@@ -2,13 +2,15 @@
   inputs = {
     utils.url = "github:numtide/flake-utils";
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus/v1.3.1";
+
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
   };
 
   outputs = { self, nixpkgs, flake-utils-plus, utils, ... } @ inputs:
     let
       inherit (builtins) removeAttrs;
       mkApp = utils.lib.mkApp;
-      pkgs = self.pkgs.x86_64-linux.nixpkgs;
+      # pkgs = self.pkgs.x86_64-linux.nixpkgs;
     in
     flake-utils-plus.lib.mkFlake {
       inherit self inputs;
@@ -67,9 +69,19 @@
       ### flake outputs builder ###
       #############################
 
-      outputsBuilder = _channels: {
+      outputsBuilder = channels: {
         # apps = {};
         # packages = {};
+
+        devShell = channels.nixpkgs.mkShell {
+          inherit (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
+            src = ./.;
+            hooks = {
+              nixpkgs-fmt.enable = true;
+              # nix-linter.enable = true;
+            };
+          }) shellHook;
+        };
       };
 
       #########################################################
