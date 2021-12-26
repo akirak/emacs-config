@@ -1,0 +1,16 @@
+* Life Cycles of the Nix packages
+** NixOS Containers
+*** Build the container
+#+begin_src sh
+sudo nixos-rebuild build --flake .#container  
+#+end_src
+*** Create and start the container
+#+begin_src sh
+nixos-container create flake-test --flake .
+#+end_src
+
+#+begin_src sh
+nixos-container start flake-test  
+#+end_src
+** Resources
+- [[https://www.tweag.io/blog/2020-07-31-nixos-flakes/][Nix Flakes, Part 3: Managing NixOS systems - Tweag]]
