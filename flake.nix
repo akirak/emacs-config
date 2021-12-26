@@ -4,9 +4,18 @@
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus/v1.3.1";
 
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+
+    home-manager.url = "github:nix-community/home-manager";
   };
 
-  outputs = { self, nixpkgs, flake-utils-plus, utils, ... } @ inputs:
+  outputs =
+    { self
+    , nixpkgs
+    , flake-utils-plus
+    , utils
+    , home-manager
+    , ...
+    } @ inputs:
     let
       inherit (builtins) removeAttrs;
       mkApp = utils.lib.mkApp;
@@ -32,10 +41,10 @@
 
         # Default modules to be passed to all hosts.
         modules = [
+          ./nixos/modules/defaults.nix
         ];
 
         # channelName = "unstable";
-        # extraArgs = { inherit utils inputs; foo = "foo"; };
       };
 
       #############
@@ -45,23 +54,18 @@
       hosts.container = {
         modules =
           [
-            ({ pkgs, ... }: {
+            {
               boot.isContainer = true;
-
-              # Let 'nixos-version --json' know about the Git revision of this
-              # flake.
-              system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
-
-              # Network configuration.
               networking.useDHCP = false;
-              networking.firewall.allowedTCPPorts = [ 80 ];
-
-              # Enable a web server.
-              services.httpd = {
+              networking.firewall.allowedTCPPorts = [ ];
+            }
+            home-manager.nixosModules.home-manager
+            ./nixos/modules/default-user.nix
+            {
+              services.openssh = {
                 enable = true;
-                adminAddr = "morty@example.org";
               };
-            })
+            }
           ];
       };
 
