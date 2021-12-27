@@ -1,0 +1,61 @@
+{
+  "nodes": {
+    "bind-key": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1612973363,
+        "narHash": "sha256-Cyu9GixhdKUaGADCC/pmyEdRxRLIE97XgqSIcsh74v8=",
+        "owner": "jwiegley",
+        "repo": "use-package",
+        "rev": "a7422fb8ab1baee19adb2717b5b47b9c3812a84c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jwiegley",
+        "repo": "use-package",
+        "type": "github"
+      }
+    },
+    "dash": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1632096711,
+        "narHash": "sha256-oeIUEe5OGgij6IessN6bmS7re5r+D5BlrU4MOsaK3JE=",
+        "owner": "magnars",
+        "repo": "dash.el",
+        "rev": "da167c51e9fd167a48d06c7c0ee8e3ac7abd9718",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magnars",
+        "repo": "dash.el",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "bind-key": "bind-key",
+        "dash": "dash",
+        "use-package": "use-package"
+      }
+    },
+    "use-package": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1612973363,
+        "narHash": "sha256-Cyu9GixhdKUaGADCC/pmyEdRxRLIE97XgqSIcsh74v8=",
+        "owner": "jwiegley",
+        "repo": "use-package",
+        "rev": "a7422fb8ab1baee19adb2717b5b47b9c3812a84c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jwiegley",
+        "repo": "use-package",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

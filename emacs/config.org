@@ -1,0 +1,9 @@
+* Emacs Configuration
+#+begin_src emacs-lisp
+  (require 'use-package)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package dash
+    :ensure t)
+#+end_src
