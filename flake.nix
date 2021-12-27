@@ -50,20 +50,23 @@
       #############
 
       hosts.container = {
+        extraArgs = {
+          home = import ./hm/home.nix;
+        };
+
         modules =
           [
             {
               boot.isContainer = true;
               networking.useDHCP = false;
               networking.firewall.allowedTCPPorts = [ ];
-            }
-            home-manager.nixosModules.home-manager
-            ./nixos/modules/default-user.nix
-            {
+
               services.openssh = {
                 enable = true;
               };
             }
+            home-manager.nixosModules.home-manager
+            ./nixos/modules/default-user.nix
           ];
       };
 

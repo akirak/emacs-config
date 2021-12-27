@@ -1,3 +1,4 @@
+{ home, ... }:
 {
   users.users.akirakomamura = {
     uid = 1000;
@@ -11,12 +12,6 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.akirakomamura = { pkgs, ... }: {
-      home.packages = pkgs.lib.attrVals [
-        "zsh"
-        "emacs"
-      ]
-        pkgs;
-    };
+    users.akirakomamura = home;
   };
 }
