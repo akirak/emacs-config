@@ -3,8 +3,6 @@
     utils.url = "github:numtide/flake-utils";
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus/v1.3.1";
 
-    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-
     home-manager.url = "github:nix-community/home-manager";
   };
 
@@ -76,16 +74,6 @@
       outputsBuilder = channels: {
         # apps = {};
         # packages = {};
-
-        devShell = channels.nixpkgs.mkShell {
-          inherit (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
-            src = ./.;
-            hooks = {
-              nixpkgs-fmt.enable = true;
-              # nix-linter.enable = true;
-            };
-          }) shellHook;
-        };
       };
 
       #########################################################
