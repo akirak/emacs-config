@@ -90,13 +90,13 @@
       outputsBuilder = channels:
         let
           emacs-full = channels.nixpkgs.emacsConfigurations.full;
-          # Add more variants of the full profile later
-          emacs-base = emacs-full;
+          emacsSandbox = channels.nixpkgs.callPackage ./sandbox/emacs.nix { };
         in
         {
           packages = {
             inherit emacs-full;
-            emacs = emacs-base;
+            # Add more variants of the full profile later
+            emacs = emacsSandbox emacs-full { };
           };
 
           apps =
