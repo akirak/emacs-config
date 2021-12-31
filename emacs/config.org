@@ -135,6 +135,11 @@ You can load a theme on startup by adding command line arguments to Emacs, e.g.
 
 Here I have defined some /definers/ for my keybinding conventions.
 They are shorthands but allow changing keys later.
+*** system-packages
+#+begin_src emacs-lisp
+  (use-package use-package-ensure-system-package
+    :ensure t)
+#+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_src emacs-lisp
   (use-package which-key
@@ -145,6 +150,16 @@ They are shorthands but allow changing keys later.
 #+end_src
 ** org-mode                                                       :packages:
 ** Packages                                                       :packages:
+*** magit                                                             :git:
+#+begin_src emacs-lisp
+  (use-package magit
+    :ensure t
+    :ensure-system-package git
+    :commands
+    (magit-status
+     magit-dispatch
+     magit-file-dispatch))
+#+end_src
 ** Notes
 :PROPERTIES:
 :TOC:      :depth 2

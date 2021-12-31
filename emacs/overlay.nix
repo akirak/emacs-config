@@ -26,6 +26,7 @@ in
   emacsConfigurations = {
     full = makeEmacsConfiguration [
       initFile
+      ./compat.el
     ];
   };
 }

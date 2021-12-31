@@ -32,6 +32,22 @@
         "type": "github"
       }
     },
+    "dash": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1632096711,
+        "narHash": "sha256-oeIUEe5OGgij6IessN6bmS7re5r+D5BlrU4MOsaK3JE=",
+        "owner": "magnars",
+        "repo": "dash.el",
+        "rev": "da167c51e9fd167a48d06c7c0ee8e3ac7abd9718",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magnars",
+        "repo": "dash.el",
+        "type": "github"
+      }
+    },
     "doom-themes": {
       "flake": false,
       "locked": {
@@ -80,6 +96,54 @@
         "type": "github"
       }
     },
+    "git-commit": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640504284,
+        "narHash": "sha256-bvbrQROSOV/IiuxVh8vFNT8GFVtXJd4N+S+5Ov47JWk=",
+        "owner": "magit",
+        "repo": "magit",
+        "rev": "03f495f351d6e622143e4628681019df1313a5f2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magit",
+        "repo": "magit",
+        "type": "github"
+      }
+    },
+    "magit": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640504284,
+        "narHash": "sha256-bvbrQROSOV/IiuxVh8vFNT8GFVtXJd4N+S+5Ov47JWk=",
+        "owner": "magit",
+        "repo": "magit",
+        "rev": "03f495f351d6e622143e4628681019df1313a5f2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magit",
+        "repo": "magit",
+        "type": "github"
+      }
+    },
+    "magit-section": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640504284,
+        "narHash": "sha256-bvbrQROSOV/IiuxVh8vFNT8GFVtXJd4N+S+5Ov47JWk=",
+        "owner": "magit",
+        "repo": "magit",
+        "rev": "03f495f351d6e622143e4628681019df1313a5f2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magit",
+        "repo": "magit",
+        "type": "github"
+      }
+    },
     "poet-theme": {
       "flake": false,
       "locked": {
@@ -100,11 +164,35 @@
       "inputs": {
         "benchmark-init": "benchmark-init",
         "bind-key": "bind-key",
+        "dash": "dash",
         "doom-themes": "doom-themes",
         "gcmh": "gcmh",
         "general": "general",
+        "git-commit": "git-commit",
+        "magit": "magit",
+        "magit-section": "magit-section",
         "poet-theme": "poet-theme",
-        "use-package": "use-package"
+        "system-packages": "system-packages",
+        "use-package": "use-package",
+        "use-package-ensure-system-package": "use-package-ensure-system-package",
+        "which-key": "which-key",
+        "with-editor": "with-editor"
+      }
+    },
+    "system-packages": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1609632495,
+        "narHash": "sha256-WVq74VWc5p1q2bAnV8sGB9E2mWghcvJgYAsaj3HJmFg=",
+        "ref": "master",
+        "rev": "05add2fe051846e2ecb3c23ef22c41ecc59a1f36",
+        "revCount": 132,
+        "type": "git",
+        "url": "https://gitlab.com/jabranham/system-packages.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gitlab.com/jabranham/system-packages.git"
       }
     },
     "use-package": {
@@ -120,6 +208,54 @@
       "original": {
         "owner": "jwiegley",
         "repo": "use-package",
+        "type": "github"
+      }
+    },
+    "use-package-ensure-system-package": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1612973363,
+        "narHash": "sha256-Cyu9GixhdKUaGADCC/pmyEdRxRLIE97XgqSIcsh74v8=",
+        "owner": "jwiegley",
+        "repo": "use-package",
+        "rev": "a7422fb8ab1baee19adb2717b5b47b9c3812a84c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jwiegley",
+        "repo": "use-package",
+        "type": "github"
+      }
+    },
+    "which-key": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1639448852,
+        "narHash": "sha256-DY8TKurc8h2LY4oEL2hORUqQMuSwbJXgnH4DeGPoPe4=",
+        "owner": "justbur",
+        "repo": "emacs-which-key",
+        "rev": "5f19ec67f58585ab0b8fa713905243ea0de190e0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "justbur",
+        "repo": "emacs-which-key",
+        "type": "github"
+      }
+    },
+    "with-editor": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640504324,
+        "narHash": "sha256-aFTA5xkhLLOKcltUyeRC7lpWHB3bGM7NfeAhiaBQkQw=",
+        "owner": "magit",
+        "repo": "with-editor",
+        "rev": "87f8cbf5400bc9b6561f61970576831170362cb9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magit",
+        "repo": "with-editor",
         "type": "github"
       }
     }
