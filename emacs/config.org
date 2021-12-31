@@ -2,25 +2,29 @@
 :PROPERTIES:
 :TOC:      :include descendants :depth 1
 :END:
-#+begin_src emacs-lisp
-  ;; -*- lexical-binding: t; no-byte-compile: t; -*-
-  (require 'use-package)
-  
-  ;; Disable package.el
-  (setq use-package-ensure-function #'ignore)
-#+end_src
 
 :CONTENTS:
 - [[#performance][Performance]]
-- [[#emacs][emacs]]
+- [[#sensible-defaults][Sensible defaults]]
 - [[#themes][Themes]]
 - [[#helper-packages][Helper packages]]
-- [[#org-mode][org-mode]]
+- [[#org][Org]]
 - [[#packages][Packages]]
 - [[#notes][Notes]]
-  - [[#profiling][profiling]]
+  - [[#profiling][Profiling]]
 :END:
+
+This configuration uses =use-package= to configure packages:
+
+#+begin_src emacs-lisp
+  ;; -*- lexical-binding: t; no-byte-compile: t; -*-
+  (require 'use-package)
+
+  ;; Disable package.el
+  (setq use-package-ensure-function #'ignore)
+#+end_src
 ** Performance                                                    :packages:
+# Note: Some of these should be loaded as early as possible.
 *** benchmark-init                               :profiling:initialization:
 #+begin_src emacs-lisp
   (use-package benchmark-init
@@ -34,6 +38,13 @@
     (benchmark-init/show-durations-tabulated
      benchmark-init/show-durations-tree))
 #+end_src
+*** gcmh                                                      :performance:
+#+begin_src emacs-lisp
+  (use-package gcmh
+    :ensure t
+    :config
+    (gcmh-mode t))
+#+end_src
 *** Measuring init time                                    :initialization:
 Display initialization time concisely at startup:
 
@@ -44,14 +55,9 @@ Display initialization time concisely at startup:
                        (float-time (time-subtract after-init-time before-init-time))
                        gcs-done)))
 #+end_src
-*** gcmh                                                      :performance:
-#+begin_src emacs-lisp
-  (use-package gcmh
-    :ensure t
-    :config
-    (gcmh-mode t))
-#+end_src
-** emacs
+** Sensible defaults
+# Note: These should never fail.
+
 #+begin_src emacs-lisp
 (use-package emacs
   :init
@@ -82,7 +88,7 @@ Display initialization time concisely at startup:
 Resources:
 
 - https://github.com/minad/vertico#configuration
-*** Default font
+*** Font families
 You need to install the font separately.
 
 #+begin_src emacs-lisp
@@ -100,7 +106,10 @@ You need to install the font separately.
                      (set-face-attribute face nil :family family)
                    (message "Font family %s is not installed" family)))))))
 #+end_src
-** Themes
+** Themes                                                           :visual:
+# Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
+# I want a separate section for themes to add this comment.
+
 No theme is set by default in this configuration.
 You can load a theme on startup by adding command line arguments to Emacs, e.g.
 
@@ -117,7 +126,9 @@ You can load a theme on startup by adding command line arguments to Emacs, e.g.
   (use-package poet-theme
     :ensure t)
 #+end_src
-** Helper packages
+** Helper packages                                                :packages:
+# Note: These are packages that should be loaded in prior to configurations of other packages.
+Extend =use-package.=
 *** general                                                   :keybindings:
 #+begin_src emacs-lisp
   (use-package general
@@ -135,7 +146,7 @@ You can load a theme on startup by adding command line arguments to Emacs, e.g.
 
 Here I have defined some /definers/ for my keybinding conventions.
 They are shorthands but allow changing keys later.
-*** system-packages
+*** system-packages                                                :system:
 #+begin_src emacs-lisp
   (use-package use-package-ensure-system-package
     :ensure t)
@@ -148,8 +159,10 @@ They are shorthands but allow changing keys later.
     (which-key-mode t)
     (which-key-setup-side-window-bottom))
 #+end_src
-** org-mode                                                       :packages:
+** Org                                                            :packages:
+Embrace Org as a common document format for Emacs.
 ** Packages                                                       :packages:
+A bunch of useful packages are configured here.
 *** magit                                                             :git:
 #+begin_src emacs-lisp
   (use-package magit
@@ -164,7 +177,7 @@ They are shorthands but allow changing keys later.
 :PROPERTIES:
 :TOC:      :depth 2
 :END:
-*** profiling
+*** Profiling
 #+BEGIN: org-ql :query "tags: profiling" :columns (heading)
 | Heading        |
 |----------------|
@@ -172,6 +185,5 @@ They are shorthands but allow changing keys later.
 #+END:
 ** Footer                                                         :noexport:
 # Local Variables:
-# mode: org-make-toc
 # no-byte-compile: t
 # End:
