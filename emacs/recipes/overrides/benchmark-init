@@ -1,0 +1,2 @@
+;; Use a fork until the bugfix is merged
+(benchmark-init :fetcher github :repo "akirak/benchmark-init-el")

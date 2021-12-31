@@ -96,7 +96,12 @@
           packages = {
             inherit emacs-full;
             # Add more variants of the full profile later
-            emacs = emacsSandbox emacs-full { };
+            emacs = emacsSandbox emacs-full {
+              emacsArguments = [
+                "--eval"
+                "(eval-after-load 'doom-themes (load-theme 'doom-tomorrow-night t))"
+              ];
+            };
           };
 
           apps =

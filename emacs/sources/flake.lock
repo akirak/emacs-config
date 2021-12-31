@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "benchmark-init": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1610947231,
+        "narHash": "sha256-E3noBkDrWixhMMUQGuVWufqLx1mNtkKKuu6z5N5aFcA=",
+        "owner": "akirak",
+        "repo": "benchmark-init-el",
+        "rev": "085594f78a057a27e1aeb6dab9979341cec40f7f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "benchmark-init-el",
+        "type": "github"
+      }
+    },
     "bind-key": {
       "flake": false,
       "locked": {
@@ -16,26 +32,78 @@
         "type": "github"
       }
     },
-    "dash": {
+    "doom-themes": {
       "flake": false,
       "locked": {
-        "lastModified": 1632096711,
-        "narHash": "sha256-oeIUEe5OGgij6IessN6bmS7re5r+D5BlrU4MOsaK3JE=",
-        "owner": "magnars",
-        "repo": "dash.el",
-        "rev": "da167c51e9fd167a48d06c7c0ee8e3ac7abd9718",
+        "lastModified": 1640111812,
+        "narHash": "sha256-6oIubb2hp44dr/vs9VAoFpjjJHSVKfwmkFlzdEVPlQU=",
+        "owner": "doomemacs",
+        "repo": "themes",
+        "rev": "2d7bf3daa50a4e0a612faed43cd8cd4af33b9e19",
         "type": "github"
       },
       "original": {
-        "owner": "magnars",
-        "repo": "dash.el",
+        "owner": "doomemacs",
+        "repo": "themes",
+        "type": "github"
+      }
+    },
+    "gcmh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1605567102,
+        "narHash": "sha256-RXSs1ANy04eZAoz0ZdVVguNOEPome3AzIX1seNFVAXo=",
+        "ref": "master",
+        "rev": "0089f9c3a6d4e9a310d0791cf6fa8f35642ecfd9",
+        "revCount": 34,
+        "type": "git",
+        "url": "https://gitlab.com/koral/gcmh.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gitlab.com/koral/gcmh.git"
+      }
+    },
+    "general": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1638494436,
+        "narHash": "sha256-2g9bp05OCOAOiVKL6FdV66EG+yfKrDUJfIiAOhVq7gc=",
+        "owner": "noctuid",
+        "repo": "general.el",
+        "rev": "9651024e7f40a8ac5c3f31f8675d3ebe2b667344",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctuid",
+        "repo": "general.el",
+        "type": "github"
+      }
+    },
+    "poet-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1591487005,
+        "narHash": "sha256-ZefJm6prXMmGTvaczOVd8MlBujwHau2tPNK3FveSqH4=",
+        "owner": "kunalb",
+        "repo": "poet",
+        "rev": "16eb694f0755c04c4db98614d0eca1199fddad70",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kunalb",
+        "repo": "poet",
         "type": "github"
       }
     },
     "root": {
       "inputs": {
+        "benchmark-init": "benchmark-init",
         "bind-key": "bind-key",
-        "dash": "dash",
+        "doom-themes": "doom-themes",
+        "gcmh": "gcmh",
+        "general": "general",
+        "poet-theme": "poet-theme",
         "use-package": "use-package"
       }
     },

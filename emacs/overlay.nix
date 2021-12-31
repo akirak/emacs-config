@@ -10,7 +10,13 @@ let
   };
 
   makeEmacsConfiguration = initFiles: emacsTwist {
-    inherit inventories initFiles;
+    inventories = [
+      {
+        type = "melpa";
+        path = ./recipes/overrides;
+      }
+    ] ++ inventories;
+    inherit initFiles;
     emacsPackage = emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
     lockDir = ./sources;
     inputOverrides = { };

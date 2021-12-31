@@ -8,17 +8,19 @@ emacs:
 { name ? "emacs-sandboxed"
 , userEmacsDirectory ? null
 , extraBubblewrapOptions ? [ ]
+, emacsArguments ? [ ]
 }:
 let
   load = file: "(load \"${file}\" nil t)\n";
 
   initEl = writeText "init.el" (
-    lib.concatMapStrings load emacs.initFiles
-    + ''
+    '';; -*- lexical-binding: t; no-byte-compile: t; -*-
       (setq custom-file (locate-user-emacs-file "custom.el"))
       (when (file-exists-p custom-file)
         (load custom-file nil t))
     ''
+    +
+    lib.concatMapStrings load emacs.initFiles
   );
 
   emacsDirectoryOpts =
@@ -76,6 +78,6 @@ lib.extendDerivation true
         --ro-bind ${../emacs/early-init.el} ${userEmacsDirectory'}/early-init.el \
         --ro-bind ${initEl} ${userEmacsDirectory'}/init.el \
         $opts \
-        ${emacs}/bin/emacs "$@"
+        ${emacs}/bin/emacs ${lib.escapeShellArgs emacsArguments} "$@"
       )
   '')
