@@ -4,3 +4,13 @@ This is a monorepo for my Nix configuration files.
 - The entire =flake.nix= is organized using [[https://github.com/gytis-ivaskevicius/flake-utils-plus][flake-utils-plus]]
 - Manage user preferences using [[https://github.com/nix-community/home-manager][home-manager]]
 - Configure Emacs using [[https://github.com/akirak/emacs-twist][emacs-twist]] and each session is sandboxed using [[https://github.com/containers/bubblewrap][bubblewrap]]
+** Usage
+If you are using Linux with Nix 2.4 installed, you can try out the Emacs configuration inside a sandboxed session:
+
+#+begin_src sh
+nix run github:akirak/nix-config#emacs -- ~/work/
+#+end_src
+
+The argument after =--= can be any existing file or directory on your file system.
+It is bind-mounted in the sandbox, and the other directories in your home directory becomes invisible.
+Network access is also forbidden.
