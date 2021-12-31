@@ -101,13 +101,13 @@
 
           apps =
             {
-              emacs-lock = mkApp {
+              lock = mkApp {
                 drv = emacs-full.lock.writeToDir "emacs/sources";
               };
-              emacs-sync = mkApp {
+              sync = mkApp {
                 drv = emacs-full.sync.writeToDir "emacs/sources";
               };
-              emacs-update = mkApp {
+              update = mkApp {
                 drv = emacs-full.update.writeToDir "emacs/sources";
               };
             };
