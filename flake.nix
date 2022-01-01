@@ -39,6 +39,7 @@
         inputs.org-babel.overlay
         inputs.twist.overlay
         (import ./emacs/overlay.nix {
+          inherit (inputs) twist org-babel;
           inherit (inputs.emacs-inventories.lib) inventories;
         })
       ];
@@ -99,7 +100,7 @@
             emacs = emacsSandbox emacs-full {
               emacsArguments = [
                 "--eval"
-                "(eval-after-load 'doom-themes (load-theme 'doom-tomorrow-night t))"
+                "(when init-file-user (require 'doom-themes) (load-theme 'doom-tomorrow-night t))"
               ];
             };
           };

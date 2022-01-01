@@ -4,45 +4,56 @@
 :END:
 
 :CONTENTS:
+- [[#initialize-setupel][Initialize setup.el]]
 - [[#performance][Performance]]
 - [[#sensible-defaults][Sensible defaults]]
 - [[#themes][Themes]]
-- [[#helper-packages][Helper packages]]
 - [[#org][Org]]
 - [[#packages][Packages]]
 - [[#notes][Notes]]
   - [[#profiling][Profiling]]
 :END:
-
-This configuration uses =use-package= to configure packages:
-
+** Initialize setup.el
 #+begin_src emacs-lisp
-  ;; -*- lexical-binding: t; no-byte-compile: t; -*-
-  (require 'use-package)
-
-  ;; Disable package.el
-  (setq use-package-ensure-function #'ignore)
+  (eval-when-compile
+    (require 'setup)
+    (require 'cl-lib)
+  
+    (defmacro define-setup-macro (name signature &rest body)
+      "Shorthand for `setup-define'.
+    NAME is the name of the local macro.  SIGNATURE is used as the
+    argument list for FN.  If BODY starts with a string, use this as
+    the value for :documentation.  Any following keywords are passed
+    as OPTS to `setup-define'."
+      (declare (debug defun))
+      (let (opts)
+        (when (stringp (car body))
+          (setq opts (nconc (list :documentation (pop body))
+                            opts)))
+        (while (keywordp (car body))
+          (let* ((prop (pop body))
+                 (val `',(pop body)))
+            (setq opts (nconc (list prop val) opts))))
+        `(setup-define ,name
+           (cl-function (lambda ,signature ,@body))
+           ,@opts)))
+  
+    (define-setup-macro :package (package)
+      "Fake installation of PACKAGE."
+      :repeatable t
+      :shorthand cadr))
 #+end_src
 ** Performance                                                    :packages:
 # Note: Some of these should be loaded as early as possible.
 *** benchmark-init                               :profiling:initialization:
 #+begin_src emacs-lisp
-  (use-package benchmark-init
-    :ensure t
-    :config
+  (setup (:package benchmark-init)
+    (:require benchmark-init)
     (add-hook 'after-init-hook 'benchmark-init/deactivate))
-  
-  (use-package benchmark-init-modes
-    :ensure benchmark-init
-    :commands
-    (benchmark-init/show-durations-tabulated
-     benchmark-init/show-durations-tree))
 #+end_src
 *** gcmh                                                      :performance:
 #+begin_src emacs-lisp
-  (use-package gcmh
-    :ensure t
-    :config
+  (setup (:package gcmh)
     (gcmh-mode t))
 #+end_src
 *** Measuring init time                                    :initialization:
@@ -59,30 +70,27 @@ Display initialization time concisely at startup:
 # Note: These should never fail.
 
 #+begin_src emacs-lisp
-(use-package emacs
-  :init
-
-  ;; Add an indicator if mutiple strings are read
-  (advice-add #'completing-read-multiple
-              :filter-args
-              (defun crm-indicator (args)
-                (cons (concat "[CRM] " (car args)) (cdr args))))
-
-  ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
-
-  ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t)
-
-  :custom
-  (register-preview-delay 0))
+  (setup emacs
+    (:option register-preview-delay 0)
+  
+    ;; Add an indicator if mutiple strings are read
+    (advice-add #'completing-read-multiple
+                :filter-args
+                (defun crm-indicator (args)
+                  (cons (concat "[CRM] " (car args)) (cdr args))))
+  
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  
+    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+    ;; Vertico commands are hidden in normal buffers.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
+  
+    ;; Enable recursive minibuffers
+    (setq enable-recursive-minibuffers t))
 #+end_src
 
 Resources:
@@ -114,50 +122,15 @@ No theme is set by default in this configuration.
 You can load a theme on startup by adding command line arguments to Emacs, e.g.
 
 #+begin_src sh
-  emacs --eval "(eval-after-load 'doom-themes (load-theme 'doom-tomorrow-night t))"
+  emacs --eval "(when init-file-user (require 'doom-themes) (load-theme 'doom-tomorrow-night t))"
 #+end_src
 *** doom-themes                                                     :theme:
 #+begin_src emacs-lisp
-  (use-package doom-themes
-    :ensure t)
+  (setup (:package doom-themes))
 #+end_src
 *** poet-theme                                                      :theme:
 #+begin_src emacs-lisp
-  (use-package poet-theme
-    :ensure t)
-#+end_src
-** Helper packages                                                :packages:
-# Note: These are packages that should be loaded in prior to configurations of other packages.
-Extend =use-package.=
-*** general                                                   :keybindings:
-#+begin_src emacs-lisp
-  (use-package general
-    :ensure t
-    :config
-    ;; Define a prefix key for major/minor mode-specific commands.
-    (defconst akirak/mode-prefix-key "C-,"
-      "Prefix key for mode-specific commands.")
-    (general-create-definer akirak/bind-mode :prefix akirak/mode-prefix-key)
-
-    ;; Use ~<C-return>~ for starting a REPL session
-    (general-create-definer akirak/bind-mode-repl
-      :prefix "<C-return>"))
-#+end_src
-
-Here I have defined some /definers/ for my keybinding conventions.
-They are shorthands but allow changing keys later.
-*** system-packages                                                :system:
-#+begin_src emacs-lisp
-  (use-package use-package-ensure-system-package
-    :ensure t)
-#+end_src
-*** which-key                                       :usability:keybindings:
-#+begin_src emacs-lisp
-  (use-package which-key
-    :ensure t
-    :config
-    (which-key-mode t)
-    (which-key-setup-side-window-bottom))
+  (setup (:package poet-theme))
 #+end_src
 ** Org                                                            :packages:
 Embrace Org as a common document format for Emacs.
@@ -165,13 +138,13 @@ Embrace Org as a common document format for Emacs.
 A bunch of useful packages are configured here.
 *** magit                                                             :git:
 #+begin_src emacs-lisp
-  (use-package magit
-    :ensure t
-    :ensure-system-package git
-    :commands
-    (magit-status
-     magit-dispatch
-     magit-file-dispatch))
+  (setup (:package magit))
+#+end_src
+*** which-key                                       :usability:keybindings:
+#+begin_src emacs-lisp
+  (setup (:package which-key)
+    (which-key-mode t)
+    (which-key-setup-side-window-bottom))
 #+end_src
 ** Notes
 :PROPERTIES:
@@ -183,7 +156,3 @@ A bunch of useful packages are configured here.
 |----------------|
 | [[benchmark-init][benchmark-init]] |
 #+END:
-** Footer                                                         :noexport:
-# Local Variables:
-# no-byte-compile: t
-# End:

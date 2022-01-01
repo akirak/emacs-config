@@ -8,12 +8,6 @@
       repo = "benchmark-init-el";
       type = "github";
     };
-    bind-key = {
-      flake = false;
-      owner = "jwiegley";
-      repo = "use-package";
-      type = "github";
-    };
     dash = {
       flake = false;
       owner = "magnars";
@@ -30,12 +24,6 @@
       flake = false;
       type = "git";
       url = "https://gitlab.com/koral/gcmh.git";
-    };
-    general = {
-      flake = false;
-      owner = "noctuid";
-      repo = "general.el";
-      type = "github";
     };
     git-commit = {
       flake = false;
@@ -59,23 +47,6 @@
       flake = false;
       owner = "kunalb";
       repo = "poet";
-      type = "github";
-    };
-    system-packages = {
-      flake = false;
-      type = "git";
-      url = "https://gitlab.com/jabranham/system-packages.git";
-    };
-    use-package = {
-      flake = false;
-      owner = "jwiegley";
-      repo = "use-package";
-      type = "github";
-    };
-    use-package-ensure-system-package = {
-      flake = false;
-      owner = "jwiegley";
-      repo = "use-package";
       type = "github";
     };
     which-key = {

@@ -1,1 +1,17 @@
-{}
+{
+  "setup": {
+    "archive": {
+      "narHash": "sha256-T786A6atp69/l8Tn9vhXnSpYElRt6XvHaduQATl7SyI=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/setup-1.2.0.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "emacs": "26.1"
+    },
+    "version": "1.2.0"
+  }
+}

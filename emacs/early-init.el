@@ -2,7 +2,7 @@
 (setq gc-cons-threshold most-positive-fixnum)
 
 (setq package-enable-at-startup nil)
-(setq package-quickstart t)
+(setq package-quickstart nil)
 
 (setq auto-window-vscroll nil)
 (push '(menu-bar-lines . 0) default-frame-alist)
