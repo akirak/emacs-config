@@ -1,0 +1,19 @@
+* Extra Configurations for Specific Situations
+** beancount
+#+begin_src emacs-lisp
+  (setup (:package beancount)
+    ;; TODO: I want to install beancount executable from nixpkgs, but I don't have a
+    ;; macro for it.
+  
+    ;; I don't like the default keybindings on C-c, so change the prefix.
+    (:option beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
+  
+    (:with-mode beancount-mode
+      (:file-match "\\.beancount\\'" "\\.bean\\'")
+      (:when-loaded
+        (:hook
+         (defun akirak/beancount-turn-on-outline-mode ()
+           (outline-minor-mode t)))
+        (:bind
+         "d" #'beancount-insert-date))))
+#+end_src

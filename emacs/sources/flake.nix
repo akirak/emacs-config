@@ -2,6 +2,12 @@
   description =
     "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
+    beancount = {
+      flake = false;
+      owner = "beancount";
+      repo = "beancount-mode";
+      type = "github";
+    };
     benchmark-init = {
       flake = false;
       owner = "akirak";

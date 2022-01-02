@@ -2,20 +2,22 @@
 final: prev:
 let
   inherit (prev) tangleOrgBabelFile emacsPgtkGcc emacsTwist;
-  inherit (org-babel.lib) excludeOrgSubtreesOnHeadlines matchOrgTag;
+  org = org-babel.lib;
   inherit (twist.lib { inherit (prev) lib; }) parseSetup;
 
-  orgFile = ./emacs-config.org;
-
-  initFile = tangleOrgBabelFile "init.el" orgFile {
-    languages = [ "emacs-lisp" ];
-    processLines = excludeOrgSubtreesOnHeadlines
-      (matchOrgTag "ARCHIVE");
+  initFile = tangleOrgBabelFile "init.el" ./emacs-config.org {
+    processLines = org.excludeHeadlines (org.tag "ARCHIVE");
   };
 
   compatEl = builtins.path {
     name = "compat.el";
     path = ./compat.el;
+  };
+
+  extraConfigFile = ./extras.org;
+
+  extraFile = tangleOrgBabelFile "extra-init.el" ./extras.org {
+    processLines = org.excludeHeadlines (org.tag "ARCHIVE");
   };
 
   makeEmacsConfiguration = initFiles: emacsTwist {
@@ -24,7 +26,12 @@ let
         type = "melpa";
         path = ./recipes/overrides;
       }
-    ] ++ inventories;
+    ] ++ inventories ++ [
+      {
+        type = "melpa";
+        path = ./recipes/fallbacks;
+      }
+    ];
     inherit initFiles;
     extraPackages = [
       "setup"
@@ -37,7 +44,16 @@ let
 in
 {
   emacsConfigurations = {
+    # Used to generate lock files
     full = makeEmacsConfiguration [
+      initFile
+      compatEl
+      extraFile
+    ];
+    basic = makeEmacsConfiguration [
+      initFile
+    ];
+    compat = makeEmacsConfiguration [
       initFile
       compatEl
     ];

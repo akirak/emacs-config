@@ -90,18 +90,27 @@
 
       outputsBuilder = channels:
         let
-          emacs-full = channels.nixpkgs.emacsConfigurations.full;
+          inherit (channels.nixpkgs) emacsConfigurations;
+          emacs-full = emacsConfigurations.full;
+          emacs-basic = emacsConfigurations.basic;
+          emacs-compat = emacsConfigurations.compat;
+
           emacsSandbox = channels.nixpkgs.callPackage ./sandbox/emacs.nix { };
+
+          useDoomTheme = themeName: [
+            "--eval"
+            "(when init-file-user (require 'doom-themes) (load-theme '${themeName} t))"
+          ];
         in
         {
           packages = {
             inherit emacs-full;
             # Add more variants of the full profile later
-            emacs = emacsSandbox emacs-full {
-              emacsArguments = [
-                "--eval"
-                "(when init-file-user (require 'doom-themes) (load-theme 'doom-tomorrow-night t))"
-              ];
+            emacs = emacsSandbox emacs-basic {
+              emacsArguments = useDoomTheme "doom-tomorrow-night";
+            };
+            emacs-compat = emacsSandbox emacs-compat {
+              # emacsArguments = useDoomTheme "doom-tomorrow-night";
             };
           };
 
