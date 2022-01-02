@@ -37,6 +37,12 @@ let
     if userEmacsDirectory == null
     then "$HOME/.emacs.d"
     else userEmacsDirectory;
+
+  wrap = open: end: body: open + body + end;
+
+  # lib.escapeShellArgs quotes each argument with single quotes. It is safe, but
+  # I want to allow use of environment variables passed as arguments.
+  quoteShellArgs = lib.concatMapStringsSep " " (wrap "\"" "\"");
 in
 lib.extendDerivation true
 {
@@ -73,11 +79,11 @@ lib.extendDerivation true
         --die-with-parent \
         --unshare-all \
         --setenv PATH ${lib.makeBinPath [ coreutils ]} \
-        ${lib.escapeShellArgs extraBubblewrapOptions} \
+        ${quoteShellArgs extraBubblewrapOptions} \
         ${emacsDirectoryOpts} \
         --ro-bind ${../emacs/early-init.el} ${userEmacsDirectory'}/early-init.el \
         --ro-bind ${initEl} ${userEmacsDirectory'}/init.el \
         $opts \
-        ${emacs}/bin/emacs ${lib.escapeShellArgs emacsArguments} "$@"
+        ${emacs}/bin/emacs ${quoteShellArgs emacsArguments} "$@"
       )
   '')
