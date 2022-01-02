@@ -8,6 +8,7 @@
 - [[#performance][Performance]]
 - [[#built-ins][Built-ins]]
 - [[#basic-appearances][Basic appearances]]
+- [[#custom-variables][Custom variables]]
 - [[#org][Org]]
 - [[#packages][Packages]]
 - [[#notes][Notes]]
@@ -133,6 +134,12 @@ You need to install the font separately.
                  (if (member family families)
                      (set-face-attribute face nil :family family)
                    (message "Font family %s is not installed" family)))))))
+#+end_src
+** Custom variables
+#+begin_src emacs-lisp
+  (defcustom akirak/mode-prefix-key "C-,"
+    "Prefix for mode-specific keybindings."
+    :type 'string)
 #+end_src
 ** Org                                                            :packages:
 Embrace Org as a common document format for Emacs.

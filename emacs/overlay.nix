@@ -16,8 +16,11 @@ let
 
   extraConfigFile = ./extras.org;
 
-  extraFile = tangleOrgBabelFile "extra-init.el" ./extras.org {
-    processLines = org.excludeHeadlines (org.tag "ARCHIVE");
+  extraFile = f: tangleOrgBabelFile "extra-init.el" ./extras.org {
+    processLines = lines: prev.lib.pipe lines [
+      (org.excludeHeadlines (org.tag "ARCHIVE"))
+      f
+    ];
   };
 
   makeEmacsConfiguration = initFiles: emacsTwist {
@@ -48,7 +51,7 @@ in
     full = makeEmacsConfiguration [
       initFile
       compatEl
-      extraFile
+      (extraFile prev.lib.id)
     ];
     basic = makeEmacsConfiguration [
       initFile
@@ -56,6 +59,11 @@ in
     compat = makeEmacsConfiguration [
       initFile
       compatEl
+    ];
+    beancount = makeEmacsConfiguration [
+      initFile
+      compatEl
+      (extraFile (org.selectHeadlines (org.headlineText "beancount")))
     ];
   };
 }

@@ -112,6 +112,17 @@
             emacs-compat = emacsSandbox emacs-compat {
               # emacsArguments = useDoomTheme "doom-tomorrow-night";
             };
+            emacs-beancount = emacsSandbox emacsConfigurations.beancount {
+              emacsArguments = useDoomTheme "doom-opera-light";
+              extraBubblewrapOptions = [
+                "--bind"
+                "$HOME/beancount"
+                "$HOME/beancount"
+                "--bind-try"
+                "$HOME/Downloads"
+                "$HOME/Downloads"
+              ];
+            };
           };
 
           apps =
