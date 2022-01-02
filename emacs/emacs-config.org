@@ -4,16 +4,17 @@
 :END:
 
 :CONTENTS:
-- [[#initialize-setupel][Initialize setup.el]]
+- [[#setupel][Setup.el]]
 - [[#performance][Performance]]
-- [[#sensible-defaults][Sensible defaults]]
-- [[#themes][Themes]]
+- [[#built-ins][Built-ins]]
+- [[#basic-appearances][Basic appearances]]
 - [[#org][Org]]
 - [[#packages][Packages]]
 - [[#notes][Notes]]
+  - [[#how-to-develop-this-configuration][How to develop this configuration]]
   - [[#profiling][Profiling]]
 :END:
-** Initialize setup.el
+** Setup.el
 #+begin_src emacs-lisp
   (eval-when-compile
     (require 'setup)
@@ -66,7 +67,7 @@ Display initialization time concisely at startup:
                        (float-time (time-subtract after-init-time before-init-time))
                        gcs-done)))
 #+end_src
-** Sensible defaults
+** Built-ins
 # Note: These should never fail.
 
 #+begin_src emacs-lisp
@@ -96,6 +97,25 @@ Display initialization time concisely at startup:
 Resources:
 
 - https://github.com/minad/vertico#configuration
+** Basic appearances                                                :visual:
+*** Theme packages                                        :packages:
+# Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
+# I want a separate section for themes to add this comment.
+
+The following theme packages are bundled with configuration:
+
+#+begin_src emacs-lisp
+  (setup (:package doom-themes))
+  
+  (setup (:package poet-theme))
+#+end_src
+
+No theme is set by default.
+You can load a theme on startup by adding command line arguments to Emacs, e.g.
+
+#+begin_src sh
+  emacs --eval "(when init-file-user (require 'doom-themes) (load-theme 'doom-tomorrow-night t))"
+#+end_src
 *** Font families
 You need to install the font separately.
 
@@ -114,27 +134,12 @@ You need to install the font separately.
                      (set-face-attribute face nil :family family)
                    (message "Font family %s is not installed" family)))))))
 #+end_src
-** Themes                                                           :visual:
-# Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
-# I want a separate section for themes to add this comment.
-
-No theme is set by default in this configuration.
-You can load a theme on startup by adding command line arguments to Emacs, e.g.
-
-#+begin_src sh
-  emacs --eval "(when init-file-user (require 'doom-themes) (load-theme 'doom-tomorrow-night t))"
-#+end_src
-*** doom-themes                                                     :theme:
-#+begin_src emacs-lisp
-  (setup (:package doom-themes))
-#+end_src
-*** poet-theme                                                      :theme:
-#+begin_src emacs-lisp
-  (setup (:package poet-theme))
-#+end_src
 ** Org                                                            :packages:
 Embrace Org as a common document format for Emacs.
 ** Packages                                                       :packages:
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
 A bunch of useful packages are configured here.
 *** magit                                                             :git:
 #+begin_src emacs-lisp
@@ -150,6 +155,17 @@ A bunch of useful packages are configured here.
 :PROPERTIES:
 :TOC:      :depth 2
 :END:
+*** How to develop this configuration
+:PROPERTIES:
+:CREATED_TIME: [2022-01-02 Sun 14:52]
+:END:
+This configuration is maintained in Org, and [[file:.org-config.el][.org-config.el]] contains the configuration for the Org file. It uses [[https://github.com/akirak/org-starter][org-starter]], which is my package for maintaining file-specific Org configuration.
+
+The workflow is as follows:
+
+1. Use =org-capture= to add an entry with a source block to the configuration file.
+2. Add further configuration for the package using =setup= and set tags on the heading.
+3. Org entries are automatically sorted by package name when the buffer is saved.
 *** Profiling
 #+BEGIN: org-ql :query "tags: profiling" :columns (heading)
 | Heading        |
