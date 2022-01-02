@@ -42,7 +42,16 @@ let
     initParser = parseSetup;
     emacsPackage = emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
     lockDir = ./sources;
-    inputOverrides = { };
+    inputOverrides = {
+      bufler = _: _: {
+        origin = {
+          type = "github";
+          owner = "akirak";
+          repo = "bufler.el";
+          ref = "fix-cl-macs";
+        };
+      };
+    };
   };
 in
 {

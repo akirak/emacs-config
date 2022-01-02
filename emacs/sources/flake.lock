@@ -32,6 +32,23 @@
         "type": "github"
       }
     },
+    "bufler": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641133938,
+        "narHash": "sha256-1IIUcqssDBHIVy72ukcrCWcHyRPTJokyunhB3mxc6IQ=",
+        "owner": "akirak",
+        "repo": "bufler.el",
+        "rev": "df000ab98225488af76303a1275b3999d3a3230f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "ref": "fix-cl-macs",
+        "repo": "bufler.el",
+        "type": "github"
+      }
+    },
     "dash": {
       "flake": false,
       "locked": {
@@ -64,6 +81,22 @@
         "type": "github"
       }
     },
+    "f": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1624532602,
+        "narHash": "sha256-vsslMtF8dQm6cJYb07SxPO0rp44lfRONSxRHj3e52Ew=",
+        "owner": "rejeep",
+        "repo": "f.el",
+        "rev": "50af874cd19042f17c8686813d52569b1025c76a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rejeep",
+        "repo": "f.el",
+        "type": "github"
+      }
+    },
     "gcmh": {
       "flake": false,
       "locked": {
@@ -93,6 +126,38 @@
       "original": {
         "owner": "magit",
         "repo": "magit",
+        "type": "github"
+      }
+    },
+    "hydra": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641110604,
+        "narHash": "sha256-AE3l5N0irSunycinznvthqjSG49sequndSY+lECFtIc=",
+        "owner": "abo-abo",
+        "repo": "hydra",
+        "rev": "9e9e00cb240ea1903ffd36a54956b3902c379d29",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "hydra",
+        "type": "github"
+      }
+    },
+    "lv": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641110604,
+        "narHash": "sha256-AE3l5N0irSunycinznvthqjSG49sequndSY+lECFtIc=",
+        "owner": "abo-abo",
+        "repo": "hydra",
+        "rev": "9e9e00cb240ea1903ffd36a54956b3902c379d29",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "hydra",
         "type": "github"
       }
     },
@@ -144,19 +209,57 @@
         "type": "github"
       }
     },
+    "pretty-hydra": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1613896470,
+        "narHash": "sha256-BeYSQLYIQe0IugW924944a7QpVToXa0lLUi4hX3rifs=",
+        "owner": "jerrypnz",
+        "repo": "major-mode-hydra.el",
+        "rev": "84c1929a5153be169ca5c36737439d51dffde505",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jerrypnz",
+        "repo": "major-mode-hydra.el",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "beancount": "beancount",
         "benchmark-init": "benchmark-init",
+        "bufler": "bufler",
         "dash": "dash",
         "doom-themes": "doom-themes",
+        "f": "f",
         "gcmh": "gcmh",
         "git-commit": "git-commit",
+        "hydra": "hydra",
+        "lv": "lv",
         "magit": "magit",
         "magit-section": "magit-section",
         "poet-theme": "poet-theme",
+        "pretty-hydra": "pretty-hydra",
+        "s": "s",
         "which-key": "which-key",
         "with-editor": "with-editor"
+      }
+    },
+    "s": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1623824393,
+        "narHash": "sha256-F0BrAlsxBskNzkyHriG3yNY+PZ7npYi1x98Ci5yVDAo=",
+        "owner": "magnars",
+        "repo": "s.el",
+        "rev": "08661efb075d1c6b4fa812184c1e5e90c08795a9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magnars",
+        "repo": "s.el",
+        "type": "github"
       }
     },
     "which-key": {

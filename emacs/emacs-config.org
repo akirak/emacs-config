@@ -148,6 +148,17 @@ Embrace Org as a common document format for Emacs.
 :SORTING_TYPE: a
 :END:
 A bunch of useful packages are configured here.
+*** bufler
+:PROPERTIES:
+:CREATED_TIME: [2022-01-02 Sun 22:51]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package bufler)
+    (bufler-mode t)
+    ;; Use it as a replacement for ibuffer
+    (:global "C-x C-b" #'bufler))
+#+end_src
 *** magit                                                             :git:
 #+begin_src emacs-lisp
   (setup (:package magit))

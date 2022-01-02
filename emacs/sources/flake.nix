@@ -14,6 +14,13 @@
       repo = "benchmark-init-el";
       type = "github";
     };
+    bufler = {
+      flake = false;
+      owner = "akirak";
+      ref = "fix-cl-macs";
+      repo = "bufler.el";
+      type = "github";
+    };
     dash = {
       flake = false;
       owner = "magnars";
@@ -26,6 +33,12 @@
       repo = "themes";
       type = "github";
     };
+    f = {
+      flake = false;
+      owner = "rejeep";
+      repo = "f.el";
+      type = "github";
+    };
     gcmh = {
       flake = false;
       type = "git";
@@ -35,6 +48,18 @@
       flake = false;
       owner = "magit";
       repo = "magit";
+      type = "github";
+    };
+    hydra = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "hydra";
+      type = "github";
+    };
+    lv = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "hydra";
       type = "github";
     };
     magit = {
@@ -53,6 +78,18 @@
       flake = false;
       owner = "kunalb";
       repo = "poet";
+      type = "github";
+    };
+    pretty-hydra = {
+      flake = false;
+      owner = "jerrypnz";
+      repo = "major-mode-hydra.el";
+      type = "github";
+    };
+    s = {
+      flake = false;
+      owner = "magnars";
+      repo = "s.el";
       type = "github";
     };
     which-key = {
