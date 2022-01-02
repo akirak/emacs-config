@@ -5,7 +5,7 @@ let
   inherit (org-babel.lib) excludeOrgSubtreesOnHeadlines matchOrgTag;
   inherit (twist.lib { inherit (prev) lib; }) parseSetup;
 
-  orgFile = ./config.org;
+  orgFile = ./emacs-config.org;
 
   initFile = tangleOrgBabelFile "init.el" orgFile {
     languages = [ "emacs-lisp" ];
