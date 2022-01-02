@@ -38,7 +38,7 @@
                   ("Org package" :keys "o"
                    :function ,(level2 "Org")
                    :src "(setup (:package %\\1)%?)")
-                  ("Packages" :keys "p"
+                  ("Package" :keys "p"
                    :function ,(level2 "Packages")
                    :src "(setup (:package %\\1)%?)")
 
@@ -50,7 +50,7 @@
                    :children
                    (("Org package" :keys "o"
                      :function ,(level2 "Org"))
-                    ("Packages" :keys "p"
+                    ("Package" :keys "p"
                      :function ,(level2 "Packages"))))
 
                   ("Notes" :keys "n"
