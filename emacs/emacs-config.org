@@ -13,7 +13,7 @@
 - [[#packages][Packages]]
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
-  - [[#profiling][Profiling]]
+  - [[#tag-statistics][Tag statistics]]
 :END:
 ** Setup.el
 [[https://git.sr.ht/~pkal/setup][Setup.el]] is an alternative to the famous [[https://github.com/jwiegley/use-package][use-package]].
@@ -175,7 +175,7 @@ A bunch of useful packages are configured here.
     (which-key-mode t)
     (which-key-setup-side-window-bottom))
 #+end_src
-** Notes
+** Notes                                                             :@note:
 :PROPERTIES:
 :TOC:      :depth 2
 :END:
@@ -191,9 +191,38 @@ The workflow is as follows:
 1. Use =org-capture= to add an entry with a source block to the configuration file.
 2. Add further configuration for the package using =setup= and set tags on the heading.
 3. Org entries are automatically sorted by package name when the buffer is saved.
-*** Profiling
+*** Tag statistics
+If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse entries matching a tag by pressing =C-c C-o= on a link below:
+
+#+name: tag-statistics
+#+begin_src emacs-lisp :tangle no
+  (->> (org-ql-select (current-buffer)
+         '(and (level > 2)
+               (not (tags "ARCHIVE")))
+         :action '(org-get-tags))
+       (--filter (not (member "@note" it)))
+       (-flatten-n 1)
+       (-group-by #'identity)
+       (-map (pcase-lambda (`(,tag . ,items))
+               (cons tag (length items))))
+       (-sort (-on #'> #'cdr))
+       (-map (pcase-lambda (`(,tag . ,count))
+               (list (format "[[org-ql-search:tags:%s][%s]]" tag tag)
+                     count))))
+#+end_src
+
+#+RESULTS: tag-statistics
+| [[org-ql-search:tags:packages][packages]]       | 7 |
+| [[org-ql-search:tags:initialization][initialization]] | 2 |
+| [[org-ql-search:tags:visual][visual]]         | 2 |
+| [[org-ql-search:tags:profiling][profiling]]      | 1 |
+| [[org-ql-search:tags:performance][performance]]    | 1 |
+| [[org-ql-search:tags:git][git]]            | 1 |
+| [[org-ql-search:tags:usability][usability]]      | 1 |
+| [[org-ql-search:tags:keybindings][keybindings]]    | 1 |
+
+*** Profiling (org-ql dblock example)                    :noexport:ARCHIVE:
+
 #+BEGIN: org-ql :query "tags: profiling" :columns (heading)
-| Heading        |
-|----------------|
-| [[benchmark-init][benchmark-init]] |
+
 #+END:
