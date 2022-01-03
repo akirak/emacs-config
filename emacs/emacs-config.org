@@ -17,7 +17,7 @@
 :END:
 ** Setup.el
 [[https://git.sr.ht/~pkal/setup][Setup.el]] is an alternative to the famous [[https://github.com/jwiegley/use-package][use-package]].
-I am interesting to see if it can reduce the amount of configuration code.
+I am interested to see if it can reduce the amount of configuration code.
 
 #+begin_src emacs-lisp
   (eval-when-compile
