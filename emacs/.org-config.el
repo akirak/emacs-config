@@ -8,8 +8,7 @@
 (org-starter-def "emacs-config.org"
   :key "e"
   :refile (:maxlevel . 4)
-  :minor-modes (org-edna-mode
-                akirak-org-sort-buffer-mode))
+  :minor-modes (org-edna-mode))
 
 (akirak-org-capture-add-templates
     (cl-macrolet

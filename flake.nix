@@ -10,6 +10,19 @@
     org-babel.url = "github:akirak/nix-org-babel";
     twist.url = "github:akirak/emacs-twist/devel";
     emacs-inventories.url = "path:./emacs/inventories";
+
+    # pre-commit
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "utils";
+    };
+    flake-no-path = {
+      url = "github:akirak/flake-no-path";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "utils";
+      inputs.pre-commit-hooks.follows = "pre-commit-hooks";
+    };
   };
 
   outputs =
@@ -90,6 +103,7 @@
 
       outputsBuilder = channels:
         let
+          inherit (channels.nixpkgs) system;
           inherit (channels.nixpkgs) emacsConfigurations;
           emacs-full = emacsConfigurations.full;
           emacs-basic = emacsConfigurations.basic;
@@ -137,6 +151,51 @@
                 drv = emacs-full.update.writeToDir "emacs/sources";
               };
             };
+
+          # Set up a pre-commit hook by running `nix develop`.
+          devShell = channels.nixpkgs.mkShell {
+            inherit (inputs.pre-commit-hooks.lib.${system}.run {
+              src = ./.;
+              hooks = {
+                nixpkgs-fmt.enable = true;
+                # nix-linter.enable = true;
+                flake-no-path = {
+                  enable = true;
+                  name = "Ensure that flake.lock does not contain a local path";
+                  entry = "${
+                    inputs.flake-no-path.packages.${system}.flake-no-path
+                  }/bin/flake-no-path";
+                  files = "flake\.lock$";
+                  pass_filenames = true;
+                };
+                emacs-config = {
+                  enable = true;
+                  name = "Update the documentation of the Emacs configuration";
+                  stages = [ "push" ];
+                  entry = "${
+                    (channels.nixpkgs.emacsPackagesFor emacs-full.emacs).emacsWithPackages
+                      (epkgs: [ epkgs.org-make-toc ])
+                  }/bin/emacs --batch -l ${./scripts/update-emacs-config.el}
+ -f akirak/batch-update-emacs-config";
+                  files = "emacs-config\.org$";
+                  pass_filenames = true;
+                };
+                push-emacs-binary = {
+                  enable = true;
+                  name = "Push the Emacs binary";
+                  stages = [ "push" ];
+                  entry = "${
+                    channels.nixpkgs.writeShellScript "push-emacs-binary" ''
+                      result=$(timeout 3 nix eval --raw .#emacs-full.emacs) \
+                        && timeout 5 cachix push akirak "$result"
+                    ''
+                  }";
+                  files = "^flake\.lock$";
+                  pass_filenames = false;
+                };
+              };
+            }) shellHook;
+          };
         };
 
       #########################################################

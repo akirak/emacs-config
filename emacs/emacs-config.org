@@ -8,19 +8,24 @@
 - [[#performance][Performance]]
 - [[#built-ins][Built-ins]]
 - [[#basic-appearances][Basic appearances]]
-- [[#custom-variables][Custom variables]]
+- [[#custom-conventions][Custom conventions]]
 - [[#org][Org]]
 - [[#packages][Packages]]
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
-  - [[#profiling][Profiling]]
+  - [[#tag-statistics][Tag statistics]]
 :END:
 ** Setup.el
+[[https://git.sr.ht/~pkal/setup][Setup.el]] is an alternative to the famous [[https://github.com/jwiegley/use-package][use-package]].
+I am interesting to see if it can reduce the amount of configuration code.
+
 #+begin_src emacs-lisp
   (eval-when-compile
     (require 'setup)
     (require 'cl-lib)
   
+    ;; Exactly the same definition as a snippet available at
+    ;; https://www.emacswiki.org/emacs/SetupEl#h5o-4 but renamed
     (defmacro define-setup-macro (name signature &rest body)
       "Shorthand for `setup-define'.
     NAME is the name of the local macro.  SIGNATURE is used as the
@@ -69,6 +74,9 @@ Display initialization time concisely at startup:
                        gcs-done)))
 #+end_src
 ** Built-ins
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
 # Note: These should never fail.
 
 #+begin_src emacs-lisp
@@ -98,6 +106,343 @@ Display initialization time concisely at startup:
 Resources:
 
 - https://github.com/minad/vertico#configuration
+*** autorevert                                                         :IO:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup autorevert
+    (global-auto-revert-mode t))
+#+end_src
+*** buffer.c                                        :formatting:visual:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+#+begin_src emacs-lisp
+  (setup buffer
+    (:option buffer-file-coding-system 'utf-8
+             fill-column 80
+             indicate-empty-lines t
+             truncate-lines t))
+#+end_src
+*** callproc.c                                                    :process:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup callproc
+    (:only-if (eq system-type 'windows-nt))
+    (:option shell-file-name (executable-find "bash")))
+#+end_src
+*** compile                                                       :process:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup compile
+    (:option
+     compilation-auto-jump-to-first-error t
+     compilation-scroll-output t
+     compilation-error-regexp-alist
+     (list
+      ;; eslint
+      (list (rx bol (group (or "ERROR" "WARNING"))
+                " in "
+                (group (*? anything))
+                ":" (group (+ digit))
+                ":" (group (+ digit)))
+            2 3 4 '(1 . 1))
+      ;; eslint --fix
+      (list (rx bol (group "/home/" (+ nonl)) "\n"
+                (+ space) (group (+ digit)) ":" (group (+ digit))
+                (+ space) (group (or "error" "WARNING")))
+            1 2 3 '(4 . 4))
+      ;; prettier
+      (list (rx bol "[" (group (or "error" "WARNING")) "] "
+                (group (*? anything))
+                ": "
+                (+ anything)
+                "(" (group (+ digit)) ":" (group (+ digit)) ")")
+            2 3 4 '(1 . 1))
+      ;; nix-linter
+      ;; Unused argument `hsuper` at default.nix:9:24-15:6
+      (list (rx " at " (group (+ (not (any ":"))))
+                ":" (group (+ digit)) ":" (group (+ digit))
+                "-" (+ digit) ":" (+ digit) eol)
+            1 2 3)
+      ;; hlint
+      ;; path:67:23-45:
+      (list (rx bol (group (any "/" alnum)
+                           (* (any "./" alnum)))
+                ":"
+                (group (+ digit)) ":" (group (+ digit))
+                "-"
+                (+ digit)
+                ":" (* space)
+                (group (or "Warning" "Suggestion"
+                           "warning" "error"))
+                ":" space (+ nonl))
+            1 2 3 '(4 . 4))
+      (list (rx bol (group (any "/" alnum)
+                           (* (any "./" alnum)))
+                ":"
+                "(" (group (+ digit)) "," (group (+ digit)) ")"
+                "-"
+                "(" (+ digit) "," (+ digit) ")"
+                ":" (* space)
+                (group (or "Warning" "Suggestion"
+                           "warning" "error"))
+                ":" space (+ nonl))
+            1 2 3 '(4 . 4))
+      ;; Emacs checkdoc/byte-compile, GHC, etc.
+      ;; path:line:col: error:
+      (list (rx (group (+ (not (any space ":")))) ":"
+                (group (+ digit)) ":" (group (+ digit))
+                ":" (* space)
+                (or "Error" "error" "warning") ":")
+            1 2 3 '(4 . 4))
+  
+      ;; Elixir iex
+      ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
+      (list (rx bol (+ "*") "(" (+ anything) ")"
+                (group (+ (not (any space ":")))) ":"
+                (group (+ digit)) ":" (group (+ digit))
+                ":" (* space))
+            1 2 3 '(4 . 4))))
+    )
+#+end_src
+*** ediff-wind                                                       :diff:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup ediff-wind
+    (:option ediff-window-setup-function #'ediff-setup-windows-plain))
+#+end_src
+*** fileio.c                                                        :files:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup fileio
+    (:option delete-by-moving-to-trash t))
+#+end_src
+*** filelock.c                                                         :IO:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup filelock
+    ;; lock files will kill `npm start'
+    (:option create-lockfiles nil))
+#+end_src
+*** files                                                           :files:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup files
+    (:option backup-by-copying t
+             delete-old-versions t
+             version-control t
+             view-read-only t))
+#+end_src
+*** fns.c and xfns.c                                                   :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup fns
+    (:option use-dialog-box nil))
+  
+  (setup xfns
+    (:option x-gtk-use-system-tooltips nil))
+#+end_src
+*** frame                                                          :visual:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup frame
+    (blink-cursor-mode -1))
+#+end_src
+*** hl-line                                                        :visual:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup hl-line
+    (:with-mode hl-line-mode
+      (:hook-into prog-mode-hook
+                  text-mode-hook)))
+#+end_src
+*** indent.c                                                   :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup indent
+    (defun akirak/turn-on-indent-tabs-mode ()
+      (interactive)
+      (setq indent-tabs-mode 1))
+  
+    (dolist (mode-hook '(makefile-mode-hook))
+      (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
+#+end_src
+*** mule
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup mule-cmds
+    (set-language-environment "UTF-8"))
+#+end_src
+*** paragraphs                                                       :text:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup paragraphs
+    (:option sentence-end-double-space nil))
+#+end_src
+*** paren                                                     :parentheses:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup paren
+    (show-paren-mode 1))
+#+end_src
+*** process.c                                                     :process:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup process
+    ;; Expand read-process-output-max for lsp-mode
+    (:option read-process-output-max (* 1024 1024)))
+#+end_src
+*** recentf                                                 :history:files:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup recentf
+    (recentf-mode 1)
+    (:option recentf-max-saved-items 200))
+#+end_src
+*** saveplace                                                     :history:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup saveplace
+    (save-place-mode 1))
+#+end_src
+*** subr                                                               :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup subr
+    (fset 'yes-or-no-p 'y-or-n-p))
+#+end_src
+*** terminal.c                                                         :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup terminal
+    (:option ring-bell-function 'ignore))
+#+end_src
+*** tooltip                                                            :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup tooltip
+    (tooltip-mode -1))
+#+end_src
+*** vc-hooks                                                           :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup vc-hooks
+    (:option vc-follow-symlinks t
+             vc-make-backup-files t))
+#+end_src
+*** view                                                       :navigation:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup view
+    (:option view-inhibit-help-message t)
+  
+    (:with-map View-mode-map
+      (:bind
+       [remap scroll-up-command] #'View-scroll-half-page-forward
+       [remap scroll-down-command] #'View-scroll-half-page-backward)))
+#+end_src
+*** window                                                     :navigation:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup window
+    (:option recenter-positions '(top middle bottom))
+  
+    (defun akirak/scroll-half-height (&optional window)
+      (/ (1- (window-height (or window (selected-window)))) 2))
+  
+    (:global
+     ;; TODO: scroll-other-window and scroll-other-window-down
+     [remap scroll-up-command]
+     (defun akirak/scroll-half-page-forward (&optional arg)
+       (interactive "P")
+       (if (numberp arg)
+           (scroll-up arg)
+         (scroll-up (akirak/scroll-half-height))))
+     [remap scroll-down-command]
+     (defun akirak/scroll-half-page-backward (&optional arg)
+       (interactive "P")
+       (if (numberp arg)
+           (scroll-down arg)
+         (scroll-down (akirak/scroll-half-height))))))
+#+end_src
+*** winner                                                        :history:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-03 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup winner
+    (winner-mode 1))
+#+end_src
 ** Basic appearances                                                :visual:
 *** Theme packages                                        :packages:
 # Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
@@ -135,7 +480,8 @@ You need to install the font separately.
                      (set-face-attribute face nil :family family)
                    (message "Font family %s is not installed" family)))))))
 #+end_src
-** Custom variables
+** Custom conventions
+*** Prefix for mode-specific commands
 #+begin_src emacs-lisp
   (defcustom akirak/mode-prefix-key "C-,"
     "Prefix for mode-specific keybindings."
@@ -169,13 +515,14 @@ A bunch of useful packages are configured here.
     (which-key-mode t)
     (which-key-setup-side-window-bottom))
 #+end_src
-** Notes
+** Notes                                                             :@note:
 :PROPERTIES:
 :TOC:      :depth 2
 :END:
 *** How to develop this configuration
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 14:52]
+:CUSTOM_ID: develop-org-configuration
 :END:
 This configuration is maintained in Org, and [[file:.org-config.el][.org-config.el]] contains the configuration for the Org file. It uses [[https://github.com/akirak/org-starter][org-starter]], which is my package for maintaining file-specific Org configuration.
 
@@ -184,9 +531,49 @@ The workflow is as follows:
 1. Use =org-capture= to add an entry with a source block to the configuration file.
 2. Add further configuration for the package using =setup= and set tags on the heading.
 3. Org entries are automatically sorted by package name when the buffer is saved.
-*** Profiling
+*** Tag statistics
+If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse entries matching a tag by pressing =C-c C-o= on a link below:
+
+#+name: tag-statistics
+#+begin_src emacs-lisp :tangle no
+  (->> (org-ql-select (current-buffer)
+         '(and (level > 2)
+               (not (tags "ARCHIVE")))
+         :action '(org-get-tags))
+       (--filter (not (member "@note" it)))
+       (-flatten-n 1)
+       (-group-by #'identity)
+       (-map (pcase-lambda (`(,tag . ,items))
+               (cons tag (length items))))
+       (-sort (-on #'> #'cdr))
+       (-map (pcase-lambda (`(,tag . ,count))
+               (list (format "[[org-ql-search:tags:%s][%s]]" tag tag)
+                     count))))
+#+end_src
+
+#+RESULTS: tag-statistics
+| [[org-ql-search:tags:packages][packages]]       | 7 |
+| [[org-ql-search:tags:visual][visual]]         | 5 |
+| [[org-ql-search:tags:UI][UI]]             | 4 |
+| [[org-ql-search:tags:process][process]]        | 3 |
+| [[org-ql-search:tags:files][files]]          | 3 |
+| [[org-ql-search:tags:history][history]]        | 3 |
+| [[org-ql-search:tags:initialization][initialization]] | 2 |
+| [[org-ql-search:tags:IO][IO]]             | 2 |
+| [[org-ql-search:tags:formatting][formatting]]     | 2 |
+| [[org-ql-search:tags:navigation][navigation]]     | 2 |
+| [[org-ql-search:tags:profiling][profiling]]      | 1 |
+| [[org-ql-search:tags:performance][performance]]    | 1 |
+| [[org-ql-search:tags:diff][diff]]           | 1 |
+| [[org-ql-search:tags:text][text]]           | 1 |
+| [[org-ql-search:tags:parentheses][parentheses]]    | 1 |
+| [[org-ql-search:tags:VC][VC]]             | 1 |
+| [[org-ql-search:tags:git][git]]            | 1 |
+| [[org-ql-search:tags:usability][usability]]      | 1 |
+| [[org-ql-search:tags:keybindings][keybindings]]    | 1 |
+
+*** Profiling (org-ql dblock example)                    :noexport:ARCHIVE:
+
 #+BEGIN: org-ql :query "tags: profiling" :columns (heading)
-| Heading        |
-|----------------|
-| [[benchmark-init][benchmark-init]] |
+
 #+END:
