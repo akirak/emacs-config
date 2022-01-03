@@ -81,6 +81,32 @@
         "type": "github"
       }
     },
+    "flake-no-path": {
+      "inputs": {
+        "flake-utils": [
+          "utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "pre-commit-hooks": [
+          "pre-commit-hooks"
+        ]
+      },
+      "locked": {
+        "lastModified": 1640760003,
+        "narHash": "sha256-RSk04ywngUySPFC134+Jrjzy+78xrRwcR1Y8owoAjK4=",
+        "owner": "akirak",
+        "repo": "flake-no-path",
+        "rev": "6ff159016ab78e21e83be788375b6475a5f68f7f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "flake-no-path",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1638122382,
@@ -242,14 +268,39 @@
         "type": "github"
       }
     },
+    "pre-commit-hooks": {
+      "inputs": {
+        "flake-utils": [
+          "utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1639823344,
+        "narHash": "sha256-jlsQb2y6A5dB1R0wVPLOfDGM0wLyfYqEJNzMtXuzCXw=",
+        "owner": "cachix",
+        "repo": "pre-commit-hooks.nix",
+        "rev": "ff9c0b459ddc4b79c06e19d44251daa8e9cd1746",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cachix",
+        "repo": "pre-commit-hooks.nix",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "emacs-inventories": "emacs-inventories",
         "emacs-overlay": "emacs-overlay",
+        "flake-no-path": "flake-no-path",
         "flake-utils-plus": "flake-utils-plus",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
         "org-babel": "org-babel",
+        "pre-commit-hooks": "pre-commit-hooks",
         "twist": "twist",
         "utils": "utils"
       }
