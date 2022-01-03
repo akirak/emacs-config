@@ -8,7 +8,7 @@
 - [[#performance][Performance]]
 - [[#built-ins][Built-ins]]
 - [[#basic-appearances][Basic appearances]]
-- [[#custom-variables][Custom variables]]
+- [[#custom-conventions][Custom conventions]]
 - [[#org][Org]]
 - [[#packages][Packages]]
 - [[#notes][Notes]]
@@ -16,11 +16,16 @@
   - [[#profiling][Profiling]]
 :END:
 ** Setup.el
+[[https://git.sr.ht/~pkal/setup][Setup.el]] is an alternative to the famous [[https://github.com/jwiegley/use-package][use-package]].
+I am interesting to see if it can reduce the amount of configuration code.
+
 #+begin_src emacs-lisp
   (eval-when-compile
     (require 'setup)
     (require 'cl-lib)
   
+    ;; Exactly the same definition as a snippet available at
+    ;; https://www.emacswiki.org/emacs/SetupEl#h5o-4 but renamed
     (defmacro define-setup-macro (name signature &rest body)
       "Shorthand for `setup-define'.
     NAME is the name of the local macro.  SIGNATURE is used as the
@@ -135,7 +140,8 @@ You need to install the font separately.
                      (set-face-attribute face nil :family family)
                    (message "Font family %s is not installed" family)))))))
 #+end_src
-** Custom variables
+** Custom conventions
+*** Prefix for mode-specific commands
 #+begin_src emacs-lisp
   (defcustom akirak/mode-prefix-key "C-,"
     "Prefix for mode-specific keybindings."
