@@ -180,6 +180,19 @@
                   files = "emacs-config\.org$";
                   pass_filenames = true;
                 };
+                push-emacs-binary = {
+                  enable = true;
+                  name = "Push the Emacs binary";
+                  stages = [ "push" ];
+                  entry = "${
+                    channels.nixpkgs.writeShellScript "push-emacs-binary" ''
+                      result=$(timeout 3 nix eval --raw .#emacs-full.emacs) \
+                        && timeout 5 cachix push akirak "$result"
+                    ''
+                  }";
+                  files = "^flake\.lock$";
+                  pass_filenames = false;
+                };
               };
             }) shellHook;
           };
