@@ -176,6 +176,7 @@ A bunch of useful packages are configured here.
 *** How to develop this configuration
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 14:52]
+:CUSTOM_ID: develop-org-configuration
 :END:
 This configuration is maintained in Org, and [[file:.org-config.el][.org-config.el]] contains the configuration for the Org file. It uses [[https://github.com/akirak/org-starter][org-starter]], which is my package for maintaining file-specific Org configuration.
 

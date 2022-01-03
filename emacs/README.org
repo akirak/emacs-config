@@ -1,0 +1,23 @@
+* Emacs Configuration
+This is an Emacs configuration that uses [[https://github.com/akirak/emacs-twist][emacs-twist]] to manage package version.
+
+** Structure
+The following files configure Emacs Lisp packages:
+
+- [[file:emacs-config.org][emacs-config.org]]: The main configuration file.
+- [[file:compat.el][compat.el]]: A compatibility layer for myself. Its content is mostly keybindings I grew in [[https://github.com/akirak/emacs.d/][my previous config]].
+- [[file:extras.org][extras.org]]: A collection of extra configurations for specific contexts.
+
+The following files should be the contents of =user-emacs-directory=:
+
+- [[file:early-init.el][early-init.el]]
+- [[file:init.el][init.el]]
+
+The following files and directories are needed for building the configuration using Twist:
+
+- [[file:sources/][sources/]]: A directory for lock files.
+- [[file:recipes/][recipes/]]: Custom recipes for packages that are not available on any package registry.
+- [[file:inventories/flake.nix][inventories/flake.nix]]: Track registries of Emacs Lisp packages.
+
+[[file:.org-config.el][.org-config.el]] contains my Org configuration for maintaining the configuration. See [[file:emacs-config.org::#develop-org-configuration][a note]]
+for details.
