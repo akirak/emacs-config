@@ -207,6 +207,31 @@ Resources:
   (setup ediff-wind
     (:option ediff-window-setup-function #'ediff-setup-windows-plain))
 #+end_src
+*** elec-pair                             :prog_mode:text_mode:parentheses:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup elec-pair
+    (electric-pair-mode 1))
+#+end_src
+
+While the mode is generally useful, the exception is =lispy-mode=, which overrides =self-insert-command= and conflicts with the features of the package.
+*** electric                                                       :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+The built-in =electric= package provides the following modes:
+
+- [ ] =electric-indent-mode= :: Use major-mode specific indentation functions instead?
+- [ ] =electric-layout-mode= :: It may be useful in some programming modes
+- [ ] =electric-quote-mode= :: Maybe I'll turn it on in some specific projects
+
+#+begin_src emacs-lisp
+  (setup electric)
+#+end_src
 *** fileio.c                                                        :files:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -340,6 +365,16 @@ Resources:
   (setup saveplace
     (save-place-mode 1))
 #+end_src
+*** simple                                             :formatting:writing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup simple
+    (:global [remap count-words-region] #'count-words
+             [remap delete-horizontal-space] #'cycle-spacing))
+#+end_src
 *** subr                                                               :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -390,6 +425,19 @@ Resources:
       (:bind
        [remap scroll-up-command] #'View-scroll-half-page-forward
        [remap scroll-down-command] #'View-scroll-half-page-backward)))
+#+end_src
+*** whitespace                                          :visual:formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup whitespace
+    (:option whitespace-style '(face trailing empty tabs)
+             whitespace-line-column 80)
+    (:hook-into prog-mode
+                text-mode
+                sgml-mode))
 #+end_src
 *** window                                                     :navigation:
 :PROPERTIES:
@@ -504,10 +552,45 @@ A bunch of useful packages are configured here.
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
+*** electric-operator                                          :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package electric-operator)
+    (:hook-into python-mode
+                sql-mode
+                js-mode
+                c-mode
+                java-mode
+                rust-mode))
+#+end_src
+*** git-modes                                              :major_modes:VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package git-modes)
+    (:with-mode gitattributes-mode)
+    (:with-mode gitconfig-mode)
+    (:with-mode gitignore-mode
+      (:file-match "/\\.dockerignore\\'")))
+#+end_src
 *** magit                                                             :git:
 #+begin_src emacs-lisp
   (setup (:package magit)
     (:nixpkgs git))
+#+end_src
+*** nix-mode                                                          :Nix:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nix-mode)
+    (:file-match "\\.nix\\'"))
 #+end_src
 *** vterm                                                :terminal:process:
 :PROPERTIES:
