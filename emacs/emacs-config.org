@@ -624,7 +624,8 @@ The workflow is as follows:
 2. Add further configuration for the package using =setup= and set tags on the heading.
 3. Org entries are automatically sorted by package name when the buffer is saved.
 *** Tag statistics
-If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse entries matching a tag by pressing =C-c C-o= on a link below:
+The following source block generates a table of tags in this document.
+If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse entries matching a tag by pressing =C-c C-o= on a link.
 
 #+name: tag-statistics
 #+begin_src emacs-lisp :tangle no
@@ -669,6 +670,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Nix][Nix]]            |  1 |
 | [[org-ql-search:tags:terminal][terminal]]       |  1 |
 | [[org-ql-search:tags:usability][usability]]      |  1 |
+
+Note that the table above is invisible on GitHub.
 *** Quality of life
 There are many ways to improve the quality of life inside Emacs.
 
