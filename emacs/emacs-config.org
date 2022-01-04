@@ -643,25 +643,31 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]       | 7 |
-| [[org-ql-search:tags:visual][visual]]         | 5 |
-| [[org-ql-search:tags:UI][UI]]             | 4 |
-| [[org-ql-search:tags:process][process]]        | 3 |
-| [[org-ql-search:tags:files][files]]          | 3 |
-| [[org-ql-search:tags:history][history]]        | 3 |
-| [[org-ql-search:tags:initialization][initialization]] | 2 |
-| [[org-ql-search:tags:IO][IO]]             | 2 |
-| [[org-ql-search:tags:formatting][formatting]]     | 2 |
-| [[org-ql-search:tags:navigation][navigation]]     | 2 |
-| [[org-ql-search:tags:profiling][profiling]]      | 1 |
-| [[org-ql-search:tags:performance][performance]]    | 1 |
-| [[org-ql-search:tags:diff][diff]]           | 1 |
-| [[org-ql-search:tags:text][text]]           | 1 |
-| [[org-ql-search:tags:parentheses][parentheses]]    | 1 |
-| [[org-ql-search:tags:VC][VC]]             | 1 |
-| [[org-ql-search:tags:git][git]]            | 1 |
-| [[org-ql-search:tags:usability][usability]]      | 1 |
-| [[org-ql-search:tags:keybindings][keybindings]]    | 1 |
+| [[org-ql-search:tags:packages][packages]]       | 11 |
+| [[org-ql-search:tags:formatting][formatting]]     |  6 |
+| [[org-ql-search:tags:visual][visual]]         |  6 |
+| [[org-ql-search:tags:process][process]]        |  4 |
+| [[org-ql-search:tags:UI][UI]]             |  4 |
+| [[org-ql-search:tags:files][files]]          |  3 |
+| [[org-ql-search:tags:history][history]]        |  3 |
+| [[org-ql-search:tags:initialization][initialization]] |  2 |
+| [[org-ql-search:tags:IO][IO]]             |  2 |
+| [[org-ql-search:tags:parentheses][parentheses]]    |  2 |
+| [[org-ql-search:tags:VC][VC]]             |  2 |
+| [[org-ql-search:tags:navigation][navigation]]     |  2 |
+| [[org-ql-search:tags:keybindings][keybindings]]    |  2 |
+| [[org-ql-search:tags:profiling][profiling]]      |  1 |
+| [[org-ql-search:tags:performance][performance]]    |  1 |
+| [[org-ql-search:tags:diff][diff]]           |  1 |
+| [[org-ql-search:tags:prog_mode][prog_mode]]      |  1 |
+| [[org-ql-search:tags:text_mode][text_mode]]      |  1 |
+| [[org-ql-search:tags:text][text]]           |  1 |
+| [[org-ql-search:tags:writing][writing]]        |  1 |
+| [[org-ql-search:tags:major_modes][major_modes]]    |  1 |
+| [[org-ql-search:tags:git][git]]            |  1 |
+| [[org-ql-search:tags:Nix][Nix]]            |  1 |
+| [[org-ql-search:tags:terminal][terminal]]       |  1 |
+| [[org-ql-search:tags:usability][usability]]      |  1 |
 
 *** Profiling (org-ql dblock example)                    :noexport:ARCHIVE:
 
