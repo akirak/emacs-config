@@ -17,9 +17,9 @@
                     (widen)
                     (goto-char (point-min))
                     (or (re-search-forward (rx bol "**" (+ space)
-                                               ,(regexp-quote text))
+                                               (literal ,text))
                                            nil t)
-                        (error "Heading \"%s\" is not found in the file" text)))))
+                        (error "Heading \"%s\" is not found in the file" ,text)))))
       (let ((file (org-starter-locate-file "emacs-config.org" nil t)))
         (doct `(("Emacs Config" :keys "e"
                  :when ,(stringp file)
@@ -40,6 +40,10 @@
                   ("Package" :keys "p"
                    :function ,(level2 "Packages")
                    :src "(setup (:package %\\1)%?)")
+
+                  ("Define a setup macro" :keys "d"
+                   :function ,(level2 "Setup.el")
+                   :src "(eval-when-compile\n  (define-setup-macro %\\1 (%?)))")
 
                   ("Maybe" :keys "m"
                    :template
