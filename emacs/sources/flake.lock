@@ -242,6 +242,7 @@
         "poet-theme": "poet-theme",
         "pretty-hydra": "pretty-hydra",
         "s": "s",
+        "vterm": "vterm",
         "which-key": "which-key",
         "with-editor": "with-editor"
       }
@@ -259,6 +260,22 @@
       "original": {
         "owner": "magnars",
         "repo": "s.el",
+        "type": "github"
+      }
+    },
+    "vterm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640506671,
+        "narHash": "sha256-uSzIDmRNk7u5VtCXYu+JVN7Gzkc65axCiK0Jq0X6MWQ=",
+        "owner": "akermu",
+        "repo": "emacs-libvterm",
+        "rev": "a940dd2ee8a82684860e320c0f6d5e15d31d916f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akermu",
+        "repo": "emacs-libvterm",
         "type": "github"
       }
     },

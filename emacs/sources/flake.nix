@@ -92,6 +92,12 @@
       repo = "s.el";
       type = "github";
     };
+    vterm = {
+      flake = false;
+      owner = "akermu";
+      repo = "emacs-libvterm";
+      type = "github";
+    };
     which-key = {
       flake = false;
       owner = "justbur";

@@ -514,6 +514,14 @@ A bunch of useful packages are configured here.
   (setup (:package magit)
     (:nixpkgs git))
 #+end_src
+*** vterm                                                :terminal:process:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 16:50]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package vterm))
+#+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_src emacs-lisp
   (setup (:package which-key)
