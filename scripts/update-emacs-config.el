@@ -21,7 +21,7 @@
          (error "Property didn't match")))
      (goto-char (org-entry-end-position)))))
 
-(defun akirak/batch-update-emacs-config ()
+(defun akirak/batch-update-emacs-config (&optional update-blocks)
   "Update the Emacs configuration."
   (let (changed)
     (dolist (file command-line-args-left)
@@ -31,10 +31,14 @@
         (find-file file)
         (setq initial-content (sha1 (current-buffer)))
         (akirak-org-sort-buffer)
-        (org-update-all-dblocks)
-        (when (ignore-errors
-                (goto-char (org-babel-find-named-block "tag-statistics")))
-          (org-ctrl-c-ctrl-c))
+        (when update-blocks
+          (require 'org-ql)
+          (require 'org-ql-search)
+          (org-update-all-dblocks)
+          (when (ignore-errors
+                  (goto-char (org-babel-find-named-block "tag-statistics")))
+            (let ((org-confirm-babel-evaluate nil))
+              (org-babel-execute-src-block))))
         (org-make-toc)
         (unless (equal (sha1 (current-buffer)) initial-content)
           (setq changed (or changed t))
@@ -42,3 +46,7 @@
           (save-buffer))
         (kill-buffer)))
     (kill-emacs (if changed 1 0))))
+
+(defun akirak/batch-update-emacs-config-contents ()
+  "Update the Emacs configuration."
+  (akirak/batch-update-emacs-config t))
