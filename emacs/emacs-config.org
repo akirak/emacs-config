@@ -14,6 +14,7 @@
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
   - [[#tag-statistics][Tag statistics]]
+  - [[#quality-of-life][Quality of life]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -668,9 +669,20 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Nix][Nix]]            |  1 |
 | [[org-ql-search:tags:terminal][terminal]]       |  1 |
 | [[org-ql-search:tags:usability][usability]]      |  1 |
+*** Quality of life
+There are many ways to improve the quality of life inside Emacs.
 
-*** Profiling (org-ql dblock example)                    :noexport:ARCHIVE:
+Auto-formatting is one of the keys.
 
-#+BEGIN: org-ql :query "tags: profiling" :columns (heading)
-
+#+BEGIN: org-ql :query "tags: formatting" :columns (heading todo)
+| Heading           | Todo |
+|-------------------+------|
+| [[buffer.c][buffer.c]]          |      |
+| [[electric][electric]]          |      |
+| [[indent.c][indent.c]]          |      |
+| [[simple][simple]]            |      |
+| [[whitespace][whitespace]]        |      |
+| [[electric-operator][electric-operator]] |      |
+| [[Tag statistics][Tag statistics]]    |      |
+| [[Quality of life][Quality of life]]   |      |
 #+END:
