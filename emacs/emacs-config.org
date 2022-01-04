@@ -422,7 +422,7 @@ The built-in =electric= package provides the following modes:
   (setup view
     (:option view-inhibit-help-message t)
   
-    (:with-map View-mode-map
+    (:with-map view-mode-map
       (:bind
        [remap scroll-up-command] #'View-scroll-half-page-forward
        [remap scroll-down-command] #'View-scroll-half-page-backward)))
