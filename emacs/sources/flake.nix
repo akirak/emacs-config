@@ -2,6 +2,18 @@
   description =
     "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
+    ace-window = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "ace-window";
+      type = "github";
+    };
+    avy = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "avy";
+      type = "github";
+    };
     beancount = {
       flake = false;
       owner = "beancount";

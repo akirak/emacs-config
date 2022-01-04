@@ -478,6 +478,21 @@ Embrace Org as a common document format for Emacs.
 :SORTING_TYPE: a
 :END:
 A bunch of useful packages are configured here.
+*** ace-window                                                :keybindings:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+#+begin_src emacs-lisp
+  (setup (:package ace-window)
+    (:option aw-keys (string-to-list "qwertyui")
+             aw-background nil
+             aw-ignore-on t
+             aw-ignored-buffers '(" *LV*"
+                                  minibuffer-mode
+                                  "*Calc Trail*")
+             aw-scope 'visible
+             aw-dispatch-always t))
+#+end_src
 *** bufler
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]

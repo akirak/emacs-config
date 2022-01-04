@@ -1,5 +1,37 @@
 {
   "nodes": {
+    "ace-window": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640714409,
+        "narHash": "sha256-KrI+pPSpuLaiRblsfalRHz4Us8GUxel064BZ6412aR0=",
+        "owner": "abo-abo",
+        "repo": "ace-window",
+        "rev": "0577c426a9833ab107bab46c60d1885c611b2fb9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "ace-window",
+        "type": "github"
+      }
+    },
+    "avy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641110707,
+        "narHash": "sha256-lGs7IFQvoskuRkEoN3N+rTJa3dQ/3WUL3Yj03bvMNV4=",
+        "owner": "abo-abo",
+        "repo": "avy",
+        "rev": "ba5f035be33693d1a136a5cbeedb24327f551a92",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "avy",
+        "type": "github"
+      }
+    },
     "beancount": {
       "flake": false,
       "locked": {
@@ -227,6 +259,8 @@
     },
     "root": {
       "inputs": {
+        "ace-window": "ace-window",
+        "avy": "avy",
         "beancount": "beancount",
         "benchmark-init": "benchmark-init",
         "bufler": "bufler",
