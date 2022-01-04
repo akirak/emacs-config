@@ -16,6 +16,9 @@
   - [[#tag-statistics][Tag statistics]]
 :END:
 ** Setup.el
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
 [[https://git.sr.ht/~pkal/setup][Setup.el]] is an alternative to the famous [[https://github.com/jwiegley/use-package][use-package]].
 I am interested to see if it can reduce the amount of configuration code.
 
@@ -48,11 +51,25 @@ I am interested to see if it can reduce the amount of configuration code.
     (define-setup-macro :package (package)
       "Fake installation of PACKAGE."
       :repeatable t
-      :shorthand cadr)
-
+      :shorthand cadr))
+#+end_src
+*** :compilation-error
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro :compilation-error (&rest alist)
+      "Add entries to the compilation error regexp alist."
+      `(with-eval-after-load 'compile
+         (dolist (entry (quote ,alist))
+           (if (stringp (car entry))
+               (add-to-list 'compilation-error-regexp-alist entry)
+             (add-to-list 'compilation-error-regexp-alist (car entry))
+             (add-to-list 'compilation-error-regexp-alist-alist entry))))))
+#+end_src
+*** :nixpkgs
+#+begin_src emacs-lisp
+  (eval-when-compile
     (define-setup-macro :nixpkgs (&rest nixpkgs)
-      "Fake installation of packages from NIXPKGS for executables."
-      (lambda ())))
+      "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
 ** Performance                                                    :packages:
 # Note: Some of these should be loaded as early as possible.
@@ -147,76 +164,39 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup compile
-    (:option
-     compilation-auto-jump-to-first-error t
-     compilation-scroll-output t
-     compilation-error-regexp-alist
-     (list
-      ;; eslint
-      (list (rx bol (group (or "ERROR" "WARNING"))
-                " in "
-                (group (*? anything))
-                ":" (group (+ digit))
-                ":" (group (+ digit)))
-            2 3 4 '(1 . 1))
-      ;; eslint --fix
-      (list (rx bol (group "/home/" (+ nonl)) "\n"
-                (+ space) (group (+ digit)) ":" (group (+ digit))
-                (+ space) (group (or "error" "WARNING")))
-            1 2 3 '(4 . 4))
-      ;; prettier
-      (list (rx bol "[" (group (or "error" "WARNING")) "] "
-                (group (*? anything))
-                ": "
-                (+ anything)
-                "(" (group (+ digit)) ":" (group (+ digit)) ")")
-            2 3 4 '(1 . 1))
-      ;; nix-linter
-      ;; Unused argument `hsuper` at default.nix:9:24-15:6
-      (list (rx " at " (group (+ (not (any ":"))))
-                ":" (group (+ digit)) ":" (group (+ digit))
-                "-" (+ digit) ":" (+ digit) eol)
-            1 2 3)
-      ;; hlint
-      ;; path:67:23-45:
-      (list (rx bol (group (any "/" alnum)
-                           (* (any "./" alnum)))
-                ":"
-                (group (+ digit)) ":" (group (+ digit))
-                "-"
-                (+ digit)
-                ":" (* space)
-                (group (or "Warning" "Suggestion"
-                           "warning" "error"))
-                ":" space (+ nonl))
-            1 2 3 '(4 . 4))
-      (list (rx bol (group (any "/" alnum)
-                           (* (any "./" alnum)))
-                ":"
-                "(" (group (+ digit)) "," (group (+ digit)) ")"
-                "-"
-                "(" (+ digit) "," (+ digit) ")"
-                ":" (* space)
-                (group (or "Warning" "Suggestion"
-                           "warning" "error"))
-                ":" space (+ nonl))
-            1 2 3 '(4 . 4))
-      ;; Emacs checkdoc/byte-compile, GHC, etc.
-      ;; path:line:col: error:
-      (list (rx (group (+ (not (any space ":")))) ":"
-                (group (+ digit)) ":" (group (+ digit))
-                ":" (* space)
-                (or "Error" "error" "warning") ":")
-            1 2 3 '(4 . 4))
+    (:option compilation-auto-jump-to-first-error t
+             compilation-scroll-output t)
   
-      ;; Elixir iex
-      ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
-      (list (rx bol (+ "*") "(" (+ anything) ")"
-                (group (+ (not (any space ":")))) ":"
-                (group (+ digit)) ":" (group (+ digit))
-                ":" (* space))
-            1 2 3 '(4 . 4))))
-    )
+    (:compilation-error
+     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+             2 3 4 (1 . 1))
+  
+     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
+                 1 2 3 (4 . 4))
+  
+     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
+               2 3 4 (1 . 1))
+  
+     ;; Unused argument `hsuper` at default.nix:9:24-15:6
+     (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
+                 1 2 3)
+  
+     ;; path:67:23-45:
+     (hlint "^\\([/[:alnum:]][./[:alnum:]]*\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
+            1 2 3 (4 . 4))
+  
+     ;; unknown
+     ("^\\([/[:alnum:]][./[:alnum:]]*\\):(\\([[:digit:]]+\\),\\([[:digit:]]+\\))-([[:digit:]]+,[[:digit:]]+):[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
+      1 2 3 (4 . 4))
+  
+     ;; Emacs checkdoc/byte-compile, GHC, etc.
+     ;; path:line:col: error:
+     (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\|warning\\):"
+                 1 2 3 (4 . 4))
+  
+     ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
+     (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
+          1 2 3 (4 . 4))))
 #+end_src
 *** ediff-wind                                                       :diff:
 :PROPERTIES:
