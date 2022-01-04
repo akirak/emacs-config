@@ -1,4 +1,19 @@
 {
+  "nano-modeline": {
+    "archive": {
+      "narHash": "sha256-cBbS8+3/4iLbo+V1Uf/SMyGYgao2vTH+gk5iJfvZOuA=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/nano-modeline-0.4.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "emacs": "27.1"
+    },
+    "version": "0.4"
+  },
   "setup": {
     "archive": {
       "narHash": "sha256-T786A6atp69/l8Tn9vhXnSpYElRt6XvHaduQATl7SyI=",
@@ -13,5 +28,20 @@
       "emacs": "26.1"
     },
     "version": "1.2.0"
+  },
+  "svg-lib": {
+    "archive": {
+      "narHash": "sha256-3R3VJE13xt1nGdO6pe0Xh6d+WfU3bW8CQepdp/0VNp8=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/svg-lib-0.2.4.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "emacs": "27.1"
+    },
+    "version": "0.2.4"
   }
 }

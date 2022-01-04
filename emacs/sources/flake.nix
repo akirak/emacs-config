@@ -26,11 +26,16 @@
       repo = "benchmark-init-el";
       type = "github";
     };
-    bufler = {
+    consult = {
       flake = false;
-      owner = "akirak";
-      ref = "fix-cl-macs";
-      repo = "bufler.el";
+      owner = "minad";
+      repo = "consult";
+      type = "github";
+    };
+    consult-dir = {
+      flake = false;
+      owner = "karthink";
+      repo = "consult-dir";
       type = "github";
     };
     dash = {
@@ -45,10 +50,22 @@
       repo = "themes";
       type = "github";
     };
-    f = {
+    electric-operator = {
       flake = false;
-      owner = "rejeep";
-      repo = "f.el";
+      owner = "davidshepherd7";
+      repo = "electric-operator";
+      type = "github";
+    };
+    embark = {
+      flake = false;
+      owner = "oantolin";
+      repo = "embark";
+      type = "github";
+    };
+    embark-consult = {
+      flake = false;
+      owner = "oantolin";
+      repo = "embark";
       type = "github";
     };
     gcmh = {
@@ -62,16 +79,10 @@
       repo = "magit";
       type = "github";
     };
-    hydra = {
+    git-modes = {
       flake = false;
-      owner = "abo-abo";
-      repo = "hydra";
-      type = "github";
-    };
-    lv = {
-      flake = false;
-      owner = "abo-abo";
-      repo = "hydra";
+      owner = "magit";
+      repo = "git-modes";
       type = "github";
     };
     magit = {
@@ -86,22 +97,40 @@
       repo = "magit";
       type = "github";
     };
+    marginalia = {
+      flake = false;
+      owner = "minad";
+      repo = "marginalia";
+      type = "github";
+    };
+    nano-theme = {
+      flake = false;
+      owner = "rougier";
+      repo = "nano-theme";
+      type = "github";
+    };
+    nix-mode = {
+      flake = false;
+      owner = "NixOS";
+      repo = "nix-mode";
+      type = "github";
+    };
+    orderless = {
+      flake = false;
+      owner = "oantolin";
+      repo = "orderless";
+      type = "github";
+    };
     poet-theme = {
       flake = false;
       owner = "kunalb";
       repo = "poet";
       type = "github";
     };
-    pretty-hydra = {
+    svg-tag-mode = {
       flake = false;
-      owner = "jerrypnz";
-      repo = "major-mode-hydra.el";
-      type = "github";
-    };
-    s = {
-      flake = false;
-      owner = "magnars";
-      repo = "s.el";
+      owner = "rougier";
+      repo = "svg-tag-mode";
       type = "github";
     };
     vterm = {

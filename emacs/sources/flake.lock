@@ -64,20 +64,35 @@
         "type": "github"
       }
     },
-    "bufler": {
+    "consult": {
       "flake": false,
       "locked": {
-        "lastModified": 1641133938,
-        "narHash": "sha256-1IIUcqssDBHIVy72ukcrCWcHyRPTJokyunhB3mxc6IQ=",
-        "owner": "akirak",
-        "repo": "bufler.el",
-        "rev": "df000ab98225488af76303a1275b3999d3a3230f",
+        "lastModified": 1641079103,
+        "narHash": "sha256-8KcLbrYIjbcWL4eyLzU7ZITug261O0H1M6pr/GU6r00=",
+        "owner": "minad",
+        "repo": "consult",
+        "rev": "0940ca016531f3412003c231b476e5023a510ff9",
         "type": "github"
       },
       "original": {
-        "owner": "akirak",
-        "ref": "fix-cl-macs",
-        "repo": "bufler.el",
+        "owner": "minad",
+        "repo": "consult",
+        "type": "github"
+      }
+    },
+    "consult-dir": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1633931904,
+        "narHash": "sha256-dhYMCZNNxCUoBa68FhGMzubYeG0XJGCLFrwGm7UmzrE=",
+        "owner": "karthink",
+        "repo": "consult-dir",
+        "rev": "08f543ae6acbfc1ffe579ba1d00a5414012d5c0b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "karthink",
+        "repo": "consult-dir",
         "type": "github"
       }
     },
@@ -113,19 +128,51 @@
         "type": "github"
       }
     },
-    "f": {
+    "electric-operator": {
       "flake": false,
       "locked": {
-        "lastModified": 1624532602,
-        "narHash": "sha256-vsslMtF8dQm6cJYb07SxPO0rp44lfRONSxRHj3e52Ew=",
-        "owner": "rejeep",
-        "repo": "f.el",
-        "rev": "50af874cd19042f17c8686813d52569b1025c76a",
+        "lastModified": 1636891000,
+        "narHash": "sha256-iJiKuLH85Y1HCSM2CmySbdgfTN3PkTUWP4u2uYsf/v8=",
+        "owner": "davidshepherd7",
+        "repo": "electric-operator",
+        "rev": "1c51e88d5719e7b0dd022a4704c46b24e0c91348",
         "type": "github"
       },
       "original": {
-        "owner": "rejeep",
-        "repo": "f.el",
+        "owner": "davidshepherd7",
+        "repo": "electric-operator",
+        "type": "github"
+      }
+    },
+    "embark": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641282923,
+        "narHash": "sha256-9yaaX1yRux/T7TJ0SDBLCoUvnzAPlP9wUmcMdyB9HtM=",
+        "owner": "oantolin",
+        "repo": "embark",
+        "rev": "c9b26c2e18f01ae401df6a69b7a0c1a6bc44b90c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oantolin",
+        "repo": "embark",
+        "type": "github"
+      }
+    },
+    "embark-consult": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641282923,
+        "narHash": "sha256-9yaaX1yRux/T7TJ0SDBLCoUvnzAPlP9wUmcMdyB9HtM=",
+        "owner": "oantolin",
+        "repo": "embark",
+        "rev": "c9b26c2e18f01ae401df6a69b7a0c1a6bc44b90c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oantolin",
+        "repo": "embark",
         "type": "github"
       }
     },
@@ -161,35 +208,19 @@
         "type": "github"
       }
     },
-    "hydra": {
+    "git-modes": {
       "flake": false,
       "locked": {
-        "lastModified": 1641110604,
-        "narHash": "sha256-AE3l5N0irSunycinznvthqjSG49sequndSY+lECFtIc=",
-        "owner": "abo-abo",
-        "repo": "hydra",
-        "rev": "9e9e00cb240ea1903ffd36a54956b3902c379d29",
+        "lastModified": 1634771183,
+        "narHash": "sha256-08HCzxaqS5+suWxIm3aBB1kcEXEGGE1+gWUwzG4xHys=",
+        "owner": "magit",
+        "repo": "git-modes",
+        "rev": "62fbf2e5b84ca789e7bc2f87939386023b5ba3df",
         "type": "github"
       },
       "original": {
-        "owner": "abo-abo",
-        "repo": "hydra",
-        "type": "github"
-      }
-    },
-    "lv": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1641110604,
-        "narHash": "sha256-AE3l5N0irSunycinznvthqjSG49sequndSY+lECFtIc=",
-        "owner": "abo-abo",
-        "repo": "hydra",
-        "rev": "9e9e00cb240ea1903ffd36a54956b3902c379d29",
-        "type": "github"
-      },
-      "original": {
-        "owner": "abo-abo",
-        "repo": "hydra",
+        "owner": "magit",
+        "repo": "git-modes",
         "type": "github"
       }
     },
@@ -225,6 +256,70 @@
         "type": "github"
       }
     },
+    "marginalia": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640943556,
+        "narHash": "sha256-cf49e0HW1MSiyopu6UKm335qeP1jms56ZXhqUeTyWD0=",
+        "owner": "minad",
+        "repo": "marginalia",
+        "rev": "9229d88ae4757f3439e81f51799758c009838cb4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "minad",
+        "repo": "marginalia",
+        "type": "github"
+      }
+    },
+    "nano-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641200709,
+        "narHash": "sha256-jKSP3vNipWbz9cyYsMLaZGzUMOxyhKUF7a0/6wrfMo4=",
+        "owner": "rougier",
+        "repo": "nano-theme",
+        "rev": "5962a09d1129b9bc91bce6380aa222a45b80556e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rougier",
+        "repo": "nano-theme",
+        "type": "github"
+      }
+    },
+    "nix-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1637425663,
+        "narHash": "sha256-RJWMoZRlYElcPhNVNe8HfvGeoeQvn0Yi8mfMh0K272c=",
+        "owner": "NixOS",
+        "repo": "nix-mode",
+        "rev": "3d04d92d9c3896d07bc9fed7e4f40032025fbe7b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nix-mode",
+        "type": "github"
+      }
+    },
+    "orderless": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1638234176,
+        "narHash": "sha256-th5FIOPY0lPdBElR08YqU2uFRc/i73Uk5cUKq1KtcJs=",
+        "owner": "oantolin",
+        "repo": "orderless",
+        "rev": "1ccf74ffdbb0dd34caa63022e92f947c09c49c86",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oantolin",
+        "repo": "orderless",
+        "type": "github"
+      }
+    },
     "poet-theme": {
       "flake": false,
       "locked": {
@@ -241,59 +336,48 @@
         "type": "github"
       }
     },
-    "pretty-hydra": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1613896470,
-        "narHash": "sha256-BeYSQLYIQe0IugW924944a7QpVToXa0lLUi4hX3rifs=",
-        "owner": "jerrypnz",
-        "repo": "major-mode-hydra.el",
-        "rev": "84c1929a5153be169ca5c36737439d51dffde505",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jerrypnz",
-        "repo": "major-mode-hydra.el",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "ace-window": "ace-window",
         "avy": "avy",
         "beancount": "beancount",
         "benchmark-init": "benchmark-init",
-        "bufler": "bufler",
+        "consult": "consult",
+        "consult-dir": "consult-dir",
         "dash": "dash",
         "doom-themes": "doom-themes",
-        "f": "f",
+        "electric-operator": "electric-operator",
+        "embark": "embark",
+        "embark-consult": "embark-consult",
         "gcmh": "gcmh",
         "git-commit": "git-commit",
-        "hydra": "hydra",
-        "lv": "lv",
+        "git-modes": "git-modes",
         "magit": "magit",
         "magit-section": "magit-section",
+        "marginalia": "marginalia",
+        "nano-theme": "nano-theme",
+        "nix-mode": "nix-mode",
+        "orderless": "orderless",
         "poet-theme": "poet-theme",
-        "pretty-hydra": "pretty-hydra",
-        "s": "s",
+        "svg-tag-mode": "svg-tag-mode",
         "vterm": "vterm",
         "which-key": "which-key",
         "with-editor": "with-editor"
       }
     },
-    "s": {
+    "svg-tag-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1623824393,
-        "narHash": "sha256-F0BrAlsxBskNzkyHriG3yNY+PZ7npYi1x98Ci5yVDAo=",
-        "owner": "magnars",
-        "repo": "s.el",
-        "rev": "08661efb075d1c6b4fa812184c1e5e90c08795a9",
+        "lastModified": 1641233875,
+        "narHash": "sha256-lFkMMnpT4wEUZPbfEP3hvEQ0UxAxV69kwc24Auv60dM=",
+        "owner": "rougier",
+        "repo": "svg-tag-mode",
+        "rev": "fee61c6a0b0570bd24fd335efef17c7385297aa0",
         "type": "github"
       },
       "original": {
-        "owner": "magnars",
-        "repo": "s.el",
+        "owner": "rougier",
+        "repo": "svg-tag-mode",
         "type": "github"
       }
     },
