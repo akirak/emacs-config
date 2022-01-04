@@ -3,6 +3,7 @@
 , writeShellScriptBin
 , writeText
 , coreutils
+, bashInteractive
 }:
 emacs:
 { name ? "emacs-sandboxed"
@@ -69,16 +70,26 @@ lib.extendDerivation true
         --dev-bind /dev/dri /dev/dri \
         --ro-bind /nix /nix \
         --ro-bind /etc /etc \
+        --ro-bind-try /bin /bin \
+        --ro-bind-try /usr/bin/env /usr/bin/env \
         --bind-try "$HOME/.cache/fontconfig" "$HOME/.cache/fontconfig" \
         --tmpfs /run \
         --tmpfs /tmp \
+        --ro-bind "$SHELL" "$SHELL" \
+        --ro-bind-try "$HOME/.config/zsh/.zshenv" "$HOME/.config/zsh/.zshenv" \
+        --ro-bind-try "$HOME/.config/zsh/.zshrc" "$HOME/.config/zsh/.zshrc" \
+        --ro-bind-try "$HOME/.config/zsh/plugins" "$HOME/.config/zsh/plugins" \
+        --ro-bind-try "$HOME/.zshenv" "$HOME/.zshenv" \
         --setenv DISPLAY ":0" \
         --ro-bind /tmp/.X11-unix/X0 /tmp/.X11-unix/X0 \
         --ro-bind "$XAUTHORITY" "$XAUTHORITY" \
         --new-session \
         --die-with-parent \
         --unshare-all \
-        --setenv PATH ${lib.makeBinPath [ coreutils ]} \
+        --setenv PATH ${lib.makeBinPath [
+          coreutils
+          bashInteractive
+        ]} \
         ${quoteShellArgs extraBubblewrapOptions} \
         ${emacsDirectoryOpts} \
         --ro-bind ${../emacs/early-init.el} ${userEmacsDirectory'}/early-init.el \
