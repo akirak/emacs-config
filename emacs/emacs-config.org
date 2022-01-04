@@ -48,7 +48,11 @@ I am interested to see if it can reduce the amount of configuration code.
     (define-setup-macro :package (package)
       "Fake installation of PACKAGE."
       :repeatable t
-      :shorthand cadr))
+      :shorthand cadr)
+
+    (define-setup-macro :nixpkgs (&rest nixpkgs)
+      "Fake installation of packages from NIXPKGS for executables."
+      (lambda ())))
 #+end_src
 ** Performance                                                    :packages:
 # Note: Some of these should be loaded as early as possible.
@@ -507,7 +511,8 @@ A bunch of useful packages are configured here.
 #+end_src
 *** magit                                                             :git:
 #+begin_src emacs-lisp
-  (setup (:package magit))
+  (setup (:package magit)
+    (:nixpkgs git))
 #+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_src emacs-lisp
