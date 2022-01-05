@@ -111,20 +111,21 @@
 
           emacsSandbox = channels.nixpkgs.callPackage ./sandbox/emacs.nix { };
 
-          useDoomTheme = themeName: [
+          useThemeFrom = themePackage: themeName: [
             "--eval"
-            "(when init-file-user (require 'doom-themes) (load-theme '${themeName} t))"
+            "(when init-file-user (require '${themePackage}) (load-theme '${themeName} t))"
           ];
+          useDoomTheme = useThemeFrom "doom-themes";
         in
         {
           packages = {
             inherit emacs-full;
             # Add more variants of the full profile later
             emacs = emacsSandbox emacs-basic {
-              emacsArguments = useDoomTheme "doom-tomorrow-night";
+              emacsArguments = useThemeFrom "nano-theme" "nano-dark";
             };
             emacs-compat = emacsSandbox emacs-compat {
-              # emacsArguments = useDoomTheme "doom-tomorrow-night";
+              emacsArguments = useThemeFrom "nano-theme" "nano-dark";
             };
             emacs-beancount = emacsSandbox emacsConfigurations.beancount {
               emacsArguments = useDoomTheme "doom-opera-light";

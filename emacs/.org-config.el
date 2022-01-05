@@ -8,7 +8,8 @@
 (org-starter-def "emacs-config.org"
   :key "e"
   :refile (:maxlevel . 4)
-  :minor-modes (org-edna-mode))
+  :minor-modes (org-edna-mode
+                whitespace-cleanup-mode))
 
 (akirak-org-capture-add-templates
     (cl-macrolet
