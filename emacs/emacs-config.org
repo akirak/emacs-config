@@ -85,16 +85,6 @@ I am interested to see if it can reduce the amount of configuration code.
   (setup (:package gcmh)
     (gcmh-mode t))
 #+end_src
-*** Measuring init time                                    :initialization:
-Display initialization time concisely at startup:
-
-#+begin_src emacs-lisp
-  (add-hook 'emacs-startup-hook
-            (defun akirak/show-init-time ()
-              (message "Emacs initialized in %.3f sec with %d garbage collections"
-                       (float-time (time-subtract after-init-time before-init-time))
-                       gcs-done)))
-#+end_src
 ** Built-ins
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -395,6 +385,28 @@ This is a recommended setting for use with vertico. See https://github.com/minad
   (setup simple
     (:global [remap count-words-region] #'count-words
              [remap delete-horizontal-space] #'cycle-spacing))
+#+end_src
+*** startup
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 19:45]
+:END:
+#+begin_src emacs-lisp
+  (setup startup
+    (:option inihibit-startup-screen t
+             initial-buffer-choice t
+             initial-scratch-message nil
+             initial-major-mode 'fundamental-mode))
+#+end_src
+
+=*scratch*= buffer is shown at startup.
+You can set =initial-buffer-choice= to a function or a buffer name depending on the context.
+**** Initialization time
+#+begin_src emacs-lisp
+  (add-hook 'emacs-startup-hook
+            (defun akirak/show-init-time ()
+              (message "Emacs initialized in %.3f sec with %d garbage collections"
+                       (float-time (time-subtract after-init-time before-init-time))
+                       gcs-done)))
 #+end_src
 *** subr                                                               :UI:
 :PROPERTIES:
