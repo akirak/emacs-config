@@ -616,6 +616,24 @@ A bunch of useful packages are configured here.
   (setup (:package nix-mode)
     (:file-match "\\.nix\\'"))
 #+end_src
+*** svg-lib                                              :library:graphics:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 15:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package svg-lib))
+#+end_src
+*** svg-tag-mode                                   :visual:nano:aesthetics:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 15:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package svg-tag-mode)
+    (autoload #'svg-tag-mode "svg-tag-mode.el")
+    (:hook-into org-mode prog-mode))
+#+end_src
 *** vterm                                                :terminal:process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 16:50]
