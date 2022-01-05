@@ -111,9 +111,9 @@
 
           emacsSandbox = channels.nixpkgs.callPackage ./sandbox/emacs.nix { };
 
-          useDoomTheme = themeName: [
+          useThemeFrom = themePackage: themeName: [
             "--eval"
-            "(when init-file-user (require 'doom-themes) (load-theme '${themeName} t))"
+            "(when init-file-user (require '${themePackage}) (load-theme '${themeName} t))"
           ];
         in
         {
@@ -121,13 +121,14 @@
             inherit emacs-full;
             # Add more variants of the full profile later
             emacs = emacsSandbox emacs-basic {
-              emacsArguments = useDoomTheme "doom-tomorrow-night";
+              emacsArguments = useThemeFrom "doom-themes" "doom-rouge";
             };
             emacs-compat = emacsSandbox emacs-compat {
-              # emacsArguments = useDoomTheme "doom-tomorrow-night";
+              emacsArguments = useThemeFrom "doom-themes" "doom-one";
             };
             emacs-beancount = emacsSandbox emacsConfigurations.beancount {
               emacsArguments = useDoomTheme "doom-opera-light";
+              userEmacsDirectory = "$HOME/beancount/emacs-var";
               extraBubblewrapOptions = [
                 "--bind"
                 "$HOME/beancount"
@@ -156,43 +157,11 @@
           devShell = channels.nixpkgs.mkShell {
             inherit (inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
-              hooks = {
-                nixpkgs-fmt.enable = true;
-                # nix-linter.enable = true;
-                flake-no-path = {
-                  enable = true;
-                  name = "Ensure that flake.lock does not contain a local path";
-                  entry = "${
-                    inputs.flake-no-path.packages.${system}.flake-no-path
-                  }/bin/flake-no-path";
-                  files = "flake\.lock$";
-                  pass_filenames = true;
-                };
-                emacs-config = {
-                  enable = true;
-                  name = "Update the documentation of the Emacs configuration";
-                  stages = [ "push" ];
-                  entry = "${
-                    (channels.nixpkgs.emacsPackagesFor emacs-full.emacs).emacsWithPackages
-                      (epkgs: [ epkgs.org-make-toc ])
-                  }/bin/emacs --batch -l ${./scripts/update-emacs-config.el}
- -f akirak/batch-update-emacs-config";
-                  files = "emacs-config\.org$";
-                  pass_filenames = true;
-                };
-                push-emacs-binary = {
-                  enable = true;
-                  name = "Push the Emacs binary";
-                  stages = [ "push" ];
-                  entry = "${
-                    channels.nixpkgs.writeShellScript "push-emacs-binary" ''
-                      result=$(timeout 3 nix eval --raw .#emacs-full.emacs) \
-                        && timeout 5 cachix push akirak "$result"
-                    ''
-                  }";
-                  files = "^flake\.lock$";
-                  pass_filenames = false;
-                };
+              hooks = import ./hooks.nix {
+                pkgs = channels.nixpkgs;
+                emacs = emacs-full.emacs;
+                flake-no-path = inputs.flake-no-path.packages.${system}.flake-no-path;
+                emacsBinaryPackage = "emacs-full.emacs";
               };
             }) shellHook;
           };

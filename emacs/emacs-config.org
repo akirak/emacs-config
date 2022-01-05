@@ -1,4 +1,4 @@
-* Emacs Configuration
+* An Optimist's Emacs Configuration
 :PROPERTIES:
 :TOC:      :include descendants :depth 1
 :END:
@@ -14,8 +14,12 @@
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
   - [[#tag-statistics][Tag statistics]]
+  - [[#quality-of-life][Quality of life]]
 :END:
 ** Setup.el
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
 [[https://git.sr.ht/~pkal/setup][Setup.el]] is an alternative to the famous [[https://github.com/jwiegley/use-package][use-package]].
 I am interested to see if it can reduce the amount of configuration code.
 
@@ -23,7 +27,7 @@ I am interested to see if it can reduce the amount of configuration code.
   (eval-when-compile
     (require 'setup)
     (require 'cl-lib)
-  
+
     ;; Exactly the same definition as a snippet available at
     ;; https://www.emacswiki.org/emacs/SetupEl#h5o-4 but renamed
     (defmacro define-setup-macro (name signature &rest body)
@@ -44,11 +48,29 @@ I am interested to see if it can reduce the amount of configuration code.
         `(setup-define ,name
            (cl-function (lambda ,signature ,@body))
            ,@opts)))
-  
+
     (define-setup-macro :package (package)
       "Fake installation of PACKAGE."
       :repeatable t
       :shorthand cadr))
+#+end_src
+*** :compilation-error
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro :compilation-error (&rest alist)
+      "Add entries to the compilation error regexp alist."
+      `(with-eval-after-load 'compile
+         (dolist (entry (quote ,alist))
+           (if (stringp (car entry))
+               (add-to-list 'compilation-error-regexp-alist entry)
+             (add-to-list 'compilation-error-regexp-alist (car entry))
+             (add-to-list 'compilation-error-regexp-alist-alist entry))))))
+#+end_src
+*** :nixpkgs
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro :nixpkgs (&rest nixpkgs)
+      "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
 ** Performance                                                    :packages:
 # Note: Some of these should be loaded as early as possible.
@@ -63,49 +85,11 @@ I am interested to see if it can reduce the amount of configuration code.
   (setup (:package gcmh)
     (gcmh-mode t))
 #+end_src
-*** Measuring init time                                    :initialization:
-Display initialization time concisely at startup:
-
-#+begin_src emacs-lisp
-  (add-hook 'emacs-startup-hook
-            (defun akirak/show-init-time ()
-              (message "Emacs initialized in %.3f sec with %d garbage collections"
-                       (float-time (time-subtract after-init-time before-init-time))
-                       gcs-done)))
-#+end_src
 ** Built-ins
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
 # Note: These should never fail.
-
-#+begin_src emacs-lisp
-  (setup emacs
-    (:option register-preview-delay 0)
-  
-    ;; Add an indicator if mutiple strings are read
-    (advice-add #'completing-read-multiple
-                :filter-args
-                (defun crm-indicator (args)
-                  (cons (concat "[CRM] " (car args)) (cdr args))))
-  
-    ;; Do not allow the cursor in the minibuffer prompt
-    (setq minibuffer-prompt-properties
-          '(read-only t cursor-intangible t face minibuffer-prompt))
-    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-  
-    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-    ;; Vertico commands are hidden in normal buffers.
-    ;; (setq read-extended-command-predicate
-    ;;       #'command-completion-default-include-p)
-  
-    ;; Enable recursive minibuffers
-    (setq enable-recursive-minibuffers t))
-#+end_src
-
-Resources:
-
-- https://github.com/minad/vertico#configuration
 *** autorevert                                                         :IO:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -143,76 +127,39 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup compile
-    (:option
-     compilation-auto-jump-to-first-error t
-     compilation-scroll-output t
-     compilation-error-regexp-alist
-     (list
-      ;; eslint
-      (list (rx bol (group (or "ERROR" "WARNING"))
-                " in "
-                (group (*? anything))
-                ":" (group (+ digit))
-                ":" (group (+ digit)))
-            2 3 4 '(1 . 1))
-      ;; eslint --fix
-      (list (rx bol (group "/home/" (+ nonl)) "\n"
-                (+ space) (group (+ digit)) ":" (group (+ digit))
-                (+ space) (group (or "error" "WARNING")))
-            1 2 3 '(4 . 4))
-      ;; prettier
-      (list (rx bol "[" (group (or "error" "WARNING")) "] "
-                (group (*? anything))
-                ": "
-                (+ anything)
-                "(" (group (+ digit)) ":" (group (+ digit)) ")")
-            2 3 4 '(1 . 1))
-      ;; nix-linter
-      ;; Unused argument `hsuper` at default.nix:9:24-15:6
-      (list (rx " at " (group (+ (not (any ":"))))
-                ":" (group (+ digit)) ":" (group (+ digit))
-                "-" (+ digit) ":" (+ digit) eol)
-            1 2 3)
-      ;; hlint
-      ;; path:67:23-45:
-      (list (rx bol (group (any "/" alnum)
-                           (* (any "./" alnum)))
-                ":"
-                (group (+ digit)) ":" (group (+ digit))
-                "-"
-                (+ digit)
-                ":" (* space)
-                (group (or "Warning" "Suggestion"
-                           "warning" "error"))
-                ":" space (+ nonl))
-            1 2 3 '(4 . 4))
-      (list (rx bol (group (any "/" alnum)
-                           (* (any "./" alnum)))
-                ":"
-                "(" (group (+ digit)) "," (group (+ digit)) ")"
-                "-"
-                "(" (+ digit) "," (+ digit) ")"
-                ":" (* space)
-                (group (or "Warning" "Suggestion"
-                           "warning" "error"))
-                ":" space (+ nonl))
-            1 2 3 '(4 . 4))
-      ;; Emacs checkdoc/byte-compile, GHC, etc.
-      ;; path:line:col: error:
-      (list (rx (group (+ (not (any space ":")))) ":"
-                (group (+ digit)) ":" (group (+ digit))
-                ":" (* space)
-                (or "Error" "error" "warning") ":")
-            1 2 3 '(4 . 4))
-  
-      ;; Elixir iex
-      ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
-      (list (rx bol (+ "*") "(" (+ anything) ")"
-                (group (+ (not (any space ":")))) ":"
-                (group (+ digit)) ":" (group (+ digit))
-                ":" (* space))
-            1 2 3 '(4 . 4))))
-    )
+    (:option compilation-auto-jump-to-first-error t
+             compilation-scroll-output t)
+
+    (:compilation-error
+     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+             2 3 4 (1 . 1))
+
+     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
+                 1 2 3 (4 . 4))
+
+     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
+               2 3 4 (1 . 1))
+
+     ;; Unused argument `hsuper` at default.nix:9:24-15:6
+     (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
+                 1 2 3)
+
+     ;; path:67:23-45:
+     (hlint "^\\([/[:alnum:]][./[:alnum:]]*\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
+            1 2 3 (4 . 4))
+
+     ;; unknown
+     ("^\\([/[:alnum:]][./[:alnum:]]*\\):(\\([[:digit:]]+\\),\\([[:digit:]]+\\))-([[:digit:]]+,[[:digit:]]+):[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
+      1 2 3 (4 . 4))
+
+     ;; Emacs checkdoc/byte-compile, GHC, etc.
+     ;; path:line:col: error:
+     (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\|warning\\):"
+                 1 2 3 (4 . 4))
+
+     ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
+     (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
+          1 2 3 (4 . 4))))
 #+end_src
 *** ediff-wind                                                       :diff:
 :PROPERTIES:
@@ -222,6 +169,31 @@ Resources:
 #+begin_src emacs-lisp
   (setup ediff-wind
     (:option ediff-window-setup-function #'ediff-setup-windows-plain))
+#+end_src
+*** elec-pair                             :prog_mode:text_mode:parentheses:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup elec-pair
+    (electric-pair-mode 1))
+#+end_src
+
+While the mode is generally useful, the exception is =lispy-mode=, which overrides =self-insert-command= and conflicts with the features of the package.
+*** electric                                                       :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+The built-in =electric= package provides the following modes:
+
+- [ ] =electric-indent-mode= :: Use major-mode specific indentation functions instead?
+- [ ] =electric-layout-mode= :: It may be useful in some programming modes
+- [ ] =electric-quote-mode= :: Maybe I'll turn it on in some specific projects
+
+#+begin_src emacs-lisp
+  (setup electric)
 #+end_src
 *** fileio.c                                                        :files:
 :PROPERTIES:
@@ -262,7 +234,7 @@ Resources:
 #+begin_src emacs-lisp
   (setup fns
     (:option use-dialog-box nil))
-  
+
   (setup xfns
     (:option x-gtk-use-system-tooltips nil))
 #+end_src
@@ -286,6 +258,15 @@ Resources:
       (:hook-into prog-mode-hook
                   text-mode-hook)))
 #+end_src
+*** indent
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:08]
+:END:
+
+#+begin_src emacs-lisp
+  (setup indent
+    (:option tab-always-indent 'complete))
+#+end_src
 *** indent.c                                                   :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -296,10 +277,37 @@ Resources:
     (defun akirak/turn-on-indent-tabs-mode ()
       (interactive)
       (setq indent-tabs-mode 1))
-  
+
     (dolist (mode-hook '(makefile-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
 #+end_src
+*** minibuf.c                                                  :minibuffer:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:06]
+:END:
+
+Use the recommended settings for vertico.
+
+#+begin_src emacs-lisp
+  (setup minibuf.c
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+    ;; Vertico commands are hidden in normal buffers.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
+
+    ;; Enable recursive minibuffers
+    (setq enable-recursive-minibuffers t))
+#+end_src
+
+Resources:
+
+- https://github.com/minad/vertico#configuration
+
 *** mule
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -347,6 +355,27 @@ Resources:
     (recentf-mode 1)
     (:option recentf-max-saved-items 200))
 #+end_src
+*** register
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:05]
+:END:
+
+#+begin_src emacs-lisp
+  (setup register
+    ;; Show the register preview immediately
+    (:option register-preview-delay 0))
+#+end_src
+*** savehist                                                      :history:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:08]
+:END:
+
+#+begin_src emacs-lisp
+  (setup savehist
+    (savehist-mode t))
+#+end_src
+
+This is a recommended setting for use with vertico. See https://github.com/minad/vertico#configuration.
 *** saveplace                                                     :history:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -355,6 +384,38 @@ Resources:
 #+begin_src emacs-lisp
   (setup saveplace
     (save-place-mode 1))
+#+end_src
+*** simple                                             :formatting:writing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup simple
+    (:global [remap count-words-region] #'count-words
+             [remap delete-horizontal-space] #'cycle-spacing))
+#+end_src
+*** startup
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 19:45]
+:END:
+#+begin_src emacs-lisp
+  (setup startup
+    (:option inihibit-startup-screen t
+             initial-buffer-choice t
+             initial-scratch-message nil
+             initial-major-mode 'fundamental-mode))
+#+end_src
+
+=*scratch*= buffer is shown at startup.
+You can set =initial-buffer-choice= to a function or a buffer name depending on the context.
+**** Initialization time
+#+begin_src emacs-lisp
+  (add-hook 'emacs-startup-hook
+            (defun akirak/show-init-time ()
+              (message "Emacs initialized in %.3f sec with %d garbage collections"
+                       (float-time (time-subtract after-init-time before-init-time))
+                       gcs-done)))
 #+end_src
 *** subr                                                               :UI:
 :PROPERTIES:
@@ -401,11 +462,24 @@ Resources:
 #+begin_src emacs-lisp
   (setup view
     (:option view-inhibit-help-message t)
-  
-    (:with-map View-mode-map
+
+    (:with-map view-mode-map
       (:bind
        [remap scroll-up-command] #'View-scroll-half-page-forward
        [remap scroll-down-command] #'View-scroll-half-page-backward)))
+#+end_src
+*** whitespace                                          :visual:formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup whitespace
+    (:option whitespace-style '(face trailing empty tabs)
+             whitespace-line-column 80)
+    (:hook-into prog-mode
+                text-mode
+                sgml-mode))
 #+end_src
 *** window                                                     :navigation:
 :PROPERTIES:
@@ -415,10 +489,10 @@ Resources:
 #+begin_src emacs-lisp
   (setup window
     (:option recenter-positions '(top middle bottom))
-  
+
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
-  
+
     (:global
      ;; TODO: scroll-other-window and scroll-other-window-down
      [remap scroll-up-command]
@@ -452,7 +526,9 @@ The following theme packages are bundled with configuration:
 
 #+begin_src emacs-lisp
   (setup (:package doom-themes))
-  
+
+  (setup (:package nano-theme))
+
   (setup (:package poet-theme))
 #+end_src
 
@@ -494,7 +570,51 @@ Embrace Org as a common document format for Emacs.
 :SORTING_TYPE: a
 :END:
 A bunch of useful packages are configured here.
-*** bufler
+*** ace-window                                                :keybindings:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+#+begin_src emacs-lisp
+  (setup (:package ace-window)
+    (:option aw-keys (string-to-list "qwertyui")
+             aw-background nil
+             aw-ignore-on t
+             aw-ignored-buffers '(" *LV*"
+                                  minibuffer-mode
+                                  "*Calc Trail*")
+             aw-scope 'visible
+             aw-dispatch-always t))
+#+end_src
+*** all-the-icons                                                      :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:28]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package all-the-icons))
+#+end_src
+**** all-the-icons-completion
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:29]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package all-the-icons-completion)
+    (with-eval-after-load 'marginalia
+      (all-the-icons-completion-mode t)
+      (add-hook 'marginalia-mode
+                #'all-the-icons-completion-marginalia-setup)))
+#+end_src
+**** all-the-icons-dired
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package all-the-icons-dired)
+    (:hook-into dired-mode))
+#+end_src
+*** bufler                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]
 :END:
@@ -505,9 +625,274 @@ A bunch of useful packages are configured here.
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
+*** cape                                                       :completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:17]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package cape))
+#+end_src
+*** consult                                                    :completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package consult)
+    (:with-mode consult-preview-at-point-mode
+      (:hook completion-list-mode))
+
+    (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+
+    (:option consult-narrow-key "<"
+             consult-project-root-function (defun akirak/consult-project-root ()
+                                             (when-let (project (project-current))
+                                               (project-root project))))
+
+    (:global [remap switch-to-buffer] #'consult-buffer
+             [remap bookmark-jump] #'consult-bookmark
+             [remap yank-pop] #'consult-yank-pop
+             "C-c k" #'consult-kmacro
+             [remap goto-line] #'consult-goto-line
+             "M-s m" #'consult-mark
+             "M-s M-m" #'consult-global-mark
+             "M-s o" #'consult-outline
+             [remap isearch-forward] #'consult-line
+             [remap isearch-backward] #'consult-isearch
+             "C-S-s" #'consult-line-multi
+             "C-c f" #'consult-focus-lines
+             "C-x /" #'consult-ripgrep
+             "M-s x" #'consult-complex-command
+             "M-s M-x" #'consult-mode-command)
+
+    (setup consult-imenu
+      (:global "M-s i" #'consult-imenu
+               "M-s M-i" #'consult-imenu-multi))
+
+    (setup consult-compile
+      (:global "M-s e" #'consult-compile-error))
+
+    (setup consult-flymake
+      (:global "M-s f" #'consult-flymake))
+
+    (setup consult-xref
+      (:option xref-show-xrefs-function #'consult-xref
+               xref-show-definitions-function #'consult-xref)))
+#+end_src
+*** consult-dir
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:40]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package consult-dir)
+    (:global "C-x d" #'consult-dir))
+#+end_src
+*** corfu                                                   :completion:UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 20:19]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package corfu)
+    (:with-mode (prog-mode text-mode)
+      (:hook corfu-mode fancy-dabbrev-mode)
+      (:bind "M-/" #'completion-at-point)))
+#+end_src
+*** electric-operator                                          :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package electric-operator)
+    (:hook-into python-mode
+                sql-mode
+                js-mode
+                c-mode
+                java-mode
+                rust-mode))
+#+end_src
+*** embark
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:53]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package embark)
+    ;; MAYBE: Bind "C-;" or something to embark-dwim
+    (:global "C-." #'embark-act))
+#+end_src
+
+Some notes:
+
+- =embark-next/previous-symbol= could replace =symbol-overlay= package.
+- =embark-export= can be a useful alternative to =tabulated-list=.
+- Binding =sudo-find-file= command may be useful, but I haven't done it yet.
+
+The following resources are useful:
+
+- [[https://karthinks.com/software/fifteen-ways-to-use-embark/][Fifteen ways to use Embark | Karthinks]]
+*** embark-consult
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 18:02]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package embark-consult)
+
+    ;; TODO: Use a macro
+    (with-eval-after-load 'embark
+      (with-eval-after-load 'consult
+        (require 'embark-consult)))
+
+    (:with-mode embark-collect-mode
+      (:hook consult-preview-at-point-mode)))
+#+end_src
+*** fancy-dabbrev                                              :completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 20:24]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package fancy-dabbrev)
+    ;; For activation, see corfu
+    (:global "TAB" #'fancy-dabbrev-expand-or-indent))
+#+end_src
+*** git-modes                                              :major_modes:VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package git-modes)
+    (:with-mode gitattributes-mode)
+    (:with-mode gitconfig-mode)
+    (:with-mode gitignore-mode
+      (:file-match "/\\.dockerignore\\'")))
+#+end_src
+*** kind-icon                                                          :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:22]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package kind-icon)
+    (:option kind-icon-default-face 'corfu-default)
+
+    (with-eval-after-load 'corfu
+      (require 'kind-icon)
+      (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
+#+end_src
 *** magit                                                             :git:
 #+begin_src emacs-lisp
-  (setup (:package magit))
+  (setup (:package magit)
+    (:nixpkgs git))
+#+end_src
+*** marginalia
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:49]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package marginalia)
+    (marginalia-mode 1)
+
+    (:with-map minibuffer-local-map
+      (:bind "M-A" #'marginalia-cycle)))
+#+end_src
+*** MAYBE nano-bell                                         :noexport:nano:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 15:20]
+:END:
+
+[[https://github.com/rougier/nano-bell][GitHub - rougier/nano-bell: Visual bell for GNU Emacs]]
+*** MAYBE nano-sidebar                                      :noexport:nano:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 15:19]
+:END:
+
+[[https://github.com/rougier/nano-sidebar][GitHub - rougier/nano-sidebar: Emacs package to have configurable sidebars on a per frame basis.]]
+*** nano-modeline                       :visual:aesthetics:UI:nano:ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 14:46]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nano-modeline)
+    (nano-modeline-mode t))
+#+end_src
+*** nix-mode                                                          :Nix:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nix-mode)
+    (:file-match "\\.nix\\'"))
+#+end_src
+*** orderless                                                  :completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:14]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package orderless)
+    (:option completion-styles '(orderless)
+             completion-category-defaults nil
+             completion-category-overrides '((file (styles partial-completion)))))
+#+end_src
+
+Resources:
+
+- https://github.com/minad/vertico#configuration
+
+It is also possible to use Helm as a completion style. See https://github.com/oantolin/orderless#ivy-and-helm. I will use orderless primarily because it is smaller than Helm.
+*** svg-lib                                              :library:graphics:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 15:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package svg-lib))
+#+end_src
+*** svg-tag-mode                                   :visual:nano:aesthetics:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 15:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package svg-tag-mode)
+    (autoload #'svg-tag-mode "svg-tag-mode.el")
+    (:hook-into org-mode prog-mode))
+#+end_src
+*** vertico                                         :minibuffer:completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 16:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package vertico)
+    (vertico-mode 1)
+    (:option vertico-resize t))
+#+end_src
+
+For more tips, see [[https://github.com/minad/vertico/wiki][Home · minad/vertico Wiki · GitHub]].
+
+An alternative is icomplete (or icomplete-vertical).
+See the following [[https://github.com/minad/vertico][comment]] for differences:
+
+#+begin_quote
+In contrast to Vertico, Icomplete rotates the candidates such that the current candidate always appears at the top. From my perspective, candidate rotation feels a bit less intuitive than the UI of Vertico or Selectrum.
+#+end_quote
+*** vterm                                                :terminal:process:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-04 Tue 16:50]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package vterm))
 #+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_src emacs-lisp
@@ -532,13 +917,15 @@ The workflow is as follows:
 2. Add further configuration for the package using =setup= and set tags on the heading.
 3. Org entries are automatically sorted by package name when the buffer is saved.
 *** Tag statistics
-If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse entries matching a tag by pressing =C-c C-o= on a link below:
+The following source block generates a table of tags in this document.
+If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse entries matching a tag by pressing =C-c C-o= on a link.
 
 #+name: tag-statistics
 #+begin_src emacs-lisp :tangle no
   (->> (org-ql-select (current-buffer)
          '(and (level > 2)
-               (not (tags "ARCHIVE")))
+               (not (tags "ARCHIVE"))
+               (not (tags "noexport")))
          :action '(org-get-tags))
        (--filter (not (member "@note" it)))
        (-flatten-n 1)
@@ -552,28 +939,57 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]       | 7 |
-| [[org-ql-search:tags:visual][visual]]         | 5 |
-| [[org-ql-search:tags:UI][UI]]             | 4 |
-| [[org-ql-search:tags:process][process]]        | 3 |
-| [[org-ql-search:tags:files][files]]          | 3 |
-| [[org-ql-search:tags:history][history]]        | 3 |
-| [[org-ql-search:tags:initialization][initialization]] | 2 |
-| [[org-ql-search:tags:IO][IO]]             | 2 |
-| [[org-ql-search:tags:formatting][formatting]]     | 2 |
-| [[org-ql-search:tags:navigation][navigation]]     | 2 |
-| [[org-ql-search:tags:profiling][profiling]]      | 1 |
-| [[org-ql-search:tags:performance][performance]]    | 1 |
-| [[org-ql-search:tags:diff][diff]]           | 1 |
-| [[org-ql-search:tags:text][text]]           | 1 |
-| [[org-ql-search:tags:parentheses][parentheses]]    | 1 |
-| [[org-ql-search:tags:VC][VC]]             | 1 |
-| [[org-ql-search:tags:git][git]]            | 1 |
-| [[org-ql-search:tags:usability][usability]]      | 1 |
-| [[org-ql-search:tags:keybindings][keybindings]]    | 1 |
+| [[org-ql-search:tags:packages][packages]]       | 26 |
+| [[org-ql-search:tags:UI][UI]]             |  9 |
+| [[org-ql-search:tags:visual][visual]]         |  7 |
+| [[org-ql-search:tags:formatting][formatting]]     |  6 |
+| [[org-ql-search:tags:completion][completion]]     |  6 |
+| [[org-ql-search:tags:process][process]]        |  4 |
+| [[org-ql-search:tags:history][history]]        |  4 |
+| [[org-ql-search:tags:files][files]]          |  3 |
+| [[org-ql-search:tags:IO][IO]]             |  2 |
+| [[org-ql-search:tags:parentheses][parentheses]]    |  2 |
+| [[org-ql-search:tags:minibuffer][minibuffer]]     |  2 |
+| [[org-ql-search:tags:VC][VC]]             |  2 |
+| [[org-ql-search:tags:navigation][navigation]]     |  2 |
+| [[org-ql-search:tags:keybindings][keybindings]]    |  2 |
+| [[org-ql-search:tags:profiling][profiling]]      |  1 |
+| [[org-ql-search:tags:initialization][initialization]] |  1 |
+| [[org-ql-search:tags:performance][performance]]    |  1 |
+| [[org-ql-search:tags:diff][diff]]           |  1 |
+| [[org-ql-search:tags:prog_mode][prog_mode]]      |  1 |
+| [[org-ql-search:tags:text_mode][text_mode]]      |  1 |
+| [[org-ql-search:tags:text][text]]           |  1 |
+| [[org-ql-search:tags:writing][writing]]        |  1 |
+| [[org-ql-search:tags:major_modes][major_modes]]    |  1 |
+| [[org-ql-search:tags:git][git]]            |  1 |
+| [[org-ql-search:tags:Nix][Nix]]            |  1 |
+| [[org-ql-search:tags:library][library]]        |  1 |
+| [[org-ql-search:tags:graphics][graphics]]       |  1 |
+| [[org-ql-search:tags:nano][nano]]           |  1 |
+| [[org-ql-search:tags:aesthetics][aesthetics]]     |  1 |
+| [[org-ql-search:tags:terminal][terminal]]       |  1 |
+| [[org-ql-search:tags:usability][usability]]      |  1 |
 
-*** Profiling (org-ql dblock example)                    :noexport:ARCHIVE:
+Note that the table above is invisible on GitHub.
+*** Quality of life
+There are many ways to improve the quality of life inside Emacs.
 
-#+BEGIN: org-ql :query "tags: profiling" :columns (heading)
+Auto-formatting is one of the keys.
 
+#+BEGIN: org-ql :query "tags: formatting" :columns (heading todo)
+| Heading           | Todo |
+|-------------------+------|
+| [[buffer.c][buffer.c]]          |      |
+| [[electric][electric]]          |      |
+| [[indent.c][indent.c]]          |      |
+| [[simple][simple]]            |      |
+| [[whitespace][whitespace]]        |      |
+| [[electric-operator][electric-operator]] |      |
+| [[Tag statistics][Tag statistics]]    |      |
+| [[Quality of life][Quality of life]]   |      |
 #+END:
+** Footer                                                         :noexport:
+# Local Variables:
+# org-complete-tags-always-offer-all-agenda-tags: nil
+# End:

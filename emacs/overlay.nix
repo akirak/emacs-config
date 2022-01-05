@@ -23,7 +23,7 @@ let
     ];
   };
 
-  makeEmacsConfiguration = initFiles: emacsTwist {
+  makeEmacsConfiguration = initFiles: (emacsTwist {
     inventories = [
       {
         type = "melpa";
@@ -39,7 +39,7 @@ let
     extraPackages = [
       "setup"
     ];
-    initParser = parseSetup;
+    initParser = parseSetup { };
     emacsPackage = emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
     lockDir = ./sources;
     inputOverrides = {
@@ -52,7 +52,27 @@ let
         };
       };
     };
-  };
+  }).overrideScope' (self: super: {
+    elispPackages = super.elispPackages // {
+      vterm = super.elispPackages.vterm.overrideAttrs (old: {
+        # Based on the configuration in nixpkgs available at the following URL:
+        # https://github.com/NixOS/nixpkgs/blob/af21d41260846fb9c9840a75e310e56dfe97d6a3/pkgs/applications/editors/emacs/elisp-packages/melpa-packages.nix#L483
+        nativeBuildInputs = [ final.cmake final.gcc ];
+        buildInputs = old.buildInputs ++ [ final.libvterm-neovim ];
+        cmakeFlags = [
+          "-DEMACS_SOURCE=${self.emacs.src}"
+        ];
+        preBuild = ''
+          cmake
+          make
+          install -m444 -t . ../*.so
+          install -m600 -t . ../*.el
+          cp -r -t . ../etc
+          rm -rf {CMake*,build,*.c,*.h,Makefile,*.cmake}
+        '';
+      });
+    };
+  });
 in
 {
   emacsConfigurations = {
