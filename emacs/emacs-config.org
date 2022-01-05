@@ -100,34 +100,6 @@ Display initialization time concisely at startup:
 :SORTING_TYPE: a
 :END:
 # Note: These should never fail.
-
-#+begin_src emacs-lisp
-  (setup emacs
-    (:option register-preview-delay 0)
-
-    ;; Add an indicator if mutiple strings are read
-    (advice-add #'completing-read-multiple
-                :filter-args
-                (defun crm-indicator (args)
-                  (cons (concat "[CRM] " (car args)) (cdr args))))
-
-    ;; Do not allow the cursor in the minibuffer prompt
-    (setq minibuffer-prompt-properties
-          '(read-only t cursor-intangible t face minibuffer-prompt))
-    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
-    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-    ;; Vertico commands are hidden in normal buffers.
-    ;; (setq read-extended-command-predicate
-    ;;       #'command-completion-default-include-p)
-
-    ;; Enable recursive minibuffers
-    (setq enable-recursive-minibuffers t))
-#+end_src
-
-Resources:
-
-- https://github.com/minad/vertico#configuration
 *** autorevert                                                         :IO:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -310,6 +282,33 @@ The built-in =electric= package provides the following modes:
     (dolist (mode-hook '(makefile-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
 #+end_src
+*** minibuf.c                                                  :minibuffer:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:06]
+:END:
+
+Use the recommended settings for vertico.
+
+#+begin_src emacs-lisp
+  (setup minibuf.c
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+    ;; Vertico commands are hidden in normal buffers.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
+
+    ;; Enable recursive minibuffers
+    (setq enable-recursive-minibuffers t))
+#+end_src
+
+Resources:
+
+- https://github.com/minad/vertico#configuration
+
 *** mule
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -357,6 +356,27 @@ The built-in =electric= package provides the following modes:
     (recentf-mode 1)
     (:option recentf-max-saved-items 200))
 #+end_src
+*** register
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:05]
+:END:
+
+#+begin_src emacs-lisp
+  (setup register
+    ;; Show the register preview immediately
+    (:option register-preview-delay 0))
+#+end_src
+*** savehist                                                      :history:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:08]
+:END:
+
+#+begin_src emacs-lisp
+  (setup savehist
+    (savehist-mode t))
+#+end_src
+
+This is a recommended setting for use with vertico. See https://github.com/minad/vertico#configuration.
 *** saveplace                                                     :history:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -555,6 +575,62 @@ A bunch of useful packages are configured here.
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
+*** consult                                                    :completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package consult)
+    (:with-mode consult-preview-at-point-mode
+      (:hook completion-list-mode))
+
+    (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+
+    (:option consult-narrow-key "<"
+             consult-project-root-function (defun akirak/consult-project-root ()
+                                             (when-let (project (project-current))
+                                               (project-root project))))
+
+    (:global [remap switch-to-buffer] #'consult-buffer
+             [remap bookmark-jump] #'consult-bookmark
+             [remap yank-pop] #'consult-yank-pop
+             "C-c k" #'consult-kmacro
+             [remap goto-line] #'consult-goto-line
+             "M-s m" #'consult-mark
+             "M-s M-m" #'consult-global-mark
+             "M-s o" #'consult-outline
+             [remap isearch-forward] #'consult-line
+             [remap isearch-backward] #'consult-isearch
+             "C-S-s" #'consult-line-multi
+             "C-c f" #'consult-focus-lines
+             "C-x /" #'consult-ripgrep
+             "M-s x" #'consult-complex-command
+             "M-s M-x" #'consult-mode-command)
+
+    (setup consult-imenu
+      (:global "M-s i" #'consult-imenu
+               "M-s M-i" #'consult-imenu-multi))
+
+    (setup consult-compile
+      (:global "M-s e" #'consult-compile-error))
+
+    (setup consult-flymake
+      (:global "M-s f" #'consult-flymake))
+
+    (setup consult-xref
+      (:option xref-show-xrefs-function #'consult-xref
+               xref-show-definitions-function #'consult-xref)))
+#+end_src
+*** consult-dir
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:40]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package consult-dir)
+    (:global "C-x d" #'consult-dir))
+#+end_src
 *** electric-operator                                          :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
@@ -568,6 +644,42 @@ A bunch of useful packages are configured here.
                 c-mode
                 java-mode
                 rust-mode))
+#+end_src
+*** embark
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:53]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package embark)
+    ;; MAYBE: Bind "C-;" or something to embark-dwim
+    (:global "C-." #'embark-act))
+#+end_src
+
+Some notes:
+
+- =embark-next/previous-symbol= could replace =symbol-overlay= package.
+- =embark-export= can be a useful alternative to =tabulated-list=.
+- Binding =sudo-find-file= command may be useful, but I haven't done it yet.
+
+The following resources are useful:
+
+- [[https://karthinks.com/software/fifteen-ways-to-use-embark/][Fifteen ways to use Embark | Karthinks]]
+*** embark-consult
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 18:02]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package embark-consult)
+
+    ;; TODO: Use a macro
+    (with-eval-after-load 'embark
+      (with-eval-after-load 'consult
+        (require 'embark-consult)))
+
+    (:with-mode embark-collect-mode
+      (:hook consult-preview-at-point-mode)))
 #+end_src
 *** git-modes                                              :major_modes:VC:
 :PROPERTIES:
@@ -585,6 +697,18 @@ A bunch of useful packages are configured here.
 #+begin_src emacs-lisp
   (setup (:package magit)
     (:nixpkgs git))
+#+end_src
+*** marginalia
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:49]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package marginalia)
+    (marginalia-mode 1)
+
+    (:with-map minibuffer-local-map
+      (:bind "M-A" #'marginalia-cycle)))
 #+end_src
 *** MAYBE nano-bell                                         :noexport:nano:
 :PROPERTIES:
@@ -616,6 +740,23 @@ A bunch of useful packages are configured here.
   (setup (:package nix-mode)
     (:file-match "\\.nix\\'"))
 #+end_src
+*** orderless                                                  :completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 17:14]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package orderless)
+    (:option completion-styles '(orderless)
+             completion-category-defaults nil
+             completion-category-overrides '((file (styles partial-completion)))))
+#+end_src
+
+Resources:
+
+- https://github.com/minad/vertico#configuration
+
+It is also possible to use Helm as a completion style. See https://github.com/oantolin/orderless#ivy-and-helm. I will use orderless primarily because it is smaller than Helm.
 *** svg-lib                                              :library:graphics:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:30]
@@ -634,6 +775,25 @@ A bunch of useful packages are configured here.
     (autoload #'svg-tag-mode "svg-tag-mode.el")
     (:hook-into org-mode prog-mode))
 #+end_src
+*** vertico                                         :minibuffer:completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 16:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package vertico)
+    (vertico-mode 1)
+    (:option vertico-resize t))
+#+end_src
+
+For more tips, see [[https://github.com/minad/vertico/wiki][Home · minad/vertico Wiki · GitHub]].
+
+An alternative is icomplete (or icomplete-vertical).
+See the following [[https://github.com/minad/vertico][comment]] for differences:
+
+#+begin_quote
+In contrast to Vertico, Icomplete rotates the candidates such that the current candidate always appears at the top. From my perspective, candidate rotation feels a bit less intuitive than the UI of Vertico or Selectrum.
+#+end_quote
 *** vterm                                                :terminal:process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 16:50]

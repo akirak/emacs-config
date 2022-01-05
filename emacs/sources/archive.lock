@@ -43,5 +43,20 @@
       "emacs": "27.1"
     },
     "version": "0.2.4"
+  },
+  "vertico": {
+    "archive": {
+      "narHash": "sha256-WAob2mETCUo7btV7HTcxeBweOx0aSwEMUT7PjizS8V0=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/vertico-0.18.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "emacs": "27.1"
+    },
+    "version": "0.18"
   }
 }
