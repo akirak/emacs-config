@@ -258,6 +258,15 @@ The built-in =electric= package provides the following modes:
       (:hook-into prog-mode-hook
                   text-mode-hook)))
 #+end_src
+*** indent
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:08]
+:END:
+
+#+begin_src emacs-lisp
+  (setup indent
+    (:option tab-always-indent 'complete))
+#+end_src
 *** indent.c                                                   :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -587,6 +596,14 @@ A bunch of useful packages are configured here.
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
+*** cape                                                       :completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:17]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package cape))
+#+end_src
 *** consult                                                    :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:33]
@@ -643,6 +660,17 @@ A bunch of useful packages are configured here.
   (setup (:package consult-dir)
     (:global "C-x d" #'consult-dir))
 #+end_src
+*** corfu                                                   :completion:UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 20:19]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package corfu)
+    (:with-mode (prog-mode text-mode)
+      (:hook corfu-mode fancy-dabbrev-mode)
+      (:bind "M-/" #'completion-at-point)))
+#+end_src
 *** electric-operator                                          :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
@@ -693,6 +721,16 @@ The following resources are useful:
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
 #+end_src
+*** fancy-dabbrev                                              :completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 20:24]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package fancy-dabbrev)
+    ;; For activation, see corfu
+    (:global "TAB" #'fancy-dabbrev-expand-or-indent))
+#+end_src
 *** git-modes                                              :major_modes:VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
@@ -704,6 +742,19 @@ The following resources are useful:
     (:with-mode gitconfig-mode)
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
+#+end_src
+*** kind-icon                                                          :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:22]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package kind-icon)
+    (:option kind-icon-default-face 'corfu-default)
+
+    (with-eval-after-load 'corfu
+      (require 'kind-icon)
+      (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
 *** magit                                                             :git:
 #+begin_src emacs-lisp
