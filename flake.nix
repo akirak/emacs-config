@@ -115,17 +115,16 @@
             "--eval"
             "(when init-file-user (require '${themePackage}) (load-theme '${themeName} t))"
           ];
-          useDoomTheme = useThemeFrom "doom-themes";
         in
         {
           packages = {
             inherit emacs-full;
             # Add more variants of the full profile later
             emacs = emacsSandbox emacs-basic {
-              emacsArguments = useThemeFrom "nano-theme" "nano-dark";
+              emacsArguments = useThemeFrom "doom-themes" "doom-rouge";
             };
             emacs-compat = emacsSandbox emacs-compat {
-              emacsArguments = useThemeFrom "nano-theme" "nano-dark";
+              emacsArguments = useThemeFrom "doom-themes" "doom-one";
             };
             emacs-beancount = emacsSandbox emacsConfigurations.beancount {
               emacsArguments = useDoomTheme "doom-opera-light";
