@@ -1,4 +1,35 @@
 {
+  "corfu": {
+    "archive": {
+      "narHash": "sha256-RyahW0l9JvJa7q+V4TaXgSMjBZHK2cIrrglFCl4wZHI=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/corfu-0.17.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "emacs": "27.1"
+    },
+    "version": "0.17"
+  },
+  "kind-icon": {
+    "archive": {
+      "narHash": "sha256-2R/3OuHTftdxddLZ/YHSIl3q7o+ksF3I4K+nMSwynUk=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/kind-icon-0.1.4.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "emacs": "27.1",
+      "svg-lib": "0"
+    },
+    "version": "0.1.4"
+  },
   "nano-modeline": {
     "archive": {
       "narHash": "sha256-cBbS8+3/4iLbo+V1Uf/SMyGYgao2vTH+gk5iJfvZOuA=",

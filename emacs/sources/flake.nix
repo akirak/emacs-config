@@ -8,6 +8,24 @@
       repo = "ace-window";
       type = "github";
     };
+    all-the-icons = {
+      flake = false;
+      owner = "domtronn";
+      repo = "all-the-icons.el";
+      type = "github";
+    };
+    all-the-icons-completion = {
+      flake = false;
+      owner = "iyefrat";
+      repo = "all-the-icons-completion";
+      type = "github";
+    };
+    all-the-icons-dired = {
+      flake = false;
+      owner = "wyuenho";
+      repo = "all-the-icons-dired";
+      type = "github";
+    };
     avy = {
       flake = false;
       owner = "abo-abo";
@@ -24,6 +42,12 @@
       flake = false;
       owner = "akirak";
       repo = "benchmark-init-el";
+      type = "github";
+    };
+    cape = {
+      flake = false;
+      owner = "minad";
+      repo = "cape";
       type = "github";
     };
     consult = {
@@ -66,6 +90,12 @@
       flake = false;
       owner = "oantolin";
       repo = "embark";
+      type = "github";
+    };
+    fancy-dabbrev = {
+      flake = false;
+      owner = "jrosdahl";
+      repo = "fancy-dabbrev";
       type = "github";
     };
     gcmh = {
@@ -125,6 +155,12 @@
       flake = false;
       owner = "kunalb";
       repo = "poet";
+      type = "github";
+    };
+    popup = {
+      flake = false;
+      owner = "auto-complete";
+      repo = "popup-el";
       type = "github";
     };
     svg-tag-mode = {

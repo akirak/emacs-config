@@ -16,6 +16,54 @@
         "type": "github"
       }
     },
+    "all-the-icons": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640408780,
+        "narHash": "sha256-v5TPTuOEQZXnwKqhN5ArhLSmVukkyDMDCv6n8oEEXMU=",
+        "owner": "domtronn",
+        "repo": "all-the-icons.el",
+        "rev": "6d48bc9e970ab559bc35a125c55fd83732595706",
+        "type": "github"
+      },
+      "original": {
+        "owner": "domtronn",
+        "repo": "all-the-icons.el",
+        "type": "github"
+      }
+    },
+    "all-the-icons-completion": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1633817225,
+        "narHash": "sha256-Gd0GnXPztStS0PfbhGoYGAvE7udYHoAF6xHBHe4ZraE=",
+        "owner": "iyefrat",
+        "repo": "all-the-icons-completion",
+        "rev": "a0f34d68cc12330ab3992a7521f9caa1de3b8470",
+        "type": "github"
+      },
+      "original": {
+        "owner": "iyefrat",
+        "repo": "all-the-icons-completion",
+        "type": "github"
+      }
+    },
+    "all-the-icons-dired": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1633627768,
+        "narHash": "sha256-KGksy+4mIWc+ikFJocIVaom4f/pY76heelDDk3DLCVw=",
+        "owner": "wyuenho",
+        "repo": "all-the-icons-dired",
+        "rev": "5e9b097f9950cc9f86de922b07903a4e5fefc733",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wyuenho",
+        "repo": "all-the-icons-dired",
+        "type": "github"
+      }
+    },
     "avy": {
       "flake": false,
       "locked": {
@@ -61,6 +109,22 @@
       "original": {
         "owner": "akirak",
         "repo": "benchmark-init-el",
+        "type": "github"
+      }
+    },
+    "cape": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641310529,
+        "narHash": "sha256-pW8pqRZ6E7xRtroNampLwYn6mgvu3/MFJvnyXltR2x4=",
+        "owner": "minad",
+        "repo": "cape",
+        "rev": "be2014538af37fdb3cf38b2129c06314644f745f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "minad",
+        "repo": "cape",
         "type": "github"
       }
     },
@@ -173,6 +237,22 @@
       "original": {
         "owner": "oantolin",
         "repo": "embark",
+        "type": "github"
+      }
+    },
+    "fancy-dabbrev": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631173929,
+        "narHash": "sha256-v3XCowy9whqFHNTHLn68L+FfKN7sonizAZNvXqc30OI=",
+        "owner": "jrosdahl",
+        "repo": "fancy-dabbrev",
+        "rev": "9435ad63c1c4756f574ae98d2d63ecf1189ec832",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jrosdahl",
+        "repo": "fancy-dabbrev",
         "type": "github"
       }
     },
@@ -336,12 +416,32 @@
         "type": "github"
       }
     },
+    "popup": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640975494,
+        "narHash": "sha256-n4YL625cIzub4Q48PRKOJY7kLECSQTEzwUBf7cKR1Ys=",
+        "owner": "auto-complete",
+        "repo": "popup-el",
+        "rev": "ec3d3169a4d60b0374198580e31b6c59f51ab08a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "auto-complete",
+        "repo": "popup-el",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "ace-window": "ace-window",
+        "all-the-icons": "all-the-icons",
+        "all-the-icons-completion": "all-the-icons-completion",
+        "all-the-icons-dired": "all-the-icons-dired",
         "avy": "avy",
         "beancount": "beancount",
         "benchmark-init": "benchmark-init",
+        "cape": "cape",
         "consult": "consult",
         "consult-dir": "consult-dir",
         "dash": "dash",
@@ -349,6 +449,7 @@
         "electric-operator": "electric-operator",
         "embark": "embark",
         "embark-consult": "embark-consult",
+        "fancy-dabbrev": "fancy-dabbrev",
         "gcmh": "gcmh",
         "git-commit": "git-commit",
         "git-modes": "git-modes",
@@ -359,6 +460,7 @@
         "nix-mode": "nix-mode",
         "orderless": "orderless",
         "poet-theme": "poet-theme",
+        "popup": "popup",
         "svg-tag-mode": "svg-tag-mode",
         "vterm": "vterm",
         "which-key": "which-key",
