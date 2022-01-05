@@ -585,6 +585,35 @@ A bunch of useful packages are configured here.
              aw-scope 'visible
              aw-dispatch-always t))
 #+end_src
+*** all-the-icons                                                      :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:28]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package all-the-icons))
+#+end_src
+**** all-the-icons-completion
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:29]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package all-the-icons-completion)
+    (with-eval-after-load 'marginalia
+      (all-the-icons-completion-mode t)
+      (add-hook 'marginalia-mode
+                #'all-the-icons-completion-marginalia-setup)))
+#+end_src
+**** all-the-icons-dired
+:PROPERTIES:
+:CREATED_TIME: [2022-01-05 Wed 21:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package all-the-icons-dired)
+    (:hook-into dired-mode))
+#+end_src
 *** bufler                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]
