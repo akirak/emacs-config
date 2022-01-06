@@ -127,7 +127,7 @@
               emacsArguments = useThemeFrom "doom-themes" "doom-one";
             };
             emacs-beancount = emacsSandbox emacsConfigurations.beancount {
-              emacsArguments = useDoomTheme "doom-opera-light";
+              emacsArguments = useThemeFrom "doom-opera-light";
               userEmacsDirectory = "$HOME/beancount/emacs-var";
               extraBubblewrapOptions = [
                 "--bind"
