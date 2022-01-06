@@ -8,16 +8,20 @@ This is a monorepo for my Nix configuration files.
 - Configure Emacs using [[https://github.com/akirak/emacs-twist][emacs-twist]] and each session is sandboxed using [[https://github.com/containers/bubblewrap][bubblewrap]]
 ** Usage
 *** Trying out the Emacs configuration
-Emacs with native compilation takes a lot of time to build, but I sometimes push the Emacs executable to cachix, so you may be able to use the binary cache:
+If you are using Linux with Nix 2.4 installed, you can try out the configuration inside a sandbox session.
+If you are worried, you can verify the bubblewrap options of [[file:sandbox/emacs.nix][the sandbox]].
+
+This configuration uses an Emacs binary with native compilation (a.k.a. GccEmacs) enabled.
+While it should take a lot of time to build GccEmacs, I push the Emacs binary to Cachix, so you will only build packages.
 
 #+begin_src sh
 cachix use akirak
 #+end_src
 
-If you are using Linux with Nix 2.4 installed, you can try out a sandboxed Emacs session:
+Because =~/.emacs.d= is bind-mounted inside the sandbox, you can use the configuration without installing it:
 
 #+begin_src sh
-nix run github:akirak/nix-config#emacs -- ~/work/
+nix run github:akirak/nix-config#emacs -- ~/tmp/
 #+end_src
 
 The argument after =--= can be any existing file or directory on your file system.
