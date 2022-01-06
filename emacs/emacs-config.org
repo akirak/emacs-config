@@ -867,6 +867,30 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
     (autoload #'svg-tag-mode "svg-tag-mode.el")
     (:hook-into org-mode prog-mode))
 #+end_src
+*** tree-sitter
+:PROPERTIES:
+:CREATED_TIME: [2022-01-06 Thu 14:36]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package tree-sitter))
+#+end_src
+**** tree-sitter-langs
+:PROPERTIES:
+:CREATED_TIME: [2022-01-06 Thu 14:37]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package tree-sitter-langs))
+#+end_src
+*** typescript-mode                                            :major_mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-06 Thu 18:39]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package typescript-mode))
+#+end_src
 *** vertico                                         :minibuffer:completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 16:59]
