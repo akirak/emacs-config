@@ -32,23 +32,6 @@
         "type": "github"
       }
     },
-    "emacs-inventories": {
-      "inputs": {
-        "emacs": "emacs",
-        "epkgs": "epkgs",
-        "gnu-elpa": "gnu-elpa",
-        "melpa": "melpa"
-      },
-      "locked": {
-        "narHash": "sha256-q+iGFFuTq9ylLtwHvdzhL8ZliDqHJNBKqDzc4oFq6c0=",
-        "path": "./emacs/inventories",
-        "type": "path"
-      },
-      "original": {
-        "path": "./emacs/inventories",
-        "type": "path"
-      }
-    },
     "emacs-overlay": {
       "locked": {
         "lastModified": 1640572408,
@@ -275,11 +258,14 @@
     },
     "root": {
       "inputs": {
-        "emacs-inventories": "emacs-inventories",
+        "emacs": "emacs",
         "emacs-overlay": "emacs-overlay",
+        "epkgs": "epkgs",
         "flake-no-path": "flake-no-path",
         "flake-utils-plus": "flake-utils-plus",
+        "gnu-elpa": "gnu-elpa",
         "home-manager": "home-manager",
+        "melpa": "melpa",
         "nixpkgs": "nixpkgs_2",
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks",
