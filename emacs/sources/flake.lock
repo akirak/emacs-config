@@ -462,6 +462,10 @@
         "poet-theme": "poet-theme",
         "popup": "popup",
         "svg-tag-mode": "svg-tag-mode",
+        "tree-sitter": "tree-sitter",
+        "tree-sitter-langs": "tree-sitter-langs",
+        "tsc": "tsc",
+        "typescript-mode": "typescript-mode",
         "vterm": "vterm",
         "which-key": "which-key",
         "with-editor": "with-editor"
@@ -480,6 +484,73 @@
       "original": {
         "owner": "rougier",
         "repo": "svg-tag-mode",
+        "type": "github"
+      }
+    },
+    "tree-sitter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1639225248,
+        "narHash": "sha256-tAohHdAsy/HTFFPSNOo0UyrdolH8h0KF2ekFXuLltBE=",
+        "owner": "emacs-tree-sitter",
+        "repo": "elisp-tree-sitter",
+        "rev": "48b06796a3b2e76ce004972d929de38146eafaa0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-tree-sitter",
+        "ref": "0.16.1",
+        "repo": "elisp-tree-sitter",
+        "type": "github"
+      }
+    },
+    "tree-sitter-langs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1639411291,
+        "narHash": "sha256-32oY0Mtocg2gAQXv1XSp76oLubceOcEwZomes+ORI5o=",
+        "owner": "emacs-tree-sitter",
+        "repo": "tree-sitter-langs",
+        "rev": "e537b90bbca6b4deb62042240ed12461251b3f0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-tree-sitter",
+        "ref": "0.10.13",
+        "repo": "tree-sitter-langs",
+        "type": "github"
+      }
+    },
+    "tsc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1639225248,
+        "narHash": "sha256-tAohHdAsy/HTFFPSNOo0UyrdolH8h0KF2ekFXuLltBE=",
+        "owner": "emacs-tree-sitter",
+        "repo": "elisp-tree-sitter",
+        "rev": "48b06796a3b2e76ce004972d929de38146eafaa0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-tree-sitter",
+        "ref": "0.16.1",
+        "repo": "elisp-tree-sitter",
+        "type": "github"
+      }
+    },
+    "typescript-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1638380988,
+        "narHash": "sha256-TRXpB0TbPMOVClyYzex72pA4bHVndZl21j9ZMvm1Lb4=",
+        "owner": "emacs-typescript",
+        "repo": "typescript.el",
+        "rev": "e82416205158d4b21d42d6b60c4385f68f0ae1b1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-typescript",
+        "repo": "typescript.el",
         "type": "github"
       }
     },

@@ -169,6 +169,33 @@
       repo = "svg-tag-mode";
       type = "github";
     };
+    tree-sitter = {
+      flake = false;
+      owner = "emacs-tree-sitter";
+      ref = "0.16.1";
+      repo = "elisp-tree-sitter";
+      type = "github";
+    };
+    tree-sitter-langs = {
+      flake = false;
+      owner = "emacs-tree-sitter";
+      ref = "0.10.13";
+      repo = "tree-sitter-langs";
+      type = "github";
+    };
+    tsc = {
+      flake = false;
+      owner = "emacs-tree-sitter";
+      ref = "0.16.1";
+      repo = "elisp-tree-sitter";
+      type = "github";
+    };
+    typescript-mode = {
+      flake = false;
+      owner = "emacs-typescript";
+      repo = "typescript.el";
+      type = "github";
+    };
     vterm = {
       flake = false;
       owner = "akermu";
