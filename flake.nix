@@ -68,7 +68,7 @@
         inputs.twist.overlay
         (import ./emacs/overlay.nix {
           inherit (inputs) twist org-babel;
-          inherit (inputs) gnu-elpa melpa epkgs;
+          inherit (inputs) gnu-elpa melpa epkgs emacs;
         })
       ];
 

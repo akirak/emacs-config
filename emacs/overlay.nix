@@ -3,6 +3,7 @@
 , gnu-elpa
 , melpa
 , epkgs
+, emacs
 }:
 final: prev:
 let
