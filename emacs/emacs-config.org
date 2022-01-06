@@ -873,7 +873,8 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package tree-sitter))
+  (setup (:package tree-sitter)
+    (:hook tree-sitter-hl-mode))
 #+end_src
 **** tree-sitter-langs
 :PROPERTIES:
