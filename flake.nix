@@ -9,7 +9,22 @@
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     org-babel.url = "github:akirak/nix-org-babel";
     twist.url = "github:akirak/emacs-twist/devel";
-    emacs-inventories.url = "path:./emacs/inventories";
+    melpa = {
+      url = "github:melpa/melpa";
+      flake = false;
+    };
+    gnu-elpa = {
+      url = "git+https://git.savannah.gnu.org/git/emacs/elpa.git?ref=main";
+      flake = false;
+    };
+    epkgs = {
+      url = "github:emacsmirror/epkgs";
+      flake = false;
+    };
+    emacs = {
+      url = "github:emacs-mirror/emacs";
+      flake = false;
+    };
 
     # pre-commit
     pre-commit-hooks = {
@@ -53,7 +68,7 @@
         inputs.twist.overlay
         (import ./emacs/overlay.nix {
           inherit (inputs) twist org-babel;
-          inherit (inputs.emacs-inventories.lib) inventories;
+          inherit (inputs) gnu-elpa melpa epkgs;
         })
       ];
 

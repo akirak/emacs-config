@@ -1,4 +1,9 @@
-{ twist, org-babel, inventories }:
+{ twist
+, org-babel
+, gnu-elpa
+, melpa
+, epkgs
+}:
 final: prev:
 let
   inherit (prev) tangleOrgBabelFile emacsPgtkGcc emacsTwist;
@@ -23,13 +28,42 @@ let
     ];
   };
 
+  releaseVersions = {
+    elispTreeSitterVersion = "0.16.1";
+    elispTreeSitterLangsVersion = "0.10.13";
+  };
+
   makeEmacsConfiguration = initFiles: (emacsTwist {
     inventories = [
       {
         type = "melpa";
         path = ./recipes/overrides;
       }
-    ] ++ inventories ++ [
+      {
+        type = "elpa-core";
+        path = gnu-elpa.outPath + "/elpa-packages";
+        src = emacs.outPath;
+      }
+      {
+        name = "melpa";
+        type = "melpa";
+        path = melpa.outPath + "/recipes";
+      }
+      {
+        name = "gnu";
+        type = "archive";
+        url = "https://elpa.gnu.org/packages/";
+      }
+      {
+        name = "nongnu";
+        type = "archive";
+        url = "https://elpa.nongnu.org/nongnu/";
+      }
+      {
+        name = "emacsmirror";
+        type = "gitmodules";
+        path = epkgs.outPath + "/.gitmodules";
+      }
       {
         type = "melpa";
         path = ./recipes/fallbacks;
@@ -42,36 +76,14 @@ let
     initParser = parseSetup { };
     emacsPackage = emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
     lockDir = ./sources;
-    inputOverrides = {
-      bufler = _: _: {
-        origin = {
-          type = "github";
-          owner = "akirak";
-          repo = "bufler.el";
-          ref = "fix-cl-macs";
-        };
-      };
-    };
+    inputOverrides = import ./inputs.nix releaseVersions;
   }).overrideScope' (self: super: {
-    elispPackages = super.elispPackages // {
-      vterm = super.elispPackages.vterm.overrideAttrs (old: {
-        # Based on the configuration in nixpkgs available at the following URL:
-        # https://github.com/NixOS/nixpkgs/blob/af21d41260846fb9c9840a75e310e56dfe97d6a3/pkgs/applications/editors/emacs/elisp-packages/melpa-packages.nix#L483
-        nativeBuildInputs = [ final.cmake final.gcc ];
-        buildInputs = old.buildInputs ++ [ final.libvterm-neovim ];
-        cmakeFlags = [
-          "-DEMACS_SOURCE=${self.emacs.src}"
-        ];
-        preBuild = ''
-          cmake
-          make
-          install -m444 -t . ../*.so
-          install -m600 -t . ../*.el
-          cp -r -t . ../etc
-          rm -rf {CMake*,build,*.c,*.h,Makefile,*.cmake}
-        '';
+    elispPackages = super.elispPackages.overrideScope'
+      (import ./overrides.nix releaseVersions {
+        pkgs = final;
+        inherit (prev) system;
+        inherit (self) emacs;
       });
-    };
   });
 in
 {

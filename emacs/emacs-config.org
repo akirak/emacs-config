@@ -760,7 +760,7 @@ The following resources are useful:
     ;; For activation, see corfu
     (:global "TAB" #'fancy-dabbrev-expand-or-indent))
 #+end_src
-*** git-modes                                              :major_modes:VC:
+*** git-modes                                               :VC:major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -867,6 +867,31 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
     (autoload #'svg-tag-mode "svg-tag-mode.el")
     (:hook-into org-mode prog-mode))
 #+end_src
+*** tree-sitter
+:PROPERTIES:
+:CREATED_TIME: [2022-01-06 Thu 14:36]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package tree-sitter)
+    (:hook tree-sitter-hl-mode))
+#+end_src
+**** tree-sitter-langs
+:PROPERTIES:
+:CREATED_TIME: [2022-01-06 Thu 14:37]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package tree-sitter-langs))
+#+end_src
+*** typescript-mode                                            :major_mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-06 Thu 18:39]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package typescript-mode))
+#+end_src
 *** vertico                                         :minibuffer:completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 16:59]
@@ -939,7 +964,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]       | 26 |
+| [[org-ql-search:tags:packages][packages]]       | 29 |
 | [[org-ql-search:tags:UI][UI]]             |  9 |
 | [[org-ql-search:tags:visual][visual]]         |  7 |
 | [[org-ql-search:tags:formatting][formatting]]     |  6 |
@@ -953,6 +978,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:VC][VC]]             |  2 |
 | [[org-ql-search:tags:navigation][navigation]]     |  2 |
 | [[org-ql-search:tags:keybindings][keybindings]]    |  2 |
+| [[org-ql-search:tags:major_mode][major_mode]]     |  2 |
 | [[org-ql-search:tags:profiling][profiling]]      |  1 |
 | [[org-ql-search:tags:initialization][initialization]] |  1 |
 | [[org-ql-search:tags:performance][performance]]    |  1 |
@@ -961,7 +987,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:text_mode][text_mode]]      |  1 |
 | [[org-ql-search:tags:text][text]]           |  1 |
 | [[org-ql-search:tags:writing][writing]]        |  1 |
-| [[org-ql-search:tags:major_modes][major_modes]]    |  1 |
 | [[org-ql-search:tags:git][git]]            |  1 |
 | [[org-ql-search:tags:Nix][Nix]]            |  1 |
 | [[org-ql-search:tags:library][library]]        |  1 |
