@@ -38,7 +38,7 @@ let
     inventories = [
       {
         type = "melpa";
-        path = ./recipes/overrides;
+        path = ./recipes;
       }
       {
         type = "elpa-core";
@@ -64,10 +64,6 @@ let
         name = "emacsmirror";
         type = "gitmodules";
         path = epkgs.outPath + "/.gitmodules";
-      }
-      {
-        type = "melpa";
-        path = ./recipes/fallbacks;
       }
     ];
     inherit initFiles;
