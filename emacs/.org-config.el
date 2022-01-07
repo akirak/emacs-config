@@ -57,7 +57,7 @@
                     ("Package" :keys "p"
                      :function ,(level2 "Packages"))))
 
-                  ("Notes" :keys "n"
+                  ("Note" :keys "n"
                    :function ,(level2 "Notes")
                    :template
                    ("* %?"
