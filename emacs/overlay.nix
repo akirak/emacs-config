@@ -76,7 +76,7 @@ let
     ];
     initParser = parseSetup { };
     emacsPackage = emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
-    lockDir = ./sources;
+    lockDir = ./lock;
     inputOverrides = import ./inputs.nix releaseVersions;
   }).overrideScope' (self: super: {
     elispPackages = super.elispPackages.overrideScope'
