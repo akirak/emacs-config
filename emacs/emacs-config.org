@@ -99,7 +99,8 @@ I am interested to see if it can reduce the amount of configuration code.
 
 #+begin_src emacs-lisp
   (setup autorevert
-    (global-auto-revert-mode t))
+    (:with-mode global-auto-revert-mode
+      (:hook-into after-init-hook)))
 #+end_src
 *** buffer.c                                        :formatting:visual:
 :PROPERTIES:
@@ -179,7 +180,8 @@ I am interested to see if it can reduce the amount of configuration code.
 
 #+begin_src emacs-lisp
   (setup elec-pair
-    (electric-pair-mode 1))
+    (:with-mode electric-pair-mode
+      (:hook-into after-init-hook)))
 #+end_src
 
 While the mode is generally useful, the exception is =lispy-mode=, which overrides =self-insert-command= and conflicts with the features of the package.
@@ -336,7 +338,8 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup paren
-    (show-paren-mode 1))
+    (:with-mode show-paren-mode
+      (:hook-into after-init-hook)))
 #+end_src
 *** process.c                                                     :process:
 :PROPERTIES:
@@ -355,7 +358,7 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup recentf
-    (recentf-mode 1)
+    (:hook-into after-init-hook)
     (:option recentf-max-saved-items 200))
 #+end_src
 *** register
@@ -375,7 +378,7 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup savehist
-    (savehist-mode t))
+    (:hook-into after-init-hook))
 #+end_src
 
 This is a recommended setting for use with vertico. See https://github.com/minad/vertico#configuration.
@@ -386,7 +389,8 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
 #+begin_src emacs-lisp
   (setup saveplace
-    (save-place-mode 1))
+    (:with-mode save-place-mode
+      (:hook-into after-init-hook)))
 #+end_src
 *** simple                                             :formatting:writing:
 :PROPERTIES:
@@ -518,7 +522,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup winner
-    (winner-mode 1))
+    (:hook-into after-init-hook))
 #+end_src
 *** xdisp.c
 :PROPERTIES:
@@ -839,7 +843,7 @@ The following resources are useful:
 
 #+begin_src emacs-lisp
   (setup (:package marginalia)
-    (marginalia-mode 1)
+    (:hook-into after-init-hook)
 
     (:with-map minibuffer-local-map
       (:bind "M-A" #'marginalia-cycle)))
@@ -951,7 +955,7 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 
 #+begin_src emacs-lisp
   (setup (:package vertico)
-    (vertico-mode 1)
+    (:hook-into after-init-hook)
     (:option vertico-resize t))
 #+end_src
 
@@ -974,8 +978,8 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 *** which-key                                       :usability:keybindings:
 #+begin_src emacs-lisp
   (setup (:package which-key)
-    (which-key-mode t)
-    (which-key-setup-side-window-bottom))
+    (:hook-into after-init-hook)
+    (:hook which-key-setup-side-window-bottom))
 #+end_src
 ** Notes                                                             :@note:
 :PROPERTIES:
