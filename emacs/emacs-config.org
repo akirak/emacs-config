@@ -225,7 +225,8 @@ The built-in =electric= package provides the following modes:
     (:option backup-by-copying t
              delete-old-versions t
              version-control t
-             view-read-only t))
+             view-read-only t
+             auto-mode-case-fold nil))
 #+end_src
 *** fns.c and xfns.c                                                   :UI:
 :PROPERTIES:
@@ -517,6 +518,19 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup winner
     (winner-mode 1))
+#+end_src
+*** xdisp.c
+:PROPERTIES:
+:CREATED_TIME: [2022-01-09 Sun 23:22]
+:END:
+
+#+begin_src emacs-lisp
+  (setup xdisp
+    ;; I have never encountered a situation where I need to deal with R-L
+    ;; direction so far
+    (:option bidi-inhibit-bpa t
+             bidi-display-reordering 'left-to-right
+             bidi-paragraph-direction 'left-to-right))
 #+end_src
 ** Basic appearances                                                :visual:
 *** Theme packages                                        :packages:
