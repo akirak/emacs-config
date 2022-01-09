@@ -15,6 +15,7 @@
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
   - [[#tag-statistics][Tag statistics]]
   - [[#quality-of-life][Quality of life]]
+  - [[#web-development][Web development]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -565,11 +566,29 @@ You need to install the font separately.
 #+end_src
 ** Org                                                            :packages:
 Embrace Org as a common document format for Emacs.
+*** orglink
+:PROPERTIES:
+:CREATED_TIME: [2022-01-07 Fri 10:28]
+:END:
+
+=orglink-mode= lets you open links as in Org mode.
+
+#+begin_src emacs-lisp
+(setup (:package orglink))
+#+end_src
 ** Packages                                                       :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
 A bunch of useful packages are configured here.
+*** academic-phrases                                              :writing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-07 Fri 11:28]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package academic-phrases))
+#+end_src
 *** ace-window                                                :keybindings:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
@@ -785,6 +804,14 @@ The following resources are useful:
       (require 'kind-icon)
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
+*** leetcode                                                    :exercises:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-07 Fri 11:27]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package leetcode))
+#+end_src
 *** magit                                                             :git:
 #+begin_src emacs-lisp
   (setup (:package magit)
@@ -849,6 +876,14 @@ Resources:
 - https://github.com/minad/vertico#configuration
 
 It is also possible to use Helm as a completion style. See https://github.com/oantolin/orderless#ivy-and-helm. I will use orderless primarily because it is smaller than Helm.
+*** restclient                                                        :web:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-07 Fri 10:58]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package restclient))
+#+end_src
 *** svg-lib                                              :library:graphics:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:30]
@@ -867,7 +902,7 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
     (autoload #'svg-tag-mode "svg-tag-mode.el")
     (:hook-into org-mode prog-mode))
 #+end_src
-*** tree-sitter
+*** tree-sitter                                                    :syntax:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:36]
 :END:
@@ -876,6 +911,8 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
   (setup (:package tree-sitter)
     (:hook tree-sitter-hl-mode))
 #+end_src
+
+- =tree-sitter-hl-mode= overrides highlighting provided by =font-lock-mode=.
 **** tree-sitter-langs
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:37]
@@ -964,7 +1001,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]       | 29 |
+| [[org-ql-search:tags:packages][packages]]       | 33 |
 | [[org-ql-search:tags:UI][UI]]             |  9 |
 | [[org-ql-search:tags:visual][visual]]         |  7 |
 | [[org-ql-search:tags:formatting][formatting]]     |  6 |
@@ -975,10 +1012,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:IO][IO]]             |  2 |
 | [[org-ql-search:tags:parentheses][parentheses]]    |  2 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]     |  2 |
+| [[org-ql-search:tags:writing][writing]]        |  2 |
 | [[org-ql-search:tags:VC][VC]]             |  2 |
 | [[org-ql-search:tags:navigation][navigation]]     |  2 |
 | [[org-ql-search:tags:keybindings][keybindings]]    |  2 |
 | [[org-ql-search:tags:major_mode][major_mode]]     |  2 |
+| [[org-ql-search:tags:syntax][syntax]]         |  2 |
 | [[org-ql-search:tags:profiling][profiling]]      |  1 |
 | [[org-ql-search:tags:initialization][initialization]] |  1 |
 | [[org-ql-search:tags:performance][performance]]    |  1 |
@@ -986,9 +1025,10 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:prog_mode][prog_mode]]      |  1 |
 | [[org-ql-search:tags:text_mode][text_mode]]      |  1 |
 | [[org-ql-search:tags:text][text]]           |  1 |
-| [[org-ql-search:tags:writing][writing]]        |  1 |
+| [[org-ql-search:tags:exercises][exercises]]      |  1 |
 | [[org-ql-search:tags:git][git]]            |  1 |
 | [[org-ql-search:tags:Nix][Nix]]            |  1 |
+| [[org-ql-search:tags:web][web]]            |  1 |
 | [[org-ql-search:tags:library][library]]        |  1 |
 | [[org-ql-search:tags:graphics][graphics]]       |  1 |
 | [[org-ql-search:tags:nano][nano]]           |  1 |
@@ -1014,6 +1054,22 @@ Auto-formatting is one of the keys.
 | [[Tag statistics][Tag statistics]]    |      |
 | [[Quality of life][Quality of life]]   |      |
 #+END:
+*** Web development
+:PROPERTIES:
+:CREATED_TIME: [2022-01-07 Fri 10:59]
+:END:
+
+#+BEGIN: org-ql :query "tags: web" :columns (heading todo)
+| Heading         | Todo |
+|-----------------+------|
+| [[restclient][restclient]]      |      |
+| [[Tag statistics][Tag statistics]]  |      |
+| [[Web development][Web development]] |      |
+#+END:
+
+- You will want to try out APIs from within Emacs. You can choose either [[https://github.com/pashky/restclient.el][restclient]] or [[https://github.com/federicotdn/verb][verb]].
+- I am not sure if Indium or skewer-mode works nowadays. I have never used any of them in real development.
+
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil

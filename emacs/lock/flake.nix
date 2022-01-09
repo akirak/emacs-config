@@ -2,10 +2,22 @@
   description =
     "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
+    academic-phrases = {
+      flake = false;
+      owner = "nashamri";
+      repo = "academic-phrases";
+      type = "github";
+    };
     ace-window = {
       flake = false;
       owner = "abo-abo";
       repo = "ace-window";
+      type = "github";
+    };
+    aio = {
+      flake = false;
+      owner = "skeeto";
+      repo = "emacs-aio";
       type = "github";
     };
     all-the-icons = {
@@ -115,6 +127,30 @@
       repo = "git-modes";
       type = "github";
     };
+    graphql = {
+      flake = false;
+      owner = "vermiculus";
+      repo = "graphql.el";
+      type = "github";
+    };
+    ht = {
+      flake = false;
+      owner = "Wilfred";
+      repo = "ht.el";
+      type = "github";
+    };
+    leetcode = {
+      flake = false;
+      owner = "kaiwk";
+      repo = "leetcode.el";
+      type = "github";
+    };
+    log4e = {
+      flake = false;
+      owner = "aki2o";
+      repo = "log4e";
+      type = "github";
+    };
     magit = {
       flake = false;
       owner = "magit";
@@ -151,6 +187,12 @@
       repo = "orderless";
       type = "github";
     };
+    orglink = {
+      flake = false;
+      owner = "tarsius";
+      repo = "orglink";
+      type = "github";
+    };
     poet-theme = {
       flake = false;
       owner = "kunalb";
@@ -161,6 +203,18 @@
       flake = false;
       owner = "auto-complete";
       repo = "popup-el";
+      type = "github";
+    };
+    restclient = {
+      flake = false;
+      owner = "pashky";
+      repo = "restclient.el";
+      type = "github";
+    };
+    s = {
+      flake = false;
+      owner = "magnars";
+      repo = "s.el";
       type = "github";
     };
     svg-tag-mode = {

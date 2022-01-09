@@ -57,7 +57,7 @@
                     ("Package" :keys "p"
                      :function ,(level2 "Packages"))))
 
-                  ("Notes" :keys "n"
+                  ("Note" :keys "n"
                    :function ,(level2 "Notes")
                    :template
                    ("* %?"
@@ -73,4 +73,11 @@
                              (substring-no-properties
                               (org-get-heading t t t t))
                              ")%?)\n"
-                             "#+end_src"))))))))))
+                             "#+end_src")))
+
+                  ("Org-Ql dynamic block for a tag" :keys "q"
+                   :contexts (:in-file "emacs-config\\.org\\'")
+                   :type plain
+                   :template
+                   ("#+BEGIN: org-ql :query \"tags: %^{tag}\" :columns (heading todo)"
+                    "#+END:")))))))))

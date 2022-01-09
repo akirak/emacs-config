@@ -38,7 +38,7 @@ let
     inventories = [
       {
         type = "melpa";
-        path = ./recipes/overrides;
+        path = ./recipes;
       }
       {
         type = "elpa-core";
@@ -65,10 +65,6 @@ let
         type = "gitmodules";
         path = epkgs.outPath + "/.gitmodules";
       }
-      {
-        type = "melpa";
-        path = ./recipes/fallbacks;
-      }
     ];
     inherit initFiles;
     extraPackages = [
@@ -76,7 +72,7 @@ let
     ];
     initParser = parseSetup { };
     emacsPackage = emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
-    lockDir = ./sources;
+    lockDir = ./lock;
     inputOverrides = import ./inputs.nix releaseVersions;
   }).overrideScope' (self: super: {
     elispPackages = super.elispPackages.overrideScope'
