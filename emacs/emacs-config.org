@@ -1001,7 +1001,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]       | 29 |
+| [[org-ql-search:tags:packages][packages]]       | 33 |
 | [[org-ql-search:tags:UI][UI]]             |  9 |
 | [[org-ql-search:tags:visual][visual]]         |  7 |
 | [[org-ql-search:tags:formatting][formatting]]     |  6 |
@@ -1012,10 +1012,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:IO][IO]]             |  2 |
 | [[org-ql-search:tags:parentheses][parentheses]]    |  2 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]     |  2 |
+| [[org-ql-search:tags:writing][writing]]        |  2 |
 | [[org-ql-search:tags:VC][VC]]             |  2 |
 | [[org-ql-search:tags:navigation][navigation]]     |  2 |
 | [[org-ql-search:tags:keybindings][keybindings]]    |  2 |
 | [[org-ql-search:tags:major_mode][major_mode]]     |  2 |
+| [[org-ql-search:tags:syntax][syntax]]         |  2 |
 | [[org-ql-search:tags:profiling][profiling]]      |  1 |
 | [[org-ql-search:tags:initialization][initialization]] |  1 |
 | [[org-ql-search:tags:performance][performance]]    |  1 |
@@ -1023,9 +1025,10 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:prog_mode][prog_mode]]      |  1 |
 | [[org-ql-search:tags:text_mode][text_mode]]      |  1 |
 | [[org-ql-search:tags:text][text]]           |  1 |
-| [[org-ql-search:tags:writing][writing]]        |  1 |
+| [[org-ql-search:tags:exercises][exercises]]      |  1 |
 | [[org-ql-search:tags:git][git]]            |  1 |
 | [[org-ql-search:tags:Nix][Nix]]            |  1 |
+| [[org-ql-search:tags:web][web]]            |  1 |
 | [[org-ql-search:tags:library][library]]        |  1 |
 | [[org-ql-search:tags:graphics][graphics]]       |  1 |
 | [[org-ql-search:tags:nano][nano]]           |  1 |
@@ -1060,6 +1063,7 @@ Auto-formatting is one of the keys.
 | Heading         | Todo |
 |-----------------+------|
 | [[restclient][restclient]]      |      |
+| [[Tag statistics][Tag statistics]]  |      |
 | [[Web development][Web development]] |      |
 #+END:
 
