@@ -84,7 +84,8 @@ I am interested to see if it can reduce the amount of configuration code.
 *** gcmh                                                      :performance:
 #+begin_src emacs-lisp
   (setup (:package gcmh)
-    (gcmh-mode t))
+    (:hook-into after-init-hook)
+    (:option gcmh-verbose t))
 #+end_src
 ** Built-ins
 :PROPERTIES:
