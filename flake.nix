@@ -158,13 +158,13 @@
           apps =
             {
               lock = mkApp {
-                drv = emacs-full.lock.writeToDir "emacs/sources";
+                drv = emacs-full.lock.writeToDir "emacs/lock";
               };
-              sync = mkApp {
-                drv = emacs-full.sync.writeToDir "emacs/sources";
-              };
-              update = mkApp {
-                drv = emacs-full.update.writeToDir "emacs/sources";
+              # sync = mkApp {
+              #   drv = emacs-full.sync.writeToDir "emacs/lock";
+              # };
+              update-elpa = mkApp {
+                drv = emacs-full.update.writeToDir "emacs/lock";
               };
             };
 
