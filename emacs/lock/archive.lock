@@ -77,9 +77,9 @@
   },
   "vertico": {
     "archive": {
-      "narHash": "sha256-WAob2mETCUo7btV7HTcxeBweOx0aSwEMUT7PjizS8V0=",
+      "narHash": "sha256-oSdW+b0KPeJoSKDks/95fDRaJilj84mmx0xO2kA+HIU=",
       "type": "tarball",
-      "url": "https://elpa.gnu.org/packages/vertico-0.18.tar"
+      "url": "https://elpa.gnu.org/packages/vertico-0.19.tar"
     },
     "inventory": {
       "type": "archive",
@@ -88,6 +88,6 @@
     "packageRequires": {
       "emacs": "27.1"
     },
-    "version": "0.18"
+    "version": "0.19"
   }
 }
