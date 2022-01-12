@@ -41,27 +41,24 @@ let
         path = ./recipes;
       }
       {
-        type = "elpa-core";
+        type = "elpa";
         path = gnu-elpa.outPath + "/elpa-packages";
-        src = emacs.outPath;
+        core-src = emacs.outPath;
+        auto-sync-only = true;
       }
       {
-        name = "melpa";
         type = "melpa";
         path = melpa.outPath + "/recipes";
       }
       {
-        name = "gnu";
         type = "archive";
         url = "https://elpa.gnu.org/packages/";
       }
       {
-        name = "nongnu";
         type = "archive";
         url = "https://elpa.nongnu.org/nongnu/";
       }
       {
-        name = "emacsmirror";
         type = "gitmodules";
         path = epkgs.outPath + "/.gitmodules";
       }

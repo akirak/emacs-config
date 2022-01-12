@@ -14,7 +14,9 @@ esuper:
       "-DEMACS_SOURCE=${emacs.src}"
     ];
     preBuild = ''
-      cmake
+      mkdir -p build
+      cd build
+      cmake ..
       make
       install -m444 -t . ../*.so
       install -m600 -t . ../*.el
