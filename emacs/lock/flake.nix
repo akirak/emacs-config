@@ -74,6 +74,12 @@
       repo = "consult-dir";
       type = "github";
     };
+    corfu = {
+      flake = false;
+      owner = "minad";
+      repo = "corfu";
+      type = "github";
+    };
     dash = {
       flake = false;
       owner = "magnars";
@@ -137,6 +143,12 @@
       flake = false;
       owner = "Wilfred";
       repo = "ht.el";
+      type = "github";
+    };
+    kind-icon = {
+      flake = false;
+      owner = "jdtsmith";
+      repo = "kind-icon";
       type = "github";
     };
     leetcode = {
@@ -217,6 +229,17 @@
       repo = "s.el";
       type = "github";
     };
+    setup = {
+      flake = false;
+      type = "git";
+      url = "https://git.sr.ht/~pkal/setup";
+    };
+    svg-lib = {
+      flake = false;
+      owner = "rougier";
+      repo = "svg-lib";
+      type = "github";
+    };
     svg-tag-mode = {
       flake = false;
       owner = "rougier";
@@ -248,6 +271,12 @@
       flake = false;
       owner = "emacs-typescript";
       repo = "typescript.el";
+      type = "github";
+    };
+    vertico = {
+      flake = false;
+      owner = "minad";
+      repo = "vertico";
       type = "github";
     };
     vterm = {
