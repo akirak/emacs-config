@@ -156,20 +156,9 @@
                 "$HOME/Downloads"
               ];
             };
-          };
-
-          apps =
-            {
-              lock = mkApp {
-                drv = emacs-full.lock.writeToDir "emacs/lock";
-              };
-              # sync = mkApp {
-              #   drv = emacs-full.sync.writeToDir "emacs/lock";
-              # };
-              update-elpa = mkApp {
-                drv = emacs-full.update.writeToDir "emacs/lock";
-              };
-            };
+          }
+          //
+          nixpkgs.lib.getAttrs [ "lock" "update" ] (emacs-full.admin "emacs/lock");
 
           # Set up a pre-commit hook by running `nix develop`.
           devShell = channels.nixpkgs.mkShell {
