@@ -432,6 +432,22 @@
         "type": "github"
       }
     },
+    "macrostep": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1479675960,
+        "narHash": "sha256-X0KJxrpZduW691sjTGznVebXhhAiJf6+ZwkJ23oFpLo=",
+        "owner": "joddie",
+        "repo": "macrostep",
+        "rev": "424e3734a1ee526a1bd7b5c3cd1d3ef19d184267",
+        "type": "github"
+      },
+      "original": {
+        "owner": "joddie",
+        "repo": "macrostep",
+        "type": "github"
+      }
+    },
     "magit": {
       "flake": false,
       "locked": {
@@ -621,6 +637,7 @@
         "kind-icon": "kind-icon",
         "leetcode": "leetcode",
         "log4e": "log4e",
+        "macrostep": "macrostep",
         "magit": "magit",
         "magit-section": "magit-section",
         "marginalia": "marginalia",

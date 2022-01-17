@@ -831,6 +831,17 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package leetcode))
 #+end_src
+*** macrostep                                      :emacs_lisp:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-17 Mon 15:52]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package macrostep))
+#+end_src
+
+To use it, turn on =macrostep-mode=.
+
 *** magit                                                             :git:
 #+begin_src emacs-lisp
   (setup (:package magit)

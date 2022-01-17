@@ -163,6 +163,12 @@
       repo = "log4e";
       type = "github";
     };
+    macrostep = {
+      flake = false;
+      owner = "joddie";
+      repo = "macrostep";
+      type = "github";
+    };
     magit = {
       flake = false;
       owner = "magit";
