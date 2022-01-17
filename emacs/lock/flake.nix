@@ -285,6 +285,12 @@
       repo = "typescript.el";
       type = "github";
     };
+    unmodified-buffer = {
+      flake = false;
+      owner = "arthurcgusmao";
+      repo = "unmodified-buffer";
+      type = "github";
+    };
     vertico = {
       flake = false;
       owner = "minad";

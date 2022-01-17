@@ -967,6 +967,15 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 #+begin_src emacs-lisp
 (setup (:package typescript-mode))
 #+end_src
+*** unmodified-buffer
+:PROPERTIES:
+:CREATED_TIME: [2022-01-17 Mon 15:58]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package unmodified-buffer)
+    (:hook-into after-init-hook))
+#+end_src
 *** vertico                                         :minibuffer:completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 16:59]

@@ -657,6 +657,7 @@
         "tsc": "tsc",
         "turbo-log": "turbo-log",
         "typescript-mode": "typescript-mode",
+        "unmodified-buffer": "unmodified-buffer",
         "vertico": "vertico",
         "vterm": "vterm",
         "which-key": "which-key",
@@ -807,6 +808,22 @@
       "original": {
         "owner": "emacs-typescript",
         "repo": "typescript.el",
+        "type": "github"
+      }
+    },
+    "unmodified-buffer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641974106,
+        "narHash": "sha256-4mdWhLJmrpAgKDYRhM/8f74S2SKYGeHnO4Ot+Fff16U=",
+        "owner": "arthurcgusmao",
+        "repo": "unmodified-buffer",
+        "rev": "dea0daaf951fc9aee042d15091675c8ed54df096",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arthurcgusmao",
+        "repo": "unmodified-buffer",
         "type": "github"
       }
     },
