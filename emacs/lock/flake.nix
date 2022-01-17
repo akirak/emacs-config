@@ -273,6 +273,12 @@
       repo = "elisp-tree-sitter";
       type = "github";
     };
+    turbo-log = {
+      flake = false;
+      owner = "Artawower";
+      repo = "turbo-log";
+      type = "github";
+    };
     typescript-mode = {
       flake = false;
       owner = "emacs-typescript";

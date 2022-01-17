@@ -655,6 +655,7 @@
         "tree-sitter": "tree-sitter",
         "tree-sitter-langs": "tree-sitter-langs",
         "tsc": "tsc",
+        "turbo-log": "turbo-log",
         "typescript-mode": "typescript-mode",
         "vertico": "vertico",
         "vterm": "vterm",
@@ -774,6 +775,22 @@
         "owner": "emacs-tree-sitter",
         "ref": "0.16.1",
         "repo": "elisp-tree-sitter",
+        "type": "github"
+      }
+    },
+    "turbo-log": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1642278484,
+        "narHash": "sha256-Th5uakkAoYMtH5t0D08UkxDcDSAfKmmiso6oBcJohEQ=",
+        "owner": "Artawower",
+        "repo": "turbo-log",
+        "rev": "99b407de638dc8c8fc5fcd8b3a25028d93e7d8e6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Artawower",
+        "repo": "turbo-log",
         "type": "github"
       }
     },
