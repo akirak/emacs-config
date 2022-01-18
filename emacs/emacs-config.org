@@ -599,6 +599,15 @@ You need to install the font separately.
 #+end_src
 ** Org                                                            :packages:
 Embrace Org as a common document format for Emacs.
+*** org-dynamic-bullets                                        :aesthetics:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-18 Tue 16:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-dynamic-bullets)
+    (:hook-into org-mode-hook))
+#+end_src
 *** orglink
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:28]
@@ -608,6 +617,15 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
 (setup (:package orglink))
+#+end_src
+*** org-visual-indent                                          :aesthetics:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-17 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-visual-indent)
+    (:hook-into org-mode-hook))
 #+end_src
 ** Packages                                                       :packages:
 :PROPERTIES:

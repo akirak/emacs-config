@@ -544,6 +544,40 @@
         "type": "github"
       }
     },
+    "org-dynamic-bullets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1642493304,
+        "narHash": "sha256-oQsyq+U8FGZ0BhVuCLy5PFtwkDlRheZ8q2+mul/om2g=",
+        "owner": "akirak",
+        "repo": "org-visual-outline",
+        "rev": "a31fd1fe799677401f8a7e0e013d90ceb9c5d4d8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "ref": "fix-package-requires",
+        "repo": "org-visual-outline",
+        "type": "github"
+      }
+    },
+    "org-visual-indent": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1642493304,
+        "narHash": "sha256-oQsyq+U8FGZ0BhVuCLy5PFtwkDlRheZ8q2+mul/om2g=",
+        "owner": "akirak",
+        "repo": "org-visual-outline",
+        "rev": "a31fd1fe799677401f8a7e0e013d90ceb9c5d4d8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "ref": "fix-package-requires",
+        "repo": "org-visual-outline",
+        "type": "github"
+      }
+    },
     "orglink": {
       "flake": false,
       "locked": {
@@ -644,6 +678,8 @@
         "nano-theme": "nano-theme",
         "nix-mode": "nix-mode",
         "orderless": "orderless",
+        "org-dynamic-bullets": "org-dynamic-bullets",
+        "org-visual-indent": "org-visual-indent",
         "orglink": "orglink",
         "poet-theme": "poet-theme",
         "popup": "popup",

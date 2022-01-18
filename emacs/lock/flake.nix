@@ -205,6 +205,20 @@
       repo = "orderless";
       type = "github";
     };
+    org-dynamic-bullets = {
+      flake = false;
+      owner = "akirak";
+      ref = "fix-package-requires";
+      repo = "org-visual-outline";
+      type = "github";
+    };
+    org-visual-indent = {
+      flake = false;
+      owner = "akirak";
+      ref = "fix-package-requires";
+      repo = "org-visual-outline";
+      type = "github";
+    };
     orglink = {
       flake = false;
       owner = "tarsius";
