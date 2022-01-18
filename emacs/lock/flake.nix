@@ -266,6 +266,12 @@
       repo = "svg-tag-mode";
       type = "github";
     };
+    titlecase = {
+      flake = false;
+      owner = "duckwork";
+      repo = "titlecase.el";
+      type = "github";
+    };
     tree-sitter = {
       flake = false;
       owner = "emacs-tree-sitter";

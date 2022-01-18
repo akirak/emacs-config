@@ -688,6 +688,7 @@
         "setup": "setup",
         "svg-lib": "svg-lib",
         "svg-tag-mode": "svg-tag-mode",
+        "titlecase": "titlecase",
         "tree-sitter": "tree-sitter",
         "tree-sitter-langs": "tree-sitter-langs",
         "tsc": "tsc",
@@ -761,6 +762,22 @@
       "original": {
         "owner": "rougier",
         "repo": "svg-tag-mode",
+        "type": "github"
+      }
+    },
+    "titlecase": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1642486707,
+        "narHash": "sha256-ETLrnBtyJxuKOLfnPcQAsj0OtpAroX7sgFsiAx2yP9Q=",
+        "owner": "duckwork",
+        "repo": "titlecase.el",
+        "rev": "d82f3d23c166db1c3ea9ae25adaf43d1eeb748dc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "duckwork",
+        "repo": "titlecase.el",
         "type": "github"
       }
     },
