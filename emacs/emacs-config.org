@@ -14,7 +14,6 @@
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
   - [[#tag-statistics][Tag statistics]]
-  - [[#quality-of-life][Quality of life]]
   - [[#web-development][Web development]]
 :END:
 ** Setup.el
@@ -1064,12 +1063,12 @@ This configuration is maintained in Org, and [[file:.org-config.el][.org-config.
 
 The workflow is as follows:
 
-1. Use =org-capture= to add an entry with a source block to the configuration file.
-2. Add further configuration for the package using =setup= and set tags on the heading.
-3. Org entries are automatically sorted by package name when the buffer is saved.
+1. Use =org-capture= to add an entry to the configuration file. It should contain a source block with a package name.
+2. Add further configuration for the package. Optionally set tags on the heading.
+3. When the buffer is saved, Org entries are automatically sorted by package name. This feature depends on the pre-commit hook of this repository.
 *** Tag statistics
-The following source block generates a table of tags in this document.
-If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse entries matching a tag by pressing =C-c C-o= on a link.
+The following source block generates a list of tags in this document.
+If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse matching entries by pressing =C-c C-o= on a link in the table.
 
 #+name: tag-statistics
 #+begin_src emacs-lisp :tangle no
@@ -1129,38 +1128,22 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:usability][usability]]      |  1 |
 
 Note that the table above is invisible on GitHub.
-*** Quality of life
-There are many ways to improve the quality of life inside Emacs.
-
-Auto-formatting is one of the keys.
-
-#+BEGIN: org-ql :query "tags: formatting" :columns (heading todo)
-| Heading           | Todo |
-|-------------------+------|
-| [[buffer.c][buffer.c]]          |      |
-| [[electric][electric]]          |      |
-| [[indent.c][indent.c]]          |      |
-| [[simple][simple]]            |      |
-| [[whitespace][whitespace]]        |      |
-| [[electric-operator][electric-operator]] |      |
-| [[Tag statistics][Tag statistics]]    |      |
-| [[Quality of life][Quality of life]]   |      |
-#+END:
+There is a table right before paragraph.
 *** Web development
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:59]
 :END:
 
-#+BEGIN: org-ql :query "tags: web" :columns (heading todo)
-| Heading         | Todo |
-|-----------------+------|
-| [[restclient][restclient]]      |      |
-| [[Tag statistics][Tag statistics]]  |      |
-| [[Web development][Web development]] |      |
+The following packages (tagged =web=) are related to web development:
+
+#+BEGIN: org-ql :query "tags:web" :columns (heading todo)
+| Heading    | Todo |
+|------------+------|
+| [[restclient][restclient]] |      |
 #+END:
 
-- You will want to try out APIs from within Emacs. You can choose either [[https://github.com/pashky/restclient.el][restclient]] or [[https://github.com/federicotdn/verb][verb]].
-- I am not sure if Indium or skewer-mode works nowadays. I have never used any of them in real development.
+- You will want to test web APIs from inside Emacs. You can choose either [[https://github.com/pashky/restclient.el][restclient]] or [[https://github.com/federicotdn/verb][verb]] for this purpose.
+- I am not sure if Indium or skewer-mode is suitable for modern web development. I have never used any of them.
 
 ** Footer                                                         :noexport:
 # Local Variables:
