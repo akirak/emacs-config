@@ -6,8 +6,7 @@ They serve as extensions to [[file:emacs-config.org][the basic configuration]]. 
 ** beancount
 #+begin_src emacs-lisp
   (setup (:package beancount)
-    ;; TODO: I want to install beancount executable from nixpkgs, but I don't have a
-    ;; macro for it.
+    (:nixpkgs "beancount" "fava")
   
     ;; I don't like the default keybindings on C-c, so change the prefix.
     (:option beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
