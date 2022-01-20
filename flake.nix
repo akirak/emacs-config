@@ -191,7 +191,7 @@
 
       # checks.x86_64-linux.someCheck = pkgs.hello;
       # packages.x86_64-linux.somePackage = pkgs.hello;
-      # overlay = import ./overlays;
+      overlay = import ./pkgs/overlay.nix;
       # abc = 132;
     };
 }
