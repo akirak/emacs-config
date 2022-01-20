@@ -66,6 +66,7 @@
         inputs.emacs-overlay.overlay
         inputs.org-babel.overlay
         inputs.twist.overlay
+        (import ./pkgs/overlay.nix)
         (import ./emacs/overlay.nix {
           inherit (inputs) twist org-babel;
           inherit (inputs) gnu-elpa melpa epkgs emacs;
@@ -133,6 +134,8 @@
         in
         {
           packages = {
+            inherit (channels.nixpkgs) github-linguist;
+
             inherit emacs-full;
             # Add more variants of the full profile later
             emacs = emacsSandbox emacs-basic {
