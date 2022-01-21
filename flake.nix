@@ -144,6 +144,9 @@
             emacs-compat = emacsSandbox emacs-compat {
               emacsArguments = useThemeFrom "doom-themes" "doom-one";
             };
+            emacs-readability = emacsSandbox emacs-compat {
+              emacsArguments = useThemeFrom "poet-theme" "poet";
+            };
             emacs-beancount = emacsSandbox emacsConfigurations.beancount {
               emacsArguments = useThemeFrom "doom-opera-light";
               userEmacsDirectory = "$HOME/beancount/emacs-var";
