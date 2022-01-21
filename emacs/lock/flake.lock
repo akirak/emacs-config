@@ -448,6 +448,38 @@
         "type": "github"
       }
     },
+    "json-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1633933809,
+        "narHash": "sha256-H+HNE9NYXnC7eIQG/hy8a4qbvo7Lpp7oGGFNVLApE2Q=",
+        "owner": "joshwnj",
+        "repo": "json-mode",
+        "rev": "eedb4560034f795a7950fa07016bd4347c368873",
+        "type": "github"
+      },
+      "original": {
+        "owner": "joshwnj",
+        "repo": "json-mode",
+        "type": "github"
+      }
+    },
+    "json-snatcher": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1600276660,
+        "narHash": "sha256-ECQq7/HZiKneJ01wdF23loAU0iJYtGGzAOg6hqOIu9s=",
+        "owner": "Sterlingg",
+        "repo": "json-snatcher",
+        "rev": "b28d1c0670636da6db508d03872d96ffddbc10f2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Sterlingg",
+        "repo": "json-snatcher",
+        "type": "github"
+      }
+    },
     "kind-icon": {
       "flake": false,
       "locked": {
@@ -830,6 +862,8 @@
         "hydra": "hydra",
         "iedit": "iedit",
         "ivy": "ivy",
+        "json-mode": "json-mode",
+        "json-snatcher": "json-snatcher",
         "kind-icon": "kind-icon",
         "leetcode": "leetcode",
         "lispy": "lispy",

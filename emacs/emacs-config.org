@@ -853,6 +853,15 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package iedit))
 #+end_src
+*** json-mode                                                 :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package json-mode)
+    (:file-match "\\.json\\'" "\\.lock\\'"))
+#+end_src
 *** kind-icon                                                          :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:22]

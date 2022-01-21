@@ -169,6 +169,18 @@
       repo = "swiper";
       type = "github";
     };
+    json-mode = {
+      flake = false;
+      owner = "joshwnj";
+      repo = "json-mode";
+      type = "github";
+    };
+    json-snatcher = {
+      flake = false;
+      owner = "Sterlingg";
+      repo = "json-snatcher";
+      type = "github";
+    };
     kind-icon = {
       flake = false;
       owner = "jdtsmith";
