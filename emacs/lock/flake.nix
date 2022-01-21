@@ -223,6 +223,12 @@
       repo = "marginalia";
       type = "github";
     };
+    mlscroll = {
+      flake = false;
+      owner = "jdtsmith";
+      repo = "mlscroll";
+      type = "github";
+    };
     nano-theme = {
       flake = false;
       owner = "rougier";

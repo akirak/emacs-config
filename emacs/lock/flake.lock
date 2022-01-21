@@ -592,6 +592,22 @@
         "type": "github"
       }
     },
+    "mlscroll": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1632760599,
+        "narHash": "sha256-7VPNSmVSUE6mAR38llYbDtYdInlUmWLvmVJMuwlnzik=",
+        "owner": "jdtsmith",
+        "repo": "mlscroll",
+        "rev": "a9f2abd32f2517392a396d61e558bea3c887b5b6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jdtsmith",
+        "repo": "mlscroll",
+        "type": "github"
+      }
+    },
     "nano-theme": {
       "flake": false,
       "locked": {
@@ -807,6 +823,7 @@
         "magit": "magit",
         "magit-section": "magit-section",
         "marginalia": "marginalia",
+        "mlscroll": "mlscroll",
         "nano-theme": "nano-theme",
         "nix-mode": "nix-mode",
         "nov": "nov",

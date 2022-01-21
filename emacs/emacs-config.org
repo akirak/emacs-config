@@ -933,6 +933,18 @@ To use it, turn on =macrostep-mode=.
 :END:
 
 [[https://github.com/rougier/nano-sidebar][GitHub - rougier/nano-sidebar: Emacs package to have configurable sidebars on a per frame basis.]]
+*** mlscroll                                                :aesthetics:UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package mlscroll)
+    (:option mlscroll-in-color "#888888"
+             mlscroll-out-color (face-attribute 'region :background nil t))
+    (:with-mode mlscroll-mode
+      (:hook-into after-init-hook)))
+#+end_src
 *** nano-modeline                       :visual:aesthetics:UI:nano:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 14:46]
