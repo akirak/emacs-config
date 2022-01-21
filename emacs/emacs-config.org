@@ -1151,43 +1151,47 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]       | 39 |
-| [[org-ql-search:tags:UI][UI]]             |  9 |
-| [[org-ql-search:tags:visual][visual]]         |  7 |
-| [[org-ql-search:tags:formatting][formatting]]     |  6 |
-| [[org-ql-search:tags:completion][completion]]     |  6 |
-| [[org-ql-search:tags:process][process]]        |  4 |
-| [[org-ql-search:tags:history][history]]        |  4 |
-| [[org-ql-search:tags:files][files]]          |  3 |
-| [[org-ql-search:tags:writing][writing]]        |  3 |
-| [[org-ql-search:tags:aesthetics][aesthetics]]     |  3 |
-| [[org-ql-search:tags:IO][IO]]             |  2 |
-| [[org-ql-search:tags:parentheses][parentheses]]    |  2 |
-| [[org-ql-search:tags:minibuffer][minibuffer]]     |  2 |
-| [[org-ql-search:tags:VC][VC]]             |  2 |
-| [[org-ql-search:tags:navigation][navigation]]     |  2 |
-| [[org-ql-search:tags:keybindings][keybindings]]    |  2 |
-| [[org-ql-search:tags:major_mode][major_mode]]     |  2 |
-| [[org-ql-search:tags:development][development]]    |  2 |
-| [[org-ql-search:tags:syntax][syntax]]         |  2 |
-| [[org-ql-search:tags:profiling][profiling]]      |  1 |
-| [[org-ql-search:tags:initialization][initialization]] |  1 |
-| [[org-ql-search:tags:performance][performance]]    |  1 |
-| [[org-ql-search:tags:diff][diff]]           |  1 |
-| [[org-ql-search:tags:prog_mode][prog_mode]]      |  1 |
-| [[org-ql-search:tags:text_mode][text_mode]]      |  1 |
-| [[org-ql-search:tags:text][text]]           |  1 |
-| [[org-ql-search:tags:exercises][exercises]]      |  1 |
-| [[org-ql-search:tags:emacs_lisp][emacs_lisp]]     |  1 |
-| [[org-ql-search:tags:git][git]]            |  1 |
-| [[org-ql-search:tags:Nix][Nix]]            |  1 |
-| [[org-ql-search:tags:web][web]]            |  1 |
-| [[org-ql-search:tags:library][library]]        |  1 |
-| [[org-ql-search:tags:graphics][graphics]]       |  1 |
-| [[org-ql-search:tags:nano][nano]]           |  1 |
-| [[org-ql-search:tags:debugging][debugging]]      |  1 |
-| [[org-ql-search:tags:terminal][terminal]]       |  1 |
-| [[org-ql-search:tags:usability][usability]]      |  1 |
+| [[org-ql-search:tags:packages][packages]]            | 42 |
+| [[org-ql-search:tags:UI][UI]]                  |  9 |
+| [[org-ql-search:tags:visual][visual]]              |  7 |
+| [[org-ql-search:tags:formatting][formatting]]          |  6 |
+| [[org-ql-search:tags:completion][completion]]          |  6 |
+| [[org-ql-search:tags:process][process]]             |  4 |
+| [[org-ql-search:tags:history][history]]             |  4 |
+| [[org-ql-search:tags:files][files]]               |  3 |
+| [[org-ql-search:tags:writing][writing]]             |  3 |
+| [[org-ql-search:tags:aesthetics][aesthetics]]          |  3 |
+| [[org-ql-search:tags:IO][IO]]                  |  2 |
+| [[org-ql-search:tags:parentheses][parentheses]]         |  2 |
+| [[org-ql-search:tags:minibuffer][minibuffer]]          |  2 |
+| [[org-ql-search:tags:VC][VC]]                  |  2 |
+| [[org-ql-search:tags:navigation][navigation]]          |  2 |
+| [[org-ql-search:tags:keybindings][keybindings]]         |  2 |
+| [[org-ql-search:tags:major_mode][major_mode]]          |  2 |
+| [[org-ql-search:tags:structured__editing][structured__editing]] |  2 |
+| [[org-ql-search:tags:development][development]]         |  2 |
+| [[org-ql-search:tags:syntax][syntax]]              |  2 |
+| [[org-ql-search:tags:tree_sitter][tree_sitter]]         |  2 |
+| [[org-ql-search:tags:profiling][profiling]]           |  1 |
+| [[org-ql-search:tags:initialization][initialization]]      |  1 |
+| [[org-ql-search:tags:performance][performance]]         |  1 |
+| [[org-ql-search:tags:diff][diff]]                |  1 |
+| [[org-ql-search:tags:prog_mode][prog_mode]]           |  1 |
+| [[org-ql-search:tags:text_mode][text_mode]]           |  1 |
+| [[org-ql-search:tags:text][text]]                |  1 |
+| [[org-ql-search:tags:editing][editing]]             |  1 |
+| [[org-ql-search:tags:exercises][exercises]]           |  1 |
+| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |  1 |
+| [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |  1 |
+| [[org-ql-search:tags:git][git]]                 |  1 |
+| [[org-ql-search:tags:Nix][Nix]]                 |  1 |
+| [[org-ql-search:tags:web][web]]                 |  1 |
+| [[org-ql-search:tags:library][library]]             |  1 |
+| [[org-ql-search:tags:graphics][graphics]]            |  1 |
+| [[org-ql-search:tags:nano][nano]]                |  1 |
+| [[org-ql-search:tags:debugging][debugging]]           |  1 |
+| [[org-ql-search:tags:terminal][terminal]]            |  1 |
+| [[org-ql-search:tags:usability][usability]]           |  1 |
 
 Note that the table above is invisible on GitHub.
 There is a table right before paragraph.
@@ -1227,8 +1231,8 @@ There are some packages for structured editing:
 #+BEGIN: org-ql :query "tags:structured__editing" :columns (heading todo)
 | Heading | Todo |
 |---------+------|
-| [[puni][puni]]    |      |
 | [[lispy][lispy]]   |      |
+| [[puni][puni]]    |      |
 #+END:
 
 I like the idea of [[https://github.com/mickeynp/combobulate][combobulate]], but it looks immature at present.
