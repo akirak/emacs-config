@@ -288,6 +288,12 @@
       repo = "puni";
       type = "github";
     };
+    rainbow-mode = {
+      flake = false;
+      owner = "emacsmirror";
+      repo = "rainbow-mode";
+      type = "github";
+    };
     restclient = {
       flake = false;
       owner = "pashky";

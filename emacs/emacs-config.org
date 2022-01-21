@@ -1029,6 +1029,15 @@ Limitations:
 
 - puni doesn't handle JSX in typescript-mode with tree-sitter.
 
+*** rainbow-mode                                                   :colors:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package rainbow-mode)
+    (:hook-into prog-mode))
+#+end_src
 *** restclient                                                        :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:58]
