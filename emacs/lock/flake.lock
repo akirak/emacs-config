@@ -626,6 +626,22 @@
         "type": "github"
       }
     },
+    "puni": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1638622563,
+        "narHash": "sha256-XPOzjbAB+bqv4xmauTCpfnhM8C6nqPW4EgnEbP6/kxo=",
+        "owner": "AmaiKinono",
+        "repo": "puni",
+        "rev": "e147a72f3c6b7bb40ef7fa37d12ea54afa09cd7e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AmaiKinono",
+        "repo": "puni",
+        "type": "github"
+      }
+    },
     "restclient": {
       "flake": false,
       "locked": {
@@ -683,6 +699,7 @@
         "orglink": "orglink",
         "poet-theme": "poet-theme",
         "popup": "popup",
+        "puni": "puni",
         "restclient": "restclient",
         "s": "s",
         "setup": "setup",

@@ -237,6 +237,12 @@
       repo = "popup-el";
       type = "github";
     };
+    puni = {
+      flake = false;
+      owner = "AmaiKinono";
+      repo = "puni";
+      type = "github";
+    };
     restclient = {
       flake = false;
       owner = "pashky";

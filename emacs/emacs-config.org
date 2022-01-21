@@ -938,6 +938,37 @@ Resources:
 - https://github.com/minad/vertico#configuration
 
 It is also possible to use Helm as a completion style. See https://github.com/oantolin/orderless#ivy-and-helm. I will use orderless primarily because it is smaller than Helm.
+*** puni                                              :structured__editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 16:24]
+:END:
+
+[[https://github.com/AmaiKinono/puni][puni]] will replace smartparens, expand-region, and paredit (which I didn't adopt in favour of lispy).
+
+#+begin_src emacs-lisp
+  (setup (:package puni)
+    (:hook-into prog-mode
+                sgml-mode
+                nxml-mode)
+
+    ;; TODO: Bind commands
+    ;;
+    ;; Marking commands
+    ;; Sexp manipulating commands
+    (:bind))
+#+end_src
+
+The following types of commands don't have pre-defined keybindings in =puni-mode=, so I have to manually bind them:
+
+- Marking commnads
+- Sexp manipulating commands
+
+For auto-pairing, you can use =electric-pair-mode= along with puni.
+
+Limitations:
+
+- puni doesn't handle JSX in typescript-mode with tree-sitter.
+
 *** restclient                                                        :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:58]
@@ -1162,6 +1193,14 @@ There are some companion packages:
 |-------------------+------|
 | [[tree-sitter][tree-sitter]]       |      |
 | [[tree-sitter-langs][tree-sitter-langs]] |      |
+#+END:
+
+There are some packages for structured editing:
+
+#+BEGIN: org-ql :query "tags:structured__editing" :columns (heading todo)
+| Heading | Todo |
+|---------+------|
+| [[puni][puni]]    |      |
 #+END:
 
 ** Footer                                                         :noexport:
