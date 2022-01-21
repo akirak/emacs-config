@@ -831,6 +831,7 @@
         "typescript-mode": "typescript-mode",
         "unmodified-buffer": "unmodified-buffer",
         "vertico": "vertico",
+        "visual-fill-column": "visual-fill-column",
         "vterm": "vterm",
         "which-key": "which-key",
         "with-editor": "with-editor",
@@ -1046,6 +1047,23 @@
         "owner": "minad",
         "repo": "vertico",
         "type": "github"
+      }
+    },
+    "visual-fill-column": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1637195632,
+        "narHash": "sha256-23AFjF7pT7Ixj3bcLl6hWh6T/qHejTq5D/hYHbBhRnI=",
+        "ref": "main",
+        "rev": "cf3e2bc632b68d54145c79beede85d3458a337de",
+        "revCount": 137,
+        "type": "git",
+        "url": "https://codeberg.org/joostkremers/visual-fill-column.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://codeberg.org/joostkremers/visual-fill-column.git"
       }
     },
     "vterm": {

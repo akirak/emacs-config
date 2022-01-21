@@ -368,6 +368,12 @@
       repo = "vertico";
       type = "github";
     };
+    visual-fill-column = {
+      flake = false;
+      ref = "main";
+      type = "git";
+      url = "https://codeberg.org/joostkremers/visual-fill-column.git";
+    };
     vterm = {
       flake = false;
       owner = "akermu";

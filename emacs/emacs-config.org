@@ -16,6 +16,7 @@
   - [[#tag-statistics][Tag statistics]]
   - [[#web-development][Web development]]
   - [[#syntax-support][Syntax support]]
+  - [[#readability][Readability]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -577,7 +578,9 @@ You need to install the font separately.
 
 #+begin_src emacs-lisp
   (defcustom akirak/base-face-family-alist
-    '((default . "Cascadia Code"))
+    '((default . "Cascadia Code")
+      (fixed-pitch . "Cascadia Code")
+      (variable-pitch . "Merriweather"))
     "Alist of font families for faces."
     :type '(alist :key-type symbol
                   :value-type string)
@@ -959,7 +962,12 @@ To use it, turn on =macrostep-mode=.
     (:nixpkgs unzip)
 
     (:with-mode nov-mode
-      (:file-match "\\.epub\\'")))
+      (:file-match "\\.epub\\'")
+
+      (:local-set line-spacing 0.4)
+
+      (:hook visual-line-mode
+             visual-fill-column-mode)))
 #+end_src
 *** orderless                                                  :completion:
 :PROPERTIES:
@@ -1111,6 +1119,16 @@ See the following [[https://github.com/minad/vertico][comment]] for differences:
 #+begin_quote
 In contrast to Vertico, Icomplete rotates the candidates such that the current candidate always appears at the top. From my perspective, candidate rotation feels a bit less intuitive than the UI of Vertico or Selectrum.
 #+end_quote
+*** visual-fill-column
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package visual-fill-column)
+    (:option visual-fill-column-center-text t
+             visual-fill-column-width 80))
+#+end_src
 *** vterm                                                :terminal:process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 16:50]
@@ -1250,6 +1268,8 @@ There are some packages for structured editing:
 
 I like the idea of [[https://github.com/mickeynp/combobulate][combobulate]], but it looks immature at present.
 I will consider it in the future.
+*** Readability
+See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil
