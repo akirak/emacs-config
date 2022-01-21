@@ -34,23 +34,4 @@
       ref = elispTreeSitterLangsVersion;
     };
   };
-
-  # Until https://github.com/legalnonsense/org-visual-outline/pull/5 is merged
-  org-visual-indent = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "org-visual-outline";
-      ref = "fix-package-requires";
-    };
-  };
-  org-dynamic-bullets = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "org-visual-outline";
-      ref = "fix-package-requires";
-    };
-  };
-
 }

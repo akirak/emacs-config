@@ -237,15 +237,13 @@
     };
     org-dynamic-bullets = {
       flake = false;
-      owner = "akirak";
-      ref = "fix-package-requires";
+      owner = "legalnonsense";
       repo = "org-visual-outline";
       type = "github";
     };
     org-visual-indent = {
       flake = false;
-      owner = "akirak";
-      ref = "fix-package-requires";
+      owner = "legalnonsense";
       repo = "org-visual-outline";
       type = "github";
     };
