@@ -145,6 +145,24 @@
       repo = "ht.el";
       type = "github";
     };
+    hydra = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "hydra";
+      type = "github";
+    };
+    iedit = {
+      flake = false;
+      owner = "victorhge";
+      repo = "iedit";
+      type = "github";
+    };
+    ivy = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "swiper";
+      type = "github";
+    };
     kind-icon = {
       flake = false;
       owner = "jdtsmith";
@@ -157,10 +175,22 @@
       repo = "leetcode.el";
       type = "github";
     };
+    lispy = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "lispy";
+      type = "github";
+    };
     log4e = {
       flake = false;
       owner = "aki2o";
       repo = "log4e";
+      type = "github";
+    };
+    lv = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "hydra";
       type = "github";
     };
     macrostep = {
@@ -272,6 +302,12 @@
       repo = "svg-tag-mode";
       type = "github";
     };
+    swiper = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "swiper";
+      type = "github";
+    };
     titlecase = {
       flake = false;
       owner = "duckwork";
@@ -339,6 +375,12 @@
       flake = false;
       owner = "magit";
       repo = "with-editor";
+      type = "github";
+    };
+    zoutline = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "zoutline";
       type = "github";
     };
   };

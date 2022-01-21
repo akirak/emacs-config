@@ -384,6 +384,54 @@
         "type": "github"
       }
     },
+    "hydra": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641110604,
+        "narHash": "sha256-AE3l5N0irSunycinznvthqjSG49sequndSY+lECFtIc=",
+        "owner": "abo-abo",
+        "repo": "hydra",
+        "rev": "9e9e00cb240ea1903ffd36a54956b3902c379d29",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "hydra",
+        "type": "github"
+      }
+    },
+    "iedit": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1642575505,
+        "narHash": "sha256-hiZbEM/bcP5HazHsEYkNY5B1bUi2AEY3Imm7B/NtgJY=",
+        "owner": "victorhge",
+        "repo": "iedit",
+        "rev": "44968bea9bff8fdd5bf9d227f53814c44bb9f619",
+        "type": "github"
+      },
+      "original": {
+        "owner": "victorhge",
+        "repo": "iedit",
+        "type": "github"
+      }
+    },
+    "ivy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640971806,
+        "narHash": "sha256-4pnpTYwvMRE9Wv2MUNGoLgX+WD1QZnCLbT0aarBuOxY=",
+        "owner": "abo-abo",
+        "repo": "swiper",
+        "rev": "c97ea72285f2428ed61b519269274d27f2b695f9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "swiper",
+        "type": "github"
+      }
+    },
     "kind-icon": {
       "flake": false,
       "locked": {
@@ -416,6 +464,22 @@
         "type": "github"
       }
     },
+    "lispy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641843162,
+        "narHash": "sha256-tMRsz7reG/hV5X4RUEkC+Vt/nO9TmE4Uq6fpSuslrMs=",
+        "owner": "abo-abo",
+        "repo": "lispy",
+        "rev": "9c03f3be2bae318363f1a35a01ab9906124610c5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "lispy",
+        "type": "github"
+      }
+    },
     "log4e": {
       "flake": false,
       "locked": {
@@ -429,6 +493,22 @@
       "original": {
         "owner": "aki2o",
         "repo": "log4e",
+        "type": "github"
+      }
+    },
+    "lv": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641110604,
+        "narHash": "sha256-AE3l5N0irSunycinznvthqjSG49sequndSY+lECFtIc=",
+        "owner": "abo-abo",
+        "repo": "hydra",
+        "rev": "9e9e00cb240ea1903ffd36a54956b3902c379d29",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "hydra",
         "type": "github"
       }
     },
@@ -684,9 +764,14 @@
         "git-modes": "git-modes",
         "graphql": "graphql",
         "ht": "ht",
+        "hydra": "hydra",
+        "iedit": "iedit",
+        "ivy": "ivy",
         "kind-icon": "kind-icon",
         "leetcode": "leetcode",
+        "lispy": "lispy",
         "log4e": "log4e",
+        "lv": "lv",
         "macrostep": "macrostep",
         "magit": "magit",
         "magit-section": "magit-section",
@@ -705,6 +790,7 @@
         "setup": "setup",
         "svg-lib": "svg-lib",
         "svg-tag-mode": "svg-tag-mode",
+        "swiper": "swiper",
         "titlecase": "titlecase",
         "tree-sitter": "tree-sitter",
         "tree-sitter-langs": "tree-sitter-langs",
@@ -715,7 +801,8 @@
         "vertico": "vertico",
         "vterm": "vterm",
         "which-key": "which-key",
-        "with-editor": "with-editor"
+        "with-editor": "with-editor",
+        "zoutline": "zoutline"
       }
     },
     "s": {
@@ -779,6 +866,22 @@
       "original": {
         "owner": "rougier",
         "repo": "svg-tag-mode",
+        "type": "github"
+      }
+    },
+    "swiper": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640971806,
+        "narHash": "sha256-4pnpTYwvMRE9Wv2MUNGoLgX+WD1QZnCLbT0aarBuOxY=",
+        "owner": "abo-abo",
+        "repo": "swiper",
+        "rev": "c97ea72285f2428ed61b519269274d27f2b695f9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "swiper",
         "type": "github"
       }
     },
@@ -958,6 +1061,22 @@
       "original": {
         "owner": "magit",
         "repo": "with-editor",
+        "type": "github"
+      }
+    },
+    "zoutline": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641112535,
+        "narHash": "sha256-CKMC9gW7s921Ok4ng9o7LLZDAzqO2Jmfm/rn9cf3tAs=",
+        "owner": "abo-abo",
+        "repo": "zoutline",
+        "rev": "32857c6c4b9b0bcbed14d825a10b91a98d5fed0a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abo-abo",
+        "repo": "zoutline",
         "type": "github"
       }
     }

@@ -842,6 +842,14 @@ The following resources are useful:
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
+*** iedit                                                         :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 16:51]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package iedit))
+#+end_src
 *** kind-icon                                                          :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:22]
@@ -863,6 +871,25 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package leetcode))
 #+end_src
+*** lispy                                 :Emacs__Lisp:structured__editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 16:36]
+:END:
+
+For Emacs Lisp, I use lispy.
+
+#+begin_src emacs-lisp
+  (setup (:package lispy)
+
+    (:hook
+     (defun akirak/lispy-invert-puni-mode ()
+       "Turn off `puni-mode' when `lispy-mode' is on."
+       (when (featurep 'puni)
+         (puni-mode (not lispy-mode))))))
+#+end_src
+
+Lispy is not turned on by default.
+Its configuration is about my habits, so it is put in [[file:compat.el::(setup lispy][compat.el]].
 *** macrostep                                      :emacs_lisp:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:52]
@@ -1201,6 +1228,7 @@ There are some packages for structured editing:
 | Heading | Todo |
 |---------+------|
 | [[puni][puni]]    |      |
+| [[lispy][lispy]]   |      |
 #+END:
 
 ** Footer                                                         :noexport:
