@@ -110,6 +110,12 @@
       repo = "embark";
       type = "github";
     };
+    esxml = {
+      flake = false;
+      owner = "tali713";
+      repo = "esxml";
+      type = "github";
+    };
     fancy-dabbrev = {
       flake = false;
       owner = "jrosdahl";
@@ -228,6 +234,11 @@
       owner = "NixOS";
       repo = "nix-mode";
       type = "github";
+    };
+    nov = {
+      flake = false;
+      type = "git";
+      url = "https://depp.brause.cc/nov.el.git";
     };
     orderless = {
       flake = false;

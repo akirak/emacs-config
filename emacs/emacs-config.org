@@ -948,6 +948,19 @@ To use it, turn on =macrostep-mode=.
   (setup (:package nix-mode)
     (:file-match "\\.nix\\'"))
 #+end_src
+*** nov                                                      :reading:EPUB:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nov)
+    ;; unzip is required for opening EPUB
+    (:nixpkgs unzip)
+
+    (:with-mode nov-mode
+      (:file-match "\\.epub\\'")))
+#+end_src
 *** orderless                                                  :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:14]

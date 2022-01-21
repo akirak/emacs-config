@@ -288,6 +288,22 @@
         "type": "github"
       }
     },
+    "esxml": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1637600256,
+        "narHash": "sha256-vof0wkIJ1hj+KSS0Ib6P4AdsLNeVu7yIMXS5C6asqOs=",
+        "owner": "tali713",
+        "repo": "esxml",
+        "rev": "f88a323bd15ad7bd94eda684e1a36525ba81a089",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tali713",
+        "repo": "esxml",
+        "type": "github"
+      }
+    },
     "fancy-dabbrev": {
       "flake": false,
       "locked": {
@@ -608,6 +624,22 @@
         "type": "github"
       }
     },
+    "nov": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640858040,
+        "narHash": "sha256-2o2Hb17RVUTh6GDClssaMhAek5SyuZjmA5LB7SOHnIY=",
+        "ref": "master",
+        "rev": "2b4a7231aff6211a5a2f28719d830887aec6cc57",
+        "revCount": 117,
+        "type": "git",
+        "url": "https://depp.brause.cc/nov.el.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://depp.brause.cc/nov.el.git"
+      }
+    },
     "orderless": {
       "flake": false,
       "locked": {
@@ -756,6 +788,7 @@
         "electric-operator": "electric-operator",
         "embark": "embark",
         "embark-consult": "embark-consult",
+        "esxml": "esxml",
         "fancy-dabbrev": "fancy-dabbrev",
         "gcmh": "gcmh",
         "git-commit": "git-commit",
@@ -776,6 +809,7 @@
         "marginalia": "marginalia",
         "nano-theme": "nano-theme",
         "nix-mode": "nix-mode",
+        "nov": "nov",
         "orderless": "orderless",
         "org-dynamic-bullets": "org-dynamic-bullets",
         "org-visual-indent": "org-visual-indent",
