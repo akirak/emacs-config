@@ -1,21 +1,13 @@
 { pkgs
-, flake-no-path
-, emacs
 , emacsBinaryPackage
 }:
 let
-  emacsForCI =
-    (pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs: [
-      epkgs.org-make-toc
-      epkgs.org-ql
-    ]);
-
   emacsConfig = { name, stages, funcName }: {
     enable = true;
     inherit stages;
     inherit name;
     entry = builtins.concatStringsSep " " [
-      "${emacsForCI}/bin/emacs"
+      "${pkgs.emacsProfiles.batch}/bin/emacs"
       "--batch -l ${./scripts/update-emacs-config.el}"
       "-f ${funcName}"
     ];
@@ -24,7 +16,7 @@ let
   };
 
   pushEmacsBinary = pkgs.writeShellScript "push-emacs-binary" ''
-    result=$(timeout 3 nix eval --raw .#emacs-full.emacs) \
+    result=$(timeout 3 nix eval --raw .#${emacsBinaryPackage}) \
     && timeout 5 cachix push akirak "$result"
   '';
 in
@@ -36,7 +28,7 @@ in
   flake-no-path = {
     enable = true;
     name = "Ensure that flake.lock does not contain a local path";
-    entry = "${flake-no-path}/bin/flake-no-path";
+    entry = "${pkgs.flake-no-path}/bin/flake-no-path";
     files = "flake\.lock$";
     pass_filenames = true;
   };

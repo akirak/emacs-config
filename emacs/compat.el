@@ -62,6 +62,24 @@
                     (when (window-live-p initial-window)
                       (select-window initial-window)))))))
 
+(setup lispy
+  (:option lispy-key-theme '(special lispy))
+
+  (:hook-into lisp-mode
+              emacs-lisp-mode
+              lisp-interaction-mode
+              ielm-mode
+              eval-expression-minibuffer-setup)
+
+  (:with-map lispy-mode-map-lispy
+    ;; Prevent conflicts with other custom keybindings
+    (:unbind "C-,"
+             "M-<left>"
+             "M-<right>"
+             "M-m"
+             "<M-return>"
+             "<M-RET>")))
+
 (setup magit
   (:global "<f8> <f7>" #'magit-stage-file
            "<f8> <f8>" #'magit-status

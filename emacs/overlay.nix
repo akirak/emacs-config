@@ -1,104 +1,137 @@
-{ twist
-, org-babel
-, gnu-elpa
-, melpa
-, epkgs
-, emacs
-}:
+{ inputs }:
 final: prev:
+with builtins;
 let
-  inherit (prev) tangleOrgBabelFile emacsPgtkGcc emacsTwist;
-  org = org-babel.lib;
-  inherit (twist.lib { inherit (prev) lib; }) parseSetup;
+  inherit (inputs.twist.lib { inherit (inputs.nixpkgs) lib; }) parseSetup;
+  org = inputs.org-babel.lib;
+  inherit (prev) lib;
 
-  initFile = tangleOrgBabelFile "init.el" ./emacs-config.org {
-    processLines = org.excludeHeadlines (org.tag "ARCHIVE");
-  };
-
-  compatEl = builtins.path {
-    name = "compat.el";
-    path = ./compat.el;
-  };
-
-  extraConfigFile = ./extras.org;
-
-  extraFile = f: tangleOrgBabelFile "extra-init.el" ./extras.org {
-    processLines = lines: prev.lib.pipe lines [
-      (org.excludeHeadlines (org.tag "ARCHIVE"))
-      f
-    ];
-  };
+  inherit (inputs.emacs-overlay.overlay final prev) emacsPgtkGcc;
+  inherit (inputs.twist.overlay final prev) emacsTwist;
+  inherit (inputs.org-babel.overlay final prev) tangleOrgBabelFile;
 
   releaseVersions = {
     elispTreeSitterVersion = "0.16.1";
     elispTreeSitterLangsVersion = "0.10.13";
   };
 
-  makeEmacsConfiguration = initFiles: (emacsTwist {
-    inventories = [
-      {
-        type = "melpa";
-        path = ./recipes;
-      }
-      {
-        type = "elpa";
-        path = gnu-elpa.outPath + "/elpa-packages";
-        core-src = emacs.outPath;
-        auto-sync-only = true;
-      }
-      {
-        type = "melpa";
-        path = melpa.outPath + "/recipes";
-      }
-      {
-        type = "archive";
-        url = "https://elpa.gnu.org/packages/";
-      }
-      {
-        type = "archive";
-        url = "https://elpa.nongnu.org/nongnu/";
-      }
-      {
-        type = "gitmodules";
-        path = epkgs.outPath + "/.gitmodules";
-      }
+  excludeArchive = org.excludeHeadlines (org.tag "ARCHIVE");
+
+  basicInit = tangleOrgBabelFile "init.el" ./emacs-config.org {
+    processLines = excludeArchive;
+  };
+
+  compatInit = builtins.path {
+    name = "compat.el";
+    path = ./compat.el;
+  };
+
+  selectExtras = extras:
+    if extras == true
+    then lib.id
+    else if isString extras
+    then org.selectHeadlines (org.headlineText extras)
+    else if isList extras
+    then org.selectHeadlines (s: lib.any (substr: org.headlineText substr s) extras)
+    else throw "extras must be either null, true, a string, or a list of strings";
+
+  extraInit = extras: tangleOrgBabelFile "extra-init.el" ./extras.org {
+    processLines = lines: lib.pipe lines [
+      excludeArchive
+      (selectExtras extras)
     ];
-    inherit initFiles;
+  };
+
+  configureInitFiles = { compat ? true, extras ? true }:
+    [ basicInit ]
+    ++ lib.optional compat compatInit
+    ++ lib.optional (extras != false) (extraInit extras);
+
+  emacsPackage = emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
+
+  inventories = import ./inventories.nix inputs;
+
+  makeEmacsProfile = args: (emacsTwist {
+    inherit emacsPackage;
+    initFiles = configureInitFiles args;
     extraPackages = [
       "setup"
     ];
     initParser = parseSetup { };
-    emacsPackage = emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
+    inherit inventories;
     lockDir = ./lock;
     inputOverrides = import ./inputs.nix releaseVersions;
   }).overrideScope' (self: super: {
-    elispPackages = super.elispPackages.overrideScope'
-      (import ./overrides.nix releaseVersions {
-        pkgs = final;
-        inherit (prev) system;
-        inherit (self) emacs;
-      });
+    elispPackages = super.elispPackages.overrideScope' (import ./overrides.nix releaseVersions {
+      pkgs = prev;
+      inherit (prev) system;
+      emacs = emacsPackage;
+    });
   });
+
+  full = makeEmacsProfile {
+    compat = true;
+    extras = true;
+  };
+
+  sandbox = prev.callPackage ./sandbox.nix { };
 in
 {
-  emacsConfigurations = {
-    # Used to generate lock files
-    full = makeEmacsConfiguration [
-      initFile
-      compatEl
-      (extraFile prev.lib.id)
-    ];
-    basic = makeEmacsConfiguration [
-      initFile
-    ];
-    compat = makeEmacsConfiguration [
-      initFile
-      compatEl
-    ];
-    beancount = makeEmacsConfiguration [
-      initFile
-      compatEl
-      (extraFile (org.selectHeadlines (org.headlineText "beancount")))
-    ];
-  };
+  emacsProfiles = lib.extendDerivation true
+    {
+
+      basic = sandbox
+        {
+          themePackage = "doom-themes";
+          themeName = "doom-rouge";
+        }
+        (makeEmacsProfile {
+          compat = false;
+          extras = false;
+        });
+
+      compat = sandbox
+        {
+          themePackage = "doom-themes";
+          themeName = "doom-one";
+        }
+        (makeEmacsProfile {
+          extras = false;
+        });
+
+      beancount = sandbox
+        {
+          themePackage = "doom-themes";
+          themeName = "doom-opera-light";
+          userEmacsDirectory = "$HOME/beancount/emacs-var";
+          extraBubblewrapOptions = [
+            "--bind"
+            "$HOME/beancount"
+            "$HOME/beancount"
+            "--bind-try"
+            "$HOME/Downloads"
+            "$HOME/Downloads"
+          ];
+        }
+        (makeEmacsProfile {
+          extras = "beancount";
+        });
+
+      readability = sandbox
+        {
+          themePackage = "poet-theme";
+          themeName = "poet";
+        }
+        (makeEmacsProfile { });
+
+      # A configuration with the packages for the Git hooks.
+      batch = emacsTwist {
+        inherit emacsPackage;
+        initFiles = [ ];
+        extraPackages = [ "org-ql" "org-make-toc" ];
+        inherit inventories;
+        lockDir = ./lock;
+      };
+    }
+    full;
 }

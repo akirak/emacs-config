@@ -110,6 +110,18 @@
       repo = "embark";
       type = "github";
     };
+    esxml = {
+      flake = false;
+      owner = "tali713";
+      repo = "esxml";
+      type = "github";
+    };
+    f = {
+      flake = false;
+      owner = "rejeep";
+      repo = "f.el";
+      type = "github";
+    };
     fancy-dabbrev = {
       flake = false;
       owner = "jrosdahl";
@@ -145,6 +157,36 @@
       repo = "ht.el";
       type = "github";
     };
+    hydra = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "hydra";
+      type = "github";
+    };
+    iedit = {
+      flake = false;
+      owner = "victorhge";
+      repo = "iedit";
+      type = "github";
+    };
+    ivy = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "swiper";
+      type = "github";
+    };
+    json-mode = {
+      flake = false;
+      owner = "joshwnj";
+      repo = "json-mode";
+      type = "github";
+    };
+    json-snatcher = {
+      flake = false;
+      owner = "Sterlingg";
+      repo = "json-snatcher";
+      type = "github";
+    };
     kind-icon = {
       flake = false;
       owner = "jdtsmith";
@@ -157,10 +199,28 @@
       repo = "leetcode.el";
       type = "github";
     };
+    lispy = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "lispy";
+      type = "github";
+    };
     log4e = {
       flake = false;
       owner = "aki2o";
       repo = "log4e";
+      type = "github";
+    };
+    lv = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "hydra";
+      type = "github";
+    };
+    macrostep = {
+      flake = false;
+      owner = "joddie";
+      repo = "macrostep";
       type = "github";
     };
     magit = {
@@ -181,6 +241,12 @@
       repo = "marginalia";
       type = "github";
     };
+    mlscroll = {
+      flake = false;
+      owner = "jdtsmith";
+      repo = "mlscroll";
+      type = "github";
+    };
     nano-theme = {
       flake = false;
       owner = "rougier";
@@ -193,16 +259,57 @@
       repo = "nix-mode";
       type = "github";
     };
+    nov = {
+      flake = false;
+      type = "git";
+      url = "https://depp.brause.cc/nov.el.git";
+    };
     orderless = {
       flake = false;
       owner = "oantolin";
       repo = "orderless";
       type = "github";
     };
+    org-dynamic-bullets = {
+      flake = false;
+      owner = "legalnonsense";
+      repo = "org-visual-outline";
+      type = "github";
+    };
+    org-make-toc = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "org-make-toc";
+      type = "github";
+    };
+    org-ql = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "org-ql";
+      type = "github";
+    };
+    org-super-agenda = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "org-super-agenda";
+      type = "github";
+    };
+    org-visual-indent = {
+      flake = false;
+      owner = "legalnonsense";
+      repo = "org-visual-outline";
+      type = "github";
+    };
     orglink = {
       flake = false;
       owner = "tarsius";
       repo = "orglink";
+      type = "github";
+    };
+    ov = {
+      flake = false;
+      owner = "emacsorphanage";
+      repo = "ov";
       type = "github";
     };
     poet-theme = {
@@ -215,6 +322,18 @@
       flake = false;
       owner = "auto-complete";
       repo = "popup-el";
+      type = "github";
+    };
+    puni = {
+      flake = false;
+      owner = "AmaiKinono";
+      repo = "puni";
+      type = "github";
+    };
+    rainbow-mode = {
+      flake = false;
+      owner = "emacsmirror";
+      repo = "rainbow-mode";
       type = "github";
     };
     restclient = {
@@ -246,6 +365,18 @@
       repo = "svg-tag-mode";
       type = "github";
     };
+    swiper = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "swiper";
+      type = "github";
+    };
+    titlecase = {
+      flake = false;
+      owner = "duckwork";
+      repo = "titlecase.el";
+      type = "github";
+    };
     tree-sitter = {
       flake = false;
       owner = "emacs-tree-sitter";
@@ -260,11 +391,23 @@
       repo = "tree-sitter-langs";
       type = "github";
     };
+    ts = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "ts.el";
+      type = "github";
+    };
     tsc = {
       flake = false;
       owner = "emacs-tree-sitter";
       ref = "0.16.1";
       repo = "elisp-tree-sitter";
+      type = "github";
+    };
+    turbo-log = {
+      flake = false;
+      owner = "Artawower";
+      repo = "turbo-log";
       type = "github";
     };
     typescript-mode = {
@@ -273,11 +416,23 @@
       repo = "typescript.el";
       type = "github";
     };
+    unmodified-buffer = {
+      flake = false;
+      owner = "arthurcgusmao";
+      repo = "unmodified-buffer";
+      type = "github";
+    };
     vertico = {
       flake = false;
       owner = "minad";
       repo = "vertico";
       type = "github";
+    };
+    visual-fill-column = {
+      flake = false;
+      ref = "main";
+      type = "git";
+      url = "https://codeberg.org/joostkremers/visual-fill-column.git";
     };
     vterm = {
       flake = false;
@@ -295,6 +450,12 @@
       flake = false;
       owner = "magit";
       repo = "with-editor";
+      type = "github";
+    };
+    zoutline = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "zoutline";
       type = "github";
     };
   };

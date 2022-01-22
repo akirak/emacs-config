@@ -78,6 +78,8 @@
                   ("Org-Ql dynamic block for a tag" :keys "q"
                    :contexts (:in-file "emacs-config\\.org\\'")
                    :type plain
+                   :function ignore
+                   :immediate-finish t
                    :template
-                   ("#+BEGIN: org-ql :query \"tags: %^{tag}\" :columns (heading todo)"
+                   ("#+BEGIN: org-ql :query \"tags:%^{tag}\" :columns (heading todo)"
                     "#+END:")))))))))

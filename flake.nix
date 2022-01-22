@@ -63,14 +63,9 @@
       };
 
       sharedOverlays = [
-        inputs.emacs-overlay.overlay
-        inputs.org-babel.overlay
-        inputs.twist.overlay
         (import ./pkgs/overlay.nix)
-        (import ./emacs/overlay.nix {
-          inherit (inputs) twist org-babel;
-          inherit (inputs) gnu-elpa melpa epkgs emacs;
-        })
+        inputs.flake-no-path.overlay
+        (import ./emacs/overlay.nix { inherit inputs; })
       ];
 
       # Nixpkgs flake reference to be used in the configuration.
@@ -119,67 +114,21 @@
 
       outputsBuilder = channels:
         let
-          inherit (channels.nixpkgs) system;
-          inherit (channels.nixpkgs) emacsConfigurations;
-          emacs-full = emacsConfigurations.full;
-          emacs-basic = emacsConfigurations.basic;
-          emacs-compat = emacsConfigurations.compat;
-
-          emacsSandbox = channels.nixpkgs.callPackage ./sandbox/emacs.nix { };
-
-          useThemeFrom = themePackage: themeName: [
-            "--eval"
-            "(when init-file-user (require '${themePackage}) (load-theme '${themeName} t))"
-          ];
+          inherit (channels.nixpkgs) emacsProfiles;
         in
         {
           packages = {
-            inherit (channels.nixpkgs) github-linguist;
-
-            inherit emacs-full;
-            # Add more variants of the full profile later
-            emacs = emacsSandbox emacs-basic {
-              emacsArguments = useThemeFrom "doom-themes" "doom-rouge";
-            };
-            emacs-compat = emacsSandbox emacs-compat {
-              emacsArguments = useThemeFrom "doom-themes" "doom-one";
-            };
-            emacs-beancount = emacsSandbox emacsConfigurations.beancount {
-              emacsArguments = useThemeFrom "doom-opera-light";
-              userEmacsDirectory = "$HOME/beancount/emacs-var";
-              extraBubblewrapOptions = [
-                "--bind"
-                "$HOME/beancount"
-                "$HOME/beancount"
-                "--bind-try"
-                "$HOME/Downloads"
-                "$HOME/Downloads"
-              ];
-            };
-          };
-
-          apps =
-            {
-              lock = mkApp {
-                drv = emacs-full.lock.writeToDir "emacs/lock";
-              };
-              # sync = mkApp {
-              #   drv = emacs-full.sync.writeToDir "emacs/lock";
-              # };
-              update-elpa = mkApp {
-                drv = emacs-full.update.writeToDir "emacs/lock";
-              };
-            };
+            emacs = emacsProfiles;
+          } //
+          nixpkgs.lib.getAttrs [ "lock" "update" ] (emacsProfiles.admin "emacs/lock");
 
           # Set up a pre-commit hook by running `nix develop`.
           devShell = channels.nixpkgs.mkShell {
-            inherit (inputs.pre-commit-hooks.lib.${system}.run {
+            inherit (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
               src = ./.;
               hooks = import ./hooks.nix {
                 pkgs = channels.nixpkgs;
-                emacs = emacs-full.emacs;
-                flake-no-path = inputs.flake-no-path.packages.${system}.flake-no-path;
-                emacsBinaryPackage = "emacs-full.emacs";
+                emacsBinaryPackage = "emacs.emacs";
               };
             }) shellHook;
           };

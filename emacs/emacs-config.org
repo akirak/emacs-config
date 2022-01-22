@@ -14,8 +14,9 @@
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
   - [[#tag-statistics][Tag statistics]]
-  - [[#quality-of-life][Quality of life]]
   - [[#web-development][Web development]]
+  - [[#syntax-support][Syntax support]]
+  - [[#readability][Readability]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -341,6 +342,20 @@ Resources:
     (:with-mode show-paren-mode
       (:hook-into after-init-hook)))
 #+end_src
+*** pixel-scroll
+:PROPERTIES:
+:CREATED_TIME: [2022-01-17 Mon 17:27]
+:END:
+
+#+begin_src emacs-lisp
+  (setup pixel-scroll
+    (:only-if (version<= "29" emacs-version)
+              (:with-mode pixel-scroll-precision-mode
+                ;; TODO: Find a better way to hook the minor mode
+                (:hook-into find-file-hook
+                            eww-mode-hook
+                            help-mode-hook))))
+#+end_src
 *** process.c                                                     :process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -563,7 +578,9 @@ You need to install the font separately.
 
 #+begin_src emacs-lisp
   (defcustom akirak/base-face-family-alist
-    '((default . "Cascadia Code"))
+    '((default . "Cascadia Code")
+      (fixed-pitch . "Cascadia Code")
+      (variable-pitch . "Merriweather"))
     "Alist of font families for faces."
     :type '(alist :key-type symbol
                   :value-type string)
@@ -584,7 +601,19 @@ You need to install the font separately.
     :type 'string)
 #+end_src
 ** Org                                                            :packages:
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
 Embrace Org as a common document format for Emacs.
+*** org-dynamic-bullets                                        :aesthetics:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-18 Tue 16:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-dynamic-bullets)
+    (:hook-into org-mode-hook))
+#+end_src
 *** orglink
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:28]
@@ -594,6 +623,31 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
 (setup (:package orglink))
+#+end_src
+*** org-make-toc                                            :documentation:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-22 Sat 20:50]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-make-toc))
+#+end_src
+*** org-ql                                                        :library:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-22 Sat 20:50]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-ql))
+#+end_src
+*** org-visual-indent                                          :aesthetics:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-17 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-visual-indent)
+    (:hook-into org-mode-hook))
 #+end_src
 ** Packages                                                       :packages:
 :PROPERTIES:
@@ -810,6 +864,23 @@ The following resources are useful:
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
+*** iedit                                                         :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 16:51]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package iedit))
+#+end_src
+*** json-mode                                                 :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package json-mode)
+    (:file-match "\\.json\\'" "\\.lock\\'"))
+#+end_src
 *** kind-icon                                                          :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:22]
@@ -831,6 +902,36 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package leetcode))
 #+end_src
+*** lispy                                 :Emacs__Lisp:structured__editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 16:36]
+:END:
+
+For Emacs Lisp, I use lispy.
+
+#+begin_src emacs-lisp
+  (setup (:package lispy)
+
+    (:hook
+     (defun akirak/lispy-invert-puni-mode ()
+       "Turn off `puni-mode' when `lispy-mode' is on."
+       (when (featurep 'puni)
+         (puni-mode (not lispy-mode))))))
+#+end_src
+
+Lispy is not turned on by default.
+Its configuration is about my habits, so it is put in [[file:compat.el::(setup lispy][compat.el]].
+*** macrostep                                      :emacs_lisp:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-17 Mon 15:52]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package macrostep))
+#+end_src
+
+To use it, turn on =macrostep-mode=.
+
 *** magit                                                             :git:
 #+begin_src emacs-lisp
   (setup (:package magit)
@@ -860,6 +961,18 @@ The following resources are useful:
 :END:
 
 [[https://github.com/rougier/nano-sidebar][GitHub - rougier/nano-sidebar: Emacs package to have configurable sidebars on a per frame basis.]]
+*** mlscroll                                                :aesthetics:UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package mlscroll)
+    (:option mlscroll-in-color "#888888"
+             mlscroll-out-color (face-attribute 'region :background nil t))
+    (:with-mode mlscroll-mode
+      (:hook-into after-init-hook)))
+#+end_src
 *** nano-modeline                       :visual:aesthetics:UI:nano:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 14:46]
@@ -878,6 +991,24 @@ The following resources are useful:
   (setup (:package nix-mode)
     (:file-match "\\.nix\\'"))
 #+end_src
+*** nov                                                      :reading:EPUB:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nov)
+    ;; unzip is required for opening EPUB
+    (:nixpkgs unzip)
+
+    (:with-mode nov-mode
+      (:file-match "\\.epub\\'")
+
+      (:local-set line-spacing 0.4)
+
+      (:hook visual-line-mode
+             visual-fill-column-mode)))
+#+end_src
 *** orderless                                                  :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:14]
@@ -895,6 +1026,46 @@ Resources:
 - https://github.com/minad/vertico#configuration
 
 It is also possible to use Helm as a completion style. See https://github.com/oantolin/orderless#ivy-and-helm. I will use orderless primarily because it is smaller than Helm.
+*** puni                                              :structured__editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 16:24]
+:END:
+
+[[https://github.com/AmaiKinono/puni][puni]] will replace smartparens, expand-region, and paredit (which I didn't adopt in favour of lispy).
+
+#+begin_src emacs-lisp
+  (setup (:package puni)
+    (:hook-into prog-mode
+                sgml-mode
+                nxml-mode)
+
+    ;; TODO: Bind commands
+    ;;
+    ;; Marking commands
+    ;; Sexp manipulating commands
+    (:bind))
+#+end_src
+
+The following types of commands don't have pre-defined keybindings in =puni-mode=, so I have to manually bind them:
+
+- Marking commnads
+- Sexp manipulating commands
+
+For auto-pairing, you can use =electric-pair-mode= along with puni.
+
+Limitations:
+
+- puni doesn't handle JSX in typescript-mode with tree-sitter.
+
+*** rainbow-mode                                                   :colors:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package rainbow-mode)
+    (:hook-into prog-mode))
+#+end_src
 *** restclient                                                        :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:58]
@@ -921,7 +1092,17 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
     (autoload #'svg-tag-mode "svg-tag-mode.el")
     (:hook-into org-mode prog-mode))
 #+end_src
-*** tree-sitter                                                    :syntax:
+*** titlecase                                                     :writing:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-18 Tue 17:13]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package titlecase))
+#+end_src
+
+The [[https://github.com/duckwork/titlecase.el][readme]] of this package contains helpful links on capitalization.
+*** tree-sitter                                        :syntax:tree_sitter:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:36]
 :END:
@@ -938,7 +1119,17 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package tree-sitter-langs))
+  (setup (:package tree-sitter-langs)
+    (:with-mode tree-sitter-mode
+      (:hook-into typescript-mode)))
+#+end_src
+*** turbo-log                                       :development:debugging:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-17 Mon 15:55]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package turbo-log))
 #+end_src
 *** typescript-mode                                            :major_mode:
 :PROPERTIES:
@@ -946,7 +1137,17 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package typescript-mode))
+  (setup (:package typescript-mode)
+    (:file-match "\\.tsx?\\'"))
+#+end_src
+*** unmodified-buffer
+:PROPERTIES:
+:CREATED_TIME: [2022-01-17 Mon 15:58]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package unmodified-buffer)
+    (:hook-into after-init-hook))
 #+end_src
 *** vertico                                         :minibuffer:completion:
 :PROPERTIES:
@@ -967,6 +1168,16 @@ See the following [[https://github.com/minad/vertico][comment]] for differences:
 #+begin_quote
 In contrast to Vertico, Icomplete rotates the candidates such that the current candidate always appears at the top. From my perspective, candidate rotation feels a bit less intuitive than the UI of Vertico or Selectrum.
 #+end_quote
+*** visual-fill-column
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package visual-fill-column)
+    (:option visual-fill-column-center-text t
+             visual-fill-column-width 80))
+#+end_src
 *** vterm                                                :terminal:process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 16:50]
@@ -994,12 +1205,12 @@ This configuration is maintained in Org, and [[file:.org-config.el][.org-config.
 
 The workflow is as follows:
 
-1. Use =org-capture= to add an entry with a source block to the configuration file.
-2. Add further configuration for the package using =setup= and set tags on the heading.
-3. Org entries are automatically sorted by package name when the buffer is saved.
+1. Use =org-capture= to add an entry to the configuration file. It should contain a source block with a package name.
+2. Add further configuration for the package. Optionally set tags on the heading.
+3. When the buffer is saved, Org entries are automatically sorted by package name. This feature depends on the pre-commit hook of this repository.
 *** Tag statistics
-The following source block generates a table of tags in this document.
-If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse entries matching a tag by pressing =C-c C-o= on a link.
+The following source block generates a list of tags in this document.
+If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can browse matching entries by pressing =C-c C-o= on a link in the table.
 
 #+name: tag-statistics
 #+begin_src emacs-lisp :tangle no
@@ -1020,75 +1231,99 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]       | 33 |
-| [[org-ql-search:tags:UI][UI]]             |  9 |
-| [[org-ql-search:tags:visual][visual]]         |  7 |
-| [[org-ql-search:tags:formatting][formatting]]     |  6 |
-| [[org-ql-search:tags:completion][completion]]     |  6 |
-| [[org-ql-search:tags:process][process]]        |  4 |
-| [[org-ql-search:tags:history][history]]        |  4 |
-| [[org-ql-search:tags:files][files]]          |  3 |
-| [[org-ql-search:tags:IO][IO]]             |  2 |
-| [[org-ql-search:tags:parentheses][parentheses]]    |  2 |
-| [[org-ql-search:tags:minibuffer][minibuffer]]     |  2 |
-| [[org-ql-search:tags:writing][writing]]        |  2 |
-| [[org-ql-search:tags:VC][VC]]             |  2 |
-| [[org-ql-search:tags:navigation][navigation]]     |  2 |
-| [[org-ql-search:tags:keybindings][keybindings]]    |  2 |
-| [[org-ql-search:tags:major_mode][major_mode]]     |  2 |
-| [[org-ql-search:tags:syntax][syntax]]         |  2 |
-| [[org-ql-search:tags:profiling][profiling]]      |  1 |
-| [[org-ql-search:tags:initialization][initialization]] |  1 |
-| [[org-ql-search:tags:performance][performance]]    |  1 |
-| [[org-ql-search:tags:diff][diff]]           |  1 |
-| [[org-ql-search:tags:prog_mode][prog_mode]]      |  1 |
-| [[org-ql-search:tags:text_mode][text_mode]]      |  1 |
-| [[org-ql-search:tags:text][text]]           |  1 |
-| [[org-ql-search:tags:exercises][exercises]]      |  1 |
-| [[org-ql-search:tags:git][git]]            |  1 |
-| [[org-ql-search:tags:Nix][Nix]]            |  1 |
-| [[org-ql-search:tags:web][web]]            |  1 |
-| [[org-ql-search:tags:library][library]]        |  1 |
-| [[org-ql-search:tags:graphics][graphics]]       |  1 |
-| [[org-ql-search:tags:nano][nano]]           |  1 |
-| [[org-ql-search:tags:aesthetics][aesthetics]]     |  1 |
-| [[org-ql-search:tags:terminal][terminal]]       |  1 |
-| [[org-ql-search:tags:usability][usability]]      |  1 |
+| [[org-ql-search:tags:packages][packages]]            | 49 |
+| [[org-ql-search:tags:UI][UI]]                  | 10 |
+| [[org-ql-search:tags:visual][visual]]              |  7 |
+| [[org-ql-search:tags:formatting][formatting]]          |  6 |
+| [[org-ql-search:tags:completion][completion]]          |  6 |
+| [[org-ql-search:tags:process][process]]             |  4 |
+| [[org-ql-search:tags:history][history]]             |  4 |
+| [[org-ql-search:tags:aesthetics][aesthetics]]          |  4 |
+| [[org-ql-search:tags:files][files]]               |  3 |
+| [[org-ql-search:tags:writing][writing]]             |  3 |
+| [[org-ql-search:tags:IO][IO]]                  |  2 |
+| [[org-ql-search:tags:parentheses][parentheses]]         |  2 |
+| [[org-ql-search:tags:minibuffer][minibuffer]]          |  2 |
+| [[org-ql-search:tags:VC][VC]]                  |  2 |
+| [[org-ql-search:tags:navigation][navigation]]          |  2 |
+| [[org-ql-search:tags:library][library]]             |  2 |
+| [[org-ql-search:tags:keybindings][keybindings]]         |  2 |
+| [[org-ql-search:tags:major_mode][major_mode]]          |  2 |
+| [[org-ql-search:tags:structured__editing][structured__editing]] |  2 |
+| [[org-ql-search:tags:development][development]]         |  2 |
+| [[org-ql-search:tags:syntax][syntax]]              |  2 |
+| [[org-ql-search:tags:tree_sitter][tree_sitter]]         |  2 |
+| [[org-ql-search:tags:profiling][profiling]]           |  1 |
+| [[org-ql-search:tags:initialization][initialization]]      |  1 |
+| [[org-ql-search:tags:performance][performance]]         |  1 |
+| [[org-ql-search:tags:diff][diff]]                |  1 |
+| [[org-ql-search:tags:prog_mode][prog_mode]]           |  1 |
+| [[org-ql-search:tags:text_mode][text_mode]]           |  1 |
+| [[org-ql-search:tags:text][text]]                |  1 |
+| [[org-ql-search:tags:documentation][documentation]]       |  1 |
+| [[org-ql-search:tags:editing][editing]]             |  1 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |  1 |
+| [[org-ql-search:tags:exercises][exercises]]           |  1 |
+| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |  1 |
+| [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |  1 |
+| [[org-ql-search:tags:git][git]]                 |  1 |
+| [[org-ql-search:tags:Nix][Nix]]                 |  1 |
+| [[org-ql-search:tags:reading][reading]]             |  1 |
+| [[org-ql-search:tags:EPUB][EPUB]]                |  1 |
+| [[org-ql-search:tags:colors][colors]]              |  1 |
+| [[org-ql-search:tags:web][web]]                 |  1 |
+| [[org-ql-search:tags:graphics][graphics]]            |  1 |
+| [[org-ql-search:tags:nano][nano]]                |  1 |
+| [[org-ql-search:tags:debugging][debugging]]           |  1 |
+| [[org-ql-search:tags:terminal][terminal]]            |  1 |
+| [[org-ql-search:tags:usability][usability]]           |  1 |
 
 Note that the table above is invisible on GitHub.
-*** Quality of life
-There are many ways to improve the quality of life inside Emacs.
-
-Auto-formatting is one of the keys.
-
-#+BEGIN: org-ql :query "tags: formatting" :columns (heading todo)
-| Heading           | Todo |
-|-------------------+------|
-| [[buffer.c][buffer.c]]          |      |
-| [[electric][electric]]          |      |
-| [[indent.c][indent.c]]          |      |
-| [[simple][simple]]            |      |
-| [[whitespace][whitespace]]        |      |
-| [[electric-operator][electric-operator]] |      |
-| [[Tag statistics][Tag statistics]]    |      |
-| [[Quality of life][Quality of life]]   |      |
-#+END:
+There is a table right before paragraph.
 *** Web development
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:59]
 :END:
 
-#+BEGIN: org-ql :query "tags: web" :columns (heading todo)
-| Heading         | Todo |
-|-----------------+------|
-| [[restclient][restclient]]      |      |
-| [[Tag statistics][Tag statistics]]  |      |
-| [[Web development][Web development]] |      |
+The following packages (tagged =web=) are related to web development:
+
+#+BEGIN: org-ql :query "tags:web" :columns (heading todo)
+| Heading    | Todo |
+|------------+------|
+| [[restclient][restclient]] |      |
 #+END:
 
-- You will want to try out APIs from within Emacs. You can choose either [[https://github.com/pashky/restclient.el][restclient]] or [[https://github.com/federicotdn/verb][verb]].
-- I am not sure if Indium or skewer-mode works nowadays. I have never used any of them in real development.
+- You will want to test web APIs from inside Emacs. You can choose either [[https://github.com/pashky/restclient.el][restclient]] or [[https://github.com/federicotdn/verb][verb]] for this purpose.
+- I am not sure if Indium or skewer-mode is suitable for modern web development. I have never used any of them.
 
+*** Syntax support
+:PROPERTIES:
+:CREATED_TIME: [2022-01-21 Fri 16:20]
+:END:
+
+Use tree-sitter wherever possible.
+There are some companion packages:
+
+#+BEGIN: org-ql :query "tags:tree_sitter" :columns (heading todo)
+| Heading           | Todo |
+|-------------------+------|
+| [[tree-sitter][tree-sitter]]       |      |
+| [[tree-sitter-langs][tree-sitter-langs]] |      |
+#+END:
+
+There are some packages for structured editing:
+
+#+BEGIN: org-ql :query "tags:structured__editing" :columns (heading todo)
+| Heading | Todo |
+|---------+------|
+| [[lispy][lispy]]   |      |
+| [[puni][puni]]    |      |
+#+END:
+
+I like the idea of [[https://github.com/mickeynp/combobulate][combobulate]], but it looks immature at present.
+I will consider it in the future.
+*** Readability
+See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil

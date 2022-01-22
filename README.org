@@ -21,7 +21,7 @@ cachix use akirak
 Because =~/.emacs.d= is bind-mounted inside the sandbox, you can use the configuration without installing it:
 
 #+begin_src sh
-nix run github:akirak/nix-config#emacs -- ~/tmp/
+nix run github:akirak/nix-config#emacs.emacs -- ~/tmp/
 #+end_src
 
 The argument after =--= can be any existing file or directory on your file system.

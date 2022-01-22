@@ -1,9 +1,12 @@
-* Extra Configurations for Specific Situations
+* Extra Configurations for Specific Tasks
+Emacs is a framework for building frontend applications, and it is possible to create a /specialized configuration/ for a specific set of tasks.
+
+This file is a collection of configurations that should be built and installed only on relevant machines.
+They serve as extensions to [[file:emacs-config.org][the basic configuration]]. [[file:overlay.nix][overlay.nix]] defines profiles using these extra configurations.
 ** beancount
 #+begin_src emacs-lisp
   (setup (:package beancount)
-    ;; TODO: I want to install beancount executable from nixpkgs, but I don't have a
-    ;; macro for it.
+    (:nixpkgs "beancount" "fava")
   
     ;; I don't like the default keybindings on C-c, so change the prefix.
     (:option beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
