@@ -116,6 +116,12 @@
       repo = "esxml";
       type = "github";
     };
+    f = {
+      flake = false;
+      owner = "rejeep";
+      repo = "f.el";
+      type = "github";
+    };
     fancy-dabbrev = {
       flake = false;
       owner = "jrosdahl";
@@ -270,6 +276,24 @@
       repo = "org-visual-outline";
       type = "github";
     };
+    org-make-toc = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "org-make-toc";
+      type = "github";
+    };
+    org-ql = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "org-ql";
+      type = "github";
+    };
+    org-super-agenda = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "org-super-agenda";
+      type = "github";
+    };
     org-visual-indent = {
       flake = false;
       owner = "legalnonsense";
@@ -280,6 +304,12 @@
       flake = false;
       owner = "tarsius";
       repo = "orglink";
+      type = "github";
+    };
+    ov = {
+      flake = false;
+      owner = "emacsorphanage";
+      repo = "ov";
       type = "github";
     };
     poet-theme = {
@@ -359,6 +389,12 @@
       owner = "emacs-tree-sitter";
       ref = "0.10.13";
       repo = "tree-sitter-langs";
+      type = "github";
+    };
+    ts = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "ts.el";
       type = "github";
     };
     tsc = {

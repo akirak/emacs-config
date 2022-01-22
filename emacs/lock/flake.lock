@@ -304,6 +304,22 @@
         "type": "github"
       }
     },
+    "f": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1624532602,
+        "narHash": "sha256-vsslMtF8dQm6cJYb07SxPO0rp44lfRONSxRHj3e52Ew=",
+        "owner": "rejeep",
+        "repo": "f.el",
+        "rev": "50af874cd19042f17c8686813d52569b1025c76a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rejeep",
+        "repo": "f.el",
+        "type": "github"
+      }
+    },
     "fancy-dabbrev": {
       "flake": false,
       "locked": {
@@ -720,6 +736,54 @@
         "type": "github"
       }
     },
+    "org-make-toc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1586448764,
+        "narHash": "sha256-yNlIiqdDQ9sys9tuYbDIT8KwDa7Yqa7DeH6+xQD98yE=",
+        "owner": "alphapapa",
+        "repo": "org-make-toc",
+        "rev": "26fbd6a7e1e7f8e473fe3a5f74faec715c3a05aa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "alphapapa",
+        "repo": "org-make-toc",
+        "type": "github"
+      }
+    },
+    "org-ql": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1632291326,
+        "narHash": "sha256-4bqvl/GstV5fFYo9tpb3yzqD2ncrvyjtUKOjAqEi1ck=",
+        "owner": "alphapapa",
+        "repo": "org-ql",
+        "rev": "31aeb0a2505acf8044c07824888ddec7f3e529c1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "alphapapa",
+        "repo": "org-ql",
+        "type": "github"
+      }
+    },
+    "org-super-agenda": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1632820567,
+        "narHash": "sha256-Id0x20HLnsABcnamTVVGmspFzAU9ONVnL7tf6aEqXeo=",
+        "owner": "alphapapa",
+        "repo": "org-super-agenda",
+        "rev": "fb5e2ef277bc811a3b061106c99e4c47b6b86f80",
+        "type": "github"
+      },
+      "original": {
+        "owner": "alphapapa",
+        "repo": "org-super-agenda",
+        "type": "github"
+      }
+    },
     "org-visual-indent": {
       "flake": false,
       "locked": {
@@ -749,6 +813,22 @@
       "original": {
         "owner": "tarsius",
         "repo": "orglink",
+        "type": "github"
+      }
+    },
+    "ov": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1585219320,
+        "narHash": "sha256-nt2yM+eMtVPlQIZlnHqEOvG8NKtFAv6VHOG4/bQkebw=",
+        "owner": "emacsorphanage",
+        "repo": "ov",
+        "rev": "c5b9aa4e1b00d702eb2caedd61c69a22a5fa1fab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacsorphanage",
+        "repo": "ov",
         "type": "github"
       }
     },
@@ -853,6 +933,7 @@
         "embark": "embark",
         "embark-consult": "embark-consult",
         "esxml": "esxml",
+        "f": "f",
         "fancy-dabbrev": "fancy-dabbrev",
         "gcmh": "gcmh",
         "git-commit": "git-commit",
@@ -879,8 +960,12 @@
         "nov": "nov",
         "orderless": "orderless",
         "org-dynamic-bullets": "org-dynamic-bullets",
+        "org-make-toc": "org-make-toc",
+        "org-ql": "org-ql",
+        "org-super-agenda": "org-super-agenda",
         "org-visual-indent": "org-visual-indent",
         "orglink": "orglink",
+        "ov": "ov",
         "poet-theme": "poet-theme",
         "popup": "popup",
         "puni": "puni",
@@ -894,6 +979,7 @@
         "titlecase": "titlecase",
         "tree-sitter": "tree-sitter",
         "tree-sitter-langs": "tree-sitter-langs",
+        "ts": "ts",
         "tsc": "tsc",
         "turbo-log": "turbo-log",
         "typescript-mode": "typescript-mode",
@@ -1033,6 +1119,22 @@
         "owner": "emacs-tree-sitter",
         "ref": "0.10.13",
         "repo": "tree-sitter-langs",
+        "type": "github"
+      }
+    },
+    "ts": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1628871468,
+        "narHash": "sha256-UdzBCdRVn78nuyeePD2kLBcAyYqrs1uly+BIqin/gYA=",
+        "owner": "alphapapa",
+        "repo": "ts.el",
+        "rev": "3fee71ceefac71ba55eb34829d7e94bb3df37cee",
+        "type": "github"
+      },
+      "original": {
+        "owner": "alphapapa",
+        "repo": "ts.el",
         "type": "github"
       }
     },

@@ -601,6 +601,9 @@ You need to install the font separately.
     :type 'string)
 #+end_src
 ** Org                                                            :packages:
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
 Embrace Org as a common document format for Emacs.
 *** org-dynamic-bullets                                        :aesthetics:
 :PROPERTIES:
@@ -620,6 +623,22 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
 (setup (:package orglink))
+#+end_src
+*** org-make-toc                                            :documentation:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-22 Sat 20:50]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-make-toc))
+#+end_src
+*** org-ql                                                        :library:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-22 Sat 20:50]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-ql))
 #+end_src
 *** org-visual-indent                                          :aesthetics:
 :PROPERTIES:
