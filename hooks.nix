@@ -2,18 +2,12 @@
 , emacsBinaryPackage
 }:
 let
-  emacsForCI =
-    (pkgs.emacsPackagesFor pkgs.emacsProfiles.emacs).emacsWithPackages (epkgs: [
-      epkgs.org-make-toc
-      epkgs.org-ql
-    ]);
-
   emacsConfig = { name, stages, funcName }: {
     enable = true;
     inherit stages;
     inherit name;
     entry = builtins.concatStringsSep " " [
-      "${emacsForCI}/bin/emacs"
+      "${pkgs.emacsProfiles.batch}/bin/emacs"
       "--batch -l ${./scripts/update-emacs-config.el}"
       "-f ${funcName}"
     ];

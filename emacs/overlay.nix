@@ -124,6 +124,14 @@ in
         }
         (makeEmacsProfile { });
 
+      # A configuration with the packages for the Git hooks.
+      batch = emacsTwist {
+        inherit emacsPackage;
+        initFiles = [ ];
+        extraPackages = [ "org-ql" "org-make-toc" ];
+        inherit inventories;
+        lockDir = ./lock;
+      };
     }
     full;
 }
