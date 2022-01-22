@@ -5,14 +5,21 @@
 , coreutils
 , bashInteractive
 }:
-emacs:
 { name ? "emacs-sandboxed"
 , userEmacsDirectory ? null
 , extraBubblewrapOptions ? [ ]
 , emacsArguments ? [ ]
+, themePackage
+, themeName
 }:
+emacs:
 let
   load = file: "(load \"${file}\" nil t)\n";
+
+  emacsArguments' = [
+    "--eval"
+    "(when init-file-user (require '${themePackage}) (load-theme '${themeName} t))"
+  ] ++ emacsArguments;
 
   initEl = writeText "init.el" (
     '';; -*- lexical-binding: t; no-byte-compile: t; -*-
@@ -95,6 +102,6 @@ lib.extendDerivation true
         --ro-bind ${../emacs/early-init.el} ${userEmacsDirectory'}/early-init.el \
         --ro-bind ${initEl} ${userEmacsDirectory'}/init.el \
         $opts \
-        ${emacs}/bin/emacs ${quoteShellArgs emacsArguments} "$@"
+        ${emacs}/bin/emacs ${quoteShellArgs emacsArguments'} "$@"
       )
   '')
