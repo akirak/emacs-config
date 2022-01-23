@@ -116,6 +116,12 @@
       repo = "embark";
       type = "github";
     };
+    envrc = {
+      flake = false;
+      owner = "purcell";
+      repo = "envrc";
+      type = "github";
+    };
     esxml = {
       flake = false;
       owner = "tali713";
@@ -179,6 +185,12 @@
       flake = false;
       owner = "victorhge";
       repo = "iedit";
+      type = "github";
+    };
+    inheritenv = {
+      flake = false;
+      owner = "purcell";
+      repo = "inheritenv";
       type = "github";
     };
     ivy = {

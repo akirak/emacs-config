@@ -850,6 +850,16 @@ The following resources are useful:
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
 #+end_src
+*** envrc                                                          :direnv:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-23 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package envrc)
+    (:with-mode envrc-global-mode
+      (:hook-into after-init-hook)))
+#+end_src
 *** fancy-dabbrev                                              :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:24]

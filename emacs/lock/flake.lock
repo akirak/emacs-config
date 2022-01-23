@@ -304,6 +304,22 @@
         "type": "github"
       }
     },
+    "envrc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641232773,
+        "narHash": "sha256-o351f1iJEAYtw80B3VEqN4pNTKRF2Z5ILEcsSk7WANE=",
+        "owner": "purcell",
+        "repo": "envrc",
+        "rev": "456c4100de41d2cb50813058a9e727b6e83c5d1e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purcell",
+        "repo": "envrc",
+        "type": "github"
+      }
+    },
     "esxml": {
       "flake": false,
       "locked": {
@@ -477,6 +493,22 @@
       "original": {
         "owner": "victorhge",
         "repo": "iedit",
+        "type": "github"
+      }
+    },
+    "inheritenv": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1616725959,
+        "narHash": "sha256-kJ2JD/9q1Rv/xScMTJPunWmlMS4zxA7TVdsHVzonheE=",
+        "owner": "purcell",
+        "repo": "inheritenv",
+        "rev": "7e4c8b0d0a43b6f1c6c4d6dbd2f3bf5ce7f20067",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purcell",
+        "repo": "inheritenv",
         "type": "github"
       }
     },
@@ -965,6 +997,7 @@
         "electric-operator": "electric-operator",
         "embark": "embark",
         "embark-consult": "embark-consult",
+        "envrc": "envrc",
         "esxml": "esxml",
         "f": "f",
         "fancy-dabbrev": "fancy-dabbrev",
@@ -976,6 +1009,7 @@
         "ht": "ht",
         "hydra": "hydra",
         "iedit": "iedit",
+        "inheritenv": "inheritenv",
         "ivy": "ivy",
         "json-mode": "json-mode",
         "json-snatcher": "json-snatcher",
