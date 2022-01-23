@@ -66,6 +66,12 @@ lib.extendDerivation true
       opts=""
     fi
 
+    if [[ -n "''${BWRAP_OPTIONS}" ]]
+    then
+      opts="$opts''${BWRAP_OPTIONS:- }''${BWRAP_OPTIONS}"
+      unset BWRAP_OPTIONS
+    fi
+
     set -x
     ( exec ${bubblewrap}/bin/bwrap \
         --dir "$HOME" \
