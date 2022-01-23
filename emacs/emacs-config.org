@@ -792,6 +792,14 @@ A bunch of useful packages are configured here.
       (:hook corfu-mode fancy-dabbrev-mode)
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** eglot                                                             :LSP:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-23 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package eglot))
+#+end_src
 *** electric-operator                                          :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
@@ -863,6 +871,14 @@ The following resources are useful:
     (:with-mode gitconfig-mode)
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
+#+end_src
+*** haskell-mode                                              :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-23 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package haskell-mode))
 #+end_src
 *** iedit                                                         :editing:
 :PROPERTIES:

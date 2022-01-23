@@ -92,6 +92,12 @@
       repo = "themes";
       type = "github";
     };
+    eglot = {
+      flake = false;
+      owner = "joaotavora";
+      repo = "eglot";
+      type = "github";
+    };
     electric-operator = {
       flake = false;
       owner = "davidshepherd7";
@@ -149,6 +155,12 @@
       flake = false;
       owner = "vermiculus";
       repo = "graphql.el";
+      type = "github";
+    };
+    haskell-mode = {
+      flake = false;
+      owner = "haskell";
+      repo = "haskell-mode";
       type = "github";
     };
     ht = {

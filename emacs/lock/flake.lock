@@ -240,6 +240,22 @@
         "type": "github"
       }
     },
+    "eglot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1642946777,
+        "narHash": "sha256-Gjzkv/nUOCuvZP0sUH7oDwSO2BFxn2/BGnLeB9Jzeqg=",
+        "owner": "joaotavora",
+        "repo": "eglot",
+        "rev": "57779f9c3940a188e2c089758d095d05cf0a0e24",
+        "type": "github"
+      },
+      "original": {
+        "owner": "joaotavora",
+        "repo": "eglot",
+        "type": "github"
+      }
+    },
     "electric-operator": {
       "flake": false,
       "locked": {
@@ -397,6 +413,22 @@
       "original": {
         "owner": "vermiculus",
         "repo": "graphql.el",
+        "type": "github"
+      }
+    },
+    "haskell-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631115790,
+        "narHash": "sha256-iwF69x0o08oYp+dfikYZpx3FVZ55VNsf4iSthzIa9xY=",
+        "owner": "haskell",
+        "repo": "haskell-mode",
+        "rev": "8402caa341d90b4236f5c0a802751f9023ccfbe7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "haskell",
+        "repo": "haskell-mode",
         "type": "github"
       }
     },
@@ -929,6 +961,7 @@
         "corfu": "corfu",
         "dash": "dash",
         "doom-themes": "doom-themes",
+        "eglot": "eglot",
         "electric-operator": "electric-operator",
         "embark": "embark",
         "embark-consult": "embark-consult",
@@ -939,6 +972,7 @@
         "git-commit": "git-commit",
         "git-modes": "git-modes",
         "graphql": "graphql",
+        "haskell-mode": "haskell-mode",
         "ht": "ht",
         "hydra": "hydra",
         "iedit": "iedit",
