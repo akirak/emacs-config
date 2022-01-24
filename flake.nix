@@ -3,7 +3,13 @@
     utils.url = "github:numtide/flake-utils";
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus/v1.3.1";
 
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:moinessim/home-manager/nix-2.4-nix-darwin-modules";
+
+    # Switch to a private profile by overriding this input
+    site = {
+      url = "path:./sites/default";
+      flake = false;
+    };
 
     # Emacs
     emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -23,6 +29,24 @@
     };
     emacs = {
       url = "github:emacs-mirror/emacs";
+      flake = false;
+    };
+
+    # zsh plugins
+    zsh-enhancd = {
+      url = "github:b4b4r07/enhancd";
+      flake = false;
+    };
+    zsh-fast-syntax-highlighting = {
+      url = "github:zdharma-continuum/fast-syntax-highlighting";
+      flake = false;
+    };
+    zsh-nix-shell = {
+      url = "github:chisui/zsh-nix-shell";
+      flake = false;
+    };
+    zsh-fzy = {
+      url = "github:aperezdc/zsh-fzy";
       flake = false;
     };
 
@@ -49,9 +73,27 @@
     , ...
     } @ inputs:
     let
-      inherit (builtins) removeAttrs;
       mkApp = utils.lib.mkApp;
-      # pkgs = self.pkgs.x86_64-linux.nixpkgs;
+      homeProfiles = import ./home { inherit (nixpkgs) lib; };
+      resolveHomeModules = config: config // {
+        homeModules =
+          nixpkgs.lib.attrVals config.homeModules homeProfiles
+            ++ (config.extraHomeModules or [ ]);
+      };
+      importSite = src: resolveHomeModules (import src);
+      site = importSite inputs.site;
+
+      makeHome = { channels, configuration }:
+        inputs.home-manager.lib.homeManagerConfiguration {
+          inherit (channels.nixpkgs) system;
+          inherit (site) username;
+          homeDirectory = "/home/${site.username}";
+          stateVersion = "21.11";
+          inherit configuration;
+          extraSpecialArgs = {
+            pkgs = channels.nixpkgs;
+          };
+        };
     in
     flake-utils-plus.lib.mkFlake {
       inherit self inputs;
@@ -66,6 +108,11 @@
         (import ./pkgs/overlay.nix)
         inputs.flake-no-path.overlay
         (import ./emacs/overlay.nix { inherit inputs; })
+        # zsh plugins used in the home-managerconfiguration
+        (_: _: import ./pkgs/zsh-plugins.nix {
+          inherit inputs;
+          inherit (nixpkgs) lib;
+        })
       ];
 
       # Nixpkgs flake reference to be used in the configuration.
@@ -74,13 +121,12 @@
 
       hostsDefaults = {
         system = "x86_64-linux";
+        channelName = "unstable";
 
         # Default modules to be passed to all hosts.
         modules = [
           ./nixos/modules/defaults.nix
         ];
-
-        # channelName = "unstable";
       };
 
       #############
@@ -89,7 +135,7 @@
 
       hosts.container = {
         extraArgs = {
-          home = import ./hm/home.nix;
+          site = importSite ./sites/container.nix;
         };
 
         modules =
@@ -117,20 +163,30 @@
           inherit (channels.nixpkgs) emacsProfiles;
         in
         {
-          packages = {
-            emacs = emacsProfiles;
-          } //
-          nixpkgs.lib.getAttrs [ "lock" "update" ] (emacsProfiles.admin "emacs/lock");
+          # packages = {
+          #   emacs = emacsProfiles;
+          # } //
+          # nixpkgs.lib.getAttrs [ "lock" "update" ] (emacsProfiles.admin "emacs/lock");
 
-          # Set up a pre-commit hook by running `nix develop`.
-          devShell = channels.nixpkgs.mkShell {
-            inherit (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
-              src = ./.;
-              hooks = import ./hooks.nix {
-                pkgs = channels.nixpkgs;
-                emacsBinaryPackage = "emacs.emacs";
+          # # Set up a pre-commit hook by running `nix develop`.
+          # devShell = channels.nixpkgs.mkShell {
+          #   inherit (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
+          #     src = ./.;
+          #     hooks = import ./hooks.nix {
+          #       pkgs = channels.nixpkgs;
+          #       emacsBinaryPackage = "emacs.emacs";
+          #     };
+          #   }) shellHook;
+          # };
+
+          homeConfigurations = {
+            ${site.username + "@" + site.hostName} = makeHome {
+              inherit channels;
+              configuration = { config, pkgs, ... }: {
+                # nixpkgs.config.allowUnfree = true;
+                imports = site.homeModules;
               };
-            }) shellHook;
+            };
           };
         };
 

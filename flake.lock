@@ -161,15 +161,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1640417317,
-        "narHash": "sha256-jT2uMARXs0Xm65ccroFsKyr4LTHSecw+9HAnmBdJO8U=",
-        "owner": "nix-community",
+        "lastModified": 1638323861,
+        "narHash": "sha256-SN7gdCAJjRW1Lnk6prBQxFP0n6NSl3sJMhIU4hlj9SE=",
+        "owner": "moinessim",
         "repo": "home-manager",
-        "rev": "48f2b381dd397ec88040d3354ac9c036739ba139",
+        "rev": "24eaa2a13a1079b9b6666884d88022ef2c5d0abd",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
+        "owner": "moinessim",
+        "ref": "nix-2.4-nix-darwin-modules",
         "repo": "home-manager",
         "type": "github"
       }
@@ -269,8 +270,25 @@
         "nixpkgs": "nixpkgs_2",
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks",
+        "site": "site",
         "twist": "twist",
-        "utils": "utils"
+        "utils": "utils",
+        "zsh-enhancd": "zsh-enhancd",
+        "zsh-fast-syntax-highlighting": "zsh-fast-syntax-highlighting",
+        "zsh-fzy": "zsh-fzy",
+        "zsh-nix-shell": "zsh-nix-shell"
+      }
+    },
+    "site": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-vR5cKbNufgJCKImMFR+2p7kd1gxDLA091sXQsMCHxBs=",
+        "path": "./sites/default",
+        "type": "path"
+      },
+      "original": {
+        "path": "./sites/default",
+        "type": "path"
       }
     },
     "twist": {
@@ -304,6 +322,70 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "zsh-enhancd": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641969216,
+        "narHash": "sha256-8Up7Pt68JE6Zy10B0QXB8zQIXD+IW+zOriNeVBULKTs=",
+        "owner": "b4b4r07",
+        "repo": "enhancd",
+        "rev": "53934f55cdac2e892a7ad1931bd3600a352a86a8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "b4b4r07",
+        "repo": "enhancd",
+        "type": "github"
+      }
+    },
+    "zsh-fast-syntax-highlighting": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1636856829,
+        "narHash": "sha256-x+4C2u03RueNo6/ZXsueqmYoPIpDHnKAZXP5IiKsidE=",
+        "owner": "zdharma-continuum",
+        "repo": "fast-syntax-highlighting",
+        "rev": "585c089968caa1c904cbe926ff04a1be9e3d8f42",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zdharma-continuum",
+        "repo": "fast-syntax-highlighting",
+        "type": "github"
+      }
+    },
+    "zsh-fzy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1610699933,
+        "narHash": "sha256-C5cflRJqi+T53izr2PBJsFW6X3CVgIlY+hGT3ODC9lI=",
+        "owner": "aperezdc",
+        "repo": "zsh-fzy",
+        "rev": "519327d9990fbea50f71649e378e650f594bb39b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "aperezdc",
+        "repo": "zsh-fzy",
+        "type": "github"
+      }
+    },
+    "zsh-nix-shell": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1628023704,
+        "narHash": "sha256-WNa8RljYhkOWk7AZbdTOvYhWw1fR8PjFxH/tnUCbems=",
+        "owner": "chisui",
+        "repo": "zsh-nix-shell",
+        "rev": "f8574f27e1d7772629c9509b2116d504798fe30a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chisui",
+        "repo": "zsh-nix-shell",
         "type": "github"
       }
     }

@@ -1,17 +1,16 @@
-{ home, ... }:
+{ site, homeModules, pkgs, ... } @ args:
 {
-  users.users.akirakomamura = {
+  users.users.${site.username} = {
     uid = 1000;
     description = "default";
     isNormalUser = true;
-
-    hashedPassword =
-      "$6$8MSnOKraU6m/OfGz$Bn.wcdaTl/.3hwsMWyEKYyuVea8TCnC2dQtHcI2A15ke9R726wtbTsX06jeatb.Fvu4CiDPbiadkaTRBLUjoB/";
-  };
+  } // site.nixos.users.users;
 
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.akirakomamura = home;
+    users.${site.username} = {
+      imports = site.homeModules;
+    };
   };
 }

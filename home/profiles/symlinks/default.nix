@@ -1,0 +1,6 @@
+{
+  imports = [
+    ./linkfarm
+    ./linkfarm-annex
+  ];
+}
