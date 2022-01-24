@@ -267,6 +267,13 @@
         (import ./pkgs/overlay.nix)
         (import ./emacs/overlay.nix { inherit inputs; });
 
+      templates = {
+        site = {
+          description = "A basic desktop host";
+          path = ./sites/default;
+        };
+      };
+
       # abc = 132;
     };
 }
