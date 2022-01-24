@@ -196,7 +196,11 @@
 
       # checks.x86_64-linux.someCheck = pkgs.hello;
       # packages.x86_64-linux.somePackage = pkgs.hello;
-      overlay = import ./pkgs/overlay.nix;
+
+      overlay = nixpkgs.lib.composeExtensions
+        (import ./pkgs/overlay.nix)
+        (import ./emacs/overlay.nix { inherit inputs; });
+
       # abc = 132;
     };
 }
