@@ -175,6 +175,21 @@
         "type": "github"
       }
     },
+    "impermanence": {
+      "locked": {
+        "lastModified": 1642362310,
+        "narHash": "sha256-/ZkAKJpvAFG9Nd0kOUUmqLb1pKOa0cpU832khuxUAUo=",
+        "owner": "nix-community",
+        "repo": "impermanence",
+        "rev": "ff2240b04ffb9322241b9f6374305cbf6a98a285",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "impermanence",
+        "type": "github"
+      }
+    },
     "melpa": {
       "flake": false,
       "locked": {
@@ -207,11 +222,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1640418986,
-        "narHash": "sha256-a8GGtxn2iL3WAkY5H+4E0s3Q7XJt6bTOvos9qqxT5OQ=",
+        "lastModified": 1643087856,
+        "narHash": "sha256-EreC7gP/T566PDRZjqNoTvByTyvABEpJpWFtyNUDS0Y=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5c37ad87222cfc1ec36d6cd1364514a9efc2f7f2",
+        "rev": "8bd55a6a5ab05942af769c2aa2494044bff7f625",
         "type": "github"
       },
       "original": {
@@ -266,12 +281,14 @@
         "flake-utils-plus": "flake-utils-plus",
         "gnu-elpa": "gnu-elpa",
         "home-manager": "home-manager",
+        "impermanence": "impermanence",
         "melpa": "melpa",
         "nixpkgs": "nixpkgs_2",
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks",
         "site": "site",
         "twist": "twist",
+        "unstable": "unstable",
         "utils": "utils",
         "zsh-enhancd": "zsh-enhancd",
         "zsh-fast-syntax-highlighting": "zsh-fast-syntax-highlighting",
@@ -308,6 +325,21 @@
         "owner": "akirak",
         "repo": "emacs-twist",
         "type": "github"
+      }
+    },
+    "unstable": {
+      "locked": {
+        "lastModified": 1642635915,
+        "narHash": "sha256-vabPA32j81xBO5m3+qXndWp5aqepe+vu96Wkd9UnngM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6d8215281b2f87a5af9ed7425a26ac575da0438f",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
       }
     },
     "utils": {
