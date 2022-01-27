@@ -103,6 +103,8 @@
           extraSpecialArgs = {
             pkgs = channels.nixpkgs;
           };
+          # Import custom home-manager modules (non-NixOSes)
+          extraModules = import ./home/modules/modules.nix;
         };
     in
     flake-utils-plus.lib.mkFlake {
@@ -141,6 +143,10 @@
         # Default modules to be passed to all hosts.
         modules = [
           ./nixos/profiles/defaults.nix
+          {
+            # Import custom home-manager modules (NixOS)
+            config.home-manager.sharedModules = import ./home/modules/modules.nix;
+          }
         ];
       };
 

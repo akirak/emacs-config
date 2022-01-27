@@ -11,6 +11,7 @@
   extraHomeModules = [
     {
       home.enableNixpkgsReleaseCheck = false;
+      programs.emacs-config-old.enable = true;
     }
   ];
 

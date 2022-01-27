@@ -1,0 +1,3 @@
+[
+  ./emacs-config-old.nix
+]
