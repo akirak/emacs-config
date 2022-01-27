@@ -1,29 +1,80 @@
 * Nix/NixOS Configuration Monorepo
+:PROPERTIES:
+:TOC:      :include descendants :depth 2
+:END:
 [[https://akirak.cachix.org][file:https://img.shields.io/badge/cachix-akirak-blue.svg]]
 
 This is a monorepo for my Nix configuration files.
-** Features
-- The entire =flake.nix= is organized using [[https://github.com/gytis-ivaskevicius/flake-utils-plus][flake-utils-plus]]
-- Manage user preferences using [[https://github.com/nix-community/home-manager][home-manager]]
-- Configure Emacs using [[https://github.com/akirak/emacs-twist][emacs-twist]] and each session is sandboxed using [[https://github.com/containers/bubblewrap][bubblewrap]]
-** Usage
-*** Trying out the Emacs configuration
-If you are using Linux with Nix 2.4 installed, you can try out the configuration inside a sandbox session.
-If you are worried, you can verify the bubblewrap options of [[file:sandbox/emacs.nix][the sandbox]].
+It is a Nix flake, and the entire [[file:flake.nix][flake.nix]] is organized using [[https://github.com/gytis-ivaskevicius/flake-utils-plus][flake-utils-plus]].
 
-This configuration uses an Emacs binary with native compilation (a.k.a. GccEmacs) enabled.
-While it should take a lot of time to build GccEmacs, I push the Emacs binary to Cachix, so you will only build packages.
+:CONTENTS:
+- [[#configuration-files][Configuration Files]]
+  - [[#emacs-configuration][Emacs Configuration]]
+  - [[#home-manager][Home-Manager]]
+  - [[#nixos][NixOS]]
+  - [[#other-flake-outputs][Other Flake Outputs]]
+- [[#development-workflow][Development Workflow]]
+- [[#resources][Resources]]
+- [[#license][License]]
+:END:
+** Configuration Files
+*** Emacs Configuration
+Directory: [[file:emacs/][emacs]]
+
+This repository contains my Emacs configuration that is built using [[https://github.com/akirak/emacs-twist][emacs-twist]].
+
+I use home-manager for installation.
+**** Trying out the configuration on Linux
+If you are using Linux with Nix 2.4 installed, you can try out the Emacs configuration without replacing your =~/.emacs.d/=.
+MacOS is not supported, because it uses bubblewrap for sandboxing.
+
+You can save time to build GccEmacs by taking advantage of binary cache of Nix:
 
 #+begin_src sh
 cachix use akirak
 #+end_src
 
-Because =~/.emacs.d= is bind-mounted inside the sandbox, you can use the configuration without installing it:
+Now you can try out the configuration:
 
 #+begin_src sh
-nix run github:akirak/nix-config#emacs.basic -- ~/tmp/
+nix run github:akirak/nix-config#tryout-emacs
+#+end_src
+*** Home-Manager
+Directory: [[file:home/][home]]
+
+I manage my preferences using [[https://github.com/nix-community/home-manager][home-manager]].
+It should work on both NixOS and non-NixOS Linux distributions, but I am currently using it only on NixOS.
+
+On NixOS, home-manager can be managed via a NixOS module, so I don't use a separate command for updating home-manager.
+*** NixOS
+Directory: [[file:nixos/][nixos]]
+
+This repository contains my NixOS configuration.
+It is meant for my personal use.
+*** Other Flake Outputs
+**** NixOS Container
+This repository contains a NixOS container, but I am not using it for any real purpose.
+***** Build the container
+#+begin_src sh
+sudo nixos-rebuild build --flake .#container  
+#+end_src
+***** Create and start the container
+#+begin_src sh
+nixos-container create flake-test --flake .
 #+end_src
 
-The argument after =--= can be any existing file or directory on your file system.
-The first argument is bind-mounted inside the sandbox, and the other directories in your home directory becomes invisible.
-Network access is also forbidden.
+#+begin_src sh
+nixos-container start flake-test  
+#+end_src
+** Development Workflow
+This repository uses [[https://github.com/cachix/pre-commit-hooks.nix/][pre-commit-hooks.nix]] for streamlining the development.
+Hooks are defined in [[file:hooks.nix][hooks.nix]].
+** Resources
+- [[https://www.tweag.io/blog/2020-07-31-nixos-flakes/][Nix Flakes, Part 3: Managing NixOS systems - Tweag]]
+- [[https://digga.divnix.com/#modules-profiles--suites][Modules, Profiles & Suites]]
+** License
+Most of the configuration was written by myself (Akira Komamura), with an exception of [[file:dotfiles/starship.toml][starship.toml]] which was copied from the repository of [[https://github.com/divnix/devos][devos]] (written by
+[[https://github.com/nrdxp][Timothy DeHerrera]]).
+
+I license this configuration under [[file:LICENSE][MIT License]].
+starship.toml is licensed under [[file:dotfiles/COPYING][MIT License]] too.

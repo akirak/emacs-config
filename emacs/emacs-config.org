@@ -17,6 +17,7 @@
   - [[#web-development][Web development]]
   - [[#syntax-support][Syntax support]]
   - [[#readability][Readability]]
+  - [[#extra-dependencies][Extra dependencies]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -1471,6 +1472,15 @@ I like the idea of [[https://github.com/mickeynp/combobulate][combobulate]], but
 I will consider it in the future.
 *** Readability
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
+*** Extra dependencies
+=@extra= tag is used to denote packages that requires large dependencies.
+To use these features, they need to be turned on at build time.
+
+#+BEGIN: org-ql :query "tags:@extra" :columns (heading todo)
+| Heading   | Todo |
+|-----------+------|
+| [[beancount][beancount]] |      |
+#+END:
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil
