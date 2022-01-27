@@ -411,7 +411,7 @@
     tree-sitter-langs = {
       flake = false;
       owner = "emacs-tree-sitter";
-      ref = "0.10.13";
+      ref = "0.10.15";
       repo = "tree-sitter-langs";
       type = "github";
     };

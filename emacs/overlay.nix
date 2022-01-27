@@ -10,10 +10,7 @@ let
   inherit (inputs.twist.overlay final prev) emacsTwist;
   inherit (inputs.org-babel.overlay final prev) tangleOrgBabelFile;
 
-  releaseVersions = {
-    elispTreeSitterVersion = "0.16.1";
-    elispTreeSitterLangsVersion = "0.10.13";
-  };
+  releaseVersions = import ./versions.nix;
 
   excludeArchive = org.excludeHeadlines (org.tag "ARCHIVE");
 
