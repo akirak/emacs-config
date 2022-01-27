@@ -21,6 +21,7 @@
     # agenix.inputs.nixpkgs.follows = "latest";
 
     # Emacs
+    nixpkgs-emacs.url = "github:NixOS/nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     org-babel.url = "github:akirak/nix-org-babel";
     twist.url = "github:akirak/emacs-twist";
@@ -106,6 +107,11 @@
           # Import custom home-manager modules (non-NixOSes)
           extraModules = import ./home/modules/modules.nix;
         };
+
+      emacsOverlay = import ./emacs/overlay.nix {
+        inherit inputs;
+        nixpkgs = inputs.nixpkgs-emacs;
+      };
     in
     flake-utils-plus.lib.mkFlake {
       inherit self inputs;
@@ -119,7 +125,7 @@
       sharedOverlays = [
         (import ./pkgs/overlay.nix)
         inputs.flake-no-path.overlay
-        (import ./emacs/overlay.nix { inherit inputs; })
+        emacsOverlay
         # zsh plugins used in the home-managerconfiguration
         (_: _: import ./pkgs/zsh-plugins.nix {
           inherit inputs;
@@ -232,24 +238,27 @@
 
       outputsBuilder = channels:
         let
-          inherit (channels.nixpkgs) emacsProfiles;
+          inherit (channels.nixpkgs) emacs-config emacsSandboxed;
         in
         {
-          # packages = {
-          #   emacs = emacsProfiles;
-          # } //
-          # nixpkgs.lib.getAttrs [ "lock" "update" ] (emacsProfiles.admin "emacs/lock");
+          packages = {
+            tryout-emacs = emacsSandboxed {
+              name = "tryout-emacs";
+              extraFeatures = [ ];
+              extraInitText = ''
+                (when init-file-user
+                  (require 'doom-themes)
+                  (load-theme 'doom-rouge t))
+              '';
+              protectHome = false;
+              shareNet = false;
+              inheritPath = false;
+            };
 
-          # # Set up a pre-commit hook by running `nix develop`.
-          # devShell = channels.nixpkgs.mkShell {
-          #   inherit (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
-          #     src = ./.;
-          #     hooks = import ./hooks.nix {
-          #       pkgs = channels.nixpkgs;
-          #       emacsBinaryPackage = "emacs.emacs";
-          #     };
-          #   }) shellHook;
-          # };
+            inherit emacs-config;
+          }
+          //
+          nixpkgs.lib.getAttrs [ "lock" "update" ] (emacs-config.admin "emacs/lock");
 
           homeConfigurations = {
             ${site.username + "@" + site.hostName} = makeHome {
@@ -259,6 +268,17 @@
                 imports = site.homeModules;
               };
             };
+          };
+
+          # Set up a pre-commit hook by running `nix develop`.
+          devShell = channels.nixpkgs.mkShell {
+            inherit (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
+              src = ./.;
+              hooks = import ./hooks.nix {
+                pkgs = channels.nixpkgs;
+                emacsBinaryPackage = "emacs-config.emacs";
+              };
+            }) shellHook;
           };
         };
 
@@ -271,7 +291,7 @@
 
       overlay = nixpkgs.lib.composeExtensions
         (import ./pkgs/overlay.nix)
-        (import ./emacs/overlay.nix { inherit inputs; });
+        emacsOverlay;
 
       templates = {
         site = {

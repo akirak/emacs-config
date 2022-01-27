@@ -34,11 +34,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1640572408,
-        "narHash": "sha256-bADuO+iCbpFbII3rSB66eg+rVsTbuBUSyMpG6dQoH44=",
+        "lastModified": 1643167418,
+        "narHash": "sha256-ab69pwN8fmdUgPJEt+d3geIuKoCbOt6iXZbLmrIN61E=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "1f591ff5ed96777035f5f438bb77224d9a1cdf5d",
+        "rev": "62981f5aca7ccfcd14528e9fec5d282122605407",
         "type": "github"
       },
       "original": {
@@ -220,6 +220,21 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-emacs": {
+      "locked": {
+        "lastModified": 1643182494,
+        "narHash": "sha256-QOgIGaetrf9JoVvjANJYxGSGmY/MQjYMXNWBE5IhVic=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d4b02fa416c0ed8500c121f66dcaae399cdb605f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1643087856,
@@ -284,6 +299,7 @@
         "impermanence": "impermanence",
         "melpa": "melpa",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-emacs": "nixpkgs-emacs",
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks",
         "site": "site",

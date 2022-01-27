@@ -1,3 +1,4 @@
 [
-  ./emacs-config-old.nix
+  ./emacs.nix
+  ./emacs-old.nix
 ]

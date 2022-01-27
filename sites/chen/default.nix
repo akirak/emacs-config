@@ -9,10 +9,17 @@
   ];
 
   extraHomeModules = [
-    {
+    ({ pkgs, ... }: {
       home.enableNixpkgsReleaseCheck = false;
       programs.emacs-config-old.enable = true;
-    }
+
+      programs.emacs-unsafe = {
+        extraDirsToTryBind = [
+          "/git-annex"
+          "/assets"
+        ];
+      };
+    })
   ];
 
   nixos = {

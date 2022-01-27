@@ -74,6 +74,20 @@ I am interested to see if it can reduce the amount of configuration code.
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
+*** :status
+By default, settings inside =:status= clauses are not loaded.
+
+#+begin_src emacs-lisp
+  (defvar akirak/enabled-status-tags nil)
+
+  (eval-when-compile
+    (define-setup-macro :status (tag &rest progn)
+      "Conditionally expand the macro."
+      :indent 1
+      (when (or (eq t akirak/enabled-status-tags)
+                (memq tag akirak/enabled-status-tags))
+        `(,@progn))))
+#+end_src
 ** Performance                                                    :packages:
 # Note: Some of these should be loaded as early as possible.
 *** benchmark-init                               :profiling:initialization:
@@ -675,7 +689,71 @@ A bunch of useful packages are configured here.
                                   minibuffer-mode
                                   "*Calc Trail*")
              aw-scope 'visible
-             aw-dispatch-always t))
+             aw-dispatch-always t)
+
+    (:status opinionated
+      (:global "M-o" #'ace-window)
+      (:with-feature lispy
+        (:when-loaded
+          (:with-map (lispy-mode-map)
+            (:unbind "M-o"))))
+      (:option aw-dispatch-alist
+               `((?o aw-swap-window "Swap Windows")
+                 (?c aw-copy-window "Duplicate the current window")
+                 (?v aw-split-window-horz "Split horizontally")
+                 (?s aw-split-window-vert "Split vertically")
+                 (?p aw-delete-window "Delete Window")
+                 (?x akirak/aw-replace-window "Replace window")
+                 (?m delete-other-windows "Delete Other Windows")
+                 ;; Unused.
+                 ;; (?k akirak/aw-quit-window "Quit window")
+                 (32 toggle-window-split)
+                 ;; tab-bar-mode.
+                 (?Q tab-bar-close-tab)
+                 (?R tab-bar-rename-tab)
+                 (?T tab-bar-new-tab)
+                 ;; Deprecated in favour of tab-bar-mode.
+                 ;; (?T tear-off-window)
+                 (?D delete-frame)
+                 (?F make-frame-command)
+                 (?? aw-show-dispatch-help)))
+
+      (defun akirak/aw-quit-window (window)
+        "Delete window WINDOW."
+        (let ((frame (window-frame window)))
+          (when (and (frame-live-p frame)
+                     (not (eq frame (selected-frame))))
+            (select-frame-set-input-focus (window-frame window)))
+          (if (= 1 (length (window-list)))
+              (progn
+                (bury-buffer (window-buffer window))
+                (delete-frame frame))
+            (if (window-live-p window)
+                (quit-window window)
+              (error "Got a dead window %S" window)))))
+
+      (defun akirak/aw-replace-window (window)
+        (let* ((buffer (current-buffer))
+               (cur-window (get-buffer-window buffer)))
+          (aw-switch-to-window window)
+          (switch-to-buffer buffer)
+          (delete-window cur-window)))
+      (custom-theme-set-faces 'user
+                              '(aw-leading-char-face
+                                ((default
+                                   :background "gray18" :foreground "tan"
+                                   :height 250))))
+      (advice-add 'aw-delete-window
+                  :after
+                  (defun akirak/ad-after-aw-delete-window (&rest _args)
+                    (balance-windows)))
+      (advice-add 'aw-delete-window
+                  :around
+                  (defun akirak/ad-around-aw-delete-window (origfun &rest args)
+                    (let ((initial-window (selected-window)))
+                      (prog1 (apply origfun args)
+                        (when (window-live-p initial-window)
+                          (select-window initial-window))))))))
 #+end_src
 *** all-the-icons                                                      :UI:
 :PROPERTIES:
@@ -705,6 +783,23 @@ A bunch of useful packages are configured here.
 #+begin_src emacs-lisp
   (setup (:package all-the-icons-dired)
     (:hook-into dired-mode))
+#+end_src
+*** beancount                                            :@extra:beancount:
+#+begin_src emacs-lisp
+  (setup (:package beancount)
+    (:nixpkgs "beancount" "fava")
+
+    ;; I don't like the default keybindings on C-c, so change the prefix.
+    (:option beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
+
+    (:with-mode beancount-mode
+      (:file-match "\\.beancount\\'" "\\.bean\\'")
+      (:when-loaded
+        (:hook
+         (defun akirak/beancount-turn-on-outline-mode ()
+           (outline-minor-mode t)))
+        (:bind
+         "d" #'beancount-insert-date))))
 #+end_src
 *** bufler                                                        :ARCHIVE:
 :PROPERTIES:
@@ -792,7 +887,7 @@ A bunch of useful packages are configured here.
       (:hook corfu-mode fancy-dabbrev-mode)
       (:bind "M-/" #'completion-at-point)))
 #+end_src
-*** eglot                                                             :LSP:
+*** eglot                                                      :LSP:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
@@ -850,7 +945,7 @@ The following resources are useful:
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
 #+end_src
-*** envrc                                                          :direnv:
+*** envrc                                                   :direnv:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
@@ -937,12 +1032,30 @@ For Emacs Lisp, I use lispy.
 
 #+begin_src emacs-lisp
   (setup (:package lispy)
-
     (:hook
      (defun akirak/lispy-invert-puni-mode ()
        "Turn off `puni-mode' when `lispy-mode' is on."
        (when (featurep 'puni)
-         (puni-mode (not lispy-mode))))))
+         (puni-mode (not lispy-mode)))))
+
+    ;; Adoption of lispy is opinionated.
+    (:status opinionated
+      (:option lispy-key-theme '(special lispy))
+
+      (:hook-into lisp-mode
+                  emacs-lisp-mode
+                  lisp-interaction-mode
+                  ielm-mode
+                  eval-expression-minibuffer-setup)
+
+      (:with-map lispy-mode-map-lispy
+        ;; Prevent conflicts with other custom keybindings
+        (:unbind "C-,"
+                 "M-<left>"
+                 "M-<right>"
+                 "M-m"
+                 "<M-return>"
+                 "<M-RET>"))))
 #+end_src
 
 Lispy is not turned on by default.
@@ -961,7 +1074,13 @@ To use it, turn on =macrostep-mode=.
 *** magit                                                             :git:
 #+begin_src emacs-lisp
   (setup (:package magit)
-    (:nixpkgs git))
+    (:nixpkgs git)
+
+    (:status opinionated
+      (:global "<f8> <f7>" #'magit-stage-file
+               "<f8> <f8>" #'magit-status
+               "<f8> <f9>" #'magit-dispatch
+               "<f8> <f10>" #'magit-file-dispatch)))
 #+end_src
 *** marginalia
 :PROPERTIES:
