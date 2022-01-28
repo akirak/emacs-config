@@ -7,7 +7,7 @@ let
     inherit stages;
     inherit name;
     entry = builtins.concatStringsSep " " [
-      "${pkgs.emacsProfiles.batch}/bin/emacs"
+      "${pkgs.emacs-batch}/bin/emacs"
       "--batch -l ${./scripts/update-emacs-config.el}"
       "-f ${funcName}"
     ];

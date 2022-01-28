@@ -92,6 +92,12 @@
       repo = "themes";
       type = "github";
     };
+    eglot = {
+      flake = false;
+      owner = "joaotavora";
+      repo = "eglot";
+      type = "github";
+    };
     electric-operator = {
       flake = false;
       owner = "davidshepherd7";
@@ -108,6 +114,12 @@
       flake = false;
       owner = "oantolin";
       repo = "embark";
+      type = "github";
+    };
+    envrc = {
+      flake = false;
+      owner = "purcell";
+      repo = "envrc";
       type = "github";
     };
     esxml = {
@@ -151,6 +163,12 @@
       repo = "graphql.el";
       type = "github";
     };
+    haskell-mode = {
+      flake = false;
+      owner = "haskell";
+      repo = "haskell-mode";
+      type = "github";
+    };
     ht = {
       flake = false;
       owner = "Wilfred";
@@ -167,6 +185,12 @@
       flake = false;
       owner = "victorhge";
       repo = "iedit";
+      type = "github";
+    };
+    inheritenv = {
+      flake = false;
+      owner = "purcell";
+      repo = "inheritenv";
       type = "github";
     };
     ivy = {
@@ -387,7 +411,7 @@
     tree-sitter-langs = {
       flake = false;
       owner = "emacs-tree-sitter";
-      ref = "0.10.13";
+      ref = "0.10.15";
       repo = "tree-sitter-langs";
       type = "github";
     };

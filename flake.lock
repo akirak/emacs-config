@@ -34,11 +34,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1640572408,
-        "narHash": "sha256-bADuO+iCbpFbII3rSB66eg+rVsTbuBUSyMpG6dQoH44=",
+        "lastModified": 1643167418,
+        "narHash": "sha256-ab69pwN8fmdUgPJEt+d3geIuKoCbOt6iXZbLmrIN61E=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "1f591ff5ed96777035f5f438bb77224d9a1cdf5d",
+        "rev": "62981f5aca7ccfcd14528e9fec5d282122605407",
         "type": "github"
       },
       "original": {
@@ -161,16 +161,32 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1640417317,
-        "narHash": "sha256-jT2uMARXs0Xm65ccroFsKyr4LTHSecw+9HAnmBdJO8U=",
-        "owner": "nix-community",
+        "lastModified": 1638323861,
+        "narHash": "sha256-SN7gdCAJjRW1Lnk6prBQxFP0n6NSl3sJMhIU4hlj9SE=",
+        "owner": "moinessim",
         "repo": "home-manager",
-        "rev": "48f2b381dd397ec88040d3354ac9c036739ba139",
+        "rev": "24eaa2a13a1079b9b6666884d88022ef2c5d0abd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "moinessim",
+        "ref": "nix-2.4-nix-darwin-modules",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "impermanence": {
+      "locked": {
+        "lastModified": 1642362310,
+        "narHash": "sha256-/ZkAKJpvAFG9Nd0kOUUmqLb1pKOa0cpU832khuxUAUo=",
+        "owner": "nix-community",
+        "repo": "impermanence",
+        "rev": "ff2240b04ffb9322241b9f6374305cbf6a98a285",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
-        "repo": "home-manager",
+        "repo": "impermanence",
         "type": "github"
       }
     },
@@ -204,13 +220,28 @@
         "type": "indirect"
       }
     },
-    "nixpkgs_2": {
+    "nixpkgs-emacs": {
       "locked": {
-        "lastModified": 1640418986,
-        "narHash": "sha256-a8GGtxn2iL3WAkY5H+4E0s3Q7XJt6bTOvos9qqxT5OQ=",
+        "lastModified": 1643182494,
+        "narHash": "sha256-QOgIGaetrf9JoVvjANJYxGSGmY/MQjYMXNWBE5IhVic=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5c37ad87222cfc1ec36d6cd1364514a9efc2f7f2",
+        "rev": "d4b02fa416c0ed8500c121f66dcaae399cdb605f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1643087856,
+        "narHash": "sha256-EreC7gP/T566PDRZjqNoTvByTyvABEpJpWFtyNUDS0Y=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "8bd55a6a5ab05942af769c2aa2494044bff7f625",
         "type": "github"
       },
       "original": {
@@ -265,12 +296,32 @@
         "flake-utils-plus": "flake-utils-plus",
         "gnu-elpa": "gnu-elpa",
         "home-manager": "home-manager",
+        "impermanence": "impermanence",
         "melpa": "melpa",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-emacs": "nixpkgs-emacs",
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks",
+        "site": "site",
         "twist": "twist",
-        "utils": "utils"
+        "unstable": "unstable",
+        "utils": "utils",
+        "zsh-enhancd": "zsh-enhancd",
+        "zsh-fast-syntax-highlighting": "zsh-fast-syntax-highlighting",
+        "zsh-fzy": "zsh-fzy",
+        "zsh-nix-shell": "zsh-nix-shell"
+      }
+    },
+    "site": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-vR5cKbNufgJCKImMFR+2p7kd1gxDLA091sXQsMCHxBs=",
+        "path": "./sites/default",
+        "type": "path"
+      },
+      "original": {
+        "path": "./sites/default",
+        "type": "path"
       }
     },
     "twist": {
@@ -292,6 +343,21 @@
         "type": "github"
       }
     },
+    "unstable": {
+      "locked": {
+        "lastModified": 1642635915,
+        "narHash": "sha256-vabPA32j81xBO5m3+qXndWp5aqepe+vu96Wkd9UnngM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6d8215281b2f87a5af9ed7425a26ac575da0438f",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
     "utils": {
       "locked": {
         "lastModified": 1638122382,
@@ -304,6 +370,70 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "zsh-enhancd": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641969216,
+        "narHash": "sha256-8Up7Pt68JE6Zy10B0QXB8zQIXD+IW+zOriNeVBULKTs=",
+        "owner": "b4b4r07",
+        "repo": "enhancd",
+        "rev": "53934f55cdac2e892a7ad1931bd3600a352a86a8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "b4b4r07",
+        "repo": "enhancd",
+        "type": "github"
+      }
+    },
+    "zsh-fast-syntax-highlighting": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1636856829,
+        "narHash": "sha256-x+4C2u03RueNo6/ZXsueqmYoPIpDHnKAZXP5IiKsidE=",
+        "owner": "zdharma-continuum",
+        "repo": "fast-syntax-highlighting",
+        "rev": "585c089968caa1c904cbe926ff04a1be9e3d8f42",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zdharma-continuum",
+        "repo": "fast-syntax-highlighting",
+        "type": "github"
+      }
+    },
+    "zsh-fzy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1610699933,
+        "narHash": "sha256-C5cflRJqi+T53izr2PBJsFW6X3CVgIlY+hGT3ODC9lI=",
+        "owner": "aperezdc",
+        "repo": "zsh-fzy",
+        "rev": "519327d9990fbea50f71649e378e650f594bb39b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "aperezdc",
+        "repo": "zsh-fzy",
+        "type": "github"
+      }
+    },
+    "zsh-nix-shell": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1628023704,
+        "narHash": "sha256-WNa8RljYhkOWk7AZbdTOvYhWw1fR8PjFxH/tnUCbems=",
+        "owner": "chisui",
+        "repo": "zsh-nix-shell",
+        "rev": "f8574f27e1d7772629c9509b2116d504798fe30a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chisui",
+        "repo": "zsh-nix-shell",
         "type": "github"
       }
     }

@@ -1,59 +1,43 @@
-{ inputs }:
+{ inputs, nixpkgs }:
 final: prev:
 with builtins;
 let
   inherit (inputs.twist.lib { inherit (inputs.nixpkgs) lib; }) parseSetup;
-  org = inputs.org-babel.lib;
-  inherit (prev) lib;
-
-  inherit (inputs.emacs-overlay.overlay final prev) emacsPgtkGcc;
   inherit (inputs.twist.overlay final prev) emacsTwist;
   inherit (inputs.org-babel.overlay final prev) tangleOrgBabelFile;
 
-  releaseVersions = {
-    elispTreeSitterVersion = "0.16.1";
-    elispTreeSitterLangsVersion = "0.10.13";
-  };
+  org = inputs.org-babel.lib;
+  inherit (prev) lib;
 
-  excludeArchive = org.excludeHeadlines (org.tag "ARCHIVE");
-
-  basicInit = tangleOrgBabelFile "init.el" ./emacs-config.org {
-    processLines = excludeArchive;
-  };
-
-  compatInit = builtins.path {
-    name = "compat.el";
-    path = ./compat.el;
-  };
-
-  selectExtras = extras:
-    if extras == true
-    then lib.id
-    else if isString extras
-    then org.selectHeadlines (org.headlineText extras)
-    else if isList extras
-    then org.selectHeadlines (s: lib.any (substr: org.headlineText substr s) extras)
-    else throw "extras must be either null, true, a string, or a list of strings";
-
-  extraInit = extras: tangleOrgBabelFile "extra-init.el" ./extras.org {
-    processLines = lines: lib.pipe lines [
-      excludeArchive
-      (selectExtras extras)
+  # Use a pinned nixpkgs to prevent the rebuild of Emacs on updating nixpkgs for the system.
+  pkgsForEmacs = import nixpkgs {
+    inherit (prev) system;
+    overlays = [
+      inputs.emacs-overlay.overlay
     ];
   };
+  emacsPackage = pkgsForEmacs.emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
 
-  configureInitFiles = { compat ? true, extras ? true }:
-    [ basicInit ]
-    ++ lib.optional compat compatInit
-    ++ lib.optional (extras != false) (extraInit extras);
-
-  emacsPackage = emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
-
+  releaseVersions = import ./versions.nix;
   inventories = import ./inventories.nix inputs;
 
-  makeEmacsProfile = args: (emacsTwist {
+  makeEmacsProfile = { extraFeatures, extraInitFiles }: (emacsTwist {
     inherit emacsPackage;
-    initFiles = configureInitFiles args;
+    initFiles = [
+      (tangleOrgBabelFile "init.el" ./emacs-config.org {
+        processLines = org.excludeHeadlines (s:
+          org.tag "ARCHIVE" s
+            ||
+            (if extraFeatures == true
+            then false
+            else
+              (org.tag "@extra" s
+                && ! lib.any (tag: org.tag tag s) extraFeatures)
+            ));
+      })
+    ]
+    # Allow adding private config on specific hosts
+    ++ extraInitFiles;
     extraPackages = [
       "setup"
     ];
@@ -68,70 +52,19 @@ let
       emacs = emacsPackage;
     });
   });
-
-  full = makeEmacsProfile {
-    compat = true;
-    extras = true;
-  };
-
-  sandbox = prev.callPackage ./sandbox.nix { };
 in
 {
-  emacsProfiles = lib.extendDerivation true
-    {
+  emacs-config = lib.makeOverridable makeEmacsProfile {
+    extraFeatures = true;
+    extraInitFiles = [ ];
+  };
 
-      basic = sandbox
-        {
-          themePackage = "doom-themes";
-          themeName = "doom-rouge";
-        }
-        (makeEmacsProfile {
-          compat = false;
-          extras = false;
-        });
-
-      compat = sandbox
-        {
-          themePackage = "doom-themes";
-          themeName = "doom-one";
-        }
-        (makeEmacsProfile {
-          extras = false;
-        });
-
-      beancount = sandbox
-        {
-          themePackage = "doom-themes";
-          themeName = "doom-opera-light";
-          userEmacsDirectory = "$HOME/beancount/emacs-var";
-          extraBubblewrapOptions = [
-            "--bind"
-            "$HOME/beancount"
-            "$HOME/beancount"
-            "--bind-try"
-            "$HOME/Downloads"
-            "$HOME/Downloads"
-          ];
-        }
-        (makeEmacsProfile {
-          extras = "beancount";
-        });
-
-      readability = sandbox
-        {
-          themePackage = "poet-theme";
-          themeName = "poet";
-        }
-        (makeEmacsProfile { });
-
-      # A configuration with the packages for the Git hooks.
-      batch = emacsTwist {
-        inherit emacsPackage;
-        initFiles = [ ];
-        extraPackages = [ "org-ql" "org-make-toc" ];
-        inherit inventories;
-        lockDir = ./lock;
-      };
-    }
-    full;
+  # A configuration with the packages for the Git hooks.
+  emacs-batch = emacsTwist {
+    inherit emacsPackage;
+    initFiles = [ ];
+    extraPackages = [ "org-ql" "org-make-toc" ];
+    inherit inventories;
+    lockDir = ./lock;
+  };
 }

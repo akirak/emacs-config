@@ -58,8 +58,7 @@ esuper:
         then "linux"
         else throw "Unsupported platform";
       sha256 = {
-        # 0.10.13
-        linux = "1v1db5nlzix4dax769nq5bsrx5fswxafzjqnsci1fxy9v95i53fx";
+        linux = "0wipqbfagp9dw54m99z29jj8cqfp0y8xax32d0jyg5ghz57zzn54";
       };
     in
     {

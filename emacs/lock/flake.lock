@@ -240,6 +240,22 @@
         "type": "github"
       }
     },
+    "eglot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1642946777,
+        "narHash": "sha256-Gjzkv/nUOCuvZP0sUH7oDwSO2BFxn2/BGnLeB9Jzeqg=",
+        "owner": "joaotavora",
+        "repo": "eglot",
+        "rev": "57779f9c3940a188e2c089758d095d05cf0a0e24",
+        "type": "github"
+      },
+      "original": {
+        "owner": "joaotavora",
+        "repo": "eglot",
+        "type": "github"
+      }
+    },
     "electric-operator": {
       "flake": false,
       "locked": {
@@ -285,6 +301,22 @@
       "original": {
         "owner": "oantolin",
         "repo": "embark",
+        "type": "github"
+      }
+    },
+    "envrc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641232773,
+        "narHash": "sha256-o351f1iJEAYtw80B3VEqN4pNTKRF2Z5ILEcsSk7WANE=",
+        "owner": "purcell",
+        "repo": "envrc",
+        "rev": "456c4100de41d2cb50813058a9e727b6e83c5d1e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purcell",
+        "repo": "envrc",
         "type": "github"
       }
     },
@@ -400,6 +432,22 @@
         "type": "github"
       }
     },
+    "haskell-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631115790,
+        "narHash": "sha256-iwF69x0o08oYp+dfikYZpx3FVZ55VNsf4iSthzIa9xY=",
+        "owner": "haskell",
+        "repo": "haskell-mode",
+        "rev": "8402caa341d90b4236f5c0a802751f9023ccfbe7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "haskell",
+        "repo": "haskell-mode",
+        "type": "github"
+      }
+    },
     "ht": {
       "flake": false,
       "locked": {
@@ -445,6 +493,22 @@
       "original": {
         "owner": "victorhge",
         "repo": "iedit",
+        "type": "github"
+      }
+    },
+    "inheritenv": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1616725959,
+        "narHash": "sha256-kJ2JD/9q1Rv/xScMTJPunWmlMS4zxA7TVdsHVzonheE=",
+        "owner": "purcell",
+        "repo": "inheritenv",
+        "rev": "7e4c8b0d0a43b6f1c6c4d6dbd2f3bf5ce7f20067",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purcell",
+        "repo": "inheritenv",
         "type": "github"
       }
     },
@@ -929,9 +993,11 @@
         "corfu": "corfu",
         "dash": "dash",
         "doom-themes": "doom-themes",
+        "eglot": "eglot",
         "electric-operator": "electric-operator",
         "embark": "embark",
         "embark-consult": "embark-consult",
+        "envrc": "envrc",
         "esxml": "esxml",
         "f": "f",
         "fancy-dabbrev": "fancy-dabbrev",
@@ -939,9 +1005,11 @@
         "git-commit": "git-commit",
         "git-modes": "git-modes",
         "graphql": "graphql",
+        "haskell-mode": "haskell-mode",
         "ht": "ht",
         "hydra": "hydra",
         "iedit": "iedit",
+        "inheritenv": "inheritenv",
         "ivy": "ivy",
         "json-mode": "json-mode",
         "json-snatcher": "json-snatcher",
@@ -1108,16 +1176,16 @@
     "tree-sitter-langs": {
       "flake": false,
       "locked": {
-        "lastModified": 1639411291,
-        "narHash": "sha256-32oY0Mtocg2gAQXv1XSp76oLubceOcEwZomes+ORI5o=",
+        "lastModified": 1643245095,
+        "narHash": "sha256-A0KkGfcUfomVIYny0oV8ed5WLUFOUuEGGsDQPSbgvI8=",
         "owner": "emacs-tree-sitter",
         "repo": "tree-sitter-langs",
-        "rev": "e537b90bbca6b4deb62042240ed12461251b3f0c",
+        "rev": "4ac2400c04e2adee20000d316367d30e813fe5e3",
         "type": "github"
       },
       "original": {
         "owner": "emacs-tree-sitter",
-        "ref": "0.10.13",
+        "ref": "0.10.15",
         "repo": "tree-sitter-langs",
         "type": "github"
       }
