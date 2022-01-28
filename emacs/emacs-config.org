@@ -1377,7 +1377,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 52 |
+| [[org-ql-search:tags:packages][packages]]            | 53 |
 | [[org-ql-search:tags:UI][UI]]                  | 10 |
 | [[org-ql-search:tags:visual][visual]]              |  7 |
 | [[org-ql-search:tags:formatting][formatting]]          |  6 |
@@ -1408,6 +1408,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:text_mode][text_mode]]           |  1 |
 | [[org-ql-search:tags:text][text]]                |  1 |
 | [[org-ql-search:tags:documentation][documentation]]       |  1 |
+| [[org-ql-search:tags:@extra][@extra]]              |  1 |
+| [[org-ql-search:tags:beancount][beancount]]           |  1 |
 | [[org-ql-search:tags:LSP][LSP]]                 |  1 |
 | [[org-ql-search:tags:direnv][direnv]]              |  1 |
 | [[org-ql-search:tags:editing][editing]]             |  1 |
