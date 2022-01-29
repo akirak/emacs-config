@@ -246,9 +246,8 @@
               name = "tryout-emacs";
               extraFeatures = [ ];
               extraInitText = ''
-                (when init-file-user
-                  (require 'doom-themes)
-                  (load-theme 'doom-rouge t))
+                (require 'doom-themes)
+                (load-theme 'doom-rouge t)
               '';
               protectHome = false;
               shareNet = false;
