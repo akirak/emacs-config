@@ -68,9 +68,9 @@ runWorkspaceAction = do
     (_,(_:suffix)) ->  go suffix
     where
       go :: String -> X ()
-      go "emacs" = spawn "emacs-default" -- This is my custom wrapper around Emacs
+      go "emacs" = spawn "emacs-unsafe"
       go "web" = spawn "firefox --new-window"
-      go "github" = firefox "https://github.com"
+      -- go "github" = firefox "https://github.com"
       -- go "music" = firefox "https://music.youtube.com"
       go _ = return ()
 
