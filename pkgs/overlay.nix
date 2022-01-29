@@ -10,4 +10,6 @@ final: prev:
   emacsSandboxed = prev.callPackage ./development/emacs-sandboxed { } {
     inherit (final) bubblewrapGUI;
   };
+
+  emacs-reader = final.callPackage ./development/emacs-profiles/reader.nix { };
 }

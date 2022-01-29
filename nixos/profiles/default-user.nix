@@ -1,5 +1,7 @@
 { site, homeModules, pkgs, ... } @ args:
 {
+  users.defaultUserShell = pkgs.zsh;
+
   users.users.${site.username} = {
     uid = 1000;
     description = "default";

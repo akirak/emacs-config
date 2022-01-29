@@ -244,16 +244,18 @@
           packages = {
             tryout-emacs = emacsSandboxed {
               name = "tryout-emacs";
+              enabledOpinionatedSettings = false;
               extraFeatures = [ ];
               extraInitText = ''
-                (when init-file-user
-                  (require 'doom-themes)
-                  (load-theme 'doom-rouge t))
+                (require 'doom-themes)
+                (load-theme 'doom-rouge t)
               '';
               protectHome = false;
               shareNet = false;
               inheritPath = false;
             };
+
+            inherit (channels.nixpkgs) emacs-reader;
 
             inherit emacs-config;
           }
