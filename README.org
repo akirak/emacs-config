@@ -26,7 +26,7 @@ This repository contains my Emacs configuration that is built using [[https://gi
 I use home-manager for installation.
 **** Trying out the configuration on Linux
 If you are using Linux with Nix 2.4 installed, you can try out the Emacs configuration without replacing your =~/.emacs.d/=.
-MacOS is not supported, because it uses bubblewrap for sandboxing.
+MacOS is not supported, because the Nix app depends on bubblewrap, which is only supported on Linux.
 
 You can save time to build GccEmacs by taking advantage of binary cache of Nix:
 
