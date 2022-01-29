@@ -87,7 +87,7 @@ By default, settings inside =:status= clauses are not loaded.
       :indent 1
       (when (or (eq t akirak/enabled-status-tags)
                 (memq tag akirak/enabled-status-tags))
-        `(,@progn))))
+        (macroexp-progn progn))))
 #+end_src
 ** Performance                                                    :packages:
 # Note: Some of these should be loaded as early as possible.
