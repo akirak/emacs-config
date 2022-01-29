@@ -148,7 +148,9 @@
 
         # Default modules to be passed to all hosts.
         modules = [
+          impermanence.nixosModules.impermanence
           ./nixos/profiles/defaults.nix
+          home-manager.nixosModules.home-manager
           {
             # Import custom home-manager modules (NixOS)
             config.home-manager.sharedModules = import ./home/modules/modules.nix;
@@ -179,8 +181,9 @@
                 enable = true;
               };
             }
-            home-manager.nixosModules.home-manager
+
             ./nixos/profiles/default-user.nix
+
             ./nixos/base.nix
           ];
       };
@@ -193,8 +196,6 @@
         };
 
         modules = [
-          impermanence.nixosModules.impermanence
-
           {
             imports = [
               ./sites/chen/nixos/boot.nix
@@ -223,7 +224,6 @@
             '';
           }
 
-          home-manager.nixosModules.home-manager
           ./nixos/profiles/default-user.nix
 
           ./nixos/desktop.nix
