@@ -67,7 +67,7 @@ nixos-container create flake-test --flake .
 nixos-container start flake-test  
 #+end_src
 ** Development Workflow
-This repository uses [[https://github.com/cachix/pre-commit-hooks.nix/][pre-commit-hooks.nix]] for streamlining the development.
+This repository uses [[https://github.com/cachix/pre-commit-hooks.nix/][pre-commit-hooks.nix]] for streamlining development.
 Hooks are defined in [[file:hooks.nix][hooks.nix]].
 ** Resources
 - [[https://www.tweag.io/blog/2020-07-31-nixos-flakes/][Nix Flakes, Part 3: Managing NixOS systems - Tweag]]
