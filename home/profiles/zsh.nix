@@ -98,6 +98,15 @@
         # if [[ -f ~/.asdf/asdf.sh ]]; then
         #    source ~/.asdf/asdf.sh
         # fi
+
+        function this_nixos() {
+          cmd="$1"
+          shift
+          sudo nixos-rebuild "$cmd" --flake $(readlink -f "$HOME/config")#$(uname -n) "$@"
+        }
+
+        alias this_rebuild="this_nixos build";
+        alias this_switch="this_nixos switch";
       '';
       shellAliases = {
         ".." = "cd ..";
