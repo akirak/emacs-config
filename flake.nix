@@ -244,6 +244,7 @@
           packages = {
             tryout-emacs = emacsSandboxed {
               name = "tryout-emacs";
+              enabledOpinionatedSettings = false;
               extraFeatures = [ ];
               extraInitText = ''
                 (require 'doom-themes)
