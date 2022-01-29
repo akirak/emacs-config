@@ -255,6 +255,8 @@
               inheritPath = false;
             };
 
+            inherit (channels.nixpkgs) emacs-reader;
+
             inherit emacs-config;
           }
           //
