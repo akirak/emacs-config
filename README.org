@@ -75,8 +75,7 @@ Hooks are defined in [[file:hooks.nix][hooks.nix]].
 ** License
 Most of the configuration was written by the author of this repository (Akira Komamura), with exceptions of:
 
-- [[file:dotfiles/starship.toml][starship.toml]] which was copied from the repository of [[https://github.com/divnix/devos][devos]] (written by
-[[https://github.com/nrdxp][Timothy DeHerrera]])
+- [[file:dotfiles/starship.toml][starship.toml]] which was copied from the repository of [[https://github.com/divnix/devos][devos]] (written by [[https://github.com/nrdxp][Timothy DeHerrera]])
 - Some code snippets were pasted from sources on the internet, e.g. blogs, Git repositories, reddit, etc. They have respective notes on sources.
 
 My code in this repository are licensed under [[file:LICENSE][MIT License]].
