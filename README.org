@@ -73,8 +73,11 @@ Hooks are defined in [[file:hooks.nix][hooks.nix]].
 - [[https://www.tweag.io/blog/2020-07-31-nixos-flakes/][Nix Flakes, Part 3: Managing NixOS systems - Tweag]]
 - [[https://digga.divnix.com/#modules-profiles--suites][Modules, Profiles & Suites]]
 ** License
-Most of the configuration was written by myself (Akira Komamura), with an exception of [[file:dotfiles/starship.toml][starship.toml]] which was copied from the repository of [[https://github.com/divnix/devos][devos]] (written by
-[[https://github.com/nrdxp][Timothy DeHerrera]]).
+Most of the configuration was written by the author of this repository (Akira Komamura), with exceptions of:
 
-I license this configuration under [[file:LICENSE][MIT License]].
+- [[file:dotfiles/starship.toml][starship.toml]] which was copied from the repository of [[https://github.com/divnix/devos][devos]] (written by
+[[https://github.com/nrdxp][Timothy DeHerrera]])
+- Some code snippets were pasted from sources on the internet, e.g. blogs, Git repositories, reddit, etc. They have respective notes on sources.
+
+My code in this repository are licensed under [[file:LICENSE][MIT License]].
 starship.toml is licensed under [[file:dotfiles/COPYING][MIT License]] too.
