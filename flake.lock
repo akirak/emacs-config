@@ -3,16 +3,16 @@
     "elisp-helpers": {
       "flake": false,
       "locked": {
-        "lastModified": 1641996288,
-        "narHash": "sha256-0Fz5COcAvNc7Lfmwg+1LcmDiGJivRpHdAFx0SCpjixk=",
-        "owner": "akirak",
-        "repo": "nix-elisp-helpers",
-        "rev": "ec7eaf0f1af9eda3f34d434a6ab4b852629289f4",
+        "lastModified": 1643495017,
+        "narHash": "sha256-luC3T14fhP8F//e3aevmfPzcqTeasLBchxQTYJfLRh4=",
+        "owner": "emacs-twist",
+        "repo": "elisp-helpers",
+        "rev": "8c47de635ef831f52db433da6b6a852a534c3dfd",
         "type": "github"
       },
       "original": {
-        "owner": "akirak",
-        "repo": "nix-elisp-helpers",
+        "owner": "emacs-twist",
+        "repo": "elisp-helpers",
         "type": "github"
       }
     },
@@ -251,16 +251,16 @@
     },
     "org-babel": {
       "locked": {
-        "lastModified": 1641201870,
-        "narHash": "sha256-mEkzFnjFSbdWkV0kmjSgYyPTqNZGRv5Yj1dHn8WBTvs=",
-        "owner": "akirak",
-        "repo": "nix-org-babel",
-        "rev": "3adb6617b1bab46545ce375c07780fc01df83284",
+        "lastModified": 1642531237,
+        "narHash": "sha256-lg/vPkXvLx6cs0S1I1/S06hwSR5/KJJmdJEcp01/S1E=",
+        "owner": "emacs-twist",
+        "repo": "org-babel",
+        "rev": "96d88bd7a44db7270bbe4e42b3fe0f8dfc27f14a",
         "type": "github"
       },
       "original": {
-        "owner": "akirak",
-        "repo": "nix-org-babel",
+        "owner": "emacs-twist",
+        "repo": "org-babel",
         "type": "github"
       }
     },
@@ -330,16 +330,16 @@
         "fromElisp": "fromElisp"
       },
       "locked": {
-        "lastModified": 1642315402,
-        "narHash": "sha256-RjuAI10u5igJayupcIGEydzTVKBx7kXJgmiukbqICtw=",
-        "owner": "akirak",
-        "repo": "emacs-twist",
-        "rev": "72d799d5d577595e04b60eb3f927722a7dd182a1",
+        "lastModified": 1643539764,
+        "narHash": "sha256-EpdruGUyNfy0sTUF6pdBqSh0ziuTqagzIcXUMDslyWQ=",
+        "owner": "emacs-twist",
+        "repo": "twist.nix",
+        "rev": "845853e70cebd2dbbc5b8b19bbb2f715c4023d1f",
         "type": "github"
       },
       "original": {
-        "owner": "akirak",
-        "repo": "emacs-twist",
+        "owner": "emacs-twist",
+        "repo": "twist.nix",
         "type": "github"
       }
     },

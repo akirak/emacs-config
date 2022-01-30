@@ -23,8 +23,8 @@
     # Emacs
     nixpkgs-emacs.url = "github:NixOS/nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    org-babel.url = "github:akirak/nix-org-babel";
-    twist.url = "github:akirak/emacs-twist";
+    org-babel.url = "github:emacs-twist/org-babel";
+    twist.url = "github:emacs-twist/twist.nix";
     melpa = {
       url = "github:melpa/melpa";
       flake = false;
