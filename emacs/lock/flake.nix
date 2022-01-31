@@ -14,10 +14,22 @@
       repo = "ace-window";
       type = "github";
     };
+    aggressive-indent = {
+      flake = false;
+      owner = "Malabarba";
+      repo = "aggressive-indent-mode";
+      type = "github";
+    };
     aio = {
       flake = false;
       owner = "skeeto";
       repo = "emacs-aio";
+      type = "github";
+    };
+    akirak = {
+      flake = false;
+      owner = "akirak";
+      repo = "trivial-elisps";
       type = "github";
     };
     all-the-icons = {
@@ -26,16 +38,16 @@
       repo = "all-the-icons.el";
       type = "github";
     };
-    all-the-icons-completion = {
-      flake = false;
-      owner = "iyefrat";
-      repo = "all-the-icons-completion";
-      type = "github";
-    };
     all-the-icons-dired = {
       flake = false;
       owner = "wyuenho";
       repo = "all-the-icons-dired";
+      type = "github";
+    };
+    async = {
+      flake = false;
+      owner = "jwiegley";
+      repo = "emacs-async";
       type = "github";
     };
     avy = {
@@ -62,6 +74,12 @@
       repo = "cape";
       type = "github";
     };
+    color-theme-sanityinc-tomorrow = {
+      flake = false;
+      owner = "purcell";
+      repo = "color-theme-sanityinc-tomorrow";
+      type = "github";
+    };
     consult = {
       flake = false;
       owner = "minad";
@@ -86,10 +104,10 @@
       repo = "dash.el";
       type = "github";
     };
-    doom-themes = {
+    defrepeater = {
       flake = false;
-      owner = "doomemacs";
-      repo = "themes";
+      owner = "alphapapa";
+      repo = "defrepeater.el";
       type = "github";
     };
     eglot = {
@@ -102,6 +120,12 @@
       flake = false;
       owner = "davidshepherd7";
       repo = "electric-operator";
+      type = "github";
+    };
+    elx = {
+      flake = false;
+      owner = "emacscollective";
+      repo = "elx";
       type = "github";
     };
     embark = {
@@ -122,6 +146,18 @@
       repo = "envrc";
       type = "github";
     };
+    eros = {
+      flake = false;
+      owner = "xiongtx";
+      repo = "eros";
+      type = "github";
+    };
+    esup = {
+      flake = false;
+      owner = "jschaf";
+      repo = "esup";
+      type = "github";
+    };
     esxml = {
       flake = false;
       owner = "tali713";
@@ -140,10 +176,20 @@
       repo = "fancy-dabbrev";
       type = "github";
     };
+    fullframe = {
+      flake = false;
+      type = "git";
+      url = "https://git.sr.ht/~tomterl/fullframe";
+    };
     gcmh = {
       flake = false;
       type = "git";
       url = "https://gitlab.com/koral/gcmh.git";
+    };
+    gif-screencast = {
+      flake = false;
+      type = "git";
+      url = "https://gitlab.com/Ambrevar/emacs-gif-screencast.git";
     };
     git-commit = {
       flake = false;
@@ -157,16 +203,28 @@
       repo = "git-modes";
       type = "github";
     };
+    github-linguist = {
+      flake = false;
+      owner = "akirak";
+      repo = "github-linguist.el";
+      type = "github";
+    };
     graphql = {
       flake = false;
       owner = "vermiculus";
       repo = "graphql.el";
       type = "github";
     };
-    haskell-mode = {
+    haskell-tng-mode = {
       flake = false;
-      owner = "haskell";
-      repo = "haskell-mode";
+      ref = "tng";
+      type = "git";
+      url = "https://gitlab.com/tseenshe/haskell-tng.el.git";
+    };
+    hercules = {
+      flake = false;
+      owner = "wurosh";
+      repo = "hercules";
       type = "github";
     };
     ht = {
@@ -223,6 +281,24 @@
       repo = "leetcode.el";
       type = "github";
     };
+    license-templates = {
+      flake = false;
+      owner = "jcs-elpa";
+      repo = "license-templates";
+      type = "github";
+    };
+    link-hint = {
+      flake = false;
+      owner = "noctuid";
+      repo = "link-hint.el";
+      type = "github";
+    };
+    lisp-extra-font-lock = {
+      flake = false;
+      owner = "Lindydancer";
+      repo = "lisp-extra-font-lock";
+      type = "github";
+    };
     lispy = {
       flake = false;
       owner = "abo-abo";
@@ -265,16 +341,16 @@
       repo = "marginalia";
       type = "github";
     };
+    memoize = {
+      flake = false;
+      owner = "skeeto";
+      repo = "emacs-memoize";
+      type = "github";
+    };
     mlscroll = {
       flake = false;
       owner = "jdtsmith";
       repo = "mlscroll";
-      type = "github";
-    };
-    nano-theme = {
-      flake = false;
-      owner = "rougier";
-      repo = "nano-theme";
       type = "github";
     };
     nix-mode = {
@@ -300,6 +376,12 @@
       repo = "org-visual-outline";
       type = "github";
     };
+    org-journal = {
+      flake = false;
+      owner = "bastibe";
+      repo = "org-journal";
+      type = "github";
+    };
     org-make-toc = {
       flake = false;
       owner = "alphapapa";
@@ -310,6 +392,12 @@
       flake = false;
       owner = "alphapapa";
       repo = "org-ql";
+      type = "github";
+    };
+    org-starter = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-starter";
       type = "github";
     };
     org-super-agenda = {
@@ -324,6 +412,12 @@
       repo = "org-visual-outline";
       type = "github";
     };
+    orgit = {
+      flake = false;
+      owner = "magit";
+      repo = "orgit";
+      type = "github";
+    };
     orglink = {
       flake = false;
       owner = "tarsius";
@@ -336,10 +430,22 @@
       repo = "ov";
       type = "github";
     };
+    package-lint = {
+      flake = false;
+      owner = "purcell";
+      repo = "package-lint";
+      type = "github";
+    };
     poet-theme = {
       flake = false;
       owner = "kunalb";
       repo = "poet";
+      type = "github";
+    };
+    popper = {
+      flake = false;
+      owner = "karthink";
+      repo = "popper";
       type = "github";
     };
     popup = {
@@ -354,10 +460,27 @@
       repo = "puni";
       type = "github";
     };
+    rainbow-delimiters = {
+      flake = false;
+      owner = "Fanael";
+      repo = "rainbow-delimiters";
+      type = "github";
+    };
     rainbow-mode = {
       flake = false;
       owner = "emacsmirror";
       repo = "rainbow-mode";
+      type = "github";
+    };
+    repl-toggle = {
+      flake = false;
+      type = "git";
+      url = "https://git.sr.ht/~tomterl/repl-toggle";
+    };
+    request = {
+      flake = false;
+      owner = "tkf";
+      repo = "emacs-request";
       type = "github";
     };
     restclient = {
@@ -393,6 +516,25 @@
       flake = false;
       owner = "abo-abo";
       repo = "swiper";
+      type = "github";
+    };
+    symbol-overlay = {
+      flake = false;
+      owner = "wolray";
+      repo = "symbol-overlay";
+      type = "github";
+    };
+    taxy = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "taxy.el";
+      type = "github";
+    };
+    taxy-magit-section = {
+      flake = false;
+      owner = "alphapapa";
+      ref = "package/taxy-magit-section";
+      repo = "taxy.el";
       type = "github";
     };
     titlecase = {
@@ -432,6 +574,13 @@
       flake = false;
       owner = "Artawower";
       repo = "turbo-log";
+      type = "github";
+    };
+    twist = {
+      flake = false;
+      owner = "emacs-twist";
+      ref = "develop";
+      repo = "twist.el";
       type = "github";
     };
     typescript-mode = {
@@ -474,6 +623,12 @@
       flake = false;
       owner = "magit";
       repo = "with-editor";
+      type = "github";
+    };
+    ws-butler = {
+      flake = false;
+      owner = "lewang";
+      repo = "ws-butler";
       type = "github";
     };
     zoutline = {
