@@ -101,7 +101,7 @@ By default, settings inside =:status= clauses are not loaded.
 #+begin_src emacs-lisp
   (setup (:package gcmh)
     (:hook-into after-init-hook)
-    (:option gcmh-verbose t))
+    (:option gcmh-verbose debug-on-error))
 #+end_src
 ** Built-ins
 :PROPERTIES:
