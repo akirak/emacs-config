@@ -18,6 +18,8 @@
   - [[#syntax-support][Syntax support]]
   - [[#readability][Readability]]
   - [[#extra-dependencies][Extra dependencies]]
+  - [[#links][Links]]
+  - [[#window-management][Window management]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -647,7 +649,7 @@ Embrace Org as a common document format for Emacs.
   (setup (:package org-dynamic-bullets)
     (:hook-into org-mode-hook))
 #+end_src
-*** orglink
+*** orglink                                                         :links:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:28]
 :END:
@@ -1518,6 +1520,12 @@ There are some packages for structured editing:
 I like the idea of [[https://github.com/mickeynp/combobulate][combobulate]], but it looks immature at present.
 I will consider it in the future.
 *** Readability
+I want to care about readability in the following modes:
+
+- [ ] nov
+- [ ] info
+- [ ] helpful
+
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Extra dependencies
 =@extra= tag is used to denote packages that requires large dependencies.
@@ -1527,6 +1535,23 @@ To use these features, they need to be turned on at build time.
 | Heading   | Todo |
 |-----------+------|
 | [[beancount][beancount]] |      |
+#+END:
+*** Links
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 18:27]
+:END:
+#+BEGIN: org-ql :query "tags:links" :columns (heading todo)
+| Heading   | Todo |
+|-----------+------|
+| [[orglink][orglink]]   |      |
+| [[link-hint][link-hint]] |      |
+| [[orgit][orgit]]     |      |
+#+END:
+*** Window management
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 19:07]
+:END:
+#+BEGIN: org-ql :query "tags:windows" :columns (heading todo)
 #+END:
 ** Footer                                                         :noexport:
 # Local Variables:
