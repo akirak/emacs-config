@@ -1209,6 +1209,14 @@ Resources:
 - https://github.com/minad/vertico#configuration
 
 It is also possible to use Helm as a completion style. See https://github.com/oantolin/orderless#ivy-and-helm. I will use orderless primarily because it is smaller than Helm.
+*** orgit                                                           :links:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 18:28]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package orgit))
+#+end_src
 *** puni                                              :structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:24]
