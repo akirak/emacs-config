@@ -133,6 +133,15 @@ By default, settings inside =:status= clauses are not loaded.
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
+*** defrepeater                                               :keybindings:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 20:13]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package defrepeater)
+    (:require))
+#+end_src
 *** fullframe                                                     :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:06]
