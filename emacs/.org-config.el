@@ -41,6 +41,9 @@
                   ("Package" :keys "p"
                    :function ,(level2 "Packages")
                    :src "(setup (:package %\\1)%?)")
+                  ("Macro package" :keys "M"
+                   :function ,(level2 "Macro packages")
+                   :src "(setup (:package %\\1)%?)")
 
                   ("Define a setup macro" :keys "d"
                    :function ,(level2 "Setup.el")
