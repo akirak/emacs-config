@@ -1016,13 +1016,22 @@ The following resources are useful:
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
-*** haskell-mode                                              :major__mode:
+*** haskell-mode                                      :major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
 
 #+begin_src emacs-lisp
 (setup (:package haskell-mode))
+#+end_src
+*** haskell-tng-mode                                  :Haskell:major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 19:02]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package haskell-tng-mode)
+    (:file-match "\\.hs\\'"))
 #+end_src
 *** hercules                                                  :keybindings:
 :PROPERTIES:
