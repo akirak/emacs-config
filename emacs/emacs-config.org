@@ -990,6 +990,20 @@ The following resources are useful:
     ;; For activation, see corfu
     (:global "TAB" #'fancy-dabbrev-expand-or-indent))
 #+end_src
+*** gif-screencast                                      :screen__recording:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 18:38]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package gif-screencast)
+
+    ;; TODO: Maybe use flameshot for creating screenshot on Wayland
+    (:nixpkgs "gifsicle" "scrot"
+              "graphicsmagick"
+              "graphicsmagick-imagemagick-compat"))
+#+end_src
+
 *** git-modes                                               :VC:major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
