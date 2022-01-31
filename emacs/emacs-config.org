@@ -884,8 +884,12 @@ A bunch of useful packages are configured here.
 
 #+begin_src emacs-lisp
   (setup (:package corfu)
+    (:with-mode (prog-mode text-mode comint-mode)
+      (:hook corfu-mode fancy-dabbrev-mode))
+
     (:with-mode (prog-mode text-mode)
-      (:hook corfu-mode fancy-dabbrev-mode)
+      (:bind "M-/" #'completion-at-point))
+    (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
 *** eglot                                                      :LSP:
