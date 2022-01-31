@@ -6,9 +6,10 @@
 :CONTENTS:
 - [[#setupel][Setup.el]]
 - [[#performance][Performance]]
+- [[#custom-conventions][Custom conventions]]
+- [[#macro-packages][Macro packages]]
 - [[#built-ins][Built-ins]]
 - [[#basic-appearances][Basic appearances]]
-- [[#custom-conventions][Custom conventions]]
 - [[#org][Org]]
 - [[#packages][Packages]]
 - [[#notes][Notes]]
@@ -71,6 +72,22 @@ I am interested to see if it can reduce the amount of configuration code.
              (add-to-list 'compilation-error-regexp-alist (car entry))
              (add-to-list 'compilation-error-regexp-alist-alist entry))))))
 #+end_src
+*** :mode-repl
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 19:41]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro :mode-repl (repl-fn)
+      "Add an entry to `rtog/mode-repl-alist'."
+      `(progn
+         (with-eval-after-load 'repl-toggle
+           (push (cons ',(setup-get 'mode) ',repl-fn)
+                 rtog/mode-repl-alist))
+         (add-hook ',(setup-get 'hook)
+                   #'repl-toggle-mode))))
+#+end_src
 *** :nixpkgs
 #+begin_src emacs-lisp
   (eval-when-compile
@@ -105,6 +122,27 @@ By default, settings inside =:status= clauses are not loaded.
     (:hook-into after-init-hook)
     (:option gcmh-verbose debug-on-error))
 #+end_src
+** Custom conventions                          :packages:
+*** Prefix for mode-specific commands
+#+begin_src emacs-lisp
+  (defcustom akirak/mode-prefix-key "C-,"
+    "Prefix for mode-specific keybindings."
+    :type 'string)
+#+end_src
+** Macro packages                                                 :packages:
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
+*** fullframe                                                     :windows:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 19:06]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package fullframe))
+#+end_src
+
+For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullframe - sourcehut git]].
 ** Built-ins
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -627,13 +665,6 @@ You need to install the font separately.
                  (if (member family families)
                      (set-face-attribute face nil :family family)
                    (message "Font family %s is not installed" family)))))))
-#+end_src
-** Custom conventions
-*** Prefix for mode-specific commands
-#+begin_src emacs-lisp
-  (defcustom akirak/mode-prefix-key "C-,"
-    "Prefix for mode-specific keybindings."
-    :type 'string)
 #+end_src
 ** Org                                                            :packages:
 :PROPERTIES:
@@ -1205,7 +1236,8 @@ To use it, turn on =macrostep-mode=.
 
 #+begin_src emacs-lisp
   (setup (:package nix-mode)
-    (:file-match "\\.nix\\'"))
+    (:file-match "\\.nix\\'")
+    (:mode-repl nix-repl))
 #+end_src
 *** nov                                                      :reading:EPUB:
 :PROPERTIES:
@@ -1290,6 +1322,22 @@ Limitations:
   (setup (:package rainbow-mode)
     (:hook-into prog-mode))
 #+end_src
+*** repl-toggle                                       :windows:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 19:05]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package repl-toggle)
+    ;; rtog/goto-buffer-fun #'pop-to-buffer
+    (:option rtog/fullscreen nil)
+
+    ;; Unbind the default key
+    (:unbind "C-c C-z")
+    (:bind "<C-return>" #'rtog/toggle-repl))
+#+end_src
+
+For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-toggle - sourcehut git]].
 *** restclient                                                        :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:58]
