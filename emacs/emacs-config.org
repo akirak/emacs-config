@@ -247,6 +247,15 @@ The built-in =electric= package provides the following modes:
              view-read-only t
              auto-mode-case-fold nil))
 #+end_src
+*** find-func
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 18:18]
+:END:
+
+#+begin_src emacs-lisp
+  (setup find-func
+    (:global "C-x M-l" #'find-library))
+#+end_src
 *** fns.c and xfns.c                                                   :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -553,6 +562,15 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup winner
     (:hook-into after-init-hook))
+#+end_src
+*** woman
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 18:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup woman
+    (:global "<f1> M-m" #'woman))
 #+end_src
 *** xdisp.c
 :PROPERTIES:
