@@ -40,7 +40,7 @@ let
       (setq akirak/enabled-status-tags t)
     ''}
     (dolist (file '(${quoteShellArgs package.initFiles}))
-      (load file t t))
+      (load file nil (not init-file-debug)))
     ${lib.optionalString (isString extraInitText) extraInitText}
   '';
 in
