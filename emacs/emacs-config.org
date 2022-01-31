@@ -1024,6 +1024,14 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package haskell-mode))
 #+end_src
+*** hercules                                                  :keybindings:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 18:51]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package hercules))
+#+end_src
 *** iedit                                                         :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:51]
