@@ -576,6 +576,18 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
                 text-mode
                 sgml-mode))
 #+end_src
+*** windmove                                                      :windows:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 20:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup windmove
+    (:status opinionated
+      (add-hook 'after-init-hook
+                (defun akirak/setup-windmove ()
+                  (windmove-default-keybindings 'control)))))
+#+end_src
 *** window                                                     :navigation:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -603,14 +615,18 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
            (scroll-down arg)
          (scroll-down (akirak/scroll-half-height))))))
 #+end_src
-*** winner                                                        :history:
+*** winner                                                :history:windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
 
 #+begin_src emacs-lisp
   (setup winner
-    (:hook-into after-init-hook))
+    (:hook-into after-init-hook)
+
+    (:status opinionated
+      (:bind "C-c u" (defrepeater #'winner-undo)
+             "C-c <Right>" (defrepeater #'winner-redo))))
 #+end_src
 *** woman
 :PROPERTIES:
@@ -1640,6 +1656,12 @@ To use these features, they need to be turned on at build time.
 :CREATED_TIME: [2022-01-31 Mon 19:07]
 :END:
 #+BEGIN: org-ql :query "tags:windows" :columns (heading todo)
+| Heading     | Todo |
+|-------------+------|
+| [[fullframe][fullframe]]   |      |
+| [[windmove][windmove]]    |      |
+| [[winner][winner]]      |      |
+| [[repl-toggle][repl-toggle]] |      |
 #+END:
 ** Footer                                                         :noexport:
 # Local Variables:
