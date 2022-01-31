@@ -1024,6 +1024,21 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package leetcode))
 #+end_src
+*** link-hint                                                       :links:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-31 Mon 17:39]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package link-hint)
+    (:global "M-g f" #'link-hint-open-link)
+
+    ;; Extra bindings for particular modes
+    (:with-feature info
+      (:when-loaded
+        (:with-map Info-mode-map
+          (:bind "f" #'link-hint-open-link)))))
+#+end_src
 *** lispy                                 :Emacs__Lisp:structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:36]
