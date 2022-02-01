@@ -691,6 +691,21 @@ You need to install the font separately.
                      (set-face-attribute face nil :family family)
                    (message "Font family %s is not installed" family)))))))
 #+end_src
+*** Font size
+#+begin_src emacs-lisp
+  (defcustom akirak/font-height 107
+    "Default height of the font."
+    :group 'akirak
+    :type 'integer
+    :set (lambda (sym value)
+           (set sym value)
+           (set-face-attribute 'default nil :height value)
+           (with-eval-after-load 'org
+             (set-face-attribute 'org-tag nil
+                                 :height (ceiling (* value 1.1)))
+             (set-face-attribute 'org-todo nil
+                                 :height (ceiling (* value 1.1))))))
+#+end_src
 ** Org                                                            :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
