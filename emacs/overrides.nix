@@ -5,6 +5,11 @@
 _eself:
 esuper:
 {
+  akirak = esuper.akirak.overrideAttrs (old: {
+    # The libraries are improperly packaged, so disable byte-compilation for now.
+    dontByteCompile = true;
+  });
+
   vterm = esuper.vterm.overrideAttrs (old: {
     # Based on the configuration in nixpkgs available at the following URL:
     # https://github.com/NixOS/nixpkgs/blob/af21d41260846fb9c9840a75e310e56dfe97d6a3/pkgs/applications/editors/emacs/elisp-packages/melpa-packages.nix#L483

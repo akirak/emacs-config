@@ -705,6 +705,14 @@ Embrace Org as a common document format for Emacs.
   (setup (:package org-dynamic-bullets)
     (:hook-into org-mode-hook))
 #+end_src
+*** org-journal
+:PROPERTIES:
+:CREATED_TIME: [2022-02-01 Tue 20:14]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-journal))
+#+end_src
 *** orglink                                                         :links:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:28]
@@ -730,6 +738,14 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
 (setup (:package org-ql))
+#+end_src
+*** org-starter
+:PROPERTIES:
+:CREATED_TIME: [2022-02-01 Tue 20:14]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-starter))
 #+end_src
 *** org-visual-indent                                          :aesthetics:
 :PROPERTIES:
@@ -831,6 +847,16 @@ A bunch of useful packages are configured here.
                       (prog1 (apply origfun args)
                         (when (window-live-p initial-window)
                           (select-window initial-window))))))))
+#+end_src
+*** akirak
+:PROPERTIES:
+:CREATED_TIME: [2022-02-01 Tue 20:12]
+:END:
+
+This is a collection of extra utilities for various packages.
+
+#+begin_src emacs-lisp
+(setup (:package akirak))
 #+end_src
 *** all-the-icons                                                      :UI:
 :PROPERTIES:
