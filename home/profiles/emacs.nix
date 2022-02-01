@@ -3,8 +3,8 @@
     enable = true;
 
     extraInitText = ''
-      (require 'doom-themes)
-      (load-theme 'doom-one t)
+      (require 'sanityinc-tomorrow-eighties-theme)
+      (load-theme 'sanityinc-tomorrow-eighties t)
     '';
   };
 }

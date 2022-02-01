@@ -247,8 +247,8 @@
               enableOpinionatedSettings = false;
               extraFeatures = [ ];
               extraInitText = ''
-                (require 'doom-themes)
-                (load-theme 'doom-rouge t)
+                (require 'sanityinc-tomorrow-night-theme)
+                (load-theme 'sanityinc-tomorrow-night t)
               '';
               protectHome = false;
               shareNet = false;

@@ -658,9 +658,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 The following theme packages are bundled with configuration:
 
 #+begin_src emacs-lisp
-  (setup (:package doom-themes))
-
-  (setup (:package nano-theme))
+  (setup (:package color-theme-sanityinc-tomorrow))
 
   (setup (:package poet-theme))
 #+end_src
