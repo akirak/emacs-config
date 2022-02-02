@@ -861,6 +861,15 @@ A bunch of useful packages are configured here.
                         (when (window-live-p initial-window)
                           (select-window initial-window))))))))
 #+end_src
+*** aggressive-indent                                          :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-02 Wed 20:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package aggressive-indent)
+    (:hook-into emacs-lisp-mode-hook))
+#+end_src
 *** akirak
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:12]
@@ -1436,6 +1445,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
     (autoload #'svg-tag-mode "svg-tag-mode.el")
     (:hook-into org-mode prog-mode))
 #+end_src
+*** symbol-overlay                                                :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-02 Wed 20:24]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package symbol-overlay)
+    (:global "C-c s" #'symbol-overlay-put))
+#+end_src
+
+=embark= can substitute for most of the functionalities of the package, but I am used to this package.
 *** titlecase                                                     :writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 17:13]
