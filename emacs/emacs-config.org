@@ -1456,6 +1456,22 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+end_src
 
 =embark= can substitute for most of the functionalities of the package, but I am used to this package.
+*** taxy                                                          :library:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-02 Wed 23:18]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package taxy))
+#+end_src
+*** taxy-magit-section                                         :UI:library:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-02 Wed 23:18]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package taxy-magit-section))
+#+end_src
 *** titlecase                                                     :writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 17:13]

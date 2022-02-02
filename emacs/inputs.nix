@@ -2,6 +2,11 @@
 , elispTreeSitterLangsVersion
 }:
 {
+  taxy-magit-section = _: super: {
+    packageRequires = {
+      taxy = "0";
+    } // super.packageRequires;
+  };
   bufler = _: _: {
     origin = {
       type = "github";
