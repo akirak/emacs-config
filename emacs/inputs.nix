@@ -34,4 +34,13 @@
       ref = elispTreeSitterLangsVersion;
     };
   };
+
+  twist = _: _: {
+    origin = {
+      type = "github";
+      owner = "emacs-twist";
+      repo = "twist.el";
+      ref = "develop";
+    };
+  };
 }

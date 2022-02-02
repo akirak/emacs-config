@@ -1475,6 +1475,14 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
 #+begin_src emacs-lisp
 (setup (:package turbo-log))
 #+end_src
+*** twist                                                   :configuration:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-02 Wed 14:12]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package twist))
+#+end_src
 *** typescript-mode                                            :major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 18:39]
