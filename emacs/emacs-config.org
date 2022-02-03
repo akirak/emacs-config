@@ -1107,6 +1107,14 @@ The following resources are useful:
     (:with-mode envrc-global-mode
       (:hook-into after-init-hook)))
 #+end_src
+*** esup                                                :startup:profiling:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 15:44]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package esup))
+#+end_src
 *** fancy-dabbrev                                              :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:24]
