@@ -72,6 +72,20 @@ I am interested to see if it can reduce the amount of configuration code.
              (add-to-list 'compilation-error-regexp-alist (car entry))
              (add-to-list 'compilation-error-regexp-alist-alist entry))))))
 #+end_src
+*** :defer
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 15:19]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro :defer (seconds &optional func)
+      "Call a function at N seconds after init."
+      `(add-hook 'after-init-hook
+                 (lambda ()
+                   (run-with-timer ,seconds nil
+                                   ,(or func (setup-get 'hook)))))))
+#+end_src
 *** :mode-repl
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:41]
@@ -296,6 +310,9 @@ The built-in =electric= package provides the following modes:
              view-read-only t
              auto-mode-case-fold nil))
 #+end_src
+
+- Use =akirak-files-ensure-abbrev-list= to update =directory-abbrev-alist=. (see [[*akirak][akirak]]).
+
 *** find-func
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:18]
@@ -878,7 +895,12 @@ A bunch of useful packages are configured here.
 This is a collection of extra utilities for various packages.
 
 #+begin_src emacs-lisp
-(setup (:package akirak))
+  (setup (:package akirak)
+
+    ;; These settings are specific to my environment.
+    (:status personal
+      (:defer 1 #'akirak-files-ensure-abbrev-list)
+      (run-with-idle-timer 300 nil #'akirak-project-discover)))
 #+end_src
 *** all-the-icons                                                      :UI:
 :PROPERTIES:
