@@ -351,7 +351,10 @@ The built-in =electric= package provides the following modes:
              delete-old-versions t
              version-control t
              view-read-only t
-             auto-mode-case-fold nil))
+             auto-mode-case-fold nil)
+
+    (:status opinionated
+      (:global "<f5>" #'revert-buffer)))
 #+end_src
 
 - Use =akirak-files-ensure-abbrev-list= to update =directory-abbrev-alist=. (see [[*akirak][akirak]]).
@@ -419,6 +422,16 @@ The built-in =electric= package provides the following modes:
 
     (dolist (mode-hook '(makefile-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
+#+end_src
+*** menu-bar
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 19:22]
+:END:
+
+#+begin_src emacs-lisp
+  (setup menu-bar
+    (:status opinionated
+      (:global "<f12> <f12>" #'toggle-debug-on-error)))
 #+end_src
 *** minibuf.c                                                  :minibuffer:
 :PROPERTIES:
