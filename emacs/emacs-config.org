@@ -252,6 +252,16 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup ediff-wind
     (:option ediff-window-setup-function #'ediff-setup-windows-plain))
 #+end_src
+*** eldoc                                                :help:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 18:08]
+:END:
+
+#+begin_src emacs-lisp
+  (setup eldoc
+    (:with-hook turn-on-eldoc-mode
+      (:hook-into emacs-lisp-mode)))
+#+end_src
 *** elec-pair                             :prog_mode:text_mode:parentheses:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
@@ -277,6 +287,39 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup electric)
+#+end_src
+*** elisp-mode                                    :Emacs__Lisp:major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 17:55]
+:END:
+
+#+begin_src emacs-lisp
+  (setup elisp-mode
+    (:with-mode emacs-lisp-mode
+      (:local-set imenu-generic-expression
+                  ;; Copied from my previous config. Maybe requires some adaptation.
+                  `(("Headings" ";;[;]\\{1,8\\} \\(.*$\\)" 1)
+                    (nil "^\\s-*(\\(cl-def\\(?:generic\\|ine-compiler-macro\\|m\\(?:acro\\|ethod\\)\\|subst\\|un\\)\\|def\\(?:advice\\|generic\\|ine-\\(?:advice\\|compil\\(?:ation-mode\\|er-macro\\)\\|derived-mode\\|g\\(?:\\(?:eneric\\|lobal\\(?:\\(?:ized\\)?-minor\\)\\)-mode\\)\\|inline\\|m\\(?:ethod-combination\\|inor-mode\\|odify-macro\\)\\|s\\(?:etf-expander\\|keleton\\)\\)\\|m\\(?:acro\\|ethod\\)\\|s\\(?:etf\\|ubst\\)\\|un\\*?\\)\\|ert-deftest\\)\\s-+\\(\\(?:\\sw\\|\\s_\\|\\\\.\\)+\\)" 2)
+                    ("Custom vars" "^\\s-*(\\(defcustom\\)\\s-+\\(\\(?:\\sw\\|\\s_\\|\\\\.\\)+\\)" 2)
+                    ("Variables" "^\\s-*(\\(def\\(?:c\\(?:onst\\(?:ant\\)?\\|ustom\\)\\|ine-symbol-macro\\|parameter\\)\\)\\s-+\\(\\(?:\\sw\\|\\s_\\|\\\\.\\)+\\)" 2)
+                    ("Variables" "^\\s-*(defvar\\(?:-local\\)?\\s-+\\(\\(?:\\sw\\|\\s_\\|\\\\.\\)+\\)[[:space:]\n]+[^)]" 1)
+                    ("Types" "^\\s-*(\\(cl-def\\(?:struct\\|type\\)\\|def\\(?:class\\|face\\|group\\|ine-\\(?:condition\\|error\\|widget\\)\\|package\\|struct\\|t\\(?:\\(?:hem\\|yp\\)e\\)\\)\\)\\s-+'?\\(\\(?:\\sw\\|\\s_\\|\\\\.\\)+\\)" 2)
+                    ;; Only in my configuration
+                    ("use-package" ,(rx "(use-package" (+ space)
+                                        (group (+ (any alnum "-"))))
+                     1)
+                    ("org-capture" ,(rx "(org-starter-def-capture" (+ space)
+                                        (+ (not space)) (+ space)
+                                        (syntax string-quote)
+                                        (group (+ (not (syntax string-quote)))))
+                     1))))
+
+    (defun akirak/eval-buffer-or-load-file ()
+      (interactive)
+      (when (eq major-mode 'emacs-lisp-mode)
+        (if buffer-file-name
+            (load-file buffer-file-name)
+          (eval-buffer)))))
 #+end_src
 *** fileio.c                                                        :files:
 :PROPERTIES:
@@ -1061,6 +1104,14 @@ This is a collection of extra utilities for various packages.
                 java-mode
                 rust-mode))
 #+end_src
+*** elx                                   :Emacs__Lisp:development:library:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 18:07]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package elx))
+#+end_src
 *** embark
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:53]
@@ -1106,6 +1157,15 @@ The following resources are useful:
   (setup (:package envrc)
     (:with-mode envrc-global-mode
       (:hook-into after-init-hook)))
+#+end_src
+*** eros                                          :Emacs__Lisp:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 18:05]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package eros)
+    (:hook-into emacs-lisp-mode))
 #+end_src
 *** esup                                                :startup:profiling:
 :PROPERTIES:
@@ -1228,6 +1288,14 @@ The following resources are useful:
       (:when-loaded
         (:with-map Info-mode-map
           (:bind "f" #'link-hint-open-link)))))
+#+end_src
+*** lisp-extra-font-lock                               :Emacs__Lisp:visual:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 18:04]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package lisp-extra-font-lock))
 #+end_src
 *** lispy                                 :Emacs__Lisp:structured__editing:
 :PROPERTIES:
@@ -1386,6 +1454,14 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 #+begin_src emacs-lisp
 (setup (:package orgit))
 #+end_src
+*** package-lint                                        :Emacs:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 18:06]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package package-lint))
+#+end_src
 *** popper                                                        :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 23:59]
@@ -1425,6 +1501,15 @@ Limitations:
 
 - puni doesn't handle JSX in typescript-mode with tree-sitter.
 
+*** rainbow-delimiters                                             :visual:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 18:07]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package rainbow-delimiters)
+    (:hook-into emacs-lisp-mode))
+#+end_src
 *** rainbow-mode                                                   :colors:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
