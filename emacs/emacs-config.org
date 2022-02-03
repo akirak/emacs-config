@@ -631,11 +631,18 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup whitespace
-    (:option whitespace-style '(face trailing empty tabs)
-             whitespace-line-column 80)
+    (:option whitespace-style
+             '(face trailing missing-newline-at-eof tab-mark))
     (:hook-into prog-mode
                 text-mode
-                sgml-mode))
+                conf-mode
+                sgml-mode)
+
+    (:status theme
+      (:option whitespace-trailing
+               '(((t (:underline (:color "firebrick"
+                                         :style wave
+                                         :position nil))))))))
 #+end_src
 *** windmove                                                      :windows:
 :PROPERTIES:
@@ -1695,6 +1702,15 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
   (setup (:package which-key)
     (:hook-into after-init-hook)
     (:hook which-key-setup-side-window-bottom))
+#+end_src
+*** ws-butler                                                  :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-03 Thu 19:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package ws-butler)
+    (:hook-into prog-mode-hook))
 #+end_src
 ** Notes                                                             :@note:
 :PROPERTIES:
