@@ -964,7 +964,10 @@ This is a collection of extra utilities for various packages.
     ;; These settings are specific to my environment.
     (:status personal
       (:defer 1 #'akirak-files-ensure-abbrev-list)
-      (run-with-idle-timer 300 nil #'akirak-project-discover)))
+      (run-with-idle-timer 300 nil
+                           (lambda ()
+                             (akirak-project-discover)
+                             (github-linguist-update-projects)))))
 #+end_src
 *** all-the-icons                                                      :UI:
 :PROPERTIES:
@@ -1219,6 +1222,16 @@ The following resources are useful:
               "graphicsmagick-imagemagick-compat"))
 #+end_src
 
+*** github-linguist
+:PROPERTIES:
+:CREATED_TIME: [2022-02-04 Fri 19:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package github-linguist)
+    (:nixpkgs "github-linguist")
+    (:option github-linguist-executable "github-linguist"))
+#+end_src
 *** git-modes                                               :VC:major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
