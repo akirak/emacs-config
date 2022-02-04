@@ -1386,7 +1386,7 @@ To use it, turn on =macrostep-mode=.
     (:hook-into after-init-hook)
 
     (:with-map minibuffer-local-map
-      (:bind "M-A" #'marginalia-cycle)))
+      (:bind "M-a" #'marginalia-cycle)))
 #+end_src
 *** MAYBE nano-bell                                         :noexport:nano:
 :PROPERTIES:
