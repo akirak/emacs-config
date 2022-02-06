@@ -1392,7 +1392,13 @@ To use it, turn on =macrostep-mode=.
       (:global "<f8> <f7>" #'magit-stage-file
                "<f8> <f8>" #'magit-status
                "<f8> <f9>" #'magit-dispatch
-               "<f8> <f10>" #'magit-file-dispatch)))
+               "<f8> <f10>" #'magit-file-dispatch))
+
+    (:status personal
+      (:option magit-repository-directories '(("~/" . 1)
+                                              ("~/.config" . 1)
+                                              ("~/work" . 3)
+                                              ("~/archives/oss/" . 3)))))
 #+end_src
 *** marginalia
 :PROPERTIES:
