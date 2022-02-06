@@ -512,6 +512,14 @@ Resources:
     ;; Expand read-process-output-max for lsp-mode
     (:option read-process-output-max (* 1024 1024)))
 #+end_src
+*** project
+:PROPERTIES:
+:CREATED_TIME: [2022-02-06 Sun 17:00]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package project))
+#+end_src
 *** recentf                                                 :history:files:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -960,6 +968,8 @@ This is a collection of extra utilities for various packages.
 
 #+begin_src emacs-lisp
   (setup (:package akirak)
+
+    (:global "C-x g" #'akirak-project-switch)
 
     ;; These settings are specific to my environment.
     (:status personal
@@ -1410,7 +1420,13 @@ To use it, turn on =macrostep-mode=.
     (:hook-into after-init-hook)
 
     (:with-map minibuffer-local-map
-      (:bind "M-a" #'marginalia-cycle)))
+      (:bind "M-a" #'marginalia-cycle))
+
+    (:when-loaded
+      (:option (prepend marginalia-annotator-registry)
+               '(project-root
+                 akirak-project-root-annotator
+                 builtin none))))
 #+end_src
 *** MAYBE nano-bell                                         :noexport:nano:
 :PROPERTIES:
