@@ -789,9 +789,9 @@ You need to install the font separately.
            (set-face-attribute 'default nil :height value)
            (with-eval-after-load 'org
              (set-face-attribute 'org-tag nil
-                                 :height (ceiling (* value 1.1)))
+                                 :height (ceiling (* akirak/font-height 1.1)))
              (set-face-attribute 'org-todo nil
-                                 :height (ceiling (* value 1.1))))))
+                                 :height (ceiling (* akirak/font-height 1.1))))))
 #+end_src
 ** Org                                                            :packages:
 :PROPERTIES:
