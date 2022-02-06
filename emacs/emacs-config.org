@@ -1304,6 +1304,14 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package leetcode))
 #+end_src
+*** license-templates                                     :development:OSS:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-06 Sun 14:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package license-templates))
+#+end_src
 *** link-hint                                                       :links:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 17:39]
