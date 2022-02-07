@@ -30,6 +30,16 @@ esuper:
     '';
   });
 
+  emacsql-sqlite = esuper.emacsql-sqlite.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
+
+    postBuild = ''
+      cd sqlite
+      make
+      cd ..
+    '';
+  });
+
   tsc = esuper.tsc.overrideAttrs (old:
     let
       baseUrl = "https://github.com/emacs-tree-sitter/elisp-tree-sitter/releases/download/${elispTreeSitterVersion}";
