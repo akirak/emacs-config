@@ -28,7 +28,8 @@
   programs.bat.enable = true;
 
   programs.broot = {
-    enable = true;
+    # Causes a build failure
+    enable = false;
     enableZshIntegration = true;
   };
 
