@@ -512,6 +512,26 @@ Resources:
     ;; Expand read-process-output-max for lsp-mode
     (:option read-process-output-max (* 1024 1024)))
 #+end_src
+*** profiler                                              :Emacs:profiling:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-16 Wed 07:49]
+:END:
+
+#+begin_src emacs-lisp
+  (setup profiler
+    (defun akirak/profiler-toggle ()
+      (interactive)
+      (require 'profiler)
+      (if (profiler-running-p)
+          (progn
+            (profiler-report)
+            (profiler-stop)
+            (profiler-reset))
+        (profiler-start)))
+
+    (:status opinionated
+      (:global "<f12> e p" akirak/profiler-toggle)))
+#+end_src
 *** project
 :PROPERTIES:
 :CREATED_TIME: [2022-02-06 Sun 17:00]
