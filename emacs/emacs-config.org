@@ -818,6 +818,14 @@ You need to install the font separately.
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
+*** doct                                                          :capture:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-16 Wed 20:08]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package doct))
+#+end_src
 *** org-dynamic-bullets                                        :aesthetics:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
@@ -860,6 +868,14 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
 (setup (:package org-ql))
+#+end_src
+*** org-reverse-datetree
+:PROPERTIES:
+:CREATED_TIME: [2022-02-16 Wed 20:15]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-reverse-datetree))
 #+end_src
 *** org-starter
 :PROPERTIES:
