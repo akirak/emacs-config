@@ -1,3 +1,0 @@
-(haskell-tng-mode :fetcher gitlab :repo "tseenshe/haskell-tng.el"
-                  :branch "tng"
-                  :files ("*.el" (:exclude "haskell-tng-extra-*.el")))

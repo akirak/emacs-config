@@ -26,7 +26,7 @@
     org-babel.url = "github:emacs-twist/org-babel";
     twist.url = "github:emacs-twist/twist.nix";
     melpa = {
-      url = "github:melpa/melpa";
+      url = "github:akirak/melpa/akirak";
       flake = false;
     };
     gnu-elpa = {

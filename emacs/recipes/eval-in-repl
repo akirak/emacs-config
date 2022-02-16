@@ -1,3 +1,0 @@
-;; Override the recipe because :commit "origin/master"
-;; is problematic in the Nix fetcher
-(eval-in-repl :fetcher github :repo "kaz-yos/eval-in-repl")

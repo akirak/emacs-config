@@ -1,6 +1,0 @@
-;; I initially intended to use this fork until a bugfix PR is merged.
-;;
-;; However, I added another patch which further enhances the package,
-;; so I probably won't switch back to the original.
-;; https://github.com/akirak/benchmark-init-el/commit/cc16e08c3d3a6e0044046b74c3f6544e46250d4a
-(benchmark-init :fetcher github :repo "akirak/benchmark-init-el")
