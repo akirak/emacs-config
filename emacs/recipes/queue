@@ -1,3 +1,0 @@
-;; Nix cannot fetch the official repository, so use a mirror instead.
-;; The official site is https://www.dr-qubit.org/predictive.html
-(queue :fetcher github :repo "dmgerman/predictive")

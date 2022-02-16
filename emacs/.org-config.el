@@ -8,6 +8,7 @@
 (org-starter-def "emacs-config.org"
   :key "e"
   :refile (:maxlevel . 4)
+  :local-variables ((org-id-link-to-org-use-id . nil))
   :minor-modes (org-edna-mode
                 whitespace-cleanup-mode))
 
@@ -40,6 +41,9 @@
                    :src "(setup (:package %\\1)%?)")
                   ("Package" :keys "p"
                    :function ,(level2 "Packages")
+                   :src "(setup (:package %\\1)%?)")
+                  ("Macro package" :keys "M"
+                   :function ,(level2 "Macro packages")
                    :src "(setup (:package %\\1)%?)")
 
                   ("Define a setup macro" :keys "d"

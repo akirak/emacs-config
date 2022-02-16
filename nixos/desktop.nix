@@ -13,11 +13,11 @@
     };
     optimise.automatic = false;
 
-    useSandbox = true;
-
-    allowedUsers = [ "@wheel" ];
-
-    trustedUsers = [ "root" "@wheel" ];
+    settings = {
+      sandbox = true;
+      trusted-users = [ "root" "@wheel" ];
+      allowed-users = [ "@wheel" ];
+    };
 
     extraOptions = ''
       min-free = 536870912

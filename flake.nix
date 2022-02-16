@@ -23,10 +23,10 @@
     # Emacs
     nixpkgs-emacs.url = "github:NixOS/nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    org-babel.url = "github:akirak/nix-org-babel";
-    twist.url = "github:akirak/emacs-twist";
+    org-babel.url = "github:emacs-twist/org-babel";
+    twist.url = "github:emacs-twist/twist.nix";
     melpa = {
-      url = "github:melpa/melpa";
+      url = "github:akirak/melpa/akirak";
       flake = false;
     };
     gnu-elpa = {
@@ -148,7 +148,9 @@
 
         # Default modules to be passed to all hosts.
         modules = [
+          impermanence.nixosModules.impermanence
           ./nixos/profiles/defaults.nix
+          home-manager.nixosModules.home-manager
           {
             # Import custom home-manager modules (NixOS)
             config.home-manager.sharedModules = import ./home/modules/modules.nix;
@@ -179,8 +181,9 @@
                 enable = true;
               };
             }
-            home-manager.nixosModules.home-manager
+
             ./nixos/profiles/default-user.nix
+
             ./nixos/base.nix
           ];
       };
@@ -193,8 +196,6 @@
         };
 
         modules = [
-          impermanence.nixosModules.impermanence
-
           {
             imports = [
               ./sites/chen/nixos/boot.nix
@@ -223,7 +224,6 @@
             '';
           }
 
-          home-manager.nixosModules.home-manager
           ./nixos/profiles/default-user.nix
 
           ./nixos/desktop.nix
@@ -244,11 +244,11 @@
           packages = {
             tryout-emacs = emacsSandboxed {
               name = "tryout-emacs";
-              enabledOpinionatedSettings = false;
+              enableOpinionatedSettings = false;
               extraFeatures = [ ];
               extraInitText = ''
-                (require 'doom-themes)
-                (load-theme 'doom-rouge t)
+                (require 'sanityinc-tomorrow-night-theme)
+                (load-theme 'sanityinc-tomorrow-night t)
               '';
               protectHome = false;
               shareNet = false;

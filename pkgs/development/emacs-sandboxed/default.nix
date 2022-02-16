@@ -14,7 +14,7 @@ in
 # From final (self)
 { bubblewrapGUI }:
 { name ? "emacs"
-, enabledOpinionatedSettings ? true
+, enableOpinionatedSettings ? true
 , extraFeatures ? [ ]
 , extraInitFiles ? [ ]
 , extraInitText ? null
@@ -35,12 +35,12 @@ let
   initEl = writeText "init.el" ''
     ;; -*- lexical-binding: t; no-byte-compile: t; -*-
     (setq custom-file (locate-user-emacs-file "custom.el"))
-    ${lib.optionalString enabledOpinionatedSettings ''
+    ${lib.optionalString enableOpinionatedSettings ''
       ;; Turn on settings inside :status clauses
       (setq akirak/enabled-status-tags t)
     ''}
     (dolist (file '(${quoteShellArgs package.initFiles}))
-      (load file t t))
+      (load file nil (not init-file-debug)))
     ${lib.optionalString (isString extraInitText) extraInitText}
   '';
 in

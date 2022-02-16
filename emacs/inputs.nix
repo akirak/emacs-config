@@ -2,6 +2,11 @@
 , elispTreeSitterLangsVersion
 }:
 {
+  taxy-magit-section = _: super: {
+    packageRequires = {
+      taxy = "0";
+    } // super.packageRequires;
+  };
   bufler = _: _: {
     origin = {
       type = "github";
@@ -32,6 +37,15 @@
       owner = "emacs-tree-sitter";
       repo = "tree-sitter-langs";
       ref = elispTreeSitterLangsVersion;
+    };
+  };
+
+  twist = _: _: {
+    origin = {
+      type = "github";
+      owner = "emacs-twist";
+      repo = "twist.el";
+      ref = "develop";
     };
   };
 }
