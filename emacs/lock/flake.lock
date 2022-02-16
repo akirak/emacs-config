@@ -1571,16 +1571,16 @@
     "tree-sitter": {
       "flake": false,
       "locked": {
-        "lastModified": 1639225248,
-        "narHash": "sha256-tAohHdAsy/HTFFPSNOo0UyrdolH8h0KF2ekFXuLltBE=",
+        "lastModified": 1644683578,
+        "narHash": "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=",
         "owner": "emacs-tree-sitter",
         "repo": "elisp-tree-sitter",
-        "rev": "48b06796a3b2e76ce004972d929de38146eafaa0",
+        "rev": "909717c685ff5a2327fa2ca8fb8a25216129361c",
         "type": "github"
       },
       "original": {
         "owner": "emacs-tree-sitter",
-        "ref": "0.16.1",
+        "ref": "0.18.0",
         "repo": "elisp-tree-sitter",
         "type": "github"
       }
@@ -1588,16 +1588,16 @@
     "tree-sitter-langs": {
       "flake": false,
       "locked": {
-        "lastModified": 1643245095,
-        "narHash": "sha256-A0KkGfcUfomVIYny0oV8ed5WLUFOUuEGGsDQPSbgvI8=",
+        "lastModified": 1644648114,
+        "narHash": "sha256-Br+ON7a8FWoU75ySPSP2DkiyHjj80TP5XvcMMJrU9+k=",
         "owner": "emacs-tree-sitter",
         "repo": "tree-sitter-langs",
-        "rev": "4ac2400c04e2adee20000d316367d30e813fe5e3",
+        "rev": "599570cd2a6d1b43a109634896b5c52121e155e3",
         "type": "github"
       },
       "original": {
         "owner": "emacs-tree-sitter",
-        "ref": "0.10.15",
+        "ref": "0.11.3",
         "repo": "tree-sitter-langs",
         "type": "github"
       }
@@ -1621,16 +1621,16 @@
     "tsc": {
       "flake": false,
       "locked": {
-        "lastModified": 1639225248,
-        "narHash": "sha256-tAohHdAsy/HTFFPSNOo0UyrdolH8h0KF2ekFXuLltBE=",
+        "lastModified": 1644683578,
+        "narHash": "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=",
         "owner": "emacs-tree-sitter",
         "repo": "elisp-tree-sitter",
-        "rev": "48b06796a3b2e76ce004972d929de38146eafaa0",
+        "rev": "909717c685ff5a2327fa2ca8fb8a25216129361c",
         "type": "github"
       },
       "original": {
         "owner": "emacs-tree-sitter",
-        "ref": "0.16.1",
+        "ref": "0.18.0",
         "repo": "elisp-tree-sitter",
         "type": "github"
       }

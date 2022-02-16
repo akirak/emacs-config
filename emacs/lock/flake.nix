@@ -164,7 +164,7 @@
       repo = "esxml";
       type = "github";
     };
-    f = {
+    "f" = {
       flake = false;
       owner = "rejeep";
       repo = "f.el";
@@ -489,7 +489,7 @@
       repo = "restclient.el";
       type = "github";
     };
-    s = {
+    "s" = {
       flake = false;
       owner = "magnars";
       repo = "s.el";
@@ -546,14 +546,14 @@
     tree-sitter = {
       flake = false;
       owner = "emacs-tree-sitter";
-      ref = "0.16.1";
+      ref = "0.18.0";
       repo = "elisp-tree-sitter";
       type = "github";
     };
     tree-sitter-langs = {
       flake = false;
       owner = "emacs-tree-sitter";
-      ref = "0.10.15";
+      ref = "0.11.3";
       repo = "tree-sitter-langs";
       type = "github";
     };
@@ -566,7 +566,7 @@
     tsc = {
       flake = false;
       owner = "emacs-tree-sitter";
-      ref = "0.16.1";
+      ref = "0.18.0";
       repo = "elisp-tree-sitter";
       type = "github";
     };
