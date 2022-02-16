@@ -67,11 +67,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1644138481,
-        "narHash": "sha256-TSBvEytVjVcLDDuIbxX1uep2N58uNLGYrhdvaEyx7nc=",
+        "lastModified": 1644976618,
+        "narHash": "sha256-UPogsepqWIPpjLATx56Z7zeTMXZ6bnutlzhShdIBB7s=",
         "owner": "akirak",
         "repo": "trivial-elisps",
-        "rev": "e8fa4344cf192bb35a9d040639de3901f07c2349",
+        "rev": "bd31e0a24f774147c128076991d18ff08590ea2b",
         "type": "github"
       },
       "original": {
@@ -868,11 +868,11 @@
     "magit": {
       "flake": false,
       "locked": {
-        "lastModified": 1641026513,
-        "narHash": "sha256-toDDAhYZHC0QYFIlZssTJBO7fJprdJIHtjVmg5rhjDM=",
+        "lastModified": 1644948458,
+        "narHash": "sha256-oVeQ0l0C71HKqAN2cfygwEr/rEbVhH6Uh9pin5jeO2g=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "7d0d7068deff003a02f49fa430153e4611c80175",
+        "rev": "2df1e34665a2fb7872050a770a5cd608418fdc7f",
         "type": "github"
       },
       "original": {
@@ -884,11 +884,11 @@
     "magit-section": {
       "flake": false,
       "locked": {
-        "lastModified": 1641026513,
-        "narHash": "sha256-toDDAhYZHC0QYFIlZssTJBO7fJprdJIHtjVmg5rhjDM=",
+        "lastModified": 1644948458,
+        "narHash": "sha256-oVeQ0l0C71HKqAN2cfygwEr/rEbVhH6Uh9pin5jeO2g=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "7d0d7068deff003a02f49fa430153e4611c80175",
+        "rev": "2df1e34665a2fb7872050a770a5cd608418fdc7f",
         "type": "github"
       },
       "original": {
@@ -1571,16 +1571,16 @@
     "tree-sitter": {
       "flake": false,
       "locked": {
-        "lastModified": 1639225248,
-        "narHash": "sha256-tAohHdAsy/HTFFPSNOo0UyrdolH8h0KF2ekFXuLltBE=",
+        "lastModified": 1644683578,
+        "narHash": "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=",
         "owner": "emacs-tree-sitter",
         "repo": "elisp-tree-sitter",
-        "rev": "48b06796a3b2e76ce004972d929de38146eafaa0",
+        "rev": "909717c685ff5a2327fa2ca8fb8a25216129361c",
         "type": "github"
       },
       "original": {
         "owner": "emacs-tree-sitter",
-        "ref": "0.16.1",
+        "ref": "0.18.0",
         "repo": "elisp-tree-sitter",
         "type": "github"
       }
@@ -1588,16 +1588,16 @@
     "tree-sitter-langs": {
       "flake": false,
       "locked": {
-        "lastModified": 1643245095,
-        "narHash": "sha256-A0KkGfcUfomVIYny0oV8ed5WLUFOUuEGGsDQPSbgvI8=",
+        "lastModified": 1644648114,
+        "narHash": "sha256-Br+ON7a8FWoU75ySPSP2DkiyHjj80TP5XvcMMJrU9+k=",
         "owner": "emacs-tree-sitter",
         "repo": "tree-sitter-langs",
-        "rev": "4ac2400c04e2adee20000d316367d30e813fe5e3",
+        "rev": "599570cd2a6d1b43a109634896b5c52121e155e3",
         "type": "github"
       },
       "original": {
         "owner": "emacs-tree-sitter",
-        "ref": "0.10.15",
+        "ref": "0.11.3",
         "repo": "tree-sitter-langs",
         "type": "github"
       }
@@ -1621,16 +1621,16 @@
     "tsc": {
       "flake": false,
       "locked": {
-        "lastModified": 1639225248,
-        "narHash": "sha256-tAohHdAsy/HTFFPSNOo0UyrdolH8h0KF2ekFXuLltBE=",
+        "lastModified": 1644683578,
+        "narHash": "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=",
         "owner": "emacs-tree-sitter",
         "repo": "elisp-tree-sitter",
-        "rev": "48b06796a3b2e76ce004972d929de38146eafaa0",
+        "rev": "909717c685ff5a2327fa2ca8fb8a25216129361c",
         "type": "github"
       },
       "original": {
         "owner": "emacs-tree-sitter",
-        "ref": "0.16.1",
+        "ref": "0.18.0",
         "repo": "elisp-tree-sitter",
         "type": "github"
       }
@@ -1654,11 +1654,11 @@
     "twist": {
       "flake": false,
       "locked": {
-        "lastModified": 1643775122,
-        "narHash": "sha256-+ovBjjK5H2uFkS36plNkQsqRqBHRoWM73m0dNaXV6kM=",
+        "lastModified": 1644071825,
+        "narHash": "sha256-Dv2MKqi3Aw/K6IpBCefuS1xys/0AAeR5Lmn52V4aUIA=",
         "owner": "emacs-twist",
         "repo": "twist.el",
-        "rev": "9bc6d4f52e7dc7bc5c04331466ea2c9e29d2d30d",
+        "rev": "61841c608365da3afdcdb27f9e71cb4bcbb109da",
         "type": "github"
       },
       "original": {

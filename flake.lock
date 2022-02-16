@@ -193,15 +193,16 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1644751938,
-        "narHash": "sha256-pRexWyTtWRz8LRnJrCsWgvhkkayzKZAtGY5dyAamMvo=",
-        "owner": "melpa",
+        "lastModified": 1644992902,
+        "narHash": "sha256-paKMlv9WFgt+1Ssc7zWcGSY6Pvl+tvvlDSJOsGILWa4=",
+        "owner": "akirak",
         "repo": "melpa",
-        "rev": "7eadfd36ae9b7bd241c38d09a7203873538983fb",
+        "rev": "2cd22f06a54605830255bd77aa9fd840f8037782",
         "type": "github"
       },
       "original": {
-        "owner": "melpa",
+        "owner": "akirak",
+        "ref": "akirak",
         "repo": "melpa",
         "type": "github"
       }

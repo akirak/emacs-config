@@ -48,7 +48,7 @@ esuper:
         then "tsc-dyn.so"
         else throw "Unsupported platform";
       sha256 = {
-        "tsc-dyn.so" = "0l0gfsvzcra2qwvg241lx7p1m7aiz5sh5kk65prpmqyfg739ascp";
+        "tsc-dyn.so" = "08cpf2rzd364h5x4lp4q819y5zj3dlb47blpg0fdw90dsv6q7cpp";
       };
     in
     assert old.version == elispTreeSitterVersion;
@@ -73,7 +73,7 @@ esuper:
         then "linux"
         else throw "Unsupported platform";
       sha256 = {
-        linux = "0wipqbfagp9dw54m99z29jj8cqfp0y8xax32d0jyg5ghz57zzn54";
+        linux = "0vngwn47vz75rp4g3ywz8krndf15i72ksgqzvb8n5q701j9yg4rj";
       };
     in
     {

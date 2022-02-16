@@ -1,4 +1,4 @@
 {
-  elispTreeSitterVersion = "0.16.1";
-  elispTreeSitterLangsVersion = "0.10.15";
+  elispTreeSitterVersion = "0.18.0";
+  elispTreeSitterLangsVersion = "0.11.3";
 }
