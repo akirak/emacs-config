@@ -1550,6 +1550,17 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 #+begin_src emacs-lisp
 (setup (:package popper))
 #+end_src
+*** project-hercules                                  :project:keybindings:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-16 Wed 15:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package project-hercules)
+    (:when-loaded
+      (:also-load project-hercules-config))
+    (:global "M-SPC" project-hercules-dispatch))
+#+end_src
 *** puni                                              :structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:24]
