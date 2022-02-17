@@ -861,6 +861,14 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
 #+end_src
+*** org-noter
+:PROPERTIES:
+:CREATED_TIME: [2022-02-17 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-noter))
+#+end_src
 *** org-ql                                                        :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-22 Sat 20:50]
@@ -868,6 +876,14 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
 (setup (:package org-ql))
+#+end_src
+*** org-remark
+:PROPERTIES:
+:CREATED_TIME: [2022-02-17 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-remark))
 #+end_src
 *** org-reverse-datetree
 :PROPERTIES:
