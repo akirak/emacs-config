@@ -258,6 +258,11 @@
             inherit (channels.nixpkgs) emacs-reader;
 
             inherit emacs-config;
+
+            update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
+              cd emacs/lock
+              bash ./update.bash
+            '';
           }
           //
           nixpkgs.lib.getAttrs [ "lock" "update" ] (emacs-config.admin "emacs/lock");
