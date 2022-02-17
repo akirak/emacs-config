@@ -827,7 +827,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package doct))
 #+end_src
-*** org-dynamic-bullets                                        :aesthetics:
+*** org-dynamic-bullets                                :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
 :END:
@@ -910,7 +910,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-transclusion))
 #+end_src
-*** org-visual-indent                                          :aesthetics:
+*** org-visual-indent                                  :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 23:59]
 :END:
