@@ -18,5 +18,9 @@
                              org-starter-path)))
                   (org-starter-mode t)))
     '';
+
+    extraDirsToTryBind = [
+      "/run/user/$(id -u)"
+    ];
   };
 }
