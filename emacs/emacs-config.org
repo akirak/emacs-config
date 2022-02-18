@@ -799,9 +799,33 @@ You need to install the font separately.
                (pcase-dolist (`(,face . ,family) value)
                  (if (member family families)
                      (set-face-attribute face nil :family family)
-                   (message "Font family %s is not installed" family)))))))
+                   (message "Font family %s is not installed" family)
+                   (delq (assq face value) value)
+                   (set symbol value)))))))
+  
+  (eval-after-load 'outline
+    (defun akirak/set-outline-families ()
+      (when-let (family (cdr (assq 'variable-pitch akirak/base-face-family-alist)))
+        (dolist (x '(outline-1
+                     outline-2
+                     outline-3
+                     outline-4
+                     outline-5
+                     outline-6
+                     outline-7
+                     outline-8))
+          (set-face-attribute x nil :family family)))))
+  
+  (eval-after-load 'org
+    (defun akirak/set-org-faces ()
+      (set-face-attribute 'org-tag nil :inherit 'fixed-pitch)
+      (set-face-attribute 'org-todo nil :inherit 'fixed-pitch)))
 #+end_src
 *** Font size
+Override font heights for certain faces.
+
+I think it would be better to create my own theme, but I don't have enough time for it.
+
 #+begin_src emacs-lisp
   (defcustom akirak/font-height 107
     "Default height of the font."
@@ -809,12 +833,22 @@ You need to install the font separately.
     :type 'integer
     :set (lambda (sym value)
            (set sym value)
-           (set-face-attribute 'default nil :height value)
-           (with-eval-after-load 'org
-             (set-face-attribute 'org-tag nil
-                                 :height (ceiling (* akirak/font-height 1.1)))
-             (set-face-attribute 'org-todo nil
-                                 :height (ceiling (* akirak/font-height 1.1))))))
+           (set-face-attribute 'default nil :height value)))
+  
+  (eval-after-load 'outline
+    (defun akirak/apply-outline-font-heights ()
+      (set-face-attribute 'outline-1 nil :height 1.54)
+      (set-face-attribute 'outline-2 nil :height 1.41)
+      (set-face-attribute 'outline-3 nil :height 1.3)
+      (set-face-attribute 'outline-4 nil :height 1.19)
+      (set-face-attribute 'outline-5 nil :height 1.1)
+      (set-face-attribute 'outline-6 nil :height 1.07)
+      (set-face-attribute 'outline-7 nil :height 1.03)
+      (set-face-attribute 'outline-8 nil :height 1.0)))
+
+  (eval-after-load 'org
+    (defun akirak/apply-org-font-heights ()
+      (set-face-attribute 'org-tag nil :height (ceiling (* 1.05 akirak/font-height)))))
 #+end_src
 ** Org                                                            :packages:
 :PROPERTIES:
