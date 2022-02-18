@@ -193,6 +193,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
              indicate-empty-lines t
              truncate-lines t))
 #+end_src
+**** Line spacing
+#+begin_src emacs-lisp
+  ;; buffer.c
+  (setup line-spacing
+    (:with-mode (org-mode markdown-mode)
+      (:local-set line-spacing 0.5))
+    (:with-mode (Help-mode helpful-mode Info-mode)
+      (:local-set line-spacing 0.3))
+    (:with-mode (eww-mode)
+      (:local-set line-spacing 0.35)))
+#+end_src
 *** callproc.c                                                    :process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
