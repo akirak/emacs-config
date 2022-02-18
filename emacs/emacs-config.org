@@ -360,6 +360,8 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup files
     (:option backup-by-copying t
+             backup-directory-alist
+             `(("." . ,(locate-user-emacs-file "backup/")))
              delete-old-versions t
              version-control t
              view-read-only t
