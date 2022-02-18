@@ -417,6 +417,8 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup indent
+    (:option indent-tabs-mode nil)
+
     (defun akirak/turn-on-indent-tabs-mode ()
       (interactive)
       (setq indent-tabs-mode 1))
