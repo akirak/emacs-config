@@ -949,7 +949,16 @@ Embrace Org as a common document format for Emacs.
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package org-starter))
+  (setup (:package org-starter)
+    (:option org-starter-require-file-by-default nil
+             org-starter-load-config-files t
+             org-starter-exclude-from-recentf '(known-files path)
+             ;; org-starter-alternative-find-function #'helm-org-ql
+             org-starter-find-file-visit-window t
+             org-starter-override-agenda-window-setup 'other-window
+             org-starter-enable-local-variables :all)
+
+    (:global "M-g M-o" #'org-starter-find-file-by-key))
 #+end_src
 *** org-transclusion
 :PROPERTIES:
