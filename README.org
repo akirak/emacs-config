@@ -21,7 +21,7 @@ It is a Nix flake, and the entire [[file:flake.nix][flake.nix]] is organized usi
 *** Emacs Configuration
 Directory: [[file:emacs/][emacs]]
 
-This repository contains my Emacs configuration that is built using [[https://github.com/akirak/emacs-twist][emacs-twist]].
+This repository contains my Emacs configuration which is built using [[https://github.com/akirak/emacs-twist][emacs-twist]].
 
 I use home-manager for installation.
 **** Trying out the configuration on Linux
