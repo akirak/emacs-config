@@ -1326,6 +1326,14 @@ The following resources are useful:
     (:with-mode envrc-global-mode
       (:hook-into after-init-hook)))
 #+end_src
+*** epkg                                                            :Emacs:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-19 Sat 14:36]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package epkg))
+#+end_src
 *** eros                                          :Emacs__Lisp:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:05]
