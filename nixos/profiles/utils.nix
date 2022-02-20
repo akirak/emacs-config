@@ -6,6 +6,7 @@
     curl
     dnsutils
     dosfstools
+    git
     gptfdisk
     cryptsetup
     iputils
