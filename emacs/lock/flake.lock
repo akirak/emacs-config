@@ -192,6 +192,22 @@
         "type": "github"
       }
     },
+    "closql": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645038417,
+        "narHash": "sha256-ndvR58vHa1KV8eWdhYLNle0n6vg4WbmElR0JzVeMOek=",
+        "owner": "emacscollective",
+        "repo": "closql",
+        "rev": "1ba85ce9f7094aeddce25044689278eda6739531",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacscollective",
+        "repo": "closql",
+        "type": "github"
+      }
+    },
     "color-theme-sanityinc-tomorrow": {
       "flake": false,
       "locked": {
@@ -288,6 +304,38 @@
         "type": "github"
       }
     },
+    "doct": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645332973,
+        "narHash": "sha256-3XUZ+dwI2spO41QRICWKoYFlUkJ5QkBIqv51DkbucX4=",
+        "owner": "progfolio",
+        "repo": "doct",
+        "rev": "1e3c1962558d6545e453583793e1d48417d4ef14",
+        "type": "github"
+      },
+      "original": {
+        "owner": "progfolio",
+        "repo": "doct",
+        "type": "github"
+      }
+    },
+    "ediprolog": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1606687037,
+        "narHash": "sha256-5fb1Nq1HyfCFNTPex5UTRZWDzGSxogEa1FGbI5k7DBo=",
+        "owner": "emacsmirror",
+        "repo": "ediprolog",
+        "rev": "3fa2be14eaad929953488ea057e2ab95780bcb9a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacsmirror",
+        "repo": "ediprolog",
+        "type": "github"
+      }
+    },
     "eglot": {
       "flake": false,
       "locked": {
@@ -336,6 +384,38 @@
         "type": "github"
       }
     },
+    "emacsql": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645199005,
+        "narHash": "sha256-hUyxzMPWDnbDDERSP0njfbBitFcWXekV2BPyrCcWaHw=",
+        "owner": "skeeto",
+        "repo": "emacsql",
+        "rev": "374726060d74df0e2bcb9d0355ff41e2c400ed30",
+        "type": "github"
+      },
+      "original": {
+        "owner": "skeeto",
+        "repo": "emacsql",
+        "type": "github"
+      }
+    },
+    "emacsql-sqlite": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645199005,
+        "narHash": "sha256-hUyxzMPWDnbDDERSP0njfbBitFcWXekV2BPyrCcWaHw=",
+        "owner": "skeeto",
+        "repo": "emacsql",
+        "rev": "374726060d74df0e2bcb9d0355ff41e2c400ed30",
+        "type": "github"
+      },
+      "original": {
+        "owner": "skeeto",
+        "repo": "emacsql",
+        "type": "github"
+      }
+    },
     "embark": {
       "flake": false,
       "locked": {
@@ -381,6 +461,22 @@
       "original": {
         "owner": "purcell",
         "repo": "envrc",
+        "type": "github"
+      }
+    },
+    "epkg": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645039007,
+        "narHash": "sha256-157PRsTnHjHScTRY2x76VakqHRKWqA5//DOwhtufWYE=",
+        "owner": "emacscollective",
+        "repo": "epkg",
+        "rev": "4bb8a13a43e30798e27c80174169ff955bf2b631",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacscollective",
+        "repo": "epkg",
         "type": "github"
       }
     },
@@ -993,22 +1089,6 @@
         "type": "github"
       }
     },
-    "org-dynamic-bullets": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1642520064,
-        "narHash": "sha256-oQsyq+U8FGZ0BhVuCLy5PFtwkDlRheZ8q2+mul/om2g=",
-        "owner": "legalnonsense",
-        "repo": "org-visual-outline",
-        "rev": "681cae2a3fb445322d01a79be9e5104e11575669",
-        "type": "github"
-      },
-      "original": {
-        "owner": "legalnonsense",
-        "repo": "org-visual-outline",
-        "type": "github"
-      }
-    },
     "org-journal": {
       "flake": false,
       "locked": {
@@ -1041,6 +1121,22 @@
         "type": "github"
       }
     },
+    "org-noter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1573435704,
+        "narHash": "sha256-g55YtQVc8mGoUGrBIM6vmTdvc3Eq2qI20ZBN5cVGX/s=",
+        "owner": "weirdNox",
+        "repo": "org-noter",
+        "rev": "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "weirdNox",
+        "repo": "org-noter",
+        "type": "github"
+      }
+    },
     "org-ql": {
       "flake": false,
       "locked": {
@@ -1054,6 +1150,38 @@
       "original": {
         "owner": "alphapapa",
         "repo": "org-ql",
+        "type": "github"
+      }
+    },
+    "org-remark": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644865965,
+        "narHash": "sha256-Xze46C/okSYkD3Ee4fkb7T5GzXiE0Trec3MxqrmeBp4=",
+        "owner": "nobiot",
+        "repo": "org-remark",
+        "rev": "1051b649585a65db89948b5b841a3e4357d26c28",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nobiot",
+        "repo": "org-remark",
+        "type": "github"
+      }
+    },
+    "org-reverse-datetree": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644927832,
+        "narHash": "sha256-idUO60KdQI9mDkbltmOJEMf/HCK29qKkSukxUIYq9Ic=",
+        "owner": "akirak",
+        "repo": "org-reverse-datetree",
+        "rev": "38724365176f50b7a94ad13c1215ca4755e16a28",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "org-reverse-datetree",
         "type": "github"
       }
     },
@@ -1089,19 +1217,19 @@
         "type": "github"
       }
     },
-    "org-visual-indent": {
+    "org-transclusion": {
       "flake": false,
       "locked": {
-        "lastModified": 1642520064,
-        "narHash": "sha256-oQsyq+U8FGZ0BhVuCLy5PFtwkDlRheZ8q2+mul/om2g=",
-        "owner": "legalnonsense",
-        "repo": "org-visual-outline",
-        "rev": "681cae2a3fb445322d01a79be9e5104e11575669",
+        "lastModified": 1643478446,
+        "narHash": "sha256-d3CRLkbBZsCrmjKtrtkS4z9IDSbOldEvlvlZVOIrGms=",
+        "owner": "nobiot",
+        "repo": "org-transclusion",
+        "rev": "ccc0aaa72732ea633bf52bcc8a0345cd3ac178fd",
         "type": "github"
       },
       "original": {
-        "owner": "legalnonsense",
-        "repo": "org-visual-outline",
+        "owner": "nobiot",
+        "repo": "org-transclusion",
         "type": "github"
       }
     },
@@ -1217,6 +1345,22 @@
         "type": "github"
       }
     },
+    "project-hercules": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645009147,
+        "narHash": "sha256-0VT6l8VYXXRupvs5IIWUgCLuuCMSvxfnfGN9O9kKAVg=",
+        "owner": "akirak",
+        "repo": "project-hercules.el",
+        "rev": "b6151dbb8505e6fdcdbe4fb8e3d38ea6339aa059",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "project-hercules.el",
+        "type": "github"
+      }
+    },
     "puni": {
       "flake": false,
       "locked": {
@@ -1327,18 +1471,24 @@
         "beancount": "beancount",
         "benchmark-init": "benchmark-init",
         "cape": "cape",
+        "closql": "closql",
         "color-theme-sanityinc-tomorrow": "color-theme-sanityinc-tomorrow",
         "consult": "consult",
         "consult-dir": "consult-dir",
         "corfu": "corfu",
         "dash": "dash",
         "defrepeater": "defrepeater",
+        "doct": "doct",
+        "ediprolog": "ediprolog",
         "eglot": "eglot",
         "electric-operator": "electric-operator",
         "elx": "elx",
+        "emacsql": "emacsql",
+        "emacsql-sqlite": "emacsql-sqlite",
         "embark": "embark",
         "embark-consult": "embark-consult",
         "envrc": "envrc",
+        "epkg": "epkg",
         "eros": "eros",
         "esup": "esup",
         "esxml": "esxml",
@@ -1377,13 +1527,15 @@
         "nix-mode": "nix-mode",
         "nov": "nov",
         "orderless": "orderless",
-        "org-dynamic-bullets": "org-dynamic-bullets",
         "org-journal": "org-journal",
         "org-make-toc": "org-make-toc",
+        "org-noter": "org-noter",
         "org-ql": "org-ql",
+        "org-remark": "org-remark",
+        "org-reverse-datetree": "org-reverse-datetree",
         "org-starter": "org-starter",
         "org-super-agenda": "org-super-agenda",
-        "org-visual-indent": "org-visual-indent",
+        "org-transclusion": "org-transclusion",
         "orgit": "orgit",
         "orglink": "orglink",
         "ov": "ov",
@@ -1391,6 +1543,7 @@
         "poet-theme": "poet-theme",
         "popper": "popper",
         "popup": "popup",
+        "project-hercules": "project-hercules",
         "puni": "puni",
         "rainbow-delimiters": "rainbow-delimiters",
         "rainbow-mode": "rainbow-mode",
