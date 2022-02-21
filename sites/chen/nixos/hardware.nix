@@ -3,7 +3,7 @@
 {
   environment.systemPackages = [ pkgs.clinfo ];
 
-  nix.settings.max-jobs = pkgs.lib.mkDefault 6;
+  nix.maxJobs = pkgs.lib.mkDefault 6;
   powerManagement.cpuFreqGovernor = pkgs.lib.mkDefault "powersave";
 
   hardware.opengl = {
