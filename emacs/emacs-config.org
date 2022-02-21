@@ -21,6 +21,7 @@
   - [[#extra-dependencies][Extra dependencies]]
   - [[#links][Links]]
   - [[#window-management][Window management]]
+  - [[#annotating][Annotating]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -192,6 +193,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
              indicate-empty-lines t
              truncate-lines t))
 #+end_src
+**** Line spacing
+#+begin_src emacs-lisp
+  ;; buffer.c
+  (setup line-spacing
+    (:with-mode (org-mode markdown-mode)
+      (:local-set line-spacing 0.5))
+    (:with-mode (Help-mode helpful-mode Info-mode)
+      (:local-set line-spacing 0.3))
+    (:with-mode (eww-mode)
+      (:local-set line-spacing 0.35)))
+#+end_src
 *** callproc.c                                                    :process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -348,6 +360,8 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup files
     (:option backup-by-copying t
+             backup-directory-alist
+             `(("." . ,(locate-user-emacs-file "backup/")))
              delete-old-versions t
              version-control t
              view-read-only t
@@ -416,6 +430,8 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup indent
+    (:option indent-tabs-mode nil)
+
     (defun akirak/turn-on-indent-tabs-mode ()
       (interactive)
       (setq indent-tabs-mode 1))
@@ -460,6 +476,25 @@ Resources:
 
 - https://github.com/minad/vertico#configuration
 
+*** minibuffer                                     :minibuffer:keybindings:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-19 Sat 14:05]
+:END:
+
+#+begin_src emacs-lisp
+  (setup minibuffer
+    (define-key minibuffer-mode-map
+                "~"
+                (defun akirak/minibuffer-tilde ()
+                  "During `find-file', replace the minibuffer input with the home directory."
+                  (interactive)
+                  (if minibuffer-completing-file-name
+                      (progn
+                        (delete-region (minibuffer-prompt-end) (point-max))
+                        (goto-char (point-max))
+                        (insert "~/"))
+                    (insert "~")))))
+#+end_src
 *** mule
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -539,6 +574,15 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup (:package project))
+#+end_src
+*** prolog                                             :major__mode:Prolog:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-19 Sat 19:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup prolog
+    (:file-match "\\.pl\\'"))
 #+end_src
 *** recentf                                                 :history:files:
 :PROPERTIES:
@@ -796,9 +840,33 @@ You need to install the font separately.
                (pcase-dolist (`(,face . ,family) value)
                  (if (member family families)
                      (set-face-attribute face nil :family family)
-                   (message "Font family %s is not installed" family)))))))
+                   (message "Font family %s is not installed" family)
+                   (delq (assq face value) value)
+                   (set symbol value)))))))
+  
+  (eval-after-load 'outline
+    (defun akirak/set-outline-families ()
+      (when-let (family (cdr (assq 'variable-pitch akirak/base-face-family-alist)))
+        (dolist (x '(outline-1
+                     outline-2
+                     outline-3
+                     outline-4
+                     outline-5
+                     outline-6
+                     outline-7
+                     outline-8))
+          (set-face-attribute x nil :family family)))))
+  
+  (eval-after-load 'org
+    (defun akirak/set-org-faces ()
+      (set-face-attribute 'org-tag nil :inherit 'fixed-pitch)
+      (set-face-attribute 'org-todo nil :inherit 'fixed-pitch)))
 #+end_src
 *** Font size
+Override font heights for certain faces.
+
+I think it would be better to create my own theme, but I don't have enough time for it.
+
 #+begin_src emacs-lisp
   (defcustom akirak/font-height 107
     "Default height of the font."
@@ -806,19 +874,37 @@ You need to install the font separately.
     :type 'integer
     :set (lambda (sym value)
            (set sym value)
-           (set-face-attribute 'default nil :height value)
-           (with-eval-after-load 'org
-             (set-face-attribute 'org-tag nil
-                                 :height (ceiling (* akirak/font-height 1.1)))
-             (set-face-attribute 'org-todo nil
-                                 :height (ceiling (* akirak/font-height 1.1))))))
+           (set-face-attribute 'default nil :height value)))
+  
+  (eval-after-load 'outline
+    (defun akirak/apply-outline-font-heights ()
+      (set-face-attribute 'outline-1 nil :height 1.54)
+      (set-face-attribute 'outline-2 nil :height 1.41)
+      (set-face-attribute 'outline-3 nil :height 1.3)
+      (set-face-attribute 'outline-4 nil :height 1.19)
+      (set-face-attribute 'outline-5 nil :height 1.1)
+      (set-face-attribute 'outline-6 nil :height 1.07)
+      (set-face-attribute 'outline-7 nil :height 1.03)
+      (set-face-attribute 'outline-8 nil :height 1.0)))
+
+  (eval-after-load 'org
+    (defun akirak/apply-org-font-heights ()
+      (set-face-attribute 'org-tag nil :height (ceiling (* 1.05 akirak/font-height)))))
 #+end_src
 ** Org                                                            :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
-*** org-dynamic-bullets                                        :aesthetics:
+*** doct                                                          :capture:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-16 Wed 20:08]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package doct))
+#+end_src
+*** org-dynamic-bullets                                :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
 :END:
@@ -853,6 +939,14 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
 #+end_src
+*** org-noter
+:PROPERTIES:
+:CREATED_TIME: [2022-02-17 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-noter))
+#+end_src
 *** org-ql                                                        :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-22 Sat 20:50]
@@ -861,15 +955,48 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-ql))
 #+end_src
+*** org-remark
+:PROPERTIES:
+:CREATED_TIME: [2022-02-17 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-remark))
+#+end_src
+*** org-reverse-datetree
+:PROPERTIES:
+:CREATED_TIME: [2022-02-16 Wed 20:15]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-reverse-datetree))
+#+end_src
 *** org-starter
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package org-starter))
+  (setup (:package org-starter)
+    (:option org-starter-require-file-by-default nil
+             org-starter-load-config-files t
+             org-starter-exclude-from-recentf '(known-files path)
+             ;; org-starter-alternative-find-function #'helm-org-ql
+             org-starter-find-file-visit-window t
+             org-starter-override-agenda-window-setup 'other-window
+             org-starter-enable-local-variables :all)
+
+    (:global "M-g M-o" #'org-starter-find-file-by-key))
 #+end_src
-*** org-visual-indent                                          :aesthetics:
+*** org-transclusion
+:PROPERTIES:
+:CREATED_TIME: [2022-02-17 Thu 23:09]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-transclusion))
+#+end_src
+*** org-visual-indent                                  :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 23:59]
 :END:
@@ -1132,6 +1259,22 @@ This is a collection of extra utilities for various packages.
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** ediprolog                                                      :Prolog:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-19 Sat 19:24]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package ediprolog)
+    ;; Set `ediprolog-system' and `ediprolog-program' depending on the system
+    (:nixpkgs "scryer-prolog")
+
+    (:with-feature prolog
+      ;; In other modes, this key is bound to repl.
+      (:bind "<C-return>" #'ediprolog-dwim)))
+#+end_src
+
+[[https://lib.rs/crates/scryer-prolog][scryer-prolog]] is the bleeding-edge implementation of Prolog (like GHC to Haskell), and it is installed with this package.
 *** eglot                                                      :LSP:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
@@ -1207,6 +1350,14 @@ The following resources are useful:
   (setup (:package envrc)
     (:with-mode envrc-global-mode
       (:hook-into after-init-hook)))
+#+end_src
+*** epkg                                                            :Emacs:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-19 Sat 14:36]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package epkg))
 #+end_src
 *** eros                                          :Emacs__Lisp:development:
 :PROPERTIES:
@@ -1550,6 +1701,17 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 #+begin_src emacs-lisp
 (setup (:package popper))
 #+end_src
+*** project-hercules                                  :project:keybindings:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-16 Wed 15:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package project-hercules)
+    (:when-loaded
+      (:also-load project-hercules-config))
+    (:global "M-SPC" project-hercules-dispatch))
+#+end_src
 *** puni                                              :structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:24]
@@ -1824,33 +1986,34 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 78 |
-| [[org-ql-search:tags:visual][visual]]              | 10 |
+| [[org-ql-search:tags:packages][packages]]            | 84 |
+| [[org-ql-search:tags:visual][visual]]              | 11 |
 | [[org-ql-search:tags:UI][UI]]                  | 10 |
-| [[org-ql-search:tags:formatting][formatting]]          |  8 |
+| [[org-ql-search:tags:formatting][formatting]]          |  9 |
 | [[org-ql-search:tags:development][development]]         |  8 |
+| [[org-ql-search:tags:keybindings][keybindings]]         |  6 |
 | [[org-ql-search:tags:completion][completion]]          |  6 |
 | [[org-ql-search:tags:windows][windows]]             |  5 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |  5 |
 | [[org-ql-search:tags:library][library]]             |  5 |
-| [[org-ql-search:tags:keybindings][keybindings]]         |  4 |
 | [[org-ql-search:tags:process][process]]             |  4 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |  4 |
 | [[org-ql-search:tags:history][history]]             |  4 |
-| [[org-ql-search:tags:aesthetics][aesthetics]]          |  4 |
 | [[org-ql-search:tags:profiling][profiling]]           |  3 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |  3 |
 | [[org-ql-search:tags:files][files]]               |  3 |
+| [[org-ql-search:tags:minibuffer][minibuffer]]          |  3 |
+| [[org-ql-search:tags:Emacs][Emacs]]               |  3 |
 | [[org-ql-search:tags:writing][writing]]             |  3 |
 | [[org-ql-search:tags:links][links]]               |  3 |
 | [[org-ql-search:tags:IO][IO]]                  |  2 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |  2 |
-| [[org-ql-search:tags:minibuffer][minibuffer]]          |  2 |
-| [[org-ql-search:tags:Emacs][Emacs]]               |  2 |
+| [[org-ql-search:tags:Prolog][Prolog]]              |  2 |
 | [[org-ql-search:tags:VC][VC]]                  |  2 |
 | [[org-ql-search:tags:navigation][navigation]]          |  2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |  2 |
 | [[org-ql-search:tags:editing][editing]]             |  2 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |  2 |
+| [[org-ql-search:tags:aesthetics][aesthetics]]          |  2 |
 | [[org-ql-search:tags:syntax][syntax]]              |  2 |
 | [[org-ql-search:tags:tree_sitter][tree_sitter]]         |  2 |
 | [[org-ql-search:tags:initialization][initialization]]      |  1 |
@@ -1860,6 +2023,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:prog_mode][prog_mode]]           |  1 |
 | [[org-ql-search:tags:text_mode][text_mode]]           |  1 |
 | [[org-ql-search:tags:text][text]]                |  1 |
+| [[org-ql-search:tags:capture][capture]]             |  1 |
 | [[org-ql-search:tags:documentation][documentation]]       |  1 |
 | [[org-ql-search:tags:@extra][@extra]]              |  1 |
 | [[org-ql-search:tags:beancount][beancount]]           |  1 |
@@ -1875,6 +2039,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Nix][Nix]]                 |  1 |
 | [[org-ql-search:tags:reading][reading]]             |  1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |  1 |
+| [[org-ql-search:tags:project][project]]             |  1 |
 | [[org-ql-search:tags:colors][colors]]              |  1 |
 | [[org-ql-search:tags:web][web]]                 |  1 |
 | [[org-ql-search:tags:graphics][graphics]]            |  1 |
@@ -1969,6 +2134,13 @@ To use these features, they need to be turned on at build time.
 | [[popper][popper]]      |      |
 | [[repl-toggle][repl-toggle]] |      |
 #+END:
+*** Annotating
+:PROPERTIES:
+:CREATED_TIME: [2022-02-17 Thu 23:59]
+:END:
+You can use org-remark to annotate texts in file buffers.
+
+To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF files (via =pdf-tools= package), but I won't use pdf-tools package.
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil

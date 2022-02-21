@@ -74,6 +74,12 @@
       repo = "cape";
       type = "github";
     };
+    closql = {
+      flake = false;
+      owner = "emacscollective";
+      repo = "closql";
+      type = "github";
+    };
     color-theme-sanityinc-tomorrow = {
       flake = false;
       owner = "purcell";
@@ -110,6 +116,18 @@
       repo = "defrepeater.el";
       type = "github";
     };
+    doct = {
+      flake = false;
+      owner = "progfolio";
+      repo = "doct";
+      type = "github";
+    };
+    ediprolog = {
+      flake = false;
+      owner = "emacsmirror";
+      repo = "ediprolog";
+      type = "github";
+    };
     eglot = {
       flake = false;
       owner = "joaotavora";
@@ -128,6 +146,18 @@
       repo = "elx";
       type = "github";
     };
+    emacsql = {
+      flake = false;
+      owner = "skeeto";
+      repo = "emacsql";
+      type = "github";
+    };
+    emacsql-sqlite = {
+      flake = false;
+      owner = "skeeto";
+      repo = "emacsql";
+      type = "github";
+    };
     embark = {
       flake = false;
       owner = "oantolin";
@@ -144,6 +174,12 @@
       flake = false;
       owner = "purcell";
       repo = "envrc";
+      type = "github";
+    };
+    epkg = {
+      flake = false;
+      owner = "emacscollective";
+      repo = "epkg";
       type = "github";
     };
     eros = {
@@ -370,12 +406,6 @@
       repo = "orderless";
       type = "github";
     };
-    org-dynamic-bullets = {
-      flake = false;
-      owner = "legalnonsense";
-      repo = "org-visual-outline";
-      type = "github";
-    };
     org-journal = {
       flake = false;
       owner = "bastibe";
@@ -388,10 +418,28 @@
       repo = "org-make-toc";
       type = "github";
     };
+    org-noter = {
+      flake = false;
+      owner = "weirdNox";
+      repo = "org-noter";
+      type = "github";
+    };
     org-ql = {
       flake = false;
       owner = "alphapapa";
       repo = "org-ql";
+      type = "github";
+    };
+    org-remark = {
+      flake = false;
+      owner = "nobiot";
+      repo = "org-remark";
+      type = "github";
+    };
+    org-reverse-datetree = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-reverse-datetree";
       type = "github";
     };
     org-starter = {
@@ -406,10 +454,10 @@
       repo = "org-super-agenda";
       type = "github";
     };
-    org-visual-indent = {
+    org-transclusion = {
       flake = false;
-      owner = "legalnonsense";
-      repo = "org-visual-outline";
+      owner = "nobiot";
+      repo = "org-transclusion";
       type = "github";
     };
     orgit = {
@@ -452,6 +500,12 @@
       flake = false;
       owner = "auto-complete";
       repo = "popup-el";
+      type = "github";
+    };
+    project-hercules = {
+      flake = false;
+      owner = "akirak";
+      repo = "project-hercules.el";
       type = "github";
     };
     puni = {
