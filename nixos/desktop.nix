@@ -37,7 +37,9 @@
   # https://github.com/nix-community/impermanence
   # programs.fuse.userAllowOther = true;
 
+  security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
+  security.sudo.execWheelOnly = true;
 
   services.earlyoom.enable = true;
 
