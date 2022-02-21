@@ -161,16 +161,15 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1638323861,
-        "narHash": "sha256-SN7gdCAJjRW1Lnk6prBQxFP0n6NSl3sJMhIU4hlj9SE=",
-        "owner": "moinessim",
+        "lastModified": 1645244400,
+        "narHash": "sha256-o7KCd6ySFZ9/LbS62aTeuFmBWtP7Tt3Q3RcNjYgTgZU=",
+        "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "24eaa2a13a1079b9b6666884d88022ef2c5d0abd",
+        "rev": "0232fe1b75e6d7864fd82b5c72f6646f87838fc3",
         "type": "github"
       },
       "original": {
-        "owner": "moinessim",
-        "ref": "nix-2.4-nix-darwin-modules",
+        "owner": "nix-community",
         "repo": "home-manager",
         "type": "github"
       }

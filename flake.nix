@@ -3,7 +3,7 @@
     utils.url = "github:numtide/flake-utils";
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus/v1.3.1";
 
-    home-manager.url = "github:moinessim/home-manager/nix-2.4-nix-darwin-modules";
+    home-manager.url = "github:nix-community/home-manager";
 
     # Channels
     unstable.url = "nixpkgs/nixos-unstable";
