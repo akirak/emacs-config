@@ -913,7 +913,7 @@ Embrace Org as a common document format for Emacs.
   (setup (:package org-dynamic-bullets)
     (:hook-into org-mode-hook))
 #+end_src
-*** org-journal
+*** org-journal                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
