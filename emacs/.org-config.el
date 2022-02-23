@@ -70,6 +70,7 @@
                   ("Source block for a package" :keys "s"
                    :contexts (:in-file "emacs-config\\.org\\'")
                    :type plain
+                   :function ignore
                    :template
                    (lambda ()
                      (concat "#+begin_src emacs-lisp\n"
