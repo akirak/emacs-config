@@ -10,6 +10,16 @@ esuper:
     dontByteCompile = true;
   });
 
+  magit = esuper.magit.overrideAttrs (old: {
+    # Since magit 3.3.0, magit requires git executable for byte-compilation.
+    buildInputs = old.buildInputs ++ [ pkgs.git ];
+  });
+
+  orgit = esuper.orgit.overrideAttrs (old: {
+    # Since magit 3.3.0, magit requires git executable for byte-compilation.
+    buildInputs = old.buildInputs ++ [ pkgs.git ];
+  });
+
   vterm = esuper.vterm.overrideAttrs (old: {
     # Based on the configuration in nixpkgs available at the following URL:
     # https://github.com/NixOS/nixpkgs/blob/af21d41260846fb9c9840a75e310e56dfe97d6a3/pkgs/applications/editors/emacs/elisp-packages/melpa-packages.nix#L483
