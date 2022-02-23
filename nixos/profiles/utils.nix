@@ -17,5 +17,6 @@
     utillinux
     whois
     unzip
+    lzip
   ];
 }
