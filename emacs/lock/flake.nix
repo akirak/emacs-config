@@ -74,6 +74,18 @@
       repo = "cape";
       type = "github";
     };
+    citar = {
+      flake = false;
+      owner = "bdarcus";
+      repo = "citar";
+      type = "github";
+    };
+    citeproc = {
+      flake = false;
+      owner = "andras-simonyi";
+      repo = "citeproc-el";
+      type = "github";
+    };
     closql = {
       flake = false;
       owner = "emacscollective";
@@ -377,12 +389,6 @@
       repo = "marginalia";
       type = "github";
     };
-    memoize = {
-      flake = false;
-      owner = "skeeto";
-      repo = "emacs-memoize";
-      type = "github";
-    };
     mlscroll = {
       flake = false;
       owner = "jdtsmith";
@@ -404,12 +410,6 @@
       flake = false;
       owner = "oantolin";
       repo = "orderless";
-      type = "github";
-    };
-    org-journal = {
-      flake = false;
-      owner = "bastibe";
-      repo = "org-journal";
       type = "github";
     };
     org-make-toc = {
@@ -484,6 +484,12 @@
       repo = "package-lint";
       type = "github";
     };
+    parsebib = {
+      flake = false;
+      owner = "joostkremers";
+      repo = "parsebib";
+      type = "github";
+    };
     poet-theme = {
       flake = false;
       owner = "kunalb";
@@ -512,6 +518,12 @@
       flake = false;
       owner = "AmaiKinono";
       repo = "puni";
+      type = "github";
+    };
+    queue = {
+      flake = false;
+      owner = "dmgerman";
+      repo = "predictive";
       type = "github";
     };
     rainbow-delimiters = {
@@ -553,6 +565,12 @@
       flake = false;
       type = "git";
       url = "https://git.sr.ht/~pkal/setup";
+    };
+    string-inflection = {
+      flake = false;
+      owner = "akicho8";
+      repo = "string-inflection";
+      type = "github";
     };
     svg-lib = {
       flake = false;

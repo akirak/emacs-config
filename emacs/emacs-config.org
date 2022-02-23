@@ -896,6 +896,14 @@ I think it would be better to create my own theme, but I don't have enough time 
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
+*** citar
+:PROPERTIES:
+:CREATED_TIME: [2022-02-23 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package citar))
+#+end_src
 *** doct                                                          :capture:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 20:08]
@@ -913,7 +921,7 @@ Embrace Org as a common document format for Emacs.
   (setup (:package org-dynamic-bullets)
     (:hook-into org-mode-hook))
 #+end_src
-*** org-journal
+*** org-journal                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:

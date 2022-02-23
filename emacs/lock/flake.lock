@@ -67,11 +67,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1644976618,
-        "narHash": "sha256-UPogsepqWIPpjLATx56Z7zeTMXZ6bnutlzhShdIBB7s=",
+        "lastModified": 1645542078,
+        "narHash": "sha256-21CJlldBUlEgQEff5I1pLN3a7iTbrZvUBlwxf5LWY0Y=",
         "owner": "akirak",
         "repo": "trivial-elisps",
-        "rev": "bd31e0a24f774147c128076991d18ff08590ea2b",
+        "rev": "c7c934abd8b7caa49d7672266766e4f8494013f8",
         "type": "github"
       },
       "original": {
@@ -189,6 +189,38 @@
       "original": {
         "owner": "minad",
         "repo": "cape",
+        "type": "github"
+      }
+    },
+    "citar": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645114005,
+        "narHash": "sha256-n57vSkU+zYDqSW6urgG5bS3v+5gVDkD6CL/UPZWg/kE=",
+        "owner": "bdarcus",
+        "repo": "citar",
+        "rev": "b84cb375933053cf3e5408f0386034e8dabca5cb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bdarcus",
+        "repo": "citar",
+        "type": "github"
+      }
+    },
+    "citeproc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1643008878,
+        "narHash": "sha256-Gzvb+TL0b95JpoZvcaMVnfzC0TTHnydGLCOrM0r/uf8=",
+        "owner": "andras-simonyi",
+        "repo": "citeproc-el",
+        "rev": "ba49516265fa24b138346c4918d39d19b4de8a62",
+        "type": "github"
+      },
+      "original": {
+        "owner": "andras-simonyi",
+        "repo": "citeproc-el",
         "type": "github"
       }
     },
@@ -643,11 +675,11 @@
     "github-linguist": {
       "flake": false,
       "locked": {
-        "lastModified": 1644136939,
-        "narHash": "sha256-2dkFP/YdqFCtICGbTpPoFjsnksfFmxabcoRij7Qm4gs=",
+        "lastModified": 1645606750,
+        "narHash": "sha256-7dqhL/Z1aNOiy6cw4emOkgzF1Okg8D8BixG7770gM9k=",
         "owner": "akirak",
         "repo": "github-linguist.el",
-        "rev": "f4e34f365006cf3c791d5eb0861dfdc030223526",
+        "rev": "22e25fa375d7f959fcef11e69281792d5688447f",
         "type": "github"
       },
       "original": {
@@ -964,11 +996,11 @@
     "magit": {
       "flake": false,
       "locked": {
-        "lastModified": 1644948458,
-        "narHash": "sha256-oVeQ0l0C71HKqAN2cfygwEr/rEbVhH6Uh9pin5jeO2g=",
+        "lastModified": 1645538080,
+        "narHash": "sha256-jCNYR7O8aQ7U3L1HtXRckzFfCUKXOel30VmrkhyS/8Q=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "2df1e34665a2fb7872050a770a5cd608418fdc7f",
+        "rev": "3525928602a3b68855fa239cadbc7d31c67fd50e",
         "type": "github"
       },
       "original": {
@@ -980,11 +1012,11 @@
     "magit-section": {
       "flake": false,
       "locked": {
-        "lastModified": 1644948458,
-        "narHash": "sha256-oVeQ0l0C71HKqAN2cfygwEr/rEbVhH6Uh9pin5jeO2g=",
+        "lastModified": 1645538080,
+        "narHash": "sha256-jCNYR7O8aQ7U3L1HtXRckzFfCUKXOel30VmrkhyS/8Q=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "2df1e34665a2fb7872050a770a5cd608418fdc7f",
+        "rev": "3525928602a3b68855fa239cadbc7d31c67fd50e",
         "type": "github"
       },
       "original": {
@@ -1006,22 +1038,6 @@
       "original": {
         "owner": "minad",
         "repo": "marginalia",
-        "type": "github"
-      }
-    },
-    "memoize": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1578083801,
-        "narHash": "sha256-XYmPtJk0jteu30IQtwNnPaVSLN+nFAdjjVRvwSMZToA=",
-        "owner": "skeeto",
-        "repo": "emacs-memoize",
-        "rev": "51b075935ca7070f62fae1d69fe0ff7d8fa56fdd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "skeeto",
-        "repo": "emacs-memoize",
         "type": "github"
       }
     },
@@ -1086,22 +1102,6 @@
       "original": {
         "owner": "oantolin",
         "repo": "orderless",
-        "type": "github"
-      }
-    },
-    "org-journal": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1641375905,
-        "narHash": "sha256-BtXe3tavyHAbQ5E3mNlmlvyrR9KxscX6mBbyvkRNUUE=",
-        "owner": "bastibe",
-        "repo": "org-journal",
-        "rev": "f121450610650c63aabf13afd0d2089e05fad2e4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "bastibe",
-        "repo": "org-journal",
         "type": "github"
       }
     },
@@ -1172,11 +1172,11 @@
     "org-reverse-datetree": {
       "flake": false,
       "locked": {
-        "lastModified": 1644927832,
-        "narHash": "sha256-idUO60KdQI9mDkbltmOJEMf/HCK29qKkSukxUIYq9Ic=",
+        "lastModified": 1645526511,
+        "narHash": "sha256-yzTCEApK1SwU19G5xbLwUaUV+v26TmfSNXDn0Iy2RIQ=",
         "owner": "akirak",
         "repo": "org-reverse-datetree",
-        "rev": "38724365176f50b7a94ad13c1215ca4755e16a28",
+        "rev": "777bdff6df36a7b0f4e82a3caa0edd7cf92e888f",
         "type": "github"
       },
       "original": {
@@ -1188,11 +1188,11 @@
     "org-starter": {
       "flake": false,
       "locked": {
-        "lastModified": 1640880380,
-        "narHash": "sha256-5H+V2bIjTV50FNXtzU97O5A/jVAIObJTz3NKZt0iMH4=",
+        "lastModified": 1645170348,
+        "narHash": "sha256-88vPoNkDxBoGt4WFzJkSZMDF4BK9soO9SPH16D1n0/Q=",
         "owner": "akirak",
         "repo": "org-starter",
-        "rev": "6b1b3b045390bf1cff8214ece54da07c7a0aa8ad",
+        "rev": "2b06b02b8008dde8cfad69b679f89742d80aa4e6",
         "type": "github"
       },
       "original": {
@@ -1297,6 +1297,22 @@
         "type": "github"
       }
     },
+    "parsebib": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1642376182,
+        "narHash": "sha256-31AXjK0WOAXUKw0+ZhiVXP9EvDWutcZ1rAHg/W2wZt4=",
+        "owner": "joostkremers",
+        "repo": "parsebib",
+        "rev": "63e85c8477fdf98ba920437c9df15f8f06c315e9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "joostkremers",
+        "repo": "parsebib",
+        "type": "github"
+      }
+    },
     "poet-theme": {
       "flake": false,
       "locked": {
@@ -1374,6 +1390,22 @@
       "original": {
         "owner": "AmaiKinono",
         "repo": "puni",
+        "type": "github"
+      }
+    },
+    "queue": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1435143947,
+        "narHash": "sha256-ePELBeb7/Ta/zS7sNNaGPmASNAp9UKUX8ZBaxDKU1Cg=",
+        "owner": "dmgerman",
+        "repo": "predictive",
+        "rev": "3019c7cb4195f42b20fbc28af5be5b0ca06bd03c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dmgerman",
+        "repo": "predictive",
         "type": "github"
       }
     },
@@ -1471,6 +1503,8 @@
         "beancount": "beancount",
         "benchmark-init": "benchmark-init",
         "cape": "cape",
+        "citar": "citar",
+        "citeproc": "citeproc",
         "closql": "closql",
         "color-theme-sanityinc-tomorrow": "color-theme-sanityinc-tomorrow",
         "consult": "consult",
@@ -1522,12 +1556,10 @@
         "magit": "magit",
         "magit-section": "magit-section",
         "marginalia": "marginalia",
-        "memoize": "memoize",
         "mlscroll": "mlscroll",
         "nix-mode": "nix-mode",
         "nov": "nov",
         "orderless": "orderless",
-        "org-journal": "org-journal",
         "org-make-toc": "org-make-toc",
         "org-noter": "org-noter",
         "org-ql": "org-ql",
@@ -1540,11 +1572,13 @@
         "orglink": "orglink",
         "ov": "ov",
         "package-lint": "package-lint",
+        "parsebib": "parsebib",
         "poet-theme": "poet-theme",
         "popper": "popper",
         "popup": "popup",
         "project-hercules": "project-hercules",
         "puni": "puni",
+        "queue": "queue",
         "rainbow-delimiters": "rainbow-delimiters",
         "rainbow-mode": "rainbow-mode",
         "repl-toggle": "repl-toggle",
@@ -1552,6 +1586,7 @@
         "restclient": "restclient",
         "s": "s",
         "setup": "setup",
+        "string-inflection": "string-inflection",
         "svg-lib": "svg-lib",
         "svg-tag-mode": "svg-tag-mode",
         "swiper": "swiper",
@@ -1606,6 +1641,22 @@
       "original": {
         "type": "git",
         "url": "https://git.sr.ht/~pkal/setup"
+      }
+    },
+    "string-inflection": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631938753,
+        "narHash": "sha256-Ul1ygiEIXbGzOAyUhhFCzVlm25QxHJL0WCO+ssfNU3M=",
+        "owner": "akicho8",
+        "repo": "string-inflection",
+        "rev": "fd7926ac17293e9124b31f706a4e8f38f6a9b855",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akicho8",
+        "repo": "string-inflection",
+        "type": "github"
       }
     },
     "svg-lib": {

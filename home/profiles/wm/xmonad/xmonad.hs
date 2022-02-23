@@ -52,6 +52,7 @@ myKeybindings =
   , ((mod4Mask, xK_r), renameWorkspace myXPConfig)
   -- Restart without recompiling, since Nix builds xmonad
   , ((mod4Mask, xK_q), spawn "xmonad --restart")
+  , ((mod4Mask, xK_F9), switchNixOSConfig)
   , ((mod4Mask, xK_BackSpace), swapScreens)
   , ((mod4Mask .|. shiftMask, xK_q), confirmQuit)
   , ((mod4Mask, xK_Insert), runWorkspaceAction)
