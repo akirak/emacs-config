@@ -50,6 +50,10 @@ esuper:
     '';
   });
 
+  queue = esuper.queue.overrideAttrs (old: {
+    outputs = [ "out" ];
+  });
+
   tsc = esuper.tsc.overrideAttrs (old:
     let
       baseUrl = "https://github.com/emacs-tree-sitter/elisp-tree-sitter/releases/download/${elispTreeSitterVersion}";
