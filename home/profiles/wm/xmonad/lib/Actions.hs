@@ -7,6 +7,7 @@ import qualified XMonad.Actions.PhysicalScreens as P
 import System.Exit
 import qualified XMonad.StackSet as W
 import qualified Data.List as L
+import XMonad.Util.Run (runInTerm)
 
 -- | Focus a window or run a command via rofi.
 rofi :: X ()
@@ -80,3 +81,7 @@ chromium url = spawn $ "chromium --new-window " ++ url
 
 firefox :: String -> X ()
 firefox url = spawn $ "firefox --new-window " ++ url
+
+switchNixOSConfig :: X ()
+switchNixOSConfig = runInTerm ""
+    "sh -c 'sudo nixos-rebuild switch --flake `readlink -f $HOME/config`#`uname -n` || read'"
