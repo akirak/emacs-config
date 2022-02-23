@@ -15,13 +15,13 @@
 (akirak-org-capture-add-templates
     (cl-macrolet
         ((level2 (text)
-                 `(lambda ()
-                    (widen)
-                    (goto-char (point-min))
-                    (or (re-search-forward (rx bol "**" (+ space)
-                                               (literal ,text))
-                                           nil t)
-                        (error "Heading \"%s\" is not found in the file" ,text)))))
+           `(lambda ()
+              (widen)
+              (goto-char (point-min))
+              (or (re-search-forward (rx bol "**" (+ space)
+                                         (literal ,text))
+                                     nil t)
+                  (error "Heading \"%s\" is not found in the file" ,text)))))
       (let ((file (org-starter-locate-file "emacs-config.org" nil t)))
         (doct `(("Emacs Config" :keys "e"
                  :when ,(stringp file)
