@@ -912,6 +912,15 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package doct))
 #+end_src
+*** org-capture
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 12:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-capture
+    (:global "C-c c" #'org-capture))
+#+end_src
 *** org-dynamic-bullets                                :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
