@@ -26,7 +26,7 @@
       in
       rec {
         packages = flake-utils.lib.flattenTree {
-          beta = pkgs.latest.firefox-beta-bin;
+          inherit (pkgs.latest) firefox-beta-bin;
         };
         defaultPackage = pkgs.latest.firefox-beta-bin;
       });
