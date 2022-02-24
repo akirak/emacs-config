@@ -40,6 +40,20 @@
     };
   };
 
+  # ghelp is not a proper MELPA package yet, and it needs workarounds.
+  ghelp-helpful = _: _: {
+    packageRequires = {
+      ghelp = "0";
+      helpful = "0";
+    };
+  };
+  ghelp-eglot = _: _: {
+    packageRequires = {
+      ghelp = "0";
+      eglot = "0";
+    };
+  };
+
   twist = _: _: {
     origin = {
       type = "github";

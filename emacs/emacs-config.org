@@ -1403,6 +1403,26 @@ The following resources are useful:
     ;; For activation, see corfu
     (:global "TAB" #'fancy-dabbrev-expand-or-indent))
 #+end_src
+*** ghelp                                           :reference:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 12:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package ghelp)
+    (:global "<f1> ." #'ghelp-describe-at-point)
+  
+    ;; Temporary workaround
+    (autoload 'ghelp-describe-at-point "ghelp"))
+#+end_src
+*** ghelp-helpful
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 13:16]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package ghelp-helpful))
+#+end_src
 *** gif-screencast                                      :screen__recording:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:38]
@@ -1455,6 +1475,14 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package haskell-tng-mode)
     (:file-match "\\.hs\\'"))
+#+end_src
+*** helpful                                               :reference:Emacs:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 12:50]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package helpful))
 #+end_src
 *** hercules                                                  :keybindings:
 :PROPERTIES:
