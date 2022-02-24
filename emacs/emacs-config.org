@@ -1291,6 +1291,15 @@ This is an extra functions for window management.
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** cycle-at-point                                                :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 14:36]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package cycle-at-point)
+    (:global "C-=" #'cycle-at-point))
+#+end_src
 *** ediprolog                                                      :Prolog:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
