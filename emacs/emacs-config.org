@@ -1983,6 +1983,35 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
     (:hook-into after-init-hook)
     (:hook which-key-setup-side-window-bottom))
 #+end_src
+*** windswap                                                       :windows:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 13:52]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package windswap)
+    (:status opinionated
+      (:global "<C-S-left>" #'windswap-left
+               "<C-S-right>" #'windswap-right
+               "<C-S-up>" #'windswap-up
+               "<C-S-down>" #'windswap-down)
+
+      ;; These keys are bound by default in org-mode, so unbind them.
+      (:with-feature org
+        (:when-loaded
+          (:unbind
+           "<C-S-left>"
+           "<C-S-right>"
+           "<C-S-up>"
+           "<C-S-down>")))
+      (:with-feature org-agenda
+        (:when-loaded
+          (:unbind
+           "<C-S-left>"
+           "<C-S-right>"
+           "<C-S-up>"
+           "<C-S-down>")))))
+#+end_src
 *** ws-butler                                                  :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:16]
