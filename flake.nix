@@ -255,6 +255,22 @@
               inheritPath = false;
             };
 
+            emacs-personalized = emacsSandboxed {
+              name = "emacs-personalized";
+              shareNet = false;
+              protectHome = true;
+              inheritPath = true;
+              userEmacsDirectory = "$HOME/emacs";
+              extraInitText = builtins.readFile ./home/profiles/emacs/extra-init.el;
+              extraDirsToTryBind = [
+                "$HOME/emacs"
+                "$HOME/config"
+                "$HOME/fleeting"
+                "$HOME/org"
+                "$HOME/resources"
+              ];
+            };
+
             inherit (channels.nixpkgs) emacs-reader;
 
             inherit emacs-config;
