@@ -255,6 +255,18 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
      (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
           1 2 3 (4 . 4))))
 #+end_src
+*** dired                                                           :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:47]
+:END:
+
+#+begin_src emacs-lisp
+  (setup dired
+    (:option dired-recursive-copies 'always
+             dired-recursive-deletes 'top)
+  
+    (:bind "h" #'dired-up-directory))
+#+end_src
 *** ediff-wind                                                       :diff:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -366,7 +378,7 @@ The built-in =electric= package provides the following modes:
              version-control t
              view-read-only t
              auto-mode-case-fold nil)
-
+    
     (:status opinionated
       (:global "<f5>" #'revert-buffer)))
 #+end_src
@@ -1299,6 +1311,128 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup (:package cycle-at-point)
     (:global "C-=" #'cycle-at-point))
+#+end_src
+*** dired-collapse                                                  :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:44]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package dired-collapse))
+#+end_src
+
+I will manually turn on =dired-collapse-mode= when necessary.
+*** dired-filter                                                    :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:50]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dired-filter)
+    (:hook-into dired-mode-hook)
+    (:hook dired-filter-group-mode)
+  
+    (:option dired-filter-group-saved-groups
+             `(("default"
+                ("Directories"
+                 (directory . t))
+                ("Dotfiles"
+                 (name . "^\\."))
+                ;; Text files
+                ("Text"
+                 (or (name . "README")
+                     (name . "TODO")
+                     (name . "LICENSE")
+                     (extension "txt" "md" "mkd" "markdown" "rst")))
+                ("Org"
+                 (extension "org" "bib"))
+                ("Ledger"
+                 (extension "beancount"))
+                ("Data files"
+                 (extension "csv" "json" "sql"))
+                ;; Binary files
+                ("Books and papers"
+                 (extension "pdf" "mobi" "epub" "azw"))
+                ("Archives"
+                 (extension "zip" "rar" "gz" "bz2" "tar"))
+                ("Disk images"
+                 (extension "iso" "ova"))
+                ("Office docs"
+                 (extension "xlsx" "xls" "docx" "doc"))
+                ("Programs"
+                 (extension "exe" "run" "deb"))
+                ("Objects and binary files"
+                 (extension "o" "elc"))
+                ("Meta data"
+                 (extension "torrent" "acsm"))
+                ;; Images are often thumbnails, so they should come
+                ;; after other binary files
+                ("Images and graphics"
+                 (extension "jpg" "jpeg" "png" "gif" "svg"))
+                ;; Source code
+                ("Config"
+                 (or (name . "Makefile")
+                     (name . "Dockerfile")
+                     (extension "yml" "yaml" "cabal"
+                                "dockerfile" "mk")))
+                ("Emacs Lisp"
+                 (extension "el"))))))
+#+end_src
+*** dired-hacks-utils                                               :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:49]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dired-hacks-utils)
+    (:with-map dired-mode-map
+      ;; Remap 'n' and 'p'
+      "n" 'dired-hacks-next-file
+      "p" 'dired-hacks-previous-file))
+#+end_src
+*** dired-hide-dotfiles                                             :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 19:08]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package dired-hide-dotfiles))
+#+end_src
+*** dired-k                                                 :dired:ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dired-k)
+    (:option dired-k-style 'git)
+  
+    (:with-hook dired-k-no-revert
+      (:hook-into dired-after-readin-hook))
+  
+    ;; Prevent from highlighting by file attributes.
+    ;; Just add git status
+    ;; (defun akirak/ad-override-dired-k--highlight-by-file-attribyte ()
+    ;;   nil)
+    ;; (advice-add #'dired-k--highlight-by-file-attribyte
+    ;;             :override
+    ;;             #'akirak/ad-override-dired-k--highlight-by-file-attribyte)
+    )
+#+end_src
+
+dired-k depends on dired-x, which has a poor code quality.
+*** dired-open                                                      :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:47]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dired-open)
+    ;; Temporary workaround
+    (autoload 'dired-open-xdg "dired-open")
+    
+    (:option dired-open-functions '(dired-open-by-extension
+                                    dired-open-subdir)))
 #+end_src
 *** ediprolog                                                      :Prolog:
 :PROPERTIES:
