@@ -1140,6 +1140,21 @@ This is a collection of extra utilities for various packages.
       (:defer 1 #'akirak-files-ensure-abbrev-list)
       (run-with-idle-timer 300 nil #'github-linguist-update-projects)))
 #+end_src
+**** akirak-window                                               :windows:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 14:10]
+:END:
+
+This is an extra functions for window management.
+
+#+begin_src emacs-lisp
+  (setup akirak-window
+    (:status opinionated
+      (:global "C-2" #'akirak-window-setup-columns
+               "C-3" #'akirak-window-split-vertically
+               "C-4" #'akirak-window-split-and-select
+               [remap abort-recursive-edit] #'akirak-window-cleanup)))
+#+end_src
 *** all-the-icons                                                      :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:28]
