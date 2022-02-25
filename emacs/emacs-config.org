@@ -22,6 +22,7 @@
   - [[#links][Links]]
   - [[#window-management][Window management]]
   - [[#annotating][Annotating]]
+  - [[#natural-languages][Natural languages]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -144,19 +145,23 @@ By default, settings inside =:status= clauses are not loaded.
     "Prefix for mode-specific keybindings."
     :type 'string)
 #+end_src
+*** Key translation map
+#+begin_src emacs-lisp
+  (setup key-translation-map
+    (:status opinionated
+      (global-set-key (kbd "M-r") nil)
+      (define-key key-translation-map (kbd "M-r") (kbd "C-x r"))
+
+      ;; Chromebook don't have physical function keys. They substitute
+      ;; Search + num for function keys, but Search + 1 is hard to press,
+      ;; especially when Search and Ctrl are swapped.
+      ;; This is quite annoying, so I will use M-` as <f1>.
+      (define-key key-translation-map (kbd "M-`") (kbd "<f1>"))))
+#+end_src
 ** Macro packages                                                 :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
-*** defrepeater                                               :keybindings:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-31 Mon 20:13]
-:END:
-
-#+begin_src emacs-lisp
-  (setup (:package defrepeater)
-    (:require))
-#+end_src
 *** fullframe                                                     :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:06]
@@ -172,6 +177,18 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 :SORTING_TYPE: a
 :END:
 # Note: These should never fail.
+*** autoinsert                                                    :expansion:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 17:47]
+:END:
+
+#+begin_src emacs-lisp
+  (setup autoinsert
+    (:option auto-insert 'other
+             auto-insert-query nil)
+    (:with-mode auto-insert-mode
+      (:hook-into after-init-hook)))
+#+end_src
 *** autorevert                                                         :IO:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -254,6 +271,18 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
      ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
      (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
           1 2 3 (4 . 4))))
+#+end_src
+*** dired                                                           :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:47]
+:END:
+
+#+begin_src emacs-lisp
+  (setup dired
+    (:option dired-recursive-copies 'always
+             dired-recursive-deletes 'top)
+  
+    (:bind "h" #'dired-up-directory))
 #+end_src
 *** ediff-wind                                                       :diff:
 :PROPERTIES:
@@ -366,7 +395,7 @@ The built-in =electric= package provides the following modes:
              version-control t
              view-read-only t
              auto-mode-case-fold nil)
-
+    
     (:status opinionated
       (:global "<f5>" #'revert-buffer)))
 #+end_src
@@ -573,7 +602,14 @@ Resources:
 :END:
 
 #+begin_src emacs-lisp
-  (setup (:package project))
+  (setup (:package project)
+    (:status opinionated
+      (:when-loaded
+        (:with-map ctl-x-map
+          ;; Don't use c-x p for the prefix map.
+          (:unbind "p")
+          ;; Rebind the key
+          (:bind "p" #'consult-project-extra-find)))))
 #+end_src
 *** prolog                                             :major__mode:Prolog:
 :PROPERTIES:
@@ -634,7 +670,13 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup simple
     (:global [remap count-words-region] #'count-words
-             [remap delete-horizontal-space] #'cycle-spacing))
+             [remap delete-horizontal-space] #'cycle-spacing)
+
+    (:with-mode visual-line-mode
+      (:hook-into prog-mode-hook
+                  text-mode-hook
+                  help-mode-hook
+                  special-mode-hook)))
 #+end_src
 *** startup
 :PROPERTIES:
@@ -778,8 +820,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
     (:hook-into after-init-hook)
 
     (:status opinionated
-      (:bind "C-c u" (defrepeater #'winner-undo)
-             "C-c <Right>" (defrepeater #'winner-redo))))
+      (:with-map ctl-x-map
+        (:bind "," #'winner-undo
+               "." #'winner-redo))))
 #+end_src
 *** woman
 :PROPERTIES:
@@ -896,7 +939,7 @@ I think it would be better to create my own theme, but I don't have enough time 
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
-*** citar
+*** citar                                                    :bibliography:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-23 Wed 23:59]
 :END:
@@ -912,6 +955,218 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package doct))
 #+end_src
+*** org
+#+begin_src emacs-lisp
+  (setup org
+    (:with-mode org-mode
+      (:when-loaded
+        (:also-load org-crypt))
+
+      (:option org-log-done 'time
+               org-log-into-drawer t
+               org-startup-folded 'content
+               org-startup-indented t
+               org-startup-truncated nil
+               org-enforce-todo-dependencies t
+               org-use-speed-commands t
+               org-track-ordered-property-with-tag t
+               org-extend-today-until 5
+               ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
+               org-cycle-separator-lines 0
+               org-blank-before-new-entry '((heading . nil)
+                                            (plain-list-item . auto))
+               org-imenu-depth 6
+               ;; Prevent an annoying behaviour probably due to org's bug.
+               org-link-search-must-match-exact-headline t
+               org-catch-invisible-edits 'show-and-error
+               ;; Prevent from saving org-refile and org-capture locations to bookmarks
+               org-bookmark-names-plist nil)))
+#+end_src
+**** Completion
+#+begin_src emacs-lisp
+  (setup org-mode
+    ;; When `org-tag-persistent-alist' is non-nil,
+    ;; `org-current-tag-alist' is set, and tags from
+    ;; `org-get-buffer-tags' are unavailable in completion.
+    ;;
+    ;; To provide non-persistent tags, enable this option to
+    ;; feed tags from all agenda files.
+    ;;
+    ;; This will be safe, since I use categories instead of
+    ;; tags to identify work projects.
+    (:option org-complete-tags-always-offer-all-agenda-tags t)
+
+    ;; https://emacs.stackexchange.com/questions/21171/company-mode-completion-for-org-keywords
+    (:hook (defun akirak-org-add-completion-at-point ()
+             (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point
+                       nil t))))
+#+end_src
+**** Display settings
+#+begin_src emacs-lisp
+  (setup org-mode
+    (:option org-image-actual-width (ignore-errors
+                                      (* 90 (/ (frame-text-width)
+                                               (frame-width))))
+             ;; Based on https://lepisma.xyz/2017/10/28/ricing-org-mode/
+             org-ellipsis " ⌄ "
+             org-pretty-entities t
+             org-hide-emphasis-markers t
+             org-fontify-whole-heading-line t
+             org-fontify-done-headline nil
+             org-fontify-quote-and-verse-blocks t))
+#+end_src
+**** Keybindings
+#+begin_src emacs-lisp
+  (setup org
+    (:with-mode org-mode
+      (:status opinionated
+        (:option org-special-ctrl-a/e t
+                 org-M-RET-may-split-line nil)
+
+        (:global "M-g h" #'akirak-org-avy-heading)
+
+        (:unbind "C-'"
+                 ;; I don't use any of these bindings and want to use them for other purposes
+                 "C-c ["
+                 "C-c ]")
+        (:bind akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
+               "C-c C-x c" #'akirak-org-avy-clone-subtree
+               ;; M-up/down/left/right is unavailable on Chromebooks, so I need
+               ;; alternative bindings for commands bound on those keys.
+               "M-n" #'org-metadown
+               "M-p" #'org-metaup
+               "M-H" #'org-shiftmetaleft
+               "M-L" #'org-shiftmetaright)
+
+        (:with-map org-read-date-minibuffer-local-map
+          (:bind "C-p" (defun akirak/org-calendar-previous-week ()
+                         (interactive)
+                         (org-eval-in-calendar '(calendar-forward-week -1)))
+                 "C-n" (defun akirak/org-calendar-next-week ()
+                         (interactive)
+                         (org-eval-in-calendar '(calendar-forward-week 1)))
+                 "<tab>" (defun akirak/org-calendar-next-day ()
+                           (interactive)
+                           (org-eval-in-calendar '(calendar-forward-day 1)))
+                 "<S-iso-lefttab>" (defun akirak/org-calendar-previous-day ()
+                                     (interactive)
+                                     (org-eval-in-calendar '(calendar-forward-day -1))))))))
+
+
+
+
+#+end_src
+**** org-agenda
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:12]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-agenda
+    (:option org-agenda-start-with-clockreport-mode t
+             org-agenda-remove-tags t
+             org-agenda-use-tag-inheritance t
+             org-agenda-sticky t))
+#+end_src
+**** org-babel (ob)
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:37]
+:END:
+
+#+begin_src emacs-lisp
+  (setup ob
+    (:option org-confirm-babel-evaluate nil
+             org-babel-load-languages
+             '((shell . t)
+               (emacs-lisp . t)
+               (sqlite . t))))
+#+end_src
+**** org-clock
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:13]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-clock
+    (:option org-clock-history-length 20
+             org-clock-goto-may-find-recent-task nil
+             org-clock-mode-line-total 'today
+             org-clock-out-remove-zero-time-clocks t
+             org-clock-persist t
+             org-clock-persist-query-resume nil))
+#+end_src
+**** org-habit
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-habit
+    (:option org-habit-following-days 7
+             org-habit-graph-column 55
+             org-habit-preceding-days 14
+             org-habit-scheduled-past-days 7
+             org-habit-show-done-always-green t))
+#+end_src
+**** org-id
+#+begin_src emacs-lisp
+  (setup org-id
+    (:option org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+#+end_src
+**** org-refile
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-refile
+    (:option org-log-refile nil
+
+             org-outline-path-complete-in-steps nil
+             org-refile-allow-creating-parent-nodes 'confirm
+             org-refile-use-outline-path 'full-file-path))
+#+end_src
+**** org-src
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-src
+    (:option org-src-tab-acts-natively t))
+#+end_src
+**** Tags
+#+begin_src emacs-lisp
+  (setup org-tags
+    (:option org-group-tags t
+             org-tags-exclude-from-inheritance '("ORDERED" "crypt")))
+#+end_src
+*** org-autolist
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 19:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-autolist)
+    (:hook-into org-mode-hook))
+#+end_src
+*** org-bookmark-heading
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 19:26]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-bookmark-heading))
+#+end_src
+*** org-capture
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 12:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-capture
+    (:global "C-c c" #'org-capture))
+#+end_src
 *** org-dynamic-bullets                                :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
@@ -920,6 +1175,14 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
   (setup (:package org-dynamic-bullets)
     (:hook-into org-mode-hook))
+#+end_src
+*** org-edna
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 19:16]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-edna))
 #+end_src
 *** org-journal                                                   :ARCHIVE:
 :PROPERTIES:
@@ -939,6 +1202,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package orglink))
 #+end_src
+
 *** org-make-toc                                            :documentation:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-22 Sat 20:50]
@@ -961,7 +1225,9 @@ Embrace Org as a common document format for Emacs.
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package org-ql))
+  (setup (:package org-ql)
+    ;; Temporarily workaround
+    (autoload 'org-dblock-write:org-ql "org-ql-search"))
 #+end_src
 *** org-remark
 :PROPERTIES:
@@ -1105,6 +1371,18 @@ A bunch of useful packages are configured here.
                         (when (window-live-p initial-window)
                           (select-window initial-window))))))))
 #+end_src
+*** adaptive-wrap                                                    :visual:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 17:56]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package adaptive-wrap)
+    (add-hook 'visual-line-mode
+              (defun akirak/turn-on-adaptive-wrap-prefix-mode ()
+                (unless (derived-mode-p 'org-mode)
+                  (adaptive-wrap-prefix-mode 1)))))
+#+end_src
 *** aggressive-indent                                          :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 20:26]
@@ -1130,6 +1408,21 @@ This is a collection of extra utilities for various packages.
     (:status personal
       (:defer 1 #'akirak-files-ensure-abbrev-list)
       (run-with-idle-timer 300 nil #'github-linguist-update-projects)))
+#+end_src
+**** akirak-window                                               :windows:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 14:10]
+:END:
+
+This is an extra functions for window management.
+
+#+begin_src emacs-lisp
+  (setup akirak-window
+    (:status opinionated
+      (:global "C-2" #'akirak-window-setup-columns
+               "C-3" #'akirak-window-split-vertically
+               "C-4" #'akirak-window-split-and-select
+               [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
 *** all-the-icons                                                      :UI:
 :PROPERTIES:
@@ -1159,6 +1452,25 @@ This is a collection of extra utilities for various packages.
 #+begin_src emacs-lisp
   (setup (:package all-the-icons-dired)
     (:hook-into dired-mode))
+#+end_src
+*** auto-yasnippet                                                :expansion:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 15:39]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package auto-yasnippet)
+    (:global "C-x r a" #'aya-create
+             "C-x r e" #'aya-expand))
+#+end_src
+*** avy
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 19:10]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package avy)
+    (:global "C-'" #'avy-goto-char-timer))
 #+end_src
 *** beancount                                            :@extra:beancount:
 #+begin_src emacs-lisp
@@ -1252,6 +1564,17 @@ This is a collection of extra utilities for various packages.
   (setup (:package consult-dir)
     (:global "C-x d" #'consult-dir))
 #+end_src
+*** consult-project-extra
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 18:22]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package consult-project-extra)
+    (:status opinionated
+      (:with-map ctl-x-map
+        (:bind "p" #'consult-project-extra-find))))
+#+end_src
 *** corfu                                                   :completion:UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:19]
@@ -1266,6 +1589,137 @@ This is a collection of extra utilities for various packages.
       (:bind "M-/" #'completion-at-point))
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
+#+end_src
+*** cycle-at-point                                                :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 14:36]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package cycle-at-point)
+    (:global "C-=" #'cycle-at-point))
+#+end_src
+*** dired-collapse                                                  :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:44]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package dired-collapse))
+#+end_src
+
+I will manually turn on =dired-collapse-mode= when necessary.
+*** dired-filter                                                    :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:50]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dired-filter)
+    (:hook-into dired-mode-hook)
+    (:hook dired-filter-group-mode)
+  
+    (:option dired-filter-group-saved-groups
+             `(("default"
+                ("Directories"
+                 (directory . t))
+                ("Dotfiles"
+                 (name . "^\\."))
+                ;; Text files
+                ("Text"
+                 (or (name . "README")
+                     (name . "TODO")
+                     (name . "LICENSE")
+                     (extension "txt" "md" "mkd" "markdown" "rst")))
+                ("Org"
+                 (extension "org" "bib"))
+                ("Ledger"
+                 (extension "beancount"))
+                ("Data files"
+                 (extension "csv" "json" "sql"))
+                ;; Binary files
+                ("Books and papers"
+                 (extension "pdf" "mobi" "epub" "azw"))
+                ("Archives"
+                 (extension "zip" "rar" "gz" "bz2" "tar"))
+                ("Disk images"
+                 (extension "iso" "ova"))
+                ("Office docs"
+                 (extension "xlsx" "xls" "docx" "doc"))
+                ("Programs"
+                 (extension "exe" "run" "deb"))
+                ("Objects and binary files"
+                 (extension "o" "elc"))
+                ("Meta data"
+                 (extension "torrent" "acsm"))
+                ;; Images are often thumbnails, so they should come
+                ;; after other binary files
+                ("Images and graphics"
+                 (extension "jpg" "jpeg" "png" "gif" "svg"))
+                ;; Source code
+                ("Config"
+                 (or (name . "Makefile")
+                     (name . "Dockerfile")
+                     (extension "yml" "yaml" "cabal"
+                                "dockerfile" "mk")))
+                ("Emacs Lisp"
+                 (extension "el"))))))
+#+end_src
+*** dired-hacks-utils                                               :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:49]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dired-hacks-utils)
+    (:with-map dired-mode-map
+      ;; Remap 'n' and 'p'
+      "n" 'dired-hacks-next-file
+      "p" 'dired-hacks-previous-file))
+#+end_src
+*** dired-hide-dotfiles                                             :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 19:08]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package dired-hide-dotfiles))
+#+end_src
+*** dired-k                                                 :dired:ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dired-k)
+    (:option dired-k-style 'git)
+  
+    (:with-hook dired-k-no-revert
+      (:hook-into dired-after-readin-hook))
+  
+    ;; Prevent from highlighting by file attributes.
+    ;; Just add git status
+    ;; (defun akirak/ad-override-dired-k--highlight-by-file-attribyte ()
+    ;;   nil)
+    ;; (advice-add #'dired-k--highlight-by-file-attribyte
+    ;;             :override
+    ;;             #'akirak/ad-override-dired-k--highlight-by-file-attribyte)
+    )
+#+end_src
+
+dired-k depends on dired-x, which has a poor code quality.
+*** dired-open                                                      :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 18:47]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dired-open)
+    ;; Temporary workaround
+    (autoload 'dired-open-xdg "dired-open")
+    
+    (:option dired-open-functions '(dired-open-by-extension
+                                    dired-open-subdir)))
 #+end_src
 *** ediprolog                                                      :Prolog:
 :PROPERTIES:
@@ -1394,6 +1848,34 @@ The following resources are useful:
     ;; For activation, see corfu
     (:global "TAB" #'fancy-dabbrev-expand-or-indent))
 #+end_src
+*** fanyi                                                      :dictionary:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package fanyi))
+#+end_src
+*** ghelp                                           :reference:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 12:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package ghelp)
+    (:global "<f1> ." #'ghelp-describe-at-point)
+  
+    ;; Temporary workaround
+    (autoload 'ghelp-describe-at-point "ghelp"))
+#+end_src
+*** ghelp-helpful
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 13:16]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package ghelp-helpful))
+#+end_src
 *** gif-screencast                                      :screen__recording:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:38]
@@ -1446,6 +1928,14 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package haskell-tng-mode)
     (:file-match "\\.hs\\'"))
+#+end_src
+*** helpful                                               :reference:Emacs:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 12:50]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package helpful))
 #+end_src
 *** hercules                                                  :keybindings:
 :PROPERTIES:
@@ -1581,7 +2071,24 @@ To use it, turn on =macrostep-mode=.
       (:global "<f8> <f7>" #'magit-stage-file
                "<f8> <f8>" #'magit-status
                "<f8> <f9>" #'magit-dispatch
-               "<f8> <f10>" #'magit-file-dispatch))
+               "<f8> <f10>" #'magit-file-dispatch)
+
+      (:option magit-display-buffer-function
+               ;; Based on 'magit-display-buffer-same-window-except-diff-v1
+               (defun akirak/magit-display-buffer (buffer)
+                 (let ((action (with-current-buffer buffer
+                                 (cond
+                                  ((derived-mode-p 'magit-diff-mode)
+                                   '(nil (inhibit-same-window . t)))
+                                  ((derived-mode-p 'magit-process-mode)
+                                   '(akirak-window-display-buffer-prefer-other-pane))
+                                  (t
+                                   '(display-buffer-same-window))))))
+                   (prog1 (display-buffer buffer action)
+                     (with-current-buffer buffer
+                       (when (derived-mode-p 'magit-process-mode)
+                         (goto-char (point-max))
+                         (recenter-top-bottom -1))))))))
 
     (:status personal
       (:option magit-repository-directories '(("~/" . 1)
@@ -1801,7 +2308,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
   (setup (:package svg-lib))
 #+end_src
-*** svg-tag-mode                                   :visual:nano:aesthetics:
+*** svg-tag-mode                             :visual:nano:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:26]
 :END:
@@ -1809,7 +2316,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
   (setup (:package svg-tag-mode)
     (autoload #'svg-tag-mode "svg-tag-mode.el")
-    (:hook-into org-mode prog-mode))
+    (:hook-into after-init-hook))
 #+end_src
 *** symbol-overlay                                                :editing:
 :PROPERTIES:
@@ -1946,6 +2453,35 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
     (:hook-into after-init-hook)
     (:hook which-key-setup-side-window-bottom))
 #+end_src
+*** windswap                                                       :windows:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 13:52]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package windswap)
+    (:status opinionated
+      (:global "<C-S-left>" #'windswap-left
+               "<C-S-right>" #'windswap-right
+               "<C-S-up>" #'windswap-up
+               "<C-S-down>" #'windswap-down)
+
+      ;; These keys are bound by default in org-mode, so unbind them.
+      (:with-feature org
+        (:when-loaded
+          (:unbind
+           "<C-S-left>"
+           "<C-S-right>"
+           "<C-S-up>"
+           "<C-S-down>")))
+      (:with-feature org-agenda
+        (:when-loaded
+          (:unbind
+           "<C-S-left>"
+           "<C-S-right>"
+           "<C-S-up>"
+           "<C-S-down>")))))
+#+end_src
 *** ws-butler                                                  :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:16]
@@ -1994,68 +2530,72 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 84 |
-| [[org-ql-search:tags:visual][visual]]              | 11 |
-| [[org-ql-search:tags:UI][UI]]                  | 10 |
-| [[org-ql-search:tags:formatting][formatting]]          |  9 |
-| [[org-ql-search:tags:development][development]]         |  8 |
-| [[org-ql-search:tags:keybindings][keybindings]]         |  6 |
-| [[org-ql-search:tags:completion][completion]]          |  6 |
-| [[org-ql-search:tags:windows][windows]]             |  5 |
-| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |  5 |
-| [[org-ql-search:tags:library][library]]             |  5 |
-| [[org-ql-search:tags:process][process]]             |  4 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |  4 |
-| [[org-ql-search:tags:history][history]]             |  4 |
-| [[org-ql-search:tags:profiling][profiling]]           |  3 |
-| [[org-ql-search:tags:files][files]]               |  3 |
-| [[org-ql-search:tags:minibuffer][minibuffer]]          |  3 |
-| [[org-ql-search:tags:Emacs][Emacs]]               |  3 |
-| [[org-ql-search:tags:writing][writing]]             |  3 |
-| [[org-ql-search:tags:links][links]]               |  3 |
-| [[org-ql-search:tags:IO][IO]]                  |  2 |
-| [[org-ql-search:tags:parentheses][parentheses]]         |  2 |
-| [[org-ql-search:tags:Prolog][Prolog]]              |  2 |
-| [[org-ql-search:tags:VC][VC]]                  |  2 |
-| [[org-ql-search:tags:navigation][navigation]]          |  2 |
-| [[org-ql-search:tags:major_mode][major_mode]]          |  2 |
-| [[org-ql-search:tags:editing][editing]]             |  2 |
-| [[org-ql-search:tags:structured__editing][structured__editing]] |  2 |
-| [[org-ql-search:tags:aesthetics][aesthetics]]          |  2 |
-| [[org-ql-search:tags:syntax][syntax]]              |  2 |
-| [[org-ql-search:tags:tree_sitter][tree_sitter]]         |  2 |
-| [[org-ql-search:tags:initialization][initialization]]      |  1 |
-| [[org-ql-search:tags:performance][performance]]         |  1 |
-| [[org-ql-search:tags:diff][diff]]                |  1 |
-| [[org-ql-search:tags:help][help]]                |  1 |
-| [[org-ql-search:tags:prog_mode][prog_mode]]           |  1 |
-| [[org-ql-search:tags:text_mode][text_mode]]           |  1 |
-| [[org-ql-search:tags:text][text]]                |  1 |
-| [[org-ql-search:tags:capture][capture]]             |  1 |
-| [[org-ql-search:tags:documentation][documentation]]       |  1 |
-| [[org-ql-search:tags:@extra][@extra]]              |  1 |
-| [[org-ql-search:tags:beancount][beancount]]           |  1 |
-| [[org-ql-search:tags:LSP][LSP]]                 |  1 |
-| [[org-ql-search:tags:direnv][direnv]]              |  1 |
-| [[org-ql-search:tags:startup][startup]]             |  1 |
-| [[org-ql-search:tags:screen__recording][screen__recording]]   |  1 |
-| [[org-ql-search:tags:Haskell][Haskell]]             |  1 |
-| [[org-ql-search:tags:exercises][exercises]]           |  1 |
-| [[org-ql-search:tags:OSS][OSS]]                 |  1 |
-| [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |  1 |
-| [[org-ql-search:tags:git][git]]                 |  1 |
-| [[org-ql-search:tags:Nix][Nix]]                 |  1 |
-| [[org-ql-search:tags:reading][reading]]             |  1 |
-| [[org-ql-search:tags:EPUB][EPUB]]                |  1 |
-| [[org-ql-search:tags:project][project]]             |  1 |
-| [[org-ql-search:tags:colors][colors]]              |  1 |
-| [[org-ql-search:tags:web][web]]                 |  1 |
-| [[org-ql-search:tags:graphics][graphics]]            |  1 |
-| [[org-ql-search:tags:nano][nano]]                |  1 |
-| [[org-ql-search:tags:debugging][debugging]]           |  1 |
-| [[org-ql-search:tags:configuration][configuration]]       |  1 |
-| [[org-ql-search:tags:terminal][terminal]]            |  1 |
-| [[org-ql-search:tags:usability][usability]]           |  1 |
+| [[org-ql-search:tags:packages][packages]]            | 115 |
+| [[org-ql-search:tags:visual][visual]]              |  11 |
+| [[org-ql-search:tags:UI][UI]]                  |  10 |
+| [[org-ql-search:tags:formatting][formatting]]          |   9 |
+| [[org-ql-search:tags:development][development]]         |   9 |
+| [[org-ql-search:tags:windows][windows]]             |   7 |
+| [[org-ql-search:tags:dired][dired]]               |   6 |
+| [[org-ql-search:tags:completion][completion]]          |   6 |
+| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
+| [[org-ql-search:tags:keybindings][keybindings]]         |   5 |
+| [[org-ql-search:tags:library][library]]             |   5 |
+| [[org-ql-search:tags:process][process]]             |   4 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
+| [[org-ql-search:tags:Emacs][Emacs]]               |   4 |
+| [[org-ql-search:tags:history][history]]             |   4 |
+| [[org-ql-search:tags:profiling][profiling]]           |   3 |
+| [[org-ql-search:tags:files][files]]               |   3 |
+| [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
+| [[org-ql-search:tags:writing][writing]]             |   3 |
+| [[org-ql-search:tags:links][links]]               |   3 |
+| [[org-ql-search:tags:editing][editing]]             |   3 |
+| [[org-ql-search:tags:expansion][expansion]]           |   2 |
+| [[org-ql-search:tags:IO][IO]]                  |   2 |
+| [[org-ql-search:tags:parentheses][parentheses]]         |   2 |
+| [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
+| [[org-ql-search:tags:VC][VC]]                  |   2 |
+| [[org-ql-search:tags:navigation][navigation]]          |   2 |
+| [[org-ql-search:tags:reference][reference]]           |   2 |
+| [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:structured__editing][structured__editing]] |   2 |
+| [[org-ql-search:tags:syntax][syntax]]              |   2 |
+| [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
+| [[org-ql-search:tags:initialization][initialization]]      |   1 |
+| [[org-ql-search:tags:performance][performance]]         |   1 |
+| [[org-ql-search:tags:diff][diff]]                |   1 |
+| [[org-ql-search:tags:help][help]]                |   1 |
+| [[org-ql-search:tags:prog_mode][prog_mode]]           |   1 |
+| [[org-ql-search:tags:text_mode][text_mode]]           |   1 |
+| [[org-ql-search:tags:text][text]]                |   1 |
+| [[org-ql-search:tags:bibliography][bibliography]]        |   1 |
+| [[org-ql-search:tags:capture][capture]]             |   1 |
+| [[org-ql-search:tags:documentation][documentation]]       |   1 |
+| [[org-ql-search:tags:@extra][@extra]]              |   1 |
+| [[org-ql-search:tags:beancount][beancount]]           |   1 |
+| [[org-ql-search:tags:LSP][LSP]]                 |   1 |
+| [[org-ql-search:tags:direnv][direnv]]              |   1 |
+| [[org-ql-search:tags:startup][startup]]             |   1 |
+| [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
+| [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
+| [[org-ql-search:tags:Haskell][Haskell]]             |   1 |
+| [[org-ql-search:tags:exercises][exercises]]           |   1 |
+| [[org-ql-search:tags:OSS][OSS]]                 |   1 |
+| [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
+| [[org-ql-search:tags:git][git]]                 |   1 |
+| [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
+| [[org-ql-search:tags:Nix][Nix]]                 |   1 |
+| [[org-ql-search:tags:reading][reading]]             |   1 |
+| [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
+| [[org-ql-search:tags:project][project]]             |   1 |
+| [[org-ql-search:tags:colors][colors]]              |   1 |
+| [[org-ql-search:tags:web][web]]                 |   1 |
+| [[org-ql-search:tags:graphics][graphics]]            |   1 |
+| [[org-ql-search:tags:debugging][debugging]]           |   1 |
+| [[org-ql-search:tags:configuration][configuration]]       |   1 |
+| [[org-ql-search:tags:terminal][terminal]]            |   1 |
+| [[org-ql-search:tags:usability][usability]]           |   1 |
 
 Note that the table above is invisible on GitHub.
 There is a table right before paragraph.
@@ -2134,13 +2674,15 @@ To use these features, they need to be turned on at build time.
 :CREATED_TIME: [2022-01-31 Mon 19:07]
 :END:
 #+BEGIN: org-ql :query "tags:windows" :columns (heading todo)
-| Heading     | Todo |
-|-------------+------|
-| [[fullframe][fullframe]]   |      |
-| [[windmove][windmove]]    |      |
-| [[winner][winner]]      |      |
-| [[popper][popper]]      |      |
-| [[repl-toggle][repl-toggle]] |      |
+| Heading       | Todo |
+|---------------+------|
+| [[fullframe][fullframe]]     |      |
+| [[windmove][windmove]]      |      |
+| [[winner][winner]]        |      |
+| [[akirak-window][akirak-window]] |      |
+| [[popper][popper]]        |      |
+| [[repl-toggle][repl-toggle]]   |      |
+| [[windswap][windswap]]      |      |
 #+END:
 *** Annotating
 :PROPERTIES:
@@ -2149,6 +2691,12 @@ To use these features, they need to be turned on at build time.
 You can use org-remark to annotate texts in file buffers.
 
 To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF files (via =pdf-tools= package), but I won't use pdf-tools package.
+*** Natural languages
+#+BEGIN: org-ql :query "tags:dictionary" :columns (heading todo)
+| Heading | Todo |
+|---------+------|
+| [[fanyi][fanyi]]   |      |
+#+END:
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil

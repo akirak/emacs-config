@@ -50,6 +50,12 @@
       repo = "emacs-async";
       type = "github";
     };
+    auto-yasnippet = {
+      flake = false;
+      owner = "abo-abo";
+      repo = "auto-yasnippet";
+      type = "github";
+    };
     avy = {
       flake = false;
       owner = "abo-abo";
@@ -110,11 +116,22 @@
       repo = "consult-dir";
       type = "github";
     };
+    consult-project-extra = {
+      flake = false;
+      owner = "Qkessler";
+      repo = "consult-project-extra";
+      type = "github";
+    };
     corfu = {
       flake = false;
       owner = "minad";
       repo = "corfu";
       type = "github";
+    };
+    cycle-at-point = {
+      flake = false;
+      type = "git";
+      url = "https://gitlab.com/ideasman42/emacs-cycle-at-point.git";
     };
     dash = {
       flake = false;
@@ -122,10 +139,34 @@
       repo = "dash.el";
       type = "github";
     };
-    defrepeater = {
+    dired-collapse = {
       flake = false;
-      owner = "alphapapa";
-      repo = "defrepeater.el";
+      owner = "Fuco1";
+      repo = "dired-hacks";
+      type = "github";
+    };
+    dired-filter = {
+      flake = false;
+      owner = "Fuco1";
+      repo = "dired-hacks";
+      type = "github";
+    };
+    dired-hacks-utils = {
+      flake = false;
+      owner = "Fuco1";
+      repo = "dired-hacks";
+      type = "github";
+    };
+    dired-hide-dotfiles = {
+      flake = false;
+      owner = "mattiasb";
+      repo = "dired-hide-dotfiles";
+      type = "github";
+    };
+    dired-open = {
+      flake = false;
+      owner = "Fuco1";
+      repo = "dired-hacks";
       type = "github";
     };
     doct = {
@@ -150,6 +191,12 @@
       flake = false;
       owner = "davidshepherd7";
       repo = "electric-operator";
+      type = "github";
+    };
+    elisp-refs = {
+      flake = false;
+      owner = "Wilfred";
+      repo = "elisp-refs";
       type = "github";
     };
     elx = {
@@ -224,6 +271,12 @@
       repo = "fancy-dabbrev";
       type = "github";
     };
+    fanyi = {
+      flake = false;
+      owner = "condy0919";
+      repo = "fanyi.el";
+      type = "github";
+    };
     fullframe = {
       flake = false;
       type = "git";
@@ -233,6 +286,18 @@
       flake = false;
       type = "git";
       url = "https://gitlab.com/koral/gcmh.git";
+    };
+    ghelp = {
+      flake = false;
+      owner = "casouri";
+      repo = "ghelp";
+      type = "github";
+    };
+    ghelp-helpful = {
+      flake = false;
+      owner = "casouri";
+      repo = "ghelp";
+      type = "github";
     };
     gif-screencast = {
       flake = false;
@@ -268,6 +333,12 @@
       ref = "tng";
       type = "git";
       url = "https://gitlab.com/tseenshe/haskell-tng.el.git";
+    };
+    helpful = {
+      flake = false;
+      owner = "Wilfred";
+      repo = "helpful";
+      type = "github";
     };
     hercules = {
       flake = false;
@@ -412,6 +483,18 @@
       repo = "orderless";
       type = "github";
     };
+    org-autolist = {
+      flake = false;
+      owner = "calvinwyoung";
+      repo = "org-autolist";
+      type = "github";
+    };
+    org-bookmark-heading = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "org-bookmark-heading";
+      type = "github";
+    };
     org-make-toc = {
       flake = false;
       owner = "alphapapa";
@@ -538,6 +621,11 @@
       repo = "rainbow-mode";
       type = "github";
     };
+    recomplete = {
+      flake = false;
+      type = "git";
+      url = "https://gitlab.com/ideasman42/emacs-recomplete.git";
+    };
     repl-toggle = {
       flake = false;
       type = "git";
@@ -576,12 +664,6 @@
       flake = false;
       owner = "rougier";
       repo = "svg-lib";
-      type = "github";
-    };
-    svg-tag-mode = {
-      flake = false;
-      owner = "rougier";
-      repo = "svg-tag-mode";
       type = "github";
     };
     swiper = {
@@ -691,6 +773,12 @@
       repo = "emacs-which-key";
       type = "github";
     };
+    windswap = {
+      flake = false;
+      owner = "purcell";
+      repo = "windswap";
+      type = "github";
+    };
     with-editor = {
       flake = false;
       owner = "magit";
@@ -701,6 +789,12 @@
       flake = false;
       owner = "lewang";
       repo = "ws-butler";
+      type = "github";
+    };
+    yasnippet = {
+      flake = false;
+      owner = "joaotavora";
+      repo = "yasnippet";
       type = "github";
     };
     zoutline = {

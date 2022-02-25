@@ -255,11 +255,28 @@
               inheritPath = false;
             };
 
+            emacs-personalized = emacsSandboxed {
+              name = "emacs-personalized";
+              shareNet = false;
+              protectHome = true;
+              inheritPath = true;
+              userEmacsDirectory = "$HOME/emacs";
+              extraInitText = builtins.readFile ./home/profiles/emacs/extra-init.el;
+              extraDirsToTryBind = [
+                "$HOME/emacs"
+                "$HOME/config"
+                "$HOME/fleeting"
+                "$HOME/org"
+                "$HOME/resources"
+              ];
+            };
+
             inherit (channels.nixpkgs) emacs-reader;
 
             inherit emacs-config;
 
             update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
+              nix flake lock --update-input melpa --update-input gnu-elpa
               cd emacs/lock
               bash ./update.bash
             '';
