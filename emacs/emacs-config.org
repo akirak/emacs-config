@@ -162,15 +162,6 @@ By default, settings inside =:status= clauses are not loaded.
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
-*** defrepeater                                               :keybindings:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-31 Mon 20:13]
-:END:
-
-#+begin_src emacs-lisp
-  (setup (:package defrepeater)
-    (:require))
-#+end_src
 *** fullframe                                                     :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:06]
@@ -804,8 +795,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
     (:hook-into after-init-hook)
 
     (:status opinionated
-      (:bind "C-c u" (defrepeater #'winner-undo)
-             "C-c <Right>" (defrepeater #'winner-redo))))
+      (:with-map ctl-x-map
+        (:bind "," #'winner-undo
+               "." #'winner-redo))))
 #+end_src
 *** woman
 :PROPERTIES:
