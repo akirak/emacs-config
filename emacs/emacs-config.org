@@ -145,6 +145,19 @@ By default, settings inside =:status= clauses are not loaded.
     "Prefix for mode-specific keybindings."
     :type 'string)
 #+end_src
+*** Key translation map
+#+begin_src emacs-lisp
+  (setup key-translation-map
+    (:status opinionated
+      (global-set-key (kbd "M-r") nil)
+      (define-key key-translation-map (kbd "M-r") (kbd "C-x r"))
+
+      ;; Chromebook don't have physical function keys. They substitute
+      ;; Search + num for function keys, but Search + 1 is hard to press,
+      ;; especially when Search and Ctrl are swapped.
+      ;; This is quite annoying, so I will use M-` as <f1>.
+      (define-key key-translation-map (kbd "M-`") (kbd "<f1>"))))
+#+end_src
 ** Macro packages                                                 :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
