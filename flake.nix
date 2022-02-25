@@ -276,6 +276,7 @@
             inherit emacs-config;
 
             update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
+              nix flake lock --update-input melpa --update-input gnu-elpa
               cd emacs/lock
               bash ./update.bash
             '';
