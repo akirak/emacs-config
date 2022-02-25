@@ -2093,7 +2093,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
   (setup (:package svg-lib))
 #+end_src
-*** svg-tag-mode                                   :visual:nano:aesthetics:
+*** svg-tag-mode                             :visual:nano:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:26]
 :END:
@@ -2101,7 +2101,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
   (setup (:package svg-tag-mode)
     (autoload #'svg-tag-mode "svg-tag-mode.el")
-    (:hook-into org-mode prog-mode))
+    (:hook-into after-init-hook))
 #+end_src
 *** symbol-overlay                                                :editing:
 :PROPERTIES:
