@@ -1793,7 +1793,24 @@ To use it, turn on =macrostep-mode=.
       (:global "<f8> <f7>" #'magit-stage-file
                "<f8> <f8>" #'magit-status
                "<f8> <f9>" #'magit-dispatch
-               "<f8> <f10>" #'magit-file-dispatch))
+               "<f8> <f10>" #'magit-file-dispatch)
+
+      (:option magit-display-buffer-function
+               ;; Based on 'magit-display-buffer-same-window-except-diff-v1
+               (defun akirak/magit-display-buffer (buffer)
+                 (let ((action (with-current-buffer buffer
+                                 (cond
+                                  ((derived-mode-p 'magit-diff-mode)
+                                   '(nil (inhibit-same-window . t)))
+                                  ((derived-mode-p 'magit-process-mode)
+                                   '(akirak-window-display-buffer-prefer-other-pane))
+                                  (t
+                                   '(display-buffer-same-window))))))
+                   (prog1 (display-buffer buffer action)
+                     (with-current-buffer buffer
+                       (when (derived-mode-p 'magit-process-mode)
+                         (goto-char (point-max))
+                         (recenter-top-bottom -1))))))))
 
     (:status personal
       (:option magit-repository-directories '(("~/" . 1)
