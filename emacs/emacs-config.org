@@ -939,12 +939,6 @@ I think it would be better to create my own theme, but I don't have enough time 
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
-
-#+begin_src emacs-lisp
-  (setup org
-    (:with-mode org-mode
-      (:unbind "C-'")))
-#+end_src
 *** citar                                                    :bibliography:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-23 Wed 23:59]
@@ -960,6 +954,209 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
 (setup (:package doct))
+#+end_src
+*** org
+#+begin_src emacs-lisp
+  (setup org
+    (:with-mode org-mode
+      (:when-loaded
+        (:also-load org-crypt))
+
+      (:option org-log-done 'time
+               org-log-into-drawer t
+               org-startup-folded 'content
+               org-startup-indented t
+               org-startup-truncated nil
+               org-enforce-todo-dependencies t
+               org-use-speed-commands t
+               org-track-ordered-property-with-tag t
+               org-extend-today-until 5
+               ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
+               org-cycle-separator-lines 0
+               org-blank-before-new-entry '((heading . nil)
+                                            (plain-list-item . auto))
+               org-imenu-depth 6
+               ;; Prevent an annoying behaviour probably due to org's bug.
+               org-link-search-must-match-exact-headline t
+               org-catch-invisible-edits 'show-and-error
+               ;; Prevent from saving org-refile and org-capture locations to bookmarks
+               org-bookmark-names-plist nil)))
+#+end_src
+**** Completion
+#+begin_src emacs-lisp
+  (setup org-mode
+    ;; When `org-tag-persistent-alist' is non-nil,
+    ;; `org-current-tag-alist' is set, and tags from
+    ;; `org-get-buffer-tags' are unavailable in completion.
+    ;;
+    ;; To provide non-persistent tags, enable this option to
+    ;; feed tags from all agenda files.
+    ;;
+    ;; This will be safe, since I use categories instead of
+    ;; tags to identify work projects.
+    (:option org-complete-tags-always-offer-all-agenda-tags t)
+
+    ;; https://emacs.stackexchange.com/questions/21171/company-mode-completion-for-org-keywords
+    (:hook (defun akirak-org-add-completion-at-point ()
+             (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point
+                       nil t))))
+#+end_src
+**** Display settings
+#+begin_src emacs-lisp
+  (setup org-mode
+    (:option org-image-actual-width (ignore-errors
+                                      (* 90 (/ (frame-text-width)
+                                               (frame-width))))
+             ;; Based on https://lepisma.xyz/2017/10/28/ricing-org-mode/
+             org-ellipsis " ⌄ "
+             org-pretty-entities t
+             org-hide-emphasis-markers t
+             org-fontify-whole-heading-line t
+             org-fontify-done-headline nil
+             org-fontify-quote-and-verse-blocks t))
+#+end_src
+**** Keybindings
+#+begin_src emacs-lisp
+  (setup org
+    (:with-mode org-mode
+      (:status opinionated
+        (:option org-special-ctrl-a/e t
+                 org-M-RET-may-split-line nil)
+
+        (:global "M-g h" #'akirak-org-avy-heading)
+
+        (:unbind "C-'"
+                 ;; I don't use any of these bindings and want to use them for other purposes
+                 "C-c ["
+                 "C-c ]")
+        (:bind akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
+               "C-c C-x c" #'akirak-org-avy-clone-subtree
+               ;; M-up/down/left/right is unavailable on Chromebooks, so I need
+               ;; alternative bindings for commands bound on those keys.
+               "M-n" #'org-metadown
+               "M-p" #'org-metaup
+               "M-H" #'org-shiftmetaleft
+               "M-L" #'org-shiftmetaright)
+
+        (:with-map org-read-date-minibuffer-local-map
+          (:bind "C-p" (defun akirak/org-calendar-previous-week ()
+                         (interactive)
+                         (org-eval-in-calendar '(calendar-forward-week -1)))
+                 "C-n" (defun akirak/org-calendar-next-week ()
+                         (interactive)
+                         (org-eval-in-calendar '(calendar-forward-week 1)))
+                 "<tab>" (defun akirak/org-calendar-next-day ()
+                           (interactive)
+                           (org-eval-in-calendar '(calendar-forward-day 1)))
+                 "<S-iso-lefttab>" (defun akirak/org-calendar-previous-day ()
+                                     (interactive)
+                                     (org-eval-in-calendar '(calendar-forward-day -1))))))))
+
+
+
+
+#+end_src
+**** org-agenda
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:12]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-agenda
+    (:option org-agenda-start-with-clockreport-mode t
+             org-agenda-remove-tags t
+             org-agenda-use-tag-inheritance t
+             org-agenda-sticky t))
+#+end_src
+**** org-babel (ob)
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:37]
+:END:
+
+#+begin_src emacs-lisp
+  (setup ob
+    (:option org-confirm-babel-evaluate nil
+             org-babel-load-languages
+             '((shell . t)
+               (emacs-lisp . t)
+               (sqlite . t))))
+#+end_src
+**** org-clock
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:13]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-clock
+    (:option org-clock-history-length 20
+             org-clock-goto-may-find-recent-task nil
+             org-clock-mode-line-total 'today
+             org-clock-out-remove-zero-time-clocks t
+             org-clock-persist t
+             org-clock-persist-query-resume nil))
+#+end_src
+**** org-habit
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-habit
+    (:option org-habit-following-days 7
+             org-habit-graph-column 55
+             org-habit-preceding-days 14
+             org-habit-scheduled-past-days 7
+             org-habit-show-done-always-green t))
+#+end_src
+**** org-id
+#+begin_src emacs-lisp
+  (setup org-id
+    (:option org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+#+end_src
+**** org-refile
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-refile
+    (:option org-log-refile nil
+
+             org-outline-path-complete-in-steps nil
+             org-refile-allow-creating-parent-nodes 'confirm
+             org-refile-use-outline-path 'full-file-path))
+#+end_src
+**** org-src
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 22:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-src
+    (:option org-src-tab-acts-natively t))
+#+end_src
+**** Tags
+#+begin_src emacs-lisp
+  (setup org-tags
+    (:option org-group-tags t
+             org-tags-exclude-from-inheritance '("ORDERED" "crypt")))
+#+end_src
+*** org-autolist
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 19:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-autolist)
+    (:hook-into org-mode-hook))
+#+end_src
+*** org-bookmark-heading
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 19:26]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-bookmark-heading))
 #+end_src
 *** org-capture
 :PROPERTIES:
@@ -979,6 +1176,14 @@ Embrace Org as a common document format for Emacs.
   (setup (:package org-dynamic-bullets)
     (:hook-into org-mode-hook))
 #+end_src
+*** org-edna
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 19:16]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-edna))
+#+end_src
 *** org-journal                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
@@ -997,6 +1202,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package orglink))
 #+end_src
+
 *** org-make-toc                                            :documentation:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-22 Sat 20:50]
