@@ -909,6 +909,12 @@ I think it would be better to create my own theme, but I don't have enough time 
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
+
+#+begin_src emacs-lisp
+  (setup org
+    (:with-mode org-mode
+      (:unbind "C-'")))
+#+end_src
 *** citar                                                    :bibliography:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-23 Wed 23:59]
