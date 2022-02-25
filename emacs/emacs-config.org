@@ -1257,6 +1257,15 @@ This is an extra functions for window management.
     (:global "C-x r a" #'aya-create
              "C-x r e" #'aya-expand))
 #+end_src
+*** avy
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 19:10]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package avy)
+    (:global "C-'" #'avy-goto-char-timer))
+#+end_src
 *** beancount                                            :@extra:beancount:
 #+begin_src emacs-lisp
   (setup (:package beancount)
