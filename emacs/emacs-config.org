@@ -983,7 +983,9 @@ Embrace Org as a common document format for Emacs.
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package org-ql))
+  (setup (:package org-ql)
+    ;; Temporarily workaround
+    (autoload 'org-dblock-write:org-ql "org-ql-search"))
 #+end_src
 *** org-remark
 :PROPERTIES:
