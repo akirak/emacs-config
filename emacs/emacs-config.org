@@ -1218,6 +1218,16 @@ This is an extra functions for window management.
   (setup (:package all-the-icons-dired)
     (:hook-into dired-mode))
 #+end_src
+*** auto-yasnippet                                                :expansion:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 15:39]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package auto-yasnippet)
+    (:global "C-x r a" #'aya-create
+             "C-x r e" #'aya-expand))
+#+end_src
 *** beancount                                            :@extra:beancount:
 #+begin_src emacs-lisp
   (setup (:package beancount)
