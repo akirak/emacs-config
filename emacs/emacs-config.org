@@ -602,7 +602,14 @@ Resources:
 :END:
 
 #+begin_src emacs-lisp
-  (setup (:package project))
+  (setup (:package project)
+    (:status opinionated
+      (:when-loaded
+        (:with-map ctl-x-map
+          ;; Don't use c-x p for the prefix map.
+          (:unbind "p")
+          ;; Rebind the key
+          (:bind "p" #'consult-project-extra-find)))))
 #+end_src
 *** prolog                                             :major__mode:Prolog:
 :PROPERTIES:
@@ -1341,6 +1348,17 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup (:package consult-dir)
     (:global "C-x d" #'consult-dir))
+#+end_src
+*** consult-project-extra
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 18:22]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package consult-project-extra)
+    (:status opinionated
+      (:with-map ctl-x-map
+        (:bind "p" #'consult-project-extra-find))))
 #+end_src
 *** corfu                                                   :completion:UI:
 :PROPERTIES:
