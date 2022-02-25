@@ -1158,6 +1158,18 @@ A bunch of useful packages are configured here.
                         (when (window-live-p initial-window)
                           (select-window initial-window))))))))
 #+end_src
+*** adaptive-wrap                                                    :visual:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 17:56]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package adaptive-wrap)
+    (add-hook 'visual-line-mode
+              (defun akirak/turn-on-adaptive-wrap-prefix-mode ()
+                (unless (derived-mode-p 'org-mode)
+                  (adaptive-wrap-prefix-mode 1)))))
+#+end_src
 *** aggressive-indent                                          :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 20:26]
