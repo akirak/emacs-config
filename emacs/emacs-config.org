@@ -663,7 +663,13 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup simple
     (:global [remap count-words-region] #'count-words
-             [remap delete-horizontal-space] #'cycle-spacing))
+             [remap delete-horizontal-space] #'cycle-spacing)
+
+    (:with-mode visual-line-mode
+      (:hook-into prog-mode-hook
+                  text-mode-hook
+                  help-mode-hook
+                  special-mode-hook)))
 #+end_src
 *** startup
 :PROPERTIES:
