@@ -2530,68 +2530,72 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 84 |
-| [[org-ql-search:tags:visual][visual]]              | 11 |
-| [[org-ql-search:tags:UI][UI]]                  | 10 |
-| [[org-ql-search:tags:formatting][formatting]]          |  9 |
-| [[org-ql-search:tags:development][development]]         |  8 |
-| [[org-ql-search:tags:keybindings][keybindings]]         |  6 |
-| [[org-ql-search:tags:completion][completion]]          |  6 |
-| [[org-ql-search:tags:windows][windows]]             |  5 |
-| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |  5 |
-| [[org-ql-search:tags:library][library]]             |  5 |
-| [[org-ql-search:tags:process][process]]             |  4 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |  4 |
-| [[org-ql-search:tags:history][history]]             |  4 |
-| [[org-ql-search:tags:profiling][profiling]]           |  3 |
-| [[org-ql-search:tags:files][files]]               |  3 |
-| [[org-ql-search:tags:minibuffer][minibuffer]]          |  3 |
-| [[org-ql-search:tags:Emacs][Emacs]]               |  3 |
-| [[org-ql-search:tags:writing][writing]]             |  3 |
-| [[org-ql-search:tags:links][links]]               |  3 |
-| [[org-ql-search:tags:IO][IO]]                  |  2 |
-| [[org-ql-search:tags:parentheses][parentheses]]         |  2 |
-| [[org-ql-search:tags:Prolog][Prolog]]              |  2 |
-| [[org-ql-search:tags:VC][VC]]                  |  2 |
-| [[org-ql-search:tags:navigation][navigation]]          |  2 |
-| [[org-ql-search:tags:major_mode][major_mode]]          |  2 |
-| [[org-ql-search:tags:editing][editing]]             |  2 |
-| [[org-ql-search:tags:structured__editing][structured__editing]] |  2 |
-| [[org-ql-search:tags:aesthetics][aesthetics]]          |  2 |
-| [[org-ql-search:tags:syntax][syntax]]              |  2 |
-| [[org-ql-search:tags:tree_sitter][tree_sitter]]         |  2 |
-| [[org-ql-search:tags:initialization][initialization]]      |  1 |
-| [[org-ql-search:tags:performance][performance]]         |  1 |
-| [[org-ql-search:tags:diff][diff]]                |  1 |
-| [[org-ql-search:tags:help][help]]                |  1 |
-| [[org-ql-search:tags:prog_mode][prog_mode]]           |  1 |
-| [[org-ql-search:tags:text_mode][text_mode]]           |  1 |
-| [[org-ql-search:tags:text][text]]                |  1 |
-| [[org-ql-search:tags:capture][capture]]             |  1 |
-| [[org-ql-search:tags:documentation][documentation]]       |  1 |
-| [[org-ql-search:tags:@extra][@extra]]              |  1 |
-| [[org-ql-search:tags:beancount][beancount]]           |  1 |
-| [[org-ql-search:tags:LSP][LSP]]                 |  1 |
-| [[org-ql-search:tags:direnv][direnv]]              |  1 |
-| [[org-ql-search:tags:startup][startup]]             |  1 |
-| [[org-ql-search:tags:screen__recording][screen__recording]]   |  1 |
-| [[org-ql-search:tags:Haskell][Haskell]]             |  1 |
-| [[org-ql-search:tags:exercises][exercises]]           |  1 |
-| [[org-ql-search:tags:OSS][OSS]]                 |  1 |
-| [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |  1 |
-| [[org-ql-search:tags:git][git]]                 |  1 |
-| [[org-ql-search:tags:Nix][Nix]]                 |  1 |
-| [[org-ql-search:tags:reading][reading]]             |  1 |
-| [[org-ql-search:tags:EPUB][EPUB]]                |  1 |
-| [[org-ql-search:tags:project][project]]             |  1 |
-| [[org-ql-search:tags:colors][colors]]              |  1 |
-| [[org-ql-search:tags:web][web]]                 |  1 |
-| [[org-ql-search:tags:graphics][graphics]]            |  1 |
-| [[org-ql-search:tags:nano][nano]]                |  1 |
-| [[org-ql-search:tags:debugging][debugging]]           |  1 |
-| [[org-ql-search:tags:configuration][configuration]]       |  1 |
-| [[org-ql-search:tags:terminal][terminal]]            |  1 |
-| [[org-ql-search:tags:usability][usability]]           |  1 |
+| [[org-ql-search:tags:packages][packages]]            | 115 |
+| [[org-ql-search:tags:visual][visual]]              |  11 |
+| [[org-ql-search:tags:UI][UI]]                  |  10 |
+| [[org-ql-search:tags:formatting][formatting]]          |   9 |
+| [[org-ql-search:tags:development][development]]         |   9 |
+| [[org-ql-search:tags:windows][windows]]             |   7 |
+| [[org-ql-search:tags:dired][dired]]               |   6 |
+| [[org-ql-search:tags:completion][completion]]          |   6 |
+| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
+| [[org-ql-search:tags:keybindings][keybindings]]         |   5 |
+| [[org-ql-search:tags:library][library]]             |   5 |
+| [[org-ql-search:tags:process][process]]             |   4 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
+| [[org-ql-search:tags:Emacs][Emacs]]               |   4 |
+| [[org-ql-search:tags:history][history]]             |   4 |
+| [[org-ql-search:tags:profiling][profiling]]           |   3 |
+| [[org-ql-search:tags:files][files]]               |   3 |
+| [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
+| [[org-ql-search:tags:writing][writing]]             |   3 |
+| [[org-ql-search:tags:links][links]]               |   3 |
+| [[org-ql-search:tags:editing][editing]]             |   3 |
+| [[org-ql-search:tags:expansion][expansion]]           |   2 |
+| [[org-ql-search:tags:IO][IO]]                  |   2 |
+| [[org-ql-search:tags:parentheses][parentheses]]         |   2 |
+| [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
+| [[org-ql-search:tags:VC][VC]]                  |   2 |
+| [[org-ql-search:tags:navigation][navigation]]          |   2 |
+| [[org-ql-search:tags:reference][reference]]           |   2 |
+| [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:structured__editing][structured__editing]] |   2 |
+| [[org-ql-search:tags:syntax][syntax]]              |   2 |
+| [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
+| [[org-ql-search:tags:initialization][initialization]]      |   1 |
+| [[org-ql-search:tags:performance][performance]]         |   1 |
+| [[org-ql-search:tags:diff][diff]]                |   1 |
+| [[org-ql-search:tags:help][help]]                |   1 |
+| [[org-ql-search:tags:prog_mode][prog_mode]]           |   1 |
+| [[org-ql-search:tags:text_mode][text_mode]]           |   1 |
+| [[org-ql-search:tags:text][text]]                |   1 |
+| [[org-ql-search:tags:bibliography][bibliography]]        |   1 |
+| [[org-ql-search:tags:capture][capture]]             |   1 |
+| [[org-ql-search:tags:documentation][documentation]]       |   1 |
+| [[org-ql-search:tags:@extra][@extra]]              |   1 |
+| [[org-ql-search:tags:beancount][beancount]]           |   1 |
+| [[org-ql-search:tags:LSP][LSP]]                 |   1 |
+| [[org-ql-search:tags:direnv][direnv]]              |   1 |
+| [[org-ql-search:tags:startup][startup]]             |   1 |
+| [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
+| [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
+| [[org-ql-search:tags:Haskell][Haskell]]             |   1 |
+| [[org-ql-search:tags:exercises][exercises]]           |   1 |
+| [[org-ql-search:tags:OSS][OSS]]                 |   1 |
+| [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
+| [[org-ql-search:tags:git][git]]                 |   1 |
+| [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
+| [[org-ql-search:tags:Nix][Nix]]                 |   1 |
+| [[org-ql-search:tags:reading][reading]]             |   1 |
+| [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
+| [[org-ql-search:tags:project][project]]             |   1 |
+| [[org-ql-search:tags:colors][colors]]              |   1 |
+| [[org-ql-search:tags:web][web]]                 |   1 |
+| [[org-ql-search:tags:graphics][graphics]]            |   1 |
+| [[org-ql-search:tags:debugging][debugging]]           |   1 |
+| [[org-ql-search:tags:configuration][configuration]]       |   1 |
+| [[org-ql-search:tags:terminal][terminal]]            |   1 |
+| [[org-ql-search:tags:usability][usability]]           |   1 |
 
 Note that the table above is invisible on GitHub.
 There is a table right before paragraph.
@@ -2670,13 +2674,15 @@ To use these features, they need to be turned on at build time.
 :CREATED_TIME: [2022-01-31 Mon 19:07]
 :END:
 #+BEGIN: org-ql :query "tags:windows" :columns (heading todo)
-| Heading     | Todo |
-|-------------+------|
-| [[fullframe][fullframe]]   |      |
-| [[windmove][windmove]]    |      |
-| [[winner][winner]]      |      |
-| [[popper][popper]]      |      |
-| [[repl-toggle][repl-toggle]] |      |
+| Heading       | Todo |
+|---------------+------|
+| [[fullframe][fullframe]]     |      |
+| [[windmove][windmove]]      |      |
+| [[winner][winner]]        |      |
+| [[akirak-window][akirak-window]] |      |
+| [[popper][popper]]        |      |
+| [[repl-toggle][repl-toggle]]   |      |
+| [[windswap][windswap]]      |      |
 #+END:
 *** Annotating
 :PROPERTIES:
