@@ -177,6 +177,18 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 :SORTING_TYPE: a
 :END:
 # Note: These should never fail.
+*** autoinsert                                                    :expansion:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-25 Fri 17:47]
+:END:
+
+#+begin_src emacs-lisp
+  (setup autoinsert
+    (:option auto-insert 'other
+             auto-insert-query nil)
+    (:with-mode auto-insert-mode
+      (:hook-into after-init-hook)))
+#+end_src
 *** autorevert                                                         :IO:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
