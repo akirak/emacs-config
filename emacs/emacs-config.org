@@ -22,6 +22,7 @@
   - [[#links][Links]]
   - [[#window-management][Window management]]
   - [[#annotating][Annotating]]
+  - [[#natural-languages][Natural languages]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -1561,6 +1562,14 @@ The following resources are useful:
     ;; For activation, see corfu
     (:global "TAB" #'fancy-dabbrev-expand-or-indent))
 #+end_src
+*** fanyi                                                      :dictionary:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package fanyi))
+#+end_src
 *** ghelp                                           :reference:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:45]
@@ -2373,6 +2382,12 @@ To use these features, they need to be turned on at build time.
 You can use org-remark to annotate texts in file buffers.
 
 To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF files (via =pdf-tools= package), but I won't use pdf-tools package.
+*** Natural languages
+#+BEGIN: org-ql :query "tags:dictionary" :columns (heading todo)
+| Heading | Todo |
+|---------+------|
+| [[fanyi][fanyi]]   |      |
+#+END:
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil
