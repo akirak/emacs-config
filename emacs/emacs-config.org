@@ -1888,6 +1888,33 @@ The following resources are useful:
               "graphicsmagick-imagemagick-compat"))
 #+end_src
 
+*** git-gutter                                                         :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-26 Sat 19:08]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package git-gutter)
+    (add-hook 'after-init-hook #'global-git-gutter-mode)
+
+    (:global "M-g j" #'git-gutter:next-hunk
+             "M-g k" #'git-gutter:previous-hunk)
+
+    (:when-loaded
+      (defun akirak/git-gutter-follow-up-navigation (orig &rest args)
+        (when (buffer-narrowed-p)
+          (widen))
+        (let ((pos (point)))
+          (prog1 (apply orig args)
+            (unless (eq pos (point))
+              (when (derived-mode-p 'org-mode)
+                (org-show-context))))))
+
+      (advice-add 'git-gutter:next-hunk
+                  :around #'akirak/git-gutter-follow-up-navigation)
+      (advice-add 'git-gutter:previous-hunk
+                  :around #'akirak/git-gutter-follow-up-navigation)))
+#+end_src
 *** github-linguist
 :PROPERTIES:
 :CREATED_TIME: [2022-02-04 Fri 19:15]
