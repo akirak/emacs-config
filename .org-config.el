@@ -4,14 +4,6 @@
 (setq akirak/my-nixos-config-directory
       (file-name-directory (or load-file-name (buffer-file-name))))
 
-(defmacro akirak/define-nix-build (name package &optional args)
-  (declare (indent 1))
-  `(defun ,(intern (concat "akirak/" name)) ()
-     (interactive)
-     (let ((default-directory (project-root (project-current))))
-       (compile (concat "nix build .#" ,package
-                        ,(if args (concat " " args) ""))))))
-
 (defmacro akirak/define-nix-run (name package &optional args)
   (declare (indent 1))
   `(defun ,(intern (concat "akirak/" name)) (args)
