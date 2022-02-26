@@ -271,7 +271,7 @@
               ];
             };
 
-            inherit (channels.nixpkgs) emacs-reader;
+            inherit (channels.nixpkgs) emacs-reader readability-cli;
 
             inherit emacs-config;
 

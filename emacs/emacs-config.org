@@ -1279,6 +1279,16 @@ Embrace Org as a common document format for Emacs.
   (setup (:package org-visual-indent)
     (:hook-into org-mode-hook))
 #+end_src
+*** org-web-tools :reading:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-26 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-web-tools))
+#+end_src
+
+I want to replace this package someday.
 ** Packages                                                       :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -1795,10 +1805,8 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package embark-consult)
 
-    ;; TODO: Use a macro
-    (with-eval-after-load 'embark
-      (with-eval-after-load 'consult
-        (require 'embark-consult)))
+    (with-eval-after-load 'consult
+      (require 'embark-consult))
 
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
@@ -1890,6 +1898,33 @@ The following resources are useful:
               "graphicsmagick-imagemagick-compat"))
 #+end_src
 
+*** git-gutter                                                         :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-26 Sat 19:08]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package git-gutter)
+    (add-hook 'after-init-hook #'global-git-gutter-mode)
+
+    (:global "M-g j" #'git-gutter:next-hunk
+             "M-g k" #'git-gutter:previous-hunk)
+
+    (:when-loaded
+      (defun akirak/git-gutter-follow-up-navigation (orig &rest args)
+        (when (buffer-narrowed-p)
+          (widen))
+        (let ((pos (point)))
+          (prog1 (apply orig args)
+            (unless (eq pos (point))
+              (when (derived-mode-p 'org-mode)
+                (org-show-context))))))
+
+      (advice-add 'git-gutter:next-hunk
+                  :around #'akirak/git-gutter-follow-up-navigation)
+      (advice-add 'git-gutter:previous-hunk
+                  :around #'akirak/git-gutter-follow-up-navigation)))
+#+end_src
 *** github-linguist
 :PROPERTIES:
 :CREATED_TIME: [2022-02-04 Fri 19:15]
@@ -2146,6 +2181,14 @@ To use it, turn on =macrostep-mode=.
 #+begin_src emacs-lisp
   (setup (:package nano-modeline)
     (nano-modeline-mode t))
+#+end_src
+*** nix26                                                     :Nix:project:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-26 Sat 17:12]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package nix26))
 #+end_src
 *** nix-mode                                                          :Nix:
 :PROPERTIES:
@@ -2530,7 +2573,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 115 |
+| [[org-ql-search:tags:packages][packages]]            | 118 |
 | [[org-ql-search:tags:visual][visual]]              |  11 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
 | [[org-ql-search:tags:formatting][formatting]]          |   9 |
@@ -2549,17 +2592,20 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:files][files]]               |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:writing][writing]]             |   3 |
+| [[org-ql-search:tags:VC][VC]]                  |   3 |
 | [[org-ql-search:tags:links][links]]               |   3 |
 | [[org-ql-search:tags:editing][editing]]             |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:IO][IO]]                  |   2 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
-| [[org-ql-search:tags:VC][VC]]                  |   2 |
 | [[org-ql-search:tags:navigation][navigation]]          |   2 |
+| [[org-ql-search:tags:reading][reading]]             |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   2 |
+| [[org-ql-search:tags:Nix][Nix]]                 |   2 |
+| [[org-ql-search:tags:project][project]]             |   2 |
 | [[org-ql-search:tags:syntax][syntax]]              |   2 |
 | [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
 | [[org-ql-search:tags:initialization][initialization]]      |   1 |
@@ -2585,10 +2631,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
 | [[org-ql-search:tags:git][git]]                 |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
-| [[org-ql-search:tags:Nix][Nix]]                 |   1 |
-| [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
-| [[org-ql-search:tags:project][project]]             |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:web][web]]                 |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
