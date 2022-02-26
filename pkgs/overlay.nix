@@ -12,4 +12,8 @@ final: prev:
   };
 
   emacs-reader = final.callPackage ./development/emacs-profiles/reader.nix { };
+
+  readability-cli = prev.callPackage ./media/readability-cli {
+    pkgs = prev;
+  };
 }
