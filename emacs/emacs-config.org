@@ -1795,10 +1795,8 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package embark-consult)
 
-    ;; TODO: Use a macro
-    (with-eval-after-load 'embark
-      (with-eval-after-load 'consult
-        (require 'embark-consult)))
+    (with-eval-after-load 'consult
+      (require 'embark-consult))
 
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
