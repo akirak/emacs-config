@@ -1279,6 +1279,16 @@ Embrace Org as a common document format for Emacs.
   (setup (:package org-visual-indent)
     (:hook-into org-mode-hook))
 #+end_src
+*** org-web-tools :reading:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-26 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-web-tools))
+#+end_src
+
+I want to replace this package someday.
 ** Packages                                                       :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
