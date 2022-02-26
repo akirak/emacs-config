@@ -2147,6 +2147,14 @@ To use it, turn on =macrostep-mode=.
   (setup (:package nano-modeline)
     (nano-modeline-mode t))
 #+end_src
+*** nix26                                                     :Nix:project:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-26 Sat 17:12]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package nix26))
+#+end_src
 *** nix-mode                                                          :Nix:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
