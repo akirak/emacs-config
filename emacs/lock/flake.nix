@@ -310,6 +310,12 @@
       repo = "magit";
       type = "github";
     };
+    git-gutter = {
+      flake = false;
+      owner = "emacsorphanage";
+      repo = "git-gutter";
+      type = "github";
+    };
     git-modes = {
       flake = false;
       owner = "magit";
@@ -472,6 +478,13 @@
       repo = "nix-mode";
       type = "github";
     };
+    nix26 = {
+      flake = false;
+      owner = "emacs-twist";
+      ref = "develop";
+      repo = "nix26.el";
+      type = "github";
+    };
     nov = {
       flake = false;
       type = "git";
@@ -543,6 +556,12 @@
       repo = "org-transclusion";
       type = "github";
     };
+    org-web-tools = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "org-web-tools";
+      type = "github";
+    };
     orgit = {
       flake = false;
       owner = "magit";
@@ -595,6 +614,12 @@
       flake = false;
       owner = "akirak";
       repo = "project-hercules.el";
+      type = "github";
+    };
+    promise = {
+      flake = false;
+      owner = "chuntaro";
+      repo = "emacs-promise";
       type = "github";
     };
     puni = {
