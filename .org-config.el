@@ -12,6 +12,7 @@
                           ,args)))
      (let ((default-directory (project-root (project-current))))
        (compile (concat "nix run .#" ,package
+                        " --print-build-logs"
                         (if args (concat " " args) ""))))))
 
 (eval-after-load 'project-hercules
