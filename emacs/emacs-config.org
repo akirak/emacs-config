@@ -2343,6 +2343,14 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
 (setup (:package restclient))
 #+end_src
+*** string-inflection                                             :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-27 Sun 14:07]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package string-inflection))
+#+end_src
 *** svg-lib                                              :library:graphics:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:30]
