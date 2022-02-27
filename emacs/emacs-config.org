@@ -88,6 +88,29 @@ I am interested to see if it can reduce the amount of configuration code.
                    (run-with-timer ,seconds nil
                                    ,(or func (setup-get 'hook)))))))
 #+end_src
+*** :huan
+:PROPERTIES:
+:CREATED_TIME: [2022-02-27 Sun 21:38]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :huan (&rest entries)
+     "Add ENTRIES to `huan-mode-symbols-alist' for the mode."
+     :indent 0
+     `(with-eval-after-load 'huan
+        (let ((mode ',(setup-get 'mode))
+              (entries ',entries))
+          (if-let (cell (assq mode huan-mode-symbols-alist))
+              (let ((sym (make-symbol "entries")))
+                (set sym (cdr cell))
+                (dolist (ent (reverse entries))
+                  (add-to-list sym ent))
+                (setcdr cell (symbol-value sym)))
+            (push (cons mode entries)
+                  huan-mode-symbols-alist))))))
+#+end_src
 *** :mode-repl
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:41]
@@ -337,6 +360,7 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup elisp-mode
     (:with-mode emacs-lisp-mode
+      (:huan ("eval-after-load" "with-eval-after-load"))
       (:local-set imenu-generic-expression
                   ;; Copied from my previous config. Maybe requires some adaptation.
                   `(("Headings" ";;[;]\\{1,8\\} \\(.*$\\)" 1)
@@ -1620,15 +1644,6 @@ This is an extra functions for window management.
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
-*** cycle-at-point                                                :editing:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-24 Thu 14:36]
-:END:
-
-#+begin_src emacs-lisp
-  (setup (:package cycle-at-point)
-    (:global "C-=" #'cycle-at-point))
-#+end_src
 *** dired-collapse                                                  :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:44]
@@ -2033,6 +2048,19 @@ The following resources are useful:
 
 #+begin_src emacs-lisp
 (setup (:package hercules))
+#+end_src
+*** huan                                                          :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-27 Sun 21:11]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package huan)
+    (:global "C-=" #'huan-symbol
+             "C-+" #'huan-defun)
+    (with-eval-after-load 'embark
+      (define-key embark-defun-map "`" #'huan-defun)
+      (define-key embark-identifier-map "`" #'huan-symbol)))
 #+end_src
 *** iedit                                                         :editing:
 :PROPERTIES:
