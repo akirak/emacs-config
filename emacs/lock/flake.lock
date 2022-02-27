@@ -67,48 +67,16 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1645783488,
-        "narHash": "sha256-/ANBHthORwqssiVF22/HQe8tGPqiR8Wndf5nODVUhMo=",
+        "lastModified": 1645951590,
+        "narHash": "sha256-KgA1WH/+2KokxrSdwXKyLKyrxofpAZq57M/QF7GcZJ0=",
         "owner": "akirak",
         "repo": "trivial-elisps",
-        "rev": "a1c3fb2391e8b6bf374a36d2a5dd3c46f3fed3f3",
+        "rev": "0ca9288c365bbfde6fc51d8552770462392ae20e",
         "type": "github"
       },
       "original": {
         "owner": "akirak",
         "repo": "trivial-elisps",
-        "type": "github"
-      }
-    },
-    "all-the-icons": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1640408780,
-        "narHash": "sha256-v5TPTuOEQZXnwKqhN5ArhLSmVukkyDMDCv6n8oEEXMU=",
-        "owner": "domtronn",
-        "repo": "all-the-icons.el",
-        "rev": "6d48bc9e970ab559bc35a125c55fd83732595706",
-        "type": "github"
-      },
-      "original": {
-        "owner": "domtronn",
-        "repo": "all-the-icons.el",
-        "type": "github"
-      }
-    },
-    "all-the-icons-dired": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1633627768,
-        "narHash": "sha256-KGksy+4mIWc+ikFJocIVaom4f/pY76heelDDk3DLCVw=",
-        "owner": "wyuenho",
-        "repo": "all-the-icons-dired",
-        "rev": "5e9b097f9950cc9f86de922b07903a4e5fefc733",
-        "type": "github"
-      },
-      "original": {
-        "owner": "wyuenho",
-        "repo": "all-the-icons-dired",
         "type": "github"
       }
     },
@@ -336,22 +304,6 @@
         "type": "github"
       }
     },
-    "cycle-at-point": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1645331492,
-        "narHash": "sha256-smN+7l0j8KurX1AHaecFQ9o9jfrI6wM6VTNzbnb8CoA=",
-        "ref": "master",
-        "rev": "ea22b90f35f4cef73387047b3ef3fad83787d4e2",
-        "revCount": 1,
-        "type": "git",
-        "url": "https://gitlab.com/ideasman42/emacs-cycle-at-point.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://gitlab.com/ideasman42/emacs-cycle-at-point.git"
-      }
-    },
     "dash": {
       "flake": false,
       "locked": {
@@ -493,6 +445,22 @@
       "original": {
         "owner": "joaotavora",
         "repo": "eglot",
+        "type": "github"
+      }
+    },
+    "eldoc-eval": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641498711,
+        "narHash": "sha256-jq5bXj9IxtMxOK8ZTKZjAws1DnVwAVivJLa0fRmjMwY=",
+        "owner": "thierryvolpiatto",
+        "repo": "eldoc-eval",
+        "rev": "e91800503c90cb75dc70abe42f1d6ae499346cc1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "thierryvolpiatto",
+        "repo": "eldoc-eval",
         "type": "github"
       }
     },
@@ -688,6 +656,22 @@
         "type": "github"
       }
     },
+    "evil-nerd-commenter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641471845,
+        "narHash": "sha256-OTPPIyPLPWNJOqL5rBrY/d1uERFwW10ifArNsx/x2Pg=",
+        "owner": "redguardtoo",
+        "repo": "evil-nerd-commenter",
+        "rev": "42ba1a473b4f1df061baddd2f8b812a2f35e366e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "redguardtoo",
+        "repo": "evil-nerd-commenter",
+        "type": "github"
+      }
+    },
     "f": {
       "flake": false,
       "locked": {
@@ -848,6 +832,22 @@
         "type": "github"
       }
     },
+    "git-identity": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1630843735,
+        "narHash": "sha256-YS2ReJIBgc8t9hJAcGQm2Zm8bj88C7roYeZ9mdrXzvM=",
+        "owner": "akirak",
+        "repo": "git-identity.el",
+        "rev": "e2620767694d8cd2860b632c47fbe92e20a9ef14",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "git-identity.el",
+        "type": "github"
+      }
+    },
     "git-modes": {
       "flake": false,
       "locked": {
@@ -958,6 +958,22 @@
       "original": {
         "owner": "Wilfred",
         "repo": "ht.el",
+        "type": "github"
+      }
+    },
+    "huan": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645971965,
+        "narHash": "sha256-IFvb/Da5Xb6iRAhHgmBXTZ2YuBgC/Ew3lOKni07ZOss=",
+        "owner": "akirak",
+        "repo": "huan.el",
+        "rev": "ab90da12d8add943d7cfb4eb0422e4fddd54a78e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "huan.el",
         "type": "github"
       }
     },
@@ -1730,22 +1746,6 @@
         "type": "github"
       }
     },
-    "recomplete": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1644558487,
-        "narHash": "sha256-foBSITOGB3Lte0wAOL06OU+ys55VnK8YiXLLrXkJBJ0=",
-        "ref": "master",
-        "rev": "d0d380929460ff35534900e34ababad43d23c966",
-        "revCount": 13,
-        "type": "git",
-        "url": "https://gitlab.com/ideasman42/emacs-recomplete.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://gitlab.com/ideasman42/emacs-recomplete.git"
-      }
-    },
     "repl-toggle": {
       "flake": false,
       "locked": {
@@ -1801,8 +1801,6 @@
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
         "akirak": "akirak",
-        "all-the-icons": "all-the-icons",
-        "all-the-icons-dired": "all-the-icons-dired",
         "async": "async",
         "auto-yasnippet": "auto-yasnippet",
         "avy": "avy",
@@ -1817,7 +1815,6 @@
         "consult-dir": "consult-dir",
         "consult-project-extra": "consult-project-extra",
         "corfu": "corfu",
-        "cycle-at-point": "cycle-at-point",
         "dash": "dash",
         "dired-collapse": "dired-collapse",
         "dired-filter": "dired-filter",
@@ -1827,6 +1824,7 @@
         "doct": "doct",
         "ediprolog": "ediprolog",
         "eglot": "eglot",
+        "eldoc-eval": "eldoc-eval",
         "electric-operator": "electric-operator",
         "elisp-refs": "elisp-refs",
         "elx": "elx",
@@ -1839,6 +1837,7 @@
         "eros": "eros",
         "esup": "esup",
         "esxml": "esxml",
+        "evil-nerd-commenter": "evil-nerd-commenter",
         "f": "f",
         "fancy-dabbrev": "fancy-dabbrev",
         "fanyi": "fanyi",
@@ -1849,6 +1848,7 @@
         "gif-screencast": "gif-screencast",
         "git-commit": "git-commit",
         "git-gutter": "git-gutter",
+        "git-identity": "git-identity",
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
         "graphql": "graphql",
@@ -1856,6 +1856,7 @@
         "helpful": "helpful",
         "hercules": "hercules",
         "ht": "ht",
+        "huan": "huan",
         "hydra": "hydra",
         "iedit": "iedit",
         "inheritenv": "inheritenv",
@@ -1904,7 +1905,6 @@
         "queue": "queue",
         "rainbow-delimiters": "rainbow-delimiters",
         "rainbow-mode": "rainbow-mode",
-        "recomplete": "recomplete",
         "repl-toggle": "repl-toggle",
         "request": "request",
         "restclient": "restclient",
@@ -1924,7 +1924,6 @@
         "turbo-log": "turbo-log",
         "twist": "twist",
         "typescript-mode": "typescript-mode",
-        "unmodified-buffer": "unmodified-buffer",
         "vertico": "vertico",
         "visual-fill-column": "visual-fill-column",
         "vterm": "vterm",
@@ -2194,22 +2193,6 @@
       "original": {
         "owner": "emacs-typescript",
         "repo": "typescript.el",
-        "type": "github"
-      }
-    },
-    "unmodified-buffer": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1641974106,
-        "narHash": "sha256-4mdWhLJmrpAgKDYRhM/8f74S2SKYGeHnO4Ot+Fff16U=",
-        "owner": "arthurcgusmao",
-        "repo": "unmodified-buffer",
-        "rev": "dea0daaf951fc9aee042d15091675c8ed54df096",
-        "type": "github"
-      },
-      "original": {
-        "owner": "arthurcgusmao",
-        "repo": "unmodified-buffer",
         "type": "github"
       }
     },

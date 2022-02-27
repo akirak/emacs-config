@@ -32,18 +32,6 @@
       repo = "trivial-elisps";
       type = "github";
     };
-    all-the-icons = {
-      flake = false;
-      owner = "domtronn";
-      repo = "all-the-icons.el";
-      type = "github";
-    };
-    all-the-icons-dired = {
-      flake = false;
-      owner = "wyuenho";
-      repo = "all-the-icons-dired";
-      type = "github";
-    };
     async = {
       flake = false;
       owner = "jwiegley";
@@ -128,11 +116,6 @@
       repo = "corfu";
       type = "github";
     };
-    cycle-at-point = {
-      flake = false;
-      type = "git";
-      url = "https://gitlab.com/ideasman42/emacs-cycle-at-point.git";
-    };
     dash = {
       flake = false;
       owner = "magnars";
@@ -185,6 +168,12 @@
       flake = false;
       owner = "joaotavora";
       repo = "eglot";
+      type = "github";
+    };
+    eldoc-eval = {
+      flake = false;
+      owner = "thierryvolpiatto";
+      repo = "eldoc-eval";
       type = "github";
     };
     electric-operator = {
@@ -259,6 +248,12 @@
       repo = "esxml";
       type = "github";
     };
+    evil-nerd-commenter = {
+      flake = false;
+      owner = "redguardtoo";
+      repo = "evil-nerd-commenter";
+      type = "github";
+    };
     "f" = {
       flake = false;
       owner = "rejeep";
@@ -316,6 +311,12 @@
       repo = "git-gutter";
       type = "github";
     };
+    git-identity = {
+      flake = false;
+      owner = "akirak";
+      repo = "git-identity.el";
+      type = "github";
+    };
     git-modes = {
       flake = false;
       owner = "magit";
@@ -356,6 +357,12 @@
       flake = false;
       owner = "Wilfred";
       repo = "ht.el";
+      type = "github";
+    };
+    huan = {
+      flake = false;
+      owner = "akirak";
+      repo = "huan.el";
       type = "github";
     };
     hydra = {
@@ -646,11 +653,6 @@
       repo = "rainbow-mode";
       type = "github";
     };
-    recomplete = {
-      flake = false;
-      type = "git";
-      url = "https://gitlab.com/ideasman42/emacs-recomplete.git";
-    };
     repl-toggle = {
       flake = false;
       type = "git";
@@ -766,12 +768,6 @@
       flake = false;
       owner = "emacs-typescript";
       repo = "typescript.el";
-      type = "github";
-    };
-    unmodified-buffer = {
-      flake = false;
-      owner = "arthurcgusmao";
-      repo = "unmodified-buffer";
       type = "github";
     };
     vertico = {
