@@ -1965,6 +1965,30 @@ The following resources are useful:
     (:nixpkgs "github-linguist")
     (:option github-linguist-executable "github-linguist"))
 #+end_src
+*** git-identity                                                       :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-27 Sun 15:24]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package git-identity)
+    (:with-feature magit
+      (:when-loaded
+        (git-identity-magit-mode 1)
+        (:with-map magit-status-mode-map
+          (:bind "I" #'git-identity-info))))
+
+    (cl-defmacro akirak/git-identity-add (address &rest args)
+      "Add a new entry to the identity list, avoiding duplicates.
+
+  This macro should be used in extra init files which should be kept private."
+      (declare (indent 1))
+      `(let ((cell (assoc ,address git-identity-list)))
+         (if cell
+             (setcdr cell (quote ,args))
+           (push (cons ,address (quote ,args))
+                 git-identity-list)))))
+#+end_src
 *** git-modes                                               :VC:major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
