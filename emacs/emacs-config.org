@@ -393,6 +393,29 @@ The built-in =electric= package provides the following modes:
                                         (group (+ (not (syntax string-quote)))))
                      1))))
 
+    (:auto-insert
+     ("-tests?\\.el\\'" . (> ";;; -*- lexical-binding: t -*-\n\n"
+                             "(require 'buttercup)\n"
+                             "(require '" (replace-regexp-in-string
+                                           "-tests?\\'" ""
+                                           (file-name-base (buffer-file-name)))
+                             ")\n\n"
+                             _ "\n\n"
+                             "(provide '" (file-name-base (buffer-file-name)) ")\n"))
+     ("\\.el\\'" . (> ";;; "
+                      (file-name-nondirectory (or buffer-file-name (buffer-name)))
+                      " --- " _
+                      " -*- lexical-binding: t -*-\n"
+                      "\n\n\n"
+                      "(provide '"
+                      (file-name-base (or buffer-file-name (buffer-name)))
+                      ")\n"
+                      ";;; "
+                      (file-name-nondirectory (or buffer-file-name (buffer-name)))
+                      " ends here"))
+     ("/recipes/.+\\'" . (> "(" (file-name-nondirectory (buffer-file-name))
+                            " :fetcher github :repo \"" _ "\")")))
+
     (defun akirak/eval-buffer-or-load-file ()
       (interactive)
       (when (eq major-mode 'emacs-lisp-mode)
