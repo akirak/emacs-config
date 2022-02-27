@@ -62,6 +62,20 @@ I am interested to see if it can reduce the amount of configuration code.
       :repeatable t
       :shorthand cadr))
 #+end_src
+*** :auto-insert
+:PROPERTIES:
+:CREATED_TIME: [2022-02-27 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :auto-insert (&rest entries)
+     "Add ENTRIES to `auto-insert-alist'."
+     `(with-eval-after-load 'autoinsert
+        (dolist (entry (reverse ',entries))
+          (add-to-list 'auto-insert-alist entry)))))
+#+end_src
 *** :compilation-error
 #+begin_src emacs-lisp
   (eval-when-compile
