@@ -1846,6 +1846,16 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package esup))
 #+end_src
+*** evil-nerd-commenter                                           :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-27 Sun 14:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package evil-nerd-commenter)
+    (:global "M-;" #'evilnc-comment-or-uncomment-lines
+             "C-c p" #'evilnc-comment-or-uncomment-paragraphs))
+#+end_src
 *** fancy-dabbrev                                              :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:24]
