@@ -1307,6 +1307,17 @@ Embrace Org as a common document format for Emacs.
     ;; Temporarily workaround
     (autoload 'org-dblock-write:org-ql "org-ql-search"))
 #+end_src
+*** org-recur
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 14:17]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-recur)
+    (:status opinionated
+      (with-eval-after-load 'org
+        (akirak-org-recur-mode t))))
+#+end_src
 *** org-remark
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:59]
