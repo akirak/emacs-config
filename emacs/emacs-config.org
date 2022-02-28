@@ -147,6 +147,18 @@ I am interested to see if it can reduce the amount of configuration code.
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
+*** :set
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 11:30]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :set (&rest args)
+     "Set the default values of variables."
+     `(setq-default ,@args)))
+#+end_src
 *** :status
 By default, settings inside =:status= clauses are not loaded.
 
@@ -173,7 +185,7 @@ By default, settings inside =:status= clauses are not loaded.
 #+begin_src emacs-lisp
   (setup (:package gcmh)
     (:hook-into after-init-hook)
-    (:option gcmh-verbose debug-on-error))
+    (:set gcmh-verbose debug-on-error))
 #+end_src
 ** Custom conventions                          :packages:
 *** Prefix for mode-specific commands
@@ -221,8 +233,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup autoinsert
-    (:option auto-insert 'other
-             auto-insert-query nil)
+    (:set auto-insert 'other
+          auto-insert-query nil)
     (:with-mode auto-insert-mode
       (:hook-into after-init-hook)))
 #+end_src
@@ -242,10 +254,10 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 :END:
 #+begin_src emacs-lisp
   (setup buffer
-    (:option buffer-file-coding-system 'utf-8
-             fill-column 80
-             indicate-empty-lines t
-             truncate-lines t))
+    (:set buffer-file-coding-system 'utf-8
+          fill-column 80
+          indicate-empty-lines t
+          truncate-lines t))
 #+end_src
 **** Line spacing
 #+begin_src emacs-lisp
@@ -266,7 +278,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup callproc
     (:only-if (eq system-type 'windows-nt))
-    (:option shell-file-name (executable-find "bash")))
+    (:set shell-file-name (executable-find "bash")))
 #+end_src
 *** compile                                                       :process:
 :PROPERTIES:
@@ -275,8 +287,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup compile
-    (:option compilation-auto-jump-to-first-error t
-             compilation-scroll-output t)
+    (:set compilation-auto-jump-to-first-error t
+          compilation-scroll-output t)
 
     (:compilation-error
      (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
@@ -316,9 +328,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup dired
-    (:option dired-recursive-copies 'always
-             dired-recursive-deletes 'top)
-  
+    (:set dired-recursive-copies 'always
+          dired-recursive-deletes 'top)
+
     (:bind "h" #'dired-up-directory))
 #+end_src
 *** ediff-wind                                                       :diff:
@@ -328,7 +340,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup ediff-wind
-    (:option ediff-window-setup-function #'ediff-setup-windows-plain))
+    (:set ediff-window-setup-function #'ediff-setup-windows-plain))
 #+end_src
 *** eldoc                                                :help:development:
 :PROPERTIES:
@@ -428,7 +440,7 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup fileio
-    (:option delete-by-moving-to-trash t))
+    (:set delete-by-moving-to-trash t))
 #+end_src
 *** filelock.c                                                         :IO:
 :PROPERTIES:
@@ -438,7 +450,7 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup filelock
     ;; lock files will kill `npm start'
-    (:option create-lockfiles nil))
+    (:set create-lockfiles nil))
 #+end_src
 *** files                                                           :files:
 :PROPERTIES:
@@ -447,14 +459,14 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup files
-    (:option backup-by-copying t
-             backup-directory-alist
-             `(("." . ,(locate-user-emacs-file "backup/")))
-             delete-old-versions t
-             version-control t
-             view-read-only t
-             auto-mode-case-fold nil)
-    
+    (:set backup-by-copying t
+          backup-directory-alist
+          `(("." . ,(locate-user-emacs-file "backup/")))
+          delete-old-versions t
+          version-control t
+          view-read-only t
+          auto-mode-case-fold nil)
+
     (:status opinionated
       (:global "<f5>" #'revert-buffer)))
 #+end_src
@@ -477,10 +489,10 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup fns
-    (:option use-dialog-box nil))
+    (:set use-dialog-box nil))
 
   (setup xfns
-    (:option x-gtk-use-system-tooltips nil))
+    (:set x-gtk-use-system-tooltips nil))
 #+end_src
 *** frame                                                          :visual:
 :PROPERTIES:
@@ -509,7 +521,7 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup indent
-    (:option tab-always-indent 'complete))
+    (:set tab-always-indent 'complete))
 #+end_src
 *** indent.c                                                   :formatting:
 :PROPERTIES:
@@ -518,7 +530,7 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup indent
-    (:option indent-tabs-mode nil)
+    (:set indent-tabs-mode nil)
 
     (defun akirak/turn-on-indent-tabs-mode ()
       (interactive)
@@ -599,7 +611,7 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup paragraphs
-    (:option sentence-end-double-space nil))
+    (:set sentence-end-double-space nil))
 #+end_src
 *** paren                                                     :parentheses:
 :PROPERTIES:
@@ -633,7 +645,7 @@ Resources:
 #+begin_src emacs-lisp
   (setup process
     ;; Expand read-process-output-max for lsp-mode
-    (:option read-process-output-max (* 1024 1024)))
+    (:set read-process-output-max (* 1024 1024)))
 #+end_src
 *** profiler                                              :Emacs:profiling:
 :PROPERTIES:
@@ -687,8 +699,8 @@ Resources:
 #+begin_src emacs-lisp
   (setup recentf
     (:hook-into after-init-hook)
-    (:option recentf-max-saved-items 200
-             recentf-auto-cleanup 'never))
+    (:set recentf-max-saved-items 200
+          recentf-auto-cleanup 'never))
 #+end_src
 *** register
 :PROPERTIES:
@@ -698,7 +710,7 @@ Resources:
 #+begin_src emacs-lisp
   (setup register
     ;; Show the register preview immediately
-    (:option register-preview-delay 0))
+    (:set register-preview-delay 0))
 #+end_src
 *** savehist                                                      :history:
 :PROPERTIES:
@@ -743,10 +755,10 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 :END:
 #+begin_src emacs-lisp
   (setup startup
-    (:option inihibit-startup-screen t
-             initial-buffer-choice t
-             initial-scratch-message nil
-             initial-major-mode 'fundamental-mode))
+    (:set inihibit-startup-screen t
+          initial-buffer-choice t
+          initial-scratch-message nil
+          initial-major-mode 'fundamental-mode))
 #+end_src
 
 =*scratch*= buffer is shown at startup.
@@ -775,7 +787,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup terminal
-    (:option ring-bell-function 'ignore))
+    (:set ring-bell-function 'ignore))
 #+end_src
 *** tooltip                                                            :UI:
 :PROPERTIES:
@@ -793,8 +805,8 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup vc-hooks
-    (:option vc-follow-symlinks t
-             vc-make-backup-files t))
+    (:set vc-follow-symlinks t
+          vc-make-backup-files t))
 #+end_src
 *** view                                                       :navigation:
 :PROPERTIES:
@@ -803,7 +815,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup view
-    (:option view-inhibit-help-message t)
+    (:set view-inhibit-help-message t)
 
     (:with-map view-mode-map
       (:bind
@@ -817,18 +829,18 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup whitespace
-    (:option whitespace-style
-             '(face trailing missing-newline-at-eof tab-mark))
+    (:set whitespace-style
+          '(face trailing missing-newline-at-eof tab-mark))
     (:hook-into prog-mode
                 text-mode
                 conf-mode
                 sgml-mode)
 
     (:status theme
-      (:option whitespace-trailing
-               '(((t (:underline (:color "firebrick"
-                                         :style wave
-                                         :position nil))))))))
+      (:set whitespace-trailing
+            '(((t (:underline (:color "firebrick"
+                                      :style wave
+                                      :position nil))))))))
 #+end_src
 *** windmove                                                      :windows:
 :PROPERTIES:
@@ -849,7 +861,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup window
-    (:option recenter-positions '(top middle bottom))
+    (:set recenter-positions '(top middle bottom))
 
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
@@ -901,9 +913,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
   (setup xdisp
     ;; I have never encountered a situation where I need to deal with R-L
     ;; direction so far
-    (:option bidi-inhibit-bpa t
-             bidi-display-reordering 'left-to-right
-             bidi-paragraph-direction 'left-to-right))
+    (:set bidi-inhibit-bpa t
+          bidi-display-reordering 'left-to-right
+          bidi-paragraph-direction 'left-to-right))
 #+end_src
 ** Basic appearances                                                :visual:
 *** Theme packages                                        :packages:
@@ -1021,25 +1033,25 @@ Embrace Org as a common document format for Emacs.
       (:when-loaded
         (:also-load org-crypt))
 
-      (:option org-log-done 'time
-               org-log-into-drawer t
-               org-startup-folded 'content
-               org-startup-indented t
-               org-startup-truncated nil
-               org-enforce-todo-dependencies t
-               org-use-speed-commands t
-               org-track-ordered-property-with-tag t
-               org-extend-today-until 5
-               ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
-               org-cycle-separator-lines 0
-               org-blank-before-new-entry '((heading . nil)
-                                            (plain-list-item . auto))
-               org-imenu-depth 6
-               ;; Prevent an annoying behaviour probably due to org's bug.
-               org-link-search-must-match-exact-headline t
-               org-catch-invisible-edits 'show-and-error
-               ;; Prevent from saving org-refile and org-capture locations to bookmarks
-               org-bookmark-names-plist nil)))
+      (:set org-log-done 'time
+            org-log-into-drawer t
+            org-startup-folded 'content
+            org-startup-indented t
+            org-startup-truncated nil
+            org-enforce-todo-dependencies t
+            org-use-speed-commands t
+            org-track-ordered-property-with-tag t
+            org-extend-today-until 5
+            ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
+            org-cycle-separator-lines 0
+            org-blank-before-new-entry '((heading . nil)
+                                         (plain-list-item . auto))
+            org-imenu-depth 6
+            ;; Prevent an annoying behaviour probably due to org's bug.
+            org-link-search-must-match-exact-headline t
+            org-catch-invisible-edits 'show-and-error
+            ;; Prevent from saving org-refile and org-capture locations to bookmarks
+            org-bookmark-names-plist nil)))
 #+end_src
 **** Completion
 #+begin_src emacs-lisp
@@ -1053,7 +1065,7 @@ Embrace Org as a common document format for Emacs.
     ;;
     ;; This will be safe, since I use categories instead of
     ;; tags to identify work projects.
-    (:option org-complete-tags-always-offer-all-agenda-tags t)
+    (:set org-complete-tags-always-offer-all-agenda-tags t)
 
     ;; https://emacs.stackexchange.com/questions/21171/company-mode-completion-for-org-keywords
     (:hook (defun akirak-org-add-completion-at-point ()
@@ -1063,24 +1075,27 @@ Embrace Org as a common document format for Emacs.
 **** Display settings
 #+begin_src emacs-lisp
   (setup org-mode
-    (:option org-image-actual-width (ignore-errors
-                                      (* 90 (/ (frame-text-width)
-                                               (frame-width))))
-             ;; Based on https://lepisma.xyz/2017/10/28/ricing-org-mode/
-             org-ellipsis " ⌄ "
-             org-pretty-entities t
-             org-hide-emphasis-markers t
-             org-fontify-whole-heading-line t
-             org-fontify-done-headline nil
-             org-fontify-quote-and-verse-blocks t))
+    ;; Based on https://lepisma.xyz/2017/10/28/ricing-org-mode/
+    (:set org-ellipsis " ⌄ "
+          org-pretty-entities t
+          org-hide-emphasis-markers t
+          org-fontify-whole-heading-line t
+          org-fontify-done-headline nil
+          org-fontify-quote-and-verse-blocks t)
+
+    (:when-loaded
+      ;; This evaluation is a bit slow, so defer it to the library load time.
+      org-image-actual-width (ignore-errors
+                               (* 90 (/ (frame-text-width)
+                                        (frame-width))))))
 #+end_src
 **** Keybindings
 #+begin_src emacs-lisp
   (setup org
     (:with-mode org-mode
       (:status opinionated
-        (:option org-special-ctrl-a/e t
-                 org-M-RET-may-split-line nil)
+        (:set org-special-ctrl-a/e t
+              org-M-RET-may-split-line nil)
 
         (:global "M-g h" #'akirak-org-avy-heading)
 
@@ -1122,7 +1137,7 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-agenda
-    (:option org-agenda-start-with-clockreport-mode t
+    (:set org-agenda-start-with-clockreport-mode t
              org-agenda-remove-tags t
              org-agenda-use-tag-inheritance t
              org-agenda-sticky t))
@@ -1134,11 +1149,11 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup ob
-    (:option org-confirm-babel-evaluate nil
-             org-babel-load-languages
-             '((shell . t)
-               (emacs-lisp . t)
-               (sqlite . t))))
+    (:set org-confirm-babel-evaluate nil
+          org-babel-load-languages
+          '((shell . t)
+            (emacs-lisp . t)
+            (sqlite . t))))
 #+end_src
 **** org-clock
 :PROPERTIES:
@@ -1147,12 +1162,12 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-clock
-    (:option org-clock-history-length 20
-             org-clock-goto-may-find-recent-task nil
-             org-clock-mode-line-total 'today
-             org-clock-out-remove-zero-time-clocks t
-             org-clock-persist t
-             org-clock-persist-query-resume nil))
+    (:set org-clock-history-length 20
+          org-clock-goto-may-find-recent-task nil
+          org-clock-mode-line-total 'today
+          org-clock-out-remove-zero-time-clocks t
+          org-clock-persist t
+          org-clock-persist-query-resume nil))
 #+end_src
 **** org-habit
 :PROPERTIES:
@@ -1161,16 +1176,16 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-habit
-    (:option org-habit-following-days 7
-             org-habit-graph-column 55
-             org-habit-preceding-days 14
-             org-habit-scheduled-past-days 7
-             org-habit-show-done-always-green t))
+    (:set org-habit-following-days 7
+          org-habit-graph-column 55
+          org-habit-preceding-days 14
+          org-habit-scheduled-past-days 7
+          org-habit-show-done-always-green t))
 #+end_src
 **** org-id
 #+begin_src emacs-lisp
   (setup org-id
-    (:option org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+    (:set org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
 **** org-refile
 :PROPERTIES:
@@ -1179,11 +1194,11 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-refile
-    (:option org-log-refile nil
+    (:set org-log-refile nil
 
-             org-outline-path-complete-in-steps nil
-             org-refile-allow-creating-parent-nodes 'confirm
-             org-refile-use-outline-path 'full-file-path))
+          org-outline-path-complete-in-steps nil
+          org-refile-allow-creating-parent-nodes 'confirm
+          org-refile-use-outline-path 'full-file-path))
 #+end_src
 **** org-src
 :PROPERTIES:
@@ -1192,13 +1207,13 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-src
-    (:option org-src-tab-acts-natively t))
+    (:set org-src-tab-acts-natively t))
 #+end_src
 **** Tags
 #+begin_src emacs-lisp
   (setup org-tags
-    (:option org-group-tags t
-             org-tags-exclude-from-inheritance '("ORDERED" "crypt")))
+    (:set org-group-tags t
+          org-tags-exclude-from-inheritance '("ORDERED" "crypt")))
 #+end_src
 *** org-autolist
 :PROPERTIES:
@@ -1311,13 +1326,13 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup (:package org-starter)
-    (:option org-starter-require-file-by-default nil
-             org-starter-load-config-files t
-             org-starter-exclude-from-recentf '(known-files path)
-             ;; org-starter-alternative-find-function #'helm-org-ql
-             org-starter-find-file-visit-window t
-             org-starter-override-agenda-window-setup 'other-window
-             org-starter-enable-local-variables :all)
+    (:set org-starter-require-file-by-default nil
+          org-starter-load-config-files t
+          org-starter-exclude-from-recentf '(known-files path)
+          ;; org-starter-alternative-find-function #'helm-org-ql
+          org-starter-find-file-visit-window t
+          org-starter-override-agenda-window-setup 'other-window
+          org-starter-enable-local-variables :all)
 
     (:global "M-g M-o" #'org-starter-find-file-by-key))
 #+end_src
@@ -1367,14 +1382,14 @@ A bunch of useful packages are configured here.
 :END:
 #+begin_src emacs-lisp
   (setup (:package ace-window)
-    (:option aw-keys (string-to-list "qwertyui")
-             aw-background nil
-             aw-ignore-on t
-             aw-ignored-buffers '(" *LV*"
-                                  minibuffer-mode
-                                  "*Calc Trail*")
-             aw-scope 'visible
-             aw-dispatch-always t)
+    (:set aw-keys (string-to-list "qwertyui")
+          aw-background nil
+          aw-ignore-on t
+          aw-ignored-buffers '(" *LV*"
+                               minibuffer-mode
+                               "*Calc Trail*")
+          aw-scope 'visible
+          aw-dispatch-always t)
 
     (:status opinionated
       (:global "M-o" #'ace-window)
@@ -1382,26 +1397,26 @@ A bunch of useful packages are configured here.
         (:when-loaded
           (:with-map (lispy-mode-map)
             (:unbind "M-o"))))
-      (:option aw-dispatch-alist
-               `((?o aw-swap-window "Swap Windows")
-                 (?c aw-copy-window "Duplicate the current window")
-                 (?v aw-split-window-horz "Split horizontally")
-                 (?s aw-split-window-vert "Split vertically")
-                 (?p aw-delete-window "Delete Window")
-                 (?x akirak/aw-replace-window "Replace window")
-                 (?m delete-other-windows "Delete Other Windows")
-                 ;; Unused.
-                 ;; (?k akirak/aw-quit-window "Quit window")
-                 (32 toggle-window-split)
-                 ;; tab-bar-mode.
-                 (?Q tab-bar-close-tab)
-                 (?R tab-bar-rename-tab)
-                 (?T tab-bar-new-tab)
-                 ;; Deprecated in favour of tab-bar-mode.
-                 ;; (?T tear-off-window)
-                 (?D delete-frame)
-                 (?F make-frame-command)
-                 (?? aw-show-dispatch-help)))
+      (:set aw-dispatch-alist
+            `((?o aw-swap-window "Swap Windows")
+              (?c aw-copy-window "Duplicate the current window")
+              (?v aw-split-window-horz "Split horizontally")
+              (?s aw-split-window-vert "Split vertically")
+              (?p aw-delete-window "Delete Window")
+              (?x akirak/aw-replace-window "Replace window")
+              (?m delete-other-windows "Delete Other Windows")
+              ;; Unused.
+              ;; (?k akirak/aw-quit-window "Quit window")
+              (32 toggle-window-split)
+              ;; tab-bar-mode.
+              (?Q tab-bar-close-tab)
+              (?R tab-bar-rename-tab)
+              (?T tab-bar-new-tab)
+              ;; Deprecated in favour of tab-bar-mode.
+              ;; (?T tear-off-window)
+              (?D delete-frame)
+              (?F make-frame-command)
+              (?? aw-show-dispatch-help)))
 
       (defun akirak/aw-quit-window (window)
         "Delete window WINDOW."
@@ -1567,7 +1582,7 @@ This is an extra functions for window management.
     (:nixpkgs "beancount" "fava")
 
     ;; I don't like the default keybindings on C-c, so change the prefix.
-    (:option beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
+    (:set beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
 
     (:with-mode beancount-mode
       (:file-match "\\.beancount\\'" "\\.bean\\'")
@@ -1609,10 +1624,10 @@ This is an extra functions for window management.
 
     (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
 
-    (:option consult-narrow-key "<"
-             consult-project-root-function (defun akirak/consult-project-root ()
-                                             (when-let (project (project-current))
-                                               (project-root project))))
+    (:set consult-narrow-key "<"
+          consult-project-root-function (defun akirak/consult-project-root ()
+                                          (when-let (project (project-current))
+                                            (project-root project))))
 
     (:global [remap switch-to-buffer] #'consult-buffer
              [remap bookmark-jump] #'consult-bookmark
@@ -1641,8 +1656,8 @@ This is an extra functions for window management.
       (:global "M-s f" #'consult-flymake))
 
     (setup consult-xref
-      (:option xref-show-xrefs-function #'consult-xref
-               xref-show-definitions-function #'consult-xref)))
+      (:set xref-show-xrefs-function #'consult-xref
+            xref-show-definitions-function #'consult-xref)))
 #+end_src
 *** consult-dir
 :PROPERTIES:
@@ -1698,52 +1713,52 @@ I will manually turn on =dired-collapse-mode= when necessary.
   (setup (:package dired-filter)
     (:hook-into dired-mode-hook)
     (:hook dired-filter-group-mode)
-  
-    (:option dired-filter-group-saved-groups
-             `(("default"
-                ("Directories"
-                 (directory . t))
-                ("Dotfiles"
-                 (name . "^\\."))
-                ;; Text files
-                ("Text"
-                 (or (name . "README")
-                     (name . "TODO")
-                     (name . "LICENSE")
-                     (extension "txt" "md" "mkd" "markdown" "rst")))
-                ("Org"
-                 (extension "org" "bib"))
-                ("Ledger"
-                 (extension "beancount"))
-                ("Data files"
-                 (extension "csv" "json" "sql"))
-                ;; Binary files
-                ("Books and papers"
-                 (extension "pdf" "mobi" "epub" "azw"))
-                ("Archives"
-                 (extension "zip" "rar" "gz" "bz2" "tar"))
-                ("Disk images"
-                 (extension "iso" "ova"))
-                ("Office docs"
-                 (extension "xlsx" "xls" "docx" "doc"))
-                ("Programs"
-                 (extension "exe" "run" "deb"))
-                ("Objects and binary files"
-                 (extension "o" "elc"))
-                ("Meta data"
-                 (extension "torrent" "acsm"))
-                ;; Images are often thumbnails, so they should come
-                ;; after other binary files
-                ("Images and graphics"
-                 (extension "jpg" "jpeg" "png" "gif" "svg"))
-                ;; Source code
-                ("Config"
-                 (or (name . "Makefile")
-                     (name . "Dockerfile")
-                     (extension "yml" "yaml" "cabal"
-                                "dockerfile" "mk")))
-                ("Emacs Lisp"
-                 (extension "el"))))))
+
+    (:set dired-filter-group-saved-groups
+          `(("default"
+             ("Directories"
+              (directory . t))
+             ("Dotfiles"
+              (name . "^\\."))
+             ;; Text files
+             ("Text"
+              (or (name . "README")
+                  (name . "TODO")
+                  (name . "LICENSE")
+                  (extension "txt" "md" "mkd" "markdown" "rst")))
+             ("Org"
+              (extension "org" "bib"))
+             ("Ledger"
+              (extension "beancount"))
+             ("Data files"
+              (extension "csv" "json" "sql"))
+             ;; Binary files
+             ("Books and papers"
+              (extension "pdf" "mobi" "epub" "azw"))
+             ("Archives"
+              (extension "zip" "rar" "gz" "bz2" "tar"))
+             ("Disk images"
+              (extension "iso" "ova"))
+             ("Office docs"
+              (extension "xlsx" "xls" "docx" "doc"))
+             ("Programs"
+              (extension "exe" "run" "deb"))
+             ("Objects and binary files"
+              (extension "o" "elc"))
+             ("Meta data"
+              (extension "torrent" "acsm"))
+             ;; Images are often thumbnails, so they should come
+             ;; after other binary files
+             ("Images and graphics"
+              (extension "jpg" "jpeg" "png" "gif" "svg"))
+             ;; Source code
+             ("Config"
+              (or (name . "Makefile")
+                  (name . "Dockerfile")
+                  (extension "yml" "yaml" "cabal"
+                             "dockerfile" "mk")))
+             ("Emacs Lisp"
+              (extension "el"))))))
 #+end_src
 *** dired-hacks-utils                                               :dired:
 :PROPERTIES:
@@ -1772,7 +1787,7 @@ I will manually turn on =dired-collapse-mode= when necessary.
 
 #+begin_src emacs-lisp
   (setup (:package dired-k)
-    (:option dired-k-style 'git)
+    (:set dired-k-style 'git)
   
     (:with-hook dired-k-no-revert
       (:hook-into dired-after-readin-hook))
@@ -1798,7 +1813,7 @@ dired-k depends on dired-x, which has a poor code quality.
     ;; Temporary workaround
     (autoload 'dired-open-xdg "dired-open")
     
-    (:option dired-open-functions '(dired-open-by-extension
+    (:set dired-open-functions '(dired-open-by-extension
                                     dired-open-subdir)))
 #+end_src
 *** ediprolog                                                      :Prolog:
@@ -2013,7 +2028,7 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package github-linguist)
     (:nixpkgs "github-linguist")
-    (:option github-linguist-executable "github-linguist"))
+    (:set github-linguist-executable "github-linguist"))
 #+end_src
 *** git-identity                                                       :VC:
 :PROPERTIES:
@@ -2121,7 +2136,7 @@ The following resources are useful:
 
 #+begin_src emacs-lisp
   (setup (:package kind-icon)
-    (:option kind-icon-default-face 'corfu-default)
+    (:set kind-icon-default-face 'corfu-default)
 
     (with-eval-after-load 'corfu
       (require 'kind-icon)
@@ -2183,7 +2198,7 @@ For Emacs Lisp, I use lispy.
 
     ;; Adoption of lispy is opinionated.
     (:status opinionated
-      (:option lispy-key-theme '(special lispy))
+      (:set lispy-key-theme '(special lispy))
 
       (:hook-into lisp-mode
                   emacs-lisp-mode
@@ -2227,28 +2242,28 @@ To use it, turn on =macrostep-mode=.
                "<f8> <f9>" #'magit-dispatch
                "<f8> <f10>" #'magit-file-dispatch)
 
-      (:option magit-display-buffer-function
-               ;; Based on 'magit-display-buffer-same-window-except-diff-v1
-               (defun akirak/magit-display-buffer (buffer)
-                 (let ((action (with-current-buffer buffer
-                                 (cond
-                                  ((derived-mode-p 'magit-diff-mode)
-                                   '(nil (inhibit-same-window . t)))
-                                  ((derived-mode-p 'magit-process-mode)
-                                   '(akirak-window-display-buffer-prefer-other-pane))
-                                  (t
-                                   '(display-buffer-same-window))))))
-                   (prog1 (display-buffer buffer action)
-                     (with-current-buffer buffer
-                       (when (derived-mode-p 'magit-process-mode)
-                         (goto-char (point-max))
-                         (recenter-top-bottom -1))))))))
+      (:set magit-display-buffer-function
+            ;; Based on 'magit-display-buffer-same-window-except-diff-v1
+            (defun akirak/magit-display-buffer (buffer)
+              (let ((action (with-current-buffer buffer
+                              (cond
+                               ((derived-mode-p 'magit-diff-mode)
+                                '(nil (inhibit-same-window . t)))
+                               ((derived-mode-p 'magit-process-mode)
+                                '(akirak-window-display-buffer-prefer-other-pane))
+                               (t
+                                '(display-buffer-same-window))))))
+                (prog1 (display-buffer buffer action)
+                  (with-current-buffer buffer
+                    (when (derived-mode-p 'magit-process-mode)
+                      (goto-char (point-max))
+                      (recenter-top-bottom -1))))))))
 
     (:status personal
-      (:option magit-repository-directories '(("~/" . 1)
-                                              ("~/.config" . 1)
-                                              ("~/work" . 3)
-                                              ("~/archives/oss/" . 3)))))
+      (:set magit-repository-directories '(("~/" . 1)
+                                           ("~/.config" . 1)
+                                           ("~/work" . 3)
+                                           ("~/archives/oss/" . 3)))))
 #+end_src
 *** marginalia
 :PROPERTIES:
@@ -2263,10 +2278,12 @@ To use it, turn on =macrostep-mode=.
       (:bind "M-a" #'marginalia-cycle))
 
     (:when-loaded
-      (:option (prepend marginalia-annotator-registry)
-               '(project-root
-                 akirak-project-root-annotator
-                 builtin none))))
+      (:set marginalia-annotator-registry
+            (append '((project-root
+                       akirak-project-root-annotator
+                       builtin none))
+                    (get 'marginalia-annotator-registry
+                         'standard-value)))))
 #+end_src
 *** MAYBE nano-bell                                         :noexport:nano:
 :PROPERTIES:
@@ -2287,8 +2304,8 @@ To use it, turn on =macrostep-mode=.
 
 #+begin_src emacs-lisp
   (setup (:package mlscroll)
-    (:option mlscroll-in-color "#888888"
-             mlscroll-out-color (face-attribute 'region :background nil t))
+    (:set mlscroll-in-color "#888888"
+          mlscroll-out-color (face-attribute 'region :background nil t))
     (:with-mode mlscroll-mode
       (:hook-into after-init-hook)))
 #+end_src
@@ -2344,9 +2361,9 @@ To use it, turn on =macrostep-mode=.
 
 #+begin_src emacs-lisp
   (setup (:package orderless)
-    (:option completion-styles '(orderless)
-             completion-category-defaults nil
-             completion-category-overrides '((file (styles partial-completion)))))
+    (:set completion-styles '(orderless)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 
 Resources:
@@ -2446,7 +2463,7 @@ Limitations:
 #+begin_src emacs-lisp
   (setup (:package repl-toggle)
     ;; rtog/goto-buffer-fun #'pop-to-buffer
-    (:option rtog/fullscreen nil)
+    (:set rtog/fullscreen nil)
 
     ;; Unbind the default key
     (:unbind "C-c C-z")
@@ -2596,7 +2613,7 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
 #+begin_src emacs-lisp
   (setup (:package vertico)
     (:hook-into after-init-hook)
-    (:option vertico-resize t))
+    (:set vertico-resize t))
 #+end_src
 
 For more tips, see [[https://github.com/minad/vertico/wiki][Home · minad/vertico Wiki · GitHub]].
@@ -2614,8 +2631,8 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 
 #+begin_src emacs-lisp
   (setup (:package visual-fill-column)
-    (:option visual-fill-column-center-text t
-             visual-fill-column-width 80))
+    (:set visual-fill-column-center-text t
+          visual-fill-column-width 80))
 #+end_src
 *** vterm                                                :terminal:process:
 :PROPERTIES:
