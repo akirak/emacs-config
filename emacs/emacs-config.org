@@ -1850,6 +1850,19 @@ dired-k depends on dired-x, which has a poor code quality.
     (:set dired-open-functions '(dired-open-by-extension
                                     dired-open-subdir)))
 #+end_src
+*** dumb-jump                                                  :navigation:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dumb-jump)
+    (:set dumb-jump-selector #'completing-read)
+
+    ;; NOTE: The activation function should be added to the end
+    ;; of the backend function. Is this really sufficient?
+    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+#+end_src
 *** ediprolog                                                      :Prolog:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
