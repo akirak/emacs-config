@@ -1513,7 +1513,7 @@ This is an extra functions for window management.
                "C-4" #'akirak-window-split-and-select
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
-*** all-the-icons                                                      :UI:
+*** all-the-icons                                              :UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:28]
 :END:
@@ -1533,7 +1533,7 @@ This is an extra functions for window management.
       (add-hook 'marginalia-mode
                 #'all-the-icons-completion-marginalia-setup)))
 #+end_src
-**** all-the-icons-dired
+**** all-the-icons-dired                                         :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:30]
 :END:
