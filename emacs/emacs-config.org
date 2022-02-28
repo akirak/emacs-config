@@ -1840,6 +1840,18 @@ dired-k depends on dired-x, which has a poor code quality.
 #+begin_src emacs-lisp
 (setup (:package eglot))
 #+end_src
+*** eldoc-eval                                                      :Emacs:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 12:31]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package eldoc-eval)
+    (:with-mode eldoc-in-minibuffer-mode
+      (:hook-into after-init-hook)))
+#+end_src
+
+I use this package mostly because it uses =pp-eval-expression= for printing the result, but it also has some other nice features, and it works flawlessly.
 *** electric-operator                                          :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
