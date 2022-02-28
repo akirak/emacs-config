@@ -1567,6 +1567,21 @@ This is a collection of extra utilities for various packages.
 #+end_src
 
 I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it had dependency on expand-region I wanted to get rid of, so I implemented a simpler alternative.
+**** akirak-image
+#+begin_src emacs-lisp
+  (setup akirak-image
+    (with-eval-after-load 'embark
+      (define-key embark-url-map (kbd "d") #'akirak-image-insert-offline-link)))
+#+end_src
+**** akirak-url                                                :clipboard:
+Complete a URL from the clipboard and the kill ring and insert as a link
+
+#+begin_src emacs-lisp
+  (setup akirak-url
+    (:global "C-c w" #'akirak-url-insert-dwim)
+    (with-eval-after-load 'embark
+      (define-key embark-url-map (kbd "m") #'akirak-url-insert-as-markdown)))
+#+end_src
 **** akirak-window                                               :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 14:10]
