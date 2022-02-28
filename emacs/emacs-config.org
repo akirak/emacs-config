@@ -2210,6 +2210,18 @@ Make vendored and generated files read only.
 #+begin_src emacs-lisp
 (setup (:package hercules))
 #+end_src
+*** highlight-indent-guides                                            :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package highlight-indent-guides)
+    (:hook-into python-mode-hook
+                yaml-mode-hook))
+#+end_src
+
+This is helpful in programming languages that depend on indentation levels.
 *** huan                                                          :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 21:11]
