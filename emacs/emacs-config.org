@@ -2480,6 +2480,19 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 #+begin_src emacs-lisp
 (setup (:package package-lint))
 #+end_src
+*** page-break-lines                                               :visual:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:37]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package page-break-lines)
+    (:hook-into doc-mode-hook
+                help-mode-hook
+                magit-mode-hook
+                compilation-mode-hook
+                haskell-mode-hook))
+#+end_src
 *** popper                                                        :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 23:59]
