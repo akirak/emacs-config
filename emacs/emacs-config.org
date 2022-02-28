@@ -2308,6 +2308,19 @@ To use it, turn on =macrostep-mode=.
                     (get 'marginalia-annotator-registry
                          'standard-value)))))
 #+end_src
+*** markdown-mode                                             :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 14:12]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package markdown-mode)
+    (:file-match "\\.md\\'" "\\.markdown\\'")
+    (:with-mode gfm-mode
+      (:file-match "README.md\\'"))
+
+    (:bind "C-c '" #'markdown-edit-code-block))
+#+end_src
 *** MAYBE nano-bell                                         :noexport:nano:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:20]
