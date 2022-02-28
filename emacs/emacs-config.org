@@ -771,7 +771,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (add-hook 'emacs-startup-hook
             (defun akirak/show-init-time ()
-              (message "Emacs initialized in %.3f sec with %d garbage collections"
+              (message "Emacs initialized in %.3f sec with %d garbage collection(s)"
                        (float-time (time-subtract after-init-time before-init-time))
                        gcs-done)))
 #+end_src
