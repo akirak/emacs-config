@@ -2365,6 +2365,10 @@ To use it, turn on =macrostep-mode=.
   (setup (:package magit)
     (:nixpkgs git)
 
+    ;; Twist allows me to get the git version of any package if necessary, so
+    ;; there is no point in making this IO-intensive function run.
+    (advice-add 'magit-version :override #'ignore)
+
     (:status opinionated
       (:global "<f8> <f7>" #'magit-stage-file
                "<f8> <f8>" #'magit-status
