@@ -548,6 +548,9 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup menu-bar
     (:status opinionated
+      (:with-map ctl-x-map
+        ;; I don't need kill-buffer when I have consult-buffer
+        (:bind "k" #'kill-this-buffer))
       (:global "<f12> <f12>" #'toggle-debug-on-error)))
 #+end_src
 *** minibuf.c                                                  :minibuffer:
