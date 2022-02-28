@@ -245,6 +245,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup autorevert
+    (:set auto-revert-avoid-polling t)
     (:with-mode global-auto-revert-mode
       (:hook-into after-init-hook)))
 #+end_src
