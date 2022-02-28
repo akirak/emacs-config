@@ -2596,7 +2596,7 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
   (setup (:package typescript-mode)
     (:file-match "\\.tsx?\\'"))
 #+end_src
-*** unmodified-buffer
+*** unmodified-buffer                                             :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]
 :END:
