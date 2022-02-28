@@ -1866,6 +1866,16 @@ dired-k depends on dired-x, which has a poor code quality.
 #+end_src
 
 [[https://lib.rs/crates/scryer-prolog][scryer-prolog]] is the bleeding-edge implementation of Prolog (like GHC to Haskell), and it is installed with this package.
+*** editorconfig                                               :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package editorconfig))
+#+end_src
+
+It is required only in specific projects, so I won't turn on the mode by default.
 *** eglot                                                      :LSP:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
