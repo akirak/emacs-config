@@ -2663,6 +2663,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
 (setup (:package suggest))
 #+end_src
+*** super-save                                                         :IO:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package super-save)
+    (:hook-into after-init-hook)
+    (:set super-save-auto-save-when-idle t
+          super-save-remote-files nil))
+#+end_src
 *** svg-lib                                              :library:graphics:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:30]
