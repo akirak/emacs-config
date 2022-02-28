@@ -1224,6 +1224,12 @@ Embrace Org as a common document format for Emacs.
   (setup org-id
     (:set org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
+**** org-link (ol)
+#+begin_src emacs-lisp
+  (setup ol
+    (:status opinionated
+      (:global "C-c l" #'org-store-link)))
+#+end_src
 **** org-refile
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 22:15]
