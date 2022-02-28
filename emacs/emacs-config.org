@@ -147,6 +147,27 @@ I am interested to see if it can reduce the amount of configuration code.
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
+*** :reformatters
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :reformatters (&rest entries)
+     "Define reformatters."
+     (let ((feature (setup-get 'feature)))
+       (macroexp-progn
+        (mapcar (pcase-lambda (`(,name . ,args))
+                  `(eval-after-load ',feature
+                     (defun ,(intern (concat "akirak/reformatter-define-"
+                                             (symbol-name name))) ()
+                       (reformatter-define ,name ,@args))))
+                entries)))))
+#+end_src
+
+This macro is untested. I have to test it later.
 *** :set
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 11:30]
@@ -2573,6 +2594,14 @@ Limitations:
 #+begin_src emacs-lisp
   (setup (:package rainbow-mode)
     (:hook-into prog-mode))
+#+end_src
+*** reformatter                                                :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package reformatter))
 #+end_src
 *** repl-toggle                                       :windows:development:
 :PROPERTIES:
