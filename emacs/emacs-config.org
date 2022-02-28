@@ -1787,47 +1787,52 @@ I will manually turn on =dired-collapse-mode= when necessary.
           `(("default"
              ("Directories"
               (directory . t))
-             ("Dotfiles"
-              (name . "^\\."))
-             ;; Text files
-             ("Text"
-              (or (name . "README")
-                  (name . "TODO")
-                  (name . "LICENSE")
-                  (extension "txt" "md" "mkd" "markdown" "rst")))
-             ("Org"
-              (extension "org" "bib"))
-             ("Ledger"
-              (extension "beancount"))
-             ("Data files"
-              (extension "csv" "json" "sql"))
-             ;; Binary files
-             ("Books and papers"
-              (extension "pdf" "mobi" "epub" "azw"))
-             ("Archives"
-              (extension "zip" "rar" "gz" "bz2" "tar"))
-             ("Disk images"
-              (extension "iso" "ova"))
-             ("Office docs"
-              (extension "xlsx" "xls" "docx" "doc"))
-             ("Programs"
-              (extension "exe" "run" "deb"))
-             ("Objects and binary files"
-              (extension "o" "elc"))
-             ("Meta data"
-              (extension "torrent" "acsm"))
-             ;; Images are often thumbnails, so they should come
-             ;; after other binary files
-             ("Images and graphics"
-              (extension "jpg" "jpeg" "png" "gif" "svg"))
-             ;; Source code
-             ("Config"
-              (or (name . "Makefile")
-                  (name . "Dockerfile")
-                  (extension "yml" "yaml" "cabal"
-                             "dockerfile" "mk")))
-             ("Emacs Lisp"
-              (extension "el"))))))
+             ,@(mapcar
+                (lambda (filter-stack)
+                  `(,(car filter-stack)
+                    (file . t)
+                    ,@(cdr filter-stack)))
+                '(("Dotfiles"
+                   (name . "^\\."))
+                  ;; Text files
+                  ("Text"
+                   (or (name . "README")
+                       (name . "TODO")
+                       (name . "LICENSE")
+                       (extension "txt" "md" "mkd" "markdown" "rst")))
+                  ("Org"
+                   (extension "org" "bib"))
+                  ("Ledger"
+                   (extension "beancount"))
+                  ("Data files"
+                   (extension "csv" "json" "sql"))
+                  ;; Binary files
+                  ("Books and papers"
+                   (extension "pdf" "mobi" "epub" "azw"))
+                  ("Archives"
+                   (extension "zip" "rar" "gz" "bz2" "tar"))
+                  ("Disk images"
+                   (extension "iso" "ova"))
+                  ("Office docs"
+                   (extension "xlsx" "xls" "docx" "doc"))
+                  ("Programs"
+                   (extension "exe" "run" "deb"))
+                  ("Objects and binary files"
+                   (extension "o" "elc"))
+                  ("Meta data"
+                   (extension "torrent" "acsm"))
+                  ;; Images are often thumbnails, so they should come
+                  ;; after other binary files
+                  ("Images and graphics"
+                   (extension "jpg" "jpeg" "png" "gif" "svg"))
+                  ;; Source code
+                  ("Config"
+                   (or (name . "Makefile")
+                       (name . "Dockerfile")
+                       (extension "yml" "yaml" "cabal"
+                                  "dockerfile" "mk")))
+                  ("Emacs Lisp"
+                   (extension "el"))))))))
 #+end_src
 *** dired-hacks-utils                                               :dired:
 :PROPERTIES:
