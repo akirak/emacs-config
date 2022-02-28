@@ -1749,6 +1749,14 @@ This is an extra functions for window management.
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** deadgrep                                                         :grep:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package deadgrep))
+#+end_src
 *** dired-collapse                                                  :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:44]
