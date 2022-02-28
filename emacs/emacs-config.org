@@ -2334,6 +2334,17 @@ To use it, turn on =macrostep-mode=.
                                            ("~/work" . 3)
                                            ("~/archives/oss/" . 3)))))
 #+end_src
+*** magit-todos                                                        :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package magit-todos)
+    (:set magit-todos-exclude-globs '("**/*.map")))
+#+end_src
+
+I won't turn on the mode by default, because it reduces the performance to some extent.
 *** marginalia
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:49]
