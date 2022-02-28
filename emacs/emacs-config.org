@@ -388,6 +388,7 @@ The built-in =electric= package provides the following modes:
   (setup elisp-mode
     (:with-mode emacs-lisp-mode
       (:huan ("eval-after-load" "with-eval-after-load"))
+      (:hook outline-minor-mode)
       (:local-set imenu-generic-expression
                   (append lisp-imenu-generic-expression
                           `(("Misc"
@@ -607,6 +608,17 @@ Resources:
 #+begin_src emacs-lisp
   (setup mule-cmds
     (set-language-environment "UTF-8"))
+#+end_src
+*** outline                                                       :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup outline
+    (:with-mode outline-minor-mode
+      (:status opinionated
+        (:bind "M-RET" #'outline-insert-heading))))
 #+end_src
 *** paragraphs                                                       :text:
 :PROPERTIES:
