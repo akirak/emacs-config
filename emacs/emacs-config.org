@@ -1689,6 +1689,13 @@ This is an extra functions for window management.
     (:with-mode (prog-mode text-mode comint-mode)
       (:hook corfu-mode fancy-dabbrev-mode))
 
+    (:with-hook minibuffer-setup-hook
+      (:hook
+       (defun corfu-enable-in-minibuffer ()
+         "Enable Corfu in the minibuffer if `completion-at-point' is bound."
+         (when (where-is-internal #'completion-at-point (list (current-local-map)))
+           (corfu-mode 1)))))
+
     (:with-mode (prog-mode text-mode)
       (:bind "M-/" #'completion-at-point))
     (:with-feature comint
