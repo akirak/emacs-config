@@ -1192,6 +1192,15 @@ Embrace Org as a common document format for Emacs.
             (emacs-lisp . t)
             (sqlite . t))))
 #+end_src
+**** org-capture
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 12:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-capture
+    (:global "C-c c" #'org-capture))
+#+end_src
 **** org-clock
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 22:13]
@@ -1274,15 +1283,6 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
 (setup (:package org-bookmark-heading))
-#+end_src
-*** org-capture
-:PROPERTIES:
-:CREATED_TIME: [2022-02-24 Thu 12:45]
-:END:
-
-#+begin_src emacs-lisp
-  (setup org-capture
-    (:global "C-c c" #'org-capture))
 #+end_src
 *** org-dynamic-bullets                                :aesthetics:ARCHIVE:
 :PROPERTIES:
