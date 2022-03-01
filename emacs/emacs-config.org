@@ -2069,11 +2069,50 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:24]
 :END:
-
 #+begin_src emacs-lisp
   (setup (:package fancy-dabbrev)
-    ;; For activation, see corfu
-    (:global "TAB" #'fancy-dabbrev-expand-or-indent))
+    ;; Useful for lisp
+    (:set fancy-dabbrev-preview-context 'before-non-word
+          fancy-dabbrev-expansion-context 'after-symbol)
+
+    (defvar fancy-dabbrev-lispy-self-ins-cmds nil)
+    (add-hook 'lispy-mode-hook
+              (defun fancy-dabbrev-lispy-setup ()
+                (let ((sym (make-variable-buffer-local 'fancy-dabbrev-self-insert-commands)))
+                  (if fancy-dabbrev-lispy-self-ins-cmds
+                      (set sym fancy-dabbrev-lispy-self-ins-cmds)
+                    (dolist (key (number-sequence 33 ?z))
+                      (add-to-list sym (key-binding (vector key))))
+                    (setq fancy-dabbrev-lispy-self-ins-cmds (symbol-value sym))))))
+
+    (:when-loaded
+      (add-to-list 'fancy-dabbrev-self-insert-commands
+                   'org-self-insert-command))
+
+    (defcustom fancy-dabbrev-expansion-key "C-e"
+      ""
+      :type 'string)
+    (defun fancy-dabbrev-remap (map)
+      (let* ((mode-cmd (keymap-lookup map fancy-dabbrev-expansion-key))
+             (remapped-cmd (or mode-cmd
+                               (with-temp-buffer
+                                 (keymap-lookup global-map fancy-dabbrev-expansion-key))))
+             (fallback-cmd (or mode-cmd
+                               (command-remapping remapped-cmd nil map)))
+             (wrapper-cmd (intern (concat "fancy-dabbrev-expand-or-" (symbol-name fallback-cmd)))))
+        (fset wrapper-cmd
+              `(lambda ()
+                 (interactive)
+                 (if (memq last-command fancy-dabbrev-self-insert-commands)
+                     (let ((fancy-dabbrev-indent-command ',fallback-cmd))
+                       (fancy-dabbrev-expand-or-indent))
+                   (call-interactively ',fallback-cmd))))
+        (define-key map (vector 'remap remapped-cmd) wrapper-cmd)))
+
+    (with-eval-after-load 'org-keys
+      (fancy-dabbrev-remap org-mode-map))
+    (with-eval-after-load 'lispy
+      (fancy-dabbrev-remap lispy-mode-map)))
 #+end_src
 *** fanyi                                                      :dictionary:
 :PROPERTIES:
