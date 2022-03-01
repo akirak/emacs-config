@@ -994,7 +994,7 @@ You need to install the font separately.
                    (message "Font family %s is not installed" family)
                    (delq (assq face value) value)
                    (set symbol value)))))))
-  
+
   (eval-after-load 'outline
     (defun akirak/set-outline-families ()
       (when-let (family (cdr (assq 'variable-pitch akirak/base-face-family-alist)))
@@ -1007,7 +1007,7 @@ You need to install the font separately.
                      outline-7
                      outline-8))
           (set-face-attribute x nil :family family)))))
-  
+
   (eval-after-load 'org
     (defun akirak/set-org-faces ()
       (set-face-attribute 'org-tag nil :inherit 'fixed-pitch)
@@ -1026,7 +1026,7 @@ I think it would be better to create my own theme, but I don't have enough time 
     :set (lambda (sym value)
            (set sym value)
            (set-face-attribute 'default nil :height value)))
-  
+
   (eval-after-load 'outline
     (defun akirak/apply-outline-font-heights ()
       (set-face-attribute 'outline-1 nil :height 1.54)
@@ -1877,10 +1877,10 @@ I will manually turn on =dired-collapse-mode= when necessary.
 #+begin_src emacs-lisp
   (setup (:package dired-k)
     (:set dired-k-style 'git)
-  
+
     (:with-hook dired-k-no-revert
       (:hook-into dired-after-readin-hook))
-  
+
     ;; Prevent from highlighting by file attributes.
     ;; Just add git status
     ;; (defun akirak/ad-override-dired-k--highlight-by-file-attribyte ()
@@ -1901,7 +1901,7 @@ dired-k depends on dired-x, which has a poor code quality.
   (setup (:package dired-open)
     ;; Temporary workaround
     (autoload 'dired-open-xdg "dired-open")
-    
+
     (:set dired-open-functions '(dired-open-by-extension
                                     dired-open-subdir)))
 #+end_src
@@ -2130,7 +2130,7 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package ghelp)
     (:global "<f1> ." #'ghelp-describe-at-point)
-  
+
     ;; Temporary workaround
     (autoload 'ghelp-describe-at-point "ghelp"))
 #+end_src
