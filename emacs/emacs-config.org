@@ -2287,6 +2287,15 @@ Make vendored and generated files read only.
 #+end_src
 
 This is helpful in programming languages that depend on indentation levels.
+*** hl-todo                                                   :development:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-02 Wed 15:58]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package hl-todo)
+    (:global "M-i t" #'hl-todo-insert))
+#+end_src
 *** huan                                                          :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 21:11]
