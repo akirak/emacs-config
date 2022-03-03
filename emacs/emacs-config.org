@@ -2657,6 +2657,8 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
                 sgml-mode
                 nxml-mode)
 
+    (:unbind "C-M-a" "C-M-e")
+
     ;; TODO: Bind commands
     ;;
     ;; Marking commands
