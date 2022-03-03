@@ -1284,6 +1284,42 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-bookmark-heading))
 #+end_src
+*** org-dog
+:PROPERTIES:
+:CREATED_TIME: [2022-03-03 Thu 16:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-dog)
+    (:when-loaded
+      (:also-load org-dog-embark
+                  org-dog-consult
+                  org-dog-facade)))
+#+end_src
+**** org-dog-consult
+:PROPERTIES:
+:CREATED_TIME: [2022-03-04 Fri 20:33]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-dog-consult))
+#+end_src
+**** org-dog-embark
+:PROPERTIES:
+:CREATED_TIME: [2022-03-03 Thu 16:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-dog-embark))
+#+end_src
+**** org-dog-facade
+:PROPERTIES:
+:CREATED_TIME: [2022-03-04 Fri 20:33]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-dog-facade))
+#+end_src
 *** org-dynamic-bullets                                :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
