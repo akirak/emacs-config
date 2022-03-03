@@ -62,6 +62,12 @@
       repo = "benchmark-init-el";
       type = "github";
     };
+    buttercup = {
+      flake = false;
+      owner = "jorgenschaefer";
+      repo = "emacs-buttercup";
+      type = "github";
+    };
     cape = {
       flake = false;
       owner = "minad";
@@ -122,6 +128,12 @@
       repo = "dash.el";
       type = "github";
     };
+    deadgrep = {
+      flake = false;
+      owner = "Wilfred";
+      repo = "deadgrep";
+      type = "github";
+    };
     dired-collapse = {
       flake = false;
       owner = "Fuco1";
@@ -158,10 +170,22 @@
       repo = "doct";
       type = "github";
     };
+    dumb-jump = {
+      flake = false;
+      owner = "jacktasia";
+      repo = "dumb-jump";
+      type = "github";
+    };
     ediprolog = {
       flake = false;
       owner = "emacsmirror";
       repo = "ediprolog";
+      type = "github";
+    };
+    editorconfig = {
+      flake = false;
+      owner = "editorconfig";
+      repo = "editorconfig-emacs";
       type = "github";
     };
     eglot = {
@@ -299,6 +323,12 @@
       type = "git";
       url = "https://gitlab.com/Ambrevar/emacs-gif-screencast.git";
     };
+    git-attr = {
+      flake = false;
+      owner = "arnested";
+      repo = "emacs-git-attr";
+      type = "github";
+    };
     git-commit = {
       flake = false;
       owner = "magit";
@@ -351,6 +381,18 @@
       flake = false;
       owner = "wurosh";
       repo = "hercules";
+      type = "github";
+    };
+    highlight-indent-guides = {
+      flake = false;
+      owner = "DarthFennec";
+      repo = "highlight-indent-guides";
+      type = "github";
+    };
+    hl-todo = {
+      flake = false;
+      owner = "tarsius";
+      repo = "hl-todo";
       type = "github";
     };
     ht = {
@@ -467,10 +509,22 @@
       repo = "magit";
       type = "github";
     };
+    magit-todos = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "magit-todos";
+      type = "github";
+    };
     marginalia = {
       flake = false;
       owner = "minad";
       repo = "marginalia";
+      type = "github";
+    };
+    markdown-mode = {
+      flake = false;
+      owner = "jrblevin";
+      repo = "markdown-mode";
       type = "github";
     };
     mlscroll = {
@@ -515,6 +569,34 @@
       repo = "org-bookmark-heading";
       type = "github";
     };
+    org-dog = {
+      flake = false;
+      owner = "akirak";
+      ref = "develop";
+      repo = "org-dog";
+      type = "github";
+    };
+    org-dog-consult = {
+      flake = false;
+      owner = "akirak";
+      ref = "develop";
+      repo = "org-dog";
+      type = "github";
+    };
+    org-dog-embark = {
+      flake = false;
+      owner = "akirak";
+      ref = "develop";
+      repo = "org-dog";
+      type = "github";
+    };
+    org-dog-facade = {
+      flake = false;
+      owner = "akirak";
+      ref = "develop";
+      repo = "org-dog";
+      type = "github";
+    };
     org-make-toc = {
       flake = false;
       owner = "alphapapa";
@@ -531,6 +613,12 @@
       flake = false;
       owner = "alphapapa";
       repo = "org-ql";
+      type = "github";
+    };
+    org-recur = {
+      flake = false;
+      owner = "m-cat";
+      repo = "org-recur";
       type = "github";
     };
     org-remark = {
@@ -593,10 +681,22 @@
       repo = "package-lint";
       type = "github";
     };
+    page-break-lines = {
+      flake = false;
+      owner = "purcell";
+      repo = "page-break-lines";
+      type = "github";
+    };
     parsebib = {
       flake = false;
       owner = "joostkremers";
       repo = "parsebib";
+      type = "github";
+    };
+    pcre2el = {
+      flake = false;
+      owner = "joddie";
+      repo = "pcre2el";
       type = "github";
     };
     poet-theme = {
@@ -653,6 +753,12 @@
       repo = "rainbow-mode";
       type = "github";
     };
+    reformatter = {
+      flake = false;
+      owner = "purcell";
+      repo = "emacs-reformatter";
+      type = "github";
+    };
     repl-toggle = {
       flake = false;
       type = "git";
@@ -685,6 +791,12 @@
       flake = false;
       owner = "akicho8";
       repo = "string-inflection";
+      type = "github";
+    };
+    super-save = {
+      flake = false;
+      owner = "bbatsov";
+      repo = "super-save";
       type = "github";
     };
     svg-lib = {
@@ -810,6 +922,12 @@
       flake = false;
       owner = "lewang";
       repo = "ws-butler";
+      type = "github";
+    };
+    xterm-color = {
+      flake = false;
+      owner = "atomontage";
+      repo = "xterm-color";
       type = "github";
     };
     yasnippet = {

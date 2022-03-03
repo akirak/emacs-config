@@ -142,11 +142,11 @@
     "gnu-elpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1645811263,
-        "narHash": "sha256-rVCN8zINxyTfCDaksM8ySvIy6IDL3iUKXnLh3KK1myI=",
+        "lastModified": 1646080218,
+        "narHash": "sha256-WD2gi3UPO8sf2cVruVqnTiq0nC+paw55wFvgbRaUglM=",
         "ref": "main",
-        "rev": "d13dbaa72ec65eec3bf23c0c6ca3aad168e5ed33",
-        "revCount": 340,
+        "rev": "9cbf6d62e839311e2b91842fd3089711aebd537b",
+        "revCount": 341,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/emacs/elpa.git"
       },
@@ -192,11 +192,11 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1645963853,
-        "narHash": "sha256-KPdz/RChRFz2jN5TY1igzfgx6uMrY9FFSV8UuglPX7w=",
+        "lastModified": 1646381253,
+        "narHash": "sha256-wgw4hZiigfLZMCLyyaiH/1ZlT+13wRpGVLf1M9Ou7gg=",
         "owner": "akirak",
         "repo": "melpa",
-        "rev": "28591f5f8a2e42394942e804517180d9a1bf913a",
+        "rev": "51da1d67986d3df9b471b7228dc0ac8818bcf8d5",
         "type": "github"
       },
       "original": {
