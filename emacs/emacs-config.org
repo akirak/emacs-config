@@ -1407,7 +1407,11 @@ Embrace Org as a common document format for Emacs.
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package org-reverse-datetree))
+  (setup (:package org-reverse-datetree)
+    (:set org-reverse-datetree-entry-time
+          '((property "CLOSED")
+            (clock latest)
+            (property "CREATED_TIME"))))
 #+end_src
 *** org-starter
 :PROPERTIES:
