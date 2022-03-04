@@ -1709,6 +1709,31 @@ This is an extra functions for window management.
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
+*** buttercup                             :Emacs__Lisp:testing:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-04 Fri 18:14]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package buttercup)
+    (:with-hook emacs-lisp-mode-hook
+      (:hook (defun akirak/buttercup-setup ()
+               (when (and (buffer-file-name)
+                          (string-match-p (rx (any "-/") "test" (?  "s") ".el" eol)
+                                          (buffer-file-name)))
+                 (buttercup-minor-mode t)))))
+
+    (:when-loaded
+      ;; Work around the duplicate lines issue.
+      ;; See https://github.com/jorgenschaefer/emacs-buttercup/issues/181
+      (advice-add #'buttercup-reporter-interactive
+                  :before-while
+                  (defun akirak/ad-bf-reporter-interactive (event arg)
+                    (not (eq event `spec-started))))
+
+      (advice-add #'buttercup-colorize :filter-return #'xterm-color-filter)))
+#+end_src
+
 *** cape                                                       :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:17]
@@ -2981,6 +3006,16 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
   (setup (:package ws-butler)
     (:hook-into prog-mode-hook))
 #+end_src
+*** xterm-color
+:PROPERTIES:
+:CREATED_TIME: [2022-03-04 Fri 19:00]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package xterm-color))
+#+end_src
+
+This package is required by the configuration for buttercup now.
 ** Notes                                                             :@note:
 :PROPERTIES:
 :TOC:      :depth 2
