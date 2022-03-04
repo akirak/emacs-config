@@ -84,4 +84,4 @@ firefox url = spawn $ "firefox --new-window " ++ url
 
 switchNixOSConfig :: X ()
 switchNixOSConfig = runInTerm ""
-    "sh -c 'sudo nixos-rebuild switch --flake `readlink -f $HOME/config`#`uname -n` || read'"
+    "sh -c 'sudo nixos-rebuild switch --flake `readlink -f $HOME/config`#`uname -n` --print-build-logs || read'"
