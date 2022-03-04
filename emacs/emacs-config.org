@@ -279,7 +279,10 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:set buffer-file-coding-system 'utf-8
           fill-column 80
           indicate-empty-lines t
-          truncate-lines t))
+          truncate-lines t)
+
+    (:status opinionated
+      (set-default 'major-mode 'lisp-interaction-mode)))
 #+end_src
 **** Line spacing
 #+begin_src emacs-lisp
