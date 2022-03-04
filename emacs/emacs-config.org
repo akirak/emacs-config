@@ -1431,7 +1431,13 @@ Embrace Org as a common document format for Emacs.
           org-starter-override-agenda-window-setup 'other-window
           org-starter-enable-local-variables :all)
 
-    (:global "M-g M-o" #'org-starter-find-file-by-key))
+    (:when-loaded
+      (add-to-list 'org-starter-extra-refile-map
+                   '("'" avy-org-refile-as-child "avy")))
+
+    (:global "M-g M-o" #'org-starter-find-file-by-key)
+    (:with-mode org-mode
+      (:bind "C-c C-x r" #'org-starter-refile-by-key)))
 #+end_src
 *** org-transclusion
 :PROPERTIES:
