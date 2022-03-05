@@ -1409,13 +1409,13 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 20:15]
 :END:
-
 #+begin_src emacs-lisp
   (setup (:package org-reverse-datetree)
     (:set org-reverse-datetree-entry-time
           '((property "CLOSED")
             (clock latest)
-            (property "CREATED_TIME"))))
+            (property "CREATED_TIME"))
+          org-reverse-datetree-month-format "%Y-%m"))
 #+end_src
 *** org-starter
 :PROPERTIES:
