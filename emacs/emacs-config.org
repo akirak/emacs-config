@@ -147,6 +147,27 @@ I am interested to see if it can reduce the amount of configuration code.
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
+*** :reformatters
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :reformatters (&rest entries)
+     "Define reformatters."
+     (let ((feature (setup-get 'feature)))
+       (macroexp-progn
+        (mapcar (pcase-lambda (`(,name . ,args))
+                  `(eval-after-load ',feature
+                     (defun ,(intern (concat "akirak/reformatter-define-"
+                                             (symbol-name name))) ()
+                       (reformatter-define ,name ,@args))))
+                entries)))))
+#+end_src
+
+This macro is untested. I have to test it later.
 *** :set
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 11:30]
@@ -258,7 +279,10 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:set buffer-file-coding-system 'utf-8
           fill-column 80
           indicate-empty-lines t
-          truncate-lines t))
+          truncate-lines t)
+
+    (:status opinionated
+      (set-default 'major-mode 'lisp-interaction-mode)))
 #+end_src
 **** Line spacing
 #+begin_src emacs-lisp
@@ -388,6 +412,7 @@ The built-in =electric= package provides the following modes:
   (setup elisp-mode
     (:with-mode emacs-lisp-mode
       (:huan ("eval-after-load" "with-eval-after-load"))
+      (:hook outline-minor-mode)
       (:local-set imenu-generic-expression
                   (append lisp-imenu-generic-expression
                           `(("Misc"
@@ -608,6 +633,17 @@ Resources:
   (setup mule-cmds
     (set-language-environment "UTF-8"))
 #+end_src
+*** outline                                                       :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup outline
+    (:with-mode outline-minor-mode
+      (:status opinionated
+        (:bind "M-RET" #'outline-insert-heading))))
+#+end_src
 *** paragraphs                                                       :text:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -771,7 +807,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (add-hook 'emacs-startup-hook
             (defun akirak/show-init-time ()
-              (message "Emacs initialized in %.3f sec with %d garbage collections"
+              (message "Emacs initialized in %.3f sec with %d garbage collection(s)"
                        (float-time (time-subtract after-init-time before-init-time))
                        gcs-done)))
 #+end_src
@@ -961,7 +997,7 @@ You need to install the font separately.
                    (message "Font family %s is not installed" family)
                    (delq (assq face value) value)
                    (set symbol value)))))))
-  
+
   (eval-after-load 'outline
     (defun akirak/set-outline-families ()
       (when-let (family (cdr (assq 'variable-pitch akirak/base-face-family-alist)))
@@ -974,7 +1010,7 @@ You need to install the font separately.
                      outline-7
                      outline-8))
           (set-face-attribute x nil :family family)))))
-  
+
   (eval-after-load 'org
     (defun akirak/set-org-faces ()
       (set-face-attribute 'org-tag nil :inherit 'fixed-pitch)
@@ -993,7 +1029,7 @@ I think it would be better to create my own theme, but I don't have enough time 
     :set (lambda (sym value)
            (set sym value)
            (set-face-attribute 'default nil :height value)))
-  
+
   (eval-after-load 'outline
     (defun akirak/apply-outline-font-heights ()
       (set-face-attribute 'outline-1 nil :height 1.54)
@@ -1159,6 +1195,15 @@ Embrace Org as a common document format for Emacs.
             (emacs-lisp . t)
             (sqlite . t))))
 #+end_src
+**** org-capture
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 12:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-capture
+    (:global "C-c c" #'org-capture))
+#+end_src
 **** org-clock
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 22:13]
@@ -1190,6 +1235,12 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
   (setup org-id
     (:set org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+#+end_src
+**** org-link (ol)
+#+begin_src emacs-lisp
+  (setup ol
+    (:status opinionated
+      (:global "C-c l" #'org-store-link)))
 #+end_src
 **** org-refile
 :PROPERTIES:
@@ -1236,14 +1287,41 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-bookmark-heading))
 #+end_src
-*** org-capture
+*** org-dog
 :PROPERTIES:
-:CREATED_TIME: [2022-02-24 Thu 12:45]
+:CREATED_TIME: [2022-03-03 Thu 16:26]
 :END:
 
 #+begin_src emacs-lisp
-  (setup org-capture
-    (:global "C-c c" #'org-capture))
+  (setup (:package org-dog)
+    (:when-loaded
+      (:also-load org-dog-embark
+                  org-dog-consult
+                  org-dog-facade)))
+#+end_src
+**** org-dog-consult
+:PROPERTIES:
+:CREATED_TIME: [2022-03-04 Fri 20:33]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-dog-consult))
+#+end_src
+**** org-dog-embark
+:PROPERTIES:
+:CREATED_TIME: [2022-03-03 Thu 16:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-dog-embark))
+#+end_src
+**** org-dog-facade
+:PROPERTIES:
+:CREATED_TIME: [2022-03-04 Fri 20:33]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-dog-facade))
 #+end_src
 *** org-dynamic-bullets                                :aesthetics:ARCHIVE:
 :PROPERTIES:
@@ -1307,6 +1385,17 @@ Embrace Org as a common document format for Emacs.
     ;; Temporarily workaround
     (autoload 'org-dblock-write:org-ql "org-ql-search"))
 #+end_src
+*** org-recur
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 14:17]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-recur)
+    (:status opinionated
+      (with-eval-after-load 'org
+        (akirak-org-recur-mode t))))
+#+end_src
 *** org-remark
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:59]
@@ -1321,7 +1410,11 @@ Embrace Org as a common document format for Emacs.
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package org-reverse-datetree))
+  (setup (:package org-reverse-datetree)
+    (:set org-reverse-datetree-entry-time
+          '((property "CLOSED")
+            (clock latest)
+            (property "CREATED_TIME"))))
 #+end_src
 *** org-starter
 :PROPERTIES:
@@ -1338,7 +1431,13 @@ Embrace Org as a common document format for Emacs.
           org-starter-override-agenda-window-setup 'other-window
           org-starter-enable-local-variables :all)
 
-    (:global "M-g M-o" #'org-starter-find-file-by-key))
+    (:when-loaded
+      (add-to-list 'org-starter-extra-refile-map
+                   '("'" avy-org-refile-as-child "avy")))
+
+    (:global "M-g M-o" #'org-starter-find-file-by-key)
+    (:with-mode org-mode
+      (:bind "C-c C-x r" #'org-starter-refile-by-key)))
 #+end_src
 *** org-transclusion
 :PROPERTIES:
@@ -1517,6 +1616,21 @@ This is a collection of extra utilities for various packages.
 #+end_src
 
 I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it had dependency on expand-region I wanted to get rid of, so I implemented a simpler alternative.
+**** akirak-image
+#+begin_src emacs-lisp
+  (setup akirak-image
+    (with-eval-after-load 'embark
+      (define-key embark-url-map (kbd "d") #'akirak-image-insert-offline-link)))
+#+end_src
+**** akirak-url                                                :clipboard:
+Complete a URL from the clipboard and the kill ring and insert as a link
+
+#+begin_src emacs-lisp
+  (setup akirak-url
+    (:global "C-c w" #'akirak-url-insert-dwim)
+    (with-eval-after-load 'embark
+      (define-key embark-url-map (kbd "m") #'akirak-url-insert-as-markdown)))
+#+end_src
 **** akirak-window                                               :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 14:10]
@@ -1608,6 +1722,31 @@ This is an extra functions for window management.
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
+*** buttercup                             :Emacs__Lisp:testing:development:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-04 Fri 18:14]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package buttercup)
+    (:with-hook emacs-lisp-mode-hook
+      (:hook (defun akirak/buttercup-setup ()
+               (when (and (buffer-file-name)
+                          (string-match-p (rx (any "-/") "test" (?  "s") ".el" eol)
+                                          (buffer-file-name)))
+                 (buttercup-minor-mode t)))))
+
+    (:when-loaded
+      ;; Work around the duplicate lines issue.
+      ;; See https://github.com/jorgenschaefer/emacs-buttercup/issues/181
+      (advice-add #'buttercup-reporter-interactive
+                  :before-while
+                  (defun akirak/ad-bf-reporter-interactive (event arg)
+                    (not (eq event `spec-started))))
+
+      (advice-add #'buttercup-colorize :filter-return #'xterm-color-filter)))
+#+end_src
+
 *** cape                                                       :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:17]
@@ -1705,6 +1844,14 @@ This is an extra functions for window management.
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** deadgrep                                                         :grep:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package deadgrep))
+#+end_src
 *** dired-collapse                                                  :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:44]
@@ -1729,47 +1876,52 @@ I will manually turn on =dired-collapse-mode= when necessary.
           `(("default"
              ("Directories"
               (directory . t))
-             ("Dotfiles"
-              (name . "^\\."))
-             ;; Text files
-             ("Text"
-              (or (name . "README")
-                  (name . "TODO")
-                  (name . "LICENSE")
-                  (extension "txt" "md" "mkd" "markdown" "rst")))
-             ("Org"
-              (extension "org" "bib"))
-             ("Ledger"
-              (extension "beancount"))
-             ("Data files"
-              (extension "csv" "json" "sql"))
-             ;; Binary files
-             ("Books and papers"
-              (extension "pdf" "mobi" "epub" "azw"))
-             ("Archives"
-              (extension "zip" "rar" "gz" "bz2" "tar"))
-             ("Disk images"
-              (extension "iso" "ova"))
-             ("Office docs"
-              (extension "xlsx" "xls" "docx" "doc"))
-             ("Programs"
-              (extension "exe" "run" "deb"))
-             ("Objects and binary files"
-              (extension "o" "elc"))
-             ("Meta data"
-              (extension "torrent" "acsm"))
-             ;; Images are often thumbnails, so they should come
-             ;; after other binary files
-             ("Images and graphics"
-              (extension "jpg" "jpeg" "png" "gif" "svg"))
-             ;; Source code
-             ("Config"
-              (or (name . "Makefile")
-                  (name . "Dockerfile")
-                  (extension "yml" "yaml" "cabal"
-                             "dockerfile" "mk")))
-             ("Emacs Lisp"
-              (extension "el"))))))
+             ,@(mapcar
+                (lambda (filter-stack)
+                  `(,(car filter-stack)
+                    (file . t)
+                    ,@(cdr filter-stack)))
+                '(("Dotfiles"
+                   (name . "^\\."))
+                  ;; Text files
+                  ("Text"
+                   (or (name . "README")
+                       (name . "TODO")
+                       (name . "LICENSE")
+                       (extension "txt" "md" "mkd" "markdown" "rst")))
+                  ("Org"
+                   (extension "org" "bib"))
+                  ("Ledger"
+                   (extension "beancount"))
+                  ("Data files"
+                   (extension "csv" "json" "sql"))
+                  ;; Binary files
+                  ("Books and papers"
+                   (extension "pdf" "mobi" "epub" "azw"))
+                  ("Archives"
+                   (extension "zip" "rar" "gz" "bz2" "tar"))
+                  ("Disk images"
+                   (extension "iso" "ova"))
+                  ("Office docs"
+                   (extension "xlsx" "xls" "docx" "doc"))
+                  ("Programs"
+                   (extension "exe" "run" "deb"))
+                  ("Objects and binary files"
+                   (extension "o" "elc"))
+                  ("Meta data"
+                   (extension "torrent" "acsm"))
+                  ;; Images are often thumbnails, so they should come
+                  ;; after other binary files
+                  ("Images and graphics"
+                   (extension "jpg" "jpeg" "png" "gif" "svg"))
+                  ;; Source code
+                  ("Config"
+                   (or (name . "Makefile")
+                       (name . "Dockerfile")
+                       (extension "yml" "yaml" "cabal"
+                                  "dockerfile" "mk")))
+                  ("Emacs Lisp"
+                   (extension "el"))))))))
 #+end_src
 *** dired-hacks-utils                                               :dired:
 :PROPERTIES:
@@ -1799,10 +1951,10 @@ I will manually turn on =dired-collapse-mode= when necessary.
 #+begin_src emacs-lisp
   (setup (:package dired-k)
     (:set dired-k-style 'git)
-  
+
     (:with-hook dired-k-no-revert
       (:hook-into dired-after-readin-hook))
-  
+
     ;; Prevent from highlighting by file attributes.
     ;; Just add git status
     ;; (defun akirak/ad-override-dired-k--highlight-by-file-attribyte ()
@@ -1823,9 +1975,22 @@ dired-k depends on dired-x, which has a poor code quality.
   (setup (:package dired-open)
     ;; Temporary workaround
     (autoload 'dired-open-xdg "dired-open")
-    
+
     (:set dired-open-functions '(dired-open-by-extension
                                     dired-open-subdir)))
+#+end_src
+*** dumb-jump                                                  :navigation:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dumb-jump)
+    (:set dumb-jump-selector #'completing-read)
+
+    ;; NOTE: The activation function should be added to the end
+    ;; of the backend function. Is this really sufficient?
+    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 #+end_src
 *** ediprolog                                                      :Prolog:
 :PROPERTIES:
@@ -1843,6 +2008,16 @@ dired-k depends on dired-x, which has a poor code quality.
 #+end_src
 
 [[https://lib.rs/crates/scryer-prolog][scryer-prolog]] is the bleeding-edge implementation of Prolog (like GHC to Haskell), and it is installed with this package.
+*** editorconfig                                               :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package editorconfig))
+#+end_src
+
+It is required only in specific projects, so I won't turn on the mode by default.
 *** eglot                                                      :LSP:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
@@ -1968,11 +2143,50 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:24]
 :END:
-
 #+begin_src emacs-lisp
   (setup (:package fancy-dabbrev)
-    ;; For activation, see corfu
-    (:global "TAB" #'fancy-dabbrev-expand-or-indent))
+    ;; Useful for lisp
+    (:set fancy-dabbrev-preview-context 'before-non-word
+          fancy-dabbrev-expansion-context 'after-symbol)
+
+    (defvar fancy-dabbrev-lispy-self-ins-cmds nil)
+    (add-hook 'lispy-mode-hook
+              (defun fancy-dabbrev-lispy-setup ()
+                (let ((sym (make-variable-buffer-local 'fancy-dabbrev-self-insert-commands)))
+                  (if fancy-dabbrev-lispy-self-ins-cmds
+                      (set sym fancy-dabbrev-lispy-self-ins-cmds)
+                    (dolist (key (number-sequence 33 ?z))
+                      (add-to-list sym (key-binding (vector key))))
+                    (setq fancy-dabbrev-lispy-self-ins-cmds (symbol-value sym))))))
+
+    (:when-loaded
+      (add-to-list 'fancy-dabbrev-self-insert-commands
+                   'org-self-insert-command))
+
+    (defcustom fancy-dabbrev-expansion-key "C-e"
+      ""
+      :type 'string)
+    (defun fancy-dabbrev-remap (map)
+      (let* ((mode-cmd (keymap-lookup map fancy-dabbrev-expansion-key))
+             (remapped-cmd (or mode-cmd
+                               (with-temp-buffer
+                                 (keymap-lookup global-map fancy-dabbrev-expansion-key))))
+             (fallback-cmd (or mode-cmd
+                               (command-remapping remapped-cmd nil map)))
+             (wrapper-cmd (intern (concat "fancy-dabbrev-expand-or-" (symbol-name fallback-cmd)))))
+        (fset wrapper-cmd
+              `(lambda ()
+                 (interactive)
+                 (if (memq last-command fancy-dabbrev-self-insert-commands)
+                     (let ((fancy-dabbrev-indent-command ',fallback-cmd))
+                       (fancy-dabbrev-expand-or-indent))
+                   (call-interactively ',fallback-cmd))))
+        (define-key map (vector 'remap remapped-cmd) wrapper-cmd)))
+
+    (with-eval-after-load 'org-keys
+      (fancy-dabbrev-remap org-mode-map))
+    (with-eval-after-load 'lispy
+      (fancy-dabbrev-remap lispy-mode-map)))
 #+end_src
 *** fanyi                                                      :dictionary:
 :PROPERTIES:
@@ -1990,7 +2204,7 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package ghelp)
     (:global "<f1> ." #'ghelp-describe-at-point)
-  
+
     ;; Temporary workaround
     (autoload 'ghelp-describe-at-point "ghelp"))
 #+end_src
@@ -2016,6 +2230,19 @@ The following resources are useful:
               "graphicsmagick-imagemagick-compat"))
 #+end_src
 
+*** git-attr                                               :files:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_quote
+Make vendored and generated files read only.
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package git-attr)
+    (add-hook 'find-file-hook #'git-attr-linguist))
+#+end_src
 *** git-gutter                                                         :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 19:08]
@@ -2121,6 +2348,27 @@ The following resources are useful:
 
 #+begin_src emacs-lisp
 (setup (:package hercules))
+#+end_src
+*** highlight-indent-guides                                            :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package highlight-indent-guides)
+    (:hook-into python-mode-hook
+                yaml-mode-hook))
+#+end_src
+
+This is helpful in programming languages that depend on indentation levels.
+*** hl-todo                                                   :development:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-02 Wed 15:58]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package hl-todo)
+    (:global "M-i t" #'hl-todo-insert))
 #+end_src
 *** huan                                                          :editing:
 :PROPERTIES:
@@ -2259,6 +2507,10 @@ To use it, turn on =macrostep-mode=.
   (setup (:package magit)
     (:nixpkgs git)
 
+    ;; Twist allows me to get the git version of any package if necessary, so
+    ;; there is no point in making this IO-intensive function run.
+    (advice-add 'magit-version :override #'ignore)
+
     (:status opinionated
       (:global "<f8> <f7>" #'magit-stage-file
                "<f8> <f8>" #'magit-status
@@ -2288,6 +2540,17 @@ To use it, turn on =macrostep-mode=.
                                            ("~/work" . 3)
                                            ("~/archives/oss/" . 3)))))
 #+end_src
+*** magit-todos                                                        :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package magit-todos)
+    (:set magit-todos-exclude-globs '("**/*.map")))
+#+end_src
+
+I won't turn on the mode by default, because it reduces the performance to some extent.
 *** marginalia
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:49]
@@ -2307,6 +2570,19 @@ To use it, turn on =macrostep-mode=.
                        builtin none))
                     (get 'marginalia-annotator-registry
                          'standard-value)))))
+#+end_src
+*** markdown-mode                                             :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 14:12]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package markdown-mode)
+    (:file-match "\\.md\\'" "\\.markdown\\'")
+    (:with-mode gfm-mode
+      (:file-match "README.md\\'"))
+
+    (:bind "C-c '" #'markdown-edit-code-block))
 #+end_src
 *** MAYBE nano-bell                                         :noexport:nano:
 :PROPERTIES:
@@ -2410,6 +2686,19 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 #+begin_src emacs-lisp
 (setup (:package package-lint))
 #+end_src
+*** page-break-lines                                               :visual:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:37]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package page-break-lines)
+    (:hook-into doc-mode-hook
+                help-mode-hook
+                magit-mode-hook
+                compilation-mode-hook
+                haskell-mode-hook))
+#+end_src
 *** popper                                                        :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 23:59]
@@ -2441,6 +2730,8 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
     (:hook-into prog-mode
                 sgml-mode
                 nxml-mode)
+
+    (:unbind "C-M-a" "C-M-e")
 
     ;; TODO: Bind commands
     ;;
@@ -2477,6 +2768,14 @@ Limitations:
 #+begin_src emacs-lisp
   (setup (:package rainbow-mode)
     (:hook-into prog-mode))
+#+end_src
+*** reformatter                                                :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package reformatter))
 #+end_src
 *** repl-toggle                                       :windows:development:
 :PROPERTIES:
@@ -2517,6 +2816,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 
 #+begin_src emacs-lisp
 (setup (:package suggest))
+#+end_src
+*** super-save                                                         :IO:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package super-save)
+    (:hook-into after-init-hook)
+    (:set super-save-auto-save-when-idle t
+          super-save-remote-files nil))
 #+end_src
 *** svg-lib                                              :library:graphics:
 :PROPERTIES:
@@ -2709,6 +3019,16 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
   (setup (:package ws-butler)
     (:hook-into prog-mode-hook))
 #+end_src
+*** xterm-color
+:PROPERTIES:
+:CREATED_TIME: [2022-03-04 Fri 19:00]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package xterm-color))
+#+end_src
+
+This package is required by the configuration for buttercup now.
 ** Notes                                                             :@note:
 :PROPERTIES:
 :TOC:      :depth 2
@@ -2748,33 +3068,33 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 120 |
-| [[org-ql-search:tags:visual][visual]]              |  11 |
-| [[org-ql-search:tags:formatting][formatting]]          |   9 |
-| [[org-ql-search:tags:development][development]]         |   9 |
-| [[org-ql-search:tags:UI][UI]]                  |   8 |
+| [[org-ql-search:tags:packages][packages]]            | 141 |
+| [[org-ql-search:tags:visual][visual]]              |  12 |
+| [[org-ql-search:tags:formatting][formatting]]          |  11 |
+| [[org-ql-search:tags:development][development]]         |  11 |
+| [[org-ql-search:tags:UI][UI]]                  |   9 |
 | [[org-ql-search:tags:windows][windows]]             |   7 |
 | [[org-ql-search:tags:dired][dired]]               |   6 |
+| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   6 |
+| [[org-ql-search:tags:editing][editing]]             |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
-| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   5 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   5 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   5 |
+| [[org-ql-search:tags:VC][VC]]                  |   5 |
 | [[org-ql-search:tags:library][library]]             |   5 |
-| [[org-ql-search:tags:editing][editing]]             |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
+| [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
-| [[org-ql-search:tags:VC][VC]]                  |   4 |
 | [[org-ql-search:tags:profiling][profiling]]           |   3 |
+| [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
-| [[org-ql-search:tags:files][files]]               |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:writing][writing]]             |   3 |
+| [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:links][links]]               |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
-| [[org-ql-search:tags:IO][IO]]                  |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
-| [[org-ql-search:tags:navigation][navigation]]          |   2 |
 | [[org-ql-search:tags:reading][reading]]             |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
@@ -2793,8 +3113,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:bibliography][bibliography]]        |   1 |
 | [[org-ql-search:tags:capture][capture]]             |   1 |
 | [[org-ql-search:tags:documentation][documentation]]       |   1 |
+| [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:@extra][@extra]]              |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
+| [[org-ql-search:tags:testing][testing]]             |   1 |
+| [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:startup][startup]]             |   1 |

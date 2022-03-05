@@ -85,6 +85,39 @@
   #   } // super.packageRequires;
   # };
 
+  org-dog = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
+  org-dog-embark = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
+  org-dog-consult = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
+  org-dog-facade = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
+
   twist = _: _: {
     origin = {
       type = "github";

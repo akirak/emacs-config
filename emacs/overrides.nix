@@ -15,6 +15,10 @@ esuper:
     buildInputs = old.buildInputs ++ [ pkgs.git ];
   });
 
+  magit-todos = esuper.magit.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [ pkgs.git ];
+  });
+
   orgit = esuper.orgit.overrideAttrs (old: {
     # Since magit 3.3.0, magit requires git executable for byte-compilation.
     buildInputs = old.buildInputs ++ [ pkgs.git ];

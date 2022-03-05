@@ -30,7 +30,7 @@ in
     home.packages = [
       wrapper
       (pkgs.makeDesktopItem {
-        name = "Emacs Config (2018)";
+        name = "emacs-config-2018";
         type = "Application";
         desktopName = "emacs-config-2018";
         # custom-file is loaded inside my init.el
