@@ -2485,6 +2485,7 @@ For Emacs Lisp, I use lispy.
                  "M-<left>"
                  "M-<right>"
                  "M-m"
+                 "<C-return>"
                  "<M-return>"
                  "<M-RET>"))))
 #+end_src
@@ -2789,7 +2790,7 @@ Limitations:
 
     ;; Unbind the default key
     (:unbind "C-c C-z")
-    (:bind "<C-return>" #'rtog/toggle-repl))
+    (:global "<C-return>" #'rtog/toggle-repl))
 #+end_src
 
 For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-toggle - sourcehut git]].
