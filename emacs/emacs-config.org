@@ -2595,8 +2595,7 @@ I won't turn on the mode by default, because it reduces the performance to some 
             (append '((project-root
                        akirak-project-root-annotator
                        builtin none))
-                    (get 'marginalia-annotator-registry
-                         'standard-value)))))
+                    (eval (car (get 'marginalia-annotator-registry 'standard-value)))))))
 #+end_src
 *** markdown-mode                                             :major__mode:
 :PROPERTIES:
