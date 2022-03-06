@@ -3253,20 +3253,20 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 141 |
+| [[org-ql-search:tags:packages][packages]]            | 148 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |  11 |
 | [[org-ql-search:tags:UI][UI]]                  |   9 |
+| [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:windows][windows]]             |   7 |
+| [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:dired][dired]]               |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   6 |
-| [[org-ql-search:tags:editing][editing]]             |   6 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
+| [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |   5 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   5 |
-| [[org-ql-search:tags:Emacs][Emacs]]               |   5 |
-| [[org-ql-search:tags:VC][VC]]                  |   5 |
 | [[org-ql-search:tags:library][library]]             |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
@@ -3279,7 +3279,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:links][links]]               |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
+| [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
+| [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:reading][reading]]             |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
@@ -3290,7 +3292,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
 | [[org-ql-search:tags:initialization][initialization]]      |   1 |
 | [[org-ql-search:tags:performance][performance]]         |   1 |
-| [[org-ql-search:tags:diff][diff]]                |   1 |
 | [[org-ql-search:tags:help][help]]                |   1 |
 | [[org-ql-search:tags:prog_mode][prog_mode]]           |   1 |
 | [[org-ql-search:tags:text_mode][text_mode]]           |   1 |
@@ -3307,8 +3308,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:startup][startup]]             |   1 |
 | [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
+| [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
-| [[org-ql-search:tags:Haskell][Haskell]]             |   1 |
 | [[org-ql-search:tags:exercises][exercises]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
