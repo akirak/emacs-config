@@ -32,6 +32,12 @@
       repo = "trivial-elisps";
       type = "github";
     };
+    anzu = {
+      flake = false;
+      owner = "emacsorphanage";
+      repo = "anzu";
+      type = "github";
+    };
     async = {
       flake = false;
       owner = "jwiegley";
@@ -194,6 +200,12 @@
       repo = "eglot";
       type = "github";
     };
+    el-patch = {
+      flake = false;
+      owner = "raxod502";
+      repo = "el-patch";
+      type = "github";
+    };
     eldoc-eval = {
       flake = false;
       owner = "thierryvolpiatto";
@@ -300,6 +312,12 @@
       flake = false;
       type = "git";
       url = "https://git.sr.ht/~tomterl/fullframe";
+    };
+    fwb-cmds = {
+      flake = false;
+      owner = "tarsius";
+      repo = "fwb-cmds";
+      type = "github";
     };
     gcmh = {
       flake = false;
@@ -503,6 +521,12 @@
       repo = "magit";
       type = "github";
     };
+    magit-delta = {
+      flake = false;
+      owner = "dandavison";
+      repo = "magit-delta";
+      type = "github";
+    };
     magit-section = {
       flake = false;
       owner = "magit";
@@ -531,6 +555,12 @@
       flake = false;
       owner = "jdtsmith";
       repo = "mlscroll";
+      type = "github";
+    };
+    move-dup = {
+      flake = false;
+      owner = "wyuenho";
+      repo = "move-dup";
       type = "github";
     };
     nix-mode = {
@@ -928,6 +958,12 @@
       flake = false;
       owner = "atomontage";
       repo = "xterm-color";
+      type = "github";
+    };
+    yaml-mode = {
+      flake = false;
+      owner = "yoshiki";
+      repo = "yaml-mode";
       type = "github";
     };
     yasnippet = {
