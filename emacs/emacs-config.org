@@ -1991,7 +1991,14 @@ dired-k depends on dired-x, which has a poor code quality.
 
     ;; NOTE: The activation function should be added to the end
     ;; of the backend function. Is this really sufficient?
-    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+
+    (add-hook 'emacs-lisp-mode-hook
+              ;; Make dumb-jump take precedence over the builtin backend,
+              ;; to search the project code whenever possible.
+              (defun akirak/elisp-setup-dumb-jump ()
+                (add-to-list 'xref-backend-functions
+                             #'dumb-jump-xref-activate))))
 #+end_src
 *** ediprolog                                                      :Prolog:
 :PROPERTIES:
