@@ -1310,6 +1310,10 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup (:package org-dog)
+    (with-eval-after-load 'org-id
+      (org-dog-id-mode t))
+    (add-hook 'org-mode-hook #'org-dog-file-mode-maybe)
+
     (:when-loaded
       (:also-load org-dog-embark
                   org-dog-consult
