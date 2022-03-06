@@ -339,7 +339,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
      ;; Emacs checkdoc/byte-compile, GHC, etc.
      ;; path:line:col: error:
-     (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\|warning\\):"
+     (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\):"
                  1 2 3 (4 . 4))
 
      ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
