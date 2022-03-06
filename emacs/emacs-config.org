@@ -731,6 +731,21 @@ Resources:
   (setup prolog
     (:file-match "\\.pl\\'"))
 #+end_src
+*** re-builder                                                     :regexp:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-06 Sun 21:01]
+:END:
+
+#+begin_src emacs-lisp
+  (setup re-builder
+    (:set reb-re-syntax 'rx)
+
+    (advice-add 'reb-empty-regexp
+                :override
+                (lambda ()
+                  (cond ((reb-lisp-syntax-p) (el-patch-swap "'()" "`(and bol)"))
+                        (t "")))))
+#+end_src
 *** recentf                                                 :history:files:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -1675,6 +1690,19 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup (:package all-the-icons-dired)
     (:hook-into dired-mode))
+#+end_src
+*** anzu                                                   :editing:regexp:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-06 Sun 21:00]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package anzu)
+    (:with-mode global-anzu-mode
+      (:hook-into after-init-hook))
+
+    (:global [remap query-replace] #'anzu-query-replace
+             [remap query-replace-regexp] #'anzu-query-replace-regexp))
 #+end_src
 *** auto-yasnippet                                                :expansion:
 :PROPERTIES:
@@ -2633,6 +2661,24 @@ I won't turn on the mode by default, because it reduces the performance to some 
           mlscroll-out-color (face-attribute 'region :background nil t))
     (:with-mode mlscroll-mode
       (:hook-into after-init-hook)))
+#+end_src
+*** move-dup                                                      :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-06 Sun 20:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package move-dup)
+    (:bind "M-p" #'move-dup-move-lines-up
+           "M-n" #'move-dup-move-lines-down
+           "C-M-p" #'move-dup-duplicate-up
+           "C-M-n" #'move-dup-duplicate-down)
+
+    (add-hook 'prog-mode-hook #'move-dup-mode)
+    (add-hook 'text-mode-hook
+              (defun akirak/turn-on-move-dup-mode ()
+                (unless (derived-mode-p 'org-mode 'markdown-mode)
+                  (move-dup-mode 1)))))
 #+end_src
 *** nano-modeline                       :visual:aesthetics:UI:nano:ARCHIVE:
 :PROPERTIES:
