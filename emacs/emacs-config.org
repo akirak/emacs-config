@@ -1642,9 +1642,9 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup akirak-window
     (:status opinionated
-      (:global "C-2" #'akirak-window-setup-columns
-               "C-3" #'akirak-window-split-vertically
-               "C-4" #'akirak-window-split-and-select
+      (:global "C-2" #'akirak-window-split-vertically
+               "C-3" #'akirak-window-split-and-select
+               "C-4" #'akirak-window-setup-columns
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
 *** all-the-icons                                              :UI:ARCHIVE:
