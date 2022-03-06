@@ -2549,6 +2549,24 @@ To use it, turn on =macrostep-mode=.
                                            ("~/work" . 3)
                                            ("~/archives/oss/" . 3)))))
 #+end_src
+*** magit-delta                                                   :VC:diff:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-06 Sun 13:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package magit-delta)
+    (:nixpkgs "delta")
+    (:hook-into magit-mode-hook)
+
+    (setq magit-delta-default-dark-theme "base16")
+
+    (:when-loaded
+      (unless (member "magit-delta" magit-delta-delta-args)
+        (setq magit-delta-delta-args
+              (append magit-delta-delta-args
+                      '("--features" "magit-delta"))))))
+#+end_src
 *** magit-todos                                                        :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
