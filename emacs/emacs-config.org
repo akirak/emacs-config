@@ -3107,6 +3107,15 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 #+end_src
 
 This package is required by the configuration for buttercup now.
+*** yaml-mode                                                 :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-07 Mon 16:07]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package yaml-mode)
+    (:file-match "\\.ya?ml\\'"))
+#+end_src
 ** Notes                                                             :@note:
 :PROPERTIES:
 :TOC:      :depth 2
