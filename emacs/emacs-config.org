@@ -1106,7 +1106,9 @@ Embrace Org as a common document format for Emacs.
             org-link-search-must-match-exact-headline t
             org-catch-invisible-edits 'show-and-error
             ;; Prevent from saving org-refile and org-capture locations to bookmarks
-            org-bookmark-names-plist nil)))
+            org-bookmark-names-plist nil)
+
+      (advice-add #'org-insert-heading :after #'akirak-org-add-timestamp)))
 #+end_src
 **** Completion
 #+begin_src emacs-lisp
