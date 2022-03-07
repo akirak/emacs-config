@@ -1613,10 +1613,14 @@ This is a collection of extra utilities for various packages.
 
     (:global "C-x g" #'akirak-project-switch)
 
+    (with-eval-after-load 'embark
+      (add-to-list 'embark-keymap-alist
+                   '(project-root . akirak-project-root-map)))
+
     ;; These settings are specific to my environment.
     (:status personal
       (:defer 1 #'akirak-files-ensure-abbrev-list)
-      (run-with-idle-timer 300 nil #'github-linguist-update-projects)))
+      (run-with-idle-timer 300 nil #'akirak-project-rescan)))
 #+end_src
 **** akirak-elec-pair                                        :parentheses:
 :PROPERTIES:
@@ -2622,14 +2626,7 @@ I won't turn on the mode by default, because it reduces the performance to some 
     (:hook-into after-init-hook)
 
     (:with-map minibuffer-local-map
-      (:bind "M-a" #'marginalia-cycle))
-
-    (:when-loaded
-      (:set marginalia-annotator-registry
-            (append '((project-root
-                       akirak-project-root-annotator
-                       builtin none))
-                    (eval (car (get 'marginalia-annotator-registry 'standard-value)))))))
+      (:bind "M-a" #'marginalia-cycle)))
 #+end_src
 *** markdown-mode                                             :major__mode:
 :PROPERTIES:
