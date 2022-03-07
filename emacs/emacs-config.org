@@ -1252,7 +1252,7 @@ Embrace Org as a common document format for Emacs.
 **** org-id
 #+begin_src emacs-lisp
   (setup org-id
-    (:set org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+    (:set org-id-link-to-org-use-id t))
 #+end_src
 **** org-link (ol)
 #+begin_src emacs-lisp
