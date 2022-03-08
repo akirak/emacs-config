@@ -2083,7 +2083,10 @@ It is required only in specific projects, so I won't turn on the mode by default
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package eglot))
+  (setup (:package eglot)
+    (:with-mode eglot-ensure
+      (:hook-into haskell-mode-hook
+                  rust-mode-hook)))
 #+end_src
 *** eldoc-eval                                                      :Emacs:
 :PROPERTIES:
@@ -2385,15 +2388,21 @@ Make vendored and generated files read only.
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
-*** haskell-mode                                      :major__mode:ARCHIVE:
+*** haskell-mode                                              :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package haskell-mode))
+  (setup (:package haskell-mode)
+    (:file-match "\\.hs\\'")
+    (:with-mode haskell-cabal-mode
+      (:file-match "\\.cabal\\'"))
+
+    (:hook subword-mode
+           interactive-haskell-mode))
 #+end_src
-*** haskell-tng-mode                                  :Haskell:major__mode:
+*** haskell-tng-mode                          :Haskell:major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:02]
 :END:

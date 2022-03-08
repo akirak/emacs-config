@@ -976,21 +976,20 @@
         "type": "github"
       }
     },
-    "haskell-tng-mode": {
+    "haskell-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1618868372,
-        "narHash": "sha256-ZvRlfdvFFY5VBVRYQJWH6cC7LcEZs0vW/RwVQ560m8A=",
-        "ref": "tng",
-        "rev": "55d8e69a7621c8e63f306c268705df0c03afb855",
-        "revCount": 385,
-        "type": "git",
-        "url": "https://gitlab.com/tseenshe/haskell-tng.el.git"
+        "lastModified": 1644344493,
+        "narHash": "sha256-6pK/t8TqWda1gbVUwgg2zwwNWBw9NeuCQtuaYtFSVRk=",
+        "owner": "haskell",
+        "repo": "haskell-mode",
+        "rev": "f13b6db78bc880e680c320e015ae232f525e0a27",
+        "type": "github"
       },
       "original": {
-        "ref": "tng",
-        "type": "git",
-        "url": "https://gitlab.com/tseenshe/haskell-tng.el.git"
+        "owner": "haskell",
+        "repo": "haskell-mode",
+        "type": "github"
       }
     },
     "helpful": {
@@ -2133,7 +2132,7 @@
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
         "graphql": "graphql",
-        "haskell-tng-mode": "haskell-tng-mode",
+        "haskell-mode": "haskell-mode",
         "helpful": "helpful",
         "hercules": "hercules",
         "highlight-indent-guides": "highlight-indent-guides",

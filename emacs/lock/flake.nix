@@ -365,11 +365,11 @@
       repo = "graphql.el";
       type = "github";
     };
-    haskell-tng-mode = {
+    haskell-mode = {
       flake = false;
-      ref = "tng";
-      type = "git";
-      url = "https://gitlab.com/tseenshe/haskell-tng.el.git";
+      owner = "haskell";
+      repo = "haskell-mode";
+      type = "github";
     };
     helpful = {
       flake = false;
