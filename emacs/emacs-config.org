@@ -1316,6 +1316,8 @@ Embrace Org as a common document format for Emacs.
       (org-dog-id-mode t))
     (add-hook 'org-mode-hook #'org-dog-file-mode-maybe)
 
+    (:global "M-g M-/" #'org-dog-find-file)
+
     (:when-loaded
       (:also-load org-dog-embark
                   org-dog-consult
