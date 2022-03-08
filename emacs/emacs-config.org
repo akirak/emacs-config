@@ -1168,7 +1168,21 @@ Embrace Org as a common document format for Emacs.
                "M-n" #'org-metadown
                "M-p" #'org-metaup
                "M-H" #'org-shiftmetaleft
-               "M-L" #'org-shiftmetaright)
+               "M-L" #'org-shiftmetaright
+               "M-g a" (defun akirak/org-goto-beginnning-of-content ()
+                         (interactive)
+                         (org-back-to-heading)
+                         (org-end-of-meta-data t)
+                         (when (org-at-heading-p)
+                           (org-open-line 1)))
+               "M-g e" (defun akirak/org-goto-before-next-heading ()
+                         (interactive)
+                         (org-next-visible-heading 1)
+                         (re-search-backward (rx (+ (any "\n"))) nil t))
+               "C-M-u" (defun akirak/org-up-element ()
+                         (interactive)
+                         (org-up-element)
+                         (org-show-entry)))
 
         (:with-map org-read-date-minibuffer-local-map
           (:bind "C-p" (defun akirak/org-calendar-previous-week ()
@@ -1183,10 +1197,6 @@ Embrace Org as a common document format for Emacs.
                  "<S-iso-lefttab>" (defun akirak/org-calendar-previous-day ()
                                      (interactive)
                                      (org-eval-in-calendar '(calendar-forward-day -1))))))))
-
-
-
-
 #+end_src
 **** org-agenda
 :PROPERTIES:
