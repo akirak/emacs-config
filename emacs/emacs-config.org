@@ -2742,7 +2742,9 @@ I won't turn on the mode by default, because it reduces the performance to some 
 #+begin_src emacs-lisp
   (setup (:package nix-mode)
     (:file-match "\\.nix\\'")
-    (:mode-repl nix-repl))
+    (:mode-repl nix-repl)
+    (:reformatters
+     (nixpkgs-fmt :program "nixpkgs-fmt")))
 #+end_src
 *** nov                                                      :reading:EPUB:
 :PROPERTIES:
