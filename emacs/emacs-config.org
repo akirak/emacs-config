@@ -2242,6 +2242,16 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package fanyi))
 #+end_src
+*** fwb-cmds                                                       :window:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-08 Tue 16:02]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package fwb-cmds))
+#+end_src
+
+I need this package for =toggle-window-split= command.
 *** ghelp                                           :reference:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:45]
