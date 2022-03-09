@@ -1244,7 +1244,31 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-capture
-    (:global "C-c c" #'org-capture))
+    (:global "C-c c" #'org-capture)
+
+    (:when-loaded
+      (require 'el-patch)
+      (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
+        "Insert the template at the target location, and display the buffer.
+  When INHIBIT-WCONF-STORE is non-nil, don't store the window configuration, as it
+  may have been stored before."
+        (unless inhibit-wconf-store
+          (org-capture-put :return-to-wconf (current-window-configuration)))
+        (el-patch-remove (delete-other-windows))
+        (org-switch-to-buffer-other-window
+         (org-capture-get-indirect-buffer (org-capture-get :buffer) "CAPTURE"))
+        (widen)
+        (org-show-all)
+        (goto-char (org-capture-get :pos))
+        (setq-local outline-level 'org-outline-level)
+        (pcase (org-capture-get :type)
+          ((or `nil `entry) (org-capture-place-entry))
+          (`table-line (org-capture-place-table-line))
+          (`plain (org-capture-place-plain-text))
+          (`item (org-capture-place-item))
+          (`checkitem (org-capture-place-item)))
+        (setq-local org-capture-current-plist org-capture-plist)
+        (org-capture-mode 1))))
 #+end_src
 **** org-clock
 :PROPERTIES:
