@@ -285,10 +285,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:set buffer-file-coding-system 'utf-8
           fill-column 80
           indicate-empty-lines t
-          truncate-lines t)
-
-    (:status opinionated
-      (set-default 'major-mode 'lisp-interaction-mode)))
+          truncate-lines t))
 #+end_src
 **** Line spacing
 #+begin_src emacs-lisp
@@ -1634,6 +1631,7 @@ This is a collection of extra utilities for various packages.
   (setup (:package akirak)
 
     (:global "C-x g" #'akirak-project-switch)
+    (:global "C-c i" #'akirak-scratch-elisp)
 
     (with-eval-after-load 'embark
       (add-to-list 'embark-keymap-alist
@@ -2828,6 +2826,8 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
           popper-display-function #'popper-select-popup-at-bottom
           akirak/display-popup-window-function popper-display-function
           popper-reference-buffers `("\\*Messages\\*$"
+                                     "\\*Backtrace\\*"
+                                     lisp-interaction-mode
                                      vterm-mode))
 
     (:hook-into after-init-hook)
