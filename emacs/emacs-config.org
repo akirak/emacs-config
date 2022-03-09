@@ -228,6 +228,12 @@ By default, settings inside =:status= clauses are not loaded.
       ;; This is quite annoying, so I will use M-` as <f1>.
       (define-key key-translation-map (kbd "M-`") (kbd "<f1>"))))
 #+end_src
+*** Window management
+#+begin_src emacs-lisp
+  (defcustom akirak/display-popup-window-function #'pop-to-buffer
+    "Function used to display popup windows."
+    :type 'function)
+#+end_src
 ** Macro packages                                                 :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -1293,7 +1299,8 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-src
-    (:set org-src-tab-acts-natively t))
+    (:set org-src-tab-acts-natively t
+          org-src-window-setup 'split-window-below))
 #+end_src
 **** Tags
 #+begin_src emacs-lisp
@@ -2816,7 +2823,15 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package popper))
+  (setup (:package popper)
+    (:set popper-window-height 0.3
+          popper-display-function #'popper-select-popup-at-bottom
+          akirak/display-popup-window-function popper-display-function
+          popper-reference-buffers `("\\*Messages\\*$"
+                                     vterm-mode))
+
+    (:hook-into after-init-hook)
+    (:bind "M-S-SPC" #'popper-cycle))
 #+end_src
 *** project-hercules                                  :project:keybindings:
 :PROPERTIES:
@@ -2895,8 +2910,8 @@ Limitations:
 
 #+begin_src emacs-lisp
   (setup (:package repl-toggle)
-    ;; rtog/goto-buffer-fun #'pop-to-buffer
-    (:set rtog/fullscreen nil)
+    (:set rtog/fullscreen nil
+          rtog/goto-buffer-fun akirak/display-popup-window-function)
 
     ;; Unbind the default key
     (:unbind "C-c C-z")
@@ -3084,7 +3099,18 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 :END:
 
 #+begin_src emacs-lisp
-  (setup (:package vterm))
+  (setup (:package vterm)
+    (defun akirak/vterm (dir)
+      (interactive (pcase current-prefix-arg
+                     (`nil (list default-directory))
+                     ('(4) (list (read-directory-name "Directory: ")))))
+      (require 'vterm)
+      (let ((default-directory dir))
+        (vterm--internal akirak/display-popup-window-function)))
+
+    (defun akirak/project-vterm ()
+      (interactive)
+      (akirak/vterm (project-root (project-current)))))
 #+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_src emacs-lisp
