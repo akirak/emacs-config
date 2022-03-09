@@ -238,6 +238,14 @@ By default, settings inside =:status= clauses are not loaded.
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
+*** el-patch                                                        :Emacs:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-09 Wed 15:26]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package el-patch))
+#+end_src
 *** fullframe                                                     :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:06]
