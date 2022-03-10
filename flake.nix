@@ -275,6 +275,8 @@
 
             inherit emacs-config;
 
+            test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests { };
+
             update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
               nix flake lock --update-input melpa --update-input gnu-elpa
               cd emacs/lock
