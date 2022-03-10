@@ -424,7 +424,10 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup elisp-mode
     (:with-mode emacs-lisp-mode
-      (:huan ("eval-after-load" "with-eval-after-load"))
+      (:huan
+        ("eval-after-load" "with-eval-after-load")
+        ("add-hook" "remove-hook")
+        ("advice-add" "advice-remove"))
       (:hook outline-minor-mode)
       (:local-set imenu-generic-expression
                   (append lisp-imenu-generic-expression
@@ -2861,6 +2864,7 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
           akirak/display-popup-window-function popper-display-function
           popper-reference-buffers `("\\*Messages\\*$"
                                      "\\*Backtrace\\*"
+                                     "\\*Org-Dog-Context\\*"
                                      lisp-interaction-mode
                                      vterm-mode))
 
