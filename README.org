@@ -25,7 +25,7 @@ This repository contains my Emacs configuration which is built using [[https://g
 
 I use home-manager for installation.
 **** Trying out the configuration on Linux
-If you are using Linux with Nix 2.4 installed, you can try out the Emacs configuration without replacing your =~/.emacs.d/=.
+If you are using Linux with Nix 2.4 installed, you can try out the Emacs configuration without replacing your user-emacs-directory.
 MacOS is not supported, because the Nix app depends on bubblewrap, which is only supported on Linux.
 
 You can save time to build GccEmacs by taking advantage of binary cache of Nix:
@@ -39,6 +39,9 @@ Now you can try out the configuration:
 #+begin_src sh
 nix run github:akirak/nix-config#tryout-emacs
 #+end_src
+
+It assumes that your existing Emacs configuration resides in the XDG config directory (i.e. =~/.config/emacs= by default).
+If your configuration is installed in =~/.emacs.d=, the sandboxed app won't work.
 *** Home-Manager
 Directory: [[file:home/][home]]
 
