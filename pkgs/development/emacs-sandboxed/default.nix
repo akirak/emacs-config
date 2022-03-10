@@ -21,7 +21,7 @@ in
   # Options related to the sandbox
 , protectHome ? true
 , userEmacsDirectory ? null
-, userEmacsDirectoryMountPoint ? "$HOME/.emacs.d"
+, userEmacsDirectoryMountPoint ? "\${XDG_CONFIG_HOME:-$HOME/.config}/emacs"
 , shareNet ? false
 , inheritPath ? false
 , extraDirsToTryBind ? [ ]
