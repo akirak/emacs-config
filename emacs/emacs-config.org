@@ -228,10 +228,24 @@ By default, settings inside =:status= clauses are not loaded.
       ;; This is quite annoying, so I will use M-` as <f1>.
       (define-key key-translation-map (kbd "M-`") (kbd "<f1>"))))
 #+end_src
+*** Window management
+#+begin_src emacs-lisp
+  (defcustom akirak/display-popup-window-function #'pop-to-buffer
+    "Function used to display popup windows."
+    :type 'function)
+#+end_src
 ** Macro packages                                                 :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
+*** el-patch                                                        :Emacs:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-09 Wed 15:26]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package el-patch))
+#+end_src
 *** fullframe                                                     :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:06]
@@ -279,10 +293,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:set buffer-file-coding-system 'utf-8
           fill-column 80
           indicate-empty-lines t
-          truncate-lines t)
-
-    (:status opinionated
-      (set-default 'major-mode 'lisp-interaction-mode)))
+          truncate-lines t))
 #+end_src
 **** Line spacing
 #+begin_src emacs-lisp
@@ -339,7 +350,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
      ;; Emacs checkdoc/byte-compile, GHC, etc.
      ;; path:line:col: error:
-     (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\|warning\\):"
+     (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\):"
                  1 2 3 (4 . 4))
 
      ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
@@ -375,7 +386,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup eldoc
     (:with-hook turn-on-eldoc-mode
-      (:hook-into emacs-lisp-mode)))
+      (:hook-into emacs-lisp-mode))
+
+    (:global "C-c e" #'eldoc-doc-buffer))
 #+end_src
 *** elec-pair                             :prog_mode:text_mode:parentheses:
 :PROPERTIES:
@@ -411,7 +424,10 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup elisp-mode
     (:with-mode emacs-lisp-mode
-      (:huan ("eval-after-load" "with-eval-after-load"))
+      (:huan
+        ("eval-after-load" "with-eval-after-load")
+        ("add-hook" "remove-hook")
+        ("advice-add" "advice-remove"))
       (:hook outline-minor-mode)
       (:local-set imenu-generic-expression
                   (append lisp-imenu-generic-expression
@@ -730,6 +746,21 @@ Resources:
 #+begin_src emacs-lisp
   (setup prolog
     (:file-match "\\.pl\\'"))
+#+end_src
+*** re-builder                                                     :regexp:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-06 Sun 21:01]
+:END:
+
+#+begin_src emacs-lisp
+  (setup re-builder
+    (:set reb-re-syntax 'rx)
+
+    (advice-add 'reb-empty-regexp
+                :override
+                (lambda ()
+                  (cond ((reb-lisp-syntax-p) (el-patch-swap "'()" "`(and bol)"))
+                        (t "")))))
 #+end_src
 *** recentf                                                 :history:files:
 :PROPERTIES:
@@ -1091,7 +1122,9 @@ Embrace Org as a common document format for Emacs.
             org-link-search-must-match-exact-headline t
             org-catch-invisible-edits 'show-and-error
             ;; Prevent from saving org-refile and org-capture locations to bookmarks
-            org-bookmark-names-plist nil)))
+            org-bookmark-names-plist nil)
+
+      (advice-add #'org-insert-heading :after #'akirak-org-add-timestamp)))
 #+end_src
 **** Completion
 #+begin_src emacs-lisp
@@ -1144,13 +1177,31 @@ Embrace Org as a common document format for Emacs.
                  "C-c ["
                  "C-c ]")
         (:bind akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
-               "C-c C-x c" #'akirak-org-avy-clone-subtree
+               "<" #'akirak-org-angle-open
+               "C-c C-x y" #'akirak-org-yank-into-new-block
+               "C-c C-x ' c" #'akirak-org-avy-clone-subtree
+               "C-c C-x ' r" #'avy-org-refile-as-child
+               "C-c C-x C-w" #'org-cut-subtree
                ;; M-up/down/left/right is unavailable on Chromebooks, so I need
                ;; alternative bindings for commands bound on those keys.
                "M-n" #'org-metadown
                "M-p" #'org-metaup
                "M-H" #'org-shiftmetaleft
-               "M-L" #'org-shiftmetaright)
+               "M-L" #'org-shiftmetaright
+               "M-g a" (defun akirak/org-goto-beginnning-of-content ()
+                         (interactive)
+                         (org-back-to-heading)
+                         (org-end-of-meta-data t)
+                         (when (org-at-heading-p)
+                           (org-open-line 1)))
+               "M-g e" (defun akirak/org-goto-before-next-heading ()
+                         (interactive)
+                         (org-next-visible-heading 1)
+                         (re-search-backward (rx (+ (any "\n"))) nil t))
+               "C-M-u" (defun akirak/org-up-element ()
+                         (interactive)
+                         (org-up-element)
+                         (org-show-entry)))
 
         (:with-map org-read-date-minibuffer-local-map
           (:bind "C-p" (defun akirak/org-calendar-previous-week ()
@@ -1165,10 +1216,6 @@ Embrace Org as a common document format for Emacs.
                  "<S-iso-lefttab>" (defun akirak/org-calendar-previous-day ()
                                      (interactive)
                                      (org-eval-in-calendar '(calendar-forward-day -1))))))))
-
-
-
-
 #+end_src
 **** org-agenda
 :PROPERTIES:
@@ -1202,7 +1249,31 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-capture
-    (:global "C-c c" #'org-capture))
+    (:global "C-c c" #'org-capture)
+
+    (:when-loaded
+      (require 'el-patch)
+      (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
+        "Insert the template at the target location, and display the buffer.
+  When INHIBIT-WCONF-STORE is non-nil, don't store the window configuration, as it
+  may have been stored before."
+        (unless inhibit-wconf-store
+          (org-capture-put :return-to-wconf (current-window-configuration)))
+        (el-patch-remove (delete-other-windows))
+        (org-switch-to-buffer-other-window
+         (org-capture-get-indirect-buffer (org-capture-get :buffer) "CAPTURE"))
+        (widen)
+        (org-show-all)
+        (goto-char (org-capture-get :pos))
+        (setq-local outline-level 'org-outline-level)
+        (pcase (org-capture-get :type)
+          ((or `nil `entry) (org-capture-place-entry))
+          (`table-line (org-capture-place-table-line))
+          (`plain (org-capture-place-plain-text))
+          (`item (org-capture-place-item))
+          (`checkitem (org-capture-place-item)))
+        (setq-local org-capture-current-plist org-capture-plist)
+        (org-capture-mode 1))))
 #+end_src
 **** org-clock
 :PROPERTIES:
@@ -1234,7 +1305,7 @@ Embrace Org as a common document format for Emacs.
 **** org-id
 #+begin_src emacs-lisp
   (setup org-id
-    (:set org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+    (:set org-id-link-to-org-use-id t))
 #+end_src
 **** org-link (ol)
 #+begin_src emacs-lisp
@@ -1262,7 +1333,8 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-src
-    (:set org-src-tab-acts-natively t))
+    (:set org-src-tab-acts-natively t
+          org-src-window-setup 'split-window-below))
 #+end_src
 **** Tags
 #+begin_src emacs-lisp
@@ -1294,6 +1366,12 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup (:package org-dog)
+    (with-eval-after-load 'org-id
+      (org-dog-id-mode t))
+    (add-hook 'org-mode-hook #'org-dog-file-mode-maybe)
+
+    (:global "M-g M-/" #'org-dog-find-file)
+
     (:when-loaded
       (:also-load org-dog-embark
                   org-dog-consult
@@ -1408,13 +1486,13 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 20:15]
 :END:
-
 #+begin_src emacs-lisp
   (setup (:package org-reverse-datetree)
     (:set org-reverse-datetree-entry-time
           '((property "CLOSED")
             (clock latest)
-            (property "CREATED_TIME"))))
+            (property "CREATED_TIME"))
+          org-reverse-datetree-month-format "%Y-%m"))
 #+end_src
 *** org-starter
 :PROPERTIES:
@@ -1590,11 +1668,16 @@ This is a collection of extra utilities for various packages.
   (setup (:package akirak)
 
     (:global "C-x g" #'akirak-project-switch)
+    (:global "C-c i" #'akirak-scratch-elisp)
+
+    (with-eval-after-load 'embark
+      (add-to-list 'embark-keymap-alist
+                   '(project-root . akirak-project-root-map)))
 
     ;; These settings are specific to my environment.
     (:status personal
       (:defer 1 #'akirak-files-ensure-abbrev-list)
-      (run-with-idle-timer 300 nil #'github-linguist-update-projects)))
+      (run-with-idle-timer 300 nil #'akirak-project-rescan)))
 #+end_src
 **** akirak-elec-pair                                        :parentheses:
 :PROPERTIES:
@@ -1641,9 +1724,9 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup akirak-window
     (:status opinionated
-      (:global "C-2" #'akirak-window-setup-columns
-               "C-3" #'akirak-window-split-vertically
-               "C-4" #'akirak-window-split-and-select
+      (:global "C-2" #'akirak-window-split-vertically
+               "C-3" #'akirak-window-split-and-select
+               "C-4" #'akirak-window-setup-columns
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
 *** all-the-icons                                              :UI:ARCHIVE:
@@ -1674,6 +1757,19 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup (:package all-the-icons-dired)
     (:hook-into dired-mode))
+#+end_src
+*** anzu                                                   :editing:regexp:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-06 Sun 21:00]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package anzu)
+    (:with-mode global-anzu-mode
+      (:hook-into after-init-hook))
+
+    (:global [remap query-replace] #'anzu-query-replace
+             [remap query-replace-regexp] #'anzu-query-replace-regexp))
 #+end_src
 *** auto-yasnippet                                                :expansion:
 :PROPERTIES:
@@ -1990,7 +2086,14 @@ dired-k depends on dired-x, which has a poor code quality.
 
     ;; NOTE: The activation function should be added to the end
     ;; of the backend function. Is this really sufficient?
-    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+
+    (add-hook 'emacs-lisp-mode-hook
+              ;; Make dumb-jump take precedence over the builtin backend,
+              ;; to search the project code whenever possible.
+              (defun akirak/elisp-setup-dumb-jump ()
+                (add-to-list 'xref-backend-functions
+                             #'dumb-jump-xref-activate))))
 #+end_src
 *** ediprolog                                                      :Prolog:
 :PROPERTIES:
@@ -2024,7 +2127,10 @@ It is required only in specific projects, so I won't turn on the mode by default
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package eglot))
+  (setup (:package eglot)
+    (:with-mode eglot-ensure
+      (:hook-into haskell-mode-hook
+                  rust-mode-hook)))
 #+end_src
 *** eldoc-eval                                                      :Emacs:
 :PROPERTIES:
@@ -2196,6 +2302,16 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package fanyi))
 #+end_src
+*** fwb-cmds                                                       :window:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-08 Tue 16:02]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package fwb-cmds))
+#+end_src
+
+I need this package for =toggle-window-split= command.
 *** ghelp                                           :reference:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:45]
@@ -2316,15 +2432,21 @@ Make vendored and generated files read only.
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
-*** haskell-mode                                      :major__mode:ARCHIVE:
+*** haskell-mode                                              :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package haskell-mode))
+  (setup (:package haskell-mode)
+    (:file-match "\\.hs\\'")
+    (:with-mode haskell-cabal-mode
+      (:file-match "\\.cabal\\'"))
+
+    (:hook subword-mode
+           interactive-haskell-mode))
 #+end_src
-*** haskell-tng-mode                                  :Haskell:major__mode:
+*** haskell-tng-mode                          :Haskell:major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:02]
 :END:
@@ -2368,7 +2490,8 @@ This is helpful in programming languages that depend on indentation levels.
 
 #+begin_src emacs-lisp
   (setup (:package hl-todo)
-    (:global "M-i t" #'hl-todo-insert))
+    (:status opinionated
+      (:global "M-i t" #'hl-todo-insert)))
 #+end_src
 *** huan                                                          :editing:
 :PROPERTIES:
@@ -2485,6 +2608,7 @@ For Emacs Lisp, I use lispy.
                  "M-<left>"
                  "M-<right>"
                  "M-m"
+                 "<C-return>"
                  "<M-return>"
                  "<M-RET>"))))
 #+end_src
@@ -2540,6 +2664,24 @@ To use it, turn on =macrostep-mode=.
                                            ("~/work" . 3)
                                            ("~/archives/oss/" . 3)))))
 #+end_src
+*** magit-delta                                                   :VC:diff:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-06 Sun 13:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package magit-delta)
+    (:nixpkgs "delta")
+    (:hook-into magit-mode-hook)
+
+    (setq magit-delta-default-dark-theme "base16")
+
+    (:when-loaded
+      (unless (member "magit-delta" magit-delta-delta-args)
+        (setq magit-delta-delta-args
+              (append magit-delta-delta-args
+                      '("--features" "magit-delta"))))))
+#+end_src
 *** magit-todos                                                        :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
@@ -2561,15 +2703,7 @@ I won't turn on the mode by default, because it reduces the performance to some 
     (:hook-into after-init-hook)
 
     (:with-map minibuffer-local-map
-      (:bind "M-a" #'marginalia-cycle))
-
-    (:when-loaded
-      (:set marginalia-annotator-registry
-            (append '((project-root
-                       akirak-project-root-annotator
-                       builtin none))
-                    (get 'marginalia-annotator-registry
-                         'standard-value)))))
+      (:bind "M-a" #'marginalia-cycle)))
 #+end_src
 *** markdown-mode                                             :major__mode:
 :PROPERTIES:
@@ -2608,6 +2742,24 @@ I won't turn on the mode by default, because it reduces the performance to some 
     (:with-mode mlscroll-mode
       (:hook-into after-init-hook)))
 #+end_src
+*** move-dup                                                      :editing:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-06 Sun 20:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package move-dup)
+    (:bind "M-p" #'move-dup-move-lines-up
+           "M-n" #'move-dup-move-lines-down
+           "C-M-p" #'move-dup-duplicate-up
+           "C-M-n" #'move-dup-duplicate-down)
+
+    (add-hook 'prog-mode-hook #'move-dup-mode)
+    (add-hook 'text-mode-hook
+              (defun akirak/turn-on-move-dup-mode ()
+                (unless (derived-mode-p 'org-mode 'markdown-mode)
+                  (move-dup-mode 1)))))
+#+end_src
 *** nano-modeline                       :visual:aesthetics:UI:nano:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 14:46]
@@ -2633,7 +2785,9 @@ I won't turn on the mode by default, because it reduces the performance to some 
 #+begin_src emacs-lisp
   (setup (:package nix-mode)
     (:file-match "\\.nix\\'")
-    (:mode-repl nix-repl))
+    (:mode-repl nix-repl)
+    (:reformatters
+     (nixpkgs-fmt :program "nixpkgs-fmt")))
 #+end_src
 *** nov                                                      :reading:EPUB:
 :PROPERTIES:
@@ -2705,7 +2859,18 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package popper))
+  (setup (:package popper)
+    (:set popper-window-height 0.3
+          popper-display-function #'popper-select-popup-at-bottom
+          akirak/display-popup-window-function popper-display-function
+          popper-reference-buffers `("\\*Messages\\*$"
+                                     "\\*Backtrace\\*"
+                                     "\\*Org-Dog-Context\\*"
+                                     lisp-interaction-mode
+                                     vterm-mode))
+
+    (:hook-into after-init-hook)
+    (:bind "M-S-SPC" #'popper-cycle))
 #+end_src
 *** project-hercules                                  :project:keybindings:
 :PROPERTIES:
@@ -2784,12 +2949,12 @@ Limitations:
 
 #+begin_src emacs-lisp
   (setup (:package repl-toggle)
-    ;; rtog/goto-buffer-fun #'pop-to-buffer
-    (:set rtog/fullscreen nil)
+    (:set rtog/fullscreen nil
+          rtog/goto-buffer-fun akirak/display-popup-window-function)
 
     ;; Unbind the default key
     (:unbind "C-c C-z")
-    (:bind "<C-return>" #'rtog/toggle-repl))
+    (:global "<C-return>" #'rtog/toggle-repl))
 #+end_src
 
 For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-toggle - sourcehut git]].
@@ -2973,7 +3138,18 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 :END:
 
 #+begin_src emacs-lisp
-  (setup (:package vterm))
+  (setup (:package vterm)
+    (defun akirak/vterm (dir)
+      (interactive (pcase current-prefix-arg
+                     (`nil (list default-directory))
+                     ('(4) (list (read-directory-name "Directory: ")))))
+      (require 'vterm)
+      (let ((default-directory dir))
+        (vterm--internal akirak/display-popup-window-function)))
+
+    (defun akirak/project-vterm ()
+      (interactive)
+      (akirak/vterm (project-root (project-current)))))
 #+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_src emacs-lisp
@@ -3029,6 +3205,15 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 #+end_src
 
 This package is required by the configuration for buttercup now.
+*** yaml-mode                                                 :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-07 Mon 16:07]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package yaml-mode)
+    (:file-match "\\.ya?ml\\'"))
+#+end_src
 ** Notes                                                             :@note:
 :PROPERTIES:
 :TOC:      :depth 2
@@ -3068,20 +3253,20 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 141 |
+| [[org-ql-search:tags:packages][packages]]            | 148 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |  11 |
 | [[org-ql-search:tags:UI][UI]]                  |   9 |
+| [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:windows][windows]]             |   7 |
+| [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:dired][dired]]               |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   6 |
-| [[org-ql-search:tags:editing][editing]]             |   6 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
+| [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |   5 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   5 |
-| [[org-ql-search:tags:Emacs][Emacs]]               |   5 |
-| [[org-ql-search:tags:VC][VC]]                  |   5 |
 | [[org-ql-search:tags:library][library]]             |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
@@ -3094,7 +3279,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:links][links]]               |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
+| [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
+| [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:reading][reading]]             |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
@@ -3105,7 +3292,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
 | [[org-ql-search:tags:initialization][initialization]]      |   1 |
 | [[org-ql-search:tags:performance][performance]]         |   1 |
-| [[org-ql-search:tags:diff][diff]]                |   1 |
 | [[org-ql-search:tags:help][help]]                |   1 |
 | [[org-ql-search:tags:prog_mode][prog_mode]]           |   1 |
 | [[org-ql-search:tags:text_mode][text_mode]]           |   1 |
@@ -3122,8 +3308,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:startup][startup]]             |   1 |
 | [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
+| [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
-| [[org-ql-search:tags:Haskell][Haskell]]             |   1 |
 | [[org-ql-search:tags:exercises][exercises]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
