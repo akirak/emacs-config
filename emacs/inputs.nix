@@ -40,6 +40,10 @@
     };
   };
 
+  graphviz-dot-mode = _: super: {
+    files = builtins.removeAttrs super.files [ "company-graphviz-dot.el" ];
+  };
+
   # ghelp is not a proper MELPA package yet, and it needs workarounds.
   ghelp-helpful = _: _: {
     packageRequires = {
