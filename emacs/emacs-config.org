@@ -1170,7 +1170,8 @@ Embrace Org as a common document format for Emacs.
         (:set org-special-ctrl-a/e t
               org-M-RET-may-split-line nil)
 
-        (:global "M-g h" #'akirak-org-avy-heading)
+        (:global "M-g h" #'akirak-org-avy-heading
+                 "<S-menu>" #'akirak-org-clocked-entry-or-agenda)
 
         (:unbind "C-'"
                  ;; I don't use any of these bindings and want to use them for other purposes
@@ -1224,10 +1225,12 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-agenda
-    (:set org-agenda-start-with-clockreport-mode t
-             org-agenda-remove-tags t
-             org-agenda-use-tag-inheritance t
-             org-agenda-sticky t))
+    (:set org-agenda-start-with-clockreport-mode nil
+          org-agenda-remove-tags nil
+          org-agenda-use-tag-inheritance t
+          org-agenda-sticky nil
+          org-agenda-restore-windows-after-quit t
+          org-agenda-window-setup 'other-window))
 #+end_src
 **** org-babel (ob)
 :PROPERTIES:
