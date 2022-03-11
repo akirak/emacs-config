@@ -1411,6 +1411,22 @@ Embrace Org as a common document format for Emacs.
 
     (:global "M-g M-/" #'org-dog-find-file)
 
+    (add-hook 'org-dog-file-registration-hook
+              (defun akirak/org-dog-add-agenda-file (file-obj)
+                (when (string-match-p (rx bol (or "learning" "lifelog"
+                                                  "personal/"))
+                                      (oref file-obj relative))
+                  (add-to-list 'org-agenda-files (oref file-obj absolute)))))
+
+    (add-hook 'org-dog-reload-hook
+              (defun akirak/org-dog-add-extra-agenda-files ()
+                (require 'org-dog-overview)
+                (setq org-agenda-files
+                      (thread-last
+                        (org-dog-overview-scan org-agenda-files)
+                        (mapcar #'car)
+                        (reverse)))))
+
     (:when-loaded
       (:also-load org-dog-embark
                   org-dog-consult
