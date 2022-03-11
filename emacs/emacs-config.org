@@ -1334,7 +1334,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
   (setup org-src
     (:set org-src-tab-acts-natively t
-          org-src-window-setup 'split-window-below))
+          org-src-window-setup 'current-window))
 #+end_src
 **** Tags
 #+begin_src emacs-lisp
