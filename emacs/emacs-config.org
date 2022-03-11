@@ -1520,6 +1520,16 @@ Embrace Org as a common document format for Emacs.
     (:with-mode org-mode
       (:bind "C-c C-x r" #'org-starter-refile-by-key)))
 #+end_src
+*** org-super-agenda
+:PROPERTIES:
+:CREATED_TIME: [2022-03-11 Fri 17:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-super-agenda)
+    (with-eval-after-load 'org-agenda
+      (org-super-agenda-mode t)))
+#+end_src
 *** org-transclusion
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:09]
