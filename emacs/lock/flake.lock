@@ -67,11 +67,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1646830692,
-        "narHash": "sha256-QPygirZleCulpAnGgsmEuK/3fvmMgSb7ZKo8oDrGIxQ=",
+        "lastModified": 1646987383,
+        "narHash": "sha256-k0Y13UyrYrzoHEaD/N/6pYloGiwRKSZys5goXqFfCSg=",
         "owner": "akirak",
         "repo": "trivial-elisps",
-        "rev": "fb20cf8cf11da56bb1633f2d8a33e0a88bf769f8",
+        "rev": "2911c357c3084c347a0ff49a303f6f939b17be42",
         "type": "github"
       },
       "original": {
@@ -995,11 +995,11 @@
     "github-linguist": {
       "flake": false,
       "locked": {
-        "lastModified": 1646676133,
-        "narHash": "sha256-U+RJaYpK7tiU5Dd13upXwCDGutnpF656MtHRwRgbuko=",
+        "lastModified": 1646987229,
+        "narHash": "sha256-ybR5QzKIxzA52stCmjX7uyahxPTC64aHaMUdkE1MXIM=",
         "owner": "akirak",
         "repo": "github-linguist.el",
-        "rev": "fe144c2c0266ff7d19e58431f02dad02d1443b8b",
+        "rev": "3f3f5c93f80ec664d7ffadbeb9d30bd4c2741fa4",
         "type": "github"
       },
       "original": {
@@ -1021,6 +1021,22 @@
       "original": {
         "owner": "vermiculus",
         "repo": "graphql.el",
+        "type": "github"
+      }
+    },
+    "graphviz-dot-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1646832977,
+        "narHash": "sha256-tgrzswb7G/P3dtiOaXUGbxWhhpWf9pI15VjcxSnp6BI=",
+        "owner": "ppareit",
+        "repo": "graphviz-dot-mode",
+        "rev": "6e96a89762760935a7dff6b18393396f6498f976",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ppareit",
+        "repo": "graphviz-dot-mode",
         "type": "github"
       }
     },
@@ -1604,11 +1620,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1646931730,
-        "narHash": "sha256-/6nzC8QY1/SG8jIitM6Q9cqMEgPLGZ8usPQNGl9aJqs=",
+        "lastModified": 1647158610,
+        "narHash": "sha256-v6Ib97d/rbJAUjXxaWlqiLK/hUeAlSt2/VWnhxl1/Ic=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "89ab4342ecdba77463fb8d23a22492ef4d9134df",
+        "rev": "2ab3701ab9dc9c176eddb84d52e2d77acf5cdcd8",
         "type": "github"
       },
       "original": {
@@ -1621,11 +1637,11 @@
     "org-dog-consult": {
       "flake": false,
       "locked": {
-        "lastModified": 1646931730,
-        "narHash": "sha256-/6nzC8QY1/SG8jIitM6Q9cqMEgPLGZ8usPQNGl9aJqs=",
+        "lastModified": 1647158610,
+        "narHash": "sha256-v6Ib97d/rbJAUjXxaWlqiLK/hUeAlSt2/VWnhxl1/Ic=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "89ab4342ecdba77463fb8d23a22492ef4d9134df",
+        "rev": "2ab3701ab9dc9c176eddb84d52e2d77acf5cdcd8",
         "type": "github"
       },
       "original": {
@@ -1638,11 +1654,11 @@
     "org-dog-embark": {
       "flake": false,
       "locked": {
-        "lastModified": 1646931730,
-        "narHash": "sha256-/6nzC8QY1/SG8jIitM6Q9cqMEgPLGZ8usPQNGl9aJqs=",
+        "lastModified": 1647158610,
+        "narHash": "sha256-v6Ib97d/rbJAUjXxaWlqiLK/hUeAlSt2/VWnhxl1/Ic=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "89ab4342ecdba77463fb8d23a22492ef4d9134df",
+        "rev": "2ab3701ab9dc9c176eddb84d52e2d77acf5cdcd8",
         "type": "github"
       },
       "original": {
@@ -1655,11 +1671,11 @@
     "org-dog-facade": {
       "flake": false,
       "locked": {
-        "lastModified": 1646931730,
-        "narHash": "sha256-/6nzC8QY1/SG8jIitM6Q9cqMEgPLGZ8usPQNGl9aJqs=",
+        "lastModified": 1647158610,
+        "narHash": "sha256-v6Ib97d/rbJAUjXxaWlqiLK/hUeAlSt2/VWnhxl1/Ic=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "89ab4342ecdba77463fb8d23a22492ef4d9134df",
+        "rev": "2ab3701ab9dc9c176eddb84d52e2d77acf5cdcd8",
         "type": "github"
       },
       "original": {
@@ -2215,6 +2231,7 @@
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
         "graphql": "graphql",
+        "graphviz-dot-mode": "graphviz-dot-mode",
         "haskell-mode": "haskell-mode",
         "helpful": "helpful",
         "hercules": "hercules",
