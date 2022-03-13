@@ -222,6 +222,10 @@
             services.journald.extraConfig = ''
               SystemMaxFiles=5
             '';
+
+            virtualisation.virtualbox.host = {
+              enable = true;
+            };
           }
 
           ./nixos/profiles/default-user.nix

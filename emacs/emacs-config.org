@@ -638,7 +638,19 @@ Resources:
                         (delete-region (minibuffer-prompt-end) (point-max))
                         (goto-char (point-max))
                         (insert "~/"))
-                    (insert "~")))))
+                    (insert "~"))))
+    (define-key minibuffer-mode-map
+                "/"
+                (defun akirak/minibuffer-slash ()
+                  "During `find-file', replace the minibuffer input with the root directory."
+                  (interactive)
+                  (if (and minibuffer-completing-file-name
+                           (eq ?/ (char-after (1- (point)))))
+                      (progn
+                        (delete-region (minibuffer-prompt-end) (point-max))
+                        (goto-char (point-max))
+                        (insert "/"))
+                    (insert "/")))))
 #+end_src
 *** mule
 :PROPERTIES:
@@ -1124,7 +1136,43 @@ Embrace Org as a common document format for Emacs.
             ;; Prevent from saving org-refile and org-capture locations to bookmarks
             org-bookmark-names-plist nil)
 
-      (advice-add #'org-insert-heading :after #'akirak-org-add-timestamp)))
+      (advice-add #'org-insert-heading :after #'akirak-org-add-timestamp)
+
+      (:when-loaded
+        (require 'el-patch)
+        (el-patch-defun org-add-log-note (&optional _purpose)
+          "Pop up a window for taking a note, and add this note later."
+          (remove-hook 'post-command-hook 'org-add-log-note)
+          (setq org-log-setup nil)
+          (setq org-log-note-window-configuration (current-window-configuration))
+          (el-patch-remove (delete-other-windows))
+          (move-marker org-log-note-return-to (point))
+          (pop-to-buffer-same-window (marker-buffer org-log-note-marker))
+          (goto-char org-log-note-marker)
+          (org-switch-to-buffer-other-window "*Org Note*")
+          (erase-buffer)
+          (if (memq org-log-note-how '(time state))
+              (org-store-log-note)
+            (let ((org-inhibit-startup t)) (org-mode))
+            (insert (format "# Insert note for %s.
+  # Finish with C-c C-c, or cancel with C-c C-k.\n\n"
+                            (cl-case org-log-note-purpose
+                              (clock-out "stopped clock")
+                              (done "closed todo item")
+                              (reschedule "rescheduling")
+                              (delschedule "no longer scheduled")
+                              (redeadline "changing deadline")
+                              (deldeadline "removing deadline")
+                              (refile "refiling")
+                              (note "this entry")
+                              (state
+                               (format "state change from \"%s\" to \"%s\""
+                                       (or org-log-note-previous-state "")
+                                       (or org-log-note-state "")))
+                              (t (error "This should not happen")))))
+            (when org-log-note-extra (insert org-log-note-extra))
+            (setq-local org-finish-function 'org-store-log-note)
+            (run-hooks 'org-log-buffer-setup-hook))))))
 #+end_src
 **** Completion
 #+begin_src emacs-lisp
@@ -1170,7 +1218,8 @@ Embrace Org as a common document format for Emacs.
         (:set org-special-ctrl-a/e t
               org-M-RET-may-split-line nil)
 
-        (:global "M-g h" #'akirak-org-avy-heading)
+        (:global "M-g h" #'akirak-org-avy-heading
+                 "<S-menu>" #'akirak-org-clocked-entry-or-agenda)
 
         (:unbind "C-'"
                  ;; I don't use any of these bindings and want to use them for other purposes
@@ -1224,10 +1273,12 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-agenda
-    (:set org-agenda-start-with-clockreport-mode t
-             org-agenda-remove-tags t
-             org-agenda-use-tag-inheritance t
-             org-agenda-sticky t))
+    (:set org-agenda-start-with-clockreport-mode nil
+          org-agenda-remove-tags nil
+          org-agenda-use-tag-inheritance t
+          org-agenda-sticky nil
+          org-agenda-restore-windows-after-quit t
+          org-agenda-window-setup 'other-window))
 #+end_src
 **** org-babel (ob)
 :PROPERTIES:
@@ -1334,7 +1385,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
   (setup org-src
     (:set org-src-tab-acts-natively t
-          org-src-window-setup 'split-window-below))
+          org-src-window-setup 'current-window))
 #+end_src
 **** Tags
 #+begin_src emacs-lisp
@@ -1371,6 +1422,22 @@ Embrace Org as a common document format for Emacs.
     (add-hook 'org-mode-hook #'org-dog-file-mode-maybe)
 
     (:global "M-g M-/" #'org-dog-find-file)
+
+    (add-hook 'org-dog-file-registration-hook
+              (defun akirak/org-dog-add-agenda-file (file-obj)
+                (when (string-match-p (rx bol (or "learning" "lifelog"
+                                                  "personal/"))
+                                      (oref file-obj relative))
+                  (add-to-list 'org-agenda-files (oref file-obj absolute)))))
+
+    (add-hook 'org-dog-reload-hook
+              (defun akirak/org-dog-add-extra-agenda-files ()
+                (require 'org-dog-overview)
+                (setq org-agenda-files
+                      (thread-last
+                        (org-dog-overview-scan org-agenda-files)
+                        (mapcar #'car)
+                        (reverse)))))
 
     (:when-loaded
       (:also-load org-dog-embark
@@ -1516,6 +1583,16 @@ Embrace Org as a common document format for Emacs.
     (:global "M-g M-o" #'org-starter-find-file-by-key)
     (:with-mode org-mode
       (:bind "C-c C-x r" #'org-starter-refile-by-key)))
+#+end_src
+*** org-super-agenda
+:PROPERTIES:
+:CREATED_TIME: [2022-03-11 Fri 17:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-super-agenda)
+    (with-eval-after-load 'org-agenda
+      (org-super-agenda-mode t)))
 #+end_src
 *** org-transclusion
 :PROPERTIES:
@@ -2432,6 +2509,16 @@ Make vendored and generated files read only.
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
+*** graphviz-dot-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-03-11 Fri 22:02]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package graphviz-dot-mode)
+    (:nixpkgs "graphviz")
+    (:file-match "\\.dot\\'"))
+#+end_src
 *** haskell-mode                                              :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
@@ -2866,6 +2953,7 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
           popper-reference-buffers `("\\*Messages\\*$"
                                      "\\*Backtrace\\*"
                                      "\\*Org-Dog-Context\\*"
+                                     "^\\*Org Note\\*"
                                      lisp-interaction-mode
                                      vterm-mode))
 
@@ -3253,7 +3341,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 148 |
+| [[org-ql-search:tags:packages][packages]]            | 150 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |  11 |

@@ -383,6 +383,12 @@
       repo = "graphql.el";
       type = "github";
     };
+    graphviz-dot-mode = {
+      flake = false;
+      owner = "ppareit";
+      repo = "graphviz-dot-mode";
+      type = "github";
+    };
     haskell-mode = {
       flake = false;
       owner = "haskell";
@@ -602,28 +608,24 @@
     org-dog = {
       flake = false;
       owner = "akirak";
-      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
     org-dog-consult = {
       flake = false;
       owner = "akirak";
-      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
     org-dog-embark = {
       flake = false;
       owner = "akirak";
-      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
     org-dog-facade = {
       flake = false;
       owner = "akirak";
-      ref = "develop";
       repo = "org-dog";
       type = "github";
     };

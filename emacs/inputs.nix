@@ -40,6 +40,10 @@
     };
   };
 
+  graphviz-dot-mode = _: super: {
+    files = builtins.removeAttrs super.files [ "company-graphviz-dot.el" ];
+  };
+
   # ghelp is not a proper MELPA package yet, and it needs workarounds.
   ghelp-helpful = _: _: {
     packageRequires = {
@@ -84,39 +88,6 @@
   #     direx = "0";
   #   } // super.packageRequires;
   # };
-
-  org-dog = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "org-dog";
-      ref = "develop";
-    };
-  };
-  org-dog-embark = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "org-dog";
-      ref = "develop";
-    };
-  };
-  org-dog-consult = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "org-dog";
-      ref = "develop";
-    };
-  };
-  org-dog-facade = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "org-dog";
-      ref = "develop";
-    };
-  };
 
   twist = _: _: {
     origin = {

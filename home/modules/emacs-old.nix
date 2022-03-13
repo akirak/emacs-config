@@ -6,7 +6,7 @@ let
 
   wrapper = pkgs.writeShellScriptBin "emacs-old" ''
     nix run --no-update-lock-file \
-      ${config.home.homeDirectory}/.emacs.d -- \
+      ${config.home.homeDirectory}/.config/emacs -- \
         --eval "(progn
           (setq custom-file \"${config.xdg.dataHome}/emacs/custom.el\")
           (when (file-exists-p custom-file)
