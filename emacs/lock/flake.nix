@@ -608,28 +608,24 @@
     org-dog = {
       flake = false;
       owner = "akirak";
-      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
     org-dog-consult = {
       flake = false;
       owner = "akirak";
-      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
     org-dog-embark = {
       flake = false;
       owner = "akirak";
-      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
     org-dog-facade = {
       flake = false;
       owner = "akirak";
-      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
