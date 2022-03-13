@@ -638,7 +638,19 @@ Resources:
                         (delete-region (minibuffer-prompt-end) (point-max))
                         (goto-char (point-max))
                         (insert "~/"))
-                    (insert "~")))))
+                    (insert "~"))))
+    (define-key minibuffer-mode-map
+                "/"
+                (defun akirak/minibuffer-slash ()
+                  "During `find-file', replace the minibuffer input with the root directory."
+                  (interactive)
+                  (if (and minibuffer-completing-file-name
+                           (eq ?/ (char-after (1- (point)))))
+                      (progn
+                        (delete-region (minibuffer-prompt-end) (point-max))
+                        (goto-char (point-max))
+                        (insert "/"))
+                    (insert "/")))))
 #+end_src
 *** mule
 :PROPERTIES:
