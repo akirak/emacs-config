@@ -2243,6 +2243,15 @@ I use this package mostly because it uses =pp-eval-expression= for printing the 
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
+*** emacsql-sqlite                                                :library:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-14 Mon 13:46]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package emacsql-sqlite)
+    (:nixpkgs "sqlite"))
+#+end_src
 *** embark
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:53]
@@ -2293,7 +2302,7 @@ The following resources are useful:
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package epkg))
+  (setup (:package epkg))
 #+end_src
 *** eros                                          :Emacs__Lisp:development:
 :PROPERTIES:
