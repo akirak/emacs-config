@@ -23,6 +23,7 @@
   - [[#window-management][Window management]]
   - [[#annotating][Annotating]]
   - [[#natural-languages][Natural languages]]
+  - [[#grep][Grep]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -3557,6 +3558,8 @@ To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF fi
 |---------+------|
 | [[fanyi][fanyi]]   |      |
 #+END:
+*** Grep
+[[https://github.com/minad/affe][affe]] doesn't look mature enough, but I will re-evaluate it later.
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil
