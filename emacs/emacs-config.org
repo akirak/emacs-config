@@ -1884,6 +1884,16 @@ This is an extra functions for window management.
         (:bind
          "d" #'beancount-insert-date))))
 #+end_src
+*** blamer                                                             :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-14 Mon 17:48]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package blamer)
+    (:set blamer-max-lines 50
+          blamer-max-commit-message-length 50))
+#+end_src
 *** bufler                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]
