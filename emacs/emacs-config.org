@@ -2379,6 +2379,14 @@ The following resources are useful:
 #+begin_src emacs-lisp
 (setup (:package fanyi))
 #+end_src
+*** forge                                                     :VC:project:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-14 Mon 13:22]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package forge))
+#+end_src
 *** fwb-cmds                                                       :window:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-08 Tue 16:02]

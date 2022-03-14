@@ -58,6 +58,10 @@
     };
   };
 
+  ghub = _: super: {
+    files = builtins.removeAttrs super.files [ ".dir-locals.el" ];
+  };
+
   # Quite a few dired extension packages have missing dependencies.
   dired-collapse = _: super: {
     packageRequires = {

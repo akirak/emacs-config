@@ -23,6 +23,10 @@ esuper:
     buildInputs = old.buildInputs ++ [ pkgs.git ];
   });
 
+  forge = esuper.forge.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [ pkgs.git ];
+  });
+
   orgit = esuper.orgit.overrideAttrs (old: {
     # Since magit 3.3.0, magit requires git executable for byte-compilation.
     buildInputs = old.buildInputs ++ [ pkgs.git ];
