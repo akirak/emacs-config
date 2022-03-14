@@ -2,6 +2,12 @@
   description =
     "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
+    "a" = {
+      flake = false;
+      owner = "plexus";
+      repo = "a.el";
+      type = "github";
+    };
     academic-phrases = {
       flake = false;
       owner = "nashamri";
@@ -68,6 +74,12 @@
       repo = "benchmark-init-el";
       type = "github";
     };
+    blamer = {
+      flake = false;
+      owner = "Artawower";
+      repo = "blamer.el";
+      type = "github";
+    };
     buttercup = {
       flake = false;
       owner = "jorgenschaefer";
@@ -114,6 +126,13 @@
       flake = false;
       owner = "karthink";
       repo = "consult-dir";
+      type = "github";
+    };
+    consult-org-dog = {
+      flake = false;
+      owner = "akirak";
+      ref = "develop";
+      repo = "org-dog";
       type = "github";
     };
     consult-project-extra = {
@@ -174,6 +193,12 @@
       flake = false;
       owner = "progfolio";
       repo = "doct";
+      type = "github";
+    };
+    duckduckgo = {
+      flake = false;
+      owner = "akirak";
+      repo = "duckduckgo.el";
       type = "github";
     };
     dumb-jump = {
@@ -308,6 +333,12 @@
       repo = "fanyi.el";
       type = "github";
     };
+    forge = {
+      flake = false;
+      owner = "magit";
+      repo = "forge";
+      type = "github";
+    };
     fullframe = {
       flake = false;
       type = "git";
@@ -334,6 +365,12 @@
       flake = false;
       owner = "casouri";
       repo = "ghelp";
+      type = "github";
+    };
+    ghub = {
+      flake = false;
+      owner = "magit";
+      repo = "ghub";
       type = "github";
     };
     gif-screencast = {
@@ -383,6 +420,12 @@
       repo = "graphql.el";
       type = "github";
     };
+    graphql-mode = {
+      flake = false;
+      owner = "davazp";
+      repo = "graphql-mode";
+      type = "github";
+    };
     graphviz-dot-mode = {
       flake = false;
       owner = "ppareit";
@@ -393,6 +436,12 @@
       flake = false;
       owner = "haskell";
       repo = "haskell-mode";
+      type = "github";
+    };
+    hcl-mode = {
+      flake = false;
+      owner = "purcell";
+      repo = "emacs-hcl-mode";
       type = "github";
     };
     helpful = {
@@ -471,6 +520,12 @@
       flake = false;
       owner = "jdtsmith";
       repo = "kind-icon";
+      type = "github";
+    };
+    kv = {
+      flake = false;
+      owner = "nicferrier";
+      repo = "emacs-kv";
       type = "github";
     };
     leetcode = {
@@ -557,6 +612,12 @@
       repo = "markdown-mode";
       type = "github";
     };
+    mini-modeline = {
+      flake = false;
+      owner = "kiennq";
+      repo = "emacs-mini-modeline";
+      type = "github";
+    };
     mlscroll = {
       flake = false;
       owner = "jdtsmith";
@@ -608,24 +669,21 @@
     org-dog = {
       flake = false;
       owner = "akirak";
-      repo = "org-dog";
-      type = "github";
-    };
-    org-dog-consult = {
-      flake = false;
-      owner = "akirak";
+      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
     org-dog-embark = {
       flake = false;
       owner = "akirak";
+      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
     org-dog-facade = {
       flake = false;
       owner = "akirak";
+      ref = "develop";
       repo = "org-dog";
       type = "github";
     };
@@ -633,6 +691,12 @@
       flake = false;
       owner = "alphapapa";
       repo = "org-make-toc";
+      type = "github";
+    };
+    org-ml = {
+      flake = false;
+      owner = "ndwarshuis";
+      repo = "org-ml";
       type = "github";
     };
     org-noter = {
@@ -808,6 +872,12 @@
       repo = "restclient.el";
       type = "github";
     };
+    rich-minority = {
+      flake = false;
+      owner = "Malabarba";
+      repo = "rich-minority";
+      type = "github";
+    };
     "s" = {
       flake = false;
       owner = "magnars";
@@ -880,6 +950,12 @@
       owner = "emacs-tree-sitter";
       ref = "0.11.3";
       repo = "tree-sitter-langs";
+      type = "github";
+    };
+    treepy = {
+      flake = false;
+      owner = "volrath";
+      repo = "treepy.el";
       type = "github";
     };
     ts = {
@@ -960,6 +1036,12 @@
       flake = false;
       owner = "atomontage";
       repo = "xterm-color";
+      type = "github";
+    };
+    yaml = {
+      flake = false;
+      owner = "zkry";
+      repo = "yaml.el";
       type = "github";
     };
     yaml-mode = {
