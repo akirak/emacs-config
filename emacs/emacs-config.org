@@ -2542,6 +2542,15 @@ Make vendored and generated files read only.
   (setup (:package haskell-tng-mode)
     (:file-match "\\.hs\\'"))
 #+end_src
+*** hcl-mode                                                    :Terraform:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-20 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package hcl-mode)
+    (:file-match "\\.hcl\\'"))
+#+end_src
 *** helpful                                               :reference:Emacs:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:50]
