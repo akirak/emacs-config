@@ -3217,6 +3217,15 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
   (setup (:package unmodified-buffer)
     (:hook-into after-init-hook))
 #+end_src
+*** use-package
+:PROPERTIES:
+:CREATED_TIME: [2022-03-14 Mon 14:04]
+:END:
+I don't use use-package, but I only need indentation:
+
+#+begin_src emacs-lisp
+  (put 'use-package 'lisp-indent-function 1)
+#+end_src
 *** vertico                                         :minibuffer:completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 16:59]
