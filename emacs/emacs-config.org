@@ -1115,6 +1115,7 @@ Embrace Org as a common document format for Emacs.
   (setup org
     (:with-mode org-mode
       (:when-loaded
+        (:also-load org-id)
         (:also-load org-crypt))
 
       (:set org-log-done 'time
