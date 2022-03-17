@@ -2172,6 +2172,14 @@ dired-k depends on dired-x, which has a poor code quality.
     (:set dired-open-functions '(dired-open-by-extension
                                     dired-open-subdir)))
 #+end_src
+*** duckduckgo                                                     :search:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-17 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package duckduckgo))
+#+end_src
 *** dumb-jump                                                  :navigation:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
