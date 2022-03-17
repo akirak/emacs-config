@@ -2568,7 +2568,31 @@ Make vendored and generated files read only.
       (:file-match "\\.cabal\\'"))
 
     (:hook subword-mode
-           interactive-haskell-mode))
+           interactive-haskell-mode)
+
+    (defun akirak/haskell-module-name (&optional filename)
+      (let* ((filename (or filename (buffer-file-name)))
+             (project (project-current nil (file-name-directory filename)))
+             (root (if project
+                       (project-root project)
+                     "~"))
+             (relative (file-relative-name
+                        (file-name-sans-extension filename)
+                        root))
+             (segments (split-string relative "/"))
+             (case-fold-search nil))
+        (pcase (seq-drop-while (lambda (s) (string-match-p "^[^A-Z]" s))
+                               segments)
+          (`nil "Main")
+          ((and `(,name) (guard (string-suffix-p "Main" name)))
+           "Main")
+          (module-segments (string-join module-segments ".")))))
+
+    (:auto-insert
+     ("\\.hs\\'" . (> "module " (akirak/haskell-module-name) "\n"
+                      "  (\n"
+                      "  ) where\n\n"
+                      _))))
 #+end_src
 *** haskell-tng-mode                          :Haskell:major__mode:ARCHIVE:
 :PROPERTIES:
