@@ -1514,6 +1514,14 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
 #+end_src
+*** org-ml                                                        :library:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-17 Thu 20:26]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-ml))
+#+end_src
 *** org-noter
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:59]
