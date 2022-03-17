@@ -1443,16 +1443,15 @@ Embrace Org as a common document format for Emacs.
 
     (:when-loaded
       (:also-load org-dog-embark
-                  org-dog-consult
                   org-dog-facade)))
 #+end_src
-**** org-dog-consult
+**** consult-org-dog
 :PROPERTIES:
 :CREATED_TIME: [2022-03-04 Fri 20:33]
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package org-dog-consult))
+  (setup (:package consult-org-dog))
 #+end_src
 **** org-dog-embark
 :PROPERTIES:

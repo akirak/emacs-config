@@ -109,7 +109,7 @@
       ref = "develop";
     };
   };
-  org-dog-consult = _: _: {
+  consult-org-dog = _: _: {
     origin = {
       type = "github";
       owner = "akirak";
