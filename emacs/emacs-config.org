@@ -2574,6 +2574,7 @@ Make vendored and generated files read only.
     (:with-mode haskell-cabal-mode
       (:file-match "\\.cabal\\'"))
 
+    (:mode-repl run-haskell)
     (:hook subword-mode
            interactive-haskell-mode)
 
@@ -3027,10 +3028,12 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
     (:set popper-window-height 0.3
           popper-display-function #'popper-select-popup-at-bottom
           akirak/display-popup-window-function popper-display-function
+          ;; You may have to re-enable popper-mode after updating this variable
           popper-reference-buffers `("\\*Messages\\*$"
                                      "\\*Backtrace\\*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
+                                     inferior-haskell-mode
                                      lisp-interaction-mode
                                      vterm-mode))
 
