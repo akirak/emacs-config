@@ -2013,7 +2013,66 @@ This is an extra functions for window management.
 
 #+begin_src emacs-lisp
   (setup (:package consult-dir)
-    (:global "C-x d" #'consult-dir))
+    (:global "C-x d" #'consult-dir)
+
+    (:set consult-dir-sources
+          '(consult-dir--source-bookmark
+            consult-dir--source-default
+            akirak/consult-dired-dir-source
+            akirak/consult-project-dir-source
+            akirak/consult-project-parent-source
+            consult-dir--source-recentf)))
+#+end_src
+**** Project directories
+#+begin_src emacs-lisp
+  (defvar akirak/consult-project-dir-source
+    ;; Based on `consult-dir--source-project' in consult-dir.el.
+    `(:name "Projects"
+            :narrow ?p
+            :category project-root
+            :face consult-file
+            :history file-name-history
+            ;; :enabled ,(lambda () consult-dir-project-list-function)
+            :items ,(lambda () (seq-difference (project-known-project-roots)
+                                               (consult-dir--default-dirs)
+                                               #'equal))))
+#+end_src
+**** Dired buffers
+#+begin_src emacs-lisp
+  (defvar akirak/consult-dired-dir-source
+    `(:name "Dired buffers"
+            :narrow ?d
+            :category directory
+            :face consult-file
+            ;; :enabled ,(lambda () consult-dir-project-list-function)
+            :items ,(lambda ()
+                      (thread-last
+                        (buffer-list)
+                        (seq-filter (lambda (buf)
+                                      (eq (buffer-local-value 'major-mode buf)
+                                          'dired-mode)))
+                        (mapcar (lambda (buf)
+                                  (buffer-local-value 'default-directory buf)))))))
+#+end_src
+**** Project parent directories
+#+begin_src emacs-lisp
+  (defvar akirak/consult-project-parent-source
+    `(:name "Project parents"
+            :narrow ?P
+            :category directory
+            :face consult-file
+            ;; :history file-name-history
+            ;; :enabled ,(lambda () consult-dir-project-list-function)
+            :items ,(lambda ()
+                      (cl-remove-duplicates
+                       (thread-last
+                         (project-known-project-roots)
+                         (cl-remove-if (lambda (dir)
+                                         (string-prefix-p "~/archives/" dir)))
+                         (mapcar (lambda (dir)
+                                   (file-name-directory (string-remove-suffix "/" dir)))))
+                       :test #'equal))))
+
 #+end_src
 *** consult-project-extra
 :PROPERTIES:
@@ -2880,7 +2939,11 @@ I won't turn on the mode by default, because it reduces the performance to some 
     (:hook-into after-init-hook)
 
     (:with-map minibuffer-local-map
-      (:bind "M-a" #'marginalia-cycle)))
+      (:bind "M-a" #'marginalia-cycle))
+
+    (:when-loaded
+      (add-to-list 'marginalia-annotator-registry
+                   '(project-root akirak-project-root-annotator builtin none))))
 #+end_src
 *** markdown-mode                                             :major__mode:
 :PROPERTIES:
