@@ -327,6 +327,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:set compilation-auto-jump-to-first-error t
           compilation-scroll-output t)
 
+    (:global "<f9>" #'recompile)
+
     (:compilation-error
      (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
              2 3 4 (1 . 1))
