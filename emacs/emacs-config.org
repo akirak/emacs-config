@@ -527,6 +527,16 @@ The built-in =electric= package provides the following modes:
   (setup find-func
     (:global "C-x M-l" #'find-library))
 #+end_src
+*** flymake                                                   :development:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-19 Sat 16:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup flymake
+    (:bind "M-g M-n" #'flymake-goto-next-error
+           "M-g M-p" #'flymake-goto-prev-error))
+#+end_src
 *** fns.c and xfns.c                                                   :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
