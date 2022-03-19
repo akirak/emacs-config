@@ -210,7 +210,7 @@ By default, settings inside =:status= clauses are not loaded.
     (:hook-into after-init-hook)
     (:set gcmh-verbose debug-on-error))
 #+end_src
-** Custom conventions                          :packages:
+** Custom conventions
 *** Prefix for mode-specific commands
 #+begin_src emacs-lisp
   (defcustom akirak/mode-prefix-key "C-,"
