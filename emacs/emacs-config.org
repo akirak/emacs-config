@@ -24,6 +24,7 @@
   - [[#annotating][Annotating]]
   - [[#natural-languages][Natural languages]]
   - [[#grep][Grep]]
+  - [[#sh-emulation-keybindings][Sh-emulation keybindings]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -594,6 +595,18 @@ The built-in =electric= package provides the following modes:
     (dolist (mode-hook '(makefile-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
 #+end_src
+*** keymap.c                                                  :keybindings:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-19 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup keymap.c
+    (:status opinionated
+      (:with-map minibuffer-local-map
+        (:bind "C-u" #'backward-kill-sentence
+               "C-w" #'backward-kill-word))))
+#+end_src
 *** menu-bar
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:22]
@@ -843,7 +856,27 @@ This is a recommended setting for use with vertico. See https://github.com/minad
       (:hook-into prog-mode-hook
                   text-mode-hook
                   help-mode-hook
-                  special-mode-hook)))
+                  special-mode-hook))
+
+    (:status opinionated
+      (:global "C-w"
+               (defun akirak/kill-region-or-backward-kill-word (&optional arg)
+                 "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
+                 (interactive "p")
+                 (if (region-active-p)
+                     (kill-region (region-beginning) (region-end))
+                   (backward-kill-word arg))))
+      (:with-mode prog-mode
+        (:bind "C-a"
+               (defun akirak/back-to-indentation-or-bol ()
+                 (interactive)
+                 (if (or (looking-at "^")
+                         (string-match-p (rx (not (any space)))
+                                         (buffer-substring-no-properties
+                                          (line-beginning-position)
+                                          (point))))
+                     (back-to-indentation)
+                   (beginning-of-line)))))))
 #+end_src
 *** startup
 :PROPERTIES:
@@ -874,8 +907,13 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subr
-    (fset 'yes-or-no-p 'y-or-n-p))
+    (fset 'yes-or-no-p 'y-or-n-p)
+
+    (:status opinionated
+      (:global "C-h" 'backward-delete-char)))
 #+end_src
+
+=C-h= is one of the sh-emulation bindings.
 *** terminal.c                                                         :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -3139,7 +3177,7 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
                 sgml-mode
                 nxml-mode)
 
-    (:unbind "C-M-a" "C-M-e")
+    (:unbind "C-M-a" "C-M-e" "C-w")
 
     ;; TODO: Bind commands
     ;;
@@ -3678,6 +3716,9 @@ To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF fi
 #+END:
 *** Grep
 [[https://github.com/minad/affe][affe]] doesn't look mature enough, but I will re-evaluate it later.
+*** Sh-emulation keybindings
+I rebind the following keys in some keymaps to emulate a typical UNIX shell:
+C-a, C-e, C-u, C-w, C-h.
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil
