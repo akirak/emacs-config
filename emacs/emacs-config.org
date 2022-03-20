@@ -2684,8 +2684,10 @@ Make vendored and generated files read only.
       (:file-match "\\.cabal\\'"))
 
     (:mode-repl run-haskell)
-    (:hook subword-mode
-           interactive-haskell-mode)
+    (:hook interactive-haskell-mode)
+
+    (:reformatters
+     (ormolu :program "ormolu"))
 
     (defun akirak/haskell-module-name (&optional filename)
       (let* ((filename (or filename (buffer-file-name)))
