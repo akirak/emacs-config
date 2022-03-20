@@ -2662,6 +2662,15 @@ Make vendored and generated files read only.
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
+*** graphql-mode                                                      :web:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-20 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package graphql-mode)
+    (:file-match "\\.gql\\'"))
+#+end_src
 *** graphviz-dot-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-03-11 Fri 22:02]
