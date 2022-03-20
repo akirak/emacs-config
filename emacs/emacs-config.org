@@ -2707,8 +2707,7 @@ Make vendored and generated files read only.
 
     (:auto-insert
      ("\\.hs\\'" . (> "module " (akirak/haskell-module-name) "\n"
-                      "  (\n"
-                      "  ) where\n\n"
+                      "  where\n\n"
                       _))))
 #+end_src
 *** haskell-tng-mode                          :Haskell:major__mode:ARCHIVE:
