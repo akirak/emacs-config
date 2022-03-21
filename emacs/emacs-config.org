@@ -1397,7 +1397,9 @@ Embrace Org as a common document format for Emacs.
           org-clock-persist t
           org-clock-persist-query-resume nil
           ;; Set for mini-modeline
-          org-clock-string-limit 40))
+          org-clock-string-limit 40)
+
+    (:global "M-g M-j" #'org-clock-goto))
 #+end_src
 **** org-habit
 :PROPERTIES:
