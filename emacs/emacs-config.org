@@ -3011,18 +3011,6 @@ I won't turn on the mode by default, because it reduces the performance to some 
 
     (:bind "C-c '" #'markdown-edit-code-block))
 #+end_src
-*** MAYBE nano-bell                                         :noexport:nano:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-05 Wed 15:20]
-:END:
-
-[[https://github.com/rougier/nano-bell][GitHub - rougier/nano-bell: Visual bell for GNU Emacs]]
-*** MAYBE nano-sidebar                                      :noexport:nano:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-05 Wed 15:19]
-:END:
-
-[[https://github.com/rougier/nano-sidebar][GitHub - rougier/nano-sidebar: Emacs package to have configurable sidebars on a per frame basis.]]
 *** mlscroll                                                :aesthetics:UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
@@ -3052,15 +3040,6 @@ I won't turn on the mode by default, because it reduces the performance to some 
               (defun akirak/turn-on-move-dup-mode ()
                 (unless (derived-mode-p 'org-mode 'markdown-mode)
                   (move-dup-mode 1)))))
-#+end_src
-*** nano-modeline                       :visual:aesthetics:UI:nano:ARCHIVE:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-05 Wed 14:46]
-:END:
-
-#+begin_src emacs-lisp
-  (setup (:package nano-modeline)
-    (nano-modeline-mode t))
 #+end_src
 *** nix26                                                     :Nix:project:
 :PROPERTIES:
