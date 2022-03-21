@@ -3260,6 +3260,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
 (setup (:package restclient))
 #+end_src
+*** rich-minority                                                      :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-21 Mon 23:27]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package rich-minority)
+    (:set rm-whitelist
+          (rx bol (* space) "envrc"))
+    (:hook-into after-init-hook))
+#+end_src
 *** string-inflection                                             :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:07]
