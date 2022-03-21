@@ -654,6 +654,11 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup minibuffer
+    (:set completion-category-defaults nil
+          completion-category-overrides
+          '((file (styles partial-completion))
+            (url (styles partial-completion))))
+
     (define-key minibuffer-mode-map
                 "~"
                 (defun akirak/minibuffer-tilde ()
@@ -3102,9 +3107,7 @@ I won't turn on the mode by default, because it reduces the performance to some 
 
 #+begin_src emacs-lisp
   (setup (:package orderless)
-    (:set completion-styles '(orderless)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles partial-completion)))))
+    (:set completion-styles '(orderless)))
 #+end_src
 
 Resources:
