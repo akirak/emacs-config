@@ -58,6 +58,10 @@
     };
   };
 
+  ghub = _: super: {
+    files = builtins.removeAttrs super.files [ ".dir-locals.el" ];
+  };
+
   # Quite a few dired extension packages have missing dependencies.
   dired-collapse = _: super: {
     packageRequires = {
@@ -88,6 +92,39 @@
   #     direx = "0";
   #   } // super.packageRequires;
   # };
+
+  org-dog = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
+  org-dog-embark = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
+  consult-org-dog = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
+  org-dog-facade = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
 
   twist = _: _: {
     origin = {

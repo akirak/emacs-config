@@ -23,6 +23,8 @@
   - [[#window-management][Window management]]
   - [[#annotating][Annotating]]
   - [[#natural-languages][Natural languages]]
+  - [[#grep][Grep]]
+  - [[#sh-emulation-keybindings][Sh-emulation keybindings]]
 :END:
 ** Setup.el
 :PROPERTIES:
@@ -208,7 +210,7 @@ By default, settings inside =:status= clauses are not loaded.
     (:hook-into after-init-hook)
     (:set gcmh-verbose debug-on-error))
 #+end_src
-** Custom conventions                          :packages:
+** Custom conventions
 *** Prefix for mode-specific commands
 #+begin_src emacs-lisp
   (defcustom akirak/mode-prefix-key "C-,"
@@ -325,6 +327,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup compile
     (:set compilation-auto-jump-to-first-error t
           compilation-scroll-output t)
+
+    (:global "<f9>" #'recompile)
 
     (:compilation-error
      (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
@@ -524,6 +528,16 @@ The built-in =electric= package provides the following modes:
   (setup find-func
     (:global "C-x M-l" #'find-library))
 #+end_src
+*** flymake                                                   :development:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-19 Sat 16:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup flymake
+    (:bind "M-g M-n" #'flymake-goto-next-error
+           "M-g M-p" #'flymake-goto-prev-error))
+#+end_src
 *** fns.c and xfns.c                                                   :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -581,6 +595,18 @@ The built-in =electric= package provides the following modes:
     (dolist (mode-hook '(makefile-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
 #+end_src
+*** keymap.c                                                  :keybindings:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-19 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup keymap.c
+    (:status opinionated
+      (:with-map minibuffer-local-map
+        (:bind "C-u" #'backward-kill-sentence
+               "C-w" #'backward-kill-word))))
+#+end_src
 *** menu-bar
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:22]
@@ -628,6 +654,11 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup minibuffer
+    (:set completion-category-defaults nil
+          completion-category-overrides
+          '((file (styles partial-completion))
+            (url (styles partial-completion))))
+
     (define-key minibuffer-mode-map
                 "~"
                 (defun akirak/minibuffer-tilde ()
@@ -830,7 +861,27 @@ This is a recommended setting for use with vertico. See https://github.com/minad
       (:hook-into prog-mode-hook
                   text-mode-hook
                   help-mode-hook
-                  special-mode-hook)))
+                  special-mode-hook))
+
+    (:status opinionated
+      (:global "C-w"
+               (defun akirak/kill-region-or-backward-kill-word (&optional arg)
+                 "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
+                 (interactive "p")
+                 (if (region-active-p)
+                     (kill-region (region-beginning) (region-end))
+                   (backward-kill-word arg))))
+      (:with-mode prog-mode
+        (:bind "C-a"
+               (defun akirak/back-to-indentation-or-bol ()
+                 (interactive)
+                 (if (or (looking-at "^")
+                         (string-match-p (rx (not (any space)))
+                                         (buffer-substring-no-properties
+                                          (line-beginning-position)
+                                          (point))))
+                     (back-to-indentation)
+                   (beginning-of-line)))))))
 #+end_src
 *** startup
 :PROPERTIES:
@@ -861,8 +912,13 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subr
-    (fset 'yes-or-no-p 'y-or-n-p))
+    (fset 'yes-or-no-p 'y-or-n-p)
+
+    (:status opinionated
+      (:global "C-h" 'backward-delete-char)))
 #+end_src
+
+=C-h= is one of the sh-emulation bindings.
 *** terminal.c                                                         :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -1114,6 +1170,7 @@ Embrace Org as a common document format for Emacs.
   (setup org
     (:with-mode org-mode
       (:when-loaded
+        (:also-load org-id)
         (:also-load org-crypt))
 
       (:set org-log-done 'time
@@ -1338,7 +1395,11 @@ Embrace Org as a common document format for Emacs.
           org-clock-mode-line-total 'today
           org-clock-out-remove-zero-time-clocks t
           org-clock-persist t
-          org-clock-persist-query-resume nil))
+          org-clock-persist-query-resume nil
+          ;; Set for mini-modeline
+          org-clock-string-limit 40)
+
+    (:global "M-g M-j" #'org-clock-goto))
 #+end_src
 **** org-habit
 :PROPERTIES:
@@ -1441,16 +1502,15 @@ Embrace Org as a common document format for Emacs.
 
     (:when-loaded
       (:also-load org-dog-embark
-                  org-dog-consult
                   org-dog-facade)))
 #+end_src
-**** org-dog-consult
+**** consult-org-dog
 :PROPERTIES:
 :CREATED_TIME: [2022-03-04 Fri 20:33]
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package org-dog-consult))
+  (setup (:package consult-org-dog))
 #+end_src
 **** org-dog-embark
 :PROPERTIES:
@@ -1511,6 +1571,14 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
+#+end_src
+*** org-ml                                                        :library:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-17 Thu 20:26]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-ml))
 #+end_src
 *** org-noter
 :PROPERTIES:
@@ -1884,6 +1952,16 @@ This is an extra functions for window management.
         (:bind
          "d" #'beancount-insert-date))))
 #+end_src
+*** blamer                                                             :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-14 Mon 17:48]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package blamer)
+    (:set blamer-max-lines 50
+          blamer-max-commit-message-length 50))
+#+end_src
 *** bufler                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]
@@ -1982,7 +2060,66 @@ This is an extra functions for window management.
 
 #+begin_src emacs-lisp
   (setup (:package consult-dir)
-    (:global "C-x d" #'consult-dir))
+    (:global "C-x d" #'consult-dir)
+
+    (:set consult-dir-sources
+          '(consult-dir--source-bookmark
+            consult-dir--source-default
+            akirak/consult-dired-dir-source
+            akirak/consult-project-dir-source
+            akirak/consult-project-parent-source
+            consult-dir--source-recentf)))
+#+end_src
+**** Project directories
+#+begin_src emacs-lisp
+  (defvar akirak/consult-project-dir-source
+    ;; Based on `consult-dir--source-project' in consult-dir.el.
+    `(:name "Projects"
+            :narrow ?p
+            :category project-root
+            :face consult-file
+            :history file-name-history
+            ;; :enabled ,(lambda () consult-dir-project-list-function)
+            :items ,(lambda () (seq-difference (project-known-project-roots)
+                                               (consult-dir--default-dirs)
+                                               #'equal))))
+#+end_src
+**** Dired buffers
+#+begin_src emacs-lisp
+  (defvar akirak/consult-dired-dir-source
+    `(:name "Dired buffers"
+            :narrow ?d
+            :category directory
+            :face consult-file
+            ;; :enabled ,(lambda () consult-dir-project-list-function)
+            :items ,(lambda ()
+                      (thread-last
+                        (buffer-list)
+                        (seq-filter (lambda (buf)
+                                      (eq (buffer-local-value 'major-mode buf)
+                                          'dired-mode)))
+                        (mapcar (lambda (buf)
+                                  (buffer-local-value 'default-directory buf)))))))
+#+end_src
+**** Project parent directories
+#+begin_src emacs-lisp
+  (defvar akirak/consult-project-parent-source
+    `(:name "Project parents"
+            :narrow ?P
+            :category directory
+            :face consult-file
+            ;; :history file-name-history
+            ;; :enabled ,(lambda () consult-dir-project-list-function)
+            :items ,(lambda ()
+                      (cl-remove-duplicates
+                       (thread-last
+                         (project-known-project-roots)
+                         (cl-remove-if (lambda (dir)
+                                         (string-prefix-p "~/archives/" dir)))
+                         (mapcar (lambda (dir)
+                                   (file-name-directory (string-remove-suffix "/" dir)))))
+                       :test #'equal))))
+
 #+end_src
 *** consult-project-extra
 :PROPERTIES:
@@ -2152,6 +2289,14 @@ dired-k depends on dired-x, which has a poor code quality.
     (:set dired-open-functions '(dired-open-by-extension
                                     dired-open-subdir)))
 #+end_src
+*** duckduckgo                                                     :search:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-17 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package duckduckgo))
+#+end_src
 *** dumb-jump                                                  :navigation:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
@@ -2243,6 +2388,15 @@ I use this package mostly because it uses =pp-eval-expression= for printing the 
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
+*** emacsql-sqlite                                                :library:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-14 Mon 13:46]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package emacsql-sqlite)
+    (:nixpkgs "sqlite"))
+#+end_src
 *** embark
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:53]
@@ -2293,7 +2447,7 @@ The following resources are useful:
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package epkg))
+  (setup (:package epkg))
 #+end_src
 *** eros                                          :Emacs__Lisp:development:
 :PROPERTIES:
@@ -2378,6 +2532,14 @@ The following resources are useful:
 
 #+begin_src emacs-lisp
 (setup (:package fanyi))
+#+end_src
+*** forge                                                     :VC:project:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-14 Mon 13:22]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package forge))
 #+end_src
 *** fwb-cmds                                                       :window:
 :PROPERTIES:
@@ -2509,6 +2671,15 @@ Make vendored and generated files read only.
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
+*** graphql-mode                                                      :web:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-20 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package graphql-mode)
+    (:file-match "\\.gql\\'"))
+#+end_src
 *** graphviz-dot-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-03-11 Fri 22:02]
@@ -2530,8 +2701,34 @@ Make vendored and generated files read only.
     (:with-mode haskell-cabal-mode
       (:file-match "\\.cabal\\'"))
 
-    (:hook subword-mode
-           interactive-haskell-mode))
+    (:mode-repl run-haskell)
+    (:hook interactive-haskell-mode)
+
+    (:reformatters
+     (ormolu :program "ormolu"))
+
+    (defun akirak/haskell-module-name (&optional filename)
+      (let* ((filename (or filename (buffer-file-name)))
+             (project (project-current nil (file-name-directory filename)))
+             (root (if project
+                       (project-root project)
+                     "~"))
+             (relative (file-relative-name
+                        (file-name-sans-extension filename)
+                        root))
+             (segments (split-string relative "/"))
+             (case-fold-search nil))
+        (pcase (seq-drop-while (lambda (s) (string-match-p "^[^A-Z]" s))
+                               segments)
+          (`nil "Main")
+          ((and `(,name) (guard (string-suffix-p "Main" name)))
+           "Main")
+          (module-segments (string-join module-segments ".")))))
+
+    (:auto-insert
+     ("\\.hs\\'" . (> "module " (akirak/haskell-module-name) "\n"
+                      "  where\n\n"
+                      _))))
 #+end_src
 *** haskell-tng-mode                          :Haskell:major__mode:ARCHIVE:
 :PROPERTIES:
@@ -2541,6 +2738,15 @@ Make vendored and generated files read only.
 #+begin_src emacs-lisp
   (setup (:package haskell-tng-mode)
     (:file-match "\\.hs\\'"))
+#+end_src
+*** hcl-mode                                                    :Terraform:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-20 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package hcl-mode)
+    (:file-match "\\.hcl\\'"))
 #+end_src
 *** helpful                                               :reference:Emacs:
 :PROPERTIES:
@@ -2790,7 +2996,11 @@ I won't turn on the mode by default, because it reduces the performance to some 
     (:hook-into after-init-hook)
 
     (:with-map minibuffer-local-map
-      (:bind "M-a" #'marginalia-cycle)))
+      (:bind "M-a" #'marginalia-cycle))
+
+    (:when-loaded
+      (add-to-list 'marginalia-annotator-registry
+                   '(project-root akirak-project-root-annotator builtin none))))
 #+end_src
 *** markdown-mode                                             :major__mode:
 :PROPERTIES:
@@ -2805,19 +3015,53 @@ I won't turn on the mode by default, because it reduces the performance to some 
 
     (:bind "C-c '" #'markdown-edit-code-block))
 #+end_src
-*** MAYBE nano-bell                                         :noexport:nano:
+*** mini-modeline                                                      :UI:
 :PROPERTIES:
-:CREATED_TIME: [2022-01-05 Wed 15:20]
+:CREATED_TIME: [2022-03-21 Mon 23:16]
 :END:
 
-[[https://github.com/rougier/nano-bell][GitHub - rougier/nano-bell: Visual bell for GNU Emacs]]
-*** MAYBE nano-sidebar                                      :noexport:nano:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-05 Wed 15:19]
-:END:
+#+begin_src emacs-lisp
+  (setup (:package mini-modeline)
+    (:set mini-modeline-enhance-visual nil
+          mini-modeline-display-gui-line nil
+          mini-modeline-l-format '((mode-line-modified mode-line-modified)
+                                   (mode-line-mule-info mode-line-mule-info)
+                                   " "
+                                   (:eval (akirak-mode-line-directory))
+                                   "%b"
+                                   "%n %p (%l,%c) "
+                                   (:eval (string-trim (format-mode-line mode-line-modes)))
+                                   (vc-mode vc-mode))
+          mini-modeline-r-format '("%e"
+                                   (mode-line-process ("  " mode-line-process))
+                                   (current-input-method-title
+                                    (current-input-method-title " "))
+                                   (:eval (format-time-string "%b %d %a W%U %H:%M "))
+                                   (mode-line-client mode-line-client)
+                                   (mode-line-misc-info mode-line-misc-info)))
+    (:hook-into emacs-startup-hook)
 
-[[https://github.com/rougier/nano-sidebar][GitHub - rougier/nano-sidebar: Emacs package to have configurable sidebars on a per frame basis.]]
-*** mlscroll                                                :aesthetics:UI:
+    (defun akirak-mode-line-directory ()
+      (let* ((base (buffer-base-buffer))
+             (filename (buffer-file-name base))
+             (dir (when filename
+                    (abbreviate-file-name (file-name-directory filename)))))
+        (if filename
+            (concat (if-let (project (project-current nil dir))
+                        (let ((root (string-remove-suffix "/" (project-root project))))
+                          (concat (file-name-directory root)
+                                  (propertize (file-name-nondirectory root)
+                                              'face 'font-lock-constant-face)
+                                  (propertize (string-remove-prefix root dir)
+                                              'face 'font-lock-string-face)))
+                      (propertize dir 'face 'font-lock-string-face))
+                    (if base
+                        (concat (file-name-nondirectory filename)
+                                " -> [indirect]")
+                      ""))
+          ""))))
+#+end_src
+*** mlscroll                                        :aesthetics:UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
@@ -2846,15 +3090,6 @@ I won't turn on the mode by default, because it reduces the performance to some 
               (defun akirak/turn-on-move-dup-mode ()
                 (unless (derived-mode-p 'org-mode 'markdown-mode)
                   (move-dup-mode 1)))))
-#+end_src
-*** nano-modeline                       :visual:aesthetics:UI:nano:ARCHIVE:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-05 Wed 14:46]
-:END:
-
-#+begin_src emacs-lisp
-  (setup (:package nano-modeline)
-    (nano-modeline-mode t))
 #+end_src
 *** nix26                                                     :Nix:project:
 :PROPERTIES:
@@ -2901,9 +3136,7 @@ I won't turn on the mode by default, because it reduces the performance to some 
 
 #+begin_src emacs-lisp
   (setup (:package orderless)
-    (:set completion-styles '(orderless)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles partial-completion)))))
+    (:set completion-styles '(orderless)))
 #+end_src
 
 Resources:
@@ -2950,10 +3183,12 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
     (:set popper-window-height 0.3
           popper-display-function #'popper-select-popup-at-bottom
           akirak/display-popup-window-function popper-display-function
+          ;; You may have to re-enable popper-mode after updating this variable
           popper-reference-buffers `("\\*Messages\\*$"
                                      "\\*Backtrace\\*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
+                                     inferior-haskell-mode
                                      lisp-interaction-mode
                                      vterm-mode))
 
@@ -2984,7 +3219,7 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
                 sgml-mode
                 nxml-mode)
 
-    (:unbind "C-M-a" "C-M-e")
+    (:unbind "C-M-a" "C-M-e" "C-w")
 
     ;; TODO: Bind commands
     ;;
@@ -3053,6 +3288,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 
 #+begin_src emacs-lisp
 (setup (:package restclient))
+#+end_src
+*** rich-minority                                                      :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-21 Mon 23:27]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package rich-minority)
+    (:set rm-whitelist
+          (rx bol (* space) "envrc"))
+    (:hook-into after-init-hook))
 #+end_src
 *** string-inflection                                             :editing:
 :PROPERTIES:
@@ -3190,6 +3436,15 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
 #+begin_src emacs-lisp
   (setup (:package unmodified-buffer)
     (:hook-into after-init-hook))
+#+end_src
+*** use-package
+:PROPERTIES:
+:CREATED_TIME: [2022-03-14 Mon 14:04]
+:END:
+I don't use use-package, but I only need indentation:
+
+#+begin_src emacs-lisp
+  (put 'use-package 'lisp-indent-function 1)
 #+end_src
 *** vertico                                         :minibuffer:completion:
 :PROPERTIES:
@@ -3341,21 +3596,21 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 150 |
+| [[org-ql-search:tags:packages][packages]]            | 159 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
+| [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
-| [[org-ql-search:tags:development][development]]         |  11 |
-| [[org-ql-search:tags:UI][UI]]                  |   9 |
+| [[org-ql-search:tags:UI][UI]]                  |  10 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
+| [[org-ql-search:tags:VC][VC]]                  |   8 |
 | [[org-ql-search:tags:windows][windows]]             |   7 |
+| [[org-ql-search:tags:library][library]]             |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:dired][dired]]               |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
-| [[org-ql-search:tags:VC][VC]]                  |   6 |
+| [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
-| [[org-ql-search:tags:keybindings][keybindings]]         |   5 |
-| [[org-ql-search:tags:library][library]]             |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
@@ -3366,6 +3621,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:writing][writing]]             |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:links][links]]               |   3 |
+| [[org-ql-search:tags:project][project]]             |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
@@ -3373,9 +3629,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:reading][reading]]             |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:web][web]]                 |   2 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
-| [[org-ql-search:tags:project][project]]             |   2 |
 | [[org-ql-search:tags:syntax][syntax]]              |   2 |
 | [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
 | [[org-ql-search:tags:initialization][initialization]]      |   1 |
@@ -3392,20 +3648,20 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
+| [[org-ql-search:tags:search][search]]              |   1 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:startup][startup]]             |   1 |
 | [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
+| [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:exercises][exercises]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
 | [[org-ql-search:tags:git][git]]                 |   1 |
-| [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
-| [[org-ql-search:tags:web][web]]                 |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
 | [[org-ql-search:tags:debugging][debugging]]           |   1 |
 | [[org-ql-search:tags:configuration][configuration]]       |   1 |
@@ -3422,9 +3678,10 @@ There is a table right before paragraph.
 The following packages (tagged =web=) are related to web development:
 
 #+BEGIN: org-ql :query "tags:web" :columns (heading todo)
-| Heading    | Todo |
-|------------+------|
-| [[restclient][restclient]] |      |
+| Heading      | Todo |
+|--------------+------|
+| [[graphql-mode][graphql-mode]] |      |
+| [[restclient][restclient]]   |      |
 #+END:
 
 - You will want to test web APIs from inside Emacs. You can choose either [[https://github.com/pashky/restclient.el][restclient]] or [[https://github.com/federicotdn/verb][verb]] for this purpose.
@@ -3512,6 +3769,11 @@ To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF fi
 |---------+------|
 | [[fanyi][fanyi]]   |      |
 #+END:
+*** Grep
+[[https://github.com/minad/affe][affe]] doesn't look mature enough, but I will re-evaluate it later.
+*** Sh-emulation keybindings
+I rebind the following keys in some keymaps to emulate a typical UNIX shell:
+C-a, C-e, C-u, C-w, C-h.
 ** Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil

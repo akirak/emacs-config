@@ -22,6 +22,8 @@
     # userName = "Akira Komamura";
 
     extraConfig = {
+      github.user = "akirak";
+
       pull.rebase = false;
 
       "url \"git@github.com:\"".pushInsteadOf = "https://github.com/";
