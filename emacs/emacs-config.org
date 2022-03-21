@@ -1395,7 +1395,9 @@ Embrace Org as a common document format for Emacs.
           org-clock-mode-line-total 'today
           org-clock-out-remove-zero-time-clocks t
           org-clock-persist t
-          org-clock-persist-query-resume nil))
+          org-clock-persist-query-resume nil
+          ;; Set for mini-modeline
+          org-clock-string-limit 40))
 #+end_src
 **** org-habit
 :PROPERTIES:
@@ -3010,6 +3012,52 @@ I won't turn on the mode by default, because it reduces the performance to some 
       (:file-match "README.md\\'"))
 
     (:bind "C-c '" #'markdown-edit-code-block))
+#+end_src
+*** mini-modeline                                                      :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-21 Mon 23:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package mini-modeline)
+    (:set mini-modeline-enhance-visual nil
+          mini-modeline-display-gui-line nil
+          mini-modeline-l-format '((mode-line-modified mode-line-modified)
+                                   (mode-line-mule-info mode-line-mule-info)
+                                   " "
+                                   (:eval (akirak-mode-line-directory))
+                                   "%b"
+                                   "%n %p (%l,%c) "
+                                   (:eval (string-trim (format-mode-line mode-line-modes)))
+                                   (vc-mode vc-mode))
+          mini-modeline-r-format '("%e"
+                                   (mode-line-process ("  " mode-line-process))
+                                   (current-input-method-title
+                                    (current-input-method-title " "))
+                                   (:eval (format-time-string "%b %d %a W%U %H:%M "))
+                                   (mode-line-client mode-line-client)
+                                   (mode-line-misc-info mode-line-misc-info)))
+    (:hook-into emacs-startup-hook)
+
+    (defun akirak-mode-line-directory ()
+      (let* ((base (buffer-base-buffer))
+             (filename (buffer-file-name base))
+             (dir (when filename
+                    (abbreviate-file-name (file-name-directory filename)))))
+        (if filename
+            (concat (if-let (project (project-current nil dir))
+                        (let ((root (string-remove-suffix "/" (project-root project))))
+                          (concat (file-name-directory root)
+                                  (propertize (file-name-nondirectory root)
+                                              'face 'font-lock-constant-face)
+                                  (propertize (string-remove-prefix root dir)
+                                              'face 'font-lock-string-face)))
+                      (propertize dir 'face 'font-lock-string-face))
+                    (if base
+                        (concat (file-name-nondirectory filename)
+                                " -> [indirect]")
+                      ""))
+          ""))))
 #+end_src
 *** mlscroll                                                :aesthetics:UI:
 :PROPERTIES:
