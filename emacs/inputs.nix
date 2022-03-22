@@ -93,6 +93,17 @@
   #   } // super.packageRequires;
   # };
 
+  # Fix a performance issue described in
+  # https://github.com/noctuid/link-hint.el/issues/206
+  link-hint = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "link-hint.el";
+      ref = "skip-invisible";
+    };
+  };
+
   org-dog = _: _: {
     origin = {
       type = "github";
