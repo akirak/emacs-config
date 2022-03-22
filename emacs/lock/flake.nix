@@ -62,6 +62,12 @@
       repo = "avy";
       type = "github";
     };
+    avy-riben = {
+      flake = false;
+      owner = "akirak";
+      repo = "emacs-dumb-japanese";
+      type = "github";
+    };
     beancount = {
       flake = false;
       owner = "beancount";
@@ -291,6 +297,12 @@
       repo = "epkg";
       type = "github";
     };
+    epkg-marginalia = {
+      flake = false;
+      owner = "emacscollective";
+      repo = "epkg-marginalia";
+      type = "github";
+    };
     eros = {
       flake = false;
       owner = "xiongtx";
@@ -382,6 +394,12 @@
       flake = false;
       owner = "arnested";
       repo = "emacs-git-attr";
+      type = "github";
+    };
+    git-auto-commit-mode = {
+      flake = false;
+      owner = "ryuslash";
+      repo = "git-auto-commit-mode";
       type = "github";
     };
     git-commit = {
@@ -542,14 +560,9 @@
     };
     link-hint = {
       flake = false;
-      owner = "noctuid";
+      owner = "akirak";
+      ref = "skip-invisible";
       repo = "link-hint.el";
-      type = "github";
-    };
-    lisp-extra-font-lock = {
-      flake = false;
-      owner = "Lindydancer";
-      repo = "lisp-extra-font-lock";
       type = "github";
     };
     lispy = {
@@ -618,16 +631,16 @@
       repo = "emacs-mini-modeline";
       type = "github";
     };
-    mlscroll = {
-      flake = false;
-      owner = "jdtsmith";
-      repo = "mlscroll";
-      type = "github";
-    };
     move-dup = {
       flake = false;
       owner = "wyuenho";
       repo = "move-dup";
+      type = "github";
+    };
+    nickel-mode = {
+      flake = false;
+      owner = "GTrunSec";
+      repo = "nickel-mode";
       type = "github";
     };
     nix-mode = {
@@ -813,6 +826,12 @@
       repo = "popup-el";
       type = "github";
     };
+    posframe = {
+      flake = false;
+      owner = "tumashu";
+      repo = "posframe";
+      type = "github";
+    };
     project-hercules = {
       flake = false;
       owner = "akirak";
@@ -870,6 +889,12 @@
       flake = false;
       owner = "pashky";
       repo = "restclient.el";
+      type = "github";
+    };
+    riben = {
+      flake = false;
+      owner = "akirak";
+      repo = "emacs-dumb-japanese";
       type = "github";
     };
     rich-minority = {
