@@ -781,6 +781,11 @@ Resources:
           ;; Rebind the key
           (:bind "p" #'consult-project-extra-find)))))
 #+end_src
+**** akirak-project
+#+begin_src emacs-lisp
+  (setup akirak-project
+    (run-with-idle-timer 180 nil #'akirak-project-import-from-magit))
+#+end_src
 *** prolog                                             :major__mode:Prolog:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:33]
