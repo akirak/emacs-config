@@ -2531,7 +2531,13 @@ The following resources are useful:
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package fanyi))
+  (setup (:package fanyi)
+    (:set fanyi-providers '(fanyi-longman-provider
+                            fanyi-etymon-provider))
+
+    ;; Enable fanyi link type
+    (with-eval-after-load 'ol
+      (require 'ol-fanyi)))
 #+end_src
 *** forge                                                     :VC:project:
 :PROPERTIES:
