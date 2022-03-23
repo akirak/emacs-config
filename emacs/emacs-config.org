@@ -3308,7 +3308,10 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
   (setup (:package rich-minority)
     (:set rm-whitelist
-          (rx bol (* space) "envrc"))
+          (rx bol (* space)
+              (or "envrc"
+                  ;; Don't match DogId
+                  "Dog[")))
     (:hook-into after-init-hook))
 #+end_src
 *** string-inflection                                             :editing:
