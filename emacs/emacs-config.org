@@ -1489,6 +1489,8 @@ Embrace Org as a common document format for Emacs.
 
     (:global "M-g M-/" #'org-dog-find-file)
 
+    (add-hook 'org-dog-file-mode-hook #'org-dog-header-line-enable)
+
     (add-hook 'org-dog-file-registration-hook
               (defun akirak/org-dog-add-agenda-file (file-obj)
                 (when (string-match-p (rx bol (or "learning" "lifelog"
