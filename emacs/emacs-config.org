@@ -2873,14 +2873,6 @@ This is helpful in programming languages that depend on indentation levels.
         (:with-map Info-mode-map
           (:bind "f" #'link-hint-open-link)))))
 #+end_src
-*** lisp-extra-font-lock                               :Emacs__Lisp:visual:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-03 Thu 18:04]
-:END:
-
-#+begin_src emacs-lisp
-(setup (:package lisp-extra-font-lock))
-#+end_src
 *** lispy                                 :Emacs__Lisp:structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:36]
