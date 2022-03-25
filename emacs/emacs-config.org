@@ -3200,6 +3200,14 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
     (:hook-into after-init-hook)
     (:bind "M-S-SPC" #'popper-cycle))
 #+end_src
+*** posframe                                                   :UI:library:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-25 Fri 10:57]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package posframe))
+#+end_src
 *** project-hercules                                  :project:keybindings:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 15:16]
