@@ -3028,6 +3028,9 @@ I won't turn on the mode by default, because it reduces the performance to some 
 #+begin_src emacs-lisp
   (setup (:package mini-modeline)
     (:set mini-modeline-enhance-visual nil
+          mini-modeline-echo-duration 5
+          ;; If this option is set to t, it seems to suppress header lines, so I
+          ;; will set it to nil.
           mini-modeline-display-gui-line nil
           mini-modeline-l-format '((mode-line-modified mode-line-modified)
                                    (mode-line-mule-info mode-line-mule-info)
