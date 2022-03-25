@@ -3294,6 +3294,14 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
 (setup (:package restclient))
 #+end_src
+*** riben                                                        :Japanese:
+#+begin_src emacs-lisp
+  (setup (:package riben))
+#+end_src
+**** avy-riben
+#+begin_src emacs-lisp
+  (setup (:package avy-riben))
+#+end_src
 *** rich-minority                                                      :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:27]
