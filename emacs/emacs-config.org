@@ -1174,10 +1174,6 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
   (setup org
     (:with-mode org-mode
-      (:when-loaded
-        (:also-load org-id)
-        (:also-load org-crypt))
-
       (:set org-log-done 'time
             org-log-into-drawer t
             org-startup-folded 'content
@@ -1235,6 +1231,17 @@ Embrace Org as a common document format for Emacs.
             (when org-log-note-extra (insert org-log-note-extra))
             (setq-local org-finish-function 'org-store-log-note)
             (run-hooks 'org-log-buffer-setup-hook))))))
+#+end_src
+**** org-modules
+#+begin_src emacs-lisp
+  (setq org-modules
+        '(org-id
+          org-crypt
+          ;; Built-in link types I need
+          ol-info
+          ol-eww
+          ;; See fanyi
+          ol-fanyi))
 #+end_src
 **** Completion
 #+begin_src emacs-lisp
@@ -2540,12 +2547,11 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package fanyi)
     (:set fanyi-providers '(fanyi-longman-provider
-                            fanyi-etymon-provider))
-
-    ;; Enable fanyi link type
-    (with-eval-after-load 'ol
-      (require 'ol-fanyi)))
+                            fanyi-etymon-provider)))
 #+end_src
+
+You should also load ol-fanyi library to enable fanyi link type.
+See modules.
 *** forge                                                     :VC:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
