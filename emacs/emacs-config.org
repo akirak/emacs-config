@@ -2617,6 +2617,25 @@ Make vendored and generated files read only.
   (setup (:package git-attr)
     (add-hook 'find-file-hook #'git-attr-linguist))
 #+end_src
+*** git-auto-commit-mode                                               :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-26 Sat 20:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package git-auto-commit-mode)
+    (:set gac-silent-message-p t
+          gac-default-message #'akirak/git-auto-commit-message)
+
+    (defun akirak/git-auto-commit-message (filename)
+      (thread-last
+        (project-current nil filename)
+        (project-root)
+        (file-relative-name filename)
+        (concat "Auto commit: "))))
+#+end_src
+
+A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 *** git-gutter                                                         :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 19:08]
