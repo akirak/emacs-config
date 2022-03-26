@@ -1510,7 +1510,7 @@ Embrace Org as a common document format for Emacs.
                 (require 'org-dog-overview)
                 (setq org-agenda-files
                       (thread-last
-                        (org-dog-overview-scan org-agenda-files)
+                        (org-dog-overview-scan org-agenda-files :fast t)
                         (mapcar #'car)
                         (reverse)))))
 
