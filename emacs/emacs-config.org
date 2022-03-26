@@ -761,7 +761,7 @@ Resources:
             (profiler-report)
             (profiler-stop)
             (profiler-reset))
-        (profiler-start)))
+        (call-interactively #'profiler-start)))
 
     (:status opinionated
       (:global "<f12> e p" akirak/profiler-toggle)))
