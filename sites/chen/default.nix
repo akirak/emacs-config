@@ -23,6 +23,10 @@
           "/assets"
         ];
       };
+
+      home.packages = [
+        pkgs.wine
+      ];
     })
   ];
 
