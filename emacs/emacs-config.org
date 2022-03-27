@@ -3135,6 +3135,15 @@ I won't turn on the mode by default, because it reduces the performance to some 
                 (unless (derived-mode-p 'org-mode 'markdown-mode)
                   (move-dup-mode 1)))))
 #+end_src
+*** nickel-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-03-27 Sun 18:25]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nickel-mode)
+    (:file-match "\\.ncl\\'"))
+#+end_src
 *** nix26                                                     :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
