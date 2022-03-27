@@ -2463,6 +2463,17 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package epkg))
 #+end_src
+**** epkg-marginalia                                    :Emacs:completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-27 Sun 18:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package epkg-marginalia)
+    (with-eval-after-load 'marginalia
+      (cl-pushnew 'epkg-marginalia-annotate-package
+                  (alist-get 'package marginalia-annotator-registry))))
+#+end_src
 *** eros                                          :Emacs__Lisp:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:05]
