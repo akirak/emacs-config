@@ -238,6 +238,55 @@
         ];
       };
 
+      hosts.li = {
+        system = "x86_64-linux";
+        channelName = "unstable";
+        extraArgs = {
+          site = importSite ./sites/li;
+        };
+
+        modules = [
+          {
+            imports = [
+              ./sites/li/nixos/boot.nix
+              ./sites/li/nixos/hardware.nix
+              ./sites/li/nixos/xserver.nix
+              ./sites/li/nixos/filesystems.nix
+              ./sites/li/nixos/zfs.nix
+              ./sites/li/nixos/rpool2
+            ];
+
+            networking.hostName = "li";
+            # Needed for the ZFS pool.
+            networking.hostId = "8425e349";
+
+            networking.firewall = { };
+
+            networking.useDHCP = false;
+            # networking.interfaces.enp0s31f6.useDHCP = true;
+            # networking.interfaces.wlp2s0.useDHCP = true;
+            networking.networkmanager.enable = true;
+            systemd.services.NetworkManager-wait-online.enable = true;
+
+            services.journald.extraConfig = ''
+              SystemMaxFiles=5
+            '';
+
+            virtualisation.virtualbox.host = {
+              enable = true;
+            };
+          }
+
+          ./nixos/profiles/default-user.nix
+
+          ./nixos/desktop.nix
+          ./nixos/development.nix
+          ./nixos/xmonad.nix
+
+          # ./nixos/profiles/android.nix
+        ];
+      };
+
       #############################
       ### flake outputs builder ###
       #############################
