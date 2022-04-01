@@ -233,6 +233,8 @@
           ./nixos/desktop.nix
           ./nixos/development.nix
           ./nixos/xmonad.nix
+
+          ./nixos/profiles/android.nix
         ];
       };
 
