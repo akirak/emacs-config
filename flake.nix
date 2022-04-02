@@ -188,56 +188,6 @@
           ];
       };
 
-      hosts.chen = {
-        system = "x86_64-linux";
-        channelName = "unstable";
-        extraArgs = {
-          site = importSite ./sites/chen;
-        };
-
-        modules = [
-          {
-            imports = [
-              ./sites/chen/nixos/boot.nix
-              ./sites/chen/nixos/hardware.nix
-              ./sites/chen/nixos/xserver.nix
-              ./sites/chen/nixos/filesystems.nix
-              ./sites/chen/nixos/zfs.nix
-              ./sites/chen/nixos/rpool
-            ];
-
-            networking.hostName = "chen";
-            # Needed for the ZFS pool.
-            networking.hostId = "1450b997";
-
-            networking.firewall = { };
-
-            networking.useDHCP = false;
-            # networking.interfaces.enp0s31f6.useDHCP = true;
-            # networking.interfaces.enp1s0.useDHCP = true;
-            # networking.interfaces.wlp2s0.useDHCP = true;
-            networking.networkmanager.enable = true;
-            systemd.services.NetworkManager-wait-online.enable = true;
-
-            services.journald.extraConfig = ''
-              SystemMaxFiles=5
-            '';
-
-            virtualisation.virtualbox.host = {
-              enable = true;
-            };
-          }
-
-          ./nixos/profiles/default-user.nix
-
-          ./nixos/desktop.nix
-          ./nixos/development.nix
-          ./nixos/xmonad.nix
-
-          ./nixos/profiles/android.nix
-        ];
-      };
-
       hosts.li = {
         system = "x86_64-linux";
         channelName = "unstable";
