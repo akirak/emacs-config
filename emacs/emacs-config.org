@@ -761,7 +761,7 @@ Resources:
             (profiler-report)
             (profiler-stop)
             (profiler-reset))
-        (profiler-start)))
+        (call-interactively #'profiler-start)))
 
     (:status opinionated
       (:global "<f12> e p" akirak/profiler-toggle)))
@@ -780,6 +780,11 @@ Resources:
           (:unbind "p")
           ;; Rebind the key
           (:bind "p" #'consult-project-extra-find)))))
+#+end_src
+**** akirak-project
+#+begin_src emacs-lisp
+  (setup akirak-project
+    (run-with-idle-timer 180 nil #'akirak-project-import-from-magit))
 #+end_src
 *** prolog                                             :major__mode:Prolog:
 :PROPERTIES:
@@ -1169,10 +1174,6 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
   (setup org
     (:with-mode org-mode
-      (:when-loaded
-        (:also-load org-id)
-        (:also-load org-crypt))
-
       (:set org-log-done 'time
             org-log-into-drawer t
             org-startup-folded 'content
@@ -1230,6 +1231,17 @@ Embrace Org as a common document format for Emacs.
             (when org-log-note-extra (insert org-log-note-extra))
             (setq-local org-finish-function 'org-store-log-note)
             (run-hooks 'org-log-buffer-setup-hook))))))
+#+end_src
+**** org-modules
+#+begin_src emacs-lisp
+  (setq org-modules
+        '(org-id
+          org-crypt
+          ;; Built-in link types I need
+          ol-info
+          ol-eww
+          ;; See fanyi
+          ol-fanyi))
 #+end_src
 **** Completion
 #+begin_src emacs-lisp
@@ -1484,6 +1496,8 @@ Embrace Org as a common document format for Emacs.
 
     (:global "M-g M-/" #'org-dog-find-file)
 
+    (add-hook 'org-dog-file-mode-hook #'org-dog-header-line-enable)
+
     (add-hook 'org-dog-file-registration-hook
               (defun akirak/org-dog-add-agenda-file (file-obj)
                 (when (string-match-p (rx bol (or "learning" "lifelog"
@@ -1496,7 +1510,7 @@ Embrace Org as a common document format for Emacs.
                 (require 'org-dog-overview)
                 (setq org-agenda-files
                       (thread-last
-                        (org-dog-overview-scan org-agenda-files)
+                        (org-dog-overview-scan org-agenda-files :fast t)
                         (mapcar #'car)
                         (reverse)))))
 
@@ -2449,6 +2463,17 @@ The following resources are useful:
 #+begin_src emacs-lisp
   (setup (:package epkg))
 #+end_src
+**** epkg-marginalia                                    :Emacs:completion:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-27 Sun 18:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package epkg-marginalia)
+    (with-eval-after-load 'marginalia
+      (cl-pushnew 'epkg-marginalia-annotate-package
+                  (alist-get 'package marginalia-annotator-registry))))
+#+end_src
 *** eros                                          :Emacs__Lisp:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:05]
@@ -2531,8 +2556,13 @@ The following resources are useful:
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package fanyi))
+  (setup (:package fanyi)
+    (:set fanyi-providers '(fanyi-longman-provider
+                            fanyi-etymon-provider)))
 #+end_src
+
+You should also load ol-fanyi library to enable fanyi link type.
+See modules.
 *** forge                                                     :VC:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
@@ -2598,6 +2628,25 @@ Make vendored and generated files read only.
   (setup (:package git-attr)
     (add-hook 'find-file-hook #'git-attr-linguist))
 #+end_src
+*** git-auto-commit-mode                                               :VC:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-26 Sat 20:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package git-auto-commit-mode)
+    (:set gac-silent-message-p t
+          gac-default-message #'akirak/git-auto-commit-message)
+
+    (defun akirak/git-auto-commit-message (filename)
+      (thread-last
+        (project-current nil filename)
+        (project-root)
+        (file-relative-name filename)
+        (concat "Auto commit: "))))
+#+end_src
+
+A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 *** git-gutter                                                         :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 19:08]
@@ -2860,14 +2909,6 @@ This is helpful in programming languages that depend on indentation levels.
         (:with-map Info-mode-map
           (:bind "f" #'link-hint-open-link)))))
 #+end_src
-*** lisp-extra-font-lock                               :Emacs__Lisp:visual:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-03 Thu 18:04]
-:END:
-
-#+begin_src emacs-lisp
-(setup (:package lisp-extra-font-lock))
-#+end_src
 *** lispy                                 :Emacs__Lisp:structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:36]
@@ -3023,6 +3064,9 @@ I won't turn on the mode by default, because it reduces the performance to some 
 #+begin_src emacs-lisp
   (setup (:package mini-modeline)
     (:set mini-modeline-enhance-visual nil
+          mini-modeline-echo-duration 5
+          ;; If this option is set to t, it seems to suppress header lines, so I
+          ;; will set it to nil.
           mini-modeline-display-gui-line nil
           mini-modeline-l-format '((mode-line-modified mode-line-modified)
                                    (mode-line-mule-info mode-line-mule-info)
@@ -3090,6 +3134,15 @@ I won't turn on the mode by default, because it reduces the performance to some 
               (defun akirak/turn-on-move-dup-mode ()
                 (unless (derived-mode-p 'org-mode 'markdown-mode)
                   (move-dup-mode 1)))))
+#+end_src
+*** nickel-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-03-27 Sun 18:25]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nickel-mode)
+    (:file-match "\\.ncl\\'"))
 #+end_src
 *** nix26                                                     :Nix:project:
 :PROPERTIES:
@@ -3193,7 +3246,23 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
                                      vterm-mode))
 
     (:hook-into after-init-hook)
-    (:bind "M-S-SPC" #'popper-cycle))
+    (:bind "M-\"" #'popper-cycle
+           "M-'" #'akirak/popper-commander-map)
+
+    (define-prefix-command 'akirak/popper-commander-map)
+    (define-key akirak/popper-commander-map (kbd "t") #'akirak/project-vterm)
+    (define-key akirak/popper-commander-map (kbd "m")
+                (defun akirak/message-buffer ()
+                  (interactive)
+                  (display-buffer "*Messages*"))))
+#+end_src
+*** posframe                                                   :UI:library:
+:PROPERTIES:
+:CREATED_TIME: [2022-03-25 Fri 10:57]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package posframe))
 #+end_src
 *** project-hercules                                  :project:keybindings:
 :PROPERTIES:
@@ -3289,6 +3358,14 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
 (setup (:package restclient))
 #+end_src
+*** riben                                                        :Japanese:
+#+begin_src emacs-lisp
+  (setup (:package riben))
+#+end_src
+**** avy-riben
+#+begin_src emacs-lisp
+  (setup (:package avy-riben))
+#+end_src
 *** rich-minority                                                      :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:27]
@@ -3297,7 +3374,10 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
   (setup (:package rich-minority)
     (:set rm-whitelist
-          (rx bol (* space) "envrc"))
+          (rx bol (* space)
+              (or "envrc"
+                  ;; Don't match DogId
+                  "Dog[")))
     (:hook-into after-init-hook))
 #+end_src
 *** string-inflection                                             :editing:
@@ -3325,8 +3405,12 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
   (setup (:package super-save)
     (:hook-into after-init-hook)
     (:set super-save-auto-save-when-idle t
+          super-save-idle-duration 120
           super-save-remote-files nil))
 #+end_src
+
+=super-save-mode= can be annoying when you use org-crypt.
+Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][super-save disable when file header is present. · Issue #10 · bbatsov/super-save · GitHub]]
 *** svg-lib                                              :library:graphics:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:30]
@@ -3596,21 +3680,21 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 159 |
-| [[org-ql-search:tags:visual][visual]]              |  12 |
+| [[org-ql-search:tags:packages][packages]]            | 165 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
-| [[org-ql-search:tags:UI][UI]]                  |  10 |
+| [[org-ql-search:tags:visual][visual]]              |  11 |
+| [[org-ql-search:tags:UI][UI]]                  |  11 |
+| [[org-ql-search:tags:VC][VC]]                  |   9 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
-| [[org-ql-search:tags:VC][VC]]                  |   8 |
+| [[org-ql-search:tags:library][library]]             |   8 |
+| [[org-ql-search:tags:Emacs][Emacs]]               |   7 |
 | [[org-ql-search:tags:windows][windows]]             |   7 |
-| [[org-ql-search:tags:library][library]]             |   7 |
-| [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
+| [[org-ql-search:tags:completion][completion]]          |   7 |
 | [[org-ql-search:tags:dired][dired]]               |   6 |
-| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
-| [[org-ql-search:tags:completion][completion]]          |   6 |
+| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
@@ -3632,6 +3716,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:web][web]]                 |   2 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
+| [[org-ql-search:tags:Japanese][Japanese]]            |   2 |
 | [[org-ql-search:tags:syntax][syntax]]              |   2 |
 | [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
 | [[org-ql-search:tags:initialization][initialization]]      |   1 |

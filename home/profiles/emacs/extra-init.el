@@ -17,3 +17,6 @@
       (add-to-list 'org-starter-path "~/config/emacs/"))
     (require 'org-starter)
     (org-starter-mode t)))
+
+(when (and custom-file (file-exists-p custom-file))
+  (load custom-file))

@@ -16,42 +16,55 @@ let
       inputs.emacs-overlay.overlay
     ];
   };
-  emacsPackage = pkgsForEmacs.emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
+  emacsPackage =
+    pkgsForEmacs.emacsPgtkGcc.overrideAttrs (_: { version = "29.0.50"; });
 
   releaseVersions = import ./versions.nix;
   inventories = import ./inventories.nix inputs;
 
-  makeEmacsProfile = { extraFeatures, extraInitFiles }: (emacsTwist {
-    inherit emacsPackage;
-    initFiles = [
-      (tangleOrgBabelFile "init.el" ./emacs-config.org {
-        processLines = org.excludeHeadlines (s:
-          org.tag "ARCHIVE" s
-            ||
-            (if extraFeatures == true
-            then false
-            else
-              (org.tag "@extra" s
-                && ! lib.any (tag: org.tag tag s) extraFeatures)
-            ));
-      })
-    ]
-    # Allow adding private config on specific hosts
-    ++ extraInitFiles;
-    extraPackages = [
-      "setup"
-    ];
-    initParser = parseSetup { };
-    inherit inventories;
-    lockDir = ./lock;
-    inputOverrides = import ./inputs.nix releaseVersions;
-  }).overrideScope' (self: super: {
-    elispPackages = super.elispPackages.overrideScope' (import ./overrides.nix releaseVersions {
-      pkgs = prev;
-      inherit (prev) system;
-      emacs = emacsPackage;
+  makeEmacsProfile =
+    { extraFeatures
+    , extraInitFiles
+    , withXwidgets ? false
+    }: (emacsTwist {
+      emacsPackage =
+        if withXwidgets
+        then
+          emacsPackage.override
+            (_: {
+              inherit (pkgsForEmacs) webkitgtk;
+              withXwidgets = true;
+            })
+        else emacsPackage;
+      initFiles = [
+        (tangleOrgBabelFile "init.el" ./emacs-config.org {
+          processLines = org.excludeHeadlines (s:
+            org.tag "ARCHIVE" s
+              ||
+              (if extraFeatures == true
+              then false
+              else
+                (org.tag "@extra" s
+                  && ! lib.any (tag: org.tag tag s) extraFeatures)
+              ));
+        })
+      ]
+      # Allow adding private config on specific hosts
+      ++ extraInitFiles;
+      extraPackages = [
+        "setup"
+      ];
+      initParser = parseSetup { };
+      inherit inventories;
+      lockDir = ./lock;
+      inputOverrides = import ./inputs.nix releaseVersions;
+    }).overrideScope' (self: super: {
+      elispPackages = super.elispPackages.overrideScope' (import ./overrides.nix releaseVersions {
+        pkgs = prev;
+        inherit (prev) system;
+        emacs = emacsPackage;
+      });
     });
-  });
 in
 {
   emacs-config = lib.makeOverridable makeEmacsProfile {

@@ -25,6 +25,7 @@
         (doct `(("Emacs Config" :keys "e"
                  :when ,(stringp file)
                  :file ,file
+                 :jump-to-captured t
                  :template
                  ("* %^{Name}"
                   ,akirak-org-capture-default-drawer

@@ -1,5 +1,12 @@
 # Configuration for non-ZFS file systems on the system SSD
 {
+  boot.initrd.luks.devices = {
+    root = {
+      device = "/dev/disk/by-uuid/8d814cba-6716-4951-94b8-331025c318f2";
+      preLVM = true;
+    };
+  };
+
   fileSystems."/" =
     {
       device = "tmpfs";
@@ -9,10 +16,10 @@
 
   fileSystems."/boot" =
     {
-      device = "/dev/disk/by-uuid/4436-C0E5";
+      device = "/dev/disk/by-uuid/89D8-EFFA";
       fsType = "vfat";
     };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/6e1f6320-2dd3-45ad-8d83-e916dffc9f1d"; }];
+
+  swapDevices = [ ];
 }

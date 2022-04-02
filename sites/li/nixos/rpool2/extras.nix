@@ -2,49 +2,42 @@
 
   fileSystems."/git-annex/personal" =
     {
-      device = "rpool/git-annex/personal";
-      fsType = "zfs";
-      options = [ "noatime" ];
-    };
-
-  fileSystems."/git-annex/hobbies" =
-    {
-      device = "rpool/git-annex/hobbies";
+      device = "rpool2/git-annex/personal";
       fsType = "zfs";
       options = [ "noatime" ];
     };
 
   fileSystems."/assets/archives/personal/git" =
     {
-      device = "rpool/git/private";
+      device = "rpool2/git/private";
       fsType = "zfs";
       options = [ "noatime" ];
     };
 
   fileSystems."/assets/archives/oss" =
     {
-      device = "rpool/git/oss";
+      device = "rpool2/git/oss";
       fsType = "zfs";
       options = [ "noatime" ];
     };
 
   fileSystems."/assets/work" =
     {
-      device = "rpool/git/work";
+      device = "rpool2/git/work";
       fsType = "zfs";
       options = [ "noatime" ];
     };
 
   fileSystems."/assets/archives/personal/appdata" =
     {
-      device = "rpool/media/appdata";
+      device = "rpool2/media/appdata";
       fsType = "zfs";
       options = [ "noatime" ];
     };
 
   fileSystems."/assets/archives/hoard" =
     {
-      device = "rpool/media/hoard";
+      device = "rpool2/media/hoard";
       fsType = "zfs";
       options = [ "noatime" ];
     };

@@ -1,5 +1,5 @@
 {
-  hostName = "chen";
+  hostName = "li";
   username = "akirakomamura";
 
   homeModules = [
@@ -23,6 +23,10 @@
           "/assets"
         ];
       };
+
+      home.packages = [
+        pkgs.wine
+      ];
     })
   ];
 
