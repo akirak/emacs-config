@@ -2720,6 +2720,16 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
+*** go-translate                                              :translation:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-02 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package go-translate)
+    (:set gts-translate-list '(("ja" "en")
+                               ("zh" "en"))))
+#+end_src
 *** graphql-mode                                                      :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
