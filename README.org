@@ -72,6 +72,10 @@ nixos-container start flake-test
 ** Development Workflow
 This repository uses [[https://github.com/cachix/pre-commit-hooks.nix/][pre-commit-hooks.nix]] for streamlining development.
 Hooks are defined in [[file:hooks.nix][hooks.nix]].
+
+Latest commits are likely to be available on [[https://github.com/akirak/nix-config/tree/develop][develop]] branch, if it exists.
+I merge it into master at some random intervals.
+I often squash commits on the non-master branch, so if you need to create a permalink to a particular file in my repository, please pick a commit on master branch.
 ** Resources
 - [[https://www.tweag.io/blog/2020-07-31-nixos-flakes/][Nix Flakes, Part 3: Managing NixOS systems - Tweag]]
 - [[https://digga.divnix.com/#modules-profiles--suites][Modules, Profiles & Suites]]
