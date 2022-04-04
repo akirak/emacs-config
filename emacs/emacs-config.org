@@ -1197,6 +1197,14 @@ Embrace Org as a common document format for Emacs.
       (advice-add #'org-insert-heading :after #'akirak-org-add-timestamp)
 
       (:when-loaded
+        (setq org-structure-template-alist
+              (seq-sort-by #'car #'string-collate-lessp
+                           (cl-remove-duplicates
+                            (append '(("d" . "definition"))
+                                    org-structure-template-alist)
+                            :key #'car
+                            :test #'equal)))
+
         (require 'el-patch)
         (el-patch-defun org-add-log-note (&optional _purpose)
           "Pop up a window for taking a note, and add this note later."
