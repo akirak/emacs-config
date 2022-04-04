@@ -1693,6 +1693,16 @@ Embrace Org as a common document format for Emacs.
   (setup (:package org-visual-indent)
     (:hook-into org-mode-hook))
 #+end_src
+*** org-volume
+:PROPERTIES:
+:CREATED_TIME: [2022-04-04 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-volume)
+    (:set org-volume-image-download-method #'akirak-image-insert-offline-link
+          org-volume-dblock-defaults '(:lang "en" :limit 1)))
+#+end_src
 *** org-web-tools :reading:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 23:59]
