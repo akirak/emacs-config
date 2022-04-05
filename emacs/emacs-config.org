@@ -657,7 +657,7 @@ Resources:
     (:set completion-category-defaults nil
           completion-category-overrides
           '((file (styles partial-completion))
-            (url (styles partial-completion))))
+            (url (styles substring))))
 
     (define-key minibuffer-mode-map
                 "~"
