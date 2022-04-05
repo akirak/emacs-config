@@ -1902,7 +1902,8 @@ Complete a URL from the clipboard and the kill ring and insert as a link
   (setup akirak-url
     (:global "C-c w" #'akirak-url-insert-dwim)
     (with-eval-after-load 'embark
-      (define-key embark-url-map (kbd "m") #'akirak-url-insert-as-markdown)))
+      (define-key embark-url-map (kbd "m") #'akirak-url-insert-as-markdown)
+      (define-key embark-url-map (kbd "c") #'akirak-url-org-capture)))
 #+end_src
 **** akirak-window                                               :windows:
 :PROPERTIES:
