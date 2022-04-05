@@ -168,8 +168,6 @@ I am interested to see if it can reduce the amount of configuration code.
                        (reformatter-define ,name ,@args))))
                 entries)))))
 #+end_src
-
-This macro is untested. I have to test it later.
 *** :set
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 11:30]
@@ -3209,7 +3207,8 @@ I won't turn on the mode by default, because it reduces the performance to some 
     (:file-match "\\.nix\\'")
     (:mode-repl nix-repl)
     (:reformatters
-     (nixpkgs-fmt :program "nixpkgs-fmt")))
+     (nixpkgs-fmt :program "nixpkgs-fmt")
+     (alejandra :program "alejandra")))
 #+end_src
 *** nov                                                      :reading:EPUB:
 :PROPERTIES:
