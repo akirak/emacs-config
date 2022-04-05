@@ -21,8 +21,7 @@ let
   '';
 in
 {
-  nixpkgs-fmt.enable = true;
-
+  alejandra.enable = true;
   # nix-linter.enable = true;
 
   flake-no-path = {

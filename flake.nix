@@ -74,49 +74,53 @@
     };
   };
 
-  outputs =
-    { self
-    , nixpkgs
-    , flake-utils-plus
-    , utils
-    , home-manager
-    , impermanence
-    , ...
-    } @ inputs:
-    let
-      mkApp = utils.lib.mkApp;
-      homeProfiles = import ./home { inherit (nixpkgs) lib; };
-      resolveHomeModules = config: config // {
+  outputs = {
+    self,
+    nixpkgs,
+    flake-utils-plus,
+    utils,
+    home-manager,
+    impermanence,
+    ...
+  } @ inputs: let
+    mkApp = utils.lib.mkApp;
+    homeProfiles = import ./home {inherit (nixpkgs) lib;};
+    resolveHomeModules = config:
+      config
+      // {
         homeModules =
           nixpkgs.lib.attrVals config.homeModules homeProfiles
-            ++ (config.extraHomeModules or [ ]);
+          ++ (config.extraHomeModules or []);
       };
-      importSite = src: resolveHomeModules (import src);
-      site = importSite inputs.site;
+    importSite = src: resolveHomeModules (import src);
+    site = importSite inputs.site;
 
-      makeHome = { channels, configuration }:
-        inputs.home-manager.lib.homeManagerConfiguration {
-          inherit (channels.nixpkgs) system;
-          inherit (site) username;
-          homeDirectory = "/home/${site.username}";
-          stateVersion = "21.11";
-          inherit configuration;
-          extraSpecialArgs = {
-            pkgs = channels.nixpkgs;
-          };
-          # Import custom home-manager modules (non-NixOSes)
-          extraModules = import ./home/modules/modules.nix;
+    makeHome = {
+      channels,
+      configuration,
+    }:
+      inputs.home-manager.lib.homeManagerConfiguration {
+        inherit (channels.nixpkgs) system;
+        inherit (site) username;
+        homeDirectory = "/home/${site.username}";
+        stateVersion = "21.11";
+        inherit configuration;
+        extraSpecialArgs = {
+          pkgs = channels.nixpkgs;
         };
-
-      emacsOverlay = import ./emacs/overlay.nix {
-        inherit inputs;
-        nixpkgs = inputs.nixpkgs-emacs;
+        # Import custom home-manager modules (non-NixOSes)
+        extraModules = import ./home/modules/modules.nix;
       };
-    in
+
+    emacsOverlay = import ./emacs/overlay.nix {
+      inherit inputs;
+      nixpkgs = inputs.nixpkgs-emacs;
+    };
+  in
     flake-utils-plus.lib.mkFlake {
       inherit self inputs;
 
-      supportedSystems = [ "x86_64-linux" ];
+      supportedSystems = ["x86_64-linux"];
 
       channelsConfig = {
         allowBroken = false;
@@ -127,10 +131,11 @@
         inputs.flake-no-path.overlay
         emacsOverlay
         # zsh plugins used in the home-managerconfiguration
-        (_: _: import ./pkgs/zsh-plugins.nix {
-          inherit inputs;
-          inherit (nixpkgs) lib;
-        })
+        (_: _:
+          import ./pkgs/zsh-plugins.nix {
+            inherit inputs;
+            inherit (nixpkgs) lib;
+          })
       ];
 
       # Nixpkgs flake reference to be used in the configuration.
@@ -167,25 +172,24 @@
           site = importSite ./sites/container.nix;
         };
 
-        modules =
-          [
-            {
-              boot.isContainer = true;
-              networking.useDHCP = false;
-              networking.firewall = {
-                enable = true;
-                allowedTCPPorts = [ ];
-              };
+        modules = [
+          {
+            boot.isContainer = true;
+            networking.useDHCP = false;
+            networking.firewall = {
+              enable = true;
+              allowedTCPPorts = [];
+            };
 
-              services.openssh = {
-                enable = true;
-              };
-            }
+            services.openssh = {
+              enable = true;
+            };
+          }
 
-            ./nixos/profiles/default-user.nix
+          ./nixos/profiles/default-user.nix
 
-            ./nixos/base.nix
-          ];
+          ./nixos/base.nix
+        ];
       };
 
       hosts.li = {
@@ -210,7 +214,7 @@
             # Needed for the ZFS pool.
             networking.hostId = "8425e349";
 
-            networking.firewall = { };
+            networking.firewall = {};
 
             networking.useDHCP = false;
             # networking.interfaces.enp0s31f6.useDHCP = true;
@@ -241,16 +245,15 @@
       ### flake outputs builder ###
       #############################
 
-      outputsBuilder = channels:
-        let
-          inherit (channels.nixpkgs) emacs-config emacsSandboxed;
-        in
-        {
-          packages = {
+      outputsBuilder = channels: let
+        inherit (channels.nixpkgs) emacs-config emacsSandboxed;
+      in {
+        packages =
+          {
             tryout-emacs = emacsSandboxed {
               name = "tryout-emacs";
               enableOpinionatedSettings = false;
-              extraFeatures = [ ];
+              extraFeatures = [];
               extraInitText = ''
                 (require 'sanityinc-tomorrow-night-theme)
                 (load-theme 'sanityinc-tomorrow-night t)
@@ -280,7 +283,7 @@
 
             inherit emacs-config;
 
-            test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests { };
+            test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
 
             update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
               nix flake lock --update-input melpa --update-input gnu-elpa
@@ -288,30 +291,36 @@
               bash ./update.bash "$@"
             '';
           }
-          //
-          nixpkgs.lib.getAttrs [ "lock" "update" ] (emacs-config.admin "emacs/lock");
+          // nixpkgs.lib.getAttrs ["lock" "update"] (emacs-config.admin "emacs/lock");
 
-          homeConfigurations = {
-            ${site.username + "@" + site.hostName} = makeHome {
-              inherit channels;
-              configuration = { config, pkgs, ... }: {
-                # nixpkgs.config.allowUnfree = true;
-                imports = site.homeModules;
-              };
+        homeConfigurations = {
+          ${site.username + "@" + site.hostName} = makeHome {
+            inherit channels;
+            configuration = {
+              config,
+              pkgs,
+              ...
+            }: {
+              # nixpkgs.config.allowUnfree = true;
+              imports = site.homeModules;
             };
           };
+        };
 
-          # Set up a pre-commit hook by running `nix develop`.
-          devShell = channels.nixpkgs.mkShell {
-            inherit (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
+        # Set up a pre-commit hook by running `nix develop`.
+        devShell = channels.nixpkgs.mkShell {
+          inherit
+            (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
               src = ./.;
               hooks = import ./hooks.nix {
                 pkgs = channels.nixpkgs;
                 emacsBinaryPackage = "emacs-config.emacs";
               };
-            }) shellHook;
-          };
+            })
+            shellHook
+            ;
         };
+      };
 
       #########################################################
       ### All other properties are passed down to the flake ###
@@ -320,7 +329,8 @@
       # checks.x86_64-linux.someCheck = pkgs.hello;
       # packages.x86_64-linux.somePackage = pkgs.hello;
 
-      overlay = nixpkgs.lib.composeExtensions
+      overlay =
+        nixpkgs.lib.composeExtensions
         (import ./pkgs/overlay.nix)
         emacsOverlay;
 
