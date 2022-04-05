@@ -1207,6 +1207,11 @@ Embrace Org as a common document format for Emacs.
       (advice-add #'org-insert-heading :after #'akirak-org-add-timestamp)
 
       (:when-loaded
+        (add-to-list 'display-buffer-alist
+                     '("\\*Org Select\\*"
+                       (display-buffer-in-side-window
+                        '((side . bottom))))
+                     t)
         (setq org-structure-template-alist
               (seq-sort-by #'car #'string-collate-lessp
                            (cl-remove-duplicates
