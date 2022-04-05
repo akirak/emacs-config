@@ -818,7 +818,7 @@ Resources:
 #+begin_src emacs-lisp
   (setup recentf
     (:hook-into after-init-hook)
-    (:set recentf-max-saved-items 200
+    (:set recentf-max-saved-items 1000
           recentf-auto-cleanup 'never))
 #+end_src
 *** register
