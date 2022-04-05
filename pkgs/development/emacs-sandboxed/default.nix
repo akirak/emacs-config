@@ -123,7 +123,11 @@ bubblewrapGUI {
       initEl
       (userEmacsDirectoryMountPoint + "/init.el")
     ] ++
-    (concatLists (map (dir: [ "--bind-try" dir dir ])
+    (concatLists (map (dir: [
+      "--bind-try"
+      "$(readlink -f ${dir})"
+      dir
+    ])
       extraDirsToTryBind
     ))
     ++
