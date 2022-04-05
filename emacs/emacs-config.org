@@ -1417,9 +1417,7 @@ Embrace Org as a common document format for Emacs.
           org-clock-persist t
           org-clock-persist-query-resume nil
           ;; Set for mini-modeline
-          org-clock-string-limit 40)
-
-    (:global "M-g M-j" #'org-clock-goto))
+          org-clock-string-limit 40))
 #+end_src
 **** org-habit
 :PROPERTIES:
@@ -2084,6 +2082,11 @@ This is an extra functions for window management.
     (:with-feature consult-xref
       (:set xref-show-xrefs-function #'consult-xref
             xref-show-definitions-function #'consult-xref)))
+#+end_src
+**** consult-org
+#+begin_src emacs-lisp
+  (setup consult-org
+    (:global "M-g M-j" #'consult-org-clock-goto))
 #+end_src
 *** consult-dir
 :PROPERTIES:
