@@ -2071,17 +2071,17 @@ This is an extra functions for window management.
              "M-s x" #'consult-complex-command
              "M-s M-x" #'consult-mode-command)
 
-    (setup consult-imenu
+    (:with-feature consult-imenu
       (:global "M-s i" #'consult-imenu
                "M-s M-i" #'consult-imenu-multi))
 
-    (setup consult-compile
+    (:with-feature consult-compile
       (:global "M-s e" #'consult-compile-error))
 
-    (setup consult-flymake
+    (:with-feature consult-flymake
       (:global "M-s f" #'consult-flymake))
 
-    (setup consult-xref
+    (:with-feature consult-xref
       (:set xref-show-xrefs-function #'consult-xref
             xref-show-definitions-function #'consult-xref)))
 #+end_src
