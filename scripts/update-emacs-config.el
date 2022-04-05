@@ -16,10 +16,31 @@
            (org-save-outline-visibility nil
              (org-sort-entries nil
                                (thread-last (match-string 3 line)
-                                 (string-to-list)
-                                 (car))))
+                                            (string-to-list)
+                                            (car))))
          (error "Property didn't match")))
      (goto-char (org-entry-end-position)))))
+
+(defun akirak-emacs-config-set-noexport ()
+  "Toggle existence of noexport tag according to ARCHIVE tag.
+
+This is a workaround for Org rendering on GitHub that archived
+entries are visible."
+  (org-map-entries
+   (lambda ()
+     (let* ((tags (org-get-tags nil t))
+            (new-tags (cond
+                       ((member "ARCHIVE" tags)
+                        (cl-adjoin "noexport" tags :test #'equal))
+                       ;; "Footer" heading should have noexport tag,
+                       ;; so check the outline level.
+                       ((> (org-outline-level) 2)
+                        (cl-remove "noexport" tags :test #'equal))
+                       (t
+                        tags))))
+       (unless (equal tags new-tags)
+         (org-set-tags new-tags))))
+   "ARCHIVE\|noexport"))
 
 (defun akirak/batch-update-emacs-config (&optional update-blocks)
   "Update the Emacs configuration."
@@ -31,6 +52,7 @@
         (find-file file)
         (setq initial-content (sha1 (current-buffer)))
         (akirak-org-sort-buffer)
+        (akirak-emacs-config-set-noexport)
         (when update-blocks
           (require 'org-ql)
           (require 'org-ql-search)

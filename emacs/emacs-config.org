@@ -1561,7 +1561,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-dog-facade))
 #+end_src
-*** org-dynamic-bullets                                :aesthetics:ARCHIVE:
+*** org-dynamic-bullets                       :noexport:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
 :END:
@@ -1578,7 +1578,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-edna))
 #+end_src
-*** org-journal                                                   :ARCHIVE:
+*** org-journal                                          :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
@@ -1703,7 +1703,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-transclusion))
 #+end_src
-*** org-visual-indent                                  :aesthetics:ARCHIVE:
+*** org-visual-indent                         :noexport:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 23:59]
 :END:
@@ -1918,7 +1918,7 @@ This is an extra functions for window management.
                "C-4" #'akirak-window-setup-columns
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
-*** all-the-icons                                              :UI:ARCHIVE:
+*** all-the-icons                                     :noexport:UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:28]
 :END:
@@ -1926,7 +1926,7 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup (:package all-the-icons))
 #+end_src
-**** all-the-icons-completion                                    :ARCHIVE:
+**** all-the-icons-completion                           :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:29]
 :END:
@@ -1938,7 +1938,7 @@ This is an extra functions for window management.
       (add-hook 'marginalia-mode
                 #'all-the-icons-completion-marginalia-setup)))
 #+end_src
-**** all-the-icons-dired                                         :ARCHIVE:
+**** all-the-icons-dired                                :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:30]
 :END:
@@ -2006,7 +2006,7 @@ This is an extra functions for window management.
     (:set blamer-max-lines 50
           blamer-max-commit-message-length 50))
 #+end_src
-*** bufler                                                        :ARCHIVE:
+*** bufler                                               :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]
 :END:
@@ -2302,7 +2302,7 @@ I will manually turn on =dired-collapse-mode= when necessary.
 #+begin_src emacs-lisp
 (setup (:package dired-hide-dotfiles))
 #+end_src
-*** dired-k                                                 :dired:ARCHIVE:
+*** dired-k                                        :noexport:dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:45]
 :END:
@@ -2824,7 +2824,7 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
                       "  where\n\n"
                       _))))
 #+end_src
-*** haskell-tng-mode                          :Haskell:major__mode:ARCHIVE:
+*** haskell-tng-mode                 :noexport:Haskell:major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:02]
 :END:
@@ -3150,7 +3150,7 @@ I won't turn on the mode by default, because it reduces the performance to some 
                       ""))
           ""))))
 #+end_src
-*** mlscroll                                        :aesthetics:UI:ARCHIVE:
+*** mlscroll                               :noexport:aesthetics:UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
@@ -3442,7 +3442,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
 (setup (:package string-inflection))
 #+end_src
-*** suggest                          :Emacs__Lisp:development:help:ARCHIVE:
+*** suggest                 :noexport:Emacs__Lisp:development:help:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 18:10]
 :END:
@@ -3473,7 +3473,7 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 #+begin_src emacs-lisp
   (setup (:package svg-lib))
 #+end_src
-*** svg-tag-mode                             :visual:nano:aesthetics:ARCHIVE:
+*** svg-tag-mode                  :noexport:visual:nano:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:26]
 :END:
@@ -3566,7 +3566,7 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
   (setup (:package typescript-mode)
     (:file-match "\\.tsx?\\'"))
 #+end_src
-*** unmodified-buffer                                             :ARCHIVE:
+*** unmodified-buffer                                    :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]
 :END:
