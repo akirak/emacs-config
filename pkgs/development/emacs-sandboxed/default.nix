@@ -18,6 +18,7 @@ in
 , extraFeatures ? [ ]
 , extraInitFiles ? [ ]
 , extraInitText ? null
+, withXwidgets ? false
   # Options related to the sandbox
 , protectHome ? true
 , userEmacsDirectory ? null
@@ -29,7 +30,7 @@ in
 }:
 let
   package = emacs-config.override {
-    inherit extraFeatures extraInitFiles;
+    inherit extraFeatures extraInitFiles withXwidgets;
   };
 
   initEl = writeText "init.el" ''

@@ -24,7 +24,6 @@ let
       ./profiles/graphical.nix
       ./profiles/git-annex.nix
       ./profiles/emacs
-      ./profiles/reader.nix
     ];
     xmonad = desktop ++ [
       ./profiles/wm/xmonad

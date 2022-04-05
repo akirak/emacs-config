@@ -25,7 +25,7 @@ let
   makeEmacsProfile =
     { extraFeatures
     , extraInitFiles
-    , withXwidgets ? false
+    , withXwidgets
     }: (emacsTwist {
       emacsPackage =
         if withXwidgets
@@ -70,6 +70,7 @@ in
   emacs-config = lib.makeOverridable makeEmacsProfile {
     extraFeatures = true;
     extraInitFiles = [ ];
+    withXwidgets = false;
   };
 
   # A configuration with the packages for the Git hooks.

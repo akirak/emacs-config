@@ -279,7 +279,21 @@
               ];
             };
 
-            inherit (channels.nixpkgs) emacs-reader readability-cli;
+            emacs-reader = emacsSandboxed {
+              name = "emacs-reader";
+              withXwidgets = true;
+              shareNet = true;
+              protectHome = true;
+              inheritPath = false;
+              userEmacsDirectory = "$HOME/emacs";
+              extraInitText = builtins.readFile ./home/profiles/emacs/extra-init.el;
+              extraDirsToTryBind = [
+                "$HOME/org"
+                "$HOME/resources"
+              ];
+            };
+
+            inherit (channels.nixpkgs) readability-cli;
 
             inherit emacs-config;
 

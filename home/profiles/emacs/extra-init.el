@@ -1,6 +1,9 @@
 (require 'sanityinc-tomorrow-eighties-theme)
 (load-theme 'sanityinc-tomorrow-eighties t)
 
+;; (require 'poet-theme)
+;; (load-theme 'poet t)
+
 (eval-after-load 'org
   (defun akirak/setup-org-starter ()
     (unless (bound-and-true-p org-starter-path)
