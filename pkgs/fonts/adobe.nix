@@ -1,5 +1,10 @@
 {
-  source-han-serif = stdenvNoCC.mkDerivation
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}: {
+  source-han-serif =
+    stdenvNoCC.mkDerivation
     {
       src = fetchFromGitHub {
         owner = "adobe-fonts";
@@ -26,5 +31,5 @@
         license = licenses.ofl;
         platforms = platforms.all;
       };
-    }
-    }
+    };
+}
