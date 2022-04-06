@@ -1,8 +1,10 @@
-{ pkgs, lib, ... }:
-let
-  inherit (lib) fileContents;
-in
 {
+  pkgs,
+  lib,
+  ...
+}: let
+  inherit (lib) fileContents;
+in {
   environment.shellInit = ''
     export STARSHIP_CONFIG=${
       pkgs.writeText "starship.toml"

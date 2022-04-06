@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   fonts = {
     fonts = with pkgs; [
       jetbrains-mono-nerdfont
@@ -8,11 +7,11 @@
     ];
 
     fontconfig.defaultFonts = {
-      monospace = [ "JetBrains Mono NF" ];
+      monospace = ["JetBrains Mono NF"];
 
-      sansSerif = [ "Lato" ];
+      sansSerif = ["Lato"];
 
-      serif = [ "Merriweather" ];
+      serif = ["Merriweather"];
     };
   };
 

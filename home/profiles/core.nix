@@ -1,28 +1,28 @@
-{ pkgs, ... }:
-{
-  home.packages = pkgs.lib.attrVals [
-    "ripgrep"
-    "fd"
-    "jq"
-    "tealdeer"
+{pkgs, ...}: {
+  home.packages =
+    pkgs.lib.attrVals [
+      "ripgrep"
+      "fd"
+      "jq"
+      "tealdeer"
 
-    # Nix
-    "cachix"
-    "nix-prefetch-git"
-    "manix"
-    "nix-index"
+      # Nix
+      "cachix"
+      "nix-prefetch-git"
+      "manix"
+      "nix-index"
 
-    # System
-    "glances"
+      # System
+      "glances"
 
-    # Disk
-    "du-dust"
-    "duf"
+      # Disk
+      "du-dust"
+      "duf"
 
-    # Net
-    "xh"
-    "rclone"
-  ]
+      # Net
+      "xh"
+      "rclone"
+    ]
     pkgs;
 
   programs.bat.enable = true;

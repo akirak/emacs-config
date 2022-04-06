@@ -1,5 +1,9 @@
-{ config, pkgs, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib) mkIf mkOption types;
 
   cfg = config.programs.emacs-config-old;
@@ -12,8 +16,7 @@ let
           (when (file-exists-p custom-file)
             (load custom-file nil :nomessage)))"
   '';
-in
-{
+in {
   options = {
     programs.emacs-config-old = {
       enable = mkOption {
