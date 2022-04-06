@@ -1,6 +1,5 @@
-{ lib }:
-with builtins;
-let
+{lib}:
+with builtins; let
   moduleDir = ./profiles;
 
   profiles = lib.pipe (readDir moduleDir) [
@@ -13,25 +12,28 @@ let
     listToAttrs
   ];
 
-  suites = lib.mapAttrs (_: imports: { inherit imports; }) (rec {
+  suites = lib.mapAttrs (_: imports: {inherit imports;}) rec {
     base = [
       ./profiles/core.nix
       ./profiles/zsh.nix
       ./profiles/gpg.nix
     ];
-    desktop = base ++ [
-      ./profiles/development.nix
-      ./profiles/graphical.nix
-      ./profiles/git-annex.nix
-      ./profiles/emacs
-      ./profiles/reader.nix
-    ];
-    xmonad = desktop ++ [
-      ./profiles/wm/xmonad
-    ];
+    desktop =
+      base
+      ++ [
+        ./profiles/development.nix
+        ./profiles/graphical.nix
+        ./profiles/git-annex.nix
+        ./profiles/emacs
+      ];
+    xmonad =
+      desktop
+      ++ [
+        ./profiles/wm/xmonad
+      ];
     personal = [
       ./profiles/dropbox.nix
     ];
-  });
+  };
 in
-profiles // suites
+  profiles // suites

@@ -7,19 +7,16 @@
     };
   };
 
-  fileSystems."/" =
-    {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = [ "defaults" "size=10G" "mode=755" ];
-    };
+  fileSystems."/" = {
+    device = "tmpfs";
+    fsType = "tmpfs";
+    options = ["defaults" "size=10G" "mode=755"];
+  };
 
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-uuid/89D8-EFFA";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/89D8-EFFA";
+    fsType = "vfat";
+  };
 
-
-  swapDevices = [ ];
+  swapDevices = [];
 }

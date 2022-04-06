@@ -1,6 +1,10 @@
 # Other hardware-specific settings
-{ pkgs, lib, config, ... }:
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   # environment.systemPackages = [ pkgs.clinfo ];
 
   # nix.maxJobs = pkgs.lib.mkDefault 6;
@@ -9,7 +13,7 @@
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   nixpkgs.config.pafckageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    vaapiIntel = pkgs.vaapiIntel.override {enableHybridCodec = true;};
   };
 
   hardware.opengl = {

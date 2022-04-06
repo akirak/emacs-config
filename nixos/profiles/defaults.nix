@@ -1,5 +1,8 @@
-{ self, pkgs, ... }:
 {
+  self,
+  pkgs,
+  ...
+}: {
   nix.generateRegistryFromInputs = true;
   nix.generateNixPathFromInputs = true;
   # nix.linkInputs = true;

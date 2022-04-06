@@ -1,8 +1,12 @@
-{ pkgs
-, emacsBinaryPackage
-}:
-let
-  emacsConfig = { name, stages, funcName }: {
+{
+  pkgs,
+  emacsBinaryPackage,
+}: let
+  emacsConfig = {
+    name,
+    stages,
+    funcName,
+  }: {
     enable = true;
     inherit stages;
     inherit name;
@@ -19,10 +23,8 @@ let
     result=$(timeout 3 nix eval --raw .#${emacsBinaryPackage}) \
     && timeout 5 cachix push akirak "$result"
   '';
-in
-{
-  nixpkgs-fmt.enable = true;
-
+in {
+  alejandra.enable = true;
   # nix-linter.enable = true;
 
   flake-no-path = {
@@ -35,20 +37,20 @@ in
 
   emacs-config = emacsConfig {
     name = "Sort entries in the Emacs configuration";
-    stages = [ "commit" ];
+    stages = ["commit"];
     funcName = "akirak/batch-update-emacs-config";
   };
 
   emacs-config-contents = emacsConfig {
     name = "Update blocks in the Emacs configuration";
-    stages = [ "push" ];
+    stages = ["push"];
     funcName = "akirak/batch-update-emacs-config-contents";
   };
 
   push-emacs-binary = {
     enable = true;
     name = "Push the Emacs binary";
-    stages = [ "push" ];
+    stages = ["push"];
     entry = pushEmacsBinary.outPath;
     files = "^flake\.lock$";
     pass_filenames = false;

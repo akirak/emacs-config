@@ -1,8 +1,10 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   home.packages = with pkgs; [
     gh
     pre-commit
+    nixpkgs-fmt
+    alejandra
+    deadnix
   ];
 
   programs.direnv = {

@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   networking.networkmanager = {
     enable = true;
     packages = [
@@ -22,7 +21,7 @@
   services.dbus = {
     enable = true;
     # socketActivated = true;
-    packages = [ pkgs.dconf ];
+    packages = [pkgs.dconf];
   };
 
   # services.gnome.gnome-keyring.enable = true;

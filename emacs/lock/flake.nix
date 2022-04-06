@@ -1,6 +1,5 @@
 {
-  description =
-    "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
+  description = "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
     "a" = {
       flake = false;
@@ -432,6 +431,12 @@
       repo = "github-linguist.el";
       type = "github";
     };
+    go-translate = {
+      flake = false;
+      owner = "lorniu";
+      repo = "go-translate";
+      type = "github";
+    };
     graphql = {
       flake = false;
       owner = "vermiculus";
@@ -760,6 +765,12 @@
       repo = "org-transclusion";
       type = "github";
     };
+    org-volume = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-volume";
+      type = "github";
+    };
     org-web-tools = {
       flake = false;
       owner = "alphapapa";
@@ -806,6 +817,18 @@
       flake = false;
       owner = "joddie";
       repo = "pcre2el";
+      type = "github";
+    };
+    pocket-lib = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "pocket-lib.el";
+      type = "github";
+    };
+    pocket-reader = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "pocket-reader.el";
       type = "github";
     };
     poet-theme = {
@@ -860,6 +883,12 @@
       flake = false;
       owner = "Fanael";
       repo = "rainbow-delimiters";
+      type = "github";
+    };
+    rainbow-identifiers = {
+      flake = false;
+      owner = "Fanael";
+      repo = "rainbow-identifiers";
       type = "github";
     };
     rainbow-mode = {
@@ -1088,5 +1117,5 @@
       type = "github";
     };
   };
-  outputs = { ... }: { };
+  outputs = {...}: {};
 }

@@ -1,19 +1,19 @@
-{ lib
-, runCommandLocal
-, emacs-config
+{
+  lib,
+  runCommandLocal,
+  emacs-config,
 }:
-with builtins;
-let
+with builtins; let
   emacsBatch = "emacs --batch ${
     lib.escapeShellArgs (lib.flatten
-      (map (file: [ "-l" file ]) emacs-config.initFiles))
+      (map (file: ["-l" file]) emacs-config.initFiles))
   }";
 in
-runCommandLocal "test-emacs-config"
-{
-  buildInputs = [ emacs-config ];
-} ''
-  set -euo pipefail
-  ${emacsBatch}
-  touch $out
-''
+  runCommandLocal "test-emacs-config"
+  {
+    buildInputs = [emacs-config];
+  } ''
+    set -euo pipefail
+    ${emacsBatch}
+    touch $out
+  ''

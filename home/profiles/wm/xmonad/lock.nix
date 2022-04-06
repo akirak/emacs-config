@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   services.screen-locker = {
     enable = true;
     inactiveInterval = 30;

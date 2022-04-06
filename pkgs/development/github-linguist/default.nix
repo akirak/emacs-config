@@ -1,5 +1,7 @@
-{ bundlerEnv, ruby }:
-let
+{
+  bundlerEnv,
+  ruby,
+}: let
   # the magic which will include gemset.nix
   gems = bundlerEnv {
     name = "linguist-env";
@@ -7,6 +9,7 @@ let
     gemdir = ./.;
   };
 in
-gems.gems.github-linguist // {
-  name = "github-linguist";
-}
+  gems.gems.github-linguist
+  // {
+    name = "github-linguist";
+  }

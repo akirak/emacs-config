@@ -1,4 +1,7 @@
-{ stdenv, fetchzip }:
+{
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation {
   name = "jetbrains-mono-nerdfont";
 

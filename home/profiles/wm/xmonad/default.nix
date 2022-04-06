@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   imports = [
     ./lock.nix
     ./dunst.nix
@@ -41,7 +40,6 @@
         "Actions.hs" = ./lib/Actions.hs;
       };
     };
-
   };
 
   programs.rofi = {

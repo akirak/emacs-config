@@ -1,11 +1,13 @@
-{ elispTreeSitterVersion
-, elispTreeSitterLangsVersion
-}:
 {
+  elispTreeSitterVersion,
+  elispTreeSitterLangsVersion,
+}: {
   taxy-magit-section = _: super: {
-    packageRequires = {
-      taxy = "0";
-    } // super.packageRequires;
+    packageRequires =
+      {
+        taxy = "0";
+      }
+      // super.packageRequires;
   };
   bufler = _: _: {
     origin = {
@@ -41,7 +43,7 @@
   };
 
   graphviz-dot-mode = _: super: {
-    files = builtins.removeAttrs super.files [ "company-graphviz-dot.el" ];
+    files = builtins.removeAttrs super.files ["company-graphviz-dot.el"];
   };
 
   # ghelp is not a proper MELPA package yet, and it needs workarounds.
@@ -59,32 +61,40 @@
   };
 
   ghub = _: super: {
-    files = builtins.removeAttrs super.files [ ".dir-locals.el" ];
+    files = builtins.removeAttrs super.files [".dir-locals.el"];
   };
 
   # Quite a few dired extension packages have missing dependencies.
   dired-collapse = _: super: {
-    packageRequires = {
-      dash = "0";
-      f = "0";
-      dired-hacks-utils = "0";
-    } // super.packageRequires;
+    packageRequires =
+      {
+        dash = "0";
+        f = "0";
+        dired-hacks-utils = "0";
+      }
+      // super.packageRequires;
   };
   dired-filter = _: super: {
-    packageRequires = {
-      dired-hacks-utils = "0";
-      f = "0";
-    } // super.packageRequires;
+    packageRequires =
+      {
+        dired-hacks-utils = "0";
+        f = "0";
+      }
+      // super.packageRequires;
   };
   dired-open = _: super: {
-    packageRequires = {
-      dired-hacks-utils = "0";
-    } // super.packageRequires;
+    packageRequires =
+      {
+        dired-hacks-utils = "0";
+      }
+      // super.packageRequires;
   };
   dired-hacks-utils = _: super: {
-    packageRequires = {
-      dash = "0";
-    } // super.packageRequires;
+    packageRequires =
+      {
+        dash = "0";
+      }
+      // super.packageRequires;
   };
   # I won't use packages that depend on direx.
   # dired-k = _: super: {

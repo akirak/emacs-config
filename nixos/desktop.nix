@@ -15,9 +15,9 @@
 
     useSandbox = true;
 
-    allowedUsers = [ "@wheel" ];
+    allowedUsers = ["@wheel"];
 
-    trustedUsers = [ "root" "@wheel" ];
+    trustedUsers = ["root" "@wheel"];
 
     extraOptions = ''
       min-free = 536870912

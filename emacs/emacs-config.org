@@ -1,4 +1,4 @@
-* An Optimist's Emacs Configuration
+* A Progressive Emacs Configuration
 :PROPERTIES:
 :TOC:      :include descendants :depth 1
 :END:
@@ -168,8 +168,6 @@ I am interested to see if it can reduce the amount of configuration code.
                        (reformatter-define ,name ,@args))))
                 entries)))))
 #+end_src
-
-This macro is untested. I have to test it later.
 *** :set
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 11:30]
@@ -216,6 +214,20 @@ By default, settings inside =:status= clauses are not loaded.
   (defcustom akirak/mode-prefix-key "C-,"
     "Prefix for mode-specific keybindings."
     :type 'string)
+#+end_src
+*** <f12> as a prefix for miscellaneous commands
+I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'which-key
+    (pcase-dolist (`(,key . ,description)
+                   '(("c" . "capture")
+                     ("c f" . "frame")
+                     ("c s" . "screenshot")
+                     ("c r" . "record screen")
+                     ("e" . "emacs")))
+      (which-key-add-keymap-based-replacements
+        global-map (concat "<f12> " key) description)))
 #+end_src
 *** Key translation map
 #+begin_src emacs-lisp
@@ -286,6 +298,25 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:with-mode global-auto-revert-mode
       (:hook-into after-init-hook)))
 #+end_src
+*** browse-url
+:PROPERTIES:
+:CREATED_TIME: [2022-04-06 Wed 17:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup browse-url
+    (:status personal
+      (:set browse-url-browser-function #'akirak/browse-url-external-browser
+            browse-url-secondary-browser-function #'akirak/browse-url-external-browser)
+
+      (defun akirak/browse-url-external-browser (url)
+        (let ((host (url-host (if (url-p url)
+                                  url
+                                (url-generic-parse-url url)))))
+          (if (member host '("airtable.com"))
+              (browse-url-chromium url)
+            (browse-url-default-browser url))))))
+#+end_src
 *** buffer.c                                        :formatting:visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -325,7 +356,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup compile
-    (:set compilation-auto-jump-to-first-error t
+    (:set compilation-auto-jump-to-first-error nil
           compilation-scroll-output t)
 
     (:global "<f9>" #'recompile)
@@ -657,7 +688,7 @@ Resources:
     (:set completion-category-defaults nil
           completion-category-overrides
           '((file (styles partial-completion))
-            (url (styles partial-completion))))
+            (url (styles substring))))
 
     (define-key minibuffer-mode-map
                 "~"
@@ -818,7 +849,7 @@ Resources:
 #+begin_src emacs-lisp
   (setup recentf
     (:hook-into after-init-hook)
-    (:set recentf-max-saved-items 200
+    (:set recentf-max-saved-items 1000
           recentf-auto-cleanup 'never))
 #+end_src
 *** register
@@ -851,6 +882,16 @@ This is a recommended setting for use with vertico. See https://github.com/minad
   (setup saveplace
     (:with-mode save-place-mode
       (:hook-into after-init-hook)))
+#+end_src
+*** shr
+:PROPERTIES:
+:CREATED_TIME: [2022-04-05 Tue 23:13]
+:END:
+
+#+begin_src emacs-lisp
+  (setup shr
+    ;; Set `shr-bullet' for ease of pasting into org.
+    (:set shr-bullet "- "))
 #+end_src
 *** simple                                             :formatting:writing:
 :PROPERTIES:
@@ -1197,6 +1238,19 @@ Embrace Org as a common document format for Emacs.
       (advice-add #'org-insert-heading :after #'akirak-org-add-timestamp)
 
       (:when-loaded
+        (add-to-list 'display-buffer-alist
+                     '("\\*Org Select\\*"
+                       (display-buffer-in-side-window
+                        '((side . bottom))))
+                     t)
+        (setq org-structure-template-alist
+              (seq-sort-by #'car #'string-collate-lessp
+                           (cl-remove-duplicates
+                            (append '(("d" . "definition"))
+                                    org-structure-template-alist)
+                            :key #'car
+                            :test #'equal)))
+
         (require 'el-patch)
         (el-patch-defun org-add-log-note (&optional _purpose)
           "Pop up a window for taking a note, and add this note later."
@@ -1409,9 +1463,7 @@ Embrace Org as a common document format for Emacs.
           org-clock-persist t
           org-clock-persist-query-resume nil
           ;; Set for mini-modeline
-          org-clock-string-limit 40)
-
-    (:global "M-g M-j" #'org-clock-goto))
+          org-clock-string-limit 40))
 #+end_src
 **** org-habit
 :PROPERTIES:
@@ -1542,7 +1594,13 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-dog-facade))
 #+end_src
-*** org-dynamic-bullets                                :aesthetics:ARCHIVE:
+**** akirak-org-dog
+#+begin_src emacs-lisp
+  (setup akirak-org-dog
+    (:global "<f12> c b" #'akirak-org-dog-capture-backlog
+             "<f12> c d" #'akirak-org-dog-capture-datetree-dwim))
+#+end_src
+*** org-dynamic-bullets                       :noexport:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
 :END:
@@ -1559,7 +1617,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-edna))
 #+end_src
-*** org-journal                                                   :ARCHIVE:
+*** org-journal                                          :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
@@ -1684,7 +1742,7 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-transclusion))
 #+end_src
-*** org-visual-indent                                  :aesthetics:ARCHIVE:
+*** org-visual-indent                         :noexport:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 23:59]
 :END:
@@ -1692,6 +1750,16 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
   (setup (:package org-visual-indent)
     (:hook-into org-mode-hook))
+#+end_src
+*** org-volume
+:PROPERTIES:
+:CREATED_TIME: [2022-04-04 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-volume)
+    (:set org-volume-image-download-method #'akirak-image-insert-offline-link
+          org-volume-dblock-defaults '(:lang "en" :limit 1)))
 #+end_src
 *** org-web-tools :reading:
 :PROPERTIES:
@@ -1869,9 +1937,11 @@ Complete a URL from the clipboard and the kill ring and insert as a link
 
 #+begin_src emacs-lisp
   (setup akirak-url
-    (:global "C-c w" #'akirak-url-insert-dwim)
+    (:global "C-c w" #'akirak-url-insert-dwim
+             "<f12> c u" #'akirak-url-org-capture)
     (with-eval-after-load 'embark
-      (define-key embark-url-map (kbd "m") #'akirak-url-insert-as-markdown)))
+      (define-key embark-url-map (kbd "m") #'akirak-url-insert-as-markdown)
+      (define-key embark-url-map (kbd "c") #'akirak-url-org-capture)))
 #+end_src
 **** akirak-window                                               :windows:
 :PROPERTIES:
@@ -1888,7 +1958,7 @@ This is an extra functions for window management.
                "C-4" #'akirak-window-setup-columns
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
-*** all-the-icons                                              :UI:ARCHIVE:
+*** all-the-icons                                     :noexport:UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:28]
 :END:
@@ -1896,7 +1966,7 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup (:package all-the-icons))
 #+end_src
-**** all-the-icons-completion                                    :ARCHIVE:
+**** all-the-icons-completion                           :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:29]
 :END:
@@ -1908,7 +1978,7 @@ This is an extra functions for window management.
       (add-hook 'marginalia-mode
                 #'all-the-icons-completion-marginalia-setup)))
 #+end_src
-**** all-the-icons-dired                                         :ARCHIVE:
+**** all-the-icons-dired                                :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:30]
 :END:
@@ -1976,7 +2046,7 @@ This is an extra functions for window management.
     (:set blamer-max-lines 50
           blamer-max-commit-message-length 50))
 #+end_src
-*** bufler                                                        :ARCHIVE:
+*** bufler                                               :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]
 :END:
@@ -2053,19 +2123,24 @@ This is an extra functions for window management.
              "M-s x" #'consult-complex-command
              "M-s M-x" #'consult-mode-command)
 
-    (setup consult-imenu
+    (:with-feature consult-imenu
       (:global "M-s i" #'consult-imenu
                "M-s M-i" #'consult-imenu-multi))
 
-    (setup consult-compile
+    (:with-feature consult-compile
       (:global "M-s e" #'consult-compile-error))
 
-    (setup consult-flymake
+    (:with-feature consult-flymake
       (:global "M-s f" #'consult-flymake))
 
-    (setup consult-xref
+    (:with-feature consult-xref
       (:set xref-show-xrefs-function #'consult-xref
             xref-show-definitions-function #'consult-xref)))
+#+end_src
+**** consult-org
+#+begin_src emacs-lisp
+  (setup consult-org
+    (:global "M-g M-j" #'consult-org-clock-goto))
 #+end_src
 *** consult-dir
 :PROPERTIES:
@@ -2267,7 +2342,7 @@ I will manually turn on =dired-collapse-mode= when necessary.
 #+begin_src emacs-lisp
 (setup (:package dired-hide-dotfiles))
 #+end_src
-*** dired-k                                                 :dired:ARCHIVE:
+*** dired-k                                        :noexport:dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:45]
 :END:
@@ -2720,6 +2795,16 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
+*** go-translate                                              :translation:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-02 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package go-translate)
+    (:set gts-translate-list '(("ja" "en")
+                               ("zh" "en"))))
+#+end_src
 *** graphql-mode                                                      :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
@@ -2779,7 +2864,7 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
                       "  where\n\n"
                       _))))
 #+end_src
-*** haskell-tng-mode                          :Haskell:major__mode:ARCHIVE:
+*** haskell-tng-mode                 :noexport:Haskell:major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:02]
 :END:
@@ -3105,7 +3190,7 @@ I won't turn on the mode by default, because it reduces the performance to some 
                       ""))
           ""))))
 #+end_src
-*** mlscroll                                        :aesthetics:UI:ARCHIVE:
+*** mlscroll                               :noexport:aesthetics:UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
@@ -3162,7 +3247,8 @@ I won't turn on the mode by default, because it reduces the performance to some 
     (:file-match "\\.nix\\'")
     (:mode-repl nix-repl)
     (:reformatters
-     (nixpkgs-fmt :program "nixpkgs-fmt")))
+     (nixpkgs-fmt :program "nixpkgs-fmt")
+     (alejandra :program "alejandra")))
 #+end_src
 *** nov                                                      :reading:EPUB:
 :PROPERTIES:
@@ -3225,6 +3311,14 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
                 magit-mode-hook
                 compilation-mode-hook
                 haskell-mode-hook))
+#+end_src
+*** pocket-reader                                                 :reading:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-05 Tue 18:19]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package pocket-reader))
 #+end_src
 *** popper                                                        :windows:
 :PROPERTIES:
@@ -3388,7 +3482,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 #+begin_src emacs-lisp
 (setup (:package string-inflection))
 #+end_src
-*** suggest                          :Emacs__Lisp:development:help:ARCHIVE:
+*** suggest                 :noexport:Emacs__Lisp:development:help:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 18:10]
 :END:
@@ -3419,7 +3513,7 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 #+begin_src emacs-lisp
   (setup (:package svg-lib))
 #+end_src
-*** svg-tag-mode                             :visual:nano:aesthetics:ARCHIVE:
+*** svg-tag-mode                  :noexport:visual:nano:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:26]
 :END:
@@ -3512,7 +3606,7 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
   (setup (:package typescript-mode)
     (:file-match "\\.tsx?\\'"))
 #+end_src
-*** unmodified-buffer                                             :ARCHIVE:
+*** unmodified-buffer                                    :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]
 :END:
@@ -3680,7 +3774,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 165 |
+| [[org-ql-search:tags:packages][packages]]            | 170 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:visual][visual]]              |  11 |
@@ -3688,9 +3782,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:VC][VC]]                  |   9 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
+| [[org-ql-search:tags:completion][completion]]          |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   7 |
 | [[org-ql-search:tags:windows][windows]]             |   7 |
-| [[org-ql-search:tags:completion][completion]]          |   7 |
 | [[org-ql-search:tags:dired][dired]]               |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
@@ -3705,12 +3799,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:writing][writing]]             |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:links][links]]               |   3 |
+| [[org-ql-search:tags:reading][reading]]             |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
-| [[org-ql-search:tags:reading][reading]]             |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:web][web]]                 |   2 |
@@ -3740,6 +3834,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
+| [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:exercises][exercises]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
