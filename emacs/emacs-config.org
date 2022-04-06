@@ -215,6 +215,20 @@ By default, settings inside =:status= clauses are not loaded.
     "Prefix for mode-specific keybindings."
     :type 'string)
 #+end_src
+*** <f12> as a prefix for miscellaneous commands
+I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'which-key
+    (pcase-dolist (`(,key . ,description)
+                   '(("c" . "capture")
+                     ("c f" . "frame")
+                     ("c s" . "screenshot")
+                     ("c r" . "record screen")
+                     ("e" . "emacs")))
+      (which-key-add-keymap-based-replacements
+        global-map (concat "<f12> " key) description)))
+#+end_src
 *** Key translation map
 #+begin_src emacs-lisp
   (setup key-translation-map
