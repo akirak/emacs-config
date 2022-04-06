@@ -14,7 +14,7 @@ import Polybar
 main :: IO ()
 main = do
   dbus <- mkDbusClient
-  xmonad $ ewmh $ defaultConfig
+  xmonad $ ewmh $ def
     { terminal = "alacritty"
     , modMask = mod4Mask
     , layoutHook = myLayoutHook
@@ -72,4 +72,4 @@ myKeybindings =
   | (key, i) <- (zip [xK_1..xK_9] [1..9]) ++ [(xK_0, 0)]
   ]
 
-myXPConfig = defaultXPConfig
+myXPConfig = def
