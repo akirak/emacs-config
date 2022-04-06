@@ -1594,6 +1594,12 @@ Embrace Org as a common document format for Emacs.
 #+begin_src emacs-lisp
 (setup (:package org-dog-facade))
 #+end_src
+**** akirak-org-dog
+#+begin_src emacs-lisp
+  (setup akirak-org-dog
+    (:global "<f12> c b" #'akirak-org-dog-capture-backlog
+             "<f12> c d" #'akirak-org-dog-capture-datetree-dwim))
+#+end_src
 *** org-dynamic-bullets                       :noexport:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
