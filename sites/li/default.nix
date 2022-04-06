@@ -9,7 +9,7 @@
   ];
 
   extraHomeModules = [
-    ({ pkgs, ... }: {
+    ({pkgs, ...}: {
       home.enableNixpkgsReleaseCheck = false;
       programs.emacs-config-old.enable = true;
 
@@ -21,6 +21,16 @@
         extraDirsToTryBind = [
           "/git-annex"
           "/assets"
+        ];
+      };
+
+      programs.chromium = {
+        enable = true;
+        extensions = [
+          {
+            # Google Input Tools
+            id = "mclkkofklkfljcocdinagocijmpgbhab";
+          }
         ];
       };
 
