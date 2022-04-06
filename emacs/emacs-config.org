@@ -284,6 +284,25 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:with-mode global-auto-revert-mode
       (:hook-into after-init-hook)))
 #+end_src
+*** browse-url
+:PROPERTIES:
+:CREATED_TIME: [2022-04-06 Wed 17:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup browse-url
+    (:status personal
+      (:set browse-url-browser-function #'akirak/browse-url-external-browser
+            browse-url-secondary-browser-function #'akirak/browse-url-external-browser)
+
+      (defun akirak/browse-url-external-browser (url)
+        (let ((host (url-host (if (url-p url)
+                                  url
+                                (url-generic-parse-url url)))))
+          (if (member host '("airtable.com"))
+              (browse-url-chromium url)
+            (browse-url-default-browser url))))))
+#+end_src
 *** buffer.c                                        :formatting:visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
