@@ -1423,8 +1423,6 @@ Embrace Org as a common document format for Emacs.
 
 #+begin_src emacs-lisp
   (setup org-capture
-    (:global "C-c c" #'org-capture)
-
     (:when-loaded
       (require 'el-patch)
       (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
@@ -1597,8 +1595,8 @@ Embrace Org as a common document format for Emacs.
 **** akirak-org-dog
 #+begin_src emacs-lisp
   (setup akirak-org-dog
-    (:global "<f12> c b" #'akirak-org-dog-capture-backlog
-             "<f12> c d" #'akirak-org-dog-capture-datetree-dwim))
+    (:global "C-c c b" #'akirak-org-dog-capture-backlog
+             "C-c c d" #'akirak-org-dog-capture-datetree-dwim))
 #+end_src
 *** org-dynamic-bullets                       :noexport:aesthetics:ARCHIVE:
 :PROPERTIES:
@@ -1897,6 +1895,8 @@ This is a collection of extra utilities for various packages.
     (:global "C-x g" #'akirak-project-switch)
     (:global "C-c i" #'akirak-scratch-elisp)
 
+    (:global "C-c c e" #'akirak-emacs-config-capture)
+
     (with-eval-after-load 'embark
       (add-to-list 'embark-keymap-alist
                    '(project-root . akirak-project-root-map)))
@@ -1938,7 +1938,7 @@ Complete a URL from the clipboard and the kill ring and insert as a link
 #+begin_src emacs-lisp
   (setup akirak-url
     (:global "C-c w" #'akirak-url-insert-dwim
-             "<f12> c u" #'akirak-url-org-capture)
+             "C-c c u" #'akirak-url-org-capture)
     (with-eval-after-load 'embark
       (define-key embark-url-map (kbd "m") #'akirak-url-insert-as-markdown)
       (define-key embark-url-map (kbd "c") #'akirak-url-org-capture)))
