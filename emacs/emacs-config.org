@@ -3505,6 +3505,15 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 
 =super-save-mode= can be annoying when you use org-crypt.
 Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][super-save disable when file header is present. · Issue #10 · bbatsov/super-save · GitHub]]
+*** svelte-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-04-08 Fri 20:31]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package svelte-mode)
+    (:file-match "\\.svelte\\'"))
+#+end_src
 *** svg-lib                                              :library:graphics:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:30]
