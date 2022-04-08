@@ -955,6 +955,12 @@
       repo = "super-save";
       type = "github";
     };
+    svelte-mode = {
+      flake = false;
+      owner = "leafOfTree";
+      repo = "svelte-mode";
+      type = "github";
+    };
     svg-lib = {
       flake = false;
       owner = "rougier";
@@ -971,6 +977,12 @@
       flake = false;
       owner = "wolray";
       repo = "symbol-overlay";
+      type = "github";
+    };
+    tagedit = {
+      flake = false;
+      owner = "magnars";
+      repo = "tagedit";
       type = "github";
     };
     taxy = {

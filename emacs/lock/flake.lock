@@ -83,11 +83,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1649242778,
-        "narHash": "sha256-9J2WIQ8O51zjBAyajmzUuC1GoDzVSKeWwUD3qwWIeSE=",
+        "lastModified": 1649486621,
+        "narHash": "sha256-AerbQslkKlBb7irY9lpjrJUs8OnS0U0U30TYDDlryzw=",
         "owner": "akirak",
         "repo": "trivial-elisps",
-        "rev": "19fb392276849287796ae8d6687530fa152ff1e4",
+        "rev": "d4cf5c48ce714cc6da9711f637875d0737d1e947",
         "type": "github"
       },
       "original": {
@@ -163,11 +163,11 @@
     "avy-riben": {
       "flake": false,
       "locked": {
-        "lastModified": 1648991541,
-        "narHash": "sha256-xJNG7nrthh5CJsBX9J7UKx4emJhoeSOi5xtjNA5DlqQ=",
+        "lastModified": 1649391378,
+        "narHash": "sha256-I1R/i2P6NNO5oD99iliLdCZe9nAfVln2zR4METvSSjg=",
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "rev": "cfbfedbcc9d0b4d794f00f49338be10f5b586228",
+        "rev": "3dacbbb8a6577697ed366449a31debc05aa97bf0",
         "type": "github"
       },
       "original": {
@@ -2457,11 +2457,11 @@
     "riben": {
       "flake": false,
       "locked": {
-        "lastModified": 1648991541,
-        "narHash": "sha256-xJNG7nrthh5CJsBX9J7UKx4emJhoeSOi5xtjNA5DlqQ=",
+        "lastModified": 1649391378,
+        "narHash": "sha256-I1R/i2P6NNO5oD99iliLdCZe9nAfVln2zR4METvSSjg=",
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "rev": "cfbfedbcc9d0b4d794f00f49338be10f5b586228",
+        "rev": "3dacbbb8a6577697ed366449a31debc05aa97bf0",
         "type": "github"
       },
       "original": {
@@ -2647,9 +2647,11 @@
         "setup": "setup",
         "string-inflection": "string-inflection",
         "super-save": "super-save",
+        "svelte-mode": "svelte-mode",
         "svg-lib": "svg-lib",
         "swiper": "swiper",
         "symbol-overlay": "symbol-overlay",
+        "tagedit": "tagedit",
         "taxy": "taxy",
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
@@ -2739,6 +2741,22 @@
         "type": "github"
       }
     },
+    "svelte-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1634367172,
+        "narHash": "sha256-gXoghLw4friBtqsP9CKTQ0WStd+g6BVEV/rjntnvFRU=",
+        "owner": "leafOfTree",
+        "repo": "svelte-mode",
+        "rev": "6a1d4274af7f4c0f271f77bd96678c3dd1fa68e1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "leafOfTree",
+        "repo": "svelte-mode",
+        "type": "github"
+      }
+    },
     "svg-lib": {
       "flake": false,
       "locked": {
@@ -2784,6 +2802,22 @@
       "original": {
         "owner": "wolray",
         "repo": "symbol-overlay",
+        "type": "github"
+      }
+    },
+    "tagedit": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1479718520,
+        "narHash": "sha256-PLMZ69z10b5nH2fN56HiIXeYZolw2SOyfjxh2tWICXc=",
+        "owner": "magnars",
+        "repo": "tagedit",
+        "rev": "b3a70101a0dcf85498c92b7fcfa7fdbac869746c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magnars",
+        "repo": "tagedit",
         "type": "github"
       }
     },
