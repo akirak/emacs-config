@@ -6,10 +6,6 @@
 (require 'akirak-org-capture)
 
 (org-starter-def "emacs-config.org"
-  :key "e"
-  :refile (:maxlevel . 4)
-  :local-variables ((org-id-link-to-org-use-id . nil))
-  :minor-modes (org-edna-mode))
 
 (akirak-org-capture-add-templates
     (cl-macrolet
