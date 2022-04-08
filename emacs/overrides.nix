@@ -97,7 +97,7 @@
         then "linux"
         else throw "Unsupported platform";
       sha256 = {
-        linux = "0vngwn47vz75rp4g3ywz8krndf15i72ksgqzvb8n5q701j9yg4rj";
+        linux = "0m4w8dlphmzir00syx188f53lijpb5rih7p7by477mlsfj8r9lki";
       };
     in {
       bundle = builtins.fetchurl {

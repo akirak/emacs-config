@@ -2890,16 +2890,16 @@
     "tree-sitter-langs": {
       "flake": false,
       "locked": {
-        "lastModified": 1644648114,
-        "narHash": "sha256-Br+ON7a8FWoU75ySPSP2DkiyHjj80TP5XvcMMJrU9+k=",
+        "lastModified": 1648475055,
+        "narHash": "sha256-4AnTSnJ30GZZkuDrvbwVC9B5zlRHtfkd3witQX2830s=",
         "owner": "emacs-tree-sitter",
         "repo": "tree-sitter-langs",
-        "rev": "599570cd2a6d1b43a109634896b5c52121e155e3",
+        "rev": "0dd5e56e2f5646aa51ed0fc9eb869a8f7090228a",
         "type": "github"
       },
       "original": {
         "owner": "emacs-tree-sitter",
-        "ref": "0.11.3",
+        "ref": "0.11.6",
         "repo": "tree-sitter-langs",
         "type": "github"
       }
