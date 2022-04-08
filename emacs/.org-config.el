@@ -50,35 +50,11 @@
                    :function ,(level2 "Setup.el")
                    :src "(eval-when-compile\n  (define-setup-macro %\\1 (%?)))")
 
-                  ("Maybe" :keys "m"
-                   :template
-                   ("* MAYBE %^{Name} :noexport:"
-                    ,akirak-org-capture-default-drawer
-                    "%?")
-                   :children
-                   (("Org package" :keys "o"
-                     :function ,(level2 "Org"))
-                    ("Package" :keys "p"
-                     :function ,(level2 "Packages"))))
-
                   ("Note" :keys "n"
                    :function ,(level2 "Notes")
                    :template
                    ("* %?"
                     ,akirak-org-capture-default-drawer))
-
-                  ("Source block for a package" :keys "s"
-                   :contexts (:in-file "emacs-config\\.org\\'")
-                   :type plain
-                   :function ignore
-                   :template
-                   (lambda ()
-                     (concat "#+begin_src emacs-lisp\n"
-                             "(setup (:package "
-                             (substring-no-properties
-                              (org-get-heading t t t t))
-                             ")%?)\n"
-                             "#+end_src")))
 
                   ("Org-Ql dynamic block for a tag" :keys "q"
                    :contexts (:in-file "emacs-config\\.org\\'")
