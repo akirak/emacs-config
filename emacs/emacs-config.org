@@ -1268,7 +1268,10 @@ DOCT: Declarative Org capture templates
             ;; Prevent from saving org-refile and org-capture locations to bookmarks
             org-bookmark-names-plist nil)
 
-      (advice-add #'org-insert-heading :after #'akirak-org-add-timestamp)
+      (advice-add #'org-insert-heading-respect-content
+                  :around #'akirak-org-ad-around-insert-heading)
+      (advice-add #'org-insert-todo-heading-respect-content
+                  :around #'akirak-org-ad-around-insert-heading)
 
       (:when-loaded
         (add-to-list 'display-buffer-alist
