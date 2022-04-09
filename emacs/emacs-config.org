@@ -3554,6 +3554,14 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 #+end_src
 
 =embark= can substitute for most of the functionalities of the package, but I am used to this package.
+*** tagedit                                                           :web:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-08 Fri 21:12]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package tagedit))
+#+end_src
 *** taxy                                                          :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
