@@ -2310,33 +2310,19 @@ Insert paths into the minibuffer prompt
     (:global "C-x d" #'consult-dir)
 
     (:set consult-dir-sources
-          '(consult-dir--source-bookmark
-            consult-dir--source-default
+          '(consult-dir--source-default
+            consult-dir--source-bookmark
+            consult-dir--source-project
             akirak/consult-dired-dir-source
-            akirak/consult-project-dir-source
             akirak/consult-project-parent-source
             consult-dir--source-recentf)))
-#+end_src
-**** Project directories
-#+begin_src emacs-lisp
-  (defvar akirak/consult-project-dir-source
-    ;; Based on `consult-dir--source-project' in consult-dir.el.
-    `(:name "Projects"
-            :narrow ?p
-            :category project-root
-            :face consult-file
-            :history file-name-history
-            ;; :enabled ,(lambda () consult-dir-project-list-function)
-            :items ,(lambda () (seq-difference (project-known-project-roots)
-                                               (consult-dir--default-dirs)
-                                               #'equal))))
 #+end_src
 **** Dired buffers
 #+begin_src emacs-lisp
   (defvar akirak/consult-dired-dir-source
     `(:name "Dired buffers"
             :narrow ?d
-            :category directory
+            :category file
             :face consult-file
             ;; :enabled ,(lambda () consult-dir-project-list-function)
             :items ,(lambda ()
@@ -2353,19 +2339,18 @@ Insert paths into the minibuffer prompt
   (defvar akirak/consult-project-parent-source
     `(:name "Project parents"
             :narrow ?P
-            :category directory
+            :category file
             :face consult-file
             ;; :history file-name-history
             ;; :enabled ,(lambda () consult-dir-project-list-function)
             :items ,(lambda ()
-                      (cl-remove-duplicates
-                       (thread-last
-                         (project-known-project-roots)
-                         (cl-remove-if (lambda (dir)
-                                         (string-prefix-p "~/archives/" dir)))
-                         (mapcar (lambda (dir)
-                                   (file-name-directory (string-remove-suffix "/" dir)))))
-                       :test #'equal))))
+                      (thread-last
+                        (project-known-project-roots)
+                        (cl-remove-if (lambda (dir)
+                                        (string-prefix-p "~/archives/" dir)))
+                        (mapcar (lambda (dir)
+                                  (file-name-directory (string-remove-suffix "/" dir))))
+                        (delete-dups)))))
 
 #+end_src
 *** consult-project-extra
