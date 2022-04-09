@@ -197,12 +197,18 @@ By default, settings inside =:status= clauses are not loaded.
 ** Performance                                                    :packages:
 # Note: Some of these should be loaded as early as possible.
 *** benchmark-init                               :profiling:initialization:
+#+begin_quote
+Benchmarks Emacs require and load calls
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package benchmark-init)
     (:require benchmark-init)
     (add-hook 'after-init-hook 'benchmark-init/deactivate))
 #+end_src
 *** gcmh                                                      :performance:
+#+begin_quote
+the Garbage Collector Magic Hack
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package gcmh)
     (:hook-into after-init-hook)
@@ -256,6 +262,9 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-09 Wed 15:26]
 :END:
+#+begin_quote
+Future-proof your Elisp
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package el-patch))
@@ -264,6 +273,9 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:06]
 :END:
+#+begin_quote
+Generalized automatic execution in a single frame
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package fullframe))
@@ -801,6 +813,9 @@ Resources:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-06 Sun 17:00]
 :END:
+#+begin_quote
+Operations on the current project
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package project)
@@ -1210,6 +1225,9 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-23 Wed 23:59]
 :END:
+#+begin_quote
+Citation-related commands for org, latex, markdown
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package citar))
@@ -1218,6 +1236,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 20:08]
 :END:
+#+begin_quote
+DOCT: Declarative Org capture templates
+[[https://github.com/progfolio/doct]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package doct))
@@ -1531,6 +1553,9 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 19:26]
 :END:
+#+begin_quote
+Improved list management in org-mode
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-autolist)
@@ -1540,6 +1565,9 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 19:26]
 :END:
+#+begin_quote
+Emacs bookmark support for org-mode
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-bookmark-heading))
@@ -1548,6 +1576,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-03 Thu 16:26]
 :END:
+#+begin_quote
+A programmable workflow layer for Org mode
+[[https://github.com/akirak/org-dog]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-dog)
@@ -1583,6 +1615,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-04 Fri 20:33]
 :END:
+#+begin_quote
+ 
+[[https://github.com/akirak/org-dog]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package consult-org-dog))
@@ -1591,6 +1627,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-03 Thu 16:26]
 :END:
+#+begin_quote
+An example embark configuration for org-dog
+[[https://github.com/akirak/org-dog]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-dog-embark))
@@ -1599,6 +1639,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-04 Fri 20:33]
 :END:
+#+begin_quote
+Facade Org files
+[[https://github.com/akirak/org-dog]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-dog-facade))
@@ -1622,6 +1666,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 19:16]
 :END:
+#+begin_quote
+Extensible Dependencies 'N' Actions
+[[https://savannah.nongnu.org/projects/org-edna-el/]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-edna))
@@ -1638,6 +1686,9 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:28]
 :END:
+#+begin_quote
+use Org Mode links in other modes
+#+end_quote
 
 =orglink-mode= lets you open links as in Org mode.
 
@@ -1649,6 +1700,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-22 Sat 20:50]
 :END:
+#+begin_quote
+Automatic tables of contents for Org files
+[[http://github.com/alphapapa/org-make-toc]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
@@ -1657,6 +1712,9 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-17 Thu 20:26]
 :END:
+#+begin_quote
+Functional Org Mode API
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-ml))
@@ -1665,6 +1723,9 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:59]
 :END:
+#+begin_quote
+A synchronized, Org-mode, document annotator
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-noter))
@@ -1673,6 +1734,9 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-22 Sat 20:50]
 :END:
+#+begin_quote
+Org Query Language, search command, and agenda-like view
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-ql)
@@ -1683,6 +1747,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 14:17]
 :END:
+#+begin_quote
+Recurring org-mode tasks
+[[https://github.com/m-cat/org-recur]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-recur)
@@ -1694,6 +1762,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:59]
 :END:
+#+begin_quote
+Highlight & annotate any text files
+[[https://github.com/nobiot/org-remark]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-remark))
@@ -1702,6 +1774,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 20:15]
 :END:
+#+begin_quote
+Create reverse date trees in org-mode
+[[https://github.com/akirak/org-reverse-datetree]]
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package org-reverse-datetree)
     (:set org-reverse-datetree-entry-time
@@ -1714,6 +1790,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
+#+begin_quote
+A basic configuration framework for org mode
+[[https://github.com/akirak/org-starter]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-starter)
@@ -1737,6 +1817,9 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-11 Fri 17:45]
 :END:
+#+begin_quote
+Supercharge your agenda
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-super-agenda)
@@ -1747,6 +1830,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:09]
 :END:
+#+begin_quote
+Transclude text content via links
+[[https://github.com/nobiot/org-transclusion]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-transclusion))
@@ -1764,6 +1851,10 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-04-04 Mon 23:59]
 :END:
+#+begin_quote
+Retrieve metadata of volumes from inside Org
+[[https://github.com/akirak/org-volume]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-volume)
@@ -1774,6 +1865,9 @@ Embrace Org as a common document format for Emacs.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 23:59]
 :END:
+#+begin_quote
+Display and capture web content with Org-mode
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-web-tools))
@@ -1789,6 +1883,9 @@ A bunch of useful packages are configured here.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 11:28]
 :END:
+#+begin_quote
+Bypass that mental block when writing your papers.
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package academic-phrases))
@@ -1797,6 +1894,10 @@ A bunch of useful packages are configured here.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
+#+begin_quote
+Quickly switch windows.
+[[https://github.com/abo-abo/ace-window]]
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package ace-window)
     (:set aw-keys (string-to-list "qwertyui")
@@ -1876,6 +1977,9 @@ A bunch of useful packages are configured here.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 17:56]
 :END:
+#+begin_quote
+Smart line-wrapping with wrap-prefix
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package adaptive-wrap)
@@ -1888,6 +1992,10 @@ A bunch of useful packages are configured here.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 20:26]
 :END:
+#+begin_quote
+Minor mode to aggressively keep your code always indented
+[[https://github.com/Malabarba/aggressive-indent-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package aggressive-indent)
@@ -1897,6 +2005,10 @@ A bunch of useful packages are configured here.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:12]
 :END:
+#+begin_quote
+A collection of commands and utilities
+[[https://github.com/akirak/trivial-elisps]]
+#+end_quote
 
 This is a collection of extra utilities for various packages.
 
@@ -2002,6 +2114,10 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 21:00]
 :END:
+#+begin_quote
+Show number of matches in mode-line while searching
+[[https://github.com/emacsorphanage/anzu]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package anzu)
@@ -2015,6 +2131,10 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 15:39]
 :END:
+#+begin_quote
+Quickly create disposable yasnippets
+[[https://github.com/abo-abo/auto-yasnippet]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package auto-yasnippet)
@@ -2025,12 +2145,19 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 19:10]
 :END:
+#+begin_quote
+Jump to arbitrary positions in visible text and select text quickly.
+[[https://github.com/abo-abo/avy]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package avy)
     (:global "C-'" #'avy-goto-char-timer))
 #+end_src
 *** beancount                                            :@extra:beancount:
+#+begin_quote
+A major mode to edit Beancount input files.
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package beancount)
     (:nixpkgs "beancount" "fava")
@@ -2051,6 +2178,10 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 17:48]
 :END:
+#+begin_quote
+Show git blame info about current line
+[[https://github.com/artawower/blamer.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package blamer)
@@ -2072,6 +2203,10 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-04 Fri 18:14]
 :END:
+#+begin_quote
+Behavior-Driven Emacs Lisp Testing
+[[https://github.com/jorgenschaefer/emacs-buttercup]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package buttercup)
@@ -2097,6 +2232,9 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:17]
 :END:
+#+begin_quote
+Completion At Point Extensions
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package cape))
@@ -2105,6 +2243,9 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:33]
 :END:
+#+begin_quote
+Consulting completing-read
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package consult)
@@ -2157,6 +2298,9 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:40]
 :END:
+#+begin_quote
+Insert paths into the minibuffer prompt
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package consult-dir)
@@ -2225,6 +2369,10 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 18:22]
 :END:
+#+begin_quote
+Consult integration for project.el
+[[https://github.com/Qkessler/consult-project-extra]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package consult-project-extra)
@@ -2236,6 +2384,9 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:19]
 :END:
+#+begin_quote
+Completion Overlay Region FUnction
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package corfu)
@@ -2258,6 +2409,10 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
+#+begin_quote
+fast, friendly searching with ripgrep
+[[https://github.com/Wilfred/deadgrep]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package deadgrep))
@@ -2266,6 +2421,9 @@ This is an extra functions for window management.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:44]
 :END:
+#+begin_quote
+Collapse unique nested paths in dired listing
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package dired-collapse))
@@ -2276,6 +2434,9 @@ I will manually turn on =dired-collapse-mode= when necessary.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:50]
 :END:
+#+begin_quote
+Ibuffer-like filtering for dired
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package dired-filter)
@@ -2337,6 +2498,9 @@ I will manually turn on =dired-collapse-mode= when necessary.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:49]
 :END:
+#+begin_quote
+Utilities and helpers for dired-hacks collection
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package dired-hacks-utils)
@@ -2349,6 +2513,10 @@ I will manually turn on =dired-collapse-mode= when necessary.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 19:08]
 :END:
+#+begin_quote
+Hide dotfiles in dired
+[[https://github.com/mattiasb/dired-hide-dotfiles]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package dired-hide-dotfiles))
@@ -2380,6 +2548,9 @@ dired-k depends on dired-x, which has a poor code quality.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:47]
 :END:
+#+begin_quote
+Open files from dired using using custom actions
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package dired-open)
@@ -2393,6 +2564,10 @@ dired-k depends on dired-x, which has a poor code quality.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-17 Thu 23:59]
 :END:
+#+begin_quote
+Run DuckDuckGo search
+[[https://github.com/akirak/duckduckgo.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package duckduckgo))
@@ -2401,6 +2576,9 @@ dired-k depends on dired-x, which has a poor code quality.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
+#+begin_quote
+Jump to definition for 50+ languages without configuration
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package dumb-jump)
@@ -2421,6 +2599,9 @@ dired-k depends on dired-x, which has a poor code quality.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
 :END:
+#+begin_quote
+Emacs Does Interactive Prolog
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package ediprolog)
@@ -2437,6 +2618,10 @@ dired-k depends on dired-x, which has a poor code quality.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
+#+begin_quote
+EditorConfig Emacs Plugin
+[[https://github.com/editorconfig/editorconfig-emacs#readme]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package editorconfig))
@@ -2447,6 +2632,10 @@ It is required only in specific projects, so I won't turn on the mode by default
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
+#+begin_quote
+Client for Language Server Protocol (LSP) servers
+[[https://github.com/joaotavora/eglot]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package eglot)
@@ -2458,6 +2647,9 @@ It is required only in specific projects, so I won't turn on the mode by default
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 12:31]
 :END:
+#+begin_quote
+Enable eldoc support when minibuffer is in use.
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package eldoc-eval)
@@ -2470,6 +2662,10 @@ I use this package mostly because it uses =pp-eval-expression= for printing the 
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
+#+begin_quote
+Automatically add spaces around operators
+[[https://github.com/davidshepherd7/electric-operator]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package electric-operator)
@@ -2484,6 +2680,9 @@ I use this package mostly because it uses =pp-eval-expression= for printing the 
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
 :END:
+#+begin_quote
+extract information from Emacs Lisp libraries
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package elx))
@@ -2492,6 +2691,10 @@ I use this package mostly because it uses =pp-eval-expression= for printing the 
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:46]
 :END:
+#+begin_quote
+EmacSQL back-end for SQLite
+[[https://github.com/skeeto/emacsql]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package emacsql-sqlite)
@@ -2501,6 +2704,9 @@ I use this package mostly because it uses =pp-eval-expression= for printing the 
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:53]
 :END:
+#+begin_quote
+Conveniently act on minibuffer completions
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package embark)
@@ -2521,6 +2727,9 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 18:02]
 :END:
+#+begin_quote
+Consult integration for Embark
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package embark-consult)
@@ -2535,6 +2744,9 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
+#+begin_quote
+Support for `direnv' that operates buffer-locally
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package envrc)
@@ -2545,6 +2757,9 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 14:36]
 :END:
+#+begin_quote
+browse the Emacsmirror package database
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package epkg))
@@ -2553,6 +2768,9 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-27 Sun 18:16]
 :END:
+#+begin_quote
+Show Epkg information in completion annotations
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package epkg-marginalia)
@@ -2564,6 +2782,10 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:05]
 :END:
+#+begin_quote
+Evaluation Result OverlayS for Emacs Lisp
+[[https://github.com/xiongtx/eros]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package eros)
@@ -2573,6 +2795,10 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 15:44]
 :END:
+#+begin_quote
+The Emacs StartUp Profiler (ESUP)
+[[https://github.com/jschaf/esup]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package esup))
@@ -2581,6 +2807,10 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:26]
 :END:
+#+begin_quote
+Comment/uncomment lines efficiently. Like Nerd Commenter in Vim
+[[http://github.com/redguardtoo/evil-nerd-commenter]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package evil-nerd-commenter)
@@ -2591,6 +2821,10 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:24]
 :END:
+#+begin_quote
+Like dabbrev-expand with preview and popup menu
+[[https://github.com/jrosdahl/fancy-dabbrev]]
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package fancy-dabbrev)
     ;; Useful for lisp
@@ -2640,6 +2874,10 @@ The following resources are useful:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 23:59]
 :END:
+#+begin_quote
+Not only English-Chinese translator
+[[https://github.com/condy0919/fanyi.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package fanyi)
@@ -2653,6 +2891,9 @@ See modules.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
 :END:
+#+begin_quote
+Access Git forges from Magit.
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package forge))
@@ -2661,6 +2902,9 @@ See modules.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-08 Tue 16:02]
 :END:
+#+begin_quote
+misc frame, window and buffer commands
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package fwb-cmds))
@@ -2671,6 +2915,9 @@ I need this package for =toggle-window-split= command.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:45]
 :END:
+#+begin_quote
+Generic help
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package ghelp)
@@ -2683,6 +2930,9 @@ I need this package for =toggle-window-split= command.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 13:16]
 :END:
+#+begin_quote
+Ghelp+Helpful
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package ghelp-helpful))
@@ -2691,6 +2941,10 @@ I need this package for =toggle-window-split= command.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:38]
 :END:
+#+begin_quote
+One-frame-per-action GIF recording
+[[https://gitlab.com/ambrevar/emacs-gif-screencast]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package gif-screencast)
@@ -2705,6 +2959,10 @@ I need this package for =toggle-window-split= command.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
+#+begin_quote
+Git attributes of buffer file
+[[https://github.com/arnested/emacs-git-attr]]
+#+end_quote
 
 #+begin_quote
 Make vendored and generated files read only.
@@ -2718,6 +2976,10 @@ Make vendored and generated files read only.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-26 Sat 20:33]
 :END:
+#+begin_quote
+Emacs Minor mode to automatically commit and push
+[[https://github.com/ryuslash/git-auto-commit-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package git-auto-commit-mode)
@@ -2737,6 +2999,10 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 19:08]
 :END:
+#+begin_quote
+Port of Sublime Text plugin GitGutter
+[[https://github.com/emacsorphanage/git-gutter]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package git-gutter)
@@ -2764,6 +3030,10 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-04 Fri 19:15]
 :END:
+#+begin_quote
+Run GitHub Linguist on projects to collect information
+[[https://github.com/akirak/github-linguist.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package github-linguist)
@@ -2774,6 +3044,10 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 15:24]
 :END:
+#+begin_quote
+Identity management for (ma)git
+[[https://github.com/akirak/git-identity.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package git-identity)
@@ -2798,6 +3072,9 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
+#+begin_quote
+Major modes for editing Git configuration files
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package git-modes)
@@ -2810,6 +3087,10 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-04-02 Sat 23:59]
 :END:
+#+begin_quote
+Translation framework supports multiple engines such as Google/Bing/DeepL
+[[https://github.com/lorniu/go-translate]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package go-translate)
@@ -2820,6 +3101,9 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
 :END:
+#+begin_quote
+Major mode for editing GraphQL schemas
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package graphql-mode)
@@ -2829,6 +3113,9 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-11 Fri 22:02]
 :END:
+#+begin_quote
+Mode for the dot-language used by graphviz (att).
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package graphviz-dot-mode)
@@ -2839,6 +3126,10 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
+#+begin_quote
+A Haskell editing mode
+[[https://github.com/haskell/haskell-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package haskell-mode)
@@ -2888,6 +3179,10 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
 :END:
+#+begin_quote
+Major mode for Hashicorp
+[[https://github.com/purcell/emacs-hcl-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package hcl-mode)
@@ -2897,6 +3192,10 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:50]
 :END:
+#+begin_quote
+A better *help* buffer
+[[https://github.com/Wilfred/helpful]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package helpful))
@@ -2905,6 +3204,10 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:51]
 :END:
+#+begin_quote
+An auto-magical, which-key-based hydra banisher.
+[[https://gitlab.com/jjzmajic/hercules]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package hercules))
@@ -2913,6 +3216,10 @@ A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
+#+begin_quote
+Minor mode to highlight indentation
+[[https://github.com/DarthFennec/highlight-indent-guides]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package highlight-indent-guides)
@@ -2925,6 +3232,9 @@ This is helpful in programming languages that depend on indentation levels.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-02 Wed 15:58]
 :END:
+#+begin_quote
+highlight TODO and similar keywords
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package hl-todo)
@@ -2935,6 +3245,9 @@ This is helpful in programming languages that depend on indentation levels.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 21:11]
 :END:
+#+begin_quote
+Replace things with predefined alternatives
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package huan)
@@ -2948,6 +3261,9 @@ This is helpful in programming languages that depend on indentation levels.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:51]
 :END:
+#+begin_quote
+Edit multiple regions in the same way simultaneously.
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package iedit))
@@ -2956,6 +3272,10 @@ This is helpful in programming languages that depend on indentation levels.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
+#+begin_quote
+Major mode for editing JSON files.
+[[https://github.com/joshwnj/json-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package json-mode)
@@ -2965,6 +3285,9 @@ This is helpful in programming languages that depend on indentation levels.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:22]
 :END:
+#+begin_quote
+Completion kind icons
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package kind-icon)
@@ -2978,6 +3301,10 @@ This is helpful in programming languages that depend on indentation levels.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 11:27]
 :END:
+#+begin_quote
+An leetcode client
+[[https://github.com/kaiwk/leetcode.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package leetcode))
@@ -2986,6 +3313,10 @@ This is helpful in programming languages that depend on indentation levels.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-06 Sun 14:30]
 :END:
+#+begin_quote
+Create LICENSE using GitHub API
+[[https://github.com/jcs-elpa/license-templates]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package license-templates))
@@ -2994,6 +3325,10 @@ This is helpful in programming languages that depend on indentation levels.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 17:39]
 :END:
+#+begin_quote
+Use avy to open, copy, etc. visible links
+[[https://github.com/noctuid/link-hint.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package link-hint)
@@ -3009,6 +3344,10 @@ This is helpful in programming languages that depend on indentation levels.
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:36]
 :END:
+#+begin_quote
+vi-like Paredit
+[[https://github.com/abo-abo/lispy]]
+#+end_quote
 
 For Emacs Lisp, I use lispy.
 
@@ -3049,6 +3388,9 @@ Its configuration is about my habits, so it is put in [[file:compat.el::(setup l
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:52]
 :END:
+#+begin_quote
+interactive macro expander
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package macrostep))
@@ -3057,6 +3399,9 @@ Its configuration is about my habits, so it is put in [[file:compat.el::(setup l
 To use it, turn on =macrostep-mode=.
 
 *** magit                                                             :git:
+#+begin_quote
+A Git porcelain inside Emacs.
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package magit)
     (:nixpkgs git)
@@ -3098,6 +3443,10 @@ To use it, turn on =macrostep-mode=.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 13:33]
 :END:
+#+begin_quote
+Use Delta when displaying diffs in Magit
+[[https://github.com/dandavison/magit-delta]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package magit-delta)
@@ -3116,6 +3465,10 @@ To use it, turn on =macrostep-mode=.
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
+#+begin_quote
+Show source file TODOs in Magit
+[[http://github.com/alphapapa/magit-todos]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package magit-todos)
@@ -3127,6 +3480,9 @@ I won't turn on the mode by default, because it reduces the performance to some 
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:49]
 :END:
+#+begin_quote
+Enrich existing commands with completion annotations
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package marginalia)
@@ -3143,6 +3499,10 @@ I won't turn on the mode by default, because it reduces the performance to some 
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 14:12]
 :END:
+#+begin_quote
+Major mode for Markdown-formatted text
+[[https://jblevins.org/projects/markdown-mode/]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package markdown-mode)
@@ -3156,6 +3516,10 @@ I won't turn on the mode by default, because it reduces the performance to some 
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:16]
 :END:
+#+begin_quote
+Display modeline in minibuffer
+[[https://github.com/kiennq/emacs-mini-modeline]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package mini-modeline)
@@ -3217,6 +3581,9 @@ I won't turn on the mode by default, because it reduces the performance to some 
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 20:59]
 :END:
+#+begin_quote
+Eclipse-like moving and duplicating lines or rectangles
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package move-dup)
@@ -3235,6 +3602,9 @@ I won't turn on the mode by default, because it reduces the performance to some 
 :PROPERTIES:
 :CREATED_TIME: [2022-03-27 Sun 18:25]
 :END:
+#+begin_quote
+description
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package nickel-mode)
@@ -3244,6 +3614,10 @@ I won't turn on the mode by default, because it reduces the performance to some 
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
 :END:
+#+begin_quote
+Frontend for experimental commands of Nix
+[[https://github.com/emacs-twist/nix26.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package nix26))
@@ -3252,6 +3626,9 @@ I won't turn on the mode by default, because it reduces the performance to some 
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
+#+begin_quote
+Major mode for editing .nix files
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package nix-mode)
@@ -3265,6 +3642,10 @@ I won't turn on the mode by default, because it reduces the performance to some 
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
+#+begin_quote
+Featureful EPUB reader mode
+[[https://depp.brause.cc/nov.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package nov)
@@ -3283,6 +3664,9 @@ I won't turn on the mode by default, because it reduces the performance to some 
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:14]
 :END:
+#+begin_quote
+Completion style for matching regexps in any order
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package orderless)
@@ -3298,6 +3682,9 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:28]
 :END:
+#+begin_quote
+support for Org links to Magit buffers
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package orgit))
@@ -3306,6 +3693,10 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:06]
 :END:
+#+begin_quote
+A linting library for elisp package authors
+[[https://github.com/purcell/package-lint]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package package-lint))
@@ -3314,6 +3705,10 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:37]
 :END:
+#+begin_quote
+Display ^L page breaks as tidy horizontal lines
+[[https://github.com/purcell/page-break-lines]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package page-break-lines)
@@ -3327,6 +3722,10 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :PROPERTIES:
 :CREATED_TIME: [2022-04-05 Tue 18:19]
 :END:
+#+begin_quote
+Client for Pocket reading list
+[[https://github.com/alphapapa/pocket-reader.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package pocket-reader))
@@ -3335,6 +3734,10 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 23:59]
 :END:
+#+begin_quote
+Summon and dismiss buffers as popups
+[[https://github.com/karthink/popper]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package popper)
@@ -3365,6 +3768,10 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :PROPERTIES:
 :CREATED_TIME: [2022-03-25 Fri 10:57]
 :END:
+#+begin_quote
+Pop a posframe (just a frame) at point
+[[https://github.com/tumashu/posframe]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package posframe))
@@ -3373,6 +3780,10 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 15:16]
 :END:
+#+begin_quote
+Per-project transient keymaps
+[[https://github.com/akirak/project-hercules.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package project-hercules)
@@ -3384,6 +3795,9 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:24]
 :END:
+#+begin_quote
+Parentheses Universalistic
+#+end_quote
 
 [[https://github.com/AmaiKinono/puni][puni]] will replace smartparens, expand-region, and paredit (which I didn't adopt in favour of lispy).
 
@@ -3417,6 +3831,9 @@ Limitations:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
 :END:
+#+begin_quote
+Highlight brackets according to their depth
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package rainbow-delimiters)
@@ -3426,6 +3843,9 @@ Limitations:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
+#+begin_quote
+Colorize color names in buffers
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package rainbow-mode)
@@ -3435,6 +3855,9 @@ Limitations:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
+#+begin_quote
+Define commands which run reformatters on the current buffer
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package reformatter))
@@ -3443,6 +3866,9 @@ Limitations:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:05]
 :END:
+#+begin_quote
+Switch to/from repl buffer for current major-mode
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package repl-toggle)
@@ -3459,15 +3885,26 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:58]
 :END:
+#+begin_quote
+An interactive HTTP client for Emacs
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package restclient))
 #+end_src
 *** riben                                                        :Japanese:
+#+begin_quote
+A dumb Japanese input method
+[[https://github.com/akirak/emacs-dumb-japanese]]
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package riben))
 #+end_src
 **** avy-riben
+#+begin_quote
+Jump to Japanese text using avy
+[[https://github.com/akirak/emacs-dumb-japanese]]
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package avy-riben))
 #+end_src
@@ -3475,6 +3912,10 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:27]
 :END:
+#+begin_quote
+Clean-up and Beautify the list of minor-modes.
+[[https://github.com/Malabarba/rich-minority]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package rich-minority)
@@ -3489,6 +3930,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:07]
 :END:
+#+begin_quote
+underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package string-inflection))
@@ -3505,6 +3949,10 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
+#+begin_quote
+Auto-save buffers, based on your activity.
+[[https://github.com/bbatsov/super-save]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package super-save)
@@ -3520,6 +3968,9 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 :PROPERTIES:
 :CREATED_TIME: [2022-04-08 Fri 20:31]
 :END:
+#+begin_quote
+Emacs major mode for Svelte
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package svelte-mode)
@@ -3529,6 +3980,10 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:30]
 :END:
+#+begin_quote
+SVG tags, progress bars & icons
+[[https://github.com/rougier/svg-lib]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package svg-lib))
@@ -3547,6 +4002,10 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 20:24]
 :END:
+#+begin_quote
+Highlight symbols with keymap-enabled overlays
+[[https://github.com/wolray/symbol-overlay/]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package symbol-overlay)
@@ -3558,6 +4017,9 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 :PROPERTIES:
 :CREATED_TIME: [2022-04-08 Fri 21:12]
 :END:
+#+begin_quote
+Some paredit-like features for html-mode
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package tagedit))
@@ -3566,6 +4028,10 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
+#+begin_quote
+Programmable taxonomical grouping for arbitrary objects
+[[https://github.com/alphapapa/taxy.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package taxy))
@@ -3574,6 +4040,10 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
+#+begin_quote
+View Taxy structs in a Magit Section buffer
+[[https://github.com/alphapapa/taxy.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package taxy-magit-section))
@@ -3582,6 +4052,10 @@ Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][supe
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 17:13]
 :END:
+#+begin_quote
+Title-case phrases
+[[https://github.com/duckwork/titlecase.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package titlecase))
@@ -3592,6 +4066,9 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:36]
 :END:
+#+begin_quote
+Incremental parsing system
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package tree-sitter)
@@ -3603,6 +4080,9 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:37]
 :END:
+#+begin_quote
+Grammar bundle for tree-sitter
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package tree-sitter-langs)
@@ -3613,6 +4093,10 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:55]
 :END:
+#+begin_quote
+The simple package for fast log selected region
+[[https://github.com/Artawower/turbo-log]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package turbo-log))
@@ -3621,6 +4105,10 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 14:12]
 :END:
+#+begin_quote
+Frontend to Twist configuration
+[[https://github.com/akirak/twist.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package twist))
@@ -3629,6 +4117,10 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 18:39]
 :END:
+#+begin_quote
+Major mode for editing typescript
+[[http://github.com/ananthakumaran/typescript.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package typescript-mode)
@@ -3656,6 +4148,9 @@ I don't use use-package, but I only need indentation:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 16:59]
 :END:
+#+begin_quote
+VERTical Interactive COmpletion
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package vertico)
@@ -3675,6 +4170,10 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
+#+begin_quote
+fill-column for visual-line-mode
+[[https://codeberg.org/joostkremers/visual-fill-column]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package visual-fill-column)
@@ -3685,6 +4184,10 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 16:50]
 :END:
+#+begin_quote
+Fully-featured terminal emulator
+[[https://github.com/akermu/emacs-libvterm]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package vterm)
@@ -3701,6 +4204,10 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
       (akirak/vterm (project-root (project-current)))))
 #+end_src
 *** which-key                                       :usability:keybindings:
+#+begin_quote
+Display available keybindings in popup
+[[https://github.com/justbur/emacs-which-key]]
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package which-key)
     (:hook-into after-init-hook)
@@ -3710,6 +4217,9 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 13:52]
 :END:
+#+begin_quote
+Like windmove, but swaps buffers while moving point
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package windswap)
@@ -3739,6 +4249,10 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:16]
 :END:
+#+begin_quote
+Unobtrusively remove trailing whitespace.
+[[https://github.com/lewang/ws-butler]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package ws-butler)
@@ -3748,6 +4262,10 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 :PROPERTIES:
 :CREATED_TIME: [2022-03-04 Fri 19:00]
 :END:
+#+begin_quote
+ANSI, XTERM 256 and Truecolor support
+[[https://github.com/atomontage/xterm-color]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package xterm-color))
@@ -3758,6 +4276,10 @@ This package is required by the configuration for buttercup now.
 :PROPERTIES:
 :CREATED_TIME: [2022-03-07 Mon 16:07]
 :END:
+#+begin_quote
+Major mode for editing YAML files
+[[https://github.com/yoshiki/yaml-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package yaml-mode)
