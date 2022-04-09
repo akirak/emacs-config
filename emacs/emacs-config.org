@@ -4324,7 +4324,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 170 |
+| [[org-ql-search:tags:packages][packages]]            | 172 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:visual][visual]]              |  11 |
@@ -4351,13 +4351,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:links][links]]               |   3 |
 | [[org-ql-search:tags:reading][reading]]             |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
+| [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
-| [[org-ql-search:tags:web][web]]                 |   2 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   2 |
@@ -4412,6 +4412,7 @@ The following packages (tagged =web=) are related to web development:
 |--------------+------|
 | [[graphql-mode][graphql-mode]] |      |
 | [[restclient][restclient]]   |      |
+| [[tagedit][tagedit]]      |      |
 #+END:
 
 - You will want to test web APIs from inside Emacs. You can choose either [[https://github.com/pashky/restclient.el][restclient]] or [[https://github.com/federicotdn/verb][verb]] for this purpose.
