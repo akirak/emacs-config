@@ -1459,6 +1459,11 @@ DOCT: Declarative Org capture templates
 
 #+begin_src emacs-lisp
   (setup org-capture
+    (:global "C-c c SPC"
+             (defun akirak/org-capture-last-location ()
+               (interactive)
+               (org-capture '(16))))
+
     (:when-loaded
       (require 'el-patch)
       (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
