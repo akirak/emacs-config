@@ -33,9 +33,8 @@
     };
     akirak = {
       flake = false;
-      owner = "akirak";
-      repo = "trivial-elisps";
-      type = "github";
+      type = "git";
+      url = "https://git.sr.ht/~akirak/akirak-mode";
     };
     anzu = {
       flake = false;
