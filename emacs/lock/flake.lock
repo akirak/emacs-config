@@ -83,17 +83,17 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1649242778,
-        "narHash": "sha256-9J2WIQ8O51zjBAyajmzUuC1GoDzVSKeWwUD3qwWIeSE=",
-        "owner": "akirak",
-        "repo": "trivial-elisps",
-        "rev": "19fb392276849287796ae8d6687530fa152ff1e4",
-        "type": "github"
+        "lastModified": 1649524463,
+        "narHash": "sha256-Fvcw78/EObaXxlRzGczes6qXESZ6Y2eDly8+5eI+9vE=",
+        "ref": "master",
+        "rev": "be20c6f540a1c4847e56c7b53990bfc53ec05a0e",
+        "revCount": 155,
+        "type": "git",
+        "url": "https://git.sr.ht/~akirak/akirak-mode"
       },
       "original": {
-        "owner": "akirak",
-        "repo": "trivial-elisps",
-        "type": "github"
+        "type": "git",
+        "url": "https://git.sr.ht/~akirak/akirak-mode"
       }
     },
     "anzu": {
@@ -163,11 +163,11 @@
     "avy-riben": {
       "flake": false,
       "locked": {
-        "lastModified": 1648991541,
-        "narHash": "sha256-xJNG7nrthh5CJsBX9J7UKx4emJhoeSOi5xtjNA5DlqQ=",
+        "lastModified": 1649391378,
+        "narHash": "sha256-I1R/i2P6NNO5oD99iliLdCZe9nAfVln2zR4METvSSjg=",
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "rev": "cfbfedbcc9d0b4d794f00f49338be10f5b586228",
+        "rev": "3dacbbb8a6577697ed366449a31debc05aa97bf0",
         "type": "github"
       },
       "original": {
@@ -355,11 +355,11 @@
     "consult-org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1649234310,
-        "narHash": "sha256-pdCe4r9xHXKal/4rKzkxiqNzH594ghk+eu5yBMG+XPc=",
+        "lastModified": 1649579960,
+        "narHash": "sha256-vQd+y3PnrP3NaIgyP2DpUZzurF64E+Hsjgawv0kVQFQ=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "9a8b7561aae6fdb03a8d70e179ba5a9872c70c06",
+        "rev": "26728c6293889fe57c058b8c60abefbcd425988a",
         "type": "github"
       },
       "original": {
@@ -1830,11 +1830,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1649234310,
-        "narHash": "sha256-pdCe4r9xHXKal/4rKzkxiqNzH594ghk+eu5yBMG+XPc=",
+        "lastModified": 1649579960,
+        "narHash": "sha256-vQd+y3PnrP3NaIgyP2DpUZzurF64E+Hsjgawv0kVQFQ=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "9a8b7561aae6fdb03a8d70e179ba5a9872c70c06",
+        "rev": "26728c6293889fe57c058b8c60abefbcd425988a",
         "type": "github"
       },
       "original": {
@@ -1847,11 +1847,11 @@
     "org-dog-embark": {
       "flake": false,
       "locked": {
-        "lastModified": 1649234310,
-        "narHash": "sha256-pdCe4r9xHXKal/4rKzkxiqNzH594ghk+eu5yBMG+XPc=",
+        "lastModified": 1649579960,
+        "narHash": "sha256-vQd+y3PnrP3NaIgyP2DpUZzurF64E+Hsjgawv0kVQFQ=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "9a8b7561aae6fdb03a8d70e179ba5a9872c70c06",
+        "rev": "26728c6293889fe57c058b8c60abefbcd425988a",
         "type": "github"
       },
       "original": {
@@ -1864,11 +1864,11 @@
     "org-dog-facade": {
       "flake": false,
       "locked": {
-        "lastModified": 1649234310,
-        "narHash": "sha256-pdCe4r9xHXKal/4rKzkxiqNzH594ghk+eu5yBMG+XPc=",
+        "lastModified": 1649579960,
+        "narHash": "sha256-vQd+y3PnrP3NaIgyP2DpUZzurF64E+Hsjgawv0kVQFQ=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "9a8b7561aae6fdb03a8d70e179ba5a9872c70c06",
+        "rev": "26728c6293889fe57c058b8c60abefbcd425988a",
         "type": "github"
       },
       "original": {
@@ -2457,11 +2457,11 @@
     "riben": {
       "flake": false,
       "locked": {
-        "lastModified": 1648991541,
-        "narHash": "sha256-xJNG7nrthh5CJsBX9J7UKx4emJhoeSOi5xtjNA5DlqQ=",
+        "lastModified": 1649391378,
+        "narHash": "sha256-I1R/i2P6NNO5oD99iliLdCZe9nAfVln2zR4METvSSjg=",
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "rev": "cfbfedbcc9d0b4d794f00f49338be10f5b586228",
+        "rev": "3dacbbb8a6577697ed366449a31debc05aa97bf0",
         "type": "github"
       },
       "original": {
@@ -2647,9 +2647,11 @@
         "setup": "setup",
         "string-inflection": "string-inflection",
         "super-save": "super-save",
+        "svelte-mode": "svelte-mode",
         "svg-lib": "svg-lib",
         "swiper": "swiper",
         "symbol-overlay": "symbol-overlay",
+        "tagedit": "tagedit",
         "taxy": "taxy",
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
@@ -2739,6 +2741,22 @@
         "type": "github"
       }
     },
+    "svelte-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1634367172,
+        "narHash": "sha256-gXoghLw4friBtqsP9CKTQ0WStd+g6BVEV/rjntnvFRU=",
+        "owner": "leafOfTree",
+        "repo": "svelte-mode",
+        "rev": "6a1d4274af7f4c0f271f77bd96678c3dd1fa68e1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "leafOfTree",
+        "repo": "svelte-mode",
+        "type": "github"
+      }
+    },
     "svg-lib": {
       "flake": false,
       "locked": {
@@ -2784,6 +2802,22 @@
       "original": {
         "owner": "wolray",
         "repo": "symbol-overlay",
+        "type": "github"
+      }
+    },
+    "tagedit": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1479718520,
+        "narHash": "sha256-PLMZ69z10b5nH2fN56HiIXeYZolw2SOyfjxh2tWICXc=",
+        "owner": "magnars",
+        "repo": "tagedit",
+        "rev": "b3a70101a0dcf85498c92b7fcfa7fdbac869746c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magnars",
+        "repo": "tagedit",
         "type": "github"
       }
     },
@@ -2856,16 +2890,16 @@
     "tree-sitter-langs": {
       "flake": false,
       "locked": {
-        "lastModified": 1644648114,
-        "narHash": "sha256-Br+ON7a8FWoU75ySPSP2DkiyHjj80TP5XvcMMJrU9+k=",
+        "lastModified": 1648475055,
+        "narHash": "sha256-4AnTSnJ30GZZkuDrvbwVC9B5zlRHtfkd3witQX2830s=",
         "owner": "emacs-tree-sitter",
         "repo": "tree-sitter-langs",
-        "rev": "599570cd2a6d1b43a109634896b5c52121e155e3",
+        "rev": "0dd5e56e2f5646aa51ed0fc9eb869a8f7090228a",
         "type": "github"
       },
       "original": {
         "owner": "emacs-tree-sitter",
-        "ref": "0.11.3",
+        "ref": "0.11.6",
         "repo": "tree-sitter-langs",
         "type": "github"
       }

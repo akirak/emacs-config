@@ -71,4 +71,38 @@ entries are visible."
 
 (defun akirak/batch-update-emacs-config-contents ()
   "Update the Emacs configuration."
+  (akirak/emacs-config-annotate-metadata)
   (akirak/batch-update-emacs-config t))
+
+(defun akirak/emacs-config-annotate-metadata ()
+  (let* ((default-directory (project-root (project-current)))
+         (data (with-temp-buffer
+                 (unless (zerop (call-process "nix" nil (list t nil) nil
+                                              "eval" ".#emacs-config.packageInputs" "--json"))
+                   (error "nix eval exited with non-zero"))
+                 (goto-char (point-min))
+                 (json-parse-buffer :object-type 'alist :array-type 'list))))
+    (with-current-buffer (find-file-noselect "emacs/emacs-config.org")
+      (org-mode)
+      (org-with-wide-buffer
+       (goto-char (point-min))
+       (while (re-search-forward org-complex-heading-regexp nil t)
+         (when-let* ((name (match-string 4))
+                     (entry (assq (intern name) data))
+                     (meta (assq 'meta (cdr entry)))
+                     (description (cdr (assq 'description meta)))
+                     (end (save-excursion
+                            (re-search-forward org-babel-src-block-regexp
+                                               (org-entry-end-position) t))))
+           (re-search-forward org-property-end-re end t)
+           (beginning-of-line 2)
+           (when (and (looking-at org-block-regexp)
+                      (equal (match-string 1) "quote"))
+             (replace-match ""))
+           (message description)
+           (insert "#+begin_quote\n"
+                   description)
+           (when-let (homepage (cdr (assq 'homepage meta)))
+             (insert "\n" (org-link-make-string homepage)))
+           (insert "\n#+end_quote\n"))))
+      (save-buffer))))

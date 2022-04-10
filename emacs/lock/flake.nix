@@ -33,9 +33,8 @@
     };
     akirak = {
       flake = false;
-      owner = "akirak";
-      repo = "trivial-elisps";
-      type = "github";
+      type = "git";
+      url = "https://git.sr.ht/~akirak/akirak-mode";
     };
     anzu = {
       flake = false;
@@ -955,6 +954,12 @@
       repo = "super-save";
       type = "github";
     };
+    svelte-mode = {
+      flake = false;
+      owner = "leafOfTree";
+      repo = "svelte-mode";
+      type = "github";
+    };
     svg-lib = {
       flake = false;
       owner = "rougier";
@@ -971,6 +976,12 @@
       flake = false;
       owner = "wolray";
       repo = "symbol-overlay";
+      type = "github";
+    };
+    tagedit = {
+      flake = false;
+      owner = "magnars";
+      repo = "tagedit";
       type = "github";
     };
     taxy = {
@@ -1002,7 +1013,7 @@
     tree-sitter-langs = {
       flake = false;
       owner = "emacs-tree-sitter";
-      ref = "0.11.3";
+      ref = "0.11.6";
       repo = "tree-sitter-langs";
       type = "github";
     };
