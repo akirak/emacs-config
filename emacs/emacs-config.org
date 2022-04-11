@@ -1330,6 +1330,8 @@ DOCT: Declarative Org capture templates
           ;; Built-in link types I need
           ol-info
           ol-eww
+          ;; Ensure the library is used when creating a bookmark
+          org-bookmark-heading
           ;; See fanyi
           ol-fanyi))
 #+end_src
