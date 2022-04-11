@@ -311,14 +311,17 @@
     "site": {
       "flake": false,
       "locked": {
-        "lastModified": 1,
+        "lastModified": 1649686035,
         "narHash": "sha256-GCiWKV/fdCMRQgm37qHirAFn2Ngnc4DETgbrb/oVEM8=",
-        "path": "./sites/default",
-        "type": "path"
+        "ref": "master",
+        "rev": "f6dbf16970121629c26ec04ce00d0f82e80c182b",
+        "revCount": 1,
+        "type": "git",
+        "url": "https://git.sr.ht/~akirak/default-host"
       },
       "original": {
-        "path": "./sites/default",
-        "type": "path"
+        "type": "git",
+        "url": "https://git.sr.ht/~akirak/default-host"
       }
     },
     "twist": {

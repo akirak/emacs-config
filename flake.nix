@@ -10,7 +10,7 @@
 
     # Switch to a private profile by overriding this input
     site = {
-      url = "path:./sites/default";
+      url = "git+https://git.sr.ht/~akirak/default-host";
       flake = false;
     };
 
