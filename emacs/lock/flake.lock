@@ -83,11 +83,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1649733031,
-        "narHash": "sha256-FlBdYmLylW/gsfphOdYhNjeqTlnvYYLt4AazSWoyANY=",
+        "lastModified": 1649853453,
+        "narHash": "sha256-cp9MWHZfdePx8uXj0BPFLK83PKhney/uRgHTQMJ8Kvw=",
         "ref": "master",
-        "rev": "4266f798a48f55c791f3f8ae48be4595e1180625",
-        "revCount": 160,
+        "rev": "ee724ef7cc67842f73c279b4b294c9ee38112b1b",
+        "revCount": 163,
         "type": "git",
         "url": "https://git.sr.ht/~akirak/akirak-mode"
       },
@@ -596,11 +596,11 @@
     "eglot": {
       "flake": false,
       "locked": {
-        "lastModified": 1642946777,
-        "narHash": "sha256-Gjzkv/nUOCuvZP0sUH7oDwSO2BFxn2/BGnLeB9Jzeqg=",
+        "lastModified": 1649257199,
+        "narHash": "sha256-gB7VVxaxCPvH247A10yPwbav5Gd1m1TkqK9vV+QG9PM=",
         "owner": "joaotavora",
         "repo": "eglot",
-        "rev": "57779f9c3940a188e2c089758d095d05cf0a0e24",
+        "rev": "2c34dae387c583aa307615779ff570a84d5e723c",
         "type": "github"
       },
       "original": {
@@ -1150,6 +1150,22 @@
       "original": {
         "owner": "akirak",
         "repo": "github-linguist.el",
+        "type": "github"
+      }
+    },
+    "go-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1649163803,
+        "narHash": "sha256-XynfeozT1pSKMj6dWfHqY6Q5S808jXuH5DcFrV82ybc=",
+        "owner": "dominikh",
+        "repo": "go-mode.el",
+        "rev": "fa2693278637f56759480d2bf203bb8aad107230",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dominikh",
+        "repo": "go-mode.el",
         "type": "github"
       }
     },
@@ -1811,6 +1827,22 @@
         "type": "github"
       }
     },
+    "org-bb": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1649923281,
+        "narHash": "sha256-ejM0W8nX16P/cP+1IH4vC8DSOTJ9qQFMcpHlH32A7N4=",
+        "owner": "akirak",
+        "repo": "org-blockers-block",
+        "rev": "01198de742449e1801be6ae8bcfef9dee8ae4850",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "org-blockers-block",
+        "type": "github"
+      }
+    },
     "org-bookmark-heading": {
       "flake": false,
       "locked": {
@@ -2297,11 +2329,11 @@
     "project-hercules": {
       "flake": false,
       "locked": {
-        "lastModified": 1645009147,
-        "narHash": "sha256-0VT6l8VYXXRupvs5IIWUgCLuuCMSvxfnfGN9O9kKAVg=",
+        "lastModified": 1649928824,
+        "narHash": "sha256-lxcEzylBgGGsB3W1+v/kn1tlzXaE9dnUv07qBMjO6Q0=",
         "owner": "akirak",
         "repo": "project-hercules.el",
-        "rev": "b6151dbb8505e6fdcdbe4fb8e3d38ea6339aa059",
+        "rev": "717d67a4ad072ba18ace5e561b56cc10e71fd129",
         "type": "github"
       },
       "original": {
@@ -2576,6 +2608,7 @@
         "git-identity": "git-identity",
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
+        "go-mode": "go-mode",
         "go-translate": "go-translate",
         "graphql": "graphql",
         "graphql-mode": "graphql-mode",
@@ -2617,6 +2650,7 @@
         "nov": "nov",
         "orderless": "orderless",
         "org-autolist": "org-autolist",
+        "org-bb": "org-bb",
         "org-bookmark-heading": "org-bookmark-heading",
         "org-dog": "org-dog",
         "org-dog-embark": "org-dog-embark",

@@ -430,6 +430,12 @@
       repo = "github-linguist.el";
       type = "github";
     };
+    go-mode = {
+      flake = false;
+      owner = "dominikh";
+      repo = "go-mode.el";
+      type = "github";
+    };
     go-translate = {
       flake = false;
       owner = "lorniu";
@@ -675,6 +681,12 @@
       flake = false;
       owner = "calvinwyoung";
       repo = "org-autolist";
+      type = "github";
+    };
+    org-bb = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-blockers-block";
       type = "github";
     };
     org-bookmark-heading = {
