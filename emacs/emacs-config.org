@@ -2722,7 +2722,28 @@ Conveniently act on minibuffer completions
 #+begin_src emacs-lisp
   (setup (:package embark)
     ;; MAYBE: Bind "C-;" or something to embark-dwim
-    (:global "C-." #'embark-act))
+    (:global "C-." #'embark-act)
+
+    (:when-loaded
+      (defun akirak/embark-target-org-link-at-point ()
+        (when (bound-and-true-p org-link-bracket-re)
+          (save-match-data
+            (when-let (href (cond
+                             ((thing-at-point-looking-at org-link-bracket-re)
+                              (match-string 1))
+                             ((thing-at-point-looking-at org-link-plain-re)
+                              (match-string 0))))
+              (let* ((bounds (cons (marker-position (nth 0 (match-data)))
+                                   (marker-position (nth 1 (match-data)))))
+                     (href (substring-no-properties href)))
+                (pcase href
+                  ;; TODO Add org-link type
+                  ((rx bol "file:" (group (+ anything)))
+                   `(file ,(match-string 1 href) . ,bounds))
+                  ((rx bol "http" (?  "s") ":")
+                   `(url ,href . ,bounds))))))))
+
+      (add-to-list 'embark-target-finders #'akirak/embark-target-org-link-at-point)))
 #+end_src
 
 Some notes:
