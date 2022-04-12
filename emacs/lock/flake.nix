@@ -704,6 +704,12 @@
       repo = "org-dog";
       type = "github";
     };
+    org-epubinfo = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-epubinfo";
+      type = "github";
+    };
     org-make-toc = {
       flake = false;
       owner = "alphapapa";

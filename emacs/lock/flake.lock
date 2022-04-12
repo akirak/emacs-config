@@ -83,11 +83,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1649725139,
-        "narHash": "sha256-laopj26/m+jUcvmDq28k6vqcIDZSwGAgXZGW3QpwAfY=",
+        "lastModified": 1649733031,
+        "narHash": "sha256-FlBdYmLylW/gsfphOdYhNjeqTlnvYYLt4AazSWoyANY=",
         "ref": "master",
-        "rev": "76920d39643e1ff2a78ea7d305d71763e6485ec2",
-        "revCount": 158,
+        "rev": "4266f798a48f55c791f3f8ae48be4595e1180625",
+        "revCount": 160,
         "type": "git",
         "url": "https://git.sr.ht/~akirak/akirak-mode"
       },
@@ -1878,6 +1878,22 @@
         "type": "github"
       }
     },
+    "org-epubinfo": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1649732014,
+        "narHash": "sha256-UQRuH+pOZlvsXyPvSwDH+YV3WfT0sjuqHPfuXBdzz5M=",
+        "owner": "akirak",
+        "repo": "org-epubinfo",
+        "rev": "d541cc9625c50ef0ca163208996a28a644c3d27a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "org-epubinfo",
+        "type": "github"
+      }
+    },
     "org-make-toc": {
       "flake": false,
       "locked": {
@@ -2605,6 +2621,7 @@
         "org-dog": "org-dog",
         "org-dog-embark": "org-dog-embark",
         "org-dog-facade": "org-dog-facade",
+        "org-epubinfo": "org-epubinfo",
         "org-make-toc": "org-make-toc",
         "org-ml": "org-ml",
         "org-noter": "org-noter",
