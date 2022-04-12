@@ -102,7 +102,7 @@ in
             userEmacsDirectory
             userEmacsDirectoryMountPoint
           ]
-          else ["--tmpfs" "$HOME/.emacs.d"]
+          else ["--tmpfs" userEmacsDirectoryMountPoint]
         )
         ++ [
           "--setenv"
