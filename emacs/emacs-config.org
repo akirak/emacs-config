@@ -1388,6 +1388,12 @@ DOCT: Declarative Org capture templates
                  "C-c ]")
         (:bind akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
                "<" #'akirak-org-angle-open
+               "*" #'akirak-org-bold
+               "/" #'akirak-org-italic
+               "_" #'akirak-org-underlined
+               "=" #'akirak-org-verbatim
+               "~" #'akirak-org-code
+               "+" #'akirak-org-strike-through
                "C-c C-x y" #'akirak-org-yank-into-new-block
                "C-c C-x ' c" #'akirak-org-avy-clone-subtree
                "C-c C-x ' r" #'avy-org-refile-as-child
