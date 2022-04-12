@@ -4005,7 +4005,12 @@ Emacs major mode for Svelte
                    (push (svelte--submode-name submode) names))))
              names))
          ;; Prevent creating keymaps every time `svelte-mode' is called
-         (setq-local akirak/svelte-remap-submodes-done t)))))
+         (setq-local akirak/svelte-remap-submodes-done t))))
+
+    (:auto-insert
+     ("\\.svelte\\'"
+      . (> "<script lang=\"ts\">\n</script>\n\n"
+           _ "\n\n<style>\n\n</style>\n"))))
 #+end_src
 *** svg-lib                                              :library:graphics:
 :PROPERTIES:
