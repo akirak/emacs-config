@@ -60,6 +60,9 @@
       flake = false;
     };
 
+    # other packages
+    epubinfo.url = "github:akirak/epubinfo";
+
     # pre-commit
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -129,6 +132,9 @@
       sharedOverlays = [
         (import ./pkgs/overlay.nix)
         inputs.flake-no-path.overlay
+        (_: prev: {
+          inherit (inputs.epubinfo.packages.${prev.system}) epubinfo;
+        })
         emacsOverlay
         # zsh plugins used in the home-managerconfiguration
         (_: _:

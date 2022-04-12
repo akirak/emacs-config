@@ -63,6 +63,42 @@
         "type": "github"
       }
     },
+    "epubinfo": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1649441665,
+        "narHash": "sha256-yt/FIaghHkyv0i/MiZJ5/Ch0UfRnG3L8zEYqGeYa9jU=",
+        "owner": "akirak",
+        "repo": "epubinfo",
+        "rev": "577e5daebb98d610f977942ddcdd1ee350a4295b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "epubinfo",
+        "type": "github"
+      }
+    },
+    "flake-compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1606424373,
+        "narHash": "sha256-oq8d4//CJOrVj+EcOaSXvMebvuTkmBJuT5tzlfewUnQ=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "99f1c2157fba4bfe6211a321fd0ee43199025dbf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-no-path": {
       "inputs": {
         "flake-utils": [
@@ -91,11 +127,11 @@
     },
     "flake-utils": {
       "locked": {
-        "lastModified": 1638122382,
-        "narHash": "sha256-sQzZzAbvKEqN9s0bzWuYmRaA03v40gaJ4+iL1LXjaeI=",
+        "lastModified": 1605370193,
+        "narHash": "sha256-YyMTf3URDL/otKdKgtoMChu4vfVL3vCMkRqpGifhUn0=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "74f7e4319258e287b0f9cb95426c9853b282730b",
+        "rev": "5021eac20303a61fafe17224c087f5519baed54d",
         "type": "github"
       },
       "original": {
@@ -106,7 +142,7 @@
     },
     "flake-utils-plus": {
       "inputs": {
-        "flake-utils": "flake-utils"
+        "flake-utils": "flake-utils_2"
       },
       "locked": {
         "lastModified": 1638172912,
@@ -120,6 +156,21 @@
         "owner": "gytis-ivaskevicius",
         "ref": "v1.3.1",
         "repo": "flake-utils-plus",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "locked": {
+        "lastModified": 1638122382,
+        "narHash": "sha256-sQzZzAbvKEqN9s0bzWuYmRaA03v40gaJ4+iL1LXjaeI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "74f7e4319258e287b0f9cb95426c9853b282730b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
         "type": "github"
       }
     },
@@ -158,7 +209,7 @@
     },
     "home-manager": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1649130493,
@@ -192,11 +243,11 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1649587552,
-        "narHash": "sha256-VmwXRaStFwxuR+8uQcxWVAd5UNh359GayFR4yUeoH8w=",
+        "lastModified": 1649731672,
+        "narHash": "sha256-ZdW9Pd3K/JWNG9+kUXdl59VJdhO1lBF6H05FMw2bZg0=",
         "owner": "akirak",
         "repo": "melpa",
-        "rev": "5691d1b08699cabfe25a360257a079f01fdd3fd6",
+        "rev": "bd782b0e9cc9309a53be82dc84a7623d43e869bb",
         "type": "github"
       },
       "original": {
@@ -208,14 +259,18 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-Ctij+dOi0ZZIfX5eMhgwugfvB+WZSrvVNAyAuANOsnQ=",
-        "path": "/nix/store/m2vv0bxfchzrjngx8wi0i7dhzb9q2g50-source",
-        "type": "path"
+        "lastModified": 1607092910,
+        "narHash": "sha256-qnpo32a0QSLl3HLMK4BdjMj6NqlNjoX6BndHxPVfxJU=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "b3abbd61f52ec1acc08a0c49972c4a152e657f1f",
+        "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nixpkgs-emacs": {
@@ -234,6 +289,18 @@
       }
     },
     "nixpkgs_2": {
+      "locked": {
+        "lastModified": 0,
+        "narHash": "sha256-Ctij+dOi0ZZIfX5eMhgwugfvB+WZSrvVNAyAuANOsnQ=",
+        "path": "/nix/store/m2vv0bxfchzrjngx8wi0i7dhzb9q2g50-source",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 0,
         "narHash": "sha256-Ctij+dOi0ZZIfX5eMhgwugfvB+WZSrvVNAyAuANOsnQ=",
@@ -288,13 +355,14 @@
         "emacs": "emacs",
         "emacs-overlay": "emacs-overlay",
         "epkgs": "epkgs",
+        "epubinfo": "epubinfo",
         "flake-no-path": "flake-no-path",
         "flake-utils-plus": "flake-utils-plus",
         "gnu-elpa": "gnu-elpa",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "melpa": "melpa",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "nixpkgs-emacs": "nixpkgs-emacs",
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks",
