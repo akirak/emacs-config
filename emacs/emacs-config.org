@@ -1356,7 +1356,7 @@ DOCT: Declarative Org capture templates
 #+end_src
 **** Display settings
 #+begin_src emacs-lisp
-  (setup org-mode
+  (setup org
     ;; Based on https://lepisma.xyz/2017/10/28/ricing-org-mode/
     (:set org-ellipsis " ⌄ "
           org-pretty-entities t
