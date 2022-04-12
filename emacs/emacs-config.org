@@ -1690,6 +1690,15 @@ Extensible Dependencies 'N' Actions
 #+begin_src emacs-lisp
 (setup (:package org-edna))
 #+end_src
+*** org-epubinfo
+:PROPERTIES:
+:CREATED_TIME: [2022-04-12 Tue 11:03]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-epubinfo)
+    (:nixpkgs epubinfo))
+#+end_src
 *** org-journal                                          :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
