@@ -3094,6 +3094,15 @@ Major modes for editing Git configuration files
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
+*** go-mode                                                   :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-12 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package go-mode)
+    (:file-match "\\.go\\'"))
+#+end_src
 *** go-translate                                              :translation:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-02 Sat 23:59]
