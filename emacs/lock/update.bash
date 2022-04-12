@@ -21,4 +21,6 @@ do
         sed -e 's/^/--update-input /' >> "$tmp"
 done
 
+echo "--update-input akirak" >> "$tmp"
+
 xargs nix flake lock < "$tmp"
