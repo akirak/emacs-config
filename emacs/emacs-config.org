@@ -2077,6 +2077,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 **** akirak-image
 #+begin_src emacs-lisp
   (setup akirak-image
+    (:nixpkgs "librsvg")
     (with-eval-after-load 'embark
       (define-key embark-url-map (kbd "d") #'akirak-image-insert-offline-link)))
 #+end_src
