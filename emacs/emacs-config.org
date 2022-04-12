@@ -1368,7 +1368,7 @@ DOCT: Declarative Org capture templates
     (:when-loaded
       ;; This evaluation is a bit slow, so defer it to the library load time.
       org-image-actual-width (ignore-errors
-                               (* 90 (/ (frame-text-width)
+                               (* 80 (/ (frame-text-width)
                                         (frame-width))))))
 #+end_src
 **** Keybindings
