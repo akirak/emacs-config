@@ -1688,18 +1688,6 @@ Facade Org files
   (setup (:package org-dynamic-bullets)
     (:hook-into org-mode-hook))
 #+end_src
-*** org-edna
-:PROPERTIES:
-:CREATED_TIME: [2022-02-25 Fri 19:16]
-:END:
-#+begin_quote
-Extensible Dependencies 'N' Actions
-[[https://savannah.nongnu.org/projects/org-edna-el/]]
-#+end_quote
-
-#+begin_src emacs-lisp
-(setup (:package org-edna))
-#+end_src
 *** org-epubinfo
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 11:03]
