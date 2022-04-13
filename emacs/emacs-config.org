@@ -1577,6 +1577,16 @@ Improved list management in org-mode
   (setup (:package org-autolist)
     (:hook-into org-mode-hook))
 #+end_src
+*** org-bb
+:PROPERTIES:
+:CREATED_TIME: [2022-04-13 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-bb)
+    (with-eval-after-load 'org
+      (org-bb-mode t)))
+#+end_src
 *** org-bookmark-heading
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 19:26]
