@@ -126,23 +126,11 @@
       repo = "consult";
       type = "github";
     };
-    consult-dir = {
-      flake = false;
-      owner = "karthink";
-      repo = "consult-dir";
-      type = "github";
-    };
     consult-org-dog = {
       flake = false;
       owner = "akirak";
       ref = "develop";
       repo = "org-dog";
-      type = "github";
-    };
-    consult-project-extra = {
-      flake = false;
-      owner = "Qkessler";
-      repo = "consult-project-extra";
       type = "github";
     };
     corfu = {
@@ -155,6 +143,12 @@
       flake = false;
       owner = "magnars";
       repo = "dash.el";
+      type = "github";
+    };
+    dash-docs = {
+      flake = false;
+      owner = "dash-docs-el";
+      repo = "dash-docs";
       type = "github";
     };
     deadgrep = {
@@ -641,6 +635,12 @@
       repo = "emacs-mini-modeline";
       type = "github";
     };
+    mlscroll = {
+      flake = false;
+      owner = "jdtsmith";
+      repo = "mlscroll";
+      type = "github";
+    };
     move-dup = {
       flake = false;
       owner = "wyuenho";
@@ -792,6 +792,12 @@
       flake = false;
       owner = "alphapapa";
       repo = "org-web-tools";
+      type = "github";
+    };
+    orgabilize = {
+      flake = false;
+      owner = "akirak";
+      repo = "orgabilize.el";
       type = "github";
     };
     orgit = {
