@@ -1565,6 +1565,17 @@ DOCT: Declarative Org capture templates
     (:set org-group-tags t
           org-tags-exclude-from-inheritance '("ORDERED" "crypt")))
 #+end_src
+*** orgabilize
+:PROPERTIES:
+:CREATED_TIME: [2022-04-15 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package orgabilize)
+    (:nixpkgs "readability-cli")
+    (with-eval-after-load 'embark
+      (define-key embark-url-map (kbd "r") #'orgabilize-org-archive)))
+#+end_src
 *** org-autolist
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 19:26]
