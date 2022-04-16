@@ -1326,6 +1326,7 @@ DOCT: Declarative Org capture templates
 #+begin_src emacs-lisp
   (setq org-modules
         '(org-id
+          org-clock
           org-crypt
           ;; Built-in link types I need
           ol-info
