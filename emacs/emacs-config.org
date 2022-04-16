@@ -2086,6 +2086,7 @@ Complete a URL from the clipboard and the kill ring and insert as a link
              "C-c c u" #'akirak-url-org-capture)
     (with-eval-after-load 'embark
       (define-key embark-url-map (kbd "m") #'akirak-url-insert-as-markdown)
+      (define-key embark-file-map (kbd "C-l") #'akirak-org-store-link-to-file)
       (define-key embark-url-map (kbd "c") #'akirak-url-org-capture)))
 #+end_src
 **** akirak-window                                               :windows:
