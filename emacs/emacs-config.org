@@ -2950,7 +2950,8 @@ Generic help
 
 #+begin_src emacs-lisp
   (setup (:package ghelp)
-    (:global "<f1> ." #'ghelp-describe-at-point)
+    (:global "<f1> ." #'ghelp-describe-at-point
+             [remap describe-symbol] #'ghelp-describe)
 
     ;; Temporary workaround
     (autoload 'ghelp-describe-at-point "ghelp"))
@@ -3236,7 +3237,14 @@ A better *help* buffer
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package helpful))
+  (setup (:package helpful)
+    ;; Also: helpful-at-point, helpful-callable, helpful-macro, and
+    ;; helpful-visit-reference.
+    (:global [remap describe-function] #'helpful-callable
+             [remap describe-variable] #'helpful-variable
+             [remap describe-command] #'helpful-command
+             [remap describe-key] #'helpful-key
+             [remap describe-symbol] #'helpful-symbol))
 #+end_src
 *** hercules                                                  :keybindings:
 :PROPERTIES:
