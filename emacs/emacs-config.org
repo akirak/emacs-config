@@ -1895,19 +1895,6 @@ Retrieve metadata of volumes from inside Org
     (:set org-volume-image-download-method #'akirak-image-insert-offline-link
           org-volume-dblock-defaults '(:lang "en" :limit 1)))
 #+end_src
-*** org-web-tools :reading:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-26 Sat 23:59]
-:END:
-#+begin_quote
-Display and capture web content with Org-mode
-#+end_quote
-
-#+begin_src emacs-lisp
-(setup (:package org-web-tools))
-#+end_src
-
-I want to replace this package someday.
 ** Packages                                                       :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
