@@ -3620,15 +3620,15 @@ Display modeline in minibuffer
                       ""))
           ""))))
 #+end_src
-*** mlscroll                               :noexport:aesthetics:UI:ARCHIVE:
+*** mlscroll                                                  :aesthetics:UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
 
 #+begin_src emacs-lisp
   (setup (:package mlscroll)
-    (:set mlscroll-in-color "#888888"
-          mlscroll-out-color (face-attribute 'region :background nil t))
+    (:set mlscroll-in-color (face-attribute 'region :background nil t)
+          mlscroll-out-color (face-attribute 'default :background nil t))
     (:with-mode mlscroll-mode
       (:hook-into after-init-hook)))
 #+end_src
