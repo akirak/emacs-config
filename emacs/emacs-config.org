@@ -825,7 +825,7 @@ Operations on the current project
           ;; Don't use c-x p for the prefix map.
           (:unbind "p")
           ;; Rebind the key
-          (:bind "p" #'consult-project-extra-find)))))
+          (:bind "p" #'akirak-consult-project-file)))))
 #+end_src
 **** akirak-project
 #+begin_src emacs-lisp
@@ -2053,6 +2053,13 @@ This is a collection of extra utilities for various packages.
       (:defer 1 #'akirak-files-ensure-abbrev-list)
       (run-with-idle-timer 300 nil #'akirak-project-rescan)))
 #+end_src
+**** akirak-consult
+#+begin_src emacs-lisp
+  (setup akirak-consult
+    (:status opinionated
+      (:with-map ctl-x-map
+        (:bind "p" #'akirak-consult-project-file))))
+#+end_src
 **** akirak-elec-pair                                        :parentheses:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:39]
@@ -2327,21 +2334,6 @@ Consulting completing-read
 #+begin_src emacs-lisp
   (setup consult-org
     (:global "M-g M-j" #'consult-org-clock-goto))
-#+end_src
-*** consult-project-extra
-:PROPERTIES:
-:CREATED_TIME: [2022-02-25 Fri 18:22]
-:END:
-#+begin_quote
-Consult integration for project.el
-[[https://github.com/Qkessler/consult-project-extra]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package consult-project-extra)
-    (:status opinionated
-      (:with-map ctl-x-map
-        (:bind "p" #'consult-project-extra-find))))
 #+end_src
 *** corfu                                                   :completion:UI:
 :PROPERTIES:
