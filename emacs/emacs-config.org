@@ -4213,7 +4213,9 @@ Fully-featured terminal emulator
 
     (defun akirak/project-vterm ()
       (interactive)
-      (akirak/vterm (project-root (project-current)))))
+      (akirak/vterm (if-let (project (project-current))
+                        (project-root project)
+                      default-directory))))
 #+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_quote
