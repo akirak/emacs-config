@@ -3404,10 +3404,10 @@ A Git porcelain inside Emacs.
     (advice-add 'magit-version :override #'ignore)
 
     (:status opinionated
-      (:global "<f8> <f7>" #'magit-stage-file
-               "<f8> <f8>" #'magit-status
+      (:global "<f8> <f8>" #'magit-status
                "<f8> <f9>" #'magit-dispatch
-               "<f8> <f10>" #'magit-file-dispatch)
+               "<f8> <f10>" #'magit-file-dispatch
+               "C-x g" #'magit-blob-visit-file)
 
       (:set magit-display-buffer-function
             ;; Based on 'magit-display-buffer-same-window-except-diff-v1
