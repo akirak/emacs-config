@@ -2328,62 +2328,6 @@ Consulting completing-read
   (setup consult-org
     (:global "M-g M-j" #'consult-org-clock-goto))
 #+end_src
-*** consult-dir
-:PROPERTIES:
-:CREATED_TIME: [2022-01-05 Wed 17:40]
-:END:
-#+begin_quote
-Insert paths into the minibuffer prompt
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package consult-dir)
-    (:global "C-x d" #'consult-dir)
-
-    (:set consult-dir-sources
-          '(consult-dir--source-default
-            consult-dir--source-bookmark
-            consult-dir--source-project
-            akirak/consult-dired-dir-source
-            akirak/consult-project-parent-source
-            consult-dir--source-recentf)))
-#+end_src
-**** Dired buffers
-#+begin_src emacs-lisp
-  (defvar akirak/consult-dired-dir-source
-    `(:name "Dired buffers"
-            :narrow ?d
-            :category file
-            :face consult-file
-            ;; :enabled ,(lambda () consult-dir-project-list-function)
-            :items ,(lambda ()
-                      (thread-last
-                        (buffer-list)
-                        (seq-filter (lambda (buf)
-                                      (eq (buffer-local-value 'major-mode buf)
-                                          'dired-mode)))
-                        (mapcar (lambda (buf)
-                                  (buffer-local-value 'default-directory buf)))))))
-#+end_src
-**** Project parent directories
-#+begin_src emacs-lisp
-  (defvar akirak/consult-project-parent-source
-    `(:name "Project parents"
-            :narrow ?P
-            :category file
-            :face consult-file
-            ;; :history file-name-history
-            ;; :enabled ,(lambda () consult-dir-project-list-function)
-            :items ,(lambda ()
-                      (thread-last
-                        (project-known-project-roots)
-                        (cl-remove-if (lambda (dir)
-                                        (string-prefix-p "~/archives/" dir)))
-                        (mapcar (lambda (dir)
-                                  (file-name-directory (string-remove-suffix "/" dir))))
-                        (delete-dups)))))
-
-#+end_src
 *** consult-project-extra
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 18:22]
