@@ -2037,14 +2037,16 @@ This is a collection of extra utilities for various packages.
 #+begin_src emacs-lisp
   (setup (:package akirak)
 
-    (:global "C-x g" #'akirak-project-switch)
-    (:global "C-c i" #'akirak-scratch-elisp)
-
-    (:global "C-c c e" #'akirak-emacs-config-capture)
-
+    (:global "C-x d" #'akirak-consult-dir
+             "C-c i" #'akirak-scratch-elisp
+             "C-c c e" #'akirak-emacs-config-capture)
+  
     (with-eval-after-load 'embark
+      (require 'akirak-embark)
       (add-to-list 'embark-keymap-alist
-                   '(project-root . akirak-project-root-map)))
+                   '(directory . akirak-embark-directory-map))
+      (add-to-list 'embark-keymap-alist
+                   '(project-root . akirak-embark-project-root-map)))
 
     ;; These settings are specific to my environment.
     (:status personal
@@ -3548,7 +3550,9 @@ Enrich existing commands with completion annotations
 
     (:when-loaded
       (add-to-list 'marginalia-annotator-registry
-                   '(project-root akirak-project-root-annotator builtin none))))
+                   '(project-root akirak-project-root-annotator builtin none))
+      (add-to-list 'marginalia-annotator-registry
+                   '(directory marginalia-annotate-file builtin none))))
 #+end_src
 *** markdown-mode                                             :major__mode:
 :PROPERTIES:
