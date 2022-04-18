@@ -3970,28 +3970,10 @@ Emacs major mode for Svelte
 #+begin_src emacs-lisp
   (setup (:package svelte-mode)
     (:file-match "\\.svelte\\'")
-    (defvar akirak/svelte-remap-submodes-done nil)
     (:hook
-     (defun akirak/svelte-remap-submodes ()
-       "Use `puni-mode' only inside submodes."
-       (require 'puni)
+     (defun akirak/svelte-setup ()
        (puni-mode -1)
-       (unless akirak/svelte-remap-submodes-done
-         (save-excursion
-           (goto-char (point-min))
-           (let (match
-                 names)
-             (while (setq match (text-property-search-forward 'svelte-submode))
-               (when-let (submode (prop-match-value match))
-                 (unless (member (svelte--submode-name submode) names)
-                   (setf (svelte--submode-keymap submode)
-                         (make-composed-keymap (list puni-mode-map)
-                                               (svelte--submode-keymap submode)))
-                   (push (svelte--submode-name submode) names))))
-             names))
-         ;; Prevent creating keymaps every time `svelte-mode' is called
-         (setq-local akirak/svelte-remap-submodes-done t))))
-
+       (visual-line-mode -1)))
     (:auto-insert
      ("\\.svelte\\'"
       . (> "<script lang=\"ts\">\n</script>\n\n"
@@ -4043,7 +4025,16 @@ Some paredit-like features for html-mode
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package tagedit))
+  (setup (:package tagedit)
+    ;; The upstream lacks this autoload
+    (autoload 'tagedit-mode "tagedit")
+    (:hook-into html-mode)
+
+    (:bind "C-k" (defun akirak/tagedit-kill-line ()
+                   (interactive)
+                   (if (looking-at (rx (* blank) "<"))
+                       (tagedit-kill)
+                     (puni-kill-line)))))
 #+end_src
 *** taxy                                                          :library:
 :PROPERTIES:
