@@ -3567,7 +3567,7 @@ Display modeline in minibuffer
 
 #+begin_src emacs-lisp
   (setup (:package mlscroll)
-    (:set mlscroll-in-color (face-attribute 'region :background nil t)
+    (:set mlscroll-in-color (face-attribute 'tool-bar :background nil t)
           mlscroll-out-color (face-attribute 'default :background nil t))
     (:with-mode mlscroll-mode
       (:hook-into after-init-hook)))
