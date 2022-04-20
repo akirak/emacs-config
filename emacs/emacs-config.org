@@ -2866,7 +2866,10 @@ Not only English-Chinese translator
 #+begin_src emacs-lisp
   (setup (:package fanyi)
     (:set fanyi-providers '(fanyi-longman-provider
-                            fanyi-etymon-provider)))
+                            fanyi-etymon-provider))
+    (:when-loaded
+      (require 'fanyi-longman)
+      (require 'fanyi-etymon)))
 #+end_src
 
 You should also load ol-fanyi library to enable fanyi link type.
