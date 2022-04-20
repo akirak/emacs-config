@@ -2360,6 +2360,14 @@ Completion Overlay Region FUnction
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** dash-docs                                               :documentation:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-20 Wed 17:28]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package dash-docs))
+#+end_src
 *** deadgrep                                                         :grep:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
