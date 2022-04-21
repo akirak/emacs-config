@@ -254,64 +254,66 @@
       outputsBuilder = channels: let
         inherit (channels.nixpkgs) emacs-config emacsSandboxed;
       in {
-        packages =
-          {
-            tryout-emacs = emacsSandboxed {
-              name = "tryout-emacs";
-              enableOpinionatedSettings = false;
-              extraFeatures = [];
-              extraInitText = ''
-                (require 'sanityinc-tomorrow-night-theme)
-                (load-theme 'sanityinc-tomorrow-night t)
-              '';
-              protectHome = false;
-              shareNet = false;
-              inheritPath = false;
-            };
-
-            emacs-personalized = emacsSandboxed {
-              name = "emacs-personalized";
-              shareNet = false;
-              protectHome = true;
-              inheritPath = true;
-              userEmacsDirectory = "$HOME/emacs";
-              extraInitText = builtins.readFile ./home/profiles/emacs/extra-init.el;
-              extraDirsToTryBind = [
-                "$HOME/emacs"
-                "$HOME/config"
-                "$HOME/fleeting"
-                "$HOME/org"
-                "$HOME/resources"
-              ];
-            };
-
-            emacs-reader = emacsSandboxed {
-              name = "emacs-reader";
-              withXwidgets = true;
-              shareNet = true;
-              protectHome = true;
-              inheritPath = false;
-              userEmacsDirectory = "$HOME/emacs";
-              extraInitText = builtins.readFile ./home/profiles/emacs/extra-init.el;
-              extraDirsToTryBind = [
-                "$HOME/org"
-                "$HOME/resources"
-              ];
-            };
-
-            inherit (channels.nixpkgs) readability-cli;
-
-            inherit emacs-config;
-
-            test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
-
-            update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
-              nix flake lock --update-input melpa --update-input gnu-elpa
-              cd emacs/lock
-              bash ./update.bash "$@"
+        packages = {
+          tryout-emacs = emacsSandboxed {
+            name = "tryout-emacs";
+            enableOpinionatedSettings = false;
+            extraFeatures = [];
+            extraInitText = ''
+              (require 'sanityinc-tomorrow-night-theme)
+              (load-theme 'sanityinc-tomorrow-night t)
             '';
-          }
-          // nixpkgs.lib.getAttrs ["lock" "update"] (emacs-config.admin "emacs/lock");
+            protectHome = false;
+            shareNet = false;
+            inheritPath = false;
+          };
+
+          emacs-personalized = emacsSandboxed {
+            name = "emacs-personalized";
+            shareNet = false;
+            protectHome = true;
+            inheritPath = true;
+            userEmacsDirectory = "$HOME/emacs";
+            extraInitText = builtins.readFile ./home/profiles/emacs/extra-init.el;
+            extraDirsToTryBind = [
+              "$HOME/emacs"
+              "$HOME/config"
+              "$HOME/fleeting"
+              "$HOME/org"
+              "$HOME/resources"
+            ];
+          };
+
+          emacs-reader = emacsSandboxed {
+            name = "emacs-reader";
+            withXwidgets = true;
+            shareNet = true;
+            protectHome = true;
+            inheritPath = false;
+            userEmacsDirectory = "$HOME/emacs";
+            extraInitText = builtins.readFile ./home/profiles/emacs/extra-init.el;
+            extraDirsToTryBind = [
+              "$HOME/org"
+              "$HOME/resources"
+            ];
+          };
+
+          inherit (channels.nixpkgs) readability-cli;
+
+          inherit emacs-config;
+
+          test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
+
+          update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
+            nix flake lock --update-input melpa --update-input gnu-elpa
+            cd emacs/lock
+            bash ./update.bash "$@"
+          '';
+        };
+
+        apps = emacs-config.makeApps {
+          lockDirName = "emacs/lock";
+        };
 
         homeConfigurations = {
           ${site.username + "@" + site.hostName} = makeHome {
