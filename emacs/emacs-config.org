@@ -2278,7 +2278,12 @@ Completion At Point Extensions
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package cape))
+  (setup (:package cape)
+    (:with-map ctl-x-r-map
+      (:bind "M-d" #'cape-dabbrev
+             "M-f" #'cape-file
+             "M-s" #'cape-symbol
+             "M-l" #'cape-line)))
 #+end_src
 *** consult                                                    :completion:
 :PROPERTIES:
