@@ -2283,11 +2283,10 @@ Completion At Point Extensions
 
 #+begin_src emacs-lisp
   (setup (:package cape)
-    (:with-map ctl-x-r-map
-      (:bind "M-d" #'cape-dabbrev
-             "M-f" #'cape-file
-             "M-s" #'cape-symbol
-             "M-l" #'cape-line)))
+    (:global "C-x r M-d" #'cape-dabbrev
+             "C-x r M-f" #'cape-file
+             "C-x r M-s" #'cape-symbol
+             "C-x r M-l" #'cape-line))
 #+end_src
 *** consult                                                    :completion:
 :PROPERTIES:
