@@ -5,7 +5,7 @@
 }: {
   nix.generateRegistryFromInputs = true;
   nix.generateNixPathFromInputs = true;
-  # nix.linkInputs = true;
+  nix.linkInputs = true;
 
   # Let 'nixos-version --json' know about the Git revision of this
   # flake.
