@@ -157,6 +157,12 @@
       repo = "deadgrep";
       type = "github";
     };
+    dired-auto-readme = {
+      flake = false;
+      owner = "amno1";
+      repo = "dired-auto-readme";
+      type = "github";
+    };
     dired-collapse = {
       flake = false;
       owner = "Fuco1";
@@ -671,6 +677,12 @@
       type = "git";
       url = "https://depp.brause.cc/nov.el.git";
     };
+    olivetti = {
+      flake = false;
+      owner = "rnkn";
+      repo = "olivetti";
+      type = "github";
+    };
     orderless = {
       flake = false;
       owner = "oantolin";
@@ -738,6 +750,12 @@
       flake = false;
       owner = "weirdNox";
       repo = "org-noter";
+      type = "github";
+    };
+    org-pretty-table = {
+      flake = false;
+      owner = "Fuco1";
+      repo = "org-pretty-table";
       type = "github";
     };
     org-ql = {
