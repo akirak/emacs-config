@@ -1,7 +1,7 @@
 {
   inputs = {
     utils.url = "github:numtide/flake-utils";
-    flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus/v1.3.1";
+    flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
 
     home-manager.url = "github:nix-community/home-manager";
 
