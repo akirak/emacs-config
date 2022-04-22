@@ -3676,6 +3676,14 @@ Featureful EPUB reader mode
       (:hook visual-line-mode
              visual-fill-column-mode)))
 #+end_src
+*** olivetti                                                      :writing:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-22 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package olivetti))
+#+end_src
 *** orderless                                                  :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:14]
