@@ -1786,6 +1786,14 @@ A synchronized, Org-mode, document annotator
 #+begin_src emacs-lisp
 (setup (:package org-noter))
 #+end_src
+*** org-pretty-table
+:PROPERTIES:
+:CREATED_TIME: [2022-04-23 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-pretty-table))
+#+end_src
 *** org-ql                                                        :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-22 Sat 20:50]
@@ -2404,6 +2412,15 @@ fast, friendly searching with ripgrep
 
 #+begin_src emacs-lisp
 (setup (:package deadgrep))
+#+end_src
+*** dired-auto-readme                                               :dired:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-23 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dired-auto-readme)
+    (:hook-into dired-mode))
 #+end_src
 *** dired-collapse                                                  :dired:
 :PROPERTIES:
