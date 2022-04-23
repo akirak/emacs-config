@@ -1,10 +1,7 @@
 {pkgs, ...}: {
-  networking.networkmanager = {
-    enable = true;
-    packages = [
-      pkgs.networkmanagerapplet
-    ];
-  };
+  environment.systemPackages = [
+    pkgs.networkmanagerapplet
+  ];
 
   services.xserver = {
     xkbOptions = "ctrl:nocaps";
