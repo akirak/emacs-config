@@ -907,7 +907,24 @@ This is a recommended setting for use with vertico. See https://github.com/minad
   (setup sgml-mode
     (:with-map html-mode-map
       ;; I don't use facemenu commands, so save M-o
-      (:unbind "M-o")))
+      (:unbind "M-o"))
+
+    (:with-map sgml-mode-map
+      (:bind "C-j" #'newline-and-indent
+             [remap sgml-close-tag] #'akirak-sgml-close-tag))
+
+    (defun akirak-sgml-close-tag ()
+      (interactive)
+      (let ((tag (car (save-excursion
+                        (sgml-get-context)))))
+        (when (and tag (sgml-tag-p tag))
+          (if (and (> (point) (sgml-tag-start tag))
+                   (< (point) (sgml-tag-end tag)))
+              (progn
+                (goto-char (sgml-tag-end tag))
+                (save-excursion
+                  (sgml-close-tag)))
+            (sgml-close-tag))))))
 #+end_src
 *** shr
 :PROPERTIES:
@@ -3998,6 +4015,7 @@ Emacs major mode for Svelte
 #+begin_src emacs-lisp
   (setup (:package svelte-mode)
     (:file-match "\\.svelte\\'")
+    (:set svelte-display-submode-name t)
     (:hook
      (defun akirak/svelte-setup ()
        (puni-mode -1)
