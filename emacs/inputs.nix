@@ -163,4 +163,12 @@
       ref = "develop";
     };
   };
+  eglot = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "eglot";
+      ref = "develop";
+    };
+  };
 }
