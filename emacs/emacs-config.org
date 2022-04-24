@@ -850,7 +850,7 @@ Operations on the current project
 **** akirak-project
 #+begin_src emacs-lisp
   (setup akirak-project
-    (run-with-idle-timer 180 nil #'akirak-project-import-from-magit)
+    (run-with-idle-timer 180 nil #'akirak-project-rescan)
 
     (with-eval-after-load 'embark
       (define-key embark-file-map (kbd "+") #'akirak-project-init)))
