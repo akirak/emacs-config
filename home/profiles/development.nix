@@ -42,6 +42,7 @@
 
     ignores = [
       ".direnv"
+      "#*"
     ];
   };
 }
