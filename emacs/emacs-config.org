@@ -104,6 +104,26 @@ I am interested to see if it can reduce the amount of configuration code.
                    (run-with-timer ,seconds nil
                                    ,(or func (setup-get 'hook)))))))
 #+end_src
+*** :embark
+:PROPERTIES:
+:CREATED_TIME: [2022-04-24 Sun 17:26]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :embark (map interactive &rest bindings)
+     "Proxy embark bindings."
+     :indent 2
+     `(with-eval-after-load 'embark
+        ,@(cl-loop for (key cmd . _) in bindings
+                   collect `(define-key ,map (kbd ,key)
+                                        (defun ,(intern (format "_embark-%s_%s"
+                                                                interactive cmd))
+                                            (arg)
+                                          (interactive ,interactive)
+                                          (,cmd arg)))))))
+#+end_src
 *** :huan
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 21:38]
@@ -1591,8 +1611,13 @@ DOCT: Declarative Org capture templates
 #+begin_src emacs-lisp
   (setup (:package orgabilize)
     (:nixpkgs "readability-cli")
-    (with-eval-after-load 'embark
-      (define-key embark-url-map (kbd "r") #'orgabilize-org-archive)))
+    ;; (with-eval-after-load 'embark
+    ;;   (define-key embark-url-map (kbd "r")
+    ;;               (defun akirak/embark-archive-url-to-org (url)
+    ;;                 (interactive "s")
+    ;;                 (orgabilize-org-archive url))))
+    (:embark embark-url-map "s"
+      ("r" orgabilize-org-archive)))
 #+end_src
 *** org-autolist
 :PROPERTIES:
@@ -2121,8 +2146,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-image
     (:nixpkgs "librsvg")
-    (with-eval-after-load 'embark
-      (define-key embark-url-map (kbd "d") #'akirak-image-insert-offline-link)))
+    (:embark embark-url-map "s"
+      ("d" akirak-image-insert-offline-link)))
 #+end_src
 **** akirak-url                                                :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
@@ -2131,10 +2156,11 @@ Complete a URL from the clipboard and the kill ring and insert as a link
   (setup akirak-url
     (:global "C-c w" #'akirak-url-insert-dwim
              "C-c c u" #'akirak-url-org-capture)
-    (with-eval-after-load 'embark
-      (define-key embark-url-map (kbd "m") #'akirak-url-insert-as-markdown)
-      (define-key embark-file-map (kbd "C-l") #'akirak-org-store-link-to-file)
-      (define-key embark-url-map (kbd "c") #'akirak-url-org-capture)))
+    (:embark embark-url-map "s"
+      ("m" akirak-url-insert-as-markdown)
+      ("c" akirak-url-org-capture))
+    (:embark embark-file-map "s"
+      ("C-l" akirak-org-store-link-to-file)))
 #+end_src
 **** akirak-window                                               :windows:
 :PROPERTIES:
