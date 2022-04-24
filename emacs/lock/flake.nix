@@ -1,5 +1,6 @@
 {
-  description = "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
+  description =
+    "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
     "a" = {
       flake = false;
@@ -17,6 +18,12 @@
       flake = false;
       owner = "abo-abo";
       repo = "ace-window";
+      type = "github";
+    };
+    affe = {
+      flake = false;
+      owner = "minad";
+      repo = "affe";
       type = "github";
     };
     aggressive-indent = {
@@ -131,6 +138,11 @@
       repo = "consult";
       type = "github";
     };
+    consult-dash = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/ravi/consult-dash.git";
+    };
     consult-org-dog = {
       flake = false;
       owner = "akirak";
@@ -142,6 +154,12 @@
       flake = false;
       owner = "minad";
       repo = "corfu";
+      type = "github";
+    };
+    corfu-doc = {
+      flake = false;
+      owner = "galeo";
+      repo = "corfu-doc";
       type = "github";
     };
     dash = {
@@ -192,12 +210,6 @@
       repo = "dired-hide-dotfiles";
       type = "github";
     };
-    dired-open = {
-      flake = false;
-      owner = "Fuco1";
-      repo = "dired-hacks";
-      type = "github";
-    };
     doct = {
       flake = false;
       owner = "progfolio";
@@ -230,7 +242,8 @@
     };
     eglot = {
       flake = false;
-      owner = "joaotavora";
+      owner = "akirak";
+      ref = "develop";
       repo = "eglot";
       type = "github";
     };
@@ -1126,6 +1139,12 @@
       repo = "emacs-libvterm";
       type = "github";
     };
+    web-mode = {
+      flake = false;
+      owner = "fxbois";
+      repo = "web-mode";
+      type = "github";
+    };
     which-key = {
       flake = false;
       owner = "justbur";
@@ -1181,5 +1200,5 @@
       type = "github";
     };
   };
-  outputs = {...}: {};
+  outputs = { ... }: { };
 }
