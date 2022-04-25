@@ -3077,7 +3077,12 @@ Emacs Minor mode to automatically commit and push
         (concat "Auto commit: "))))
 #+end_src
 
-A recommended way to turn on automatic commits is to adding to =.dir-locals.el=.
+A recommended way to turn on automatic commits is to define local variables in =.dir-locals.el=, e.g.:
+
+#+begin_src emacs-lisp :tangle no
+  ((org-mode . ((gac-debounce-interval . 180)
+                (eval . (git-auto-commit-mode t)))))
+#+end_src
 *** git-gutter                                                         :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 19:08]
