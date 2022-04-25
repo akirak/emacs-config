@@ -1049,6 +1049,17 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
   (setup tooltip
     (tooltip-mode -1))
 #+end_src
+*** transient
+:PROPERTIES:
+:CREATED_TIME: [2022-04-26 Tue 08:51]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package transient))
+#+end_src
+
+Because transient is developed by the maintainer of magit, it is better to update them together.
+Thus I will explicitly install this package rather than using the built-in version.
 *** vc-hooks                                                           :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
