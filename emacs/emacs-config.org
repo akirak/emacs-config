@@ -2439,6 +2439,14 @@ Completion Overlay Region FUnction
 #+begin_src emacs-lisp
 (setup (:package dash-docs))
 #+end_src
+**** consult-dash
+:PROPERTIES:
+:CREATED_TIME: [2022-04-25 Mon 20:26]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package consult-dash))
+#+end_src
 *** deadgrep                                                         :grep:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
