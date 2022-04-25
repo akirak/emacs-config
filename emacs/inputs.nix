@@ -171,4 +171,9 @@
       ref = "develop";
     };
   };
+  dash-docs = _: super: {
+    files = builtins.removeAttrs super.files [
+      "use-package-dash-docs.el"
+    ];
+  };
 }
