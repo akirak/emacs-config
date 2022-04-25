@@ -120,6 +120,11 @@
       repo = "color-theme-sanityinc-tomorrow";
       type = "github";
     };
+    compat = {
+      flake = false;
+      type = "git";
+      url = "https://git.sr.ht/~pkal/compat";
+    };
     consult = {
       flake = false;
       owner = "minad";
@@ -1043,6 +1048,12 @@
       flake = false;
       owner = "duckwork";
       repo = "titlecase.el";
+      type = "github";
+    };
+    transient = {
+      flake = false;
+      owner = "magit";
+      repo = "transient";
       type = "github";
     };
     tree-sitter = {

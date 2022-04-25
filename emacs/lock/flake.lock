@@ -320,6 +320,22 @@
         "type": "github"
       }
     },
+    "compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650874979,
+        "narHash": "sha256-We4kbkUTzoibcAZAIl2Coma7eiEXdryFY62190O5ji8=",
+        "ref": "master",
+        "rev": "afea8e9943940ca2f0c0b1e0632e3ce2705f60cd",
+        "revCount": 334,
+        "type": "git",
+        "url": "https://git.sr.ht/~pkal/compat"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.sr.ht/~pkal/compat"
+      }
+    },
     "consult": {
       "flake": false,
       "locked": {
@@ -916,11 +932,11 @@
     "forge": {
       "flake": false,
       "locked": {
-        "lastModified": 1647646745,
-        "narHash": "sha256-eTeZW+H5IfsI0DpVpbpqtXJ5uGe6kA0aA13ZlpyHbJk=",
+        "lastModified": 1650809817,
+        "narHash": "sha256-IzbNH5ufdXeu6pWjJCIBeIQY2Puks8FboaORKEdLWEw=",
         "owner": "magit",
         "repo": "forge",
-        "rev": "de8856738f5c5d5b77349709c42329c1e23c0da5",
+        "rev": "627972bbc83b2355047e075ce938f79136b1f74a",
         "type": "github"
       },
       "original": {
@@ -1012,11 +1028,11 @@
     "ghub": {
       "flake": false,
       "locked": {
-        "lastModified": 1647822858,
-        "narHash": "sha256-aMd8C8EBF3po8HRGZrJSG6RckJfGaqZ7Gb/os1tI12Y=",
+        "lastModified": 1650793642,
+        "narHash": "sha256-3yjft+KbpgGRkNM1UcOvfF6YuOcVSPo480ja++kCcZ8=",
         "owner": "magit",
         "repo": "ghub",
-        "rev": "e3feb1befa2e8fa5376335ebaccdb06305a2c036",
+        "rev": "5135058a78a2bea112f9e591500790c1e3b731fd",
         "type": "github"
       },
       "original": {
@@ -1076,11 +1092,11 @@
     "git-commit": {
       "flake": false,
       "locked": {
-        "lastModified": 1647868365,
-        "narHash": "sha256-lbamQcx/Hwmxk+g0YzTfOhizXydhdIgOqH0wk+j5gV4=",
+        "lastModified": 1650887609,
+        "narHash": "sha256-eMb7rUG+xMtWe3FDJN6nJiBCmdxPgj5880843k+nKSA=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "b32521d5432b5fbc33a2e47b72f2258bf98cb8b4",
+        "rev": "3cb7f5ba430906bded9e5d9951f5260ab25644d0",
         "type": "github"
       },
       "original": {
@@ -1124,11 +1140,11 @@
     "git-modes": {
       "flake": false,
       "locked": {
-        "lastModified": 1634771183,
-        "narHash": "sha256-08HCzxaqS5+suWxIm3aBB1kcEXEGGE1+gWUwzG4xHys=",
+        "lastModified": 1650643869,
+        "narHash": "sha256-5HLRWxjxlnUEX8rQ2psETVlWH0BuT0LGIMj0JbkNbTQ=",
         "owner": "magit",
         "repo": "git-modes",
-        "rev": "62fbf2e5b84ca789e7bc2f87939386023b5ba3df",
+        "rev": "96abfb732d695cbd2075ba701254651a7b28d693",
         "type": "github"
       },
       "original": {
@@ -1605,11 +1621,11 @@
     "magit": {
       "flake": false,
       "locked": {
-        "lastModified": 1647868365,
-        "narHash": "sha256-lbamQcx/Hwmxk+g0YzTfOhizXydhdIgOqH0wk+j5gV4=",
+        "lastModified": 1650887609,
+        "narHash": "sha256-eMb7rUG+xMtWe3FDJN6nJiBCmdxPgj5880843k+nKSA=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "b32521d5432b5fbc33a2e47b72f2258bf98cb8b4",
+        "rev": "3cb7f5ba430906bded9e5d9951f5260ab25644d0",
         "type": "github"
       },
       "original": {
@@ -1637,11 +1653,11 @@
     "magit-section": {
       "flake": false,
       "locked": {
-        "lastModified": 1647868365,
-        "narHash": "sha256-lbamQcx/Hwmxk+g0YzTfOhizXydhdIgOqH0wk+j5gV4=",
+        "lastModified": 1650887609,
+        "narHash": "sha256-eMb7rUG+xMtWe3FDJN6nJiBCmdxPgj5880843k+nKSA=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "b32521d5432b5fbc33a2e47b72f2258bf98cb8b4",
+        "rev": "3cb7f5ba430906bded9e5d9951f5260ab25644d0",
         "type": "github"
       },
       "original": {
@@ -2185,11 +2201,11 @@
     "orgit": {
       "flake": false,
       "locked": {
-        "lastModified": 1644539149,
-        "narHash": "sha256-MpA08xhsU0K1UFakZ49TsezBT2CP7wXpV/65rZZD2m4=",
+        "lastModified": 1650887871,
+        "narHash": "sha256-FE+KnvNHWMqSEl4E3diA+aJEGq2tswxvDlmKicfl8/Y=",
         "owner": "magit",
         "repo": "orgit",
-        "rev": "42b7f682b3e4e487ff209a44221a729921241133",
+        "rev": "6dc4d4bfffd6c11550952203a51346b13e120165",
         "type": "github"
       },
       "original": {
@@ -2620,6 +2636,7 @@
         "citeproc": "citeproc",
         "closql": "closql",
         "color-theme-sanityinc-tomorrow": "color-theme-sanityinc-tomorrow",
+        "compat": "compat",
         "consult": "consult",
         "consult-org-dog": "consult-org-dog",
         "corfu": "corfu",
@@ -2774,6 +2791,7 @@
         "taxy": "taxy",
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
+        "transient": "transient",
         "tree-sitter": "tree-sitter",
         "tree-sitter-langs": "tree-sitter-langs",
         "treepy": "treepy",
@@ -2986,6 +3004,22 @@
       "original": {
         "owner": "duckwork",
         "repo": "titlecase.el",
+        "type": "github"
+      }
+    },
+    "transient": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650892471,
+        "narHash": "sha256-zAQbvV7/Cftzo00rRB7QCdtuPnA8QYQ5gGBs78kaAdo=",
+        "owner": "magit",
+        "repo": "transient",
+        "rev": "84f2d12ef31ec74c85e616283926780532fed13f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magit",
+        "repo": "transient",
         "type": "github"
       }
     },
@@ -3205,11 +3239,11 @@
     "with-editor": {
       "flake": false,
       "locked": {
-        "lastModified": 1647822874,
-        "narHash": "sha256-7hUi0B1nAajhJPxLnIQq2L2//l+WGF39HRpAG6chrOA=",
+        "lastModified": 1650644921,
+        "narHash": "sha256-dyOZp1Cq0oqXP187x3QT5r82epTNCPpd+VLG44kKVsE=",
         "owner": "magit",
         "repo": "with-editor",
-        "rev": "e8569e027ff5c9bef8d9ff0734e3293e1c0574a2",
+        "rev": "54d1e816ac0f3203f0065ea9e6a551b9d103dad4",
         "type": "github"
       },
       "original": {
