@@ -333,6 +333,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 *** browse-url
 :PROPERTIES:
 :CREATED_TIME: [2022-04-06 Wed 17:15]
+:ID:       02a91209-86f8-412b-98f3-19a56e481df0
 :END:
 
 #+begin_src emacs-lisp
@@ -3118,11 +3119,28 @@ Emacs Minor mode to automatically commit and push
           gac-default-message #'akirak/git-auto-commit-message)
 
     (defun akirak/git-auto-commit-message (filename)
-      (thread-last
-        (project-current nil filename)
-        (project-root)
-        (file-relative-name filename)
-        (concat "Auto commit: "))))
+      (let ((root (project-root (project-current nil filename))))
+        (thread-last
+          (if (org-clocking-p)
+              (let* ((clocking-file (buffer-file-name (org-base-buffer
+                                                       (marker-buffer
+                                                        org-clock-marker))))
+                     (category (file-name-base clocking-file)))
+                (cond
+                 ((string-prefix-p "~/work/" root)
+                  (org-link-display-format org-clock-current-task))
+                 ((string-prefix-p (expand-file-name root)
+                                   clocking-file)
+                  (format "%s: %s\n\norg-id: %s"
+                          category
+                          (org-link-display-format org-clock-current-task)
+                          (org-with-point-at org-clock-marker
+                            (org-id-get-create))))
+                 (t
+                  "!Working on a task in another repository")))
+            (concat "Modified " (file-relative-name filename root)))
+          ;; Add a prefix to indicate it is a machine commit
+          (concat "(auto) ")))))
 #+end_src
 
 A recommended way to turn on automatic commits is to define local variables in =.dir-locals.el=, e.g.:
