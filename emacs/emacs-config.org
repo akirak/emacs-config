@@ -2690,9 +2690,19 @@ Client for Language Server Protocol (LSP) servers
 
 #+begin_src emacs-lisp
   (setup (:package eglot)
-    (:with-mode eglot-ensure
-      (:hook-into haskell-mode-hook
-                  rust-mode-hook)))
+
+    ;; It depends on the project whether it is recommended to turn on LSP.
+    ;;
+    ;; (:with-mode eglot-ensure
+    ;;   (:hook-into haskell-mode-hook
+    ;;               rust-mode-hook))
+
+    (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
+
+    (defun akirak/eglot-setup-buffer ()
+      (if (eglot-managed-p)
+          (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+        (remove-hook 'before-save-hook #'eglot-format-buffer t))))
 #+end_src
 *** eldoc-eval                                                      :Emacs:
 :PROPERTIES:
