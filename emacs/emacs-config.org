@@ -648,6 +648,16 @@ The built-in =electric= package provides the following modes:
       (:hook-into prog-mode-hook
                   text-mode-hook)))
 #+end_src
+*** image
+:PROPERTIES:
+:CREATED_TIME: [2022-04-27 Wed 07:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup image
+    (:nixpkgs "graphicsmagick")
+    (:set image-use-external-converter t))
+#+end_src
 *** indent
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:08]
@@ -2176,7 +2186,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-image
     (:nixpkgs "librsvg")
     (:embark embark-url-map "s"
-      ("d" akirak-image-insert-offline-link)))
+      ("d" akirak-image-insert-offline-link))
+    (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
 #+end_src
 **** akirak-url                                                :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
