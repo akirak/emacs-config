@@ -347,7 +347,22 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
                                 (url-generic-parse-url url)))))
           (if (member host '("airtable.com"))
               (browse-url-chromium url)
-            (browse-url-default-browser url))))))
+            (browse-url-default-browser url))))
+
+      (defvar akirak/browser-url-orig-fn nil)
+
+      (defun akirak/browse-url-chromium-oneshot-advice (&rest _args)
+        (advice-remove 'browse-url-chromium
+                       #'akirak/browse-url-chromium-oneshot-advice)
+        (setq browse-url-browser-function akirak/browser-url-orig-fn))
+
+      (defun akirak/browse-url-use-oneshot-chromium ()
+        "Use Chromium for browsing the next url."
+        (interactive)
+        (setq akirak/browser-url-orig-fn browse-url-browser-function
+              browse-url-browser-function #'browse-url-chromium)
+        (advice-add 'browse-url-chromium
+                    :after #'akirak/browse-url-chromium-oneshot-advice))))
 #+end_src
 *** buffer.c                                        :formatting:visual:
 :PROPERTIES:
@@ -3079,6 +3094,7 @@ Make vendored and generated files read only.
 *** git-auto-commit-mode                                               :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-26 Sat 20:33]
+:ID:       0ec2d09e-7e97-40ba-aa5a-7af027187f62
 :END:
 #+begin_quote
 Emacs Minor mode to automatically commit and push
