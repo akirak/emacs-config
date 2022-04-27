@@ -2633,22 +2633,6 @@ Hide dotfiles in dired
 #+end_src
 
 dired-k depends on dired-x, which has a poor code quality.
-*** dired-open                                                      :dired:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-24 Thu 18:47]
-:END:
-#+begin_quote
-Open files from dired using using custom actions
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package dired-open)
-    ;; Temporary workaround
-    (autoload 'dired-open-xdg "dired-open")
-
-    (:set dired-open-functions '(dired-open-by-extension
-                                    dired-open-subdir)))
-#+end_src
 *** duckduckgo                                                     :search:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-17 Thu 23:59]
