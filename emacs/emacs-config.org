@@ -2104,6 +2104,14 @@ Smart line-wrapping with wrap-prefix
                 (unless (derived-mode-p 'org-mode)
                   (adaptive-wrap-prefix-mode 1)))))
 #+end_src
+*** affe                                                  :completion:grep:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-28 Thu 05:52]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package affe))
+#+end_src
 *** aggressive-indent                                          :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 20:26]
