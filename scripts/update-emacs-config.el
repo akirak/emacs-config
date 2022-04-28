@@ -105,5 +105,7 @@ entries are visible."
                    description)
            (when-let (homepage (cdr (assq 'homepage meta)))
              (insert "\n" (org-link-make-string homepage)))
-           (insert "\n#+end_quote\n"))))
+           (insert "\n#+end_quote\n")
+           (when (looking-at (rx (+ space)))
+             (replace-match "\n")))))
       (save-buffer))))
