@@ -3932,6 +3932,10 @@ Summon and dismiss buffers as popups
 
     (define-prefix-command 'akirak/popper-commander-map)
     (define-key akirak/popper-commander-map (kbd "t") #'akirak/project-vterm)
+    (define-key akirak/popper-commander-map (kbd "c")
+                (defun akirak/compilation-buffer ()
+                  (interactive)
+                  (pop-to-buffer "*compilation*")))
     (define-key akirak/popper-commander-map (kbd "m")
                 (defun akirak/message-buffer ()
                   (interactive)
