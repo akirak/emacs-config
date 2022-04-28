@@ -143,6 +143,12 @@
       type = "git";
       url = "https://codeberg.org/ravi/consult-dash.git";
     };
+    consult-ls-git = {
+      flake = false;
+      owner = "rcj";
+      repo = "consult-ls-git";
+      type = "github";
+    };
     consult-org-dog = {
       flake = false;
       owner = "akirak";
@@ -178,12 +184,6 @@
       flake = false;
       owner = "Wilfred";
       repo = "deadgrep";
-      type = "github";
-    };
-    dired-auto-readme = {
-      flake = false;
-      owner = "amno1";
-      repo = "dired-auto-readme";
       type = "github";
     };
     dired-collapse = {
@@ -259,16 +259,16 @@
       repo = "eldoc-eval";
       type = "github";
     };
-    electric-operator = {
-      flake = false;
-      owner = "davidshepherd7";
-      repo = "electric-operator";
-      type = "github";
-    };
     elisp-refs = {
       flake = false;
       owner = "Wilfred";
       repo = "elisp-refs";
+      type = "github";
+    };
+    elixir-mode = {
+      flake = false;
+      owner = "elixir-editors";
+      repo = "emacs-elixir";
       type = "github";
     };
     elx = {
@@ -357,7 +357,8 @@
     };
     fanyi = {
       flake = false;
-      owner = "condy0919";
+      owner = "akirak";
+      ref = "possibly-fix";
       repo = "fanyi.el";
       type = "github";
     };
@@ -384,6 +385,12 @@
       url = "https://gitlab.com/koral/gcmh.git";
     };
     ghelp = {
+      flake = false;
+      owner = "casouri";
+      repo = "ghelp";
+      type = "github";
+    };
+    ghelp-eglot = {
       flake = false;
       owner = "casouri";
       repo = "ghelp";
@@ -950,12 +957,6 @@
       repo = "rainbow-identifiers";
       type = "github";
     };
-    rainbow-mode = {
-      flake = false;
-      owner = "emacsmirror";
-      repo = "rainbow-mode";
-      type = "github";
-    };
     reformatter = {
       flake = false;
       owner = "purcell";
@@ -989,6 +990,12 @@
       flake = false;
       owner = "Malabarba";
       repo = "rich-minority";
+      type = "github";
+    };
+    ruby-end = {
+      flake = false;
+      owner = "rejeep";
+      repo = "ruby-end.el";
       type = "github";
     };
     "s" = {
@@ -1149,6 +1156,12 @@
       flake = false;
       owner = "justbur";
       repo = "emacs-which-key";
+      type = "github";
+    };
+    whole-line-or-region = {
+      flake = false;
+      owner = "purcell";
+      repo = "whole-line-or-region";
       type = "github";
     };
     windswap = {
