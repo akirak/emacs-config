@@ -4412,6 +4412,15 @@ Fully-featured terminal emulator
                         (project-root project)
                       default-directory))))
 #+end_src
+*** web-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-04-28 Thu 18:37]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package web-mode)
+    (:file-match "\\.mdx\\'"))
+#+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_quote
 Display available keybindings in popup
