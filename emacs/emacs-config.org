@@ -999,6 +999,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
       (:hook-into prog-mode-hook
                   text-mode-hook
                   help-mode-hook
+                  compilation-mode-hook
                   special-mode-hook))
 
     (:status opinionated
