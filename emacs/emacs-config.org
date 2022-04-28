@@ -1466,6 +1466,7 @@ DOCT: Declarative Org capture templates
                  "C-c ]")
         (:bind akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
                "<" #'akirak-org-angle-open
+               "[" #'akirak-org-square-open
                "*" #'akirak-org-bold
                "/" #'akirak-org-italic
                "_" #'akirak-org-underlined
