@@ -220,6 +220,7 @@ By default, settings inside =:status= clauses are not loaded.
 #+begin_quote
 Benchmarks Emacs require and load calls
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package benchmark-init)
     (:require benchmark-init)
@@ -229,6 +230,7 @@ Benchmarks Emacs require and load calls
 #+begin_quote
 the Garbage Collector Magic Hack
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package gcmh)
     (:hook-into after-init-hook)
@@ -1080,6 +1082,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 :PROPERTIES:
 :CREATED_TIME: [2022-04-26 Tue 08:51]
 :END:
+#+begin_quote
+Transient commands
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package transient))
@@ -1649,6 +1654,10 @@ DOCT: Declarative Org capture templates
 :PROPERTIES:
 :CREATED_TIME: [2022-04-15 Fri 23:59]
 :END:
+#+begin_quote
+Converts web pages into Org
+[[https://github.com/akirak/orgabilize.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package orgabilize)
@@ -1678,6 +1687,10 @@ Improved list management in org-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-13 Wed 23:59]
 :END:
+#+begin_quote
+Defining todo blockers in a block
+[[https://github.com/akirak/org-blockers-block]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-bb)
@@ -1793,6 +1806,10 @@ Facade Org files
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 11:03]
 :END:
+#+begin_quote
+Integrate Org with epubinfo program
+[[https://github.com/akirak/org-epubinfo]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-epubinfo)
@@ -1858,6 +1875,9 @@ A synchronized, Org-mode, document annotator
 :PROPERTIES:
 :CREATED_TIME: [2022-04-23 Sat 23:59]
 :END:
+#+begin_quote
+Replace org-table characters with box-drawing unicode glyphs.
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-pretty-table))
@@ -1910,6 +1930,7 @@ Highlight & annotate any text files
 Create reverse date trees in org-mode
 [[https://github.com/akirak/org-reverse-datetree]]
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package org-reverse-datetree)
     (:set org-reverse-datetree-entry-time
@@ -2017,6 +2038,7 @@ Bypass that mental block when writing your papers.
 Quickly switch windows.
 [[https://github.com/abo-abo/ace-window]]
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package ace-window)
     (:set aw-keys (string-to-list "qwertyui")
@@ -2111,6 +2133,9 @@ Smart line-wrapping with wrap-prefix
 :PROPERTIES:
 :CREATED_TIME: [2022-04-28 Thu 05:52]
 :END:
+#+begin_quote
+Asynchronous Fuzzy Finder for Emacs
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package affe))
@@ -2306,6 +2331,7 @@ Jump to arbitrary positions in visible text and select text quickly.
 #+begin_quote
 A major mode to edit Beancount input files.
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package beancount)
     (:nixpkgs "beancount" "fava")
@@ -2475,6 +2501,10 @@ Completion Overlay Region FUnction
 :PROPERTIES:
 :CREATED_TIME: [2022-04-24 Sun 19:51]
 :END:
+#+begin_quote
+Documentation popup for Corfu
+[[https://github.com/galeo/corfu-doc]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package corfu-doc)
@@ -2484,6 +2514,10 @@ Completion Overlay Region FUnction
 :PROPERTIES:
 :CREATED_TIME: [2022-04-20 Wed 17:28]
 :END:
+#+begin_quote
+Offline documentation browser using Dash docsets.
+[[http://github.com/areina/helm-dash]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package dash-docs))
@@ -2492,6 +2526,10 @@ Completion Overlay Region FUnction
 :PROPERTIES:
 :CREATED_TIME: [2022-04-25 Mon 20:26]
 :END:
+#+begin_quote
+Consult front-end for dash-docs
+[[https://codeberg.org/ravi/consult-dash]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package consult-dash))
@@ -2512,6 +2550,10 @@ fast, friendly searching with ripgrep
 :PROPERTIES:
 :CREATED_TIME: [2022-04-23 Sat 23:59]
 :END:
+#+begin_quote
+Auto-display README files in Dired biffers
+[[https://github.com/amno1/org-view-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package dired-auto-readme)
@@ -2947,6 +2989,7 @@ Comment/uncomment lines efficiently. Like Nerd Commenter in Vim
 Like dabbrev-expand with preview and popup menu
 [[https://github.com/jrosdahl/fancy-dabbrev]]
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package fancy-dabbrev)
     ;; Useful for lisp
@@ -3236,6 +3279,9 @@ Major modes for editing Git configuration files
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 23:59]
 :END:
+#+begin_quote
+Major mode for the Go programming language
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package go-mode)
@@ -3568,6 +3614,7 @@ To use it, turn on =macrostep-mode=.
 #+begin_quote
 A Git porcelain inside Emacs.
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package magit)
     (:nixpkgs git)
@@ -3737,6 +3784,9 @@ Display modeline in minibuffer
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
+#+begin_quote
+A scroll bar for the modeline
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package mlscroll)
@@ -3832,6 +3882,10 @@ Featureful EPUB reader mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-22 Fri 23:59]
 :END:
+#+begin_quote
+Minor mode for a nice writing environment
+[[https://github.com/rnkn/olivetti]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package olivetti))
@@ -3859,7 +3913,7 @@ It is also possible to use Helm as a completion style. See https://github.com/oa
 :CREATED_TIME: [2022-01-31 Mon 18:28]
 :END:
 #+begin_quote
-support for Org links to Magit buffers
+Support for Org links to Magit buffers
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -4077,6 +4131,7 @@ An interactive HTTP client for Emacs
 A dumb Japanese input method
 [[https://github.com/akirak/emacs-dumb-japanese]]
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package riben)
     (:bind "C-j" #'riben-dispatch))
@@ -4086,6 +4141,7 @@ A dumb Japanese input method
 Jump to Japanese text using avy
 [[https://github.com/akirak/emacs-dumb-japanese]]
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package avy-riben))
 #+end_src
@@ -4417,6 +4473,10 @@ Fully-featured terminal emulator
 :PROPERTIES:
 :CREATED_TIME: [2022-04-28 Thu 18:37]
 :END:
+#+begin_quote
+major mode for editing web templates
+[[https://web-mode.org]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package web-mode)
@@ -4427,6 +4487,7 @@ Fully-featured terminal emulator
 Display available keybindings in popup
 [[https://github.com/justbur/emacs-which-key]]
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package which-key)
     (:hook-into after-init-hook)
@@ -4543,19 +4604,19 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 176 |
+| [[org-ql-search:tags:packages][packages]]            | 179 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:visual][visual]]              |  11 |
 | [[org-ql-search:tags:VC][VC]]                  |   9 |
+| [[org-ql-search:tags:completion][completion]]          |   9 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
-| [[org-ql-search:tags:completion][completion]]          |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   7 |
 | [[org-ql-search:tags:windows][windows]]             |   7 |
-| [[org-ql-search:tags:dired][dired]]               |   7 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
+| [[org-ql-search:tags:dired][dired]]               |   6 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
@@ -4568,13 +4629,14 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:links][links]]               |   3 |
+| [[org-ql-search:tags:documentation][documentation]]       |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
-| [[org-ql-search:tags:documentation][documentation]]       |   2 |
+| [[org-ql-search:tags:grep][grep]]                |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   2 |
@@ -4595,7 +4657,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:@extra][@extra]]              |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
-| [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
