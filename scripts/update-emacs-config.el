@@ -2,6 +2,7 @@
 
 (require 'org)
 (require 'org-make-toc)
+(require 'project)
 
 ;; Copied from
 ;; <https://github.com/akirak/trivial-elisps/blob/master/akirak-org.el>
