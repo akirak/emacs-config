@@ -1652,6 +1652,7 @@ DOCT: Declarative Org capture templates
 #+begin_src emacs-lisp
   (setup (:package orgabilize)
     (:nixpkgs "readability-cli")
+    (add-hook 'org-ctrl-c-ctrl-c-hook #'orgabilize-update-link-title)
     ;; (with-eval-after-load 'embark
     ;;   (define-key embark-url-map (kbd "r")
     ;;               (defun akirak/embark-archive-url-to-org (url)
