@@ -4125,7 +4125,16 @@ Auto-save buffers, based on your activity.
     (:hook-into after-init-hook)
     (:set super-save-auto-save-when-idle t
           super-save-idle-duration 120
-          super-save-remote-files nil))
+          super-save-remote-files nil
+          super-save-triggers '(consult-buffer
+                                tab-next
+                                tab-previous
+                                tab-new
+                                tab-close
+                                find-file
+                                org-dog-find-file
+                                akirak-consult-project-file
+                                akirak-consult-dir)))
 #+end_src
 
 =super-save-mode= can be annoying when you use org-crypt.
