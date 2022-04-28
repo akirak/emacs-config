@@ -24,7 +24,12 @@
     && timeout 5 cachix push akirak "$result"
   '';
 in {
-  alejandra.enable = true;
+  alejandra = {
+    enable = true;
+    excludes = [
+      "emacs/lock/flake\\.nix"
+    ];
+  };
   # nix-linter.enable = true;
 
   flake-no-path = {
