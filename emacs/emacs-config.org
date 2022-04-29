@@ -2812,6 +2812,50 @@ Automatically add spaces around operators
                 java-mode
                 rust-mode))
 #+end_src
+*** elixir-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-04-29 Fri 19:08]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package elixir-mode)
+    (:file-match "\\.exs?\\'")
+
+    (:auto-insert
+     ("/config/config\\.exs\\'"
+      . (> "use Mix.Config\n\n"
+           _))
+     ("/lib/.+\\.ex\\'"
+      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+           "  " _
+           "\nend\n"))
+     ("/test/.+_test\\.exs\\'"
+      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+           "  use ExUnit.Case\n\n"
+           "  alias " (string-remove-suffix
+                       "Test" (akirak/elixir-module-name-from-file))
+           "\n"
+           "  doctest " (string-remove-suffix
+                         "Test" (akirak/elixir-module-name-from-file))
+           "\n"
+           "  " _
+           "\nend\n")))
+
+    (defun akirak/elixir-module-name-from-file ()
+      (require 'f)
+      (require 'dash)
+      (let ((segments (f-split (buffer-file-name))))
+        (when-let (i (-find-last-index
+                      (lambda (x) (member x '("lib" "test")))
+                      segments))
+          (mapconcat (lambda (s)
+                       (->> (split-string s "_")
+                            (mapcar #'capitalize)
+                            (string-join)))
+                     (append (-slice segments (1+ i) -1)
+                             (list (f-base (-last-item segments))))
+                     ".")))))
+#+end_src
 *** elx                                   :Emacs__Lisp:development:library:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
