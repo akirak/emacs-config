@@ -4111,7 +4111,13 @@ For auto-pairing, you can use =electric-pair-mode= along with puni.
 Limitations:
 
 - puni doesn't handle JSX in typescript-mode with tree-sitter.
+**** akirak-puni
+#+begin_src emacs-lisp
+  (setup akirak-puni
+    (add-hook 'puni-mode-hook #'akirak-puni-mode-setup))
+#+end_src
 
+This contains workarounds for puni-mode, like mode-specific soft deletion.
 *** rainbow-delimiters                                             :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
