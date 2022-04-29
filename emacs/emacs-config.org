@@ -3285,7 +3285,14 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup (:package go-mode)
-    (:file-match "\\.go\\'"))
+    (:file-match "\\.go\\'")
+
+    (:auto-insert
+     ("\\.go\\'"
+      . (> "package "
+           (file-name-base (or buffer-file-name (buffer-name)))
+           "\n\nimport (\n"
+           ")\n\n"))))
 #+end_src
 *** go-translate                                              :translation:
 :PROPERTIES:
