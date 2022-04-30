@@ -62,6 +62,7 @@
 
     # other packages
     epubinfo.url = "github:akirak/epubinfo";
+    squasher.url = "github:akirak/squasher";
 
     # pre-commit
     pre-commit-hooks = {
@@ -134,6 +135,9 @@
         inputs.flake-no-path.overlay
         (_: prev: {
           inherit (inputs.epubinfo.packages.${prev.system}) epubinfo;
+        })
+        (_: prev: {
+          inherit (inputs.squasher.packages.${prev.system}) squasher;
         })
         emacsOverlay
         # zsh plugins used in the home-managerconfiguration

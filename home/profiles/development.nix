@@ -5,6 +5,7 @@
     nixpkgs-fmt
     alejandra
     deadnix
+    squasher
   ];
 
   programs.direnv = {

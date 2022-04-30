@@ -311,6 +311,21 @@
         "type": "indirect"
       }
     },
+    "nixpkgs_4": {
+      "locked": {
+        "lastModified": 1642609835,
+        "narHash": "sha256-ZwJnV4mdis28u5vH240ec2mrApuEJYJekn23qlTwJ8c=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "77aa71f66fd05d9e7b7d1c084865d703a8008ab7",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-21.11",
+        "type": "indirect"
+      }
+    },
     "org-babel": {
       "locked": {
         "lastModified": 1644384285,
@@ -366,6 +381,7 @@
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks",
         "site": "site",
+        "squasher": "squasher",
         "twist": "twist",
         "unstable": "unstable",
         "utils": "utils",
@@ -389,6 +405,24 @@
       "original": {
         "type": "git",
         "url": "https://git.sr.ht/~akirak/default-host"
+      }
+    },
+    "squasher": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1651317118,
+        "narHash": "sha256-1HI1tZ3ns58jBAD2/44F3Jryw5gHxrmXkleIbIN5Z7c=",
+        "owner": "akirak",
+        "repo": "squasher",
+        "rev": "84764a874614e894edebcc58b5fc7610dc463995",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "squasher",
+        "type": "github"
       }
     },
     "twist": {
