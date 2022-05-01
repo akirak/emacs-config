@@ -2563,7 +2563,7 @@ fast, friendly searching with ripgrep
 #+begin_src emacs-lisp
 (setup (:package deadgrep))
 #+end_src
-*** dired-auto-readme                                               :dired:
+*** dired-auto-readme                                :noexport:dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-23 Sat 23:59]
 :END:
