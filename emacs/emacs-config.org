@@ -4168,7 +4168,12 @@ Define commands which run reformatters on the current buffer
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package reformatter))
+  (setup (:package reformatter)
+    (:reformatters
+     ;; If you use prettier, you need to install its executable separately.
+     (prettier
+      :program "prettier"
+      :args (list "--stdin-filepath" (buffer-file-name)))))
 #+end_src
 *** repl-toggle                                       :windows:development:
 :PROPERTIES:
