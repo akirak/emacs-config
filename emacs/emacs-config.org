@@ -4090,6 +4090,8 @@ Per-project transient keymaps
 #+begin_src emacs-lisp
   (setup (:package project-hercules)
     (:when-loaded
+      (:with-map project-hercules-parent-map
+        (:bind "d" #'project-dired))
       (:also-load project-hercules-config))
     (:global "M-SPC" project-hercules-dispatch))
 #+end_src
