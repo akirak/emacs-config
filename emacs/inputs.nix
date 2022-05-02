@@ -171,6 +171,14 @@
       ref = "develop";
     };
   };
+  fanyi = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "fanyi.el";
+      ref = "possibly-fix";
+    };
+  };
   dash-docs = _: super: {
     files = builtins.removeAttrs super.files [
       "use-package-dash-docs.el"
