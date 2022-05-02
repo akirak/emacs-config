@@ -3645,6 +3645,7 @@ For Emacs Lisp, I use lispy.
 
       (:hook-into lisp-mode
                   emacs-lisp-mode
+                  lisp-data-mode
                   lisp-interaction-mode
                   ielm-mode
                   eval-expression-minibuffer-setup)
