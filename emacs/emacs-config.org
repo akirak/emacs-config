@@ -2961,6 +2961,8 @@ Consult integration for Embark
 
     (with-eval-after-load 'consult
       (require 'embark-consult))
+    (with-eval-after-load 'embark
+      (require 'embark-consult))
 
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
