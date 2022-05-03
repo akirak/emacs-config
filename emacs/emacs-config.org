@@ -703,6 +703,30 @@ The built-in =electric= package provides the following modes:
     (dolist (mode-hook '(makefile-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
 #+end_src
+*** js-jsx-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-05-03 Tue 23:14]
+:END:
+
+#+begin_src emacs-lisp
+  (setup js-jsx-mode
+    (:file-match "\\.jsx\\'")
+
+    (:hook (defun akirak/setup-js-jsx-mode ()
+             (require 'sgml-mode)))
+
+    (:with-feature js
+      (:bind "C-c C-e" #'akirak-sgml-close-tag)))
+#+end_src
+*** js-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-05-03 Tue 23:43]
+:END:
+
+#+begin_src emacs-lisp
+  (setup js-mode
+    (:file-match "\\.c?js\\'"))
+#+end_src
 *** keymap.c                                                  :keybindings:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-19 Sat 23:59]
