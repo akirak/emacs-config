@@ -2844,7 +2844,7 @@ Enable eldoc support when minibuffer is in use.
 #+end_src
 
 I use this package mostly because it uses =pp-eval-expression= for printing the result, but it also has some other nice features, and it works flawlessly.
-*** electric-operator                                          :formatting:
+*** electric-operator                           :noexport:formatting:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
