@@ -3158,6 +3158,10 @@ Generic help
     ;; Temporary workaround
     (autoload 'ghelp-describe-at-point "ghelp"))
 #+end_src
+*** ghelp-eglot
+#+begin_src emacs-lisp
+  (setup (:package ghelp-eglot))
+#+end_src
 *** ghelp-helpful
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 13:16]
