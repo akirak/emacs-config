@@ -2489,6 +2489,15 @@ Consulting completing-read
   (setup consult-org
     (:global "M-g M-j" #'consult-org-clock-goto))
 #+end_src
+*** consult-ls-git
+:PROPERTIES:
+:CREATED_TIME: [2022-05-03 Tue 21:31]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package consult-ls-git)
+    (:global "C-x g" #'consult-ls-git-ls-status))
+#+end_src
 *** corfu                                                   :completion:UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:19]
