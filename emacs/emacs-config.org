@@ -2346,6 +2346,7 @@ Jump to arbitrary positions in visible text and select text quickly.
 #+begin_src emacs-lisp
   (setup (:package avy)
     (:global "C-'" #'avy-goto-char-timer
+             [remap goto-line] #'avy-goto-line
              "M-g z" #'avy-goto-char-in-line))
 #+end_src
 *** beancount                                            :@extra:beancount:
@@ -2462,7 +2463,6 @@ Consulting completing-read
              [remap bookmark-jump] #'consult-bookmark
              [remap yank-pop] #'consult-yank-pop
              "C-c k" #'consult-kmacro
-             [remap goto-line] #'consult-goto-line
              "M-s m" #'consult-mark
              "M-s M-m" #'consult-global-mark
              "M-s o" #'consult-outline
