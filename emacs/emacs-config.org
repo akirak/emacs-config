@@ -1029,7 +1029,9 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                  (interactive "p")
                  (if (region-active-p)
                      (kill-region (region-beginning) (region-end))
-                   (backward-kill-word arg))))
+                   (backward-kill-word arg)))
+               ;; In place of zap-to-char
+               "M-z" #'zap-up-to-char)
       (:with-mode prog-mode
         (:bind "C-a"
                (defun akirak/back-to-indentation-or-bol ()
