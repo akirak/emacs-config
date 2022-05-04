@@ -2462,17 +2462,15 @@ Consulting completing-read
     (:global [remap switch-to-buffer] #'consult-buffer
              [remap bookmark-jump] #'consult-bookmark
              [remap yank-pop] #'consult-yank-pop
-             "C-c k" #'consult-kmacro
-             "M-s m" #'consult-mark
-             "M-s M-m" #'consult-global-mark
+             "C-c j" #'consult-register
              "M-s o" #'consult-outline
-             [remap isearch-forward] #'consult-line
-             [remap isearch-backward] #'consult-isearch
-             "C-S-s" #'consult-line-multi
+             ;; Remap `isearch-forward' that is bound to C-s. `isearch-forward' is
+             ;; bound to "s" in `View-mode-map', but don't remap it.
+             ;; `isearch-backward' is still bound to C-r, so you can use it to
+             ;; dispatch the built-in isearch.
+             "C-s" #'consult-line
              "C-c f" #'consult-focus-lines
-             "C-x /" #'consult-ripgrep
-             "M-s x" #'consult-complex-command
-             "M-s M-x" #'consult-mode-command)
+             "C-x /" #'consult-ripgrep)
 
     (:with-feature consult-imenu
       (:global "M-s i" #'consult-imenu
