@@ -4595,6 +4595,23 @@ Display available keybindings in popup
     (:hook-into after-init-hook)
     (:hook which-key-setup-side-window-bottom))
 #+end_src
+*** whole-line-or-region
+:PROPERTIES:
+:CREATED_TIME: [2022-05-04 Wed 09:17]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package whole-line-or-region)
+    (:global "C-c r"
+             (defun akirak/anzu-query-replace-on-line (arg)
+               (interactive "P")
+               (require 'anzu)
+               (whole-line-or-region-wrap-modified-region #'anzu-query-replace
+                                                          (if (numberp arg)
+                                                              arg
+                                                            1)
+                                                          arg))))
+#+end_src
 *** windswap                                                       :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 13:52]
