@@ -4335,10 +4335,6 @@ Emacs major mode for Svelte
   (setup (:package svelte-mode)
     (:file-match "\\.svelte\\'")
     (:set svelte-display-submode-name t)
-    (:hook
-     (defun akirak/svelte-setup ()
-       (puni-mode -1)
-       (visual-line-mode -1)))
     (:auto-insert
      ("\\.svelte\\'"
       . (> "<script lang=\"ts\">\n</script>\n\n"
@@ -4392,14 +4388,7 @@ Some paredit-like features for html-mode
 #+begin_src emacs-lisp
   (setup (:package tagedit)
     ;; The upstream lacks this autoload
-    (autoload 'tagedit-mode "tagedit")
-    (:hook-into html-mode)
-
-    (:bind "C-k" (defun akirak/tagedit-kill-line ()
-                   (interactive)
-                   (if (looking-at (rx (* blank) "<"))
-                       (tagedit-kill)
-                     (puni-kill-line)))))
+    (autoload 'tagedit-mode "tagedit"))
 #+end_src
 *** taxy                                                          :library:
 :PROPERTIES:
