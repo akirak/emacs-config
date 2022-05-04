@@ -2345,7 +2345,8 @@ Jump to arbitrary positions in visible text and select text quickly.
 
 #+begin_src emacs-lisp
   (setup (:package avy)
-    (:global "C-'" #'avy-goto-char-timer))
+    (:global "C-'" #'avy-goto-char-timer
+             "M-g z" #'avy-goto-char-in-line))
 #+end_src
 *** beancount                                            :@extra:beancount:
 #+begin_quote
