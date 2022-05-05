@@ -3256,7 +3256,33 @@ Emacs Minor mode to automatically commit and push
                   "!Working on a task in another repository")))
             (concat "Modified " (file-relative-name filename root)))
           ;; Add a prefix to indicate it is a machine commit
-          (concat "(auto) ")))))
+          (concat "(auto) "))))
+
+    (with-eval-after-load 'org-clock
+      (add-hook 'org-clock-out-hook
+                (defun akirak/gac-org-clock-out ()
+                  "Create an auto commit after `org-clock-out'."
+                  (when (and git-auto-commit-mode
+                             ;; If the entry has at least one auto commit
+                             (> (org-clock-sum-current-item
+                                 (- (float-time)
+                                    gac-debounce-interval
+                                    60))
+                                0))
+                    ;; I often refile the clocked entry immediately after clocking
+                    ;; out from it, so rather than instantly creating a commit,
+                    ;; defer it.
+                    (let ((root (project-root (project-current))))
+                      (run-with-timer
+                       20 nil
+                       `(lambda ()
+                          (let ((default-directory ,root))
+                            (save-some-buffers t (save-some-buffers-root))
+                            (unless (zerop (call-process "git" nil nil nil
+                                                         ;; Reuse the message
+                                                         "commit" "-C" "HEAD"
+                                                         "-a"))
+                              (message "Git auto commit failed")))))))))))
 #+end_src
 
 A recommended way to turn on automatic commits is to define local variables in =.dir-locals.el=, e.g.:
