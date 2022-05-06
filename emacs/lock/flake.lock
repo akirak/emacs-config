@@ -259,11 +259,11 @@
     "cape": {
       "flake": false,
       "locked": {
-        "lastModified": 1641310529,
-        "narHash": "sha256-pW8pqRZ6E7xRtroNampLwYn6mgvu3/MFJvnyXltR2x4=",
+        "lastModified": 1651487989,
+        "narHash": "sha256-6oeBu9GbUYqE5lE5PVmyzezI64ZjlfDSVoIn/rwdnv0=",
         "owner": "minad",
         "repo": "cape",
-        "rev": "be2014538af37fdb3cf38b2129c06314644f745f",
+        "rev": "d836397d9c025f03125fb4321abd48d557518bb6",
         "type": "github"
       },
       "original": {
@@ -355,11 +355,11 @@
     "consult": {
       "flake": false,
       "locked": {
-        "lastModified": 1645716767,
-        "narHash": "sha256-97xZ99iRm5yvj4/dFYPZJqOgfiIXa0b8DRdhfzMGro4=",
+        "lastModified": 1651616978,
+        "narHash": "sha256-qdb27zOt7USy3YsSUfxaDuBRJt/PU5BMJg0nvXRwNUI=",
         "owner": "minad",
         "repo": "consult",
-        "rev": "95d1851567637325425c0956adbf711c801dd45c",
+        "rev": "ea30b4dc8b25b65082ab9a2d56d2c6035d63b31e",
         "type": "github"
       },
       "original": {
@@ -420,11 +420,11 @@
     "corfu": {
       "flake": false,
       "locked": {
-        "lastModified": 1649889240,
-        "narHash": "sha256-TdeDj9hkDebjjGXRILujD34DuRTUdmafmMT+yjRwaDY=",
+        "lastModified": 1651394075,
+        "narHash": "sha256-rt9HUOU8/PkrKHVF9zZVKAeWGNQkTxZ2CKRcFNrMbAQ=",
         "owner": "minad",
         "repo": "corfu",
-        "rev": "7b44e5637187e50f3839816f36df87dfd0a3fca0",
+        "rev": "71adaf1e674f46a367f6d815183da6456033f139",
         "type": "github"
       },
       "original": {
@@ -773,11 +773,11 @@
     "embark": {
       "flake": false,
       "locked": {
-        "lastModified": 1641282923,
-        "narHash": "sha256-9yaaX1yRux/T7TJ0SDBLCoUvnzAPlP9wUmcMdyB9HtM=",
+        "lastModified": 1651790428,
+        "narHash": "sha256-PUDUe7DXE50qPrj68l3PkPkfYnF79/pZDfPc/+ACTQ4=",
         "owner": "oantolin",
         "repo": "embark",
-        "rev": "c9b26c2e18f01ae401df6a69b7a0c1a6bc44b90c",
+        "rev": "f29dc5a0a26a077918b75f2b36e778a45e6ec7e1",
         "type": "github"
       },
       "original": {
@@ -789,11 +789,11 @@
     "embark-consult": {
       "flake": false,
       "locked": {
-        "lastModified": 1641282923,
-        "narHash": "sha256-9yaaX1yRux/T7TJ0SDBLCoUvnzAPlP9wUmcMdyB9HtM=",
+        "lastModified": 1651790428,
+        "narHash": "sha256-PUDUe7DXE50qPrj68l3PkPkfYnF79/pZDfPc/+ACTQ4=",
         "owner": "oantolin",
         "repo": "embark",
-        "rev": "c9b26c2e18f01ae401df6a69b7a0c1a6bc44b90c",
+        "rev": "f29dc5a0a26a077918b75f2b36e778a45e6ec7e1",
         "type": "github"
       },
       "original": {
@@ -1735,11 +1735,11 @@
     "marginalia": {
       "flake": false,
       "locked": {
-        "lastModified": 1647093442,
-        "narHash": "sha256-RJNzjoZlf//hzB4cQslFTb0AjLpFLMT/XTK11wEU1F0=",
+        "lastModified": 1650948597,
+        "narHash": "sha256-kDncE8C2bo6V/2buTiL6zx+M8GGBGL4kzcYI09mDdS0=",
         "owner": "minad",
         "repo": "marginalia",
-        "rev": "e63d27e6fb24ed16339de9d813c555d40aa1e4ca",
+        "rev": "26f2bd9ee7b63bcad6604108e2f565b34bc6083b",
         "type": "github"
       },
       "original": {
@@ -1896,11 +1896,11 @@
     "orderless": {
       "flake": false,
       "locked": {
-        "lastModified": 1638234176,
-        "narHash": "sha256-th5FIOPY0lPdBElR08YqU2uFRc/i73Uk5cUKq1KtcJs=",
+        "lastModified": 1650316750,
+        "narHash": "sha256-Y25fZC7AAWPhNHtiWTFGA2eAItVBuyhuUYVOfJKyg2Y=",
         "owner": "oantolin",
         "repo": "orderless",
-        "rev": "1ccf74ffdbb0dd34caa63022e92f947c09c49c86",
+        "rev": "75eeae21971d86b51a712ed8ecd6434463b2d866",
         "type": "github"
       },
       "original": {
@@ -3213,11 +3213,11 @@
     "vertico": {
       "flake": false,
       "locked": {
-        "lastModified": 1641929865,
-        "narHash": "sha256-8tnyyiQePwM2Dfoqsu6I1X/MvRawEwVrpZNHT5vHoeg=",
+        "lastModified": 1651589443,
+        "narHash": "sha256-MQPtDxuTxME6lQK9guaDAQiflnKmai77Q07ZBKF8Au0=",
         "owner": "minad",
         "repo": "vertico",
-        "rev": "716b618791268d14a53a4aa13f56bba6ff3fb346",
+        "rev": "e348e1a26a3dbfc99b80f6fc463635e4dc01f82c",
         "type": "github"
       },
       "original": {
