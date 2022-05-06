@@ -32,12 +32,6 @@
       repo = "aggressive-indent-mode";
       type = "github";
     };
-    aio = {
-      flake = false;
-      owner = "skeeto";
-      repo = "emacs-aio";
-      type = "github";
-    };
     akirak = {
       flake = false;
       type = "git";
@@ -467,12 +461,6 @@
       repo = "go-translate";
       type = "github";
     };
-    graphql = {
-      flake = false;
-      owner = "vermiculus";
-      repo = "graphql.el";
-      type = "github";
-    };
     graphql-mode = {
       flake = false;
       owner = "davazp";
@@ -581,12 +569,6 @@
       repo = "emacs-kv";
       type = "github";
     };
-    leetcode = {
-      flake = false;
-      owner = "kaiwk";
-      repo = "leetcode.el";
-      type = "github";
-    };
     license-templates = {
       flake = false;
       owner = "jcs-elpa";
@@ -604,12 +586,6 @@
       flake = false;
       owner = "abo-abo";
       repo = "lispy";
-      type = "github";
-    };
-    log4e = {
-      flake = false;
-      owner = "aki2o";
-      repo = "log4e";
       type = "github";
     };
     lv = {

@@ -80,30 +80,14 @@
         "type": "github"
       }
     },
-    "aio": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1591815868,
-        "narHash": "sha256-5jh7UYD6qVo1uLMf1G55xzyODXDQvpIl7C/Tfstf3UI=",
-        "owner": "skeeto",
-        "repo": "emacs-aio",
-        "rev": "da93523e235529fa97d6f251319d9e1d6fc24a41",
-        "type": "github"
-      },
-      "original": {
-        "owner": "skeeto",
-        "repo": "emacs-aio",
-        "type": "github"
-      }
-    },
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1651622467,
-        "narHash": "sha256-8ewX+dbvqUOkLhawyUWC80yzYlCOQhULDdXJnzdO6Hg=",
+        "lastModified": 1652030157,
+        "narHash": "sha256-XzrEqZt8uhZFbskaQZY9vxnfWhfF8T7trkbGmf0ZLBg=",
         "ref": "master",
-        "rev": "1d2c93178a422c18f6e29d40203bb76ce9e06a23",
-        "revCount": 215,
+        "rev": "bd757b15904ee34c57369f1db5f2ec5416ab11c4",
+        "revCount": 219,
         "type": "git",
         "url": "https://git.sr.ht/~akirak/akirak-mode"
       },
@@ -403,11 +387,11 @@
     "consult-org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1650509283,
-        "narHash": "sha256-/Vym+VsCXbY1AuwHob/zzWLzvsx0kPs6GeEKHD5n6l0=",
+        "lastModified": 1652025065,
+        "narHash": "sha256-bMKqAm0+LWNGuRrFUGxeGjGeW/NyG0l6sCowqVucGek=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "c90015320347a8721081c0bc85ea69cab761cadd",
+        "rev": "7a5a941451cb7445ac4f6a4a6290b3816bf1c216",
         "type": "github"
       },
       "original": {
@@ -1251,22 +1235,6 @@
         "type": "github"
       }
     },
-    "graphql": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1638798348,
-        "narHash": "sha256-hm+1/1Ib8Q6BB6p1/+jn740syZ4Mtn8y2O2TUxJxAHI=",
-        "owner": "vermiculus",
-        "repo": "graphql.el",
-        "rev": "5ca5f50b5e6f3883f1138453a356d59a1c002120",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vermiculus",
-        "repo": "graphql.el",
-        "type": "github"
-      }
-    },
     "graphql-mode": {
       "flake": false,
       "locked": {
@@ -1555,22 +1523,6 @@
         "type": "github"
       }
     },
-    "leetcode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1633440660,
-        "narHash": "sha256-ELaNpDPOnI1oOp2443JNpmUMHRowOGCHJ+Cw0dT4prI=",
-        "owner": "kaiwk",
-        "repo": "leetcode.el",
-        "rev": "e278b099173dced55e6e39f9924e90899542ebf1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kaiwk",
-        "repo": "leetcode.el",
-        "type": "github"
-      }
-    },
     "license-templates": {
       "flake": false,
       "locked": {
@@ -1617,22 +1569,6 @@
       "original": {
         "owner": "abo-abo",
         "repo": "lispy",
-        "type": "github"
-      }
-    },
-    "log4e": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1634636892,
-        "narHash": "sha256-Pzv4ApqUbdU4o4R50XdA2xt7do9uKFMVcixREhX/T/k=",
-        "owner": "aki2o",
-        "repo": "log4e",
-        "rev": "737d275eac28dbdfb0b26d28e99da148bfce9d16",
-        "type": "github"
-      },
-      "original": {
-        "owner": "aki2o",
-        "repo": "log4e",
         "type": "github"
       }
     },
@@ -1960,11 +1896,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1650509283,
-        "narHash": "sha256-/Vym+VsCXbY1AuwHob/zzWLzvsx0kPs6GeEKHD5n6l0=",
+        "lastModified": 1652025065,
+        "narHash": "sha256-bMKqAm0+LWNGuRrFUGxeGjGeW/NyG0l6sCowqVucGek=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "c90015320347a8721081c0bc85ea69cab761cadd",
+        "rev": "7a5a941451cb7445ac4f6a4a6290b3816bf1c216",
         "type": "github"
       },
       "original": {
@@ -1977,11 +1913,11 @@
     "org-dog-embark": {
       "flake": false,
       "locked": {
-        "lastModified": 1650509283,
-        "narHash": "sha256-/Vym+VsCXbY1AuwHob/zzWLzvsx0kPs6GeEKHD5n6l0=",
+        "lastModified": 1652025065,
+        "narHash": "sha256-bMKqAm0+LWNGuRrFUGxeGjGeW/NyG0l6sCowqVucGek=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "c90015320347a8721081c0bc85ea69cab761cadd",
+        "rev": "7a5a941451cb7445ac4f6a4a6290b3816bf1c216",
         "type": "github"
       },
       "original": {
@@ -1994,11 +1930,11 @@
     "org-dog-facade": {
       "flake": false,
       "locked": {
-        "lastModified": 1650509283,
-        "narHash": "sha256-/Vym+VsCXbY1AuwHob/zzWLzvsx0kPs6GeEKHD5n6l0=",
+        "lastModified": 1652025065,
+        "narHash": "sha256-bMKqAm0+LWNGuRrFUGxeGjGeW/NyG0l6sCowqVucGek=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "c90015320347a8721081c0bc85ea69cab761cadd",
+        "rev": "7a5a941451cb7445ac4f6a4a6290b3816bf1c216",
         "type": "github"
       },
       "original": {
@@ -2235,11 +2171,11 @@
     "orgabilize": {
       "flake": false,
       "locked": {
-        "lastModified": 1651765400,
-        "narHash": "sha256-jA1rujDkaFkTkrO16x4/JWUx/IKKW3uz95gz5WP49Mg=",
+        "lastModified": 1651894631,
+        "narHash": "sha256-s+hNy7APxcaFgPsPmzo4HEKV29qz+nhuf52mqW2N1S4=",
         "owner": "akirak",
         "repo": "orgabilize.el",
-        "rev": "405ebafa215d0193c3b6ace2b7dba0cfb904811d",
+        "rev": "816749477b63cb283203980ae3021b0269df5f95",
         "type": "github"
       },
       "original": {
@@ -2655,7 +2591,6 @@
         "ace-window": "ace-window",
         "affe": "affe",
         "aggressive-indent": "aggressive-indent",
-        "aio": "aio",
         "akirak": "akirak",
         "anzu": "anzu",
         "async": "async",
@@ -2728,7 +2663,6 @@
         "github-linguist": "github-linguist",
         "go-mode": "go-mode",
         "go-translate": "go-translate",
-        "graphql": "graphql",
         "graphql-mode": "graphql-mode",
         "graphviz-dot-mode": "graphviz-dot-mode",
         "haskell-mode": "haskell-mode",
@@ -2747,11 +2681,9 @@
         "json-snatcher": "json-snatcher",
         "kind-icon": "kind-icon",
         "kv": "kv",
-        "leetcode": "leetcode",
         "license-templates": "license-templates",
         "link-hint": "link-hint",
         "lispy": "lispy",
-        "log4e": "log4e",
         "lv": "lv",
         "macrostep": "macrostep",
         "magit": "magit",
