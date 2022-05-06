@@ -3620,18 +3620,6 @@ Completion kind icons
       (require 'kind-icon)
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
-*** leetcode                                                    :exercises:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-07 Fri 11:27]
-:END:
-#+begin_quote
-An leetcode client
-[[https://github.com/kaiwk/leetcode.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-(setup (:package leetcode))
-#+end_src
 *** license-templates                                     :development:OSS:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-06 Sun 14:30]
