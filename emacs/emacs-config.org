@@ -1483,6 +1483,8 @@ DOCT: Declarative Org capture templates
         (:set org-special-ctrl-a/e t
               org-M-RET-may-split-line nil)
 
+        (:hook #'akirak-org-eldoc-setup)
+
         (:global "M-g h" #'akirak-org-avy-heading
                  "<S-menu>" #'akirak-org-clocked-entry-or-agenda)
 
