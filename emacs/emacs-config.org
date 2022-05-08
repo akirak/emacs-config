@@ -3754,6 +3754,24 @@ A Git porcelain inside Emacs.
                                            ("~/work" . 3)
                                            ("~/archives/oss/" . 3)))))
 #+end_src
+**** Squash commits
+#+begin_src emacs-lisp
+  (setup squasher
+    ;; https://github.com/akirak/squasher
+    (:nixpkgs "squasher")
+
+    (defun akirak/squasher-from-revision-at-point ()
+      (interactive)
+      (if-let (commit (magit-rev-parse
+                       (magit-thing-at-point 'git-revision t)))
+          (when (zerop (with-temp-buffer
+                         (prog1 (call-process "squasher"
+                                              nil t nil
+                                              "--base" commit)
+                           (message (buffer-string)))))
+            (revert-buffer))
+        (user-error "No commit at point"))))
+#+end_src
 *** magit-delta                                                   :VC:diff:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 13:33]
