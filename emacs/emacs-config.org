@@ -2509,6 +2509,10 @@ Consulting completing-read
 :PROPERTIES:
 :CREATED_TIME: [2022-05-03 Tue 21:31]
 :END:
+#+begin_quote
+Consult integration for git
+[[https://github.com/rcj/consult-ls-git]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package consult-ls-git)
@@ -2858,6 +2862,10 @@ Automatically add spaces around operators
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 19:08]
 :END:
+#+begin_quote
+Major mode for editing Elixir files
+[[https://github.com/elixir-editors/emacs-elixir]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package elixir-mode)
@@ -3184,6 +3192,10 @@ Generic help
     (autoload 'ghelp-describe-at-point "ghelp"))
 #+end_src
 *** ghelp-eglot
+#+begin_quote
+Ghelp+Eglot
+#+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package ghelp-eglot))
 #+end_src
@@ -4312,6 +4324,10 @@ Clean-up and Beautify the list of minor-modes.
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 23:59]
 :END:
+#+begin_quote
+Automatic insertion of end blocks for Ruby
+[[http://github.com/rejeep/ruby-end]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package ruby-end)
@@ -4646,6 +4662,9 @@ Display available keybindings in popup
 :PROPERTIES:
 :CREATED_TIME: [2022-05-04 Wed 09:17]
 :END:
+#+begin_quote
+Operate on current line if region undefined
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package whole-line-or-region)
@@ -4770,11 +4789,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 179 |
+| [[org-ql-search:tags:packages][packages]]            | 183 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
-| [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:visual][visual]]              |  11 |
+| [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:VC][VC]]                  |   9 |
 | [[org-ql-search:tags:completion][completion]]          |   9 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
@@ -4782,8 +4801,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Emacs][Emacs]]               |   7 |
 | [[org-ql-search:tags:windows][windows]]             |   7 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
-| [[org-ql-search:tags:dired][dired]]               |   6 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
+| [[org-ql-search:tags:dired][dired]]               |   5 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
@@ -4798,6 +4817,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:documentation][documentation]]       |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
+| [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
@@ -4805,7 +4825,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:grep][grep]]                |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
-| [[org-ql-search:tags:structured__editing][structured__editing]] |   2 |
+| [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
 | [[org-ql-search:tags:reading][reading]]             |   2 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   2 |
@@ -4832,10 +4852,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
-| [[org-ql-search:tags:exercises][exercises]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
-| [[org-ql-search:tags:git][git]]                 |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
@@ -4883,10 +4901,11 @@ There are some companion packages:
 There are some packages for structured editing:
 
 #+BEGIN: org-ql :query "tags:structured__editing" :columns (heading todo)
-| Heading | Todo |
-|---------+------|
-| [[lispy][lispy]]   |      |
-| [[puni][puni]]    |      |
+| Heading     | Todo |
+|-------------+------|
+| [[lispy][lispy]]       |      |
+| [[puni][puni]]        |      |
+| [[akirak-puni][akirak-puni]] |      |
 #+END:
 
 I like the idea of [[https://github.com/mickeynp/combobulate][combobulate]], but it looks immature at present.
