@@ -2270,6 +2270,9 @@ This is an extra functions for window management.
 
 #+begin_src emacs-lisp
   (setup akirak-window
+    (add-to-list 'display-buffer-alist
+                 '(akirak-help-buffer-p (akirak-help-buffer-display-function)))
+
     (:status opinionated
       (:global "C-2" #'akirak-window-split-vertically
                "C-3" #'akirak-window-split-and-select
