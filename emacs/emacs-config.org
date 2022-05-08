@@ -2461,6 +2461,15 @@ Consulting completing-read
                                           (when-let (project (project-current))
                                             (project-root project))))
 
+    (:when-loaded
+      (:set consult-buffer-sources `(consult--source-project-buffer
+                                     consult--source-project-recent-file
+                                     ,@(when (require 'akirak-consult nil t)
+                                         '(akirak-consult-source-help-buffer
+                                           akirak-consult-source-indirect-buffer))
+                                     consult--source-buffer
+                                     consult--source-recent-file)))
+
     (:global [remap switch-to-buffer] #'consult-buffer
              [remap bookmark-jump] #'consult-bookmark
              [remap yank-pop] #'consult-yank-pop
