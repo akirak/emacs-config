@@ -1180,6 +1180,16 @@ Thus I will explicitly install this package rather than using the built-in versi
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
 
+    (let ((modes '(help-mode
+                   helpful-mode
+                   ghelp-page-mode)))
+      (add-to-list 'display-buffer-alist
+                   `((or ,@(mapcar (lambda (mode) (cons 'major-mode mode))
+                                   modes))
+                     display-buffer-reuse-mode-window
+                     mode ,@modes)
+                   t))
+
     (:global
      ;; TODO: scroll-other-window and scroll-other-window-down
      [remap scroll-up-command]
@@ -2270,9 +2280,6 @@ This is an extra functions for window management.
 
 #+begin_src emacs-lisp
   (setup akirak-window
-    (add-to-list 'display-buffer-alist
-                 '(akirak-help-buffer-p (akirak-help-buffer-display-function)))
-
     (:status opinionated
       (:global "C-2" #'akirak-window-split-vertically
                "C-3" #'akirak-window-split-and-select
