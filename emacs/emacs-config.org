@@ -1386,6 +1386,8 @@ DOCT: Declarative Org capture templates
       (advice-add #'org-insert-todo-heading-respect-content
                   :around #'akirak-org-ad-around-insert-heading)
 
+      (:global "C-c o" #'org-open-at-point-global)
+
       (:when-loaded
         (add-to-list 'display-buffer-alist
                      '("\\*Org Select\\*"
