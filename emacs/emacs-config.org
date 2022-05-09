@@ -3282,11 +3282,14 @@ Emacs Minor mode to automatically commit and push
                   (org-link-display-format org-clock-current-task))
                  ((string-prefix-p (expand-file-name root)
                                    clocking-file)
-                  (format "%s: %s\n\norg-id: %s"
+                  (format "%s: %s\n\n%s"
                           category
                           (org-link-display-format org-clock-current-task)
-                          (org-with-point-at org-clock-marker
-                            (org-id-get-create))))
+                          ;; By using the link format of Org, it will enable the
+                          ;; user to navigate to the referenced entry.
+                          (org-link-make-string
+                           (concat "id:" (org-with-point-at org-clock-marker
+                                           (org-id-get-create))))))
                  (t
                   "!Working on a task in another repository")))
             (concat "Modified " (file-relative-name filename root)))
