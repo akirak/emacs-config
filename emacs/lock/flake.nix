@@ -198,12 +198,6 @@
       repo = "dired-hacks";
       type = "github";
     };
-    dired-hide-dotfiles = {
-      flake = false;
-      owner = "mattiasb";
-      repo = "dired-hide-dotfiles";
-      type = "github";
-    };
     doct = {
       flake = false;
       owner = "progfolio";
@@ -236,8 +230,7 @@
     };
     eglot = {
       flake = false;
-      owner = "akirak";
-      ref = "develop";
+      owner = "joaotavora";
       repo = "eglot";
       type = "github";
     };
@@ -823,12 +816,6 @@
       flake = false;
       owner = "magit";
       repo = "orgit";
-      type = "github";
-    };
-    orglink = {
-      flake = false;
-      owner = "tarsius";
-      repo = "orglink";
       type = "github";
     };
     ov = {

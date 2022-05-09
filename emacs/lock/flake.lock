@@ -83,11 +83,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1652030157,
-        "narHash": "sha256-XzrEqZt8uhZFbskaQZY9vxnfWhfF8T7trkbGmf0ZLBg=",
+        "lastModified": 1652237197,
+        "narHash": "sha256-BNHvzrJ/et6I+9TURjGZrO4TY0Agns3zHa5aNsDiotY=",
         "ref": "master",
-        "rev": "bd757b15904ee34c57369f1db5f2ec5416ab11c4",
-        "revCount": 219,
+        "rev": "97afa37cd24d01f2b1f8f4d357661d79ecb54bf8",
+        "revCount": 230,
         "type": "git",
         "url": "https://git.sr.ht/~akirak/akirak-mode"
       },
@@ -529,22 +529,6 @@
         "type": "github"
       }
     },
-    "dired-hide-dotfiles": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1614021595,
-        "narHash": "sha256-Y2+VzNh1Y3TU/NHTQ5Iwo+Mmj5CTnaqjMCptu5uVmjM=",
-        "owner": "mattiasb",
-        "repo": "dired-hide-dotfiles",
-        "rev": "6a379f23f64045f5950d229254ce6f32dbbf5364",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mattiasb",
-        "repo": "dired-hide-dotfiles",
-        "type": "github"
-      }
-    },
     "doct": {
       "flake": false,
       "locked": {
@@ -628,16 +612,15 @@
     "eglot": {
       "flake": false,
       "locked": {
-        "lastModified": 1651240847,
-        "narHash": "sha256-64wqRT/XCoR6L0AQtQWwcVKgAMSgSJ8rMfSOglpMqnk=",
-        "owner": "akirak",
+        "lastModified": 1652123052,
+        "narHash": "sha256-pUnxebkcUmlL3m/2Bs/f8kobcrGhwJORVTmsy5Hv1iM=",
+        "owner": "joaotavora",
         "repo": "eglot",
-        "rev": "fa9efa8e0d281965f0d03422d4f72e7df841b2bd",
+        "rev": "ba618d2cee55c8c339d46621b7e721957cc30a72",
         "type": "github"
       },
       "original": {
-        "owner": "akirak",
-        "ref": "develop",
+        "owner": "joaotavora",
         "repo": "eglot",
         "type": "github"
       }
@@ -1783,11 +1766,11 @@
     "nix26": {
       "flake": false,
       "locked": {
-        "lastModified": 1651417288,
-        "narHash": "sha256-29ea5YBjI2I8IzJsBSx/x2XWVsk25Xd7ZsA35ySr4Ro=",
+        "lastModified": 1652123567,
+        "narHash": "sha256-yYdcyLpf5zhTmOhKo5/fDR5a9WJ6dcQTtVBgyEdqhiA=",
         "owner": "emacs-twist",
         "repo": "nix26.el",
-        "rev": "65297c1bd089ba00418fde396cd26df7a9c43642",
+        "rev": "023a7a77e8b3b1130da1bbdc7ed848b3de876a7b",
         "type": "github"
       },
       "original": {
@@ -2171,11 +2154,11 @@
     "orgabilize": {
       "flake": false,
       "locked": {
-        "lastModified": 1651894631,
-        "narHash": "sha256-s+hNy7APxcaFgPsPmzo4HEKV29qz+nhuf52mqW2N1S4=",
+        "lastModified": 1652221511,
+        "narHash": "sha256-HsrkcO94Oaauqj1weA4vLHJbwvBqeS1kIUEyYEFJ6Hk=",
         "owner": "akirak",
         "repo": "orgabilize.el",
-        "rev": "816749477b63cb283203980ae3021b0269df5f95",
+        "rev": "cd19f0bc294e8d339347d597b625b70cd6070d67",
         "type": "github"
       },
       "original": {
@@ -2197,22 +2180,6 @@
       "original": {
         "owner": "magit",
         "repo": "orgit",
-        "type": "github"
-      }
-    },
-    "orglink": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1641033957,
-        "narHash": "sha256-iR5mEfJKbB+lLAActy4fVLkMLFEH8ZWLolTADZKnKZg=",
-        "owner": "tarsius",
-        "repo": "orglink",
-        "rev": "d0210403b62eaf5c68f04a313f509589f253bc12",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tarsius",
-        "repo": "orglink",
         "type": "github"
       }
     },
@@ -2619,7 +2586,6 @@
         "dired-collapse": "dired-collapse",
         "dired-filter": "dired-filter",
         "dired-hacks-utils": "dired-hacks-utils",
-        "dired-hide-dotfiles": "dired-hide-dotfiles",
         "doct": "doct",
         "duckduckgo": "duckduckgo",
         "dumb-jump": "dumb-jump",
@@ -2723,7 +2689,6 @@
         "org-web-tools": "org-web-tools",
         "orgabilize": "orgabilize",
         "orgit": "orgit",
-        "orglink": "orglink",
         "ov": "ov",
         "package-lint": "package-lint",
         "page-break-lines": "page-break-lines",
