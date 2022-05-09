@@ -1857,7 +1857,7 @@ Integrate Org with epubinfo program
 #+begin_src emacs-lisp
 (setup (:package org-journal))
 #+end_src
-*** orglink                                                         :links:
+*** orglink                                          :noexport:links:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:28]
 :END:
