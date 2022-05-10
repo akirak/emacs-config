@@ -2751,7 +2751,9 @@ Run DuckDuckGo search
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package duckduckgo))
+  (setup (:package duckduckgo)
+    ;; Replace `eww-search-words'
+    (:global "M-s M-w" #'duckduckgo))
 #+end_src
 *** dumb-jump                                                  :navigation:
 :PROPERTIES:
