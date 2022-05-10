@@ -2478,7 +2478,8 @@ Consulting completing-read
                                      consult--source-project-recent-file
                                      ,@(when (require 'akirak-consult nil t)
                                          '(akirak-consult-source-help-buffer
-                                           akirak-consult-source-indirect-buffer))
+                                           akirak-consult-source-indirect-buffer
+                                           akirak-consult-source-narrowed-buffer))
                                      consult--source-buffer
                                      consult--source-recent-file)))
 
