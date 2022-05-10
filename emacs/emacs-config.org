@@ -2706,7 +2706,7 @@ Utilities and helpers for dired-hacks collection
       "n" 'dired-hacks-next-file
       "p" 'dired-hacks-previous-file))
 #+end_src
-*** dired-hide-dotfiles                                             :dired:
+*** dired-hide-dotfiles                              :noexport:dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 19:08]
 :END:
