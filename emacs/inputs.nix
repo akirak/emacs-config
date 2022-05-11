@@ -163,14 +163,6 @@
       ref = "develop";
     };
   };
-  eglot = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "eglot";
-      ref = "develop";
-    };
-  };
   fanyi = _: _: {
     origin = {
       type = "github";

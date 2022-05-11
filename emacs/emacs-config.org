@@ -2830,6 +2830,9 @@ Client for Language Server Protocol (LSP) servers
     ;;   (:hook-into haskell-mode-hook
     ;;               rust-mode-hook))
 
+    (:when-loaded
+      (add-to-list 'eglot-server-programs
+                   '(svelte-mode . ("svelteserver" "--stdio"))))
     (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
 
     (defun akirak/eglot-setup-buffer ()
