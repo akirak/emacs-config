@@ -4828,7 +4828,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 183 |
+| [[org-ql-search:tags:packages][packages]]            | 182 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:visual][visual]]              |  11 |
@@ -4841,9 +4841,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:windows][windows]]             |   7 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
-| [[org-ql-search:tags:dired][dired]]               |   5 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
+| [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
@@ -4852,9 +4852,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
-| [[org-ql-search:tags:links][links]]               |   3 |
 | [[org-ql-search:tags:documentation][documentation]]       |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
+| [[org-ql-search:tags:major_mode][major_mode]]          |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
@@ -4863,7 +4863,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:grep][grep]]                |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
-| [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
 | [[org-ql-search:tags:reading][reading]]             |   2 |
