@@ -2833,6 +2833,9 @@ Client for Language Server Protocol (LSP) servers
     (:when-loaded
       (add-to-list 'eglot-server-programs
                    '(svelte-mode . ("svelteserver" "--stdio"))))
+
+    (put 'typescript-tsx-mode 'eglot-language-id "typescriptreact")
+
     (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
 
     (defun akirak/eglot-setup-buffer ()
@@ -4519,7 +4522,12 @@ Incremental parsing system
 
 #+begin_src emacs-lisp
   (setup (:package tree-sitter)
-    (:hook tree-sitter-hl-mode))
+    (:hook tree-sitter-hl-mode)
+
+    (:when-loaded
+      ;; Based on https://github.com/emacs-typescript/typescript.el/issues/4#issuecomment-849355222
+      (add-to-list 'tree-sitter-major-mode-language-alist
+                   '(typescript-tsx-mode . tsx))))
 #+end_src
 
 - =tree-sitter-hl-mode= overrides highlighting provided by =font-lock-mode=.
@@ -4534,7 +4542,8 @@ Grammar bundle for tree-sitter
 #+begin_src emacs-lisp
   (setup (:package tree-sitter-langs)
     (:with-mode tree-sitter-mode
-      (:hook-into typescript-mode)))
+      (:hook-into typescript-mode-hook
+                  typescript-tsx-mode-hook)))
 #+end_src
 *** turbo-log                                       :development:debugging:
 :PROPERTIES:
@@ -4571,7 +4580,19 @@ Major mode for editing typescript
 
 #+begin_src emacs-lisp
   (setup (:package typescript-mode)
-    (:file-match "\\.tsx?\\'"))
+    (:file-match "\\.ts\\'"))
+#+end_src
+**** typescript-tsx-mode
+#+begin_src emacs-lisp
+  (setup typescript-tsx-mode
+    (:file-match "\\.tsx\\'")
+
+    ;; https://github.com/emacs-typescript/typescript.el/issues/4#issuecomment-849355222
+    (define-derived-mode typescript-tsx-mode typescript-mode
+      "typescript-tsx")
+
+    (with-eval-after-load 'typescript-mode
+      (define-key typescript-tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
 *** unmodified-buffer                                    :noexport:ARCHIVE:
 :PROPERTIES:
