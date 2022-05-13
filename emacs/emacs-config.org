@@ -2514,7 +2514,7 @@ Consulting completing-read
     (:with-mode consult-preview-at-point-mode
       (:hook completion-list-mode))
 
-    (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+    ;; (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
 
     (:set consult-narrow-key "<"
           consult-project-root-function (defun akirak/consult-project-root ()

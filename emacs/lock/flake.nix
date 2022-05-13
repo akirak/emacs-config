@@ -216,12 +216,6 @@
       repo = "dumb-jump";
       type = "github";
     };
-    ediprolog = {
-      flake = false;
-      owner = "emacsmirror";
-      repo = "ediprolog";
-      type = "github";
-    };
     editorconfig = {
       flake = false;
       owner = "editorconfig";
@@ -236,7 +230,7 @@
     };
     el-patch = {
       flake = false;
-      owner = "raxod502";
+      owner = "radian-software";
       repo = "el-patch";
       type = "github";
     };
@@ -466,6 +460,12 @@
       repo = "graphviz-dot-mode";
       type = "github";
     };
+    guess-language = {
+      flake = false;
+      owner = "tmalsburg";
+      repo = "guess-language.el";
+      type = "github";
+    };
     haskell-mode = {
       flake = false;
       owner = "haskell";
@@ -536,6 +536,12 @@
       flake = false;
       owner = "abo-abo";
       repo = "swiper";
+      type = "github";
+    };
+    jq-mode = {
+      flake = false;
+      owner = "ljos";
+      repo = "jq-mode";
       type = "github";
     };
     json-mode = {
@@ -715,6 +721,13 @@
       repo = "org-dog";
       type = "github";
     };
+    org-dog-export = {
+      flake = false;
+      owner = "akirak";
+      ref = "develop";
+      repo = "org-dog";
+      type = "github";
+    };
     org-dog-facade = {
       flake = false;
       owner = "akirak";
@@ -822,6 +835,12 @@
       flake = false;
       owner = "emacsorphanage";
       repo = "ov";
+      type = "github";
+    };
+    ox-gfm = {
+      flake = false;
+      owner = "larstvei";
+      repo = "ox-gfm";
       type = "github";
     };
     package-lint = {
