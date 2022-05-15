@@ -332,6 +332,39 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:with-mode global-auto-revert-mode
       (:hook-into after-init-hook)))
 #+end_src
+*** bookmark
+:PROPERTIES:
+:CREATED_TIME: [2022-05-14 Sat 09:53]
+:END:
+
+#+begin_src emacs-lisp
+  (setup bookmark
+    (defun akirak/delete-bookmark-to-here ()
+      "Delete a bookmark record to the current location, if any"
+      (interactive)
+      (bookmark-maybe-load-default-file)
+      (cl-flet
+          ((remk
+             (record)
+             (thread-last
+               (cdr record)
+               (seq-filter (pcase-lambda (`(,key . ,alist))
+                             (memq key '(filename
+                                         handler
+                                         front-context-string))))
+               (seq-sort-by (lambda (record)
+                              (symbol-name (car record)))
+                            #'string<))))
+        (let ((this (bookmark-make-record)))
+          (when-let (record (seq-find (lambda (record)
+                                        (equal (remk record) (remk this)))
+                                      bookmark-alist))
+            ;; TODO This seem to be ineffective on bookmarks created using org-bookmark-heading.
+            (bookmark--remove-fringe-mark
+             (bookmark-get-bookmark (car record) 'noerror))
+            (bookmark-delete (car record))
+            (message "Deleted \"%s\"" (car record)))))))
+#+end_src
 *** browse-url
 :PROPERTIES:
 :CREATED_TIME: [2022-04-06 Wed 17:15]
