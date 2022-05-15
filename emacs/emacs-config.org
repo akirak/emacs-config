@@ -4711,6 +4711,7 @@ Operate on current line if region undefined
              (defun akirak/anzu-query-replace-on-line (arg)
                (interactive "P")
                (require 'anzu)
+               (require 'whole-line-or-region)
                (whole-line-or-region-wrap-modified-region #'anzu-query-replace
                                                           (if (numberp arg)
                                                               arg
