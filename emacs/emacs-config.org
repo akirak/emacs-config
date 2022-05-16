@@ -4357,7 +4357,12 @@ A dumb Japanese input method
 #+begin_src emacs-lisp
   (setup (:package riben)
     (:bind "C-j" #'riben-dispatch
-           "C-S-j" #'riben-inc-counter))
+           "C-S-j" #'riben-inc-counter)
+
+    ;; Workaround for commands in `org-mode-map' and other maps.
+    (:when-loaded
+      (dolist (key (mapcar #'car riben-decode-punctuation-alist))
+        (define-key riben-mode-map (vector key) #'riben-self-insert-command))))
 #+end_src
 **** avy-riben
 #+begin_quote
