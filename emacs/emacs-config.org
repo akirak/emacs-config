@@ -1476,13 +1476,16 @@ DOCT: Declarative Org capture templates
         '(org-id
           org-clock
           org-crypt
+          ;; Exporters
+          ox-gfm
           ;; Built-in link types I need
           ol-info
           ol-eww
           ;; Ensure the library is used when creating a bookmark
           org-bookmark-heading
           ;; See fanyi
-          ol-fanyi))
+          ol-fanyi
+          ))
 #+end_src
 **** Completion
 #+begin_src emacs-lisp
@@ -2080,6 +2083,14 @@ Retrieve metadata of volumes from inside Org
   (setup (:package org-volume)
     (:set org-volume-image-download-method #'akirak-image-insert-offline-link
           org-volume-dblock-defaults '(:lang "en" :limit 1)))
+#+end_src
+*** ox-gfm
+:PROPERTIES:
+:CREATED_TIME: [2022-05-15 Sun 16:56]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package ox-gfm))
 #+end_src
 ** Packages                                                       :packages:
 :PROPERTIES:
