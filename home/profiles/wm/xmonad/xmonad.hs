@@ -41,6 +41,7 @@ myManageHook =
     , resource =? "pavucontrol" --> doFloat
     , resource =? "com.rafaelmardojai.Blanket" --> doFloat
     , className =? "mpv" --> doFloat
+    , title =? "Inkscape 1.1" --> doFloat
     ]
 
 myHandleEventHook =
