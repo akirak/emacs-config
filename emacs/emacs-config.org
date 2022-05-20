@@ -1430,7 +1430,8 @@ DOCT: Declarative Org capture templates
         (setq org-structure-template-alist
               (seq-sort-by #'car #'string-collate-lessp
                            (cl-remove-duplicates
-                            (append '(("d" . "definition"))
+                            (append '(("d" . "definition")
+                                      ("t" . "toc"))
                                     org-structure-template-alist)
                             :key #'car
                             :test #'equal)))
