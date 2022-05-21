@@ -1846,6 +1846,10 @@ An example embark configuration for org-dog
 #+begin_src emacs-lisp
   (setup (:package org-dog-embark))
 #+end_src
+**** org-dog-export
+#+begin_src emacs-lisp
+  (setup (:package org-dog-export))
+#+end_src
 **** org-dog-facade
 :PROPERTIES:
 :CREATED_TIME: [2022-03-04 Fri 20:33]

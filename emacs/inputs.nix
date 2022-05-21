@@ -130,6 +130,14 @@
       ref = "develop";
     };
   };
+  org-dog-export = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
   consult-org-dog = _: _: {
     origin = {
       type = "github";
