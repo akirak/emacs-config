@@ -22,6 +22,7 @@
       ];
       ensureDatabases = [
         "postgres"
+        "hasura"
       ];
 
       # Allow access from web applications
@@ -39,14 +40,13 @@
       initialPasswordFile = "/persist/etc/pgpasswd";
     };
 
-    # postgresqlBackup = {
-    #   enable = true;
-    #   startAt = "*-*-* 01:15:00";
-    #   # Because this is a development machine, backup is actually unnecessary,
-    #   # so only backup the main database. Backup is just a practice here.
-    #   databases = [
-    #     "postgres"
-    #   ];
-    # };
+    postgresqlBackup = {
+      enable = true;
+      startAt = "*-*-* 01:15:00";
+      location = "/var/backup/postgresql";
+      # Use the transparent compression of ZFS instead
+      compression = "none";
+      backupAll = true;
+    };
   };
 }

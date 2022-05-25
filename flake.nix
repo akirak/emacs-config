@@ -244,8 +244,10 @@
           ./nixos/profiles/default-user.nix
 
           ./nixos/desktop.nix
-          ./nixos/development.nix
           ./nixos/xmonad.nix
+
+          # Optional toy environment for experimenting with services
+          ./nixos/toy.nix
 
           # ./nixos/profiles/android.nix
         ];
