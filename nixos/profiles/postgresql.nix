@@ -1,11 +1,10 @@
 {pkgs, ...}: {
   services = {
     postgresql = {
-      enable = false;
+      enable = true;
 
-      # The default is 5432, but I will change it to a different value
-      # in case I make a mistake
-      port = 5431;
+      # Default: 5432
+      port = 5432;
 
       # Specify an explicit major version
       package = pkgs.postgresql_14;
@@ -29,17 +28,25 @@
       enableTCPIP = true;
 
       # Set the data directory explicitly
-      dataDir = "/var/lib/postgresql/14";
+      # dataDir = "/var/lib/postgresql/14";
     };
 
-    postgresqlBackup = {
+    pgadmin = {
       enable = true;
-      startAt = "*-*-* 01:15:00";
-      # Because this is a development machine, backup is actually unnecessary,
-      # so only backup the main database. Backup is just a practice here.
-      databases = [
-        "postgres"
-      ];
+      # Default
+      port = 5050;
+      initialEmail = "akira.komamura@gmail.com";
+      initialPasswordFile = "/persist/etc/pgpasswd";
     };
+
+    # postgresqlBackup = {
+    #   enable = true;
+    #   startAt = "*-*-* 01:15:00";
+    #   # Because this is a development machine, backup is actually unnecessary,
+    #   # so only backup the main database. Backup is just a practice here.
+    #   databases = [
+    #     "postgres"
+    #   ];
+    # };
   };
 }
