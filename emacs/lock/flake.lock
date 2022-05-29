@@ -753,6 +753,22 @@
         "type": "github"
       }
     },
+    "embark-org": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1653690515,
+        "narHash": "sha256-tzJG7wFDIUp0zbN6qebVJxnEm8p7J7UUyv/vOXZyZ2o=",
+        "owner": "oantolin",
+        "repo": "embark",
+        "rev": "7eab6ea6182581f508c20e9a60c40c106a3539bd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oantolin",
+        "repo": "embark",
+        "type": "github"
+      }
+    },
     "envrc": {
       "flake": false,
       "locked": {
@@ -2649,6 +2665,7 @@
         "emacsql-sqlite": "emacsql-sqlite",
         "embark": "embark",
         "embark-consult": "embark-consult",
+        "embark-org": "embark-org",
         "envrc": "envrc",
         "epkg": "epkg",
         "epkg-marginalia": "epkg-marginalia",
@@ -2998,17 +3015,18 @@
     "titlecase": {
       "flake": false,
       "locked": {
-        "lastModified": 1642486707,
-        "narHash": "sha256-ETLrnBtyJxuKOLfnPcQAsj0OtpAroX7sgFsiAx2yP9Q=",
-        "owner": "duckwork",
-        "repo": "titlecase.el",
-        "rev": "d82f3d23c166db1c3ea9ae25adaf43d1eeb748dc",
-        "type": "github"
+        "lastModified": 1652728163,
+        "narHash": "sha256-ITstBosWxbC9DJALMFd0IkA4WT+Gm7v+WYZb8f81MJ0=",
+        "ref": "main",
+        "rev": "ca79d9b25e8bab5eef92b13dc69ac0c38ac39172",
+        "revCount": 80,
+        "type": "git",
+        "url": "https://codeberg.org/acdw/titlecase.el"
       },
       "original": {
-        "owner": "duckwork",
-        "repo": "titlecase.el",
-        "type": "github"
+        "ref": "main",
+        "type": "git",
+        "url": "https://codeberg.org/acdw/titlecase.el"
       }
     },
     "transient": {

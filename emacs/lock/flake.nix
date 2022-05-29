@@ -282,6 +282,12 @@
       repo = "embark";
       type = "github";
     };
+    embark-org = {
+      flake = false;
+      owner = "oantolin";
+      repo = "embark";
+      type = "github";
+    };
     envrc = {
       flake = false;
       owner = "purcell";
@@ -1048,9 +1054,9 @@
     };
     titlecase = {
       flake = false;
-      owner = "duckwork";
-      repo = "titlecase.el";
-      type = "github";
+      ref = "main";
+      type = "git";
+      url = "https://codeberg.org/acdw/titlecase.el";
     };
     transient = {
       flake = false;
