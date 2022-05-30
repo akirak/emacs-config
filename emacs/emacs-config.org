@@ -3689,6 +3689,14 @@ Edit multiple regions in the same way simultaneously.
 #+begin_src emacs-lisp
 (setup (:package iedit))
 #+end_src
+*** jq-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-05-30 Mon 14:03]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package jq-mode))
+#+end_src
 *** json-mode                                                 :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
