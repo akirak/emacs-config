@@ -24,4 +24,8 @@
   # services.gnome.gnome-keyring.enable = true;
 
   services.blueman.enable = true;
+
+  xdg.portal.extraPortals = [
+    pkgs.xdg-desktop-portal-gtk
+  ];
 }
