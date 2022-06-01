@@ -15,4 +15,8 @@
   programs.mpv = {
     enable = true;
   };
+
+  programs.firefox = {
+    enable = true;
+  };
 }
