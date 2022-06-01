@@ -3834,6 +3834,15 @@ A Git porcelain inside Emacs.
     ;; there is no point in making this IO-intensive function run.
     (advice-add 'magit-version :override #'ignore)
 
+    (:with-map magit-status-mode-map
+      (:bind "^" (defun akirak/magit-dired-up ()
+                   "Show the parent directory using dired."
+                   (interactive)
+                   (dired (thread-last
+                            default-directory
+                            (string-remove-suffix "/")
+                            (file-name-directory))))))
+
     (:status opinionated
       (:global "<f8> <f8>" #'magit-status
                "<f8> <f9>" #'magit-dispatch
