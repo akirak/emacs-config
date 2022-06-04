@@ -2886,7 +2886,18 @@ Client for Language Server Protocol (LSP) servers
     ;;   (:hook-into haskell-mode-hook
     ;;               rust-mode-hook))
 
+    (:set eglot-confirm-server-initiated-edits nil)
+
+    (:bind akirak/mode-prefix-key #'akirak/eglot-prefix-map)
+
     (:when-loaded
+      (define-prefix-command 'akirak/eglot-prefix-map)
+      (:with-map akirak/eglot-prefix-map
+        (:bind "a" #'eglot-code-actions
+               "i" #'eglot-code-action-inline
+               "q" #'eglot-code-action-quickfix
+               "o" #'eglot-code-action-organize-imports))
+
       (add-to-list 'eglot-server-programs
                    '(svelte-mode . ("svelteserver" "--stdio")))
       (add-to-list 'eglot-server-programs
