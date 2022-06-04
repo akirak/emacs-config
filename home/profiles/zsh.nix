@@ -115,6 +115,7 @@
       ".." = "cd ..";
       "..." = "cd ../..";
       # "nvfetcher" = "nix run github:berberman/nvfetcher";
+      ":h" = "run-help";
       # Drop these in favour of exa
       # "ls" = "ls --color=auto";
       # "la" = "ls -a";
