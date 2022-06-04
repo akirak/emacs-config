@@ -84,4 +84,5 @@ firefox url = spawn $ "firefox --new-window " ++ url
 
 switchNixOSConfig :: X ()
 switchNixOSConfig = runInTerm ""
-    "sh -c 'sudo nixos-rebuild switch --flake `readlink -f $HOME/config`#`uname -n` --print-build-logs || read'"
+                    -- --use-remote-sudo is required for the reason explained in https://github.com/NixOS/nixpkgs/issues/169193
+    "nixos-rebuild switch --flake `readlink -f $HOME/config`#`uname -n` --print-build-logs --use-remote-sudo || read"
