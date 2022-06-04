@@ -1418,6 +1418,8 @@ DOCT: Declarative Org capture templates
                   :around #'akirak-org-ad-around-insert-heading)
       (advice-add #'org-insert-todo-heading-respect-content
                   :around #'akirak-org-ad-around-insert-heading)
+      (advice-add 'org-meta-return
+                  :around #'akirak-org-meta-return-split-block-advice)
       (:hook #'akirak-org-protected-mode)
 
       (:global "C-c o" #'org-open-at-point-global)
