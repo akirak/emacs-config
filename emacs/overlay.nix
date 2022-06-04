@@ -18,7 +18,7 @@ with builtins; let
     ];
   };
   emacsPackage =
-    pkgsForEmacs.emacsPgtkGcc.overrideAttrs (_: {version = "29.0.50";});
+    pkgsForEmacs.emacsPgtkNativeComp.overrideAttrs (_: {version = "29.0.50";});
 
   releaseVersions = import ./versions.nix;
   inventories = import ./inventories.nix inputs;
