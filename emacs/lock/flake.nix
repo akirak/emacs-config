@@ -282,12 +282,6 @@
       repo = "embark";
       type = "github";
     };
-    embark-org = {
-      flake = false;
-      owner = "oantolin";
-      repo = "embark";
-      type = "github";
-    };
     envrc = {
       flake = false;
       owner = "purcell";

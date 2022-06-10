@@ -83,11 +83,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1654315006,
-        "narHash": "sha256-QpquUQ9VyLyYGOnFE/SCWFnuIBjalsXVCa5T2n7PRVo=",
-        "ref": "master",
-        "rev": "2b62d6b54ed35f26f65f64a80b27822723079168",
-        "revCount": 242,
+        "lastModified": 1654884667,
+        "narHash": "sha256-XEG9CoEWW/jAjtNrpzoj81HSn79V8M2v7DrD3cJMioQ=",
+        "ref": "refs/heads/master",
+        "rev": "fb082cb356099f2b6ddee90990f688ffa687db03",
+        "revCount": 244,
         "type": "git",
         "url": "https://git.sr.ht/~akirak/akirak-mode"
       },
@@ -387,11 +387,11 @@
     "consult-org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1653824452,
-        "narHash": "sha256-QRV7NnxmZ/vZ69PWxdgbBlyVfbd2Xz58UVBWsrjViDE=",
+        "lastModified": 1654883989,
+        "narHash": "sha256-I3sPj1S9eQAkrn75VO2qRqcLGPgp41JK2qs1yW3xWEw=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "167a49a0839777da0b6ac9a42b353181c6920f32",
+        "rev": "841c3f98f49750fac1b1205da4f134848041ce59",
         "type": "github"
       },
       "original": {
@@ -745,22 +745,6 @@
         "owner": "oantolin",
         "repo": "embark",
         "rev": "f29dc5a0a26a077918b75f2b36e778a45e6ec7e1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oantolin",
-        "repo": "embark",
-        "type": "github"
-      }
-    },
-    "embark-org": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1653690515,
-        "narHash": "sha256-tzJG7wFDIUp0zbN6qebVJxnEm8p7J7UUyv/vOXZyZ2o=",
-        "owner": "oantolin",
-        "repo": "embark",
-        "rev": "7eab6ea6182581f508c20e9a60c40c106a3539bd",
         "type": "github"
       },
       "original": {
@@ -1911,11 +1895,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1653824452,
-        "narHash": "sha256-QRV7NnxmZ/vZ69PWxdgbBlyVfbd2Xz58UVBWsrjViDE=",
+        "lastModified": 1654883989,
+        "narHash": "sha256-I3sPj1S9eQAkrn75VO2qRqcLGPgp41JK2qs1yW3xWEw=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "167a49a0839777da0b6ac9a42b353181c6920f32",
+        "rev": "841c3f98f49750fac1b1205da4f134848041ce59",
         "type": "github"
       },
       "original": {
@@ -1928,11 +1912,11 @@
     "org-dog-embark": {
       "flake": false,
       "locked": {
-        "lastModified": 1653824452,
-        "narHash": "sha256-QRV7NnxmZ/vZ69PWxdgbBlyVfbd2Xz58UVBWsrjViDE=",
+        "lastModified": 1654883989,
+        "narHash": "sha256-I3sPj1S9eQAkrn75VO2qRqcLGPgp41JK2qs1yW3xWEw=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "167a49a0839777da0b6ac9a42b353181c6920f32",
+        "rev": "841c3f98f49750fac1b1205da4f134848041ce59",
         "type": "github"
       },
       "original": {
@@ -1945,11 +1929,11 @@
     "org-dog-export": {
       "flake": false,
       "locked": {
-        "lastModified": 1653824452,
-        "narHash": "sha256-QRV7NnxmZ/vZ69PWxdgbBlyVfbd2Xz58UVBWsrjViDE=",
+        "lastModified": 1654883989,
+        "narHash": "sha256-I3sPj1S9eQAkrn75VO2qRqcLGPgp41JK2qs1yW3xWEw=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "167a49a0839777da0b6ac9a42b353181c6920f32",
+        "rev": "841c3f98f49750fac1b1205da4f134848041ce59",
         "type": "github"
       },
       "original": {
@@ -1962,11 +1946,11 @@
     "org-dog-facade": {
       "flake": false,
       "locked": {
-        "lastModified": 1653824452,
-        "narHash": "sha256-QRV7NnxmZ/vZ69PWxdgbBlyVfbd2Xz58UVBWsrjViDE=",
+        "lastModified": 1654883989,
+        "narHash": "sha256-I3sPj1S9eQAkrn75VO2qRqcLGPgp41JK2qs1yW3xWEw=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "167a49a0839777da0b6ac9a42b353181c6920f32",
+        "rev": "841c3f98f49750fac1b1205da4f134848041ce59",
         "type": "github"
       },
       "original": {
@@ -2665,7 +2649,6 @@
         "emacsql-sqlite": "emacsql-sqlite",
         "embark": "embark",
         "embark-consult": "embark-consult",
-        "embark-org": "embark-org",
         "envrc": "envrc",
         "epkg": "epkg",
         "epkg-marginalia": "epkg-marginalia",
