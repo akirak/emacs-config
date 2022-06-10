@@ -3162,7 +3162,8 @@ Comment/uncomment lines efficiently. Like Nerd Commenter in Vim
 #+begin_src emacs-lisp
   (setup (:package evil-nerd-commenter)
     (:global "M-;" #'evilnc-comment-or-uncomment-lines
-             "C-c p" #'evilnc-comment-or-uncomment-paragraphs))
+             ;; "C-c p" #'evilnc-comment-or-uncomment-paragraphs
+             ))
 #+end_src
 *** fancy-dabbrev                                              :completion:
 :PROPERTIES:
@@ -4324,7 +4325,10 @@ Limitations:
 **** akirak-puni
 #+begin_src emacs-lisp
   (setup akirak-puni
-    (add-hook 'puni-mode-hook #'akirak-puni-mode-setup))
+    (add-hook 'puni-mode-hook #'akirak-puni-mode-setup)
+
+    (:with-feature puni
+      (:bind "C-c p" #'akirak-puni-toggle-comment)))
 #+end_src
 
 This contains workarounds for puni-mode, like mode-specific soft deletion.
