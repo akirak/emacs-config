@@ -250,6 +250,7 @@
           ./nixos/toy.nix
 
           ./nixos/frontend.nix
+          ./nixos/development.nix
 
           # ./nixos/profiles/android.nix
         ];
