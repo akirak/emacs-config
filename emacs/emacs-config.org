@@ -3627,6 +3627,7 @@ Major mode for Hashicorp
 #+begin_src emacs-lisp
   (setup (:package hcl-mode)
     (:file-match "\\.tf\\'"
+                 "\\.prisma\\'"
                  "\\.hcl\\'"))
 #+end_src
 *** helpful                                               :reference:Emacs:
