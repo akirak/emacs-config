@@ -1850,6 +1850,11 @@ An example embark configuration for org-dog
   (setup (:package org-dog-embark))
 #+end_src
 **** org-dog-export
+#+begin_quote
+Export Org contents to various formats
+[[https://github.com/akirak/org-dog]]
+#+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package org-dog-export))
 #+end_src
@@ -2101,6 +2106,9 @@ Retrieve metadata of volumes from inside Org
 :PROPERTIES:
 :CREATED_TIME: [2022-05-15 Sun 16:56]
 :END:
+#+begin_quote
+Github Flavored Markdown Back-End for Org Export Engine
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package ox-gfm))
@@ -3244,7 +3252,7 @@ See modules.
 :CREATED_TIME: [2022-03-14 Mon 13:22]
 :END:
 #+begin_quote
-Access Git forges from Magit.
+Access Git forges from Magit
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -3558,6 +3566,10 @@ Mode for the dot-language used by graphviz (att).
 :PROPERTIES:
 :CREATED_TIME: [2022-06-04 Sat 15:05]
 :END:
+#+begin_quote
+Robust automatic language detection
+[[https://github.com/tmalsburg/guess-language.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package guess-language))
@@ -3721,6 +3733,9 @@ Edit multiple regions in the same way simultaneously.
 :PROPERTIES:
 :CREATED_TIME: [2022-05-30 Mon 14:03]
 :END:
+#+begin_quote
+Edit jq scripts.
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package jq-mode))
@@ -3790,7 +3805,7 @@ Use avy to open, copy, etc. visible links
 :CREATED_TIME: [2022-01-21 Fri 16:36]
 :END:
 #+begin_quote
-vi-like Paredit
+vi-like Paredit.
 [[https://github.com/abo-abo/lispy]]
 #+end_quote
 
@@ -3846,7 +3861,7 @@ To use it, turn on =macrostep-mode=.
 
 *** magit                                                             :git:
 #+begin_quote
-A Git porcelain inside Emacs.
+A Git porcelain inside Emacs
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -4934,7 +4949,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 182 |
+| [[org-ql-search:tags:packages][packages]]            | 186 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:visual][visual]]              |  11 |
