@@ -677,6 +677,12 @@
       type = "git";
       url = "https://depp.brause.cc/nov.el.git";
     };
+    ob-restclient = {
+      flake = false;
+      owner = "alf";
+      repo = "ob-restclient.el";
+      type = "github";
+    };
     olivetti = {
       flake = false;
       owner = "rnkn";
