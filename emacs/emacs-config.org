@@ -1390,6 +1390,14 @@ DOCT: Declarative Org capture templates
 #+begin_src emacs-lisp
 (setup (:package doct))
 #+end_src
+*** ob-restclient
+:PROPERTIES:
+:CREATED_TIME: [2022-06-14 Tue 18:27]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package ob-restclient))
+#+end_src
 *** org
 #+begin_src emacs-lisp
   (setup org
@@ -1617,6 +1625,7 @@ DOCT: Declarative Org capture templates
           org-babel-load-languages
           '((shell . t)
             (emacs-lisp . t)
+            (restclient . t)
             (sqlite . t))))
 #+end_src
 **** org-capture
@@ -4949,7 +4958,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 186 |
+| [[org-ql-search:tags:packages][packages]]            | 187 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:visual][visual]]              |  11 |
