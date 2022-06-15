@@ -6,6 +6,7 @@
     alejandra
     deadnix
     squasher
+    drawio
   ];
 
   programs.direnv = {
