@@ -16,6 +16,13 @@ in
   writeShellScriptBin name ''
     ${lib.optionalString (preamble != null) preamble}
 
+    if [[ -v XAUTHORITY ]]
+    then
+      xauthority_args="--ro-bind $XAUTHORITY $XAUTHORITY"
+    else
+      xauthority_args=""
+    fi
+
     set -x
     ( exec ${bubblewrap}/bin/bwrap \
         --proc /proc \
@@ -36,7 +43,7 @@ in
         --tmpfs /tmp \
         --setenv DISPLAY ":0" \
         --ro-bind /tmp/.X11-unix/X0 /tmp/.X11-unix/X0 \
-        --ro-bind "$XAUTHORITY" "$XAUTHORITY" \
+        ''${xauthority_args} \
         --unshare-all \
         ${quoteShellArgs arguments} "$@"
       )
