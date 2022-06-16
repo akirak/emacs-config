@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "shippori-mincho-otf";
   src = fetchzip {
     url = "https://fontdasu.com/download/shippori3.zip";
-    sha256 = "14k9k30m29wbsrdcb0ayws6mxk3pabyml4kakig90q77f2niwy2c";
+    sha256 = "0bi01dxy9s6xl9fizcwixqkv81h9cgcwqsr94vd8n8w21n9app6v";
     stripRoot = false;
   };
 
