@@ -6,6 +6,7 @@
     cascadia-code
     libre-baskerville
     shippori-mincho
+    dejavu_fonts
   ];
 
   programs.alacritty = {

@@ -1300,7 +1300,7 @@ You need to install the font separately.
   (defcustom akirak/base-face-family-alist
     '((default . "Cascadia Code")
       (fixed-pitch . "Cascadia Code")
-      (variable-pitch . "Merriweather"))
+      (variable-pitch . "DejaVu Serif"))
     "Alist of font families for faces."
     :type '(alist :key-type symbol
                   :value-type string)
@@ -1361,6 +1361,10 @@ I think it would be better to create my own theme, but I don't have enough time 
   (eval-after-load 'org
     (defun akirak/apply-org-font-heights ()
       (set-face-attribute 'org-tag nil :height (ceiling (* 1.05 akirak/font-height)))))
+
+  (eval-after-load 'shr
+    (defun akirak/apply-shr-font-heights ()
+      (set-face-attribute 'shr-text nil :height 1.3)))
 #+end_src
 ** Org                                                            :packages:
 :PROPERTIES:
@@ -4775,7 +4779,7 @@ fill-column for visual-line-mode
 #+begin_src emacs-lisp
   (setup (:package visual-fill-column)
     (:set visual-fill-column-center-text t
-          visual-fill-column-width 80))
+          visual-fill-column-width 100))
 #+end_src
 *** vterm                                                :terminal:process:
 :PROPERTIES:
