@@ -1398,6 +1398,9 @@ DOCT: Declarative Org capture templates
 :PROPERTIES:
 :CREATED_TIME: [2022-06-14 Tue 18:27]
 :END:
+#+begin_quote
+org-babel functions for restclient-mode
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package ob-restclient))
