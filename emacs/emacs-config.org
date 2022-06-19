@@ -399,6 +399,15 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:with-mode (eww-mode)
       (:local-set line-spacing 0.35)))
 #+end_src
+**** Tab width
+#+begin_src emacs-lisp
+  (setup tab-width
+    (:set tab-width 2)
+    (:with-mode (makefile-mode)
+      (:local-set tab-width 4))
+    (:with-mode (js-mode typescript-mode sh-mode python-mode)
+      (:local-set tab-width 2)))
+#+end_src
 *** callproc.c                                                    :process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -735,7 +744,8 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup js-mode
-    (:file-match "\\.c?js\\'"))
+    (:file-match "\\.c?js\\'")
+    (:set js-indent-level 2))
 #+end_src
 *** keymap.c                                                  :keybindings:
 :PROPERTIES:
@@ -4724,7 +4734,8 @@ Major mode for editing typescript
 
 #+begin_src emacs-lisp
   (setup (:package typescript-mode)
-    (:file-match "\\.ts\\'"))
+    (:file-match "\\.ts\\'")
+    (:set typescript-indent-level 2))
 #+end_src
 **** typescript-tsx-mode
 #+begin_src emacs-lisp
