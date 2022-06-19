@@ -340,17 +340,28 @@
         };
 
         # Set up a pre-commit hook by running `nix develop`.
-        devShell = channels.nixpkgs.mkShell {
-          inherit
-            (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
-              src = ./.;
-              hooks = import ./hooks.nix {
-                pkgs = channels.nixpkgs;
-                emacsBinaryPackage = "emacs-config.emacs";
-              };
-            })
-            shellHook
-            ;
+        devShells = {
+          default = channels.nixpkgs.mkShell {
+            inherit
+              (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
+                src = ./.;
+                hooks = import ./hooks.nix {
+                  pkgs = channels.nixpkgs;
+                  emacsBinaryPackage = "emacs-config.emacs";
+                };
+              })
+              shellHook
+              ;
+          };
+
+          # Add global devShells for scaffolding new projects
+
+          pnpm = channels.nixpkgs.mkShell {
+            buildInputs = [
+              channels.unstable.nodejs_latest
+              channels.unstable.nodePackages.pnpm
+            ];
+          };
         };
       };
 
