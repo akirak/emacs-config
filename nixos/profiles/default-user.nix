@@ -19,6 +19,7 @@
         "disk"
         "networkmanager"
         "systemd-journal"
+        "docker"
       ];
     }
     // site.nixos.users.users;
