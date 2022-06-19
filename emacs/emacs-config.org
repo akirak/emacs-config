@@ -3065,32 +3065,7 @@ Conveniently act on minibuffer completions
     (:global "C-." #'embark-act)
 
     (:when-loaded
-      (defun akirak/embark-target-org-link-at-point ()
-        (cond
-         ((eq major-mode 'pocket-reader-mode)
-          ;; Based on `pocket-reader-copy-url' from pocket-reader.el
-          (when-let* ((id (tabulated-list-get-id))
-                      (item (ht-get pocket-reader-items id))
-                      (url (pocket-reader--get-url item)))
-            `(url ,url . ,(bounds-of-thing-at-point 'line))))
-         ((bound-and-true-p org-link-bracket-re)
-          (save-match-data
-            (when-let (href (cond
-                             ((thing-at-point-looking-at org-link-bracket-re)
-                              (match-string 1))
-                             ((thing-at-point-looking-at org-link-plain-re)
-                              (match-string 0))))
-              (let* ((bounds (cons (marker-position (nth 0 (match-data)))
-                                   (marker-position (nth 1 (match-data)))))
-                     (href (substring-no-properties href)))
-                (pcase href
-                  ;; TODO Add org-link type
-                  ((rx bol "file:" (group (+ anything)))
-                   `(file ,(match-string 1 href) . ,bounds))
-                  ((rx bol "http" (?  "s") ":")
-                   `(url ,href . ,bounds)))))))))
-
-      (add-to-list 'embark-target-finders #'akirak/embark-target-org-link-at-point)))
+      (akirak-embark-org-setup)))
 #+end_src
 
 Some notes:
