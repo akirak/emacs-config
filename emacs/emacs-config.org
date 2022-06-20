@@ -1056,7 +1056,10 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup simple
     (:global [remap count-words-region] #'count-words
-             [remap delete-horizontal-space] #'cycle-spacing)
+             [remap delete-horizontal-space] #'cycle-spacing
+             [remap upcase-word] #'upcase-dwim
+             [remap downcase-word] #'downcase-dwim
+             [remap capitalize-word] #'capitalize-dwim)
 
     (:with-mode visual-line-mode
       (:hook-into prog-mode-hook
