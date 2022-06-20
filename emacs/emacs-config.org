@@ -2188,7 +2188,7 @@ Quickly switch windows.
               (?s aw-split-window-vert "Split vertically")
               (?p aw-delete-window "Delete Window")
               (?x akirak/aw-replace-window "Replace window")
-              (?m delete-other-windows "Delete Other Windows")
+              (?m akirak/aw-mirror-window "Mirror window")
               ;; Unused.
               ;; (?k akirak/aw-quit-window "Quit window")
               (32 toggle-window-split)
@@ -2216,6 +2216,14 @@ Quickly switch windows.
                 (quit-window window)
               (error "Got a dead window %S" window)))))
 
+      (defun akirak/aw-mirror-window (window)
+        "Display the current window in WINDOW but keep the current focus."
+        (let* ((buffer (current-buffer))
+               (start (window-start))
+               (cur-window (get-buffer-window buffer)))
+          (set-window-buffer window buffer)
+          (set-window-start window start)))
+
       (defun akirak/aw-replace-window (window)
         (let* ((buffer (current-buffer))
                (cur-window (get-buffer-window buffer)))
@@ -2225,8 +2233,8 @@ Quickly switch windows.
       (custom-theme-set-faces 'user
                               '(aw-leading-char-face
                                 ((default
-                                   :background "gray18" :foreground "tan"
-                                   :height 250))))
+                                  :background "gray18" :foreground "tan"
+                                  :height 250))))
       (advice-add 'aw-delete-window
                   :after
                   (defun akirak/ad-after-aw-delete-window (&rest _args)
