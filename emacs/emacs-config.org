@@ -4500,6 +4500,16 @@ Automatic insertion of end blocks for Ruby
                 (setq-local ruby-end-expand-keywords-before-re "\\(?:^\\|\\s-+\\)\\(?:do\\)"
                             ruby-end-check-statement-modifiers nil))))
 #+end_src
+*** separedit
+:PROPERTIES:
+:CREATED_TIME: [2022-06-21 Tue 15:12]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package separedit)
+    (:set separedit-default-mode 'markdown-mode)
+    (:global "C-c '" #'separedit))
+#+end_src
 *** string-inflection                                             :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:07]
@@ -4721,7 +4731,12 @@ Major mode for editing typescript
 #+begin_src emacs-lisp
   (setup (:package typescript-mode)
     (:file-match "\\.ts\\'")
-    (:set typescript-indent-level 2))
+    (:set typescript-indent-level 2)
+
+    ;; C-c ' should be bound to separedit globally, and I don't want to override
+    ;; it in typescript-mode.
+    (:bind "C-c `" #'typescript-convert-to-template)
+    (:unbind "C-c '"))
 #+end_src
 **** typescript-tsx-mode
 #+begin_src emacs-lisp
