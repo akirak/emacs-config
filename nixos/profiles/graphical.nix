@@ -20,7 +20,7 @@
 
   systemd.services.setxkbmap = {
     enable = true;
-    after = "post-resume.target";
+    after = ["post-resume.target"];
     description = "Run setxkbmap";
 
     script = "/run/current-system/sw/bin/setxkbmap -option ctrl:nocaps";
