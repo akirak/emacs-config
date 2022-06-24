@@ -99,7 +99,7 @@
     };
     citar = {
       flake = false;
-      owner = "bdarcus";
+      owner = "emacs-citar";
       repo = "citar";
       type = "github";
     };
@@ -214,6 +214,12 @@
       flake = false;
       owner = "jacktasia";
       repo = "dumb-jump";
+      type = "github";
+    };
+    edit-indirect = {
+      flake = false;
+      owner = "Fanael";
+      repo = "edit-indirect";
       type = "github";
     };
     editorconfig = {
@@ -992,6 +998,12 @@
       repo = "s.el";
       type = "github";
     };
+    separedit = {
+      flake = false;
+      owner = "twlz0ne";
+      repo = "separedit.el";
+      type = "github";
+    };
     setup = {
       flake = false;
       type = "git";
@@ -1054,7 +1066,6 @@
     };
     titlecase = {
       flake = false;
-      ref = "main";
       type = "git";
       url = "https://codeberg.org/acdw/titlecase.el";
     };

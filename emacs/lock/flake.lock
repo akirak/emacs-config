@@ -163,11 +163,11 @@
     "avy-riben": {
       "flake": false,
       "locked": {
-        "lastModified": 1652593654,
-        "narHash": "sha256-gK8NlHSpOihNu7FRP0YCHE2/YLF7a+iV5CKslsSfYEc=",
+        "lastModified": 1656095330,
+        "narHash": "sha256-3lcxHZqikI1cr6W/X5Nl/xyBnMyM0HRC0ZTBnGUJBzE=",
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "rev": "079ddea834461231c5cb1baae22dba24d3a941fd",
+        "rev": "86fd5c15af3833c673fddf65672882e826e2a836",
         "type": "github"
       },
       "original": {
@@ -259,15 +259,15 @@
     "citar": {
       "flake": false,
       "locked": {
-        "lastModified": 1645114005,
-        "narHash": "sha256-n57vSkU+zYDqSW6urgG5bS3v+5gVDkD6CL/UPZWg/kE=",
-        "owner": "bdarcus",
+        "lastModified": 1655555339,
+        "narHash": "sha256-i9x+NwQ7LHVbKwCvREr82UCdqqI+Vgv9UjLHm3yVBCU=",
+        "owner": "emacs-citar",
         "repo": "citar",
-        "rev": "b84cb375933053cf3e5408f0386034e8dabca5cb",
+        "rev": "b6cd49ffb56824b8d1793b0c4268237b3d89fb45",
         "type": "github"
       },
       "original": {
-        "owner": "bdarcus",
+        "owner": "emacs-citar",
         "repo": "citar",
         "type": "github"
       }
@@ -574,6 +574,22 @@
       "original": {
         "owner": "jacktasia",
         "repo": "dumb-jump",
+        "type": "github"
+      }
+    },
+    "edit-indirect": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1652268267,
+        "narHash": "sha256-ACyiyaY5hpZXzRoG1Kdk5jzB7byn0cFIXWPbAf92YI8=",
+        "owner": "Fanael",
+        "repo": "edit-indirect",
+        "rev": "f80f63822ffae78de38dbe72cacaeb1aaa96c732",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Fanael",
+        "repo": "edit-indirect",
         "type": "github"
       }
     },
@@ -2427,11 +2443,11 @@
     "project-hercules": {
       "flake": false,
       "locked": {
-        "lastModified": 1654136240,
-        "narHash": "sha256-qRTGEfF4vcCUvxLluQj+iogbIA/xn1tYOfc9rwxlDYM=",
+        "lastModified": 1655701093,
+        "narHash": "sha256-D9G7iCusn46ZmpJ+wpSWV9rv14zSQxC0Hlq2DoXsz/A=",
         "owner": "akirak",
         "repo": "project-hercules.el",
-        "rev": "83a6087f879667e114b213640610e4873a9dfb46",
+        "rev": "55a4b3076f25c56b14323487f9df2a7b3afb9f44",
         "type": "github"
       },
       "original": {
@@ -2587,11 +2603,11 @@
     "riben": {
       "flake": false,
       "locked": {
-        "lastModified": 1652593654,
-        "narHash": "sha256-gK8NlHSpOihNu7FRP0YCHE2/YLF7a+iV5CKslsSfYEc=",
+        "lastModified": 1656095330,
+        "narHash": "sha256-3lcxHZqikI1cr6W/X5Nl/xyBnMyM0HRC0ZTBnGUJBzE=",
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "rev": "079ddea834461231c5cb1baae22dba24d3a941fd",
+        "rev": "86fd5c15af3833c673fddf65672882e826e2a836",
         "type": "github"
       },
       "original": {
@@ -2654,6 +2670,7 @@
         "doct": "doct",
         "duckduckgo": "duckduckgo",
         "dumb-jump": "dumb-jump",
+        "edit-indirect": "edit-indirect",
         "editorconfig": "editorconfig",
         "eglot": "eglot",
         "el-patch": "el-patch",
@@ -2783,6 +2800,7 @@
         "rich-minority": "rich-minority",
         "ruby-end": "ruby-end",
         "s": "s",
+        "separedit": "separedit",
         "setup": "setup",
         "string-inflection": "string-inflection",
         "super-save": "super-save",
@@ -2848,6 +2866,22 @@
       "original": {
         "owner": "magnars",
         "repo": "s.el",
+        "type": "github"
+      }
+    },
+    "separedit": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1651419577,
+        "narHash": "sha256-038jdAcO3mvKu6aRIT/UZ5Z6LZ7GZYT3EZ8S8yIj7UQ=",
+        "owner": "twlz0ne",
+        "repo": "separedit.el",
+        "rev": "454c9a3561acca3d57cce6ddb356f686b3d8cbee",
+        "type": "github"
+      },
+      "original": {
+        "owner": "twlz0ne",
+        "repo": "separedit.el",
         "type": "github"
       }
     },
@@ -3017,14 +3051,13 @@
       "locked": {
         "lastModified": 1652728163,
         "narHash": "sha256-ITstBosWxbC9DJALMFd0IkA4WT+Gm7v+WYZb8f81MJ0=",
-        "ref": "main",
+        "ref": "refs/heads/main",
         "rev": "ca79d9b25e8bab5eef92b13dc69ac0c38ac39172",
         "revCount": 80,
         "type": "git",
         "url": "https://codeberg.org/acdw/titlecase.el"
       },
       "original": {
-        "ref": "main",
         "type": "git",
         "url": "https://codeberg.org/acdw/titlecase.el"
       }
