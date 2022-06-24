@@ -4506,6 +4506,10 @@ Automatic insertion of end blocks for Ruby
 :PROPERTIES:
 :CREATED_TIME: [2022-06-21 Tue 15:12]
 :END:
+#+begin_quote
+Edit comment/string/docstring/code block in separate buffer
+[[https://github.com/twlz0ne/separedit.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package separedit)
@@ -4987,7 +4991,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 187 |
+| [[org-ql-search:tags:packages][packages]]            | 188 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
