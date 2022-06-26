@@ -163,11 +163,11 @@
     "avy-riben": {
       "flake": false,
       "locked": {
-        "lastModified": 1656095330,
-        "narHash": "sha256-3lcxHZqikI1cr6W/X5Nl/xyBnMyM0HRC0ZTBnGUJBzE=",
+        "lastModified": 1656318772,
+        "narHash": "sha256-7/Cnb7q4+LwL+/Px0l6LlSUA/cOaHRlXapHsTCotRPE=",
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "rev": "86fd5c15af3833c673fddf65672882e826e2a836",
+        "rev": "9ba25a24a2ce48ef1ed9e5af5e122cd274b35f08",
         "type": "github"
       },
       "original": {
@@ -1474,35 +1474,19 @@
         "type": "github"
       }
     },
-    "json-mode": {
+    "jsonian": {
       "flake": false,
       "locked": {
-        "lastModified": 1633933809,
-        "narHash": "sha256-H+HNE9NYXnC7eIQG/hy8a4qbvo7Lpp7oGGFNVLApE2Q=",
-        "owner": "joshwnj",
-        "repo": "json-mode",
-        "rev": "eedb4560034f795a7950fa07016bd4347c368873",
+        "lastModified": 1656288346,
+        "narHash": "sha256-lkkWxT6UD+ZzGUlvBZx1XV/JCBifF7aMWpYir0gpImU=",
+        "owner": "iwahbe",
+        "repo": "jsonian",
+        "rev": "34c1ae16029d590bef68be35b3a955ea815c1d94",
         "type": "github"
       },
       "original": {
-        "owner": "joshwnj",
-        "repo": "json-mode",
-        "type": "github"
-      }
-    },
-    "json-snatcher": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1600276660,
-        "narHash": "sha256-ECQq7/HZiKneJ01wdF23loAU0iJYtGGzAOg6hqOIu9s=",
-        "owner": "Sterlingg",
-        "repo": "json-snatcher",
-        "rev": "b28d1c0670636da6db508d03872d96ffddbc10f2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Sterlingg",
-        "repo": "json-snatcher",
+        "owner": "iwahbe",
+        "repo": "jsonian",
         "type": "github"
       }
     },
@@ -2219,11 +2203,11 @@
     "orgabilize": {
       "flake": false,
       "locked": {
-        "lastModified": 1652413945,
-        "narHash": "sha256-42FRcKeY+mpeTMx6JZqVFzhDvzUlnTQa7XaiQgO/ZqA=",
+        "lastModified": 1656429954,
+        "narHash": "sha256-N4vO+hr+S6PtAKEDFeqCtT+wvjArVcKXYxd3aY+pD+U=",
         "owner": "akirak",
         "repo": "orgabilize.el",
-        "rev": "f089d5c63bef1862e6943dfb1c7b7afa989e3fd2",
+        "rev": "3c1d9e2d33073bc260bd419c8b53c5309f587315",
         "type": "github"
       },
       "original": {
@@ -2603,11 +2587,11 @@
     "riben": {
       "flake": false,
       "locked": {
-        "lastModified": 1656095330,
-        "narHash": "sha256-3lcxHZqikI1cr6W/X5Nl/xyBnMyM0HRC0ZTBnGUJBzE=",
+        "lastModified": 1656318772,
+        "narHash": "sha256-7/Cnb7q4+LwL+/Px0l6LlSUA/cOaHRlXapHsTCotRPE=",
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "rev": "86fd5c15af3833c673fddf65672882e826e2a836",
+        "rev": "9ba25a24a2ce48ef1ed9e5af5e122cd274b35f08",
         "type": "github"
       },
       "original": {
@@ -2726,8 +2710,7 @@
         "inheritenv": "inheritenv",
         "ivy": "ivy",
         "jq-mode": "jq-mode",
-        "json-mode": "json-mode",
-        "json-snatcher": "json-snatcher",
+        "jsonian": "jsonian",
         "kind-icon": "kind-icon",
         "kv": "kv",
         "license-templates": "license-templates",

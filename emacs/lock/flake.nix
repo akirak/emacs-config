@@ -550,16 +550,10 @@
       repo = "jq-mode";
       type = "github";
     };
-    json-mode = {
+    jsonian = {
       flake = false;
-      owner = "joshwnj";
-      repo = "json-mode";
-      type = "github";
-    };
-    json-snatcher = {
-      flake = false;
-      owner = "Sterlingg";
-      repo = "json-snatcher";
+      owner = "iwahbe";
+      repo = "jsonian";
       type = "github";
     };
     kind-icon = {
