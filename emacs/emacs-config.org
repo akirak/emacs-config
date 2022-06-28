@@ -3752,7 +3752,16 @@ Edit jq scripts.
 #+begin_src emacs-lisp
 (setup (:package jq-mode))
 #+end_src
-*** json-mode                                                 :major__mode:
+*** jsonian
+:PROPERTIES:
+:CREATED_TIME: [2022-06-28 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package jsonian)
+    (:file-match "\\.json\\'" "\\.lock\\'"))
+#+end_src
+*** json-mode                                  :noexport:major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
