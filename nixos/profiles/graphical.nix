@@ -1,4 +1,8 @@
 {pkgs, ...}: {
+  environment.systemPackages = with pkgs; [
+    flameshot
+  ];
+
   fonts = {
     fonts = with pkgs; [
       jetbrains-mono-nerdfont
