@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  boot.kernelPackages = pkgs.linuxPackages_5_17;
+  boot.kernelPackages = pkgs.linuxPackages_5_18;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
