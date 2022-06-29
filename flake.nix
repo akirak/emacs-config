@@ -239,6 +239,8 @@
             virtualisation.virtualbox.host = {
               enable = true;
             };
+
+            system.stateVersion = "22.11";
           }
 
           ./nixos/profiles/default-user.nix
