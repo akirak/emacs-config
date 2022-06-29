@@ -37,6 +37,8 @@
       home.packages = [
         pkgs.wine
       ];
+
+      home.stateVersion = "22.05";
     })
   ];
 
