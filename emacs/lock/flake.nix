@@ -349,6 +349,12 @@
       repo = "fanyi.el";
       type = "github";
     };
+    flymake-eslint = {
+      flake = false;
+      owner = "orzechowskid";
+      repo = "flymake-eslint";
+      type = "github";
+    };
     forge = {
       flake = false;
       owner = "magit";

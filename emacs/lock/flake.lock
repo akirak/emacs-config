@@ -930,14 +930,30 @@
         "type": "github"
       }
     },
+    "flymake-eslint": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1647568330,
+        "narHash": "sha256-vG4lqhs5O0xxSfI4C1VpFnOuaOI20d0Jy7TJw9WuO6M=",
+        "owner": "orzechowskid",
+        "repo": "flymake-eslint",
+        "rev": "bfcf28259c7d774b259a6ed122f1f0936a5b96b9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "orzechowskid",
+        "repo": "flymake-eslint",
+        "type": "github"
+      }
+    },
     "forge": {
       "flake": false,
       "locked": {
-        "lastModified": 1655152739,
-        "narHash": "sha256-WO1K4OlsXjRw2aKIyD+365ybwJS8jzgd4crzF6i11Ks=",
+        "lastModified": 1655926157,
+        "narHash": "sha256-wTxlsiydSJkjlx5blhfIJ0JR97mAfyx0Tz4eqUcXsk0=",
         "owner": "magit",
         "repo": "forge",
-        "rev": "fa77ed0771e2565b4fb4223730da1dc13ed56950",
+        "rev": "ed8abdafd8b15852538bbe064fef037345772627",
         "type": "github"
       },
       "original": {
@@ -1045,11 +1061,11 @@
     "ghub": {
       "flake": false,
       "locked": {
-        "lastModified": 1655158122,
-        "narHash": "sha256-Lq/wCSEZiAmLL5o017VZzjw0wNACnq4qdgcEso5On2g=",
+        "lastModified": 1656057821,
+        "narHash": "sha256-dRU59egO1+6RDc4WdobBgrzqyhkwNS4+4P9naFju1Ic=",
         "owner": "magit",
         "repo": "ghub",
-        "rev": "7beed8c5c638ed9a94cb5962587ea286f07b8981",
+        "rev": "94f5aa2ddecc6426ebc69a0c67934ccba6ae9797",
         "type": "github"
       },
       "original": {
@@ -1109,11 +1125,11 @@
     "git-commit": {
       "flake": false,
       "locked": {
-        "lastModified": 1654912641,
-        "narHash": "sha256-WF3YGQ17iiHvXljCncruOJACejg5IpECtUcVMP4vbgg=",
+        "lastModified": 1656159578,
+        "narHash": "sha256-3s66hUMsyR96PfXOZFShNRxwtxNSCTGK0ulMcTqKAr4=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "b79df6dc77f0d3a27361abfb073e2cabe573bb61",
+        "rev": "35da95e99943740c7778fb588cd275f0be1536fa",
         "type": "github"
       },
       "original": {
@@ -1606,11 +1622,11 @@
     "magit": {
       "flake": false,
       "locked": {
-        "lastModified": 1654912641,
-        "narHash": "sha256-WF3YGQ17iiHvXljCncruOJACejg5IpECtUcVMP4vbgg=",
+        "lastModified": 1656159578,
+        "narHash": "sha256-3s66hUMsyR96PfXOZFShNRxwtxNSCTGK0ulMcTqKAr4=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "b79df6dc77f0d3a27361abfb073e2cabe573bb61",
+        "rev": "35da95e99943740c7778fb588cd275f0be1536fa",
         "type": "github"
       },
       "original": {
@@ -1638,11 +1654,11 @@
     "magit-section": {
       "flake": false,
       "locked": {
-        "lastModified": 1654912641,
-        "narHash": "sha256-WF3YGQ17iiHvXljCncruOJACejg5IpECtUcVMP4vbgg=",
+        "lastModified": 1656159578,
+        "narHash": "sha256-3s66hUMsyR96PfXOZFShNRxwtxNSCTGK0ulMcTqKAr4=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "b79df6dc77f0d3a27361abfb073e2cabe573bb61",
+        "rev": "35da95e99943740c7778fb588cd275f0be1536fa",
         "type": "github"
       },
       "original": {
@@ -2676,6 +2692,7 @@
         "f": "f",
         "fancy-dabbrev": "fancy-dabbrev",
         "fanyi": "fanyi",
+        "flymake-eslint": "flymake-eslint",
         "forge": "forge",
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",
