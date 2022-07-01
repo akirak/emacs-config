@@ -3259,6 +3259,14 @@ Not only English-Chinese translator
 
 You should also load ol-fanyi library to enable fanyi link type.
 See modules.
+*** flymake-eslint
+:PROPERTIES:
+:CREATED_TIME: [2022-07-01 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package flymake-eslint))
+#+end_src
 *** forge                                                     :VC:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
