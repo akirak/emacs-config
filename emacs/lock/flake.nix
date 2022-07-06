@@ -85,6 +85,12 @@
       repo = "blamer.el";
       type = "github";
     };
+    browse-at-remote = {
+      flake = false;
+      owner = "rmuslimov";
+      repo = "browse-at-remote";
+      type = "github";
+    };
     buttercup = {
       flake = false;
       owner = "jorgenschaefer";
@@ -1073,6 +1079,12 @@
       flake = false;
       owner = "magit";
       repo = "transient";
+      type = "github";
+    };
+    trashed = {
+      flake = false;
+      owner = "shingo256";
+      repo = "trashed";
       type = "github";
     };
     tree-sitter = {
