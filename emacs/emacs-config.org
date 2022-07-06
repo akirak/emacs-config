@@ -408,6 +408,15 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:with-mode (js-mode typescript-mode sh-mode python-mode)
       (:local-set tab-width 2)))
 #+end_src
+*** calc
+:PROPERTIES:
+:CREATED_TIME: [2022-07-03 Sun 15:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup calc
+    (:global "C-c q c" #'calc))
+#+end_src
 *** callproc.c                                                    :process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
