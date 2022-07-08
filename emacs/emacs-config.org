@@ -2508,6 +2508,14 @@ Show git blame info about current line
     (:set blamer-max-lines 50
           blamer-max-commit-message-length 50))
 #+end_src
+*** browse-at-remote
+:PROPERTIES:
+:CREATED_TIME: [2022-07-08 Fri 12:35]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package browse-at-remote))
+#+end_src
 *** bufler                                               :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]
