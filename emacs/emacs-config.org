@@ -4713,6 +4713,14 @@ Title-case phrases
 #+end_src
 
 The [[https://github.com/duckwork/titlecase.el][readme]] of this package contains helpful links on capitalization.
+*** trashed
+:PROPERTIES:
+:CREATED_TIME: [2022-07-09 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package trashed))
+#+end_src
 *** tree-sitter                                        :syntax:tree_sitter:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:36]
