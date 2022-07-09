@@ -2958,7 +2958,9 @@ Client for Language Server Protocol (LSP) servers
         (:bind "a" #'eglot-code-actions
                "i" #'eglot-code-action-inline
                "q" #'eglot-code-action-quickfix
-               "o" #'eglot-code-action-organize-imports))
+               "o" #'eglot-code-action-organize-imports
+               "R" #'eglot-reconnect
+               "r" #'eglot-rename))
 
       (add-to-list 'eglot-server-programs
                    '(svelte-mode . ("svelteserver" "--stdio")))
