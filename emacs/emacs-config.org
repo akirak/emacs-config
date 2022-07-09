@@ -683,7 +683,9 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup frame
-    (blink-cursor-mode -1))
+    (blink-cursor-mode -1)
+    ;; suspend-frame is annoying, so I will disable it
+    (:global "C-z" #'ignore))
 #+end_src
 *** hl-line                                                        :visual:
 :PROPERTIES:
