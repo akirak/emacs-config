@@ -605,6 +605,15 @@ The built-in =electric= package provides the following modes:
             (load-file buffer-file-name)
           (eval-buffer)))))
 #+end_src
+*** executable
+:PROPERTIES:
+:CREATED_TIME: [2022-07-09 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup executable
+    (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p))
+#+end_src
 *** fileio.c                                                        :files:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
