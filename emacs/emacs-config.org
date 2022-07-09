@@ -3093,7 +3093,7 @@ Conveniently act on minibuffer completions
     (:global "C-." #'embark-act)
 
     (:when-loaded
-      (akirak-embark-org-setup)))
+      (akirak-embark-setup)))
 #+end_src
 
 Some notes:
