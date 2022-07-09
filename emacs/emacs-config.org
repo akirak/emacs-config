@@ -2531,6 +2531,9 @@ Show git blame info about current line
 :PROPERTIES:
 :CREATED_TIME: [2022-07-08 Fri 12:35]
 :END:
+#+begin_quote
+Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package browse-at-remote))
@@ -4736,6 +4739,10 @@ The [[https://github.com/duckwork/titlecase.el][readme]] of this package contain
 :PROPERTIES:
 :CREATED_TIME: [2022-07-09 Sat 23:59]
 :END:
+#+begin_quote
+Viewing/editing system trash can
+[[https://github.com/shingo256/trashed]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package trashed))
@@ -5064,7 +5071,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 189 |
+| [[org-ql-search:tags:packages][packages]]            | 191 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
