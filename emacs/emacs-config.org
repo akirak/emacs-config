@@ -967,7 +967,7 @@ Operations on the current project
       (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
       (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
       (define-key ctl-x-x-map "T" #'akirak-project-find-test)
-      (define-key ctl-x-x-map "S" #'akirak-project-find-test))
+      (define-key ctl-x-x-map "S" #'akirak-project-find-stories))
 
     (with-eval-after-load 'embark
       (define-key embark-file-map (kbd "+") #'akirak-project-init)))
