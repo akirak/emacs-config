@@ -25,6 +25,7 @@ with builtins; let
         ./profiles/graphical.nix
         ./profiles/git-annex.nix
         ./profiles/emacs
+        ./profiles/office.nix
       ];
     xmonad =
       desktop
