@@ -3815,7 +3815,11 @@ A major mode for editing JSON files
 
 #+begin_src emacs-lisp
   (setup (:package jsonian)
-    (:file-match "\\.json\\'" "\\.lock\\'"))
+    (:file-match "\\.json\\'" "\\.lock\\'")
+
+    (with-eval-after-load "org-src"
+      (add-to-list 'org-src-lang-modes
+                   '("json" . jsonian))))
 #+end_src
 *** json-mode                                  :noexport:major__mode:ARCHIVE:
 :PROPERTIES:
