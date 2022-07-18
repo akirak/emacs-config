@@ -2390,6 +2390,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       ("d" akirak-image-insert-offline-link))
     (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
 #+end_src
+**** akirak-japanese
+#+begin_src emacs-lisp
+  (setup akirak-japanese
+    ;; Local search
+    (:global "M-s M-l" #'akirak-japanese-search))
+#+end_src
 **** akirak-url                                                :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
 
@@ -3147,6 +3153,14 @@ Consult integration for Embark
 
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
+#+end_src
+*** engine-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-07-18 Mon 12:32]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package engine-mode))
 #+end_src
 *** envrc                                                   :direnv:
 :PROPERTIES:
