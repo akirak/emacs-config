@@ -294,6 +294,12 @@
       repo = "embark";
       type = "github";
     };
+    engine-mode = {
+      flake = false;
+      owner = "hrs";
+      repo = "engine-mode";
+      type = "github";
+    };
     envrc = {
       flake = false;
       owner = "purcell";
