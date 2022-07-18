@@ -4868,7 +4868,10 @@ VERTical Interactive COmpletion
 #+begin_src emacs-lisp
   (setup (:package vertico)
     (:hook-into after-init-hook)
-    (:set vertico-resize t))
+    (:set vertico-resize t)
+    (:with-map vertico-map
+      (:bind "C-r" #'previous-matching-history-element
+             "C-s" #'next-matching-history-element)))
 #+end_src
 
 For more tips, see [[https://github.com/minad/vertico/wiki][Home · minad/vertico Wiki · GitHub]].
