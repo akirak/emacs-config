@@ -4514,7 +4514,8 @@ An interactive HTTP client for Emacs
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package restclient))
+  (setup (:package restclient)
+    (:file-match "\\.restclient\\'"))
 #+end_src
 *** riben                                                        :Japanese:
 #+begin_quote
