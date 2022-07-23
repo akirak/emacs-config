@@ -966,6 +966,7 @@ Operations on the current project
     (with-eval-after-load "bindings"
       (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
       (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
+      (define-key ctl-x-x-map "C" #'akirak-project-find-css)
       (define-key ctl-x-x-map "T" #'akirak-project-find-test)
       (define-key ctl-x-x-map "S" #'akirak-project-find-stories))
 
