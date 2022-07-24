@@ -520,6 +520,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:with-hook turn-on-eldoc-mode
       (:hook-into emacs-lisp-mode))
 
+    (:set eldoc-documentation-strategy 'eldoc-documentation-compose)
     (:global "C-c e" #'eldoc-doc-buffer))
 #+end_src
 *** elec-pair                             :prog_mode:text_mode:parentheses:
