@@ -370,6 +370,13 @@
               channels.unstable.nodePackages.pnpm
             ];
           };
+
+          yarn = channels.nixpkgs.mkShell {
+            buildInputs = [
+              channels.unstable.nodejs
+              channels.unstable.yarn
+            ];
+          };
         };
       };
 
