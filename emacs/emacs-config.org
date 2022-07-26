@@ -4950,7 +4950,9 @@ major mode for editing web templates
 #+begin_src emacs-lisp
   (setup (:package web-mode)
     (:file-match "\\.mdx\\'"
-                 "\\.html?\\'"))
+                 "\\.html?\\'"
+                 "\\.html\\.eex\\'"
+                 "\\.sface\\'"))
 #+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_quote
