@@ -3160,6 +3160,10 @@ Consult integration for Embark
 :PROPERTIES:
 :CREATED_TIME: [2022-07-18 Mon 12:32]
 :END:
+#+begin_quote
+Define and query search engines from within Emacs.
+[[https://github.com/hrs/engine-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package engine-mode))
@@ -5097,7 +5101,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 191 |
+| [[org-ql-search:tags:packages][packages]]            | 193 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
