@@ -32,8 +32,7 @@ myTerminal = "alacritty"
 
 myWorkspaces =
   ["1-emacs", "2-web"] ++
-  [show i | i <- [3..8]] ++
-  ["9-github"]
+  [show i | i <- [3..9]]
 
 myLayoutHook =
   avoidStruts (layoutHook defaultConfig)
