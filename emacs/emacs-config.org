@@ -2407,6 +2407,7 @@ Complete a URL from the clipboard and the kill ring and insert as a link
              "C-c c u" #'akirak-url-org-capture)
     (:embark embark-url-map "s"
       ("m" akirak-url-insert-as-markdown)
+      ("g" akirak-git-clone)
       ("c" akirak-url-org-capture))
     (:embark embark-file-map "s"
       ("C-l" akirak-org-store-link-to-file)))
