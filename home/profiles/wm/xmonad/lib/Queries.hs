@@ -9,3 +9,6 @@ qEmacs = appName =? "emacs"
 
 qFirefox :: Query Bool
 qFirefox = className =? "firefox"
+
+qAlacritty :: Query Bool
+qAlacritty = appName =? "Alacritty"

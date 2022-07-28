@@ -17,7 +17,7 @@ main :: IO ()
 main = do
   dbus <- mkDbusClient
   xmonad $ ewmh $ def
-    { terminal = "alacritty"
+    { terminal = myTerminal
     , modMask = mod4Mask
     , layoutHook = myLayoutHook
     , manageHook = myManageHook
@@ -26,6 +26,9 @@ main = do
     , logHook = myPolybarLogHook dbus
     }
     `additionalKeys` myKeybindings
+
+myTerminal :: String
+myTerminal = "alacritty"
 
 myWorkspaces =
   ["1-emacs", "2-web"] ++
@@ -57,6 +60,7 @@ myKeybindings =
   , ((mod4Mask, xK_q), spawn "xmonad --restart")
   , ((mod4Mask, xK_f), raiseMaybe emacs qEmacs)
   , ((mod4Mask, xK_b), raiseMaybe firefoxNewWindow qFirefox)
+  , ((mod4Mask, xK_v), runOrRaise myTerminal qAlacritty)
   , ((mod4Mask, xK_F9), switchNixOSConfig)
   , ((mod4Mask, xK_BackSpace), swapScreens)
   , ((mod4Mask .|. shiftMask, xK_q), confirmQuit)
