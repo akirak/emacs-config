@@ -57,6 +57,9 @@ myKeybindings =
   , ((mod4Mask, xK_BackSpace), swapScreens)
   , ((mod4Mask .|. shiftMask, xK_q), confirmQuit)
   , ((mod4Mask, xK_Insert), runWorkspaceAction)
+  , ((mod4Mask, xK_equal), spawn "pamixer -i 3")
+  , ((mod4Mask, xK_minus), spawn "pamixer -d 3")
+  , ((mod4Mask, xK_Delete), spawn "pamixer -t")
   ]
   ++
   [ ((modm, key), f c)

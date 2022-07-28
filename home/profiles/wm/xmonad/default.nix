@@ -10,6 +10,7 @@
     arandr
     pavucontrol
     pasystray
+    pamixer # for actions
     dunst # for dunstctl
     xmonad-log
     rofi-systemd
