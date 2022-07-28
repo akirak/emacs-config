@@ -7,8 +7,10 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Actions.DynamicWorkspaces
+import XMonad.Actions.WindowGo
 
 import Actions
+import Queries
 import Polybar
 
 main :: IO ()
@@ -53,6 +55,8 @@ myKeybindings =
   , ((mod4Mask, xK_r), renameWorkspace myXPConfig)
   -- Restart without recompiling, since Nix builds xmonad
   , ((mod4Mask, xK_q), spawn "xmonad --restart")
+  , ((mod4Mask, xK_f), raiseMaybe emacs qEmacs)
+  , ((mod4Mask, xK_b), raiseMaybe firefoxNewWindow qFirefox)
   , ((mod4Mask, xK_F9), switchNixOSConfig)
   , ((mod4Mask, xK_BackSpace), swapScreens)
   , ((mod4Mask .|. shiftMask, xK_q), confirmQuit)

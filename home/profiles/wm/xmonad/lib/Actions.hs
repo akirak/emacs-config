@@ -69,11 +69,17 @@ runWorkspaceAction = do
     (_,(_:suffix)) ->  go suffix
     where
       go :: String -> X ()
-      go "emacs" = spawn "emacs-unsafe"
-      go "web" = spawn "firefox --new-window"
+      go "emacs" = emacs
+      go "web" = firefoxNewWindow
       -- go "github" = firefox "https://github.com"
       -- go "music" = firefox "https://music.youtube.com"
       go _ = return ()
+
+firefoxNewWindow :: X ()
+firefoxNewWindow = spawn "firefox --new-window"
+
+emacs :: X ()
+emacs = spawn "emacs-unsafe"
 
 -- | Open a URL with the browser.
 chromium :: String -> X ()

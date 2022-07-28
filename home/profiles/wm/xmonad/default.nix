@@ -39,6 +39,7 @@
       libFiles = {
         "Polybar.hs" = ./lib/Polybar.hs;
         "Actions.hs" = ./lib/Actions.hs;
+        "Queries.hs" = ./lib/Queries.hs;
       };
     };
   };
