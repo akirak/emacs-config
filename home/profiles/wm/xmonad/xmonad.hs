@@ -8,6 +8,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Actions.DynamicWorkspaces
 import XMonad.Actions.WindowGo
+import XMonad.Actions.FindEmptyWorkspace
 
 import Actions
 import Queries
@@ -57,6 +58,8 @@ myKeybindings =
   , ((mod4Mask, xK_r), renameWorkspace myXPConfig)
   -- Restart without recompiling, since Nix builds xmonad
   , ((mod4Mask, xK_q), spawn "xmonad --restart")
+  , ((mod4Mask, xK_d), viewEmptyWorkspace)
+  , ((mod4Mask .|. shiftMask, xK_d), tagToEmptyWorkspace)
   , ((mod4Mask, xK_f), raiseMaybe emacs qEmacs)
   , ((mod4Mask, xK_b), raiseMaybe firefoxNewWindow qFirefox)
   , ((mod4Mask, xK_v), runOrRaise myTerminal qAlacritty)
