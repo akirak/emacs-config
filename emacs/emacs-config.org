@@ -1858,6 +1858,9 @@ A programmable workflow layer for Org mode
 
     (:global "M-g M-/" #'org-dog-find-file)
 
+    (:set org-dog-context-path-patterns
+          `(("^\\.github/" . "services/github.com")))
+
     (:with-feature org
       (:with-map org-mode-map
         (:bind "C-x i" #'org-dog-insert-internal-link)))
@@ -2398,6 +2401,13 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-japanese
     ;; Local search
     (:global "M-s M-l" #'akirak-japanese-search))
+#+end_src
+**** akirak-snippet
+#+begin_src emacs-lisp
+  (setup akirak-snippet
+    (:global "C-c c s" #'akirak-snippet-capture
+             "C-c c S" #'akirak-snippet-capture-skeleton)
+    (define-key ctl-x-r-map "/" #'akirak-snippet-search))
 #+end_src
 **** akirak-url                                                :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
@@ -5103,7 +5113,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 193 |
+| [[org-ql-search:tags:packages][packages]]            | 194 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
