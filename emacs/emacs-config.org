@@ -293,7 +293,7 @@ Future-proof your Elisp
 #+begin_src emacs-lisp
 (setup (:package el-patch))
 #+end_src
-*** fullframe                                                     :windows:
+*** fullframe                                      :noexport:windows:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:06]
 :END:
