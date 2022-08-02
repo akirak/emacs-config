@@ -909,6 +909,19 @@
       repo = "poet";
       type = "github";
     };
+    poly-astro = {
+      flake = false;
+      owner = "akirak";
+      ref = "autoload";
+      repo = "poly-astro";
+      type = "github";
+    };
+    polymode = {
+      flake = false;
+      owner = "polymode";
+      repo = "polymode";
+      type = "github";
+    };
     popper = {
       flake = false;
       owner = "karthink";
