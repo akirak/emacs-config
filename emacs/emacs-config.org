@@ -190,6 +190,20 @@ I am interested to see if it can reduce the amount of configuration code.
                        (reformatter-define ,name ,@args))))
                 entries)))))
 #+end_src
+*** :repeat
+:PROPERTIES:
+:CREATED_TIME: [2022-08-04 Thu 23:54]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :repeat (keymap &rest commands)
+     "Set the repeat map of commands."
+     :indent 1
+     (dolist (cmd commands)
+       (put cmd 'repeat-map keymap))))
+#+end_src
 *** :set
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 11:30]
