@@ -1021,6 +1021,16 @@ Operations on the current project
     ;; Show the register preview immediately
     (:set register-preview-delay 0))
 #+end_src
+*** repeat
+:PROPERTIES:
+:CREATED_TIME: [2022-08-04 Thu 23:53]
+:END:
+
+#+begin_src emacs-lisp
+  (setup repeat
+    (:hook-into after-init-hook)
+    (:set repeat-echo-function #'ignore))
+#+end_src
 *** savehist                                                      :history:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:08]
