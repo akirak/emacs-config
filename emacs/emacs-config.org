@@ -4915,7 +4915,9 @@ VERTical Interactive COmpletion
     (:set vertico-resize t)
     (:with-map vertico-map
       (:bind "C-r" #'previous-matching-history-element
-             "C-s" #'next-matching-history-element)))
+             "C-s" #'next-matching-history-element
+             "C-o" #'vertico-next-group
+             "C-S-o" #'vertico-previous-group)))
 #+end_src
 
 For more tips, see [[https://github.com/minad/vertico/wiki][Home · minad/vertico Wiki · GitHub]].
