@@ -171,6 +171,14 @@
       ref = "develop";
     };
   };
+  poly-astro = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "poly-astro";
+      ref = "autoload";
+    };
+  };
   fanyi = _: _: {
     origin = {
       type = "github";
