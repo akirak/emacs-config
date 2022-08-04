@@ -45,6 +45,7 @@ myManageHook =
     , resource =? ".blueman-manager-wrapped" --> doFloat
     , resource =? "pavucontrol" --> doFloat
     , resource =? "com.rafaelmardojai.Blanket" --> doFloat
+    , resource =? "flameshot" --> doFloat
     , className =? "mpv" --> doFloat
     , title =? "Inkscape 1.1" --> doFloat
     ]
@@ -55,6 +56,7 @@ myHandleEventHook =
 myKeybindings =
   [ ((mod4Mask, xK_p), rofi)
   ,  ((mod4Mask, xK_s), safeSpawnProg "rofi-systemd")
+  ,  ((mod4Mask .|. shiftMask, xK_s), spawn "flameshot gui")
   , ((mod4Mask, xK_r), renameWorkspace myXPConfig)
   -- Restart without recompiling, since Nix builds xmonad
   , ((mod4Mask, xK_q), spawn "xmonad --restart")
