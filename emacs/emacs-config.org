@@ -113,16 +113,18 @@ I am interested to see if it can reduce the amount of configuration code.
   (eval-when-compile
     (define-setup-macro
      :embark (map interactive &rest bindings)
-     "Proxy embark bindings."
+     "Proxy or bind embark bindings."
      :indent 2
      `(with-eval-after-load 'embark
         ,@(cl-loop for (key cmd . _) in bindings
                    collect `(define-key ,map (kbd ,key)
-                                        (defun ,(intern (format "_embark-%s_%s"
-                                                                interactive cmd))
-                                            (arg)
-                                          (interactive ,interactive)
-                                          (,cmd arg)))))))
+                                        ,(if interactive
+                                             `(defun ,(intern (format "_embark-%s_%s"
+                                                                      interactive cmd))
+                                                  (arg)
+                                                (interactive ,interactive)
+                                                (,cmd arg))
+                                           `(quote ,cmd)))))))
 #+end_src
 *** :huan
 :PROPERTIES:
@@ -2390,11 +2392,14 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:hook-into after-init-hook))
 #+end_src
 **** akirak-image
+
 #+begin_src emacs-lisp
   (setup akirak-image
     (:nixpkgs "librsvg")
     (:embark embark-url-map "s"
       ("d" akirak-image-insert-offline-link))
+    (:embark embark-file-map nil
+      ("C-c i" akirak-image-import-file))
     (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
 #+end_src
 **** akirak-japanese
