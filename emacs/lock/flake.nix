@@ -460,6 +460,12 @@
       repo = "github-linguist.el";
       type = "github";
     };
+    gleam-mode = {
+      flake = false;
+      owner = "gleam-lang";
+      repo = "gleam-mode";
+      type = "github";
+    };
     go-mode = {
       flake = false;
       owner = "dominikh";
@@ -683,6 +689,12 @@
       repo = "nix-mode";
       type = "github";
     };
+    nix-update = {
+      flake = false;
+      owner = "jwiegley";
+      repo = "nix-update-el";
+      type = "github";
+    };
     nix26 = {
       flake = false;
       owner = "emacs-twist";
@@ -801,12 +813,6 @@
       repo = "org-recur";
       type = "github";
     };
-    org-remark = {
-      flake = false;
-      owner = "nobiot";
-      repo = "org-remark";
-      type = "github";
-    };
     org-reverse-datetree = {
       flake = false;
       owner = "akirak";
@@ -835,12 +841,6 @@
       flake = false;
       owner = "akirak";
       repo = "org-volume";
-      type = "github";
-    };
-    org-web-tools = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "org-web-tools";
       type = "github";
     };
     orgabilize = {
@@ -891,16 +891,10 @@
       repo = "pcre2el";
       type = "github";
     };
-    pocket-lib = {
+    plz = {
       flake = false;
       owner = "alphapapa";
-      repo = "pocket-lib.el";
-      type = "github";
-    };
-    pocket-reader = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "pocket-reader.el";
+      repo = "plz.el";
       type = "github";
     };
     poet-theme = {
@@ -968,12 +962,6 @@
       flake = false;
       owner = "Fanael";
       repo = "rainbow-delimiters";
-      type = "github";
-    };
-    rainbow-identifiers = {
-      flake = false;
-      owner = "Fanael";
-      repo = "rainbow-identifiers";
       type = "github";
     };
     reformatter = {
@@ -1066,7 +1054,8 @@
     };
     symbol-overlay = {
       flake = false;
-      owner = "wolray";
+      owner = "akirak";
+      ref = "jump-hook";
       repo = "symbol-overlay";
       type = "github";
     };
@@ -1112,6 +1101,11 @@
       ref = "0.18.0";
       repo = "elisp-tree-sitter";
       type = "github";
+    };
+    tree-sitter-indent = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/FelipeLema/tree-sitter-indent.el.git";
     };
     tree-sitter-langs = {
       flake = false;
