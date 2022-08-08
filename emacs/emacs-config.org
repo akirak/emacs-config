@@ -327,6 +327,28 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 :SORTING_TYPE: a
 :END:
 # Note: These should never fail.
+*** abbrev
+:PROPERTIES:
+:CREATED_TIME: [2022-08-08 Mon 21:19]
+:END:
+
+#+begin_src emacs-lisp
+  (setup abbrev
+    (:set save-abbrevs nil)
+    (:hook-into prog-mode text-mode minibuffer-setup)
+    (:global "C-M-/" #'expand-abbrev)
+    (:when-loaded
+      (define-abbrev-table 'global-abbrev-table
+        '(("jjb" "" akirak-insert-basename)
+          ("jjB" "" akirak-insert-basename-pascalcased)
+          ("jjp" "" akirak-insert-project-name)
+          ("jjP" "" akirak-insert-project-name-pascalcased)
+          ("jlisp" "" akirak-insert-from-lisp)
+          ("jdate" "" akirak-insert-iso8601-date)
+          ("jcal" "" akirak-insert-iso8601-read-date)
+          ("jname" "" akirak-insert-user-full-name)
+          ("jmail" "" akirak-insert-user-mail-address)))))
+#+end_src
 *** autoinsert                                                    :expansion:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 17:47]
