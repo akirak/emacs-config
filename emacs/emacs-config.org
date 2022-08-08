@@ -4286,6 +4286,14 @@ Major mode for editing .nix files
      (nixpkgs-fmt :program "nixpkgs-fmt")
      (alejandra :program "alejandra")))
 #+end_src
+*** nix-update
+:PROPERTIES:
+:CREATED_TIME: [2022-08-08 Mon 15:44]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package nix-update))
+#+end_src
 *** nov                                                      :reading:EPUB:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
