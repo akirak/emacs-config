@@ -4378,6 +4378,14 @@ Display ^L page breaks as tidy horizontal lines
                 compilation-mode-hook
                 haskell-mode-hook))
 #+end_src
+*** plz
+:PROPERTIES:
+:CREATED_TIME: [2022-08-08 Mon 15:15]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package plz))
+#+end_src
 *** pocket-reader                                                 :reading:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-05 Tue 18:19]
