@@ -192,4 +192,12 @@
       "use-package-dash-docs.el"
     ];
   };
+
+  gleam-mode = _: super: {
+    packageRequires =
+      {
+        tree-sitter-indent = "0";
+      }
+      // super.packageRequires;
+  };
 }

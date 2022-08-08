@@ -3630,6 +3630,15 @@ Major modes for editing Git configuration files
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
+*** gleam-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-08-08 Mon 11:53]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package gleam-mode)
+    (:file-match "\\.gleam\\'"))
+#+end_src
 *** go-mode                                                   :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 23:59]

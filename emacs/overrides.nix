@@ -110,4 +110,18 @@
       '';
     }
   );
+
+  gleam-mode = esuper.gleam-mode.overrideAttrs (old: rec {
+    tree-sitter-gleam = builtins.fetchurl {
+      url = "https://github.com/J3RN/tree-sitter-gleam/archive/f13d9d86f0c8ea7505dfeaff81a92def444877ae.tar.gz";
+      sha256 = "1wljx1cp751pnywzn8kzgr53981a5nh4imcsa2hylbmx0a46kby9";
+    };
+
+    preBuild = ''
+      install -d tree-sitter-gleam
+      tar zxf ${tree-sitter-gleam} --directory=tree-sitter-gleam --strip-components=1
+
+      emacs --batch -L . -l gleam-mode -f gleam-mode--compile-grammar
+    '';
+  });
 }
