@@ -4808,7 +4808,12 @@ Highlight symbols with keymap-enabled overlays
 
 #+begin_src emacs-lisp
   (setup (:package symbol-overlay)
-    (:global "C-c s" #'symbol-overlay-put))
+    (:global "C-c s" #'symbol-overlay-put)
+
+    (add-hook 'symbol-overlay-jump-hook
+              (defun akirak/symbol-overlay-org-show-entry ()
+                (when (derived-mode-p 'org-mode)
+                  (org-show-entry)))))
 #+end_src
 
 =embark= can substitute for most of the functionalities of the package, but I am used to this package.
