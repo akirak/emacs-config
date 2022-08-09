@@ -4404,7 +4404,7 @@ Display ^L page breaks as tidy horizontal lines
 #+begin_src emacs-lisp
 (setup (:package plz))
 #+end_src
-*** pocket-reader                                                 :reading:
+*** pocket-reader                                  :noexport:reading:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-05 Tue 18:19]
 :END:
