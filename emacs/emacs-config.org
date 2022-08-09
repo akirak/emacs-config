@@ -3662,6 +3662,10 @@ Major modes for editing Git configuration files
 :PROPERTIES:
 :CREATED_TIME: [2022-08-08 Mon 11:53]
 :END:
+#+begin_quote
+Major mode for Gleam
+[[https://github.com/gleam-lang/gleam-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package gleam-mode)
@@ -4318,6 +4322,10 @@ Major mode for editing .nix files
 :PROPERTIES:
 :CREATED_TIME: [2022-08-08 Mon 15:44]
 :END:
+#+begin_quote
+Update "fetch" blocks in .nix expressions
+[[https://github.com/jwiegley/nix-update-el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package nix-update))
@@ -4418,6 +4426,10 @@ Display ^L page breaks as tidy horizontal lines
 :PROPERTIES:
 :CREATED_TIME: [2022-08-08 Mon 15:15]
 :END:
+#+begin_quote
+HTTP library
+[[https://github.com/alphapapa/plz.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package plz))
@@ -5217,7 +5229,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 194 |
+| [[org-ql-search:tags:packages][packages]]            | 195 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
@@ -5255,7 +5267,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
-| [[org-ql-search:tags:reading][reading]]             |   2 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   2 |
 | [[org-ql-search:tags:syntax][syntax]]              |   2 |
 | [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
@@ -5283,6 +5294,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
+| [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
