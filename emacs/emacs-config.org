@@ -2354,7 +2354,7 @@ Smart line-wrapping with wrap-prefix
                 (unless (derived-mode-p 'org-mode)
                   (adaptive-wrap-prefix-mode 1)))))
 #+end_src
-*** affe                                                  :completion:grep:
+*** affe                                   :noexport:completion:grep:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-28 Thu 05:52]
 :END:
@@ -2606,7 +2606,7 @@ Show git blame info about current line
     (:set blamer-max-lines 50
           blamer-max-commit-message-length 50))
 #+end_src
-*** browse-at-remote
+*** browse-at-remote                                       :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-08 Fri 12:35]
 :END:
@@ -2998,7 +2998,7 @@ Jump to definition for 50+ languages without configuration
                 (add-to-list 'xref-backend-functions
                              #'dumb-jump-xref-activate))))
 #+end_src
-*** ediprolog                                                      :Prolog:
+*** ediprolog                                       :noexport:Prolog:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
 :END:
@@ -3290,7 +3290,7 @@ Evaluation Result OverlayS for Emacs Lisp
   (setup (:package eros)
     (:hook-into emacs-lisp-mode))
 #+end_src
-*** esup                                                :startup:profiling:
+*** esup                                 :noexport:startup:profiling:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 15:44]
 :END:
