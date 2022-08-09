@@ -260,7 +260,7 @@
           ./nixos/frontend.nix
           ./nixos/development.nix
           ./nixos/profiles/docker.nix
-          ./nixos/profiles/fcitx.nix
+          # ./nixos/profiles/fcitx.nix
 
           # ./nixos/profiles/android.nix
         ];
