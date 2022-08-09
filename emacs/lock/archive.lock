@@ -12,19 +12,6 @@
     "packageRequires": {},
     "version": "0.8"
   },
-  "ediprolog": {
-    "archive": {
-      "narHash": "sha256-XOF+WFkCcOv9pFAftCBcDOZwHZwTMQAVXvvmhAyjKD8=",
-      "type": "file",
-      "url": "https://elpa.gnu.org/packages/ediprolog-2.1.el"
-    },
-    "inventory": {
-      "type": "archive",
-      "url": "https://elpa.gnu.org/packages/"
-    },
-    "packageRequires": {},
-    "version": "2.1"
-  },
   "peg": {
     "archive": {
       "narHash": "sha256-okKDP1vLCVsd5/zp7c0BlyYtN1bYHvPM5IDZ3KV4ul8=",

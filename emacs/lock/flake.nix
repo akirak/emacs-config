@@ -20,12 +20,6 @@
       repo = "ace-window";
       type = "github";
     };
-    affe = {
-      flake = false;
-      owner = "minad";
-      repo = "affe";
-      type = "github";
-    };
     aggressive-indent = {
       flake = false;
       owner = "Malabarba";
@@ -83,12 +77,6 @@
       flake = false;
       owner = "Artawower";
       repo = "blamer.el";
-      type = "github";
-    };
-    browse-at-remote = {
-      flake = false;
-      owner = "rmuslimov";
-      repo = "browse-at-remote";
       type = "github";
     };
     buttercup = {
@@ -294,12 +282,6 @@
       repo = "embark";
       type = "github";
     };
-    engine-mode = {
-      flake = false;
-      owner = "hrs";
-      repo = "engine-mode";
-      type = "github";
-    };
     envrc = {
       flake = false;
       owner = "purcell";
@@ -322,12 +304,6 @@
       flake = false;
       owner = "xiongtx";
       repo = "eros";
-      type = "github";
-    };
-    esup = {
-      flake = false;
-      owner = "jschaf";
-      repo = "esup";
       type = "github";
     };
     esxml = {
@@ -669,6 +645,12 @@
       flake = false;
       owner = "jdtsmith";
       repo = "mlscroll";
+      type = "github";
+    };
+    mmm-mode = {
+      flake = false;
+      owner = "purcell";
+      repo = "mmm-mode";
       type = "github";
     };
     move-dup = {
@@ -1022,6 +1004,12 @@
       type = "git";
       url = "https://git.sr.ht/~pkal/setup";
     };
+    ssass-mode = {
+      flake = false;
+      owner = "AdamNiederer";
+      repo = "ssass-mode";
+      type = "github";
+    };
     string-inflection = {
       flake = false;
       owner = "akicho8";
@@ -1168,6 +1156,18 @@
       flake = false;
       owner = "akermu";
       repo = "emacs-libvterm";
+      type = "github";
+    };
+    vue-html-mode = {
+      flake = false;
+      owner = "AdamNiederer";
+      repo = "vue-html-mode";
+      type = "github";
+    };
+    vue-mode = {
+      flake = false;
+      owner = "AdamNiederer";
+      repo = "vue-mode";
       type = "github";
     };
     web-mode = {
