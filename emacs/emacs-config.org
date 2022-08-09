@@ -2394,8 +2394,9 @@ This is a collection of extra utilities for various packages.
 
     (:global "C-x d" #'akirak-consult-dir
              "C-c i" #'akirak-scratch-elisp
+             "<f12> j" #'akirak-scratch-japanese
              "C-c c e" #'akirak-emacs-config-capture)
-  
+
     (with-eval-after-load 'embark
       (require 'akirak-embark)
       (add-to-list 'embark-keymap-alist
@@ -2454,7 +2455,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       ("C-c i" akirak-image-import-file))
     (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
 #+end_src
-**** akirak-japanese
+**** akirak-japanese                                       :noexport:ARCHIVE:
 #+begin_src emacs-lisp
   (setup akirak-japanese
     ;; Local search
@@ -3226,7 +3227,7 @@ Consult integration for Embark
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
 #+end_src
-*** engine-mode
+*** engine-mode                                            :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-18 Mon 12:32]
 :END:
@@ -4479,7 +4480,7 @@ Summon and dismiss buffers as popups
                                      "\\*Backtrace\\*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
-                                     "^\\*Japanese Scratchpad\\*"
+                                     "^\\*Scratch-Input-Method"
                                      inferior-haskell-mode
                                      lisp-interaction-mode
                                      vterm-mode))
@@ -4656,13 +4657,6 @@ A dumb Japanese input method
            "C-S-j" #'riben-inc-counter
            "q" #'riben-mode-disable
            "@" #'riben-switch-to-english-mode)
-    (:global "<f12> j" #'akirak/riben-scratchpad)
-
-    (defun akirak/riben-scratchpad ()
-      (interactive)
-      (with-current-buffer (get-buffer-create "*Japanese Scratchpad*")
-        (riben-mode 1)
-        (pop-to-buffer (current-buffer))))
 
     ;; Workaround for commands in `org-mode-map' and other maps.
     (:when-loaded
