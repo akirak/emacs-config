@@ -1979,7 +1979,8 @@ Facade Org files
 
 #+begin_src emacs-lisp
   (setup (:package org-dog-facade)
-    (:set org-dog-datetree-distribute-when-refile t))
+    (:set org-dog-datetree-distribute-on-refile t
+          org-dog-datetree-generate-id-on-refile t))
 #+end_src
 **** akirak-org-dog
 #+begin_src emacs-lisp
