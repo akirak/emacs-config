@@ -5079,6 +5079,15 @@ Fully-featured terminal emulator
                         (project-root project)
                       default-directory))))
 #+end_src
+*** vue-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-08-11 Thu 12:11]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package vue-mode)
+    (:file-match "\\.vue\\'"))
+#+end_src
 *** web-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-28 Thu 18:37]
