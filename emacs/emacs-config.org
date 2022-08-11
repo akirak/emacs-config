@@ -1133,7 +1133,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
 #+begin_src emacs-lisp
   (setup simple
-    (:global [remap count-words-region] #'count-words
+    (:global [remap count-words-region] #'akirak/count-words-dwim
              [remap delete-horizontal-space] #'cycle-spacing
              [remap upcase-word] #'upcase-dwim
              [remap downcase-word] #'downcase-dwim
@@ -1145,6 +1145,21 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                   help-mode-hook
                   compilation-mode-hook
                   special-mode-hook))
+
+    (defun akirak/count-words-dwim ()
+      (interactive)
+      (save-restriction
+        (when (derived-mode-p 'org-mode)
+          (narrow-to-region (save-excursion
+                              (org-back-to-heading)
+                              (org-end-of-meta-data t)
+                              (point))
+                            (save-excursion
+                              (org-end-of-subtree)
+                              (when (looking-at (rx bol))
+                                (end-of-line 0))
+                              (point))))
+        (call-interactively #'count-words)))
 
     (:status opinionated
       (:global "C-w"
