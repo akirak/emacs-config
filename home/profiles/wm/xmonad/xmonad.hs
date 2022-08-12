@@ -48,6 +48,7 @@ myManageHook =
     , resource =? "flameshot" --> doFloat
     , className =? "mpv" --> doFloat
     , title =? "Inkscape 1.1" --> doFloat
+    , title =? "Android Studio Setup Wizard" --> doFloat
     ]
 
 myHandleEventHook =
