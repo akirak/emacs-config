@@ -457,6 +457,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup calc
     (:global "C-c q c" #'calc))
 #+end_src
+*** calendar
+:PROPERTIES:
+:CREATED_TIME: [2022-08-12 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup calendar
+    (add-to-list 'display-buffer-alist
+                 '((major-mode . calendar-mode)
+                   (display-buffer-in-side-window))))
+#+end_src
 *** callproc.c                                                    :process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
