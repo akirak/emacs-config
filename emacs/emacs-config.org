@@ -2436,7 +2436,11 @@ This is a collection of extra utilities for various packages.
       (add-to-list 'embark-keymap-alist
                    '(directory . akirak-embark-directory-map))
       (add-to-list 'embark-keymap-alist
-                   '(project-root . akirak-embark-project-root-map)))
+                   '(project-root . akirak-embark-project-root-map))
+      ;; Since I am not using package.el, it is better to override the default
+      ;; embark map.
+      (add-to-list 'embark-keymap-alist
+                   '(package . akirak-embark-package-map)))
 
     ;; These settings are specific to my environment.
     (:status personal
@@ -2449,6 +2453,11 @@ This is a collection of extra utilities for various packages.
     (:status opinionated
       (:with-map ctl-x-map
         (:bind "p" #'akirak-consult-project-file))))
+#+end_src
+**** akirak-consult-elisp
+#+begin_src emacs-lisp
+  (setup akirak-consult-elisp
+    (:global [remap finder-by-keyword] #'akirak-consult-elisp-package))
 #+end_src
 **** akirak-elec-pair                                        :parentheses:
 :PROPERTIES:
