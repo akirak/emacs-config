@@ -2779,7 +2779,10 @@ Consult integration for git
 
 #+begin_src emacs-lisp
   (setup (:package consult-ls-git)
-    (:global "C-x g" #'consult-ls-git-ls-status))
+    (:global "C-x g" #'consult-ls-git-ls-status)
+    (with-eval-after-load 'embark
+      (add-to-list 'embark-keymap-alist
+                   '(consult-ls-git-status . akirak-embark-git-file-map))))
 #+end_src
 *** corfu                                                   :completion:UI:
 :PROPERTIES:
