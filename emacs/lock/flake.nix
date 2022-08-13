@@ -635,6 +635,12 @@
       repo = "markdown-mode";
       type = "github";
     };
+    mermaid-mode = {
+      flake = false;
+      owner = "abrochard";
+      repo = "mermaid-mode";
+      type = "github";
+    };
     mini-modeline = {
       flake = false;
       owner = "kiennq";
@@ -688,6 +694,12 @@
       flake = false;
       type = "git";
       url = "https://depp.brause.cc/nov.el.git";
+    };
+    ob-mermaid = {
+      flake = false;
+      owner = "arnm";
+      repo = "ob-mermaid";
+      type = "github";
     };
     ob-restclient = {
       flake = false;
@@ -761,7 +773,8 @@
     };
     org-make-toc = {
       flake = false;
-      owner = "alphapapa";
+      owner = "akirak";
+      ref = "fix-global-hook";
       repo = "org-make-toc";
       type = "github";
     };
@@ -1053,19 +1066,6 @@
       repo = "tagedit";
       type = "github";
     };
-    taxy = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "taxy.el";
-      type = "github";
-    };
-    taxy-magit-section = {
-      flake = false;
-      owner = "alphapapa";
-      ref = "package/taxy-magit-section";
-      repo = "taxy.el";
-      type = "github";
-    };
     titlecase = {
       flake = false;
       type = "git";
@@ -1228,6 +1228,12 @@
       flake = false;
       owner = "joaotavora";
       repo = "yasnippet";
+      type = "github";
+    };
+    zig-mode = {
+      flake = false;
+      owner = "ziglang";
+      repo = "zig-mode";
       type = "github";
     };
     zoutline = {
