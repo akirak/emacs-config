@@ -209,4 +209,13 @@
       ref = "jump-hook";
     };
   };
+
+  org-make-toc = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-make-toc";
+      ref = "fix-global-hook";
+    };
+  };
 }
