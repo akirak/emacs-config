@@ -13,4 +13,16 @@ final: prev: {
   readability-cli = prev.callPackage ./media/readability-cli {
     pkgs = prev;
   };
+
+  nodePackages =
+    prev.nodePackages
+    // {
+      mermaid-cli = prev.nodePackages.mermaid-cli.overrideAttrs (old: {
+        passthru =
+          (old.passthru or {})
+          // {
+            exePath = "/bin/mmdc";
+          };
+      });
+    };
 }
