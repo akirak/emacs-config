@@ -4,9 +4,19 @@
     wofi
   ];
 
-  # home.file.".xsession-river".text = ''
-  #   exec river
-  # '';
+  systemd.user.services.river = {
+    Unit = {
+      Description = "River Wayland compositor";
+    };
 
-  xdg.configFile."river/init".source = ./init;
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.bashInteractive}/bin/bash --login -c 'river -c ${./init}'";
+
+      Environment = [
+        "XKB_DEFAULT_LAYOUT=us"
+        "XKB_DEFAULT_OPTIONS=ctrl:nocaps"
+      ];
+    };
+  };
 }

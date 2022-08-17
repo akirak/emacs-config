@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   services.xserver = {
-    enable = true;
+    # enable = true;
     # videoDrivers = [
     #   "modesetting"
     # ];

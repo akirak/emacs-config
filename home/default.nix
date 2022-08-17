@@ -31,6 +31,7 @@ with builtins; let
       desktop
       ++ [
         ./profiles/wm/xmonad
+        ./profiles/wm/river
       ];
     personal = [
       ./profiles/dropbox.nix
