@@ -5265,6 +5265,15 @@ Major mode for editing YAML files
   (setup (:package yaml-mode)
     (:file-match "\\.ya?ml\\'"))
 #+end_src
+*** zig-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-08-17 Wed 14:14]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package zig-mode)
+    (:file-match "\\.zig\\'"))
+#+end_src
 ** Notes                                                             :@note:
 :PROPERTIES:
 :TOC:      :depth 2
