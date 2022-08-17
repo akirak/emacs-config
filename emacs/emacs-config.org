@@ -1528,6 +1528,14 @@ DOCT: Declarative Org capture templates
 #+begin_src emacs-lisp
 (setup (:package doct))
 #+end_src
+*** ob-mermaid
+:PROPERTIES:
+:CREATED_TIME: [2022-08-17 Wed 13:53]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package ob-mermaid))
+#+end_src
 *** ob-restclient
 :PROPERTIES:
 :CREATED_TIME: [2022-06-14 Tue 18:27]
@@ -1767,6 +1775,7 @@ org-babel functions for restclient-mode
           '((shell . t)
             (emacs-lisp . t)
             (restclient . t)
+            (mermaid . t)
             (sqlite . t))))
 #+end_src
 **** org-capture
@@ -4235,6 +4244,17 @@ Major mode for Markdown-formatted text
       (:file-match "README.md\\'"))
 
     (:bind "C-c '" #'markdown-edit-code-block))
+#+end_src
+*** mermaid-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-08-17 Wed 13:52]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package mermaid-mode)
+    (:nixpkgs "nodePackages.mermaid-cli")
+
+    (:file-match "\\.mmd\\'"))
 #+end_src
 *** mini-modeline                                                      :UI:
 :PROPERTIES:
