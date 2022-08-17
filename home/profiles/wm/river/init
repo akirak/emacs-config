@@ -17,6 +17,10 @@ riverctl map normal Super Q close
 
 riverctl map normal Super P spawn 'wofi --show run'
 
+riverctl map normal Super+Shift S spawn 'flameshot gui'
+
+riverctl map normal Super F9 spawn 'foot nixos-rebuild switch --flake `readlink -f $HOME/config`#`uname -n` --print-build-logs --use-remote-sudo'
+
 # Super+Shift+E to exit river
 riverctl map normal Super+Shift E exit
 
@@ -125,9 +129,12 @@ do
     riverctl map $mode None XF86Eject spawn 'eject -T'
 
     # Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
-    riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5'
-    riverctl map $mode None XF86AudioLowerVolume  spawn 'pamixer -d 5'
+    riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 3'
+    riverctl map $mode Super Equal                spawn 'pamixer -i 3'
+    riverctl map $mode None XF86AudioLowerVolume  spawn 'pamixer -d 3'
+    riverctl map $mode Super Minus                spawn 'pamixer -d 3'
     riverctl map $mode None XF86AudioMute         spawn 'pamixer --toggle-mute'
+    riverctl map $mode Super Delete               spawn 'pamixer --toggle-mute'
 
     # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
     riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
