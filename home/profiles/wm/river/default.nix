@@ -1,7 +1,25 @@
 {pkgs, ...}: {
+  imports = [
+    ../../foot.nix
+    ./waybar.nix
+  ];
+
   home.packages = with pkgs; [
+    # riverctl and rivertile need to be in PATH
     river
+
     wofi
+    (pkgs.writeShellApplication {
+      name = "lock-screen";
+      runtimeInputs = [pkgs.swaylock-effects];
+      # TODO: Use a color scheme
+      text = ''
+        swaylock -f --clock --fade-in 0.5
+      '';
+    })
+
+    flameshot
+    wf-recorder
   ];
 
   systemd.user.services.river = {

@@ -10,7 +10,14 @@
 
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 
-riverctl map normal Super+Shift Return spawn alacritty
+# Also inspired by
+# https://github.com/4Dk3/Sway-waybar-and-river/blob/main/river/init
+
+export $(dbus-launch)
+waybar &
+foot --server &
+
+riverctl map normal Super+Shift Return spawn foot
 
 # Super+Q to close the focused view
 riverctl map normal Super Q close
