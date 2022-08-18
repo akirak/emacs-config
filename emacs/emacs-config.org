@@ -1535,6 +1535,10 @@ DOCT: Declarative Org capture templates
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:53]
 :END:
+#+begin_quote
+org-babel support for mermaid evaluation
+[[https://github.com/arnm/ob-mermaid]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package ob-mermaid))
@@ -4278,6 +4282,10 @@ Major mode for Markdown-formatted text
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
 :END:
+#+begin_quote
+major mode for working with mermaid graphs
+[[https://github.com/abrochard/mermaid-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package mermaid-mode)
@@ -5200,6 +5208,9 @@ Fully-featured terminal emulator
 :PROPERTIES:
 :CREATED_TIME: [2022-08-11 Thu 12:11]
 :END:
+#+begin_quote
+Major mode for vue component based on mmm-mode
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package vue-mode)
@@ -5329,6 +5340,9 @@ Major mode for editing YAML files
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 14:14]
 :END:
+#+begin_quote
+A major mode for the Zig programming language
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package zig-mode)
@@ -5373,26 +5387,25 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 195 |
-| [[org-ql-search:tags:UI][UI]]                  |  13 |
+| [[org-ql-search:tags:packages][packages]]            | 194 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
+| [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:VC][VC]]                  |   9 |
-| [[org-ql-search:tags:completion][completion]]          |   9 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
-| [[org-ql-search:tags:library][library]]             |   8 |
+| [[org-ql-search:tags:completion][completion]]          |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   7 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
+| [[org-ql-search:tags:library][library]]             |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
-| [[org-ql-search:tags:profiling][profiling]]           |   3 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
@@ -5402,34 +5415,35 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major_mode][major_mode]]          |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
+| [[org-ql-search:tags:Japanese][Japanese]]            |   3 |
+| [[org-ql-search:tags:profiling][profiling]]           |   2 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
-| [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
-| [[org-ql-search:tags:grep][grep]]                |   2 |
 | [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
-| [[org-ql-search:tags:Japanese][Japanese]]            |   2 |
 | [[org-ql-search:tags:syntax][syntax]]              |   2 |
 | [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
+| [[org-ql-search:tags:configuration][configuration]]       |   2 |
 | [[org-ql-search:tags:initialization][initialization]]      |   1 |
 | [[org-ql-search:tags:performance][performance]]         |   1 |
 | [[org-ql-search:tags:help][help]]                |   1 |
 | [[org-ql-search:tags:prog_mode][prog_mode]]           |   1 |
 | [[org-ql-search:tags:text_mode][text_mode]]           |   1 |
 | [[org-ql-search:tags:text][text]]                |   1 |
+| [[org-ql-search:tags:Prolog][Prolog]]              |   1 |
 | [[org-ql-search:tags:bibliography][bibliography]]        |   1 |
 | [[org-ql-search:tags:capture][capture]]             |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:@extra][@extra]]              |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
+| [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
-| [[org-ql-search:tags:startup][startup]]             |   1 |
 | [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
@@ -5443,7 +5457,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
 | [[org-ql-search:tags:debugging][debugging]]           |   1 |
-| [[org-ql-search:tags:configuration][configuration]]       |   1 |
 | [[org-ql-search:tags:terminal][terminal]]            |   1 |
 | [[org-ql-search:tags:usability][usability]]           |   1 |
 
