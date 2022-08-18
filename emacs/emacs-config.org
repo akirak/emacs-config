@@ -548,6 +548,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup dired
     (:set dired-recursive-copies 'always
           dired-recursive-deletes 'top)
+    (:mode-repl akirak/vterm)
 
     (:bind "h" #'dired-up-directory))
 #+end_src
@@ -5181,12 +5182,12 @@ Fully-featured terminal emulator
 
 #+begin_src emacs-lisp
   (setup (:package vterm)
-    (defun akirak/vterm (dir)
+    (defun akirak/vterm (&optional dir)
       (interactive (pcase current-prefix-arg
                      (`nil (list default-directory))
                      ('(4) (list (read-directory-name "Directory: ")))))
       (require 'vterm)
-      (let ((default-directory dir))
+      (let ((default-directory (or dir default-directory)))
         (vterm--internal akirak/display-popup-window-function)))
 
     (defun akirak/project-vterm ()
