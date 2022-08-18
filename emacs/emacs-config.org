@@ -4157,7 +4157,28 @@ A Git porcelain inside Emacs
       (:set magit-repository-directories '(("~/" . 1)
                                            ("~/.config" . 1)
                                            ("~/work" . 3)
-                                           ("~/archives/oss/" . 3)))))
+                                           ("~/archives/oss/" . 3)))
+
+      (:when-loaded
+        ;; Run the following commands to set up SSH_AUTH_SOCK environment
+        ;; from GPG:
+        ;;
+        ;; gpg-connect-agent /bye
+        ;; export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+        (unless (getenv "SSH_AUTH_SOCK")
+          (condition-case-unless-debug err
+              (progn
+                (with-temp-buffer
+                  (unless (= 0 (call-process "gpg-connect-agent"
+                                             nil nil nil "/bye"))
+                    (error "gpg-connect-agent failed")))
+                (let ((sock (car (process-lines "gpgconf" "--list-dirs" "agent-ssh-socket"))))
+                  (if (and sock (file-exists-p sock))
+                      (progn
+                        (setenv "SSH_AUTH_SOCK" sock)
+                        (message "SSH_AUTH_SOCK set to %s" sock))
+                    (error "Socket is nil or does not exist: %s" sock))))
+            (error (message "Failed to initialize SSH_AUTH_SOCK: %s" err)))))))
 #+end_src
 **** Squash commits
 #+begin_src emacs-lisp
