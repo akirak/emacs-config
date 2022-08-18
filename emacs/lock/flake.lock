@@ -67,11 +67,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1660388871,
-        "narHash": "sha256-Ek+RcDzAVhbe9QOoS6TSKF77wqsHWo0Vt/65J8ZZidQ=",
+        "lastModified": 1660832241,
+        "narHash": "sha256-OInyfQT0EPeYSatPuscx4eWAMLbbOwIZNSR3rjSOn8M=",
         "ref": "refs/heads/master",
-        "rev": "ef7a720ebdfb9766ad69ebd6451dc0d841749d6e",
-        "revCount": 301,
+        "rev": "3e38f3c950f92411fab44f54f6efb97508c80dc0",
+        "revCount": 311,
         "type": "git",
         "url": "https://git.sr.ht/~akirak/akirak-mode"
       },
@@ -917,11 +917,11 @@
     "forge": {
       "flake": false,
       "locked": {
-        "lastModified": 1655926157,
-        "narHash": "sha256-wTxlsiydSJkjlx5blhfIJ0JR97mAfyx0Tz4eqUcXsk0=",
+        "lastModified": 1660132855,
+        "narHash": "sha256-CWcGQrMmVSVWtAlAIJKa1XeGbERlh1Y9fWSGxrsfdUk=",
         "owner": "magit",
         "repo": "forge",
-        "rev": "ed8abdafd8b15852538bbe064fef037345772627",
+        "rev": "9556d3b4c20bf405390d0931d77c9f012f8e843f",
         "type": "github"
       },
       "original": {
@@ -1029,11 +1029,11 @@
     "ghub": {
       "flake": false,
       "locked": {
-        "lastModified": 1656057821,
-        "narHash": "sha256-dRU59egO1+6RDc4WdobBgrzqyhkwNS4+4P9naFju1Ic=",
+        "lastModified": 1660132864,
+        "narHash": "sha256-av1xhAud70BVBhYALDGk2xccQ8ubyxh5DK1AuVfJRYU=",
         "owner": "magit",
         "repo": "ghub",
-        "rev": "94f5aa2ddecc6426ebc69a0c67934ccba6ae9797",
+        "rev": "4e5bb75305a763ef9ccfc1971b3cba4520f290d7",
         "type": "github"
       },
       "original": {
@@ -1093,11 +1093,11 @@
     "git-commit": {
       "flake": false,
       "locked": {
-        "lastModified": 1658261660,
-        "narHash": "sha256-l5AeaG/wyjGBM4DnhGq8V2iB+bn0YqYCxzNdXDrH3OM=",
+        "lastModified": 1660503354,
+        "narHash": "sha256-wLwaVawIf5i4z+w4naIHItic20gqhFPWw6WwGyQvHsQ=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "80cdadb08efcf3287f6af138608d2a71bd8d0a40",
+        "rev": "124a5ad8d7c078aa851203896493617005aad253",
         "type": "github"
       },
       "original": {
@@ -1606,11 +1606,11 @@
     "magit": {
       "flake": false,
       "locked": {
-        "lastModified": 1658261660,
-        "narHash": "sha256-l5AeaG/wyjGBM4DnhGq8V2iB+bn0YqYCxzNdXDrH3OM=",
+        "lastModified": 1660503354,
+        "narHash": "sha256-wLwaVawIf5i4z+w4naIHItic20gqhFPWw6WwGyQvHsQ=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "80cdadb08efcf3287f6af138608d2a71bd8d0a40",
+        "rev": "124a5ad8d7c078aa851203896493617005aad253",
         "type": "github"
       },
       "original": {
@@ -1638,11 +1638,11 @@
     "magit-section": {
       "flake": false,
       "locked": {
-        "lastModified": 1658261660,
-        "narHash": "sha256-l5AeaG/wyjGBM4DnhGq8V2iB+bn0YqYCxzNdXDrH3OM=",
+        "lastModified": 1660503354,
+        "narHash": "sha256-wLwaVawIf5i4z+w4naIHItic20gqhFPWw6WwGyQvHsQ=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "80cdadb08efcf3287f6af138608d2a71bd8d0a40",
+        "rev": "124a5ad8d7c078aa851203896493617005aad253",
         "type": "github"
       },
       "original": {
@@ -1654,11 +1654,11 @@
     "magit-todos": {
       "flake": false,
       "locked": {
-        "lastModified": 1648271953,
-        "narHash": "sha256-Tdjz2IuynnyxKkDgXuErPZnZL0uW945a1rz2C5MaGgI=",
+        "lastModified": 1660596140,
+        "narHash": "sha256-C2zFDtMH8P/nopoRHEU6CUrwP8ky0w31W+STtEOhj8s=",
         "owner": "alphapapa",
         "repo": "magit-todos",
-        "rev": "67fd80c2f10aec4d5b2a24b5d3d53c08cc1f05dc",
+        "rev": "f7ce396d4fc12c0fc28698bceeb155a3a6a468c2",
         "type": "github"
       },
       "original": {
@@ -2124,11 +2124,11 @@
     "org-ql": {
       "flake": false,
       "locked": {
-        "lastModified": 1658169865,
-        "narHash": "sha256-1d1fu9IYmtjrp1z+uDlB6o+K2Q+FNBZlXR2BCxPnw2I=",
+        "lastModified": 1660598215,
+        "narHash": "sha256-uiOKjD6JpdB5KxgNZjmt8eBsY+iPgBm51nnxxr5HIHg=",
         "owner": "alphapapa",
         "repo": "org-ql",
-        "rev": "06f1e1be6ff5ef7e2c8c05dc1954bcedcbb6eb0b",
+        "rev": "6257ae83044aa9fcd5c2ddffbd2f73f2b235f905",
         "type": "github"
       },
       "original": {
@@ -2188,11 +2188,11 @@
     "org-super-agenda": {
       "flake": false,
       "locked": {
-        "lastModified": 1646180562,
-        "narHash": "sha256-oXpwzGpEFvmnx+yy09HtWGZaLiwQIyhOYj/6NcCXU5w=",
+        "lastModified": 1660780318,
+        "narHash": "sha256-P2ex1LFoyqGkrK0YdJlSwaOu25SAcWCFJGOxMw3PYvo=",
         "owner": "alphapapa",
         "repo": "org-super-agenda",
-        "rev": "3108bc3f725818f0e868520d2c243abe9acbef4e",
+        "rev": "fcc860190682274989fef15385c37c02895078df",
         "type": "github"
       },
       "original": {
@@ -3072,11 +3072,11 @@
     "transient": {
       "flake": false,
       "locked": {
-        "lastModified": 1658077992,
-        "narHash": "sha256-0e7mLjBK+kZpwmbd9foZ5WMSeK9VGNSnnQcp7MzJM7Q=",
+        "lastModified": 1660132885,
+        "narHash": "sha256-qgy4ftUzYCgTIHIvKuDDjDNqMr0fk6NqEmcAz8Cwcs8=",
         "owner": "magit",
         "repo": "transient",
-        "rev": "cc887ebe3fa85a3642d937efe2ff882b356da9c0",
+        "rev": "6b9c93af9c1d1646be4445656c46ee9390c9f129",
         "type": "github"
       },
       "original": {
@@ -3397,11 +3397,11 @@
     "with-editor": {
       "flake": false,
       "locked": {
-        "lastModified": 1654683454,
-        "narHash": "sha256-XWGXpF+2MSa6lrJdB4opguIffPst2o6ZI88cK/XUbQo=",
+        "lastModified": 1660132895,
+        "narHash": "sha256-688oc2M1XXYjoRAxaoBCkbVIwr9kfsesP2fCKRNrzcA=",
         "owner": "magit",
         "repo": "with-editor",
-        "rev": "cfcbc2731e402b9169c0dc03e89b5b57aa988502",
+        "rev": "1d5860cfd05d6805018bd071b8f9b56493ba11c6",
         "type": "github"
       },
       "original": {
