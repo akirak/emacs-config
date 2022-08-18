@@ -13,9 +13,9 @@
 # Also inspired by
 # https://github.com/4Dk3/Sway-waybar-and-river/blob/main/river/init
 
-export $(dbus-launch)
 waybar &
 foot --server &
+dunst &
 
 riverctl map normal Super+Shift Return spawn foot
 

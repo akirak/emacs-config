@@ -9,6 +9,12 @@
     # riverctl and rivertile need to be in PATH
     river
 
+    (pkgs.writeShellScriptBin "river-session" ''
+      export XKB_DEFAULT_LAYOUT=us
+      export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+      exec ${pkgs.dbus}/bin/dbus-run-session -- river
+    '')
+
     wofi
     (pkgs.writeShellApplication {
       name = "lock-screen";
@@ -24,23 +30,5 @@
     wf-recorder
   ];
 
-  systemd.user.services.river = {
-    Unit = {
-      Description = "River Wayland compositor";
-    };
-
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.bashInteractive}/bin/bash --login -c 'river -c ${./init}'";
-
-      Environment = [
-        "XKB_DEFAULT_LAYOUT=us"
-        "XKB_DEFAULT_OPTIONS=ctrl:nocaps"
-      ];
-    };
-
-    Install = {
-      Wants = ["dunst.service"];
-    };
-  };
+  xdg.configFile."river/init".source = ./init;
 }

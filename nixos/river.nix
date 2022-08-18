@@ -7,11 +7,16 @@
     pkgs.xdg-utils
   ];
 
-  # no display manager
-
   xdg.portal.wlr = {
     enable = true;
   };
 
   security.pam.services.swaylock = {};
+
+  services.greetd = {
+    enable = true;
+    settings.default_session.command = ''
+      ${pkgs.greetd.tuigreet}/bin/tuigreet -c river-session
+    '';
+  };
 }
