@@ -5052,6 +5052,13 @@ Frontend to Twist configuration
 #+begin_src emacs-lisp
 (setup (:package twist))
 #+end_src
+**** akirak-twist
+#+begin_src emacs-lisp
+  (setup akirak-twist
+    (with-eval-after-load 'embark
+      (define-key embark-library-map
+                  "f" #'akirak-twist-find-git-source)))
+#+end_src
 *** typescript-mode                                            :major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 18:39]
