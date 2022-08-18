@@ -26,7 +26,7 @@ riverctl map normal Super P spawn 'wofi --show run'
 
 riverctl map normal Super+Shift S spawn 'flameshot gui'
 
-riverctl map normal Super F9 spawn 'foot nixos-rebuild switch --flake `readlink -f $HOME/config`#`uname -n` --print-build-logs --use-remote-sudo'
+riverctl map normal Super F9 spawn 'foot nixos-rebuild-and-notify'
 
 # Super+Shift+E to exit river
 riverctl map normal Super+Shift E exit

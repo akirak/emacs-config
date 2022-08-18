@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ../../foot.nix
+    ./dunst.nix
     ./waybar.nix
   ];
 
@@ -18,6 +19,7 @@
       '';
     })
 
+    (pkgs.callPackage ./rebuild.nix {})
     flameshot
     wf-recorder
   ];
@@ -35,6 +37,10 @@
         "XKB_DEFAULT_LAYOUT=us"
         "XKB_DEFAULT_OPTIONS=ctrl:nocaps"
       ];
+    };
+
+    Install = {
+      Wants = ["dunst.service"];
     };
   };
 }
