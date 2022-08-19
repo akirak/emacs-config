@@ -3384,7 +3384,7 @@ The Emacs StartUp Profiler (ESUP)
 #+begin_src emacs-lisp
 (setup (:package esup))
 #+end_src
-*** evil-nerd-commenter                                           :editing:
+*** evil-nerd-commenter                            :noexport:editing:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:26]
 :END:
