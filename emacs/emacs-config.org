@@ -2478,6 +2478,11 @@ This is a collection of extra utilities for various packages.
       (:defer 1 #'akirak-files-ensure-abbrev-list)
       (run-with-idle-timer 300 nil #'akirak-project-rescan)))
 #+end_src
+**** akirak-comment
+#+begin_src emacs-lisp
+  (setup akirak-comment
+    (:global "M-;" #'akirak-comment-toggle))
+#+end_src
 **** akirak-consult
 #+begin_src emacs-lisp
   (setup akirak-consult
@@ -4704,10 +4709,7 @@ Limitations:
 **** akirak-puni
 #+begin_src emacs-lisp
   (setup akirak-puni
-    (add-hook 'puni-mode-hook #'akirak-puni-mode-setup)
-
-    (:with-feature puni
-      (:bind "C-c p" #'akirak-puni-toggle-comment)))
+    (add-hook 'puni-mode-hook #'akirak-puni-mode-setup))
 #+end_src
 
 This contains workarounds for puni-mode, like mode-specific soft deletion.
