@@ -2240,6 +2240,14 @@ Supercharge your agenda
     (with-eval-after-load 'org-agenda
       (org-super-agenda-mode t)))
 #+end_src
+*** org-super-links
+:PROPERTIES:
+:CREATED_TIME: [2022-08-19 Fri 15:36]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-super-links))
+#+end_src
 *** org-transclusion
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:09]
