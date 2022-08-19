@@ -312,12 +312,6 @@
       repo = "esxml";
       type = "github";
     };
-    evil-nerd-commenter = {
-      flake = false;
-      owner = "redguardtoo";
-      repo = "evil-nerd-commenter";
-      type = "github";
-    };
     "f" = {
       flake = false;
       owner = "rejeep";
@@ -707,6 +701,13 @@
       repo = "ob-restclient.el";
       type = "github";
     };
+    octopus = {
+      flake = false;
+      owner = "akirak";
+      ref = "develop";
+      repo = "org-dog";
+      type = "github";
+    };
     olivetti = {
       flake = false;
       owner = "rnkn";
@@ -771,6 +772,12 @@
       repo = "org-epubinfo";
       type = "github";
     };
+    org-lang-env = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-lang-env";
+      type = "github";
+    };
     org-make-toc = {
       flake = false;
       owner = "akirak";
@@ -814,16 +821,16 @@
       repo = "org-reverse-datetree";
       type = "github";
     };
-    org-starter = {
-      flake = false;
-      owner = "akirak";
-      repo = "org-starter";
-      type = "github";
-    };
     org-super-agenda = {
       flake = false;
       owner = "alphapapa";
       repo = "org-super-agenda";
+      type = "github";
+    };
+    org-super-links = {
+      flake = false;
+      owner = "toshism";
+      repo = "org-super-links";
       type = "github";
     };
     org-transclusion = {

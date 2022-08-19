@@ -67,11 +67,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1660832241,
-        "narHash": "sha256-OInyfQT0EPeYSatPuscx4eWAMLbbOwIZNSR3rjSOn8M=",
+        "lastModified": 1661166283,
+        "narHash": "sha256-xP7Zb8WYOpqcLdxa0Ne6cZbtijeXM4uA/aoDuSE0/4I=",
         "ref": "refs/heads/master",
-        "rev": "3e38f3c950f92411fab44f54f6efb97508c80dc0",
-        "revCount": 311,
+        "rev": "ec438a93f6f8fffaf6158e87669afcc24306bd12",
+        "revCount": 337,
         "type": "git",
         "url": "https://git.sr.ht/~akirak/akirak-mode"
       },
@@ -371,11 +371,11 @@
     "consult-org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1660702991,
-        "narHash": "sha256-vY8eY5D5oyi+3Ue7G7Y0+Yo/s3CDs87bQ4eVDB0FXgk=",
+        "lastModified": 1661158542,
+        "narHash": "sha256-c+hMSegBuFLzxAjuZe1yx6CjvZg9Gc54uJcZcVUO5gA=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "cd8653fc348c2a9fe38475dc585c6d6ca151771c",
+        "rev": "965dabc0da7c674ccbcb466f6455017752a556c5",
         "type": "github"
       },
       "original": {
@@ -830,22 +830,6 @@
       "original": {
         "owner": "tali713",
         "repo": "esxml",
-        "type": "github"
-      }
-    },
-    "evil-nerd-commenter": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1641471845,
-        "narHash": "sha256-OTPPIyPLPWNJOqL5rBrY/d1uERFwW10ifArNsx/x2Pg=",
-        "owner": "redguardtoo",
-        "repo": "evil-nerd-commenter",
-        "rev": "42ba1a473b4f1df061baddd2f8b812a2f35e366e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "redguardtoo",
-        "repo": "evil-nerd-commenter",
         "type": "github"
       }
     },
@@ -1892,6 +1876,23 @@
         "type": "github"
       }
     },
+    "octopus": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1661158542,
+        "narHash": "sha256-c+hMSegBuFLzxAjuZe1yx6CjvZg9Gc54uJcZcVUO5gA=",
+        "owner": "akirak",
+        "repo": "org-dog",
+        "rev": "965dabc0da7c674ccbcb466f6455017752a556c5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "ref": "develop",
+        "repo": "org-dog",
+        "type": "github"
+      }
+    },
     "olivetti": {
       "flake": false,
       "locked": {
@@ -1975,11 +1976,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1660702991,
-        "narHash": "sha256-vY8eY5D5oyi+3Ue7G7Y0+Yo/s3CDs87bQ4eVDB0FXgk=",
+        "lastModified": 1661158542,
+        "narHash": "sha256-c+hMSegBuFLzxAjuZe1yx6CjvZg9Gc54uJcZcVUO5gA=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "cd8653fc348c2a9fe38475dc585c6d6ca151771c",
+        "rev": "965dabc0da7c674ccbcb466f6455017752a556c5",
         "type": "github"
       },
       "original": {
@@ -1992,11 +1993,11 @@
     "org-dog-embark": {
       "flake": false,
       "locked": {
-        "lastModified": 1660702991,
-        "narHash": "sha256-vY8eY5D5oyi+3Ue7G7Y0+Yo/s3CDs87bQ4eVDB0FXgk=",
+        "lastModified": 1661158542,
+        "narHash": "sha256-c+hMSegBuFLzxAjuZe1yx6CjvZg9Gc54uJcZcVUO5gA=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "cd8653fc348c2a9fe38475dc585c6d6ca151771c",
+        "rev": "965dabc0da7c674ccbcb466f6455017752a556c5",
         "type": "github"
       },
       "original": {
@@ -2009,11 +2010,11 @@
     "org-dog-export": {
       "flake": false,
       "locked": {
-        "lastModified": 1660702991,
-        "narHash": "sha256-vY8eY5D5oyi+3Ue7G7Y0+Yo/s3CDs87bQ4eVDB0FXgk=",
+        "lastModified": 1661158542,
+        "narHash": "sha256-c+hMSegBuFLzxAjuZe1yx6CjvZg9Gc54uJcZcVUO5gA=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "cd8653fc348c2a9fe38475dc585c6d6ca151771c",
+        "rev": "965dabc0da7c674ccbcb466f6455017752a556c5",
         "type": "github"
       },
       "original": {
@@ -2026,11 +2027,11 @@
     "org-dog-facade": {
       "flake": false,
       "locked": {
-        "lastModified": 1660702991,
-        "narHash": "sha256-vY8eY5D5oyi+3Ue7G7Y0+Yo/s3CDs87bQ4eVDB0FXgk=",
+        "lastModified": 1661158542,
+        "narHash": "sha256-c+hMSegBuFLzxAjuZe1yx6CjvZg9Gc54uJcZcVUO5gA=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "cd8653fc348c2a9fe38475dc585c6d6ca151771c",
+        "rev": "965dabc0da7c674ccbcb466f6455017752a556c5",
         "type": "github"
       },
       "original": {
@@ -2053,6 +2054,22 @@
       "original": {
         "owner": "akirak",
         "repo": "org-epubinfo",
+        "type": "github"
+      }
+    },
+    "org-lang-env": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1660920858,
+        "narHash": "sha256-MpKCPmhfTMW48pHYjtVHhErygmj6ueAqQKqfJrRE8LM=",
+        "owner": "akirak",
+        "repo": "org-lang-env",
+        "rev": "cc6c3a932468985ea88e87dd073cc74572952bd9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "org-lang-env",
         "type": "github"
       }
     },
@@ -2169,22 +2186,6 @@
         "type": "github"
       }
     },
-    "org-starter": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1648292804,
-        "narHash": "sha256-QybNeILOdqDrZHBPXGTYz7H9thlmH5RbY6Qmb0U+4R8=",
-        "owner": "akirak",
-        "repo": "org-starter",
-        "rev": "cd9c5c0402de941299d1c8901f26a8f24d755022",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "repo": "org-starter",
-        "type": "github"
-      }
-    },
     "org-super-agenda": {
       "flake": false,
       "locked": {
@@ -2198,6 +2199,22 @@
       "original": {
         "owner": "alphapapa",
         "repo": "org-super-agenda",
+        "type": "github"
+      }
+    },
+    "org-super-links": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1657865773,
+        "narHash": "sha256-ds5MLGlW7hMVYr/tf/4d/aO2oEcVkUJ6mSC/7BtBmXw=",
+        "owner": "toshism",
+        "repo": "org-super-links",
+        "rev": "1bf1318fdfd2cf94b20d576acab0e7e57b771352",
+        "type": "github"
+      },
+      "original": {
+        "owner": "toshism",
+        "repo": "org-super-links",
         "type": "github"
       }
     },
@@ -2704,7 +2721,6 @@
         "epkg-marginalia": "epkg-marginalia",
         "eros": "eros",
         "esxml": "esxml",
-        "evil-nerd-commenter": "evil-nerd-commenter",
         "f": "f",
         "fancy-dabbrev": "fancy-dabbrev",
         "fanyi": "fanyi",
@@ -2770,6 +2786,7 @@
         "nov": "nov",
         "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
+        "octopus": "octopus",
         "olivetti": "olivetti",
         "orderless": "orderless",
         "org-autolist": "org-autolist",
@@ -2780,6 +2797,7 @@
         "org-dog-export": "org-dog-export",
         "org-dog-facade": "org-dog-facade",
         "org-epubinfo": "org-epubinfo",
+        "org-lang-env": "org-lang-env",
         "org-make-toc": "org-make-toc",
         "org-ml": "org-ml",
         "org-noter": "org-noter",
@@ -2787,8 +2805,8 @@
         "org-ql": "org-ql",
         "org-recur": "org-recur",
         "org-reverse-datetree": "org-reverse-datetree",
-        "org-starter": "org-starter",
         "org-super-agenda": "org-super-agenda",
+        "org-super-links": "org-super-links",
         "org-transclusion": "org-transclusion",
         "org-volume": "org-volume",
         "orgabilize": "orgabilize",
