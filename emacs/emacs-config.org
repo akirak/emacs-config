@@ -2049,12 +2049,6 @@ Facade Org files
       (when (org-reverse-datetree-guess-date)
         (org-dog-datetree-propagate-by-tag nil :local t))))
 #+end_src
-**** akirak-org-dog
-#+begin_src emacs-lisp
-  (setup akirak-org-dog
-    (:global "C-c c b" #'akirak-org-dog-capture-backlog
-             "C-c c d" #'akirak-org-dog-capture-datetree-dwim))
-#+end_src
 *** org-dynamic-bullets                       :noexport:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
@@ -2084,6 +2078,14 @@ Integrate Org with epubinfo program
 
 #+begin_src emacs-lisp
 (setup (:package org-journal))
+#+end_src
+*** org-lang-env
+:PROPERTIES:
+:CREATED_TIME: [2022-08-19 Fri 23:57]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-lang-env))
 #+end_src
 *** orglink                                          :noexport:links:ARCHIVE:
 :PROPERTIES:
@@ -4792,6 +4794,8 @@ A dumb Japanese input method
            "C-S-j" #'riben-inc-counter
            "q" #'riben-mode-disable
            "@" #'riben-switch-to-english-mode)
+
+    (set-language-info "Japanese" 'input-method 'japanese-riben)
 
     ;; Workaround for commands in `org-mode-map' and other maps.
     (:when-loaded
