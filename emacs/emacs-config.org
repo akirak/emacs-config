@@ -2013,7 +2013,13 @@ A programmable workflow layer for Org mode
 
 #+begin_src emacs-lisp
   (setup (:package octopus)
-    (:global "M-g M-o" #'octopus-find-file))
+    (:global "M-g M-o" #'octopus-find-file
+             "M-s M-o" #'octopus-find-node)
+
+    (:with-feature org
+      (:when-loaded
+        (:with-map org-mode-map
+          (:bind "C-c C-x r" #'octopus-refile)))))
 #+end_src
 **** org-dog-embark
 :PROPERTIES:
