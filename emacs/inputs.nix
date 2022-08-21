@@ -154,6 +154,14 @@
       ref = "develop";
     };
   };
+  octopus = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-dog";
+      ref = "develop";
+    };
+  };
 
   twist = _: _: {
     origin = {

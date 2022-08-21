@@ -2006,6 +2006,15 @@ A programmable workflow layer for Org mode
 #+begin_src emacs-lisp
   (setup (:package consult-org-dog))
 #+end_src
+**** octopus
+:PROPERTIES:
+:CREATED_TIME: [2022-08-21 Sun 16:36]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package octopus)
+    (:global "M-g M-o" #'octopus-find-file))
+#+end_src
 **** org-dog-embark
 :PROPERTIES:
 :CREATED_TIME: [2022-03-03 Thu 16:26]
@@ -2220,7 +2229,7 @@ A basic configuration framework for org mode
       (add-to-list 'org-starter-extra-refile-map
                    '("'" avy-org-refile-as-child "avy")))
 
-    (:global "M-g M-o" #'org-starter-find-file-by-key)
+    ;; (:global "M-g M-o" #'org-starter-find-file-by-key)
     (:with-mode org-mode
       (:bind "C-c C-x r" #'org-starter-refile-by-key))
 
