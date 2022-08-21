@@ -2212,7 +2212,7 @@ Create reverse date trees in org-mode
             (property "CREATED_TIME"))
           org-reverse-datetree-month-format "%Y-%m"))
 #+end_src
-*** org-starter
+*** org-starter                                            :noexport:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
@@ -2229,20 +2229,7 @@ A basic configuration framework for org mode
           ;; org-starter-alternative-find-function #'helm-org-ql
           org-starter-find-file-visit-window t
           org-starter-override-agenda-window-setup 'other-window
-          org-starter-enable-local-variables :all)
-
-    (:when-loaded
-      (add-to-list 'org-starter-extra-refile-map
-                   '("'" avy-org-refile-as-child "avy")))
-
-    ;; (:global "M-g M-o" #'org-starter-find-file-by-key)
-    (:with-mode org-mode
-      (:bind "C-c C-x r" #'org-starter-refile-by-key))
-
-    (:status personal
-      (:when-loaded
-        (org-starter-def "~/config/emacs/emacs-config.org"
-          :key "e"))))
+          org-starter-enable-local-variables :all))
 #+end_src
 *** org-super-agenda
 :PROPERTIES:
