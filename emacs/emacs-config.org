@@ -2962,11 +2962,11 @@ Ibuffer-like filtering for dired
                        (name . "LICENSE")
                        (extension "txt" "md" "mkd" "markdown" "rst")))
                   ("Org"
-                   (extension "org" "bib"))
+                   (extension "org" "org_archive" "bib"))
                   ("Ledger"
                    (extension "beancount"))
                   ("Data files"
-                   (extension "csv" "json" "sql"))
+                   (extension "csv" "json" "sql" "lock"))
                   ;; Binary files
                   ("Books and papers"
                    (extension "pdf" "mobi" "epub" "azw"))
@@ -2982,16 +2982,22 @@ Ibuffer-like filtering for dired
                    (extension "o" "elc"))
                   ("Meta data"
                    (extension "torrent" "acsm"))
+                  ("Web"
+                   (extension "html" "css" "scss"))
                   ;; Images are often thumbnails, so they should come
                   ;; after other binary files
                   ("Images and graphics"
                    (extension "jpg" "jpeg" "png" "gif" "svg"))
+                  ("Nix"
+                   (extension "nix"))
                   ;; Source code
-                  ("Config"
+                  ("Configuration"
                    (or (name . "Makefile")
                        (name . "Dockerfile")
                        (extension "yml" "yaml" "cabal"
-                                  "dockerfile" "mk")))
+                                  "prisma" "hcl" "terraform"
+                                  "dockerfile"
+                                  "mk" "makefile")))
                   ("Emacs Lisp"
                    (extension "el"))))))))
 #+end_src
