@@ -1240,7 +1240,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup tempo
-    (advice-add 'tempo-insert-template
+    (advice-add 'tempo-insert-prompt-compat
                 :before
                 (defun akirak/tempo-bind-tab (&rest _args)
                   (local-set-key [tab] #'akirak/tempo-forward-mark)))
