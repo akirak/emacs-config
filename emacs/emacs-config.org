@@ -2005,6 +2005,10 @@ A programmable workflow layer for Org mode
 :PROPERTIES:
 :CREATED_TIME: [2022-08-21 Sun 16:36]
 :END:
+#+begin_quote
+Transient commands for Org Dog
+[[https://github.com/akirak/org-dog]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package octopus)
@@ -2093,6 +2097,10 @@ Integrate Org with epubinfo program
 :PROPERTIES:
 :CREATED_TIME: [2022-08-19 Fri 23:57]
 :END:
+#+begin_quote
+Per-entry language environment
+[[https://github.com/akirak/org-lang-env]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-lang-env))
@@ -2243,6 +2251,10 @@ Supercharge your agenda
 :PROPERTIES:
 :CREATED_TIME: [2022-08-19 Fri 15:36]
 :END:
+#+begin_quote
+Make super links
+[[https://github.com/toshism/org-super-links]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-super-links))
@@ -5405,15 +5417,15 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 194 |
+| [[org-ql-search:tags:packages][packages]]            | 196 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:VC][VC]]                  |   9 |
-| [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:completion][completion]]          |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   7 |
+| [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
