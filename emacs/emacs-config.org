@@ -1791,11 +1791,6 @@ org-babel functions for restclient-mode
 
 #+begin_src emacs-lisp
   (setup org-capture
-    (:global "C-c c SPC"
-             (defun akirak/org-capture-last-location ()
-               (interactive)
-               (org-capture '(16))))
-
     (:when-loaded
       (require 'el-patch)
       (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
@@ -2460,8 +2455,7 @@ This is a collection of extra utilities for various packages.
 
     (:global "C-x d" #'akirak-consult-dir
              "C-c i" #'akirak-scratch-elisp
-             "<f12> j" #'akirak-scratch-japanese
-             "C-c c e" #'akirak-emacs-config-capture)
+             "<f12> j" #'akirak-scratch-japanese)
 
     (with-eval-after-load 'embark
       (require 'akirak-embark)
@@ -2478,6 +2472,11 @@ This is a collection of extra utilities for various packages.
     (:status personal
       (:defer 1 #'akirak-files-ensure-abbrev-list)
       (run-with-idle-timer 300 nil #'akirak-project-rescan)))
+#+end_src
+**** akirak-capture
+#+begin_src emacs-lisp
+  (setup akirak-capture
+    (:global "C-c c" #'akirak-capture))
 #+end_src
 **** akirak-comment
 #+begin_src emacs-lisp
@@ -2544,8 +2543,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 **** akirak-snippet
 #+begin_src emacs-lisp
   (setup akirak-snippet
-    (:global "C-c c s" #'akirak-snippet-capture
-             "C-c c S" #'akirak-snippet-capture-tempo)
     (define-key ctl-x-r-map "/" #'akirak-snippet-search))
 #+end_src
 **** akirak-url                                                :clipboard:
@@ -2553,8 +2550,7 @@ Complete a URL from the clipboard and the kill ring and insert as a link
 
 #+begin_src emacs-lisp
   (setup akirak-url
-    (:global "C-c w" #'akirak-url-insert-dwim
-             "C-c c u" #'akirak-url-org-capture)
+    (:global "C-c w" #'akirak-url-insert-dwim)
     (:embark embark-url-map "s"
       ("m" akirak-url-insert-as-markdown)
       ("g" akirak-git-clone)
