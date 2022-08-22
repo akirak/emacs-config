@@ -415,8 +415,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup browse-url
     (:status personal
       (:set browse-url-browser-function #'akirak-browse-url-external-browser
-            browse-url-secondary-browser-function #'akirak-browse-url-external-browser
-            browse-url-chromium-arguments '("--profile-directory=Default"))))
+            browse-url-secondary-browser-function #'akirak-browse-url-external-browser)))
 #+end_src
 *** buffer.c                                        :formatting:visual:
 :PROPERTIES:
