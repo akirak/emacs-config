@@ -309,7 +309,7 @@ Future-proof your Elisp
 #+begin_src emacs-lisp
 (setup (:package el-patch))
 #+end_src
-*** fullframe                                      :noexport:windows:ARCHIVE:
+*** COMMENT fullframe                                      :windows:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:06]
 :END:
@@ -2065,7 +2065,7 @@ Facade Org files
       (when (org-reverse-datetree-guess-date)
         (org-dog-datetree-propagate-by-tag nil :local t))))
 #+end_src
-*** org-dynamic-bullets                       :noexport:aesthetics:ARCHIVE:
+*** COMMENT org-dynamic-bullets                       :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
 :END:
@@ -2087,7 +2087,7 @@ Integrate Org with epubinfo program
   (setup (:package org-epubinfo)
     (:nixpkgs epubinfo))
 #+end_src
-*** org-journal                                          :noexport:ARCHIVE:
+*** COMMENT org-journal                                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
@@ -2107,7 +2107,7 @@ Per-entry language environment
 #+begin_src emacs-lisp
 (setup (:package org-lang-env))
 #+end_src
-*** orglink                                          :noexport:links:ARCHIVE:
+*** COMMENT orglink                                          :links:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:28]
 :END:
@@ -2217,7 +2217,7 @@ Create reverse date trees in org-mode
             (property "CREATED_TIME"))
           org-reverse-datetree-month-format "%Y-%m"))
 #+end_src
-*** org-starter                                            :noexport:ARCHIVE:
+*** COMMENT org-starter                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
@@ -2273,7 +2273,7 @@ Transclude text content via links
 #+begin_src emacs-lisp
 (setup (:package org-transclusion))
 #+end_src
-*** org-visual-indent                         :noexport:aesthetics:ARCHIVE:
+*** COMMENT org-visual-indent                         :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 23:59]
 :END:
@@ -2430,7 +2430,7 @@ Smart line-wrapping with wrap-prefix
                 (unless (derived-mode-p 'org-mode)
                   (adaptive-wrap-prefix-mode 1)))))
 #+end_src
-*** affe                                   :noexport:completion:grep:ARCHIVE:
+*** COMMENT affe                                   :completion:grep:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-28 Thu 05:52]
 :END:
@@ -2549,7 +2549,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       ("C-c i" akirak-image-import-file))
     (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
 #+end_src
-**** akirak-japanese                                       :noexport:ARCHIVE:
+**** COMMENT akirak-japanese                                       :ARCHIVE:
 #+begin_src emacs-lisp
   (setup akirak-japanese
     ;; Local search
@@ -2588,7 +2588,7 @@ This is an extra functions for window management.
                "C-4" #'akirak-window-setup-columns
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
-*** all-the-icons                                     :noexport:UI:ARCHIVE:
+*** COMMENT all-the-icons                                     :UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:28]
 :END:
@@ -2596,7 +2596,7 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup (:package all-the-icons))
 #+end_src
-**** all-the-icons-completion                           :noexport:ARCHIVE:
+**** COMMENT all-the-icons-completion                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:29]
 :END:
@@ -2608,7 +2608,7 @@ This is an extra functions for window management.
       (add-hook 'marginalia-mode
                 #'all-the-icons-completion-marginalia-setup)))
 #+end_src
-**** all-the-icons-dired                                :noexport:ARCHIVE:
+**** COMMENT all-the-icons-dired                                :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:30]
 :END:
@@ -2697,7 +2697,7 @@ Show git blame info about current line
     (:set blamer-max-lines 50
           blamer-max-commit-message-length 50))
 #+end_src
-*** browse-at-remote                                       :noexport:ARCHIVE:
+*** COMMENT browse-at-remote                                       :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-08 Fri 12:35]
 :END:
@@ -2708,7 +2708,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
 #+begin_src emacs-lisp
 (setup (:package browse-at-remote))
 #+end_src
-*** bufler                                               :noexport:ARCHIVE:
+*** COMMENT bufler                                               :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]
 :END:
@@ -2915,7 +2915,7 @@ fast, friendly searching with ripgrep
 #+begin_src emacs-lisp
 (setup (:package deadgrep))
 #+end_src
-*** dired-auto-readme                                :noexport:dired:ARCHIVE:
+*** COMMENT dired-auto-readme                                :dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-23 Sat 23:59]
 :END:
@@ -3026,7 +3026,7 @@ Utilities and helpers for dired-hacks collection
       "n" 'dired-hacks-next-file
       "p" 'dired-hacks-previous-file))
 #+end_src
-*** dired-hide-dotfiles                              :noexport:dired:ARCHIVE:
+*** COMMENT dired-hide-dotfiles                              :dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 19:08]
 :END:
@@ -3038,7 +3038,7 @@ Hide dotfiles in dired
 #+begin_src emacs-lisp
 (setup (:package dired-hide-dotfiles))
 #+end_src
-*** dired-k                                        :noexport:dired:ARCHIVE:
+*** COMMENT dired-k                                        :dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:45]
 :END:
@@ -3098,7 +3098,7 @@ Jump to definition for 50+ languages without configuration
                 (add-to-list 'xref-backend-functions
                              #'dumb-jump-xref-activate))))
 #+end_src
-*** ediprolog                                       :noexport:Prolog:ARCHIVE:
+*** COMMENT ediprolog                                       :Prolog:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
 :END:
@@ -3192,7 +3192,7 @@ Enable eldoc support when minibuffer is in use.
 #+end_src
 
 I use this package mostly because it uses =pp-eval-expression= for printing the result, but it also has some other nice features, and it works flawlessly.
-*** electric-operator                           :noexport:formatting:ARCHIVE:
+*** COMMENT electric-operator                           :formatting:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -3327,7 +3327,7 @@ Consult integration for Embark
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
 #+end_src
-*** engine-mode                                            :noexport:ARCHIVE:
+*** COMMENT engine-mode                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-18 Mon 12:32]
 :END:
@@ -3390,7 +3390,7 @@ Evaluation Result OverlayS for Emacs Lisp
   (setup (:package eros)
     (:hook-into emacs-lisp-mode))
 #+end_src
-*** esup                                 :noexport:startup:profiling:ARCHIVE:
+*** COMMENT esup                                 :startup:profiling:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 15:44]
 :END:
@@ -3402,7 +3402,7 @@ The Emacs StartUp Profiler (ESUP)
 #+begin_src emacs-lisp
 (setup (:package esup))
 #+end_src
-*** evil-nerd-commenter                            :noexport:editing:ARCHIVE:
+*** COMMENT evil-nerd-commenter                            :editing:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:26]
 :END:
@@ -3886,7 +3886,7 @@ A Haskell editing mode
                       "  where\n\n"
                       _))))
 #+end_src
-*** haskell-tng-mode                 :noexport:Haskell:major__mode:ARCHIVE:
+*** COMMENT haskell-tng-mode                 :Haskell:major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:02]
 :END:
@@ -4025,7 +4025,7 @@ A major mode for editing JSON files
       (add-to-list 'org-src-lang-modes
                    '("json" . jsonian))))
 #+end_src
-*** json-mode                                  :noexport:major__mode:ARCHIVE:
+*** COMMENT json-mode                                  :major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
@@ -4571,7 +4571,7 @@ HTTP library
 #+begin_src emacs-lisp
 (setup (:package plz))
 #+end_src
-*** pocket-reader                                  :noexport:reading:ARCHIVE:
+*** COMMENT pocket-reader                                  :reading:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-05 Tue 18:19]
 :END:
@@ -4899,7 +4899,7 @@ underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
 #+begin_src emacs-lisp
 (setup (:package string-inflection))
 #+end_src
-*** suggest                 :noexport:Emacs__Lisp:development:help:ARCHIVE:
+*** COMMENT suggest                 :Emacs__Lisp:development:help:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 18:10]
 :END:
@@ -4964,7 +4964,7 @@ SVG tags, progress bars & icons
 #+begin_src emacs-lisp
   (setup (:package svg-lib))
 #+end_src
-*** svg-tag-mode                  :noexport:visual:nano:aesthetics:ARCHIVE:
+*** COMMENT svg-tag-mode                  :visual:nano:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:26]
 :END:
@@ -5007,7 +5007,7 @@ Some paredit-like features for html-mode
     ;; The upstream lacks this autoload
     (autoload 'tagedit-mode "tagedit"))
 #+end_src
-*** taxy                                           :noexport:library:ARCHIVE:
+*** COMMENT taxy                                           :library:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
@@ -5019,7 +5019,7 @@ Programmable taxonomical grouping for arbitrary objects
 #+begin_src emacs-lisp
 (setup (:package taxy))
 #+end_src
-*** taxy-magit-section                          :noexport:UI:library:ARCHIVE:
+*** COMMENT taxy-magit-section                          :UI:library:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
@@ -5152,7 +5152,7 @@ Major mode for editing typescript
     (with-eval-after-load 'typescript-mode
       (define-key typescript-tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
-*** unmodified-buffer                                    :noexport:ARCHIVE:
+*** COMMENT unmodified-buffer                                    :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]
 :END:
@@ -5600,7 +5600,7 @@ To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF fi
 *** Sh-emulation keybindings
 I rebind the following keys in some keymaps to emulate a typical UNIX shell:
 C-a, C-e, C-u, C-w, C-h.
-** Footer                                                         :noexport:
+** COMMENT Footer                                                         :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil
 # org-id-link-to-org-use-id: nil
