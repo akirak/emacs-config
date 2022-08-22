@@ -12,6 +12,10 @@
     (pkgs.writeShellScriptBin "river-session" ''
       export XKB_DEFAULT_LAYOUT=us
       export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+      export XDG_SESSION_TYPE=wayland
+      export XDG_SESSION_DESKTOP=sway
+      export XDG_CURRENT_DESKTOP=sway
+      export MOZ_ENABLE_WAYLAND=1
       exec ${pkgs.dbus}/bin/dbus-run-session -- river
     '')
 
