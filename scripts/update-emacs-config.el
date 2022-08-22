@@ -22,26 +22,23 @@
          (error "Property didn't match")))
      (goto-char (org-entry-end-position)))))
 
-(defun akirak-emacs-config-set-noexport ()
-  "Toggle existence of noexport tag according to ARCHIVE tag.
+(defun akirak-emacs-config-set-comment ()
+  "Toggle the comment state according to ARCHIVE tag.
 
 This is a workaround for Org rendering on GitHub that archived
 entries are visible."
   (org-map-entries
    (lambda ()
-     (let* ((tags (org-get-tags nil t))
-            (new-tags (cond
-                       ((member "ARCHIVE" tags)
-                        (cl-adjoin "noexport" tags :test #'equal))
-                       ;; "Footer" heading should have noexport tag,
-                       ;; so check the outline level.
-                       ((> (org-outline-level) 2)
-                        (cl-remove "noexport" tags :test #'equal))
-                       (t
-                        tags))))
-       (unless (equal tags new-tags)
-         (org-set-tags new-tags))))
-   "ARCHIVE\|noexport"))
+     (let ((tags (org-get-tags nil t))
+           (comment (string-prefix-p org-comment-string
+                                     (org-get-heading))))
+       (when (or (and (or (member "ARCHIVE" tags)
+                          (member "noexport" tags))
+                      (not comment))
+                 (and (and (not (member "ARCHIVE" tags))
+                           (not (member "noexport" tags)))
+                      comment))
+         (org-toggle-comment))))))
 
 (defun akirak/batch-update-emacs-config (&optional update-blocks)
   "Update the Emacs configuration."
@@ -53,7 +50,7 @@ entries are visible."
         (find-file file)
         (setq initial-content (sha1 (current-buffer)))
         (akirak-org-sort-buffer)
-        (akirak-emacs-config-set-noexport)
+        (akirak-emacs-config-set-comment)
         (when update-blocks
           (require 'org-ql)
           (require 'org-ql-search)
