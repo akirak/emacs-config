@@ -1970,8 +1970,9 @@ A programmable workflow layer for Org mode
 
     (add-hook 'org-dog-file-registration-hook
               (defun akirak/org-dog-add-agenda-file (file-obj)
-                (when (string-match-p (rx bol (or "learning" "lifelog"
-                                                  "personal/"))
+                (when (string-match-p (rx bol (or "meta"
+                                                  "personal/"
+                                                  "work-context"))
                                       (oref file-obj relative))
                   (add-to-list 'org-agenda-files (oref file-obj absolute)))))
 
