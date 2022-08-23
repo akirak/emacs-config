@@ -2761,7 +2761,11 @@ Completion At Point Extensions
     (:global "C-x r M-d" #'cape-dabbrev
              "C-x r M-f" #'cape-file
              "C-x r M-s" #'cape-symbol
-             "C-x r M-l" #'cape-line))
+             "C-x r M-l" #'cape-line
+             ;; abbrev-mode is turned on, so I will use
+             ;; this keybinding for mnemonics.
+             ;; It's C-M-/ and C-x '.
+             [remap expand-abbrev] #'cape-abbrev))
 #+end_src
 *** consult                                                    :completion:
 :PROPERTIES:
