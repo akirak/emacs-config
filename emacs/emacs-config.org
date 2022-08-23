@@ -1773,7 +1773,16 @@ org-babel functions for restclient-mode
           org-agenda-restore-windows-after-quit t
           org-agenda-window-setup 'other-window)
 
-    (:global "<f12> o a" #'org-agenda))
+    (:global "<f12> o a" #'org-agenda)
+
+    ;; A function advice to prevent the default behavior which run
+    ;; `delete-other-windows' to show a completion window.
+    (advice-add 'delete-other-windows
+                :before-while
+                (defun akirak/org-allow-delete-other-windows-p (&rest _args)
+                  (not (memq this-command '(org-todo
+                                            org-agenda-todo
+                                            org-agenda))))))
 #+end_src
 **** org-babel (ob)
 :PROPERTIES:
@@ -4635,6 +4644,7 @@ Summon and dismiss buffers as popups
                                      "^\\*Org Note\\*"
                                      "^\\*Scratch-Input-Method"
                                      "^\\*Pp Eval Output\\*"
+                                     "^ \\*Agenda Commands\\*"
                                      inferior-haskell-mode
                                      lisp-interaction-mode
                                      vterm-mode))
