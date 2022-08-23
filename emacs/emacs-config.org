@@ -1388,7 +1388,9 @@ Thus I will explicitly install this package rather than using the built-in versi
     (:status opinionated
       (:with-map ctl-x-map
         (:bind "," #'winner-undo
-               "." #'winner-redo))))
+               "." #'winner-redo))
+      (:repeat ctl-x-map
+        winner-undo)))
 #+end_src
 *** woman
 :PROPERTIES:
