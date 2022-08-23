@@ -2947,6 +2947,14 @@ Collapse unique nested paths in dired listing
 #+end_src
 
 I will manually turn on =dired-collapse-mode= when necessary.
+*** dired-du
+:PROPERTIES:
+:CREATED_TIME: [2022-08-23 Tue 17:21]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package dired-du))
+#+end_src
 *** dired-filter                                                    :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:50]
