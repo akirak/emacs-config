@@ -61,6 +61,12 @@
       repo = "emacs-dumb-japanese";
       type = "github";
     };
+    beacon = {
+      flake = false;
+      owner = "Malabarba";
+      repo = "beacon";
+      type = "github";
+    };
     beancount = {
       flake = false;
       owner = "beancount";
@@ -891,6 +897,12 @@
       flake = false;
       owner = "joddie";
       repo = "pcre2el";
+      type = "github";
+    };
+    pinyin = {
+      flake = false;
+      owner = "xuchunyang";
+      repo = "pinyin.el";
       type = "github";
     };
     plz = {
