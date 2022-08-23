@@ -414,7 +414,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup browse-url
     (:status personal
-      (:set browse-url-browser-function #'akirak-browse-url-external-browser
+      (:set browse-url-browser-function #'akirak-browse-url-prefer-xwidget
             browse-url-secondary-browser-function #'akirak-browse-url-external-browser)))
 #+end_src
 *** buffer.c                                        :formatting:visual:
@@ -4645,6 +4645,7 @@ Summon and dismiss buffers as popups
                                      "^\\*Scratch-Input-Method"
                                      "^\\*Pp Eval Output\\*"
                                      "^ \\*Agenda Commands\\*"
+                                     "^\\*Xwidget WebKit History\\*"
                                      inferior-haskell-mode
                                      lisp-interaction-mode
                                      vterm-mode))
