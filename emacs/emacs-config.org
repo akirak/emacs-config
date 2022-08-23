@@ -1771,7 +1771,7 @@ org-babel functions for restclient-mode
           org-agenda-use-tag-inheritance t
           org-agenda-sticky nil
           org-agenda-restore-windows-after-quit t
-          org-agenda-window-setup 'other-window)
+          org-agenda-window-setup 'current-window)
 
     (:global "<f12> o a" #'org-agenda)
 
