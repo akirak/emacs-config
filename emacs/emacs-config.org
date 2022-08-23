@@ -4586,6 +4586,14 @@ Display ^L page breaks as tidy horizontal lines
                 compilation-mode-hook
                 haskell-mode-hook))
 #+end_src
+*** pinyin                                                        :Chinese:
+:PROPERTIES:
+:CREATED_TIME: [2022-08-23 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package pinyin))
+#+end_src
 *** plz
 :PROPERTIES:
 :CREATED_TIME: [2022-08-08 Mon 15:15]
