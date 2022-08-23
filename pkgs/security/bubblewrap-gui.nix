@@ -40,6 +40,7 @@ in
         --ro-bind-try /run/current-system/sw/etc /run/current-system/sw/etc \
         --ro-bind-try /run/current-system/sw/lib /run/current-system/sw/lib \
         --ro-bind-try /run/current-system/sw/share /run/current-system/sw/share \
+        --ro-bind-try /run/opengl-driver /run/opengl-driver \
         --tmpfs /tmp \
         --setenv DISPLAY ":0" \
         --ro-bind /tmp/.X11-unix/X0 /tmp/.X11-unix/X0 \
