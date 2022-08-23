@@ -1771,7 +1771,9 @@ org-babel functions for restclient-mode
           org-agenda-use-tag-inheritance t
           org-agenda-sticky nil
           org-agenda-restore-windows-after-quit t
-          org-agenda-window-setup 'other-window))
+          org-agenda-window-setup 'other-window)
+
+    (:global "<f12> o a" #'org-agenda))
 #+end_src
 **** org-babel (ob)
 :PROPERTIES:
@@ -1961,7 +1963,8 @@ A programmable workflow layer for Org mode
       (org-dog-id-mode t))
     (add-hook 'org-mode-hook #'org-dog-file-mode-maybe)
 
-    (:global "M-g M-/" #'org-dog-find-file)
+    (:global "M-g M-/" #'org-dog-find-file
+             "<f12> o o" #'org-dog-overview)
 
     (:set org-dog-context-path-patterns
           `(("^\\.github/" . "services/github.com")))
