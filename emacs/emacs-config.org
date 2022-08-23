@@ -5022,7 +5022,7 @@ Some paredit-like features for html-mode
     ;; The upstream lacks this autoload
     (autoload 'tagedit-mode "tagedit"))
 #+end_src
-*** COMMENT taxy                                           :library:ARCHIVE:
+*** taxy                                                  :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
@@ -5034,7 +5034,7 @@ Programmable taxonomical grouping for arbitrary objects
 #+begin_src emacs-lisp
 (setup (:package taxy))
 #+end_src
-*** COMMENT taxy-magit-section                          :UI:library:ARCHIVE:
+*** taxy-magit-section                                 :UI:library:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
