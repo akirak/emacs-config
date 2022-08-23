@@ -5,6 +5,7 @@
 
   environment.systemPackages = [
     pkgs.xdg-utils
+    pkgs.wlr-randr
   ];
 
   xdg.portal.wlr = {
