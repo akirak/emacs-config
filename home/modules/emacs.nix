@@ -10,6 +10,7 @@
 
   wrapper = pkgs.emacsSandboxed {
     name = "emacs-unsafe";
+    withXwidgets = true;
     inherit
       (cfg)
       extraFeatures
