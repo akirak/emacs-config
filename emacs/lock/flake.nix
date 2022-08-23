@@ -1073,6 +1073,19 @@
       repo = "tagedit";
       type = "github";
     };
+    taxy = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "taxy.el";
+      type = "github";
+    };
+    taxy-magit-section = {
+      flake = false;
+      owner = "alphapapa";
+      ref = "package/taxy-magit-section";
+      repo = "taxy.el";
+      type = "github";
+    };
     titlecase = {
       flake = false;
       type = "git";

@@ -12,6 +12,22 @@
     "packageRequires": {},
     "version": "0.8"
   },
+  "dired-du": {
+    "archive": {
+      "narHash": "sha256-WTdSclzo4eiM+VABjgWYM0L4fLgWhXIe0QLnLOvA2hU=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/dired-du-0.5.2.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "cl-lib": "0.5",
+      "emacs": "24.4"
+    },
+    "version": "0.5.2"
+  },
   "peg": {
     "archive": {
       "narHash": "sha256-okKDP1vLCVsd5/zp7c0BlyYtN1bYHvPM5IDZ3KV4ul8=",
