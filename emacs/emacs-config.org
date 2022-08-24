@@ -2357,7 +2357,7 @@ Quickly switch windows.
           aw-ignored-buffers '(" *LV*"
                                minibuffer-mode
                                "*Calc Trail*")
-          aw-scope 'visible
+          aw-scope 'frame
           aw-dispatch-always t)
 
     (:status opinionated
