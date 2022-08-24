@@ -269,7 +269,9 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
                      ("c f" . "frame")
                      ("c s" . "screenshot")
                      ("c r" . "record screen")
-                     ("e" . "emacs")))
+                     ("e" . "emacs")
+                     ("o" . "org")
+                     ("S" . "secrets")))
       (which-key-add-keymap-based-replacements
         global-map (concat "<f12> " key) description)))
 #+end_src
