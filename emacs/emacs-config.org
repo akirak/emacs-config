@@ -540,6 +540,13 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
      (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
           1 2 3 (4 . 4))))
 #+end_src
+*** desktop
+#+begin_src emacs-lisp
+  (setup desktop
+    (:when-loaded
+      ;; Use `desktop-after-read-hook' to display a dashboard.
+      (add-hook 'desktop-globals-to-save 'desktop-after-read-hook)))
+#+end_src
 *** dired                                                           :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:47]
@@ -2082,6 +2089,13 @@ Facade Org files
       (require 'org-dog-datetree)
       (when (org-reverse-datetree-guess-date)
         (org-dog-datetree-propagate-by-tag nil :local t))))
+#+end_src
+**** org-dog-root
+#+begin_src emacs-lisp
+  (setup org-dog-root
+    (:global "<f12> o r" #'org-dog-root-switch)
+    (:when-loaded
+      (add-hook 'mode-line-misc-info org-dog-root-mode-item)))
 #+end_src
 *** COMMENT org-dynamic-bullets                       :aesthetics:ARCHIVE:
 :PROPERTIES:
@@ -4899,6 +4913,7 @@ Clean-up and Beautify the list of minor-modes.
     (:set rm-whitelist
           (rx bol (* space)
               (or "envrc"
+                  "DogRoot"
                   ;; Don't match DogId
                   "Dog[")))
     (:hook-into after-init-hook))
