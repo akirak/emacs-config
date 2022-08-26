@@ -2018,7 +2018,11 @@ A programmable workflow layer for Org mode
 
     (:when-loaded
       (:also-load org-dog-embark
-                  org-dog-facade)))
+                  org-dog-facade))
+
+    (with-eval-after-load 'org-dog-overview
+      (define-key org-dog-overview-mode-map
+                  (kbd "+") #'org-dog-add-header-link)))
 #+end_src
 **** consult-org-dog
 :PROPERTIES:
