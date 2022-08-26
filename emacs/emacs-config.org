@@ -2097,7 +2097,8 @@ Facade Org files
 **** org-dog-root
 #+begin_src emacs-lisp
   (setup org-dog-root
-    (:global "<f12> o r" #'org-dog-root-switch)
+    (:global "<f12> o r" #'org-dog-root-switch
+             "<f12> o R" #'org-dog-root-add-active-files)
     (:when-loaded
       (add-hook 'mode-line-misc-info org-dog-root-mode-item)))
 #+end_src
@@ -2524,6 +2525,11 @@ This is a collection of extra utilities for various packages.
       (:defer 1 #'akirak-files-ensure-abbrev-list)
       (run-with-idle-timer 300 nil #'akirak-project-rescan)))
 #+end_src
+**** akirak-avy
+#+begin_src emacs-lisp
+  (setup akirak-avy
+    (:global "C-;" #'akirak-avy-insert-symbol))
+#+end_src
 **** akirak-capture
 #+begin_src emacs-lisp
   (setup akirak-capture
@@ -2802,9 +2808,7 @@ Completion At Point Extensions
 
 #+begin_src emacs-lisp
   (setup (:package cape)
-    (:global "C-x r M-d" #'cape-dabbrev
-             "C-x r M-f" #'cape-file
-             "C-x r M-s" #'cape-symbol
+    (:global "C-x r M-f" #'cape-file
              "C-x r M-l" #'cape-line
              ;; abbrev-mode is turned on, so I will use
              ;; this keybinding for mnemonics.
