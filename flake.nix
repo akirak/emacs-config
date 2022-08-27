@@ -378,6 +378,12 @@
               channels.unstable.yarn
             ];
           };
+
+          elixir = channels.nixpkgs.mkShell {
+            buildInputs = [
+              channels.unstable.elixir
+            ];
+          };
         };
       };
 
