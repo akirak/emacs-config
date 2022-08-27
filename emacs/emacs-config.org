@@ -3232,7 +3232,9 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(svelte-mode . ("svelteserver" "--stdio")))
       (add-to-list 'eglot-server-programs
-                   '(hcl-mode . ("terraform-lsp" "--stdio"))))
+                   '(hcl-mode . ("terraform-lsp" "--stdio")))
+      (add-to-list 'eglot-server-programs
+                   '(elixir-mode . ("elixir-ls"))))
 
     (put 'typescript-tsx-mode 'eglot-language-id "typescriptreact")
 
