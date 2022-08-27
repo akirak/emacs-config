@@ -1991,7 +1991,8 @@ A programmable workflow layer for Org mode
              "<f12> o o" #'org-dog-overview)
 
     (:set org-dog-context-path-patterns
-          `(("^\\.github/" . "services/github.com")))
+          `(("^\\.github/" . "services/github.com")
+            ("\\.h?eex\\'" . "programming/elixir")))
 
     (:with-feature org
       (:with-map org-mode-map
@@ -5343,7 +5344,7 @@ major mode for editing web templates
   (setup (:package web-mode)
     (:file-match "\\.mdx\\'"
                  "\\.html?\\'"
-                 "\\.html\\.eex\\'"
+                 "\\.html\\.h?eex\\'"
                  "\\.sface\\'"))
 #+end_src
 *** which-key                                       :usability:keybindings:
