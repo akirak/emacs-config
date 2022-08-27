@@ -4735,6 +4735,9 @@ Per-project transient keymaps
 #+begin_src emacs-lisp
   (setup (:package project-hercules)
     (:global "M-SPC" project-hercules-dispatch)
+
+    (:set project-hercules-mix-command-runner #'akirak-vterm-run-in-project)
+
     (:when-loaded
       (:with-map project-hercules-parent-map
         (:bind "d" #'project-dired))
