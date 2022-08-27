@@ -1733,6 +1733,7 @@ org-babel functions for restclient-mode
                "=" #'akirak-org-verbatim
                "~" #'akirak-org-code
                "+" #'akirak-org-strike-through
+               "C-c C-x h" #'org-edit-headline
                "C-c C-x t" #'akirak-org-table-create-or-edit
                "C-c C-x y" #'akirak-org-yank-into-new-block
                "C-c C-x ' c" #'akirak-org-avy-clone-subtree
