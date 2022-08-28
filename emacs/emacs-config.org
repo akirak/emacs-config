@@ -560,7 +560,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup dired
     (:set dired-recursive-copies 'always
           dired-recursive-deletes 'top)
-    (:mode-repl akirak/vterm)
+    (:mode-repl akirak-vterm-for-dir)
 
     (:bind "h" #'dired-up-directory))
 #+end_src
@@ -4719,7 +4719,7 @@ Summon and dismiss buffers as popups
            "M-'" #'akirak/popper-commander-map)
 
     (define-prefix-command 'akirak/popper-commander-map)
-    (define-key akirak/popper-commander-map (kbd "t") #'akirak/project-vterm)
+    (define-key akirak/popper-commander-map (kbd "t") #'akirak-vterm-for-project)
     (define-key akirak/popper-commander-map (kbd "c")
                 (defun akirak/compilation-buffer ()
                   (interactive)
@@ -5321,20 +5321,7 @@ Fully-featured terminal emulator
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package vterm)
-    (defun akirak/vterm (&optional dir)
-      (interactive (pcase current-prefix-arg
-                     (`nil (list default-directory))
-                     ('(4) (list (read-directory-name "Directory: ")))))
-      (require 'vterm)
-      (let ((default-directory (or dir default-directory)))
-        (vterm--internal akirak/display-popup-window-function)))
-
-    (defun akirak/project-vterm ()
-      (interactive)
-      (akirak/vterm (if-let (project (project-current))
-                        (project-root project)
-                      default-directory))))
+  (setup (:package vterm))
 #+end_src
 *** vue-mode
 :PROPERTIES:
