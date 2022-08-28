@@ -2973,6 +2973,15 @@ fast, friendly searching with ripgrep
 #+begin_src emacs-lisp
 (setup (:package deadgrep))
 #+end_src
+*** devdocs                                                     :reference:
+:PROPERTIES:
+:CREATED_TIME: [2022-08-28 Sun 13:31]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package devdocs)
+    (:global "C-c d" #'devdocs-lookup))
+#+end_src
 *** COMMENT dired-auto-readme                                :dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-23 Sat 23:59]
