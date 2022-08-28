@@ -4716,6 +4716,7 @@ Summon and dismiss buffers as popups
 
     (:hook-into after-init-hook)
     (:bind "M-\"" #'popper-cycle
+           "M-' SPC" #'popper-toggle-latest
            "M-' t" #'akirak-vterm-for-project
            "M-' c" (defun akirak/compilation-buffer ()
                      (interactive)
