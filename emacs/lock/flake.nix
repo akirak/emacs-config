@@ -61,12 +61,6 @@
       repo = "emacs-dumb-japanese";
       type = "github";
     };
-    beacon = {
-      flake = false;
-      owner = "Malabarba";
-      repo = "beacon";
-      type = "github";
-    };
     beancount = {
       flake = false;
       owner = "beancount";
@@ -178,6 +172,12 @@
       flake = false;
       owner = "Wilfred";
       repo = "deadgrep";
+      type = "github";
+    };
+    devdocs = {
+      flake = false;
+      owner = "astoff";
+      repo = "devdocs.el";
       type = "github";
     };
     dired-collapse = {

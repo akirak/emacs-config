@@ -67,11 +67,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1661619462,
-        "narHash": "sha256-tig2y3C8FzHha34dML4KpTx0r2FXA9McZmsjL3WLp9E=",
+        "lastModified": 1661667557,
+        "narHash": "sha256-kIeVDtFTD9WXaUw1iAgACjRrVpQrC28D9MLf3i5MgT0=",
         "ref": "refs/heads/master",
-        "rev": "83cb93beaa9d35308301c9273197339208e60a5d",
-        "revCount": 372,
+        "rev": "c30efaf8649a1770b95a26916ae69930cd47e91e",
+        "revCount": 376,
         "type": "git",
         "url": "https://git.sr.ht/~akirak/akirak-mode"
       },
@@ -157,22 +157,6 @@
       "original": {
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "type": "github"
-      }
-    },
-    "beacon": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1659142857,
-        "narHash": "sha256-lOzut7BxfY114RzEMtzc7efOxxEyy2h5Mb/79p9F5j4=",
-        "owner": "Malabarba",
-        "repo": "beacon",
-        "rev": "85261a928ae0ec3b41e639f05291ffd6bf7c231c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Malabarba",
-        "repo": "beacon",
         "type": "github"
       }
     },
@@ -478,6 +462,22 @@
       "original": {
         "owner": "Wilfred",
         "repo": "deadgrep",
+        "type": "github"
+      }
+    },
+    "devdocs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1660201409,
+        "narHash": "sha256-V41oOiHh5Jyr3xD6UXp/+cNu1FCxQiIJ6AtBMKJ1brU=",
+        "owner": "astoff",
+        "repo": "devdocs.el",
+        "rev": "61ce83b79dc64e2f99d7f016a09b97e14b331459",
+        "type": "github"
+      },
+      "original": {
+        "owner": "astoff",
+        "repo": "devdocs.el",
         "type": "github"
       }
     },
@@ -2711,7 +2711,6 @@
         "auto-yasnippet": "auto-yasnippet",
         "avy": "avy",
         "avy-riben": "avy-riben",
-        "beacon": "beacon",
         "beancount": "beancount",
         "benchmark-init": "benchmark-init",
         "blamer": "blamer",
@@ -2731,6 +2730,7 @@
         "dash": "dash",
         "dash-docs": "dash-docs",
         "deadgrep": "deadgrep",
+        "devdocs": "devdocs",
         "dired-collapse": "dired-collapse",
         "dired-filter": "dired-filter",
         "dired-hacks-utils": "dired-hacks-utils",
