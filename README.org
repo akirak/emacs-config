@@ -37,7 +37,7 @@ cachix use akirak
 Now you can try out the configuration:
 
 #+begin_src sh
-  nix run github:akirak/nix-config#tryout-emacs -- DIR
+  nix run sourcehut:~akirak/nix-config#tryout-emacs -- DIR
 #+end_src
 
 It assumes that your existing Emacs configuration resides in the XDG config directory (i.e. =~/.config/emacs= by default).
