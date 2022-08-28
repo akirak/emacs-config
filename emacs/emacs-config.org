@@ -4714,16 +4714,22 @@ Summon and dismiss buffers as popups
                                      lisp-interaction-mode
                                      vterm-mode))
 
+    (defun akirak/popper-display-buffer (buffer)
+      (pop-to-buffer buffer)
+      (with-current-buffer (get-buffer buffer)
+        (goto-char (point-max))
+        (recenter -1 t)))
+
     (:hook-into after-init-hook)
     (:bind "M-\"" #'popper-cycle
            "M-' SPC" #'popper-toggle-latest
            "M-' t" #'akirak-vterm-for-project
            "M-' c" (defun akirak/compilation-buffer ()
                      (interactive)
-                     (pop-to-buffer "*compilation*"))
+                     (akirak/popper-display-buffer "*compilation*"))
            "M-' m" (defun akirak/message-buffer ()
                      (interactive)
-                     (display-buffer "*Messages*"))))
+                     (akirak/popper-display-buffer "*Messages*"))))
 #+end_src
 *** posframe                                                   :UI:library:
 :PROPERTIES:
