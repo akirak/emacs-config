@@ -4716,18 +4716,13 @@ Summon and dismiss buffers as popups
 
     (:hook-into after-init-hook)
     (:bind "M-\"" #'popper-cycle
-           "M-'" #'akirak/popper-commander-map)
-
-    (define-prefix-command 'akirak/popper-commander-map)
-    (define-key akirak/popper-commander-map (kbd "t") #'akirak-vterm-for-project)
-    (define-key akirak/popper-commander-map (kbd "c")
-                (defun akirak/compilation-buffer ()
-                  (interactive)
-                  (pop-to-buffer "*compilation*")))
-    (define-key akirak/popper-commander-map (kbd "m")
-                (defun akirak/message-buffer ()
-                  (interactive)
-                  (display-buffer "*Messages*"))))
+           "M-' t" #'akirak-vterm-for-project
+           "M-' c" (defun akirak/compilation-buffer ()
+                     (interactive)
+                     (pop-to-buffer "*compilation*"))
+           "M-' m" (defun akirak/message-buffer ()
+                     (interactive)
+                     (display-buffer "*Messages*"))))
 #+end_src
 *** posframe                                                   :UI:library:
 :PROPERTIES:
