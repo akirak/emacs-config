@@ -2937,7 +2937,7 @@ Documentation popup for Corfu
   (setup (:package corfu-doc)
     (:hook-into corfu-mode-hook))
 #+end_src
-*** dash-docs                                               :documentation:
+*** COMMENT dash-docs                                       :documentation:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-20 Wed 17:28]
 :END:
