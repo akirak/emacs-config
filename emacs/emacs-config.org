@@ -2977,6 +2977,10 @@ fast, friendly searching with ripgrep
 :PROPERTIES:
 :CREATED_TIME: [2022-08-28 Sun 13:31]
 :END:
+#+begin_quote
+Emacs viewer for DevDocs
+[[https://github.com/astoff/devdocs.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package devdocs)
@@ -5506,7 +5510,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 203 |
+| [[org-ql-search:tags:packages][packages]]            | 202 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
@@ -5529,7 +5533,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
-| [[org-ql-search:tags:documentation][documentation]]       |   3 |
+| [[org-ql-search:tags:reference][reference]]           |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
@@ -5539,7 +5543,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
-| [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
@@ -5555,6 +5558,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Prolog][Prolog]]              |   1 |
 | [[org-ql-search:tags:bibliography][bibliography]]        |   1 |
 | [[org-ql-search:tags:capture][capture]]             |   1 |
+| [[org-ql-search:tags:documentation][documentation]]       |   1 |
 | [[org-ql-search:tags:secrets][secrets]]             |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:@extra][@extra]]              |   1 |
