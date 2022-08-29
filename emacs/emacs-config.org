@@ -2009,6 +2009,17 @@ A programmable workflow layer for Org mode
                                       (oref file-obj relative))
                   (add-to-list 'org-agenda-files (oref file-obj absolute)))))
 
+    ;; Add all file tags in the registered files to the persistent tag alist.
+    ;; This is important for the propagation feature of org-dog-datetree.el.
+    (add-hook 'org-dog-file-registration-hook
+              (defun akirak/org-dog-add-file-tags (file-obj)
+                (org-dog-with-file-header (oref file-obj absolute)
+                  (dolist (tag org-file-tags)
+                    (unless (assoc tag org-tag-persistent-alist)
+                      (setq org-tag-persistent-alist
+                            (append org-tag-persistent-alist
+                                    (list (list (substring-no-properties tag))))))))))
+
     (add-hook 'org-dog-reload-hook
               (defun akirak/org-dog-add-extra-agenda-files ()
                 (require 'org-dog-overview)
