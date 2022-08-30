@@ -1970,7 +1970,8 @@ Emacs bookmark support for org-mode
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package org-bookmark-heading))
+  (setup (:package org-bookmark-heading)
+    (:set org-bookmark-heading-make-ids t))
 #+end_src
 *** org-dog
 :PROPERTIES:
