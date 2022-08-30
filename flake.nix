@@ -379,6 +379,12 @@
             ];
           };
 
+          npm = channels.nixpkgs.mkShell {
+            buildInputs = [
+              channels.unstable.nodejs_latest
+            ];
+          };
+
           elixir = channels.nixpkgs.mkShell {
             buildInputs = [
               channels.unstable.elixir
