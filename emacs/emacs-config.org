@@ -4690,7 +4690,7 @@ Client for Pocket reading list
 #+begin_src emacs-lisp
   (setup (:package pocket-reader))
 #+end_src
-*** poly-astro
+*** COMMENT poly-astro                                                    :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-04 Thu 12:37]
 :END:
@@ -5364,10 +5364,15 @@ major mode for editing web templates
 
 #+begin_src emacs-lisp
   (setup (:package web-mode)
+    (:set web-mode-enable-front-matter-block t)
     (:file-match "\\.mdx\\'"
                  "\\.html?\\'"
                  "\\.html\\.h?eex\\'"
-                 "\\.sface\\'"))
+                 "\\.astro\\'"
+                 "\\.sface\\'")
+
+    (:auto-insert
+     ("\\.astro\\'" . (> "---\n" _ "\n---\n"))))
 #+end_src
 *** which-key                                       :usability:keybindings:
 #+begin_quote
