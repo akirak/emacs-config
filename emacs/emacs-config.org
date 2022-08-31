@@ -1572,7 +1572,7 @@ org-babel functions for restclient-mode
 #+end_src
 *** org
 #+begin_src emacs-lisp
-  (setup org
+  (setup (:package org)
     (:with-mode org-mode
       (:set org-log-done 'time
             org-log-into-drawer t
