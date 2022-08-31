@@ -2623,6 +2623,13 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     ;; Local search
     (:global "M-s M-l" #'akirak-japanese-search))
 #+end_src
+**** akirak-narrow
+#+begin_src emacs-lisp
+  (setup akirak-narrow
+    (:global "C-x n" #'akirak-narrow-or-widen-dwim)
+    (with-eval-after-load 'org
+      (define-key org-mode-map (kbd "C-x n") #'akirak-narrow-or-widen-dwim)))
+#+end_src
 **** akirak-snippet
 #+begin_src emacs-lisp
   (setup akirak-snippet
