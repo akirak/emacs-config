@@ -28,8 +28,9 @@
     };
     akirak = {
       flake = false;
-      type = "git";
-      url = "https://git.sr.ht/~akirak/akirak-mode";
+      owner = "~akirak";
+      repo = "akirak-mode";
+      type = "sourcehut";
     };
     anzu = {
       flake = false;
@@ -126,11 +127,6 @@
       repo = "consult";
       type = "github";
     };
-    consult-dash = {
-      flake = false;
-      type = "git";
-      url = "https://codeberg.org/ravi/consult-dash.git";
-    };
     consult-ls-git = {
       flake = false;
       owner = "rcj";
@@ -160,12 +156,6 @@
       flake = false;
       owner = "magnars";
       repo = "dash.el";
-      type = "github";
-    };
-    dash-docs = {
-      flake = false;
-      owner = "dash-docs-el";
-      repo = "dash-docs";
       type = "github";
     };
     deadgrep = {
@@ -726,6 +716,12 @@
       repo = "orderless";
       type = "github";
     };
+    org = {
+      flake = false;
+      ref = "bugfix";
+      type = "git";
+      url = "git://git.sv.gnu.org/emacs/org-mode.git";
+    };
     org-autolist = {
       flake = false;
       owner = "calvinwyoung";
@@ -915,19 +911,6 @@
       flake = false;
       owner = "kunalb";
       repo = "poet";
-      type = "github";
-    };
-    poly-astro = {
-      flake = false;
-      owner = "akirak";
-      ref = "autoload";
-      repo = "poly-astro";
-      type = "github";
-    };
-    polymode = {
-      flake = false;
-      owner = "polymode";
-      repo = "polymode";
       type = "github";
     };
     popper = {
