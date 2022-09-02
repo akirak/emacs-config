@@ -30,7 +30,7 @@
     })
 
     (pkgs.callPackage ./rebuild.nix {})
-    flameshot
+    wayshot
     wf-recorder
   ];
 
