@@ -2570,6 +2570,14 @@ This is a collection of extra utilities for various packages.
   (setup akirak-consult-elisp
     (:global [remap finder-by-keyword] #'akirak-consult-elisp-package))
 #+end_src
+**** akirak-consult-org
+#+begin_src emacs-lisp
+  (setup akirak-consult-org
+    (with-eval-after-load 'embark
+      (add-to-list 'embark-transformer-alist
+                   '(akirak-consult-org-olp-with-file
+                     . akirak-consult-org-olp-to-marker))))
+#+end_src
 **** akirak-org-secrets                                          :secrets:
 #+begin_src emacs-lisp
   (setup akirak-org-secrets
