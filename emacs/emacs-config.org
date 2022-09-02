@@ -1893,7 +1893,8 @@ org-babel functions for restclient-mode
 #+begin_src emacs-lisp
   (setup org-refile
     (:set org-log-refile nil
-
+          org-refile-targets '((nil :maxlevel . 99)
+                               (org-agenda-files :maxlevel . 99))
           org-outline-path-complete-in-steps nil
           org-refile-allow-creating-parent-nodes 'confirm
           org-refile-use-outline-path 'full-file-path))
