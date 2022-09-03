@@ -3408,6 +3408,7 @@ Conveniently act on minibuffer completions
     (:global "C-." #'embark-act)
 
     (:when-loaded
+      (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
       (akirak-embark-setup)))
 #+end_src
 
