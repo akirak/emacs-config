@@ -3039,7 +3039,7 @@ Emacs viewer for DevDocs
 
 #+begin_src emacs-lisp
   (setup (:package devdocs)
-    (:global "C-c d" #'devdocs-lookup))
+    (define-key help-map (kbd "d") #'devdocs-lookup))
 #+end_src
 *** COMMENT dired-auto-readme                                :dired:ARCHIVE:
 :PROPERTIES:
