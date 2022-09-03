@@ -1255,7 +1255,8 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
     (fset 'yes-or-no-p 'y-or-n-p)
 
     (:status opinionated
-      (:global "C-h" 'backward-delete-char)))
+      ;; (:global "C-h" 'backward-delete-char)
+      ))
 #+end_src
 
 =C-h= is one of the sh-emulation bindings.
