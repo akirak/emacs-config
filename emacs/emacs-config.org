@@ -775,6 +775,15 @@ The built-in =electric= package provides the following modes:
     ;; suspend-frame is annoying, so I will disable it
     (:global "C-z" #'ignore))
 #+end_src
+*** help
+:PROPERTIES:
+:CREATED_TIME: [2022-09-03 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup help
+    (define-key help-map (kbd "C-h") nil))
+#+end_src
 *** hl-line                                                        :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
