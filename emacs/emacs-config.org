@@ -5050,7 +5050,7 @@ Auto-save buffers, based on your activity.
 
 #+begin_src emacs-lisp
   (setup (:package super-save)
-    (:hook-into after-init-hook)
+    (:hook-into emacs-startup-hook)
     (:set super-save-auto-save-when-idle t
           super-save-idle-duration 120
           super-save-remote-files nil
