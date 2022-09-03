@@ -56,6 +56,12 @@
       repo = "avy";
       type = "github";
     };
+    avy-menu = {
+      flake = false;
+      owner = "mrkkrp";
+      repo = "avy-menu";
+      type = "github";
+    };
     avy-riben = {
       flake = false;
       owner = "akirak";
@@ -192,6 +198,12 @@
       flake = false;
       owner = "progfolio";
       repo = "doct";
+      type = "github";
+    };
+    dotenv-mode = {
+      flake = false;
+      owner = "preetpalS";
+      repo = "emacs-dotenv-mode";
       type = "github";
     };
     duckduckgo = {
@@ -331,6 +343,18 @@
       flake = false;
       owner = "orzechowskid";
       repo = "flymake-eslint";
+      type = "github";
+    };
+    flyspell-correct = {
+      flake = false;
+      owner = "d12frosted";
+      repo = "flyspell-correct";
+      type = "github";
+    };
+    flyspell-correct-avy-menu = {
+      flake = false;
+      owner = "d12frosted";
+      repo = "flyspell-correct";
       type = "github";
     };
     forge = {

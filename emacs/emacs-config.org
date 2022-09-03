@@ -1571,6 +1571,9 @@ org-babel functions for restclient-mode
 (setup (:package ob-restclient))
 #+end_src
 *** org
+#+begin_quote
+Outline-based notes management and organizer
+#+end_quote
 #+begin_src emacs-lisp
   (setup (:package org)
     (:with-mode org-mode
@@ -5544,7 +5547,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 201 |
+| [[org-ql-search:tags:packages][packages]]            | 203 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
