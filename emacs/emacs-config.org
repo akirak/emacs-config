@@ -1398,6 +1398,7 @@ Thus I will explicitly install this package rather than using the built-in versi
                    t))
 
     (:global
+     "C-x c" #'akirak-window-raise-below-window
      ;; TODO: scroll-other-window and scroll-other-window-down
      [remap scroll-up-command]
      (defun akirak/scroll-half-page-forward (&optional arg)
