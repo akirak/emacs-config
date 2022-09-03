@@ -7,6 +7,8 @@
     deadnix
     squasher
     drawio
+
+    hunspellDicts.en_US
   ];
 
   programs.direnv = {
