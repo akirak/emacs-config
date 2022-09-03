@@ -739,6 +739,18 @@ The built-in =electric= package provides the following modes:
     (:bind "M-g M-n" #'flymake-goto-next-error
            "M-g M-p" #'flymake-goto-prev-error))
 #+end_src
+*** flyspell
+:PROPERTIES:
+:CREATED_TIME: [2022-09-03 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup flyspell
+    (:nixpkgs "hunspell")
+    (:hook-into text-mode-hook
+                git-commit-mode-hook)
+    (:unbind "C-," "C-." "C-;" "C-M-i" "C-c $"))
+#+end_src
 *** fns.c and xfns.c                                                   :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -3617,6 +3629,26 @@ A Flymake backend for Javascript using eslint
 
 #+begin_src emacs-lisp
 (setup (:package flymake-eslint))
+#+end_src
+*** flyspell-correct
+:PROPERTIES:
+:CREATED_TIME: [2022-09-03 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package flyspell-correct)
+    (with-eval-after-load "flyspell"
+      (define-key flyspell-mode-map (kbd "C-M-;") #'flyspell-correct-wrapper)))
+#+end_src
+*** flyspell-correct-avy-menu
+:PROPERTIES:
+:CREATED_TIME: [2022-09-03 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package flyspell-correct-avy-menu)
+    (with-eval-after-load "flyspell-correct"
+      (require 'flyspell-correct-avy-menu)))
 #+end_src
 *** forge                                                     :VC:project:
 :PROPERTIES:
