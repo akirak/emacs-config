@@ -3626,7 +3626,8 @@ Not only English-Chinese translator
                             fanyi-etymon-provider))
     (:when-loaded
       (require 'fanyi-longman)
-      (require 'fanyi-etymon)))
+      (require 'fanyi-etymon))
+    (define-key help-map (kbd "M-d") #'fanyi-dwim2))
 #+end_src
 
 You should also load ol-fanyi library to enable fanyi link type.
