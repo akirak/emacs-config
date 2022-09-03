@@ -1388,6 +1388,7 @@ Thus I will explicitly install this package rather than using the built-in versi
 
     (let ((modes '(help-mode
                    helpful-mode
+                   devdocs-mode
                    ghelp-page-mode)))
       (add-to-list 'display-buffer-alist
                    `((or ,@(mapcar (lambda (mode) (cons 'major-mode mode))
