@@ -1815,6 +1815,10 @@ Outline-based notes management and organizer
           org-agenda-window-setup 'current-window)
 
     (:global "<f12> o a" #'org-agenda)
+    (define-key help-map (kbd "M-a")
+                (defun akirak/org-default-agenda ()
+                  (interactive)
+                  (org-agenda nil "a")))
 
     ;; A function advice to prevent the default behavior which run
     ;; `delete-other-windows' to show a completion window.
