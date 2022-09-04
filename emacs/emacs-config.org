@@ -3193,6 +3193,15 @@ Hide dotfiles in dired
 #+end_src
 
 dired-k depends on dired-x, which has a poor code quality.
+*** dotenv-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-09-04 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dotenv-mode)
+    (:file-match "\\.env\\(?:\\.[a-z]+\\)?\\'"))
+#+end_src
 *** duckduckgo                                                     :search:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-17 Thu 23:59]
