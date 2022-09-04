@@ -9,7 +9,7 @@
 - [[#custom-conventions][Custom conventions]]
 - [[#macro-packages][Macro packages]]
 - [[#built-ins][Built-ins]]
-- [[#basic-appearances][Basic appearances]]
+- [[#typography-settings][Typography settings]]
 - [[#org][Org]]
 - [[#packages][Packages]]
 - [[#notes][Notes]]
@@ -432,7 +432,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:set buffer-file-coding-system 'utf-8
           fill-column 80
           indicate-empty-lines t
-          truncate-lines t))
+          truncate-lines nil))
 #+end_src
 **** Line spacing
 #+begin_src emacs-lisp
@@ -443,7 +443,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:with-mode (Help-mode helpful-mode Info-mode)
       (:local-set line-spacing 0.3))
     (:with-mode (eww-mode)
-      (:local-set line-spacing 0.35)))
+      (:local-set line-spacing 0.35))
+    (:with-mode (nov-mode)
+      (:local-set line-spacing 0.4)))
 #+end_src
 **** Tab width
 #+begin_src emacs-lisp
@@ -1188,13 +1190,6 @@ This is a recommended setting for use with vertico. See https://github.com/minad
              [remap downcase-word] #'downcase-dwim
              [remap capitalize-word] #'capitalize-dwim)
 
-    (:with-mode visual-line-mode
-      (:hook-into prog-mode-hook
-                  text-mode-hook
-                  help-mode-hook
-                  compilation-mode-hook
-                  special-mode-hook))
-
     (defun akirak/count-words-dwim ()
       (interactive)
       (save-restriction
@@ -1451,7 +1446,7 @@ Thus I will explicitly install this package rather than using the built-in versi
           bidi-display-reordering 'left-to-right
           bidi-paragraph-direction 'left-to-right))
 #+end_src
-** Basic appearances                                                :visual:
+** Typography settings                                              :visual:
 *** Theme packages                                        :packages:
 # Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
 # I want a separate section for themes to add this comment.
@@ -1510,7 +1505,7 @@ You need to install the font separately.
       (set-face-attribute 'org-tag nil :inherit 'fixed-pitch)
       (set-face-attribute 'org-todo nil :inherit 'fixed-pitch)))
 #+end_src
-*** Font size
+*** Font size and line spacing
 Override font heights for certain faces.
 
 I think it would be better to create my own theme, but I don't have enough time for it.
@@ -1543,7 +1538,7 @@ I think it would be better to create my own theme, but I don't have enough time 
     (defun akirak/apply-shr-font-heights ()
       (set-face-attribute 'shr-text nil :height 1.3)))
 #+end_src
-*** Standard body width
+*** Width and wrap
 #+begin_src emacs-lisp
   (setq akirak/default-body-width 86)
 #+end_src
@@ -2511,11 +2506,7 @@ Smart line-wrapping with wrap-prefix
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package adaptive-wrap)
-    (add-hook 'visual-line-mode
-              (defun akirak/turn-on-adaptive-wrap-prefix-mode ()
-                (unless (derived-mode-p 'org-mode)
-                  (adaptive-wrap-prefix-mode 1)))))
+  (setup (:package adaptive-wrap))
 #+end_src
 *** COMMENT affe                                   :completion:grep:ARCHIVE:
 :PROPERTIES:
