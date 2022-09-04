@@ -4642,7 +4642,11 @@ Featureful EPUB reader mode
     (:hook (defun akirak/nov-setup ()
              (when (require 'olivetti nil t)
                (olivetti-mode 1)
-               (setq nov-text-width nil)))))
+               (setq-local nov-text-width nil)
+               ;; Re-render as olivetti changes the window width.
+               (add-hook 'olivetti-expand-hook
+                         #'nov-render-document
+                         nil t)))))
 #+end_src
 *** olivetti                                                      :writing:
 :PROPERTIES:
