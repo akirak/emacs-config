@@ -1543,6 +1543,10 @@ I think it would be better to create my own theme, but I don't have enough time 
     (defun akirak/apply-shr-font-heights ()
       (set-face-attribute 'shr-text nil :height 1.3)))
 #+end_src
+*** Standard body width
+#+begin_src emacs-lisp
+  (setq akirak/default-body-width 86)
+#+end_src
 ** Org                                                            :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -4641,14 +4645,13 @@ Featureful EPUB reader mode
   (setup (:package nov)
     ;; unzip is required for opening EPUB
     (:nixpkgs unzip)
+    (:file-match "\\.epub\\'")
+    (:set nov-text-width akirak/default-body-width)
 
-    (:with-mode nov-mode
-      (:file-match "\\.epub\\'")
-
-      (:local-set line-spacing 0.4)
-
-      (:hook visual-line-mode
-             visual-fill-column-mode)))
+    (:hook (defun akirak/nov-setup ()
+             (when (require 'olivetti nil t)
+               (olivetti-mode 1)
+               (setq nov-text-width nil)))))
 #+end_src
 *** olivetti                                                      :writing:
 :PROPERTIES:
@@ -4660,7 +4663,8 @@ Minor mode for a nice writing environment
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package olivetti))
+  (setup (:package olivetti)
+    (:set olivetti-body-width akirak/default-body-width))
 #+end_src
 *** orderless                                                  :completion:
 :PROPERTIES:
