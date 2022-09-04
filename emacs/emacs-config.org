@@ -4655,7 +4655,13 @@ Minor mode for a nice writing environment
 
 #+begin_src emacs-lisp
   (setup (:package olivetti)
-    (:set olivetti-body-width akirak/default-body-width))
+    (:set olivetti-body-width akirak/default-body-width)
+
+    ;; Implement `olivetti-set-width-hook' without tweaking the upstream code.
+    (advice-add 'olivetti-expand
+                :after
+                (lambda (&rest _args)
+                  (run-hooks 'olivetti-expand-hook))))
 #+end_src
 *** orderless                                                  :completion:
 :PROPERTIES:
