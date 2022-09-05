@@ -3,6 +3,7 @@
     ../../foot.nix
     ./dunst.nix
     ./waybar.nix
+    ./kanshi.nix
   ];
 
   home.packages = with pkgs; [
