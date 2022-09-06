@@ -1367,7 +1367,12 @@ Thus I will explicitly install this package rather than using the built-in versi
     (:status opinionated
       (add-hook 'after-init-hook
                 (defun akirak/setup-windmove ()
-                  (windmove-default-keybindings 'control)))))
+                  (windmove-default-keybindings 'control)))
+
+      ;; extra keybindings
+      ;; See also windswap
+      (:global "C-c [" #'windmove-left
+               "C-c ]" #'windmove-right)))
 #+end_src
 *** window                                                     :navigation:
 :PROPERTIES:
@@ -5513,7 +5518,11 @@ Like windmove, but swaps buffers while moving point
       (:global "<C-S-left>" #'windswap-left
                "<C-S-right>" #'windswap-right
                "<C-S-up>" #'windswap-up
-               "<C-S-down>" #'windswap-down)
+               "<C-S-down>" #'windswap-down
+
+               ;; There are corresponding keybindings for windmove.
+               "C-c {" #'windswap-left
+               "C-c }" #'windswap-right)
 
       ;; These keys are bound by default in org-mode, so unbind them.
       (:with-feature org
