@@ -116,12 +116,6 @@
       repo = "closql";
       type = "github";
     };
-    color-theme-sanityinc-tomorrow = {
-      flake = false;
-      owner = "purcell";
-      repo = "color-theme-sanityinc-tomorrow";
-      type = "github";
-    };
     compat = {
       flake = false;
       type = "git";
@@ -580,6 +574,12 @@
       flake = false;
       owner = "nicferrier";
       repo = "emacs-kv";
+      type = "github";
+    };
+    language-detection = {
+      flake = false;
+      owner = "andreasjansson";
+      repo = "language-detection.el";
       type = "github";
     };
     license-templates = {
@@ -1042,6 +1042,12 @@
       flake = false;
       type = "git";
       url = "https://git.sr.ht/~pkal/setup";
+    };
+    shr-tag-pre-highlight = {
+      flake = false;
+      owner = "xuchunyang";
+      repo = "shr-tag-pre-highlight.el";
+      type = "github";
     };
     ssass-mode = {
       flake = false;
