@@ -1597,6 +1597,7 @@ org-babel functions for restclient-mode
 #+begin_quote
 Outline-based notes management and organizer
 #+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package org)
     (:with-mode org-mode
@@ -3201,6 +3202,10 @@ dired-k depends on dired-x, which has a poor code quality.
 :PROPERTIES:
 :CREATED_TIME: [2022-09-04 Sun 23:59]
 :END:
+#+begin_quote
+Major mode for .env files
+[[https://github.com/preetpalS/emacs-dotenv-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package dotenv-mode)
@@ -3655,6 +3660,10 @@ A Flymake backend for Javascript using eslint
 :PROPERTIES:
 :CREATED_TIME: [2022-09-03 Sat 23:59]
 :END:
+#+begin_quote
+Correcting words with flyspell via custom interface
+[[https://github.com/d12frosted/flyspell-correct]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package flyspell-correct)
@@ -3665,6 +3674,10 @@ A Flymake backend for Javascript using eslint
 :PROPERTIES:
 :CREATED_TIME: [2022-09-03 Sat 23:59]
 :END:
+#+begin_quote
+Correcting words with flyspell via avy-menu interface
+[[https://github.com/d12frosted/flyspell-correct]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package flyspell-correct-avy-menu)
@@ -5607,9 +5620,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 203 |
+| [[org-ql-search:tags:packages][packages]]            | 206 |
+| [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
-| [[org-ql-search:tags:visual][visual]]              |  12 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:VC][VC]]                  |   9 |
