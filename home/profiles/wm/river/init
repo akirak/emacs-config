@@ -28,8 +28,8 @@ riverctl map normal Super+Shift S spawn 'flameshot gui'
 
 riverctl map normal Super F9 spawn 'foot nixos-rebuild-and-notify'
 
-# Super+Shift+E to exit river
-riverctl map normal Super+Shift E exit
+# Super+Shift+Q to exit river
+riverctl map normal Super+Shift Q exit
 
 # Super+J and Super+K to focus the next/previous view in the layout stack
 riverctl map normal Super J focus-view next
