@@ -749,7 +749,9 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup flyspell
     (:nixpkgs "hunspell")
-    (:hook-into text-mode-hook
+    (:hook-into markdown-mode
+                ;; For org-mode, set up hooks in .dir-locals.el of individual
+                ;; projects
                 git-commit-mode-hook)
     (:unbind "C-," "C-." "C-;" "C-M-i" "C-c $"))
 #+end_src
