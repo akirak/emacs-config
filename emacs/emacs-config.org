@@ -5502,7 +5502,7 @@ Operate on current line if region undefined
                (interactive "P")
                (require 'anzu)
                (require 'whole-line-or-region)
-               (whole-line-or-region-wrap-modified-region #'anzu-query-replace
+               (whole-line-or-region-wrap-modified-region #'anzu-query-replace-regexp
                                                           (if (numberp arg)
                                                               arg
                                                             1)
