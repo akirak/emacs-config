@@ -1767,6 +1767,7 @@ Outline-based notes management and organizer
                "=" #'akirak-org-verbatim
                "~" #'akirak-org-code
                "+" #'akirak-org-strike-through
+               "C-c b" #'akirak-org-select-region-dwim
                "C-c C-x h" #'org-edit-headline
                "C-c C-x t" #'akirak-org-table-create-or-edit
                "C-c C-x y" #'akirak-org-yank-into-new-block
