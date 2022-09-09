@@ -443,6 +443,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:set buffer-file-coding-system 'utf-8
           fill-column 80
           indicate-empty-lines t
+          ;; In some major modes, you should turn on truncate-lines.
+          ;; They should be configured alongside individual modes.
           truncate-lines nil))
 #+end_src
 **** Line spacing
@@ -1844,6 +1846,7 @@ Outline-based notes management and organizer
           org-agenda-sticky nil
           org-agenda-restore-windows-after-quit t
           org-agenda-window-setup 'current-window)
+    (:local-set truncate-lines t)
 
     (:global "<f12> o a" #'org-agenda)
     (define-key help-map (kbd "M-a")
