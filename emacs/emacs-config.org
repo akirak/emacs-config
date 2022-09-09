@@ -378,6 +378,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:with-mode global-auto-revert-mode
       (:hook-into after-init-hook)))
 #+end_src
+*** bindings
+:PROPERTIES:
+:CREATED_TIME: [2022-09-09 Fri 12:22]
+:END:
+
+#+begin_src emacs-lisp
+  (setup bindings
+    ;; Exclude global-mode-string from mode-line-misc-info.
+    ;; See the settings for mini-modeline.
+    (:set mode-line-misc-info nil))
+#+end_src
 *** bookmark
 :PROPERTIES:
 :CREATED_TIME: [2022-05-14 Sat 09:53]
@@ -4546,7 +4557,15 @@ Display modeline in minibuffer
                                    (mode-line-process ("  " mode-line-process))
                                    (current-input-method-title
                                     (current-input-method-title " "))
-                                   (mode-line-misc-info mode-line-misc-info)
+                                   ;; I'll show mode-line-misc-info in the header line,
+                                   ;; as it contains information for eglot, which-func, etc.
+                                   ;; which are specific to buffers.
+                                   ;; (mode-line-misc-info mode-line-misc-info)
+
+                                   ;; However, global-mode-string, which is part
+                                   ;; of mode-line-misc-info by default, should be
+                                   ;; included here. See also bindings.
+                                   (global-mode-string global-mode-string)
                                    (mode-line-client mode-line-client)
                                    (:eval (format-time-string "%b %d %a W%U %H:%M "))))
     (:hook-into emacs-startup-hook)
