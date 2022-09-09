@@ -4578,7 +4578,7 @@ Display modeline in minibuffer
                                    ;; included here. See also bindings.
                                    (global-mode-string global-mode-string)
                                    (mode-line-client mode-line-client)
-                                   (:eval (format-time-string "%b %d %a W%U %H:%M "))))
+                                   (:eval (format-time-string " %b %d %a W%U %H:%M"))))
     (:hook-into emacs-startup-hook)
 
     (defun akirak-mode-line-directory ()
