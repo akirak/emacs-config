@@ -1350,6 +1350,17 @@ Thus I will explicitly install this package rather than using the built-in versi
        [remap scroll-up-command] #'View-scroll-half-page-forward
        [remap scroll-down-command] #'View-scroll-half-page-backward)))
 #+end_src
+*** which-func
+:PROPERTIES:
+:CREATED_TIME: [2022-09-09 Fri 12:28]
+:END:
+
+#+begin_src emacs-lisp
+  (setup which-func
+    (:with-mode which-function-mode
+      (:hook-into prog-mode-hook
+                  conf-mode-hook)))
+#+end_src
 *** whitespace                                          :visual:formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
