@@ -1892,6 +1892,14 @@ Outline-based notes management and organizer
 
 #+begin_src emacs-lisp
   (setup org-capture
+    (add-hook 'org-capture-prepare-finalize-hook
+              (defun akirak/org-capture-maybe-fill-headline ()
+                "Edit the headline if it is missing."
+                (goto-char (point-min))
+                (let ((headline (org-get-heading t t t t)))
+                  (when (string-empty-p headline)
+                    (org-edit-headline)))))
+
     (:when-loaded
       (require 'el-patch)
       (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
