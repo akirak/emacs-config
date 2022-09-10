@@ -74,12 +74,6 @@
       repo = "beancount-mode";
       type = "github";
     };
-    benchmark-init = {
-      flake = false;
-      owner = "akirak";
-      repo = "benchmark-init-el";
-      type = "github";
-    };
     blamer = {
       flake = false;
       owner = "Artawower";
@@ -817,18 +811,6 @@
       repo = "org-ml";
       type = "github";
     };
-    org-noter = {
-      flake = false;
-      owner = "weirdNox";
-      repo = "org-noter";
-      type = "github";
-    };
-    org-pretty-table = {
-      flake = false;
-      owner = "Fuco1";
-      repo = "org-pretty-table";
-      type = "github";
-    };
     org-ql = {
       flake = false;
       owner = "alphapapa";
@@ -1231,12 +1213,6 @@
       flake = false;
       owner = "purcell";
       repo = "whole-line-or-region";
-      type = "github";
-    };
-    windswap = {
-      flake = false;
-      owner = "purcell";
-      repo = "windswap";
       type = "github";
     };
     with-editor = {
