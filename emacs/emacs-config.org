@@ -4316,6 +4316,10 @@ Completion kind icons
 :PROPERTIES:
 :CREATED_TIME: [2022-09-10 Sat 20:00]
 :END:
+#+begin_quote
+Automatic language detection from code snippets
+[[https://github.com/andreasjansson/language-detection.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package language-detection))
@@ -5197,6 +5201,10 @@ Edit comment/string/docstring/code block in separate buffer
 :PROPERTIES:
 :CREATED_TIME: [2022-09-10 Sat 19:48]
 :END:
+#+begin_quote
+Syntax highlighting code block in HTML
+[[https://github.com/xuchunyang/shr-tag-pre-highlight.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package shr-tag-pre-highlight)
@@ -5736,8 +5744,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 206 |
-| [[org-ql-search:tags:visual][visual]]              |  13 |
+| [[org-ql-search:tags:packages][packages]]            | 207 |
+| [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -5748,13 +5756,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
-| [[org-ql-search:tags:windows][windows]]             |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
+| [[org-ql-search:tags:windows][windows]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
