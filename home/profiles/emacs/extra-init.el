@@ -1,8 +1,8 @@
-(require 'sanityinc-tomorrow-eighties-theme)
-(load-theme 'sanityinc-tomorrow-eighties t)
+;; (require 'modus-operandi-theme)
+;; (load-theme 'modus-operandi t)
 
-;; (require 'poet-theme)
-;; (load-theme 'poet t)
+(require 'poet-theme)
+(load-theme 'poet t)
 
 (let ((file "~/org/config.el"))
   (when (file-exists-p file)
