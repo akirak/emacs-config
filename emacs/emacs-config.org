@@ -1998,7 +1998,7 @@ Outline-based notes management and organizer
                                (org-agenda-files :maxlevel . 99))
           org-outline-path-complete-in-steps nil
           org-refile-allow-creating-parent-nodes 'confirm
-          org-refile-use-outline-path 'full-file-path))
+          org-refile-use-outline-path 'file))
 #+end_src
 **** org-src
 :PROPERTIES:
