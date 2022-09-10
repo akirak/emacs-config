@@ -1487,7 +1487,8 @@ The following theme packages are bundled with configuration:
 #+begin_src emacs-lisp
   (setup (:package color-theme-sanityinc-tomorrow))
 
-  (setup (:package poet-theme))
+  (setup (:package poet-theme)
+    (:set poet-theme-variable-headers nil))
 #+end_src
 
 No theme is set by default.
