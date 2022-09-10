@@ -1657,7 +1657,8 @@ Outline-based notes management and organizer
       (:set org-log-done 'time
             org-log-into-drawer t
             org-startup-folded 'content
-            org-startup-indented t
+            ;; If necessary, set up startup indent in individual files
+            org-startup-indented nil
             org-startup-truncated nil
             org-enforce-todo-dependencies t
             org-use-speed-commands t
@@ -1777,7 +1778,8 @@ Outline-based notes management and organizer
     ;; Based on https://lepisma.xyz/2017/10/28/ricing-org-mode/
     (:set org-ellipsis " ⌄ "
           org-pretty-entities t
-          org-hide-emphasis-markers t
+          org-hide-emphasis-markers nil
+          org-hide-leading-stars nil
           org-fontify-whole-heading-line t
           org-fontify-done-headline nil
           org-fontify-quote-and-verse-blocks t)
@@ -2244,6 +2246,15 @@ Integrate Org with epubinfo program
 #+begin_src emacs-lisp
   (setup (:package org-epubinfo)
     (:nixpkgs epubinfo))
+#+end_src
+*** org-indent
+:PROPERTIES:
+:CREATED_TIME: [2022-09-10 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-indent
+    (:set org-indent-mode-turns-on-hiding-stars t))
 #+end_src
 *** COMMENT org-journal                                    :ARCHIVE:
 :PROPERTIES:
