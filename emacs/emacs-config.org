@@ -1382,7 +1382,7 @@ Thus I will explicitly install this package rather than using the built-in versi
                                       :style wave
                                       :position nil))))))))
 #+end_src
-*** windmove                                               :windows:
+*** COMMENT windmove                                       :windows:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 20:16]
 :END:
@@ -5611,7 +5611,7 @@ Operate on current line if region undefined
                                                             1)
                                                           arg))))
 #+end_src
-*** windswap                                               :windows:
+*** COMMENT windswap                                       :windows:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 13:52]
 :END:
