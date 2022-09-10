@@ -1583,11 +1583,11 @@ I think it would be better to create my own theme, but I don't have enough time 
     ;; The result is dependent on the theme.
     (pcase-dolist (`(,face . ,parent)
                    '((shr-h1 . org-level-1)
-                     ((shr-h2 . org-level-2))
-                     ((shr-h3 . org-level-3))
-                     ((shr-h4 . org-level-4))
-                     ((shr-h5 . org-level-5))
-                     ((shr-h6 . org-level-6))))
+                     (shr-h2 . org-level-2)
+                     (shr-h3 . org-level-3)
+                     (shr-h4 . org-level-4)
+                     (shr-h5 . org-level-5)
+                     (shr-h6 . org-level-6)))
       (set-face-attribute face nil :inherit parent)))
 #+end_src
 *** Width and wrap
