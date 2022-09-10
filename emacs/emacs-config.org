@@ -1187,8 +1187,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
 #+begin_src emacs-lisp
   (setup shr
-    ;; Set `shr-bullet' for ease of pasting into org.
-    (:set shr-bullet "- "))
+    (:set shr-bullet " ‣ "))
 #+end_src
 *** simple                                      :formatting:writing:
 :PROPERTIES:
