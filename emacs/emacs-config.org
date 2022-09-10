@@ -2314,7 +2314,7 @@ Functional Org Mode API
 #+begin_src emacs-lisp
 (setup (:package org-ml))
 #+end_src
-*** org-noter
+*** COMMENT org-noter                                                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:59]
 :END:
