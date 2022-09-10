@@ -3002,7 +3002,6 @@ Consult integration for git
 
 #+begin_src emacs-lisp
   (setup (:package consult-ls-git)
-    (:global "C-x g" #'consult-ls-git-ls-status)
     (with-eval-after-load 'embark
       (add-to-list 'embark-keymap-alist
                    '(consult-ls-git-status . akirak-embark-git-file-map))))
@@ -3919,7 +3918,9 @@ Port of Sublime Text plugin GitGutter
   (setup (:package git-gutter)
     (add-hook 'after-init-hook #'global-git-gutter-mode)
 
-    (:global "M-g j" #'git-gutter:next-hunk
+    (define-key ctl-x-map "g" #'git-gutter)
+    (:global "C-c g" #'akirak-git-gutter-map
+             "M-g j" #'git-gutter:next-hunk
              "M-g k" #'git-gutter:previous-hunk)
 
     (:when-loaded
