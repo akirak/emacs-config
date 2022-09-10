@@ -4401,20 +4401,19 @@ A Git porcelain inside Emacs
                             (string-remove-suffix "/")
                             (file-name-directory))))))
 
+    ;; Replace the binding to compose-message
+    (define-key ctl-x-map "m" #'magit-dispatch)
+    (define-key ctl-x-map (kbd "M-s") #'magit-status)
+    (define-key ctl-x-x-map "e" (defun akirak/edit-source-file ()
+                                  "Visit a corresponding file in a Git repository."
+                                  (interactive)
+                                  (if (and buffer-file-name
+                                           (file-in-directory-p buffer-file-name "/nix/store/"))
+                                      (call-interactively #'akirak-twist-find-git-source)
+                                    (magit-blob-visit-file))))
+    (define-key ctl-x-x-map "m" #'magit-file-dispatch)
+
     (:status opinionated
-      (:global "<f8> <f8>" #'magit-status
-               "<f8> <f9>" #'magit-dispatch
-               "<f8> <f10>" #'magit-file-dispatch)
-
-      (:with-map ctl-x-x-map
-        (:bind "e" (defun akirak/edit-source-file ()
-                     "Visit a corresponding file in a Git repository."
-                     (interactive)
-                     (if (and buffer-file-name
-                              (file-in-directory-p buffer-file-name "/nix/store/"))
-                         (call-interactively #'akirak-twist-find-git-source)
-                       (magit-blob-visit-file)))))
-
       (:set magit-display-buffer-function
             ;; Based on 'magit-display-buffer-same-window-except-diff-v1
             (defun akirak/magit-display-buffer (buffer)
