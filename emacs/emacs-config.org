@@ -230,9 +230,9 @@ By default, settings inside =:status= clauses are not loaded.
                 (memq tag akirak/enabled-status-tags))
         (macroexp-progn progn))))
 #+end_src
-** Performance                                                    :packages:
+** Performance                                             :packages:
 # Note: Some of these should be loaded as early as possible.
-*** benchmark-init                               :profiling:initialization:
+*** benchmark-init                        :profiling:initialization:
 #+begin_quote
 Benchmarks Emacs require and load calls
 #+end_quote
@@ -242,7 +242,7 @@ Benchmarks Emacs require and load calls
     (:require benchmark-init)
     (add-hook 'after-init-hook 'benchmark-init/deactivate))
 #+end_src
-*** gcmh                                                      :performance:
+*** gcmh                                               :performance:
 #+begin_quote
 the Garbage Collector Magic Hack
 #+end_quote
@@ -296,11 +296,11 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
     "Function used to display popup windows."
     :type 'function)
 #+end_src
-** Macro packages                                                 :packages:
+** Macro packages                                          :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
-*** el-patch                                                        :Emacs:
+*** el-patch                                                 :Emacs:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-09 Wed 15:26]
 :END:
@@ -311,7 +311,7 @@ Future-proof your Elisp
 #+begin_src emacs-lisp
 (setup (:package el-patch))
 #+end_src
-*** COMMENT fullframe                                      :windows:ARCHIVE:
+*** COMMENT fullframe                              :windows:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:06]
 :END:
@@ -355,7 +355,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           ;; Common mistypes
           ("ort" "org")))))
 #+end_src
-*** autoinsert                                                    :expansion:
+*** autoinsert                                           :expansion:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 17:47]
 :END:
@@ -367,7 +367,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:with-mode auto-insert-mode
       (:hook-into after-init-hook)))
 #+end_src
-*** autorevert                                                         :IO:
+*** autorevert                                                  :IO:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -434,7 +434,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
       (:set browse-url-browser-function #'akirak-browse-url-external-browser
             browse-url-secondary-browser-function #'akirak-browse-url-external-browser)))
 #+end_src
-*** buffer.c                                        :formatting:visual:
+*** buffer.c                                     :formatting:visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -489,7 +489,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
                  '((major-mode . calendar-mode)
                    (display-buffer-in-side-window))))
 #+end_src
-*** callproc.c                                                    :process:
+*** callproc.c                                             :process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -499,7 +499,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:only-if (eq system-type 'windows-nt))
     (:set shell-file-name (executable-find "bash")))
 #+end_src
-*** compile                                                       :process:
+*** compile                                                :process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -566,7 +566,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
       ;; Use `desktop-after-read-hook' to display a dashboard.
       (add-hook 'desktop-globals-to-save 'desktop-after-read-hook)))
 #+end_src
-*** dired                                                           :dired:
+*** dired                                                    :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:47]
 :END:
@@ -579,7 +579,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
     (:bind "h" #'dired-up-directory))
 #+end_src
-*** ediff-wind                                                       :diff:
+*** ediff-wind                                                :diff:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -588,7 +588,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup ediff-wind
     (:set ediff-window-setup-function #'ediff-setup-windows-plain))
 #+end_src
-*** eldoc                                                :help:development:
+*** eldoc                                         :help:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:08]
 :END:
@@ -601,7 +601,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:set eldoc-documentation-strategy 'eldoc-documentation-compose)
     (:global "C-c e" #'eldoc-doc-buffer))
 #+end_src
-*** elec-pair                             :prog_mode:text_mode:parentheses:
+*** elec-pair                      :prog_mode:text_mode:parentheses:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -613,7 +613,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+end_src
 
 While the mode is generally useful, the exception is =lispy-mode=, which overrides =self-insert-command= and conflicts with the features of the package.
-*** electric                                                       :formatting:
+*** electric                                            :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -627,7 +627,7 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup electric)
 #+end_src
-*** elisp-mode                                    :Emacs__Lisp:major__mode:
+*** elisp-mode                             :Emacs__Lisp:major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 17:55]
 :END:
@@ -695,7 +695,7 @@ The built-in =electric= package provides the following modes:
   (setup executable
     (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p))
 #+end_src
-*** fileio.c                                                        :files:
+*** fileio.c                                                 :files:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -704,7 +704,7 @@ The built-in =electric= package provides the following modes:
   (setup fileio
     (:set delete-by-moving-to-trash t))
 #+end_src
-*** filelock.c                                                         :IO:
+*** filelock.c                                                  :IO:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -714,7 +714,7 @@ The built-in =electric= package provides the following modes:
     ;; lock files will kill `npm start'
     (:set create-lockfiles nil))
 #+end_src
-*** files                                                           :files:
+*** files                                                    :files:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -744,7 +744,7 @@ The built-in =electric= package provides the following modes:
   (setup find-func
     (:global "C-x M-l" #'find-library))
 #+end_src
-*** flymake                                                   :development:
+*** flymake                                            :development:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-19 Sat 16:33]
 :END:
@@ -768,7 +768,7 @@ The built-in =electric= package provides the following modes:
                 git-commit-mode-hook)
     (:unbind "C-," "C-." "C-;" "C-M-i" "C-c $"))
 #+end_src
-*** fns.c and xfns.c                                                   :UI:
+*** fns.c and xfns.c                                            :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -780,7 +780,7 @@ The built-in =electric= package provides the following modes:
   (setup xfns
     (:set x-gtk-use-system-tooltips nil))
 #+end_src
-*** frame                                                          :visual:
+*** frame                                                   :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -801,7 +801,7 @@ The built-in =electric= package provides the following modes:
   (setup help
     (define-key help-map (kbd "C-h") nil))
 #+end_src
-*** hl-line                                                        :visual:
+*** hl-line                                                 :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -831,7 +831,7 @@ The built-in =electric= package provides the following modes:
   (setup indent
     (:set tab-always-indent 'complete))
 #+end_src
-*** indent.c                                                   :formatting:
+*** indent.c                                            :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -872,7 +872,7 @@ The built-in =electric= package provides the following modes:
     (:file-match "\\.c?js\\'")
     (:set js-indent-level 2))
 #+end_src
-*** keymap.c                                                  :keybindings:
+*** keymap.c                                           :keybindings:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-19 Sat 23:59]
 :END:
@@ -897,7 +897,7 @@ The built-in =electric= package provides the following modes:
         (:bind "k" #'kill-this-buffer))
       (:global "<f12> <f12>" #'toggle-debug-on-error)))
 #+end_src
-*** minibuf.c                                                  :minibuffer:
+*** minibuf.c                                           :minibuffer:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:06]
 :END:
@@ -924,7 +924,7 @@ Resources:
 
 - https://github.com/minad/vertico#configuration
 
-*** minibuffer                                     :minibuffer:keybindings:
+*** minibuffer                              :minibuffer:keybindings:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 14:05]
 :END:
@@ -969,7 +969,7 @@ Resources:
   (setup mule-cmds
     (set-language-environment "UTF-8"))
 #+end_src
-*** outline                                                       :editing:
+*** outline                                                :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -980,7 +980,7 @@ Resources:
       (:status opinionated
         (:bind "M-RET" #'outline-insert-heading))))
 #+end_src
-*** paragraphs                                                       :text:
+*** paragraphs                                                :text:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -989,7 +989,7 @@ Resources:
   (setup paragraphs
     (:set sentence-end-double-space nil))
 #+end_src
-*** paren                                                     :parentheses:
+*** paren                                              :parentheses:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1013,7 +1013,7 @@ Resources:
                             eww-mode-hook
                             help-mode-hook))))
 #+end_src
-*** process.c                                                     :process:
+*** process.c                                              :process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1023,7 +1023,7 @@ Resources:
     ;; Expand read-process-output-max for lsp-mode
     (:set read-process-output-max (* 1024 1024)))
 #+end_src
-*** profiler                                              :Emacs:profiling:
+*** profiler                                       :Emacs:profiling:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 07:49]
 :END:
@@ -1076,7 +1076,7 @@ Operations on the current project
     (with-eval-after-load 'embark
       (define-key embark-file-map (kbd "+") #'akirak-project-init)))
 #+end_src
-*** prolog                                             :major__mode:Prolog:
+*** prolog                                      :major__mode:Prolog:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:33]
 :END:
@@ -1085,7 +1085,7 @@ Operations on the current project
   (setup prolog
     (:file-match "\\.pl\\'"))
 #+end_src
-*** re-builder                                                     :regexp:
+*** re-builder                                              :regexp:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 21:01]
 :END:
@@ -1100,7 +1100,7 @@ Operations on the current project
                   (cond ((reb-lisp-syntax-p) (el-patch-swap "'()" "`(and bol)"))
                         (t "")))))
 #+end_src
-*** recentf                                                 :history:files:
+*** recentf                                          :history:files:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1131,7 +1131,7 @@ Operations on the current project
     (:hook-into after-init-hook)
     (:set repeat-echo-function #'ignore))
 #+end_src
-*** savehist                                                      :history:
+*** savehist                                               :history:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:08]
 :END:
@@ -1142,7 +1142,7 @@ Operations on the current project
 #+end_src
 
 This is a recommended setting for use with vertico. See https://github.com/minad/vertico#configuration.
-*** saveplace                                                     :history:
+*** saveplace                                              :history:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1190,7 +1190,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     ;; Set `shr-bullet' for ease of pasting into org.
     (:set shr-bullet "- "))
 #+end_src
-*** simple                                             :formatting:writing:
+*** simple                                      :formatting:writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -1264,7 +1264,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
                        (float-time (time-subtract after-init-time before-init-time))
                        gcs-done)))
 #+end_src
-*** subr                                                               :UI:
+*** subr                                                        :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1296,7 +1296,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
       (unless (tempo-forward-mark)
         (local-unset-key [tab]))))
 #+end_src
-*** terminal.c                                                         :UI:
+*** terminal.c                                                  :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1305,7 +1305,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
   (setup terminal
     (:set ring-bell-function 'ignore))
 #+end_src
-*** tooltip                                                            :UI:
+*** tooltip                                                     :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1328,7 +1328,7 @@ Transient commands
 
 Because transient is developed by the maintainer of magit, it is better to update them together.
 Thus I will explicitly install this package rather than using the built-in version.
-*** vc-hooks                                                           :VC:
+*** vc-hooks                                                    :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1338,7 +1338,7 @@ Thus I will explicitly install this package rather than using the built-in versi
     (:set vc-follow-symlinks t
           vc-make-backup-files t))
 #+end_src
-*** view                                                       :navigation:
+*** view                                                :navigation:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1363,7 +1363,7 @@ Thus I will explicitly install this package rather than using the built-in versi
       (:hook-into prog-mode-hook
                   conf-mode-hook)))
 #+end_src
-*** whitespace                                          :visual:formatting:
+*** whitespace                                   :visual:formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -1383,7 +1383,7 @@ Thus I will explicitly install this package rather than using the built-in versi
                                       :style wave
                                       :position nil))))))))
 #+end_src
-*** windmove                                                      :windows:
+*** windmove                                               :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 20:16]
 :END:
@@ -1400,7 +1400,7 @@ Thus I will explicitly install this package rather than using the built-in versi
       (:global "C-c [" #'windmove-left
                "C-c ]" #'windmove-right)))
 #+end_src
-*** window                                                     :navigation:
+*** window                                              :navigation:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1439,7 +1439,7 @@ Thus I will explicitly install this package rather than using the built-in versi
            (scroll-down arg)
          (scroll-down (akirak/scroll-half-height))))))
 #+end_src
-*** winner                                                :history:windows:
+*** winner                                         :history:windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
@@ -1477,7 +1477,7 @@ Thus I will explicitly install this package rather than using the built-in versi
           bidi-display-reordering 'left-to-right
           bidi-paragraph-direction 'left-to-right))
 #+end_src
-** Typography settings                                              :visual:
+** Typography settings                                       :visual:
 *** Theme packages                                        :packages:
 # Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
 # I want a separate section for themes to add this comment.
@@ -1485,8 +1485,6 @@ Thus I will explicitly install this package rather than using the built-in versi
 The following theme packages are bundled with configuration:
 
 #+begin_src emacs-lisp
-  (setup (:package color-theme-sanityinc-tomorrow))
-
   (setup (:package poet-theme)
     (:set poet-theme-variable-headers nil))
 #+end_src
@@ -1574,12 +1572,12 @@ I think it would be better to create my own theme, but I don't have enough time 
 #+begin_src emacs-lisp
   (setq akirak/default-body-width 86)
 #+end_src
-** Org                                                            :packages:
+** Org                                                     :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
-*** citar                                                    :bibliography:
+*** citar                                             :bibliography:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-23 Wed 23:59]
 :END:
@@ -1590,7 +1588,7 @@ Citation-related commands for org, latex, markdown
 #+begin_src emacs-lisp
 (setup (:package citar))
 #+end_src
-*** doct                                                          :capture:
+*** doct                                                   :capture:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 20:08]
 :END:
@@ -1640,6 +1638,7 @@ Outline-based notes management and organizer
             org-startup-truncated nil
             org-enforce-todo-dependencies t
             org-use-speed-commands t
+            org-tags-column -70
             org-track-ordered-property-with-tag t
             org-extend-today-until 5
             ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
@@ -2201,7 +2200,7 @@ Facade Org files
     (:when-loaded
       (add-hook 'mode-line-misc-info org-dog-root-mode-item)))
 #+end_src
-*** COMMENT org-dynamic-bullets                       :aesthetics:ARCHIVE:
+*** COMMENT org-dynamic-bullets                 :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 16:59]
 :END:
@@ -2223,7 +2222,7 @@ Integrate Org with epubinfo program
   (setup (:package org-epubinfo)
     (:nixpkgs epubinfo))
 #+end_src
-*** COMMENT org-journal                                          :ARCHIVE:
+*** COMMENT org-journal                                    :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
@@ -2243,7 +2242,7 @@ Per-entry language environment
 #+begin_src emacs-lisp
 (setup (:package org-lang-env))
 #+end_src
-*** COMMENT orglink                                          :links:ARCHIVE:
+*** COMMENT orglink                                  :links:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:28]
 :END:
@@ -2257,7 +2256,7 @@ use Org Mode links in other modes
 (setup (:package orglink))
 #+end_src
 
-*** org-make-toc                                            :documentation:
+*** org-make-toc                                     :documentation:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-22 Sat 20:50]
 :END:
@@ -2269,7 +2268,7 @@ Automatic tables of contents for Org files
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
 #+end_src
-*** org-ml                                                        :library:
+*** org-ml                                                 :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-17 Thu 20:26]
 :END:
@@ -2302,7 +2301,7 @@ Replace org-table characters with box-drawing unicode glyphs.
 #+begin_src emacs-lisp
 (setup (:package org-pretty-table))
 #+end_src
-*** org-ql                                                        :library:
+*** org-ql                                                 :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-22 Sat 20:50]
 :END:
@@ -2353,7 +2352,7 @@ Create reverse date trees in org-mode
             (property "CREATED_TIME"))
           org-reverse-datetree-month-format "%Y-%m"))
 #+end_src
-*** COMMENT org-starter                                            :ARCHIVE:
+*** COMMENT org-starter                                    :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 20:14]
 :END:
@@ -2409,7 +2408,7 @@ Transclude text content via links
 #+begin_src emacs-lisp
 (setup (:package org-transclusion))
 #+end_src
-*** COMMENT org-visual-indent                         :aesthetics:ARCHIVE:
+*** COMMENT org-visual-indent                   :aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 23:59]
 :END:
@@ -2443,12 +2442,12 @@ Github Flavored Markdown Back-End for Org Export Engine
 #+begin_src emacs-lisp
 (setup (:package ox-gfm))
 #+end_src
-** Packages                                                       :packages:
+** Packages                                                :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
 A bunch of useful packages are configured here.
-*** academic-phrases                                              :writing:
+*** academic-phrases                                       :writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 11:28]
 :END:
@@ -2459,7 +2458,7 @@ Bypass that mental block when writing your papers.
 #+begin_src emacs-lisp
 (setup (:package academic-phrases))
 #+end_src
-*** ace-window                                                :keybindings:
+*** ace-window                                         :keybindings:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -2551,7 +2550,7 @@ Quickly switch windows.
                         (when (window-live-p initial-window)
                           (select-window initial-window))))))))
 #+end_src
-*** adaptive-wrap                                                    :visual:
+*** adaptive-wrap                                           :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 17:56]
 :END:
@@ -2562,7 +2561,7 @@ Smart line-wrapping with wrap-prefix
 #+begin_src emacs-lisp
   (setup (:package adaptive-wrap))
 #+end_src
-*** COMMENT affe                                   :completion:grep:ARCHIVE:
+*** COMMENT affe                           :completion:grep:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-28 Thu 05:52]
 :END:
@@ -2573,7 +2572,7 @@ Asynchronous Fuzzy Finder for Emacs
 #+begin_src emacs-lisp
 (setup (:package affe))
 #+end_src
-*** aggressive-indent                                          :formatting:
+*** aggressive-indent                                   :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 20:26]
 :END:
@@ -2655,7 +2654,7 @@ This is a collection of extra utilities for various packages.
                    '(akirak-consult-org-olp-with-file
                      . akirak-consult-org-olp-to-marker))))
 #+end_src
-**** akirak-org-secrets                                          :secrets:
+**** akirak-org-secrets                                   :secrets:
 #+begin_src emacs-lisp
   (setup akirak-org-secrets
     (:global "<f12> S i" #'akirak-org-secrets-insert
@@ -2663,7 +2662,7 @@ This is a collection of extra utilities for various packages.
              "<f12> S s" #'akirak-org-secrets-show
              "<f12> S c" #'akirak-org-secrets-capture))
 #+end_src
-**** akirak-elec-pair                                        :parentheses:
+**** akirak-elec-pair                                 :parentheses:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:39]
 :END:
@@ -2683,7 +2682,7 @@ This is a collection of extra utilities for various packages.
 #+end_src
 
 I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it had dependency on expand-region I wanted to get rid of, so I implemented a simpler alternative.
-**** akirak-header-line                                               :UI:
+**** akirak-header-line                                        :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-18 Mon 08:15]
 :END:
@@ -2702,7 +2701,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       ("C-c i" akirak-image-import-file))
     (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
 #+end_src
-**** COMMENT akirak-japanese                                       :ARCHIVE:
+**** COMMENT akirak-japanese                              :ARCHIVE:
 #+begin_src emacs-lisp
   (setup akirak-japanese
     ;; Local search
@@ -2720,7 +2719,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-snippet
     (define-key ctl-x-r-map "/" #'akirak-snippet-search))
 #+end_src
-**** akirak-url                                                :clipboard:
+**** akirak-url                                         :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
 
 #+begin_src emacs-lisp
@@ -2733,7 +2732,7 @@ Complete a URL from the clipboard and the kill ring and insert as a link
     (:embark embark-file-map "s"
       ("C-l" akirak-org-store-link-to-file)))
 #+end_src
-**** akirak-window                                               :windows:
+**** akirak-window                                        :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 14:10]
 :END:
@@ -2750,7 +2749,7 @@ This is an extra functions for window management.
                "C-x M-o" #'akirak-window-swap-two-windows
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
-*** COMMENT all-the-icons                                     :UI:ARCHIVE:
+*** COMMENT all-the-icons                               :UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:28]
 :END:
@@ -2758,7 +2757,7 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup (:package all-the-icons))
 #+end_src
-**** COMMENT all-the-icons-completion                           :ARCHIVE:
+**** COMMENT all-the-icons-completion                     :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:29]
 :END:
@@ -2770,7 +2769,7 @@ This is an extra functions for window management.
       (add-hook 'marginalia-mode
                 #'all-the-icons-completion-marginalia-setup)))
 #+end_src
-**** COMMENT all-the-icons-dired                                :ARCHIVE:
+**** COMMENT all-the-icons-dired                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:30]
 :END:
@@ -2779,7 +2778,7 @@ This is an extra functions for window management.
   (setup (:package all-the-icons-dired)
     (:hook-into dired-mode))
 #+end_src
-*** anzu                                                   :editing:regexp:
+*** anzu                                            :editing:regexp:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 21:00]
 :END:
@@ -2796,7 +2795,7 @@ Show number of matches in mode-line while searching
     (:global [remap query-replace] #'anzu-query-replace
              [remap query-replace-regexp] #'anzu-query-replace-regexp))
 #+end_src
-*** auto-yasnippet                                                :expansion:
+*** auto-yasnippet                                       :expansion:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 15:39]
 :END:
@@ -2824,7 +2823,7 @@ Jump to arbitrary positions in visible text and select text quickly.
     (:global "C-'" #'avy-goto-char-timer
              "M-g z" #'avy-goto-char-in-line))
 #+end_src
-*** beancount                                            :@extra:beancount:
+*** beancount                                     :@extra:beancount:
 #+begin_quote
 A major mode to edit Beancount input files.
 #+end_quote
@@ -2845,7 +2844,7 @@ A major mode to edit Beancount input files.
         (:bind
          "d" #'beancount-insert-date))))
 #+end_src
-*** blamer                                                             :VC:
+*** blamer                                                      :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 17:48]
 :END:
@@ -2862,7 +2861,7 @@ Show git blame info about current line
     (define-key ctl-x-x-map (kbd "b") #'blamer-mode)
     (define-key help-map (kbd "M-g") #'blamer-show-commit-info))
 #+end_src
-*** COMMENT browse-at-remote                                       :ARCHIVE:
+*** COMMENT browse-at-remote                               :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-08 Fri 12:35]
 :END:
@@ -2873,7 +2872,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
 #+begin_src emacs-lisp
 (setup (:package browse-at-remote))
 #+end_src
-*** COMMENT bufler                                               :ARCHIVE:
+*** COMMENT bufler                                         :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-02 Sun 22:51]
 :END:
@@ -2884,7 +2883,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
-*** buttercup                             :Emacs__Lisp:testing:development:
+*** buttercup                      :Emacs__Lisp:testing:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-04 Fri 18:14]
 :END:
@@ -2913,7 +2912,7 @@ Behavior-Driven Emacs Lisp Testing
       (advice-add #'buttercup-colorize :filter-return #'xterm-color-filter)))
 #+end_src
 
-*** cape                                                       :completion:
+*** cape                                                :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:17]
 :END:
@@ -2930,7 +2929,7 @@ Completion At Point Extensions
              ;; It's C-M-/ and C-x '.
              [remap expand-abbrev] #'cape-abbrev))
 #+end_src
-*** consult                                                    :completion:
+*** consult                                             :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:33]
 :END:
@@ -3007,7 +3006,7 @@ Consult integration for git
       (add-to-list 'embark-keymap-alist
                    '(consult-ls-git-status . akirak-embark-git-file-map))))
 #+end_src
-*** corfu                                                   :completion:UI:
+*** corfu                                            :completion:UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:19]
 :END:
@@ -3045,7 +3044,7 @@ Documentation popup for Corfu
   (setup (:package corfu-doc)
     (:hook-into corfu-mode-hook))
 #+end_src
-*** COMMENT dash-docs                                       :documentation:ARCHIVE:
+*** COMMENT dash-docs                        :documentation:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-20 Wed 17:28]
 :END:
@@ -3069,7 +3068,7 @@ Consult front-end for dash-docs
 #+begin_src emacs-lisp
 (setup (:package consult-dash))
 #+end_src
-*** deadgrep                                                         :grep:
+*** deadgrep                                                  :grep:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -3081,7 +3080,7 @@ fast, friendly searching with ripgrep
 #+begin_src emacs-lisp
 (setup (:package deadgrep))
 #+end_src
-*** devdocs                                                     :reference:
+*** devdocs                                              :reference:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-28 Sun 13:31]
 :END:
@@ -3094,7 +3093,7 @@ Emacs viewer for DevDocs
   (setup (:package devdocs)
     (define-key help-map (kbd "d") #'devdocs-lookup))
 #+end_src
-*** COMMENT dired-auto-readme                                :dired:ARCHIVE:
+*** COMMENT dired-auto-readme                        :dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-23 Sat 23:59]
 :END:
@@ -3107,7 +3106,7 @@ Auto-display README files in Dired biffers
   (setup (:package dired-auto-readme)
     (:hook-into dired-mode))
 #+end_src
-*** dired-collapse                                                  :dired:
+*** dired-collapse                                           :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:44]
 :END:
@@ -3131,7 +3130,7 @@ Dired with recursive directory sizes
 #+begin_src emacs-lisp
 (setup (:package dired-du))
 #+end_src
-*** dired-filter                                                    :dired:
+*** dired-filter                                             :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:50]
 :END:
@@ -3201,7 +3200,7 @@ Ibuffer-like filtering for dired
                   ("Emacs Lisp"
                    (extension "el"))))))))
 #+end_src
-*** dired-hacks-utils                                               :dired:
+*** dired-hacks-utils                                        :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:49]
 :END:
@@ -3216,7 +3215,7 @@ Utilities and helpers for dired-hacks collection
       "n" 'dired-hacks-next-file
       "p" 'dired-hacks-previous-file))
 #+end_src
-*** COMMENT dired-hide-dotfiles                              :dired:ARCHIVE:
+*** COMMENT dired-hide-dotfiles                      :dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 19:08]
 :END:
@@ -3228,7 +3227,7 @@ Hide dotfiles in dired
 #+begin_src emacs-lisp
 (setup (:package dired-hide-dotfiles))
 #+end_src
-*** COMMENT dired-k                                        :dired:ARCHIVE:
+*** COMMENT dired-k                                  :dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:45]
 :END:
@@ -3264,7 +3263,7 @@ Major mode for .env files
   (setup (:package dotenv-mode)
     (:file-match "\\.env\\(?:\\.[a-z]+\\)?\\'"))
 #+end_src
-*** duckduckgo                                                     :search:
+*** duckduckgo                                              :search:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-17 Thu 23:59]
 :END:
@@ -3278,7 +3277,7 @@ Run DuckDuckGo search
     ;; Replace `eww-search-words'
     (:global "M-s M-w" #'duckduckgo))
 #+end_src
-*** dumb-jump                                                  :navigation:
+*** dumb-jump                                           :navigation:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -3301,7 +3300,7 @@ Jump to definition for 50+ languages without configuration
                 (add-to-list 'xref-backend-functions
                              #'dumb-jump-xref-activate))))
 #+end_src
-*** COMMENT ediprolog                                       :Prolog:ARCHIVE:
+*** COMMENT ediprolog                               :Prolog:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
 :END:
@@ -3320,7 +3319,7 @@ Emacs Does Interactive Prolog
 #+end_src
 
 [[https://lib.rs/crates/scryer-prolog][scryer-prolog]] is the bleeding-edge implementation of Prolog (like GHC to Haskell), and it is installed with this package.
-*** editorconfig                                               :formatting:
+*** editorconfig                                        :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -3382,7 +3381,7 @@ Client for Language Server Protocol (LSP) servers
           (add-hook 'before-save-hook #'eglot-format-buffer nil t)
         (remove-hook 'before-save-hook #'eglot-format-buffer t))))
 #+end_src
-*** eldoc-eval                                                      :Emacs:
+*** eldoc-eval                                               :Emacs:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 12:31]
 :END:
@@ -3397,7 +3396,7 @@ Enable eldoc support when minibuffer is in use.
 #+end_src
 
 I use this package mostly because it uses =pp-eval-expression= for printing the result, but it also has some other nice features, and it works flawlessly.
-*** COMMENT electric-operator                           :formatting:ARCHIVE:
+*** COMMENT electric-operator                   :formatting:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -3463,7 +3462,7 @@ Major mode for editing Elixir files
                              (list (f-base (-last-item segments))))
                      ".")))))
 #+end_src
-*** elx                                   :Emacs__Lisp:development:library:
+*** elx                            :Emacs__Lisp:development:library:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
 :END:
@@ -3474,7 +3473,7 @@ extract information from Emacs Lisp libraries
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
-*** emacsql-sqlite                                                :library:
+*** emacsql-sqlite                                         :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:46]
 :END:
@@ -3533,7 +3532,7 @@ Consult integration for Embark
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
 #+end_src
-*** COMMENT engine-mode                                            :ARCHIVE:
+*** COMMENT engine-mode                                    :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-18 Mon 12:32]
 :END:
@@ -3558,7 +3557,7 @@ Support for `direnv' that operates buffer-locally
     (:with-mode envrc-global-mode
       (:hook-into after-init-hook)))
 #+end_src
-*** epkg                                                            :Emacs:
+*** epkg                                                     :Emacs:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 14:36]
 :END:
@@ -3569,7 +3568,7 @@ browse the Emacsmirror package database
 #+begin_src emacs-lisp
   (setup (:package epkg))
 #+end_src
-**** epkg-marginalia                                    :Emacs:completion:
+**** epkg-marginalia                             :Emacs:completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-27 Sun 18:16]
 :END:
@@ -3583,7 +3582,7 @@ Show Epkg information in completion annotations
       (cl-pushnew 'epkg-marginalia-annotate-package
                   (alist-get 'package marginalia-annotator-registry))))
 #+end_src
-*** eros                                          :Emacs__Lisp:development:
+*** eros                                   :Emacs__Lisp:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:05]
 :END:
@@ -3596,7 +3595,7 @@ Evaluation Result OverlayS for Emacs Lisp
   (setup (:package eros)
     (:hook-into emacs-lisp-mode))
 #+end_src
-*** COMMENT esup                                 :startup:profiling:ARCHIVE:
+*** COMMENT esup                         :startup:profiling:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 15:44]
 :END:
@@ -3608,7 +3607,7 @@ The Emacs StartUp Profiler (ESUP)
 #+begin_src emacs-lisp
 (setup (:package esup))
 #+end_src
-*** COMMENT evil-nerd-commenter                            :editing:ARCHIVE:
+*** COMMENT evil-nerd-commenter                    :editing:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:26]
 :END:
@@ -3623,7 +3622,7 @@ Comment/uncomment lines efficiently. Like Nerd Commenter in Vim
              ;; "C-c p" #'evilnc-comment-or-uncomment-paragraphs
              ))
 #+end_src
-*** fancy-dabbrev                                              :completion:
+*** fancy-dabbrev                                       :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:24]
 :END:
@@ -3677,7 +3676,7 @@ Like dabbrev-expand with preview and popup menu
     (with-eval-after-load 'lispy
       (fancy-dabbrev-remap lispy-mode-map)))
 #+end_src
-*** fanyi                                                      :dictionary:
+*** fanyi                                               :dictionary:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 23:59]
 :END:
@@ -3737,7 +3736,7 @@ Correcting words with flyspell via avy-menu interface
     (with-eval-after-load "flyspell-correct"
       (require 'flyspell-correct-avy-menu)))
 #+end_src
-*** forge                                                     :VC:project:
+*** forge                                               :VC:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
 :END:
@@ -3748,7 +3747,7 @@ Access Git forges from Magit
 #+begin_src emacs-lisp
 (setup (:package forge))
 #+end_src
-*** fwb-cmds                                                       :window:
+*** fwb-cmds                                                :window:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-08 Tue 16:02]
 :END:
@@ -3761,7 +3760,7 @@ misc frame, window and buffer commands
 #+end_src
 
 I need this package for =toggle-window-split= command.
-*** ghelp                                           :reference:development:
+*** ghelp                                    :reference:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:45]
 :END:
@@ -3796,7 +3795,7 @@ Ghelp+Helpful
 #+begin_src emacs-lisp
 (setup (:package ghelp-helpful))
 #+end_src
-*** gif-screencast                                      :screen__recording:
+*** gif-screencast                               :screen__recording:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:38]
 :END:
@@ -3814,7 +3813,7 @@ One-frame-per-action GIF recording
               "graphicsmagick-imagemagick-compat"))
 #+end_src
 
-*** git-attr                                               :files:
+*** git-attr                                                 :files:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -3831,7 +3830,7 @@ Make vendored and generated files read only.
   (setup (:package git-attr)
     (add-hook 'find-file-hook #'git-attr-linguist))
 #+end_src
-*** git-auto-commit-mode                                               :VC:
+*** git-auto-commit-mode                                        :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-26 Sat 20:33]
 :ID:       0ec2d09e-7e97-40ba-aa5a-7af027187f62
@@ -3906,7 +3905,7 @@ A recommended way to turn on automatic commits is to define local variables in =
   ((org-mode . ((gac-debounce-interval . 180)
                 (eval . (git-auto-commit-mode t)))))
 #+end_src
-*** git-gutter                                                         :VC:
+*** git-gutter                                                  :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 19:08]
 :END:
@@ -3953,7 +3952,7 @@ Run GitHub Linguist on projects to collect information
     (:nixpkgs "github-linguist")
     (:set github-linguist-executable "github-linguist"))
 #+end_src
-*** git-identity                                                       :VC:
+*** git-identity                                                :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 15:24]
 :END:
@@ -3981,7 +3980,7 @@ Identity management for (ma)git
            (push (cons ,address (quote ,args))
                  git-identity-list)))))
 #+end_src
-*** git-modes                                               :VC:major_mode:
+*** git-modes                                        :VC:major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -4009,7 +4008,7 @@ Major mode for Gleam
   (setup (:package gleam-mode)
     (:file-match "\\.gleam\\'"))
 #+end_src
-*** go-mode                                                   :major__mode:
+*** go-mode                                            :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 23:59]
 :END:
@@ -4028,7 +4027,7 @@ Major mode for the Go programming language
            "\n\nimport (\n"
            ")\n\n"))))
 #+end_src
-*** go-translate                                              :translation:
+*** go-translate                                       :translation:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-02 Sat 23:59]
 :END:
@@ -4042,7 +4041,7 @@ Translation framework supports multiple engines such as Google/Bing/DeepL
     (:set gts-translate-list '(("ja" "en")
                                ("zh" "en"))))
 #+end_src
-*** graphql-mode                                                      :web:
+*** graphql-mode                                               :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
 :END:
@@ -4079,7 +4078,7 @@ Robust automatic language detection
 #+begin_src emacs-lisp
 (setup (:package guess-language))
 #+end_src
-*** haskell-mode                                              :major__mode:
+*** haskell-mode                                       :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
@@ -4123,7 +4122,7 @@ A Haskell editing mode
                       "  where\n\n"
                       _))))
 #+end_src
-*** COMMENT haskell-tng-mode                 :Haskell:major__mode:ARCHIVE:
+*** COMMENT haskell-tng-mode           :Haskell:major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:02]
 :END:
@@ -4132,7 +4131,7 @@ A Haskell editing mode
   (setup (:package haskell-tng-mode)
     (:file-match "\\.hs\\'"))
 #+end_src
-*** hcl-mode                                                    :Terraform:
+*** hcl-mode                                             :Terraform:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
 :END:
@@ -4147,7 +4146,7 @@ Major mode for Hashicorp
                  "\\.prisma\\'"
                  "\\.hcl\\'"))
 #+end_src
-*** helpful                                               :reference:Emacs:
+*** helpful                                        :reference:Emacs:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:50]
 :END:
@@ -4166,7 +4165,7 @@ A better *help* buffer
              [remap describe-key] #'helpful-key
              [remap describe-symbol] #'helpful-symbol))
 #+end_src
-*** hercules                                                  :keybindings:
+*** hercules                                           :keybindings:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:51]
 :END:
@@ -4178,7 +4177,7 @@ An auto-magical, which-key-based hydra banisher.
 #+begin_src emacs-lisp
 (setup (:package hercules))
 #+end_src
-*** highlight-indent-guides                                            :UI:
+*** highlight-indent-guides                                     :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -4194,7 +4193,7 @@ Minor mode to highlight indentation
 #+end_src
 
 This is helpful in programming languages that depend on indentation levels.
-*** hl-todo                                                   :development:
+*** hl-todo                                            :development:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-02 Wed 15:58]
 :END:
@@ -4207,7 +4206,7 @@ highlight TODO and similar keywords
     (:status opinionated
       (:global "M-i t" #'hl-todo-insert)))
 #+end_src
-*** huan                                                          :editing:
+*** huan                                                   :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 21:11]
 :END:
@@ -4223,7 +4222,7 @@ Replace things with predefined alternatives
       (define-key embark-defun-map "`" #'huan-defun)
       (define-key embark-identifier-map "`" #'huan-symbol)))
 #+end_src
-*** iedit                                                         :editing:
+*** iedit                                                  :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:51]
 :END:
@@ -4262,7 +4261,7 @@ A major mode for editing JSON files
       (add-to-list 'org-src-lang-modes
                    '("json" . jsonian))))
 #+end_src
-*** COMMENT json-mode                                  :major__mode:ARCHIVE:
+*** COMMENT json-mode                          :major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
@@ -4275,7 +4274,7 @@ Major mode for editing JSON files.
   (setup (:package json-mode)
     (:file-match "\\.json\\'" "\\.lock\\'"))
 #+end_src
-*** kind-icon                                                          :UI:
+*** kind-icon                                                   :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:22]
 :END:
@@ -4291,7 +4290,7 @@ Completion kind icons
       (require 'kind-icon)
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
-*** license-templates                                     :development:OSS:
+*** license-templates                              :development:OSS:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-06 Sun 14:30]
 :END:
@@ -4303,7 +4302,7 @@ Create LICENSE using GitHub API
 #+begin_src emacs-lisp
   (setup (:package license-templates))
 #+end_src
-*** link-hint                                                       :links:
+*** link-hint                                                :links:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 17:39]
 :END:
@@ -4322,7 +4321,7 @@ Use avy to open, copy, etc. visible links
         (:with-map Info-mode-map
           (:bind "f" #'link-hint-open-link)))))
 #+end_src
-*** lispy                                 :Emacs__Lisp:structured__editing:
+*** lispy                          :Emacs__Lisp:structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:36]
 :END:
@@ -4367,7 +4366,7 @@ For Emacs Lisp, I use lispy.
 
 Lispy is not turned on by default.
 Its configuration is about my habits, so it is put in [[file:compat.el::(setup lispy][compat.el]].
-*** macrostep                                      :emacs_lisp:development:
+*** macrostep                               :emacs_lisp:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:52]
 :END:
@@ -4381,7 +4380,7 @@ interactive macro expander
 
 To use it, turn on =macrostep-mode=.
 
-*** magit                                                             :git:
+*** magit                                                      :git:
 #+begin_quote
 A Git porcelain inside Emacs
 #+end_quote
@@ -4478,7 +4477,7 @@ A Git porcelain inside Emacs
             (revert-buffer))
         (user-error "No commit at point"))))
 #+end_src
-*** magit-delta                                                   :VC:diff:
+*** magit-delta                                            :VC:diff:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 13:33]
 :END:
@@ -4500,7 +4499,7 @@ Use Delta when displaying diffs in Magit
               (append magit-delta-delta-args
                       '("--features" "magit-delta"))))))
 #+end_src
-*** magit-todos                                                        :VC:
+*** magit-todos                                                 :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -4536,7 +4535,7 @@ Enrich existing commands with completion annotations
       (add-to-list 'marginalia-annotator-registry
                    '(directory marginalia-annotate-file builtin none))))
 #+end_src
-*** markdown-mode                                             :major__mode:
+*** markdown-mode                                      :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 14:12]
 :END:
@@ -4568,7 +4567,7 @@ major mode for working with mermaid graphs
 
     (:file-match "\\.mmd\\'"))
 #+end_src
-*** mini-modeline                                                      :UI:
+*** mini-modeline                                               :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:16]
 :END:
@@ -4629,7 +4628,7 @@ Display modeline in minibuffer
                       ""))
           ""))))
 #+end_src
-*** mlscroll                                                  :aesthetics:UI:
+*** mlscroll                                         :aesthetics:UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
@@ -4644,7 +4643,7 @@ A scroll bar for the modeline
     (:with-mode mlscroll-mode
       (:hook-into after-init-hook)))
 #+end_src
-*** move-dup                                                      :editing:
+*** move-dup                                               :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 20:59]
 :END:
@@ -4677,7 +4676,7 @@ description
   (setup (:package nickel-mode)
     (:file-match "\\.ncl\\'"))
 #+end_src
-*** nix26                                                     :Nix:project:
+*** nix26                                              :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
 :END:
@@ -4689,7 +4688,7 @@ Frontend for experimental commands of Nix
 #+begin_src emacs-lisp
 (setup (:package nix26))
 #+end_src
-*** nix-mode                                                          :Nix:
+*** nix-mode                                                   :Nix:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -4717,7 +4716,7 @@ Update "fetch" blocks in .nix expressions
 #+begin_src emacs-lisp
 (setup (:package nix-update))
 #+end_src
-*** nov                                                      :reading:EPUB:
+*** nov                                               :reading:EPUB:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
@@ -4742,7 +4741,7 @@ Featureful EPUB reader mode
                          #'nov-render-document
                          nil t)))))
 #+end_src
-*** olivetti                                                      :writing:
+*** olivetti                                               :writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-22 Fri 23:59]
 :END:
@@ -4761,7 +4760,7 @@ Minor mode for a nice writing environment
                 (lambda (&rest _args)
                   (run-hooks 'olivetti-expand-hook))))
 #+end_src
-*** orderless                                                  :completion:
+*** orderless                                           :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:14]
 :END:
@@ -4779,7 +4778,7 @@ Resources:
 - https://github.com/minad/vertico#configuration
 
 It is also possible to use Helm as a completion style. See https://github.com/oantolin/orderless#ivy-and-helm. I will use orderless primarily because it is smaller than Helm.
-*** orgit                                                           :links:
+*** orgit                                                    :links:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:28]
 :END:
@@ -4790,7 +4789,7 @@ Support for Org links to Magit buffers
 #+begin_src emacs-lisp
 (setup (:package orgit))
 #+end_src
-*** package-lint                                        :Emacs:development:
+*** package-lint                                 :Emacs:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:06]
 :END:
@@ -4802,7 +4801,7 @@ A linting library for elisp package authors
 #+begin_src emacs-lisp
 (setup (:package package-lint))
 #+end_src
-*** page-break-lines                                               :visual:
+*** page-break-lines                                        :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:37]
 :END:
@@ -4819,7 +4818,7 @@ Display ^L page breaks as tidy horizontal lines
                 compilation-mode-hook
                 haskell-mode-hook))
 #+end_src
-*** pinyin                                                        :Chinese:
+*** pinyin                                                 :Chinese:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-23 Tue 23:59]
 :END:
@@ -4842,7 +4841,7 @@ HTTP library
 #+begin_src emacs-lisp
 (setup (:package plz))
 #+end_src
-*** COMMENT pocket-reader                                  :reading:ARCHIVE:
+*** COMMENT pocket-reader                          :reading:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-05 Tue 18:19]
 :END:
@@ -4854,7 +4853,7 @@ Client for Pocket reading list
 #+begin_src emacs-lisp
   (setup (:package pocket-reader))
 #+end_src
-*** COMMENT poly-astro                                                    :ARCHIVE:
+*** COMMENT poly-astro                                     :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-04 Thu 12:37]
 :END:
@@ -4868,7 +4867,7 @@ A polymode for astro files
     (:with-mode poly-astro
       (:file-match "\\.astro\\'")))
 #+end_src
-*** popper                                                        :windows:
+*** popper                                                 :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-01 Tue 23:59]
 :END:
@@ -4908,7 +4907,7 @@ Summon and dismiss buffers as popups
                      (interactive)
                      (akirak/popper-display-buffer "*compilation*"))))
 #+end_src
-*** posframe                                                   :UI:library:
+*** posframe                                            :UI:library:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-25 Fri 10:57]
 :END:
@@ -4920,7 +4919,7 @@ Pop a posframe (just a frame) at point
 #+begin_src emacs-lisp
 (setup (:package posframe))
 #+end_src
-*** project-hercules                                  :project:keybindings:
+*** project-hercules                           :project:keybindings:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 15:16]
 :END:
@@ -4964,7 +4963,7 @@ Per-project transient keymaps
                     (akirak/define-nix-run "update-elisp-packages"
                       "update-elisp")))))
 #+end_src
-*** puni                                              :structured__editing:
+*** puni                                       :structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:24]
 :END:
@@ -5006,7 +5005,7 @@ Limitations:
 #+end_src
 
 This contains workarounds for puni-mode, like mode-specific soft deletion.
-*** rainbow-delimiters                                             :visual:
+*** rainbow-delimiters                                      :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
 :END:
@@ -5018,7 +5017,7 @@ Highlight brackets according to their depth
   (setup (:package rainbow-delimiters)
     (:hook-into emacs-lisp-mode))
 #+end_src
-*** rainbow-mode                                                   :colors:
+*** rainbow-mode                                            :colors:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
@@ -5030,7 +5029,7 @@ Colorize color names in buffers
   (setup (:package rainbow-mode)
     (:hook-into prog-mode))
 #+end_src
-*** reformatter                                                :formatting:
+*** reformatter                                         :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -5046,7 +5045,7 @@ Define commands which run reformatters on the current buffer
       :program "prettier"
       :args (list "--stdin-filepath" (buffer-file-name)))))
 #+end_src
-*** repl-toggle                                       :windows:development:
+*** repl-toggle                                :windows:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:05]
 :END:
@@ -5065,7 +5064,7 @@ Switch to/from repl buffer for current major-mode
 #+end_src
 
 For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-toggle - sourcehut git]].
-*** restclient                                                        :web:
+*** restclient                                                 :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 10:58]
 :END:
@@ -5077,7 +5076,7 @@ An interactive HTTP client for Emacs
   (setup (:package restclient)
     (:file-match "\\.restclient\\'"))
 #+end_src
-*** riben                                                        :Japanese:
+*** riben                                                 :Japanese:
 #+begin_quote
 A dumb Japanese input method
 [[https://github.com/akirak/emacs-dumb-japanese]]
@@ -5112,7 +5111,7 @@ Jump to Japanese text using avy
     (:bind "C-j" #'riben-english-to-japanese
            "C-S-j" #'riben-english-confirm))
 #+end_src
-*** rich-minority                                                      :UI:
+*** rich-minority                                               :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:27]
 :END:
@@ -5164,7 +5163,7 @@ Edit comment/string/docstring/code block in separate buffer
     (:set separedit-default-mode 'markdown-mode)
     (:global "C-c '" #'separedit))
 #+end_src
-*** string-inflection                                             :editing:
+*** string-inflection                                      :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:07]
 :END:
@@ -5175,7 +5174,7 @@ underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
 #+begin_src emacs-lisp
 (setup (:package string-inflection))
 #+end_src
-*** COMMENT suggest                 :Emacs__Lisp:development:help:ARCHIVE:
+*** COMMENT suggest           :Emacs__Lisp:development:help:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 18:10]
 :END:
@@ -5183,7 +5182,7 @@ underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
 #+begin_src emacs-lisp
 (setup (:package suggest))
 #+end_src
-*** super-save                                                         :IO:
+*** super-save                                                  :IO:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -5228,7 +5227,7 @@ Emacs major mode for Svelte
       . (> "<script lang=\"ts\">\n</script>\n\n"
            _ "\n\n<style>\n\n</style>\n"))))
 #+end_src
-*** svg-lib                                              :library:graphics:
+*** svg-lib                                       :library:graphics:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:30]
 :END:
@@ -5240,7 +5239,7 @@ SVG tags, progress bars & icons
 #+begin_src emacs-lisp
   (setup (:package svg-lib))
 #+end_src
-*** COMMENT svg-tag-mode                  :visual:nano:aesthetics:ARCHIVE:
+*** COMMENT svg-tag-mode            :visual:nano:aesthetics:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 15:26]
 :END:
@@ -5250,7 +5249,7 @@ SVG tags, progress bars & icons
     (autoload #'svg-tag-mode "svg-tag-mode.el")
     (:hook-into after-init-hook))
 #+end_src
-*** symbol-overlay                                                :editing:
+*** symbol-overlay                                         :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 20:24]
 :END:
@@ -5270,7 +5269,7 @@ Highlight symbols with keymap-enabled overlays
 #+end_src
 
 =embark= can substitute for most of the functionalities of the package, but I am used to this package.
-*** tagedit                                                           :web:
+*** tagedit                                                    :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-08 Fri 21:12]
 :END:
@@ -5283,7 +5282,7 @@ Some paredit-like features for html-mode
     ;; The upstream lacks this autoload
     (autoload 'tagedit-mode "tagedit"))
 #+end_src
-*** taxy                                                  :library:
+*** taxy                                                   :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
@@ -5295,7 +5294,7 @@ Programmable taxonomical grouping for arbitrary objects
 #+begin_src emacs-lisp
 (setup (:package taxy))
 #+end_src
-*** taxy-magit-section                                 :UI:library:
+*** taxy-magit-section                                  :UI:library:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
@@ -5307,7 +5306,7 @@ View Taxy structs in a Magit Section buffer
 #+begin_src emacs-lisp
 (setup (:package taxy-magit-section))
 #+end_src
-*** titlecase                                                     :writing:
+*** titlecase                                              :writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-18 Tue 17:13]
 :END:
@@ -5333,7 +5332,7 @@ Viewing/editing system trash can
 #+begin_src emacs-lisp
 (setup (:package trashed))
 #+end_src
-*** tree-sitter                                        :syntax:tree_sitter:
+*** tree-sitter                                 :syntax:tree_sitter:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:36]
 :END:
@@ -5366,7 +5365,7 @@ Grammar bundle for tree-sitter
       (:hook-into typescript-mode-hook
                   typescript-tsx-mode-hook)))
 #+end_src
-*** turbo-log                                       :development:debugging:
+*** turbo-log                                :development:debugging:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:55]
 :END:
@@ -5378,7 +5377,7 @@ The simple package for fast log selected region
 #+begin_src emacs-lisp
 (setup (:package turbo-log))
 #+end_src
-*** twist                                                   :configuration:
+*** twist                                            :configuration:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 14:12]
 :END:
@@ -5400,7 +5399,7 @@ Frontend to Twist configuration
              "<f12> e f" #'akirak-twist-find-git-source
              "<f12> e u" #'akirak-twist-update-emacs-inputs))
 #+end_src
-*** typescript-mode                                            :major_mode:
+*** typescript-mode                                     :major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 18:39]
 :END:
@@ -5431,7 +5430,7 @@ Major mode for editing typescript
     (with-eval-after-load 'typescript-mode
       (define-key typescript-tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
-*** COMMENT unmodified-buffer                                    :ARCHIVE:
+*** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]
 :END:
@@ -5449,7 +5448,7 @@ I don't use use-package, but I only need indentation:
 #+begin_src emacs-lisp
   (put 'use-package 'lisp-indent-function 1)
 #+end_src
-*** vertico                                         :minibuffer:completion:
+*** vertico                                  :minibuffer:completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 16:59]
 :END:
@@ -5490,7 +5489,7 @@ fill-column for visual-line-mode
     (:set visual-fill-column-center-text t
           visual-fill-column-width 100))
 #+end_src
-*** vterm                                                :terminal:process:
+*** vterm                                         :terminal:process:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 16:50]
 :END:
@@ -5535,7 +5534,7 @@ major mode for editing web templates
     (:auto-insert
      ("\\.astro\\'" . (> "---\n" _ "\n---\n"))))
 #+end_src
-*** which-key                                       :usability:keybindings:
+*** which-key                                :usability:keybindings:
 #+begin_quote
 Display available keybindings in popup
 [[https://github.com/justbur/emacs-which-key]]
@@ -5567,7 +5566,7 @@ Operate on current line if region undefined
                                                             1)
                                                           arg))))
 #+end_src
-*** windswap                                                       :windows:
+*** windswap                                               :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 13:52]
 :END:
@@ -5603,7 +5602,7 @@ Like windmove, but swaps buffers while moving point
            "<C-S-up>"
            "<C-S-down>")))))
 #+end_src
-*** ws-butler                                                  :formatting:
+*** ws-butler                                           :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:16]
 :END:
@@ -5630,7 +5629,7 @@ ANSI, XTERM 256 and Truecolor support
 #+end_src
 
 This package is required by the configuration for buttercup now.
-*** yaml-mode                                                 :major__mode:
+*** yaml-mode                                          :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-07 Mon 16:07]
 :END:
@@ -5655,7 +5654,7 @@ A major mode for the Zig programming language
   (setup (:package zig-mode)
     (:file-match "\\.zig\\'"))
 #+end_src
-** Notes                                                             :@note:
+** Notes                                                      :@note:
 :PROPERTIES:
 :TOC:      :depth 2
 :END:
@@ -5875,7 +5874,7 @@ To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF fi
 *** Sh-emulation keybindings
 I rebind the following keys in some keymaps to emulate a typical UNIX shell:
 C-a, C-e, C-u, C-w, C-h.
-** COMMENT Footer                                                         :noexport:
+** COMMENT Footer                                          :noexport:
 # Local Variables:
 # org-complete-tags-always-offer-all-agenda-tags: nil
 # org-id-link-to-org-use-id: nil
