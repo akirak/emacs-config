@@ -1662,7 +1662,8 @@ Outline-based notes management and organizer
             org-startup-truncated nil
             org-enforce-todo-dependencies t
             org-use-speed-commands t
-            org-tags-column -70
+            ;; Enlarge for olivetti-mode
+            org-tags-column -80
             org-track-ordered-property-with-tag t
             org-extend-today-until 5
             ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
@@ -4799,6 +4800,9 @@ Minor mode for a nice writing environment
 #+begin_src emacs-lisp
   (setup (:package olivetti)
     (:set olivetti-body-width akirak/default-body-width)
+
+    ;; Also hooked into nov-mode. See the package setting
+    (:hook-into org-mode-hook)
 
     ;; Implement `olivetti-set-width-hook' without tweaking the upstream code.
     (advice-add 'olivetti-expand
