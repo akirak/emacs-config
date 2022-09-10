@@ -7,6 +7,8 @@
     libre-baskerville
     shippori-mincho
     dejavu_fonts
+    aileron
+    # crimson
   ];
 
   programs.alacritty = {

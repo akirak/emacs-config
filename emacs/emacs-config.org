@@ -1501,7 +1501,7 @@ You need to install the font separately.
   (defcustom akirak/base-face-family-alist
     '((default . "Cascadia Code")
       (fixed-pitch . "Cascadia Code")
-      (variable-pitch . "DejaVu Serif"))
+      (variable-pitch . "Aileron"))
     "Alist of font families for faces."
     :type '(alist :key-type symbol
                   :value-type string)
