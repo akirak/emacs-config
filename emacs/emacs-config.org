@@ -2856,7 +2856,10 @@ Show git blame info about current line
 #+begin_src emacs-lisp
   (setup (:package blamer)
     (:set blamer-max-lines 50
-          blamer-max-commit-message-length 50))
+          blamer-max-commit-message-length 50)
+
+    (define-key ctl-x-x-map (kbd "b") #'blamer-mode)
+    (define-key help-map (kbd "M-g") #'blamer-show-commit-info))
 #+end_src
 *** COMMENT browse-at-remote                                       :ARCHIVE:
 :PROPERTIES:
