@@ -4290,6 +4290,14 @@ Completion kind icons
       (require 'kind-icon)
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
+*** language-detection
+:PROPERTIES:
+:CREATED_TIME: [2022-09-10 Sat 20:00]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package language-detection))
+#+end_src
 *** license-templates                              :development:OSS:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-06 Sun 14:30]
@@ -5162,6 +5170,21 @@ Edit comment/string/docstring/code block in separate buffer
   (setup (:package separedit)
     (:set separedit-default-mode 'markdown-mode)
     (:global "C-c '" #'separedit))
+#+end_src
+*** shr-tag-pre-highlight
+:PROPERTIES:
+:CREATED_TIME: [2022-09-10 Sat 19:48]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package shr-tag-pre-highlight)
+    (:when-loaded
+      (:set shr-tag-pre-highlight-lang-modes
+            (append '(("elixir" . elixir))
+                    shr-tag-pre-highlight-lang-modes)))
+    (with-eval-after-load 'shr
+      (add-to-list 'shr-external-rendering-functions
+                   '(pre . shr-tag-pre-highlight))))
 #+end_src
 *** string-inflection                                      :editing:
 :PROPERTIES:
