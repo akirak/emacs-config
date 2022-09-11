@@ -110,6 +110,12 @@
       repo = "closql";
       type = "github";
     };
+    code-review = {
+      flake = false;
+      owner = "wandersoncferreira";
+      repo = "code-review";
+      type = "github";
+    };
     compat = {
       flake = false;
       type = "git";
@@ -156,6 +162,12 @@
       flake = false;
       owner = "Wilfred";
       repo = "deadgrep";
+      type = "github";
+    };
+    deferred = {
+      flake = false;
+      owner = "kiwanami";
+      repo = "emacs-deferred";
       type = "github";
     };
     devdocs = {
@@ -276,6 +288,12 @@
       flake = false;
       owner = "oantolin";
       repo = "embark";
+      type = "github";
+    };
+    emojify = {
+      flake = false;
+      owner = "iqbalansari";
+      repo = "emacs-emojify";
       type = "github";
     };
     envrc = {
@@ -667,6 +685,12 @@
       repo = "mmm-mode";
       type = "github";
     };
+    modus-themes = {
+      flake = false;
+      ref = "main";
+      type = "git";
+      url = "https://git.sr.ht/~protesilaos/modus-themes";
+    };
     move-dup = {
       flake = false;
       owner = "wyuenho";
@@ -841,12 +865,6 @@
       repo = "org-super-links";
       type = "github";
     };
-    org-transclusion = {
-      flake = false;
-      owner = "nobiot";
-      repo = "org-transclusion";
-      type = "github";
-    };
     org-volume = {
       flake = false;
       owner = "akirak";
@@ -911,12 +929,6 @@
       flake = false;
       owner = "alphapapa";
       repo = "plz.el";
-      type = "github";
-    };
-    poet-theme = {
-      flake = false;
-      owner = "kunalb";
-      repo = "poet";
       type = "github";
     };
     popper = {
@@ -1029,6 +1041,12 @@
       flake = false;
       owner = "xuchunyang";
       repo = "shr-tag-pre-highlight.el";
+      type = "github";
+    };
+    spinner = {
+      flake = false;
+      owner = "Malabarba";
+      repo = "spinner.el";
       type = "github";
     };
     ssass-mode = {
@@ -1165,6 +1183,12 @@
       flake = false;
       owner = "emacs-typescript";
       repo = "typescript.el";
+      type = "github";
+    };
+    uuidgen = {
+      flake = false;
+      owner = "kanru";
+      repo = "uuidgen-el";
       type = "github";
     };
     vertico = {
