@@ -5481,7 +5481,11 @@ Major mode for editing typescript
     ;; C-c ' should be bound to separedit globally, and I don't want to override
     ;; it in typescript-mode.
     (:bind "C-c `" #'typescript-convert-to-template)
-    (:unbind "C-c '"))
+    (:unbind "C-c '")
+
+    (:hook (defun akirak/typescript-setup ()
+             (add-to-list (make-local-variable 'electric-pair-pairs)
+                          '(?< . ?>)))))
 #+end_src
 **** akirak-typescript
 #+begin_src emacs-lisp
