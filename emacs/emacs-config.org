@@ -5481,11 +5481,19 @@ Major mode for editing typescript
   (setup (:package typescript-mode)
     (:file-match "\\.ts\\'")
     (:set typescript-indent-level 2)
+    (:also-load akirak-typescript)
 
     ;; C-c ' should be bound to separedit globally, and I don't want to override
     ;; it in typescript-mode.
     (:bind "C-c `" #'typescript-convert-to-template)
     (:unbind "C-c '"))
+#+end_src
+**** akirak-typescript
+#+begin_src emacs-lisp
+  (setup akirak-typescript
+    (:with-mode typescript-mode
+      (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
+                  end-of-defun-function #'akirak-typescript-end-of-defun)))
 #+end_src
 **** typescript-tsx-mode
 #+begin_src emacs-lisp
