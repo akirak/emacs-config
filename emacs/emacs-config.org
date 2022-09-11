@@ -4451,7 +4451,7 @@ A Git porcelain inside Emacs
 
     ;; Replace the binding to compose-message
     (define-key ctl-x-map "m" #'magit-dispatch)
-    (define-key ctl-x-map (kbd "M-s") #'magit-status)
+    (define-key ctl-x-map "j" #'magit-status)
     (define-key ctl-x-x-map "e" (defun akirak/edit-source-file ()
                                   "Visit a corresponding file in a Git repository."
                                   (interactive)
