@@ -4448,6 +4448,8 @@ A Git porcelain inside Emacs
   (setup (:package magit)
     (:nixpkgs git)
 
+    (:set magit-save-repository-buffers 'dontask)
+
     ;; Twist allows me to get the git version of any package if necessary, so
     ;; there is no point in making this IO-intensive function run.
     (advice-add 'magit-version :override #'ignore)
