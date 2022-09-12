@@ -1503,7 +1503,8 @@ You need to install the font separately.
     '((default "Cascadia Code")
       (fixed-pitch "Cascadia Code")
       (variable-pitch "Aileron")
-      (kana "Shippori Mincho OTF" :fontset t))
+      (kana "Source Han Sans HC" :fontset t)
+      (han "Source Han Sans HC" :fontset t))
     "Alist of font families for faces."
     :type '(repeat (list symbol
                          string

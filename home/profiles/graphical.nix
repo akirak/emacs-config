@@ -4,11 +4,8 @@
 
     # Fonts
     cascadia-code
-    libre-baskerville
-    shippori-mincho
-    dejavu_fonts
     aileron
-    # crimson
+    source-han-sans
   ];
 
   programs.alacritty = {
