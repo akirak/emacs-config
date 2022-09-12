@@ -9,7 +9,8 @@
   ];
 
   programs.alacritty = {
-    enable = true;
+    # Not on Wayland
+    enable = false;
   };
 
   programs.mpv = {
