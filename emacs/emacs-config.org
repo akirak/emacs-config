@@ -531,35 +531,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
                     (xterm-color-filter string))))))
 
     (:compilation-error
-     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
-             2 3 4 (1 . 1))
-
-     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
-                 1 2 3 (4 . 4))
-
-     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
-               2 3 4 (1 . 1))
-
-     ;; Unused argument `hsuper` at default.nix:9:24-15:6
-     (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
-                 1 2 3)
-
-     ;; path:67:23-45:
-     (hlint "^\\([/[:alnum:]][./[:alnum:]]*\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
-            1 2 3 (4 . 4))
-
      ;; unknown
      ("^\\([/[:alnum:]][./[:alnum:]]*\\):(\\([[:digit:]]+\\),\\([[:digit:]]+\\))-([[:digit:]]+,[[:digit:]]+):[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
-      1 2 3 (4 . 4))
-
-     ;; Emacs checkdoc/byte-compile, GHC, etc.
-     ;; path:line:col: error:
-     (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\):"
-                 1 2 3 (4 . 4))
-
-     ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
-     (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
-          1 2 3 (4 . 4))))
+      1 2 3 (4 . 4))))
 #+end_src
 *** desktop
 #+begin_src emacs-lisp
@@ -656,7 +630,12 @@ The built-in =electric= package provides the following modes:
                              1)
                             ("Config"
                              "^(\\(?:setup\\|use-package\\)[[:blank:]]+\\_<\\([^[:space:]]+\\)"
-                             1)))))
+                             1))))
+      (:compilation-error
+       ;; Emacs checkdoc/byte-compile, GHC, etc.
+       ;; path:line:col: error:
+       (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\):"
+                   1 2 3 (4 . 4))))
 
     (:auto-insert
      ("-tests?\\.el\\'" . (> ";;; -*- lexical-binding: t -*-\n\n"
@@ -3496,6 +3475,11 @@ Major mode for editing Elixir files
            "  " _
            "\nend\n")))
 
+    (:compilation-error
+     ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
+     (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
+          1 2 3 (4 . 4)))
+
     (defun akirak/elixir-module-name-from-file ()
       (require 'f)
       (require 'dash)
@@ -4148,6 +4132,11 @@ A Haskell editing mode
     (:reformatters
      (ormolu :program "ormolu"))
 
+    (:compilation-error
+     ;; path:67:23-45:
+     (hlint "^\\([/[:alnum:]][./[:alnum:]]*\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
+            1 2 3 (4 . 4)))
+
     (defun akirak/haskell-module-name (&optional filename)
       (let* ((filename (or filename (buffer-file-name)))
              (project (project-current nil (file-name-directory filename)))
@@ -4765,7 +4754,11 @@ Major mode for editing .nix files
     (:mode-repl nix-repl)
     (:reformatters
      (nixpkgs-fmt :program "nixpkgs-fmt")
-     (alejandra :program "alejandra")))
+     (alejandra :program "alejandra"))
+    (:compilation-error
+     ;; Unused argument `hsuper` at default.nix:9:24-15:6
+     (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
+                 1 2 3)))
 #+end_src
 *** nix-update
 :PROPERTIES:
@@ -5501,7 +5494,15 @@ Major mode for editing typescript
 
     (:hook (defun akirak/typescript-setup ()
              (add-to-list (make-local-variable 'electric-pair-pairs)
-                          '(?< . ?>)))))
+                          '(?< . ?>))))
+
+    (:compilation-error
+     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+             2 3 4 (1 . 1))
+     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
+                 1 2 3 (4 . 4))
+     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
+               2 3 4 (1 . 1))))
 #+end_src
 **** akirak-typescript
 #+begin_src emacs-lisp
