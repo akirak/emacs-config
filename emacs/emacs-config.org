@@ -506,7 +506,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup compile
-    (:set compilation-auto-jump-to-first-error nil
+    (:set compilation-ask-about-save nil
+          compilation-save-buffers-predicate #'save-some-buffers-root
+          compilation-auto-jump-to-first-error nil
           compilation-scroll-output t
           compilation-environment '("TERM=xterm-256color"))
 
