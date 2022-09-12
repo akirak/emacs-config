@@ -579,7 +579,8 @@ The other variables must not be saved, and they should be put in configuration:
           dired-recursive-deletes 'top)
     (:mode-repl akirak-vterm-for-dir)
 
-    (:bind "h" #'dired-up-directory))
+    (:bind "h" #'dired-up-directory)
+    (:unbind "C-x M-o"))
 #+end_src
 *** ediff-wind                                                :diff:
 :PROPERTIES:
