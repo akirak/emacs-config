@@ -530,6 +530,37 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
            (funcall 'compilation-filter proc
                     (xterm-color-filter string)))))))
 #+end_src
+*** custom
+:PROPERTIES:
+:CREATED_TIME: [2022-09-12 Mon 15:13]
+:END:
+The following variable defines variables that can be saved to =custom-file=:
+
+#+begin_src emacs-lisp
+  (defconst akirak/custom-variable-whitelist
+    '(auth-sources    ; Can be machine-dependent
+      org-agenda-span ; Can be dependent on the work context
+      ;; Work context
+      user-full-name
+      user-mail-address
+      ;; Dynamic
+      safe-local-variable-values))
+#+end_src
+
+The other variables must not be saved, and they should be put in configuration:
+
+#+begin_src emacs-lisp
+(setup custom
+    (:status personal
+      ;; Don't allow saving a variable that is not included in the whitelist
+      (advice-add 'custom-variable-mark-to-save
+                  :before
+                  (defun akirak/customize-save-variable-check (widget)
+                    (unless (memq (widget-value widget)
+                                  akirak/custom-variable-whitelist)
+                      (error "Variable %s should not be saved to custom-file"
+                             (widget-value widget)))))))
+#+end_src
 *** desktop
 #+begin_src emacs-lisp
   (setup desktop
