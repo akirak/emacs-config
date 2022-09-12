@@ -1499,27 +1499,38 @@ You can load a theme on startup by adding command line arguments to Emacs, e.g.
 You need to install the font separately.
 
 #+begin_src emacs-lisp
-  (defcustom akirak/base-face-family-alist
-    '((default . "Cascadia Code")
-      (fixed-pitch . "Cascadia Code")
-      (variable-pitch . "Aileron"))
+  (defcustom akirak/font-family-alist
+    '((default "Cascadia Code")
+      (fixed-pitch "Cascadia Code")
+      (variable-pitch "Aileron")
+      (kana "Shippori Mincho OTF" :fontset t))
     "Alist of font families for faces."
-    :type '(alist :key-type symbol
-                  :value-type string)
+    :type '(repeat (list symbol
+                         string
+                         (plist :inline t
+                                :options
+                                (((const :fontset)
+                                  (choice (const :tag "Default" t)
+                                          (string :tag "Name of a fontset")))))))
     :set (lambda (symbol value)
            (set symbol value)
            (when window-system
              (let ((families (font-family-list)))
-               (pcase-dolist (`(,face . ,family) value)
+               (pcase-dolist (`(,face ,family . ,plist) value)
                  (if (member family families)
-                     (set-face-attribute face nil :family family)
+                     (if-let (fontset (plist-get plist :fontset))
+                         (set-fontset-font (if (stringp fontset)
+                                               fontset
+                                             "fontset-default")
+                                           face family)
+                       (set-face-attribute face nil :family family))
                    (message "Font family %s is not installed" family)
                    (delq (assq face value) value)
                    (set symbol value)))))))
 
   (eval-after-load 'outline
     (defun akirak/set-outline-families ()
-      (when-let (family (cdr (assq 'variable-pitch akirak/base-face-family-alist)))
+      (when-let (family (cadr (assq 'variable-pitch akirak/font-family-alist)))
         (dolist (x '(outline-1
                      outline-2
                      outline-3
