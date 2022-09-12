@@ -528,12 +528,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
          proc
          (lambda (proc string)
            (funcall 'compilation-filter proc
-                    (xterm-color-filter string))))))
-
-    (:compilation-error
-     ;; unknown
-     ("^\\([/[:alnum:]][./[:alnum:]]*\\):(\\([[:digit:]]+\\),\\([[:digit:]]+\\))-([[:digit:]]+,[[:digit:]]+):[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
-      1 2 3 (4 . 4))))
+                    (xterm-color-filter string)))))))
 #+end_src
 *** desktop
 #+begin_src emacs-lisp
