@@ -2513,7 +2513,7 @@ Bypass that mental block when writing your papers.
 #+begin_src emacs-lisp
 (setup (:package academic-phrases))
 #+end_src
-*** ace-window                                         :keybindings:
+*** COMMENT ace-window                                             :keybindings:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -2802,6 +2802,7 @@ This is an extra functions for window management.
                "C-4" #'akirak-window-setup-columns
                "C-x o" #'akirak-window-cycle-two-windows
                "C-x M-o" #'akirak-window-swap-two-windows
+               "M-o" #'akirak-window-duplicate-state
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
 *** COMMENT all-the-icons                               :UI:ARCHIVE:
