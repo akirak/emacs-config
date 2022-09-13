@@ -350,6 +350,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           ("jcal" "" akirak-insert-iso8601-read-date)
           ("jname" "" akirak-insert-user-full-name)
           ("jmail" "" akirak-insert-user-mail-address)
+          ("jorgclock" "" akirak-insert-org-clock-heading)
           ;; Acronyms
           ("wip" "WIP")
           ;; Common mistypes
