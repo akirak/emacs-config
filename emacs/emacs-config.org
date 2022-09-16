@@ -838,7 +838,10 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup indent
-    (:set tab-always-indent 'complete))
+    (:set tab-always-indent 'complete)
+
+    ;; Unbind `tab-to-tab-stop'
+    (:global "M-i" nil))
 #+end_src
 *** indent.c                                            :formatting:
 :PROPERTIES:
@@ -4593,6 +4596,18 @@ Use Delta when displaying diffs in Magit
         (setq magit-delta-delta-args
               (append magit-delta-delta-args
                       '("--features" "magit-delta"))))))
+#+end_src
+*** magit-section
+:PROPERTIES:
+:CREATED_TIME: [2022-09-16 Fri 10:35]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package magit-section)
+    (:with-map magit-section-mode-map
+      ;; I don't want to override global bindings on these keys.
+      (:unbind "M-1" "M-2" "M-3" "M-4"
+               [C-tab] [M-tab])))
 #+end_src
 *** magit-todos                                                 :VC:
 :PROPERTIES:
