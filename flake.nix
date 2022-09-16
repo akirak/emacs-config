@@ -256,7 +256,7 @@
           ./nixos/river.nix
 
           # Optional toy environment for experimenting with services
-          ./nixos/toy.nix
+          # ./nixos/toy.nix
 
           ./nixos/frontend.nix
           ./nixos/development.nix
