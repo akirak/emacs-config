@@ -1506,14 +1506,6 @@ Thus I will explicitly install this package rather than using the built-in versi
 # Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
 # I want a separate section for themes to add this comment.
 
-The following theme packages are bundled with configuration:
-
-#+begin_src emacs-lisp
-  (setup (:package poet-theme)
-    (:set poet-theme-variable-headers nil
-          poet-theme-variable-pitch-multiplier 1.0))
-#+end_src
-
 No theme is set by default.
 You can load a theme on startup by adding command line arguments to Emacs, e.g.
 
@@ -4755,6 +4747,14 @@ A scroll bar for the modeline
           mlscroll-out-color (face-attribute 'default :background nil t))
     (:with-mode mlscroll-mode
       (:hook-into after-init-hook)))
+#+end_src
+*** modus-themes                                                        :themes:
+:PROPERTIES:
+:CREATED_TIME: [2022-09-20 Tue 20:43]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package modus-themes))
 #+end_src
 *** move-dup                                               :editing:
 :PROPERTIES:
