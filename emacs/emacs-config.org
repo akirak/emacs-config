@@ -3030,7 +3030,10 @@ Consulting completing-read
                                            akirak-consult-source-indirect-buffer
                                            akirak-consult-source-narrowed-buffer))
                                      consult--source-buffer
-                                     consult--source-recent-file)))
+                                     consult--source-recent-file))
+
+      (add-to-list 'consult-bookmark-narrow
+                   '(?o "Org" org-bookmark-heading-jump)))
 
     (:global [remap switch-to-buffer] #'consult-buffer
              [remap bookmark-jump] #'consult-bookmark
