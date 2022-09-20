@@ -8,6 +8,10 @@ inputs: [
     path = inputs.gnu-elpa.outPath + "/elpa-packages";
     core-src = inputs.emacs.outPath;
     auto-sync-only = true;
+    exclude = [
+      # Use tarball, as it contains info
+      "org-transclusion"
+    ];
   }
   {
     type = "archive";
