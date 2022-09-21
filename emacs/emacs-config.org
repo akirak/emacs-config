@@ -1519,7 +1519,7 @@ You need to install the font separately.
   (defcustom akirak/font-family-alist
     '((default "Cascadia Code")
       (fixed-pitch "Cascadia Code")
-      (variable-pitch "Aileron")
+      (variable-pitch "Inter")
       (kana "Source Han Sans HC" :fontset t)
       (han "Source Han Sans HC" :fontset t))
     "Alist of font families for faces."

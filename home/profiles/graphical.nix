@@ -4,7 +4,7 @@
 
     # Fonts
     cascadia-code
-    aileron
+    inter
     source-han-sans
   ];
 
