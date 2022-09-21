@@ -14,10 +14,9 @@
         modus-themes-links '(neutral-underline)
 
         modus-themes-headings
-        '((1 . (background variable-pitch 1.5))
-          (2 . (rainbow overline 1.1))
-          (3 . (semibold))
-          (4 . (italic))))
+        '((1 . (background medium variable-pitch 1.5))
+          (2 . (rainbow overline variable-pitch 1.1))
+          (4 . (variable-pitch))))
   (modus-themes-load-themes)
   (modus-themes-load-operandi))
 
