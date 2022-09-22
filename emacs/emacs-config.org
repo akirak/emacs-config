@@ -2083,7 +2083,18 @@ Improved list management in org-mode
 
 #+begin_src emacs-lisp
   (setup (:package org-autolist)
-    (:hook-into org-mode-hook))
+    (:hook-into org-mode-hook)
+    (:when-loaded
+      ;; Inside a block, org-autolist splits the block instead of adding a new
+      ;; item. This advice is a workaround for the issue.
+      (advice-add 'org-meta-return
+                  :around
+                  (defun akirak/org-autolist-ad-around-org-meta-return (orig &rest args)
+                    (if (and (eq this-command 'org-return)
+                             (org-at-item-p)
+                             (eolp))
+                        (org-insert-item)
+                      (apply orig args))))))
 #+end_src
 *** org-bb
 :PROPERTIES:
