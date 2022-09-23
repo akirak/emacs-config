@@ -1711,6 +1711,8 @@ Outline-based notes management and organizer
                   :around #'akirak-org-ad-around-insert-heading)
       (advice-add #'org-insert-todo-heading-respect-content
                   :around #'akirak-org-ad-around-insert-heading)
+      (advice-add 'org-return
+                  :around #'akirak-org-ad-around-org-return)
       (advice-add 'org-meta-return
                   :around #'akirak-org-meta-return-split-block-advice)
       (:hook #'akirak-org-protected-mode)
