@@ -3010,6 +3010,14 @@ Completion At Point Extensions
              ;; It's C-M-/ and C-x '.
              [remap expand-abbrev] #'cape-abbrev))
 #+end_src
+*** code-review
+:PROPERTIES:
+:CREATED_TIME: [2022-09-23 Fri 21:19]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package code-review))
+#+end_src
 *** consult                                             :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:33]

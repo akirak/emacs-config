@@ -33,6 +33,10 @@
     buildInputs = old.buildInputs ++ [pkgs.git];
   });
 
+  code-review = esuper.code-review.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [pkgs.git];
+  });
+
   vterm = esuper.vterm.overrideAttrs (old: {
     # Based on the configuration in nixpkgs available at the following URL:
     # https://github.com/NixOS/nixpkgs/blob/af21d41260846fb9c9840a75e310e56dfe97d6a3/pkgs/applications/editors/emacs/elisp-packages/melpa-packages.nix#L483
