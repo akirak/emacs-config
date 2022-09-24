@@ -1910,7 +1910,7 @@ Outline-based notes management and organizer
     (define-key help-map (kbd "M-a")
                 (defun akirak/org-default-agenda ()
                   (interactive)
-                  (unless org-clock-history
+                  (unless (bound-and-true-p org-clock-history)
                     (akirak-org-clock-add-agenda-files))
                   (org-agenda nil "a")))
 
