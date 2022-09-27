@@ -3019,6 +3019,9 @@ Completion At Point Extensions
 :PROPERTIES:
 :CREATED_TIME: [2022-09-23 Fri 21:19]
 :END:
+#+begin_quote
+Perform code review from Github, Gitlab, and Bitbucket Cloud
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package code-review))
@@ -4305,7 +4308,7 @@ This is helpful in programming languages that depend on indentation levels.
 :CREATED_TIME: [2022-03-02 Wed 15:58]
 :END:
 #+begin_quote
-highlight TODO and similar keywords
+Highlight TODO and similar keywords
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -4625,6 +4628,9 @@ Use Delta when displaying diffs in Magit
 :PROPERTIES:
 :CREATED_TIME: [2022-09-16 Fri 10:35]
 :END:
+#+begin_quote
+Sections for read-only buffers
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package magit-section)
@@ -4781,6 +4787,10 @@ A scroll bar for the modeline
 :PROPERTIES:
 :CREATED_TIME: [2022-09-20 Tue 20:43]
 :END:
+#+begin_quote
+Elegant, highly legible and customizable themes
+[[https://git.sr.ht/~protesilaos/modus-themes]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package modus-themes))
@@ -5874,7 +5884,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 205 |
+| [[org-ql-search:tags:packages][packages]]            | 209 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
@@ -5885,21 +5895,21 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Emacs][Emacs]]               |   7 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
-| [[org-ql-search:tags:keybindings][keybindings]]         |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
+| [[org-ql-search:tags:keybindings][keybindings]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
 | [[org-ql-search:tags:windows][windows]]             |   4 |
+| [[org-ql-search:tags:major_mode][major_mode]]          |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:reference][reference]]           |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
-| [[org-ql-search:tags:major_mode][major_mode]]          |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   3 |
@@ -5924,6 +5934,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:documentation][documentation]]       |   1 |
 | [[org-ql-search:tags:secrets][secrets]]             |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
+| [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:@extra][@extra]]              |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
@@ -5939,6 +5950,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
+| [[org-ql-search:tags:themes][themes]]              |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:Chinese][Chinese]]             |   1 |
