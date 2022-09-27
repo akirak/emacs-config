@@ -4057,7 +4057,7 @@ Run GitHub Linguist on projects to collect information
     (:nixpkgs "github-linguist")
     (:set github-linguist-executable "github-linguist"))
 #+end_src
-*** git-identity                                                :VC:
+*** COMMENT git-identity                                                    :VC:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 15:24]
 :END:
