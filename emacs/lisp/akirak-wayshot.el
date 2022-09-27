@@ -67,6 +67,7 @@
 
 ;;;; Prefix
 
+;;;###autoload (autoload 'akirak-wayshot "akirak-wayshot" nil 'interactive)
 (transient-define-prefix akirak-wayshot ()
   ["Options"
    ("/" akirak-wayshot-set-directory)
