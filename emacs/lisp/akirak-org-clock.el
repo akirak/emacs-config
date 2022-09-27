@@ -64,12 +64,14 @@
   "Return a regexp for inactive clock within a certain DAYS.
 
 DAYS default to `akirak-org-clock-history-threshold'."
-  (let ((seconds (/ days (* 3600 24))))
-    (rx-to-string `(seq (or ,@(mapcar (lambda (days)
-                                        (format-time-string
-                                         "%F" (+ (float-time) (* 3600 24 seconds))))
-                                      (number-sequence (- seconds) 0)))
-                        (optional " " (*? nonl))))))
+  (rx-to-string `(seq (or ,@(mapcar (lambda (days)
+                                      (format-time-string
+                                       "%F" (+ (float-time) (* 3600 24 days))))
+                                    (number-sequence (- (or days
+                                                            (/ akirak-org-clock-history-threshold
+                                                               (* 3600 24))))
+                                                     0)))
+                      (optional " " (*? nonl)))))
 
 (defun akirak-org-clock--recently-active-p (file &optional days)
   "Return non-nil is there is a recent activity in FILE."
@@ -77,8 +79,7 @@ DAYS default to `akirak-org-clock-history-threshold'."
       ((find-ts ()
          ;; A regular expression based on `org-ts-regexp-inactive' from org.el.
          (re-search-forward (format "\\[\\(%s\\)\\]"
-                                    (akirak-org-clock--date-regxps
-                                     (or days akirak-org-clock-history-threshold)))
+                                    (akirak-org-clock--date-regxps days))
                             nil t)))
     (if-let (buffer (find-buffer-visiting file))
         (with-current-buffer buffer
