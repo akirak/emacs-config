@@ -2812,6 +2812,11 @@ Complete a URL from the clipboard and the kill ring and insert as a link
     (:embark embark-file-map "s"
       ("C-l" akirak-org-store-link-to-file)))
 #+end_src
+**** akirak-wayshot                                                 :screenshot:
+#+begin_src emacs-lisp
+  (when (getenv "WAYLAND_DISPLAY")
+    (global-set-key (kbd "<f12> c s w") #'akirak-wayshot))
+#+end_src
 **** akirak-window                                        :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 14:10]
