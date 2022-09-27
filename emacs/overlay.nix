@@ -60,7 +60,18 @@ with builtins; let
       initParser = parseSetup {};
       inherit inventories;
       lockDir = ./lock;
-      inputOverrides = import ./inputs.nix releaseVersions;
+      inputOverrides =
+        (import ./inputs.nix releaseVersions)
+        // {
+          akirak = _: _: {
+            src = inputs.nix-filter.lib {
+              root = inputs.self;
+              include = [
+                "emacs/lisp"
+              ];
+            };
+          };
+        };
     })
     .overrideScope' (self: super: {
       elispPackages = super.elispPackages.overrideScope' (import ./overrides.nix releaseVersions {

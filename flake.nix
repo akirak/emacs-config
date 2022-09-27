@@ -2,6 +2,7 @@
   inputs = {
     utils.url = "github:numtide/flake-utils";
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
+    nix-filter.url = "github:numtide/nix-filter";
 
     home-manager.url = "github:nix-community/home-manager";
 
