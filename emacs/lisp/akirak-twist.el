@@ -128,18 +128,25 @@
                        :null-object nil)))
 
 ;;;###autoload
-(defun akirak-twist-find-git-source (library)
+(defun akirak-twist-find-git-source (library &optional pos)
   "Clone the upstream source and edit a corresponding file."
-  (interactive (list (if current-prefix-arg
-                         (read-library-name)
-                       (buffer-file-name))))
+  (interactive (if current-prefix-arg
+                   (list (read-library-name))
+                 (list (buffer-file-name) (point))))
   (let* ((filename (file-truename
                     (find-library-name library)))
          (package (akirak-twist--file-package-name filename)))
-    (akirak-git-clone-elisp-package
-     package
-     :filename (file-name-nondirectory filename)
-     :char (point))))
+    (if (equal package "akirak")
+        ;; Visit a corresponding file in the same repository as the config
+        (let ((default-directory akirak-twist-root-directory))
+          (find-file (akirak-git-clone--file-path-in-repo
+                      (file-name-nondirectory filename)))
+          (when pos
+            (goto-char pos)))
+      (akirak-git-clone-elisp-package
+       package
+       :filename (file-name-nondirectory filename)
+       :char (point)))))
 
 (defun akirak-twist--file-package-name (filename)
   (if (string-match (rx "/nix/store/" (group (+ (not (any "/")))) "/")
