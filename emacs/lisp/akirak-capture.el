@@ -349,7 +349,8 @@
    ("s" "Snippet" akirak-capture-snippet)
    ;; As a wisdom quote
    ;; As a linguistic example
-   ]
+   ("!" "Troubleshooting (with region as an error message)"
+    akirak-capture-troubleshooting)]
   (interactive)
   (unless (use-region-p)
     (user-error "No active region"))
@@ -484,9 +485,11 @@
 ;;;; Other commands
 
 ;;;###autoload
-(defun akirak-capture-troubleshooting ()
-  (interactive)
-  (let ((text (read-string "Error message: ")))
+(defun akirak-capture-troubleshooting (&optional arg)
+  (interactive "P")
+  (let ((text (if (use-region-p)
+                  (buffer-substring-no-properties (region-beginning) (region-end))
+                (read-string "Error message: "))))
     (when (string-empty-p (string-trim text))
       (setq text nil))
     (setq akirak-capture-headline (if (and text
