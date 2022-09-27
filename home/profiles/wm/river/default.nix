@@ -33,6 +33,7 @@
     (pkgs.callPackage ./rebuild.nix {})
     wayshot
     wf-recorder
+    slurp # Used with wayshot
   ];
 
   xdg.configFile."river/init".source = ./init;
