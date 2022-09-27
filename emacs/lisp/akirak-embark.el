@@ -88,6 +88,8 @@
   ("gc" akirak-git-clone-elisp-package))
 
 (embark-define-keymap akirak-embark-org-marker-map
+  ""
+  :parent nil
   ("g" org-goto-marker-or-bmk)
   ("I" akirak-embark-org-clock-in))
 
