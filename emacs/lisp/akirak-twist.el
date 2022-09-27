@@ -139,6 +139,7 @@
     (if (equal package "akirak")
         ;; Visit a corresponding file in the same repository as the config
         (let ((default-directory akirak-twist-root-directory))
+          (require 'akirak-git-clone)
           (find-file (akirak-git-clone--file-path-in-repo
                       (file-name-nondirectory filename)))
           (when pos
