@@ -29,7 +29,7 @@
     akirak = {
       flake = false;
       owner = "~akirak";
-      repo = "akirak-mode";
+      repo = "nix-config";
       type = "sourcehut";
     };
     anzu = {
