@@ -246,13 +246,13 @@
    :class transient-row
    ("T" "Start todo" (lambda ()
                        (interactive)
-                       (setq akirak-capture-headline "%^{Title}"
+                       (setq akirak-capture-headline (read-string "Heading of the todo: ")
                              akirak-capture-template-options '(:todo "UNDERWAY")
                              akirak-capture-doct-options '(:clock-in t :clock-resume t))
                        (akirak-capture-doct)))
    ("t" "Todo" (lambda ()
                  (interactive)
-                 (setq akirak-capture-headline "%^{Title}"
+                 (setq akirak-capture-headline (read-string "Heading of the todo: ")
                        akirak-capture-template-options '(:todo "TODO")
                        akirak-capture-doct-options nil)
                  (akirak-capture-doct)))
