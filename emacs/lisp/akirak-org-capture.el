@@ -1,0 +1,161 @@
+;;; akirak-org-capture.el --- Basic definitions for org-capture -*- lexical-binding: t -*-
+
+;; Copyright (C) 2021 Akira Komamura
+
+;; Author: Akira Komamura <akira.komamura@gmail.com>
+;; Version: 0.1
+;; URL: https://github.com/akirak/trivial-elisps
+
+;; This file is not part of GNU Emacs.
+
+;;; License:
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; 
+
+;;; Code:
+
+(require 'org)
+(require 'ol)
+(require 'org-capture)
+
+(defvar org-capture-templates)
+(defvar org-capture-templates-contexts)
+
+(defgroup akirak-org-capture
+  nil
+  ""
+  :group 'akirak
+  :group 'org-capture)
+
+(defcustom akirak-org-capture-default-drawer
+  ":PROPERTIES:
+:CREATED_TIME: %U
+:END:
+"
+  "String appended to the body of `org-capture' by default."
+  :type 'string)
+
+;;;###autoload
+(cl-defun akirak-org-capture-make-entry-body (headline &key
+                                                       todo tags
+                                                       scheduled
+                                                       deadline
+                                                       active-ts
+                                                       (drawer akirak-org-capture-default-drawer)
+                                                       (body t))
+  "Build the template body of a capture template.
+
+HEADLINE is a string put in the headline.
+
+TODO specifies the todo keyword of the entry.
+
+TAGS specifies tags of the entry and can be one of the following
+values:
+
+ - nil, which means no tag is set.
+
+ - A string.
+
+ - A list of strings.
+
+ - t, which lets you pick a tag from the current buffer (%^g).
+
+ - `all', which lets you pick a tag from all Org buffers (%^G).
+
+SCHEDULED, DEADLINE, and ACTIVE-TS are appended after the
+heading. They can be Org timestamps, timestamp strings, or Emacs
+internal time representations.
+
+If DRAWER is given, it is inserted before the entry body. By
+default, `akirak-org-capture-default-drawer' is inserted. If you
+specify an empty string, it will be empty.
+
+The entire content ends with BODY. It can be one of the following
+values:
+
+ - A string literal.
+
+ - t, which means the cursor is moved to the point."
+  (declare (indent 0))
+  (concat "* " (if todo
+                   (concat todo " ")
+                 "")
+          (pcase headline
+            ((pred stringp) headline)
+            (`(url ,url) (org-link-make-string url (orgabilize-document-title url)))
+            (`prompt "%^{headline}")
+            (`t "%?")
+            (_ (error "Invalid headline value: %s" headline)))
+          (pcase tags
+            (`nil "")
+            ((pred stringp) (format " :%s:" tags))
+            ((pred listp) (format " :%s:" (string-join tags ":")))
+            (`all " %^G")
+            (`t " %^g"))
+          "\n"
+          (mapconcat (pcase-lambda (`(,prefix ,time ,long))
+                       (when time
+                         (concat prefix
+                                 (pcase time
+                                   ;; Org timestamp
+                                   ((pred stringp)
+                                    time)
+                                   (`(timestamp . ,_)
+                                    (org-element-property :raw-value time))
+                                   (_
+                                    (org-format-time-string
+                                     (org-time-stamp-format long)
+                                     time))))))
+                     `((nil ,active-ts long)
+                       ("SCHEDULED: " ,scheduled nil)
+                       ("DEADLINE: " ,deadline nil)))
+          (or drawer akirak-org-capture-default-drawer "")
+          (pcase body
+            (`nil "")
+            ((pred stringp) body)
+            ((pred listp) (string-join body "\n"))
+            (`t (if (or (eq headline t)
+                        (equal headline "%?"))
+                    ""
+                  "%?")))))
+
+;;;###autoload
+(defun akirak-org-capture-add-templates (templates)
+  "Add TEMPLATES to `org-capture-templates' without duplicates."
+  (declare (indent 1))
+  (prog1 org-capture-templates
+    (pcase-dolist (`(,key . ,args) templates)
+      (if-let (cell (assoc key org-capture-templates))
+          (setcdr cell args)
+        (add-to-list 'org-capture-templates
+                     (cons key args)
+                     t)))))
+
+;;;###autoload
+(defun akirak-org-capture-with-doct (declarations)
+  "Dispatch `org-capture' with doct DECLARATIONS."
+  (let ((orig-contexts org-capture-templates-contexts)
+        (org-capture-templates (progn
+                                 (setq org-capture-templates-contexts nil)
+                                 (doct declarations))))
+    (unwind-protect
+        (org-capture)
+      (setq org-capture-templates-contexts orig-contexts))))
+
+(provide 'akirak-org-capture)
+;;; akirak-org-capture.el ends here
