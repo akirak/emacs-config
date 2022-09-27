@@ -2363,6 +2363,10 @@ Functional Org Mode API
 :PROPERTIES:
 :CREATED_TIME: [2022-09-27 Tue 23:59]
 :END:
+#+begin_quote
+Utilities for in-file links
+[[https://github.com/akirak/org-nlink.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-nlink)
@@ -2371,6 +2375,11 @@ Functional Org Mode API
         (:bind "M-s l" #'org-nlink-occur))))
 #+end_src
 **** consult-org-nlink
+#+begin_quote
+Consult interface for org-nlink
+[[https://github.com/akirak/org-nlink.el]]
+#+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package consult-org-nlink)
       (:with-feature org
@@ -5907,7 +5916,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 208 |
+| [[org-ql-search:tags:packages][packages]]            | 211 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
