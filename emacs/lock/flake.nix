@@ -438,12 +438,6 @@
       repo = "git-gutter";
       type = "github";
     };
-    git-identity = {
-      flake = false;
-      owner = "akirak";
-      repo = "git-identity.el";
-      type = "github";
-    };
     git-modes = {
       flake = false;
       owner = "magit";
