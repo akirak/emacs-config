@@ -486,7 +486,7 @@
 ;;;###autoload
 (defun akirak-capture-troubleshooting ()
   (interactive)
-  (let ((text (read-from-kill-ring "Error message: ")))
+  (let ((text (read-string "Error message: ")))
     (when (string-empty-p (string-trim text))
       (setq text nil))
     (setq akirak-capture-headline (if (and text
