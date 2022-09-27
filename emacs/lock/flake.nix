@@ -140,6 +140,12 @@
       repo = "org-dog";
       type = "github";
     };
+    consult-org-nlink = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-nlink.el";
+      type = "github";
+    };
     corfu = {
       flake = false;
       owner = "minad";
@@ -827,6 +833,12 @@
       flake = false;
       owner = "ndwarshuis";
       repo = "org-ml";
+      type = "github";
+    };
+    org-nlink = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-nlink.el";
       type = "github";
     };
     org-ql = {

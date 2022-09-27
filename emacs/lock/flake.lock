@@ -67,11 +67,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1662838881,
-        "narHash": "sha256-c6pZnCewMU0UvTI4hwLhxsWuNyO8kUXjfAsQ61oyknQ=",
+        "lastModified": 1664281458,
+        "narHash": "sha256-gBpho/vECI+nBNXqoWhB1wKhHOt7qhacW4KxaqsMw8Y=",
         "owner": "~akirak",
         "repo": "nix-config",
-        "rev": "b40cd70fb73b0913757108c08b1a4c6e1b23c53e",
+        "rev": "02b9c829993ff4db7486027ac8408635eec1c125",
         "type": "sourcehut"
       },
       "original": {
@@ -366,6 +366,22 @@
         "owner": "akirak",
         "ref": "develop",
         "repo": "org-dog",
+        "type": "github"
+      }
+    },
+    "consult-org-nlink": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1664305000,
+        "narHash": "sha256-ndK5pOTh+Ho8r089QewlzKipdVtibxCHBscDf4SgLUE=",
+        "owner": "akirak",
+        "repo": "org-nlink.el",
+        "rev": "90f1d5ea6145a5a75cb8a0a2e3de669d65c2a84f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "org-nlink.el",
         "type": "github"
       }
     },
@@ -884,11 +900,11 @@
     "fancy-dabbrev": {
       "flake": false,
       "locked": {
-        "lastModified": 1631173929,
-        "narHash": "sha256-v3XCowy9whqFHNTHLn68L+FfKN7sonizAZNvXqc30OI=",
+        "lastModified": 1644561223,
+        "narHash": "sha256-hRz0Cbg7WXI545CxLc14qqPJZ+2UJ+etjhoiQze/6RM=",
         "owner": "jrosdahl",
         "repo": "fancy-dabbrev",
-        "rev": "9435ad63c1c4756f574ae98d2d63ecf1189ec832",
+        "rev": "cf4a2f7e3e43e07ab9aa9db16532a21010e9fc8c",
         "type": "github"
       },
       "original": {
@@ -1189,11 +1205,11 @@
     "github-linguist": {
       "flake": false,
       "locked": {
-        "lastModified": 1650241325,
-        "narHash": "sha256-os0HTVFkkJQ7XgU62y4sIWnHH3iIQ6z4+/uaCiHUSwE=",
+        "lastModified": 1664286825,
+        "narHash": "sha256-1ENOqlxVRndz8M6zqD8bFy5dHNxx/2e3ipxZeJ5fsSg=",
         "owner": "akirak",
         "repo": "github-linguist.el",
-        "rev": "e1055cba19d82620a735e8e40d094b538e1f4d94",
+        "rev": "f8f28745542d7e4300d73c6bf006ce48b6657947",
         "type": "github"
       },
       "original": {
@@ -2204,6 +2220,22 @@
         "type": "github"
       }
     },
+    "org-nlink": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1664305000,
+        "narHash": "sha256-ndK5pOTh+Ho8r089QewlzKipdVtibxCHBscDf4SgLUE=",
+        "owner": "akirak",
+        "repo": "org-nlink.el",
+        "rev": "90f1d5ea6145a5a75cb8a0a2e3de669d65c2a84f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "org-nlink.el",
+        "type": "github"
+      }
+    },
     "org-ql": {
       "flake": false,
       "locked": {
@@ -2709,6 +2741,7 @@
         "consult": "consult",
         "consult-ls-git": "consult-ls-git",
         "consult-org-dog": "consult-org-dog",
+        "consult-org-nlink": "consult-org-nlink",
         "corfu": "corfu",
         "corfu-doc": "corfu-doc",
         "dash": "dash",
@@ -2823,6 +2856,7 @@
         "org-lang-env": "org-lang-env",
         "org-make-toc": "org-make-toc",
         "org-ml": "org-ml",
+        "org-nlink": "org-nlink",
         "org-ql": "org-ql",
         "org-recur": "org-recur",
         "org-reverse-datetree": "org-reverse-datetree",
