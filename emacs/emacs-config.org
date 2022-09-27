@@ -2359,6 +2359,24 @@ Functional Org Mode API
 #+begin_src emacs-lisp
 (setup (:package org-ml))
 #+end_src
+*** org-nlink
+:PROPERTIES:
+:CREATED_TIME: [2022-09-27 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-nlink)
+    (:with-feature org
+      (:with-map org-mode-map
+        (:bind "M-s l" #'org-nlink-occur))))
+#+end_src
+**** consult-org-nlink
+#+begin_src emacs-lisp
+  (setup (:package consult-org-nlink)
+      (:with-feature org
+        (:with-map org-mode-map
+          (:bind "C-x i" #'consult-org-nlink-insert))))
+#+end_src
 *** COMMENT org-noter                                                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:59]
