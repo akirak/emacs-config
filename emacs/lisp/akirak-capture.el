@@ -312,6 +312,13 @@
        (setq akirak-capture-headline ""
              akirak-capture-template-options '(:tags "@note")
              akirak-capture-doct-options nil)
+       (akirak-capture-doct)))
+    ("l" "Link as heading"
+     (lambda ()
+       (interactive)
+       (setq akirak-capture-headline "%A"
+             akirak-capture-template-options '(:body "%?")
+             akirak-capture-doct-options nil)
        (akirak-capture-doct)))]
 
    ["Schedule an event"
