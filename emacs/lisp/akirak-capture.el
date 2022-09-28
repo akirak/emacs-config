@@ -276,22 +276,22 @@
                        akirak-capture-template-options '(:todo "TODO")
                        akirak-capture-doct-options nil)
                  (akirak-capture-doct)))
-   ("r" "Research topic" (lambda ()
-                           (interactive)
-                           (setq akirak-capture-headline "%^{Title}"
-                                 akirak-capture-template-options
-                                 '(:todo "UNDERWAY" :tags "@research")
-                                 akirak-capture-doct-options (list :clock-in t
-                                                                   :clock-resume t
-                                                                   :jump-to-captured t))
-                           (akirak-capture-doct)))
-   ("m" "Compose a message" (lambda ()
-                              (interactive)
-                              (setq akirak-capture-headline "%^{Title}"
-                                    akirak-capture-template-options '(:todo "UNDERWAY"
-                                                                            :tags "@message")
-                                    akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                              (akirak-capture-doct)))
+   ;; ("r" "Research topic" (lambda ()
+   ;;                         (interactive)
+   ;;                         (setq akirak-capture-headline "%^{Title}"
+   ;;                               akirak-capture-template-options
+   ;;                               '(:todo "UNDERWAY" :tags "@research")
+   ;;                               akirak-capture-doct-options (list :clock-in t
+   ;;                                                                 :clock-resume t
+   ;;                                                                 :jump-to-captured t))
+   ;;                         (akirak-capture-doct)))
+   ;; ("m" "Compose a message" (lambda ()
+   ;;                            (interactive)
+   ;;                            (setq akirak-capture-headline "%^{Title}"
+   ;;                                  akirak-capture-template-options '(:todo "UNDERWAY"
+   ;;                                                                          :tags "@message")
+   ;;                                  akirak-capture-doct-options '(:clock-in t :clock-resume t))
+   ;;                            (akirak-capture-doct)))
    ("!" "Troubleshoot" akirak-capture-troubleshooting)]
 
   ["Information (input, events, etc.)"
