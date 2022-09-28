@@ -46,6 +46,15 @@
   "Root of the repositories."
   :type 'directory)
 
+(defcustom akirak-git-clone-owned-repos
+  '(("github" owner "akirak" "emacs-twist")
+    ("sourcehut" owner "~akirak"))
+  ""
+  :type '(alist :key-type string
+                :value-type (cons symbol (repeat (choice (list (const regexp)
+                                                               string)
+                                                         string)))))
+
 (defcustom akirak-git-clone-browser-function
   #'dired
   "Function used to open a directory."
@@ -188,54 +197,76 @@ URL can be either a Git url or url representation of a flake ref."
   ""
   :type '(repeat string))
 
+(defun akirak-git-clone--name-from-ref (ref)
+  (or (alist-get 'repo ref)
+      (akirak-git-clone--repo-name (alist-get 'url ref))))
+
+(defun akirak-git-clone--clone-url-from-ref (ref)
+  (pcase (alist-get 'type ref)
+    ("github"
+     (format "https://github.com/%s/%s.git"
+             (alist-get 'owner ref)
+             (alist-get 'repo ref)))
+    ("sourcehut"
+     (format "https://git.sr.ht/%s/%s"
+             (alist-get 'owner ref)
+             (alist-get 'repo ref)))
+    ("git"
+     (alist-get 'url ref))))
+
 (cl-defun akirak-git-clone-flake-node (ref &optional directory
                                            &key callback)
-  (cl-labels
-      ((git-clone
-         (git-url dest)
-         (if (file-directory-p dest)
-             (if callback
-                 (funcall callback dest)
-               (akirak-git-clone-browse dest))
-           (akirak-git-clone--clone git-url dest
-                                    :callback callback)))
-       (make-dest-path
-         (parent)
-         (cond
-          ((file-name-absolute-p parent)
-           parent)
-          ((stringp parent)
-           (pcase (alist-get 'type ref)
-             ("github"
-              (expand-file-name parent "~/work/github.com/"))
-             ("sourcehut"
-              (expand-file-name parent "~/work/git.sr.ht/"))
-             ("git"
-              (expand-file-name parent (concat "~/work/"
-                                               (akirak-git-clone--git-host
-                                                (alist-get 'url ref)))))))
-          (t
-           (error "Not implemented for empty directory")))))
-    (cl-etypecase ref
-      (string (error "Not implemented"))
-      (list (pcase (alist-get 'type ref)
-              ("github"
-               (git-clone (format "https://github.com/%s/%s.git"
-                                  (alist-get 'owner ref)
-                                  (alist-get 'repo ref))
-                          (expand-file-name (alist-get 'repo ref)
-                                            (make-dest-path directory))))
-              ("sourcehut"
-               (git-clone (format "https://git.sr.ht/%s/%s"
-                                  (alist-get 'owner ref)
-                                  (alist-get 'repo ref))
-                          (expand-file-name (alist-get 'repo ref)
-                                            (make-dest-path directory))))
-              ("git"
-               (git-clone (alist-get 'url ref)
-                          (expand-file-name (akirak-git-clone--repo-name
-                                             (alist-get 'url ref))
-                                            (make-dest-path directory)))))))))
+  (cl-etypecase ref
+    (string (error "Not implemented"))
+    (list
+     (let* ((name (akirak-git-clone--name-from-ref ref))
+            (url (akirak-git-clone--clone-url-from-ref ref))
+            (existing-repo (thread-last
+                             (project-known-project-roots)
+                             (seq-filter (lambda (dir)
+                                           (string-prefix-p "~/work2/" dir)))
+                             (seq-find `(lambda (dir)
+                                          (string-suffix-p ,(file-name-as-directory name)
+                                                           dir))))))
+       (if (and existing-repo
+                (file-directory-p existing-repo))
+           (if callback
+               (funcall callback existing-repo)
+             (akirak-git-clone-browse existing-repo))
+         (akirak-git-clone--clone
+          url (expand-file-name name
+                                (if (akirak-git-clone--contribution-p ref)
+                                    "~/work2/foss/contributions/"
+                                  (akirak-git-clone-read-parent
+                                   (format "Parent directory for %s: " name))))
+          :callback callback
+          :ref (alist-get 'ref ref)))))))
+
+(defun akirak-git-clone--contribution-p (ref)
+  "Return non-nil if REF seems to be a target of minor contribution."
+  (pcase (cdr (assoc (alist-get 'type ref) akirak-git-clone-owned-repos))
+    (`nil t)
+    (`(,field . ,patterns)
+     (let ((value (alist-get field ref)))
+       (not (seq-find `(lambda (pattern)
+                         (pcase pattern
+                           (`(regexp ,regexp)
+                            (string-match-p regexp ,value))
+                           ((pred stringp)
+                            (equal pattern ,value))))
+                      patterns))))
+    (x
+     (error "Mismatched pattern: %s" x))))
+
+(defun akirak-git-clone-read-parent (prompt)
+  (let ((dir (completing-read prompt
+                              (thread-last
+                                (akirak-project-parents)
+                                (seq-filter (lambda (dir)
+                                              (string-prefix-p "~/work2/" dir)))))))
+    (unless (file-directory-p dir)
+      (make-directory dir 'parents))
+    dir))
 
 ;;;###autoload
 (cl-defun akirak-git-clone-elisp-package (node &key filename char)
