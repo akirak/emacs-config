@@ -89,6 +89,16 @@
   (akirak-url-complete "URL: " (oref obj value)
                        akirak-url-insert-history))
 
+(cl-defmethod transient-format-value ((obj akirak-capture-url-variable))
+  (let ((value (oref obj value)))
+    (concat
+     (propertize "(" 'face 'transient-inactive-value)
+     (propertize (if (> (length value) 30)
+                     (concat (substring value 0 30) "...")
+                   value)
+                 'face 'transient-value)
+     (propertize ")" 'face 'transient-inactive-value))))
+
 (transient-define-infix akirak-capture-source-url ()
   :class 'akirak-capture-url-variable
   :variable 'akirak-capture-current-url
