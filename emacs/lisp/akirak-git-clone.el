@@ -142,18 +142,20 @@
         (string-remove-suffix ".git" (match-string 1 git-url))
       (error "Failed to match on %s" git-url))))
 
-(cl-defun akirak-git-clone--clone (origin dest &key callback)
+(cl-defun akirak-git-clone--clone (origin dest &key callback ref)
   "Clone a Git repository from ORIGIN to DEST."
   (let ((parent (f-parent dest)))
     (unless (file-directory-p parent)
       (make-directory parent t)))
   (message "Cloning %s to %s..." origin dest)
-  (let ((proc (start-process "flake clone"
-                             "*flake clone*"
-                             "git"
-                             "clone"
-                             "--filter=blob:none"
-                             origin dest)))
+  (let ((proc (apply #'start-process "flake clone"
+                     "*flake clone*"
+                     "git"
+                     "clone"
+                     "--filter=blob:none"
+                     origin dest
+                     (when ref
+                       (list "-b" ref)))))
     (set-process-sentinel proc
                           `(lambda (process _event)
                              (when (eq 'exit (process-status process))
