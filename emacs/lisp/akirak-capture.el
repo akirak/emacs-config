@@ -286,6 +286,7 @@
                        akirak-capture-template-options '(:todo "TODO")
                        akirak-capture-doct-options nil)
                  (akirak-capture-doct)))
+   ("#" "Ticket" akirak-capture-ticket)
    ;; ("r" "Research topic" (lambda ()
    ;;                         (interactive)
    ;;                         (setq akirak-capture-headline "%^{Title}"
@@ -536,6 +537,46 @@
                                                            text
                                                            "#+end_example"))))
     (akirak-capture-doct)))
+
+(defun akirak-capture-ticket ()
+  (interactive)
+  (if (derived-mode-p 'forge-topic-mode)
+      (let ((plist (akirak-capture--forge-topic)))
+        (setq akirak-capture-headline (concat forge-buffer-topic-ident " "
+                                              (plist-get plist :title))
+              akirak-capture-template-options `(:todo "TODO"
+                                                      :body
+                                                      (list "%?"
+                                                            "#+begin_quote"
+                                                            (plist-get plist :content)
+                                                            "#+end_quote"))))
+    (setq akirak-capture-headline (read-string "Topic: " "#")
+          akirak-capture-template-options `(:todo "TODO")))
+  (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
+  (akirak-capture-doct))
+
+(defun akirak-capture--forge-topic ()
+  "Parse the content of a forge topic buffer.
+
+This is a hack that parses the buffer of a special mode. It may
+not work in the future when forge changes the output."
+  (save-excursion
+    (cl-labels
+        ((topic-property (key)
+           (goto-char (point-min))
+           (re-search-forward (concat key ":[[:blank:]]+"))
+           (let ((string (buffer-substring-no-properties (point) (pos-eol))))
+             (unless (equal string "none")
+               string))))
+      (list :title (topic-property "Title")
+            ;; :labels (topic-property "Labels")
+            ;; :milestone (topic-property "Milestone")
+            :content (progn
+                       (goto-char (point-min))
+                       (magit-section-forward-sibling)
+                       (let ((start (point)))
+                         (magit-section-forward-sibling)
+                         (buffer-substring-no-properties start (point))))))))
 
 (defun akirak-capture-command-snippet ()
   (interactive)
