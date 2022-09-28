@@ -2989,6 +2989,15 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
+*** burly
+:PROPERTIES:
+:CREATED_TIME: [2022-09-28 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package burly))
+#+end_src
+
 *** buttercup                      :Emacs__Lisp:testing:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-04 Fri 18:14]
@@ -3370,6 +3379,31 @@ Hide dotfiles in dired
 #+end_src
 
 dired-k depends on dired-x, which has a poor code quality.
+*** dogears
+:PROPERTIES:
+:CREATED_TIME: [2022-09-28 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dogears)
+    (:hook-into after-init-hook)
+
+    (defvar dogears-mode-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map (kbd "C-z") #'dogears-remember)
+        (define-key map (kbd "M-g M-z") #'dogears-go)
+        (define-key map (kbd "<C-left>") #'dogears-back)
+        (define-key map (kbd "<C-right>") #'dogears-forward)
+        map))
+
+    (advice-add 'dogears-remember
+                :around
+                (defun akirak/ad-around-dogears-remember (orig &rest args)
+                  ;; Some of my Org files must not contain IDs, so this option
+                  ;; should be set nil.
+                  (let ((org-bookmark-heading-make-ids nil))
+                    (apply orig args)))))
+#+end_src
 *** dotenv-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-09-04 Sun 23:59]
