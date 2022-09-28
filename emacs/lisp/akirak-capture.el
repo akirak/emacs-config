@@ -187,13 +187,27 @@
   :variable 'akirak-capture-doct-options
   :prop :clock-resume)
 
+(defvar akirak-capture-select-heading nil)
+
+(transient-define-infix akirak-capture-select-heading ()
+  :class 'akirak-transient-flag-variable
+  :description "Select a heading"
+  :variable 'akirak-capture-select-heading)
+
+(defun akirak-capture--goto-some-heading ()
+  (goto-char (org-ql-completing-read (org-base-buffer (current-buffer))
+               :prompt "Select a heading: ")))
+
 (transient-define-prefix akirak-capture-doct ()
-  ["Options"
-   ("-t" akirak-capture-todo-infix)
-   ("-h" akirak-capture-headline-infix)
-   ("-g" akirak-capture-tags-infix)
-   ("-i" akirak-capture-doct-clock-in)
-   ("-r" akirak-capture-doct-clock-resume)]
+  ["Infixes"
+   ["Options"
+    ("-t" akirak-capture-todo-infix)
+    ("-h" akirak-capture-headline-infix)
+    ("-g" akirak-capture-tags-infix)
+    ("-i" akirak-capture-doct-clock-in)
+    ("-r" akirak-capture-doct-clock-resume)]
+   ["Location"
+    ("=" akirak-capture-select-heading)]]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
@@ -211,25 +225,30 @@
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-doct))
                                  target)
-  (let* ((jump-func #'akirak-capture--goto-backlog)
-         (plist (cl-etypecase target
-                  (marker (list :function `(lambda ()
-                                             (org-goto-marker-or-bmk ,target)
-                                             (org-back-to-heading))))
-                  (string (list :file target
-                                :function jump-func))
-                  (org-dog-file (list :file (oref target absolute)
-                                      :function jump-func))))
-         (org-capture-entry
-          (car (doct
-                `((""
-                   :keys ""
-                   :template ,(apply #'akirak-org-capture-make-entry-body
-                                     akirak-capture-headline
-                                     akirak-capture-template-options)
-                   ,@akirak-capture-doct-options
-                   ,@plist))))))
+  (let ((org-capture-entry
+         (car (doct
+               `((""
+                  :keys ""
+                  :template ,(apply #'akirak-org-capture-make-entry-body
+                                    akirak-capture-headline
+                                    akirak-capture-template-options)
+                  ,@akirak-capture-doct-options
+                  ,@(akirak-capture--target-plist target)))))))
     (org-capture)))
+
+(defun akirak-capture--target-plist (target)
+  "Build a doct plist from the transient state."
+  (let ((jump-func (if akirak-capture-select-heading
+                       #'akirak-capture--goto-some-heading
+                     #'akirak-capture--goto-backlog)))
+    (cl-etypecase target
+      (marker (list :function `(lambda ()
+                                 (org-goto-marker-or-bmk ,target)
+                                 (org-back-to-heading))))
+      (string (list :file target
+                    :function jump-func))
+      (org-dog-file (list :file (oref target absolute)
+                          :function jump-func)))))
 
 ;;;; Transient prefixes
 
@@ -388,14 +407,15 @@
 
 ;;;###autoload (autoload 'akirak-capture-url "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture-url (url)
-  ["Options"
-   ("SPC" akirak-capture-source-url)
-   ("-t" akirak-capture-todo-infix)
-   ("-g" akirak-capture-tags-infix)
-   ("-i" akirak-capture-doct-clock-in)
-   ("-r" akirak-capture-doct-clock-resume)
-   ;; Location
-   ]
+  ["Infixes"
+   ["Options"
+    ("SPC" akirak-capture-source-url)
+    ("-t" akirak-capture-todo-infix)
+    ("-g" akirak-capture-tags-infix)
+    ("-i" akirak-capture-doct-clock-in)
+    ("-r" akirak-capture-doct-clock-resume)]
+   ["Location"
+    ("=" akirak-capture-select-heading)]]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
@@ -414,15 +434,6 @@
                                  target)
   (let* ((url akirak-capture-current-url)
          (heading (org-link-make-string url (orgabilize-document-title url)))
-         (jump-func #'akirak-capture--goto-backlog)
-         (plist (cl-etypecase target
-                  (marker (list :function `(lambda ()
-                                             (org-goto-marker-or-bmk ,target)
-                                             (org-back-to-heading))))
-                  (string (list :file target
-                                :function jump-func))
-                  (org-dog-file (list :file (oref target absolute)
-                                      :function jump-func))))
          (org-capture-entry
           (car (doct
                 `(("Url"
@@ -430,7 +441,7 @@
                    :template ,(apply #'akirak-org-capture-make-entry-body
                                      heading :body t
                                      akirak-capture-template-options)
-                   ,@plist))))))
+                   ,@(akirak-capture--target-plist target)))))))
     (org-capture)))
 
 (defvar akirak-capture-datetime nil)
