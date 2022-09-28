@@ -3993,6 +3993,8 @@ Emacs Minor mode to automatically commit and push
                 (cond
                  ((string-prefix-p "~/work/" root)
                   (org-link-display-format org-clock-current-task))
+                 ((string-prefix-p "~/work2/" root)
+                  (org-link-display-format org-clock-current-task))
                  ((string-prefix-p (expand-file-name root)
                                    clocking-file)
                   (format "%s: %s\n\n%s"
@@ -4593,6 +4595,7 @@ A Git porcelain inside Emacs
       (:set magit-repository-directories '(("~/" . 1)
                                            ("~/.config" . 1)
                                            ("~/work" . 3)
+                                           ("~/work2" . 3)
                                            ("~/archives/oss/" . 3)))
 
       (:when-loaded
