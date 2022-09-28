@@ -80,6 +80,12 @@
       repo = "blamer.el";
       type = "github";
     };
+    burly = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "burly.el";
+      type = "github";
+    };
     buttercup = {
       flake = false;
       owner = "jorgenschaefer";
@@ -204,6 +210,12 @@
       flake = false;
       owner = "progfolio";
       repo = "doct";
+      type = "github";
+    };
+    dogears = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "dogears.el";
       type = "github";
     };
     dotenv-mode = {
