@@ -25,6 +25,26 @@
      (propertize value 'face 'transient-value)
      (propertize ")" 'face 'transient-inactive-value))))
 
+;;;; akirak-transient-number-variable
+
+(defclass akirak-transient-number-variable (akirak-transient-variable)
+  ((variable :initarg :variable)
+   (zero-is-nil :initarg :zero-is-nil :initform nil)))
+
+(cl-defmethod transient-infix-read ((obj akirak-transient-number-variable))
+  (let ((value (read-number "New value: " (oref obj value))))
+    (unless (and (= value 0)
+                 (oref obj zero-is-nil))
+      value)))
+
+(cl-defmethod transient-format-value ((obj akirak-transient-number-variable))
+  (if-let (value (oref obj value))
+      (concat
+       (propertize "(" 'face 'transient-inactive-value)
+       (propertize (format "%d" value) 'face 'transient-value)
+       (propertize ")" 'face 'transient-inactive-value))
+    ""))
+
 ;;;; akirak-transient-choice-variable
 
 (defclass akirak-transient-choice-variable (akirak-transient-variable)
