@@ -2445,7 +2445,15 @@ Create reverse date trees in org-mode
           '((property "CLOSED")
             (clock latest)
             (property "CREATED_TIME"))
-          org-reverse-datetree-month-format "%Y-%m"))
+          org-reverse-datetree-month-format "%Y-%m")
+
+    (with-eval-after-load 'org
+      (define-key org-mode-map (kbd "C-c C-x M-j") #'org-reverse-datetree-calendar))
+
+    (with-eval-after-load 'calendar
+      (define-key calendar-mode-map "]" #'org-reverse-datetree-calendar-next)
+      (define-key calendar-mode-map "[" #'org-reverse-datetree-calendar-previous)
+      (define-key calendar-mode-map (kbd "RET") #'org-reverse-datetree-display-entry)))
 #+end_src
 *** COMMENT org-starter                                    :ARCHIVE:
 :PROPERTIES:
