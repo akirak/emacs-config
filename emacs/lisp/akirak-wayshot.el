@@ -97,9 +97,27 @@
           (sleep-for akirak-wayshot-delay-in-seconds))
         (akirak-wayshot--run (append (list "-f" filename)
                                      (akirak-wayshot--args))
-                             `(lambda () (dired-jump nil ,filename))))))]
+                             `(lambda () (dired-jump nil ,filename))))))
+   ("m" "Take many screenshots"
+    (lambda ()
+      (interactive)
+      (when (eq akirak-wayshot-slurp t)
+        (setq akirak-wayshot-slurp (akirak-wayshot--slurp)))
+      (akirak-wayshot-take-many)))]
   (interactive)
   (transient-setup 'akirak-wayshot))
+
+(defun akirak-wayshot-take-many ()
+  (interactive)
+  (pcase (read-char "Press SPACE to take a screenshot, n to cancel")
+    (?\s
+     (akirak-wayshot--run (append (list "-f" (akirak-wayshot--filename))
+                                  (akirak-wayshot--args))
+                          #'akirak-wayshot-take-many))
+    (?n
+     (dired akirak-wayshot-directory))
+    (_
+     (akirak-wayshot-take-many))))
 
 (defun akirak-wayshot--run (args &optional callback)
   (cl-labels
@@ -116,8 +134,9 @@
 
 (defun akirak-wayshot--args ()
   (append `("-e" ,akirak-wayshot-extension)
-          (when akirak-wayshot-slurp
-            `("-s" ,(akirak-wayshot--slurp)))
+          (pcase akirak-wayshot-slurp
+            (`t `("-s" ,(akirak-wayshot--slurp)))
+            ((pred stringp) `("-s" ,akirak-wayshot-slurp)))
           (transient-args 'akirak-wayshot)))
 
 (provide 'akirak-wayshot)
