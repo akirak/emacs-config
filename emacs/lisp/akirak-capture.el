@@ -578,6 +578,35 @@ not work in the future when forge changes the output."
                          (magit-section-forward-sibling)
                          (buffer-substring-no-properties start (point))))))))
 
+;;;###autoload
+(cl-defun akirak-capture-text (string &key as-body)
+  "Capture a new entry with the selected region as the headline."
+  (interactive (if (equal current-prefix-arg '(4))
+                   (list (read-string "Content: ")
+                         :as-body t)
+                 (read-string "Headline: ")))
+  (if as-body
+      (let ((body-type (pcase (org--insert-structure-template-mks)
+                         (`("\t" . ,_) (read-string "Structure type: "))
+                         (`(,_ ,choice . ,_) choice))))
+        (setq akirak-capture-headline "%^{Title}"
+              akirak-capture-template-options
+              `(:body ,(list "%?"
+                             (concat "#+begin_" body-type
+                                     (when (equal body-type "src")
+                                       (thread-last
+                                         (symbol-name major-mode)
+                                         (string-remove-suffix "-mode")
+                                         (concat " "))))
+                             string
+                             (concat "#+end_" (car (split-string body-type)))
+                             "%a"))
+              akirak-capture-doct-options nil))
+    (setq akirak-capture-headline string
+          akirak-capture-template-options nil
+          akirak-capture-doct-options nil))
+  (akirak-capture-doct))
+
 (defun akirak-capture-command-snippet ()
   (interactive)
   (setq akirak-capture-headline "%^{Title}"
