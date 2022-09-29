@@ -2722,7 +2722,8 @@ This is a collection of extra utilities for various packages.
 **** akirak-capture
 #+begin_src emacs-lisp
   (setup akirak-capture
-    (:global "C-c c" #'akirak-capture))
+    (:global "C-c c" #'akirak-capture
+             "C-c C" #'akirak-capture-text))
 #+end_src
 **** akirak-comment
 #+begin_src emacs-lisp
