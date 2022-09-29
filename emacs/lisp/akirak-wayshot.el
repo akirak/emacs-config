@@ -65,6 +65,16 @@
       (error "Slurp failed with non-zero exit code"))
     (string-chop-newline (buffer-string))))
 
+;;;; Timer
+
+(defvar akirak-wayshot-delay-in-seconds nil)
+
+(transient-define-infix akirak-wayshot-set-delay ()
+  :class 'akirak-transient-number-variable
+  :variable 'akirak-wayshot-delay-in-seconds
+  :zero-is-nil t
+  :description "Delay in seconds")
+
 ;;;; Prefix
 
 ;;;###autoload (autoload 'akirak-wayshot "akirak-wayshot" nil 'interactive)
@@ -76,11 +86,15 @@
    ("-e" akirak-wayshot-set-extension)
    ;; TODO: Add output support (Use "wayshot -o" to retrieve the list)
    ;; ("-o" akirak-wayshot-set-output)
-   ("-d" "Debug" "--debug")]
+   ("-d" "Debug" "--debug")
+   ("-t" "Timer" akirak-wayshot-set-delay)]
   [("d" "Save to the directory"
     (lambda ()
       (interactive)
       (let ((filename (akirak-wayshot--filename)))
+        (when akirak-wayshot-delay-in-seconds
+          (message "Sleeping for %d seconds..." akirak-wayshot-delay-in-seconds)
+          (sleep-for akirak-wayshot-delay-in-seconds))
         (akirak-wayshot--run (append (list "-f" filename)
                                      (akirak-wayshot--args))
                              `(lambda () (dired-jump nil ,filename))))))]
