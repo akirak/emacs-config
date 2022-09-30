@@ -265,13 +265,6 @@
 ;;;###autoload (autoload 'akirak-capture "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture ()
   "Main entry point to capture commands."
-  ;; These should be separate commands to allow integration with embark.
-  ;;
-  ;; ["From the buffer"
-  ;;  ;; Word, symbol, etc.
-  ;;  ;; Highlight
-  ;;  ]
-
   ["Actions (generic / specific type)"
    :class transient-row
    ("T" "Start todo" (lambda ()
