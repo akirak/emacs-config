@@ -28,6 +28,9 @@ riverctl map normal Super+Shift S spawn 'flameshot gui'
 
 riverctl map normal Super F9 spawn 'foot nixos-rebuild-and-notify'
 
+riverctl map normal Super E spawn 'emacs-unsafe'
+riverctl map normal Super+Shift E spawn 'emacs-unsafe-installer'
+
 # Super+Shift+Q to exit river
 riverctl map normal Super+Shift Q exit
 
