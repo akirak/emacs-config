@@ -405,10 +405,10 @@
     (transient-setup 'akirak-capture))))
 
 (transient-define-prefix akirak-capture-active-region ()
-  ;; [:description
-  ;;  akirak-capture--clock-description
-  ;;  :if org-clocking-p
-  ;;  ]
+  [:description
+   akirak-capture--clock-description
+   :if org-clocking-p
+   ("b" "Block" akirak-capture-region-to-clock)]
 
   ["New entry as"
    ("s" "Snippet" akirak-capture-snippet)
@@ -646,6 +646,24 @@ not work in the future when forge changes the output."
         (list :function #'akirak-snippet-select-location
               :after-finalize #'akirak-snippet--after-capture-finalize))
   (akirak-capture-doct))
+
+(defun akirak-capture-region-to-clock ()
+  (interactive)
+  (akirak-capture--to-clock
+   'plain
+   (let ((body-type (pcase (org--insert-structure-template-mks)
+                      (`("\t" . ,_) (read-string "Structure type: "))
+                      (`(,_ ,choice . ,_) choice))))
+     (list (concat "#+begin_" body-type
+                   (when (equal body-type "src")
+                     (thread-last
+                       (symbol-name major-mode)
+                       (string-remove-suffix "-mode")
+                       (concat " "))))
+           (replace-regexp-in-string
+            "%" "%%" (buffer-substring-no-properties (region-beginning) (region-end)))
+           (concat "#+end_" (car (split-string body-type)))))
+   :empty-lines-before 1))
 
 ;;;; Helper functions
 
