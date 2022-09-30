@@ -13,7 +13,7 @@
     nmap
     pciutils
     usbutils
-    utillinux
+    util-linux
     whois
     unzip
     lzip
