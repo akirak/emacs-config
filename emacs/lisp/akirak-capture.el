@@ -584,7 +584,7 @@ not work in the future when forge changes the output."
   (interactive (if (equal current-prefix-arg '(4))
                    (list (read-string "Content: ")
                          :as-body t)
-                 (read-string "Headline: ")))
+                 (list (read-string "Headline: "))))
   (if as-body
       (let ((body-type (pcase (org--insert-structure-template-mks)
                          (`("\t" . ,_) (read-string "Structure type: "))
