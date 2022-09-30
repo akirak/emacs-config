@@ -352,14 +352,13 @@
                      :body ("| Time | Destination |"
                             "|------+-------------|"
                             "| %? | |")))
-       (akirak-capture-appointment)))]
+       (akirak-capture-appointment)))]]
 
-   ["Convenience"
-    ("sc" "Command snippet" akirak-capture-command-snippet)]]
-
-  ["Specific projects"
-   :class transient-row
-   ("e" "Emacs config" akirak-emacs-config-capture)]
+  [["Convenience"
+    ("sc" "Command snippet" akirak-capture-command-snippet)]
+   ["Specific projects"
+    :class transient-row
+    ("e" "Emacs config" akirak-emacs-config-capture)]]
 
   (interactive)
   (cond
