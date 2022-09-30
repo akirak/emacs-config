@@ -282,10 +282,6 @@
             name = "tryout-emacs";
             enableOpinionatedSettings = false;
             extraFeatures = [];
-            extraInitText = ''
-              (require 'sanityinc-tomorrow-night-theme)
-              (load-theme 'sanityinc-tomorrow-night t)
-            '';
             protectHome = false;
             shareNet = false;
             inheritPath = false;

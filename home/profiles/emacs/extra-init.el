@@ -1,25 +1,3 @@
-;; Customize modus-operandi theme.
-;; See [[info:modus-themes#Override colors]]
-;; and [[info:modus-themes#Customization Options]]
-(progn
-  (setq modus-themes-operandi-color-overrides
-        '((bg-main . "#e1d9c2")
-          (fg-main . "#333333"))
-
-        modus-themes-bold-constructs nil
-        modus-themes-italic-constructs t
-        modus-themes-paren-match '(bold intence)
-        modus-themes-org-blocks 'gray-background
-
-        modus-themes-links '(neutral-underline)
-
-        modus-themes-headings
-        '((1 . (background medium variable-pitch 1.5))
-          (2 . (rainbow overline variable-pitch 1.1))
-          (4 . (variable-pitch))))
-  (modus-themes-load-themes)
-  (modus-themes-load-operandi))
-
 (let ((file "~/org/config.el"))
   (when (file-exists-p file)
     (load-file file)))
