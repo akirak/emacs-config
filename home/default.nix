@@ -30,6 +30,10 @@ with builtins; let
       desktop
       ++ [
         ./profiles/wm/xmonad
+      ];
+    river =
+      desktop
+      ++ [
         ./profiles/wm/river
       ];
     personal = [

@@ -3,7 +3,7 @@
   username = "akirakomamura";
 
   homeModules = [
-    "xmonad"
+    "river"
     "symlinks"
     "personal"
   ];
