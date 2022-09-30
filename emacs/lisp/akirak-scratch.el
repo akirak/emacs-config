@@ -15,6 +15,10 @@
     (pop-to-buffer (or (get-buffer buffer-name)
                        (with-current-buffer (generate-new-buffer buffer-name)
                          (lisp-interaction-mode)
+                         (setq-local header-line-format
+                                     '("Elisp Scratch ("
+                                       default-directory
+                                       ")"))
                          (current-buffer))))))
 
 (defvar akirak-scratch-mode-map
