@@ -13,6 +13,7 @@
 - [[#typography-settings][Typography settings]]
 - [[#org][Org]]
 - [[#packages][Packages]]
+- [[#post-init][Post init]]
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
   - [[#tag-statistics][Tag statistics]]
@@ -2175,7 +2176,15 @@ A programmable workflow layer for Org mode
 
     (with-eval-after-load 'org-dog-overview
       (define-key org-dog-overview-mode-map
-                  (kbd "+") #'org-dog-add-header-link)))
+                  (kbd "+") #'org-dog-add-header-link))
+
+    (:status personal
+      (:defer 1
+              (defun akirak/org-dog-load-on-startup ()
+                ;; I don't want to hide the init time in the echo area.
+                (let ((inhibit-message t))
+                  (require 'org-dog)
+                  (org-dog-reload-files t))))))
 #+end_src
 **** consult-org-dog
 :PROPERTIES:
@@ -5940,6 +5949,19 @@ A major mode for the Zig programming language
 #+begin_src emacs-lisp
   (setup (:package zig-mode)
     (:file-match "\\.zig\\'"))
+#+end_src
+** Post init
+Load my personal settings after all the things.
+
+#+begin_src emacs-lisp
+  (setup init
+    (:status personal
+      (let ((file "~/org/config.el"))
+        (when (file-exists-p file)
+          (load-file file)))
+
+      (when (and custom-file (file-exists-p custom-file))
+        (load custom-file))))
 #+end_src
 ** Notes                                                      :@note:
 :PROPERTIES:
