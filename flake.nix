@@ -19,6 +19,8 @@
       flake = false;
     };
 
+    emacs-sandbox.url = "path:./templates/emacs-sandbox";
+
     # NixOS modules
     impermanence.url = "github:nix-community/impermanence";
     # nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -289,35 +291,7 @@
             inheritPath = false;
           };
 
-          emacs-personalized = emacsSandboxed {
-            name = "emacs-personalized";
-            shareNet = false;
-            protectHome = true;
-            inheritPath = true;
-            userEmacsDirectory = "$HOME/emacs";
-            extraInitText = builtins.readFile ./home/profiles/emacs/extra-init.el;
-            extraDirsToTryBind = [
-              "$HOME/emacs"
-              "$HOME/config"
-              "$HOME/fleeting"
-              "$HOME/org"
-              "$HOME/resources"
-            ];
-          };
-
-          emacs-reader = emacsSandboxed {
-            name = "emacs-reader";
-            withXwidgets = true;
-            shareNet = true;
-            protectHome = true;
-            inheritPath = false;
-            userEmacsDirectory = "$HOME/emacs";
-            extraInitText = builtins.readFile ./home/profiles/emacs/extra-init.el;
-            extraDirsToTryBind = [
-              "$HOME/org"
-              "$HOME/resources"
-            ];
-          };
+          emacs-sandboxed = emacsSandboxed inputs.emacs-sandbox.lib.emacs-sandbox;
 
           inherit (channels.nixpkgs) readability-cli;
 

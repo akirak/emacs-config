@@ -51,6 +51,18 @@
         "type": "github"
       }
     },
+    "emacs-sandbox": {
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-z9FWSkANje+xrt1BcgSrDJ5AMH6yiNH/5xzfk6uZfqg=",
+        "path": "./templates/emacs-sandbox",
+        "type": "path"
+      },
+      "original": {
+        "path": "./templates/emacs-sandbox",
+        "type": "path"
+      }
+    },
     "epkgs": {
       "flake": false,
       "locked": {
@@ -419,6 +431,7 @@
       "inputs": {
         "emacs": "emacs",
         "emacs-overlay": "emacs-overlay",
+        "emacs-sandbox": "emacs-sandbox",
         "epkgs": "epkgs",
         "epubinfo": "epubinfo",
         "flake-no-path": "flake-no-path",
