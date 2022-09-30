@@ -1218,6 +1218,22 @@
         "type": "github"
       }
     },
+    "git-identity": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1664187563,
+        "narHash": "sha256-jeeuls/vAGfRLHGNL5km8899f/2wuiZPTR0A7h6EwSY=",
+        "owner": "akirak",
+        "repo": "git-identity.el",
+        "rev": "0870feb72bec44375d2b7f34eec8d2b38297a23a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "git-identity.el",
+        "type": "github"
+      }
+    },
     "git-modes": {
       "flake": false,
       "locked": {
@@ -2826,6 +2842,7 @@
         "git-auto-commit-mode": "git-auto-commit-mode",
         "git-commit": "git-commit",
         "git-gutter": "git-gutter",
+        "git-identity": "git-identity",
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
         "gleam-mode": "gleam-mode",

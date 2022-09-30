@@ -4139,7 +4139,7 @@ Run GitHub Linguist on projects to collect information
     (:nixpkgs "github-linguist")
     (:set github-linguist-executable "github-linguist"))
 #+end_src
-*** COMMENT git-identity                                                    :VC:ARCHIVE:
+*** git-identity                                                    :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 15:24]
 :END:
@@ -4152,7 +4152,7 @@ Identity management for (ma)git
   (setup (:package git-identity)
     (:with-feature magit
       (:when-loaded
-        (git-identity-magit-mode 1)
+        ;; (git-identity-magit-mode 1)
         (:with-map magit-status-mode-map
           (:bind "I" #'git-identity-info))))
 
