@@ -25,6 +25,8 @@
 
     ignores = [
       ".direnv"
+      "result"
+      "result-*"
       "#*"
     ];
 
