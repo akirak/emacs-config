@@ -2,10 +2,6 @@
   programs.git = {
     enable = true;
 
-    # Omit the global user identity
-    # userEmail = "akira.komamura@gmail.com";
-    # userName = "Akira Komamura";
-
     extraConfig = {
       github.user = "akirak";
 
