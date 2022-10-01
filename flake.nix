@@ -381,6 +381,11 @@
           description = "A basic desktop host";
           path = ./sites/default;
         };
+
+        emacs-sandbox = {
+          description = "A sandbox configuration for Emacs";
+          path = ./templates/emacs-sandbox;
+        };
       };
 
       # abc = 132;
