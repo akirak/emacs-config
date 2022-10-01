@@ -42,24 +42,46 @@
       # Increase the size of post buffers to prevent hung ups of git-push.
       # https://stackoverflow.com/questions/6842687/the-remote-end-hung-up-unexpectedly-while-git-cloning#6849424
       http.postBuffer = "524288000";
-
-      # Use a global config to track configuration files for alternative identities
-      include.path = "~/.gitconfig";
-
-      "includeIf \"hasconfig:remote.*.url:git@git.sr.ht:~akirak/**\"".path = "${./git/default-identity}";
-
-      "includeIf \"hasconfig:remote.*.url:https://github.com/akirak/**\"".path = "${./git/default-identity}";
-
-      "includeIf \"hasconfig:remote.*.url:git@github.com:akirak/**\"".path = "${./git/default-identity}";
-
-      "includeIf \"hasconfig:remote.*.url:https://github.com/emacs-twist/**\"".path = "${./git/default-identity}";
-
-      "includeIf \"hasconfig:remote.*.url:git@github.com:emacs-twist/**\"".path = "${./git/default-identity}";
     };
 
     ignores = [
       ".direnv"
       "#*"
+    ];
+
+    # Include configuration files to activate contextual identities
+    includes = [
+      {
+        path = "~/.gitconfig";
+      }
+      {
+        path = ./git/default-identity;
+        condition = "hasconfig:remote.*.url:git@git.sr.ht:~akirak/**";
+      }
+      {
+        path = ./git/default-identity;
+        condition = "hasconfig:remote.*.url:https://git.sr.ht/~akirak/**";
+      }
+      {
+        path = ./git/default-identity;
+        condition = "gitdir:~/work2/foss/";
+      }
+      {
+        path = ./git/default-identity;
+        condition = "gitdir:~/work2/personal/";
+      }
+      {
+        path = ./git/default-identity;
+        condition = "gitdir:~/work2/prototypes/";
+      }
+      {
+        path = ./git/default-identity;
+        condition = "gitdir:/assets/";
+      }
+      {
+        path = ./git/default-identity;
+        condition = "gitdir:/git-annex/";
+      }
     ];
   };
 }
