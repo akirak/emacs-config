@@ -472,6 +472,7 @@
   (interactive (list (or (akirak-url-latest)
                          (akirak-url-complete "Capture URL: "))))
   (setq akirak-capture-current-url url
+        akirak-capture-doct-options nil
         akirak-capture-template-options nil)
   (transient-setup 'akirak-capture-url))
 
