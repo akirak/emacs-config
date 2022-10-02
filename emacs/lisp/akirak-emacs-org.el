@@ -38,28 +38,29 @@
           ("Package" :keys "p"
            :function ,(level2 "Packages")
            :src "(setup (:package %\\1)%?)")
-          ("Macro package" :keys "M"
-           :function ,(level2 "Macro packages")
-           :src "(setup (:package %\\1)%?)")
+
+          ;; ("Macro package" :keys "M"
+          ;;  :function ,(level2 "Macro packages")
+          ;;  :src "(setup (:package %\\1)%?)")
+
+          ;; ("Note" :keys "n"
+          ;;  :function ,(level2 "Notes")
+          ;;  :template
+          ;;  ("* %?"
+          ;;   ,akirak-org-capture-default-drawer))
+
+          ;; ("Org-Ql dynamic block for a tag" :keys "q"
+          ;;  :contexts (:in-file "emacs-config\\.org\\'")
+          ;;  :type plain
+          ;;  :function ignore
+          ;;  :immediate-finish t
+          ;;  :template
+          ;;  ("#+BEGIN: org-ql :query \"tags:%^{tag}\" :columns (heading todo)"
+          ;;   "#+END:"))
 
           ("Define a setup macro" :keys "d"
            :function ,(level2 "Setup.el")
-           :src "(eval-when-compile\n  (define-setup-macro %\\1 (%?)))")
-
-          ("Note" :keys "n"
-           :function ,(level2 "Notes")
-           :template
-           ("* %?"
-            ,akirak-org-capture-default-drawer))
-
-          ("Org-Ql dynamic block for a tag" :keys "q"
-           :contexts (:in-file "emacs-config\\.org\\'")
-           :type plain
-           :function ignore
-           :immediate-finish t
-           :template
-           ("#+BEGIN: org-ql :query \"tags:%^{tag}\" :columns (heading todo)"
-            "#+END:"))))))))
+           :src "(eval-when-compile\n  (define-setup-macro %\\1 (%?)))")))))))
 
 ;;;###autoload
 (defun akirak-emacs-config-capture ()
