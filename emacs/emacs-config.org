@@ -2215,6 +2215,7 @@ Transient commands for Org Dog
     (:with-feature org
       (:when-loaded
         (:with-map org-mode-map
+          (:bind "C-c C-x l" #'octopus-insert-link)
           (:bind "C-c C-x r" #'octopus-refile)))))
 #+end_src
 **** org-dog-embark
