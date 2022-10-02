@@ -1,11 +1,87 @@
 ;;; akirak-org-clock.el ---  -*- lexical-binding: t -*-
 
 (require 'org-clock)
+(require 'thunk)
 
 (defcustom akirak-org-clock-history-threshold (* 3600 24 7)
   "Number of seconds for which you want to take account for clock
  activities."
   :type 'number)
+
+;;;; Global mode to ensure clocking
+
+;;;###autoload
+(define-minor-mode akirak-org-clock-mode
+  "Ensure clocking"
+  :global t
+  (cond
+   ((bound-and-true-p akirak-org-clock-mode)
+    (ad-activate 'save-buffer)
+    (ad-activate 'org-self-insert-command))
+   (t
+    (ad-deactivate 'save-buffer)
+    (ad-deactivate 'org-self-insert-command))))
+
+(defconst akirak-org-clock-file-name-whitelist
+  (rx-to-string `(or (and bol ,(expand-file-name user-emacs-directory))
+                     (and bol ,(expand-file-name "~/fleeting/"))
+                     "/.git/")))
+
+(defconst akirak-org-clock-buffer-name-whitelist
+  ;; Don't block saving buffers created using `with-temp-buffer'
+  (rx bos (or " *temp*"
+              "CAPTURE-")))
+
+(defadvice save-buffer (around akirak-org-clock activate)
+  (when (or (string-match-p akirak-org-clock-buffer-name-whitelist
+                            (buffer-name))
+            (string-match-p akirak-org-clock-file-name-whitelist
+                            (if-let (base (buffer-base-buffer))
+                                (buffer-file-name base)
+                              buffer-file-name))
+            (and (derived-mode-p 'org-mode)
+                 (or (bound-and-true-p org-capture-mode)
+                     (and (featurep 'org-dog)
+                          (org-dog-buffer-object))))
+            (akirak-org-clock--check-before-save))
+    ad-do-it))
+
+(defun akirak-org-clock--check-before-save ()
+  (require 'org-clock)
+  (require 'akirak-org-dog)
+  (if-let (pr (project-current))
+      (thunk-let* ((files0 (akirak-org-dog-project-files))
+                   (files (thread-last
+                            (org-dog-overview-scan files0 :fast t)
+                            (mapcar #'car)))
+                   (filename (thread-last
+                               (marker-buffer org-clock-marker)
+                               (buffer-file-name)
+                               (abbreviate-file-name))))
+        (if files0
+            (or (when (org-clocking-p)
+                  (or (member filename files0)
+                      (member filename files)))
+                (progn
+                  (require 'org-dog-clock)
+                  (message "You must clock in")
+                  (org-dog-clock-in files :query-prefix "todo: ")
+                  t))
+          (user-error "No Org file for the project in %s"
+                      (project-root pr))))
+    (user-error "Not in a project. First create a project")))
+
+(defadvice org-self-insert-command (around akirak-org-clock activate)
+  ad-do-it
+  (or (org-clocking-p)
+      (bound-and-true-p org-capture-mode)
+      (and (bound-and-true-p org-dog-file-mode)
+           (or (when (yes-or-no-p "akirak-org-clock-mode: Clock in to this entry? ")
+                 (org-clock-in)
+                 t)
+               (progn
+                 (org-dog-clock-in "~/org/meta.org" :query-prefix "todo: ")
+                 t)))))
 
 ;;;; Rebuild the history
 
