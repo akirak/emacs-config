@@ -1989,6 +1989,11 @@ Outline-based notes management and organizer
           ;; Set for mini-modeline
           org-clock-string-limit 40))
 #+end_src
+***** akirak-org-clock
+#+begin_src emacs-lisp
+  (setup akirak-org-clock
+    (:hook-into emacs-startup-hook))
+#+end_src
 **** org-habit
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 22:15]
@@ -2133,7 +2138,8 @@ A programmable workflow layer for Org mode
 
     (:set org-dog-context-path-patterns
           `(("^\\.github/" . "services/github.com")
-            ("\\.h?eex\\'" . "programming/elixir")))
+            ("\\.h?eex\\'" . "programming/elixir"))
+          org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
 
     (:with-feature org
       (:with-map org-mode-map
