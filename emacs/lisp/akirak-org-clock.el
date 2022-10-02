@@ -7,6 +7,8 @@
  activities."
   :type 'number)
 
+;;;; Rebuild the history
+
 ;;;###autoload
 (defun akirak-org-clock-rebuild-history ()
   (interactive)
@@ -94,20 +96,7 @@ DAYS default to `akirak-org-clock-history-threshold'."
           (delay-mode-hooks (org-mode)))
         (find-ts)))))
 
-(defun akirak-org-clock--find-or-create-logbook ()
-  "Go to the end of the log book of the entry."
-  (org-back-to-heading)
-  (let ((bound (org-entry-end-position)))
-    (if (re-search-forward org-logbook-drawer-re bound t)
-        (beginning-of-line 1)
-      (forward-line)
-      (if (re-search-forward org-property-drawer-re bound t)
-          (insert "\n")
-        (while (looking-at org-planning-line-re)
-          (forward-line)))
-      (insert ":LOGBOOK:\n:END:\n")
-      (beginning-of-line 0)))
-  (point-marker))
+;;;; Other utilities
 
 (defun akirak-org-clock-transfer-entries (dest)
   (let ((dest-logbook (with-current-buffer (marker-buffer dest)
@@ -141,6 +130,21 @@ DAYS default to `akirak-org-clock-history-threshold'."
            (insert (pop entries)))
          (org-hide-drawer-all)))
       (org-back-to-heading))))
+
+(defun akirak-org-clock--find-or-create-logbook ()
+  "Go to the end of the log book of the entry."
+  (org-back-to-heading)
+  (let ((bound (org-entry-end-position)))
+    (if (re-search-forward org-logbook-drawer-re bound t)
+        (beginning-of-line 1)
+      (forward-line)
+      (if (re-search-forward org-property-drawer-re bound t)
+          (insert "\n")
+        (while (looking-at org-planning-line-re)
+          (forward-line)))
+      (insert ":LOGBOOK:\n:END:\n")
+      (beginning-of-line 0)))
+  (point-marker))
 
 ;;;###autoload
 (defun akirak-org-clock-log (start end)
