@@ -402,18 +402,20 @@ character."
 
 (defun akirak-org-eldoc--org-entry (marker)
   "Return a string describing the target of an ID link."
-  (org-with-point-at marker
-    (concat (mapconcat #'substring-no-properties
-                       (list (org-get-heading)
-                             (format "\"%s\"" (org-format-outline-path (org-get-outline-path)
-                                                                       (frame-width)))
-                             (buffer-name (marker-buffer marker)))
-                       " in ")
-            (save-excursion
-              (or (when (re-search-forward org-ts-regexp-inactive
-                                           (org-entry-end-position) t)
-                    (concat " " (match-string-no-properties 0)))
-                  "")))))
+  (with-current-buffer (marker-buffer marker)
+    (org-with-wide-buffer
+     (goto-char marker)
+     (concat (mapconcat #'substring-no-properties
+                        (list (org-get-heading)
+                              (format "\"%s\"" (org-format-outline-path (org-get-outline-path)
+                                                                        (frame-width)))
+                              (buffer-name (marker-buffer marker)))
+                        " in ")
+             (save-excursion
+               (or (when (re-search-forward org-ts-regexp-inactive
+                                            (org-entry-end-position) t)
+                     (concat " " (match-string-no-properties 0)))
+                   ""))))))
 
 ;;;; akirak-org-protected-mode
 

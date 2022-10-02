@@ -4065,8 +4065,11 @@ Emacs Minor mode to automatically commit and push
                           ;; By using the link format of Org, it will enable the
                           ;; user to navigate to the referenced entry.
                           (org-link-make-string
-                           (concat "id:" (org-with-point-at org-clock-marker
-                                           (org-id-get-create))))))
+                           (concat "id:"
+                                   (with-current-buffer (marker-buffer org-clock-marker)
+                                     (org-with-wide-buffer
+                                      (goto-char org-clock-marker)
+                                      (org-id-get-create)))))))
                  (t
                   "!Working on a task in another repository")))
             (concat "Modified " (file-relative-name filename root)))

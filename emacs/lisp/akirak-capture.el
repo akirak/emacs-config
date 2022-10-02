@@ -44,13 +44,15 @@
 ;;;; Clock
 
 (defun akirak-capture--clock-description ()
-  (org-with-point-at org-clock-marker
-    (let ((olp (org-get-outline-path t)))
-      (format "Clock: \"%s\" in %s (%s)"
-              (car (last olp))
-              (buffer-name)
-              (substring-no-properties
-               (org-format-outline-path (butlast olp)))))))
+  (with-current-buffer (marker-buffer org-clock-marker)
+    (org-with-wide-buffer
+     (goto-char org-clock-marker)
+     (let ((olp (org-get-outline-path t)))
+       (format "Clock: \"%s\" in %s (%s)"
+               (car (last olp))
+               (buffer-name)
+               (substring-no-properties
+                (org-format-outline-path (butlast olp))))))))
 
 (defun akirak-capture--to-clock (type template &rest options)
   (let ((org-capture-entry

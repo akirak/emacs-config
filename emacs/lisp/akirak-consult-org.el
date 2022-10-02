@@ -73,19 +73,21 @@
            (unless (eq buffer (marker-buffer marker))
              (setq buffer (marker-buffer marker)
                    org-outline-path-cache nil))
-           (org-with-point-at marker
-             (pcase-let ((`(_ ,level ,todo ,prio . _) (org-heading-components))
-                         (cand (org-format-outline-path
-                                (org-get-outline-path 'with-self 'use-cache)
-                                most-positive-fixnum
-                                (abbr-buffer-file-name buffer))))
-               (setq cand (concat cand (consult--tofu-encode (point))))
-               (add-text-properties 0 1
-                                    `(consult--candidate
-                                      ,(point-marker)
-                                      consult-org--heading (,level ,todo . ,prio))
-                                    cand)
-               cand))))
+           (with-current-buffer (marker-buffer marker)
+             (org-with-wide-buffer
+              (goto-char marker)
+              (pcase-let ((`(_ ,level ,todo ,prio . _) (org-heading-components))
+                          (cand (org-format-outline-path
+                                 (org-get-outline-path 'with-self 'use-cache)
+                                 most-positive-fixnum
+                                 (abbr-buffer-file-name buffer))))
+                (setq cand (concat cand (consult--tofu-encode (point))))
+                (add-text-properties 0 1
+                                     `(consult--candidate
+                                       ,(point-marker)
+                                       consult-org--heading (,level ,todo . ,prio))
+                                     cand)
+                cand)))))
       (thread-last
         org-clock-history
         (cl-remove-if-not #'live-p)

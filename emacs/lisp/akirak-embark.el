@@ -193,8 +193,10 @@
 
 (defun akirak-embark-org-clock-in (marker)
   (interactive (list nil))
-  (org-with-point-at marker
-    (org-clock-in)))
+  (with-current-buffer (marker-buffer marker)
+    (org-with-wide-buffer
+     (goto-char marker)
+     (org-clock-in))))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
