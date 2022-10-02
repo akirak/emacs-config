@@ -3423,6 +3423,13 @@ Never lose your place again
         (define-key map (kbd "<C-right>") #'dogears-forward)
         map))
 
+    (add-hook 'dogears-ignore-places-functions
+              (defun akirak/dogears-org-capture-p ()
+                (bound-and-true-p org-capture-mode)))
+
+    (add-hook 'dogears-hooks 'org-clock-in-hook)
+    (add-hook 'dogears-hooks 'org-clock-out-hook)
+
     (advice-add 'dogears-remember
                 :around
                 (defun akirak/ad-around-dogears-remember (orig &rest args)
