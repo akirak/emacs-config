@@ -673,5 +673,33 @@ not work in the future when forge changes the output."
   (goto-char (point-min))
   (akirak-org-goto-or-create-olp '("Backlog")))
 
+;;;###autoload
+(defun akirak-capture-clock-in (file headline)
+  "Create a new heading with a title and clock into it.
+
+This should be set as the value of
+`octopus-clock-in-fallback-fn'."
+  (let* ((obj (org-dog-file-object file))
+         (jump-func (cond
+                     ((object-of-class-p obj 'org-dog-facade-datetree-file)
+                      #'akirak-capture--goto-backlog)
+                     ((object-of-class-p obj 'org-dog-datetree-file)
+                      #'org-reverse-datetree-goto-date-in-file)
+                     (t
+                      #'akirak-capture--goto-some-heading)))
+         (org-capture-entry
+          (car (doct
+                `((""
+                   :keys ""
+                   :template ,(akirak-org-capture-make-entry-body
+                                headline
+                                :todo "UNDERWAY"
+                                :body (list "%a"
+                                            "%?"))
+                   :file ,file
+                   :function ,jump-func
+                   :clock-in t :clock-resume t))))))
+    (org-capture)))
+
 (provide 'akirak-capture)
 ;;; akirak-capture.el ends here
