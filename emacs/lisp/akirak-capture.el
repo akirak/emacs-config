@@ -278,29 +278,29 @@
 ;;;###autoload (autoload 'akirak-capture "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture ()
   "Main entry point to capture commands."
-  [:description
-   akirak-capture--clock-description
-   :if org-clocking-p
-   :class transient-row
-   ("L" "Link as item"
-    (lambda ()
-      (interactive)
-      (akirak-capture--to-clock 'item "%A%?")))
-   ("U" "Url as item"
-    (lambda ()
-      (interactive)
-      (require 'orgabilize)
-      (akirak-capture--to-clock
-       'item (concat (orgabilize-make-link-string (akirak-url-latest) t)
-                     "%?"))))
-   ("i" "Item"
-    (lambda ()
-      (interactive)
-      (akirak-capture--to-clock 'item "%?")))
-   ("p" "Paragraph"
-    (lambda ()
-      (interactive)
-      (akirak-capture--to-clock 'plain "%?" :empty-lines-before 1)))]
+  ;; [:description
+  ;;  akirak-capture--clock-description
+  ;;  :if org-clocking-p
+  ;;  :class transient-row
+  ;;  ("L" "Link as item"
+  ;;   (lambda ()
+  ;;     (interactive)
+  ;;     (akirak-capture--to-clock 'item "%A%?")))
+  ;;  ("U" "Url as item"
+  ;;   (lambda ()
+  ;;     (interactive)
+  ;;     (require 'orgabilize)
+  ;;     (akirak-capture--to-clock
+  ;;      'item (concat (orgabilize-make-link-string (akirak-url-latest) t)
+  ;;                    "%?"))))
+  ;;  ("i" "Item"
+  ;;   (lambda ()
+  ;;     (interactive)
+  ;;     (akirak-capture--to-clock 'item "%?")))
+  ;;  ("p" "Paragraph"
+  ;;   (lambda ()
+  ;;     (interactive)
+  ;;     (akirak-capture--to-clock 'plain "%?" :empty-lines-before 1)))]
 
   ["Actions (generic / specific type)"
    :class transient-row
