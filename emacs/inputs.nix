@@ -218,6 +218,14 @@
     };
   };
 
+  org = _: super: {
+    origin =
+      super.origin
+      // {
+        ref = "main";
+      };
+  };
+
   org-make-toc = _: _: {
     origin = {
       type = "github";
