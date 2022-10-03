@@ -272,7 +272,6 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
                      ("c s" . "screenshot")
                      ("c r" . "record screen")
                      ("e" . "emacs")
-                     ("o" . "org")
                      ("S" . "secrets")))
       (which-key-add-keymap-based-replacements
         global-map (concat "<f12> " key) description)))
@@ -1897,7 +1896,6 @@ Outline-based notes management and organizer
           org-agenda-window-setup 'current-window)
     (:local-set truncate-lines t)
 
-    (:global "<f12> o a" #'org-agenda)
     (define-key help-map (kbd "M-a")
                 (defun akirak/org-default-agenda ()
                   (interactive)
@@ -2272,8 +2270,6 @@ Facade Org files
 **** org-dog-root
 #+begin_src emacs-lisp
   (setup org-dog-root
-    (:global "<f12> o r" #'org-dog-root-switch
-             "<f12> o R" #'org-dog-root-add-active-files)
     (:when-loaded
       (add-hook 'mode-line-misc-info org-dog-root-mode-item)))
 #+end_src
