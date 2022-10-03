@@ -3431,8 +3431,7 @@ Never lose your place again
               (defun akirak/dogears-org-capture-p ()
                 (bound-and-true-p org-capture-mode)))
 
-    (add-hook 'dogears-hooks 'org-clock-in-hook)
-    (add-hook 'dogears-hooks 'org-clock-out-hook)
+    (add-hook 'dogears-hooks 'org-capture-after-finalize-hook)
 
     (advice-add 'dogears-remember
                 :around
