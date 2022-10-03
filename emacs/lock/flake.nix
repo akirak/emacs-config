@@ -847,6 +847,12 @@
       repo = "org-make-toc";
       type = "github";
     };
+    org-memento = {
+      flake = false;
+      owner = "~akirak";
+      repo = "org-memento";
+      type = "sourcehut";
+    };
     org-ml = {
       flake = false;
       owner = "ndwarshuis";
@@ -885,7 +891,8 @@
     };
     org-super-links = {
       flake = false;
-      owner = "toshism";
+      owner = "akirak";
+      ref = "keep-narrowing-states";
       repo = "org-super-links";
       type = "github";
     };
