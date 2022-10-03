@@ -695,8 +695,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                    :template ,(akirak-org-capture-make-entry-body
                                 headline
                                 :todo "UNDERWAY"
-                                :body (list "%a"
-                                            "%?"))
+                                :body "%?")
                    :file ,file
                    :function ,jump-func
                    :clock-in t :clock-resume t))))))
