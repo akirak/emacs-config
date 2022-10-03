@@ -1707,7 +1707,8 @@ Outline-based notes management and organizer
                   :around #'akirak-org-meta-return-split-block-advice)
       (:hook #'akirak-org-protected-mode)
 
-      (:global "C-c o" #'org-open-at-point-global)
+      (:global "C-c o" #'org-open-at-point-global
+               "C-c t" #'akirak-org-dwim-on-clock)
 
       (:when-loaded
         (add-to-list 'display-buffer-alist
