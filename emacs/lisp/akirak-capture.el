@@ -366,7 +366,8 @@
        (setq akirak-capture-headline "%A"
              akirak-capture-template-options '(:body "%?")
              akirak-capture-doct-options nil)
-       (akirak-capture-doct)))]
+       (akirak-capture-doct)))
+    ("c" "Content title" akirak-capture-content)]
 
    ["Schedule an event"
     :class transient-row
@@ -547,6 +548,48 @@
                    ,@plist))))))
     (org-capture)))
 
+(transient-define-prefix akirak-capture-content ()
+  ["Locations"
+   :class transient-row
+   :setup-children akirak-capture-content-children]
+  (interactive)
+  (transient-setup 'akirak-capture-content))
+
+(defun akirak-capture-content-children (_children)
+  (thread-last
+    (org-dog-select 'absolute
+      :relative-regexp (rx "contents/" (+ (not (any "/"))) "-lists.org"))
+    (mapcar (lambda (absolute)
+              (let* ((basename (file-name-base absolute))
+                     (key (substring basename 0 1))
+                     (symbol (intern (format "akirak-capture--%s" basename))))
+                (fset symbol
+                      `(lambda ()
+                         (interactive)
+                         (akirak-capture--queue-content ,absolute)))
+                (put symbol 'interactive-only t)
+                `(,transient--default-child-level
+                  transient-suffix
+                  ,(list :key key
+                         :description basename
+                         :command symbol)))))))
+
+(defun akirak-capture--queue-content (filename)
+  (let* ((title-or-url (string-trim (read-string "Title or URL: ")))
+         (headline (if (string-match-p (rx bol "https://") title-or-url)
+                       (orgabilize-make-link-string title-or-url)
+                     title-or-url))
+         (org-refile-targets `((,filename :level . 1)))
+         (pos (nth 3 (org-refile-get-location "Select a genre: " nil t)))
+         (org-capture-entry
+          `("" ""
+            entry
+            (file+function
+             ,filename
+             (lambda ()
+               (goto-char ,pos)))
+            ,(akirak-org-capture-make-entry-body headline))))
+    (org-capture)))
 
 ;;;; Other commands
 
