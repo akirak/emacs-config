@@ -679,8 +679,7 @@ not work in the future when forge changes the output."
 (defun akirak-capture-clock-in (file headline)
   "Create a new heading with a title and clock into it.
 
-This should be set as the value of
-`octopus-clock-in-fallback-fn'."
+This is intended as the value of `org-dog-clock-in-fallback-fn'."
   (let* ((obj (org-dog-file-object file))
          (jump-func (cond
                      ((object-of-class-p obj 'org-dog-facade-datetree-file)
