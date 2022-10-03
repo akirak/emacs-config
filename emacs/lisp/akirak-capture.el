@@ -575,6 +575,7 @@
                          :command symbol)))))))
 
 (defun akirak-capture--queue-content (filename)
+  (require 'orgabilize)
   (let* ((title-or-url (string-trim (read-string "Title or URL: ")))
          (headline (if (string-match-p (rx bol "https://") title-or-url)
                        (orgabilize-make-link-string title-or-url)
