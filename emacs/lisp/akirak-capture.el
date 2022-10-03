@@ -333,7 +333,13 @@
    ;;                                                                          :tags "@message")
    ;;                                  akirak-capture-doct-options '(:clock-in t :clock-resume t))
    ;;                            (akirak-capture-doct)))
-   ("!" "Troubleshoot" akirak-capture-troubleshooting)]
+   ("!" "Troubleshoot" akirak-capture-troubleshooting)
+   ("i" "Ideate" (lambda ()
+                   (interactive)
+                   (setq akirak-capture-headline (read-string "Heading of the todo: ")
+                         akirak-capture-template-options '(:todo "IDEATE" :tags "@ideate")
+                         akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                   (akirak-capture-doct)))]
 
   ["Information (input, events, etc.)"
    :class transient-subgroups
