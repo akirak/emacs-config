@@ -77,7 +77,7 @@
 (defadvice org-self-insert-command (around akirak-org-clock activate)
   ad-do-it
   (or (org-clocking-p)
-      (bound-and-true-p org-capture-mode)
+      ;; (bound-and-true-p org-capture-mode)
       (and (bound-and-true-p org-dog-file-mode)
            (or (org-before-first-heading-p)
                (when (yes-or-no-p "akirak-org-clock-mode: Clock in to this entry? ")
