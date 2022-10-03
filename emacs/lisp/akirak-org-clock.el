@@ -23,8 +23,10 @@
     (ad-deactivate 'org-self-insert-command))))
 
 (defconst akirak-org-clock-file-name-whitelist
-  (rx-to-string `(or (and bol ,(expand-file-name user-emacs-directory))
-                     (and bol ,(expand-file-name "~/fleeting/"))
+  (rx-to-string `(or (and bol (or ,(expand-file-name user-emacs-directory)
+                                  ,(expand-file-name "~/fleeting/")
+                                  ,(expand-file-name "~/resources/images/")
+                                  ,(expand-file-name "~/resources/articles/")))
                      "/.git/")))
 
 (defconst akirak-org-clock-buffer-name-whitelist
