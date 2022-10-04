@@ -4094,7 +4094,8 @@ Emacs Minor mode to automatically commit and push
                                                          ;; Reuse the message
                                                          "commit" "-C" "HEAD"
                                                          "-a"))
-                              (message "Git auto commit failed")))))))))))
+                              (message "Git auto commit failed in %s"
+                                       default-directory)))))))))))
 #+end_src
 
 A recommended way to turn on automatic commits is to define local variables in =.dir-locals.el=, e.g.:
