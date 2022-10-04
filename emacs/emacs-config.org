@@ -2152,7 +2152,8 @@ A programmable workflow layer for Org mode
                 (when (string-match-p (rx bol
                                           (or "meta"
                                               (and "personal/" (+ (not (any "/"))) eol)
-                                              "work-context"))
+                                              "employment/"
+                                              "errands"))
                                       (oref file-obj relative))
                   (add-to-list 'org-agenda-files (oref file-obj absolute)))))
 
