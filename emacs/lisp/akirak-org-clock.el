@@ -27,6 +27,7 @@
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
                                   ,(expand-file-name "~/resources/articles/")))
+                     (and ".gpg" eol)
                      "/.git/")))
 
 (defconst akirak-org-clock-buffer-name-whitelist
