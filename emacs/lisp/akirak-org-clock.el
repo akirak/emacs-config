@@ -62,17 +62,33 @@
                                (marker-buffer org-clock-marker)
                                (buffer-file-name)
                                (abbreviate-file-name))))
-        (if files0
-            (or (when (org-clocking-p)
-                  (or (member filename files0)
-                      (member filename files)))
-                (progn
-                  (require 'org-dog-clock)
-                  (message "You must clock in")
-                  (org-dog-clock-in files :query-prefix "todo: ")
-                  t))
-          (user-error "No Org file for the project in %s"
-                      (project-root pr))))
+        (if (string-match-p (regexp-quote "/foss/contributions/")
+                            (project-root pr))
+            (if-let (mode-file (car (akirak-org-dog-major-mode-files)))
+                (or (and (org-clocking-p)
+                         (equal filename mode-file)
+                         (member "@contribution"
+                                 (save-current-buffer
+                                   (org-with-point-at org-clock-marker
+                                     (org-get-tags)))))
+                    (progn
+                      (require 'org-dog-clock)
+                      (message "You must clock into %s" mode-file)
+                      (org-dog-clock-in mode-file :query-prefix "tags:@contribution "
+                                        :tags "@contribution")
+                      t))
+              (error "No Org file for the major mode %s" major-mode))
+          (if files0
+              (or (when (org-clocking-p)
+                    (or (member filename files0)
+                        (member filename files)))
+                  (progn
+                    (require 'org-dog-clock)
+                    (message "You must clock in")
+                    (org-dog-clock-in files :query-prefix "todo: ")
+                    t))
+            (user-error "No Org file for the project in %s"
+                        (project-root pr)))))
     (user-error "Not in a project. First create a project")))
 
 (defadvice org-self-insert-command (around akirak-org-clock activate)
