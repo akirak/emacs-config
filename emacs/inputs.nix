@@ -234,4 +234,16 @@
       ref = "fix-global-hook";
     };
   };
+
+  persist = _: super: {
+    files = builtins.removeAttrs super.files ["persist.texi"];
+  };
+
+  org-gcal = _: super: {
+    packageRequires =
+      {
+        dash = "0";
+      }
+      // super.packageRequires;
+  };
 }
