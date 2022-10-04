@@ -385,18 +385,9 @@
        (interactive)
        (setq akirak-capture-template-options
              '(:tags "@session"
-                     :body ("# Links or details"
-                            "%?")))
+                     :body ("%?")))
        (akirak-capture-appointment)))
-    ("ae" "Errand (@errand)"
-     (lambda ()
-       (interactive)
-       (setq akirak-capture-template-options
-             '(:tags "@errand"
-                     :body ("| Time | Destination |"
-                            "|------+-------------|"
-                            "| %? | |")))
-       (akirak-capture-appointment)))]]
+    ("ae" "Errand" akirak-capture-errand)]]
 
   [["Convenience"
     ("sc" "Command snippet" akirak-capture-command-snippet)]
@@ -717,6 +708,43 @@ not work in the future when forge changes the output."
             "%" "%%" (buffer-substring-no-properties (region-beginning) (region-end)))
            (concat "#+end_" (car (split-string body-type)))))
    :empty-lines-before 1))
+
+(defun akirak-capture-errand ()
+  (interactive)
+  (let* ((title (read-string "Appointment title: "))
+         (timestamp (with-temp-buffer
+                      (org-time-stamp t)
+                      (buffer-string)
+                      (goto-char (point-min))
+                      (org-element-timestamp-parser)))
+         (file (or (oref (org-dog-find-file-object
+                          (org-dog-make-file-pred :relative "errands.org"))
+                         absolute)
+                   (error "Failed to locate errands.org")))
+         (org-capture-entry
+          (car (doct
+                `((""
+                   :keys ""
+                   :template ,(akirak-org-capture-make-entry-body
+                                (concat (org-element-property :raw-value timestamp)
+                                        " " title)
+                                :body
+                                (append (when (and (derived-mode-p 'org-mode)
+                                                   (not (org-before-first-heading-p)))
+                                          '("- %a" ""))
+                                        '("| Event | Time | Estimated cost |"
+                                          "|-------+------+----------------|"
+                                          "| %?    |      |                |"
+                                          "|-------+------+----------------|"
+                                          "|       |      |                |"
+                                          ""
+                                          "#+TBLFM: $3=vsum(@2$3..@-1$3)")))
+                   :file ,file
+                   :function
+                   (lambda ()
+                     (org-reverse-datetree-goto-date-in-file
+                      ',(org-timestamp-to-time timestamp)))))))))
+    (org-capture)))
 
 ;;;; Helper functions
 
