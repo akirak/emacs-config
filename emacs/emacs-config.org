@@ -2141,10 +2141,6 @@ A programmable workflow layer for Org mode
             ("\\.h?eex\\'" . "programming/elixir"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
 
-    (:with-feature org
-      (:with-map org-mode-map
-        (:bind "C-x i" #'org-dog-insert-internal-link)))
-
     (add-hook 'org-dog-file-mode-hook #'org-dog-header-line-enable)
 
     (add-hook 'org-dog-file-registration-hook
