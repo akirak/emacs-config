@@ -97,7 +97,11 @@
       ;; (bound-and-true-p org-capture-mode)
       (and (bound-and-true-p org-dog-file-mode)
            (or (org-before-first-heading-p)
-               (when (yes-or-no-p "akirak-org-clock-mode: Clock in to this entry? ")
+               ;; It is likely that I mistype 'y' or 'n' to skip the question,
+               ;; so require an uppercase letter.
+               (when (eq (read-char-choice "akirak-org-clock-mode: Clock in to this entry? "
+                                           '(?Y ?N))
+                         ?Y)
                  (org-clock-in)
                  t)
                (progn
