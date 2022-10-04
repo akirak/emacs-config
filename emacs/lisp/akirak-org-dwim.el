@@ -92,30 +92,47 @@
 
 ;;;;; Query
 
-(defvar akirak-org-dwim-ql-query nil)
+(defvar akirak-org-dwim-ql-query '(todo))
 
 ;;;;; Super groups
 
-(defvar akirak-org-dwim-super-groups nil)
+(defvar akirak-org-dwim-super-groups-name nil)
 
 (defclass akirak-org-dwim-super-groups-class (akirak-org-dwim-ql-search-param)
   ())
 
-(defcustom akirak-org-dwim-super-groups-list
-  nil
+(defcustom akirak-org-dwim-super-groups-alist
+  (when (require 'org-super-agenda nil t)
+    (mapcar (lambda (kwd)
+              (cons (symbol-name kwd) `((,kwd t))))
+            org-super-agenda-auto-selector-keywords))
   ""
-  :type '(repeat sexp))
+  :type '(alist :key-type (string :tag "Description")
+                :value-type (repeat plist)))
 
 (cl-defmethod transient-infix-read ((obj akirak-org-dwim-super-groups-class))
-  (read (completing-read "Super groups: "
-                         (mapcar #'prin1-to-string akirak-org-dwim-super-groups-list)
-                         nil nil
-                         (prin1-to-string (oref obj value)))))
+  (completing-read "Super groups: "
+                   #'akirak-org-dwim-super-groups-completions
+                   nil (oref obj value)))
+
+(defun akirak-org-dwim-super-groups-completions (string pred action)
+  (if (eq action 'metadata)
+      '(metadata . ((annotation-function . akirak-org-dwim-super-group-annotator)))
+    (complete-with-action action
+                          (mapcar #'car akirak-org-dwim-super-groups-alist)
+                          string
+                          pred)))
+
+(defun akirak-org-dwim-super-group-annotator (group)
+  (if-let (plist (cdr (assoc group akirak-org-dwim-super-groups-alist)))
+      (concat " " (propertize (prin1-to-string plist)
+                              'face 'font-lock-comment-face))
+    ""))
 
 (transient-define-infix akirak-org-dwim-super-groups ()
   :description "Super Groups"
   :class 'akirak-org-dwim-super-groups-class
-  :variable 'akirak-org-dwim-super-groups)
+  :variable 'akirak-org-dwim-super-groups-name)
 
 ;;;;; Sort
 
@@ -266,7 +283,8 @@
     (setq akirak-org-dwim-ql-query query)
     (org-ql-search (akirak-org-dwim--selected-files)
       query
-      :super-groups akirak-org-dwim-super-groups
+      :super-groups (cdr (assoc akirak-org-dwim-super-groups-name
+                                akirak-org-dwim-super-groups-alist))
       :sort akirak-org-dwim-ql-sort)))
 
 (defun akirak-org-dwim-clock-done ()
