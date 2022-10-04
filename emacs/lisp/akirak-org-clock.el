@@ -14,6 +14,7 @@
 (define-minor-mode akirak-org-clock-mode
   "Ensure clocking"
   :global t
+  :lighter " OrgClock"
   (cond
    ((bound-and-true-p akirak-org-clock-mode)
     (ad-activate 'save-buffer)
