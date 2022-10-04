@@ -754,7 +754,7 @@ not work in the future when forge changes the output."
   (akirak-org-goto-or-create-olp '("Backlog")))
 
 ;;;###autoload
-(defun akirak-capture-clock-in (file headline)
+(cl-defun akirak-capture-clock-in (file headline &key tags)
   "Create a new heading with a title and clock into it.
 
 This is intended as the value of `org-dog-clock-in-fallback-fn'."
@@ -773,6 +773,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                    :template ,(akirak-org-capture-make-entry-body
                                 headline
                                 :todo "UNDERWAY"
+                                :tags tags
                                 :body "%?")
                    :file ,file
                    :function ,jump-func
