@@ -4562,6 +4562,9 @@ For Emacs Lisp, I use lispy.
 
       (:unbind "M-i")
 
+      (:with-map lispy-mode-map-special
+        (:unbind "O"))
+
       (:with-map lispy-mode-map-lispy
         ;; Prevent conflicts with other custom keybindings
         (:unbind "C-,"
