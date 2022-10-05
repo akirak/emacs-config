@@ -103,27 +103,27 @@
   :type 'number)
 
 (defadvice org-self-insert-command (around akirak-org-clock activate)
-  ad-do-it
-  (or (org-clocking-p)
-      ;; (bound-and-true-p org-capture-mode)
-      (and (bound-and-true-p org-dog-file-mode)
-           (or (org-before-first-heading-p)
-               akirak-org-clock-snooze-timer
-               ;; It is likely that I mistype 'y' or 'n' to skip the question,
-               ;; so require an uppercase letter.
-               (pcase (read-char-choice "Choose where you clock. [.] This entry\
+  (when (or (org-clocking-p)
+            ;; (bound-and-true-p org-capture-mode)
+            (and (bound-and-true-p org-dog-file-mode)
+                 (or (org-before-first-heading-p)
+                     akirak-org-clock-snooze-timer
+                     ;; It is likely that I mistype 'y' or 'n' to skip the question,
+                     ;; so require an uppercase letter.
+                     (pcase (read-char-choice "Choose where you clock. [.] This entry\
  [M] meta.org, [S] Snooze: " '(?. ?M ?S))
-                 (?.
-                  (org-clock-in)
-                  (run-with-timer akirak-org-clock-reclock-interval
-                                  nil #'akirak-org-clock-reclock-in)
-                  t)
-                 (?M
-                  (org-dog-clock-in "~/org/meta.org" :query-prefix "todo: ")
-                  t)
-                 (?S
-                  (akirak-org-clock--snooze)
-                  t))))))
+                       (?.
+                        (org-clock-in)
+                        (run-with-timer akirak-org-clock-reclock-interval
+                                        nil #'akirak-org-clock-reclock-in)
+                        t)
+                       (?M
+                        (org-dog-clock-in "~/org/meta.org" :query-prefix "todo: ")
+                        t)
+                       (?S
+                        (akirak-org-clock--snooze)
+                        t)))))
+    ad-do-it))
 
 (defun akirak-org-clock--snooze ()
   (akirak-org-clock--snooze-end)
