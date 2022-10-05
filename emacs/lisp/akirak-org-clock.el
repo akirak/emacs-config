@@ -111,14 +111,21 @@
                      ;; It is likely that I mistype 'y' or 'n' to skip the question,
                      ;; so require an uppercase letter.
                      (pcase (read-char-choice "Choose where you clock. [.] This entry\
- [M] meta.org, [S] Snooze: " '(?. ?M ?S))
+ [M] meta, [S] Snooze: " '(?. ?M ?S))
                        (?.
                         (org-clock-in)
                         (run-with-timer akirak-org-clock-reclock-interval
                                         nil #'akirak-org-clock-reclock-in)
                         t)
                        (?M
-                        (org-dog-clock-in "~/org/meta.org" :query-prefix "todo: ")
+                        (org-dog-clock-in (cl-remove-duplicates
+                                           (list "~/org/meta.org"
+                                                 (thread-last
+                                                   (org-base-buffer (current-buffer))
+                                                   (buffer-file-name)
+                                                   (abbreviate-file-name)))
+                                           :test #'equal)
+                                          :query-prefix "todo: ")
                         t)
                        (?S
                         (akirak-org-clock--snooze)
