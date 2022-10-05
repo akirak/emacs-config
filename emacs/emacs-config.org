@@ -1910,14 +1910,7 @@ Outline-based notes management and organizer
                 (defun akirak/org-allow-delete-other-windows-p (&rest _args)
                   (not (memq this-command '(org-todo
                                             org-agenda-todo
-                                            org-agenda)))))
-
-    (:status personal
-      ;; Remove the category column from agenda
-      (:set org-agenda-prefix-format '((agenda . " %i %?-12t% s")
-                                       (todo . " %i %-12:c")
-                                       (tags . " %i %-12:c")
-                                       (search . " %i %-12:c")))))
+                                            org-agenda))))))
 #+end_src
 **** org-babel (ob)
 :PROPERTIES:
