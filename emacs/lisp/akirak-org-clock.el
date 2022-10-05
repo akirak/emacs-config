@@ -98,6 +98,10 @@
   "Duration in seconds of snoozing in Org mode."
   :type 'number)
 
+(defcustom akirak-org-clock-reclock-interval 20
+  "Reclocking interval."
+  :type 'number)
+
 (defadvice org-self-insert-command (around akirak-org-clock activate)
   ad-do-it
   (or (org-clocking-p)
@@ -111,6 +115,8 @@
  [M] meta.org, [S] Snooze: " '(?. ?M ?S))
                  (?.
                   (org-clock-in)
+                  (run-with-timer akirak-org-clock-reclock-interval
+                                  nil #'akirak-org-clock-reclock-in)
                   t)
                  (?M
                   (org-dog-clock-in "~/org/meta.org" :query-prefix "todo: ")
@@ -129,6 +135,13 @@
   (when akirak-org-clock-snooze-timer
     (cancel-timer akirak-org-clock-snooze-timer)
     (setq akirak-org-clock-snooze-timer nil)))
+
+(defun akirak-org-clock-reclock-in ()
+  "Reclock in for updating the title."
+  (when (org-clocking-p)
+    (save-current-buffer
+      (org-with-point-at org-clock-marker
+        (org-clock-in)))))
 
 ;;;; Rebuild the history
 
