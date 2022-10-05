@@ -92,22 +92,43 @@
                         (project-root pr)))))
     (user-error "Not in a project. First create a project")))
 
+(defvar akirak-org-clock-snooze-timer nil)
+
+(defcustom akirak-org-clock-snooze-duration 30
+  "Duration in seconds of snoozing in Org mode."
+  :type 'number)
+
 (defadvice org-self-insert-command (around akirak-org-clock activate)
   ad-do-it
   (or (org-clocking-p)
       ;; (bound-and-true-p org-capture-mode)
       (and (bound-and-true-p org-dog-file-mode)
            (or (org-before-first-heading-p)
+               akirak-org-clock-snooze-timer
                ;; It is likely that I mistype 'y' or 'n' to skip the question,
                ;; so require an uppercase letter.
-               (when (eq (read-char-choice "akirak-org-clock-mode: Clock in to this entry? "
-                                           '(?Y ?N))
-                         ?Y)
-                 (org-clock-in)
-                 t)
-               (progn
-                 (org-dog-clock-in "~/org/meta.org" :query-prefix "todo: ")
-                 t)))))
+               (pcase (read-char-choice "Choose where you clock. [.] This entry\
+ [M] meta.org, [S] Snooze: " '(?. ?M ?S))
+                 (?.
+                  (org-clock-in)
+                  t)
+                 (?M
+                  (org-dog-clock-in "~/org/meta.org" :query-prefix "todo: ")
+                  t)
+                 (?S
+                  (akirak-org-clock--snooze)
+                  t))))))
+
+(defun akirak-org-clock--snooze ()
+  (akirak-org-clock--snooze-end)
+  (setq akirak-org-clock-snooze-timer
+        (run-with-timer akirak-org-clock-snooze-duration
+                        nil #'akirak-org-clock--snooze-end)))
+
+(defun akirak-org-clock--snooze-end ()
+  (when akirak-org-clock-snooze-timer
+    (cancel-timer akirak-org-clock-snooze-timer)
+    (setq akirak-org-clock-snooze-timer nil)))
 
 ;;;; Rebuild the history
 
