@@ -2790,6 +2790,11 @@ This is a collection of extra utilities for various packages.
 #+end_src
 
 I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it had dependency on expand-region I wanted to get rid of, so I implemented a simpler alternative.
+**** akirak-git-commit
+#+begin_src emacs-lisp
+  (setup akirak-git-commit
+    (add-hook 'after-init-hook #'akirak-git-commit-log-to-org-clock-mode))
+#+end_src
 **** akirak-header-line                                        :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-18 Mon 08:15]
@@ -4096,6 +4101,14 @@ A recommended way to turn on automatic commits is to define local variables in =
 #+begin_src emacs-lisp :tangle no
   ((org-mode . ((gac-debounce-interval . 180)
                 (eval . (git-auto-commit-mode t)))))
+#+end_src
+*** git-commit
+:PROPERTIES:
+:CREATED_TIME: [2022-10-06 Thu 18:21]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package git-commit))
 #+end_src
 *** git-gutter                                                  :VC:
 :PROPERTIES:
