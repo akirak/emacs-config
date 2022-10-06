@@ -2346,6 +2346,10 @@ Automatic tables of contents for Org files
 :PROPERTIES:
 :CREATED_TIME: [2022-10-06 Thu 18:50]
 :END:
+#+begin_quote
+Time blocking with Org
+[[https://github.com/akirak/org-memento]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-memento)
@@ -4119,6 +4123,9 @@ A recommended way to turn on automatic commits is to define local variables in =
 :PROPERTIES:
 :CREATED_TIME: [2022-10-06 Thu 18:21]
 :END:
+#+begin_quote
+Edit Git commit messages
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package git-commit))
@@ -6035,7 +6042,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 215 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
