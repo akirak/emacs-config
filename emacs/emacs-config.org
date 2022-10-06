@@ -5155,6 +5155,7 @@ Summon and dismiss buffers as popups
           ;; You may have to re-enable popper-mode after updating this variable
           popper-reference-buffers `("\\*Messages\\*$"
                                      "\\*Backtrace\\*"
+                                     "^\\*Warnings\\*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
                                      "^\\*Scratch-Input-Method"
