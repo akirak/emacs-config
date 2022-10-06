@@ -66,36 +66,41 @@ If CALLBACK is a function, it is called with the selected url."
 ;;;###autoload
 (defun akirak-avy-insert-symbol (&optional arg)
   (interactive "P")
-  (akirak-avy--run (lambda (beg end)
-                     (let ((string (buffer-substring-no-properties beg end)))
-                       (kill-new (if (string-match (rx bol (* punct)
-                                                       (group (+? anything))
-                                                       (* punct) eol)
-                                                   string)
-                                     (match-string 1 string)
-                                   string))))
-                   (lambda ()
-                     (list (if (looking-at (rx symbol-start))
-                               (point)
-                             (re-search-backward (rx symbol-start) nil t))
-                           (save-excursion
-                             (re-search-forward
-                              (rx (group (+? anything)) symbol-end)
-                              nil t))))
+  (akirak-avy--run #'akirak-avy--symbol-pre-action
+                   #'akirak-avy--symbol-make-args
                    (if arg
-                       (lambda ()
-                         (let ((brackets (cl-case (derived-mode-p 'org-mode
-                                                                  'markdown-mode)
-                                           (org-mode '("=" . "="))
-                                           (markdown-mode '("`" . "`"))
-                                           )))
-                           (pcase brackets
-                             (`nil (yank))
-                             (`(,open . ,end)
-                              (insert open)
-                              (yank)
-                              (insert end)))))
+                       #'akirak-avy--yank-symbol-with-quotes
                      #'yank)))
+
+(defun akirak-avy--symbol-pre-action (beg end)
+  (let ((string (buffer-substring-no-properties beg end)))
+    (kill-new (if (string-match (rx bol (* punct)
+                                    (group (+? anything))
+                                    (* punct) eol)
+                                string)
+                  (match-string 1 string)
+                string))))
+
+(defun akirak-avy--symbol-make-args ()
+  (list (if (looking-at (rx symbol-start))
+            (point)
+          (re-search-backward (rx symbol-start) nil t))
+        (save-excursion
+          (re-search-forward
+           (rx (group (+? anything)) symbol-end)
+           nil t))))
+
+(defun akirak-avy--yank-symbol-with-quotes ()
+  (let ((brackets (cl-case (derived-mode-p 'org-mode
+                                           'markdown-mode)
+                    (org-mode '("=" . "="))
+                    (markdown-mode '("`" . "`")))))
+    (pcase brackets
+      (`nil (yank))
+      (`(,open . ,end)
+       (insert open)
+       (yank)
+       (insert end)))))
 
 (provide 'akirak-avy)
 ;;; akirak-avy.el ends here
