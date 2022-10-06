@@ -2164,7 +2164,9 @@ A programmable workflow layer for Org mode
                       (thread-last
                         (org-dog-overview-scan org-agenda-files :fast t)
                         (mapcar #'car)
-                        (reverse)))))
+                        (reverse)))
+                (when (require 'org-memento nil t)
+                  (add-to-list 'org-agenda-files org-memento-file t))))
 
     (:when-loaded
       (:also-load org-dog-embark
@@ -2340,6 +2342,17 @@ Automatic tables of contents for Org files
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
 #+end_src
+*** org-memento
+:PROPERTIES:
+:CREATED_TIME: [2022-10-06 Thu 18:50]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-memento)
+    (:hook-into after-init-hook))
+#+end_src
+
+=org-memento-file= must be added to =org-agenda-files=. See [[*org-dog][org-dog]].
 *** org-ml                                                 :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-17 Thu 20:26]
@@ -5406,7 +5419,7 @@ Clean-up and Beautify the list of minor-modes.
 
 #+begin_src emacs-lisp
   (setup (:package rich-minority)
-    (:set rm-whitelist (rx (or "envrc" "OrgClock")))
+    (:set rm-whitelist (rx (or "envrc" "OrgClock" "OrgMemento")))
     (:hook-into after-init-hook))
 #+end_src
 *** ruby-end
