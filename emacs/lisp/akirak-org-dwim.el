@@ -12,6 +12,12 @@
       (goto-char org-clock-marker)
       ,@progn)))
 
+(defmacro akirak-org-dwim--finalize-capture (&rest progn)
+  `(let ((is-capture org-capture-mode))
+     ,@progn
+     (when is-capture
+       (org-capture-finalize))))
+
 ;;;; Selected files
 
 (defvar akirak-org-dwim-selected-files nil)
@@ -290,12 +296,16 @@
 (defun akirak-org-dwim-clock-done ()
   (interactive)
   (akirak-org-dwim--with-clock
-   (org-todo 'done)))
+   (akirak-org-dwim--finalize-capture
+    (org-todo 'done))))
 
 (defun akirak-org-dwim-clock-set-review ()
   (interactive)
   (akirak-org-dwim--with-clock
-   (org-todo "REVIEW")))
+   (akirak-org-dwim--finalize-capture
+    ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
+    ;; will be tirggered when you switch to the state.
+    (org-todo "REVIEW"))))
 
 (defun akirak-org-dwim-clock-open ()
   (interactive)
