@@ -68,9 +68,13 @@ If CALLBACK is a function, it is called with the selected url."
   (interactive "P")
   (akirak-avy--run #'akirak-avy--symbol-pre-action
                    #'akirak-avy--symbol-make-args
-                   (if arg
-                       #'akirak-avy--yank-symbol-with-quotes
-                     #'yank)))
+                   (pcase arg
+                     ('(4)
+                      #'akirak-avy--yank-symbol-with-quotes)
+                     ('-
+                      #'ignore)
+                     (_
+                      #'yank))))
 
 (defun akirak-avy--symbol-pre-action (beg end)
   (let ((string (buffer-substring-no-properties beg end)))
