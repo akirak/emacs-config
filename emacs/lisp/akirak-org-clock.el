@@ -99,6 +99,22 @@
                         (project-root pr)))))
     (user-error "Not in a project. First create a project")))
 
+;;;###autoload
+(defun akirak-org-clock-in-to-project ()
+  "Clock in to an entry in a file related to the current project."
+  (interactive)
+  (if-let (pr (project-current))
+      (if (string-match-p (regexp-quote "/foss/contributions/")
+                          (project-root pr))
+          (org-dog-clock-in (car (akirak-org-dog-major-mode-files))
+                            :query-prefix "todo: tags:@contribution ")
+        (let ((files (thread-last
+                       (org-dog-overview-scan (akirak-org-dog-project-files)
+                                              :fast t)
+                       (mapcar #'car))))
+          (org-dog-clock-in files :query-prefix "todo: ")))
+    (user-error "No project")))
+
 (defcustom akirak-org-clock-snooze-duration 60
   "Duration in seconds of snoozing in Org mode."
   :type 'number)
