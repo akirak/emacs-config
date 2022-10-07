@@ -2470,7 +2470,8 @@ Org Query Language, search command, and agenda-like view
     (:set org-ql-completing-read-reverse-paths nil)
 
     (:with-feature org
-      (:bind "M-s o" #'org-ql-find)))
+      (:bind "M-s o" #'org-ql-find
+             "C-c C-x /" #'org-ql-sparse-tree)))
 #+end_src
 *** org-recur
 :PROPERTIES:
