@@ -10,6 +10,8 @@
 
 ;;;; Global mode to ensure clocking
 
+(defvar akirak-org-clock-snooze-until nil)
+
 ;;;###autoload
 (define-minor-mode akirak-org-clock-mode
   "Ensure clocking"
@@ -36,6 +38,10 @@
   (rx bos (or " *temp*"
               "CAPTURE-")))
 
+(defsubst akirak-org-clock--snoozed-p ()
+  (and akirak-org-clock-snooze-until
+       (< (float-time) akirak-org-clock-snooze-until)))
+
 (defadvice save-buffer (around akirak-org-clock activate)
   (when (or (string-match-p akirak-org-clock-buffer-name-whitelist
                             (buffer-name))
@@ -48,6 +54,7 @@
                  (or (bound-and-true-p org-capture-mode)
                      (and (featurep 'org-dog)
                           (org-dog-buffer-object))))
+            (akirak-org-clock--snoozed-p)
             (akirak-org-clock--check-before-save))
     ad-do-it))
 
@@ -92,9 +99,7 @@
                         (project-root pr)))))
     (user-error "Not in a project. First create a project")))
 
-(defvar akirak-org-clock-snooze-timer nil)
-
-(defcustom akirak-org-clock-snooze-duration 30
+(defcustom akirak-org-clock-snooze-duration 60
   "Duration in seconds of snoozing in Org mode."
   :type 'number)
 
@@ -112,17 +117,16 @@
                                  buffer-file-name))
             (and (bound-and-true-p org-dog-file-mode)
                  (or (org-before-first-heading-p)
-                     akirak-org-clock-snooze-timer
+                     (akirak-org-clock--snoozed-p)
                      ;; It is likely that I mistype 'y' or 'n' to skip the question,
                      ;; so require an uppercase letter.
-                     (pcase (read-char-choice "Choose where you clock. [.] This entry\
- [M] meta, [S] Snooze: " '(?. ?M ?S))
-                       (?.
+                     (pcase (read-char-choice "Clock in to this entry? " '(?Y ?N))
+                       (?Y
                         (org-clock-in)
                         (run-with-timer akirak-org-clock-reclock-interval
                                         nil #'akirak-org-clock-reclock-in)
                         t)
-                       (?M
+                       (?N
                         (org-dog-clock-in (cl-remove-duplicates
                                            (list "~/org/meta.org"
                                                  (thread-last
@@ -131,22 +135,18 @@
                                                    (abbreviate-file-name)))
                                            :test #'equal)
                                           :query-prefix "todo: ")
-                        t)
-                       (?S
-                        (akirak-org-clock--snooze)
                         t)))))
     ad-do-it))
 
-(defun akirak-org-clock--snooze ()
-  (akirak-org-clock--snooze-end)
-  (setq akirak-org-clock-snooze-timer
-        (run-with-timer akirak-org-clock-snooze-duration
-                        nil #'akirak-org-clock--snooze-end)))
+;;;###autoload
+(defun akirak-org-clock-snooze ()
+  (interactive)
+  (setq akirak-org-clock-snooze-until
+        (+ (float-time) akirak-org-clock-snooze-duration))
+  (add-hook 'org-clock-in #'akiraik-org-clock-stop-snoozing))
 
-(defun akirak-org-clock--snooze-end ()
-  (when akirak-org-clock-snooze-timer
-    (cancel-timer akirak-org-clock-snooze-timer)
-    (setq akirak-org-clock-snooze-timer nil)))
+(defun akiraik-org-clock-stop-snoozing ()
+  (setq akirak-org-clock-snooze-until nil))
 
 (defun akirak-org-clock-reclock-in ()
   "Reclock in for updating the title."
