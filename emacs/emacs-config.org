@@ -1973,14 +1973,49 @@ Outline-based notes management and organizer
 
 #+begin_src emacs-lisp
   (setup org-clock
-    (:set org-clock-history-length 20
+    (:set org-clock-history-length 50
           org-clock-goto-may-find-recent-task nil
           org-clock-mode-line-total 'today
           org-clock-out-remove-zero-time-clocks t
+
           org-clock-persist t
+          ;; I may simply close Emacs to leave the work
+          org-clock-persist-query-save t
           org-clock-persist-query-resume nil
-          ;; Set for mini-modeline
-          org-clock-string-limit 40))
+          org-clock-auto-clockout-timer (* 15 60)
+          ;; Don't ask about exiting but about saving
+          org-clock-ask-before-exiting nil
+
+          ;; I use mini-modeline extensively
+          org-clock-clocked-in-display 'both
+          org-clock-string-limit 0
+          ;; org-clock-string-limit 40 ; mini-modeline
+
+          ;; Use `org-clock-display' to track time on projects weekly or monthly
+          org-clock-display-default-range 'thisweek
+
+          org-clock-heading-function
+          (defun akirak/org-clock-mode-line-heading ()
+            (concat (file-name-base (buffer-name)) ": "
+                    (org-link-display-format
+                     (org-no-properties (org-get-heading t t t t)))))
+
+          org-clock-frame-title-format '((org-memento-current-block
+                                          org-memento-frame-title-format)
+                                         org-mode-line-string))
+
+    (advice-add 'org-clock-in :before #'akirak/block-org-clock-in)
+    (defun akirak/block-org-clock-in (&rest _args)
+      "An advice to block unindesirable `org-clock-in'."
+      (when (eq this-command 'org-clock-in)
+        (if-let (filename (buffer-file-name
+                           (org-base-buffer
+                            (current-buffer))))
+            ;; Skip unconditionally if org-dog is unavailable
+            (when (and (require 'org-dog-core nil t)
+                       (not (string-match-p org-dog--root-regexp filename)))
+              (user-error "You cannot clock in to this file"))
+          (user-error "You cannot clock in to a heading without a file")))))
 #+end_src
 ***** akirak-org-clock
 #+begin_src emacs-lisp
