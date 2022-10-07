@@ -2388,7 +2388,8 @@ Time blocking with Org
 
 #+begin_src emacs-lisp
   (setup (:package org-memento)
-    (:hook-into after-init-hook))
+    (:hook-into after-init-hook)
+    (add-hook 'org-memento-day-end-hook #'save-some-buffers))
 #+end_src
 
 =org-memento-file= must be added to =org-agenda-files=. See [[*org-dog][org-dog]].
