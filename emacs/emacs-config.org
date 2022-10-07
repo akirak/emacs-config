@@ -2811,6 +2811,7 @@ This is a collection of extra utilities for various packages.
 **** akirak-consult-org
 #+begin_src emacs-lisp
   (setup akirak-consult-org
+    (:global "M-g M-j" #'akirak-consult-org-clock)
     (with-eval-after-load 'embark
       (add-to-list 'embark-transformer-alist
                    '(akirak-consult-org-olp-with-file
@@ -3190,11 +3191,6 @@ Consulting completing-read
     (:with-feature consult-xref
       (:set xref-show-xrefs-function #'consult-xref
             xref-show-definitions-function #'consult-xref)))
-#+end_src
-**** consult-org
-#+begin_src emacs-lisp
-  (setup consult-org
-    (:global "M-g M-j" #'consult-org-clock-goto))
 #+end_src
 *** consult-ls-git
 :PROPERTIES:

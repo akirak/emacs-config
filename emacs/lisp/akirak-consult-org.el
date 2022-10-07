@@ -4,38 +4,35 @@
 (require 'akirak-org-clock)
 
 ;;;###autoload
-(defun consult-org-clock-goto (&optional arg)
+(defun akirak-consult-org-clock (&optional arg)
   (interactive "P")
   (pcase arg
     (`nil (if (org-clocking-p)
               (org-clock-goto)
-            (consult-org-clock-history)))
-    ('(4) (consult-org-clock-history))
-    ('(16) (consult-org-clock-history t))))
+            (akirak-consult-org-clock-history)))
+    ('(4) (akirak-consult-org-clock-history))
+    ('(16) (akirak-consult-org-clock-history t))))
 
-(defun consult-org-clock-history (&optional rebuild)
-  ;; Based on `consult-org-heading'.
-  "Jump to an Org heading.
-
-  MATCH and SCOPE are as in `org-map-entries' and determine which
-  entries are offered.  By default, all entries of the current
-  buffer are offered."
-  (interactive "P")
+(defun akirak-consult-org-clock-history (&optional rebuild)
+  "Clock in to an entry in the clock history."
   ;; This will trigger loading of a desired set of Org files through
   ;; `eval-after-load'.
+  (interactive)
   (require 'org-agenda)
   (when (or rebuild (not org-clock-history))
     (akirak-org-clock-rebuild-history))
-  (consult--read
-   (consult--with-increased-gc (consult-org-clock--headings))
-   :prompt "Go to heading: "
-   :category 'akirak-consult-org-olp-with-file
-   :sort nil
-   :require-match t
-   :history '(:input consult-org--history)
-   :narrow (consult-org--narrow)
-   :state (consult--jump-state)
-   :lookup #'consult--lookup-candidate))
+  (let ((selected (save-window-excursion
+                    (consult--read
+                     (consult--with-increased-gc (consult-org-clock--headings))
+                     :prompt "Go to heading: "
+                     :category 'akirak-consult-org-olp-with-file
+                     :sort nil
+                     :require-match t
+                     :history '(:input consult-org--history)
+                     :narrow (consult-org--narrow)
+                     :state (consult--jump-state)
+                     :lookup #'consult--lookup-candidate))))
+    (org-clock-clock-in (list selected))))
 
 ;;;###autoload
 (defun akirak-consult-org-olp-to-marker (_type olp)
