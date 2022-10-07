@@ -5615,7 +5615,8 @@ Highlight symbols with keymap-enabled overlays
 
 #+begin_src emacs-lisp
   (setup (:package symbol-overlay)
-    (:global "C-c s" #'symbol-overlay-put)
+    (:global "C-c s" #'symbol-overlay-put
+             "M-g s" #'akirak-symbol-overlay-goto)
 
     (add-hook 'symbol-overlay-jump-hook
               (defun akirak/symbol-overlay-org-show-entry ()
