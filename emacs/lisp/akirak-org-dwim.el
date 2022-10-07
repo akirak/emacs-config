@@ -171,6 +171,13 @@
    ;; Save the current window configuration
    ]
 
+  ["Clock in"
+   :class transient-row
+   ("I" "Last entry" org-clock-in-last)
+   ("P" "Project" akirak-org-clock-in-to-project)
+   ("J" "History" akirak-consult-org-clock)
+   ("S" "Snooze" akirak-org-clock-snooze)]
+
   [:description
    akirak-org-dwim--files-description
    :if akirak-org-dwim--files-p
