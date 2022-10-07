@@ -309,11 +309,19 @@
      ;; will be tirggered when you switch to the state.
      (org-todo "REVIEW"))))
 
+;;;###autoload
 (defun akirak-org-dwim-clock-open ()
   (interactive)
-  (other-window 1)
-  (org-goto-marker-or-bmk org-clock-marker)
-  (org-narrow-to-subtree))
+  (if-let (capture-buffer (akirak-org-dwim--capture-buffer org-clock-marker))
+      (pop-to-buffer capture-buffer)
+    (with-current-buffer (marker-buffer org-clock-marker)
+      (let ((initial-position (point)))
+        (goto-char org-clock-marker)
+        (with-current-buffer (org-dog-indirect-buffer)
+          (when (or (< (point) (point-min))
+                    (> (point) (point-max)))
+            (goto-char (point-min)))
+          (pop-to-buffer (current-buffer)))))))
 
 ;;;; Integration with org-capture
 
