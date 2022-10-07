@@ -67,7 +67,9 @@
 ;;;###autoload (autoload 'akirak-insert-org-clock-heading "akirak-insert" nil 'interactive)
 (define-skeleton akirak-insert-org-clock-heading
   "Insert the heading of the currently clocked entry." nil
-  org-clock-heading)
+  (save-current-buffer
+    (org-with-point-at org-clock-marker
+      (org-get-heading t t t t))))
 
 (provide 'akirak-insert)
 ;;; akirak-insert.el ends here
