@@ -6,12 +6,6 @@
 
 (declare-function truncate-string-to-width "mule-util")
 
-(defmacro akirak-org-dwim--with-clock (&rest progn)
-  `(with-current-buffer (marker-buffer org-clock-marker)
-     (org-with-wide-buffer
-      (goto-char org-clock-marker)
-      ,@progn)))
-
 (defmacro akirak-org-dwim--finalize-capture (&rest progn)
   `(let ((is-capture org-capture-mode))
      ,@progn
@@ -213,13 +207,13 @@
 ;;;; Descriptions and predicates
 
 (defun akirak-org-dwim--clock-description ()
-  (akirak-org-dwim--with-clock
-   (let ((olp (org-get-outline-path t)))
-     (format "Clock: \"%s\" in %s (%s)"
-             (car (last olp))
-             (buffer-name)
-             (substring-no-properties
-              (org-format-outline-path (butlast olp)))))))
+  (org-with-clock-position (list org-clock-marker)
+    (let ((olp (org-get-outline-path t)))
+      (format "Clock: \"%s\" in %s (%s)"
+              (car (last olp))
+              (buffer-name)
+              (substring-no-properties
+               (org-format-outline-path (butlast olp)))))))
 
 (defun akirak-org-dwim--files-p ()
   (and akirak-org-dwim-selected-files
@@ -302,17 +296,17 @@
 
 (defun akirak-org-dwim-clock-done ()
   (interactive)
-  (akirak-org-dwim--with-clock
    (akirak-org-dwim--finalize-capture
     (org-todo 'done))))
+  (org-with-clock-position (list org-clock-marker)
 
 (defun akirak-org-dwim-clock-set-review ()
   (interactive)
-  (akirak-org-dwim--with-clock
    (akirak-org-dwim--finalize-capture
     ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
     ;; will be tirggered when you switch to the state.
     (org-todo "REVIEW"))))
+  (org-with-clock-position (list org-clock-marker)
 
 (defun akirak-org-dwim-clock-open ()
   (interactive)
