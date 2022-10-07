@@ -90,8 +90,7 @@
 (embark-define-keymap akirak-embark-org-marker-map
   ""
   :parent nil
-  ("g" org-goto-marker-or-bmk)
-  ("I" akirak-embark-org-clock-in))
+  ("g" org-goto-marker-or-bmk))
 
 (define-key embark-library-map "t"
             (akirak-embark-new-tab-action find-library
@@ -190,13 +189,6 @@
         (cl-incf count)))
     (when (> count 0)
       (message "Killed %d buffers in %s" count root))))
-
-(defun akirak-embark-org-clock-in (marker)
-  (interactive (list nil))
-  (with-current-buffer (marker-buffer marker)
-    (org-with-wide-buffer
-     (goto-char marker)
-     (org-clock-in))))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
