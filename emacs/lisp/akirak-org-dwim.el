@@ -7,10 +7,11 @@
 (declare-function truncate-string-to-width "mule-util")
 
 (defmacro akirak-org-dwim--finalize-capture (&rest progn)
-  `(let ((is-capture org-capture-mode))
+  `(let ((capture-buffer (akirak-org-dwim--capture-buffer org-clock-marker)))
      ,@progn
-     (when is-capture
-       (org-capture-finalize))))
+     (when capture-buffer
+       (with-current-buffer capture-buffer
+         (org-capture-finalize)))))
 
 ;;;; Selected files
 
@@ -296,23 +297,39 @@
 
 (defun akirak-org-dwim-clock-done ()
   (interactive)
-   (akirak-org-dwim--finalize-capture
-    (org-todo 'done))))
   (org-with-clock-position (list org-clock-marker)
+    (akirak-org-dwim--finalize-capture
+     (org-todo 'done))))
 
 (defun akirak-org-dwim-clock-set-review ()
   (interactive)
-   (akirak-org-dwim--finalize-capture
-    ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
-    ;; will be tirggered when you switch to the state.
-    (org-todo "REVIEW"))))
   (org-with-clock-position (list org-clock-marker)
+    (akirak-org-dwim--finalize-capture
+     ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
+     ;; will be tirggered when you switch to the state.
+     (org-todo "REVIEW"))))
 
 (defun akirak-org-dwim-clock-open ()
   (interactive)
   (other-window 1)
   (org-goto-marker-or-bmk org-clock-marker)
   (org-narrow-to-subtree))
+
+;;;; Integration with org-capture
+
+(defun akirak-org-dwim--capture-buffer (clock-marker)
+  "Return a corresponding capture buffer for the clock marker."
+  (let ((suffix (buffer-name (marker-buffer clock-marker)))
+        (point (org-with-clock-position (list clock-marker)
+                 (org-back-to-heading)
+                 (point))))
+    (thread-last
+      (internal-complete-buffer "CAPTURE-" nil t)
+      (seq-some `(lambda (name)
+                   (when (string-suffix-p ,suffix name)
+                     (with-current-buffer (get-buffer name)
+                       (when (eq (point-min) ,point)
+                         (current-buffer)))))))))
 
 (provide 'akirak-org-dwim)
 ;;; akirak-org-dwim.el ends here
