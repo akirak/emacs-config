@@ -83,7 +83,10 @@
                       (require 'org-dog-clock)
                       (message "You must clock into %s" mode-file)
                       (org-dog-clock-in mode-file :query-prefix "tags:@contribution "
-                                        :tags "@contribution")
+                                        :tags "@contribution"
+                                        :prompt
+                                        (format "Clock in (%s): "
+                                                (akirak-org-clock--project-name)))
                       t))
               (error "No Org file for the major mode %s" major-mode))
           (if files0
@@ -93,7 +96,10 @@
                   (progn
                     (require 'org-dog-clock)
                     (message "You must clock in")
-                    (org-dog-clock-in files :query-prefix "todo: ")
+                    (org-dog-clock-in files :query-prefix "todo: "
+                                      :prompt
+                                      (format "Clock in (%s): "
+                                              (akirak-org-clock--project-name)))
                     t))
             (user-error "No Org file for the project in %s"
                         (project-root pr)))))
@@ -107,13 +113,26 @@
       (if (string-match-p (regexp-quote "/foss/contributions/")
                           (project-root pr))
           (org-dog-clock-in (car (akirak-org-dog-major-mode-files))
-                            :query-prefix "todo: tags:@contribution ")
+                            :query-prefix "todo: tags:@contribution "
+                            :prompt
+                            (format "Clock in (%s): "
+                                    (akirak-org-clock--project-name)))
         (let ((files (thread-last
                        (org-dog-overview-scan (akirak-org-dog-project-files)
                                               :fast t)
                        (mapcar #'car))))
-          (org-dog-clock-in files :query-prefix "todo: ")))
+          (org-dog-clock-in files :query-prefix "todo: "
+                            :prompt
+                            (format "Clock in (%s): "
+                                    (akirak-org-clock--project-name)))))
     (user-error "No project")))
+
+(defun akirak-org-clock--project-name (pr)
+  "Return the name of the project for use in prompt."
+  (thread-last
+    (project-root pr)
+    (string-remove-suffix "/")
+    (file-name-nondirectory)))
 
 (defcustom akirak-org-clock-snooze-duration 60
   "Duration in seconds of snoozing in Org mode."
