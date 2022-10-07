@@ -104,12 +104,12 @@
 
 (defadvice org-self-insert-command (around akirak-org-clock activate)
   (when (or (org-clocking-p)
+            (bound-and-true-p org-capture-mode)
             (and buffer-file-name
                  ;; I sometimes edit Org file inside `user-emacs-directory', and
                  ;; I don't want to
                  (string-match-p akirak-org-clock-file-name-whitelist
                                  buffer-file-name))
-            ;; (bound-and-true-p org-capture-mode)
             (and (bound-and-true-p org-dog-file-mode)
                  (or (org-before-first-heading-p)
                      akirak-org-clock-snooze-timer
