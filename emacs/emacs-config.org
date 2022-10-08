@@ -1257,6 +1257,15 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                      (back-to-indentation)
                    (beginning-of-line)))))))
 #+end_src
+*** skeleton
+:PROPERTIES:
+:CREATED_TIME: [2022-10-08 Sat 10:55]
+:END:
+
+#+begin_src emacs-lisp
+  (setup skeleton
+    (:set skeleton-end-newline nil))
+#+end_src
 *** startup
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 19:45]
