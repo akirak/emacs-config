@@ -86,7 +86,7 @@
                                         :tags "@contribution"
                                         :prompt
                                         (format "Clock in (%s): "
-                                                (akirak-org-clock--project-name)))
+                                                (akirak-org-clock--project-name pr)))
                       t))
               (error "No Org file for the major mode %s" major-mode))
           (if files0
@@ -99,7 +99,7 @@
                     (org-dog-clock-in files :query-prefix "todo: "
                                       :prompt
                                       (format "Clock in (%s): "
-                                              (akirak-org-clock--project-name)))
+                                              (akirak-org-clock--project-name pr)))
                     t))
             (user-error "No Org file for the project in %s"
                         (project-root pr)))))
@@ -116,7 +116,7 @@
                             :query-prefix "todo: tags:@contribution "
                             :prompt
                             (format "Clock in (%s): "
-                                    (akirak-org-clock--project-name)))
+                                    (akirak-org-clock--project-name pr)))
         (let ((files (thread-last
                        (org-dog-overview-scan (akirak-org-dog-project-files)
                                               :fast t)
@@ -124,7 +124,7 @@
           (org-dog-clock-in files :query-prefix "todo: "
                             :prompt
                             (format "Clock in (%s): "
-                                    (akirak-org-clock--project-name)))))
+                                    (akirak-org-clock--project-name pr)))))
     (user-error "No project")))
 
 (defun akirak-org-clock--project-name (pr)

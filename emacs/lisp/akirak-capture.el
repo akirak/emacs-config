@@ -306,13 +306,15 @@
    :class transient-row
    ("T" "Start todo" (lambda ()
                        (interactive)
-                       (setq akirak-capture-headline (read-string "Heading of the todo: ")
+                       (setq akirak-capture-headline (akirak-org-capture-read-string
+                                                      "Heading of the todo: ")
                              akirak-capture-template-options '(:todo "UNDERWAY")
                              akirak-capture-doct-options '(:clock-in t :clock-resume t))
                        (akirak-capture-doct)))
    ("t" "Todo" (lambda ()
                  (interactive)
-                 (setq akirak-capture-headline (read-string "Heading of the todo: ")
+                 (setq akirak-capture-headline (akirak-org-capture-read-string
+                                                "Heading of the todo: ")
                        akirak-capture-template-options '(:todo "TODO")
                        akirak-capture-doct-options nil)
                  (akirak-capture-doct)))
@@ -336,7 +338,8 @@
    ("!" "Troubleshoot" akirak-capture-troubleshooting)
    ("i" "Ideate" (lambda ()
                    (interactive)
-                   (setq akirak-capture-headline (read-string "Heading of the todo: ")
+                   (setq akirak-capture-headline (akirak-org-capture-read-string
+                                                  "Heading of the todo: ")
                          akirak-capture-template-options '(:todo "IDEATE" :tags "@ideate")
                          akirak-capture-doct-options '(:clock-in t :clock-resume t))
                    (akirak-capture-doct)))]
@@ -349,7 +352,7 @@
     ("h" "Plain heading"
      (lambda ()
        (interactive)
-       (setq akirak-capture-headline (read-string "Heading: ")
+       (setq akirak-capture-headline (akirak-org-capture-read-string "Heading: ")
              akirak-capture-template-options nil
              akirak-capture-doct-options nil)
        (akirak-capture-doct)))
@@ -500,7 +503,7 @@
    :class transient-row
    ("/" octopus-read-dog-file-suffix)]
   (interactive)
-  (let* ((title (read-string "Appointment title: "))
+  (let* ((title (akirak-org-capture-read-string "Appointment title: "))
          (timestamp (with-temp-buffer
                       (org-time-stamp nil)
                       (goto-char (point-min))
@@ -567,7 +570,7 @@
 
 (defun akirak-capture--queue-content (filename)
   (require 'orgabilize)
-  (let* ((title-or-url (string-trim (read-string "Title or URL: ")))
+  (let* ((title-or-url (string-trim (akirak-org-capture-read-string "Title or URL: ")))
          (headline (if (string-match-p (rx bol "https://") title-or-url)
                        (orgabilize-make-link-string title-or-url)
                      title-or-url))
@@ -590,7 +593,7 @@
   (interactive "P")
   (let ((text (if (use-region-p)
                   (buffer-substring-no-properties (region-beginning) (region-end))
-                (read-string "Error message: "))))
+                (akirak-org-capture-read-string "Error message: "))))
     (when (string-empty-p (string-trim text))
       (setq text nil))
     (setq akirak-capture-headline (if (and text
@@ -621,7 +624,7 @@
                                                             "#+begin_quote"
                                                             (plist-get plist :content)
                                                             "#+end_quote"))))
-    (setq akirak-capture-headline (read-string "Topic: " "#")
+    (setq akirak-capture-headline (akirak-org-capture-read-string "Topic: " "#")
           akirak-capture-template-options `(:todo "TODO")))
   (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
   (akirak-capture-doct))
@@ -653,12 +656,12 @@ not work in the future when forge changes the output."
 (cl-defun akirak-capture-text (string &key as-body)
   "Capture a new entry with the selected region as the headline."
   (interactive (if (equal current-prefix-arg '(4))
-                   (list (read-string "Content: ")
+                   (list (akirak-org-capture-read-string "Content: ")
                          :as-body t)
-                 (list (read-string "Headline: "))))
+                 (list (akirak-org-capture-read-string "Headline: "))))
   (if as-body
       (let ((body-type (pcase (org--insert-structure-template-mks)
-                         (`("\t" . ,_) (read-string "Structure type: "))
+                         (`("\t" . ,_) (akirak-org-capture-read-string "Structure type: "))
                          (`(,_ ,choice . ,_) choice))))
         (setq akirak-capture-headline "%^{Title}"
               akirak-capture-template-options
@@ -696,7 +699,7 @@ not work in the future when forge changes the output."
   (akirak-capture--to-clock
    'plain
    (let ((body-type (pcase (org--insert-structure-template-mks)
-                      (`("\t" . ,_) (read-string "Structure type: "))
+                      (`("\t" . ,_) (akirak-org-capture-read-string "Structure type: "))
                       (`(,_ ,choice . ,_) choice))))
      (list (concat "#+begin_" body-type
                    (when (equal body-type "src")
@@ -711,7 +714,7 @@ not work in the future when forge changes the output."
 
 (defun akirak-capture-errand ()
   (interactive)
-  (let* ((title (read-string "Appointment title: "))
+  (let* ((title (akirak-org-capture-read-string "Appointment title: "))
          (timestamp (with-temp-buffer
                       (org-time-stamp t)
                       (buffer-string)
@@ -779,6 +782,9 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                    :function ,jump-func
                    :clock-in t :clock-resume t))))))
     (org-capture)))
+
+(defun akirak-org-capture-read-string (prompt)
+  (read-string prompt))
 
 (provide 'akirak-capture)
 ;;; akirak-capture.el ends here
