@@ -156,6 +156,17 @@
 (transient-define-prefix akirak-org-dwim-on-clock ()
 
   [:description
+   akirak-org-dwim--memento-description
+   :if akirak-org-dwim--memento-p
+   ("t" "Open today" org-memento-open-today)
+   ;; Show the current block
+   ;; Stop the current block
+   ;; Start a new block
+
+   ;; Day ends at
+   ]
+
+  [:description
    akirak-org-dwim--clock-description
    :class transient-row
    :if org-clocking-p
@@ -228,6 +239,19 @@
      (concat "Selected files: " (string-join files " "))
      (frame-width)
      nil nil (truncate-string-ellipsis))))
+
+(defun akirak-org-dwim--memento-p ()
+  (and (require 'org-memento nil t)
+       (or org-memento-status-data
+           (progn
+             (org-memento-status)
+             t))))
+
+(defun akirak-org-dwim--memento-description ()
+  (concat "Memento: "
+          (if-let (day (org-memento-today-as-block))
+              (format-time-string "%R-" (org-memento-started-time day))
+            "(not checked in)")))
 
 ;;;; Selecting files
 
