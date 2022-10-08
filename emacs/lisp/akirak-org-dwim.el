@@ -188,10 +188,10 @@
    :class transient-subgroups
    [:class
     transient-row
-    ("/" "Select from agenda files" akirak-org-dwim-select-agenda-files)
-    ("x" "Expand" akirak-org-dwim-expand-selected-files)
-    ("n" "Narrow" akirak-org-dwim-narrow-selected-files)
+    ("x" "Add descendants" akirak-org-dwim-expand-selected-files)
+    ("n" "Select a subset" akirak-org-dwim-narrow-selected-files)
     ("j" "Last clocked file" akirak-org-dwim-select-recent-file)
+    ("/" "Agenda files" akirak-org-dwim-select-agenda-files)
     ("A" "All agenda files" akirak-org-dwim-select-all-agenda-files)]
    [:class
     transient-columns
