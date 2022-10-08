@@ -784,7 +784,11 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
     (org-capture)))
 
 (defun akirak-org-capture-read-string (prompt)
-  (read-string prompt))
+  (minibuffer-with-setup-hook
+      (lambda ()
+        (abbrev-mode t)
+        (corfu-mode t))
+    (read-string prompt)))
 
 (provide 'akirak-capture)
 ;;; akirak-capture.el ends here
