@@ -356,6 +356,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           ;; ("jorgclock" "" akirak-insert-org-clock-heading)
           ;; Acronyms
           ("wip" "WIP")
+          ("fixme" "FIXME")
           ;; Common mistypes
           ("ort" "org")))))
 #+end_src
