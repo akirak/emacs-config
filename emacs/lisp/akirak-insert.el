@@ -4,6 +4,7 @@
 
 ;;;###autoload
 (defun akirak-insert ()
+  "Complete an insertion command."
   (interactive)
   (let ((command (read-extended-command-1 "Insert: " "akirak-insert- ")))
     (call-interactively (intern command))))
@@ -62,12 +63,12 @@
 
 ;;;###autoload (autoload 'akirak-insert-user-full-name "akirak-insert")
 (define-skeleton akirak-insert-user-full-name
-  "Insert the full name of the user" nil
+  "Insert the full name of the user." nil
   user-full-name)
 
 ;;;###autoload (autoload 'akirak-insert-user-mail-address "akirak-insert")
 (define-skeleton akirak-insert-user-mail-address
-  "Insert date in the ISO-8601 format." nil
+  "Insert the user's email address in the ISO-8601 format." nil
   user-mail-address)
 
 ;;;###autoload (autoload 'akirak-insert-org-clock-heading "akirak-insert" nil 'interactive)
