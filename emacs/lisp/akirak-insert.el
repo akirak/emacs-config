@@ -2,6 +2,12 @@
 
 (require 'skeleton)
 
+;;;###autoload
+(defun akirak-insert ()
+  (interactive)
+  (let ((command (read-extended-command-1 "Insert: " "akirak-insert- ")))
+    (call-interactively (intern command))))
+
 ;;;###autoload (autoload 'akirak-insert-basename "akirak-insert")
 (define-skeleton akirak-insert-basename
   "Insert the base name of the buffer." nil

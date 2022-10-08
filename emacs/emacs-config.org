@@ -342,16 +342,18 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:global "C-M-/" #'expand-abbrev)
     (:when-loaded
       (define-abbrev-table 'global-abbrev-table
-        '(("jjb" "" akirak-insert-basename)
-          ("jjB" "" akirak-insert-basename-pascalcased)
-          ("jjp" "" akirak-insert-project-name)
-          ("jjP" "" akirak-insert-project-name-pascalcased)
-          ("jlisp" "" akirak-insert-from-lisp)
-          ("jdate" "" akirak-insert-iso8601-date)
-          ("jcal" "" akirak-insert-iso8601-read-date)
-          ("jname" "" akirak-insert-user-full-name)
-          ("jmail" "" akirak-insert-user-mail-address)
-          ("jorgclock" "" akirak-insert-org-clock-heading)
+        '(
+          ;; Use akirak-insert
+          ;; ("jjb" "" akirak-insert-basename)
+          ;; ("jjB" "" akirak-insert-basename-pascalcased)
+          ;; ("jjp" "" akirak-insert-project-name)
+          ;; ("jjP" "" akirak-insert-project-name-pascalcased)
+          ;; ("jlisp" "" akirak-insert-from-lisp)
+          ;; ("jdate" "" akirak-insert-iso8601-date)
+          ;; ("jcal" "" akirak-insert-iso8601-read-date)
+          ;; ("jname" "" akirak-insert-user-full-name)
+          ;; ("jmail" "" akirak-insert-user-mail-address)
+          ;; ("jorgclock" "" akirak-insert-org-clock-heading)
           ;; Acronyms
           ("wip" "WIP")
           ;; Common mistypes
@@ -2868,6 +2870,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:embark embark-file-map nil
       ("C-c i" akirak-image-import-file))
     (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
+#+end_src
+**** akirak-insert
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c a") #'akirak-insert)
 #+end_src
 **** COMMENT akirak-japanese                              :ARCHIVE:
 #+begin_src emacs-lisp
