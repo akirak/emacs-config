@@ -145,6 +145,8 @@
 (defadvice org-self-insert-command (around akirak-org-clock activate)
   (when (or (org-clocking-p)
             (bound-and-true-p org-capture-mode)
+            ;; Pass non-file buffers like *Org Note* buffers.
+            (not buffer-file-name)
             (and buffer-file-name
                  ;; I sometimes edit Org file inside `user-emacs-directory', and
                  ;; I don't want to
