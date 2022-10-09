@@ -160,13 +160,13 @@
    :if akirak-org-dwim--memento-p
    :class transient-row
    ("t" "Open today" org-memento-open-today)
-   ("C-i" "Start a new block" org-memento-start-block
+   ("TAB" "Start a new block" org-memento-start-block
     :if (lambda () (null org-memento-current-block)))
    ("C-o" "Finish the current block" org-memento-finish-block
     :if (lambda () org-memento-current-block))
    ("C-c" "Stop the current block" org-memento-stop-block
     :if (lambda () org-memento-current-block))
-   ("E" "End the day" org-memento-end-day)]
+   ("E" "Check out from the day" org-memento-checkout-from-day)]
 
   [:description
    akirak-org-dwim--clock-description
