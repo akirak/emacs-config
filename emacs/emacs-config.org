@@ -3135,11 +3135,7 @@ Completion At Point Extensions
 #+begin_src emacs-lisp
   (setup (:package cape)
     (:global "C-x r M-f" #'cape-file
-             "C-x r M-l" #'cape-line
-             ;; abbrev-mode is turned on, so I will use
-             ;; this keybinding for mnemonics.
-             ;; It's C-M-/ and C-x '.
-             [remap expand-abbrev] #'cape-abbrev))
+             "C-x r M-l" #'cape-line))
 #+end_src
 *** code-review
 :PROPERTIES:
