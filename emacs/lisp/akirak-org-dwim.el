@@ -93,7 +93,73 @@
 
 ;;;;; Query
 
+(defcustom akirak-org-dwim-ql-query-alist
+  '(("Project backlog"
+     (and (level 2)
+          (parent (heading "Backlog")))))
+  ""
+  :type '(alist :key-type string
+                :value-type (cons (sexp :tag "Query")
+                                  plist
+                                  )))
+
 (defvar akirak-org-dwim-ql-query '(todo))
+
+(defvar akirak-org-dwim-ql-query-name nil)
+
+(defun akirak-org-dwim-read-ql-query-name (&optional prompt initial _history)
+  (completing-read (or prompt "Query: ")
+                   #'akirak-org-dwim-ql-query-completions
+                   nil nil initial))
+
+(defun akirak-org-dwim-ql-query-completions (string pred action)
+  (if (eq action 'metadata)
+      '(metadata . ((annotation-function . akirak-org-dwim-ql-query-annotator)))
+    (complete-with-action action
+                          (mapcar #'car akirak-org-dwim-ql-query-alist)
+                          string
+                          pred)))
+
+(defun akirak-org-dwim-ql-query-annotator (group)
+  (if-let (plist (cdr (assoc group akirak-org-dwim-ql-query-alist)))
+      (concat " " (propertize (prin1-to-string plist)
+                              'face 'font-lock-comment-face))
+    ""))
+
+(defun akirak-org-dwim-ql-new-search ()
+  (interactive)
+  (let ((name (akirak-org-dwim-read-ql-query-name)))
+    (if-let (cell (assoc name akirak-org-dwim-ql-query-alist))
+        (setq akirak-org-dwim-ql-query-name name
+              akirak-org-dwim-ql-query (cadr cell))
+      (setq akirak-org-dwim-ql-query-name nil
+            akirak-org-dwim-ql-query (read name)))
+    (akirak-org-dwim-ql-search)))
+
+(defclass akirak-org-dwim-ql-query-class (transient-suffix)
+  ())
+
+(cl-defmethod transient-format-description ((obj akirak-org-dwim-ql-query-class))
+  (format "%s %s"
+          (oref obj description)
+          (if-let (value akirak-org-dwim-ql-query-name)
+              (concat
+               (propertize "(" 'face 'transient-inactive-value)
+               (propertize (format "%s" value) 'face 'transient-value)
+               (propertize ")" 'face 'transient-inactive-value))
+            "")))
+
+(transient-define-suffix akirak-org-dwim-ql-search ()
+  :class 'akirak-org-dwim-ql-query-class
+  :description "Ql search"
+  (interactive)
+  (if akirak-org-dwim-ql-query
+      (org-ql-search (akirak-org-dwim--selected-files)
+        akirak-org-dwim-ql-query
+        :super-groups (cdr (assoc akirak-org-dwim-super-groups-name
+                                  akirak-org-dwim-super-groups-alist))
+        :sort akirak-org-dwim-ql-sort)
+    (akirak-org-dwim-ql-new-search)))
 
 ;;;;; Super groups
 
@@ -194,7 +260,8 @@
     ("-o" akirak-org-dwim-ql-sort)]
    [("SPC" "Clock in" akirak-org-dwim-clock-in-todo)
     ("a" "Agenda" akirak-org-dwim-agenda)
-    ("v" "Ql search" akirak-org-dwim-ql-search)]]
+    ("v" akirak-org-dwim-ql-search)
+    ("V" "Ql search with new query" akirak-org-dwim-ql-new-search)]]
 
   ["Switch focus"
    :if-not org-clocking-p
@@ -310,16 +377,6 @@
         (org-agenda-start-with-clockreport-mode t)
         (org-agenda-use-time-grid t))
     (org-agenda nil "a")))
-
-(defun akirak-org-dwim-ql-search ()
-  (interactive)
-  (let ((query (read--expression "Query: " (prin1-to-string akirak-org-dwim-ql-query))))
-    (setq akirak-org-dwim-ql-query query)
-    (org-ql-search (akirak-org-dwim--selected-files)
-      query
-      :super-groups (cdr (assoc akirak-org-dwim-super-groups-name
-                                akirak-org-dwim-super-groups-alist))
-      :sort akirak-org-dwim-ql-sort)))
 
 (defun akirak-org-dwim-clock-done ()
   (interactive)
