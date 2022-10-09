@@ -243,17 +243,23 @@
     ("V" "Ql search with new query" akirak-org-dwim-ql-new-search)]]
 
   [:description
+   akirak-org-dwim--memento-block-description
+   :if akirak-org-dwim--memento-current-block-p
+   :class transient-row
+   ("C-o" "Finish" org-memento-finish-block)
+   ("C-c" "Stop" org-memento-stop-block)]
+
+  [:description
    akirak-org-dwim--memento-description
    :if akirak-org-dwim--memento-p
    :class transient-row
    ("t" "Open today" org-memento-open-today)
-   ("TAB" "Start a new block" org-memento-start-block
-    :if (lambda () (null org-memento-current-block)))
-   ("C-o" "Finish the current block" org-memento-finish-block
-    :if (lambda () org-memento-current-block))
-   ("C-c" "Stop the current block" org-memento-stop-block
-    :if (lambda () org-memento-current-block))
-   ("E" "Check out from the day" org-memento-checkout-from-day)]
+   ("TAB" "Start a block" org-memento-start-block
+    :if-not akirak-org-dwim--memento-current-block-p)
+   ("S" "Update status" org-memento-status)
+   ("C" "Capture" akirak-capture-memento)
+   ("E" "Check out from the day" org-memento-checkout-from-day
+    :if-not akirak-org-dwim--memento-current-block-p)]
 
   ["Switch focus"
    :if-not org-clocking-p
@@ -317,8 +323,30 @@
 (defun akirak-org-dwim--memento-description ()
   (concat "Memento: "
           (if-let (day (org-memento-today-as-block))
-              (format-time-string "%R-" (org-memento-started-time day))
+              (let* ((started (org-memento-started-time day))
+                     (ending (org-memento-ending-time day)))
+                (format-spec "%d %s%e%r"
+                             `((?d . ,(format-time-string "%F (%a)"))
+                               (?s . ,(format-time-string "%R" started))
+                               (?e . ,(if ending
+                                          (format-time-string "-%R" ending)
+                                        ""))
+                               (?r . ,(if ending
+                                          (format " (remaining %s)"
+                                                  (org-duration-from-minutes
+                                                   (/ (- ending (float-time))
+                                                      60)))
+                                        "")))))
             "(not checked in)")))
+
+(defun akirak-org-dwim--memento-current-block-p ()
+  (bound-and-true-p org-memento-current-block))
+
+(defun akirak-org-dwim--memento-block-description ()
+  (format "Memento block: %s" org-memento-current-block))
+
+(defun akirak-org-dwim--memento-status-description ()
+  (format "No current block"))
 
 ;;;; Selecting files
 
