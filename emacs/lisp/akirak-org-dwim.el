@@ -273,8 +273,7 @@
    :class transient-row
    ("I" "Last entry" org-clock-in-last)
    ("P" "Project" akirak-org-clock-in-to-project)
-   ("J" "History" akirak-consult-org-clock)
-   ("S" "Snooze" akirak-org-clock-snooze)]
+   ("J" "History" akirak-consult-org-clock)]
 
   (interactive)
   (transient-setup 'akirak-org-dwim-on-clock))

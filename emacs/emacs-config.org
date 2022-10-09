@@ -2046,7 +2046,10 @@ Outline-based notes management and organizer
 ***** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    (:hook-into emacs-startup-hook))
+    (:hook-into emacs-startup-hook)
+    (:with-feature org
+      (:with-map org-mode-map
+        (:bind "C-c C-x S" #'akirak-org-clock-snooze))))
 #+end_src
 **** org-habit
 :PROPERTIES:
