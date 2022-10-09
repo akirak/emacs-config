@@ -392,12 +392,11 @@
        (akirak-capture-appointment)))
     ("ae" "Errand" akirak-capture-errand)]]
 
-  [["Convenience"
-    ("sc" "Command snippet" akirak-capture-command-snippet)]
-   ["Specific projects"
-    :class transient-row
-    ("e" "Emacs config" akirak-emacs-config-capture)
-    ("m" "Memento" akirak-capture-memento)]]
+  ["Convenience and specific projects"
+   :class transient-row
+   ("sc" "Command snippet" akirak-capture-command-snippet)
+   ("e" "Emacs config" akirak-emacs-config-capture)
+   ("m" "Memento" akirak-capture-memento)]
 
   (interactive)
   (cond
