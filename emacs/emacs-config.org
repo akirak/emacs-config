@@ -2018,7 +2018,17 @@ Outline-based notes management and organizer
 
           org-clock-frame-title-format '((org-memento-current-block
                                           org-memento-frame-title-format)
-                                         org-mode-line-string))
+                                         org-mode-line-string)
+
+          org-clocktable-defaults
+          (list :fileskip0 t :stepskip0 t :tcolumns 1
+                ;; Remaining arguments are the same as defaults
+                :maxlevel 2 :lang "en" :scope 'file :block nil
+                :wstart 1 :mstart 1 :tstart nil :tend nil :step nil
+                :tags nil :match nil :emphasize nil :link nil
+                :narrow '40! :indent t :filetitle nil :hidefiles nil
+                :formula nil :timestamp nil :level nil
+                :formatter nil))
 
     (advice-add 'org-clock-in :before #'akirak/block-org-clock-in)
     (defun akirak/block-org-clock-in (&rest _args)
