@@ -220,6 +220,27 @@
 
 ;;;###autoload (autoload 'akirak-org-dwim-on-clock "akirak-org-dwim" nil 'interactive)
 (transient-define-prefix akirak-org-dwim-on-clock ()
+  [:description
+   akirak-org-dwim--clock-description
+   :class transient-row
+   :if org-clocking-p
+   ("d" "Mark as done" akirak-org-dwim-clock-done)
+   ("r" "Mark as REVIEW" akirak-org-dwim-clock-set-review)
+   ("O" "Clock out" org-clock-out)
+   ("o" "Display clocked entry" akirak-org-dwim-clock-open)
+   ;; Save the current window configuration
+   ]
+
+  [:description
+   akirak-org-dwim--files-description
+   :if akirak-org-dwim--files-p
+   [("-s" akirak-org-dwim-switch-span)
+    ("-g" akirak-org-dwim-super-groups)
+    ("-o" akirak-org-dwim-ql-sort)]
+   [("SPC" "Clock in" akirak-org-dwim-clock-in-todo)
+    ("a" "Agenda" akirak-org-dwim-agenda)
+    ("v" akirak-org-dwim-ql-search)
+    ("V" "Ql search with new query" akirak-org-dwim-ql-new-search)]]
 
   [:description
    akirak-org-dwim--memento-description
@@ -234,35 +255,6 @@
     :if (lambda () org-memento-current-block))
    ("E" "Check out from the day" org-memento-checkout-from-day)]
 
-  [:description
-   akirak-org-dwim--clock-description
-   :class transient-row
-   :if org-clocking-p
-   ("d" "Mark as done" akirak-org-dwim-clock-done)
-   ("r" "Mark as REVIEW" akirak-org-dwim-clock-set-review)
-   ("O" "Clock out" org-clock-out)
-   ("o" "Display clocked entry" akirak-org-dwim-clock-open)
-   ;; Save the current window configuration
-   ]
-
-  ["Clock in"
-   :class transient-row
-   ("I" "Last entry" org-clock-in-last)
-   ("P" "Project" akirak-org-clock-in-to-project)
-   ("J" "History" akirak-consult-org-clock)
-   ("S" "Snooze" akirak-org-clock-snooze)]
-
-  [:description
-   akirak-org-dwim--files-description
-   :if akirak-org-dwim--files-p
-   [("-s" akirak-org-dwim-switch-span)
-    ("-g" akirak-org-dwim-super-groups)
-    ("-o" akirak-org-dwim-ql-sort)]
-   [("SPC" "Clock in" akirak-org-dwim-clock-in-todo)
-    ("a" "Agenda" akirak-org-dwim-agenda)
-    ("v" akirak-org-dwim-ql-search)
-    ("V" "Ql search with new query" akirak-org-dwim-ql-new-search)]]
-
   ["Switch focus"
    :if-not org-clocking-p
    :class transient-subgroups
@@ -276,6 +268,13 @@
    [:class
     transient-columns
     :setup-children octopus-setup-context-file-subgroups]]
+
+  ["Clock in"
+   :class transient-row
+   ("I" "Last entry" org-clock-in-last)
+   ("P" "Project" akirak-org-clock-in-to-project)
+   ("J" "History" akirak-consult-org-clock)
+   ("S" "Snooze" akirak-org-clock-snooze)]
 
   (interactive)
   (transient-setup 'akirak-org-dwim-on-clock))
