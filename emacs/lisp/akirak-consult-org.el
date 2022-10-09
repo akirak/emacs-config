@@ -73,11 +73,17 @@
            (with-current-buffer (marker-buffer marker)
              (org-with-wide-buffer
               (goto-char marker)
-              (pcase-let ((`(_ ,level ,todo ,prio . _) (org-heading-components))
-                          (cand (org-format-outline-path
-                                 (org-get-outline-path 'with-self 'use-cache)
-                                 most-positive-fixnum
-                                 (abbr-buffer-file-name buffer))))
+              (pcase-let* ((`(_ ,level ,todo ,prio . _) (org-heading-components))
+                           (cand (org-format-outline-path
+                                  (org-get-outline-path 'with-self 'use-cache)
+                                  most-positive-fixnum
+                                  (concat (if todo
+                                              (concat (propertize todo
+                                                                  'face
+                                                                  (org-get-todo-face todo))
+                                                      " ")
+                                            "")
+                                          (abbr-buffer-file-name buffer)))))
                 (setq cand (concat cand (consult--tofu-encode (point))))
                 (add-text-properties 0 1
                                      `(consult--candidate
