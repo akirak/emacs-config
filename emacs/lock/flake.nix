@@ -853,6 +853,12 @@
       repo = "org-memento";
       type = "sourcehut";
     };
+    org-memento-timeline = {
+      flake = false;
+      owner = "~akirak";
+      repo = "org-memento";
+      type = "sourcehut";
+    };
     org-ml = {
       flake = false;
       owner = "ndwarshuis";
@@ -891,8 +897,7 @@
     };
     org-super-links = {
       flake = false;
-      owner = "akirak";
-      ref = "keep-narrowing-states";
+      owner = "toshism";
       repo = "org-super-links";
       type = "github";
     };
