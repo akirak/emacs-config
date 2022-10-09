@@ -158,13 +158,16 @@
   [:description
    akirak-org-dwim--memento-description
    :if akirak-org-dwim--memento-p
+   :class transient-row
    ("t" "Open today" org-memento-open-today)
-   ;; Show the current block
-   ;; Stop the current block
-   ;; Start a new block
-
-   ;; Day ends at
-   ]
+   ("C-i" "Start a new block" org-memento-start-block
+    :if (lambda () (null org-memento-current-block)))
+   ("C-o" "Finish the current block" org-memento-finish-block
+    :if (lambda () org-memento-current-block))
+   ("C-c" "Stop the current block" org-memento-stop-block
+    :if (lambda () org-memento-current-block))
+   ("L" "Log" org-memento-log)
+   ("E" "End the day" org-memento-end-day)]
 
   [:description
    akirak-org-dwim--clock-description
