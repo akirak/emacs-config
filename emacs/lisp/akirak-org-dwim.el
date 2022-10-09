@@ -166,7 +166,6 @@
     :if (lambda () org-memento-current-block))
    ("C-c" "Stop the current block" org-memento-stop-block
     :if (lambda () org-memento-current-block))
-   ("L" "Log" org-memento-log)
    ("E" "End the day" org-memento-end-day)]
 
   [:description
