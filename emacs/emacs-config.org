@@ -2415,7 +2415,15 @@ Time blocking with Org
 #+begin_src emacs-lisp
   (setup (:package org-memento)
     (:hook-into after-init-hook)
-    (add-hook 'org-memento-day-end-hook #'save-some-buffers))
+    (add-hook 'org-memento-day-end-hook #'save-some-buffers)
+    (add-hook 'org-memento-checkin-hook
+              (defun akirak/org-memento-insert-clocktable ()
+                "Insert a clock table for the day starting at the time."
+                (insert "#+BEGIN: clocktable :scope agenda"
+                        " :tstart \""
+                        (format-time-string (org-time-stamp-format t))
+                        "\" :tend \"<now>\"\n"
+                        "#+END:\n"))))
 #+end_src
 
 =org-memento-file= must be added to =org-agenda-files=. See [[*org-dog][org-dog]].
