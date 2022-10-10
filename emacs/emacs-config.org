@@ -2418,6 +2418,7 @@ Time blocking with Org
 #+begin_src emacs-lisp
   (setup (:package org-memento)
     (:hook-into after-init-hook)
+    (:set org-memento-idle-time 15)
     (add-hook 'org-memento-day-end-hook #'save-some-buffers)
     (add-hook 'org-memento-checkin-hook
               (defun akirak/org-memento-insert-clocktable ()
