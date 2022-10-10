@@ -396,7 +396,7 @@
    :class transient-row
    ("sc" "Command snippet" akirak-capture-command-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
-   ("m" "Memento" akirak-capture-memento)]
+   ("m" "Memento" org-memento-capture)]
 
   (interactive)
   (cond
@@ -585,14 +585,6 @@
                (goto-char ,pos)))
             ,(akirak-org-capture-make-entry-body headline))))
     (org-capture)))
-
-;;;###autoload (autoload 'akirak-capture-memento "akirak-capture" nil 'interactive)
-(transient-define-prefix akirak-capture-memento ()
-  [("l" "Log" org-memento-log)
-   ;; ("c" "Category template" org-memento-add-template)
-   ]
-  (interactive)
-  (transient-setup 'akirak-capture-memento))
 
 ;;;; Other commands
 

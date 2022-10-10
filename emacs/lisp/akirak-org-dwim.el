@@ -257,7 +257,7 @@
    ("TAB" "Start a block" org-memento-start-block
     :if-not akirak-org-dwim--memento-current-block-p)
    ("S" "Update status" org-memento-status)
-   ("C" "Capture" akirak-capture-memento)
+   ("C" "Capture" org-memento-capture)
    ("E" "Check out from the day" org-memento-checkout-from-day
     :if-not akirak-org-dwim--memento-current-block-p)]
 
