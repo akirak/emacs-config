@@ -180,6 +180,7 @@
   (interactive)
   (setq akirak-org-clock-snooze-until
         (+ (float-time) akirak-org-clock-snooze-duration))
+  (message "Snoozing org clock mode for %s seconds" akirak-org-clock-snooze-duration)
   (add-hook 'org-clock-in #'akiraik-org-clock-stop-snoozing))
 
 (defun akiraik-org-clock-stop-snoozing ()
