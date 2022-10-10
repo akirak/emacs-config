@@ -270,7 +270,9 @@
     ("n" "Select a subset" akirak-org-dwim-narrow-selected-files)
     ("j" "Last clocked file" akirak-org-dwim-select-recent-file)
     ("/" "Agenda files" akirak-org-dwim-select-agenda-files)
-    ("A" "All agenda files" akirak-org-dwim-select-all-agenda-files)]
+    ("A" "All agenda files" akirak-org-dwim-select-all-agenda-files)
+    ("\\" "This file" akirak-org-dwim-select-this-file
+     :if (lambda () (derived-mode-p 'org-mode)))]
    [:class
     transient-columns
     :setup-children octopus-setup-context-file-subgroups]]
@@ -388,6 +390,11 @@
     (setq akirak-org-dwim-selected-files
           (abbreviate-file-name (buffer-file-name (marker-buffer marker))))
     (transient-setup 'akirak-org-dwim-on-clock)))
+
+(defun akirak-org-dwim-select-this-file ()
+  (interactive)
+  (setq akirak-org-dwim-selected-files (abbreviate-file-name (buffer-file-name)))
+  (transient-setup 'akirak-org-dwim-on-clock))
 
 ;;;; Suffix commands
 
