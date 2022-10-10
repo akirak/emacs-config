@@ -5497,7 +5497,7 @@ Clean-up and Beautify the list of minor-modes.
 
 #+begin_src emacs-lisp
   (setup (:package rich-minority)
-    (:set rm-whitelist (rx (or "envrc" "OrgClock" "OrgMemento")))
+    (:set rm-whitelist (rx (or "envrc" "OrgMemento")))
     (:hook-into after-init-hook))
 #+end_src
 *** ruby-end
