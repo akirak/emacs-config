@@ -2437,6 +2437,14 @@ Time blocking with Org
 #+end_src
 
 =org-memento-file= must be added to =org-agenda-files=. See [[*org-dog][org-dog]].
+**** org-memento-timeline
+:PROPERTIES:
+:CREATED_TIME: [2022-10-11 Tue 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-memento-timeline))
+#+end_src
 *** org-ml                                                 :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-17 Thu 20:26]
