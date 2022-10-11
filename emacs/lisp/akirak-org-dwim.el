@@ -96,7 +96,8 @@
 (defcustom akirak-org-dwim-ql-query-alist
   '(("Project backlog"
      (and (level 2)
-          (parent (heading "Backlog")))))
+          (parent (heading "Backlog"))
+          (not (tags "ARCHIVE")))))
   ""
   :type '(alist :key-type string
                 :value-type (cons (sexp :tag "Query")
