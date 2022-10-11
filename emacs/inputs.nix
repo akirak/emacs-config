@@ -235,15 +235,6 @@
     };
   };
 
-  org-super-links = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "org-super-links";
-      ref = "keep-narrowing-states";
-    };
-  };
-
   persist = _: super: {
     files = builtins.removeAttrs super.files ["persist.texi"];
   };
