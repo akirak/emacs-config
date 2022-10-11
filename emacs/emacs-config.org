@@ -2419,7 +2419,7 @@ Time blocking with Org
   (setup (:package org-memento)
     (:hook-into after-init-hook)
     (:set org-memento-idle-time 15)
-    (add-hook 'org-memento-day-end-hook #'save-some-buffers)
+    (add-hook 'org-memento-checkout-hook #'save-some-buffers)
     (add-hook 'org-memento-checkin-hook
               (defun akirak/org-memento-insert-clocktable ()
                 "Insert a clock table for the day starting at the time."
@@ -2427,7 +2427,13 @@ Time blocking with Org
                         " :tstart \""
                         (format-time-string (org-time-stamp-format t))
                         "\" :tend \"<now>\"\n"
-                        "#+END:\n"))))
+                        "#+END:\n")))
+    (add-hook 'org-memento-checkout-hook
+              (defun akirak/org-memento-update-day-dblock ()
+                (org-memento-with-today-entry
+                 (when (re-search-forward org-dblock-start-re nil t)
+                   (beginning-of-line)
+                   (org-update-dblock))))))
 #+end_src
 
 =org-memento-file= must be added to =org-agenda-files=. See [[*org-dog][org-dog]].
