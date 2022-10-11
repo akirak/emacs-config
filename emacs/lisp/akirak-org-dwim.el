@@ -226,7 +226,7 @@
    :if org-clocking-p
    ("d" "Mark as done" akirak-org-dwim-clock-done)
    ("r" "Mark as REVIEW" akirak-org-dwim-clock-set-review)
-   ("O" "Clock out" org-clock-out)
+   ("O" "Clock out" akirak-org-dwim-clock-out)
    ("o" "Display clocked entry" akirak-org-dwim-clock-open)
    ;; Save the current window configuration
    ]
@@ -410,6 +410,13 @@
         (org-agenda-start-with-clockreport-mode t)
         (org-agenda-use-time-grid t))
     (org-agenda nil "a")))
+
+(defun akirak-org-dwim-clock-out ()
+  (interactive)
+  (if-let (capture-buffer (akirak-org-dwim--capture-buffer org-clock-marker))
+      (with-current-buffer capture-buffer
+        (org-capture-finalize))
+    (org-clock-out)))
 
 (defun akirak-org-dwim-clock-done ()
   (interactive)
