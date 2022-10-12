@@ -16,6 +16,7 @@
           (push sym modes))))
     modes))
 
+;;;###autoload
 (defun akirak-complete-major-mode (prompt &optional initial history)
   (completing-read prompt (akirak-major-mode-list) nil t initial history))
 
