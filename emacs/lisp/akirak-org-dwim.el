@@ -346,7 +346,41 @@
   (bound-and-true-p org-memento-current-block))
 
 (defun akirak-org-dwim--memento-block-description ()
-  (format "Memento block: %s" org-memento-current-block))
+  (let ((block (org-memento-with-current-block
+                 (org-memento-block-entry))))
+    (format "Memento block: %s%s%s%s"
+            (if-let (todo (org-element-property :TODO
+                                                (org-memento-headline-element block)))
+                (concat todo " ")
+              "")
+            org-memento-current-block
+            (if-let (category (org-element-property :memento_category
+                                                    (org-memento-headline-element block)))
+                (format " (%s)" category)
+              "")
+            (let* ((started (org-memento-started-time block))
+                   (ending (org-memento-ending-time block))
+                   (remaining (when ending
+                                (/ (- ending (float-time))
+                                   60))))
+              (format-spec " %s%e%r"
+                           `((?s . ,(format-time-string "%R" started))
+                             (?e . ,(if ending
+                                        (format-time-string "-%R" ending)
+                                      ""))
+                             (?r . ,(cond
+                                     ((null remaining)
+                                      "")
+                                     ((> remaining 0)
+                                      (format " (remaining %s)"
+                                              (org-duration-from-minutes remaining)))
+                                     ((<= remaining 0)
+                                      (propertize (format " (%d minutes exceeding)"
+                                                          (- remaining))
+                                                  'face
+                                                  (if (> remaining 0)
+                                                      'font-lock-warning-face
+                                                    'default)))))))))))
 
 (defun akirak-org-dwim--memento-status-description ()
   (format "No current block"))
