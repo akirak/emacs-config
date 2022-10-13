@@ -778,7 +778,8 @@
     };
     org = {
       flake = false;
-      ref = "main";
+      ref = "bugfix";
+      rev = "69c588947d1be9bca1eb8c773f2a8ff117d264ba";
       type = "git";
       url = "git://git.sv.gnu.org/emacs/org-mode.git";
     };

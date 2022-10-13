@@ -222,7 +222,8 @@
     origin =
       super.origin
       // {
-        ref = "main";
+        # Release 9.5.3
+        rev = "69c588947d1be9bca1eb8c773f2a8ff117d264ba";
       };
   };
 
