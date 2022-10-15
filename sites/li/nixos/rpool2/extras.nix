@@ -5,12 +5,6 @@
     options = ["noatime"];
   };
 
-  fileSystems."/assets/archives/personal/git" = {
-    device = "rpool2/git/private";
-    fsType = "zfs";
-    options = ["noatime"];
-  };
-
   fileSystems."/assets/archives/oss" = {
     device = "rpool2/git/oss";
     fsType = "zfs";
