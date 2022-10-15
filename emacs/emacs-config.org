@@ -2195,7 +2195,9 @@ A programmable workflow layer for Org mode
 
     (:set org-dog-context-path-patterns
           `(("^\\.github/" . "services/github.com")
-            ("\\.h?eex\\'" . "programming/elixir"))
+            ("\\.h?eex\\'" . "programming/elixir")
+            ("package\\.yaml\\'" . "programming/haskell")
+            ("hie\\.yaml\\'" . "programming/haskell"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
 
     (add-hook 'org-dog-file-mode-hook #'org-dog-header-line-enable)
