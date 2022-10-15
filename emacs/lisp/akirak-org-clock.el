@@ -109,6 +109,7 @@
 (defun akirak-org-clock-in-to-project ()
   "Clock in to an entry in a file related to the current project."
   (interactive)
+  (require 'akirak-org-dog)
   (if-let (pr (project-current))
       (if (string-match-p (regexp-quote "/foss/contributions/")
                           (project-root pr))
