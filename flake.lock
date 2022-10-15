@@ -508,7 +508,6 @@
         ],
         "unstable": "unstable",
         "utils": "utils_2",
-        "zsh-enhancd": "zsh-enhancd",
         "zsh-fast-syntax-highlighting": "zsh-fast-syntax-highlighting",
         "zsh-fzy": "zsh-fzy",
         "zsh-nix-shell": "zsh-nix-shell"
@@ -609,22 +608,6 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "zsh-enhancd": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1646922961,
-        "narHash": "sha256-p7ZG4NC9UWa55tPxYAaFocc0waIaTt+WO6MNearbO0U=",
-        "owner": "b4b4r07",
-        "repo": "enhancd",
-        "rev": "c6967f7f70f18991a5f9148996afffc0d3ae76e4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "b4b4r07",
-        "repo": "enhancd",
         "type": "github"
       }
     },

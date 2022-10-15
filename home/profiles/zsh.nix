@@ -28,10 +28,6 @@
         src = pkgs.zsh-history-substring-search;
       }
       {
-        name = "enhancd";
-        src = pkgs.zsh-enhancd;
-      }
-      {
         name = "fzy";
         src = pkgs.zsh-fzy;
       }

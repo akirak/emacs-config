@@ -50,10 +50,6 @@
     };
 
     # zsh plugins
-    zsh-enhancd = {
-      url = "github:b4b4r07/enhancd";
-      flake = false;
-    };
     zsh-fast-syntax-highlighting = {
       url = "github:zdharma-continuum/fast-syntax-highlighting";
       flake = false;
