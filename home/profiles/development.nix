@@ -11,6 +11,7 @@
     deadnix
     squasher
     drawio
+    emacsclient
 
     hunspellDicts.en_US
   ];

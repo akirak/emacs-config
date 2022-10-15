@@ -95,4 +95,12 @@ in {
     inherit inventories;
     lockDir = ./lock;
   };
+
+  emacsclient =
+    pkgsForEmacs.runCommandLocal "emacsclient" {
+      propagatedBuildInputs = [emacsPackage];
+    } ''
+      mkdir -p $out/bin
+      ln -t $out/bin -s ${emacsPackage}/bin/emacsclient
+    '';
 }
