@@ -4922,7 +4922,7 @@ Major mode for Markdown-formatted text
 
     (:bind "C-c '" #'markdown-edit-code-block))
 #+end_src
-*** mermaid-mode
+*** mermaid-mode                                                        :@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
 :END:
