@@ -1168,6 +1168,25 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     (:with-mode save-place-mode
       (:hook-into after-init-hook)))
 #+end_src
+*** server
+:PROPERTIES:
+:CREATED_TIME: [2022-10-15 Sat 13:04]
+:END:
+
+#+begin_src emacs-lisp
+  (setup server
+    (when window-system
+      (add-hook 'emacs-startup-hook
+                (defun akirak/start-server-at-startup ()
+                  (require 'server)
+                  (if (server-running-p)
+                      ;; Try to start an Emacs server again in 3 minutes.
+                      (run-with-timer (* 3 60) nil
+                                      (lambda ()
+                                        (unless (server-running-p)
+                                          (server-start))))
+                    (server-start))))))
+#+end_src
 *** sgml-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-08 Fri 21:08]
