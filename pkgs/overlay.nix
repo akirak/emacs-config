@@ -10,6 +10,19 @@ final: prev: {
     inherit (final) bubblewrapGUI;
   };
 
+  listEmacsProjects = final.writeShellScriptBin "ls-emacs-projects" ''
+    # /tmp is protected, so use another directory
+    tmp=$(mktemp -p "''${XDG_RUNTIME_DIR}")
+
+    trap "rm -f '$tmp'" ERR EXIT
+
+    ${final.emacsclient}/bin/emacsclient --eval "(with-temp-buffer
+      (insert (mapconcat #'expand-file-name (project-known-project-roots) \"\n\"))
+      (write-region (point-min) (point-max) \"$tmp\"))" > /dev/null
+
+    cat "$tmp"
+  '';
+
   readability-cli = prev.callPackage ./media/readability-cli {
     pkgs = prev;
   };

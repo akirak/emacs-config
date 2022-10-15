@@ -85,6 +85,15 @@
           print -Pn "\e]51;A$(pwd)\e\\";
       }
 
+      function cd() {
+        if [[ $# -gt 0 ]]
+        then
+          builtin cd "$@"
+        else
+          builtin cd "$(${pkgs.listEmacsProjects}/bin/ls-emacs-projects | fzy)"
+        fi
+      }
+
       export NIX_BUILD_SHELL=bash
 
       # Use gpg-agent as ssh-agent.
