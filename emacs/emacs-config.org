@@ -1698,7 +1698,6 @@ org-babel functions for restclient-mode
 *** org
 #+begin_quote
 Outline-based notes management and organizer
-[[https://orgmode.org]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -2433,7 +2432,7 @@ Automatic tables of contents for Org files
 :END:
 #+begin_quote
 Time blocking with Org
-[[https://github.com/akirak/org-memento]]
+[[https://git.sr.ht/~akirak/org-memento]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -2462,6 +2461,10 @@ Time blocking with Org
 :PROPERTIES:
 :CREATED_TIME: [2022-10-11 Tue 23:59]
 :END:
+#+begin_quote
+Visualize an activity timeline
+[[https://git.sr.ht/~akirak/org-memento]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package org-memento-timeline))
@@ -6149,7 +6152,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 219 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
@@ -6181,6 +6184,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
+| [[org-ql-search:tags:@extra][@extra]]              |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
@@ -6200,7 +6204,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:secrets][secrets]]             |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
-| [[org-ql-search:tags:@extra][@extra]]              |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
@@ -6285,9 +6288,10 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 To use these features, they need to be turned on at build time.
 
 #+BEGIN: org-ql :query "tags:@extra" :columns (heading todo)
-| Heading   | Todo |
-|-----------+------|
-| [[beancount][beancount]] |      |
+| Heading      | Todo |
+|--------------+------|
+| [[beancount][beancount]]    |      |
+| [[mermaid-mode][mermaid-mode]] |      |
 #+END:
 *** Links
 :PROPERTIES:
