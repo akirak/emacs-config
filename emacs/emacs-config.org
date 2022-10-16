@@ -1925,6 +1925,7 @@ Outline-based notes management and organizer
           org-agenda-restore-windows-after-quit t
           org-agenda-window-setup 'current-window)
     (:local-set truncate-lines t)
+    (:bind "C-c ." #'akirak-org-edit-active-ts)
 
     (define-key help-map (kbd "M-a")
                 (defun akirak/org-default-agenda ()
@@ -2476,7 +2477,8 @@ Visualize an activity timeline
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package org-memento-timeline))
+  (setup (:package org-memento-timeline)
+    (:bind "C-c ." #'akirak-org-edit-active-ts))
 #+end_src
 *** org-ml                                                 :library:
 :PROPERTIES:
