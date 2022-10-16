@@ -2438,7 +2438,12 @@ Time blocking with Org
 #+begin_src emacs-lisp
   (setup (:package org-memento)
     (:hook-into after-init-hook)
-    (:set org-memento-idle-time 15)
+    (:set org-memento-idle-time 15
+          org-memento-agenda-files
+          (defun akirak/org-memento-agenda-files ()
+            (when-let (dir (org-entry-get nil "project"))
+              (let ((default-directory dir))
+                (akirak-org-dog-project-files)))))
     (add-hook 'org-memento-checkout-hook #'save-some-buffers)
     (add-hook 'org-memento-checkin-hook
               (defun akirak/org-memento-insert-clocktable ()
@@ -2448,12 +2453,16 @@ Time blocking with Org
                         (format-time-string (org-time-stamp-format t))
                         "\" :tend \"<now>\"\n"
                         "#+END:\n")))
-    (add-hook 'org-memento-checkout-hook
-              (defun akirak/org-memento-update-day-dblock ()
-                (org-memento-with-today-entry
-                 (when (re-search-forward org-dblock-start-re nil t)
-                   (beginning-of-line)
-                   (org-update-dblock))))))
+    (add-hook 'org-memento-checkin-hook
+              (defun akirak/org-memento-set-frame-title ()
+                (setq frame-title-format
+                      '((org-memento-current-block
+                         org-memento-frame-title-format
+                         ;; akirak/org-memento-fallback-frame-title
+                         )))))
+    (add-hook 'org-memento-block-start-hook
+              (defun akirak/org-memento-set-agenda-files ()
+                (setq akirak-org-dwim-selected-files (org-memento-agenda-files)))))
 #+end_src
 
 =org-memento-file= must be added to =org-agenda-files=. See [[*org-dog][org-dog]].
