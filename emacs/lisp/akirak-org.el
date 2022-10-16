@@ -529,5 +529,36 @@ character."
       (end-of-line 0)
       (call-interactively this-command)))))
 
+;;;###autoload
+(defun akirak-org-edit-active-ts ()
+  "Edit the first active timestamp in the entry body."
+  (interactive)
+  (when-let (mode (derived-mode-p 'org-mode
+                                  'org-agenda-mode
+                                  'org-memento-timeline-mode))
+    (save-window-excursion
+      (save-current-buffer
+        (org-with-point-at (cl-case mode
+                             (org-mode
+                              (point-marker))
+                             (org-memento-timeline-mode
+                              (if-let (value (oref (magit-current-section) value))
+                                  (nth 3 value)
+                                (error "No section value")))
+                             (otherwise
+                              (or (get-char-property (point) 'org-hd-marker)
+                                  (get-char-property (point) 'org-marker)
+                                  (user-error "No Org marker at point"))))
+          (org-back-to-heading)
+          (org-end-of-meta-data)
+          (when (looking-at org-logbook-drawer-re)
+            (goto-char (match-end 0)))
+          (org-time-stamp nil))))
+    (cl-case mode
+      (org-agenda-mode
+       (org-agenda-redo))
+      (org-memento-timeline-mode
+       (revert-buffer)))))
+
 (provide 'akirak-org)
 ;;; akirak-org.el ends here
