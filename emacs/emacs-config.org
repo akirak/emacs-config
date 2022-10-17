@@ -2143,7 +2143,15 @@ Converts web pages into Org
     ;;                 (interactive "s")
     ;;                 (orgabilize-org-archive url))))
     (:embark embark-url-map "s"
-      ("r" orgabilize-org-archive)))
+      ("r" orgabilize-org-archive))
+    (:when-loaded
+      (setq orgabilize-title-escape-alist
+            (append (eval (car (get 'orgabilize-title-escape-alist 'standard-value)))
+                    '(("[｜│|][^z-a]+[｜│|]" . "│")
+                      ("([^z-a]+)" . "")
+                      ("^[^。]+。" . "")
+                      ("|" . "│")
+                      ("[【】]" . ""))))))
 #+end_src
 *** org-autolist
 :PROPERTIES:
