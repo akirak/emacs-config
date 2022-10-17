@@ -2560,6 +2560,15 @@ Org Query Language, search command, and agenda-like view
       (:bind "M-s o" #'org-ql-find
              "C-c C-x /" #'org-ql-sparse-tree)))
 #+end_src
+**** org-ql-view
+#+begin_src emacs-lisp
+  (setup org-ql-view
+    ;; I don't want this function to be called every time `org-capture' is fired.
+    (advice-add 'org-ql-view--link-store
+                :before-while
+                (defun akirak/org-ql-view-link-needed-p (&rest _args)
+                  (eq this-command 'org-store-link))))
+#+end_src
 *** org-recur
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 14:17]
