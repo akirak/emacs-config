@@ -320,9 +320,19 @@ character."
                  (end (region-end)))
              (save-excursion
                (goto-char start)
+               ;; Insert a zero-width space if the region is not surrounded with
+               ;; space. This is especially useful for East Asian languages.
+               ;; See https://emacsnotes.wordpress.com/2022/09/09/intra-word-emphasis-in-org-mode-using-zero-width-spaces-east-asian-language-users-please-take-note/
+               (unless (memq (char-syntax (char-after (1- (point))))
+                             '(32 44))
+                 (insert-char 8203)
+                 (cl-incf end))
                (insert-char ,char)
                (goto-char (1+ end))
-               (insert-char ,char)))
+               (insert-char ,char)
+               (unless (memq (char-syntax (char-after (1- (point))))
+                             '(32 44))
+                 (insert-char 8203))))
          (org-self-insert-command (or n 1))))))
 
 ;;;###autoload (autoload 'akirak-org-bold "akirak-org")
