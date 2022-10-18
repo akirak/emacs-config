@@ -37,17 +37,7 @@
 ;;;###autoload
 (defun akirak-consult-org-olp-to-marker (_type olp)
   "Return a marker to an OLP."
-  (cons 'org-marker
-        (save-match-data
-          (when (string-match (regexp-quote ".org/") olp)
-            (org-find-olp (cons (substring-no-properties
-                                 olp 0 (1- (match-end 0)))
-                                (thread-first
-                                  (substring-no-properties
-                                   olp (match-end 0)
-                                   (1- (length olp)))
-                                  (string-trim-right)
-                                  (split-string "/"))))))))
+  (cons 'org-marker (get-char-property 0 'consult--candidate olp)))
 
 (defun consult-org-clock--headings ()
   ;; Based on `consult-org--headings'.
