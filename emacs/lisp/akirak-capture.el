@@ -552,7 +552,7 @@
 (defun akirak-capture-content-children (_children)
   (thread-last
     (org-dog-select 'absolute
-      :relative-regexp (rx "contents/" (+ (not (any "/"))) "-lists.org"))
+      `(relative :regexp ,(rx "contents/" (+ (not (any "/"))) "-lists.org")))
     (mapcar (lambda (absolute)
               (let* ((basename (file-name-base absolute))
                      (key (substring basename 0 1))
@@ -721,7 +721,7 @@ not work in the future when forge changes the output."
                       (goto-char (point-min))
                       (org-element-timestamp-parser)))
          (file (or (oref (org-dog-find-file-object
-                          (org-dog-make-file-pred :relative "errands.org"))
+                          (org-dog-file-pred-1 '(relative "errands.org")))
                          absolute)
                    (error "Failed to locate errands.org")))
          (org-capture-entry
