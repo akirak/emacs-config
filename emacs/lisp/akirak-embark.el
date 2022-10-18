@@ -90,7 +90,9 @@
 (embark-define-keymap akirak-embark-org-marker-map
   ""
   :parent nil
-  ("g" org-goto-marker-or-bmk))
+  ("o" org-dog-indirect-buffer)
+  ("g" org-goto-marker-or-bmk)
+  ("l" org-store-link))
 
 (define-key embark-library-map "t"
             (akirak-embark-new-tab-action find-library
