@@ -2453,6 +2453,10 @@ Time blocking with Org
             (when-let (dir (org-entry-get nil "project"))
               (let ((default-directory dir))
                 (akirak-org-dog-project-files)))))
+
+    (:with-map help-map
+      (:bind "<tab>" #'org-memento-next-action))
+
     (add-hook 'org-memento-checkout-hook #'save-some-buffers)
     (add-hook 'org-memento-checkin-hook
               (defun akirak/org-memento-insert-clocktable ()
