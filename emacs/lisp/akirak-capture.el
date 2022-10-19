@@ -396,7 +396,9 @@
    :class transient-row
    ("sc" "Command snippet" akirak-capture-command-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
-   ("m" "Memento" org-memento-add-event)]
+   ("m" "Memento" org-memento-add-event)
+   ("Rq" "Question" akirak-capture-reflection-question
+    :if (lambda () (assoc "~/private/" org-dog-repository-alist)))]
 
   (interactive)
   (cond
@@ -585,6 +587,23 @@
                (goto-char ,pos)))
             ,(akirak-org-capture-make-entry-body headline))))
     (org-capture)))
+
+(defun akirak-capture-reflection-question ()
+  (interactive)
+  (org-super-links-store-link)
+  (let ((org-capture-entry
+         (car (doct
+               `((""
+                  :keys ""
+                  :function
+                  (lambda ()
+                    (akirak-capture-goto-olp-subtree
+                        (org-dog-resolve-relative-file "reflection.org")
+                      "Organized sections"))
+                  :template ,(akirak-org-capture-make-entry-body
+                               (org-get-heading t t t t))))))))
+    (org-capture)
+    (org-super-links-insert-link)))
 
 ;;;; Other commands
 
@@ -789,6 +808,29 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
         (abbrev-mode t)
         (corfu-mode t))
     (read-string prompt)))
+
+(defun akirak-capture-goto-olp-subtree (file &rest olp)
+  "Go to an entry inside a subtree."
+  (declare (indent 1))
+  (let* ((use-cache nil)
+         (width (frame-width))
+         (candidates (save-current-buffer
+                       (org-with-point-at (org-find-olp (cons file olp))
+                         (org-map-entries
+                          (lambda ()
+                            (cons (prog1 (org-format-outline-path
+                                          (org-get-outline-path t use-cache)
+                                          width nil "/")
+                                    (setq use-cache t))
+                                  (point-marker)))
+                          nil 'tree))))
+         (input (completing-read "Parent: " candidates)))
+    (if-let (marker (cdr (assoc input candidates)))
+        (org-goto-marker-or-bmk marker)
+      (find-file file)
+      (widen)
+      (goto-char (point-min))
+      (akirak-org-goto-or-create-olp (split-string input "/")))))
 
 (provide 'akirak-capture)
 ;;; akirak-capture.el ends here
