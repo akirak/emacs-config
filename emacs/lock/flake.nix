@@ -212,12 +212,6 @@
       repo = "doct";
       type = "github";
     };
-    dogears = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "dogears.el";
-      type = "github";
-    };
     dotenv-mode = {
       flake = false;
       owner = "preetpalS";
@@ -745,6 +739,18 @@
       type = "git";
       url = "https://depp.brause.cc/nov.el.git";
     };
+    oahu = {
+      flake = false;
+      owner = "~akirak";
+      repo = "oahu.el";
+      type = "sourcehut";
+    };
+    oahu-memento = {
+      flake = false;
+      owner = "~akirak";
+      repo = "oahu.el";
+      type = "sourcehut";
+    };
     ob-mermaid = {
       flake = false;
       owner = "arnm";
@@ -898,7 +904,8 @@
     };
     org-super-links = {
       flake = false;
-      owner = "toshism";
+      owner = "akirak";
+      ref = "no-duplicate-formatter";
       repo = "org-super-links";
       type = "github";
     };
