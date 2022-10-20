@@ -1672,6 +1672,32 @@ DOCT: Declarative Org capture templates
 #+begin_src emacs-lisp
 (setup (:package doct))
 #+end_src
+*** oahu
+:PROPERTIES:
+:CREATED_TIME: [2022-10-20 Thu 11:21]
+:END:
+#+begin_src emacs-lisp
+  (setup (:package oahu)
+    (:with-map help-map
+      (:bind "M-v" #'oahu-view)))
+#+end_src
+**** oahu-memento
+:PROPERTIES:
+:CREATED_TIME: [2022-10-20 Thu 12:06]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package oahu-memento)
+    (add-hook 'org-memento-block-before-exit-hook #'oahu-memento-save)
+    (add-hook 'org-memento-block-exit-hook
+              (lambda () (setq oahu-last-view nil)))
+    (add-hook 'org-memento-block-start-hook #'oahu-memento-load)
+    (:set org-memento-agenda-files
+          (lambda ()
+            (require 'oahu-memento)
+            (when-let (context (oahu-memento-context))
+              (apply #'oahu-org-files context)))))
+#+end_src
 *** ob-mermaid
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:53]
