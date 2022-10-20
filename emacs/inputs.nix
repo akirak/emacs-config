@@ -218,6 +218,15 @@
     };
   };
 
+  org-super-links = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-super-links";
+      ref = "no-duplicate-formatter";
+    };
+  };
+
   org = _: super: {
     origin =
       super.origin
