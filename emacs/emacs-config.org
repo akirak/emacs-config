@@ -548,6 +548,7 @@ The following variable defines variables that can be saved to =custom-file=:
       ;; Work context
       user-full-name
       user-mail-address
+      org-memento-workhour-alist
       ;; Dynamic
       safe-local-variable-values))
 #+end_src
