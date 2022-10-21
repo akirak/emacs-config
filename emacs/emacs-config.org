@@ -671,6 +671,9 @@ The built-in =electric= package provides the following modes:
        (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\):"
                    1 2 3 (4 . 4))))
 
+    (:with-mode lisp-data-mode
+      (:file-match "/melpa/recipes/"))
+
     (:auto-insert
      ("-tests?\\.el\\'" . (> ";;; -*- lexical-binding: t -*-\n\n"
                              "(require 'buttercup)\n"
