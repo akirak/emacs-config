@@ -106,5 +106,17 @@ If CALLBACK is a function, it is called with the selected url."
        (yank)
        (insert end)))))
 
+
+;;;###autoload
+(defun akirak-avy-insert-org-super-link ()
+  (interactive)
+  (progn
+    (save-window-excursion
+      (avy-jump (rx bol (+ "*") space)
+                :action (lambda (pt)
+                          (avy-action-goto pt)
+                          (org-super-links-store-link))))
+    (org-super-links-insert-link)))
+
 (provide 'akirak-avy)
 ;;; akirak-avy.el ends here
