@@ -1683,8 +1683,7 @@ DOCT: Declarative Org capture templates
 :END:
 #+begin_src emacs-lisp
   (setup (:package oahu)
-    (:with-map help-map
-      (:bind "M-v" #'oahu-view)))
+    (define-key help-map (kbd "M-v") #'oahu-view))
 #+end_src
 **** oahu-memento
 :PROPERTIES:
@@ -1693,15 +1692,15 @@ DOCT: Declarative Org capture templates
 
 #+begin_src emacs-lisp
   (setup (:package oahu-memento)
+    (:set org-memento-agenda-files (lambda ()
+                                     (require 'oahu-memento)
+                                     (when-let (context (oahu-memento-context))
+                                       (apply #'oahu-org-files context))))
+
     (add-hook 'org-memento-block-before-exit-hook #'oahu-memento-save)
     (add-hook 'org-memento-block-exit-hook
               (lambda () (setq oahu-last-view nil)))
-    (add-hook 'org-memento-block-start-hook #'oahu-memento-load)
-    (:set org-memento-agenda-files
-          (lambda ()
-            (require 'oahu-memento)
-            (when-let (context (oahu-memento-context))
-              (apply #'oahu-org-files context)))))
+    (add-hook 'org-memento-block-start-hook #'oahu-memento-load))
 #+end_src
 *** ob-mermaid
 :PROPERTIES:
@@ -2479,11 +2478,26 @@ Time blocking with Org
   (setup (:package org-memento)
     (:hook-into after-init-hook)
     (:set org-memento-idle-time 15
-          org-memento-agenda-files
-          (defun akirak/org-memento-agenda-files ()
-            (when-let (dir (org-entry-get nil "project"))
-              (let ((default-directory dir))
-                (akirak-org-dog-project-files)))))
+          org-memento-group-taxonomy
+          '((:read
+             (lambda (element) (org-element-property :MEMENTO_CATEGORY element))
+             :format (lambda (x) (or x "No category")))
+            (:read
+             (lambda (_) (require 'oahu-memento) (oahu-memento-context))
+             :format (lambda (x)
+                       (pcase x
+                         (`("Project" ,pr)
+                          (concat "Project " (project-root pr)))
+                         (`nil
+                          "(Not associated with a project)")
+                         (_
+                          (prin1-to-string x)))))
+            (:read
+             (lambda (element) (org-element-property :tags element))
+             :format (lambda (x)
+                       (if x
+                           (org-make-tag-string x)
+                         "(No tags)")))))
 
     (:with-map help-map
       (:bind "<tab>" #'org-memento-next-action))
@@ -2521,6 +2535,7 @@ Visualize an activity timeline
 
 #+begin_src emacs-lisp
   (setup (:package org-memento-timeline)
+    (:set org-memento-group-depth 2)
     (:bind "C-c ." #'akirak-org-edit-active-ts))
 #+end_src
 *** org-ml                                                 :library:
