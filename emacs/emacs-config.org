@@ -555,16 +555,17 @@ The following variable defines variables that can be saved to =custom-file=:
 The other variables must not be saved, and they should be put in configuration:
 
 #+begin_src emacs-lisp
-(setup custom
-    (:status personal
-      ;; Don't allow saving a variable that is not included in the whitelist
-      (advice-add 'custom-variable-mark-to-save
-                  :before
-                  (defun akirak/customize-save-variable-check (widget)
-                    (unless (memq (widget-value widget)
-                                  akirak/custom-variable-whitelist)
-                      (error "Variable %s should not be saved to custom-file"
-                             (widget-value widget)))))))
+  (setup custom
+      (:status personal
+        ;; Don't allow saving a variable that is not included in the whitelist
+        (advice-add 'custom-variable-mark-to-save
+                    :before
+                    (defun akirak/customize-save-variable-check (widget)
+                      (unless (memq (widget-value widget)
+                                    akirak/custom-variable-whitelist)
+                        (error "Variable %s should not be saved to custom-file. \
+  See akirak/custom-variable-whitelist"
+                               (widget-value widget)))))))
 #+end_src
 *** desktop
 #+begin_src emacs-lisp
