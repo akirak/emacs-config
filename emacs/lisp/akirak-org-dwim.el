@@ -7,7 +7,7 @@
 (declare-function truncate-string-to-width "mule-util")
 
 (defmacro akirak-org-dwim--finalize-capture (&rest progn)
-  `(let ((capture-buffer (akirak-org-dwim--capture-buffer org-clock-marker)))
+  `(let ((capture-buffer (akirak-org-clock--capture-buffer org-clock-marker)))
      ,@progn
      (when capture-buffer
        (with-current-buffer capture-buffer
@@ -228,7 +228,7 @@
    ("d" "Mark as done" akirak-org-dwim-clock-done)
    ("r" "Mark as REVIEW" akirak-org-dwim-clock-set-review)
    ("O" "Clock out" akirak-org-dwim-clock-out)
-   ("o" "Display clocked entry" akirak-org-dwim-clock-open)
+   ("o" "Display clocked entry" akirak-org-clock-open)
    ;; Save the current window configuration
    ]
 
@@ -449,7 +449,7 @@
 
 (defun akirak-org-dwim-clock-out ()
   (interactive)
-  (if-let (capture-buffer (akirak-org-dwim--capture-buffer org-clock-marker))
+  (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
       (with-current-buffer capture-buffer
         (org-capture-finalize))
     (org-clock-out)))
@@ -467,36 +467,6 @@
      ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
      ;; will be tirggered when you switch to the state.
      (org-todo "REVIEW"))))
-
-;;;###autoload
-(defun akirak-org-dwim-clock-open ()
-  (interactive)
-  (if-let (capture-buffer (akirak-org-dwim--capture-buffer org-clock-marker))
-      (pop-to-buffer capture-buffer)
-    (with-current-buffer (marker-buffer org-clock-marker)
-      (let ((initial-position (point)))
-        (goto-char org-clock-marker)
-        (with-current-buffer (org-dog-indirect-buffer)
-          (when (or (< (point) (point-min))
-                    (> (point) (point-max)))
-            (goto-char (point-min)))
-          (pop-to-buffer (current-buffer)))))))
-
-;;;; Integration with org-capture
-
-(defun akirak-org-dwim--capture-buffer (clock-marker)
-  "Return a corresponding capture buffer for the clock marker."
-  (let ((suffix (buffer-name (marker-buffer clock-marker)))
-        (point (org-with-clock-position (list clock-marker)
-                 (org-back-to-heading)
-                 (point))))
-    (thread-last
-      (internal-complete-buffer "CAPTURE-" nil t)
-      (seq-some `(lambda (name)
-                   (when (string-suffix-p ,suffix name)
-                     (with-current-buffer (get-buffer name)
-                       (when (eq (point-min) ,point)
-                         (current-buffer)))))))))
 
 (provide 'akirak-org-dwim)
 ;;; akirak-org-dwim.el ends here
