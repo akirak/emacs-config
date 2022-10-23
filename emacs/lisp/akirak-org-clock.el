@@ -33,6 +33,9 @@
                      (and ".gpg" eol)
                      "/.git/")))
 
+(defconst akirak-org-clock-org-file-name-whitelist
+  (concat "^" (regexp-quote (expand-file-name "~/work2/"))))
+
 (defconst akirak-org-clock-buffer-name-whitelist
   ;; Don't block saving buffers created using `with-temp-buffer'
   (rx bos (or " *temp*"
@@ -148,11 +151,12 @@
             (bound-and-true-p org-capture-mode)
             ;; Pass non-file buffers like *Org Note* buffers.
             (not buffer-file-name)
-            (and buffer-file-name
-                 ;; I sometimes edit Org file inside `user-emacs-directory', and
-                 ;; I don't want to
-                 (string-match-p akirak-org-clock-file-name-whitelist
-                                 buffer-file-name))
+            ;; I sometimes edit Org file inside `user-emacs-directory', and
+            ;; I don't want to
+            (string-match-p akirak-org-clock-file-name-whitelist
+                            buffer-file-name)
+            (string-match-p akirak-org-clock-org-file-name-whitelist
+                            buffer-file-name)
             (and (bound-and-true-p org-dog-file-mode)
                  (or (org-before-first-heading-p)
                      (akirak-org-clock--snoozed-p)
