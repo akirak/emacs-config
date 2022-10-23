@@ -325,63 +325,67 @@
              t))))
 
 (defun akirak-org-dwim--memento-description ()
-  (concat "Memento: "
-          (if-let (day (org-memento-today-as-block))
-              (let* ((started (org-memento-started-time day))
-                     (ending (org-memento-ending-time day)))
-                (format-spec "%d %s%e%r"
-                             `((?d . ,(format-time-string "%F (%a)"))
-                               (?s . ,(format-time-string "%R" started))
-                               (?e . ,(if ending
-                                          (format-time-string "-%R" ending)
-                                        ""))
-                               (?r . ,(if ending
-                                          (format " (remaining %s)"
-                                                  (org-duration-from-minutes
-                                                   (/ (- ending (float-time))
-                                                      60)))
-                                        "")))))
-            "(not checked in)")))
+  (condition-case-unless-debug _
+      (concat "Memento: "
+              (if-let (day (org-memento-today-as-block))
+                  (let* ((started (org-memento-started-time day))
+                         (ending (org-memento-ending-time day)))
+                    (format-spec "%d %s%e%r"
+                                 `((?d . ,(format-time-string "%F (%a)"))
+                                   (?s . ,(format-time-string "%R" started))
+                                   (?e . ,(if ending
+                                              (format-time-string "-%R" ending)
+                                            ""))
+                                   (?r . ,(if ending
+                                              (format " (remaining %s)"
+                                                      (org-duration-from-minutes
+                                                       (/ (- ending (float-time))
+                                                          60)))
+                                            "")))))
+                "(not checked in)"))
+    (error "(error: akirak-org-dwim--memento-description)")))
 
 (defun akirak-org-dwim--memento-current-block-p ()
   (bound-and-true-p org-memento-current-block))
 
 (defun akirak-org-dwim--memento-block-description ()
-  (let ((block (org-memento-with-current-block
-                 (org-memento-block-entry))))
-    (format "Memento block: %s%s%s%s"
-            (if-let (todo (org-element-property :TODO
-                                                (org-memento-headline-element block)))
-                (concat todo " ")
-              "")
-            org-memento-current-block
-            (if-let (category (org-element-property :memento_category
+  (condition-case-unless-debug _
+      (let ((block (org-memento-with-current-block
+                     (org-memento-block-entry))))
+        (format "Memento block: %s%s%s%s"
+                (if-let (todo (org-element-property :TODO
                                                     (org-memento-headline-element block)))
-                (format " (%s)" category)
-              "")
-            (let* ((started (org-memento-started-time block))
-                   (ending (org-memento-ending-time block))
-                   (remaining (when ending
-                                (/ (- ending (float-time))
-                                   60))))
-              (format-spec " %s%e%r"
-                           `((?s . ,(format-time-string "%R" started))
-                             (?e . ,(if ending
-                                        (format-time-string "-%R" ending)
-                                      ""))
-                             (?r . ,(cond
-                                     ((null remaining)
-                                      "")
-                                     ((> remaining 0)
-                                      (format " (remaining %s)"
-                                              (org-duration-from-minutes remaining)))
-                                     ((<= remaining 0)
-                                      (propertize (format " (%d minutes exceeding)"
-                                                          (- remaining))
-                                                  'face
-                                                  (if (> remaining 0)
-                                                      'font-lock-warning-face
-                                                    'default)))))))))))
+                    (concat todo " ")
+                  "")
+                org-memento-current-block
+                (if-let (category (org-element-property :memento_category
+                                                        (org-memento-headline-element block)))
+                    (format " (%s)" category)
+                  "")
+                (let* ((started (org-memento-started-time block))
+                       (ending (org-memento-ending-time block))
+                       (remaining (when ending
+                                    (/ (- ending (float-time))
+                                       60))))
+                  (format-spec " %s%e%r"
+                               `((?s . ,(format-time-string "%R" started))
+                                 (?e . ,(if ending
+                                            (format-time-string "-%R" ending)
+                                          ""))
+                                 (?r . ,(cond
+                                         ((null remaining)
+                                          "")
+                                         ((> remaining 0)
+                                          (format " (remaining %s)"
+                                                  (org-duration-from-minutes remaining)))
+                                         ((<= remaining 0)
+                                          (propertize (format " (%d minutes exceeding)"
+                                                              (- remaining))
+                                                      'face
+                                                      (if (> remaining 0)
+                                                          'font-lock-warning-face
+                                                        'default))))))))))
+    (error "(error: akirak-org-dwim--memento-block-description)")))
 
 (defun akirak-org-dwim--memento-status-description ()
   (format "No current block"))
