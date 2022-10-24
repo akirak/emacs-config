@@ -231,8 +231,8 @@
     origin =
       super.origin
       // {
-        # Release 9.5.3
-        rev = "69c588947d1be9bca1eb8c773f2a8ff117d264ba";
+        # Release 9.5.4
+        rev = "a49c73f16dfaec0168f749cfbc34704429cd3030";
       };
   };
 

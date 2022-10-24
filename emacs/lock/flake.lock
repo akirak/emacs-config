@@ -2073,17 +2073,17 @@
     "org": {
       "flake": false,
       "locked": {
-        "lastModified": 1650360247,
-        "narHash": "sha256-i5vj+n1YXbKuTScrRwe4FhN+YT6kFIuSH3KO3fEzNkA=",
+        "lastModified": 1654238250,
+        "narHash": "sha256-JA21Emjy/i4upmjuK9SfJ4XBQn2KAD1GIigXO6cxyKo=",
         "ref": "bugfix",
-        "rev": "69c588947d1be9bca1eb8c773f2a8ff117d264ba",
-        "revCount": 24635,
+        "rev": "a49c73f16dfaec0168f749cfbc34704429cd3030",
+        "revCount": 24643,
         "type": "git",
         "url": "git://git.sv.gnu.org/emacs/org-mode.git"
       },
       "original": {
         "ref": "bugfix",
-        "rev": "69c588947d1be9bca1eb8c773f2a8ff117d264ba",
+        "rev": "a49c73f16dfaec0168f749cfbc34704429cd3030",
         "type": "git",
         "url": "git://git.sv.gnu.org/emacs/org-mode.git"
       }
