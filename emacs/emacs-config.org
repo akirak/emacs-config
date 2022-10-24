@@ -1683,7 +1683,8 @@ DOCT: Declarative Org capture templates
 :END:
 #+begin_src emacs-lisp
   (setup (:package oahu)
-    (define-key help-map (kbd "M-v") #'oahu-view))
+    (:global "<menu>" #'oahu-view
+             "<S-menu>" #'oahu-alternative-view))
 #+end_src
 **** oahu-memento
 :PROPERTIES:
