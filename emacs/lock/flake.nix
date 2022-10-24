@@ -112,7 +112,7 @@
     };
     closql = {
       flake = false;
-      owner = "emacscollective";
+      owner = "magit";
       repo = "closql";
       type = "github";
     };
@@ -274,13 +274,13 @@
     };
     emacsql = {
       flake = false;
-      owner = "skeeto";
+      owner = "magit";
       repo = "emacsql";
       type = "github";
     };
     emacsql-sqlite = {
       flake = false;
-      owner = "skeeto";
+      owner = "magit";
       repo = "emacsql";
       type = "github";
     };
@@ -377,8 +377,9 @@
     };
     fullframe = {
       flake = false;
-      type = "git";
-      url = "https://git.sr.ht/~tomterl/fullframe";
+      owner = "~tomterl";
+      repo = "fullframe";
+      type = "sourcehut";
     };
     fwb-cmds = {
       flake = false;
@@ -518,7 +519,7 @@
     };
     hercules = {
       flake = false;
-      owner = "wurosh";
+      owner = "cyruseuros";
       repo = "hercules";
       type = "github";
     };
@@ -687,15 +688,15 @@
     };
     mmm-mode = {
       flake = false;
-      owner = "purcell";
+      owner = "dgutov";
       repo = "mmm-mode";
       type = "github";
     };
     modus-themes = {
       flake = false;
-      ref = "main";
-      type = "git";
-      url = "https://git.sr.ht/~protesilaos/modus-themes";
+      owner = "~protesilaos";
+      repo = "modus-themes";
+      type = "sourcehut";
     };
     move-dup = {
       flake = false;
@@ -1025,8 +1026,9 @@
     };
     repl-toggle = {
       flake = false;
-      type = "git";
-      url = "https://git.sr.ht/~tomterl/repl-toggle";
+      owner = "~tomterl";
+      repo = "repl-toggle";
+      type = "sourcehut";
     };
     request = {
       flake = false;
@@ -1152,7 +1154,7 @@
     titlecase = {
       flake = false;
       type = "git";
-      url = "https://codeberg.org/acdw/titlecase.el";
+      url = "https://codeberg.org/acdw/titlecase.el.git";
     };
     transient = {
       flake = false;
