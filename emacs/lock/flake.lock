@@ -2992,7 +2992,6 @@
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
         "transient": "transient",
-        "trashed": "trashed",
         "tree-sitter": "tree-sitter",
         "tree-sitter-indent": "tree-sitter-indent",
         "tree-sitter-langs": "tree-sitter-langs",
@@ -3308,22 +3307,6 @@
       "original": {
         "owner": "magit",
         "repo": "transient",
-        "type": "github"
-      }
-    },
-    "trashed": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1641477490,
-        "narHash": "sha256-yX37Smse9s1EOFkKhP0yhGIl4pBI0UssyKCp/L54ZyM=",
-        "owner": "shingo256",
-        "repo": "trashed",
-        "rev": "ddf5830730544435a068f2dc9ac75a81ea69df1d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "shingo256",
-        "repo": "trashed",
         "type": "github"
       }
     },

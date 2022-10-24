@@ -1160,12 +1160,6 @@
       repo = "transient";
       type = "github";
     };
-    trashed = {
-      flake = false;
-      owner = "shingo256";
-      repo = "trashed";
-      type = "github";
-    };
     tree-sitter = {
       flake = false;
       owner = "emacs-tree-sitter";

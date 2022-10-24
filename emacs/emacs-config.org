@@ -2874,7 +2874,7 @@ Quickly switch windows.
                         (when (window-live-p initial-window)
                           (select-window initial-window))))))))
 #+end_src
-*** adaptive-wrap                                           :visual:
+*** COMMENT adaptive-wrap                                               :visual:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 17:56]
 :END:
@@ -5836,7 +5836,7 @@ Title-case phrases
 #+end_src
 
 The [[https://github.com/duckwork/titlecase.el][readme]] of this package contains helpful links on capitalization.
-*** trashed
+*** COMMENT trashed                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-09 Sat 23:59]
 :END:
