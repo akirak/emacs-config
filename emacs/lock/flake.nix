@@ -242,12 +242,6 @@
       repo = "editorconfig-emacs";
       type = "github";
     };
-    eglot = {
-      flake = false;
-      owner = "joaotavora";
-      repo = "eglot";
-      type = "github";
-    };
     el-patch = {
       flake = false;
       owner = "radian-software";

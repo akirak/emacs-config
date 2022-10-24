@@ -641,22 +641,6 @@
         "type": "github"
       }
     },
-    "eglot": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1665486166,
-        "narHash": "sha256-m0N0D+sP9mwfA4qFRsGYw8vm/IMhO82VrJ6IqfwZCAw=",
-        "owner": "joaotavora",
-        "repo": "eglot",
-        "rev": "d1159172c9d436d7e649207565c606e9e572a8db",
-        "type": "github"
-      },
-      "original": {
-        "owner": "joaotavora",
-        "repo": "eglot",
-        "type": "github"
-      }
-    },
     "el-patch": {
       "flake": false,
       "locked": {
@@ -2856,7 +2840,6 @@
         "dumb-jump": "dumb-jump",
         "edit-indirect": "edit-indirect",
         "editorconfig": "editorconfig",
-        "eglot": "eglot",
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
         "elisp-refs": "elisp-refs",
