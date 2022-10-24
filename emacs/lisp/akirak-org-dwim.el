@@ -254,7 +254,7 @@
    akirak-org-dwim--memento-description
    :if akirak-org-dwim--memento-p
    :class transient-row
-   ("t" "Open today" org-memento-open-today)
+   ("t" "Open the journal" org-memento-open-journal)
    ("T" "Timeline" org-memento-timeline)
    ("<tab>" "Start a block" org-memento-start-block
     :if-not akirak-org-dwim--memento-current-block-p)
