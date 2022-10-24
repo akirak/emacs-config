@@ -3743,7 +3743,7 @@ Client for Language Server Protocol (LSP) servers
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package eglot)
+  (setup eglot
 
     ;; It depends on the project whether it is recommended to turn on LSP.
     ;;
