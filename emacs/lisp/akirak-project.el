@@ -12,6 +12,7 @@
 ;;;###autoload
 (defun akirak-project-rescan ()
   (interactive)
+  (project-forget-zombie-projects)
   (akirak-project-import-from-magit)
   (akirak-project-maintain-list)
   (when (fboundp 'github-linguist-update-projects)
