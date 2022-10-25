@@ -4364,7 +4364,6 @@ Port of Sublime Text plugin GitGutter
       (when-let (window (git-gutter:popup-buffer-window))
         (quit-window t window)))
 
-    (define-key ctl-x-map "g" #'git-gutter)
     (:global "C-c g" #'akirak/git-gutter-map
              "M-g j" #'git-gutter:next-hunk
              "M-g k" #'git-gutter:previous-hunk)
