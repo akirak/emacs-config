@@ -1669,6 +1669,11 @@ DOCT: Declarative Org capture templates
 :PROPERTIES:
 :CREATED_TIME: [2022-10-20 Thu 11:21]
 :END:
+#+begin_quote
+Manage Org searches
+[[https://git.sr.ht/~akirak/oahu.el]]
+#+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package oahu)
     (:global "<menu>" #'oahu-view
@@ -1678,6 +1683,10 @@ DOCT: Declarative Org capture templates
 :PROPERTIES:
 :CREATED_TIME: [2022-10-20 Thu 12:06]
 :END:
+#+begin_quote
+Org-Memento integration for oahu
+[[https://git.sr.ht/~akirak/oahu.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package oahu-memento)
@@ -2225,7 +2234,7 @@ Defining todo blockers in a block
 :CREATED_TIME: [2022-02-25 Fri 19:26]
 :END:
 #+begin_quote
-Emacs bookmark support for org-mode
+Emacs bookmark support for Org mode
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -3895,7 +3904,6 @@ extract information from Emacs Lisp libraries
 :END:
 #+begin_quote
 EmacSQL back-end for SQLite
-[[https://github.com/skeeto/emacsql]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5862,7 +5870,7 @@ View Taxy structs in a Magit Section buffer
 :END:
 #+begin_quote
 Title-case phrases
-[[https://github.com/duckwork/titlecase.el]]
+[[https://codeberg.org/acdw/titlecase.el]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -6274,16 +6282,16 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 219 |
-| [[org-ql-search:tags:visual][visual]]              |  14 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:VC][VC]]                  |   9 |
 | [[org-ql-search:tags:library][library]]             |   9 |
-| [[org-ql-search:tags:Emacs][Emacs]]               |   7 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:completion][completion]]          |   7 |
+| [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   5 |
@@ -6298,7 +6306,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
-| [[org-ql-search:tags:reference][reference]]           |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
@@ -6307,6 +6314,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:@extra][@extra]]              |   2 |
+| [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
