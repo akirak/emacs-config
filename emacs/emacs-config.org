@@ -531,12 +531,13 @@ The following variable defines variables that can be saved to =custom-file=:
 
 #+begin_src emacs-lisp
   (defconst akirak/custom-variable-whitelist
-    '(auth-sources    ; Can be machine-dependent
-      org-agenda-span ; Can be dependent on the work context
+    '(auth-sources                        ; Can be machine-dependent
+      org-agenda-span                     ; Can be dependent on the work context
       ;; Work context
       user-full-name
       user-mail-address
       org-memento-workhour-alist
+      org-memento-policy-file
       ;; Dynamic
       safe-local-variable-values))
 #+end_src
