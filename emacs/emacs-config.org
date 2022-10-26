@@ -3293,6 +3293,12 @@ Completion At Point Extensions
 
 #+begin_src emacs-lisp
   (setup (:package cape)
+    ;; This is a custom convention. You need to create a words file in the
+    ;; directory for yourself.
+    (:when-loaded
+      (require 'xdg)
+      (:set cape-dict-file (expand-file-name "dict/words" (xdg-data-home))))
+
     (:global "C-x r M-f" #'cape-file
              "C-x r M-l" #'cape-line))
 #+end_src
