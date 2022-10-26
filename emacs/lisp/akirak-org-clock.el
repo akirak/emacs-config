@@ -64,85 +64,74 @@
 (defun akirak-org-clock--check-before-save ()
   (require 'org-clock)
   (require 'akirak-org-dog)
-  (thunk-let* ((pr (or (project-current)
-                       (user-error "Not in a project. First create a project")))
-               (files0 (akirak-org-dog-project-files))
-               (files (thread-last
-                        (org-dog-overview-scan files0 :fast t)
-                        (mapcar #'car)))
-               (filename (thread-last
-                           (marker-buffer org-clock-marker)
-                           (buffer-file-name)
-                           (abbreviate-file-name))))
+  (pcase-exhaustive (akirak-org-clock--target)
+    (`(,files ,tag ,further)
+     (or (and (org-clocking-p)
+              (let ((filename (thread-last
+                                (marker-buffer org-clock-marker)
+                                (buffer-file-name)
+                                (abbreviate-file-name))))
+                (or (member filename files)
+                    (when further
+                      (member filename
+                              (thread-last
+                                (org-dog-overview-scan files :fast t)
+                                (mapcar #'car))))))
+              (or (not tag)
+                  (member tag
+                          (save-current-buffer
+                            (org-with-point-at org-clock-marker
+                              (org-get-tags))))))
+         (progn
+           (require 'org-dog-clock)
+           (message "You must clock in")
+           (org-dog-clock-in (if further
+                                 (thread-last
+                                   (org-dog-overview-scan files :fast t)
+                                   (mapcar #'car))
+                               files)
+                             :query-prefix (if tag
+                                               (format "tags:%s " tag)
+                                             "todo: ")
+                             :tags tag
+                             :prompt "Clock in: ")
+           t)))))
+
+(defun akirak-org-clock--target ()
+  (let ((pr (or (project-current)
+                (user-error "Not in a project. First create a project"))))
     (cond
      ((string-match-p (regexp-quote "/foss/contributions/")
                       (project-root pr))
-      (if-let (mode-file (car (akirak-org-dog-major-mode-files)))
-          (or (and (org-clocking-p)
-                   (equal filename mode-file)
-                   (member "@contribution"
-                           (save-current-buffer
-                             (org-with-point-at org-clock-marker
-                               (org-get-tags)))))
-              (progn
-                (require 'org-dog-clock)
-                (message "You must clock into %s" mode-file)
-                (org-dog-clock-in mode-file
-                                  :query-prefix "tags:@contribution "
-                                  :tags "@contribution"
-                                  :prompt
-                                  (format "Clock in (%s): "
-                                          (akirak-org-clock--project-name pr)))
-                t))
-        (error "No Org file for the major mode %s" major-mode)))
+      (list (list (car (akirak-org-dog-major-mode-files)))
+            "@contribution"
+            nil))
      ((equal "~/org/" (project-root pr))
-      (or (and (org-clocking-p)
-               (equal filename "~/org/meta.org"))
-          (progn
-            (require 'org-dog-clock)
-            (message "You must clock in")
-            (org-dog-clock-in "~/org/meta.org"
-                              :query-prefix "todo: "
-                              :prompt "Clock in (meta.org): ")
-            t)))
-     ((and files0
-           (org-clocking-p)
-           (or (member filename files0)
-               (member filename files))))
-     (files0
-      (require 'org-dog-clock)
-      (message "You must clock in")
-      (org-dog-clock-in files
-                        :query-prefix "todo: "
-                        :prompt
-                        (format "Clock in (%s): "
-                                (akirak-org-clock--project-name pr)))
-      t)
+      (list (list "~/org/meta.org")
+            nil
+            nil))
      (t
-      (user-error "No Org file for the project in %s" (project-root pr))))))
+      (list (akirak-org-dog-project-files)
+            nil
+            t)))))
 
 ;;;###autoload
 (defun akirak-org-clock-in-to-project ()
   "Clock in to an entry in a file related to the current project."
   (interactive)
   (require 'akirak-org-dog)
-  (if-let (pr (project-current))
-      (if (string-match-p (regexp-quote "/foss/contributions/")
-                          (project-root pr))
-          (org-dog-clock-in (car (akirak-org-dog-major-mode-files))
-                            :query-prefix "todo: tags:@contribution "
-                            :prompt
-                            (format "Clock in (%s): "
-                                    (akirak-org-clock--project-name pr)))
-        (let ((files (thread-last
-                       (org-dog-overview-scan (akirak-org-dog-project-files)
-                                              :fast t)
-                       (mapcar #'car))))
-          (org-dog-clock-in files :query-prefix "todo: "
-                            :prompt
-                            (format "Clock in (%s): "
-                                    (akirak-org-clock--project-name pr)))))
-    (user-error "No project")))
+  (pcase-exhaustive (akirak-org-clock--target)
+    (`(,files ,tag ,further)
+     (org-dog-clock-in (if further
+                           (thread-last
+                             (org-dog-overview-scan files
+                                                    :fast t)
+                             (mapcar #'car))
+                         files)
+                       :query-prefix (if tag
+                                         (format "todo: tags:%s " tag)
+                                       "todo: ")
+                       :prompt "Clock in: "))))
 
 (defun akirak-org-clock--project-name (pr)
   "Return the name of the project for use in prompt."
