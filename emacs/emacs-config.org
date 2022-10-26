@@ -1701,7 +1701,18 @@ DOCT: Declarative Org capture templates
     (add-hook 'org-memento-block-before-exit-hook #'oahu-memento-save)
     (add-hook 'org-memento-block-exit-hook
               (lambda () (setq oahu-last-view nil)))
-    (add-hook 'org-memento-block-start-hook #'oahu-memento-load))
+    (add-hook 'org-memento-block-start-hook #'oahu-memento-load)
+
+    (define-key ctl-x-map "g" #'akirak/oahu-switch-to-viewed-project)
+
+    (defun akirak/oahu-viewed-project ()
+      (pcase oahu-last-view
+        (`("Project" ,pr . ,_)
+         pr)))
+    (defun akirak/oahu-switch-to-viewed-project ()
+      (interactive)
+      (when-let (pr (akirak/oahu-viewed-project))
+        (akirak-project-switch (project-root pr)))))
 #+end_src
 *** ob-mermaid
 :PROPERTIES:
