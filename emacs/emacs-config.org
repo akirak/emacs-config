@@ -4189,7 +4189,7 @@ Ghelp+Eglot
 #+begin_src emacs-lisp
   (setup (:package ghelp-eglot))
 #+end_src
-*** ghelp-helpful
+*** COMMENT ghelp-helpful                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 13:16]
 :END:
@@ -4596,7 +4596,7 @@ Major mode for Hashicorp
                  "\\.prisma\\'"
                  "\\.hcl\\'"))
 #+end_src
-*** helpful                                        :reference:Emacs:
+*** COMMENT helpful                                            :reference:Emacs:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:50]
 :END:
