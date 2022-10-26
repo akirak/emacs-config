@@ -95,6 +95,16 @@
                                           (akirak-org-clock--project-name pr)))
                 t))
         (error "No Org file for the major mode %s" major-mode)))
+     ((equal "~/org/" (project-root pr))
+      (or (and (org-clocking-p)
+               (equal filename "~/org/meta.org"))
+          (progn
+            (require 'org-dog-clock)
+            (message "You must clock in")
+            (org-dog-clock-in "~/org/meta.org"
+                              :query-prefix "todo: "
+                              :prompt "Clock in (meta.org): ")
+            t)))
      ((and files0
            (org-clocking-p)
            (or (member filename files0)
