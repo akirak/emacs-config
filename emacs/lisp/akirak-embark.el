@@ -87,6 +87,13 @@
   ("d" epkg-describe-package)
   ("gc" akirak-git-clone-elisp-package))
 
+(embark-define-keymap akirak-embark-nix-installable-map
+  "Keymap on Nix package."
+  ("b" akirak-nix-browse-output))
+
+(defun akirak-embark-prefix-nixpkgs-installable (_type package)
+  (cons 'nix-installable (concat "nixpkgs#" package)))
+
 (embark-define-keymap akirak-embark-org-marker-map
   ""
   :parent nil
@@ -110,7 +117,11 @@
   (add-to-list 'embark-keymap-alist
                '(org-sh-src-block . akirak-embark-org-sh-src-map))
   (add-to-list 'embark-keymap-alist
-               '(project-hercules-shell-command . akirak-embark-package-shell-command-map)))
+               '(project-hercules-shell-command . akirak-embark-package-shell-command-map))
+  (add-to-list 'embark-transformer-alist
+               '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
+  (add-to-list 'embark-keymap-alist
+               '(nix-installable . akirak-embark-nix-installable-map)))
 
 (defun akirak-embark-target-org-link-at-point ()
   (cond
