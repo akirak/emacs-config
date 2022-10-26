@@ -254,12 +254,6 @@
       repo = "eldoc-eval";
       type = "github";
     };
-    elisp-refs = {
-      flake = false;
-      owner = "Wilfred";
-      repo = "elisp-refs";
-      type = "github";
-    };
     elixir-mode = {
       flake = false;
       owner = "elixir-editors";
@@ -404,12 +398,6 @@
       repo = "ghelp";
       type = "github";
     };
-    ghelp-helpful = {
-      flake = false;
-      owner = "casouri";
-      repo = "ghelp";
-      type = "github";
-    };
     ghub = {
       flake = false;
       owner = "magit";
@@ -509,12 +497,6 @@
       flake = false;
       owner = "purcell";
       repo = "emacs-hcl-mode";
-      type = "github";
-    };
-    helpful = {
-      flake = false;
-      owner = "Wilfred";
-      repo = "helpful";
       type = "github";
     };
     hercules = {
@@ -852,6 +834,7 @@
     org-memento = {
       flake = false;
       owner = "~akirak";
+      ref = "group-policies";
       repo = "org-memento";
       type = "sourcehut";
     };

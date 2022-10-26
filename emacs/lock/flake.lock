@@ -673,22 +673,6 @@
         "type": "github"
       }
     },
-    "elisp-refs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1656970918,
-        "narHash": "sha256-ZTGbth4u0ydye7Xzn1zbLEYyYYMwEN6lE7TFtXsTfU0=",
-        "owner": "Wilfred",
-        "repo": "elisp-refs",
-        "rev": "af73739084637c8ebadad337a8fe58ff4f1d2ec1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Wilfred",
-        "repo": "elisp-refs",
-        "type": "github"
-      }
-    },
     "elixir-mode": {
       "flake": false,
       "locked": {
@@ -1074,22 +1058,6 @@
         "type": "github"
       }
     },
-    "ghelp-helpful": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1633623823,
-        "narHash": "sha256-sBTwMZnYM+tjYv+YFnc2n6oy6aQxCWi+FskrPlj8c5I=",
-        "owner": "casouri",
-        "repo": "ghelp",
-        "rev": "8ecf13657f6c4185cf5a2ddede184935d45bfe20",
-        "type": "github"
-      },
-      "original": {
-        "owner": "casouri",
-        "repo": "ghelp",
-        "type": "github"
-      }
-    },
     "ghub": {
       "flake": false,
       "locked": {
@@ -1359,22 +1327,6 @@
       "original": {
         "owner": "purcell",
         "repo": "emacs-hcl-mode",
-        "type": "github"
-      }
-    },
-    "helpful": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1661835373,
-        "narHash": "sha256-g6Gx/FhFJREjdmmW7mj5HAfb5wJzkDrDy9HaVMjghDU=",
-        "owner": "Wilfred",
-        "repo": "helpful",
-        "rev": "6633d82c6e3c921c486ec284cb6542f33278b605",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Wilfred",
-        "repo": "helpful",
         "type": "github"
       }
     },
@@ -2138,11 +2090,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1666409651,
-        "narHash": "sha256-rXs2WWd7TxCSW4hauTFQaq19M9OigXfDG50beoSCsRE=",
+        "lastModified": 1666854344,
+        "narHash": "sha256-/wKrHEEbcKms20I0723vdyWR3Y6w7kRrVe9waI6cCAM=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "c31a73ef8693f80e4cd90df916cbc6f225899ecd",
+        "rev": "ea3fab559c104b0ec5f8ed3fdfbfc82df72fde12",
         "type": "github"
       },
       "original": {
@@ -2255,15 +2207,16 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1666627160,
-        "narHash": "sha256-E3XN5vySCNo+vjdCLQRoU7SdVgE6pgTAQYka/qHUHsg=",
+        "lastModified": 1666853091,
+        "narHash": "sha256-4s3VrWOiKQgyQiHur/fVq6O4bVr8BOYGWTwbwmdzPj0=",
         "owner": "~akirak",
         "repo": "org-memento",
-        "rev": "1a1702abe88c8b3a3997c360531c36bb2bb85177",
+        "rev": "0a14dee8e3864c0aeeb3302e9ea522fd257f895d",
         "type": "sourcehut"
       },
       "original": {
         "owner": "~akirak",
+        "ref": "group-policies",
         "repo": "org-memento",
         "type": "sourcehut"
       }
@@ -2841,7 +2794,6 @@
         "editorconfig": "editorconfig",
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
-        "elisp-refs": "elisp-refs",
         "elixir-mode": "elixir-mode",
         "elx": "elx",
         "emacsql": "emacsql",
@@ -2866,7 +2818,6 @@
         "gcmh": "gcmh",
         "ghelp": "ghelp",
         "ghelp-eglot": "ghelp-eglot",
-        "ghelp-helpful": "ghelp-helpful",
         "ghub": "ghub",
         "gif-screencast": "gif-screencast",
         "git-attr": "git-attr",
@@ -2884,7 +2835,6 @@
         "guess-language": "guess-language",
         "haskell-mode": "haskell-mode",
         "hcl-mode": "hcl-mode",
-        "helpful": "helpful",
         "hercules": "hercules",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
