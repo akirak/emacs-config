@@ -227,6 +227,15 @@
     };
   };
 
+  org-memento = _: _: {
+    origin = {
+      type = "sourcehut";
+      owner = "~akirak";
+      repo = "org-memento";
+      ref = "group-policies";
+    };
+  };
+
   org = _: super: {
     origin =
       super.origin
