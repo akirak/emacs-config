@@ -492,6 +492,7 @@
                    :template ,(apply #'akirak-org-capture-make-entry-body
                                      heading :body t
                                      akirak-capture-template-options)
+                   ,@akirak-capture-doct-options
                    ,@(akirak-capture--target-plist target)))))))
     (org-capture)))
 
