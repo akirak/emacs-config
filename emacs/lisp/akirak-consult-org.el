@@ -8,7 +8,7 @@
   (interactive "P")
   (pcase arg
     (`nil (if (org-clocking-p)
-              (org-clock-goto)
+              (akirak-org-clock-open)
             (akirak-consult-org-clock-history)))
     ('(4) (akirak-consult-org-clock-history))
     ('(16) (akirak-consult-org-clock-history t))))
