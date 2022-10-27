@@ -471,6 +471,13 @@
    :setup-children octopus-setup-context-file-subgroups]
   ["Other locations"
    :class transient-row
+   ("n" "News"
+    (lambda ()
+      (interactive)
+      (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
+      (octopus--dispatch (oref transient-current-prefix command)
+                         (akirak-capture--datetree-marker
+                          (org-dog-resolve-relative-file "news.org")))))
    ("@" octopus-clock-marker-suffix)
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
@@ -775,6 +782,12 @@ not work in the future when forge changes the output."
   (widen)
   (goto-char (point-min))
   (akirak-org-goto-or-create-olp '("Backlog")))
+
+(defun akirak-capture--datetree-marker (file)
+  "Return a marker to the current date in FILE."
+  (with-current-buffer (or (find-buffer-visiting file)
+                           (find-file-noselect file))
+    (org-reverse-datetree-goto-date-in-file nil :return 'marker)))
 
 ;;;###autoload
 (cl-defun akirak-capture-clock-in (file headline &key tags)
