@@ -749,7 +749,10 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup find-func
-    (:global "C-x M-l" #'find-library))
+    (:global "C-x M-l" #'find-library)
+    (add-hook 'find-function-after-hook
+              (defun akirak/find-function-focus ()
+                (recenter-top-bottom 0))))
 #+end_src
 *** flymake                                            :development:
 :PROPERTIES:
