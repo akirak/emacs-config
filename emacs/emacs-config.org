@@ -1951,6 +1951,17 @@ Outline-based notes management and organizer
                                      (interactive)
                                      (org-eval-in-calendar '(calendar-forward-day -1))))))))
 #+end_src
+**** Hooks
+#+begin_src emacs-lisp
+  (setup org-keys
+    (add-hook 'org-follow-link-hook
+              (defun akirak/org-follow-link-reveal ()
+                ;; For performance, ignore derived modes for now
+                (when (eq major-mode 'org-mode)
+                  (when (fboundp 'org-dog-indirect-buffer)
+                    (switch-to-buffer (org-dog-indirect-buffer))
+                    (org-show-context 'bookmark-jump))))))
+#+end_src
 **** org-agenda
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 22:12]
