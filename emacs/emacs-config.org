@@ -1896,8 +1896,7 @@ Outline-based notes management and organizer
 
         (:hook #'akirak-org-eldoc-setup)
 
-        (:global "M-g h" #'akirak-org-avy-heading
-                 "<S-menu>" #'akirak-org-clocked-entry-or-agenda)
+        (:global "M-g h" #'akirak-org-avy-heading)
 
         (:unbind "C-'"
                  ;; I don't use any of these bindings and want to use them for other purposes
