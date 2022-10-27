@@ -15,6 +15,21 @@
     },
     "version": "0.5.2"
   },
+  "org": {
+    "archive": {
+      "narHash": "sha256-fxcFjF/os64eXBEe48GmJynKBCh+E7KUtIwej+vQEls=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/org-9.5.5.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "emacs": "25.1"
+    },
+    "version": "9.5.5"
+  },
   "org-transclusion": {
     "archive": {
       "narHash": "sha256-2llOBw2ff3eJeXjt/FIeVkr7IyQ1nA0zKaQnvxs6sQ4=",

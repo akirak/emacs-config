@@ -9,6 +9,7 @@ inputs: [
     core-src = inputs.emacs.outPath;
     auto-sync-only = true;
     exclude = [
+      "org"
       # Use tarball, as it contains info
       "org-transclusion"
     ];

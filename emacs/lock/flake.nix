@@ -747,13 +747,6 @@
       repo = "orderless";
       type = "github";
     };
-    org = {
-      flake = false;
-      ref = "bugfix";
-      rev = "a49c73f16dfaec0168f749cfbc34704429cd3030";
-      type = "git";
-      url = "git://git.sv.gnu.org/emacs/org-mode.git";
-    };
     org-autolist = {
       flake = false;
       owner = "calvinwyoung";

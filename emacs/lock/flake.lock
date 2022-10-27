@@ -1989,24 +1989,6 @@
         "type": "github"
       }
     },
-    "org": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1654238250,
-        "narHash": "sha256-JA21Emjy/i4upmjuK9SfJ4XBQn2KAD1GIigXO6cxyKo=",
-        "ref": "bugfix",
-        "rev": "a49c73f16dfaec0168f749cfbc34704429cd3030",
-        "revCount": 24643,
-        "type": "git",
-        "url": "git://git.sv.gnu.org/emacs/org-mode.git"
-      },
-      "original": {
-        "ref": "bugfix",
-        "rev": "a49c73f16dfaec0168f749cfbc34704429cd3030",
-        "type": "git",
-        "url": "git://git.sv.gnu.org/emacs/org-mode.git"
-      }
-    },
     "org-autolist": {
       "flake": false,
       "locked": {
@@ -2907,7 +2889,6 @@
         "octopus": "octopus",
         "olivetti": "olivetti",
         "orderless": "orderless",
-        "org": "org",
         "org-autolist": "org-autolist",
         "org-bb": "org-bb",
         "org-bookmark-heading": "org-bookmark-heading",
