@@ -2506,13 +2506,21 @@ Time blocking with Org
              (lambda (element) (org-element-property :MEMENTO_CATEGORY element))
              :format (lambda (x) (or x "No category")))
             (:read
+             ;; Customize `oahu-process-alist'
              (lambda (_) (require 'oahu-memento) (oahu-memento-context))
              :format (lambda (x)
                        (pcase x
                          (`("Project" ,pr)
                           (concat "Project " (project-root pr)))
+                         (`("Org" ,files)
+                          (concat "Org "
+                                  (mapconcat #'file-name-base
+                                             (seq-filter #'stringp files)
+                                             ",")))
+                         (`("Review" ,span)
+                          (format "Review %s" span))
                          (`nil
-                          "(Not associated with a project)")
+                          "(No process)")
                          (_
                           (prin1-to-string x)))))
             (:read
