@@ -386,18 +386,6 @@
       type = "git";
       url = "https://gitlab.com/koral/gcmh.git";
     };
-    ghelp = {
-      flake = false;
-      owner = "casouri";
-      repo = "ghelp";
-      type = "github";
-    };
-    ghelp-eglot = {
-      flake = false;
-      owner = "casouri";
-      repo = "ghelp";
-      type = "github";
-    };
     ghub = {
       flake = false;
       owner = "magit";
@@ -834,7 +822,6 @@
     org-memento = {
       flake = false;
       owner = "~akirak";
-      ref = "group-policies";
       repo = "org-memento";
       type = "sourcehut";
     };
@@ -891,6 +878,12 @@
       flake = false;
       owner = "akirak";
       repo = "org-volume";
+      type = "github";
+    };
+    org-web-tools = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "org-web-tools";
       type = "github";
     };
     orgabilize = {
@@ -953,6 +946,18 @@
       repo = "plz.el";
       type = "github";
     };
+    pocket-lib = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "pocket-lib.el";
+      type = "github";
+    };
+    pocket-reader = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "pocket-reader.el";
+      type = "github";
+    };
     popper = {
       flake = false;
       owner = "karthink";
@@ -999,6 +1004,12 @@
       flake = false;
       owner = "Fanael";
       repo = "rainbow-delimiters";
+      type = "github";
+    };
+    rainbow-identifiers = {
+      flake = false;
+      owner = "Fanael";
+      repo = "rainbow-identifiers";
       type = "github";
     };
     reformatter = {
