@@ -336,6 +336,13 @@
    ;;                                  akirak-capture-doct-options '(:clock-in t :clock-resume t))
    ;;                            (akirak-capture-doct)))
    ("!" "Troubleshoot" akirak-capture-troubleshooting)
+   ("q" "Question" (lambda ()
+                     (interactive)
+                     (setq akirak-capture-headline (akirak-org-capture-read-string
+                                                    "Question: ")
+                           akirak-capture-template-options nil
+                           akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                     (akirak-capture-doct)))
    ("i" "Ideate" (lambda ()
                    (interactive)
                    (setq akirak-capture-headline (akirak-org-capture-read-string
