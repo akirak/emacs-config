@@ -72,7 +72,8 @@ If CALLBACK is a function, it is called with the selected url."
                      ('(4)
                       #'akirak-avy--yank-symbol-with-quotes)
                      ('-
-                      #'ignore)
+                      (lambda ()
+                        (message "Saved the text to kill ring")))
                      (_
                       #'yank))))
 
