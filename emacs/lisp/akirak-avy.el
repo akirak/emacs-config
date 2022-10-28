@@ -69,8 +69,6 @@ If CALLBACK is a function, it is called with the selected url."
   (akirak-avy--run #'akirak-avy--symbol-pre-action
                    #'akirak-avy--symbol-make-args
                    (pcase arg
-                     ('(4)
-                      #'akirak-avy--yank-symbol-with-quotes)
                      ('-
                       (lambda ()
                         (message "Saved the text to kill ring")))
@@ -94,19 +92,6 @@ If CALLBACK is a function, it is called with the selected url."
           (re-search-forward
            (rx (group (+? anything)) symbol-end)
            nil t))))
-
-(defun akirak-avy--yank-symbol-with-quotes ()
-  (let ((brackets (cl-case (derived-mode-p 'org-mode
-                                           'markdown-mode)
-                    (org-mode '("=" . "="))
-                    (markdown-mode '("`" . "`")))))
-    (pcase brackets
-      (`nil (yank))
-      (`(,open . ,end)
-       (insert open)
-       (yank)
-       (insert end)))))
-
 
 ;;;###autoload
 (defun akirak-avy-insert-org-super-link ()
