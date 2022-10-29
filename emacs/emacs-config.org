@@ -4856,6 +4856,11 @@ For Emacs Lisp, I use lispy.
        (when (featurep 'puni)
          (puni-mode (not lispy-mode)))))
 
+    (advice-add 'lispy-kill :around
+                (defun akirak/ad-around-lispy-kill (orig &rest args)
+                  (save-restriction
+                    (apply orig args))))
+
     ;; Adoption of lispy is opinionated.
     (:status opinionated
       (:set lispy-key-theme '(special lispy))
