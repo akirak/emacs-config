@@ -278,30 +278,6 @@
 ;;;###autoload (autoload 'akirak-capture "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture ()
   "Main entry point to capture commands."
-  ;; [:description
-  ;;  akirak-capture--clock-description
-  ;;  :if org-clocking-p
-  ;;  :class transient-row
-  ;;  ("L" "Link as item"
-  ;;   (lambda ()
-  ;;     (interactive)
-  ;;     (akirak-capture--to-clock 'item "%A%?")))
-  ;;  ("U" "Url as item"
-  ;;   (lambda ()
-  ;;     (interactive)
-  ;;     (require 'orgabilize)
-  ;;     (akirak-capture--to-clock
-  ;;      'item (concat (orgabilize-make-link-string (akirak-url-latest) t)
-  ;;                    "%?"))))
-  ;;  ("i" "Item"
-  ;;   (lambda ()
-  ;;     (interactive)
-  ;;     (akirak-capture--to-clock 'item "%?")))
-  ;;  ("p" "Paragraph"
-  ;;   (lambda ()
-  ;;     (interactive)
-  ;;     (akirak-capture--to-clock 'plain "%?" :empty-lines-before 1)))]
-
   ["Actions (generic / specific type)"
    :class transient-row
    ("T" "Start todo" (lambda ()
@@ -319,23 +295,6 @@
                        akirak-capture-doct-options nil)
                  (akirak-capture-doct)))
    ("#" "Ticket" akirak-capture-ticket)
-   ;; ("r" "Research topic" (lambda ()
-   ;;                         (interactive)
-   ;;                         (setq akirak-capture-headline "%^{Title}"
-   ;;                               akirak-capture-template-options
-   ;;                               '(:todo "UNDERWAY" :tags "@research")
-   ;;                               akirak-capture-doct-options (list :clock-in t
-   ;;                                                                 :clock-resume t
-   ;;                                                                 :jump-to-captured t))
-   ;;                         (akirak-capture-doct)))
-   ;; ("m" "Compose a message" (lambda ()
-   ;;                            (interactive)
-   ;;                            (setq akirak-capture-headline "%^{Title}"
-   ;;                                  akirak-capture-template-options '(:todo "UNDERWAY"
-   ;;                                                                          :tags "@message")
-   ;;                                  akirak-capture-doct-options '(:clock-in t :clock-resume t))
-   ;;                            (akirak-capture-doct)))
-   ("!" "Troubleshoot" akirak-capture-troubleshooting)
    ("q" "Question" (lambda ()
                      (interactive)
                      (setq akirak-capture-headline (akirak-org-capture-read-string
@@ -361,20 +320,6 @@
        (interactive)
        (setq akirak-capture-headline (akirak-org-capture-read-string "Heading: ")
              akirak-capture-template-options nil
-             akirak-capture-doct-options nil)
-       (akirak-capture-doct)))
-    ("n" "Note w/o heading"
-     (lambda ()
-       (interactive)
-       (setq akirak-capture-headline ""
-             akirak-capture-template-options '(:tags "@note")
-             akirak-capture-doct-options nil)
-       (akirak-capture-doct)))
-    ("l" "Link as heading"
-     (lambda ()
-       (interactive)
-       (setq akirak-capture-headline "%A"
-             akirak-capture-template-options '(:body "%?")
              akirak-capture-doct-options nil)
        (akirak-capture-doct)))
     ("c" "Content title" akirak-capture-content)]
