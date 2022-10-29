@@ -65,7 +65,7 @@
   (require 'org-clock)
   (require 'akirak-org-dog)
   (pcase-exhaustive (akirak-org-clock--target)
-    (`(,files ,tag ,further)
+    (`(,files ,query-prefix ,tag ,further)
      (or (and (org-clocking-p)
               (let ((filename (thread-last
                                 (marker-buffer org-clock-marker)
@@ -90,9 +90,7 @@
                                    (org-dog-overview-scan files :fast t)
                                    (mapcar #'car))
                                files)
-                             :query-prefix (if tag
-                                               (format "tags:%s " tag)
-                                             "todo: ")
+                             :query-prefix query-prefix
                              :tags tag
                              :prompt "Clock in: ")
            t)))))
@@ -104,14 +102,17 @@
      ((string-match-p (regexp-quote "/foss/contributions/")
                       (project-root pr))
       (list (list (car (akirak-org-dog-major-mode-files)))
+            "tag:@contribution "
             "@contribution"
             nil))
      ((equal "~/org/" (project-root pr))
       (list (list "~/org/meta.org")
+            "todo: "
             nil
             nil))
      (t
       (list (akirak-org-dog-project-files)
+            "todo: "
             nil
             t)))))
 
@@ -121,16 +122,14 @@
   (interactive)
   (require 'akirak-org-dog)
   (pcase-exhaustive (akirak-org-clock--target)
-    (`(,files ,tag ,further)
+    (`(,files ,query-prefix ,_tag ,further)
      (org-dog-clock-in (if further
                            (thread-last
                              (org-dog-overview-scan files
                                                     :fast t)
                              (mapcar #'car))
                          files)
-                       :query-prefix (if tag
-                                         (format "todo: tags:%s " tag)
-                                       "todo: ")
+                       :query-prefix query-prefix
                        :prompt "Clock in: "))))
 
 (defun akirak-org-clock--project-name (pr)
