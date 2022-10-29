@@ -1298,22 +1298,6 @@
         "type": "github"
       }
     },
-    "hercules": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1587368874,
-        "narHash": "sha256-TLdEd9J3HADBuls12fP2e2XYkGGbnMzbAVUiOWE+4+Y=",
-        "owner": "cyruseuros",
-        "repo": "hercules",
-        "rev": "557da39878d0637395fdded91243b340c37eff7b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cyruseuros",
-        "repo": "hercules",
-        "type": "github"
-      }
-    },
     "highlight-indent-guides": {
       "flake": false,
       "locked": {
@@ -2157,27 +2141,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1667050574,
-        "narHash": "sha256-c0h6EsyjMR8kYFsYKS31Q9Tt5u74IIRS8JwHhxWq1lU=",
+        "lastModified": 1667100823,
+        "narHash": "sha256-vCSiv+NyQn/pBAJxq7q/VZA3X3dLQ/ivXAZ4y8yvtOs=",
         "owner": "~akirak",
         "repo": "org-memento",
-        "rev": "e500f6001712a302b10ac998909724b1d0a9df42",
-        "type": "sourcehut"
-      },
-      "original": {
-        "owner": "~akirak",
-        "repo": "org-memento",
-        "type": "sourcehut"
-      }
-    },
-    "org-memento-timeline": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1666972966,
-        "narHash": "sha256-JveVeik3LRclolD0zVrySacM/RXmmV08imU8XV9at+4=",
-        "owner": "~akirak",
-        "repo": "org-memento",
-        "rev": "8029b9166aa754932b1b63c0a134ddf3e84363bc",
+        "rev": "1fea477929fd90b361482e8e3927c6ba8f4959e9",
         "type": "sourcehut"
       },
       "original": {
@@ -2571,22 +2539,6 @@
         "type": "github"
       }
     },
-    "project-hercules": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1662965575,
-        "narHash": "sha256-2ggd5K7VcvP/lCm9uciMw1JHPXWR/DmMCfFlijM6HFE=",
-        "owner": "akirak",
-        "repo": "project-hercules.el",
-        "rev": "eefc000f7666883355c5750f99d4e1001dbf88a3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "repo": "project-hercules.el",
-        "type": "github"
-      }
-    },
     "promise": {
       "flake": false,
       "locked": {
@@ -2846,7 +2798,6 @@
         "guess-language": "guess-language",
         "haskell-mode": "haskell-mode",
         "hcl-mode": "hcl-mode",
-        "hercules": "hercules",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
         "ht": "ht",
@@ -2900,7 +2851,6 @@
         "org-lang-env": "org-lang-env",
         "org-make-toc": "org-make-toc",
         "org-memento": "org-memento",
-        "org-memento-timeline": "org-memento-timeline",
         "org-ml": "org-ml",
         "org-nlink": "org-nlink",
         "org-ql": "org-ql",
@@ -2925,7 +2875,6 @@
         "popper": "popper",
         "popup": "popup",
         "posframe": "posframe",
-        "project-hercules": "project-hercules",
         "promise": "promise",
         "puni": "puni",
         "queue": "queue",
@@ -2974,6 +2923,7 @@
         "which-key": "which-key",
         "whole-line-or-region": "whole-line-or-region",
         "with-editor": "with-editor",
+        "workbox": "workbox",
         "ws-butler": "ws-butler",
         "xterm-color": "xterm-color",
         "yaml": "yaml",
@@ -3579,6 +3529,22 @@
       "original": {
         "owner": "magit",
         "repo": "with-editor",
+        "type": "github"
+      }
+    },
+    "workbox": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1667110499,
+        "narHash": "sha256-IrUI+vdtkEWp97yx4FiVXPaM/+oIFuIVTG5eoLtZ9po=",
+        "owner": "akirak",
+        "repo": "workbox.el",
+        "rev": "ea1fe92b2ccd6eb03193013652f49e011bb04574",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "workbox.el",
         "type": "github"
       }
     },

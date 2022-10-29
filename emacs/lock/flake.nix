@@ -487,12 +487,6 @@
       repo = "emacs-hcl-mode";
       type = "github";
     };
-    hercules = {
-      flake = false;
-      owner = "cyruseuros";
-      repo = "hercules";
-      type = "github";
-    };
     highlight-indent-guides = {
       flake = false;
       owner = "DarthFennec";
@@ -818,12 +812,6 @@
       repo = "org-memento";
       type = "sourcehut";
     };
-    org-memento-timeline = {
-      flake = false;
-      owner = "~akirak";
-      repo = "org-memento";
-      type = "sourcehut";
-    };
     org-ml = {
       flake = false;
       owner = "ndwarshuis";
@@ -967,12 +955,6 @@
       flake = false;
       owner = "tumashu";
       repo = "posframe";
-      type = "github";
-    };
-    project-hercules = {
-      flake = false;
-      owner = "akirak";
-      repo = "project-hercules.el";
       type = "github";
     };
     promise = {
@@ -1264,6 +1246,12 @@
       flake = false;
       owner = "magit";
       repo = "with-editor";
+      type = "github";
+    };
+    workbox = {
+      flake = false;
+      owner = "akirak";
+      repo = "workbox.el";
       type = "github";
     };
     ws-butler = {
