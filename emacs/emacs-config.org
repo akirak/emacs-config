@@ -2513,16 +2513,19 @@ Time blocking with Org
              :format (lambda (x)
                        (pcase x
                          (`("Project" ,pr)
-                          (concat "Project " (project-root pr)))
+                          (thread-last
+                            (project-root pr)
+                            (string-remove-suffix "/")
+                            (file-name-nondirectory)
+                            (concat "project:")))
                          (`("Org" ,files)
-                          (concat "Org "
-                                  (mapconcat #'file-name-base
-                                             (seq-filter #'stringp files)
-                                             ",")))
+                          (mapconcat #'file-name-nondirectory
+                                     (seq-filter #'stringp files)
+                                     ","))
                          (`("Review" ,span)
                           (format "Review %s" span))
                          (`nil
-                          "(No process)")
+                          "✲")
                          (_
                           (prin1-to-string x)))))
             (:read
@@ -2530,7 +2533,7 @@ Time blocking with Org
              :format (lambda (x)
                        (if x
                            (org-make-tag-string x)
-                         "(No tags)")))))
+                         "✲")))))
 
     (:with-map help-map
       (:bind "<tab>" #'org-memento-next-action))
