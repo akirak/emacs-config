@@ -106,10 +106,15 @@
             "@contribution"
             nil))
      ((equal "~/org/" (project-root pr))
-      (list (list "~/org/meta.org")
-            "todo: "
-            nil
-            nil))
+      (if (eq major-mode 'org-memento-policy-mode)
+          (list (list "~/org/focus.org" "~/org/meta.org")
+                ""
+                nil
+                nil)
+        (list (list "~/org/meta.org")
+              "todo: "
+              nil
+              nil)))
      (t
       (list (akirak-org-dog-project-files)
             "todo: "
