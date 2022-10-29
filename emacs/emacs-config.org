@@ -2580,6 +2580,7 @@ Visualize an activity timeline
 #+begin_src emacs-lisp
   (setup (:package org-memento-timeline)
     (:set org-memento-group-depth 2)
+    (define-key help-map (kbd "M-p") #'org-memento-planner)
     (:bind "C-c ." #'akirak-org-edit-active-ts))
 #+end_src
 *** org-ml                                                 :library:
