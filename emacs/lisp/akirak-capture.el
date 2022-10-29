@@ -308,7 +308,8 @@
                                                   "Heading of the todo: ")
                          akirak-capture-template-options '(:todo "IDEATE" :tags "@ideate")
                          akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                   (akirak-capture-doct)))]
+                   (akirak-capture-doct)))
+   ("j" "Journal" akirak-capture-journal)]
 
   ["Information (input, events, etc.)"
    :class transient-subgroups
@@ -453,6 +454,37 @@
                                      akirak-capture-template-options)
                    ,@akirak-capture-doct-options
                    ,@(akirak-capture--target-plist target)))))))
+    (org-capture)))
+
+(transient-define-prefix akirak-capture-journal ()
+  ["Context"
+   :class transient-columns
+   :setup-children octopus-setup-context-file-subgroups]
+  ["Static files"
+   :class transient-row
+   :setup-children octopus-setup-static-targets]
+  ["Other locations"
+   :class transient-row
+   ("\\" octopus-this-file-suffix)
+   ("/" octopus-read-dog-file-suffix)]
+  (interactive)
+  (transient-setup 'akirak-capture-journal))
+
+(cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-journal))
+                                 target)
+  (let* ((file (cl-etypecase target
+                 (string target)
+                 (org-dog-file (oref target absolute))))
+         (org-capture-entry
+          (car (doct
+                `((""
+                   :keys ""
+                   :template ,(akirak-org-capture-make-entry-body
+                                (read-from-minibuffer "Title: ")
+                                :body "%a%?")
+                   :file ,file
+                   :function org-reverse-datetree-goto-date-in-file
+                   :clock-in t :clock-resume t))))))
     (org-capture)))
 
 (defvar akirak-capture-datetime nil)
