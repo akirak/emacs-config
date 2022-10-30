@@ -1782,7 +1782,7 @@ Outline-based notes management and organizer
       (:hook #'akirak-org-protected-mode)
 
       (:global "C-c o" #'org-open-at-point-global
-               "C-c t" #'akirak-org-dwim-on-clock)
+               "M-SPC" #'akirak-org-dwim-on-clock)
 
       (:when-loaded
         (add-to-list 'display-buffer-alist
