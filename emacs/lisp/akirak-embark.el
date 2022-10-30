@@ -117,7 +117,7 @@
   (add-to-list 'embark-keymap-alist
                '(org-sh-src-block . akirak-embark-org-sh-src-map))
   (add-to-list 'embark-keymap-alist
-               '(project-hercules-shell-command . akirak-embark-package-shell-command-map))
+               '(workbox-shell-command . akirak-embark-package-shell-command-map))
   (add-to-list 'embark-transformer-alist
                '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
   (add-to-list 'embark-keymap-alist

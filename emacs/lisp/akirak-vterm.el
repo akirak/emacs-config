@@ -3,7 +3,7 @@
 (require 'vterm)
 (require 'project)
 
-(defvar project-hercules-default-directory)
+(defvar workbox-default-directory)
 
 ;;;###autoload
 (defun akirak-vterm-run-in-project (string)
@@ -15,7 +15,7 @@
 ;;;###autoload
 (defun akirak-vterm-run-in-package-root (string)
   (interactive "sCommand: ")
-  (akirak-vterm--run-in-dir project-hercules-default-directory string))
+  (akirak-vterm--run-in-dir workbox-default-directory string))
 
 (defun akirak-vterm--run-in-dir (dir string)
   (let* ((default-directory dir)
