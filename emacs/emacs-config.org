@@ -2503,6 +2503,7 @@ Time blocking with Org
   (setup (:package org-memento)
     (:hook-into after-init-hook)
     (:set org-memento-idle-time 15
+          ;; org-memento-group-depth 2
           org-memento-group-taxonomy
           '((:read
              (lambda (element) (org-element-property :MEMENTO_CATEGORY element))
@@ -2535,8 +2536,11 @@ Time blocking with Org
                            (org-make-tag-string x)
                          "✲")))))
 
-    (:with-map help-map
-      (:bind "<tab>" #'org-memento-next-action))
+    (define-key help-map (kbd "M-p") #'org-memento-planner)
+    (define-key help-map (kbd "<tab>") #'org-memento-next-action)
+    (:with-feature org-memento-timeline
+      (:with-map org-memento-timeline-mode-map
+        (:bind "C-c ." #'akirak-org-edit-active-ts)))
 
     (add-hook 'org-memento-checkout-hook #'save-some-buffers)
     (add-hook 'org-memento-checkin-hook
@@ -2568,21 +2572,6 @@ Time blocking with Org
 #+end_src
 
 =org-memento-file= must be added to =org-agenda-files=. See [[*org-dog][org-dog]].
-**** org-memento-timeline
-:PROPERTIES:
-:CREATED_TIME: [2022-10-11 Tue 23:59]
-:END:
-#+begin_quote
-Visualize an activity timeline
-[[https://git.sr.ht/~akirak/org-memento]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package org-memento-timeline)
-    (:set org-memento-group-depth 2)
-    (define-key help-map (kbd "M-p") #'org-memento-planner)
-    (:bind "C-c ." #'akirak-org-edit-active-ts))
-#+end_src
 *** org-ml                                                 :library:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-17 Thu 20:26]
