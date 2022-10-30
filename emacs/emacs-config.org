@@ -2507,7 +2507,10 @@ Time blocking with Org
           org-memento-group-taxonomy
           '((:read
              (lambda (element) (org-element-property :MEMENTO_CATEGORY element))
-             :format (lambda (x) (or x "No category")))
+             :format (lambda (x) (or x "No category"))
+             :template (lambda (category)
+                         (when category
+                           `(:properties (("MEMENTO_CATEGORY" . ,category))))))
             (:read
              ;; Customize `oahu-process-alist'
              (lambda (_) (require 'oahu-memento) (oahu-memento-context))
@@ -2528,13 +2531,17 @@ Time blocking with Org
                          (`nil
                           "✲")
                          (_
-                          (prin1-to-string x)))))
+                          (prin1-to-string x))))
+             :template oahu-memento-template-arguments)
             (:read
              (lambda (element) (org-element-property :tags element))
              :format (lambda (x)
                        (if x
                            (org-make-tag-string x)
-                         "✲")))))
+                         "✲"))
+             :template (lambda (tags)
+                         (when tags
+                           `(:tags ,tags))))))
 
     (:with-feature org-memento-timeline
       (:with-map org-memento-timeline-mode-map
