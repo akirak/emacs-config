@@ -6156,6 +6156,11 @@ Like windmove, but swaps buffers while moving point
 :PROPERTIES:
 :CREATED_TIME: [2022-02-16 Wed 15:16]
 :END:
+#+begin_quote
+Compilation helpers
+[[https://github.com/akirak/workbox.el]]
+#+end_quote
+
 #+begin_src emacs-lisp
   (setup (:package workbox)
     (:global "C-c p" #'workbox-run-some-package-manager
@@ -6291,11 +6296,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 216 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
-| [[org-ql-search:tags:development][development]]         |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
+| [[org-ql-search:tags:development][development]]         |  11 |
 | [[org-ql-search:tags:VC][VC]]                  |   9 |
 | [[org-ql-search:tags:library][library]]             |   9 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -6303,7 +6308,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
-| [[org-ql-search:tags:keybindings][keybindings]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
@@ -6313,6 +6317,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major_mode][major_mode]]          |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
+| [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
@@ -6323,10 +6328,10 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:@extra][@extra]]              |   2 |
-| [[org-ql-search:tags:reference][reference]]           |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
+| [[org-ql-search:tags:reading][reading]]             |   2 |
 | [[org-ql-search:tags:syntax][syntax]]              |   2 |
 | [[org-ql-search:tags:tree_sitter][tree_sitter]]         |   2 |
 | [[org-ql-search:tags:configuration][configuration]]       |   2 |
@@ -6346,6 +6351,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
+| [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
@@ -6358,7 +6364,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:themes][themes]]              |   1 |
-| [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:Chinese][Chinese]]             |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
