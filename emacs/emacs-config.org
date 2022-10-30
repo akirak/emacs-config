@@ -2536,8 +2536,6 @@ Time blocking with Org
                            (org-make-tag-string x)
                          "✲")))))
 
-    (define-key help-map (kbd "M-p") #'org-memento-planner)
-    (define-key help-map (kbd "<tab>") #'org-memento-next-action)
     (:with-feature org-memento-timeline
       (:with-map org-memento-timeline-mode-map
         (:bind "C-c ." #'akirak-org-edit-active-ts)))

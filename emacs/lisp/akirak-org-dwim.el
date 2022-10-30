@@ -27,24 +27,30 @@
    ("o" "Display clocked entry" akirak-org-clock-open)
    ;; Save the current window configuration
    ]
-  [:description
-   akirak-org-dwim--memento-block-description
-   :if akirak-org-dwim--memento-current-block-p
-   :class transient-row
-   ("C-o" "Finish" org-memento-finish-block)
-   ("C-c" "Stop" org-memento-stop-block)]
-  [:description
-   akirak-org-dwim--memento-description
+  ["Org Memento"
    :if akirak-org-dwim--memento-p
-   :class transient-row
-   ("t" "Open the journal" org-memento-open-journal)
-   ("T" "Timeline" org-memento-timeline)
-   ("<tab>" "Start a block" org-memento-start-block
-    :if-not akirak-org-dwim--memento-current-block-p)
-   ("S" "Update status" org-memento-status)
-   ("C" "Add event" org-memento-add-event)
-   ("E" "Check out from the day" org-memento-checkout-from-day
-    :if-not akirak-org-dwim--memento-current-block-p)]
+   :class transient-subgroups
+   ;; Current block
+   [:description
+    akirak-org-dwim--memento-block-description
+    :if akirak-org-dwim--memento-current-block-p
+    :class transient-row
+    ("C-o" "Finish" org-memento-finish-block)
+    ("C-c" "Stop" org-memento-stop-block)]
+   ["Next block"
+    :if-not akirak-org-dwim--memento-current-block-p
+    ("<tab>" "Start a block" org-memento-start-block)]
+   [:description
+    akirak-org-dwim--memento-general-description
+    :class transient-row
+    ("t" "Open the journal" org-memento-open-journal)
+    ("M-SPC" "Timeline" org-memento-timeline)
+    ("M-f" "Planner" org-memento-planner)]
+   ["Admin"
+    :class transient-row
+    ("s" "Update status" org-memento-status)
+    ("C-e" "Check out from the day" org-memento-checkout-from-day
+     :if-not akirak-org-dwim--memento-current-block-p)]]
   (interactive)
   (transient-setup 'akirak-org-dwim-on-clock))
 
@@ -84,9 +90,14 @@
              (org-memento-status)
              t))))
 
-(defun akirak-org-dwim--memento-description ()
+(defun akirak-org-dwim--memento-general-description ()
+  (if org-memento-current-block
+      "Information"
+    (akirak-org-dwim--memento-day-description)))
+
+(defun akirak-org-dwim--memento-day-description ()
   (condition-case-unless-debug _
-      (concat "Memento: "
+      (concat "Today: "
               (if-let (day (org-memento-today-as-block))
                   (let* ((started (org-memento-started-time day))
                          (ending (org-memento-ending-time day)))
@@ -103,7 +114,7 @@
                                                           60)))
                                             "")))))
                 "(not checked in)"))
-    (error "(error: akirak-org-dwim--memento-description)")))
+    (error "(error: akirak-org-dwim--memento-day-description)")))
 
 (defun akirak-org-dwim--memento-current-block-p ()
   (bound-and-true-p org-memento-current-block))
