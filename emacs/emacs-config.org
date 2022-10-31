@@ -811,6 +811,7 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup help
+    (:set help-window-keep-selected t)
     (define-key help-map (kbd "C-h") nil))
 #+end_src
 *** hl-line                                                 :visual:
