@@ -1982,6 +1982,8 @@ Outline-based notes management and organizer
           org-agenda-sticky nil
           org-agenda-restore-windows-after-quit t
           org-agenda-window-setup 'current-window)
+    (:status personal
+      (:set org-agenda-start-on-weekday 1))
     (:local-set truncate-lines t)
     (:bind "C-c ." #'akirak-org-edit-active-ts)
 
