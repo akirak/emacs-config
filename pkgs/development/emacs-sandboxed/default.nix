@@ -14,6 +14,7 @@ in
   # From final (self)
   {bubblewrapGUI}: {
     name ? "emacs",
+    nativeCompileAheadDefault ? true,
     enableOpinionatedSettings ? true,
     extraFeatures ? [],
     extraInitFiles ? [],
@@ -29,7 +30,7 @@ in
     extraBwrapOptions ? [],
   }: let
     package = emacs-config.override {
-      inherit extraFeatures extraInitFiles withXwidgets;
+      inherit extraFeatures extraInitFiles withXwidgets nativeCompileAheadDefault;
     };
 
     initEl = writeText "init.el" ''

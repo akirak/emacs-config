@@ -27,6 +27,7 @@ with builtins; let
     extraFeatures,
     extraInitFiles,
     withXwidgets,
+    nativeCompileAheadDefault ? true,
   }:
     (emacsTwist {
       emacsPackage =
@@ -38,6 +39,7 @@ with builtins; let
             withXwidgets = true;
           })
         else emacsPackage;
+      inherit nativeCompileAheadDefault;
       initFiles =
         [
           (tangleOrgBabelFile "init.el" ./emacs-config.org {

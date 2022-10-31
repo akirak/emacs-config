@@ -276,6 +276,7 @@
         packages = {
           tryout-emacs = emacsSandboxed {
             name = "tryout-emacs";
+            nativeCompileAheadDefault = false;
             enableOpinionatedSettings = false;
             extraFeatures = [];
             protectHome = false;
