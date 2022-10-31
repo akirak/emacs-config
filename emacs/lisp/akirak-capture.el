@@ -302,6 +302,14 @@
                            akirak-capture-template-options nil
                            akirak-capture-doct-options '(:clock-in t :clock-resume t))
                      (akirak-capture-doct)))
+   ("!" "Troubleshooting" (lambda ()
+                            (interactive)
+                            (setq akirak-capture-headline (akirak-org-capture-read-string
+                                                           "Title: ")
+                                  akirak-capture-template-options (list :todo "UNDERWAY"
+                                                                        :tags "@troubleshooting")
+                                  akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                            (akirak-capture-doct)))
    ("i" "Ideate" (lambda ()
                    (interactive)
                    (setq akirak-capture-headline (akirak-org-capture-read-string
