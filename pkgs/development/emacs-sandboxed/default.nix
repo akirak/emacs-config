@@ -143,7 +143,6 @@ in
           ])
           [
             "/usr/share/fonts"
-            "/etc/fonts"
           ]
         ))
         ++ extraBwrapOptions
