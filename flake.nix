@@ -386,4 +386,9 @@
 
       # abc = 132;
     };
+
+  nixConfig = {
+    extra-substituters = "https://akirak.cachix.org";
+    extra-trusted-public-keys = "akirak.cachix.org-1:WJrEMdV1dYyALkOdp/kAECVZ6nAODY5URN05ITFHC+M=";
+  };
 }
