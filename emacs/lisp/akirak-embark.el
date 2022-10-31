@@ -110,6 +110,9 @@
             (akirak-embark-new-tab-action find-library
               (lambda () (file-name-base buffer-file-name))))
 
+(define-key embark-identifier-map "R" #'project-query-replace-regexp)
+(define-key embark-expression-map "R" #'project-query-replace-regexp)
+
 ;;;###autoload
 (defun akirak-embark-setup ()
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
