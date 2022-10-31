@@ -133,6 +133,18 @@ in
           ])
           extraDirsToTryBind
         ))
+        # Bind directories on non-NixOS systems
+        ++ (concatLists (
+          map (dir: [
+            "--ro-bind-try"
+            dir
+            dir
+          ])
+          [
+            "/usr/share/fonts"
+            "/etc/fonts"
+          ]
+        ))
         ++ extraBwrapOptions
         ++ (lib.optional shareNet "--share-net")
         ++ [
