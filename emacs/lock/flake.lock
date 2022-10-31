@@ -2141,15 +2141,16 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1667151398,
-        "narHash": "sha256-HXhbXIIcMORf00RLjta5YAJcTyxLfaJv49nALrY4gmI=",
+        "lastModified": 1667212531,
+        "narHash": "sha256-Uk0W/5k/k8z+upBvPifebG68+7hxojpLHlpUuWooA50=",
         "owner": "~akirak",
         "repo": "org-memento",
-        "rev": "46c257760a1b0b5335d765eeb602e0a11458b5db",
+        "rev": "493369c3b85290f28153e6b22767989b615be87b",
         "type": "sourcehut"
       },
       "original": {
         "owner": "~akirak",
+        "ref": "yield",
         "repo": "org-memento",
         "type": "sourcehut"
       }

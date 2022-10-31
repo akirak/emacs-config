@@ -809,6 +809,7 @@
     org-memento = {
       flake = false;
       owner = "~akirak";
+      ref = "yield";
       repo = "org-memento";
       type = "sourcehut";
     };
