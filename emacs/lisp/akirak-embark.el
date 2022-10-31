@@ -101,6 +101,11 @@
   ("g" org-goto-marker-or-bmk)
   ("l" org-store-link))
 
+(embark-define-keymap akirak-embark-grep-map
+  ""
+  ("d" deadgrep)
+  ("R" project-query-replace-regexp))
+
 (define-key embark-library-map "t"
             (akirak-embark-new-tab-action find-library
               (lambda () (file-name-base buffer-file-name))))
@@ -109,7 +114,10 @@
 (defun akirak-embark-setup ()
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
 
+  (add-to-list 'embark-keymap-alist
+               '(grep . akirak-embark-grep-map))
   (add-to-list 'embark-keymap-alist
                '(org-marker . akirak-embark-org-marker-map))
   (add-to-list 'embark-keymap-alist
@@ -121,7 +129,11 @@
   (add-to-list 'embark-transformer-alist
                '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
   (add-to-list 'embark-keymap-alist
-               '(nix-installable . akirak-embark-nix-installable-map)))
+               '(nix-installable . akirak-embark-nix-installable-map))
+
+  (add-to-list 'embark-pre-action-hooks
+               '(project-query-replace-regexp
+                 embark--beginning-of-target embark--unmark-target)))
 
 (defun akirak-embark-target-org-link-at-point ()
   (cond
@@ -161,6 +173,15 @@
            ,(string-trim (org-element-property :value element))
            . ,(cons (org-element-property :begin element)
                     (org-element-property :end element))))))))
+
+(defun akirak-embark-target-grep-input ()
+  ;; This depends on a private API of embark, so it may not work in
+  ;; the future.
+  (condition-case-unless-debug _
+      (when (and (minibufferp nil 'live)
+                 (memq embark--command '(consult-ripgrep)))
+        (cons 'grep (string-remove-prefix "#" (minibuffer-contents-no-properties))))
+    (error nil)))
 
 (defun akirak-embark-send-to-vterm (string)
   "Send STRING to an existing vterm session."
