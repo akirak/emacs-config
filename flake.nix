@@ -102,22 +102,7 @@
     importSite = src: resolveHomeModules (import src);
     site = importSite inputs.site;
 
-    makeHome = {
-      channels,
-      configuration,
-    }:
-      inputs.home-manager.lib.homeManagerConfiguration {
-        inherit (channels.nixpkgs) system;
-        inherit (site) username;
-        homeDirectory = "/home/${site.username}";
-        stateVersion = "21.11";
-        inherit configuration;
-        extraSpecialArgs = {
-          pkgs = channels.nixpkgs;
-        };
-        # Import custom home-manager modules (non-NixOSes)
-        extraModules = import ./home/modules/modules.nix;
-      };
+    inherit (inputs.home-manager.lib) homeManagerConfiguration;
 
     emacsOverlay = import ./emacs/overlay.nix {
       inherit inputs;
@@ -300,15 +285,20 @@
         };
 
         homeConfigurations = {
-          ${site.username + "@" + site.hostName} = makeHome {
-            inherit channels;
-            configuration = {
-              config,
-              pkgs,
-              ...
-            }: {
-              imports = site.homeModules;
-            };
+          ${site.username + "@" + site.hostName} = homeManagerConfiguration {
+            # unfree must be turned on for wpsoffice
+            pkgs = channels.unfree-unstable;
+            modules =
+              [
+                {
+                  home = {
+                    inherit (site) username;
+                    homeDirectory = "/home/${site.username}";
+                    stateVersion = "22.11";
+                  };
+                }
+              ]
+              ++ site.homeModules;
           };
         };
 
