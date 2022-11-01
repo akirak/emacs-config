@@ -171,10 +171,6 @@
           impermanence.nixosModules.impermanence
           ./nixos/profiles/defaults.nix
           home-manager.nixosModules.home-manager
-          {
-            # Import custom home-manager modules (NixOS)
-            config.home-manager.sharedModules = import ./home/modules/modules.nix;
-          }
         ];
       };
 

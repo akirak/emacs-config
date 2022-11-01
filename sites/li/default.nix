@@ -11,18 +11,6 @@
   extraHomeModules = [
     ({pkgs, ...}: {
       home.enableNixpkgsReleaseCheck = false;
-      programs.emacs-config-old.enable = true;
-
-      programs.emacs-unsafe = {
-        extraFeatures = [
-          "beancount"
-        ];
-
-        extraDirsToTryBind = [
-          "/git-annex"
-          "/assets"
-        ];
-      };
 
       programs.chromium = {
         enable = true;
