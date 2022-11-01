@@ -227,15 +227,6 @@
     };
   };
 
-  org-memento = _: _: {
-    origin = {
-      type = "sourcehut";
-      owner = "~akirak";
-      repo = "org-memento";
-      ref = "yield";
-    };
-  };
-
   # org = _: super: {
   #   origin =
   #     super.origin
