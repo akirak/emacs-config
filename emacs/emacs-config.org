@@ -2506,11 +2506,15 @@ Time blocking with Org
 
 #+begin_src emacs-lisp
   (setup (:package org-memento)
+    (:set org-memento-idle-time 15)
+    (define-key help-map (kbd "<tab>") #'org-memento-next-action)
+    (:with-feature org-memento-timeline
+      (:with-map org-memento-timeline-mode-map
+        (:bind "C-c ." #'akirak-org-edit-active-ts)))
+
     (:status personal
       (:hook-into after-init-hook)
-      (:set org-memento-idle-time 15
-            ;; org-memento-group-depth 2
-            org-memento-group-taxonomy
+      (:set org-memento-group-taxonomy
             '((:read
                (lambda (element) (org-element-property :MEMENTO_CATEGORY element))
                :format (lambda (x) (or x "No category"))
@@ -2548,12 +2552,6 @@ Time blocking with Org
                :template (lambda (tags)
                            (when tags
                              `(:tags ,tags))))))
-
-      (define-key help-map (kbd "<tab>") #'org-memento-next-action)
-
-      (:with-feature org-memento-timeline
-        (:with-map org-memento-timeline-mode-map
-          (:bind "C-c ." #'akirak-org-edit-active-ts)))
 
       (add-hook 'org-memento-checkout-hook #'save-some-buffers)
       (add-hook 'org-memento-checkin-hook
