@@ -739,6 +739,8 @@ The built-in =electric= package provides the following modes:
           view-read-only t
           auto-mode-case-fold nil)
 
+    (define-key ctl-x-x-map (kbd "R") #'rename-visited-file)
+
     (:status opinionated
       (:global "<f5>" #'revert-buffer)))
 #+end_src
@@ -976,6 +978,15 @@ Resources:
                         (goto-char (point-max))
                         (insert "/"))
                     (insert "/")))))
+#+end_src
+*** misc
+:PROPERTIES:
+:CREATED_TIME: [2022-11-02 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup misc
+    (:global "C-c d" #'duplicate-dwim))
 #+end_src
 *** mule
 :PROPERTIES:
