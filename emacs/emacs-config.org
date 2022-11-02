@@ -438,7 +438,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           indicate-empty-lines t
           ;; In some major modes, you should turn on truncate-lines.
           ;; They should be configured alongside individual modes.
-          truncate-lines nil))
+          truncate-lines nil)
+    (:with-mode shr-mode
+      (:local-set truncate-lines t)))
 #+end_src
 **** Line spacing
 #+begin_src emacs-lisp
@@ -1518,6 +1520,16 @@ Thus I will explicitly install this package rather than using the built-in versi
 #+begin_src emacs-lisp
   (setup woman
     (:global "<f1> M-m" #'woman))
+#+end_src
+*** word-wrap-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-11-03 Thu 05:14]
+:END:
+
+#+begin_src emacs-lisp
+  (setup word-wrap-mode
+    (:with-mode word-wrap-whitespace-mode
+      (:hook-into shr-mode)))
 #+end_src
 *** xdisp.c
 :PROPERTIES:
