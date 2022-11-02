@@ -53,7 +53,7 @@
                                 (buffer-file-name base)
                               buffer-file-name))
             (bound-and-true-p url-http-content-type)
-            (and (derived-mode-p 'org-mode)
+            (and (derived-mode-p 'org-mode 'org-memento-policy-mode)
                  (or (bound-and-true-p org-capture-mode)
                      (and (featurep 'org-dog)
                           (org-dog-buffer-object))))
