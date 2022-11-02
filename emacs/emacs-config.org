@@ -2278,6 +2278,9 @@ A programmable workflow layer for Org mode
     (with-eval-after-load 'org-id
       (org-dog-id-mode t))
     (add-hook 'org-mode-hook #'org-dog-file-mode-maybe)
+    (add-hook 'org-agenda-after-show-hook
+              (defun akirak/org-agenda-show-entry ()
+                (switch-to-buffer (org-dog-indirect-buffer))))
 
     (:global "M-g M-/" #'org-dog-find-file)
     (define-key help-map (kbd "M-o") #'org-dog-overview)
