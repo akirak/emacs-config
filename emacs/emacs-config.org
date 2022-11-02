@@ -1713,7 +1713,7 @@ Org-Memento integration for oahu
 
       (defun akirak/oahu-viewed-project ()
         (pcase oahu-last-view
-          (`("Project" ,pr . ,_)
+          (`(Project ,pr . ,_)
            pr)))
       (defun akirak/oahu-switch-to-viewed-project ()
         (interactive)
@@ -2531,18 +2531,18 @@ Time blocking with Org
                (lambda (_) (require 'oahu-memento) (oahu-memento-context))
                :format (lambda (x)
                          (pcase x
-                           (`("Project" ,pr)
+                           (`(Project ,pr)
                             (thread-last
                               (project-root pr)
                               (string-remove-suffix "/")
                               (file-name-nondirectory)
                               (concat "project:")))
-                           (`("Org" ,files)
+                           (`(Org ,files)
                             (mapconcat #'file-name-nondirectory
                                        (seq-filter #'stringp files)
                                        ","))
-                           (`("Review" ,span)
-                            (format "Review %s" span))
+                           (`(Review ,span)
+                            (format "review %s" span))
                            (`nil
                             "✲")
                            (_
