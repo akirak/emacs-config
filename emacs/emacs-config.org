@@ -5475,6 +5475,7 @@ Summon and dismiss buffers as popups
                                      "^\\*Warnings\\*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
+                                     "^\\*scratch\\*"
                                      "^\\*Scratch-Input-Method"
                                      "^ \\*Agenda Commands\\*"
                                      inferior-haskell-mode
@@ -5491,6 +5492,7 @@ Summon and dismiss buffers as popups
     (:bind "M-\"" #'popper-cycle
            "M-' M-'" #'popper-toggle-latest
            "M-' t" #'akirak-vterm-for-project
+           "M-' s" #'scratch-buffer
            "M-' c" (defun akirak/compilation-buffer ()
                      (interactive)
                      (akirak/popper-display-buffer "*compilation*"))))
