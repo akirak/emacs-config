@@ -1985,6 +1985,8 @@ Outline-based notes management and organizer
     (:status personal
       (:set org-agenda-start-on-weekday 1))
     (:local-set truncate-lines t)
+    ;; It is confusing to have `delete-other-windows' bound to o.
+    (:unbind "o")
     (:bind "C-c ." #'akirak-org-edit-active-ts)
 
     (define-key help-map (kbd "M-a")
