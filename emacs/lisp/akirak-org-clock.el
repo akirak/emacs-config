@@ -295,6 +295,10 @@ DAYS default to `akirak-org-clock-history-threshold'."
 
 ;;;; Open clocked entries
 
+(defcustom akirak-org-clock-open-hook '(org-show-entry)
+  ""
+  :type 'hook)
+
 ;;;###autoload
 (defun akirak-org-clock-open ()
   (interactive)
@@ -307,6 +311,8 @@ DAYS default to `akirak-org-clock-history-threshold'."
           (when (or (< (point) (point-min))
                     (> (point) (point-max)))
             (goto-char (point-min)))
+          (org-back-to-heading)
+          (run-hooks 'akirak-org-clock-open-hook)
           (pop-to-buffer (current-buffer)))))))
 
 (defun akirak-org-clock--capture-buffer (clock-marker)
