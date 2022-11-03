@@ -439,6 +439,21 @@
       (octopus--dispatch (oref transient-current-prefix command)
                          (akirak-capture--datetree-marker
                           (org-dog-resolve-relative-file "news.org")))))
+   ("q" "News queue"
+    (lambda ()
+      (interactive)
+      (let* ((url akirak-capture-current-url)
+             (heading (org-link-make-string url (orgabilize-document-title url)))
+             (jump-func #'akirak-capture--goto-backlog)
+             (org-capture-entry
+              (car (doct
+                    `((""
+                       :keys ""
+                       :template ,(akirak-org-capture-make-entry-body
+                                    heading :body t)
+                       :file ,(org-dog-resolve-relative-file "news.org")
+                       :function ,jump-func))))))
+        (org-capture))))
    ("@" octopus-clock-marker-suffix)
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
