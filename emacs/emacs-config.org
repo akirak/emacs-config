@@ -276,6 +276,12 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
       (which-key-add-keymap-based-replacements
         global-map (concat "<f12> " key) description)))
 #+end_src
+*** C-z as a prefix for session commands
+#+begin_src emacs-lisp
+  (define-prefix-command 'akirak/c-z-map)
+  ;; C-z is bound to suspend-frame by default, but I won't use it anyway
+  (global-set-key (kbd "C-z") 'akirak/c-z-map)
+#+end_src
 *** Key translation map
 #+begin_src emacs-lisp
   (setup key-translation-map
@@ -805,9 +811,7 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup frame
     (blink-cursor-mode -1)
-    (set-frame-parameter nil 'alpha '(98 . 96))
-    ;; suspend-frame is annoying, so I will disable it
-    (:global "C-z" #'ignore))
+    (set-frame-parameter nil 'alpha '(98 . 96)))
 #+end_src
 *** help
 :PROPERTIES:
@@ -2536,13 +2540,19 @@ Time blocking with Org
 #+begin_src emacs-lisp
   (setup (:package org-memento)
     (:set org-memento-idle-time 15)
-    (define-key help-map (kbd "<tab>") #'org-memento-next-action)
     (:with-feature org-memento-timeline
       (:with-map org-memento-timeline-mode-map
         (:bind "C-c ." #'akirak-org-edit-active-ts)))
 
     (:status personal
       (:hook-into after-init-hook)
+
+      (define-key help-map (kbd "<tab>") #'org-memento-next-action)
+      (define-key akirak/c-z-map "o" #'org-memento-open-journal)
+      (define-key akirak/c-z-map "t" #'org-memento-timeline)
+      (define-key akirak/c-z-map "p" #'org-memento-planner)
+      (define-key akirak/c-z-map (kbd "C-z") #'org-memento-status)
+
       (:set org-memento-group-taxonomy
             '((:read
                (lambda (element) (org-element-property :MEMENTO_CATEGORY element))
