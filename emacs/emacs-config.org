@@ -2592,6 +2592,11 @@ Time blocking with Org
                            (when tags
                              `(:tags ,tags))))))
 
+      (add-hook 'org-memento-open-journal-hook
+                (defun akirak/org-memento-goto-entry-end ()
+                  (goto-char (org-entry-end-position)))
+                90)
+
       (add-hook 'org-memento-checkout-hook #'save-some-buffers)
       (add-hook 'org-memento-checkin-hook
                 (defun akirak/org-memento-insert-clocktable ()
