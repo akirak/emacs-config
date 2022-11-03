@@ -27,36 +27,7 @@
    ("o" "Display clocked entry" akirak-org-clock-open)
    ;; Save the current window configuration
    ]
-  ["Org Memento"
-   :if akirak-org-dwim--memento-p
-   :class transient-subgroups
-   ;; Current block
-   [:description
-    akirak-org-dwim--memento-block-description
-    :if akirak-org-dwim--memento-current-block-p
-    :class transient-row
-    ("C-o" "Finish" org-memento-finish-block)
-    ("C-c" "Stop" org-memento-stop-block)]
-   ["Next block"
-    :if-not akirak-org-dwim--memento-current-block-p
-    ("<tab>" "Start a block" org-memento-start-block)]
-   [:description
-    akirak-org-dwim--memento-general-description
-    :class transient-row
-    ("t" "Open the journal" org-memento-open-journal)
-    ("M-SPC" "Timeline" org-memento-timeline)
-    ("M-f" "Planner" org-memento-planner)]
-   ["Admin"
-    :class transient-row
-    ("s" "Update status" org-memento-status)
-    ("C-e" "Check out from the day" org-memento-checkout-from-day
-     :if-not akirak-org-dwim--memento-current-block-p)]]
   (interactive)
-  (transient-setup 'akirak-org-dwim-on-clock))
-
-(cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-org-dwim-on-clock))
-                                 file)
-  (setq akirak-org-dwim-selected-files file)
   (transient-setup 'akirak-org-dwim-on-clock))
 
 ;;;; Descriptions and predicates
@@ -69,97 +40,6 @@
               (buffer-name)
               (substring-no-properties
                (org-format-outline-path (butlast olp)))))))
-
-(defun akirak-org-dwim--files-p ()
-  (and akirak-org-dwim-selected-files
-       (not (org-clocking-p))))
-
-(defun akirak-org-dwim--files-description ()
-  (let ((files (thread-last
-                 (akirak-org-dwim--selected-files)
-                 (mapcar #'file-name-base))))
-    (truncate-string-to-width
-     (concat "Selected files: " (string-join files " "))
-     (frame-width)
-     nil nil (truncate-string-ellipsis))))
-
-(defun akirak-org-dwim--memento-p ()
-  (and (require 'org-memento nil t)
-       (or org-memento-status-data
-           (progn
-             (org-memento-status)
-             t))))
-
-(defun akirak-org-dwim--memento-general-description ()
-  (if org-memento-current-block
-      "Information"
-    (akirak-org-dwim--memento-day-description)))
-
-(defun akirak-org-dwim--memento-day-description ()
-  (condition-case-unless-debug _
-      (concat "Today: "
-              (if-let (day (org-memento-today-as-block))
-                  (let* ((started (org-memento-started-time day))
-                         (ending (org-memento-ending-time day)))
-                    (format-spec "%d %s%e%r"
-                                 `((?d . ,(format-time-string "%F (%a)"))
-                                   (?s . ,(format-time-string "%R" started))
-                                   (?e . ,(if ending
-                                              (format-time-string "-%R" ending)
-                                            ""))
-                                   (?r . ,(if ending
-                                              (format " (remaining %s)"
-                                                      (org-duration-from-minutes
-                                                       (/ (- ending (float-time))
-                                                          60)))
-                                            "")))))
-                "(not checked in)"))
-    (error "(error: akirak-org-dwim--memento-day-description)")))
-
-(defun akirak-org-dwim--memento-current-block-p ()
-  (bound-and-true-p org-memento-current-block))
-
-(defun akirak-org-dwim--memento-block-description ()
-  (condition-case-unless-debug _
-      (let ((block (org-memento-with-current-block
-                     (org-memento-block-entry))))
-        (format "Memento block: %s%s%s%s"
-                (if-let (todo (org-element-property :TODO
-                                                    (org-memento-headline-element block)))
-                    (concat todo " ")
-                  "")
-                org-memento-current-block
-                (if-let (category (org-element-property :memento_category
-                                                        (org-memento-headline-element block)))
-                    (format " (%s)" category)
-                  "")
-                (let* ((started (org-memento-started-time block))
-                       (ending (org-memento-ending-time block))
-                       (remaining (when ending
-                                    (/ (- ending (float-time))
-                                       60))))
-                  (format-spec " %s%e%r"
-                               `((?s . ,(format-time-string "%R" started))
-                                 (?e . ,(if ending
-                                            (format-time-string "-%R" ending)
-                                          ""))
-                                 (?r . ,(cond
-                                         ((null remaining)
-                                          "")
-                                         ((> remaining 0)
-                                          (format " (remaining %s)"
-                                                  (org-duration-from-minutes remaining)))
-                                         ((<= remaining 0)
-                                          (propertize (format " (%d minutes exceeding)"
-                                                              (- remaining))
-                                                      'face
-                                                      (if (> remaining 0)
-                                                          'font-lock-warning-face
-                                                        'default))))))))))
-    (error "(error: akirak-org-dwim--memento-block-description)")))
-
-(defun akirak-org-dwim--memento-status-description ()
-  (format "No current block"))
 
 ;;;; Suffix commands
 
