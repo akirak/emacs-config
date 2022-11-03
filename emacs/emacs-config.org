@@ -3039,7 +3039,7 @@ This is a collection of extra utilities for various packages.
 #+begin_src emacs-lisp
   (setup akirak-capture
     (:global "C-c c" #'akirak-capture
-             "C-c C" #'akirak-capture-text))
+             "C-c m" #'akirak-capture-text))
 #+end_src
 **** akirak-comment
 #+begin_src emacs-lisp
