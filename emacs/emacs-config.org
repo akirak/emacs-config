@@ -2548,6 +2548,7 @@ Time blocking with Org
       (:hook-into after-init-hook)
 
       (define-key help-map (kbd "<tab>") #'org-memento-next-action)
+      (define-key akirak/c-z-map "i" #'org-memento-policy-index)
       (define-key akirak/c-z-map "o" #'org-memento-open-journal)
       (define-key akirak/c-z-map "t" #'org-memento-timeline)
       (define-key akirak/c-z-map "p" #'org-memento-planner)
