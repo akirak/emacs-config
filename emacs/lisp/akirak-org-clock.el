@@ -34,7 +34,9 @@
                      "/.git/")))
 
 (defconst akirak-org-clock-org-file-name-whitelist
-  (concat "^" (regexp-quote (expand-file-name "~/work2/"))))
+  (rx-to-string `(and bol
+                      (or ,(expand-file-name "~/work2/")
+                          (and ,org-memento-file eol)))))
 
 (defconst akirak-org-clock-buffer-name-whitelist
   ;; Don't block saving buffers created using `with-temp-buffer'
