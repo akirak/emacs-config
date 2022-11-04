@@ -710,6 +710,8 @@ not work in the future when forge changes the output."
                                  (concat "#+end_" (car (split-string body-type)))
                                  "%a"))
                   akirak-capture-doct-options nil))
+        (when (akirak-slash-run string)
+          (throw 'capture-dispatched t))
         (setq akirak-capture-headline string
               akirak-capture-template-options nil
               akirak-capture-doct-options nil))

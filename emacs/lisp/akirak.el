@@ -31,5 +31,27 @@
 
 ;;; Code:
 
+(defcustom akirak-slash-commands
+  '(("start" . org-memento-start-quick-event)
+    ("today" . org-memento-add-quick-event))
+  ""
+  :type '(alist :key-type string
+                :value-type function))
+
+;;;###autoload
+(defun akirak-slash-run (string)
+  (save-match-data
+    (when (string-match (rx bol "/" (group (+ (any "-" word)))
+                            (?  (+ blank) (group (+ anything)))
+                            eol)
+                        string)
+      (let ((command (match-string 1 string))
+            (rest (match-string 2 string)))
+        (funcall (or (cdr (assoc command akirak-slash-commands))
+                     (error "%s is not found in akirak-slash-commands"
+                            command))
+                 rest)
+        t))))
+
 (provide 'akirak)
 ;;; akirak.el ends here
