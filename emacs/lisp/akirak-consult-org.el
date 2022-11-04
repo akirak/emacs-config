@@ -13,11 +13,12 @@
     ('(4) (akirak-consult-org-clock-history))
     ('(16) (akirak-consult-org-clock-history t))))
 
+;;;###autoload
 (defun akirak-consult-org-clock-history (&optional rebuild)
   "Clock in to an entry in the clock history."
   ;; This will trigger loading of a desired set of Org files through
   ;; `eval-after-load'.
-  (interactive)
+  (interactive "P")
   (require 'org-agenda)
   (when (or rebuild (not org-clock-history))
     (akirak-org-clock-rebuild-history))
