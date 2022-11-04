@@ -23,6 +23,13 @@ in
       xauthority_args=""
     fi
 
+    if [[ ''${DBUS_SESSION_BUS_ADDRESS} =~ ^unix:path=(.+),guid= ]]
+    then
+      dbus_args="--ro-bind ''${BASH_REMATCH[1]} ''${BASH_REMATCH[1]}"
+    else
+      dbus_args=""
+    fi
+
     set -x
     ( exec ${bubblewrap}/bin/bwrap \
         --proc /proc \
@@ -45,6 +52,7 @@ in
         --setenv DISPLAY ":0" \
         --ro-bind /tmp/.X11-unix/X0 /tmp/.X11-unix/X0 \
         ''${xauthority_args} \
+        ''${dbus_args} \
         --unshare-all \
         ${quoteShellArgs arguments} "$@"
       )
