@@ -8,6 +8,13 @@
  activities."
   :type 'number)
 
+(defmacro akirak-org-clock--finalize-capture (&rest progn)
+  `(let ((capture-buffer (akirak-org-clock--capture-buffer org-clock-marker)))
+     ,@progn
+     (when capture-buffer
+       (with-current-buffer capture-buffer
+         (org-capture-finalize)))))
+
 ;;;; Global mode to ensure clocking
 
 (defvar akirak-org-clock-snooze-until nil)
@@ -416,6 +423,32 @@ DAYS default to `akirak-org-clock-history-threshold'."
                   (akirak-org-avy-heading t)
                   (point-marker)))))
     (akirak-org-clock-transfer-entries dest)))
+
+;;;; Clock out commands
+
+;;;###autoload
+(defun akirak-org-clock-out ()
+  (interactive)
+  (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
+      (with-current-buffer capture-buffer
+        (org-capture-finalize))
+    (org-clock-out)))
+
+;;;###autoload
+(defun akirak-org-clock-done ()
+  (interactive)
+  (org-with-clock-position (list org-clock-marker)
+    (akirak-org-clock--finalize-capture
+     (org-todo 'done))))
+
+;;;###autoload
+(defun akirak-org-clock-set-review ()
+  (interactive)
+  (org-with-clock-position (list org-clock-marker)
+    (akirak-org-clock--finalize-capture
+     ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
+     ;; will be tirggered when you switch to the state.
+     (org-todo "REVIEW"))))
 
 (provide 'akirak-org-clock)
 ;;; akirak-org-clock.el ends here
