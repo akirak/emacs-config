@@ -741,6 +741,12 @@
       repo = "orderless";
       type = "github";
     };
+    org = {
+      flake = false;
+      ref = "main";
+      type = "git";
+      url = "git://git.sv.gnu.org/emacs/org-mode.git";
+    };
     org-autolist = {
       flake = false;
       owner = "calvinwyoung";

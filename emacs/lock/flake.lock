@@ -1973,6 +1973,23 @@
         "type": "github"
       }
     },
+    "org": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1667464056,
+        "narHash": "sha256-cPrxDyHc9PJPerPPzPfHCv/3VEdpCvJY0UzQ3hWNOYY=",
+        "ref": "main",
+        "rev": "bd468136dd1a2172302b3ec980c5e6b6e327d683",
+        "revCount": 25731,
+        "type": "git",
+        "url": "git://git.sv.gnu.org/emacs/org-mode.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "git://git.sv.gnu.org/emacs/org-mode.git"
+      }
+    },
     "org-autolist": {
       "flake": false,
       "locked": {

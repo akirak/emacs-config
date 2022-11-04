@@ -236,14 +236,13 @@
     };
   };
 
-  # org = _: super: {
-  #   origin =
-  #     super.origin
-  #     // {
-  #       # Release 9.5.4
-  #       rev = "a49c73f16dfaec0168f749cfbc34704429cd3030";
-  #     };
-  # };
+  org = _: super: {
+    origin =
+      super.origin
+      // {
+        ref = "main";
+      };
+  };
 
   org-make-toc = _: _: {
     origin = {
