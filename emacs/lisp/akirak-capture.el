@@ -828,7 +828,9 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
       (lambda ()
         (abbrev-mode t)
         (corfu-mode t))
-    (read-string prompt)))
+    (read-from-minibuffer prompt nil nil nil nil
+                          (thing-at-point 'word t)
+                          'inherit-input-method)))
 
 (defun akirak-capture-goto-olp-subtree (file &rest olp)
   "Go to an entry inside a subtree."
