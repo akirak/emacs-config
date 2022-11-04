@@ -227,6 +227,15 @@
     };
   };
 
+  org-memento = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-memento";
+      ref = "develop";
+    };
+  };
+
   # org = _: super: {
   #   origin =
   #     super.origin
