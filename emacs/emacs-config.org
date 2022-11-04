@@ -1712,8 +1712,8 @@ Manage Org searches
 #+begin_src emacs-lisp
   (setup (:package oahu)
     (:status personal
-      (:global "<menu>" #'oahu-view
-               "<S-menu>" #'oahu-alternative-view)))
+      (define-key akirak/c-z-map (kbd "SPC") #'oahu-view)
+      (:global "<S-menu>" #'oahu-alternative-view)))
 #+end_src
 **** oahu-memento
 :PROPERTIES:
@@ -2559,11 +2559,14 @@ Time blocking with Org
       (:hook-into after-init-hook)
 
       (define-key help-map (kbd "<tab>") #'org-memento-next-action)
+      (define-key akirak/c-z-map (kbd "<tab>") #'org-memento-next-action)
       (define-key akirak/c-z-map "i" #'org-memento-policy-index)
-      (define-key akirak/c-z-map "o" #'org-memento-open-journal)
+      (define-key akirak/c-z-map "j" #'org-memento-open-journal)
       (define-key akirak/c-z-map "t" #'org-memento-timeline)
       (define-key akirak/c-z-map "p" #'org-memento-planner)
       (define-key akirak/c-z-map (kbd "C-z") #'org-memento-status)
+      (define-key akirak/c-z-map (kbd "C-o") #'org-memento-finish-block)
+      (put 'org-memento-finish-block 'repeat-map 'akirak/c-z-map)
 
       (:set org-memento-group-taxonomy
             '((:read
