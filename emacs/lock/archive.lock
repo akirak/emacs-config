@@ -58,5 +58,20 @@
     },
     "packageRequires": {},
     "version": "1.0.6"
+  },
+  "valign": {
+    "archive": {
+      "narHash": "sha256-TuqDeg9WrcM4uKv4YG+SOcjubI9CPjSvHJY6YsXPIGw=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/valign-3.1.1.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "emacs": "26.0"
+    },
+    "version": "3.1.1"
   }
 }
