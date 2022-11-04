@@ -814,9 +814,10 @@
     };
     org-memento = {
       flake = false;
-      owner = "~akirak";
+      owner = "akirak";
+      ref = "develop";
       repo = "org-memento";
-      type = "sourcehut";
+      type = "github";
     };
     org-ml = {
       flake = false;
@@ -865,12 +866,6 @@
       flake = false;
       owner = "akirak";
       repo = "org-volume";
-      type = "github";
-    };
-    org-web-tools = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "org-web-tools";
       type = "github";
     };
     orgabilize = {
@@ -933,18 +928,6 @@
       repo = "plz.el";
       type = "github";
     };
-    pocket-lib = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "pocket-lib.el";
-      type = "github";
-    };
-    pocket-reader = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "pocket-reader.el";
-      type = "github";
-    };
     popper = {
       flake = false;
       owner = "karthink";
@@ -985,12 +968,6 @@
       flake = false;
       owner = "Fanael";
       repo = "rainbow-delimiters";
-      type = "github";
-    };
-    rainbow-identifiers = {
-      flake = false;
-      owner = "Fanael";
-      repo = "rainbow-identifiers";
       type = "github";
     };
     reformatter = {
