@@ -691,31 +691,27 @@ not work in the future when forge changes the output."
   "Capture a new entry with the selected region as the headline."
   (interactive (list (akirak-capture-read-string "Input: ")
                      current-prefix-arg))
-  (let ((string (string-trim string)))
-    (catch 'capture-dispatched
-      (if arg
-          (let ((body-type (pcase (org--insert-structure-template-mks)
-                             (`("\t" . ,_) (akirak-capture-read-string "Structure type: "))
-                             (`(,_ ,choice . ,_) choice))))
-            (setq akirak-capture-headline "%^{Title}"
-                  akirak-capture-template-options
-                  `(:body ,(list "%?"
-                                 (concat "#+begin_" body-type
-                                         (when (equal body-type "src")
-                                           (thread-last
-                                             (symbol-name major-mode)
-                                             (string-remove-suffix "-mode")
-                                             (concat " "))))
-                                 string
-                                 (concat "#+end_" (car (split-string body-type)))
-                                 "%a"))
-                  akirak-capture-doct-options nil))
-        (when (akirak-slash-run string)
-          (throw 'capture-dispatched t))
-        (setq akirak-capture-headline string
-              akirak-capture-template-options nil
+  (if arg
+      (let ((body-type (pcase (org--insert-structure-template-mks)
+                         (`("\t" . ,_) (akirak-capture-read-string "Structure type: "))
+                         (`(,_ ,choice . ,_) choice))))
+        (setq akirak-capture-headline "%^{Title}"
+              akirak-capture-template-options
+              `(:body ,(list "%?"
+                             (concat "#+begin_" body-type
+                                     (when (equal body-type "src")
+                                       (thread-last
+                                         (symbol-name major-mode)
+                                         (string-remove-suffix "-mode")
+                                         (concat " "))))
+                             string
+                             (concat "#+end_" (car (split-string body-type)))
+                             "%a"))
               akirak-capture-doct-options nil))
-      (akirak-capture-doct))))
+    (setq akirak-capture-headline string
+          akirak-capture-template-options nil
+          akirak-capture-doct-options nil))
+  (akirak-capture-doct))
 
 (defun akirak-capture-command-snippet ()
   (interactive)
