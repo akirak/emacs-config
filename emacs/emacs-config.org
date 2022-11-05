@@ -3057,8 +3057,7 @@ This is a collection of extra utilities for various packages.
 **** akirak-capture
 #+begin_src emacs-lisp
   (setup akirak-capture
-    (:global "C-c c" #'akirak-capture
-             "C-c m" #'akirak-capture-text))
+    (:global "C-c c" #'akirak-capture))
 #+end_src
 **** akirak-comment
 #+begin_src emacs-lisp
@@ -3164,6 +3163,16 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-snippet
     (define-key ctl-x-r-map "/" #'akirak-snippet-search))
+#+end_src
+**** akirak-unknown
+#+begin_src emacs-lisp
+  (setup akirak-unknown
+    (:global "C-c m" #'akirak-unknown)
+    (:when-loaded
+      (akirak-unknown-setup-embark))
+    (:with-map akirak-unknown-text-map
+      (:bind "s" #'org-memento-start-quick-event)
+      (:bind "a" #'org-memento-add-quick-event)))
 #+end_src
 **** akirak-url                                         :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
