@@ -198,6 +198,26 @@
                                       (org-make-tag-string initial)
                                       history)))
 
+(transient-define-infix akirak-capture-scheduled-infix ()
+  :class 'akirak-capture-plist-option
+  :description "Scheduled"
+  :variable 'akirak-capture-template-options
+  :prop :scheduled
+  :reader (lambda (_prompt initial _history)
+            (format-time-string (org-time-stamp-format)
+                                (org-read-date nil t nil nil nil nil
+                                               initial))))
+
+(transient-define-infix akirak-capture-deadline-infix ()
+  :class 'akirak-capture-plist-option
+  :description "Deadline"
+  :variable 'akirak-capture-template-options
+  :prop :deadline
+  :reader (lambda (_prompt initial _history)
+            (format-time-string (org-time-stamp-format)
+                                (org-read-date nil t nil nil nil nil
+                                               initial))))
+
 (transient-define-infix akirak-capture-doct-clock-in ()
   :class 'akirak-capture-doct-boolean-option
   :description "Clock-in"
@@ -230,6 +250,8 @@
    :class transient-row
    ("-t" akirak-capture-todo-infix)
    ("-g" akirak-capture-tags-infix)
+   ("-s" akirak-capture-scheduled-infix)
+   ("-d" akirak-capture-deadline-infix)
    ("-i" akirak-capture-doct-clock-in)
    ("-r" akirak-capture-doct-clock-resume)]
   ["Context"
