@@ -92,47 +92,56 @@ values:
 
  - t, which means the cursor is moved to the point."
   (declare (indent 0))
-  (concat "* " (if todo
-                   (concat todo " ")
-                 "")
-          (pcase headline
-            ((pred stringp) headline)
-            (`(url ,url) (org-link-make-string url (orgabilize-document-title url)))
-            (`prompt "%^{headline}")
-            (`t "%?")
-            (_ (error "Invalid headline value: %s" headline)))
-          (pcase tags
-            (`nil "")
-            ((pred stringp) (format " :%s:" tags))
-            ((pred listp) (format " :%s:" (string-join tags ":")))
-            (`all " %^G")
-            (`t " %^g"))
-          "\n"
-          (mapconcat (pcase-lambda (`(,prefix ,time ,long))
-                       (when time
-                         (concat prefix
-                                 (pcase time
-                                   ;; Org timestamp
-                                   ((pred stringp)
-                                    time)
-                                   (`(timestamp . ,_)
-                                    (org-element-property :raw-value time))
-                                   (_
-                                    (org-format-time-string
-                                     (org-time-stamp-format long)
-                                     time))))))
-                     `((nil ,active-ts long)
-                       ("SCHEDULED: " ,scheduled nil)
-                       ("DEADLINE: " ,deadline nil)))
-          (or drawer akirak-org-capture-default-drawer "")
-          (pcase body
-            (`nil "")
-            ((pred stringp) body)
-            ((pred listp) (string-join body "\n"))
-            (`t (if (or (eq headline t)
-                        (equal headline "%?"))
-                    ""
-                  "%?")))))
+  (cl-flet
+      ((format-ts (time long)
+         (pcase time
+           ;; Org timestamp
+           ((pred stringp)
+            time)
+           (`(timestamp . ,_)
+            (org-element-property :raw-value time))
+           (_
+            (org-format-time-string
+             (org-time-stamp-format long)
+             time))))
+       (make-planning (strings)
+         (if strings
+             (concat (string-join strings " ") "\n")
+           "")))
+    (concat "* " (if todo
+                     (concat todo " ")
+                   "")
+            (pcase headline
+              ((pred stringp) headline)
+              (`(url ,url) (org-link-make-string url (orgabilize-document-title url)))
+              (`prompt "%^{headline}")
+              (`t "%?")
+              (_ (error "Invalid headline value: %s" headline)))
+            (pcase tags
+              (`nil "")
+              ((pred stringp) (format " :%s:" tags))
+              ((pred listp) (format " :%s:" (string-join tags ":")))
+              (`all " %^G")
+              (`t " %^g"))
+            "\n"
+            (thread-first
+              (delq nil (list (when scheduled
+                                (concat "SCHEDULED: " (format-ts scheduled nil)))
+                              (when deadline
+                                (concat "DEADLINE: " (format-ts deadline nil)))))
+              (make-planning))
+            (or drawer akirak-org-capture-default-drawer "")
+            (if active-ts
+                (concat (format-ts active-ts t) "\n")
+              "")
+            (pcase body
+              (`nil "")
+              ((pred stringp) body)
+              ((pred listp) (string-join body "\n"))
+              (`t (if (or (eq headline t)
+                          (equal headline "%?"))
+                      ""
+                    "%?"))))))
 
 ;;;###autoload
 (defun akirak-org-capture-add-templates (templates)
