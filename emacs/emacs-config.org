@@ -2157,6 +2157,8 @@ Outline-based notes management and organizer
   (setup akirak-org-clock
     (:hook-into emacs-startup-hook)
 
+    (:global "M-g M-j" #'akirak-org-clock-goto)
+
     (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
     (define-key akirak/c-z-map "I" #'akirak-org-clock-in-to-project)
 
