@@ -310,22 +310,30 @@ DAYS default to `akirak-org-clock-history-threshold'."
   ""
   :type 'hook)
 
+(defmacro akirak-org-clock-require-clock (&rest body)
+  (declare (indent 0))
+  `(if (org-clocking-p)
+       (progn
+         ,@body)
+     (user-error "There is no running clock")))
+
 ;;;###autoload
 (defun akirak-org-clock-open ()
   (interactive)
-  (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
-      (pop-to-buffer capture-buffer)
-    (with-current-buffer (marker-buffer org-clock-marker)
-      (let ((initial-position (point)))
-        (goto-char org-clock-marker)
-        (with-current-buffer (org-dog-indirect-buffer)
-          (when (or (< (point) (point-min))
-                    (> (point) (point-max)))
-            (goto-char (point-min)))
-          (pop-to-buffer (current-buffer))
-          (when org-dog-new-indirect-buffer-p
-            (org-back-to-heading)
-            (run-hooks 'akirak-org-clock-open-hook)))))))
+  (akirak-org-clock-require-clock
+    (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
+        (pop-to-buffer capture-buffer)
+      (with-current-buffer (marker-buffer org-clock-marker)
+        (let ((initial-position (point)))
+          (goto-char org-clock-marker)
+          (with-current-buffer (org-dog-indirect-buffer)
+            (when (or (< (point) (point-min))
+                      (> (point) (point-max)))
+              (goto-char (point-min)))
+            (pop-to-buffer (current-buffer))
+            (when org-dog-new-indirect-buffer-p
+              (org-back-to-heading)
+              (run-hooks 'akirak-org-clock-open-hook))))))))
 
 (defun akirak-org-clock--capture-buffer (clock-marker)
   "Return a corresponding capture buffer for the clock marker."
@@ -432,26 +440,29 @@ DAYS default to `akirak-org-clock-history-threshold'."
 ;;;###autoload
 (defun akirak-org-clock-out ()
   (interactive)
-  (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
-      (with-current-buffer capture-buffer
-        (org-capture-finalize))
-    (org-clock-out)))
+  (akirak-org-clock-require-clock
+    (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
+        (with-current-buffer capture-buffer
+          (org-capture-finalize))
+      (org-clock-out))))
 
 ;;;###autoload
 (defun akirak-org-clock-done ()
   (interactive)
-  (org-with-clock-position (list org-clock-marker)
-    (akirak-org-clock--finalize-capture
-     (org-todo 'done))))
+  (akirak-org-clock-require-clock
+    (org-with-clock-position (list org-clock-marker)
+      (akirak-org-clock--finalize-capture
+       (org-todo 'done)))))
 
 ;;;###autoload
 (defun akirak-org-clock-set-review ()
   (interactive)
-  (org-with-clock-position (list org-clock-marker)
-    (akirak-org-clock--finalize-capture
-     ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
-     ;; will be tirggered when you switch to the state.
-     (org-todo "REVIEW"))))
+  (akirak-org-clock-require-clock
+    (org-with-clock-position (list org-clock-marker)
+      (akirak-org-clock--finalize-capture
+       ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
+       ;; will be tirggered when you switch to the state.
+       (org-todo "REVIEW")))))
 
 (provide 'akirak-org-clock)
 ;;; akirak-org-clock.el ends here
