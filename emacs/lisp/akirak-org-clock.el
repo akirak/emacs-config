@@ -47,7 +47,8 @@
       (setq akirak-org-clock-org-file-name-whitelist
             (rx-to-string `(and bol
                                 (or ,(expand-file-name "~/work2/")
-                                    (and ,org-memento-file eol)))))))
+                                    (and ,(expand-file-name org-memento-file)
+                                         eol)))))))
 
 (defconst akirak-org-clock-buffer-name-whitelist
   ;; Don't block saving buffers created using `with-temp-buffer'
