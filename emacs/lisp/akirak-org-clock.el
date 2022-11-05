@@ -55,20 +55,21 @@
        (< (float-time) akirak-org-clock-snooze-until)))
 
 (defadvice save-buffer (around akirak-org-clock activate)
-  (when (or (string-match-p akirak-org-clock-buffer-name-whitelist
-                            (buffer-name))
-            (string-match-p akirak-org-clock-file-name-whitelist
-                            (if-let (base (buffer-base-buffer))
-                                (buffer-file-name base)
-                              buffer-file-name))
-            (bound-and-true-p url-http-content-type)
-            (and (derived-mode-p 'org-mode 'org-memento-policy-mode)
-                 (or (bound-and-true-p org-capture-mode)
-                     (and (featurep 'org-dog)
-                          (org-dog-buffer-object))))
-            (akirak-org-clock--snoozed-p)
-            (akirak-org-clock--check-before-save))
-    ad-do-it))
+  (when-let (filename (if-let (base (buffer-base-buffer))
+                          (buffer-file-name base)
+                        buffer-file-name))
+    (when (or (string-match-p akirak-org-clock-buffer-name-whitelist
+                              (buffer-name))
+              (string-match-p akirak-org-clock-file-name-whitelist
+                              filename)
+              (bound-and-true-p url-http-content-type)
+              (and (derived-mode-p 'org-mode 'org-memento-policy-mode)
+                   (or (bound-and-true-p org-capture-mode)
+                       (and (featurep 'org-dog)
+                            (org-dog-buffer-object))))
+              (akirak-org-clock--snoozed-p)
+              (akirak-org-clock--check-before-save))
+      ad-do-it)))
 
 (defun akirak-org-clock--check-before-save ()
   (require 'org-clock)
