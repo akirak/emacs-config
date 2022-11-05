@@ -222,15 +222,16 @@
                :prompt "Select a heading: ")))
 
 (transient-define-prefix akirak-capture-doct ()
-  ["Infixes"
-   ["Options"
-    ("-t" akirak-capture-todo-infix)
-    ("-h" akirak-capture-headline-infix)
-    ("-g" akirak-capture-tags-infix)
-    ("-i" akirak-capture-doct-clock-in)
-    ("-r" akirak-capture-doct-clock-resume)]
-   ["Location"
-    ("=" akirak-capture-select-heading)]]
+  ["Headline and target parent"
+   :class transient-row
+   ("-h" akirak-capture-headline-infix)
+   ("=" akirak-capture-select-heading)]
+  ["Entry options"
+   :class transient-row
+   ("-t" akirak-capture-todo-infix)
+   ("-g" akirak-capture-tags-infix)
+   ("-i" akirak-capture-doct-clock-in)
+   ("-r" akirak-capture-doct-clock-resume)]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
