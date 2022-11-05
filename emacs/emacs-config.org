@@ -5543,6 +5543,9 @@ Summon and dismiss buffers as popups
            "M-' M-'" #'popper-toggle-latest
            "M-' t" #'akirak-vterm-for-project
            "M-' s" #'scratch-buffer
+           "M-' b" (defun akirak/backtrace-buffer ()
+                     (interactive)
+                     (akirak/popper-display-buffer "*Backtrace*"))
            "M-' c" (defun akirak/compilation-buffer ()
                      (interactive)
                      (akirak/popper-display-buffer "*compilation*"))))
