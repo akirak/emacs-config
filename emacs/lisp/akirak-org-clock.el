@@ -40,10 +40,14 @@
                      (and ".gpg" eol)
                      "/.git/")))
 
-(defconst akirak-org-clock-org-file-name-whitelist
-  (rx-to-string `(and bol
-                      (or ,(expand-file-name "~/work2/")
-                          (and ,org-memento-file eol)))))
+(defvar akirak-org-clock-org-file-name-whitelist nil)
+
+(defun akirak-org-clock-org-file-name-whitelist ()
+  (or akirak-org-clock-org-file-name-whitelist
+      (setq akirak-org-clock-org-file-name-whitelist
+            (rx-to-string `(and bol
+                                (or ,(expand-file-name "~/work2/")
+                                    (and ,org-memento-file eol)))))))
 
 (defconst akirak-org-clock-buffer-name-whitelist
   ;; Don't block saving buffers created using `with-temp-buffer'
@@ -171,7 +175,7 @@
             ;; I don't want to
             (string-match-p akirak-org-clock-file-name-whitelist
                             buffer-file-name)
-            (string-match-p akirak-org-clock-org-file-name-whitelist
+            (string-match-p (akirak-org-clock-org-file-name-whitelist)
                             buffer-file-name)
             (and (bound-and-true-p org-dog-file-mode)
                  (or (org-before-first-heading-p)
