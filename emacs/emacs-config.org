@@ -1713,6 +1713,7 @@ Manage Org searches
   (setup (:package oahu)
     (:status personal
       (define-key akirak/c-z-map (kbd "SPC") #'oahu-view)
+      (:global "<menu>" #'oahu-view)
       (:global "<S-menu>" #'oahu-alternative-view)))
 #+end_src
 **** oahu-memento
