@@ -6097,6 +6097,10 @@ I don't use use-package, but I only need indentation:
 :PROPERTIES:
 :CREATED_TIME: [2022-11-04 Fri 23:59]
 :END:
+#+begin_quote
+Visually align tables
+[[https://github.com/casouri/valign]]
+#+end_quote
 
 #+begin_quote
 This package provides visual alignment for Org Mode, Markdown and table.el tables on GUI Emacs. It can properly align tables containing variable-pitch font, CJK characters and images. 
@@ -6404,7 +6408,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 215 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
