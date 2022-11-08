@@ -831,6 +831,12 @@
       repo = "org-nlink.el";
       type = "github";
     };
+    org-placeholder = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-placeholder";
+      type = "github";
+    };
     org-ql = {
       flake = false;
       owner = "alphapapa";
