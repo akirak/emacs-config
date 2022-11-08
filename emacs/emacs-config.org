@@ -557,16 +557,19 @@ The other variables must not be saved, and they should be put in configuration:
 
 #+begin_src emacs-lisp
   (setup custom
-      (:status personal
-        ;; Don't allow saving a variable that is not included in the whitelist
-        (advice-add 'custom-variable-mark-to-save
-                    :before
-                    (defun akirak/customize-save-variable-check (widget)
-                      (unless (memq (widget-value widget)
-                                    akirak/custom-variable-whitelist)
-                        (error "Variable %s should not be saved to custom-file. \
+    (:global "<f12> e v" #'customize-variable)
+    (:global "<f12> e o" #'customize-variable-other-window)
+    (:global "<f12> e g" #'customize-group)
+    (:status personal
+      ;; Don't allow saving a variable that is not included in the whitelist
+      (advice-add 'custom-variable-mark-to-save
+                  :before
+                  (defun akirak/customize-save-variable-check (widget)
+                    (unless (memq (widget-value widget)
+                                  akirak/custom-variable-whitelist)
+                      (error "Variable %s should not be saved to custom-file. \
   See akirak/custom-variable-whitelist"
-                               (widget-value widget)))))))
+                             (widget-value widget)))))))
 #+end_src
 *** desktop
 #+begin_src emacs-lisp
