@@ -2636,9 +2636,6 @@ Time blocking with Org
                            org-memento-frame-title-format
                            ;; akirak/org-memento-fallback-frame-title
                            )))))
-      (add-hook 'org-memento-block-start-hook
-                (defun akirak/org-memento-set-agenda-files ()
-                  (setq akirak-org-dwim-selected-files (org-memento-agenda-files))))
       (add-hook 'org-memento-block-exit-hook
                 (defun akirak/org-memento-cleanup-buffers ()
                   ;; Kill all indirect buffers
