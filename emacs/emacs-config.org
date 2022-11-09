@@ -2740,6 +2740,21 @@ Org Query Language, search command, and agenda-like view
                 (defun akirak/org-ql-view-link-needed-p (&rest _args)
                   (eq this-command 'org-store-link))))
 #+end_src
+**** org-ql-find
+#+begin_src emacs-lisp
+  (setup org-ql-find
+    (:set org-ql-find-goto-hook '(org-show-context
+                                  org-show-children
+                                  org-show-entry
+                                  akirak/org-recenter-toplevel-at-top))
+    (defun akirak/org-recenter-toplevel-at-top ()
+      (unless (org-before-first-heading-p)
+        (save-excursion
+          (let ((regexp (rx bol "*" blank)))
+            (when (or (looking-at regexp)
+                      (re-search-backward regexp nil t))
+              (recenter-top-bottom 0)))))))
+#+end_src
 *** org-recur
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 14:17]
