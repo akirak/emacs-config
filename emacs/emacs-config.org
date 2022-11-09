@@ -2417,6 +2417,7 @@ Transient commands for Org Dog
   (setup (:package octopus)
     (:global "M-g M-o" #'octopus-find-file
              "M-s M-o" #'octopus-find-node)
+    (:set octopus-ql-find-options '(:query-prefix "unarchived: "))
 
     (:with-feature org
       (:when-loaded
