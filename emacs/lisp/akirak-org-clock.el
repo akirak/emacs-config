@@ -40,16 +40,6 @@
                      (and ".gpg" eol)
                      "/.git/")))
 
-(defvar akirak-org-clock-org-file-name-whitelist nil)
-
-(defun akirak-org-clock-org-file-name-whitelist ()
-  (or akirak-org-clock-org-file-name-whitelist
-      (setq akirak-org-clock-org-file-name-whitelist
-            (rx-to-string `(and bol
-                                (or ,(expand-file-name "~/work2/")
-                                    (and ,(expand-file-name org-memento-file)
-                                         eol)))))))
-
 (defconst akirak-org-clock-buffer-name-whitelist
   ;; Don't block saving buffers created using `with-temp-buffer'
   (rx bos (or " *temp*"
@@ -176,30 +166,41 @@
             ;; I don't want to
             (string-match-p akirak-org-clock-file-name-whitelist
                             buffer-file-name)
-            (string-match-p (akirak-org-clock-org-file-name-whitelist)
-                            buffer-file-name)
-            (and (bound-and-true-p org-dog-file-mode)
-                 (or (org-before-first-heading-p)
-                     (akirak-org-clock--snoozed-p)
-                     ;; It is likely that I mistype 'y' or 'n' to skip the question,
-                     ;; so require an uppercase letter.
-                     (pcase (read-char-choice "Clock in to this entry? " '(?Y ?N))
-                       (?Y
-                        (org-clock-in)
-                        (run-with-timer akirak-org-clock-reclock-interval
-                                        nil #'akirak-org-clock-reclock-in)
-                        t)
-                       (?N
-                        (org-dog-clock-in (cl-remove-duplicates
-                                           (list "~/org/meta.org"
-                                                 (thread-last
-                                                   (org-base-buffer (current-buffer))
-                                                   (buffer-file-name)
-                                                   (abbreviate-file-name)))
-                                           :test #'equal)
-                                          :query-prefix "todo: ")
-                        t)))))
+            (if (bound-and-true-p org-dog-file-mode)
+                (or (org-before-first-heading-p)
+                    (akirak-org-clock--snoozed-p)
+                    (user-error "Please clock-in first"))
+              t))
     ad-do-it))
+
+(defun akirak-org-clock-in-dwim ()
+  (interactive)
+  (cond
+   ((bound-and-true-p org-dog-file-mode)
+    (akirak-org-clock-in-to-dog))
+   (t
+    (akirak-org-clock-in-to-project))))
+
+(defun akirak-org-clock-in-to-dog ()
+  (interactive)
+  (cl-assert (bound-and-true-p org-dog-file-mode))
+  (let* ((link (progn
+                 (org-dog-store-file-link)
+                 (car (pop org-stored-links))))
+         (width (frame-width))
+         (candidates (org-ql-select "~/org/meta.org"
+                       `(and (todo)
+                             (or (ancestors (link nil :target ,link))
+                                 (link nil :target ,link)))
+                       :action `(cons (org-format-outline-path
+                                       (org-get-outline-path t t)
+                                       ,width
+                                       (org-get-todo-state))
+                                      (point-marker)))))
+    (pcase-exhaustive (cdr (assoc (completing-read "Clock in: " candidates nil t)
+                                  candidates))
+      ((and marker (cl-type marker))
+       (org-clock-clock-in (list marker))))))
 
 ;;;###autoload
 (defun akirak-org-clock-snooze ()
