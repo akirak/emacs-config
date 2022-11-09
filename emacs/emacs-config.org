@@ -3101,6 +3101,12 @@ This is a collection of extra utilities for various packages.
                    '(akirak-consult-org-olp-with-file
                      . akirak-consult-org-olp-to-marker))))
 #+end_src
+**** akirak-org-log
+#+begin_src emacs-lisp
+  (setup akirak-org-log
+    (:status personal
+      (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
+#+end_src
 **** akirak-org-secrets                                   :secrets:
 #+begin_src emacs-lisp
   (setup akirak-org-secrets
