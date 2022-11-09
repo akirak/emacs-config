@@ -2840,15 +2840,7 @@ Make super links
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package org-super-links)
-    (:set org-super-links-default-description-formatter
-          (defun akirak/org-super-links-description (link orig-desc)
-            (if-let (file (save-match-data
-                            (and (string-match (rx bos "id:" (group (+ anything)))
-                                               link)
-                                 (org-id-find-id-file (match-string 1 link)))))
-                (format "[%s] %s" (file-name-base file) orig-desc)
-              orig-desc))))
+  (setup (:package org-super-links))
 #+end_src
 *** org-transclusion
 :PROPERTIES:
