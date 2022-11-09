@@ -16,5 +16,10 @@
   :body
   (org-reverse-datetree-date-child-p))
 
+(org-ql-defpred archived ()
+  "Return non-nil if the entry is archived."
+  :body
+  (org-in-archived-heading-p))
+
 (provide 'akirak-org-ql)
 ;;; akirak-org-ql.el ends here
