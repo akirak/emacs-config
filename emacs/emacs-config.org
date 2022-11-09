@@ -1742,6 +1742,9 @@ Org-Memento integration for oahu
       (add-hook 'org-memento-block-start-hook #'oahu-memento-load)
 
       (define-key ctl-x-map "g" #'akirak/oahu-switch-to-viewed-project)
+      (:with-feature org-memento-timeline
+        (:with-map org-memento-timeline-mode-map
+          (:bind "v" #'oahu-memento-group-view)))
 
       (defun akirak/oahu-viewed-project ()
         (pcase oahu-last-view
