@@ -412,20 +412,13 @@ character."
 
 (defun akirak-org-eldoc--org-entry (marker)
   "Return a string describing the target of an ID link."
-  (with-current-buffer (marker-buffer marker)
-    (org-with-wide-buffer
-     (goto-char marker)
-     (concat (mapconcat #'substring-no-properties
-                        (list (org-get-heading)
-                              (format "\"%s\"" (org-format-outline-path (org-get-outline-path)
-                                                                        (frame-width)))
-                              (buffer-name (marker-buffer marker)))
-                        " in ")
-             (save-excursion
-               (or (when (re-search-forward org-ts-regexp-inactive
-                                            (org-entry-end-position) t)
-                     (concat " " (match-string-no-properties 0)))
-                   ""))))))
+  (save-current-buffer
+    (org-with-point-at marker
+      (let ((olp (org-get-outline-path nil t))
+            (width (frame-width)))
+        (org-no-properties
+         (org-format-outline-path
+          olp width (buffer-name (current-buffer))))))))
 
 ;;;; akirak-org-protected-mode
 
