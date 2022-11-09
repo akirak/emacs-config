@@ -218,6 +218,12 @@
                                 (org-read-date nil t nil nil nil nil
                                                initial))))
 
+(transient-define-infix akirak-capture-doct-add-annotation ()
+  :class 'akirak-capture-doct-boolean-option
+  :description "Annotation"
+  :variable 'akirak-capture-template-options
+  :prop :annotation)
+
 (transient-define-infix akirak-capture-doct-clock-in ()
   :class 'akirak-capture-doct-boolean-option
   :description "Clock-in"
@@ -503,6 +509,8 @@
     (org-capture)))
 
 (transient-define-prefix akirak-capture-journal ()
+  ["Options"
+   ("-a" akirak-capture-doct-add-annotation)]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
@@ -514,6 +522,7 @@
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
   (interactive)
+  (setq akirak-capture-template-options nil)
   (transient-setup 'akirak-capture-journal))
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-journal))
@@ -525,9 +534,10 @@
           (car (doct
                 `((""
                    :keys ""
-                   :template ,(akirak-org-capture-make-entry-body
-                                (read-from-minibuffer "Title: ")
-                                :body "%a%?")
+                   :template ,(apply #'akirak-org-capture-make-entry-body
+                                     (read-from-minibuffer "Title: ")
+                                     :body "%?"
+                                     akirak-capture-template-options)
                    :file ,file
                    :function org-reverse-datetree-goto-date-in-file
                    :clock-in t :clock-resume t))))))

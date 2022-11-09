@@ -56,6 +56,7 @@
                                                        scheduled
                                                        deadline
                                                        active-ts
+                                                       annotation
                                                        (drawer akirak-org-capture-default-drawer)
                                                        (body t))
   "Build the template body of a capture template.
@@ -141,7 +142,10 @@ values:
               (`t (if (or (eq headline t)
                           (equal headline "%?"))
                       ""
-                    "%?"))))))
+                    "%?")))
+            (if annotation
+                "\n\n%a"
+              ""))))
 
 ;;;###autoload
 (defun akirak-org-capture-add-templates (templates)
