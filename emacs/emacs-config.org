@@ -592,6 +592,15 @@ The other variables must not be saved, and they should be put in configuration:
     (:bind "h" #'dired-up-directory)
     (:unbind "C-x M-o"))
 #+end_src
+*** edebug
+:PROPERTIES:
+:CREATED_TIME: [2022-11-09 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup edebug
+    (:global "<f12> e r" #'edebug-remove-instrumentation))
+#+end_src
 *** ediff-wind                                                :diff:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
