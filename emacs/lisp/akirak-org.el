@@ -280,6 +280,18 @@ character."
               (forward-word (if (integerp n) n -1))
               (point))
             (point)))
+     ((bolp)
+      (cond
+       ((eolp)
+        (insert "- [ ] "))
+       ((looking-at (rx (* blank) (group "- [" (any " X") "]")))
+        (save-excursion
+          (replace-match "-" nil nil nil 1)))
+       ((looking-at (rx (* blank) (group "- ") word-start))
+        (save-excursion
+          (replace-match "- [ ] " nil nil nil 1)))
+       (t
+        (org-self-insert-command (or 1 n)))))
      (t
       (org-self-insert-command (or 1 n))))))
 
