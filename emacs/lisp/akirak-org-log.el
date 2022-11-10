@@ -4,6 +4,14 @@
   ""
   :type 'file)
 
+(defcustom akirak-org-log-weekly-body-function
+  (lambda (start-date end-date)
+    (concat (format "[[org-memento:timeline?span=week&date=%s,%s]]\n\n"
+                    start-date end-date)
+            "%?"))
+  ""
+  :type 'function)
+
 ;;;###autoload
 (defun akirak-org-log-goto-week-entry (&optional arg)
   (interactive "P")
@@ -25,10 +33,10 @@
             (throw 'found-entry t)))
         (goto-char initial-pos)))))
 
-(defun akirak-org-log-insert-new-week-entry (date)
+(defun akirak-org-log-insert-new-week-entry (start-date)
   (interactive (list (org-read-date nil t)))
-  (let* ((deadline (thread-first
-                     (decode-time date)
+  (let* ((end-date (thread-first
+                     (decode-time start-date)
                      (decoded-time-add (make-decoded-time :day 6))
                      (encode-time)))
          (org-capture-entry
@@ -38,15 +46,17 @@
                    :file ,akirak-org-log-file
                    :function (lambda ()
                                (org-reverse-datetree-goto-date-in-file
-                                ',date))
+                                ',start-date))
                    :template ,(akirak-org-capture-make-entry-body
                                 (format "Weekly PPP %s [/]"
                                         (format-time-string
                                          (org-time-stamp-format nil t)
-                                         date))
-                                :deadline deadline
+                                         start-date))
+                                :deadline end-date
                                 :tags '("@assessment")
-                                :body "%?")
+                                :body (funcall akirak-org-log-weekly-body-function
+                                               (format-time-string "%F" start-date)
+                                               (format-time-string "%F" end-date)))
                    :clock-in t :clock-resume t))))))
     (org-capture)))
 
