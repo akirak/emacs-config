@@ -86,7 +86,7 @@
         then
           builtin cd "$@"
         else
-          builtin cd "$(${pkgs.listEmacsProjects}/bin/ls-emacs-projects | fzy)"
+          builtin cd "$(${pkgs.listEmacsProjects}/bin/ls-emacs-projects --pipe fzy)"
         fi
       }
 
