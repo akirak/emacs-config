@@ -549,6 +549,7 @@ The following variable defines variables that can be saved to =custom-file=:
       org-memento-workhour-alist
       org-memento-file
       org-memento-policy-file
+      akirak-org-log-file
       ;; Dynamic
       safe-local-variable-values))
 #+end_src
