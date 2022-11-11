@@ -3474,7 +3474,8 @@ Consulting completing-read
                                      ,@(when (require 'akirak-consult nil t)
                                          '(akirak-consult-source-help-buffer
                                            akirak-consult-source-indirect-buffer
-                                           akirak-consult-source-narrowed-buffer))
+                                           akirak-consult-source-narrowed-buffer
+                                           akirak-consult-source-org-agenda-buffer))
                                      consult--source-buffer
                                      consult--source-recent-file))
 

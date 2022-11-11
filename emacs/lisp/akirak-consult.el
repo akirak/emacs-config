@@ -20,6 +20,20 @@
                                              :as #'buffer-name))))
 
 ;; Based on `consult--source-project-buffer' from consult.el.
+(defvar akirak-consult-source-org-agenda-buffer
+  `(:name "Agenda / org-ql-search buffer"
+          :narrow (?a . "Agenda")
+          :hidden t
+          :category buffer
+          :state ,#'consult--buffer-state
+          :face consult-buffer
+          :history buffer-name-history
+          :action ,#'consult--buffer-action
+          :items
+          ,(lambda () (consult--buffer-query :mode '(org-agenda-mode)
+                                             :as #'buffer-name))))
+
+;; Based on `consult--source-project-buffer' from consult.el.
 (defvar akirak-consult-source-indirect-buffer
   `(:name "Indirect Buffer"
           :narrow 105
