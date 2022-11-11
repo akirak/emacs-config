@@ -227,5 +227,15 @@
     (when (> count 0)
       (message "Killed %d buffers in %s" count root))))
 
+(defun akirak-embark-find-file-variable (symbol)
+  (interactive "S")
+  (let ((value (symbol-value symbol)))
+    (if (and (stringp value)
+             (file-readable-p value))
+        (find-file value)
+      (user-error "Not a file name: %s" value))))
+
+(define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
+
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
