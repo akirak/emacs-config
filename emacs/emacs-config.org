@@ -5552,7 +5552,7 @@ Summon and dismiss buffers as popups
 
 #+begin_src emacs-lisp
   (setup (:package popper)
-    (:set popper-window-height 0.3
+    (:set popper-window-height 0.2
           popper-display-function #'popper-select-popup-at-bottom
           akirak/display-popup-window-function popper-display-function
           ;; You may have to re-enable popper-mode after updating this variable
@@ -5568,23 +5568,25 @@ Summon and dismiss buffers as popups
                                      lisp-interaction-mode
                                      vterm-mode))
 
-    (defun akirak/popper-display-buffer (buffer)
-      (pop-to-buffer buffer)
-      (with-current-buffer (get-buffer buffer)
-        (goto-char (point-max))
-        (recenter -1 t)))
-
     (:hook-into after-init-hook)
+    (:hook popper-echo-mode)
+
+    (add-hook 'popper-open-popup-hook
+              (defun akirak/popper-recenter ()
+                (goto-char (point-max))
+                (recenter -1 t)))
+
     (:bind "M-\"" #'popper-cycle
+           "M-' k" #'popper-kill-latest-popup
            "M-' M-'" #'popper-toggle-latest
            "M-' t" #'akirak-vterm-for-project
            "M-' s" #'scratch-buffer
            "M-' b" (defun akirak/backtrace-buffer ()
                      (interactive)
-                     (akirak/popper-display-buffer "*Backtrace*"))
+                     (pop-to-buffer "*Backtrace*"))
            "M-' c" (defun akirak/compilation-buffer ()
                      (interactive)
-                     (akirak/popper-display-buffer "*compilation*"))))
+                     (pop-to-buffer "*compilation*"))))
 #+end_src
 *** posframe                                            :UI:library:
 :PROPERTIES:
