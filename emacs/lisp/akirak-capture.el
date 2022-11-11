@@ -386,7 +386,6 @@
    :class transient-row
    ("sc" "Command snippet" akirak-capture-command-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
-   ("m" "Memento" org-memento-add-event)
    ("Rq" "Question" akirak-capture-reflection-question
     :if (lambda () (assoc "~/private/" org-dog-repository-alist)))]
 
