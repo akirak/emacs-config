@@ -115,6 +115,8 @@
 
 ;;;###autoload
 (defun akirak-embark-setup ()
+  (define-key embark-bookmark-map "p" #'akirak-bookmark-alter-property)
+
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
