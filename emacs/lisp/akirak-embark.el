@@ -106,16 +106,15 @@
   ("d" deadgrep)
   ("R" project-query-replace-regexp))
 
-(define-key embark-library-map "t"
-            (akirak-embark-new-tab-action find-library
-              (lambda () (file-name-base buffer-file-name))))
-
-(define-key embark-identifier-map "R" #'project-query-replace-regexp)
-(define-key embark-expression-map "R" #'project-query-replace-regexp)
-
 ;;;###autoload
 (defun akirak-embark-setup ()
   (define-key embark-bookmark-map "p" #'akirak-bookmark-alter-property)
+  (define-key embark-library-map "t"
+              (akirak-embark-new-tab-action find-library
+                (lambda () (file-name-base buffer-file-name))))
+  (define-key embark-identifier-map "R" #'project-query-replace-regexp)
+  (define-key embark-expression-map "R" #'project-query-replace-regexp)
+  (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
@@ -236,8 +235,6 @@
              (file-readable-p value))
         (find-file value)
       (user-error "Not a file name: %s" value))))
-
-(define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
