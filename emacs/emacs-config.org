@@ -2745,6 +2745,10 @@ A synchronized, Org-mode, document annotator
 :PROPERTIES:
 :CREATED_TIME: [2022-11-12 Sat 18:39]
 :END:
+#+begin_quote
+Placeholders for Org
+[[https://github.com/akirak/org-placeholder]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
@@ -4166,7 +4170,7 @@ Support for `direnv' that operates buffer-locally
 :CREATED_TIME: [2022-02-19 Sat 14:36]
 :END:
 #+begin_quote
-browse the Emacsmirror package database
+Browse the Emacsmirror package database
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -6483,13 +6487,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 221 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |  11 |
+| [[org-ql-search:tags:library][library]]             |  10 |
 | [[org-ql-search:tags:VC][VC]]                  |   9 |
-| [[org-ql-search:tags:library][library]]             |   9 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:completion][completion]]          |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
