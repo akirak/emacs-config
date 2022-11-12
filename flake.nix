@@ -19,8 +19,6 @@
       flake = false;
     };
 
-    emacs-sandbox.url = "path:./templates/emacs-sandbox";
-
     # NixOS modules
     impermanence.url = "github:nix-community/impermanence";
     # nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -254,31 +252,36 @@
       outputsBuilder = channels: let
         inherit (channels.nixpkgs) emacs-config emacsSandboxed;
       in {
-        packages = {
-          tryout-emacs = emacsSandboxed {
-            name = "tryout-emacs";
-            nativeCompileAheadDefault = false;
-            enableOpinionatedSettings = false;
-            extraFeatures = [];
-            protectHome = false;
-            shareNet = false;
-            inheritPath = false;
-          };
+        packages =
+          {
+            tryout-emacs = emacsSandboxed {
+              name = "tryout-emacs";
+              nativeCompileAheadDefault = false;
+              enableOpinionatedSettings = false;
+              extraFeatures = [];
+              protectHome = false;
+              shareNet = false;
+              inheritPath = false;
+            };
 
-          emacs-sandboxed = emacsSandboxed inputs.emacs-sandbox.lib.emacs-sandbox;
+            inherit (channels.nixpkgs) readability-cli;
 
-          inherit (channels.nixpkgs) readability-cli;
+            inherit emacs-config;
 
-          inherit emacs-config;
+            test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
 
-          test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
+            update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
+              nix flake lock --update-input melpa --update-input gnu-elpa
+              cd emacs/lock
+              bash ./update.bash "$@"
+            '';
 
-          update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
-            nix flake lock --update-input melpa --update-input gnu-elpa
-            cd emacs/lock
-            bash ./update.bash "$@"
-          '';
-        };
+            emacs-installer =
+              channels.nixpkgs.callPackage
+              ./pkgs/development/emacs-sandboxed/multi-installer.nix {}
+              {inherit (site) siteConfigDir nixConfigDir;} (site.emacsProfiles or {});
+          }
+          // (builtins.mapAttrs (_: emacsSandboxed) (site.emacsProfiles or {}));
 
         apps = emacs-config.makeApps {
           lockDirName = "emacs/lock";
