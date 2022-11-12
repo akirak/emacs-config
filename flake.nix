@@ -364,13 +364,8 @@
 
       templates = {
         site = {
-          description = "A basic desktop host";
-          path = ./sites/default;
-        };
-
-        emacs-sandbox = {
-          description = "A sandbox configuration for Emacs";
-          path = ./templates/emacs-sandbox;
+          description = "Configuration for home-manager and Emacs";
+          path = "${inputs.site}";
         };
       };
 
