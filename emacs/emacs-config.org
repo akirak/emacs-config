@@ -2648,12 +2648,18 @@ Time blocking with Org
                            )))))
       (add-hook 'org-memento-block-exit-hook
                 (defun akirak/org-memento-cleanup-buffers ()
-                  ;; Kill all indirect buffers
-                  (when-let (buffers (thread-last
-                                       (buffer-list)
-                                       (seq-filter #'buffer-base-buffer)
-                                       (mapc #'kill-buffer)))
-                    (message "Killed %d indirect buffers" (length buffers)))))))
+                  (interactive)
+                  (cl-flet
+                      ((pred (buffer)
+                         (and (not (buffer-file-name buffer))
+                              (or (buffer-base-buffer buffer)
+                                  (derived-mode-p 'special-mode
+                                                  'org-agenda-mode)))))
+                    (when-let (buffers (thread-last
+                                         (buffer-list)
+                                         (seq-filter #'pred)
+                                         (mapc #'kill-buffer)))
+                      (message "Killed %d indirect buffers" (length buffers))))))))
 #+end_src
 
 =org-memento-file= must be added to =org-agenda-files=. See [[*org-dog][org-dog]].
