@@ -136,6 +136,8 @@
                '(nix-installable . akirak-embark-nix-installable-map))
 
   (add-to-list 'embark-pre-action-hooks
+               '(copy-to-register embark--mark-target))
+  (add-to-list 'embark-pre-action-hooks
                '(project-query-replace-regexp
                  embark--beginning-of-target embark--unmark-target)))
 
