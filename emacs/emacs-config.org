@@ -2581,11 +2581,12 @@ Time blocking with Org
                   (or (buffer-base-buffer buffer)
                       (derived-mode-p 'special-mode
                                       'org-agenda-mode)))))
-        (when-let (buffers (thread-last
-                             (buffer-list)
-                             (seq-filter #'pred)
-                             (mapc #'kill-buffer)))
-          (message "Killed %d indirect buffers" (length buffers)))))
+        (if-let (buffers (thread-last
+                           (buffer-list)
+                           (seq-filter #'pred)
+                           (mapc #'kill-buffer)))
+            (message "Killed %d indirect buffers" (length buffers))
+          (message "No buffer to kill"))))
 
     (:status personal
       (:hook-into after-init-hook)
