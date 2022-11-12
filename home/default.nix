@@ -38,6 +38,7 @@ with builtins; let
         ./profiles/wm/river
       ];
     personal = [
+      ./profiles/syncthing.nix
       ./profiles/dropbox.nix
     ];
   };
