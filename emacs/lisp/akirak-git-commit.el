@@ -38,7 +38,9 @@
                 (progn
                   (re-search-forward akirak-git-commit-log-drawer-end-re)
                   (beginning-of-line))
-              (org-end-of-meta-data t)
+              (goto-char (org-entry-end-position))
+              (unless (bolp)
+                (insert "\n\n"))
               (insert "#+BEGIN_COMMIT_LOG\n#+END_COMMIT_LOG\n")
               (beginning-of-line 0))
             (insert (akirak-git-commit--build-log-line
