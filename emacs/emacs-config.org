@@ -3493,7 +3493,6 @@ Consulting completing-read
     (:global [remap switch-to-buffer] #'consult-buffer
              [remap bookmark-jump] #'consult-bookmark
              [remap yank-pop] #'consult-yank-pop
-             "C-c j" #'consult-register
              "M-s o" #'consult-outline
              ;; Remap `isearch-forward' that is bound to C-s. `isearch-forward' is
              ;; bound to "s" in `View-mode-map', but don't remap it.
@@ -3506,9 +3505,6 @@ Consulting completing-read
     (:with-feature consult-imenu
       (:global "M-s i" #'consult-imenu
                "M-s M-i" #'consult-imenu-multi))
-
-    (:with-feature consult-compile
-      (:global "M-s e" #'consult-compile-error))
 
     (:with-feature consult-flymake
       (:global "M-s f" #'consult-flymake))
