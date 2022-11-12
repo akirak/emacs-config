@@ -1165,8 +1165,29 @@ Operations on the current project
 
 #+begin_src emacs-lisp
   (setup register
-    ;; Show the register preview immediately
-    (:set register-preview-delay 0))
+    (:set register-preview-delay 0.5)
+    (:global "M-SPC" #'akirak/register-dwim)
+    (defun akirak/register-dwim (reg &optional arg)
+      (interactive (list (register-read-with-preview "Dwim: ")
+                         current-prefix-arg))
+      (if-let (val (get-register reg))
+          (pcase val
+            ((cl-type marker)
+             (register-val-jump-to val arg))
+            ((cl-type string)
+             (insert-register reg))
+            ((and `(,x . ,_)
+                  (guard (window-configuration-p x)
+                         (frame-configuration-p x)))
+             (register-val-jump-to val arg))
+            ((or `(file . ,_)
+                 `(buffer . ,_)
+                 `(file-query . ,_))
+             (register-val-jump-to val arg))
+            (_
+             (error "Unknown action on register: "
+                    (register-val-describe val nil))))
+        (error "No register entry at %s" reg))))
 #+end_src
 *** repeat
 :PROPERTIES:
