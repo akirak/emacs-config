@@ -3167,6 +3167,13 @@ This is a collection of extra utilities for various packages.
 #+end_src
 
 I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it had dependency on expand-region I wanted to get rid of, so I implemented a simpler alternative.
+**** akirak-elisp
+#+begin_src emacs-lisp
+  (setup akirak-elisp
+    (:with-map emacs-lisp-mode-map
+      (:bind "C-c t l" #'akirak-elisp-let-exp)
+      (:bind "C-c t (" #'akirak-elisp-wrap-exp)))
+#+end_src
 **** akirak-git-commit
 #+begin_src emacs-lisp
   (setup akirak-git-commit
