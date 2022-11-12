@@ -30,19 +30,21 @@
                         (truncate-string-to-width rev 7))))
            (case-fold-search t))
       (save-current-buffer
-        (org-with-point-at org-clock-marker
-          (if (re-search-forward akirak-git-commit-log-drawer-start-re
-                                 (org-entry-end-position) t)
-              (progn
-                (re-search-forward akirak-git-commit-log-drawer-end-re)
-                (beginning-of-line))
-            (org-end-of-meta-data t)
-            (insert "#+BEGIN_COMMIT_LOG\n#+END_COMMIT_LOG\n")
-            (beginning-of-line 0))
-          (insert (akirak-git-commit--build-log-line
-                    :rev-link rev-link
-                    :message message)
-                  "\n"))))))
+        (org-with-point-at (or (akirak-org-clock--capture-buffer org-clock-marker)
+                               org-clock-marker)
+          (save-excursion
+            (if (re-search-forward akirak-git-commit-log-drawer-start-re
+                                   (org-entry-end-position) t)
+                (progn
+                  (re-search-forward akirak-git-commit-log-drawer-end-re)
+                  (beginning-of-line))
+              (org-end-of-meta-data t)
+              (insert "#+BEGIN_COMMIT_LOG\n#+END_COMMIT_LOG\n")
+              (beginning-of-line 0))
+            (insert (akirak-git-commit--build-log-line
+                      :rev-link rev-link
+                      :message message)
+                    "\n")))))))
 
 (cl-defun akirak-git-commit--build-log-line (&key time rev-link message)
   (declare (indent 0))
