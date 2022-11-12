@@ -2450,7 +2450,12 @@ Transient commands for Org Dog
       (:when-loaded
         (:with-map org-mode-map
           (:bind "C-c C-x l" #'octopus-insert-link)
-          (:bind "C-c C-x r" #'octopus-refile)))))
+          (:bind "C-c C-x r" #'octopus-refile))))
+
+    (:when-loaded
+      (transient-append-suffix #'octopus-find-node
+        'octopus-clocked-file-suffix
+        '("b" "Placeholder" org-placeholder-find-or-create))))
 #+end_src
 **** org-dog-embark
 :PROPERTIES:
@@ -2735,6 +2740,16 @@ A synchronized, Org-mode, document annotator
 
 #+begin_src emacs-lisp
 (setup (:package org-noter))
+#+end_src
+*** org-placeholder
+:PROPERTIES:
+:CREATED_TIME: [2022-11-12 Sat 18:39]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-placeholder)
+    (with-eval-after-load 'akirak-unknown
+      (define-key akirak-unknown-text-map "o" #'org-placeholder-find-or-create-1)))
 #+end_src
 *** COMMENT org-pretty-table                                                   :ARCHIVE:
 :PROPERTIES:
