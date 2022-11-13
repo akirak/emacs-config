@@ -178,15 +178,20 @@ This is intended for use in org-placeholder, and it should be
 configured in bookmarks."
   (let* ((heading org-capture-initial)
          (filename (org-dog-complete-file "Select a file (or enter an empty string): "
-                                          heading))
+                                          (downcase heading)))
          (object (org-dog-file-object filename)))
     (akirak-org-capture-make-entry-body
       (if object
           (org-link-make-string
            (org-dog-make-file-link object)
-           (or (org-dog-with-file-header filename
-                 (org-dog-search-keyword-line "title"))
-               heading))
+           (let ((titles (thread-last
+                           (list heading
+                                 (org-dog-with-file-header filename
+                                   (org-dog-search-keyword-line "title")))
+                           (delq nil)
+                           (seq-uniq))))
+             (completing-read "Link description: "
+                              titles nil nil nil nil (car titles))))
         heading))))
 
 (provide 'akirak-org-capture)
