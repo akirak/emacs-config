@@ -2231,7 +2231,15 @@ Outline-based notes management and organizer
 #+begin_src emacs-lisp
   (setup ol
     (:status opinionated
-      (:global "C-c l" #'org-store-link)))
+      (:global "C-c l" #'org-store-link)
+      (with-eval-after-load 'org-agenda
+        (define-key org-agenda-mode-map
+                    (kbd "C-c l")
+                    (defun akirak/org-agenda-store-link-to-entry ()
+                      (interactive)
+                      (org-agenda-with-point-at-orig-entry
+                          (thing-at-point 'line)
+                        (org-store-link nil 'interactive)))))))
 #+end_src
 **** org-refile
 :PROPERTIES:
