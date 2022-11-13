@@ -593,6 +593,15 @@ The other variables must not be saved, and they should be put in configuration:
     (:bind "h" #'dired-up-directory)
     (:unbind "C-x M-o"))
 #+end_src
+*** display-fill-column-indicator
+:PROPERTIES:
+:CREATED_TIME: [2022-11-13 Sun 17:44]
+:END:
+
+#+begin_src emacs-lisp
+  (setup display-fill-column-indicator
+    (add-hook 'after-init-hook #'global-display-fill-column-indicator-mode))
+#+end_src
 *** edebug
 :PROPERTIES:
 :CREATED_TIME: [2022-11-09 Wed 23:59]
