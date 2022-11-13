@@ -5646,6 +5646,7 @@ Summon and dismiss buffers as popups
                                      "^\\*Scratch-Input-Method"
                                      "^ \\*Agenda Commands\\*"
                                      "^\\*Register Preview\\*"
+                                     "^\\*edit string\\*"
                                      inferior-haskell-mode
                                      lisp-interaction-mode
                                      vterm-mode))
