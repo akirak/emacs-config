@@ -853,12 +853,12 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                    :clock-in t :clock-resume t))))))
     (org-capture)))
 
-(defun akirak-capture-read-string (prompt)
+(defun akirak-capture-read-string (prompt &optional initial-contents)
   (minibuffer-with-setup-hook
       (lambda ()
         (abbrev-mode t)
         (corfu-mode t))
-    (read-from-minibuffer prompt nil nil nil nil
+    (read-from-minibuffer prompt initial-contents nil nil nil
                           (thing-at-point 'word t)
                           'inherit-input-method)))
 
