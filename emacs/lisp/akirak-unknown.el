@@ -27,7 +27,10 @@
                     (setq-local embark-prompter #'embark-completing-read-prompter))
                 (read-from-minibuffer "Some text or title: "
                                       nil nil nil nil
-                                      (thing-at-point 'word t)
+                                      (if (use-region-p)
+                                          (buffer-substring-no-properties
+                                           (region-beginning) (region-end))
+                                        (thing-at-point 'word t))
                                       'inherit-input-method))))
     (akirak-capture-text text)))
 
