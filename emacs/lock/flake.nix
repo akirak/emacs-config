@@ -152,6 +152,11 @@
       repo = "org-nlink.el";
       type = "github";
     };
+    consult-recoll = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/jao/consult-recoll.git";
+    };
     corfu = {
       flake = false;
       owner = "minad";
