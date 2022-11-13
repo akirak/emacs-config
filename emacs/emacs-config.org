@@ -5204,9 +5204,12 @@ Sections for read-only buffers
 #+begin_src emacs-lisp
   (setup (:package magit-section)
     (:with-map magit-section-mode-map
-      (:bind "C-c =" (defun akirak/magit-show-section-value-at-point ()
+      (:bind "C-c =" (defun akirak/magit-show-section-at-point ()
                        (interactive)
-                       (message (prin1-to-string (oref (magit-current-section) value)))))
+                       (let ((section (magit-current-section)))
+                         (message "(%s) %s"
+                                  (oref section type)
+                                  (prin1-to-string (oref section value))))))
       ;; I don't want to override global bindings on these keys.
       (:unbind "M-1" "M-2" "M-3" "M-4"
                [C-tab] [M-tab])))
