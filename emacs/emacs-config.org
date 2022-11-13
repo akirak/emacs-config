@@ -1141,6 +1141,16 @@ Operations on the current project
   (setup prolog
     (:file-match "\\.pl\\'"))
 #+end_src
+*** pulse
+:PROPERTIES:
+:CREATED_TIME: [2022-11-13 Sun 18:00]
+:END:
+
+#+begin_src emacs-lisp
+  (setup pulse
+    (:set pulse-momentary-iterations 10
+          pulse-delay .2))
+#+end_src
 *** re-builder                                              :regexp:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 21:01]
