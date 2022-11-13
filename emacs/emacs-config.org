@@ -80,6 +80,18 @@ I am interested to see if it can reduce the amount of configuration code.
         (dolist (entry (reverse ',entries))
           (add-to-list 'auto-insert-alist entry)))))
 #+end_src
+*** :bind-hash
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :bind-hash (keymap command &rest more-commands)
+     "Bind a command to a crazy key."
+     :indent 1
+     `(progn
+        ,@(mapcar (lambda (symbol)
+                    `(define-key ,keymap (vector (sxhash-eq ,symbol)) ,symbol))
+                  (cons command more-commands)))))
+#+end_src
 *** :compilation-error
 #+begin_src emacs-lisp
   (eval-when-compile
@@ -2646,7 +2658,7 @@ Time blocking with Org
 
       (define-key help-map (kbd "<tab>") #'org-memento-next-action)
       (define-key akirak/c-z-map (kbd "<tab>") #'org-memento-next-action)
-      (define-key akirak/c-z-map "i" #'org-memento-policy-index)
+      (define-key akirak/c-z-map "i" #'org-memento-policy-find-in-source)
       (define-key akirak/c-z-map "j" #'org-memento-open-journal)
       (define-key akirak/c-z-map "k" #'akirak/org-memento-cleanup-buffers)
       (define-key akirak/c-z-map "t" #'org-memento-timeline)
@@ -2780,8 +2792,11 @@ Placeholders for Org
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
+    (define-key akirak/c-z-map "v" #'org-placeholder-view)
     (with-eval-after-load 'akirak-unknown
-      (define-key akirak-unknown-text-map "o" #'org-placeholder-find-or-create-1)))
+      (:bind-hash akirak-unknown-text-map
+        #'org-placeholder-capture-input
+        #'org-placeholder-find-or-create-1)))
 #+end_src
 *** COMMENT org-pretty-table                                                   :ARCHIVE:
 :PROPERTIES:
