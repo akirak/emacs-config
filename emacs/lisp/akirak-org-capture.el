@@ -170,5 +170,24 @@ values:
         (org-capture)
       (setq org-capture-templates-contexts orig-contexts))))
 
+;;;###autoload
+(defun akirak-org-capture-dog-link-template ()
+  "Return a template body containing a file link as the heading.
+
+This is intended for use in org-placeholder, and it should be
+configured in bookmarks."
+  (let* ((heading org-capture-initial)
+         (filename (org-dog-complete-file "Select a file (or enter an empty string): "
+                                          heading))
+         (object (org-dog-file-object filename)))
+    (akirak-org-capture-make-entry-body
+      (if object
+          (org-link-make-string
+           (org-dog-make-file-link object)
+           (or (org-dog-with-file-header filename
+                 (org-dog-search-keyword-line "title"))
+               heading))
+        heading))))
+
 (provide 'akirak-org-capture)
 ;;; akirak-org-capture.el ends here
