@@ -18,7 +18,9 @@
   (if arg
       (call-interactively #'akirak-org-log-insert-new-week-entry)
     (find-file akirak-org-log-file)
-    (let ((initial-pos (point)))
+    (let ((initial-pos (point))
+          ;; To make org-complex-heading-regexp match case-sensitively
+          (case-fold-search nil))
       (catch 'found-entry
         (goto-char (point-min))
         (while (re-search-forward org-complex-heading-regexp nil t)
