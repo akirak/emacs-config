@@ -2655,6 +2655,7 @@ Time blocking with Org
       (put 'org-memento-finish-block 'repeat-map 'akirak/c-z-map)
 
       (:set org-memento-agenda-excluded-tags '("ARCHIVE" "@epic")
+            org-memento-timeline-hidden-sections '((daily-progress .t))
             org-memento-group-taxonomy
             '((:read
                (lambda (element) (org-element-property :MEMENTO_CATEGORY element))
