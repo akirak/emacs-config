@@ -2792,7 +2792,6 @@ Placeholders for Org
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
-    (define-key akirak/c-z-map "v" #'org-placeholder-view)
     (with-eval-after-load 'akirak-unknown
       (:bind-hash akirak-unknown-text-map
         #'org-placeholder-capture-input
