@@ -30,7 +30,7 @@
                                       (if (use-region-p)
                                           (buffer-substring-no-properties
                                            (region-beginning) (region-end))
-                                        (thing-at-point 'word t))
+                                        (thing-at-point 'symbol t))
                                       'inherit-input-method))))
     (akirak-capture-text text)))
 
