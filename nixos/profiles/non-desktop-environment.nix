@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   environment.systemPackages = [
     pkgs.networkmanagerapplet
+    pkgs.elementary-xfce-icon-theme
   ];
 
   services.xserver = {
