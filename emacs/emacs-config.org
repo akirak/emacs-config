@@ -2491,6 +2491,11 @@ Transient commands for Org Dog
           (:bind "C-c C-x l" #'octopus-insert-link)
           (:bind "C-c C-x r" #'octopus-refile))))
 
+    (:with-feature org-agenda
+      (:when-loaded
+        (:with-map org-agenda-mode-map
+          (:bind [remap org-agenda-refile] #'octopus-refile))))
+
     (:when-loaded
       (transient-append-suffix #'octopus-find-node
         'octopus-clocked-file-suffix
