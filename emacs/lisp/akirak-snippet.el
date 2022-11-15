@@ -264,6 +264,13 @@ template."
     (indent-region (point-min) (point-max))
     (buffer-string)))
 
+;;;###autoload
+(defun akirak-snippet-save-as-tempo (begin end)
+  "Save the region as a tempo template."
+  (interactive "r")
+  (kill-new (akirak-snippet--to-tempo
+             (buffer-substring-no-properties begin end))))
+
 (cl-defun akirak-snippet--capture (&key language file parameters src
                                         original-language original-src)
   (let ((org-capture-entry

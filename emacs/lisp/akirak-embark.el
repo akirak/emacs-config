@@ -115,6 +115,7 @@
   (define-key embark-identifier-map "R" #'project-query-replace-regexp)
   (define-key embark-expression-map "R" #'project-query-replace-regexp)
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
+  (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
