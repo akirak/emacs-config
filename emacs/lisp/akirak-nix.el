@@ -67,7 +67,7 @@
       (delete-file err-file))))
 
 ;;;###autoload
-(defun akirak-nix-browse-nixpkgs ()
+(defun akirak-nix-search-nixpkgs ()
   (interactive)
   (let ((packages (akirak-nix--read-nixpkgs "Select packages: "
                                             (read-from-minibuffer
