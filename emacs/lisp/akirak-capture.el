@@ -41,6 +41,8 @@
 
 (defvar akirak-capture-bounds nil)
 
+(defvar akirak-capture-initial nil)
+
 ;;;; Clock
 
 (defun akirak-capture--clock-description ()
@@ -305,44 +307,40 @@
 ;;;; Transient prefixes
 
 ;;;###autoload (autoload 'akirak-capture "akirak-capture" nil 'interactive)
-(transient-define-prefix akirak-capture ()
+(transient-define-prefix akirak-capture (&optional initial)
   "Main entry point to capture commands."
   ["Actions (generic / specific type)"
    :class transient-row
    ("T" "Start todo" (lambda ()
                        (interactive)
-                       (setq akirak-capture-headline (akirak-capture-read-string
-                                                      "Heading of the todo: ")
+                       (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                              akirak-capture-template-options '(:todo "UNDERWAY")
                              akirak-capture-doct-options '(:clock-in t :clock-resume t))
                        (akirak-capture-doct)))
    ("t" "Todo" (lambda ()
                  (interactive)
-                 (setq akirak-capture-headline (akirak-capture-read-string
-                                                "Heading of the todo: ")
+                 (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                        akirak-capture-template-options '(:todo "TODO")
                        akirak-capture-doct-options nil)
                  (akirak-capture-doct)))
    ("#" "Ticket" akirak-capture-ticket)
    ("q" "Question" (lambda ()
                      (interactive)
-                     (setq akirak-capture-headline (akirak-capture-read-string
+                     (setq akirak-capture-headline (akirak-capture--maybe-read-heading
                                                     "Question: ")
                            akirak-capture-template-options nil
                            akirak-capture-doct-options '(:clock-in t :clock-resume t))
                      (akirak-capture-doct)))
    ("!" "Troubleshooting" (lambda ()
                             (interactive)
-                            (setq akirak-capture-headline (akirak-capture-read-string
-                                                           "Title: ")
+                            (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                                   akirak-capture-template-options (list :todo "UNDERWAY"
                                                                         :tags "@troubleshooting")
                                   akirak-capture-doct-options '(:clock-in t :clock-resume t))
                             (akirak-capture-doct)))
    ("i" "Ideate" (lambda ()
                    (interactive)
-                   (setq akirak-capture-headline (akirak-capture-read-string
-                                                  "Heading of the todo: ")
+                   (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                          akirak-capture-template-options '(:todo "IDEATE" :tags "@ideate")
                          akirak-capture-doct-options '(:clock-in t :clock-resume t))
                    (akirak-capture-doct)))
@@ -356,7 +354,7 @@
     ("h" "Plain heading"
      (lambda ()
        (interactive)
-       (setq akirak-capture-headline (akirak-capture-read-string "Heading: ")
+       (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
              akirak-capture-template-options nil
              akirak-capture-doct-options nil)
        (akirak-capture-doct)))
@@ -396,7 +394,14 @@
    ((use-region-p)
     (akirak-capture-active-region))
    (t
+    (setq akirak-capture-initial initial)
+    (when akirak-capture-initial
+      (message "Heading set to \"%s\"" akirak-capture-initial))
     (transient-setup 'akirak-capture))))
+
+(defun akirak-capture--maybe-read-heading (&optional prompt)
+  (or akirak-capture-initial
+      (akirak-capture-read-string (or prompt "Heading: "))))
 
 (transient-define-prefix akirak-capture-active-region ()
   [:description
@@ -719,31 +724,34 @@ not work in the future when forge changes the output."
                          (buffer-substring-no-properties start (point))))))))
 
 ;;;###autoload
-(cl-defun akirak-capture-text (string &optional arg)
-  "Capture a new entry with the selected region as the headline."
-  (interactive (list (akirak-capture-read-string "Input: ")
-                     current-prefix-arg))
-  (if arg
-      (let ((body-type (pcase (org--insert-structure-template-mks)
-                         (`("\t" . ,_) (akirak-capture-read-string "Structure type: "))
-                         (`(,_ ,choice . ,_) choice))))
-        (setq akirak-capture-headline "%^{Title}"
-              akirak-capture-template-options
-              `(:body ,(list "%?"
-                             (concat "#+begin_" body-type
-                                     (when (equal body-type "src")
-                                       (thread-last
-                                         (symbol-name major-mode)
-                                         (string-remove-suffix "-mode")
-                                         (concat " "))))
-                             string
-                             (concat "#+end_" (car (split-string body-type)))
-                             "%a"))
-              akirak-capture-doct-options nil))
-    (setq akirak-capture-headline string
-          akirak-capture-template-options nil
-          akirak-capture-doct-options nil))
-  (akirak-capture-doct))
+(cl-defun akirak-capture-text (string)
+  "Capture a new entry with the selected region as the headline.
+
+This command simply passes STRING to `akirak-capture'. It is
+provided as a separate command for integration, e.g. with embark."
+  (interactive (list (akirak-capture-read-string "Input: ")))
+  (akirak-capture string))
+
+;; (cl-defun akirak-capture-region (begin end)
+;;   "Capture a new entry with the selected region as the headline."
+;;   (interactive "r")
+;;   (let ((body-type (pcase (org--insert-structure-template-mks)
+;;                      (`("\t" . ,_) (akirak-capture-read-string "Structure type: "))
+;;                      (`(,_ ,choice . ,_) choice))))
+;;     (setq akirak-capture-headline "%^{Title}"
+;;           akirak-capture-template-options
+;;           `(:body ,(list "%?"
+;;                          (concat "#+begin_" body-type
+;;                                  (when (equal body-type "src")
+;;                                    (thread-last
+;;                                      (symbol-name major-mode)
+;;                                      (string-remove-suffix "-mode")
+;;                                      (concat " "))))
+;;                          string
+;;                          (concat "#+end_" (car (split-string body-type)))
+;;                          "%a"))
+;;           akirak-capture-doct-options nil))
+;;   (akirak-capture-doct))
 
 (defun akirak-capture-command-snippet ()
   (interactive)
