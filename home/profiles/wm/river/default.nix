@@ -34,6 +34,8 @@
     wayshot
     wf-recorder
     slurp # Used with wayshot
+
+    pavucontrol
   ];
 
   xdg.configFile."river/init".source = ./init;
