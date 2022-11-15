@@ -2055,12 +2055,18 @@ Outline-based notes management and organizer
     (add-hook 'org-follow-link-hook
               (defun akirak/org-follow-link-reveal ()
                 (let ((buffer (window-buffer (selected-window))))
-                  ;; For performance, ignore derived modes for now
                   (when (and (eq 'org-mode (buffer-local-value 'major-mode buffer))
+                             (or (looking-at org-heading-regexp)
+                                 (when-let (uri (cadr (get-char-property (point) 'htmlize-link)))
+                                   (string-match-p "^id:" uri)))
+                             (not (and (thing-at-point-looking-at org-link-any-re)
+                                       (match-string 1))))
+                    (if (and (not (buffer-base-buffer buffer))
                              (fboundp 'org-dog-indirect-buffer))
-                    (with-current-buffer (with-current-buffer buffer
-                                           (org-dog-indirect-buffer))
-                      (pop-to-buffer (current-buffer))
+                        (with-current-buffer (with-current-buffer buffer
+                                               (org-dog-indirect-buffer))
+                          (pop-to-buffer (current-buffer))
+                          (org-show-context 'bookmark-jump))
                       (org-show-context 'bookmark-jump)))))))
 #+end_src
 **** org-agenda
