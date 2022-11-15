@@ -191,7 +191,8 @@
          (candidates (org-ql-select "~/org/meta.org"
                        `(and (todo)
                              (or (ancestors (link nil :target ,link))
-                                 (link nil :target ,link)))
+                                 (link nil :target ,link)
+                                 (parent (heading "General"))))
                        :action `(cons (org-format-outline-path
                                        (org-get-outline-path t t)
                                        ,width
