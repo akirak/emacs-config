@@ -360,8 +360,24 @@
        (akirak-capture-doct)))
     ("c" "Content title" akirak-capture-content)]
 
-   ["Schedule an event"
+   ["Schedule an event / org-memento"
     :class transient-row
+    ("an" "Note"
+     (lambda ()
+       (interactive)
+       (akirak-capture-short-note
+        (akirak-capture--maybe-read-heading "Add an event or note: "))))
+    ("aa" "Schedule block"
+     (lambda ()
+       (interactive)
+       (org-memento-add-quick-event
+        (akirak-capture--maybe-read-heading "Describe an event: "))))
+    ("a!" "Quick start"
+     (lambda ()
+       (interactive)
+       (org-memento-start-quick-event
+        (akirak-capture--maybe-read-heading "Describe the current event: "))))
+
     ("am" "Meeting w/ someone"
      (lambda ()
        (interactive)
@@ -384,8 +400,16 @@
    :class transient-row
    ("sc" "Command snippet" akirak-capture-command-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
-   ("Rq" "Question" akirak-capture-reflection-question
-    :if (lambda () (assoc "~/private/" org-dog-repository-alist)))]
+   ("P" "Placeholder"
+    (lambda ()
+      (interactive)
+      (org-placeholder-capture-input
+       (akirak-capture--maybe-read-heading))))
+   (";t" "Task template"
+    (lambda ()
+      (interactive)
+      (akirak-capture-task-template
+       (akirak-capture--maybe-read-heading "Template name: "))))]
 
   (interactive)
   (cond
@@ -640,24 +664,26 @@
             ,(akirak-org-capture-make-entry-body headline))))
     (org-capture)))
 
-(defun akirak-capture-reflection-question ()
-  (interactive)
-  (org-super-links-store-link)
-  (let ((org-capture-entry
-         (car (doct
-               `((""
-                  :keys ""
-                  :function
-                  (lambda ()
-                    (akirak-capture-goto-olp-subtree
-                        (org-dog-resolve-relative-file "reflection.org")
-                      "Organized sections"))
-                  :template ,(akirak-org-capture-make-entry-body
-                               (org-get-heading t t t t))))))))
-    (org-capture)
-    (org-super-links-insert-link)))
-
 ;;;; Other commands
+
+(defun akirak-capture-short-note (string)
+  "Add a short note to the journal quickly."
+  (interactive "s")
+  (let ((org-capture-entry `("" ""
+                             entry (file+olp ,org-memento-file
+                                             ,(org-memento--today-string))
+                             ,(akirak-org-capture-make-entry-body string)
+                             :immediate-finish t)))
+    (org-capture)))
+
+(defun akirak-capture-task-template (string)
+  "Add a short note to the journal quickly."
+  (interactive "s")
+  (let ((org-capture-entry `("" ""
+                             entry (file ,(org-dog-resolve-relative-file
+                                           "task-templates.org"))
+                             ,(akirak-org-capture-make-entry-body string))))
+    (org-capture)))
 
 ;;;###autoload
 (defun akirak-capture-troubleshooting (&optional arg)
