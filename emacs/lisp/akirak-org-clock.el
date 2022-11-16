@@ -167,6 +167,7 @@
             (bound-and-true-p org-capture-mode)
             ;; Pass non-file buffers like *Org Note* buffers.
             (not buffer-file-name)
+            (bound-and-true-p org-memento-file-mode)
             ;; I sometimes edit Org file inside `user-emacs-directory', and
             ;; I don't want to
             (string-match-p akirak-org-clock-file-name-whitelist
