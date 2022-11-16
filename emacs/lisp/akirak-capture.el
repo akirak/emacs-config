@@ -250,7 +250,7 @@
 
 (transient-define-infix akirak-capture-select-heading ()
   :class 'akirak-transient-flag-variable
-  :description "Select a heading"
+  :description "Select a parent heading"
   :variable 'akirak-capture-select-heading)
 
 (defun akirak-capture--goto-some-heading ()
