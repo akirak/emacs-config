@@ -350,7 +350,6 @@
    :class transient-subgroups
    ["Input"
     :class transient-row
-    ("u" "Url" akirak-capture-url)
     ("h" "Plain heading"
      (lambda ()
        (interactive)
@@ -358,7 +357,9 @@
              akirak-capture-template-options nil
              akirak-capture-doct-options nil)
        (akirak-capture-doct)))
-    ("c" "Content title" akirak-capture-content)]
+    ("u" "Url" akirak-capture-url
+     :if (lambda () (not akirak-capture-initial)))
+    ("c" "Reading/watch list" akirak-capture-content)]
 
    ["Schedule an event / org-memento"
     :class transient-row
