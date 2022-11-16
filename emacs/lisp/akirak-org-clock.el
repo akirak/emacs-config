@@ -108,6 +108,13 @@
            "tag:@contribution "
            "@contribution"
            nil))
+    ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
+          (app (match-string 1) category))
+     (list (org-dog-select 'absolute
+             `(relative :regexp ,(regexp-quote (concat "/" category ".org"))))
+           ""
+           nil
+           nil))
     ("~/org/"
      (if (eq major-mode 'org-memento-policy-mode)
          (list (list "~/org/focus.org" "~/org/meta.org")
