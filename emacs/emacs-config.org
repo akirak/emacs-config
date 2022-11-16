@@ -2061,10 +2061,11 @@ Outline-based notes management and organizer
                                    (string-match-p "^id:" uri)))
                              (not (and (thing-at-point-looking-at org-link-any-re)
                                        (match-string 1))))
-                    (if (and (not (buffer-base-buffer buffer))
-                             (fboundp 'org-dog-indirect-buffer))
-                        (with-current-buffer (with-current-buffer buffer
-                                               (org-dog-indirect-buffer))
+                    (if-let (indirect-buf (and (not (buffer-base-buffer buffer))
+                                               (fboundp 'org-dog-indirect-buffer)
+                                               (with-current-buffer buffer
+                                                 (org-dog-indirect-buffer))))
+                        (with-current-buffer indirect-buf
                           (pop-to-buffer (current-buffer))
                           (org-show-context 'bookmark-jump))
                       (org-show-context 'bookmark-jump)))))))
