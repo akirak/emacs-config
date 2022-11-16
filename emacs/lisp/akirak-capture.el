@@ -119,6 +119,14 @@
   :variable 'akirak-capture-current-url
   :description "Url")
 
+(defvar akirak-capture-include-url-fragment nil)
+
+(transient-define-infix akirak-capture-url-fragment ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-capture-include-url-fragment
+  :if (lambda () (string-match-p (rx "#") akirak-capture-current-url))
+  :description "Url fragment")
+
 ;;;; akirak-capture-doct: A generic prefix command
 
 (defvar akirak-capture-headline nil)
@@ -482,15 +490,17 @@
 
 ;;;###autoload (autoload 'akirak-capture-url "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture-url (url)
-  ["Infixes"
-   ["Options"
-    ("SPC" akirak-capture-source-url)
-    ("-t" akirak-capture-todo-infix)
-    ("-g" akirak-capture-tags-infix)
-    ("-i" akirak-capture-doct-clock-in)
-    ("-r" akirak-capture-doct-clock-resume)]
-   ["Location"
-    ("=" akirak-capture-select-heading)]]
+  [:class
+   transient-row
+   ("SPC" akirak-capture-source-url)
+   ("-f" akirak-capture-url-fragment)]
+  ["Options"
+   :class transient-row
+   ("-t" akirak-capture-todo-infix)
+   ("-g" akirak-capture-tags-infix)
+   ("-i" akirak-capture-doct-clock-in)
+   ("-r" akirak-capture-doct-clock-resume)
+   ("=" akirak-capture-select-heading)]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
@@ -530,8 +540,9 @@
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-url))
                                  target)
+  (require 'orgabilize)
   (let* ((url akirak-capture-current-url)
-         (heading (org-link-make-string url (orgabilize-document-title url)))
+         (heading (orgabilize-make-link-string url akirak-capture-include-url-fragment))
          (org-capture-entry
           (car (doct
                 `(("Url"
