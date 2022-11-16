@@ -344,7 +344,13 @@
                          akirak-capture-template-options '(:todo "IDEATE" :tags "@ideate")
                          akirak-capture-doct-options '(:clock-in t :clock-resume t))
                    (akirak-capture-doct)))
-   ("j" "Journal" akirak-capture-journal)]
+   ("j" "Journal" akirak-capture-journal)
+   ("E" "Epic" (lambda ()
+                 (interactive)
+                 (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
+                       akirak-capture-template-options '(:todo "EPIC" :tags "@epic")
+                       akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                 (akirak-capture-doct)))]
 
   ["Information (input, events, etc.)"
    :class transient-subgroups
