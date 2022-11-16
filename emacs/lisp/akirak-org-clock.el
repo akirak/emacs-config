@@ -101,30 +101,28 @@
            t)))))
 
 (defun akirak-org-clock--target ()
-  (let ((pr (or (project-current)
-                (user-error "Not in a project. First create a project"))))
-    (cond
-     ((string-match-p (regexp-quote "/foss/contributions/")
-                      (project-root pr))
-      (list (list (car (akirak-org-dog-major-mode-files)))
-            "tag:@contribution "
-            "@contribution"
-            nil))
-     ((equal "~/org/" (project-root pr))
-      (if (eq major-mode 'org-memento-policy-mode)
-          (list (list "~/org/focus.org" "~/org/meta.org")
-                ""
-                nil
-                nil)
-        (list (list "~/org/meta.org")
-              "todo: "
-              nil
-              nil)))
-     (t
-      (list (akirak-org-dog-project-files)
-            "todo: "
-            nil
-            t)))))
+  (pcase (project-root (or (project-current)
+                           (user-error "Not in a project. First create a project")))
+    ((rx "/foss/contributions/")
+     (list (list (car (akirak-org-dog-major-mode-files)))
+           "tag:@contribution "
+           "@contribution"
+           nil))
+    ("~/org/"
+     (if (eq major-mode 'org-memento-policy-mode)
+         (list (list "~/org/focus.org" "~/org/meta.org")
+               ""
+               nil
+               nil)
+       (list (list "~/org/meta.org")
+             "todo: "
+             nil
+             nil)))
+    (_
+     (list (akirak-org-dog-project-files)
+           "todo: "
+           nil
+           t))))
 
 ;;;###autoload
 (defun akirak-org-clock-in-to-project ()
