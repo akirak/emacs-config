@@ -2949,7 +2949,11 @@ Make super links
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package org-super-links))
+  (setup (:package org-super-links)
+    (:with-feature org
+      (:with-map org-mode-map
+        (:bind "C-c C-x L" #'org-super-links-insert-link
+               "C-c C-x S" #'org-super-links-store-link))))
 #+end_src
 *** org-transclusion
 :PROPERTIES:
