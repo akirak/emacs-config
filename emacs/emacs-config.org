@@ -4157,7 +4157,8 @@ Conveniently act on minibuffer completions
 #+begin_src emacs-lisp
   (setup (:package embark)
     ;; MAYBE: Bind "C-;" or something to embark-dwim
-    (:global "C-." #'embark-act)
+    (:global "C-." #'embark-act
+             "C-c j" #'akirak-embark-on-org-clock-heading)
 
     (:when-loaded
       (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
