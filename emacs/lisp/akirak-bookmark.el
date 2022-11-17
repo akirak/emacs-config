@@ -1,5 +1,11 @@
 ;;; akirak-bookmark.el ---  -*- lexical-binding: t -*-
 
+;;; Commentary:
+
+;; I ended up not using this library. It is deprecated.
+
+;;; Code:
+
 (require 'bookmark)
 
 (defcustom akirak-bookmark-static-property-alist
