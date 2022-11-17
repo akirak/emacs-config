@@ -172,10 +172,7 @@ values:
 
 ;;;###autoload
 (defun akirak-org-capture-dog-link-template ()
-  "Return a template body containing a file link as the heading.
-
-This is intended for use in org-placeholder, and it should be
-configured in bookmarks."
+  "Return a template body containing a file link as the heading."
   (let* ((heading org-capture-initial)
          (filename (org-dog-complete-file "Select a file (or enter an empty string): "
                                           (downcase heading)))
