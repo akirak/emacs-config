@@ -443,31 +443,90 @@
       (akirak-capture-read-string (or prompt "Heading: "))))
 
 (transient-define-prefix akirak-capture-active-region ()
-  [:description
-   akirak-capture--clock-description
-   :if org-clocking-p
-   ("b" "Block" akirak-capture-region-to-clock)]
+  ["Snippet"
+   :class transient-row
+   ("r" "Tempo snippet"
+    (lambda ()
+      (interactive)
+      (setq akirak-capture-snippet-format "tempo")
+      (setq akirak-capture-snippet-literal-name nil)
+      (call-interactively #'akirak-capture-snippet)))
+   ("p" "Plain snippet"
+    (lambda ()
+      (interactive)
+      (setq akirak-capture-snippet-format "plain")
+      (setq akirak-capture-snippet-literal-name t)
+      (call-interactively #'akirak-capture-snippet)))]
+  ["New entry with a block"
+   :class
+   transient-row
+   ("s" "Source"
+    (lambda ()
+      (interactive)
+      (akirak-capture--region :headline (save-excursion
+                                          (goto-char (region-beginning))
+                                          (which-function))
+                              :type "src"
+                              :clock-in t :clock-resume t)))
+   ("S" "Source (no clock-in)"
+    (lambda ()
+      (interactive)
+      (akirak-capture--region :headline (save-excursion
+                                          (goto-char (region-beginning))
+                                          (which-function))
+                              :type "src")))
+   ("n" "Other"
+    (lambda ()
+      (interactive)
+      (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
+                              :clock-in t :clock-resume t)))
+   ("N" "Other (immediate finish)"
+    (lambda ()
+      (interactive)
+      (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
+                              :immediate-finish t)))]
+  ;; [("a" "Append to clock" akirak-capture-append-block-to-clock
+  ;;   :if org-clocking-p)]
 
-  ["New entry as"
-   ("s" "Snippet" akirak-capture-snippet)
-   ;; As a wisdom quote
-   ;; As a linguistic example
-   ("!" "Troubleshooting (with region as an error message)"
-    akirak-capture-troubleshooting)]
   (interactive)
   (unless (use-region-p)
     (user-error "No active region"))
   (transient-setup 'akirak-capture-active-region))
 
+(defun akirak-capture-tempo-snippet ()
+  (interactive)
+  (setq akirak-capture-snippet-format "tempo")
+  (setq akirak-capture-snippet-literal-name nil)
+  (call-interactively #'akirak-capture-snippet))
+
+(defun akirak-capture-plain-snippet ()
+  (interactive)
+  (setq akirak-capture-snippet-format "plain")
+  (setq akirak-capture-snippet-literal-name t)
+  (call-interactively #'akirak-capture-snippet))
+
+(cl-defun akirak-capture--region (&rest doct-options
+                                        &key type headline &allow-other-keys)
+  (setq akirak-capture-doct-options (thread-first
+                                      doct-options
+                                      (plist-put :type nil)
+                                      (plist-put :headline nil)))
+  (setq akirak-capture-template-options
+        (list :body (concat "%?\n\n" (akirak-capture--org-block type))))
+  (setq akirak-capture-headline (save-excursion
+                                  (goto-char (region-beginning))
+                                  (which-function)))
+  (akirak-capture-doct))
+
 (transient-define-prefix akirak-capture-snippet (begin end)
   ["Options"
-   ("SPC" akirak-capture-snippet-format)
-   ("l" akirak-capture-snippet-literal-name)]
+   :class transient-row
+   ("-t" akirak-capture-snippet-format)
+   ("-l" akirak-capture-snippet-literal-name)]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
   (interactive "r")
-  (setq akirak-capture-snippet-format "tempo")
   (when (use-region-p)
     (setq akirak-capture-bounds (cons begin end)))
   (transient-setup 'akirak-capture-snippet))
@@ -776,26 +835,74 @@ provided as a separate command for integration, e.g. with embark."
   (interactive (list (akirak-capture-read-string "Input: ")))
   (akirak-capture string))
 
-;; (cl-defun akirak-capture-region (begin end)
-;;   "Capture a new entry with the selected region as the headline."
-;;   (interactive "r")
-;;   (let ((body-type (pcase (org--insert-structure-template-mks)
-;;                      (`("\t" . ,_) (akirak-capture-read-string "Structure type: "))
-;;                      (`(,_ ,choice . ,_) choice))))
-;;     (setq akirak-capture-headline "%^{Title}"
-;;           akirak-capture-template-options
-;;           `(:body ,(list "%?"
-;;                          (concat "#+begin_" body-type
-;;                                  (when (equal body-type "src")
-;;                                    (thread-last
-;;                                      (symbol-name major-mode)
-;;                                      (string-remove-suffix "-mode")
-;;                                      (concat " "))))
-;;                          string
-;;                          (concat "#+end_" (car (split-string body-type)))
-;;                          "%a"))
-;;           akirak-capture-doct-options nil))
-;;   (akirak-capture-doct))
+(cl-defun akirak-capture-entry-with-region (&optional body-type &key mode content)
+  (interactive)
+  (let* ((body-type (or body-type
+                        (pcase (org--insert-structure-template-mks)
+                          (`("\t" . ,_) (akirak-capture-read-string "Structure type: "))
+                          (`(,_ ,choice . ,_) choice))))
+         (start-string (concat "#+begin_" body-type
+                               (if (equal body-type "src")
+                                   (format " %s"
+                                           (if (use-region-p)
+                                               (string-remove-suffix
+                                                "-mode" (symbol-name major-mode))
+                                             (completing-read
+                                              "Mode: " (akirak-capture--major-mode-list))))
+                                 "")))
+         (end-string (concat "#+end_" body-type))
+         (skeleton `(> "* " ,(format-time-string (org-time-stamp-format t t))
+                       n _ n n
+                       ,start-string
+                       n
+                       ,(or content
+                            (when (use-region-p)
+                              (string-trim (buffer-substring-no-properties
+                                            (region-beginning) (region-end))))
+                            "")
+                       "\n" ,end-string n)))
+    (with-current-buffer (generate-new-buffer
+                          (generate-new-buffer-name "*org-scratch*"))
+      (org-mode)
+      (local-set-key (kbd "C-c C-k") #'kill-this-buffer)
+      (skeleton-insert skeleton)
+      (pop-to-buffer (current-buffer)))))
+
+(cl-defun akirak-capture--org-block (&optional body-type &key mode content)
+  (interactive)
+  (let* ((body-type (or body-type
+                        (pcase (org--insert-structure-template-mks)
+                          (`("\t" . ,_) (akirak-capture-read-string "Structure type: "))
+                          (`(,_ ,choice . ,_) choice))))
+         (start-string (concat "#+begin_" body-type
+                               (if (equal body-type "src")
+                                   (format " %s"
+                                           (if (use-region-p)
+                                               (string-remove-suffix
+                                                "-mode" (symbol-name major-mode))
+                                             (completing-read
+                                              "Mode: " (akirak-capture--major-mode-list))))
+                                 "")))
+         (end-string (concat "#+end_" body-type)))
+    (concat start-string "\n"
+            (or content
+                (when (use-region-p)
+                  (string-trim (buffer-substring-no-properties
+                                (region-beginning) (region-end))))
+                "")
+            "\n" end-string "\n")))
+
+(defun akirak-capture--major-mode-list ()
+  (let (modes)
+    (cl-do-all-symbols (sym)
+      (when (and (fboundp sym)
+                 (commandp sym)
+                 (string-suffix-p "-mode" (symbol-name sym))
+                 (not (or (memq sym minor-mode-list)
+                          (memq sym global-minor-modes))))
+        (push (string-remove-suffix "-mode" (symbol-name sym))
+              modes)))
+    modes))
 
 (defun akirak-capture-command-snippet ()
   (interactive)
