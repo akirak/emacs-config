@@ -2804,11 +2804,7 @@ Placeholders for Org
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package org-placeholder)
-    (with-eval-after-load 'akirak-unknown
-      (:bind-hash akirak-unknown-text-map
-        #'org-placeholder-capture-input
-        #'org-placeholder-find-or-create-1)))
+  (setup (:package org-placeholder))
 #+end_src
 *** COMMENT org-pretty-table                                                   :ARCHIVE:
 :PROPERTIES:
@@ -3208,11 +3204,7 @@ This is a collection of extra utilities for various packages.
 **** akirak-consult-org
 #+begin_src emacs-lisp
   (setup akirak-consult-org
-    (:global "M-s M-j" #'akirak-consult-org-clock-history)
-    (with-eval-after-load 'embark
-      (add-to-list 'embark-transformer-alist
-                   '(akirak-consult-org-olp-with-file
-                     . akirak-consult-org-olp-to-marker))))
+    (:global "M-s M-j" #'akirak-consult-org-clock-history))
 #+end_src
 **** akirak-org-log
 #+begin_src emacs-lisp
@@ -3311,10 +3303,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-unknown
     (:global "C-c m" #'akirak-unknown)
     (:when-loaded
-      (akirak-unknown-setup-embark))
-    (:with-map akirak-unknown-text-map
-      (:bind "s" #'org-memento-start-quick-event)
-      (:bind "a" #'org-memento-add-quick-event)))
+      (akirak-unknown-setup-embark)))
 #+end_src
 **** akirak-url                                         :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
