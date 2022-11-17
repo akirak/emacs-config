@@ -108,11 +108,28 @@
         (org-goto-marker-or-bmk akirak-embark-target-org-marker)
         (call-interactively ',command)))))
 
+(defun akirak-embark-org-indirect-buffer ()
+  (interactive)
+  (pop-to-buffer (org-dog-indirect-buffer akirak-embark-target-org-marker))
+  ;; FIXME: Don't directly depend on org-ql-find for hooks
+  (run-hooks 'org-ql-find-goto-hook))
+
+(defun akirak-embark-org-clock-in-and-show ()
+  (interactive)
+  (org-with-point-at akirak-embark-target-org-marker
+    (org-clock-in))
+  (switch-to-buffer (org-dog-indirect-buffer akirak-embark-target-org-marker))
+  ;; FIXME: Don't directly depend on org-ql-find for hooks
+  (run-hooks 'org-ql-find-goto-hook))
+
 (embark-define-keymap akirak-embark-org-heading-map
   ""
   :parent nil
   ("g" (akirak-embark-run-at-marker ignore t
          akirak-embark-goto-org-marker))
+  ("G" akirak-embark-org-clock-in-and-show)
+  ("o" akirak-embark-org-indirect-buffer)
+  ("I" (akirak-embark-run-at-marker org-clock-in))
   ("l" (akirak-embark-run-at-marker org-store-link)))
 
 (embark-define-keymap akirak-embark-grep-map
