@@ -445,18 +445,8 @@
 (transient-define-prefix akirak-capture-active-region ()
   ["Snippet"
    :class transient-row
-   ("r" "Tempo snippet"
-    (lambda ()
-      (interactive)
-      (setq akirak-capture-snippet-format "tempo")
-      (setq akirak-capture-snippet-literal-name nil)
-      (call-interactively #'akirak-capture-snippet)))
-   ("p" "Plain snippet"
-    (lambda ()
-      (interactive)
-      (setq akirak-capture-snippet-format "plain")
-      (setq akirak-capture-snippet-literal-name t)
-      (call-interactively #'akirak-capture-snippet)))]
+   ("r" "Tempo snippet" akirak-capture-tempo-snippet)
+   ("p" "Plain snippet" akirak-capture-plain-snippet)]
   ["New entry with a block"
    :class
    transient-row
@@ -485,8 +475,9 @@
       (interactive)
       (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
                               :immediate-finish t)))]
-  ;; [("a" "Append to clock" akirak-capture-append-block-to-clock
-  ;;   :if org-clocking-p)]
+  ["Others"
+   ("a" "Append to clock" akirak-capture-append-block-to-clock
+    :if org-clocking-p)]
 
   (interactive)
   (unless (use-region-p)
@@ -546,6 +537,20 @@
              (cl-etypecase target
                (org-dog-file (oref target absolute))
                (string target)))))
+
+(defun akirak-capture-append-block-to-clock ()
+  (interactive)
+  (require 'akirak-org-clock)
+  (akirak-org-clock-require-clock
+    (let ((block-text (akirak-capture--org-block))
+          (buffer (akirak-org-clock-open)))
+      (with-current-buffer buffer
+        (goto-char (org-entry-end-position))
+        (delete-blank-lines)
+        (save-excursion
+          (newline 2)
+          (insert block-text))
+        (newline)))))
 
 ;;;###autoload (autoload 'akirak-capture-url "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture-url (url)
