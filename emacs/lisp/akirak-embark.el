@@ -175,6 +175,11 @@
                  embark--beginning-of-target embark--unmark-target)))
 
 (defun akirak-embark-setup-org-heading ()
+  ;; Match only at the heading
+  (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading-1)
+  ;; Added as a fallback
+  (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading t)
+
   (add-to-list 'embark-keymap-alist
                '(org-heading . akirak-embark-org-heading-map))
 
@@ -225,12 +230,33 @@
            . ,(cons (org-element-property :begin element)
                     (org-element-property :end element))))))))
 
+(defun akirak-embark-target-org-heading ()
+  (when (derived-mode-p 'org-mode)
+    (org-with-wide-buffer
+     (when (re-search-backward org-complex-heading-regexp nil t)
+       (setq akirak-embark-target-org-marker (copy-marker (match-beginning 0)))
+       (cons 'org-heading (match-string-no-properties 4))))))
+
+(defun akirak-embark-target-org-heading-1 ()
+  (when (and (derived-mode-p 'org-mode)
+             (looking-at org-complex-heading-regexp))
+    (setq akirak-embark-target-org-marker (copy-marker (match-beginning 0)))
+    (cons 'org-heading (match-string-no-properties 4))))
+
 (defun akirak-embark-make-org-heading-target (marker)
   (setq akirak-embark-target-org-marker marker)
   (cons 'org-heading (org-with-point-at marker
                        (save-match-data
                          (when (looking-at org-complex-heading-regexp)
                            (match-string-no-properties 4))))))
+
+;;;###autoload
+(defun akirak-embark-on-org-clock-heading ()
+  (interactive)
+  (akirak-org-clock-require-clock
+    (org-with-clock-position (list org-clock-marker)
+      (org-back-to-heading)
+      (embark-act))))
 
 (defun akirak-embark-target-grep-input ()
   ;; This depends on a private API of embark, so it may not work in
