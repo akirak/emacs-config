@@ -36,9 +36,10 @@
     (org-clock-clock-in (list selected))))
 
 ;;;###autoload
-(defun akirak-consult-org-olp-to-marker (_type olp)
-  "Return a marker to an OLP."
-  (cons 'org-marker (get-char-property 0 'consult--candidate olp)))
+(defun akirak-consult-org-heading-target (_type olp)
+  (require 'akirak-embark)
+  (when-let (marker (get-char-property 0 'consult--candidate olp))
+    (akirak-embark-make-org-heading-target marker)))
 
 (defun consult-org-clock--headings ()
   ;; Based on `consult-org--headings'.

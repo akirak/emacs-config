@@ -2,6 +2,8 @@
 
 (require 'embark)
 
+(defvar akirak-embark-target-org-marker nil)
+
 (eval-when-compile
   (cl-defmacro akirak-embark-wrap-project-command (func &key name-suffix require)
     "Define a function with `default-directory' at the project root."
@@ -94,12 +96,24 @@
 (defun akirak-embark-prefix-nixpkgs-installable (_type package)
   (cons 'nix-installable (concat "nixpkgs#" package)))
 
-(embark-define-keymap akirak-embark-org-marker-map
+(defmacro akirak-embark-run-at-marker (command &optional move name documentation)
+  (declare (indent 2))
+  (let ((name (or name
+                  (intern (concat "akirak-embark-" (symbol-name command))))))
+    `(defun ,name ()
+       ,@(when documentation
+           (list documentation))
+       (interactive)
+       (,(if move 'progn 'save-window-excursion)
+        (org-goto-marker-or-bmk akirak-embark-target-org-marker)
+        (call-interactively ',command)))))
+
+(embark-define-keymap akirak-embark-org-heading-map
   ""
   :parent nil
-  ("o" org-dog-indirect-buffer)
-  ("g" org-goto-marker-or-bmk)
-  ("l" org-store-link))
+  ("g" (akirak-embark-run-at-marker ignore t
+         akirak-embark-goto-org-marker))
+  ("l" (akirak-embark-run-at-marker org-store-link)))
 
 (embark-define-keymap akirak-embark-grep-map
   ""
@@ -108,6 +122,8 @@
 
 ;;;###autoload
 (defun akirak-embark-setup ()
+  (akirak-embark-setup-org-heading)
+
   (define-key embark-bookmark-map "p" #'akirak-bookmark-alter-property)
   (define-key embark-library-map "t"
               (akirak-embark-new-tab-action find-library
@@ -117,14 +133,13 @@
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
 
-  (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
 
   (add-to-list 'embark-keymap-alist
                '(grep . akirak-embark-grep-map))
-  (add-to-list 'embark-keymap-alist
-               '(org-marker . akirak-embark-org-marker-map))
+
   (add-to-list 'embark-keymap-alist
                '(org-src-block . akirak-embark-org-src-map))
   (add-to-list 'embark-keymap-alist
@@ -141,6 +156,18 @@
   (add-to-list 'embark-pre-action-hooks
                '(project-query-replace-regexp
                  embark--beginning-of-target embark--unmark-target)))
+
+(defun akirak-embark-setup-org-heading ()
+  (add-to-list 'embark-keymap-alist
+               '(org-heading . akirak-embark-org-heading-map))
+
+  (add-to-list 'embark-transformer-alist
+               '(akirak-consult-org-olp-with-file
+                 . akirak-consult-org-heading-target))
+
+  (add-to-list 'embark-target-injection-hooks
+               '(akirak-consult-org-clock-history
+                 embark--ignore-target)))
 
 (defun akirak-embark-target-org-link-at-point ()
   (cond
@@ -180,6 +207,13 @@
            ,(string-trim (org-element-property :value element))
            . ,(cons (org-element-property :begin element)
                     (org-element-property :end element))))))))
+
+(defun akirak-embark-make-org-heading-target (marker)
+  (setq akirak-embark-target-org-marker marker)
+  (cons 'org-heading (org-with-point-at marker
+                       (save-match-data
+                         (when (looking-at org-complex-heading-regexp)
+                           (match-string-no-properties 4))))))
 
 (defun akirak-embark-target-grep-input ()
   ;; This depends on a private API of embark, so it may not work in
