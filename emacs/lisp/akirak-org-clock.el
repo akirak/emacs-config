@@ -331,15 +331,19 @@ DAYS default to `akirak-org-clock-history-threshold'."
      (user-error "There is no running clock")))
 
 ;;;###autoload
-(defun akirak-org-clock-open (&optional _arg show-buffer-fn)
+(defun akirak-org-clock-open (&optional arg show-buffer-fn)
   "Open the currently clocked entry in a capture/indirect buffer.
 
 This function returns the current buffer."
-  (interactive)
+  (interactive "P")
   (akirak-org-clock-require-clock
     (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
-        (progn
-          (pop-to-buffer capture-buffer)
+        (with-current-buffer capture-buffer
+          (pop-to-buffer (current-buffer))
+          (when arg
+            (goto-char (org-entry-end-position))
+            (delete-blank-lines)
+            (newline))
           capture-buffer)
       (with-current-buffer (marker-buffer org-clock-marker)
         (let ((initial-position (point)))
@@ -352,6 +356,10 @@ This function returns the current buffer."
             (when org-dog-new-indirect-buffer-p
               (org-back-to-heading)
               (run-hooks 'akirak-org-clock-open-hook))
+            (when arg
+              (goto-char (org-entry-end-position))
+              (delete-blank-lines)
+              (newline))
             (current-buffer)))))))
 
 ;;;###autoload
