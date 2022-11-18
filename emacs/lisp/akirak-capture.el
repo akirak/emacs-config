@@ -452,17 +452,19 @@
    ("s" "Source"
     (lambda ()
       (interactive)
-      (akirak-capture--region :headline (save-excursion
-                                          (goto-char (region-beginning))
-                                          (which-function))
+      (akirak-capture--region :headline (ignore-errors
+                                          (save-excursion
+                                            (goto-char (region-beginning))
+                                            (which-function)))
                               :type "src"
                               :clock-in t :clock-resume t)))
    ("S" "Source (no clock-in)"
     (lambda ()
       (interactive)
-      (akirak-capture--region :headline (save-excursion
-                                          (goto-char (region-beginning))
-                                          (which-function))
+      (akirak-capture--region :headline (ignore-errors
+                                          (save-excursion
+                                            (goto-char (region-beginning))
+                                            (which-function)))
                               :type "src")))
    ("n" "Other"
     (lambda ()
@@ -503,9 +505,8 @@
                                       (plist-put :headline nil)))
   (setq akirak-capture-template-options
         (list :body (concat "%?\n\n" (akirak-capture--org-block type))))
-  (setq akirak-capture-headline (save-excursion
-                                  (goto-char (region-beginning))
-                                  (which-function)))
+  (setq akirak-capture-headline (or headline
+                                    (akirak-capture-read-string "Headline: ")))
   (akirak-capture-doct))
 
 (transient-define-prefix akirak-capture-snippet (begin end)
