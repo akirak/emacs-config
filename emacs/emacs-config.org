@@ -3628,6 +3628,31 @@ Consult integration for git
       (add-to-list 'embark-keymap-alist
                    '(consult-ls-git-status . akirak-embark-git-file-map))))
 #+end_src
+*** consult-recoll
+:PROPERTIES:
+:CREATED_TIME: [2022-11-18 Fri 16:25]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package consult-recoll)
+    (:global "M-s M-c" #'consult-recoll)
+    (:set consult-recoll-open-fn
+          (defun akirak/consult-recoll-open-file (file &optional _page)
+            (org-open-file file))
+
+          consult-recoll-format-candidate
+          (defun akirak/consult-recoll-format-candidate (title urln _mime)
+            (concat title
+                    (propertize (format " (%s)"
+                                        (thread-last
+                                          urln
+                                          (file-name-directory)
+                                          (string-remove-prefix "file://")
+                                          (abbreviate-file-name)))
+                                'face 'font-lock-doc-face))))
+    (:when-loaded
+      (consult-recoll-embark-setup)))
+#+end_src
 *** corfu                                            :completion:UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:19]
