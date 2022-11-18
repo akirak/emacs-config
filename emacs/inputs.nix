@@ -223,7 +223,7 @@
       type = "github";
       owner = "akirak";
       repo = "org-super-links";
-      ref = "no-duplicate-formatter";
+      ref = "fix-time-format";
     };
   };
 
