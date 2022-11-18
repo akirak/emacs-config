@@ -3632,6 +3632,9 @@ Consult integration for git
 :PROPERTIES:
 :CREATED_TIME: [2022-11-18 Fri 16:25]
 :END:
+#+begin_quote
+Recoll queries using consult
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package consult-recoll)
@@ -4154,7 +4157,7 @@ Major mode for editing Elixir files
 :CREATED_TIME: [2022-02-03 Thu 18:07]
 :END:
 #+begin_quote
-extract information from Emacs Lisp libraries
+Extract information from Emacs Lisp libraries
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -6570,7 +6573,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 221 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
