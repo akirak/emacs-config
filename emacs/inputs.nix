@@ -209,6 +209,11 @@
       // super.packageRequires;
   };
 
+  lispy = _: super: {
+    # le-js depends on indium, which I don't want to install.
+    files = builtins.removeAttrs super.files ["le-js.el"];
+  };
+
   symbol-overlay = _: _: {
     origin = {
       type = "github";
