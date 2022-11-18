@@ -869,7 +869,7 @@
     org-super-links = {
       flake = false;
       owner = "akirak";
-      ref = "no-duplicate-formatter";
+      ref = "fix-time-format";
       repo = "org-super-links";
       type = "github";
     };
