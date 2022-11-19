@@ -10,6 +10,7 @@
   (interactive)
   (unless (derived-mode-p 'org-mode)
     (user-error "You must run this command in org-mode."))
+  (require 'akirak-capture)
   (let* ((prop "ORG_DOG_PROJECTED_FILE")
          ;; TODO Completion
          (relative (org-entry-get nil prop t))
@@ -62,7 +63,7 @@
                                   `(("Datetree"
                                      :keys "x"
                                      :file ,absolute
-                                     :function org-reverse-datetree-goto-date-in-file
+                                     :function akirak-capture--goto-backlog
                                      :clock-in t :clock-resume t
                                      :template ,template))))))
     (org-capture)))
