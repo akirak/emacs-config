@@ -235,7 +235,8 @@
 (defun akirak-embark-target-org-heading ()
   (when (derived-mode-p 'org-mode)
     (org-with-wide-buffer
-     (when (re-search-backward org-complex-heading-regexp nil t)
+     (when (and (not (looking-at org-heading-regexp))
+                (re-search-backward org-complex-heading-regexp nil t))
        (setq akirak-embark-target-org-marker (copy-marker (match-beginning 0)))
        (cons 'org-heading (match-string-no-properties 4))))))
 
