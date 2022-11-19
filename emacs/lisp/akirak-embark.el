@@ -256,17 +256,21 @@
 ;;;###autoload
 (defun akirak-embark-on-org-clock-heading ()
   (interactive)
-  (pcase-let
-      ((marker (cond
-                ((org-clocking-p)
-                 org-clock-marker)
-                ((bound-and-true-p org-memento-current-block)
-                 (org-memento-marker (org-memento--current-block)))
-                (t
-                 (user-error "No clock/block is running")))))
-    (org-with-point-at marker
-      (org-back-to-heading)
-      (embark-act))))
+  (org-with-point-at (cond
+                      ((org-clocking-p)
+                       org-clock-marker)
+                      ((bound-and-true-p org-memento-current-block)
+                       (org-memento-marker (org-memento--current-block)))
+                      (t
+                       (user-error "No clock/block is running")))
+    (org-back-to-heading)
+    ;; Some actions have an extra step that requires the user to make a
+    ;; decision on the entry, so it is better to present the content.
+    (org-show-entry)
+    (org-show-children)
+    ;; Hide entries outside of the entry to avoid the confusion.
+    (org-narrow-to-subtree)
+    (embark-act)))
 
 (defun akirak-embark-target-grep-input ()
   ;; This depends on a private API of embark, so it may not work in
