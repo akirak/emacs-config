@@ -21,6 +21,7 @@
          (make-record ()
            (let* ((element (org-element-headline-parser))
                   (id (org-element-property :ID element))
+                  (todo (org-element-property :todo-keyword element))
                   (title (mapconcat #'element-title
                                     (org-element-property :title element)
                                     " "))
@@ -45,6 +46,7 @@
                        (org-link-make-string id title)
                      title)
                    file-link
+                   todo
                    (when group-path
                      (org-memento--format-group-last-node group-path))
                    (when weekly-goal
@@ -52,10 +54,12 @@
                       (slot-value weekly-goal 'duration-minutes)))))))
       (cons (list "Title"
                   "File"
+                  "State"
                   "Group"
                   "Budget")
             (org-ql-select (current-buffer)
-              '(and (todo "UNDERWAY")
+              '(and (or (todo "UNDERWAY")
+                        (todo "MAINT"))
                     (not (archived)))
               :action #'make-record)))))
 
