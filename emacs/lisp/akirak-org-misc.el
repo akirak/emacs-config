@@ -33,8 +33,7 @@
                                  (file-name-nondirectory (org-element-property :path link))))))
                   (taxy (org-memento-policy-find-context-1
                          (apply-partially #'has-id-link id)
-                         start-date end-date
-                         ))
+                         start-date end-date))
                   (group-path (when taxy
                                 (slot-value (taxy-name taxy) 'group-path)))
                   (budgets (when taxy
