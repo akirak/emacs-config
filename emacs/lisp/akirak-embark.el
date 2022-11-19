@@ -196,6 +196,8 @@
                '(org-heading . akirak-embark-org-heading-map))
 
   (add-to-list 'embark-transformer-alist
+               '(org-placeholder-item . akirak-embark-transform-org-placeholder))
+  (add-to-list 'embark-transformer-alist
                '(akirak-consult-org-olp-with-file
                  . akirak-consult-org-heading-target))
 
@@ -339,6 +341,11 @@
              (file-readable-p value))
         (find-file value)
       (user-error "Not a file name: %s" value))))
+
+(defun akirak-embark-transform-org-placeholder (_type item)
+  (let ((marker (org-placeholder-item-marker item)))
+    (setq akirak-embark-target-org-marker marker)
+    (cons 'org-heading item)))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
