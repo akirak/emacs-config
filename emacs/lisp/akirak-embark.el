@@ -123,8 +123,7 @@
   (run-hooks 'org-ql-find-goto-hook))
 
 (embark-define-keymap akirak-embark-org-heading-map
-  ""
-  :parent nil
+  "Keymap for actions on an Org heading or entry."
   ("g" (akirak-embark-run-at-marker ignore t
          akirak-embark-goto-org-marker))
   ("G" akirak-embark-org-clock-in-and-show)
