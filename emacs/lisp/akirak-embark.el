@@ -256,8 +256,15 @@
 ;;;###autoload
 (defun akirak-embark-on-org-clock-heading ()
   (interactive)
-  (akirak-org-clock-require-clock
-    (org-with-clock-position (list org-clock-marker)
+  (pcase-let
+      ((marker (cond
+                ((org-clocking-p)
+                 org-clock-marker)
+                ((bound-and-true-p org-memento-current-block)
+                 (org-memento-marker (org-memento--current-block)))
+                (t
+                 (user-error "No clock/block is running")))))
+    (org-with-point-at marker
       (org-back-to-heading)
       (embark-act))))
 
