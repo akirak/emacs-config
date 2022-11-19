@@ -388,11 +388,11 @@
     "consult-org-nlink": {
       "flake": false,
       "locked": {
-        "lastModified": 1668577439,
-        "narHash": "sha256-qmc+wuRP6roUcwOcwsC1sgbr+62LR8QcfIN0uxO4Azo=",
+        "lastModified": 1668854269,
+        "narHash": "sha256-3qtFbo4D7EaR4z4mIdkxrX4fEURgQ9jPzZyu1Y3dmaM=",
         "owner": "akirak",
         "repo": "org-nlink.el",
-        "rev": "3e8cf7bb99ef258cb3b06cb0f982a4f2a9432e2e",
+        "rev": "3a36af1acc367057599edaea4fcddb259ba9b9e3",
         "type": "github"
       },
       "original": {
@@ -1992,11 +1992,11 @@
     "org": {
       "flake": false,
       "locked": {
-        "lastModified": 1668761084,
-        "narHash": "sha256-bU7h8TOOacnnsZp2GzndmJl/Cr6oXkRdzdyay+AyvbI=",
+        "lastModified": 1668865287,
+        "narHash": "sha256-q7TfqUuEdZsD+JkF8Cr0Lnn0po6qo2zXMZDieocLpeQ=",
         "ref": "main",
-        "rev": "0b124d796865c4fe9937f9bc0b5e18813efb57c4",
-        "revCount": 25784,
+        "rev": "0737112852afe835a5a5833a2dd0a6852c04e0f0",
+        "revCount": 25787,
         "type": "git",
         "url": "git://git.sv.gnu.org/emacs/org-mode.git"
       },
@@ -2057,11 +2057,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1668602055,
-        "narHash": "sha256-cyyN2NkDS8pLK4SnApK/f/YCMpJO4ERiUKXuN6T2qHg=",
+        "lastModified": 1668853955,
+        "narHash": "sha256-a4KTMw5YG19lNgelZ2ofSxsp4nIxlYgLjN2TlKidhpM=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "92884734d4fd10b97231500f2680d07edc69d9df",
+        "rev": "d78499d2b5b5608103094fb0cd5808917aa63063",
         "type": "github"
       },
       "original": {
@@ -2174,11 +2174,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1668779282,
-        "narHash": "sha256-WZjSZ1z5chTXlgMSJVoIGThzJHA2SmIPs8CnCR4ot18=",
+        "lastModified": 1669089039,
+        "narHash": "sha256-kR3W1yTvNx/sb9WIIBWOBvqqfLt6PYEscbqSG656hXI=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "6d0b39c0e4ebf4139bbcfc21e2c3bb3d070b6f7f",
+        "rev": "26b7f9020524ba24e5cfd239ca321d18f3b7090c",
         "type": "github"
       },
       "original": {
@@ -2223,11 +2223,11 @@
     "org-placeholder": {
       "flake": false,
       "locked": {
-        "lastModified": 1668701949,
-        "narHash": "sha256-YdiJb2asy2LDxTSs+Q5OSVs30DlDb0d9rascdCQPkZk=",
+        "lastModified": 1669047773,
+        "narHash": "sha256-I2xWG/DF6NjkvUZv32xcYX1ornv/WNGkr6OGR0+sdZo=",
         "owner": "akirak",
         "repo": "org-placeholder",
-        "rev": "436df13c96f68fd4d7f46565f6e28791681e65c9",
+        "rev": "40d0241738b0f6e1f43e04d770064cef364015f0",
         "type": "github"
       },
       "original": {
