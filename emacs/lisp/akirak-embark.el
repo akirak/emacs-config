@@ -175,9 +175,11 @@
                  embark--beginning-of-target embark--unmark-target)))
 
 (defun akirak-embark-setup-org-heading ()
-  ;; Match only at the heading
+  ;; If the point is at the very beginning of the heading, I want this finder to
+  ;; match.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading-1)
-  ;; Added as a fallback
+  ;; Added as a fallback. Other finder such as the link finder should precede,
+  ;; but I can still use this finder by running `embark-act' multiple times.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading t)
 
   (add-to-list 'embark-keymap-alist
