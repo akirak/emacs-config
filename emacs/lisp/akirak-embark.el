@@ -122,6 +122,15 @@
   ;; FIXME: Don't directly depend on org-ql-find for hooks
   (run-hooks 'org-ql-find-goto-hook))
 
+(defun akirak-embark-org-open-link-in-entry ()
+  "Follow a link in the entry."
+  (interactive)
+  (require 'akirak-org)
+  (org-with-point-at akirak-embark-target-org-marker
+    (when (re-search-forward org-link-bracket-re (org-entry-end-position) t)
+      (goto-char (match-beginning 0))
+      (org-open-at-point))))
+
 (embark-define-keymap akirak-embark-org-heading-map
   "Keymap for actions on an Org heading or entry."
   ("g" (akirak-embark-run-at-marker ignore t
@@ -129,7 +138,9 @@
   ("G" akirak-embark-org-clock-in-and-show)
   ("o" akirak-embark-org-indirect-buffer)
   ("I" (akirak-embark-run-at-marker org-clock-in))
-  ("l" (akirak-embark-run-at-marker org-store-link)))
+  ("l" (akirak-embark-run-at-marker org-store-link))
+  ("t" (akirak-embark-run-at-marker org-todo))
+  ("f" akirak-embark-org-open-link-in-entry))
 
 (embark-define-keymap akirak-embark-grep-map
   ""
