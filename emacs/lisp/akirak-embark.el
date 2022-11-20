@@ -96,6 +96,10 @@
 (defun akirak-embark-prefix-nixpkgs-installable (_type package)
   (cons 'nix-installable (concat "nixpkgs#" package)))
 
+(defun akirak-embark-transform-recoll-result (_type candidate)
+  (when-let (url (consult-recoll--candidate-url candidate))
+    (cons 'file (abbreviate-file-name (string-remove-prefix "file://" url)))))
+
 (defmacro akirak-embark-run-at-marker (command &optional move name documentation)
   (declare (indent 2))
   (let ((name (or name
@@ -175,6 +179,8 @@
                '(workbox-shell-command . akirak-embark-package-shell-command-map))
   (add-to-list 'embark-transformer-alist
                '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
+  (add-to-list 'embark-transformer-alist
+               '(recoll-result . akirak-embark-transform-recoll-result))
   (add-to-list 'embark-keymap-alist
                '(nix-installable . akirak-embark-nix-installable-map))
 

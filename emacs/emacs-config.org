@@ -3647,9 +3647,7 @@ Recoll queries using consult
                                           (file-name-directory)
                                           (string-remove-prefix "file://")
                                           (abbreviate-file-name)))
-                                'face 'font-lock-doc-face))))
-    (:when-loaded
-      (consult-recoll-embark-setup)))
+                                'face 'font-lock-doc-face)))))
 #+end_src
 *** corfu                                            :completion:UI:
 :PROPERTIES:
