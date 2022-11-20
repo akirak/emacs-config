@@ -2244,6 +2244,13 @@ Outline-based notes management and organizer
     (put 'akirak-org-clock-done 'repeat-map 'akirak/c-z-map)
     (put 'akirak-org-clock-set-review 'repeat-map 'akirak/c-z-map))
 #+end_src
+**** org-element
+#+begin_src emacs-lisp
+  (setup org-element
+    ;; Disable the cache entirely. Note that this variable is not a custom
+    ;; variable.
+    (:set org-element-cache-persistent nil))
+#+end_src
 **** org-habit
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 22:15]
