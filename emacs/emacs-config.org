@@ -2928,14 +2928,8 @@ Supercharge your agenda
 #+begin_src emacs-lisp
   (setup (:package org-super-agenda)
     (with-eval-after-load 'org-agenda
-      (org-super-agenda-mode t)
-
-      (org-super-agenda--defgroup datetree
-        "Match items inside a date tree."
-        :section-name "Date tree"
-        :test
-        (org-super-agenda--when-with-marker-buffer (org-super-agenda--get-marker item)
-          (org-reverse-datetree-date-child-p)))))
+      (org-super-agenda-mode t))
+    (:also-load akirak-org-super-agenda))
 #+end_src
 *** org-super-links
 :PROPERTIES:
