@@ -37,7 +37,14 @@ is an indirect buffer, this command doesn't do anything."
                                             akirak-narrow-narrow-command-alist
                                             (mapcar #'car))))
         (funcall (alist-get mode akirak-narrow-narrow-command-alist))
-      (narrow-to-defun t)))))
+      (if (and (bound-and-true-p outline-regexp)
+               (save-excursion
+                 (beginning-of-line)
+                 (looking-at outline-regexp)))
+          (narrow-to-region (point)
+                            (save-excursion
+                              (outline-get-next-sibling)))
+        (narrow-to-defun t))))))
 
 (defun akirak-narrow--indirect ()
   ;; If the buffer is already an indirect buffer, do nothing.
