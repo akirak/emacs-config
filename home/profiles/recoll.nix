@@ -7,6 +7,7 @@
         "~/resources/bundles"
         "~/resources/ebooks"
         "~/resources/sound"
+        "~/resources/bundles"
       ];
 
       excludedmimetypes = [
