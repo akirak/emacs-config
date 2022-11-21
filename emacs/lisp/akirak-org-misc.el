@@ -1,5 +1,6 @@
 ;;; akirak-org-misc.el --- Miscellaneous snippets for Org mode -*- lexical-binding: t -*-
 
+;;;###autoload
 (defun akirak-org-misc-project-budgets ()
   (pcase-let
       ((`(,start-date ,end-date) (org-memento-week-date-range 0)))
