@@ -5706,6 +5706,7 @@ Summon and dismiss buffers as popups
                                      "^ \\*Agenda Commands\\*"
                                      "^\\*Register Preview\\*"
                                      "^\\*edit string\\*"
+                                     "^\\*eldoc\\*"
                                      inferior-haskell-mode
                                      lisp-interaction-mode
                                      vterm-mode))
