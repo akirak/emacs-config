@@ -413,6 +413,7 @@
   ["Convenience and specific projects"
    :class transient-row
    ("sc" "Command snippet" akirak-capture-command-snippet)
+   ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
    ("P" "Placeholder"
     (lambda ()
@@ -532,6 +533,32 @@
              (cl-etypecase target
                (org-dog-file (oref target absolute))
                (string target)))))
+
+(defun akirak-capture-simple-tempo-snippet ()
+  (interactive)
+  (require 'akirak-snippet)
+  (let* ((src (minibuffer-with-setup-hook
+                  (lambda ()
+                    (lisp-data-mode))
+                (read-from-minibuffer "Tempo snippet: ")))
+         (org-capture-initial (read-from-minibuffer "Name: "))
+         (org-capture-entry
+          (car (doct `((""
+                        :keys ""
+                        :file ,(buffer-file-name)
+                        :function ,akirak-snippet-capture-target
+                        :template
+                        ("* %i :@snippet:"
+                         ,akirak-org-capture-default-drawer
+                         "%?"
+                         ,(thread-last
+                            (org-ml-build-src-block
+                             :language "lisp-data"
+                             :parameters '(:snippet tempo)
+                             :value src)
+                            (org-ml-to-trimmed-string)))
+                        :after-finalize akirak-snippet--after-capture-finalize))))))
+    (org-capture)))
 
 (defun akirak-capture-append-block-to-clock ()
   (interactive)
