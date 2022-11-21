@@ -418,12 +418,7 @@
     (lambda ()
       (interactive)
       (org-placeholder-capture-input
-       (akirak-capture--maybe-read-heading))))
-   (";t" "Task template"
-    (lambda ()
-      (interactive)
-      (akirak-capture-task-template
-       (akirak-capture--maybe-read-heading "Template name: "))))]
+       (akirak-capture--maybe-read-heading))))]
 
   (interactive)
   (cond
@@ -712,15 +707,6 @@
                                              ,(org-memento--today-string))
                              ,(akirak-org-capture-make-entry-body string)
                              :immediate-finish t)))
-    (org-capture)))
-
-(defun akirak-capture-task-template (string)
-  "Add a short note to the journal quickly."
-  (interactive "s")
-  (let ((org-capture-entry `("" ""
-                             entry (file ,(org-dog-resolve-relative-file
-                                           "task-templates.org"))
-                             ,(akirak-org-capture-make-entry-body string))))
     (org-capture)))
 
 ;;;###autoload
