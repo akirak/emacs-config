@@ -1549,6 +1549,10 @@ Thus I will explicitly install this package rather than using the built-in versi
                      mode ,@modes)
                    t))
 
+    ;; I use a normal keyboard, so it is hard to access cursor keys.
+    (define-key ctl-x-map "9" #'previous-buffer)
+    (:repeat ctl-x-map previous-buffer)
+
     (:global
      ;; TODO: scroll-other-window and scroll-other-window-down
      [remap scroll-up-command]
