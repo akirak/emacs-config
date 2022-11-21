@@ -19,19 +19,22 @@
 (defun akirak-unknown ()
   "Type a free text and run some action on it."
   (interactive)
-  (let ((text (minibuffer-with-setup-hook
-                  (lambda ()
-                    (setq-local akirak-unknown-buffer-p t)
-                    (abbrev-mode t)
-                    (corfu-mode t)
-                    (setq-local embark-prompter #'embark-completing-read-prompter))
-                (read-from-minibuffer "Some text or title: "
-                                      nil nil nil nil
-                                      (if (use-region-p)
-                                          (buffer-substring-no-properties
-                                           (region-beginning) (region-end))
-                                        (thing-at-point 'symbol t))
-                                      'inherit-input-method))))
+  (let* ((region-text (when (use-region-p)
+                        (prog1 (buffer-substring-no-properties
+                                (region-beginning) (region-end))
+                          (deactivate-mark))))
+         (text (minibuffer-with-setup-hook
+                   (lambda ()
+                     (setq-local akirak-unknown-buffer-p t)
+                     (abbrev-mode t)
+                     (corfu-mode t)
+                     (setq-local embark-prompter #'embark-completing-read-prompter))
+                 (read-from-minibuffer "Some text or title: "
+                                       region-text
+                                       nil nil nil
+                                       (unless region-text
+                                         (thing-at-point 'symbol t))
+                                       'inherit-input-method))))
     (akirak-capture-text text)))
 
 (provide 'akirak-unknown)
