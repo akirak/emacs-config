@@ -2812,7 +2812,8 @@ Placeholders for Org
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
-    (:set org-placeholder-prefix-todo nil))
+    (:set org-placeholder-prefix-todo nil)
+    (:global "M-s M-p" #'org-placeholder-find-or-create))
 #+end_src
 *** COMMENT org-pretty-table                                                   :ARCHIVE:
 :PROPERTIES:
