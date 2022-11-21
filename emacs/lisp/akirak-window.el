@@ -173,23 +173,23 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
       (when (bound-and-true-p mini-modeline-mode)
         (mini-modeline-display 'clear)))))
 
-;;;###autoload
-(defun akirak-window-raise-below-window ()
-  (interactive)
-  (let* ((current-window (selected-window))
-         (top (window-top-line current-window))
-         start
-         slotw deletedw)
-    (dolist (w (window-list))
-      (if (> (window-top-line w) top)
-          (progn
-            (setq start (window-start w))
-            (setq deletedw w))
-        (unless (equal w current-window)
-          (setq slotw w))))
-    (when (and slotw deletedw)
-      (window-swap-states deletedw slotw)
-      (delete-window deletedw))))
+;; ;;;###autoload
+;; (defun akirak-window-raise-below-window ()
+;;   (interactive)
+;;   (let* ((current-window (selected-window))
+;;          (top (window-top-line current-window))
+;;          start
+;;          slotw deletedw)
+;;     (dolist (w (window-list))
+;;       (if (> (window-top-line w) top)
+;;           (progn
+;;             (setq start (window-start w))
+;;             (setq deletedw w))
+;;         (unless (equal w current-window)
+;;           (setq slotw w))))
+;;     (when (and slotw deletedw)
+;;       (window-swap-states deletedw slotw)
+;;       (delete-window deletedw))))
 
 ;;;###autoload
 (defun akirak-window-cycle-two-windows (&optional arg)
