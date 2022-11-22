@@ -2647,7 +2647,7 @@ Automatic tables of contents for Org files
 :END:
 #+begin_quote
 Time blocking with Org
-[[https://git.sr.ht/~akirak/org-memento]]
+[[https://github.com/akirak/org-memento]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -6582,7 +6582,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 222 |
+| [[org-ql-search:tags:packages][packages]]            | 224 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
