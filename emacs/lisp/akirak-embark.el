@@ -301,6 +301,12 @@
     (org-narrow-to-subtree)
     (embark-act)))
 
+;;;###autoload
+(defun akirak-embark-on-org-hd-marker (marker)
+  (interactive)
+  (org-with-point-at marker
+    (embark-act)))
+
 (defun akirak-embark-target-grep-input ()
   ;; This depends on a private API of embark, so it may not work in
   ;; the future.
