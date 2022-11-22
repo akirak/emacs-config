@@ -135,6 +135,16 @@
       (goto-char (match-beginning 0))
       (org-open-at-point))))
 
+(defun akirak-embark-org-point-to-register ()
+  (interactive)
+  (let ((register (register-read-with-preview "Point to register: "))
+        (marker (make-marker)))
+    (set-marker marker
+                (marker-position akirak-embark-target-org-marker)
+                (org-base-buffer (marker-buffer akirak-embark-target-org-marker)))
+    (set-register register marker)
+    (message "Saved to register %c" register)))
+
 (embark-define-keymap akirak-embark-org-heading-map
   "Keymap for actions on an Org heading or entry."
   ("g" (akirak-embark-run-at-marker ignore t
@@ -144,7 +154,8 @@
   ("I" (akirak-embark-run-at-marker org-clock-in))
   ("l" (akirak-embark-run-at-marker org-store-link))
   ("t" (akirak-embark-run-at-marker org-todo))
-  ("f" akirak-embark-org-open-link-in-entry))
+  ("f" akirak-embark-org-open-link-in-entry)
+  ("?" akirak-embark-org-point-to-register))
 
 (embark-define-keymap akirak-embark-grep-map
   ""
