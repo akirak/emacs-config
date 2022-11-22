@@ -2497,7 +2497,7 @@ Transient commands for Org Dog
   (setup (:package octopus)
     (:global "M-g M-o" #'octopus-find-file
              "M-s M-o" #'octopus-find-node)
-    (:set octopus-ql-find-options '(:query-prefix "unarchived: "))
+    (:set octopus-ql-find-options '(:query-prefix "!archived: "))
 
     (:with-feature org
       (:when-loaded
@@ -3218,6 +3218,11 @@ This is a collection of extra utilities for various packages.
   (setup akirak-org-log
     (:status personal
       (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
+#+end_src
+**** akirak-org-reg
+#+begin_src emacs-lisp
+  (setup akirak-org-reg
+    (:global "C-c j" #'akirak-org-reg-transient))
 #+end_src
 **** akirak-org-secrets                                   :secrets:
 #+begin_src emacs-lisp
@@ -4190,8 +4195,7 @@ Conveniently act on minibuffer completions
 #+begin_src emacs-lisp
   (setup (:package embark)
     ;; MAYBE: Bind "C-;" or something to embark-dwim
-    (:global "C-." #'embark-act
-             "C-c j" #'akirak-embark-on-org-clock-heading)
+    (:global "C-." #'embark-act)
 
     (:when-loaded
       (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
