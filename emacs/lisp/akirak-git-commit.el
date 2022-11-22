@@ -38,9 +38,10 @@
                 (progn
                   (re-search-forward akirak-git-commit-log-drawer-end-re)
                   (beginning-of-line))
-              (goto-char (org-entry-end-position))
-              (unless (bolp)
-                (insert "\n\n"))
+              ;; It's better for the drawer to not precede a drawer for
+              ;; backlinks (if any), so the commit log drawer should be the last
+              ;; drawer.
+              (org-end-of-meta-data t)
               (insert "#+BEGIN_COMMIT_LOG\n#+END_COMMIT_LOG\n")
               (beginning-of-line 0))
             (insert (akirak-git-commit--build-log-line
