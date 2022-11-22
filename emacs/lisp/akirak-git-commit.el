@@ -1,10 +1,7 @@
 ;;; akirak-git-commit.el ---  -*- lexical-binding: t -*-
 
 (defconst akirak-git-commit-log-drawer-start-re
-  (rx bol (* blank) "#+begin_commit_log" (or blank eol)))
-
-(defconst akirak-git-commit-log-drawer-end-re
-  (rx bol (* blank) "#+end_commit_log" (* blank) eol))
+  (rx bol (* blank) ":GITCOMMITS:" (or blank eol)))
 
 ;;;###autoload
 (define-minor-mode akirak-git-commit-log-to-org-clock-mode
@@ -30,19 +27,19 @@
                         (truncate-string-to-width rev 7))))
            (case-fold-search t))
       (save-current-buffer
-        (org-with-point-at (or (akirak-org-clock--capture-buffer org-clock-marker)
-                               org-clock-marker)
+        (org-with-point-at (or (akirak-org-clock--capture-buffer org-clock-hd-marker)
+                               org-clock-hd-marker)
           (save-excursion
             (if (re-search-forward akirak-git-commit-log-drawer-start-re
                                    (org-entry-end-position) t)
                 (progn
-                  (re-search-forward akirak-git-commit-log-drawer-end-re)
+                  (re-search-forward org-drawer-regexp)
                   (beginning-of-line))
               ;; It's better for the drawer to not precede a drawer for
               ;; backlinks (if any), so the commit log drawer should be the last
               ;; drawer.
               (org-end-of-meta-data t)
-              (insert "#+BEGIN_COMMIT_LOG\n#+END_COMMIT_LOG\n")
+              (insert ":GITCOMMITS:\n:END:\n")
               (beginning-of-line 0))
             (insert (akirak-git-commit--build-log-line
                       :rev-link rev-link
