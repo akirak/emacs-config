@@ -15,6 +15,7 @@ in
   {bubblewrapGUI}: {
     name ? "emacs",
     nativeCompileAheadDefault ? true,
+    automaticNativeCompile ? true,
     enableOpinionatedSettings ? true,
     extraFeatures ? [],
     extraInitFiles ? [],
@@ -36,6 +37,10 @@ in
     initEl = writeText "init.el" ''
       ;; -*- lexical-binding: t; no-byte-compile: t; -*-
       (setq custom-file (locate-user-emacs-file "custom.el"))
+      ${lib.optionalString (!automaticNativeCompile) ''
+        ;; Turn off automatic native compilation
+        (setq inhibit-automatic-native-compilation t)
+      ''}
       ${lib.optionalString enableOpinionatedSettings ''
         ;; Turn on settings inside :status clauses
         (setq akirak/enabled-status-tags t)

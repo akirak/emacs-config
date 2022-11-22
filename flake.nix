@@ -257,6 +257,7 @@
             tryout-emacs = emacsSandboxed {
               name = "tryout-emacs";
               nativeCompileAheadDefault = false;
+              automaticNativeCompile = false;
               enableOpinionatedSettings = false;
               extraFeatures = [];
               protectHome = false;
