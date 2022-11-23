@@ -2543,7 +2543,11 @@ An example embark configuration for org-dog
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package org-dog-embark))
+  (setup (:package org-dog-embark)
+    (:with-map org-dog-embark-file-map
+      (:bind "v" (defun akirak/oahu-view-org-file (file)
+                   (interactive "sFile: ")
+                   (oahu-view 'Org (list file))))))
 #+end_src
 **** org-dog-export
 #+begin_quote
