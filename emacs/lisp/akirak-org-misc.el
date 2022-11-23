@@ -64,7 +64,7 @@
               :action #'make-record)))))
 
 ;;;###autoload
-(defun akirak-org-misc-run-auto-babel-blocks ()
+(defun akirak-org-misc-update-auto-babel-blocks ()
   (interactive)
   (let (files)
     (dolist (file (org-agenda-files))
@@ -82,7 +82,9 @@
                (push file files)))))))
     (when files
       (message "Executed source blocks in %s"
-               (mapconcat #'abbreviate-file-name files " ")))))
+               (mapconcat #'abbreviate-file-name files " ")))
+    ;; Reload data from the blocks
+    (org-dog-reload-files)))
 
 (provide 'akirak-org-misc)
 ;;; akirak-org-misc.el ends here
