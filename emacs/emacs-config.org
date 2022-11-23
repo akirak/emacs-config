@@ -1127,7 +1127,8 @@ Operations on the current project
           ;; Don't use c-x p for the prefix map.
           (:unbind "p")
           ;; Rebind the key
-          (:bind "p" #'akirak-consult-project-file)))))
+          (:bind "p" #'akirak-consult-project-file))
+        (global-set-key (kbd "C-c p") project-prefix-map))))
 #+end_src
 **** akirak-project
 #+begin_src emacs-lisp
@@ -6469,8 +6470,9 @@ Compilation helpers
 
 #+begin_src emacs-lisp
   (setup (:package workbox)
-    (:global "C-c p" #'workbox-run-some-package-manager
-             "C-c SPC" #'workbox-transient)
+    (:global "C-c SPC" #'workbox-transient)
+    (with-eval-after-load 'project
+      (define-key project-prefix-map "m" #'workbox-run-some-package-manager))
 
     (:set workbox-mix-command-runner #'akirak-vterm-run-in-project)
 
