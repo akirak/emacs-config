@@ -63,6 +63,7 @@
     result))
 
 (defun akirak-elisp--run-tempo (elements on-region)
+  (require 'tempo)
   (when on-region
     (unless (use-region-p)
       (push-mark)
