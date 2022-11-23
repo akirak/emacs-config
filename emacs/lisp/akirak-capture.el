@@ -490,7 +490,7 @@
 (defun akirak-capture-plain-snippet ()
   (interactive)
   (setq akirak-capture-snippet-format "plain")
-  (setq akirak-capture-snippet-literal-name t)
+  (setq akirak-capture-snippet-literal-name nil)
   (call-interactively #'akirak-capture-snippet))
 
 (cl-defun akirak-capture--region (&rest doct-options
