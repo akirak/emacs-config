@@ -174,6 +174,7 @@
   (define-key embark-expression-map "R" #'project-query-replace-regexp)
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
+  (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
@@ -369,6 +370,16 @@
   (let ((marker (org-placeholder-item-marker item)))
     (setq akirak-embark-target-org-marker marker)
     (cons 'org-heading item)))
+
+(defun akirak-embark-org-store-link-with-desc (description)
+  "Store a link with the description set to the given text."
+  (interactive "sDescription: ")
+  (let ((inhibit-message t))
+    (call-interactively #'org-store-link)
+    (setcdr (car org-stored-links)
+            (list description)))
+  (message "Stored a link with the description \"%s\": %s"
+           description (caar org-stored-links)))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
