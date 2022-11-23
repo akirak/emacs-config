@@ -2669,7 +2669,8 @@ Time blocking with Org
 
 #+begin_src emacs-lisp
   (setup (:package org-memento)
-    (:set org-memento-idle-time 15)
+    (:set org-memento-idle-time 15
+          org-memento-timeline-window-width akirak/default-body-width)
     (:with-feature org-memento-timeline
       (:with-map org-memento-timeline-mode-map
         (:bind "C-c ." #'akirak-org-edit-active-ts)))
@@ -5589,7 +5590,8 @@ Minor mode for a nice writing environment
     (:set olivetti-body-width akirak/default-body-width)
 
     ;; Also hooked into nov-mode. See the package setting
-    (:hook-into org-mode-hook)
+    (:hook-into org-mode-hook
+                org-memento-timeline-mode-hook)
 
     ;; Implement `olivetti-set-width-hook' without tweaking the upstream code.
     (advice-add 'olivetti-expand
