@@ -4851,17 +4851,21 @@ A Haskell editing mode
     (:with-mode haskell-cabal-mode
       (:file-match "\\.cabal\\'"))
 
-    (:mode-repl run-haskell)
-    (:hook interactive-haskell-mode)
+    (:mode-repl haskell-interactive-bring)
+    (:bind "C-c C-p" #'haskell-process-cabal
+           "C-c C-m" #'haskell-compile)
+    (:hook interactive-haskell-mode
+           haskell-auto-insert-module-template)
 
     (:reformatters
      (ormolu :program "ormolu"))
 
-    (:compilation-error
-     ;; path:67:23-45:
-     (hlint "^\\([/[:alnum:]][./[:alnum:]]*\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
-            1 2 3 (4 . 4)))
+    ;; (:compilation-error
+    ;;  ;; path:67:23-45:
+    ;;  (hlint "^\\([/[:alnum:]][./[:alnum:]]*\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
+    ;;         1 2 3 (4 . 4)))
 
+    ;; Currently unused.
     (defun akirak/haskell-module-name (&optional filename)
       (let* ((filename (or filename (buffer-file-name)))
              (project (project-current nil (file-name-directory filename)))
@@ -4878,12 +4882,7 @@ A Haskell editing mode
           (`nil "Main")
           ((and `(,name) (guard (string-suffix-p "Main" name)))
            "Main")
-          (module-segments (string-join module-segments ".")))))
-
-    (:auto-insert
-     ("\\.hs\\'" . (> "module " (akirak/haskell-module-name) "\n"
-                      "  where\n\n"
-                      _))))
+          (module-segments (string-join module-segments "."))))))
 #+end_src
 *** COMMENT haskell-tng-mode           :Haskell:major__mode:ARCHIVE:
 :PROPERTIES:
