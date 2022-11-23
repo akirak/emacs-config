@@ -2093,6 +2093,23 @@ Outline-based notes management and organizer
     (:unbind "o")
     (:bind "C-c ." #'akirak-org-edit-active-ts)
 
+    ;; Keybinding compatibility with org-mode.
+    (defvar akirak/org-agenda-prefix-map (make-sparse-keymap))
+    (with-eval-after-load 'org-agenda
+      (define-key org-agenda-mode-map (kbd akirak/mode-prefix-key)
+                  akirak/org-agenda-prefix-map))
+
+    (defmacro akirak/org-agenda-wrap-orig-command (org-command)
+      `(defun ,(intern (format "akirak/%s-from-agenda" org-command)) ()
+         (interactive)
+         (org-agenda-with-point-at-orig-entry (buffer-substring (pos-bol) (pos-eol))
+           (call-interactively ',org-command))))
+
+    (:with-map akirak/org-agenda-prefix-map
+      (:bind "r" #'octopus-refile
+             "S" (akirak/org-agenda-wrap-orig-command
+                  org-super-links-store-link)))
+
     (define-key help-map (kbd "M-a")
                 (defun akirak/org-default-agenda ()
                   (interactive)
