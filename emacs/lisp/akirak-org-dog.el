@@ -53,12 +53,12 @@
                      :tags (seq-difference (org-get-tags)
                                            filetags
                                            #'equal)
-                     :body (concat "#+begin_meta\n"
+                     :body (concat ":METADATA:\n"
                                    "Context: %a\n"
                                    (if first-link
                                        (concat "Source: " first-link "\n")
                                      "")
-                                   "\n#+end_meta\n%?")))
+                                   ":END:")))
          (org-capture-entry (car (doct
                                   `(("Datetree"
                                      :keys "x"
