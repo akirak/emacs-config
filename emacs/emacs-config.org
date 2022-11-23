@@ -3330,6 +3330,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-nix
     (:global "<f12> n p" #'akirak-nix-search-nixpkgs))
 #+end_src
+**** akirak-pandoc
+#+begin_src emacs-lisp
+  (setup akirak-pandoc
+    (:nixpkgs "pandoc"))
+#+end_src
 **** akirak-snippet
 #+begin_src emacs-lisp
   (setup akirak-snippet
