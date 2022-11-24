@@ -471,7 +471,17 @@
     (lambda ()
       (interactive)
       (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
-                              :immediate-finish t)))]
+                              :immediate-finish t)))
+
+   ("t" "Troubleshooting"
+    (lambda ()
+      (interactive)
+      (akirak-capture--region :headline (akirak-capture--read-summary-for-region
+                                         "Headline: ")
+                              :todo "UNDERWAY"
+                              :tags '("@troubleshooting")
+                              :type "example"
+                              :clock-in t :clock-resume t)))]
   ["Others"
    ("a" "Append to clock" akirak-capture-append-block-to-clock
     :if org-clocking-p)]
@@ -494,16 +504,51 @@
   (call-interactively #'akirak-capture-snippet))
 
 (cl-defun akirak-capture--region (&rest doct-options
-                                        &key type headline &allow-other-keys)
+                                        &key type headline tags todo
+                                        &allow-other-keys)
   (setq akirak-capture-doct-options (thread-first
                                       doct-options
+                                      (plist-put :tags nil)
                                       (plist-put :type nil)
+                                      (plist-put :todo nil)
                                       (plist-put :headline nil)))
   (setq akirak-capture-template-options
-        (list :body (concat "%?\n\n" (akirak-capture--org-block type))))
+        (list :body (concat "%?\n\n" (akirak-capture--org-block type))
+              :todo todo
+              :tags tags))
   (setq akirak-capture-headline (or headline
                                     (akirak-capture-read-string "Headline: ")))
   (akirak-capture-doct))
+
+(defun akirak-capture--read-summary-for-region (prompt)
+  (completing-read prompt
+                   (akirak-capture--sentences
+                    (buffer-substring-no-properties
+                     (region-beginning) (region-end)))))
+
+(defun akirak-capture--sentences (text)
+  (cl-flet
+      ((split-sentences (str)
+         (let (sentences)
+           (with-temp-buffer
+             (insert str)
+             (replace-regexp-in-region (rx (* blank) "\n"
+                                           (* blank))
+                                       " "
+                                       (point-min) (point-max))
+             (goto-char (point-min))
+             (let ((start (point)))
+               (while (ignore-errors (forward-sentence))
+                 (push (string-trim (buffer-substring-no-properties start (1- (point))))
+                       sentences)
+                 (setq start (point)))))
+           sentences)))
+    (thread-last
+      (split-string text "\n\n")
+      (cl-remove-if #'string-empty-p)
+      (mapcar #'split-sentences)
+      (apply #'append)
+      (cl-remove-if #'string-empty-p))))
 
 (transient-define-prefix akirak-capture-snippet (begin end)
   ["Options"
