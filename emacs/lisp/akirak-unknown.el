@@ -6,6 +6,10 @@
 (defvar akirak-unknown-buffer-p nil
   "Non-nil in minibuffers for unknown text.")
 
+(defcustom akirak-unknown-default-text-hook nil
+  ""
+  :type 'hook)
+
 (defun akirak-unknown-setup-embark ()
   (require 'embark)
   (add-to-list 'embark-keymap-alist '(unknown-text . akirak-unknown-text-map))
@@ -33,9 +37,13 @@
                                        region-text
                                        nil nil nil
                                        (unless region-text
-                                         (thing-at-point 'symbol t))
+                                         (or (thing-at-point 'symbol t)
+                                             (akirak-unknown--default-text)))
                                        'inherit-input-method))))
     (akirak-capture-text text)))
+
+(defun akirak-unknown--default-text ()
+  (run-hook-with-args-until-success 'akirak-unknown-default-text-hook))
 
 (provide 'akirak-unknown)
 ;;; akirak-unknown.el ends here
