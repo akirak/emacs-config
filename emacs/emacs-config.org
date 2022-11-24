@@ -357,10 +357,11 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:hook-into prog-mode text-mode minibuffer-setup)
     (:when-loaded
       (define-abbrev-table 'global-abbrev-table
-        '(
-          ;; Acronyms
-          ("wip" "WIP")
+        '(("wip" "WIP")
           ("fixme" "FIXME")
+          ("afaik" "AFAIK")
+          ("imo" "IMO")
+          ("imho" "IMHO")
           ;; Common mistypes
           ("ort" "org")))))
 #+end_src
