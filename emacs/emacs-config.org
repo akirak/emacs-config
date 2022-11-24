@@ -4420,7 +4420,12 @@ Not only English-Chinese translator
     (:when-loaded
       (require 'fanyi-longman)
       (require 'fanyi-etymon))
-    (define-key help-map (kbd "M-d") #'fanyi-dwim))
+    (define-key help-map (kbd "M-d") #'fanyi-dwim)
+
+    (add-hook 'akirak-unknown-default-text-hook
+              (defun akirak-unknown-fanyi-current-word ()
+                (when (eq major-mode 'fanyi-mode)
+                  fanyi-current-word))))
 #+end_src
 
 You should also load ol-fanyi library to enable fanyi link type.
