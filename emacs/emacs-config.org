@@ -3624,10 +3624,23 @@ Consulting completing-read
                                            akirak-consult-source-narrowed-buffer
                                            akirak-consult-source-org-agenda-buffer))
                                      consult--source-buffer
-                                     consult--source-recent-file))
+                                     consult--source-recent-file)
+            ;; Use only relevant bookmark groups.
+            consult-bookmark-narrow '((?f "File or directory" bookmark-default-handler)
+                                      (?h "Help" help-bookmark-jump)
+                                      (?i "Info" Info-bookmark-jump)
+                                      ;; (?p "Picture" image-bookmark-jump)
+                                      ;; (?d "Docview" doc-view-bookmark-jump)
+                                      ;; (?m "Man" Man-bookmark-jump)
+                                      (?w "Woman" woman-bookmark-jump)
+                                      ;; (?g "Gnus" gnus-summary-bookmark-jump)
+                                      ;; (?s "Eshell" eshell-bookmark-jump)
+                                      (?e "Eww" eww-bookmark-jump)
+                                      ;; (?v "VC Directory" vc-dir-bookmark-jump)
 
-      (add-to-list 'consult-bookmark-narrow
-                   '(?o "Org" org-bookmark-heading-jump)))
+                                      ;; Non-default
+                                      (?o "Org" org-bookmark-heading-jump)
+                                      (?v "Org Placeholder" org-placeholder-view))))
 
     (:global [remap switch-to-buffer] #'consult-buffer
              [remap bookmark-jump] #'consult-bookmark
