@@ -130,12 +130,10 @@ I am interested to see if it can reduce the amount of configuration code.
      "Proxy or bind embark bindings."
      :indent 2
      `(with-eval-after-load 'embark
-        ,@(cl-loop for (key cmd . _) in bindings
+        ,@(cl-loop for (key cmd name) in bindings
                    collect `(define-key ,map (kbd ,key)
                                         ,(if interactive
-                                             `(defun ,(intern (format "_embark-%s_%s"
-                                                                      interactive cmd))
-                                                  (arg)
+                                             `(defun ,name (arg)
                                                 (interactive ,interactive)
                                                 (,cmd arg))
                                            `(quote ,cmd)))))))
@@ -2353,7 +2351,7 @@ Converts web pages into Org
     ;;                 (interactive "s")
     ;;                 (orgabilize-org-archive url))))
     (:embark embark-url-map "s"
-      ("r" orgabilize-org-archive))
+      ("r" orgabilize-org-archive akirak/embark-url-archive-org))
     (:when-loaded
       (setq orgabilize-title-escape-alist
             (append (eval (car (get 'orgabilize-title-escape-alist 'standard-value)))
@@ -3303,9 +3301,9 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-image
     (:nixpkgs "librsvg")
     (:embark embark-url-map "s"
-      ("d" akirak-image-insert-offline-link))
+      ("d" akirak-image-insert-offline-link akirak/embark-org-insert-image))
     (:embark embark-file-map nil
-      ("C-c i" akirak-image-import-file))
+      ("C-c i" akirak-image-import-file akirak/embark-import-image-url))
     (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
 #+end_src
 **** akirak-insert
@@ -3354,11 +3352,11 @@ Complete a URL from the clipboard and the kill ring and insert as a link
   (setup akirak-url
     (:global "C-c w" #'akirak-url-insert-dwim)
     (:embark embark-url-map "s"
-      ("m" akirak-url-insert-as-markdown)
-      ("g" akirak-git-clone)
-      ("c" akirak-url-org-capture))
+      ("m" akirak-url-insert-as-markdown akirak/embark-markdown-insert-link)
+      ("c" akirak-capture-url akirak/embark-capture-url)
+      ("g" akirak-git-clone akirak/embark-git-clone-from-url))
     (:embark embark-file-map "s"
-      ("C-l" akirak-org-store-link-to-file)))
+      ("C-l" akirak-org-store-link-to-file akirak/embark-org-store-file-link)))
 #+end_src
 **** akirak-wayshot                                                 :screenshot:
 #+begin_src emacs-lisp
