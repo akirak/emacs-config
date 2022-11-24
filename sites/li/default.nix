@@ -24,6 +24,7 @@
 
       home.packages = [
         pkgs.wine
+        pkgs.tenacity
       ];
 
       home.stateVersion = "22.05";
