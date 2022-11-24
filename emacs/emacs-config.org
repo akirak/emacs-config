@@ -3333,6 +3333,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-pandoc
     (:nixpkgs "pandoc"))
 #+end_src
+**** akirak-scratch
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
+#+end_src
 **** akirak-snippet
 #+begin_src emacs-lisp
   (setup akirak-snippet
@@ -5756,6 +5760,7 @@ Summon and dismiss buffers as popups
                                      "^ \\*Agenda Commands\\*"
                                      "^\\*Register Preview\\*"
                                      "^\\*edit string\\*"
+                                     "^\\*scratch from selection\\*"
                                      "^\\*eldoc\\*"
                                      inferior-haskell-mode
                                      lisp-interaction-mode

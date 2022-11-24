@@ -69,5 +69,18 @@
   (akirak-scratch-with-input-method 'japanese-riben
                                     :language "Japanese"))
 
+;;;###autoload
+(defun akirak-scratch-from-selection ()
+  (interactive)
+  (let ((text (when (use-region-p)
+                (buffer-substring (region-beginning) (region-end)))))
+    (with-current-buffer (get-buffer-create "*scratch from selection*")
+      (if text
+          (insert text)
+        (yank))
+      (goto-char (point-min))
+      (pop-to-buffer (current-buffer)))
+    (user-error "No selection")))
+
 (provide 'akirak-scratch)
 ;;; akirak-scratch.el ends here
