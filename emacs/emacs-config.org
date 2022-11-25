@@ -476,7 +476,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup tab-width
     (:set tab-width 2)
-    (:with-mode (elisp-mode)
+    (:with-mode (emacs-lisp-mode)
       (:local-set tab-width 8))
     (:with-mode (makefile-mode)
       (:local-set tab-width 4))
