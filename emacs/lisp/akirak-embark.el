@@ -91,7 +91,9 @@
 
 (embark-define-keymap akirak-embark-nix-installable-map
   "Keymap on Nix package."
-  ("b" akirak-nix-browse-output))
+  ("b" akirak-nix-browse-output)
+  ("&" akirak-embark-nix-run-async)
+  ("s" akirak-embark-nix-shell))
 
 (defun akirak-embark-prefix-nixpkgs-installable (_type package)
   (cons 'nix-installable (concat "nixpkgs#" package)))
@@ -380,6 +382,17 @@
             (list description)))
   (message "Stored a link with the description \"%s\": %s"
            description (caar org-stored-links)))
+
+(defun akirak-embark-nix-run-async (installable)
+  (interactive "s")
+  (let ((buffer (generate-new-buffer (format "*async-process<%s>*" installable))))
+    (start-process installable buffer "nix" "run" installable)
+    (display-buffer buffer)))
+
+(defun akirak-embark-nix-shell (installable)
+  (interactive "s")
+  (akirak-vterm-run-in-cwd (format "nix shell %s"
+                                   (shell-quote-argument installable))))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here

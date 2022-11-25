@@ -17,6 +17,11 @@
   (interactive "sCommand: ")
   (akirak-vterm--run-in-dir workbox-default-directory string))
 
+;;;###autoload
+(defun akirak-vterm-run-in-cwd (string)
+  (interactive "sCommand: ")
+  (akirak-vterm--run-in-dir default-directory string))
+
 (defun akirak-vterm--run-in-dir (dir string)
   (let* ((default-directory dir)
          (bufname (akirak-vterm--project-buffer-name dir string))
