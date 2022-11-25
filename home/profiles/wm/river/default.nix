@@ -17,6 +17,8 @@
       export XDG_SESSION_DESKTOP=sway
       export XDG_CURRENT_DESKTOP=sway
       export MOZ_ENABLE_WAYLAND=1
+      # Set SWAYSOCK to use swaymsg and other sway-compatible utilities
+      export SWAYSOCK=''${XDG_RUNTIME_DIR}/wayland-1
       exec ${pkgs.dbus}/bin/dbus-run-session -- river
     '')
 
