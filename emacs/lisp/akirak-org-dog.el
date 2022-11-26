@@ -200,7 +200,16 @@
     (bounds-of-thing-at-point 'symbol))))
 
 ;;;; Updating
+
+(defcustom akirak-org-dog-auto-update-hook
+  '(akirak-org-dog-update-auto-babel-blocks)
+  ""
+  :type 'hook)
+
 ;;;###autoload
+(defun akirak-org-dog-auto-update-hook ()
+  (run-hooks 'akirak-org-dog-auto-update-hook))
+
 (defun akirak-org-dog-update-auto-babel-blocks ()
   "Update babel blocks named \"auto-update\" in each file."
   (interactive)
