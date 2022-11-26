@@ -297,6 +297,7 @@
             pkgs = channels.unfree-unstable;
             modules =
               [
+                ./home/modules/crostini.nix
                 {
                   home = {
                     inherit (site) username;
