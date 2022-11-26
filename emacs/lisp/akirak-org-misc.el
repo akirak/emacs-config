@@ -21,7 +21,7 @@
                 (eq (slot-value rule 'level) 'goal)))
          (make-record ()
            (let* ((element (org-element-headline-parser))
-                  (id (org-element-property :ID element))
+                  (id (org-id-get-create))
                   (todo (org-element-property :todo-keyword element))
                   (title (mapconcat #'element-title
                                     (org-element-property :title element)
