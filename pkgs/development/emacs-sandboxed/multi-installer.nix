@@ -3,6 +3,7 @@
   symlinkJoin,
   notify-desktop,
   writeShellScriptBin,
+  makeDesktopItem,
 }: {
   nixConfigDir,
   siteConfigDir,
@@ -39,9 +40,20 @@
           -t 5000 "Failed to install ${name} to the profile"
       fi
     '';
+
+  makeDesktopItemForProfile = name: _:
+    makeDesktopItem {
+      inherit name;
+      desktopName = "GNU Emacs (${name})";
+      icon = "emacs";
+      exec = name;
+      terminal = false;
+    };
 in
   profiles:
     symlinkJoin {
       name = "emacs-installer";
-      paths = lib.mapAttrsToList makeInstaller profiles;
+      paths =
+        lib.mapAttrsToList makeInstaller profiles
+        ++ lib.mapAttrsToList makeDesktopItemForProfile profiles;
     }
