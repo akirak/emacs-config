@@ -25,7 +25,6 @@ with builtins; let
         ./profiles/writing.nix
         ./profiles/graphical.nix
         ./profiles/git-annex.nix
-        ./profiles/office.nix
         ./profiles/recoll.nix
       ];
     xmonad =
@@ -38,6 +37,9 @@ with builtins; let
       ++ [
         ./profiles/wm/river
       ];
+    work = [
+      ./profiles/office.nix
+    ];
     personal = [
       ./profiles/syncthing.nix
       ./profiles/dropbox.nix

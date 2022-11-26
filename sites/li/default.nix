@@ -6,6 +6,7 @@
     "river"
     "symlinks"
     "personal"
+    "work"
   ];
 
   extraHomeModules = [
