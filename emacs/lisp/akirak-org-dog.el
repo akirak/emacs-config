@@ -199,5 +199,30 @@
    (t
     (bounds-of-thing-at-point 'symbol))))
 
+;;;; Updating
+;;;###autoload
+(defun akirak-org-dog-update-auto-babel-blocks ()
+  "Update babel blocks named \"auto-update\" in each file."
+  (interactive)
+  (let (files)
+    (dolist (file (org-agenda-files))
+      (with-current-buffer (or (find-buffer-visiting file)
+                               (find-file-noselect file))
+        (org-with-wide-buffer
+         (goto-char (point-min))
+         (let ((bound (save-excursion (re-search-forward org-heading-regexp nil t))))
+           (when bound
+             (narrow-to-region (point-min) bound)
+             (when-let (pos (org-babel-find-named-block "auto-update"))
+               (goto-char pos)
+               (message "Executing a babel block at %d in %s" pos file)
+               (org-babel-execute-src-block)
+               (push file files)))))))
+    (when files
+      (message "Executed source blocks in %s"
+               (mapconcat #'abbreviate-file-name files " ")))
+    ;; Reload data from the blocks
+    (org-dog-reload-files)))
+
 (provide 'akirak-org-dog)
 ;;; akirak-org-dog.el ends here

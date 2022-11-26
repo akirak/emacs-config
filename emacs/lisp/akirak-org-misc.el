@@ -63,28 +63,5 @@
                     (not (archived)))
               :action #'make-record)))))
 
-;;;###autoload
-(defun akirak-org-misc-update-auto-babel-blocks ()
-  (interactive)
-  (let (files)
-    (dolist (file (org-agenda-files))
-      (with-current-buffer (or (find-buffer-visiting file)
-                               (find-file-noselect file))
-        (org-with-wide-buffer
-         (goto-char (point-min))
-         (let ((bound (save-excursion (re-search-forward org-heading-regexp nil t))))
-           (when bound
-             (narrow-to-region (point-min) bound)
-             (when-let (pos (org-babel-find-named-block "auto-update"))
-               (goto-char pos)
-               (message "Executing a babel block at %d in %s" pos file)
-               (org-babel-execute-src-block)
-               (push file files)))))))
-    (when files
-      (message "Executed source blocks in %s"
-               (mapconcat #'abbreviate-file-name files " ")))
-    ;; Reload data from the blocks
-    (org-dog-reload-files)))
-
 (provide 'akirak-org-misc)
 ;;; akirak-org-misc.el ends here
