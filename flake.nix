@@ -208,7 +208,9 @@
             # Needed for the ZFS pool.
             networking.hostId = "8425e349";
 
-            networking.firewall = {};
+            networking.firewall = {
+              enable = true;
+            };
 
             networking.useDHCP = false;
             # networking.interfaces.enp0s31f6.useDHCP = true;
@@ -239,6 +241,7 @@
           ./nixos/frontend.nix
           ./nixos/development.nix
           ./nixos/profiles/docker.nix
+          ./nixos/profiles/tailscale.nix
           # ./nixos/profiles/fcitx.nix
 
           # ./nixos/profiles/android.nix
