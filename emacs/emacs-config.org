@@ -4884,7 +4884,9 @@ A Haskell editing mode
 
     (:mode-repl haskell-interactive-bring)
     (:bind "C-c C-p" #'haskell-process-cabal
-           "C-c C-m" #'haskell-compile)
+           "C-c C-m" #'haskell-compile
+           "C-c C-g" #'haskell-session-change-target
+           "C-c C-h" #'haskell-hoogle)
     (:hook interactive-haskell-mode
            haskell-auto-insert-module-template)
 
