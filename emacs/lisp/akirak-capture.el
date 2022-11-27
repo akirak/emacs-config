@@ -558,6 +558,10 @@
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
+  ["Other locations"
+   :class transient-row
+   ("\\" octopus-this-file-suffix)
+   ("/" octopus-read-dog-file-suffix)]
   (interactive "r")
   (when (use-region-p)
     (setq akirak-capture-bounds (cons begin end)))
