@@ -5764,7 +5764,8 @@ Summon and dismiss buffers as popups
                                      "^\\*Register Preview\\*"
                                      "^\\*edit string\\*"
                                      "^\\*scratch from selection\\*"
-                                     "^\\*eldoc\\*"
+                                     "^\\*eldoc"
+                                     "^\\*hoogle\\*"
                                      inferior-haskell-mode
                                      lisp-interaction-mode
                                      vterm-mode))
