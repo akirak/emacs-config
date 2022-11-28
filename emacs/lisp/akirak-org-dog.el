@@ -89,36 +89,13 @@
   (akirak-org-dog-context-files 'major-mode t))
 
 (defun akirak-org-dog-project-files ()
-  ;; TODO: Follow links like `akirak-org-dog-major-mode-files' does
-  ;;
-  ;; Project Org files can contain links to technologies. It is better to add
-  ;; support for link types to `org-dog' and then filter links by type.
-  (pcase (org-dog-context-edge 'project)
-    (`(,_ . ,ctx)
-     (when ctx
-       (mapcar (lambda (file-obj)
-                 (oref file-obj absolute))
-               (org-dog-context-file-objects ctx))))))
+  (akirak-org-dog-context-files 'project t))
 
 (defun akirak-org-dog-path-files ()
-  ;; TODO: Follow links like `akirak-org-dog-major-mode-files' does
-  ;;
-  ;; Project Org files can contain links to technologies. It is better to add
-  ;; support for link types to `org-dog' and then filter links by type.
-  (pcase (org-dog-context-edge 'path)
-    (`(,_ . ,ctx)
-     (when ctx
-       (mapcar (lambda (file-obj)
-                 (oref file-obj absolute))
-               (org-dog-context-file-objects ctx))))))
+  (akirak-org-dog-context-files 'path t))
 
 (defun akirak-org-dog-language-files ()
-  (pcase (org-dog-context-edge 'language)
-    (`(,_ . ,ctx)
-     (when ctx
-       (mapcar (lambda (file-obj)
-                 (oref file-obj absolute))
-               (org-dog-context-file-objects ctx))))))
+  (akirak-org-dog-context-files 'language t))
 
 ;;;; In-file capture functions
 
