@@ -68,19 +68,25 @@
                                      :template ,template))))))
     (org-capture)))
 
-(defun akirak-org-dog-major-mode-files ()
-  (pcase (org-dog-context-edge 'major-mode)
+(defun akirak-org-dog-context-files (type &optional deep)
+  (pcase (org-dog-context-edge type)
     (`(,_ . ,ctx)
      (when ctx
        (let (files)
          (dolist (file-obj (org-dog-context-file-objects ctx))
            (let ((fpath (oref file-obj absolute)))
-             (setq files
-                   (thread-last
-                     (org-dog-overview-scan (list fpath) :fast t)
-                     (mapcar #'car)
-                     (append files)))))
-         (cl-remove-duplicates files :test #'equal))))))
+             (if deep
+                 (setq files (if deep
+                                 (thread-last
+                                   (org-dog-overview-scan (list fpath) :fast t)
+                                   (mapcar #'car)
+                                   (append files))))
+               (push fpath files))))
+         (cl-remove-duplicates (nreverse files)
+                               :test #'equal))))))
+
+(defun akirak-org-dog-major-mode-files ()
+  (akirak-org-dog-context-files 'major-mode t))
 
 (defun akirak-org-dog-project-files ()
   ;; TODO: Follow links like `akirak-org-dog-major-mode-files' does
