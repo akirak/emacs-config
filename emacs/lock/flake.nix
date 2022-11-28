@@ -319,6 +319,12 @@
       repo = "epkg-marginalia";
       type = "github";
     };
+    erlang = {
+      flake = false;
+      owner = "erlang";
+      repo = "otp";
+      type = "github";
+    };
     eros = {
       flake = false;
       owner = "xiongtx";
@@ -597,7 +603,7 @@
     };
     macrostep = {
       flake = false;
-      owner = "joddie";
+      owner = "emacsorphanage";
       repo = "macrostep";
       type = "github";
     };
@@ -691,17 +697,18 @@
       repo = "nix-update-el";
       type = "github";
     };
-    nix26 = {
+    nix3 = {
       flake = false;
       owner = "emacs-twist";
-      ref = "develop";
-      repo = "nix26.el";
+      repo = "nix3.el";
       type = "github";
     };
     nov = {
       flake = false;
-      type = "git";
-      url = "https://depp.brause.cc/nov.el.git";
+      owner = "akirak";
+      ref = "abbr-file-name";
+      repo = "nov.el";
+      type = "github";
     };
     oahu = {
       flake = false;
@@ -766,7 +773,8 @@
     };
     org-bookmark-heading = {
       flake = false;
-      owner = "alphapapa";
+      owner = "akirak";
+      ref = "fix-pcase";
       repo = "org-bookmark-heading";
       type = "github";
     };
@@ -925,6 +933,13 @@
       flake = false;
       owner = "joddie";
       repo = "pcre2el";
+      type = "github";
+    };
+    peg = {
+      flake = false;
+      owner = "emacsmirror";
+      repo = "peg";
+      rev = "03a35ddee99cf4b6831ee4f98474a745cc79b66f";
       type = "github";
     };
     pinyin = {
@@ -1167,13 +1182,6 @@
       flake = false;
       owner = "Artawower";
       repo = "turbo-log";
-      type = "github";
-    };
-    twist = {
-      flake = false;
-      owner = "emacs-twist";
-      ref = "develop";
-      repo = "twist.el";
       type = "github";
     };
     typescript-mode = {

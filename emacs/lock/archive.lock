@@ -33,9 +33,9 @@
   },
   "peg": {
     "archive": {
-      "narHash": "sha256-okKDP1vLCVsd5/zp7c0BlyYtN1bYHvPM5IDZ3KV4ul8=",
+      "narHash": "sha256-dUg+kDdziNVRo773qr8jRkeCa0vjlIsgBJ6WoMhBGDs=",
       "type": "tarball",
-      "url": "https://elpa.gnu.org/packages/peg-1.0.tar"
+      "url": "https://elpa.gnu.org/packages/peg-1.0.1.tar"
     },
     "inventory": {
       "type": "archive",
@@ -44,7 +44,7 @@
     "packageRequires": {
       "emacs": "25"
     },
-    "version": "1.0"
+    "version": "1.0.1"
   },
   "rainbow-mode": {
     "archive": {
