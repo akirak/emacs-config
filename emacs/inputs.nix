@@ -171,11 +171,11 @@
       ref = "develop";
     };
   };
-  nix26 = _: _: {
+  nix3 = _: _: {
     origin = {
       type = "github";
       owner = "emacs-twist";
-      repo = "nix26.el";
+      repo = "nix3.el";
       ref = "develop";
     };
   };

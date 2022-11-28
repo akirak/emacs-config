@@ -49,7 +49,7 @@
   ("V" akirak-embark-vterm-other-window)
   ("lh" akirak-embark-magit-log-head)
   ("la" akirak-embark-magit-log-all)
-  ("n" nix26-flake-show))
+  ("n" nix3-flake-show))
 
 (embark-define-keymap akirak-embark-project-root-map
   "Keymap on a project root directory."

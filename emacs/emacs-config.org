@@ -5539,7 +5539,7 @@ description
   (setup (:package nickel-mode)
     (:file-match "\\.ncl\\'"))
 #+end_src
-*** nix26                                              :Nix:project:
+*** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
 :END:
@@ -5549,7 +5549,7 @@ Frontend for experimental commands of Nix
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package nix26))
+  (setup (:package nix3))
 #+end_src
 *** nix-mode                                                   :Nix:
 :PROPERTIES:

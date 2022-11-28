@@ -7,7 +7,7 @@
 
 (declare-function github-linguist-lookup "ext:github-linguist")
 (declare-function github-linguist-update-projects "ext:github-linguist")
-(declare-function nix26-flake-show "ext:nix26")
+(declare-function nix3-flake-show "ext:nix3")
 
 ;;;###autoload
 (defun akirak-project-rescan ()
