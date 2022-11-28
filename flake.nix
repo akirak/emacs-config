@@ -280,6 +280,8 @@
               bash ./update.bash "$@"
             '';
 
+            wordnet-sqlite = channels.nixpkgs.wordnet-sqlite;
+
             emacs-installer =
               channels.nixpkgs.callPackage
               ./pkgs/development/emacs-sandboxed/multi-installer.nix {}

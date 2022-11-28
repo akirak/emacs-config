@@ -22,6 +22,7 @@ with builtins; let
       base
       ++ [
         ./profiles/development.nix
+        ./profiles/dicts.nix
         ./profiles/writing.nix
         ./profiles/graphical.nix
         ./profiles/git-annex.nix

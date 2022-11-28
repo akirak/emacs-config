@@ -10,6 +10,8 @@ final: prev: {
     inherit (final) bubblewrapGUI;
   };
 
+  wordnet-sqlite = final.callPackage ./data/wordnet/wordnet-sqlite {};
+
   listEmacsProjects = final.writeShellScriptBin "ls-emacs-projects" ''
     set -euo pipefail
 
