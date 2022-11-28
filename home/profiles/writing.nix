@@ -1,19 +1,10 @@
 {pkgs, ...}: {
-  xdg.dataFile."dict/words".source = pkgs.callPackage (
-    {
-      runCommand,
-      hunspellDicts,
-    }:
-      runCommand "words" {} ''
-        for file in "${hunspellDicts.en-us-large}/share/hunspell/en_US.dic" \
-                    "${hunspellDicts.en-gb-large}/share/hunspell/en_GB.dic"
-        do
-          cut -d/ -f1 $file \
-            | grep -vE "^[[:digit:]]" \
-            | grep -vE "^[[:upper:]]+$" \
-            >> temp
-        done
-        cat temp | sort | uniq > $out
-      ''
-  ) {};
+  xdg.dataFile."dict/words".source =
+    (pkgs.fetchFromGitHub {
+      owner = "dwyl";
+      repo = "english-words";
+      rev = "a77cb15f4f5beb59c15b945f2415328a6b33c3b0";
+      sha256 = "12mj9yas7z48cjy0zpi7jz09svipasr62v786lj3wkdssy8wrbfj";
+    })
+    + "/words_alpha.txt";
 }
