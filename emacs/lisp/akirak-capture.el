@@ -372,7 +372,8 @@
              akirak-capture-doct-options nil)
        (akirak-capture-doct)))
     ("u" "Url" akirak-capture-url
-     :if (lambda () (not akirak-capture-initial)))]
+     :if (lambda () (not akirak-capture-initial)))
+    ("v" "Vocabulary" akirak-capture-vocabulary)]
 
    ["Schedule an event / org-memento"
     :class transient-row
@@ -784,6 +785,122 @@
                              ,(akirak-org-capture-make-entry-body string)
                              :immediate-finish t)))
     (org-capture)))
+
+(defun akirak-capture-vocabulary ()
+  (interactive)
+  (let* ((files (akirak-org-dog-language-files))
+         (file (or (seq-find (lambda (file)
+                               (equal (file-name-base file) "vocabulary"))
+                             files)
+                   (car files)))
+         (text (if (use-region-p)
+                   (buffer-substring-no-properties (region-beginning 0)
+                                                   (region-end 0))
+                 (thing-at-point 'word 'no-properties)))
+         (text (or (akirak-capture--find-dictionary-word text)
+                   text))
+         (derivations (when text
+                        (akirak-wordnet-word-derivations text)))
+         (in-org-entry (and (derived-mode-p 'org-mode)
+                            (not (org-before-first-heading-p)))))
+    (cl-labels
+        ((group (candidate transform)
+           (if transform
+               candidate
+             (if (string-match-p org-link-bracket-re candidate)
+                 "Link"
+               "Derivations")))
+         (completions (string pred action)
+           (if (eq action 'metadata)
+               (cons 'metadata
+                     (list (cons 'category 'word)
+                           (cons 'group-function #'group)))
+             (complete-with-action action candidates string pred))))
+      (let ((input (completing-read "Word or phrase: "
+                                    (append (when in-org-entry
+                                              (akirak-capture--vocabulary-backlinks))
+                                            (cl-remove-duplicates
+                                             (cons text derivations)
+                                             :test #'equal))
+                                    nil nil nil
+                                    (if (and (= 1 (length derivations))
+                                             (< (length (car derivations))
+                                                (length text)))
+                                        (car derivations)
+                                      text))))
+        (if (string-match-p org-link-bracket-re input)
+            (org-link-open-from-string input)
+          (if-let (marker (akirak-capture--find-heading file input))
+              (org-goto-marker-or-bmk marker)
+            ;; Depends on an experimental feature of org-super-links.
+            (let* ((org-super-links-backlink-into-drawer "VOCABULARY")
+                   (paragraph (thing-at-point 'paragraph t))
+                   (body (with-temp-buffer
+                           (insert (string-trim paragraph))
+                           (goto-char (point-min))
+                           (while (re-search-forward (rx (* blank)
+                                                         "\n"
+                                                         (* blank))
+                                                     nil t)
+                             (replace-match " "))
+                           (buffer-string)))
+                   (org-capture-entry
+                    (car (doct
+                          `((""
+                             :keys ""
+                             :template ,(akirak-org-capture-make-entry-body
+                                          input
+                                          :tags (if (string-match-p " " input)
+                                                    nil
+                                                  '("@word"))
+                                          :body (list "#+begin_example"
+                                                      body
+                                                      "#+end_example"
+                                                      "%?"))
+                             :file ,file
+                             :function akirak-capture--goto-backlog))))))
+              (when in-org-entry
+                (org-super-links-store-link))
+              (org-capture)
+              (when in-org-entry
+                (org-super-links-insert-link))
+              (newline 2)
+              (akirak-org-insert-vocabulary-info))))))))
+
+(defun akirak-capture--vocabulary-backlinks ()
+  (save-excursion
+    (org-back-to-heading)
+    (catch 'result
+      (while (re-search-forward org-drawer-regexp nil t)
+        (when (equal (match-string-no-properties 1) "VOCABULARY")
+          (let (result
+                (bound (save-excursion
+                         (re-search-forward org-drawer-regexp nil t))))
+            (while (re-search-forward org-link-bracket-re bound t)
+              (let ((string (match-string-no-properties 0)))
+                (put-text-property 0 (length string)
+                                   'display (match-string-no-properties 2)
+                                   string)
+                (push string result)))
+            (throw 'result result)))))))
+
+(defun akirak-capture--find-heading (file heading)
+  (with-current-buffer (or (org-find-base-buffer-visiting file)
+                           (find-file-noselect file))
+    (org-with-wide-buffer
+     (goto-char (point-min))
+     (when (re-search-forward (format org-complex-heading-regexp-format
+                                      (regexp-quote heading))
+                              nil t)
+       (copy-marker (pos-bol))))))
+
+(defun akirak-capture--find-dictionary-word (word)
+  (with-temp-buffer
+    (insert-file-contents (expand-file-name "dict/words" (xdg-data-home)))
+    (goto-char (point-min))
+    (let ((case-fold-search t))
+      (when (search-forward word nil t)
+        (match-string 0)))))
 
 ;;;###autoload
 (defun akirak-capture-troubleshooting (&optional arg)

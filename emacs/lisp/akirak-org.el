@@ -575,5 +575,12 @@ character."
       (org-memento-timeline-mode
        (revert-buffer)))))
 
+;;;; Specific applications
+
+;;;###autoload
+(defun akirak-org-insert-vocabulary-info ()
+  ;; TODO
+  )
+
 (provide 'akirak-org)
 ;;; akirak-org.el ends here
