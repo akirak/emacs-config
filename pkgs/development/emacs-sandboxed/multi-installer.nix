@@ -21,7 +21,7 @@
       if nix profile install .#${name} \
         --override-input site $(readlink -f "${siteConfigDir}") \
         --priority `date +%s` \
-        --print-build-logs; then
+        --print-build-logs "$@"; then
 
           printf "Build finished in %d sec\n" $(($(date +%s) - start))
 
