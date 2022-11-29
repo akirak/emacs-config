@@ -85,7 +85,9 @@
   (declare (indent 1))
   `(transient-define-suffix ,suffix-name ()
      :class 'akirak-org-reg-marker-variable
-     :if (lambda () (markerp (symbol-value ,variable)))
+     :if (lambda ()
+           (and (markerp (symbol-value ,variable))
+                (buffer-live-p (marker-buffer (symbol-value ,variable)))))
      :description ,description
      :variable ,variable
      (interactive)
