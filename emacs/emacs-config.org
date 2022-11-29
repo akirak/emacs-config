@@ -11,6 +11,7 @@
 - [[#macro-packages][Macro packages]]
 - [[#built-ins][Built-ins]]
 - [[#typography-settings][Typography settings]]
+- [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#org][Org]]
 - [[#packages][Packages]]
 - [[#post-init][Post init]]
@@ -1740,6 +1741,11 @@ I think it would be better to create my own theme, but I don't have enough time 
 #+begin_src emacs-lisp
   (setq akirak/default-body-width 86)
 #+end_src
+** User package (akirak-*.el)
+Following sections in this configuration file assume my extras are available.
+#+begin_src emacs-lisp
+  (setup (:package akirak))
+#+end_src
 ** Org                                                     :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -3184,7 +3190,7 @@ A collection of commands and utilities
 This is a collection of extra utilities for various packages.
 
 #+begin_src emacs-lisp
-  (setup (:package akirak)
+  (setup akirak
 
     (:global "C-x d" #'akirak-consult-dir
              "C-c i" #'akirak-scratch-elisp
