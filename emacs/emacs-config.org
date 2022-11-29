@@ -2695,7 +2695,8 @@ Time blocking with Org
           (message "No buffer to kill"))))
 
     (:status personal
-      (:hook-into after-init-hook)
+      (:when-loaded
+        (org-memento-mode t))
 
       (define-key help-map (kbd "<tab>") #'org-memento-next-action)
       (define-key akirak/c-z-map (kbd "<tab>") #'org-memento-next-action)
