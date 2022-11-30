@@ -90,6 +90,9 @@
         fi
       }
 
+      alias s='builtin cd "$(fd -t d | fzy)"'
+      alias r='builtin cd "$(git rev-parse --show-toplevel)"'
+
       export NIX_BUILD_SHELL=bash
 
       # Use gpg-agent as ssh-agent.
