@@ -171,14 +171,6 @@
       ref = "develop";
     };
   };
-  nix3 = _: _: {
-    origin = {
-      type = "github";
-      owner = "emacs-twist";
-      repo = "nix3.el";
-      ref = "develop";
-    };
-  };
   poly-astro = _: _: {
     origin = {
       type = "github";
