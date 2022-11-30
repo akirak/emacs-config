@@ -5566,7 +5566,8 @@ Frontend for experimental commands of Nix
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package nix3))
+  (setup (:package nix3)
+    (:global "C-c n" #'nix3-transient))
 #+end_src
 *** nix-mode                                                   :Nix:
 :PROPERTIES:
