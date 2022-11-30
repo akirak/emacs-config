@@ -2771,7 +2771,9 @@ Time blocking with Org
                           " :tstart \""
                           (format-time-string (org-time-stamp-format t))
                           "\" :tend \"<now>\"\n"
-                          "#+END:\n")))
+                          "#+END:\n"))
+                20)
+      (add-hook 'org-memento-checkin-hook #'akirak-org-log-generate-memento-blocks 80)
       (add-hook 'org-memento-checkin-hook
                 (defun akirak/org-memento-set-frame-title ()
                   (setq frame-title-format

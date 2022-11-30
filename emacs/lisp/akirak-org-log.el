@@ -75,5 +75,53 @@
                    :clock-in t :clock-resume t))))))
     (org-capture)))
 
+;;;###autoload
+(defun akirak-org-log-generate-memento-blocks ()
+  "Insert memento blocks from weekly goals."
+  (cl-flet
+      ((parse-time (string)
+         (thread-first
+           string
+           (parse-time-string)
+           (org-memento--set-time-of-day 0 0 0)
+           (encode-time)))
+       (clean-heading (string)
+         (with-temp-buffer
+           (insert string)
+           (goto-char (point-min))
+           (while (re-search-forward org-ts-regexp nil t)
+             (replace-match ""))
+           (goto-char (point-min))
+           (when (looking-at (rx (+ space)))
+             (goto-char (match-end 0)))
+           (when (looking-at (rx (group (+? anything)) (?  "." (* space)) eos))
+             (match-string-no-properties 1)))))
+    (let* ((today (save-excursion
+                    (re-search-backward (rx bol "*" blank))
+                    (when (org-match-line org-complex-heading-regexp)
+                      (parse-time (match-string-no-properties 4)))))
+           link
+           items)
+      (org-with-point-at (akirak-org-log--find-latest-week-entry)
+        (setq link (org-link-make-string (org-id-store-link) "Weekly goals"))
+        (org-end-of-meta-data t)
+        (let ((bound (org-entry-end-position)))
+          (while (re-search-forward org-ts-regexp bound t)
+            (when-let* ((label (save-excursion
+                                 (save-match-data
+                                   (org-at-item-checkbox-p)
+                                   (when (equal "[ ]" (match-string 1))
+                                     (goto-char (match-end 0))
+                                     (buffer-substring-no-properties (point) (pos-eol))))))
+                        (day (parse-time (match-string 1))))
+              (when (or (time-equal-p day today)
+                        (time-less-p day today))
+                (push label items))))))
+      (unless (bolp)
+        (newline))
+      (dolist (item items)
+        (insert "** [#A] " (clean-heading item) "\n"
+                link "\n")))))
+
 (provide 'akirak-org-log)
 ;;; akirak-org-log.el ends here
