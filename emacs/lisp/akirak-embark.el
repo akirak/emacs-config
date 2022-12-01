@@ -182,6 +182,11 @@
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
 
+  (embark-define-thingatpt-target sentence
+    nov-mode eww-mode)
+  (embark-define-thingatpt-target paragraph
+    nov-mode eww-mode)
+
   (add-to-list 'embark-keymap-alist
                '(grep . akirak-embark-grep-map))
 
