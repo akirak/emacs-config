@@ -17,23 +17,30 @@
 (defun akirak-wordnet-word-derivations (word)
   "Return derivationally related forms of a word."
   (akirak-wordnet-with-database
-   (thread-last
-     (emacsql conn
-              [:select [w2:writtenform]
-                       :from word w1
-                       :inner-join lexrel rel
-                       :on (= w1:wordno rel:wordno1)
-                       :inner-join reltype
-                       :on (= rel:reltypeno reltype:reltypeno)
-                       :inner-join word w2
-                       :on (= rel:wordno2 w2:wordno)
-                       :where (= reltype:reltypename
-                                 '"DERIVATIONALLY RELATED FORM")
-                       :and (= w1:writtenform $r1)
-                       :group-by [w2:writtenform]]
-              word)
-     (mapcar #'car)
-     (mapcar #'symbol-name))))
+   (cl-flet
+       ((find-word (word1)
+          (thread-last
+            (emacsql conn
+                     [:select [w2:writtenform]
+                              :from word w1
+                              :inner-join lexrel rel
+                              :on (= w1:wordno rel:wordno1)
+                              :inner-join reltype
+                              :on (= rel:reltypeno reltype:reltypeno)
+                              :inner-join word w2
+                              :on (= rel:wordno2 w2:wordno)
+                              :where (= reltype:reltypename
+                                        '"DERIVATIONALLY RELATED FORM")
+                              :and (= w1:writtenform $r1)
+                              :group-by [w2:writtenform]]
+                     word1)
+            (mapcar #'car)
+            (mapcar #'symbol-name))))
+     (or (find-word word)
+         (save-match-data
+           (when (string-match (rx bol (group (+? anything)) (or "s" "ly"))
+                               word)
+             (find-word (match-string 1 word))))))))
 
 ;;;###autoload
 (defun akirak-wordnet-lexnames (word)
