@@ -482,7 +482,8 @@
                               :todo "UNDERWAY"
                               :tags '("@troubleshooting")
                               :type "example"
-                              :clock-in t :clock-resume t)))]
+                              :clock-in t :clock-resume t)))
+   ("l" "Language study" akirak-capture-language-study)]
   ["Others"
    ("a" "Append to clock" akirak-capture-append-block-to-clock
     :if org-clocking-p)]
@@ -503,6 +504,22 @@
   (setq akirak-capture-snippet-format "plain")
   (setq akirak-capture-snippet-literal-name nil)
   (call-interactively #'akirak-capture-snippet))
+
+(defun akirak-capture-language-study ()
+  "Capture the region for language study."
+  (interactive)
+  (let ((org-capture-entry
+         (car (doct
+               `((""
+                  :keys ""
+                  :file ,(akirak-capture--vocabulary-file)
+                  :function akirak-capture--goto-backlog
+                  :template ,(akirak-org-capture-make-entry-body
+                               "%l"
+                               :tags '("@input")
+                               :body (akirak-capture--org-block "quote"))
+                  :immediate-finish t))))))
+    (org-capture)))
 
 (cl-defun akirak-capture--region (&rest doct-options
                                         &key type headline tags todo
@@ -788,11 +805,7 @@
 
 (defun akirak-capture-vocabulary ()
   (interactive)
-  (let* ((files (akirak-org-dog-language-files))
-         (file (or (seq-find (lambda (file)
-                               (equal (file-name-base file) "vocabulary"))
-                             files)
-                   (car files)))
+  (let* ((file (akirak-capture--vocabulary-file))
          (text (if (use-region-p)
                    (buffer-substring-no-properties (region-beginning 0)
                                                    (region-end 0))
@@ -866,6 +879,13 @@
                 (org-super-links-insert-link))
               (newline 2)
               (akirak-org-insert-vocabulary-info))))))))
+
+(defun akirak-capture--vocabulary-file ()
+  (let ((files (akirak-org-dog-language-files)))
+    (or (seq-find (lambda (file)
+                    (equal (file-name-base file) "vocabulary"))
+                  files)
+        (car files))))
 
 (defun akirak-capture--vocabulary-backlinks ()
   (save-excursion
