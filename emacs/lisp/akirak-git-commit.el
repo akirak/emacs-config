@@ -39,6 +39,7 @@
               ;; backlinks (if any), so the commit log drawer should be the last
               ;; drawer.
               (org-end-of-meta-data t)
+              (re-search-backward (rx anything "\n") nil t)
               (insert ":GITCOMMITS:\n:END:\n")
               (beginning-of-line 0))
             (insert (akirak-git-commit--build-log-line
