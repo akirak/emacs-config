@@ -364,7 +364,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           ("imo" "IMO")
           ("imho" "IMHO")
           ;; Common mistypes
-          ("ort" "org")))))
+          ("ort" "org")
+          ("meang" "meant")))))
 #+end_src
 *** autoinsert                                           :expansion:
 :PROPERTIES:
