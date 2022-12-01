@@ -847,16 +847,21 @@
               (org-goto-marker-or-bmk marker)
             ;; Depends on an experimental feature of org-super-links.
             (let* ((org-super-links-backlink-into-drawer "VOCABULARY")
-                   (paragraph (thing-at-point 'paragraph t))
-                   (body (with-temp-buffer
-                           (insert (string-trim paragraph))
-                           (goto-char (point-min))
-                           (while (re-search-forward (rx (* blank)
-                                                         "\n"
-                                                         (* blank))
-                                                     nil t)
-                             (replace-match " "))
-                           (buffer-string)))
+                   (sentence-example (org-in-block-p '("quote" "verse" "example")))
+                   (selection (if sentence-example
+                                  (thing-at-point 'sentence t)
+                                (thing-at-point 'paragraph t)))
+                   (body (if sentence-example
+                             (string-trim selection)
+                           (with-temp-buffer
+                             (insert (string-trim selection))
+                             (goto-char (point-min))
+                             (while (re-search-forward (rx (* blank)
+                                                           "\n"
+                                                           (* blank))
+                                                       nil t)
+                               (replace-match " "))
+                             (buffer-string))))
                    (org-capture-entry
                     (car (doct
                           `((""
