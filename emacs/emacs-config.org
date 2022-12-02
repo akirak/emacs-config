@@ -2261,10 +2261,13 @@ Outline-based notes management and organizer
 
     (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
     (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
+    (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
     (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
+    (define-key akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
 
     ;; Bindings that don't end the transient map
     (define-key akirak/c-z-map "O" #'akirak-org-clock-out)
+    (define-key akirak/c-z-map "C-o" #'akirak-org-clock-out)
     (define-key akirak/c-z-map "d" #'akirak-org-clock-done)
     (define-key akirak/c-z-map "r" #'akirak-org-clock-set-review)
     (put 'akirak-org-clock-out 'repeat-map 'akirak/c-z-map)
