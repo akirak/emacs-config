@@ -18,7 +18,15 @@ stdenv.mkDerivation {
 
   phases = ["buildPhase" "installPhase"];
 
-  files = ["word.bz2" "lexrel.bz2" "reltype.bz2" "synset.bz2" "sense.bz2" "lexname.bz2"];
+  files = [
+    "word.bz2"
+    "lexrel.bz2"
+    "reltype.bz2"
+    "synset.bz2"
+    "sense.bz2"
+    "lexname.bz2"
+    "semrel.bz2"
+  ];
 
   buildPhase = ''
     db=wordnet.db
