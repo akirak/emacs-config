@@ -1861,6 +1861,10 @@ Outline-based notes management and organizer
             org-tags-column -80
             org-track-ordered-property-with-tag t
             org-extend-today-until 5
+            ;; Consider org-extend-today-until in org-reverse-datetree
+            org-use-effective-time t
+            ;; Use the last clocked time in org-todo
+            org-use-last-clock-out-time-as-effective-time t
             ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
             org-cycle-separator-lines 0
             org-blank-before-new-entry '((heading . nil)
