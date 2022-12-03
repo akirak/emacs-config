@@ -540,33 +540,12 @@
 
 (defun akirak-capture--read-summary-for-region (prompt)
   (completing-read prompt
-                   (akirak-capture--sentences
-                    (buffer-substring-no-properties
-                     (region-beginning) (region-end)))))
-
-(defun akirak-capture--sentences (text)
-  (cl-flet
-      ((split-sentences (str)
-         (let (sentences)
-           (with-temp-buffer
-             (insert str)
-             (replace-regexp-in-region (rx (* blank) "\n"
-                                           (* blank))
-                                       " "
-                                       (point-min) (point-max))
-             (goto-char (point-min))
-             (let ((start (point)))
-               (while (ignore-errors (forward-sentence))
-                 (push (string-trim (buffer-substring-no-properties start (1- (point))))
-                       sentences)
-                 (setq start (point)))))
-           sentences)))
-    (thread-last
-      (split-string text "\n\n")
-      (cl-remove-if #'string-empty-p)
-      (mapcar #'split-sentences)
-      (apply #'append)
-      (cl-remove-if #'string-empty-p))))
+                   (thread-last
+                     (buffer-substring-no-properties
+                      (region-beginning) (region-end))
+                     (akirak-misc-sentence-lines)
+                     (mapcar (lambda (s)
+                               (string-trim-right s (rx (+ punct))))))))
 
 (transient-define-prefix akirak-capture-snippet (begin end)
   ["Options"
