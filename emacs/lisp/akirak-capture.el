@@ -280,6 +280,7 @@
    :class transient-row
    ("'" octopus-avy-org-heading-suffix)
    ("@" octopus-clock-marker-suffix)
+   ("$" octopus-last-capture-marker-suffix)
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
   (interactive)
@@ -358,7 +359,13 @@
                  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                        akirak-capture-template-options '(:todo "EPIC" :tags "@epic")
                        akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                 (akirak-capture-doct)))]
+                 (akirak-capture-doct)))
+   ("l" "With link" (lambda ()
+                      (interactive)
+                      (setq akirak-capture-headline "%a"
+                            akirak-capture-template-options '(:todo "UNDERWAY")
+                            akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                      (akirak-capture-doct)))]
 
   ["Information (input, events, etc.)"
    :class transient-subgroups
