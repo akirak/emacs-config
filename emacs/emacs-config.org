@@ -4352,6 +4352,14 @@ Show Epkg information in completion annotations
       (cl-pushnew 'epkg-marginalia-annotate-package
                   (alist-get 'package marginalia-annotator-registry))))
 #+end_src
+*** erlang                                                         :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-12-03 Sat 19:57]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package erlang))
+#+end_src
 *** eros                                   :Emacs__Lisp:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:05]
