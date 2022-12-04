@@ -4,7 +4,7 @@
 }: final: prev:
 with builtins; let
   inherit (inputs.twist.lib {inherit (inputs.nixpkgs) lib;}) parseSetup;
-  inherit (inputs.twist.overlay final prev) emacsTwist;
+  inherit (inputs.twist.overlays.default final prev) emacsTwist;
   inherit (inputs.org-babel.overlay final prev) tangleOrgBabelFile;
 
   org = inputs.org-babel.lib;
