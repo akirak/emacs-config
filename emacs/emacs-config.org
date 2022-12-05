@@ -2319,6 +2319,9 @@ Outline-based notes management and organizer
 **** org-link (ol)
 #+begin_src emacs-lisp
   (setup ol
+    ;; Workaround for a bug of missing autoload
+    (autoload 'org-bibtex-store-link "ol-bibtex")
+
     (:status opinionated
       (:global "C-c l" #'org-store-link)
       (with-eval-after-load 'org-agenda
