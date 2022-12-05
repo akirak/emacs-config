@@ -269,7 +269,8 @@
    ("-s" akirak-capture-scheduled-infix)
    ("-d" akirak-capture-deadline-infix)
    ("-i" akirak-capture-doct-clock-in)
-   ("-r" akirak-capture-doct-clock-resume)]
+   ("-r" akirak-capture-doct-clock-resume)
+   ("-a" akirak-capture-doct-add-annotation)]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
