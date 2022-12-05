@@ -470,6 +470,12 @@
                                             (goto-char (region-beginning))
                                             (which-function)))
                               :type "src")))
+   ("q" "Quote (with link)"
+    (lambda ()
+      (interactive)
+      (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
+                              :annotation t
+                              :type "quote")))
    ("n" "Other"
     (lambda ()
       (interactive)
@@ -529,17 +535,19 @@
     (org-capture)))
 
 (cl-defun akirak-capture--region (&rest doct-options
-                                        &key type headline tags todo
+                                        &key type headline tags todo annotation
                                         &allow-other-keys)
   (setq akirak-capture-doct-options (thread-first
                                       doct-options
                                       (plist-put :tags nil)
                                       (plist-put :type nil)
                                       (plist-put :todo nil)
+                                      (plist-put :annotation nil)
                                       (plist-put :headline nil)))
   (setq akirak-capture-template-options
         (list :body (concat "%?\n\n" (akirak-capture--org-block type))
               :todo todo
+              :annotation annotation
               :tags tags))
   (setq akirak-capture-headline (or headline
                                     (akirak-capture-read-string "Headline: ")))
