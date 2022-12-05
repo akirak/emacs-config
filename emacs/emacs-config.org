@@ -1377,6 +1377,8 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup startup
     (:set inihibit-startup-screen t
+          inhibit-default-init t
+          inhibit-startup-echo-area-message t
           initial-buffer-choice (lambda () (get-buffer "*Messages*"))
           initial-scratch-message nil
           initial-major-mode 'fundamental-mode))
