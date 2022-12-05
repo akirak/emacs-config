@@ -263,7 +263,8 @@ the Garbage Collector Magic Hack
 #+begin_src emacs-lisp
   (setup (:package gcmh)
     (:hook-into after-init-hook)
-    (:set gcmh-verbose debug-on-error))
+    (:set gcmh-verbose init-file-debug
+          gcmh-high-cons-threshold (* 128 1024 1024)))
 #+end_src
 ** Custom conventions
 *** Prefix for mode-specific commands
@@ -906,6 +907,11 @@ The built-in =electric= package provides the following modes:
 
     (dolist (mode-hook '(makefile-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
+#+end_src
+*** jit-lock
+#+begin_src emacs-lisp
+  (setup jit-lock
+    (:set jit-lock-defer-time 0))
 #+end_src
 *** js-jsx-mode
 :PROPERTIES:
@@ -1571,6 +1577,11 @@ Thus I will explicitly install this package rather than using the built-in versi
        (if (numberp arg)
            (scroll-down arg)
          (scroll-down (akirak/scroll-half-height))))))
+#+end_src
+*** window.c
+#+begin_src emacs-lisp
+  (setup window
+    (:set fast-but-imprecise-scrolling t))
 #+end_src
 *** winner                                         :history:windows:
 :PROPERTIES:
