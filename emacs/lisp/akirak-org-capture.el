@@ -144,7 +144,7 @@ values:
                       ""
                     "%?")))
             (if annotation
-                "\n\n%a"
+                "\n%a"
               ""))))
 
 ;;;###autoload
