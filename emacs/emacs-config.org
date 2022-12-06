@@ -5814,6 +5814,7 @@ Summon and dismiss buffers as popups
                                      "^ \\*Agenda Commands\\*"
                                      "^\\*Register Preview\\*"
                                      "^\\*edit string\\*"
+                                     "^\\*edit-indirect"
                                      "^\\*scratch from selection\\*"
                                      "^\\*eldoc"
                                      "^\\*hoogle\\*"
