@@ -1374,7 +1374,21 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
 #+begin_src emacs-lisp
   (setup skeleton
-    (:set skeleton-end-newline nil))
+    (:set skeleton-end-newline nil)
+
+    (add-hook 'skeleton-end-hook
+              (defun akirak/skeleton-start ()
+                (setq skeleton-positions (nreverse skeleton-positions))
+                (when skeleton-positions
+                  (local-set-key [tab] #'akirak/skeleton-pop-positions))))
+
+    (defun akirak/skeleton-pop-positions ()
+      (interactive)
+      (when-let (pos (pop skeleton-positions))
+        (goto-char pos)
+        (if skeleton-positions
+            (message "Remaining %d positions" (length skeleton-positions))
+          (local-unset-key [tab])))))
 #+end_src
 *** startup
 :PROPERTIES:
