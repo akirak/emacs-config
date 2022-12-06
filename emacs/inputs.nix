@@ -114,6 +114,15 @@
     };
   };
 
+  peg = _: _: {
+    origin = {
+      type= "github";
+      owner = "emacsmirror";
+      repo = "peg";
+      rev = "03a35ddee99cf4b6831ee4f98474a745cc79b66f";
+    };
+  };
+
   org-dog = _: _: {
     origin = {
       type = "github";
