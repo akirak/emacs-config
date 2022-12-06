@@ -123,6 +123,15 @@
     };
   };
 
+  org-bookmark-heading = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-bookmark-heading";
+      ref = "fix-pcase";
+    };
+  };
+
   org-dog = _: _: {
     origin = {
       type = "github";
@@ -208,6 +217,15 @@
         tree-sitter-indent = "0";
       }
       // super.packageRequires;
+  };
+
+  nov = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "nov.el";
+      ref = "abbr-file-name";
+    };
   };
 
   lispy = _: super: {
