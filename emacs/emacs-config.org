@@ -4243,6 +4243,24 @@ Major mode for editing Elixir files
            "  " _
            "\nend\n")))
 
+    (:when-loaded
+      (define-abbrev elixir-mode-abbrev-table
+        "case" "" (define-skeleton akirak-elixir-case
+                    "Insert case"
+                    ""
+                    > "case " - " do" n
+                    > @ _ n
+                    > -2 "end"))
+
+      (define-abbrev elixir-mode-abbrev-table
+        "fn" "" (define-skeleton akirak-elixir-fn
+                  "Insert fn"
+                  ""
+                  > "fn " - " ->" n
+                  > @ _ n
+                  > -2 "end")))
+
+
     (:compilation-error
      ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
      (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
