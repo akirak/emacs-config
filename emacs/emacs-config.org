@@ -2718,7 +2718,10 @@ Time blocking with Org
 #+begin_src emacs-lisp
   (setup (:package org-memento)
     (:set org-memento-idle-time 15
-          org-memento-timeline-window-width akirak/default-body-width)
+          org-memento-timeline-window-width akirak/default-body-width
+          org-memento-state-trigger-alist
+          '(("HALFWAY" :todo-keyword "EXTENDED")
+            ("FAILED" :todo-keyword "RETRY")))
     (:with-feature org-memento-timeline
       (:with-map org-memento-timeline-mode-map
         (:bind "C-c ." #'akirak-org-edit-active-ts)))
