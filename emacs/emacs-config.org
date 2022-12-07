@@ -4712,7 +4712,7 @@ Emacs Minor mode to automatically commit and push
       (add-hook 'org-clock-out-hook
                 (defun akirak/gac-org-clock-out ()
                   "Create an auto commit after `org-clock-out'."
-                  (when (and git-auto-commit-mode
+                  (when (and (bound-and-true-p git-auto-commit-mode)
                              ;; If the entry has at least one auto commit
                              (> (org-clock-sum-current-item
                                  (- (float-time)
