@@ -3778,7 +3778,7 @@ Completion Overlay Region FUnction
 #+begin_src emacs-lisp
   (setup (:package corfu)
     (:with-mode (prog-mode text-mode comint-mode)
-      (:hook corfu-mode fancy-dabbrev-mode))
+      (:hook corfu-mode))
 
     (:with-hook minibuffer-setup-hook
       (:hook
@@ -4448,7 +4448,7 @@ Comment/uncomment lines efficiently. Like Nerd Commenter in Vim
              ;; "C-c p" #'evilnc-comment-or-uncomment-paragraphs
              ))
 #+end_src
-*** fancy-dabbrev                                       :completion:
+*** COMMENT fancy-dabbrev                                           :completion:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 20:24]
 :END:
