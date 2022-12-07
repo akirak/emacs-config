@@ -418,19 +418,40 @@ character."
                (if-let* ((id (match-string-no-properties 1 uri))
                          (file (org-id-find-id-file id))
                          (marker (org-id-find-id-in-file id file 'markerp)))
-                   (akirak-org-eldoc--org-entry marker)
+                   (org-with-point-at marker
+                     (akirak-org--entry-eldoc))
                  (concat uri " (missing ID location)"))))))
         (plist-get plist 'help-echo))))
 
-(defun akirak-org-eldoc--org-entry (marker)
-  "Return a string describing the target of an ID link."
-  (save-current-buffer
-    (org-with-point-at marker
-      (let ((olp (org-get-outline-path nil t))
-            (width (frame-width)))
-        (org-no-properties
-         (org-format-outline-path
-          olp width (buffer-name (current-buffer))))))))
+(defun akirak-org--entry-eldoc ()
+  "Return a string describing the entry at point.
+
+The point should be at the heading."
+  (org-match-line org-complex-heading-regexp)
+  (let* ((todo (match-string 2))
+         (heading (match-string-no-properties 4))
+         (tags (match-string 5))
+         (olp (org-get-outline-path nil t))
+         (planning (unless (and tags (string-match-p org-archive-tag tags))
+                     (forward-line)
+                     (when (looking-at-p org-planning-line-re)
+                       (buffer-substring-no-properties (match-beginning 1) (pos-eol)))))
+         (prefix (format-spec "%t%b:"
+                              `((?t . ,(if todo
+                                           (concat todo " ")
+                                         ""))
+                                (?b . ,(buffer-name)))))
+         (suffix (format-spec "/%h %g %p"
+                              `((?h . ,(org-link-display-format heading))
+                                (?g . ,(or tags ""))
+                                (?p . ,(if planning
+                                           (propertize planning 'face 'font-lock-comment-face)
+                                         "")))))
+         (width (frame-width)))
+    (concat prefix
+            (org-no-properties
+             (org-format-outline-path olp (max 0 (- width (length prefix) (length suffix)))))
+            suffix)))
 
 ;;;; akirak-org-protected-mode
 
