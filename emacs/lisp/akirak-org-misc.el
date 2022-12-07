@@ -2,6 +2,8 @@
 
 ;;;###autoload
 (defun akirak-org-misc-project-budgets ()
+  (require 'org-memento-policy)
+  (org-memento-policy-maybe-load)
   (pcase-let
       ((`(,start-date ,end-date) (org-memento-week-date-range 0)))
     (cl-labels
