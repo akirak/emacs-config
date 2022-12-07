@@ -2969,10 +2969,7 @@ Create reverse date trees in org-mode
 
 #+begin_src emacs-lisp
   (setup (:package org-reverse-datetree)
-    (:set org-reverse-datetree-entry-time
-          '((clock latest)
-            (match :type inactive))
-          org-reverse-datetree-month-format "%Y-%m")
+    (:set org-reverse-datetree-month-format "%Y-%m")
 
     (with-eval-after-load 'org
       (define-key org-mode-map (kbd "C-c C-x M-j") #'org-reverse-datetree-calendar))
