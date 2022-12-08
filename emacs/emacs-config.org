@@ -563,6 +563,10 @@ The following variable defines variables that can be saved to =custom-file=:
       org-memento-workhour-alist
       org-memento-file
       org-memento-policy-file
+      send-mail-function
+      smtpmail-smtp-server
+      smtpmail-stream-type
+      smtpmail-smtp-service
       akirak-org-log-file
       ;; Dynamic
       safe-local-variable-values))
