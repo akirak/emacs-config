@@ -164,6 +164,10 @@
   ("d" deadgrep)
   ("R" project-query-replace-regexp))
 
+(embark-define-keymap akirak-embark-image-file-map
+  ""
+  ("I" akirak-image-import-file))
+
 ;;;###autoload
 (defun akirak-embark-setup ()
   (akirak-embark-setup-org-heading)
@@ -181,6 +185,7 @@
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
 
   (embark-define-thingatpt-target sentence
     nov-mode eww-mode)
@@ -190,6 +195,8 @@
   (add-to-list 'embark-keymap-alist
                '(grep . akirak-embark-grep-map))
 
+  (add-to-list 'embark-keymap-alist
+               '(image-file . akirak-embark-image-file-map))
   (add-to-list 'embark-keymap-alist
                '(org-src-block . akirak-embark-org-src-map))
   (add-to-list 'embark-keymap-alist
@@ -323,6 +330,12 @@
                  (memq embark--command '(consult-ripgrep)))
         (cons 'grep (string-remove-prefix "#" (minibuffer-contents-no-properties))))
     (error nil)))
+
+(defun akirak-embark-target-displayed-image ()
+  (pcase (get-char-property (point) 'display)
+    ((and `(image . ,(map :file))
+          (guard (stringp file)))
+     `(image-file . ,file))))
 
 (defun akirak-embark-send-to-vterm (string)
   "Send STRING to an existing vterm session."
