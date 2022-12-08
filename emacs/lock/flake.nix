@@ -343,12 +343,6 @@
       repo = "f.el";
       type = "github";
     };
-    fancy-dabbrev = {
-      flake = false;
-      owner = "jrosdahl";
-      repo = "fancy-dabbrev";
-      type = "github";
-    };
     fanyi = {
       flake = false;
       owner = "akirak";
