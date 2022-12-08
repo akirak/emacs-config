@@ -129,7 +129,8 @@ version."
     (push (list (concat "file:" (abbreviate-file-name
                                  (or (akirak-image--scale-default copy)
                                      copy))))
-          org-stored-links)))
+          org-stored-links)
+    (message "Stored a link to a new image file")))
 
 ;;;###autoload
 (defun akirak-image-org-rescale ()
