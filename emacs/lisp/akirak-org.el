@@ -438,12 +438,14 @@ The point should be at the heading."
                        (buffer-substring-no-properties (match-beginning 1) (pos-eol)))))
          (prefix (format-spec "%t%b:"
                               `((?t . ,(if todo
-                                           (concat todo " ")
+                                           (concat (akirak-org--default-scale todo) " ")
                                          ""))
                                 (?b . ,(buffer-name)))))
          (suffix (format-spec "/%h %g %p"
                               `((?h . ,(org-link-display-format heading))
-                                (?g . ,(or tags ""))
+                                (?g . ,(if tags
+                                           (akirak-org--default-scale tags)
+                                         ""))
                                 (?p . ,(if planning
                                            (propertize planning 'face 'font-lock-comment-face)
                                          "")))))
@@ -452,6 +454,36 @@ The point should be at the heading."
             (org-no-properties
              (org-format-outline-path olp (max 0 (- width (length prefix) (length suffix)))))
             suffix)))
+
+(defun akirak-org--default-scale (text)
+  (if-let (face (get-text-property 0 'face text))
+      (propertize (org-no-properties text)
+                  'face (akirak-org--default-scale-face face))
+    text))
+
+(defun akirak-org--default-scale-face (face)
+  (let (props)
+    (cl-labels
+        ((add-prop (prop value)
+           (unless (or (eq value 'unspecified)
+                       (memq prop '(:height :extend)))
+             (push value props)
+             (push prop props)))
+         (go (x)
+           (pcase-dolist (`(,prop . ,value) (face-all-attributes x))
+             (add-prop prop value))))
+      (cl-typecase face
+        (list
+         (dolist (x face)
+           (cl-typecase x
+             (list
+              (cl-loop for (prop value) on x by #'cddr
+                       do (add-prop prop value)))
+             (symbol
+              (go x)))))
+        (symbol
+         (go face))))
+    props))
 
 ;;;; akirak-org-protected-mode
 
