@@ -127,7 +127,8 @@ version."
                                 akirak-image-dir)))
     (copy-file file copy)
     (push (list (concat "file:" (abbreviate-file-name
-                                 (akirak-image--scale-default copy))))
+                                 (or (akirak-image--scale-default copy)
+                                     copy))))
           org-stored-links)))
 
 ;;;###autoload
