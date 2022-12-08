@@ -80,24 +80,30 @@
 (defun akirak-header-line--project-and-buffer ()
   (let* ((base (buffer-base-buffer))
          (filename (buffer-file-name base))
-         (project (when filename (project-current))))
+         (root (vc-root-dir)))
     (if filename
-        (concat (pcase project
-                  ((and `(vc . ,_)
-                        (let root (project-root project)))
-                   (format "[%s] %s"
-                           (file-name-nondirectory (string-remove-suffix "/" root))
-                           (file-relative-name filename
-                                               (expand-file-name root))))
-                  (`(nix-store . ,_)
-                   (format "[nix:%s] %s"
-                           (akirak-nix-project-root-name project)
-                           (file-relative-name filename
-                                               (expand-file-name (project-root project)))))
-                  (`nil
-                   (file-name-nondirectory filename))
-                  (_
-                   (file-name-nondirectory filename)))
+        (concat (cond
+                 (root
+                  (format "[%s] %s"
+                          (file-name-nondirectory (string-remove-suffix "/" root))
+                          (file-relative-name filename
+                                              (expand-file-name root))))
+                 ((string-match (rx bol "/nix/store/" (group (+ (not (any "/")))) "/")
+                                filename)
+                  (let* ((root (match-string 0 filename))
+                         (name (thread-last
+                                 (akirak-nix-parse-drv-name (match-string 1 filename))
+                                 (alist-get 'name)))
+                         (pos (save-match-data
+                                (string-match (rx bol (+ (any alnum)) "-") name)
+                                (nth 1 (match-data)))))
+                    (format "[nix:%s] %s"
+                            (substring name pos)
+                            (file-relative-name filename (expand-file-name root)))))
+                 (`nil
+                  (file-name-nondirectory filename))
+                 (_
+                  (file-name-nondirectory filename)))
                 (if base
                     " -> %b"
                   ""))

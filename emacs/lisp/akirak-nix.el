@@ -14,16 +14,6 @@
 (cl-defmethod project-root ((project (head nix-store)))
   (cadr project))
 
-(defun akirak-nix-project-root-name (project)
-  (let* ((name (thread-last
-                 (nth 2 project)
-                 (akirak-nix-parse-drv-name)
-                 (alist-get 'name)))
-         (pos (save-match-data
-                (string-match (rx bol (+ (any alnum)) "-") name)
-                (nth 1 (match-data)))))
-    (substring name pos)))
-
 (defun akirak-nix-parse-drv-name (name)
   (with-temp-buffer
     (call-process "nix"
