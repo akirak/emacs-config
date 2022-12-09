@@ -3,7 +3,7 @@
 (require 'org-clock)
 (require 'thunk)
 
-(defcustom akirak-org-clock-history-threshold (* 3600 24 7)
+(defcustom akirak-org-clock-history-threshold (* 3600 24 2)
   "Number of seconds for which you want to take account for clock
  activities."
   :type 'number)
