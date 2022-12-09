@@ -2156,7 +2156,7 @@ Outline-based notes management and organizer
                 (defun akirak/org-default-agenda ()
                   (interactive)
                   (unless (bound-and-true-p org-clock-history)
-                    (akirak-org-clock-add-agenda-files))
+                    (akirak-org-clock-add-agenda-files 7))
                   (let ((org-agenda-custom-commands
                          `(("a" "The agenda"
                             ((agenda)
