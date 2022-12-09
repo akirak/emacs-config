@@ -366,7 +366,13 @@
                       (setq akirak-capture-headline "%a"
                             akirak-capture-template-options '(:todo "UNDERWAY")
                             akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                      (akirak-capture-doct)))]
+                      (akirak-capture-doct)))
+   ("m" "Message" (lambda ()
+                    (interactive)
+                    (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
+                          akirak-capture-template-options '(:todo "UNDERWAY" :tags "@message")
+                          akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                    (akirak-capture-doct)))]
 
   ["Information (input, events, etc.)"
    :class transient-subgroups
