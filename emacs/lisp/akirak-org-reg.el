@@ -3,8 +3,8 @@
 (require 'org)
 (require 'transient)
 
-(defcustom akirak-org-reg-action #'akirak-embark-on-org-hd-marker
-  "Default function to be called on an Org marker."
+(defcustom akirak-org-reg-action-fn #'akirak-embark-on-org-hd-marker
+  "Function called on an Org marker."
   :type 'function)
 
 ;;;; Infixes
@@ -171,7 +171,7 @@
 (defun akirak-org-reg-dispatch (target)
   (cl-etypecase target
     (symbol (akirak-org-reg-dispatch (symbol-value target)))
-    (marker (funcall akirak-org-reg-action target))))
+    (marker (funcall akirak-org-reg-action-fn target))))
 
 (provide 'akirak-org-reg)
 ;;; akirak-org-reg.el ends here

@@ -116,7 +116,7 @@
 
   peg = _: _: {
     origin = {
-      type= "github";
+      type = "github";
       owner = "emacsmirror";
       repo = "peg";
       rev = "03a35ddee99cf4b6831ee4f98474a745cc79b66f";
@@ -225,6 +225,15 @@
       owner = "akirak";
       repo = "nov.el";
       ref = "abbr-file-name";
+    };
+  };
+
+  lean4-mode = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "lean4-mode";
+      ref = "develop";
     };
   };
 

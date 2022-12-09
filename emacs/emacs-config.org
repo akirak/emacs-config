@@ -4170,6 +4170,8 @@ Client for Language Server Protocol (LSP) servers
                "r" #'eglot-rename))
 
       (add-to-list 'eglot-server-programs
+                   '(lean4-mode . ("lake" "serve")))
+      (add-to-list 'eglot-server-programs
                    '(svelte-mode . ("svelteserver" "--stdio")))
       (add-to-list 'eglot-server-programs
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
@@ -5179,6 +5181,17 @@ Automatic language detection from code snippets
 
 #+begin_src emacs-lisp
 (setup (:package language-detection))
+#+end_src
+*** lean4-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-12-09 Fri 19:50]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package lean4-mode)
+    (:file-match "\\.lean\\'")
+    (:when-loaded
+      (lean4-input-setup)))
 #+end_src
 *** license-templates                              :development:OSS:
 :PROPERTIES:
