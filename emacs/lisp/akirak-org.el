@@ -537,7 +537,8 @@ The point should be at the heading."
   (activate-mark))
 
 (defun akirak-org-goto-or-create-olp (olp)
-  (let ((level 1))
+  (let ((level 1)
+        (org-element-use-cache nil))
     (dolist (heading olp)
       (unless (catch 'found
                 (while (re-search-forward (format org-complex-heading-regexp-format
@@ -546,7 +547,8 @@ The point should be at the heading."
                   (when (equal level (- (match-end 1) (match-beginning 1)))
                     (throw 'found t))))
         (org-end-of-subtree)
-        (insert "\n" (make-string level ?*) " " heading))
+        (insert "\n" (make-string level ?*) " " heading)
+        (org-element-cache-reset))
       (org-narrow-to-subtree)
       (setq level (org-get-valid-level (1+ level))))
     (widen)))
