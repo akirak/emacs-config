@@ -4690,7 +4690,7 @@ Emacs Minor mode to automatically commit and push
           gac-default-message #'akirak/git-auto-commit-message)
 
     (defun akirak/git-auto-commit-message (filename)
-      (let ((root (project-root (project-current nil filename))))
+      (let ((root (project-root (project-current nil (file-name-directory filename)))))
         (thread-last
           (if (org-clocking-p)
               (let* ((clocking-file (buffer-file-name (org-base-buffer
