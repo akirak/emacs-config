@@ -6,6 +6,8 @@
     cascadia-code
     inter
     source-han-sans
+    noto-fonts-emoji
+    symbola
   ];
 
   programs.alacritty = {

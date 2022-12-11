@@ -1669,7 +1669,9 @@ You need to install the font separately.
       (fixed-pitch "Cascadia Code")
       (variable-pitch "Inter")
       (kana "Source Han Sans HC" :fontset t)
-      (han "Source Han Sans HC" :fontset t))
+      (han "Source Han Sans HC" :fontset t)
+      (emoji "Noto Color Emoji" :fontset t :add prepend)
+      (symbol "Symbola" :fontset t :add append))
     "Alist of font families for faces."
     :type '(repeat (list symbol
                          string
@@ -1685,10 +1687,8 @@ You need to install the font separately.
                (pcase-dolist (`(,face ,family . ,plist) value)
                  (if (member family families)
                      (if-let (fontset (plist-get plist :fontset))
-                         (set-fontset-font (if (stringp fontset)
-                                               fontset
-                                             "fontset-default")
-                                           face family)
+                         (set-fontset-font fontset face family nil
+                                           (plist-get plist :add))
                        (set-face-attribute face nil :family family))
                    (message "Font family %s is not installed" family)
                    (delq (assq face value) value)
