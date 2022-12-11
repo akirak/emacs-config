@@ -152,8 +152,11 @@ With ARG, pick a text from the kill ring instead of the last one."
           (if arg
               (yank-pop)
             (yank))
+          (push-mark)
+          (goto-char begin)
+          (when (looking-at (rx (+ "\n")))
+            (delete-region (point) (match-end 0)))
           ;; Select the pasted text.
-          (push-mark begin)
           (setq mark-active t)
           (call-interactively #'org-insert-structure-template)
           (setq done t)
