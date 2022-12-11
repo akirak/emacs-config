@@ -1967,7 +1967,68 @@ Outline-based notes management and organizer
                               (t (error "This should not happen")))))
             (when org-log-note-extra (insert org-log-note-extra))
             (setq-local org-finish-function 'org-store-log-note)
-            (run-hooks 'org-log-buffer-setup-hook))))))
+            (run-hooks 'org-log-buffer-setup-hook)))
+
+        (el-patch-defun org-offer-links-in-entry (buffer marker &optional nth zero)
+          "Offer links in the current entry and return the selected link.
+  If there is only one link, return it.
+  If NTH is an integer, return the NTH link found.
+  If ZERO is a string, check also this string for a link, and if
+  there is one, return it."
+          (with-current-buffer buffer
+            (org-with-wide-buffer
+             (goto-char marker)
+             (let ((cnt ?0)
+                   have-zero end links link c)
+               (when (and (stringp zero) (string-match org-link-bracket-re zero))
+                 (push (match-string 0 zero) links)
+                 (setq cnt (1- cnt) have-zero t))
+               (save-excursion
+                 (org-back-to-heading t)
+                 (setq end (save-excursion (outline-next-heading) (point)))
+                 (while (re-search-forward org-link-any-re end t)
+                   ;; Only consider valid links or links openable via
+                   ;; `org-open-at-point'.
+                   (when (memq (org-element-type (org-element-context)) '(link comment comment-block node-property keyword))
+                     (push (match-string 0) links)))
+                 (setq links (org-uniquify (reverse links)))
+                 (el-patch-add (narrow-to-region (org-entry-beginning-position)
+                                                 (org-entry-end-position))))
+               (cond
+                ((null links)
+                 (message "No links"))
+                ((equal (length links) 1)
+                 (setq link (car links)))
+                ((and (integerp nth) (>= (length links) (if have-zero (1+ nth) nth)))
+                 (setq link (nth (if have-zero nth (1- nth)) links)))
+                (t                        ; we have to select a link
+                 (save-excursion
+                   (save-window-excursion
+                     (el-patch-remove (delete-other-windows))
+                     (with-output-to-temp-buffer "*Select Link*"
+                       (dolist (l links)
+                         (cond
+                          ((not (string-match org-link-bracket-re l))
+                           (princ (format "[%c]  %s\n" (cl-incf cnt)
+                                          (org-unbracket-string "<" ">" l))))
+                          ((match-end 2)
+                           (princ (format "[%c]  %s (%s)\n" (cl-incf cnt)
+                                          (match-string 2 l) (match-string 1 l))))
+                          (t (princ (format "[%c]  %s\n" (cl-incf cnt)
+                                            (match-string 1 l)))))))
+                     (org-fit-window-to-buffer (get-buffer-window "*Select Link*"))
+                     (message "Select link to open, RET to open all:")
+                     (setq c (read-char-exclusive))
+                     (and (get-buffer "*Select Link*") (kill-buffer "*Select Link*"))))
+                 (when (equal c ?q) (user-error "Abort"))
+                 (if (equal c ?\C-m)
+                     (setq link links)
+                   (setq nth (- c ?0))
+                   (when have-zero (setq nth (1+ nth)))
+                   (unless (and (integerp nth) (>= (length links) nth))
+                     (user-error "Invalid link selection"))
+                   (setq link (nth (1- nth) links)))))
+               (cons link end))))))))
 #+end_src
 **** org-modules
 #+begin_src emacs-lisp
@@ -5875,6 +5936,7 @@ Summon and dismiss buffers as popups
                                      "^\\*edit-indirect"
                                      "^\\*scratch from selection\\*"
                                      "^\\*eldoc"
+                                     "^\\*Select Link\\*"
                                      "^\\*hoogle\\*"
                                      inferior-haskell-mode
                                      lisp-interaction-mode
