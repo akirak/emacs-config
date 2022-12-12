@@ -5247,6 +5247,10 @@ Automatic language detection from code snippets
 :PROPERTIES:
 :CREATED_TIME: [2022-12-09 Fri 19:50]
 :END:
+#+begin_quote
+A major mode for the Lean language
+[[https://github.com/leanprover/lean4]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package lean4-mode)
@@ -6800,7 +6804,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 225 |
+| [[org-ql-search:tags:packages][packages]]            | 226 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
