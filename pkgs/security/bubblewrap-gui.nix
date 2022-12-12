@@ -23,7 +23,7 @@ in
       xauthority_args=""
     fi
 
-    if [[ ''${DBUS_SESSION_BUS_ADDRESS} =~ ^unix:path=(.+),guid= ]]
+    if [[ ''${DBUS_SESSION_BUS_ADDRESS} =~ ^unix:path=([^,]+) ]]
     then
       dbus_args="--ro-bind ''${BASH_REMATCH[1]} ''${BASH_REMATCH[1]}"
     else
