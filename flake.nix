@@ -42,10 +42,6 @@
       url = "github:emacsmirror/epkgs";
       flake = false;
     };
-    emacs = {
-      url = "github:emacs-mirror/emacs";
-      flake = false;
-    };
 
     # zsh plugins
     zsh-fast-syntax-highlighting = {

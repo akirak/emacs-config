@@ -21,7 +21,34 @@ with builtins; let
     pkgsForEmacs.emacsPgtk.overrideAttrs (_: {version = "30.0.50";});
 
   releaseVersions = import ./versions.nix;
-  inventories = import ./inventories.nix inputs;
+  inventories = [
+    {
+      type = "melpa";
+      path = inputs.melpa.outPath + "/recipes";
+    }
+    {
+      type = "elpa";
+      path = inputs.gnu-elpa.outPath + "/elpa-packages";
+      core-src = emacsPackage.src;
+      auto-sync-only = true;
+      exclude = [
+        # Use tarball, as it contains info
+        "org-transclusion"
+      ];
+    }
+    {
+      type = "archive";
+      url = "https://elpa.gnu.org/packages/";
+    }
+    {
+      type = "archive";
+      url = "https://elpa.nongnu.org/nongnu/";
+    }
+    {
+      type = "gitmodules";
+      path = inputs.epkgs.outPath + "/.gitmodules";
+    }
+  ];
 
   makeEmacsProfile = {
     extraFeatures,
