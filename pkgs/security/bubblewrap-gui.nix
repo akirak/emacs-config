@@ -25,7 +25,7 @@ in
 
     if [[ ''${DBUS_SESSION_BUS_ADDRESS} =~ ^unix:path=([^,]+) ]]
     then
-      dbus_args="--ro-bind ''${BASH_REMATCH[1]} ''${BASH_REMATCH[1]}"
+      dbus_args="--ro-bind ''${BASH_REMATCH[1]} ''${BASH_REMATCH[1]} --setenv DBUS_SESSION_BUS_ADDRESS ''${DBUS_SESSION_BUS_ADDRESS}"
     else
       dbus_args=""
     fi
