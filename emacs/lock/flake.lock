@@ -433,22 +433,6 @@
         "type": "github"
       }
     },
-    "corfu-doc": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1650325664,
-        "narHash": "sha256-PRly3n1K/titw//3OwdNiLfG1hkVPvrdFcJLMEbtbDE=",
-        "owner": "galeo",
-        "repo": "corfu-doc",
-        "rev": "c14d42e5e2107c1d3f51e88c7d42d0bd3b247b39",
-        "type": "github"
-      },
-      "original": {
-        "owner": "galeo",
-        "repo": "corfu-doc",
-        "type": "github"
-      }
-    },
     "dash": {
       "flake": false,
       "locked": {
@@ -2765,7 +2749,6 @@
         "consult-org-nlink": "consult-org-nlink",
         "consult-recoll": "consult-recoll",
         "corfu": "corfu",
-        "corfu-doc": "corfu-doc",
         "dash": "dash",
         "deadgrep": "deadgrep",
         "deferred": "deferred",

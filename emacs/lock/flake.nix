@@ -163,12 +163,6 @@
       repo = "corfu";
       type = "github";
     };
-    corfu-doc = {
-      flake = false;
-      owner = "galeo";
-      repo = "corfu-doc";
-      type = "github";
-    };
     dash = {
       flake = false;
       owner = "magnars";

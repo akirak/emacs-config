@@ -3860,19 +3860,6 @@ Completion Overlay Region FUnction
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
-*** corfu-doc
-:PROPERTIES:
-:CREATED_TIME: [2022-04-24 Sun 19:51]
-:END:
-#+begin_quote
-Documentation popup for Corfu
-[[https://github.com/galeo/corfu-doc]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package corfu-doc)
-    (:hook-into corfu-mode-hook))
-#+end_src
 *** COMMENT dash-docs                        :documentation:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-20 Wed 17:28]
