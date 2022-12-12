@@ -29,6 +29,7 @@ in
     inheritPath ? false,
     extraDirsToTryBind ? [],
     extraBwrapOptions ? [],
+    emacsArguments ? [],
   }: let
     package = emacs-config.override {
       inherit extraFeatures extraInitFiles withXwidgets nativeCompileAheadDefault;
@@ -154,5 +155,6 @@ in
         ++ (lib.optional shareNet "--share-net")
         ++ [
           "${package}/bin/emacs"
-        ];
+        ]
+        ++ emacsArguments;
     }
