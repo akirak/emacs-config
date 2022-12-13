@@ -293,6 +293,9 @@
           ${site.username + "@" + site.hostName} = homeManagerConfiguration {
             # unfree must be turned on for wpsoffice
             pkgs = channels.unfree-unstable;
+            extraSpecialArgs = {
+              inherit site;
+            };
             modules =
               [
                 ./home/modules/crostini.nix
@@ -303,6 +306,7 @@
                     stateVersion = "22.11";
                   };
                 }
+                ./home/profiles/update.nix
               ]
               ++ site.homeModules;
           };
