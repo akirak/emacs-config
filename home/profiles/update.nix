@@ -5,8 +5,8 @@
 }: let
   rebuild = pkgs.writeShellScriptBin "rebuild-home" ''
     cd ${site.nixConfigDir}
-    system=$(nix eval builtins.currentSystem --impure)
-    nix build .#homeconfigurations.$system."${site.username}@${site.hostName}".activationPackage \
+    system=$(nix eval --expr builtins.currentSystem --impure --raw)
+    nix build .#homeConfigurations.$system."${site.username}@${site.hostName}".activationPackage \
       --override-input site ${site.siteConfigDir}
   '';
 in {
