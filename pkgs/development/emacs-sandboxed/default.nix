@@ -149,6 +149,11 @@ in
           ])
           [
             "/usr/share/fonts"
+            "/lib"
+            "/lib32"
+            "/lib64"
+            "/libx32"
+            "/libexec"
           ]
         ))
         ++ extraBwrapOptions
