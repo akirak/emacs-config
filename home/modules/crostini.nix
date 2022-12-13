@@ -34,8 +34,7 @@ in {
           "/usr/games"
           "/sbin"
           "/bin"
-        ]}"
-      Environment="XDG_DATA_DIRS=${builtins.concatStringsSep ":"
+        ]}" "XDG_DATA_DIRS=${builtins.concatStringsSep ":"
         [
           "%h/.nix-profile/share"
           "%h/.local/share"
