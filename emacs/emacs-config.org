@@ -1131,7 +1131,7 @@ Operations on the current project
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package project)
+  (setup project
     (:status opinionated
       (:when-loaded
         (:with-map ctl-x-map

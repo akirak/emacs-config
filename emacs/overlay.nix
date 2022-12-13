@@ -29,7 +29,6 @@ with builtins; let
     {
       type = "elpa";
       path = inputs.gnu-elpa.outPath + "/elpa-packages";
-      core-src = emacsPackage.src;
       auto-sync-only = true;
       exclude = [
         # Use tarball, as it contains info
