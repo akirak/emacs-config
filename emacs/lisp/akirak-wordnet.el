@@ -3,7 +3,7 @@
 (require 'emacsql-sqlite)
 
 (defcustom akirak-wordnet-database-file
-  (expand-file-name "dict/wordnet.db" (xdg-data-home))
+  (expand-file-name "~/.nix-profile/share/dict/wordnet.sqlite")
   ""
   :type 'file)
 

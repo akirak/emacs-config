@@ -44,6 +44,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    cp wordnet.db $out
+    mkdir -p $out/share/dict
+    install -m 644 wordnet.db $out/share/dict/wordnet.sqlite
   '';
 }
