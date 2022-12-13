@@ -119,6 +119,7 @@ in
             then "$PATH"
             else
               lib.makeBinPath [
+                "$HOME/.nix-profile/bin"
                 coreutils
                 gnused
               ]
