@@ -147,14 +147,25 @@ in
             dir
             dir
           ])
-          [
-            "/usr/share/fonts"
-            "/lib"
-            "/lib32"
-            "/lib64"
-            "/libx32"
-            "/libexec"
-          ]
+          ([
+              "/lib"
+              "/lib32"
+              "/lib64"
+              "/libx32"
+              "/libexec"
+            ]
+            ++ (
+              if inheritPath
+              then [
+                "/usr/bin"
+                "/usr/local/bin"
+                "/usr/lib"
+                "/usr/local/lib"
+                "/usr/share"
+                "/usr/local/share"
+              ]
+              else ["/usr/share/fonts"]
+            ))
         ))
         ++ extraBwrapOptions
         ++ (lib.optional shareNet "--share-net")
