@@ -2580,7 +2580,7 @@ A programmable workflow layer for Org mode
                         (org-dog-overview-scan org-agenda-files :fast t)
                         (mapcar #'car)
                         (reverse)))
-                (when (require 'org-memento nil t)
+                (when (bound-and-true-p org-memento-file)
                   (add-to-list 'org-agenda-files org-memento-file t))))
 
     (:when-loaded
