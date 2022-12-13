@@ -568,6 +568,7 @@ The following variable defines variables that can be saved to =custom-file=:
       smtpmail-stream-type
       smtpmail-smtp-service
       akirak-org-log-file
+      akirak/font-height
       ;; Dynamic
       safe-local-variable-values))
 #+end_src
