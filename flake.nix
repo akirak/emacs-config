@@ -150,6 +150,9 @@
           impermanence.nixosModules.impermanence
           ./nixos/profiles/defaults.nix
           home-manager.nixosModules.home-manager
+          {
+            environment.etc."nix/inputs/nixpkgs".source = inputs.unstable.outPath;
+          }
         ];
       };
 
