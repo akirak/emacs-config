@@ -170,7 +170,7 @@
         };
 
         modules = [
-          {
+          ({site, ...}: {
             boot.isContainer = true;
             networking.useDHCP = false;
             networking.firewall = {
@@ -181,7 +181,10 @@
             services.openssh = {
               enable = true;
             };
-          }
+
+            system.stateVersion = "22.11";
+            home-manager.users.${site.username}.home.stateVersion = "22.11";
+          })
 
           ./nixos/profiles/default-user.nix
 

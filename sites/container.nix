@@ -7,9 +7,6 @@
   ];
 
   extraHomeModules = [
-    {
-      home.enableNixpkgsReleaseCheck = false;
-    }
   ];
 
   nixos = {
