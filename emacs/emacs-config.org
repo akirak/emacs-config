@@ -4067,6 +4067,14 @@ Hide dotfiles in dired
 #+end_src
 
 dired-k depends on dired-x, which has a poor code quality.
+*** docopt
+:PROPERTIES:
+:CREATED_TIME: [2022-12-14 Wed 18:22]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package docopt))
+#+end_src
 *** COMMENT dogears                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-28 Wed 23:59]
@@ -5725,6 +5733,7 @@ Major mode for editing .nix files
   (setup (:package nix-mode)
     (:file-match "\\.nix\\'")
     (:mode-repl nix-repl)
+    (:bind [remap devdocs-lookup] #'akirak-nix-manix)
     (:reformatters
      (nixpkgs-fmt :program "nixpkgs-fmt")
      (alejandra :program "alejandra"))
