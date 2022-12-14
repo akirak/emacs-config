@@ -4,7 +4,10 @@
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
     nix-filter.url = "github:numtide/nix-filter";
 
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-22.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Channels
     unstable.url = "nixpkgs/nixos-unstable";
@@ -151,6 +154,7 @@
           ./nixos/profiles/defaults.nix
           home-manager.nixosModules.home-manager
           {
+            home-manager.useGlobalPkgs = true;
             environment.etc."nix/inputs/nixpkgs".source = inputs.unstable.outPath;
           }
         ];
@@ -227,6 +231,10 @@
 
             system.stateVersion = "22.11";
           }
+
+          ({site, ...}: {
+            home-manager.users.${site.username}.home.stateVersion = "22.11";
+          })
 
           ./nixos/profiles/default-user.nix
 

@@ -1,6 +1,8 @@
-{
-  hostName = "li";
+let
   username = "akirakomamura";
+in {
+  hostName = "li";
+  inherit username;
 
   homeModules = [
     "river"
@@ -10,9 +12,11 @@
   ];
 
   extraHomeModules = [
-    ({pkgs, ...}: {
-      home.enableNixpkgsReleaseCheck = false;
-
+    ({
+      pkgs,
+      site,
+      ...
+    }: {
       programs.chromium = {
         enable = true;
         extensions = [
@@ -27,8 +31,6 @@
         pkgs.wine
         pkgs.tenacity
       ];
-
-      home.stateVersion = "22.05";
     })
   ];
 
