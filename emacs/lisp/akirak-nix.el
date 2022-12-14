@@ -190,5 +190,105 @@
                                  "--print-out-paths")
                   :sentinel #'sentinel)))
 
+(defun akirak-nix--manix-source-info ()
+  "Return a list of possible values for --source option from the help.
+
+This is a hack, so it may not work in the future."
+  (require 'docopt)
+  (let (result)
+    (with-temp-buffer
+      (insert (slot-value (cl-find "source"
+                                   (thread-last
+                                     (docopt-parse (shell-command-to-string "manix --help"))
+                                     (docopt-program-options))
+                                   :key (lambda (x) (oref x name))
+                                   :test #'equal)
+                          'description))
+      (goto-char (point-min))
+      (while (re-search-forward (rx "[" (group (+ (any alpha space))) ":" (+ space)
+                                    (group (+ (any alpha space "_,")))
+                                    "]")
+                                nil t)
+        (push (cons (match-string 1)
+                    (mapcar #'string-trim (split-string (match-string 2)
+                                                        ",")))
+              result)))
+    result))
+
+(defvar akirak-nix-manix-source-info nil)
+
+(defvar akirak-nix-manix-sources nil)
+
+;; (transient-define-infix akirak-nix-manix-source-infix ()
+;;   :description "Set sources"
+;;   :class 'akirak-nix-manix-source-class
+;;   :variable 'akirak-nix-manix-sources)
+
+;;;###autoload (autoload 'akirak-nix-manix "akirak-nix" nil 'interactive)
+(transient-define-prefix akirak-nix-manix ()
+  "Look up Nix-related documentations."
+  [("q" "Search from the selected sources"
+    (lambda ()
+      (interactive)
+      (akirak-nix--manix (akirak-nix--read-manix-query "Search from nix: ")
+                         :sources akirak-nix-manix-sources)))]
+  ["Search from a source"
+   :class transient-row
+   ("o" "NixOS options"
+    (lambda ()
+      (interactive)
+      (akirak-nix--manix (akirak-nix--read-manix-query "NixOS options")
+                         :sources '("nixos_options"))))
+   ("h" "Home Manager options"
+    (lambda ()
+      (interactive)
+      (akirak-nix--manix (akirak-nix--read-manix-query "home-manager options")
+                         :sources '("hm_options"))))
+   ("d" "Nixpkgs documentation"
+    (lambda ()
+      (interactive)
+      (akirak-nix--manix (akirak-nix--read-manix-query "nixpkgs documentation")
+                         :sources '("nixpkgs_doc"))))
+   ("t" "Nixpkgs tree"
+    (lambda ()
+      (interactive)
+      (akirak-nix--manix (akirak-nix--read-manix-query "nixpkgs tree")
+                         :sources '("nixpkgs_tree"))))
+   ("c" "Nixpkgs comments"
+    (lambda ()
+      (interactive)
+      (akirak-nix--manix (akirak-nix--read-manix-query "nixpkgs comments")
+                         :sources '("nixpkgs_comments"))))]
+  (interactive)
+  (unless akirak-nix-manix-source-info
+    (setq akirak-nix-manix-source-info (akirak-nix--manix-source-info)))
+  (unless akirak-nix-manix-sources
+    (setq akirak-nix-manix-sources (or (cdr (assoc "default" akirak-nix-manix-source-info))
+                                       (error "Default options not found"))))
+  (transient-setup 'akirak-nix-manix))
+
+(defun akirak-nix--read-manix-query (prompt)
+  (let ((default (thing-at-point 'symbol t)))
+    (read-from-minibuffer (format-prompt prompt default) nil nil nil nil default)))
+
+(defun akirak-nix--manix (query &key source)
+  "Search documentation for QUERY from a Nix-related SOURCE."
+  (let ((help (with-temp-buffer
+                (if (zerop (apply #'process-file
+                                  "manix" nil (list (current-buffer) nil) nil
+                                  query
+                                  (when source
+                                    (list "--source"
+                                          (cl-typecase source
+                                            (string source)
+                                            (list (string-join source ",")))))))
+                    (buffer-string)
+                  (error "manix failed with non-zero exit code")))))
+    (if (string-empty-p help)
+        (message "The query for \"%s\" returned no result from %s." query source)
+      (with-help-window (help-buffer)
+        (with-current-buffer (help-buffer)
+          (insert help))))))
+
 (provide 'akirak-nix)
 ;;; akirak-nix.el ends here
