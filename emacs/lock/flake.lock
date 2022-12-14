@@ -420,11 +420,11 @@
     "corfu": {
       "flake": false,
       "locked": {
-        "lastModified": 1668782541,
-        "narHash": "sha256-BL14V542MP00Kymc4YxrP0A0h00q2aA8e9YfLnl2vNw=",
+        "lastModified": 1670939676,
+        "narHash": "sha256-AOECALuB8FOeZEDgqdcswve5wPRvcsbpvNuK9xp6jFM=",
         "owner": "minad",
         "repo": "corfu",
-        "rev": "51004b233a440ac72d21be466ee20874f2ef244d",
+        "rev": "9077c1e6fdade78a1eb7432ea6dae580e8bb6762",
         "type": "github"
       },
       "original": {
@@ -542,6 +542,22 @@
       "original": {
         "owner": "Fuco1",
         "repo": "dired-hacks",
+        "type": "github"
+      }
+    },
+    "docopt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1660892900,
+        "narHash": "sha256-FfwAyn9tvTzWXmvwUG7Y2hyxM7qq+TDxCUrFUChmsRU=",
+        "owner": "r0man",
+        "repo": "docopt.el",
+        "rev": "525b5d42c51995f52f0f82fb41ba8e1d246532d1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "r0man",
+        "repo": "docopt.el",
         "type": "github"
       }
     },
@@ -1880,11 +1896,11 @@
     "oahu": {
       "flake": false,
       "locked": {
-        "lastModified": 1667987867,
-        "narHash": "sha256-6rqCqL73ISzyGNnHPb9XSRYJMWn5KWEMUcQwWPW638I=",
+        "lastModified": 1671075025,
+        "narHash": "sha256-KVf2saZ8BMIB7Bw8/4T2oucauxoY2H24RFaixakXkqQ=",
         "owner": "~akirak",
         "repo": "oahu.el",
-        "rev": "0ecca6227a90ba3159172b1203cede158fa6bc76",
+        "rev": "012e926c6c123e19c4dea4ab3b362ac29d725432",
         "type": "sourcehut"
       },
       "original": {
@@ -1896,11 +1912,11 @@
     "oahu-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1668437028,
-        "narHash": "sha256-6ILQKYQ0ST+GHWEcE3B+JGClvJV2TFSo7Sh1YFPh8dM=",
+        "lastModified": 1671075025,
+        "narHash": "sha256-KVf2saZ8BMIB7Bw8/4T2oucauxoY2H24RFaixakXkqQ=",
         "owner": "~akirak",
         "repo": "oahu.el",
-        "rev": "9c9956e4a8dd8e4d5c91d70b92b471dfc5acde7b",
+        "rev": "012e926c6c123e19c4dea4ab3b362ac29d725432",
         "type": "sourcehut"
       },
       "original": {
@@ -2176,11 +2192,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1670948414,
-        "narHash": "sha256-ONnvsyTTV75wLnIab0l+6mT+uHCejFLzfWxGRTnAXfk=",
+        "lastModified": 1671030891,
+        "narHash": "sha256-iBYUdNdJ7OXT4+LpXwj+mKIw8kvH/GwllOR+c+PuZaQ=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "c19564b017423db437fe088c30bb903ab3afd5dd",
+        "rev": "a4ab7be5152b864bdb16b6ae43bd87795de827dc",
         "type": "github"
       },
       "original": {
@@ -2225,11 +2241,11 @@
     "org-placeholder": {
       "flake": false,
       "locked": {
-        "lastModified": 1669291803,
-        "narHash": "sha256-ogKS1hf53PLG2idiDAlWDT79erjCynXpoavxeBMNF/E=",
+        "lastModified": 1671063237,
+        "narHash": "sha256-uRbz/AmkvAAt/WkddX4T+JJuKEdRf9IKL1KYKUshURs=",
         "owner": "akirak",
         "repo": "org-placeholder",
-        "rev": "0b67c69f541996f0587f3c2c8a81770520c69d2b",
+        "rev": "30e2046caf248c010dc3335d1bf8047daf853553",
         "type": "github"
       },
       "original": {
@@ -2444,6 +2460,22 @@
       "original": {
         "owner": "joostkremers",
         "repo": "parsebib",
+        "type": "github"
+      }
+    },
+    "parsec": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1532909786,
+        "narHash": "sha256-9Z3RZyDjwUjFu223WYlZXLdfm6oX8ANHXHOOV4hGOrw=",
+        "owner": "cute-jumper",
+        "repo": "parsec.el",
+        "rev": "2cbbbc2254aa7bcaa4fb5e07c8c1bf2f381dba26",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cute-jumper",
+        "repo": "parsec.el",
         "type": "github"
       }
     },
@@ -2756,6 +2788,7 @@
         "dired-collapse": "dired-collapse",
         "dired-filter": "dired-filter",
         "dired-hacks-utils": "dired-hacks-utils",
+        "docopt": "docopt",
         "doct": "doct",
         "dotenv-mode": "dotenv-mode",
         "duckduckgo": "duckduckgo",
@@ -2874,6 +2907,7 @@
         "package-lint": "package-lint",
         "page-break-lines": "page-break-lines",
         "parsebib": "parsebib",
+        "parsec": "parsec",
         "pcre2el": "pcre2el",
         "peg": "peg",
         "pinyin": "pinyin",

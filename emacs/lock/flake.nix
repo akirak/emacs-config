@@ -205,6 +205,12 @@
       repo = "dired-hacks";
       type = "github";
     };
+    docopt = {
+      flake = false;
+      owner = "r0man";
+      repo = "docopt.el";
+      type = "github";
+    };
     doct = {
       flake = false;
       owner = "progfolio";
@@ -922,6 +928,12 @@
       flake = false;
       owner = "joostkremers";
       repo = "parsebib";
+      type = "github";
+    };
+    parsec = {
+      flake = false;
+      owner = "cute-jumper";
+      repo = "parsec.el";
       type = "github";
     };
     pcre2el = {
