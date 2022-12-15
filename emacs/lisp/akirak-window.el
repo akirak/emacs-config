@@ -269,14 +269,16 @@ The target window is determined according to the same logic as
     window))
 
 ;;;###autoload
-(defun akirak-window-duplicate-state ()
+(defun akirak-window-duplicate-state (&optional arg)
   "Duplicate the current window state to another pane/window."
   (interactive)
   (let* ((source (selected-window))
-         (target (thread-last
-                   (mapcar #'cadr (akirak-window--get-panes))
-                   (cl-remove source)
-                   (car))))
+         (target (if (numberp arg)
+                     (akirak-window--find-column arg)
+                   (thread-last
+                     (mapcar #'cadr (akirak-window--get-panes))
+                     (cl-remove source)
+                     (car)))))
     (window-state-put (window-state-get source)
                       target)
     (select-window source)))
@@ -292,7 +294,7 @@ Otherwise, it calls `akirak-window-duplicate-state'."
   (interactive "P")
   (if (equal arg '(4))
       (toggle-window-split)
-    (akirak-window-duplicate-state)))
+    (akirak-window-duplicate-state arg)))
 
 (provide 'akirak-window)
 ;;; akirak-window.el ends here
