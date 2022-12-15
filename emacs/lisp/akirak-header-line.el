@@ -80,7 +80,7 @@
 (defun akirak-header-line--project-and-buffer ()
   (let* ((base (buffer-base-buffer))
          (filename (buffer-file-name base))
-         (root (vc-root-dir)))
+         (root (vc-git-root filename)))
     (if filename
         (concat (cond
                  (root
