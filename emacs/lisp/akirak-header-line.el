@@ -59,8 +59,8 @@
 
 (defun akirak-header-line-render ()
   (with-demoted-errors "akirak-header-line: %s"
-    (thunk-let ((l (format-mode-line akirak-header-line--left-format))
-                (r (format-mode-line akirak-header-line--right-format)))
+    (let ((l (format-mode-line akirak-header-line--left-format))
+          (r (format-mode-line akirak-header-line--right-format)))
       (if (eq major-mode 'vterm-mode)
           l
         (let ((pad-width (- (window-total-width)
@@ -77,37 +77,46 @@
 
 ;;;; Formatting functions
 
+(defvar-local akirak-header-line--file nil)
+
 (defun akirak-header-line--project-and-buffer ()
-  (let* ((base (buffer-base-buffer))
-         (filename (buffer-file-name base))
-         (root (vc-git-root filename)))
-    (if filename
-        (concat (cond
-                 (root
-                  (format "[%s] %s"
-                          (file-name-nondirectory (string-remove-suffix "/" root))
-                          (file-relative-name filename
-                                              (expand-file-name root))))
-                 ((string-match (rx bol "/nix/store/" (group (+ (not (any "/")))) "/")
-                                filename)
-                  (let* ((root (match-string 0 filename))
-                         (name (thread-last
-                                 (akirak-nix-parse-drv-name (match-string 1 filename))
-                                 (alist-get 'name)))
-                         (pos (save-match-data
-                                (string-match (rx bol (+ (any alnum)) "-") name)
-                                (nth 1 (match-data)))))
-                    (format "[nix:%s] %s"
-                            (substring name pos)
-                            (file-relative-name filename (expand-file-name root)))))
-                 (`nil
-                  (file-name-nondirectory filename))
-                 (_
-                  (file-name-nondirectory filename)))
-                (if base
-                    " -> %b"
-                  ""))
-      "%b")))
+  (if (and akirak-header-line--file
+           (> (- (float-time) (car akirak-header-line--file))
+              1))
+      (cdr akirak-header-line--file)
+    (let* ((base (buffer-base-buffer))
+           (filename (buffer-file-name base))
+           (root (when filename (vc-git-root filename)))
+           (format (if filename
+                       (concat
+                        (cond
+                         (root
+                          (format "[%s] %s"
+                                  (file-name-nondirectory (string-remove-suffix "/" root))
+                                  (file-relative-name filename
+                                                      (expand-file-name root))))
+                         ((string-match (rx bol "/nix/store/" (group (+ (not (any "/")))) "/")
+                                        filename)
+                          (let* ((root (match-string 0 filename))
+                                 (name (thread-last
+                                         (akirak-nix-parse-drv-name (match-string 1 filename))
+                                         (alist-get 'name)))
+                                 (pos (save-match-data
+                                        (string-match (rx bol (+ (any alnum)) "-") name)
+                                        (nth 1 (match-data)))))
+                            (format "[nix:%s] %s"
+                                    (substring name pos)
+                                    (file-relative-name filename (expand-file-name root)))))
+                         (`nil
+                          (file-name-nondirectory filename))
+                         (_
+                          (file-name-nondirectory filename)))
+                        (if base
+                            " -> %b"
+                          ""))
+                     "%b")))
+      (setq akirak-header-line--file (cons (float-time) format))
+      format)))
 
 (provide 'akirak-header-line)
 ;;; akirak-header-line.el ends here
