@@ -111,7 +111,9 @@
     ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
           (app (match-string 1) category))
      (list (org-dog-select 'absolute
-             `(relative :regexp ,(regexp-quote (concat "/" category ".org"))))
+             `(relative :regexp ,(rx-to-string `(and "/" ,category
+                                                     (? "." (+ (not (any "/"))))
+                                                     ".org"))))
            ""
            nil
            nil))
