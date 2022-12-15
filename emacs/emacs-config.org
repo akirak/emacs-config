@@ -4150,6 +4150,9 @@ dired-k depends on dired-x, which has a poor code quality.
 :PROPERTIES:
 :CREATED_TIME: [2022-12-14 Wed 18:22]
 :END:
+#+begin_quote
+A Docopt implementation in Elisp
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package docopt))
@@ -6880,7 +6883,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 225 |
+| [[org-ql-search:tags:packages][packages]]            | 226 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
