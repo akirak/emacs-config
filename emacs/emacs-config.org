@@ -1936,6 +1936,91 @@ Outline-based notes management and organizer
                             :test #'equal)))
 
         (require 'el-patch)
+
+        (el-patch-defun org-fast-todo-selection (&optional current-state)
+          "Fast TODO keyword selection with single keys.
+  Returns the new TODO keyword, or nil if no state change should occur.
+  When CURRENT-STATE is given and selection letters are not unique globally,
+  prefer a state in the current sequence over on in another sequence."
+          (let* ((fulltable org-todo-key-alist)
+                 (head (org-get-todo-sequence-head current-state))
+                 (done-keywords org-done-keywords) ;; needed for the faces.
+                 (maxlen (apply 'max (mapcar
+                                      (lambda (x)
+                                        (if (stringp (car x)) (string-width (car x)) 0))
+                                      fulltable)))
+                 (expert (equal org-use-fast-todo-selection 'expert))
+                 (prompt "")
+                 (fwidth (+ maxlen 3 1 3))
+                 (ncol (/ (- (window-width) 4) fwidth))
+                 tg cnt e c tbl subtable
+                 groups ingroup in-current-sequence)
+            (save-excursion
+              (save-window-excursion
+                (if expert
+                    (set-buffer (get-buffer-create " *Org todo*"))
+                  (el-patch-remove (delete-other-windows))
+                  (set-window-buffer (split-window-vertically) (get-buffer-create " *Org todo*"))
+                  (org-switch-to-buffer-other-window " *Org todo*")
+                  (el-patch-add (fit-window-to-buffer)))
+                (erase-buffer)
+                (setq-local org-done-keywords done-keywords)
+                (setq tbl fulltable cnt 0)
+                (while (setq e (pop tbl))
+                  (cond
+                   ((equal e '(:startgroup))
+                    (push '() groups) (setq ingroup t)
+                    (unless (= cnt 0)
+                      (setq cnt 0)
+                      (insert "\n"))
+                    (setq prompt (concat prompt "{"))
+                    (insert "{ "))
+                   ((equal e '(:endgroup))
+                    (setq ingroup nil cnt 0 in-current-sequence nil)
+                    (setq prompt (concat prompt "}"))
+                    (insert "}\n"))
+                   ((equal e '(:newline))
+                    (unless (= cnt 0)
+                      (setq cnt 0)
+                      (insert "\n")
+                      (setq e (car tbl))
+                      (while (equal (car tbl) '(:newline))
+                        (insert "\n")
+                        (setq tbl (cdr tbl)))))
+                   (t
+                    (setq tg (car e) c (cdr e))
+                    (if (equal tg head) (setq in-current-sequence t))
+                    (when ingroup (push tg (car groups)))
+                    (when in-current-sequence (push e subtable))
+                    (setq tg (org-add-props tg nil 'face
+                                            (org-get-todo-face tg)))
+                    (when (and (= cnt 0) (not ingroup)) (insert "  "))
+                    (setq prompt (concat prompt "[" (char-to-string c) "] " tg " "))
+                    (insert "[" c "] " tg (make-string
+                                           (- fwidth 4 (length tg)) ?\ ))
+                    (when (and (= (setq cnt (1+ cnt)) ncol)
+                               ;; Avoid lines with just a closing delimiter.
+                               (not (equal (car tbl) '(:endgroup))))
+                      (insert "\n")
+                      (when ingroup (insert "  "))
+                      (setq cnt 0)))))
+                (insert "\n")
+                (goto-char (point-min))
+                (unless expert (org-fit-window-to-buffer))
+                (message (concat "[a-z..]:Set [SPC]:clear"
+                                 (if expert (concat "\n" prompt) "")))
+                (setq c (let ((inhibit-quit t)) (read-char-exclusive)))
+                (setq subtable (nreverse subtable))
+                (cond
+                 ((or (= c ?\C-g)
+                      (and (= c ?q) (not (rassoc c fulltable))))
+                  (setq quit-flag t))
+                 ((= c ?\ ) nil)
+                 ((setq e (or (rassoc c subtable) (rassoc c fulltable))
+                        tg (car e))
+                  tg)
+                 (t (setq quit-flag t)))))))
+
         (el-patch-defun org-add-log-note (&optional _purpose)
           "Pop up a window for taking a note, and add this note later."
           (remove-hook 'post-command-hook 'org-add-log-note)
