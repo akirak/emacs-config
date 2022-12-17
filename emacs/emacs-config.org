@@ -560,6 +560,7 @@ The following variable defines variables that can be saved to =custom-file=:
       ;; Work context
       user-full-name
       user-mail-address
+      bookmark-default-file
       org-memento-workhour-alist
       org-memento-file
       org-memento-policy-file
