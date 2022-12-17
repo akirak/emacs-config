@@ -3832,7 +3832,8 @@ Consulting completing-read
                                          '(akirak-consult-source-help-buffer
                                            akirak-consult-source-indirect-buffer
                                            akirak-consult-source-narrowed-buffer
-                                           akirak-consult-source-org-agenda-buffer))
+                                           akirak-consult-source-org-agenda-buffer
+                                           akirak-consult-source-modified-buffer))
                                      consult--source-buffer
                                      consult--source-recent-file)
             ;; Use only relevant bookmark groups.
