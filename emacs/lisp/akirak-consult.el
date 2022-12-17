@@ -67,6 +67,24 @@
                                       (buffer-narrowed-p)))
                        :as #'buffer-name))))
 
+;; Based on `consult--source-project-buffer' from consult.el.
+(defvar akirak-consult-source-modified-buffer
+  `(:name "Modified buffer"
+          :narrow (?m . "Modified")
+          :hidden t
+          :category buffer
+          :state ,#'consult--buffer-state
+          :face consult-buffer
+          :history buffer-name-history
+          :action ,#'consult--buffer-action
+          :items
+          ,(lambda () (consult--buffer-query
+                       :predicate (lambda (bufname)
+                                    (let ((buffer (get-buffer bufname)))
+                                      (and (buffer-modified-p buffer)
+                                           (buffer-file-name buffer))))
+                       :as #'buffer-name))))
+
 ;; Based on `consult--source-project-buffer'.
 (defvar akirak-consult-source-project-file-buffer
   `(:name "File Buffer"
