@@ -62,9 +62,12 @@
                       (mapcar (lambda (buf)
                                 (when (buffer-file-name buf)
                                   (buffer-local-value 'default-directory buf))))
+                      (delq nil)
                       (seq-uniq)
                       (mapcar (lambda (dir)
-                                (when-let (pr (project-current nil dir))
+                                (when-let (pr (and dir
+                                                   (file-directory-p dir)
+                                                   (project-current nil dir)))
                                   (project-root pr))))
                       (delq nil)
                       (delq (when-let (pr (project-current))
