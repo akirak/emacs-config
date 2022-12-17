@@ -1479,7 +1479,7 @@ Transient commands
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package transient))
+  (setup transient)
 #+end_src
 
 Because transient is developed by the maintainer of magit, it is better to update them together.
