@@ -25,7 +25,6 @@
     # agenix.inputs.nixpkgs.follows = "latest";
 
     # Emacs
-    nixpkgs-emacs.url = "github:NixOS/nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     org-babel.url = "github:emacs-twist/org-babel";
     twist.url = "github:emacs-twist/twist.nix";
@@ -99,7 +98,6 @@
 
     emacsOverlay = import ./emacs/overlay.nix {
       inherit inputs;
-      nixpkgs = inputs.nixpkgs-emacs;
     };
   in
     flake-utils-plus.lib.mkFlake {
@@ -392,9 +390,4 @@
 
       # abc = 132;
     };
-
-  nixConfig = {
-    extra-substituters = "https://akirak.cachix.org";
-    extra-trusted-public-keys = "akirak.cachix.org-1:WJrEMdV1dYyALkOdp/kAECVZ6nAODY5URN05ITFHC+M=";
-  };
 }

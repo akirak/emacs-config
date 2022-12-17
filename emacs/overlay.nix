@@ -1,24 +1,14 @@
-{
-  inputs,
-  nixpkgs,
-}: final: prev:
+{inputs}: final: prev:
 with builtins; let
   inherit (inputs.twist.lib {inherit (inputs.nixpkgs) lib;}) parseSetup;
   inherit (inputs.twist.overlays.default final prev) emacsTwist;
   inherit (inputs.org-babel.overlay final prev) tangleOrgBabelFile;
+  inherit (prev) system;
 
   org = inputs.org-babel.lib;
   inherit (prev) lib;
 
-  # Use a pinned nixpkgs to prevent the rebuild of Emacs on updating nixpkgs for the system.
-  pkgsForEmacs = import nixpkgs {
-    inherit (prev) system;
-    overlays = [
-      inputs.emacs-overlay.overlay
-    ];
-  };
-  emacsPackage =
-    pkgsForEmacs.emacsPgtk;
+  emacsPackage = inputs.emacs-overlay.packages.${system}.emacsPgtk;
 
   releaseVersions = import ./versions.nix;
   inventories = [
@@ -61,7 +51,6 @@ with builtins; let
         then
           emacsPackage.override
           (_: {
-            inherit (pkgsForEmacs) webkitgtk;
             withXwidgets = true;
           })
         else emacsPackage;
@@ -125,7 +114,7 @@ in {
   };
 
   emacsclient =
-    pkgsForEmacs.runCommandLocal "emacsclient" {
+    inputs.nixpkgs.legacyPackages.${system}.runCommandLocal "emacsclient" {
       propagatedBuildInputs = [emacsPackage];
     } ''
       mkdir -p $out/bin
