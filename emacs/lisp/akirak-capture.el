@@ -372,7 +372,14 @@
                     (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                           akirak-capture-template-options '(:todo "UNDERWAY" :tags "@message")
                           akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                    (akirak-capture-doct)))]
+                    (akirak-capture-doct)))
+   ("r" "Rule" (lambda ()
+                 (interactive)
+                 (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
+                       akirak-capture-template-options nil
+                       akirak-capture-doct-options '(:function akirak-capture--goto-rules
+                                                               :clock-in t :clock-resume t))
+                 (akirak-capture-doct)))]
 
   ["Information (input, events, etc.)"
    :class transient-subgroups
@@ -1144,6 +1151,11 @@ provided as a separate command for integration, e.g. with embark."
   (widen)
   (goto-char (point-min))
   (akirak-org-goto-or-create-olp '("Backlog")))
+
+(defun akirak-capture--goto-rules ()
+  (widen)
+  (goto-char (point-min))
+  (akirak-org-goto-or-create-olp '("Thumb rules")))
 
 (defun akirak-capture--datetree-marker (file)
   "Return a marker to the current date in FILE."
