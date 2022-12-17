@@ -18,7 +18,7 @@ with builtins; let
     ];
   };
   emacsPackage =
-    pkgsForEmacs.emacsPgtk.overrideAttrs (_: {version = "30.0.50";});
+    pkgsForEmacs.emacsPgtk;
 
   releaseVersions = import ./versions.nix;
   inventories = [
