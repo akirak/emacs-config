@@ -86,7 +86,12 @@
       (cdr akirak-header-line--file)
     (let* ((base (buffer-base-buffer))
            (filename (buffer-file-name base))
-           (root (when filename (vc-git-root filename)))
+           (directory (when filename
+                        (file-name-directory filename)))
+           (project (when (and directory (file-directory-p directory))
+                      (project-current nil directory)))
+           (root (when project
+                   (project-root project)))
            (format (if filename
                        (concat
                         (cond
