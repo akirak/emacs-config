@@ -671,7 +671,7 @@
     (lambda ()
       (interactive)
       (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
-      (octopus--dispatch (oref transient-current-prefix command)
+      (octopus--dispatch transient-current-command
                          (akirak-capture--datetree-marker
                           (org-dog-resolve-relative-file "news.org")))))
    ("q" "News queue"
