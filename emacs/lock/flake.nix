@@ -1141,6 +1141,12 @@
       type = "git";
       url = "https://codeberg.org/acdw/titlecase.el.git";
     };
+    transient = {
+      flake = false;
+      owner = "magit";
+      repo = "transient";
+      type = "github";
+    };
     tree-sitter = {
       flake = false;
       owner = "emacs-tree-sitter";

@@ -2942,6 +2942,7 @@
         "taxy": "taxy",
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
+        "transient": "transient",
         "tree-sitter": "tree-sitter",
         "tree-sitter-indent": "tree-sitter-indent",
         "tree-sitter-langs": "tree-sitter-langs",
@@ -3242,6 +3243,22 @@
       "original": {
         "type": "git",
         "url": "https://codeberg.org/acdw/titlecase.el.git"
+      }
+    },
+    "transient": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1670002043,
+        "narHash": "sha256-ql8cLd/cPbSyPu56KfYJoSQIyRBrqAvMosI5UbYuDPQ=",
+        "owner": "magit",
+        "repo": "transient",
+        "rev": "c6cf2f2705ab56cd89d807e723ce45b9fcdfb9e1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magit",
+        "repo": "transient",
+        "type": "github"
       }
     },
     "tree-sitter": {
