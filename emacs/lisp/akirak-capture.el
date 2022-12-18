@@ -894,6 +894,7 @@
               (akirak-org-insert-vocabulary-info))))))))
 
 (defun akirak-capture--vocabulary-file ()
+  (require 'akirak-org-dog)
   (let ((files (akirak-org-dog-language-files)))
     (or (seq-find (lambda (file)
                     (equal (file-name-base file) "vocabulary"))
