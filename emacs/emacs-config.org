@@ -2670,6 +2670,10 @@ A programmable workflow layer for Org mode
                 (when (bound-and-true-p org-memento-file)
                   (add-to-list 'org-agenda-files org-memento-file t))))
 
+    (add-hook 'org-dog-clock-in-hook
+              (defun akirak/org-dog-clock-in-push ()
+                (akirak-org-clock-push org-dog-clock-last-marker)))
+
     (:when-loaded
       (:also-load org-dog-embark
                   org-dog-facade))
