@@ -131,9 +131,12 @@
              (akirak-project-switch default-directory)))
           (bookmark
            (bookmark-jump (car ent))))
-      ;; If the input does not match an existing directory/project, create a new
-      ;; project. The entry can be either a name or an absolute path.
-      (akirak-project-init (car ent)))))
+      ;; If the input does not match an existing directory/project, clone a
+      ;; remote repository (if the input looks like a URL) or create a new project.
+      (let ((input (car ent)))
+        (if (url-type (url-generic-parse-url input))
+            (akirak-git-clone input)
+          (akirak-project-init input))))))
 
 (provide 'akirak-consult-dir)
 ;;; akirak-consult-dir.el ends here
