@@ -133,9 +133,8 @@
   (interactive)
   (require 'akirak-org)
   (org-with-point-at akirak-embark-target-org-marker
-    (when (re-search-forward org-link-bracket-re (org-entry-end-position) t)
-      (goto-char (match-beginning 0))
-      (org-open-at-point))))
+    (org-back-to-heading)
+    (org-open-at-point)))
 
 (defun akirak-embark-org-point-to-register ()
   (interactive)
@@ -156,7 +155,7 @@
   ("I" (akirak-embark-run-at-marker org-clock-in))
   ("l" (akirak-embark-run-at-marker org-store-link))
   ("t" (akirak-embark-run-at-marker org-todo))
-  ("f" akirak-embark-org-open-link-in-entry)
+  ("C-o" akirak-embark-org-open-link-in-entry)
   ("?" akirak-embark-org-point-to-register))
 
 (embark-define-keymap akirak-embark-grep-map
