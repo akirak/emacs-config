@@ -181,7 +181,7 @@ This is also useful for completion.")
                      (`literal
                       (thread-first
                         (replace-regexp-in-string "\n" "" (string-trim body))
-                        (substring 0 50)
+                        (akirak-snippet--substring 0 50)
                         (propertize 'face 'font-lock-string-face)))
                      ((pred symbolp)
                       (symbol-name name))
@@ -191,6 +191,11 @@ This is also useful for completion.")
                  name)
        :args args
        :body body))))
+
+(defun akirak-snippet--substring (string start end)
+  (if (> (length string) end)
+      (substring string start)
+    string))
 
 (defun akirak-snippet-try ()
   "Try out the snippet block at point."
