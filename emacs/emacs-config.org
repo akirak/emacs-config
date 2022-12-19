@@ -2715,7 +2715,11 @@ Transient commands for Org Dog
   (setup (:package octopus)
     (:global "M-g M-o" #'octopus-find-file
              "M-s M-o" #'octopus-find-node)
-    (:set octopus-ql-find-options '(:query-prefix "!archived: "))
+    (:set octopus-find-node-verbs
+          '((?f "Display a node" nil akirak-org-ql-find-default)
+            (?v "Display a search view" nil akirak/org-ql-search-files)
+            (?o "Open a heading link" nil akirak-org-ql-open-link)
+            (?i "Insert a target" nil org-nlink-insert-plain)))
 
     (:with-feature org
       (:when-loaded
