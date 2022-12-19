@@ -180,6 +180,7 @@
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
+  (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
@@ -410,6 +411,37 @@
   (interactive "s")
   (akirak-vterm-run-in-cwd (format "nix shell %s"
                                    (shell-quote-argument installable))))
+
+(defun akirak-embark-load-or-import-file (file)
+  "Load the file if it is elisp or store a link to its copy otherwise."
+  (if (string-match-p "\\.el[[:alpha:]]?$" file)
+      (load-file file)
+    (akirak-embark-import-file file)))
+
+(defcustom akirak-embark-file-archive-directory "~/resources/"
+  "File in which attachments should be saved."
+  :type 'directory)
+
+(defun akirak-embark-import-file (file)
+  "Copy a file into an archive and store an Org link to it."
+  (interactive "f")
+  (if (string-prefix-p akirak-embark-file-archive-directory
+                       (abbreviate-file-name file))
+      ;; Already archived
+      (akirak-org-store-link-to-file file)
+    (let* ((outdir (read-directory-name (format "Save %s to a directory: "
+                                                (file-name-nondirectory file))
+                                        "~/resources/"))
+           (outfile (expand-file-name (file-name-nondirectory file)
+                                      outdir)))
+      (while (file-exists-p outfile)
+        (setq outfile (read-file-name "The file name duplicates. Rename: "
+                                      outdir
+                                      (file-name-nondirectory file))))
+      (copy-file outdir outfile)
+      (akirak-org-store-link-to-file outfile))))
+
+(defun akirak-embark-store-link-to-file (file))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here

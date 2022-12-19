@@ -366,10 +366,9 @@ character."
 ;;;###autoload
 (defun akirak-org-store-link-to-file (file)
   (interactive "f")
-  (push (cons (concat "file:" (abbreviate-file-name
-                               (expand-file-name file)))
-              nil)
-        org-stored-links))
+  (let ((link (concat "file:" (abbreviate-file-name (expand-file-name file)))))
+    (push (cons link nil) org-stored-links)
+    (message "Stored a link to %s" link)))
 
 ;;;###autoload
 (defun akirak-org-meta-return-split-block-advice (orig &rest args)
