@@ -2058,11 +2058,11 @@
     "org-bookmark-heading": {
       "flake": false,
       "locked": {
-        "lastModified": 1670238110,
-        "narHash": "sha256-+GlcNfB3fUBs5YzAmWH7i/JiMXqKCPJgnRkCTmmmcEY=",
+        "lastModified": 1670238624,
+        "narHash": "sha256-qi+v4x9+6Xnpy+NwAUbHMTBhtlIM86sGgPFLTiSkfSg=",
         "owner": "akirak",
         "repo": "org-bookmark-heading",
-        "rev": "f98dbb2b9e7232c909622c7e7f819fd7212ae0df",
+        "rev": "41214357324a6741aaa8122907ebbe7234f7fb92",
         "type": "github"
       },
       "original": {
@@ -2321,16 +2321,15 @@
     "org-super-links": {
       "flake": false,
       "locked": {
-        "lastModified": 1668767084,
+        "lastModified": 1670961363,
         "narHash": "sha256-OWHUQBKp74sVIFbk8f7Xw7K11jPcR3HIVjpp5xiNwzs=",
-        "owner": "akirak",
+        "owner": "toshism",
         "repo": "org-super-links",
-        "rev": "d47f06cd6fbd0e7dc5d7138bc4f340a2cc8d75fa",
+        "rev": "0dd9ed22b4785f50c61051170db7c78b522a37ee",
         "type": "github"
       },
       "original": {
-        "owner": "akirak",
-        "ref": "fix-time-format",
+        "owner": "toshism",
         "repo": "org-super-links",
         "type": "github"
       }
@@ -2492,23 +2491,6 @@
       "original": {
         "owner": "joddie",
         "repo": "pcre2el",
-        "type": "github"
-      }
-    },
-    "peg": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1631160774,
-        "narHash": "sha256-YOd6WSYqQNlr2qRj0RtNq0PYyxp03arslu+cL/B8F/U=",
-        "owner": "emacsmirror",
-        "repo": "peg",
-        "rev": "03a35ddee99cf4b6831ee4f98474a745cc79b66f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacsmirror",
-        "repo": "peg",
-        "rev": "03a35ddee99cf4b6831ee4f98474a745cc79b66f",
         "type": "github"
       }
     },
@@ -2909,7 +2891,6 @@
         "parsebib": "parsebib",
         "parsec": "parsec",
         "pcre2el": "pcre2el",
-        "peg": "peg",
         "pinyin": "pinyin",
         "plz": "plz",
         "popper": "popper",

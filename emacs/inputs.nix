@@ -2,13 +2,6 @@
   elispTreeSitterVersion,
   elispTreeSitterLangsVersion,
 }: {
-  taxy-magit-section = _: super: {
-    packageRequires =
-      {
-        taxy = "0";
-      }
-      // super.packageRequires;
-  };
   bufler = _: _: {
     origin = {
       type = "github";
@@ -111,15 +104,6 @@
       owner = "akirak";
       repo = "link-hint.el";
       ref = "skip-invisible";
-    };
-  };
-
-  peg = _: _: {
-    origin = {
-      type = "github";
-      owner = "emacsmirror";
-      repo = "peg";
-      rev = "03a35ddee99cf4b6831ee4f98474a745cc79b66f";
     };
   };
 
@@ -248,15 +232,6 @@
       owner = "akirak";
       repo = "symbol-overlay";
       ref = "jump-hook";
-    };
-  };
-
-  org-super-links = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "org-super-links";
-      ref = "fix-time-format";
     };
   };
 

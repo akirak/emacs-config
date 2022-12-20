@@ -877,8 +877,7 @@
     };
     org-super-links = {
       flake = false;
-      owner = "akirak";
-      ref = "fix-time-format";
+      owner = "toshism";
       repo = "org-super-links";
       type = "github";
     };
@@ -940,13 +939,6 @@
       flake = false;
       owner = "joddie";
       repo = "pcre2el";
-      type = "github";
-    };
-    peg = {
-      flake = false;
-      owner = "emacsmirror";
-      repo = "peg";
-      rev = "03a35ddee99cf4b6831ee4f98474a745cc79b66f";
       type = "github";
     };
     pinyin = {
