@@ -426,12 +426,6 @@
       repo = "magit";
       type = "github";
     };
-    git-gutter = {
-      flake = false;
-      owner = "emacsorphanage";
-      repo = "git-gutter";
-      type = "github";
-    };
     git-identity = {
       flake = false;
       owner = "akirak";
@@ -448,12 +442,6 @@
       flake = false;
       owner = "akirak";
       repo = "github-linguist.el";
-      type = "github";
-    };
-    gleam-mode = {
-      flake = false;
-      owner = "gleam-lang";
-      repo = "gleam-mode";
       type = "github";
     };
     go-mode = {
@@ -1145,25 +1133,6 @@
       repo = "transient";
       type = "github";
     };
-    tree-sitter = {
-      flake = false;
-      owner = "emacs-tree-sitter";
-      ref = "0.18.0";
-      repo = "elisp-tree-sitter";
-      type = "github";
-    };
-    tree-sitter-indent = {
-      flake = false;
-      type = "git";
-      url = "https://codeberg.org/FelipeLema/tree-sitter-indent.el.git";
-    };
-    tree-sitter-langs = {
-      flake = false;
-      owner = "emacs-tree-sitter";
-      ref = "0.11.6";
-      repo = "tree-sitter-langs";
-      type = "github";
-    };
     treepy = {
       flake = false;
       owner = "volrath";
@@ -1174,19 +1143,6 @@
       flake = false;
       owner = "alphapapa";
       repo = "ts.el";
-      type = "github";
-    };
-    tsc = {
-      flake = false;
-      owner = "emacs-tree-sitter";
-      ref = "0.18.0";
-      repo = "elisp-tree-sitter";
-      type = "github";
-    };
-    turbo-log = {
-      flake = false;
-      owner = "Artawower";
-      repo = "turbo-log";
       type = "github";
     };
     typescript-mode = {

@@ -1138,22 +1138,6 @@
         "type": "github"
       }
     },
-    "git-gutter": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1663815370,
-        "narHash": "sha256-sdJ1CdvUQPe/xqKt8DTAHmkWwJnkoTYV2pqtWMyVo7s=",
-        "owner": "emacsorphanage",
-        "repo": "git-gutter",
-        "rev": "ec28e85d237065cb3c28db4b66d129da6d309f9c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacsorphanage",
-        "repo": "git-gutter",
-        "type": "github"
-      }
-    },
     "git-identity": {
       "flake": false,
       "locked": {
@@ -1199,22 +1183,6 @@
       "original": {
         "owner": "akirak",
         "repo": "github-linguist.el",
-        "type": "github"
-      }
-    },
-    "gleam-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1655745719,
-        "narHash": "sha256-cC78zJmG4yPuVBKavwq/KTTepOF49Wjymp+WCDxyp2c=",
-        "owner": "gleam-lang",
-        "repo": "gleam-mode",
-        "rev": "1fada93bac21811221081116c247b3d4d3b91d6c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gleam-lang",
-        "repo": "gleam-mode",
         "type": "github"
       }
     },
@@ -2823,11 +2791,9 @@
         "git-attr": "git-attr",
         "git-auto-commit-mode": "git-auto-commit-mode",
         "git-commit": "git-commit",
-        "git-gutter": "git-gutter",
         "git-identity": "git-identity",
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
-        "gleam-mode": "gleam-mode",
         "go-mode": "go-mode",
         "go-translate": "go-translate",
         "graphql-mode": "graphql-mode",
@@ -2941,13 +2907,8 @@
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
         "transient": "transient",
-        "tree-sitter": "tree-sitter",
-        "tree-sitter-indent": "tree-sitter-indent",
-        "tree-sitter-langs": "tree-sitter-langs",
         "treepy": "treepy",
         "ts": "ts",
-        "tsc": "tsc",
-        "turbo-log": "turbo-log",
         "typescript-mode": "typescript-mode",
         "uuidgen": "uuidgen",
         "vertico": "vertico",
@@ -3259,56 +3220,6 @@
         "type": "github"
       }
     },
-    "tree-sitter": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1644683578,
-        "narHash": "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=",
-        "owner": "emacs-tree-sitter",
-        "repo": "elisp-tree-sitter",
-        "rev": "909717c685ff5a2327fa2ca8fb8a25216129361c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacs-tree-sitter",
-        "ref": "0.18.0",
-        "repo": "elisp-tree-sitter",
-        "type": "github"
-      }
-    },
-    "tree-sitter-indent": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1649687955,
-        "narHash": "sha256-xrQmQjEw7zU8KK46BCgVw+PIzpjptqljd7DFonh0SEM=",
-        "ref": "refs/heads/main",
-        "rev": "4ef246db3e4ff99f672fe5e4b416c890f885c09e",
-        "revCount": 107,
-        "type": "git",
-        "url": "https://codeberg.org/FelipeLema/tree-sitter-indent.el.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://codeberg.org/FelipeLema/tree-sitter-indent.el.git"
-      }
-    },
-    "tree-sitter-langs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1648475055,
-        "narHash": "sha256-4AnTSnJ30GZZkuDrvbwVC9B5zlRHtfkd3witQX2830s=",
-        "owner": "emacs-tree-sitter",
-        "repo": "tree-sitter-langs",
-        "rev": "0dd5e56e2f5646aa51ed0fc9eb869a8f7090228a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacs-tree-sitter",
-        "ref": "0.11.6",
-        "repo": "tree-sitter-langs",
-        "type": "github"
-      }
-    },
     "treepy": {
       "flake": false,
       "locked": {
@@ -3338,39 +3249,6 @@
       "original": {
         "owner": "alphapapa",
         "repo": "ts.el",
-        "type": "github"
-      }
-    },
-    "tsc": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1644683578,
-        "narHash": "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=",
-        "owner": "emacs-tree-sitter",
-        "repo": "elisp-tree-sitter",
-        "rev": "909717c685ff5a2327fa2ca8fb8a25216129361c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacs-tree-sitter",
-        "ref": "0.18.0",
-        "repo": "elisp-tree-sitter",
-        "type": "github"
-      }
-    },
-    "turbo-log": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1642278484,
-        "narHash": "sha256-Th5uakkAoYMtH5t0D08UkxDcDSAfKmmiso6oBcJohEQ=",
-        "owner": "Artawower",
-        "repo": "turbo-log",
-        "rev": "99b407de638dc8c8fc5fcd8b3a25028d93e7d8e6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Artawower",
-        "repo": "turbo-log",
         "type": "github"
       }
     },

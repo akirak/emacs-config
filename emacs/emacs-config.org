@@ -5135,7 +5135,7 @@ Major modes for editing Git configuration files
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
-*** gleam-mode
+*** gleam-mode                                                         :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-08 Mon 11:53]
 :END:
@@ -6601,7 +6601,7 @@ Grammar bundle for tree-sitter
       (:hook-into typescript-mode-hook
                   typescript-tsx-mode-hook)))
 #+end_src
-*** turbo-log                                :development:debugging:
+*** turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:55]
 :END:

@@ -10,7 +10,7 @@ with builtins; let
 
   emacsPackage = inputs.emacs-overlay.packages.${system}.emacsPgtk;
 
-  releaseVersions = import ./versions.nix;
+  # releaseVersions = import ./versions.nix;
   inventories = [
     {
       type = "melpa";
@@ -78,7 +78,7 @@ with builtins; let
       inherit inventories;
       lockDir = ./lock;
       inputOverrides =
-        (import ./inputs.nix releaseVersions)
+        (import ./inputs.nix)
         // {
           akirak = _: _: {
             src = inputs.nix-filter.lib {
@@ -91,7 +91,7 @@ with builtins; let
         };
     })
     .overrideScope' (self: super: {
-      elispPackages = super.elispPackages.overrideScope' (import ./overrides.nix releaseVersions {
+      elispPackages = super.elispPackages.overrideScope' (import ./overrides.nix {
         pkgs = prev;
         inherit (prev) system;
         emacs = emacsPackage;

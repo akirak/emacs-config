@@ -1,7 +1,4 @@
 {
-  elispTreeSitterVersion,
-  elispTreeSitterLangsVersion,
-}: {
   system,
   pkgs,
   emacs,
@@ -69,63 +66,5 @@
 
   queue = esuper.queue.overrideAttrs (old: {
     outputs = ["out"];
-  });
-
-  tsc = esuper.tsc.overrideAttrs (old: let
-    baseUrl = "https://github.com/emacs-tree-sitter/elisp-tree-sitter/releases/download/${elispTreeSitterVersion}";
-    dynName =
-      if system == "x86_64-linux"
-      then "tsc-dyn.so"
-      else throw "Unsupported platform";
-    sha256 = {
-      "tsc-dyn.so" = "08cpf2rzd364h5x4lp4q819y5zj3dlb47blpg0fdw90dsv6q7cpp";
-    };
-  in
-    assert old.version == elispTreeSitterVersion; {
-      tscDyn = builtins.fetchurl {
-        url = "${baseUrl}/${dynName}";
-        sha256 = sha256.${dynName};
-      };
-
-      preBuild = ''
-        cp $tscDyn ${dynName}
-        echo -n "${elispTreeSitterVersion}" > DYN-VERSION
-      '';
-    });
-
-  tree-sitter-langs = esuper.tree-sitter-langs.overrideAttrs (
-    old: let
-      baseUrl = "https://github.com/emacs-tree-sitter/tree-sitter-langs/releases/download/${elispTreeSitterLangsVersion}";
-      os =
-        if system == "x86_64-linux"
-        then "linux"
-        else throw "Unsupported platform";
-      sha256 = {
-        linux = "0m4w8dlphmzir00syx188f53lijpb5rih7p7by477mlsfj8r9lki";
-      };
-    in {
-      bundle = builtins.fetchurl {
-        url = "${baseUrl}/tree-sitter-grammars-${os}-${elispTreeSitterLangsVersion}.tar.gz";
-        sha256 = sha256.${os};
-      };
-
-      preBuild = ''
-        ( mkdir bin && cd bin && tar xzf $bundle )
-      '';
-    }
-  );
-
-  gleam-mode = esuper.gleam-mode.overrideAttrs (old: rec {
-    tree-sitter-gleam = builtins.fetchurl {
-      url = "https://github.com/J3RN/tree-sitter-gleam/archive/f13d9d86f0c8ea7505dfeaff81a92def444877ae.tar.gz";
-      sha256 = "1wljx1cp751pnywzn8kzgr53981a5nh4imcsa2hylbmx0a46kby9";
-    };
-
-    preBuild = ''
-      install -d tree-sitter-gleam
-      tar zxf ${tree-sitter-gleam} --directory=tree-sitter-gleam --strip-components=1
-
-      emacs --batch -L . -l gleam-mode -f gleam-mode--compile-grammar
-    '';
   });
 }
