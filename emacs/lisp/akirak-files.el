@@ -9,25 +9,26 @@
   (let (result)
     (cl-labels
         ((go (parent)
-             (when (file-directory-p parent)
-               (pcase-dolist (`(,path ,init . ,_)
-                              (directory-files-and-attributes
-                               parent
-                               'full
-                               (rx bol (not (any ".")))
-                               'nosort))
-                 (pcase init
-                   (`nil)
-                   (`t (go path))
-                   ;; Ignore paths to the Nix store
-                   ((rx bol "/nix/"))
-                   ;; Absolute: Add
-                   ((rx bol "/")
-                    (push (cons init path) result))
-                   ;; Relative: Resolve
-                   ((pred stringp)
-                    (push (cons (file-truename (expand-file-name init parent)) path)
-                          result)))))))
+           (when (and (file-directory-p parent)
+                      (not (project-try-vc parent)))
+             (pcase-dolist (`(,path ,init . ,_)
+                            (directory-files-and-attributes
+                             parent
+                             'full
+                             (rx bol (not (any ".")))
+                             'nosort))
+               (pcase init
+                 (`nil)
+                 (`t (go path))
+                 ;; Ignore paths to the Nix store or git-annex files
+                 ((rx bol "/nix"))
+                 ;; Absolute: Add
+                 ((rx bol "/")
+                  (push (cons init path) result))
+                 ;; Relative: Resolve
+                 ((pred stringp)
+                  (push (cons (file-truename (expand-file-name init parent)) path)
+                        result)))))))
       (go "~/"))
     (setq akirak-files-home-symlink-alist result)
     (setq directory-abbrev-alist
