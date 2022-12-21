@@ -1050,6 +1050,20 @@ Resources:
   (setup mule-cmds
     (set-language-environment "UTF-8"))
 #+end_src
+*** mule-cmds
+:PROPERTIES:
+:CREATED_TIME: [2022-12-21 Wed 18:05]
+:END:
+
+#+begin_src emacs-lisp
+  (setup mule-cmds
+    (add-hook 'set-language-environment-hook
+              (defun akirak/post-set-language-environment ()
+                "Turn off `flyspell-mode' depending on the language."
+                (when (member current-language-environment
+                              '("Japanese"))
+                  (flyspell-mode -1)))))
+#+end_src
 *** outline                                                :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
