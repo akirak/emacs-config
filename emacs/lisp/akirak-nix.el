@@ -7,16 +7,20 @@
 
 (defun akirak-nix-parse-drv-name (name)
   (or (gethash name akirak-nix-drv-name-cache)
-      (with-temp-buffer
-        (call-process "nix"
-                      nil (list t nil) nil
-                      "eval" "--expr"
-                      (format "\"%s\"" name)
-                      "--json"
-                      "--apply" "builtins.parseDrvName")
-        (goto-char (point-min))
-        (puthash name (json-parse-buffer :object-type 'alist)
-                 akirak-nix-drv-name-cache))))
+      (condition-case _
+          (with-temp-buffer
+            (unless (zerop (call-process "nix"
+                                         nil (list t nil) nil
+                                         "eval" "--expr"
+                                         (format "\"%s\"" name)
+                                         "--json"
+                                         "--apply" "builtins.parseDrvName"))
+              (error "Failed to parse the derivation name %s" name))
+            (goto-char (point-min))
+            (puthash name (json-parse-buffer :object-type 'alist)
+                     akirak-nix-drv-name-cache))
+        (error (puthash name '((name . ""))
+                        akirak-nix-drv-name-cache)))))
 
 ;;;###autoload
 (defun akirak-nix-prefetch-url (url &rest args)
