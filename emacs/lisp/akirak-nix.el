@@ -2,18 +2,6 @@
 
 (require 'subr-x)
 
-(defun akirak-nix-project-root (directory)
-  (save-match-data
-    (when (string-match (rx bol "/nix/store/"
-                            (group (+ (not (any "/"))))
-                            "/")
-                        directory)
-      `(nix-store ,(match-string 0 directory)
-                  ,(match-string 1 directory)))))
-
-(cl-defmethod project-root ((project (head nix-store)))
-  (cadr project))
-
 (defun akirak-nix-parse-drv-name (name)
   (with-temp-buffer
     (call-process "nix"
