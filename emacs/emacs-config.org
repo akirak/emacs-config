@@ -1522,6 +1522,37 @@ Transient commands
 
 Because transient is developed by the maintainer of magit, it is better to update them together.
 Thus I will explicitly install this package rather than using the built-in version.
+*** treesit
+:PROPERTIES:
+:CREATED_TIME: [2022-12-21 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup treesit
+    (defmacro akirak/gen-treesit ()
+      (macroexp-progn
+       (let (exps)
+         (cl-do-all-symbols (sym)
+           (when-let* ((name (and (commandp sym)
+                                  (symbol-name sym)))
+                       (hook (and (string-suffix-p "-ts-mode" name)
+                                  (intern-soft (concat (string-remove-suffix "-ts-mode" name)
+                                                       "-mode-hook")))))
+             (push `(add-hook ',hook ',sym)
+                   exps)))
+         exps)))
+
+    ;; Macro-expand (akirak/gen-treesit).
+    (progn
+      (add-hook 'js-mode-hook 'js-ts-mode)
+      (add-hook 'c-mode-hook 'c-ts-mode)
+      (add-hook 'yaml-mode-hook 'yaml-ts-mode)
+      (add-hook 'tsx-mode-hook 'tsx-ts-mode)
+      (add-hook 'python-mode-hook 'python-ts-mode)
+      (add-hook 'typescript-mode-hook 'typescript-ts-mode)
+      (add-hook 'json-mode-hook 'json-ts-mode)
+      (add-hook 'go-mode-hook 'go-ts-mode)))
+#+end_src
 *** vc-hooks                                                    :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -6184,9 +6215,6 @@ The following types of commands don't have pre-defined keybindings in =puni-mode
 
 For auto-pairing, you can use =electric-pair-mode= along with puni.
 
-Limitations:
-
-- puni doesn't handle JSX in typescript-mode with tree-sitter.
 **** akirak-puni
 #+begin_src emacs-lisp
   (setup akirak-puni
@@ -6540,7 +6568,7 @@ Viewing/editing system trash can
 #+begin_src emacs-lisp
 (setup (:package trashed))
 #+end_src
-*** tree-sitter                                 :syntax:tree_sitter:
+*** COMMENT tree-sitter                                     :syntax:tree_sitter:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:36]
 :END:
@@ -7081,16 +7109,6 @@ The following packages (tagged =web=) are related to web development:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:20]
 :END:
-
-Use tree-sitter wherever possible.
-There are some companion packages:
-
-#+BEGIN: org-ql :query "tags:tree_sitter" :columns (heading todo)
-| Heading           | Todo |
-|-------------------+------|
-| [[tree-sitter][tree-sitter]]       |      |
-| [[tree-sitter-langs][tree-sitter-langs]] |      |
-#+END:
 
 There are some packages for structured editing:
 
