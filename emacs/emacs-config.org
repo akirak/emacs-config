@@ -2445,7 +2445,8 @@ Outline-based notes management and organizer
             ;; Skip unconditionally if org-dog is unavailable
             (when (and (require 'org-dog-core nil t)
                        (or (not (string-match-p org-dog--root-regexp filename))
-                           (equal filename (expand-file-name org-memento-file))))
+                           (and (bound-and-true-p org-memento-file)
+                                (equal filename (expand-file-name org-memento-file)))))
               (user-error "You cannot clock in to this file"))
           (user-error "You cannot clock in to a heading without a file")))))
 #+end_src
