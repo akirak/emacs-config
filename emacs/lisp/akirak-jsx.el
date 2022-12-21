@@ -1,7 +1,6 @@
 ;;; akirak-jsx.el ---  -*- lexical-binding: t -*-
 
-(require 'tsc)
-(require 'tree-sitter)
+(require 'treesit)
 (require 'sgml-mode)
 
 ;;;###autoload
@@ -11,7 +10,7 @@
          (ppss (syntax-ppss))
          (start (save-excursion
                   (goto-char (ppss-innermost-start ppss))
-                  (tsc-node-end-position (tree-sitter-node-at-pos))))
+                  (treesit-node-end (treesit-node-at (point)))))
          (end (save-excursion
                 (goto-char (ppss-innermost-start ppss))
                 (condition-case _
@@ -25,7 +24,7 @@
                        (search-forward (char-to-string close) nil t)
                      (error "No idea what to do"))))
                 (backward-char)
-                (tsc-node-start-position (tree-sitter-node-at-pos)))))
+                (treesit-node-start (treesit-node-at (point))))))
     (goto-char start)
     (when (re-search-forward (rx symbol-start "return" symbol-end)
                              end t)
