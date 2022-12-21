@@ -1266,7 +1266,21 @@ Operations on the current project
 #+begin_src emacs-lisp
   (setup repeat
     (:hook-into after-init-hook)
-    (:set repeat-echo-function #'ignore))
+    (:set repeat-echo-function #'ignore)
+
+    ;; Based on a snippet from
+    ;; https://karthinks.com/software/it-bears-repeating/#adding-a-hydra-like-prompt-to-repeat-mode
+    (advice-add 'repeat-post-hook :after
+                (defun repeat-help--which-key-popup ()
+                  (require 'which-key)
+                  (if-let (keymap (or repeat-map
+                                      (repeat--command-property 'repeat-map)))
+                      (run-at-time
+                       which-key-idle-delay nil
+                       `(lambda ()
+                          (which-key--create-buffer-and-show
+                           nil (symbol-value ',keymap))))
+                    (which-key--hide-popup)))))
 #+end_src
 *** savehist                                               :history:
 :PROPERTIES:
