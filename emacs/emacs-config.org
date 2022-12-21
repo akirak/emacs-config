@@ -5785,9 +5785,9 @@ Display modeline in minibuffer
                         3))
                 (cdr akirak/mode-line-directory-memo)
               (let* ((dir (abbreviate-file-name (file-name-directory filename)))
-                     (value (concat (if-let (root (akirak-header-line--project-root))
+                     (value (concat (if-let (pr (akirak-header-line--project))
                                         (let ((root (thread-last
-                                                      root
+                                                      (project-root pr)
                                                       (string-remove-suffix "/"))))
                                           (concat (file-name-directory root)
                                                   (propertize (file-name-nondirectory root)
