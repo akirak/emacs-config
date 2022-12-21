@@ -77,45 +77,56 @@
 
 ;;;; Formatting functions
 
+(defvar-local akirak-header-line--project nil)
+
+(defun akirak-header-line--project ()
+  (let ((val (buffer-local-value 'akirak-header-line--project (current-buffer))))
+    (cond
+     ((and (numberp val)
+           (< (- (float-time) val) 2))
+      nil)
+     (val
+      val)
+     (t
+      (if-let (pr (project-current))
+          (setq akirak-header-line--project pr)
+        (setq akirak-header-line--project (float-time)))))))
+
 (defvar-local akirak-header-line--file nil)
 
 (defun akirak-header-line--project-and-buffer ()
   (if (and akirak-header-line--file
-           (> (- (float-time) (car akirak-header-line--file))
+           (< (- (float-time) (car akirak-header-line--file))
               1))
       (cdr akirak-header-line--file)
     (let* ((base (buffer-base-buffer))
            (filename (buffer-file-name base))
            (directory (when filename
                         (file-name-directory filename)))
-           (project (when (and directory (file-directory-p directory))
-                      (project-current nil directory)))
-           (root (when project
-                   (project-root project)))
+           (pr (when (and directory (file-directory-p directory))
+                 (akirak-header-line--project)))
            (format (if filename
                        (concat
-                        (cond
-                         (root
-                          (format "[%s] %s"
-                                  (file-name-nondirectory (string-remove-suffix "/" root))
-                                  (file-relative-name filename
-                                                      (expand-file-name root))))
-                         ((string-match (rx bol "/nix/store/" (group (+ (not (any "/")))) "/")
-                                        filename)
-                          (let* ((root (match-string 0 filename))
-                                 (name (thread-last
-                                         (akirak-nix-parse-drv-name (match-string 1 filename))
-                                         (alist-get 'name)))
-                                 (pos (save-match-data
-                                        (string-match (rx bol (+ (any alnum)) "-") name)
-                                        (nth 1 (match-data)))))
-                            (format "[nix:%s] %s"
-                                    (substring name pos)
-                                    (file-relative-name filename (expand-file-name root)))))
-                         (`nil
-                          (file-name-nondirectory filename))
-                         (_
-                          (file-name-nondirectory filename)))
+                        (pcase pr
+                          (`nil
+                           (file-name-nondirectory filename))
+                          (`(nix-store ,_)
+                           (let* ((name (thread-last
+                                          (akirak-nix-parse-drv-name (project-name pr))
+                                          (alist-get 'name)))
+                                  (pos (save-match-data
+                                         (string-match (rx bol (+ (any alnum)) "-") name)
+                                         (nth 1 (match-data)))))
+                             (format "[nix:%s] %s"
+                                     (substring name pos)
+                                     (file-relative-name filename (expand-file-name
+                                                                   (project-root pr))))))
+                          (_
+                           (format "[%s] %s"
+                                   (file-name-nondirectory (string-remove-suffix "/"
+                                                                                 (project-root pr)))
+                                   (file-relative-name filename
+                                                       (expand-file-name (project-root pr))))))
                         (if base
                             " -> %b"
                           ""))
