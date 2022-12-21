@@ -2,16 +2,21 @@
 
 (require 'subr-x)
 
+(defvar akirak-nix-drv-name-cache
+  (make-hash-table :test #'equal))
+
 (defun akirak-nix-parse-drv-name (name)
-  (with-temp-buffer
-    (call-process "nix"
-                  nil (list t nil) nil
-                  "eval" "--expr"
-                  (format "\"%s\"" name)
-                  "--json"
-                  "--apply" "builtins.parseDrvName")
-    (goto-char (point-min))
-    (json-parse-buffer :object-type 'alist)))
+  (or (gethash name akirak-nix-drv-name-cache)
+      (with-temp-buffer
+        (call-process "nix"
+                      nil (list t nil) nil
+                      "eval" "--expr"
+                      (format "\"%s\"" name)
+                      "--json"
+                      "--apply" "builtins.parseDrvName")
+        (goto-char (point-min))
+        (puthash name (json-parse-buffer :object-type 'alist)
+                 akirak-nix-drv-name-cache))))
 
 ;;;###autoload
 (defun akirak-nix-prefetch-url (url &rest args)
