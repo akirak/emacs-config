@@ -1148,15 +1148,15 @@ Operations on the current project
 
 #+begin_src emacs-lisp
   (setup project
-
-    (add-hook 'project-find-functions
-              (defun akirak/project-nix-store-finder (dir)
-                (save-match-data
-                  (when (string-match (rx bol "/nix/store/" (+ (not (any "/"))) "/")
-                                      dir)
-                    `(nix-store ,(match-string 0 dir))))))
-    (cl-defmethod project-root ((project (head nix-store)))
-      (cadr project))
+    (:when-loaded
+      (add-hook 'project-find-functions
+                (defun akirak/project-nix-store-finder (dir)
+                  (save-match-data
+                    (when (string-match (rx bol "/nix/store/" (+ (not (any "/"))) "/")
+                                        dir)
+                      `(nix-store ,(match-string 0 dir))))))
+      (cl-defmethod project-root ((project (head nix-store)))
+        (cadr project)))
 
     (:status opinionated
       (:when-loaded
