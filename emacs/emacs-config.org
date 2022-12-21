@@ -4403,7 +4403,7 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(elixir-mode . ("elixir-ls"))))
 
-    (put 'typescript-tsx-mode 'eglot-language-id "typescriptreact")
+    (put 'tsx-mode 'eglot-language-id "typescriptreact")
 
     (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
 
@@ -6638,15 +6638,15 @@ Major mode for editing typescript
 #+end_src
 **** typescript-tsx-mode
 #+begin_src emacs-lisp
-  (setup typescript-tsx-mode
+  (setup tsx-mode
     (:file-match "\\.tsx\\'")
 
     ;; https://github.com/emacs-typescript/typescript.el/issues/4#issuecomment-849355222
-    (define-derived-mode typescript-tsx-mode typescript-mode
-      "typescript-tsx")
+    (define-derived-mode tsx-mode typescript-mode
+      "tsx")
 
     (with-eval-after-load 'typescript-mode
-      (define-key typescript-tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
+      (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
