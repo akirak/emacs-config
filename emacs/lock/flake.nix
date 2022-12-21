@@ -187,6 +187,12 @@
       repo = "devdocs.el";
       type = "github";
     };
+    diff-hl = {
+      flake = false;
+      owner = "dgutov";
+      repo = "diff-hl";
+      type = "github";
+    };
     dired-collapse = {
       flake = false;
       owner = "Fuco1";

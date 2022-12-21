@@ -497,6 +497,22 @@
         "type": "github"
       }
     },
+    "diff-hl": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1665179278,
+        "narHash": "sha256-8jQdSQ1Jl/WeY5oYvhhnVrIhszt0Z2QLVwpM/o3IiKQ=",
+        "owner": "dgutov",
+        "repo": "diff-hl",
+        "rev": "68fb280b300c5d8460cc7b9183e29fb3ec604136",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dgutov",
+        "repo": "diff-hl",
+        "type": "github"
+      }
+    },
     "dired-collapse": {
       "flake": false,
       "locked": {
@@ -2767,6 +2783,7 @@
         "deadgrep": "deadgrep",
         "deferred": "deferred",
         "devdocs": "devdocs",
+        "diff-hl": "diff-hl",
         "dired-collapse": "dired-collapse",
         "dired-filter": "dired-filter",
         "dired-hacks-utils": "dired-hacks-utils",

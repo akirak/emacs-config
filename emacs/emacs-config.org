@@ -4038,6 +4038,43 @@ Emacs viewer for DevDocs
   (setup (:package devdocs)
     (define-key help-map (kbd "d") #'devdocs-lookup))
 #+end_src
+*** diff-hl
+:PROPERTIES:
+:CREATED_TIME: [2022-12-21 Wed 23:01]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package diff-hl)
+    (add-hook 'after-init-hook #'global-diff-hl-mode)
+    (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
+    (:set diff-hl-command-prefix (kbd "C-c g")
+          diff-hl-show-staged-changes t)
+
+    ;; Prevent dispatch of repeat-mode.
+    (defalias 'akirak/diff-hl-next-hunk #'diff-hl-next-hunk)
+    (defalias 'akirak/diff-hl-previous-hunk #'diff-hl-previous-hunk)
+
+    (:global "M-g j" #'akirak/diff-hl-next-hunk
+             "M-g k" #'akirak/diff-hl-previous-hunk)
+
+    (:when-loaded
+      (define-key diff-hl-command-map "c" #'magit-commit)
+      (defun akirak/diff-hl-after-navigation (orig &rest args)
+        ;; (when (buffer-narrowed-p)
+        ;;   (widen))
+        (let ((pos (point)))
+          (prog1 (apply orig args)
+            (unless (eq pos (point))
+              (when (derived-mode-p 'org-mode)
+                (if (org-at-heading-p)
+                    (org-fold-show-entry)
+                  (org-fold-show-context)))))))
+
+      (advice-add 'diff-hl-next-hunk
+                  :around #'akirak/diff-hl-after-navigation)
+      (advice-add 'diff-hl-previous-hunk
+                  :around #'akirak/diff-hl-after-navigation)))
+#+end_src
 *** COMMENT dired-auto-readme                        :dired:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-23 Sat 23:59]
@@ -4954,7 +4991,7 @@ Edit Git commit messages
 #+begin_src emacs-lisp
   (setup (:package git-commit))
 #+end_src
-*** git-gutter                                                  :VC:
+*** COMMENT git-gutter                                                      :VC:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 19:08]
 :END:
