@@ -1667,6 +1667,11 @@ Thus I will explicitly install this package rather than using the built-in versi
            (scroll-down arg)
          (scroll-down (akirak/scroll-half-height))))))
 #+end_src
+**** akirak-visual-scroll
+#+begin_src emacs-lisp
+  (setup akirak-visual-scroll
+    (:hook-into org-mode-hook shr-mode-hook))
+#+end_src
 *** window.c
 #+begin_src emacs-lisp
   (setup window
