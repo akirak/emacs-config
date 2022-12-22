@@ -1061,10 +1061,47 @@ provided as a separate command for integration, e.g. with embark."
     (concat start-string "\n"
             (or content
                 (when (use-region-p)
-                  (string-trim (buffer-substring-no-properties
-                                (region-beginning) (region-end))))
+                  (let ((region-source (buffer-substring-no-properties
+                                        (region-beginning) (region-end))))
+                    (if (equal body-type "src")
+                        (akirak-capture--unindent region-source)
+                      (akirak-capture--to-org region-source))))
                 "")
             "\n" end-string "\n")))
+
+(defun akirak-capture--to-org (string)
+  (let ((bullet-regexp (when (derived-mode-p 'shr-mode)
+                         (rx-to-string `(and bol (group (*? blank)) ,shr-bullet)))))
+    (with-temp-buffer
+      (insert string)
+      (goto-char (point-min))
+      (when (looking-at (rx (+ (and (* blank) "\n"))))
+        (replace-match ""))
+      (when bullet-regexp
+        (while (re-search-forward bullet-regexp nil t)
+          (replace-match "\\1- ")))
+      (buffer-string))))
+
+(defun akirak-capture--unindent (string)
+  (let ((lines (split-string string "\n")))
+    (cl-flet
+        ((indent (s)
+           (when (string-match (rx bol (group (+ " ")) (not (any space))) s)
+             (- (match-end 1)
+                (match-beginning 1)))))
+      (let* ((min-indent (thread-last
+                           (mapcar #'indent lines)
+                           (delq nil)
+                           (apply #'min)))
+             (regexp (concat "^" (make-string min-indent ?\s))))
+        (with-temp-buffer
+          (insert string)
+          (goto-char (point-min))
+          (when (looking-at (rx (+ "\n")))
+            (replace-match ""))
+          (while (re-search-forward regexp nil t)
+            (replace-match ""))
+          (buffer-string))))))
 
 (defun akirak-capture--major-mode-list ()
   (let (modes)
