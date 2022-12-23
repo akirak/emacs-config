@@ -485,6 +485,7 @@
         "site": "site",
         "squasher": "squasher",
         "twist": "twist",
+        "unstable": "unstable",
         "utils": "utils_2",
         "zsh-fast-syntax-highlighting": "zsh-fast-syntax-highlighting",
         "zsh-fzy": "zsh-fzy",
@@ -542,6 +543,20 @@
         "owner": "emacs-twist",
         "repo": "twist.nix",
         "type": "github"
+      }
+    },
+    "unstable": {
+      "locked": {
+        "lastModified": 1671359686,
+        "narHash": "sha256-3MpC6yZo+Xn9cPordGz2/ii6IJpP2n8LE8e/ebUXLrs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "04f574a1c0fde90b51bf68198e2297ca4e7cccf4",
+        "type": "github"
+      },
+      "original": {
+        "id": "unstable",
+        "type": "indirect"
       }
     },
     "utils": {

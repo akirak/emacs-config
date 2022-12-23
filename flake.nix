@@ -10,6 +10,7 @@
     utils.url = "flake-utils";
     pre-commit-hooks.url = "pre-commit-hooks";
     nixpkgs.url = "stable";
+    unstable.url = "unstable";
 
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
     nix-filter.url = "github:numtide/nix-filter";
