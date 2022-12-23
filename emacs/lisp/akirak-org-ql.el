@@ -43,13 +43,15 @@
                   ;; for use in non-sexp org-ql queries.
                   (rx-to-string `(or (and "http" (?  "s") ":")
                                      (regexp ,org-link-bracket-re))))))
-  (org-with-point-at (org-ql-completing-read files
-                       :query-prefix (concat akirak-org-ql-default-query-prefix
-                                             akirak-org-ql-link-query))
-    (org-back-to-heading)
-    (org-match-line org-complex-heading-regexp)
-    (goto-char (match-beginning 4))
-    (org-open-at-point)))
+  (if-let (marker (org-ql-completing-read files
+                    :query-prefix (concat akirak-org-ql-default-query-prefix
+                                          akirak-org-ql-link-query)))
+      (org-with-point-at marker
+        (org-back-to-heading)
+        (org-match-line org-complex-heading-regexp)
+        (goto-char (match-beginning 4))
+        (org-open-at-point))
+    (duckduckgo (car minibuffer-history))))
 
 (provide 'akirak-org-ql)
 ;;; akirak-org-ql.el ends here
