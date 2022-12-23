@@ -1,16 +1,18 @@
 {
+  nixConfig.flake-registry = "https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json";
+
   inputs = {
-    utils.url = "github:numtide/flake-utils";
+    # The following inputs are taken from the registry:
+    # * stable (latest stable of nixpkgs)
+    # * home-manager
+    # * pre-commit-hooks
+    # * flake-utils
+    utils.url = "flake-utils";
+    pre-commit-hooks.url = "pre-commit-hooks";
+    nixpkgs.url = "stable";
+
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
     nix-filter.url = "github:numtide/nix-filter";
-
-    home-manager = {
-      url = "github:nix-community/home-manager/release-22.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Channels
-    unstable.url = "nixpkgs/nixos-unstable";
 
     # Switch to a private profile by overriding this input
     site = {
@@ -60,11 +62,6 @@
     squasher.url = "github:akirak/squasher";
 
     # pre-commit
-    pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-    };
     flake-no-path = {
       url = "github:akirak/flake-no-path";
       inputs.nixpkgs.follows = "nixpkgs";
