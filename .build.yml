@@ -15,3 +15,11 @@ tasks:
          git commit -m 'flake: Update flake inputs'
          git push --force-with-lease origin HEAD
       fi
+
+  - build: |
+      cd nix-config
+      if [[ $(git symbolic-ref HEAD) = update-flake-inputs ]]; then
+         nixos-rebuild dry-build --flake .#li
+         nix build .#homeConfigurations.x86_64-linux."defaultUser@localhost".activation-script \
+           --dry-run
+      fi
