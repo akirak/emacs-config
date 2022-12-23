@@ -1070,7 +1070,10 @@ provided as a separate command for integration, e.g. with embark."
             "\n" end-string "\n")))
 
 (defun akirak-capture--to-org (string)
-  (let ((bullet-regexp (when (derived-mode-p 'shr-mode)
+  ;; `nov-mode' is not a derived mode of `shr-mode'. There is no `shr-mode', so
+  ;; you have to check if the current major mode matches any of the known
+  ;; shr-based modes.
+  (let ((bullet-regexp (when (derived-mode-p 'nov-mode 'eww-mode)
                          (rx-to-string `(and bol (group (*? blank)) ,shr-bullet)))))
     (with-temp-buffer
       (insert string)
