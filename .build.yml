@@ -1,0 +1,17 @@
+# Continuous integration on git.sr.ht
+image: nixos/latest
+environment:
+  NIX_CONFIG: |
+    experimental-features = nix-command flakes
+    flake-registry = https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json
+sources:
+  - https://git.sr.ht/~akirak/nix-config
+tasks:
+  - update: |
+      cd nix-config
+      nix flake update --commit-lock-file
+      if ! git diff --cached --exit-code; then
+         git switch -c update-flake-inputs
+         git commit -m 'flake: Update flake inputs'
+         git push --force-with-lease origin HEAD
+      fi
