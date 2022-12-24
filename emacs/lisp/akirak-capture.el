@@ -689,7 +689,11 @@
                        :file ,(org-dog-resolve-relative-file "news.org")
                        :function ,jump-func))))))
         (org-capture))))
-   ("@" octopus-clock-marker-suffix)
+   ("@" "Clock"
+    (lambda ()
+      (interactive)
+      (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
+      (octopus--dispatch transient-current-command org-clock-marker)))
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
   (interactive (list (or (akirak-url-latest)
