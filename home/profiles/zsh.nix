@@ -95,6 +95,8 @@
 
       export NIX_BUILD_SHELL=bash
 
+      export EDITOR=emacsclient
+
       # Use gpg-agent as ssh-agent.
       gpg-connect-agent /bye
       export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
