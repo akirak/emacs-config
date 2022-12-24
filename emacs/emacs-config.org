@@ -6139,6 +6139,7 @@ Summon and dismiss buffers as popups
           popper-reference-buffers `("\\*Messages\\*$"
                                      "\\*Backtrace\\*"
                                      "^\\*Warnings\\*"
+                                     "^\\*envrc-debug\\*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
                                      "^\\*scratch\\*"
