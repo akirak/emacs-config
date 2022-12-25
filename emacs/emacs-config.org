@@ -6154,8 +6154,7 @@ Summon and dismiss buffers as popups
                                      "^\\*Select Link\\*"
                                      "^\\*hoogle\\*"
                                      inferior-haskell-mode
-                                     lisp-interaction-mode
-                                     vterm-mode))
+                                     lisp-interaction-mode))
 
     (:hook-into after-init-hook)
     (:hook popper-echo-mode)
