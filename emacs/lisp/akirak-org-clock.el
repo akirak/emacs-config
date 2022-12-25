@@ -36,7 +36,8 @@
   (rx-to-string `(or (and bol (or ,(expand-file-name user-emacs-directory)
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
-                                  ,(expand-file-name "~/resources/articles/")))
+                                  ,(expand-file-name "~/resources/articles/")
+                                  "/tmp"))
                      "/.")))
 
 (defconst akirak-org-clock-buffer-name-whitelist
