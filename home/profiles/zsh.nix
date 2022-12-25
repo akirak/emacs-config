@@ -151,4 +151,6 @@
     # fi
     # '';
   };
+
+  programs.nix-index.enableZshIntegration = config.programs.nix-index.enable;
 }

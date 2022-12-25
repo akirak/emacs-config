@@ -10,8 +10,6 @@
       "cachix"
       "nix-prefetch-git"
       "manix"
-      "nix-index"
-
       # System
       "glances"
 
@@ -36,5 +34,10 @@
   programs.exa = {
     enable = true;
     enableAliases = true;
+  };
+
+  programs.nix-index = {
+    enable = true;
+    enableBashIntegration = true;
   };
 }
