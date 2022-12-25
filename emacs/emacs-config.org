@@ -6159,6 +6159,12 @@ Summon and dismiss buffers as popups
     (:hook-into after-init-hook)
     (:hook popper-echo-mode)
 
+    (defun akirak/popper-restart ()
+      (interactive)
+      (when (bound-and-true-p popper-mode)
+        (popper-mode -1))
+      (popper-mode))
+
     (add-hook 'popper-open-popup-hook
               (defun akirak/popper-recenter ()
                 (goto-char (point-max))
