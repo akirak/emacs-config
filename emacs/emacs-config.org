@@ -1451,6 +1451,24 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+end_src
 
 =C-h= is one of the sh-emulation bindings.
+*** subword
+:PROPERTIES:
+:CREATED_TIME: [2022-12-27 Tue 19:55]
+:END:
+
+#+begin_src emacs-lisp
+  (setup subword
+    (:global "M-SPC" #'akirak/run-with-superword-inversed)
+
+    (defun akirak/run-with-superword-inversed (key)
+      "Run a command with `superword-mode' inversed."
+      (interactive "K")
+      (let ((cmd (lookup-key (current-active-maps) key)))
+        (superword-mode)
+        (unwind-protect
+            (call-interactively cmd)
+          (superword-mode)))))
+#+end_src
 *** tempo
 :PROPERTIES:
 :CREATED_TIME: [2022-08-09 Tue 23:30]
