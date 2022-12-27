@@ -5273,7 +5273,10 @@ Major mode for Hashicorp
   (setup (:package hcl-mode)
     (:file-match "\\.tf\\'"
                  "\\.prisma\\'"
-                 "\\.hcl\\'"))
+                 "\\.hcl\\'")
+    (:reformatters
+     (terraform-fmt :program "terraform"
+                    :args (list "fmt" "--write=false" "-"))))
 #+end_src
 *** COMMENT helpful                                            :reference:Emacs:ARCHIVE:
 :PROPERTIES:
