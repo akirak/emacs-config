@@ -746,7 +746,7 @@
                 `((""
                    :keys ""
                    :template ,(apply #'akirak-org-capture-make-entry-body
-                                     (read-from-minibuffer "Title: ")
+                                     (akirak-capture--maybe-read-heading)
                                      :body "%?"
                                      akirak-capture-template-options)
                    :file ,file
