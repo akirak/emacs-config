@@ -4,6 +4,7 @@
   ""
   :type 'file)
 
+;; Deprecated in favor of defaulting to simple week cycles.
 (defcustom akirak-org-log-weekly-body-function
   (lambda (start-date end-date)
     (concat (format "[[org-memento:timeline?span=week&date=%s,%s]]\n\n"
@@ -23,7 +24,17 @@
   :type 'function)
 
 ;;;###autoload
-(defun akirak-org-log-goto-week-entry (&optional arg)
+(defun akirak-org-log-goto-week-entry ()
+  (interactive)
+  (find-file akirak-org-log-file)
+  (widen)
+  (org-reverse-datetree-goto-date-in-file (current-time))
+  (beginning-of-line)
+  ;; TODO: Don't depend on org-ql-find
+  (run-hooks 'org-ql-find-goto-hook))
+
+;; Deprecated
+(defun akirak-org-log-goto-week-entry-1 (&optional arg)
   (interactive "P")
   (if arg
       (call-interactively #'akirak-org-log-insert-new-week-entry)
@@ -32,6 +43,7 @@
       ;; TODO: Don't depend on org-ql-find
       (run-hooks 'org-ql-find-goto-hook))))
 
+;; Deprecated
 (defun akirak-org-log--find-latest-week-entry ()
   (with-current-buffer (or (find-buffer-visiting akirak-org-log-file)
                            (find-file-noselect akirak-org-log-file))
@@ -48,6 +60,7 @@
              (org-back-to-heading)
              (throw 'found-entry (point-marker)))))))))
 
+;; Deprecated
 (defun akirak-org-log-insert-new-week-entry (start-date)
   (interactive (list (org-read-date nil t)))
   (let* ((end-date (thread-first
