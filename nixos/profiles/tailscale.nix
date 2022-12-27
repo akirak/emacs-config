@@ -8,6 +8,7 @@
   };
 
   networking.firewall = {
+    checkReversePath = "loose";
     trustedInterfaces = [
       "tailscale0"
     ];
