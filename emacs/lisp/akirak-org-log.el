@@ -23,6 +23,13 @@
   ""
   :type 'function)
 
+(defcustom akirak-org-log-week-entry-hook
+  '(org-fold-hide-subtree
+    org-fold-show-children
+    (lambda () (org-fold-show-entry t)))
+  ""
+  :type 'hook)
+
 ;;;###autoload
 (defun akirak-org-log-goto-week-entry ()
   (interactive)
@@ -30,8 +37,8 @@
   (widen)
   (org-reverse-datetree-goto-date-in-file (current-time))
   (beginning-of-line)
-  ;; TODO: Don't depend on org-ql-find
-  (run-hooks 'org-ql-find-goto-hook))
+  (switch-to-buffer (org-dog-indirect-buffer))
+  (run-hooks 'akirak-org-log-week-entry-hook))
 
 ;; Deprecated
 (defun akirak-org-log-goto-week-entry-1 (&optional arg)
