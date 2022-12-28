@@ -1951,7 +1951,7 @@ Outline-based notes management and organizer
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package org)
+  (setup org
     (:with-mode org-mode
       (:set org-log-done 'time
             org-log-into-drawer t
