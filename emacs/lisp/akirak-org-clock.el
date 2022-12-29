@@ -50,6 +50,7 @@
        (< (float-time) akirak-org-clock-snooze-until)))
 
 (defadvice save-buffer (around akirak-org-clock activate)
+  (require 'akirak-emacs-org)
   (when-let (filename (if-let (base (buffer-base-buffer))
                           (buffer-file-name base)
                         buffer-file-name))
@@ -57,6 +58,8 @@
                               (buffer-name))
               (string-match-p akirak-org-clock-file-name-whitelist
                               filename)
+              (string-equal (expand-file-name akirak-emacs-org-config-file)
+                            filename)
               (bound-and-true-p url-http-content-type)
               (and (derived-mode-p 'org-mode 'org-memento-policy-mode)
                    (or (bound-and-true-p org-capture-mode)
