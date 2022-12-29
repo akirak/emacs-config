@@ -1,16 +1,12 @@
 {
-  nixConfig.flake-registry = "https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json";
-
   inputs = {
-    # The following inputs are taken from the registry:
-    # * stable (latest stable of nixpkgs)
-    # * home-manager
-    # * pre-commit-hooks
-    # * flake-utils
-    utils.url = "flake-utils";
-    pre-commit-hooks.url = "pre-commit-hooks";
-    nixpkgs.url = "stable";
-    unstable.url = "unstable";
+    # Should be updated from flake-pins: <https://github.com/akirak/flake-pins>
+    utils.url = "github:numtide/flake-utils";
+    home-manager.url = "github:nix-community/home-manager";
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+    stable.url = "github:NixOS/nixpkgs/nixos-22.11";
+    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
     nix-filter.url = "github:numtide/nix-filter";
@@ -29,7 +25,7 @@
 
     # Emacs
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    emacs-overlay.inputs.nixpkgs.url = "unstable";
+    emacs-overlay.inputs.nixpkgs.follows = "unstable";
     org-babel.url = "github:emacs-twist/org-babel";
     twist.url = "github:emacs-twist/twist.nix";
     melpa = {
