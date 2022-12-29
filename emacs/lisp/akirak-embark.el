@@ -95,6 +95,12 @@
   ("&" akirak-embark-nix-run-async)
   ("s" akirak-embark-nix-shell))
 
+(embark-define-keymap akirak-embark-magit-section-map
+  "Keymap on Magit section."
+  :parent nil
+  ("h" magit-section-hide-children)
+  ("s" magit-section-show-children))
+
 (defun akirak-embark-prefix-nixpkgs-installable (_type package)
   (cons 'nix-installable (concat "nixpkgs#" package)))
 
@@ -186,6 +192,7 @@
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
   (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-magit-section)
 
   (embark-define-thingatpt-target sentence
     nov-mode eww-mode)
@@ -209,6 +216,8 @@
                '(recoll-result . akirak-embark-transform-recoll-result))
   (add-to-list 'embark-keymap-alist
                '(nix-installable . akirak-embark-nix-installable-map))
+  (add-to-list 'embark-keymap-alist
+               '(magit-section . akirak-embark-magit-section-map))
 
   (add-to-list 'embark-pre-action-hooks
                '(nix3-flake-show embark--universal-argument))
@@ -338,6 +347,10 @@
     ((and `(image . ,(map :file))
           (guard (stringp file)))
      `(image-file . ,file))))
+
+(defun akirak-embark-target-magit-section ()
+  (when-let (section (magit-current-section))
+    (cons 'magit-section section)))
 
 (defun akirak-embark-send-to-vterm (string)
   "Send STRING to an existing vterm session."
