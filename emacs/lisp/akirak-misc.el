@@ -1,5 +1,6 @@
 ;;; akirak-misc.el ---  -*- lexical-binding: t -*-
 
+;;;###autoload
 (defun akirak-misc-sentence-lines (text)
   (cl-flet
       ((split-sentences (str)
