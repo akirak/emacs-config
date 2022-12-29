@@ -671,7 +671,7 @@
     (lambda ()
       (interactive)
       (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
-      (octopus--dispatch transient-current-command
+      (octopus--dispatch (octopus-current-command)
                          (akirak-capture--datetree-marker
                           (org-dog-resolve-relative-file "news.org")))))
    ("q" "News queue"
@@ -693,7 +693,7 @@
     (lambda ()
       (interactive)
       (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
-      (octopus--dispatch transient-current-command org-clock-marker)))
+      (octopus--dispatch (octopus-current-command) org-clock-marker)))
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
   (interactive (list (or (akirak-url-latest)
