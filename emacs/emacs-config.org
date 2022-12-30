@@ -2484,6 +2484,11 @@ A programmable workflow layer for Org mode
             ("hie\\.yaml\\'" . "programming/haskell"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
 
+    (defun akirak/org-dog-turn-on-transclusion ()
+      (org-transclusion-mode t))
+    (add-hook 'org-dog-find-file-hook #'akirak/org-dog-turn-on-transclusion)
+    (add-hook 'org-dog-before-search-hook #'akirak/org-dog-turn-on-transclusion)
+
     (add-hook 'org-dog-file-mode-hook #'org-dog-header-line-enable)
 
     (add-hook 'org-dog-file-registration-hook
@@ -3027,7 +3032,9 @@ Transclude text content via links
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package org-transclusion))
+  (setup (:package org-transclusion)
+    ;; `org-transclusion-mode' is usually turned on by `org-dog'.
+    (:set org-transclusion-add-all-on-activate t))
 #+end_src
 *** COMMENT org-visual-indent                   :aesthetics:ARCHIVE:
 :PROPERTIES:
