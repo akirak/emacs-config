@@ -638,6 +638,11 @@
       repo = "markdown-mode";
       type = "github";
     };
+    mastodon = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/martianh/mastodon.el.git";
+    };
     mermaid-mode = {
       flake = false;
       owner = "abrochard";
@@ -928,6 +933,11 @@
       owner = "joddie";
       repo = "pcre2el";
       type = "github";
+    };
+    persist = {
+      flake = false;
+      type = "git";
+      url = "https://gitlab.com/phillord/persist";
     };
     pinyin = {
       flake = false;

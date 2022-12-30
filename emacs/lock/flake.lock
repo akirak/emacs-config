@@ -1700,6 +1700,22 @@
         "type": "github"
       }
     },
+    "mastodon": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1672356223,
+        "narHash": "sha256-LIoaas43FSN77W3GvAqZ4D6RBfBdbTTsu6oGk4Dl1ug=",
+        "ref": "refs/heads/develop",
+        "rev": "47eaa7a194fa38bc39c45fbd5e3f86a01d78755f",
+        "revCount": 1406,
+        "type": "git",
+        "url": "https://codeberg.org/martianh/mastodon.el.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/martianh/mastodon.el.git"
+      }
+    },
     "mermaid-mode": {
       "flake": false,
       "locked": {
@@ -1847,11 +1863,11 @@
     "nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1672327214,
-        "narHash": "sha256-AoZTWgrQo6vXzUG50MCkc62iTghzNiEK3wrf8VsjA1A=",
+        "lastModified": 1672371769,
+        "narHash": "sha256-8hdRF35eSF1evVJ4vH9vCH6CiQnVdKMLL2E14B96Aro=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "fb92387c4fbb7d3dc0c5d45c711f8a0497ba6325",
+        "rev": "8d718fae7a34dfbea99f663714d57dab95fa8c39",
         "type": "github"
       },
       "original": {
@@ -2461,6 +2477,22 @@
         "type": "github"
       }
     },
+    "persist": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1562619671,
+        "narHash": "sha256-RrWopxRphQ9YpPc3Xl6A1lgLHJ+rMcPf+PgE7csgYDw=",
+        "ref": "refs/heads/master",
+        "rev": "2a2f83b4d63734ed48603008c813cfacd9e99404",
+        "revCount": 18,
+        "type": "git",
+        "url": "https://gitlab.com/phillord/persist"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gitlab.com/phillord/persist"
+      }
+    },
     "pinyin": {
       "flake": false,
       "locked": {
@@ -2809,6 +2841,7 @@
         "magit-todos": "magit-todos",
         "marginalia": "marginalia",
         "markdown-mode": "markdown-mode",
+        "mastodon": "mastodon",
         "mermaid-mode": "mermaid-mode",
         "mini-modeline": "mini-modeline",
         "mlscroll": "mlscroll",
@@ -2856,6 +2889,7 @@
         "parsebib": "parsebib",
         "parsec": "parsec",
         "pcre2el": "pcre2el",
+        "persist": "persist",
         "pinyin": "pinyin",
         "plz": "plz",
         "popper": "popper",
