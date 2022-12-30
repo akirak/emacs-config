@@ -585,6 +585,7 @@ The following variable defines variables that can be saved to =custom-file=:
       smtpmail-smtp-server
       smtpmail-stream-type
       smtpmail-smtp-service
+      akirak-org-clock-mode
       akirak-org-log-file
       akirak/font-height
       ;; Dynamic
@@ -2293,7 +2294,7 @@ Outline-based notes management and organizer
 ***** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    (:hook-into emacs-startup-hook)
+    ;; (:hook-into emacs-startup-hook)
 
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
