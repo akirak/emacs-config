@@ -6,6 +6,7 @@
 (defun akirak-files-update-abbrev-alist ()
   "Update the value of `directory-abbrev-alist'."
   (interactive)
+  (require 'project)
   (let (result)
     (cl-labels
         ((go (parent)
