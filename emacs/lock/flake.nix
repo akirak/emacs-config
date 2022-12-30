@@ -301,6 +301,13 @@
       repo = "embark";
       type = "github";
     };
+    ement = {
+      flake = false;
+      owner = "alphapapa";
+      ref = "stable";
+      repo = "ement.el";
+      type = "github";
+    };
     emojify = {
       flake = false;
       owner = "iqbalansari";

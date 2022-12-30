@@ -801,6 +801,23 @@
         "type": "github"
       }
     },
+    "ement": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1671820448,
+        "narHash": "sha256-MCFeArS8ziO3LFNYPJKz1WcwUC1dPvdX70QR+CtYhb0=",
+        "owner": "alphapapa",
+        "repo": "ement.el",
+        "rev": "58ea59e80c5a68098c83413c49622aa0b08d7579",
+        "type": "github"
+      },
+      "original": {
+        "owner": "alphapapa",
+        "ref": "stable",
+        "repo": "ement.el",
+        "type": "github"
+      }
+    },
     "emojify": {
       "flake": false,
       "locked": {
@@ -2785,6 +2802,7 @@
         "emacsql-sqlite": "emacsql-sqlite",
         "embark": "embark",
         "embark-consult": "embark-consult",
+        "ement": "ement",
         "emojify": "emojify",
         "envrc": "envrc",
         "epkg": "epkg",
