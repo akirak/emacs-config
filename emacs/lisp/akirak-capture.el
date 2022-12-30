@@ -437,6 +437,8 @@
    ("sc" "Command snippet" akirak-capture-command-snippet)
    ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
+   ("L" "Journal" akirak-capture-journal-item
+    :if (lambda () (eq major-mode 'org-mode)))
    ("P" "Placeholder"
     (lambda ()
       (interactive)
@@ -1003,6 +1005,17 @@ not work in the future when forge changes the output."
                        (let ((start (point)))
                          (magit-section-forward-sibling)
                          (buffer-substring-no-properties start (point))))))))
+
+(defun akirak-capture-journal-item ()
+  (interactive)
+  (let ((org-capture-entry
+         (car (doct
+               `((""
+                  :keys ""
+                  :type item
+                  :template "%? %a"
+                  :function akirak-org-log-goto-week-entry))))))
+    (org-capture)))
 
 ;;;###autoload
 (cl-defun akirak-capture-text (string)
