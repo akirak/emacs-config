@@ -14,6 +14,7 @@
 - [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#org][Org]]
 - [[#packages][Packages]]
+- [[#various-hooks-and-hacks-related-to-window-management][Various Hooks and hacks related to window management]]
 - [[#post-init][Post init]]
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
@@ -2006,188 +2007,7 @@ Outline-based notes management and organizer
                                       ("t" . "toc"))
                                     org-structure-template-alist)
                             :key #'car
-                            :test #'equal)))
-
-        (require 'el-patch)
-
-        (el-patch-defun org-fast-todo-selection (&optional current-state)
-          "Fast TODO keyword selection with single keys.
-  Returns the new TODO keyword, or nil if no state change should occur.
-  When CURRENT-STATE is given and selection letters are not unique globally,
-  prefer a state in the current sequence over on in another sequence."
-          (let* ((fulltable org-todo-key-alist)
-                 (head (org-get-todo-sequence-head current-state))
-                 (done-keywords org-done-keywords) ;; needed for the faces.
-                 (maxlen (apply 'max (mapcar
-                                      (lambda (x)
-                                        (if (stringp (car x)) (string-width (car x)) 0))
-                                      fulltable)))
-                 (expert (equal org-use-fast-todo-selection 'expert))
-                 (prompt "")
-                 (fwidth (+ maxlen 3 1 3))
-                 (ncol (/ (- (window-width) 4) fwidth))
-                 tg cnt e c tbl subtable
-                 groups ingroup in-current-sequence)
-            (save-excursion
-              (save-window-excursion
-                (if expert
-                    (set-buffer (get-buffer-create " *Org todo*"))
-                  (el-patch-remove (delete-other-windows))
-                  (set-window-buffer (split-window-vertically) (get-buffer-create " *Org todo*"))
-                  (org-switch-to-buffer-other-window " *Org todo*")
-                  (el-patch-add (fit-window-to-buffer)))
-                (erase-buffer)
-                (setq-local org-done-keywords done-keywords)
-                (setq tbl fulltable cnt 0)
-                (while (setq e (pop tbl))
-                  (cond
-                   ((equal e '(:startgroup))
-                    (push '() groups) (setq ingroup t)
-                    (unless (= cnt 0)
-                      (setq cnt 0)
-                      (insert "\n"))
-                    (setq prompt (concat prompt "{"))
-                    (insert "{ "))
-                   ((equal e '(:endgroup))
-                    (setq ingroup nil cnt 0 in-current-sequence nil)
-                    (setq prompt (concat prompt "}"))
-                    (insert "}\n"))
-                   ((equal e '(:newline))
-                    (unless (= cnt 0)
-                      (setq cnt 0)
-                      (insert "\n")
-                      (setq e (car tbl))
-                      (while (equal (car tbl) '(:newline))
-                        (insert "\n")
-                        (setq tbl (cdr tbl)))))
-                   (t
-                    (setq tg (car e) c (cdr e))
-                    (if (equal tg head) (setq in-current-sequence t))
-                    (when ingroup (push tg (car groups)))
-                    (when in-current-sequence (push e subtable))
-                    (setq tg (org-add-props tg nil 'face
-                                            (org-get-todo-face tg)))
-                    (when (and (= cnt 0) (not ingroup)) (insert "  "))
-                    (setq prompt (concat prompt "[" (char-to-string c) "] " tg " "))
-                    (insert "[" c "] " tg (make-string
-                                           (- fwidth 4 (length tg)) ?\ ))
-                    (when (and (= (setq cnt (1+ cnt)) ncol)
-                               ;; Avoid lines with just a closing delimiter.
-                               (not (equal (car tbl) '(:endgroup))))
-                      (insert "\n")
-                      (when ingroup (insert "  "))
-                      (setq cnt 0)))))
-                (insert "\n")
-                (goto-char (point-min))
-                (unless expert (org-fit-window-to-buffer))
-                (message (concat "[a-z..]:Set [SPC]:clear"
-                                 (if expert (concat "\n" prompt) "")))
-                (setq c (let ((inhibit-quit t)) (read-char-exclusive)))
-                (setq subtable (nreverse subtable))
-                (cond
-                 ((or (= c ?\C-g)
-                      (and (= c ?q) (not (rassoc c fulltable))))
-                  (setq quit-flag t))
-                 ((= c ?\ ) nil)
-                 ((setq e (or (rassoc c subtable) (rassoc c fulltable))
-                        tg (car e))
-                  tg)
-                 (t (setq quit-flag t)))))))
-
-        (el-patch-defun org-add-log-note (&optional _purpose)
-          "Pop up a window for taking a note, and add this note later."
-          (remove-hook 'post-command-hook 'org-add-log-note)
-          (setq org-log-setup nil)
-          (setq org-log-note-window-configuration (current-window-configuration))
-          (el-patch-remove (delete-other-windows))
-          (move-marker org-log-note-return-to (point))
-          (pop-to-buffer-same-window (marker-buffer org-log-note-marker))
-          (goto-char org-log-note-marker)
-          (org-switch-to-buffer-other-window "*Org Note*")
-          (erase-buffer)
-          (if (memq org-log-note-how '(time state))
-              (org-store-log-note)
-            (let ((org-inhibit-startup t)) (org-mode))
-            (insert (format "# Insert note for %s.
-  # Finish with C-c C-c, or cancel with C-c C-k.\n\n"
-                            (cl-case org-log-note-purpose
-                              (clock-out "stopped clock")
-                              (done "closed todo item")
-                              (reschedule "rescheduling")
-                              (delschedule "no longer scheduled")
-                              (redeadline "changing deadline")
-                              (deldeadline "removing deadline")
-                              (refile "refiling")
-                              (note "this entry")
-                              (state
-                               (format "state change from \"%s\" to \"%s\""
-                                       (or org-log-note-previous-state "")
-                                       (or org-log-note-state "")))
-                              (t (error "This should not happen")))))
-            (when org-log-note-extra (insert org-log-note-extra))
-            (setq-local org-finish-function 'org-store-log-note)
-            (run-hooks 'org-log-buffer-setup-hook)))
-
-        (el-patch-defun org-offer-links-in-entry (buffer marker &optional nth zero)
-          "Offer links in the current entry and return the selected link.
-  If there is only one link, return it.
-  If NTH is an integer, return the NTH link found.
-  If ZERO is a string, check also this string for a link, and if
-  there is one, return it."
-          (with-current-buffer buffer
-            (org-with-wide-buffer
-             (goto-char marker)
-             (let ((cnt ?0)
-                   have-zero end links link c)
-               (when (and (stringp zero) (string-match org-link-bracket-re zero))
-                 (push (match-string 0 zero) links)
-                 (setq cnt (1- cnt) have-zero t))
-               (save-excursion
-                 (org-back-to-heading t)
-                 (setq end (save-excursion (outline-next-heading) (point)))
-                 (while (re-search-forward org-link-any-re end t)
-                   ;; Only consider valid links or links openable via
-                   ;; `org-open-at-point'.
-                   (when (memq (org-element-type (org-element-context)) '(link comment comment-block node-property keyword))
-                     (push (match-string 0) links)))
-                 (setq links (org-uniquify (reverse links)))
-                 (el-patch-add (narrow-to-region (org-entry-beginning-position)
-                                                 (org-entry-end-position))))
-               (cond
-                ((null links)
-                 (message "No links"))
-                ((equal (length links) 1)
-                 (setq link (car links)))
-                ((and (integerp nth) (>= (length links) (if have-zero (1+ nth) nth)))
-                 (setq link (nth (if have-zero nth (1- nth)) links)))
-                (t                        ; we have to select a link
-                 (save-excursion
-                   (save-window-excursion
-                     (el-patch-remove (delete-other-windows))
-                     (with-output-to-temp-buffer "*Select Link*"
-                       (dolist (l links)
-                         (cond
-                          ((not (string-match org-link-bracket-re l))
-                           (princ (format "[%c]  %s\n" (cl-incf cnt)
-                                          (org-unbracket-string "<" ">" l))))
-                          ((match-end 2)
-                           (princ (format "[%c]  %s (%s)\n" (cl-incf cnt)
-                                          (match-string 2 l) (match-string 1 l))))
-                          (t (princ (format "[%c]  %s\n" (cl-incf cnt)
-                                            (match-string 1 l)))))))
-                     (org-fit-window-to-buffer (get-buffer-window "*Select Link*"))
-                     (message "Select link to open, RET to open all:")
-                     (setq c (read-char-exclusive))
-                     (and (get-buffer "*Select Link*") (kill-buffer "*Select Link*"))))
-                 (when (equal c ?q) (user-error "Abort"))
-                 (if (equal c ?\C-m)
-                     (setq link links)
-                   (setq nth (- c ?0))
-                   (when have-zero (setq nth (1+ nth)))
-                   (unless (and (integerp nth) (>= (length links) nth))
-                     (user-error "Invalid link selection"))
-                   (setq link (nth (1- nth) links)))))
-               (cons link end))))))))
+                            :test #'equal))))))
 #+end_src
 **** org-modules
 #+begin_src emacs-lisp
@@ -2314,27 +2134,6 @@ Outline-based notes management and organizer
                                      (interactive)
                                      (org-eval-in-calendar '(calendar-forward-day -1))))))))
 #+end_src
-**** Hooks
-#+begin_src emacs-lisp
-  (setup org-keys
-    (add-hook 'org-follow-link-hook
-              (defun akirak/org-follow-link-reveal ()
-                (let ((buffer (window-buffer (selected-window))))
-                  (when (and (eq 'org-mode (buffer-local-value 'major-mode buffer))
-                             (or (looking-at org-heading-regexp)
-                                 (when-let (uri (cadr (get-char-property (point) 'htmlize-link)))
-                                   (string-match-p "^id:" uri)))
-                             (not (and (thing-at-point-looking-at org-link-any-re)
-                                       (match-string 1))))
-                    (if-let (indirect-buf (and (not (buffer-base-buffer buffer))
-                                               (fboundp 'org-dog-indirect-buffer)
-                                               (with-current-buffer buffer
-                                                 (org-dog-indirect-buffer))))
-                        (with-current-buffer indirect-buf
-                          (pop-to-buffer (current-buffer))
-                          (org-show-context 'bookmark-jump))
-                      (org-show-context 'bookmark-jump)))))))
-#+end_src
 **** org-agenda
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 22:12]
@@ -2381,16 +2180,7 @@ Outline-based notes management and organizer
                          `(("a" "The agenda"
                             ((agenda)
                              ,(org-memento-make-agenda-block))))))
-                    (org-agenda nil "a"))))
-
-    ;; A function advice to prevent the default behavior which run
-    ;; `delete-other-windows' to show a completion window.
-    (advice-add 'delete-other-windows
-                :before-while
-                (defun akirak/org-allow-delete-other-windows-p (&rest _args)
-                  (not (memq this-command '(org-todo
-                                            org-agenda-todo
-                                            org-agenda))))))
+                    (org-agenda nil "a")))))
 #+end_src
 **** org-babel (ob)
 :PROPERTIES:
@@ -2420,31 +2210,7 @@ Outline-based notes management and organizer
                 (goto-char (point-min))
                 (let ((headline (org-get-heading t t t t)))
                   (when (string-empty-p headline)
-                    (org-edit-headline)))))
-
-    (:when-loaded
-      (require 'el-patch)
-      (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
-        "Insert the template at the target location, and display the buffer.
-  When INHIBIT-WCONF-STORE is non-nil, don't store the window configuration, as it
-  may have been stored before."
-        (unless inhibit-wconf-store
-          (org-capture-put :return-to-wconf (current-window-configuration)))
-        (el-patch-remove (delete-other-windows))
-        (org-switch-to-buffer-other-window
-         (org-capture-get-indirect-buffer (org-capture-get :buffer) "CAPTURE"))
-        (widen)
-        (org-show-all)
-        (goto-char (org-capture-get :pos))
-        (setq-local outline-level 'org-outline-level)
-        (pcase (org-capture-get :type)
-          ((or `nil `entry) (org-capture-place-entry))
-          (`table-line (org-capture-place-table-line))
-          (`plain (org-capture-place-plain-text))
-          (`item (org-capture-place-item))
-          (`checkitem (org-capture-place-item)))
-        (setq-local org-capture-current-plist org-capture-plist)
-        (org-capture-mode 1))))
+                    (org-edit-headline))))))
 #+end_src
 **** org-clock
 :PROPERTIES:
@@ -6988,6 +6754,256 @@ A major mode for the Zig programming language
   (setup (:package zig-mode)
     (:file-match "\\.zig\\'"))
 #+end_src
+** Various Hooks and hacks related to window management
+:PROPERTIES:
+:ID:       5bc8a05a-c4c4-4fd4-85b3-bb5dba2b05c9
+:END:
+*** Org mode
+#+begin_src emacs-lisp
+  (add-hook 'org-follow-link-hook
+            (defun akirak/org-follow-link-reveal ()
+              (let ((buffer (window-buffer (selected-window))))
+                (when (and (eq 'org-mode (buffer-local-value 'major-mode buffer))
+                           (or (looking-at org-heading-regexp)
+                               (when-let (uri (cadr (get-char-property (point) 'htmlize-link)))
+                                 (string-match-p "^id:" uri)))
+                           (not (and (thing-at-point-looking-at org-link-any-re)
+                                     (match-string 1))))
+                  (if-let (indirect-buf (and (not (buffer-base-buffer buffer))
+                                             (fboundp 'org-dog-indirect-buffer)
+                                             (with-current-buffer buffer
+                                               (org-dog-indirect-buffer))))
+                      (with-current-buffer indirect-buf
+                        (pop-to-buffer (current-buffer))
+                        (org-show-context 'bookmark-jump))
+                    (org-show-context 'bookmark-jump))))))
+#+end_src
+**** Advices and el-patches
+Org frequently calls =delete-other-windows=, some of which I find annoying.
+They are built into big functions in the library, so I use =el-patch= to remove them.
+
+#+begin_src emacs-lisp
+  ;; A function advice to prevent the default behavior which run
+  ;; `delete-other-windows' to show a completion window.
+  (setup window
+    (:status opinionated
+      (advice-add 'delete-other-windows
+                  :before-while
+                  (defun akirak/org-allow-delete-other-windows-p (&rest _args)
+                    (not (memq this-command '(org-todo
+                                              org-agenda-todo
+                                              org-agenda)))))))
+
+  (setup org
+    (:status opinionated
+      (:when-loaded
+        (require 'el-patch)
+        (el-patch-defun org-fast-todo-selection (&optional current-state)
+          "Fast TODO keyword selection with single keys.
+  Returns the new TODO keyword, or nil if no state change should occur.
+  When CURRENT-STATE is given and selection letters are not unique globally,
+  prefer a state in the current sequence over on in another sequence."
+          (let* ((fulltable org-todo-key-alist)
+                 (head (org-get-todo-sequence-head current-state))
+                 (done-keywords org-done-keywords) ;; needed for the faces.
+                 (maxlen (apply 'max (mapcar
+                                      (lambda (x)
+                                        (if (stringp (car x)) (string-width (car x)) 0))
+                                      fulltable)))
+                 (expert (equal org-use-fast-todo-selection 'expert))
+                 (prompt "")
+                 (fwidth (+ maxlen 3 1 3))
+                 (ncol (/ (- (window-width) 4) fwidth))
+                 tg cnt e c tbl subtable
+                 groups ingroup in-current-sequence)
+            (save-excursion
+              (save-window-excursion
+                (if expert
+                    (set-buffer (get-buffer-create " *Org todo*"))
+                  (el-patch-remove (delete-other-windows))
+                  (set-window-buffer (split-window-vertically) (get-buffer-create " *Org todo*"))
+                  (org-switch-to-buffer-other-window " *Org todo*")
+                  (el-patch-add (fit-window-to-buffer)))
+                (erase-buffer)
+                (setq-local org-done-keywords done-keywords)
+                (setq tbl fulltable cnt 0)
+                (while (setq e (pop tbl))
+                  (cond
+                   ((equal e '(:startgroup))
+                    (push '() groups) (setq ingroup t)
+                    (unless (= cnt 0)
+                      (setq cnt 0)
+                      (insert "\n"))
+                    (setq prompt (concat prompt "{"))
+                    (insert "{ "))
+                   ((equal e '(:endgroup))
+                    (setq ingroup nil cnt 0 in-current-sequence nil)
+                    (setq prompt (concat prompt "}"))
+                    (insert "}\n"))
+                   ((equal e '(:newline))
+                    (unless (= cnt 0)
+                      (setq cnt 0)
+                      (insert "\n")
+                      (setq e (car tbl))
+                      (while (equal (car tbl) '(:newline))
+                        (insert "\n")
+                        (setq tbl (cdr tbl)))))
+                   (t
+                    (setq tg (car e) c (cdr e))
+                    (if (equal tg head) (setq in-current-sequence t))
+                    (when ingroup (push tg (car groups)))
+                    (when in-current-sequence (push e subtable))
+                    (setq tg (org-add-props tg nil 'face
+                                            (org-get-todo-face tg)))
+                    (when (and (= cnt 0) (not ingroup)) (insert "  "))
+                    (setq prompt (concat prompt "[" (char-to-string c) "] " tg " "))
+                    (insert "[" c "] " tg (make-string
+                                           (- fwidth 4 (length tg)) ?\ ))
+                    (when (and (= (setq cnt (1+ cnt)) ncol)
+                               ;; Avoid lines with just a closing delimiter.
+                               (not (equal (car tbl) '(:endgroup))))
+                      (insert "\n")
+                      (when ingroup (insert "  "))
+                      (setq cnt 0)))))
+                (insert "\n")
+                (goto-char (point-min))
+                (unless expert (org-fit-window-to-buffer))
+                (message (concat "[a-z..]:Set [SPC]:clear"
+                                 (if expert (concat "\n" prompt) "")))
+                (setq c (let ((inhibit-quit t)) (read-char-exclusive)))
+                (setq subtable (nreverse subtable))
+                (cond
+                 ((or (= c ?\C-g)
+                      (and (= c ?q) (not (rassoc c fulltable))))
+                  (setq quit-flag t))
+                 ((= c ?\ ) nil)
+                 ((setq e (or (rassoc c subtable) (rassoc c fulltable))
+                        tg (car e))
+                  tg)
+                 (t (setq quit-flag t)))))))
+
+        (el-patch-defun org-add-log-note (&optional _purpose)
+          "Pop up a window for taking a note, and add this note later."
+          (remove-hook 'post-command-hook 'org-add-log-note)
+          (setq org-log-setup nil)
+          (setq org-log-note-window-configuration (current-window-configuration))
+          (el-patch-remove (delete-other-windows))
+          (move-marker org-log-note-return-to (point))
+          (pop-to-buffer-same-window (marker-buffer org-log-note-marker))
+          (goto-char org-log-note-marker)
+          (org-switch-to-buffer-other-window "*Org Note*")
+          (erase-buffer)
+          (if (memq org-log-note-how '(time state))
+              (org-store-log-note)
+            (let ((org-inhibit-startup t)) (org-mode))
+            (insert (format "# Insert note for %s.
+  # Finish with C-c C-c, or cancel with C-c C-k.\n\n"
+                            (cl-case org-log-note-purpose
+                              (clock-out "stopped clock")
+                              (done "closed todo item")
+                              (reschedule "rescheduling")
+                              (delschedule "no longer scheduled")
+                              (redeadline "changing deadline")
+                              (deldeadline "removing deadline")
+                              (refile "refiling")
+                              (note "this entry")
+                              (state
+                               (format "state change from \"%s\" to \"%s\""
+                                       (or org-log-note-previous-state "")
+                                       (or org-log-note-state "")))
+                              (t (error "This should not happen")))))
+            (when org-log-note-extra (insert org-log-note-extra))
+            (setq-local org-finish-function 'org-store-log-note)
+            (run-hooks 'org-log-buffer-setup-hook)))
+
+        (el-patch-defun org-offer-links-in-entry (buffer marker &optional nth zero)
+          "Offer links in the current entry and return the selected link.
+  If there is only one link, return it.
+  If NTH is an integer, return the NTH link found.
+  If ZERO is a string, check also this string for a link, and if
+  there is one, return it."
+          (with-current-buffer buffer
+            (org-with-wide-buffer
+             (goto-char marker)
+             (let ((cnt ?0)
+                   have-zero end links link c)
+               (when (and (stringp zero) (string-match org-link-bracket-re zero))
+                 (push (match-string 0 zero) links)
+                 (setq cnt (1- cnt) have-zero t))
+               (save-excursion
+                 (org-back-to-heading t)
+                 (setq end (save-excursion (outline-next-heading) (point)))
+                 (while (re-search-forward org-link-any-re end t)
+                   ;; Only consider valid links or links openable via
+                   ;; `org-open-at-point'.
+                   (when (memq (org-element-type (org-element-context)) '(link comment comment-block node-property keyword))
+                     (push (match-string 0) links)))
+                 (setq links (org-uniquify (reverse links)))
+                 (el-patch-add (narrow-to-region (org-entry-beginning-position)
+                                                 (org-entry-end-position))))
+               (cond
+                ((null links)
+                 (message "No links"))
+                ((equal (length links) 1)
+                 (setq link (car links)))
+                ((and (integerp nth) (>= (length links) (if have-zero (1+ nth) nth)))
+                 (setq link (nth (if have-zero nth (1- nth)) links)))
+                (t                        ; we have to select a link
+                 (save-excursion
+                   (save-window-excursion
+                     (el-patch-remove (delete-other-windows))
+                     (with-output-to-temp-buffer "*Select Link*"
+                       (dolist (l links)
+                         (cond
+                          ((not (string-match org-link-bracket-re l))
+                           (princ (format "[%c]  %s\n" (cl-incf cnt)
+                                          (org-unbracket-string "<" ">" l))))
+                          ((match-end 2)
+                           (princ (format "[%c]  %s (%s)\n" (cl-incf cnt)
+                                          (match-string 2 l) (match-string 1 l))))
+                          (t (princ (format "[%c]  %s\n" (cl-incf cnt)
+                                            (match-string 1 l)))))))
+                     (org-fit-window-to-buffer (get-buffer-window "*Select Link*"))
+                     (message "Select link to open, RET to open all:")
+                     (setq c (read-char-exclusive))
+                     (and (get-buffer "*Select Link*") (kill-buffer "*Select Link*"))))
+                 (when (equal c ?q) (user-error "Abort"))
+                 (if (equal c ?\C-m)
+                     (setq link links)
+                   (setq nth (- c ?0))
+                   (when have-zero (setq nth (1+ nth)))
+                   (unless (and (integerp nth) (>= (length links) nth))
+                     (user-error "Invalid link selection"))
+                   (setq link (nth (1- nth) links)))))
+               (cons link end))))))))
+
+  (setup org-capture
+    (:status opinionated
+      (:when-loaded
+        (require 'el-patch)
+        (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
+          "Insert the template at the target location, and display the buffer.
+  When INHIBIT-WCONF-STORE is non-nil, don't store the window configuration, as it
+  may have been stored before."
+          (unless inhibit-wconf-store
+            (org-capture-put :return-to-wconf (current-window-configuration)))
+          (el-patch-remove (delete-other-windows))
+          (org-switch-to-buffer-other-window
+           (org-capture-get-indirect-buffer (org-capture-get :buffer) "CAPTURE"))
+          (widen)
+          (org-show-all)
+          (goto-char (org-capture-get :pos))
+          (setq-local outline-level 'org-outline-level)
+          (pcase (org-capture-get :type)
+            ((or `nil `entry) (org-capture-place-entry))
+            (`table-line (org-capture-place-table-line))
+            (`plain (org-capture-place-plain-text))
+            (`item (org-capture-place-item))
+            (`checkitem (org-capture-place-item)))
+          (setq-local org-capture-current-plist org-capture-plist)
+          (org-capture-mode 1)))))
+#+end_src
+
 ** Post init
 Load my personal settings after all the things.
 
