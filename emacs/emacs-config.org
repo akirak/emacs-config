@@ -120,6 +120,22 @@ I am interested to see if it can reduce the amount of configuration code.
                    (run-with-timer ,seconds nil
                                    ,(or func (setup-get 'hook)))))))
 #+end_src
+*** :el-patch
+:PROPERTIES:
+:CREATED_TIME: [2022-12-30 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (setup-define :el-patch
+      (lambda (&rest body)
+        `(when (require 'el-patch nil t)
+           ,@body))
+      :documentation "Evaluate el-patch definitions."
+      :debug '(setup)
+      :after-loaded t
+      :indent 0))
+#+end_src
 *** :embark
 :PROPERTIES:
 :CREATED_TIME: [2022-04-24 Sun 17:26]
@@ -6796,8 +6812,7 @@ They are built into big functions in the library, so I use =el-patch= to remove 
 
   (setup org
     (:status opinionated
-      (:when-loaded
-        (require 'el-patch)
+      (:el-patch
         (el-patch-defun org-fast-todo-selection (&optional current-state)
           "Fast TODO keyword selection with single keys.
   Returns the new TODO keyword, or nil if no state change should occur.
@@ -6979,8 +6994,7 @@ They are built into big functions in the library, so I use =el-patch= to remove 
 
   (setup org-capture
     (:status opinionated
-      (:when-loaded
-        (require 'el-patch)
+      (:el-patch
         (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
           "Insert the template at the target location, and display the buffer.
   When INHIBIT-WCONF-STORE is non-nil, don't store the window configuration, as it
