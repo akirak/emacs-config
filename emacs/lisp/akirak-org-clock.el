@@ -323,9 +323,8 @@ DAYS default to `akirak-org-clock-history-threshold'."
 
 ;;;; Open clocked entries
 
-(defcustom akirak-org-clock-open-hook '(org-show-entry
-                                        org-show-children)
-  ""
+(defcustom akirak-org-clock-open-hook nil
+  "Hook run after `akirak-org-clock-open' jumps to a heading."
   :type 'hook)
 
 (defmacro akirak-org-clock-require-clock (&rest body)

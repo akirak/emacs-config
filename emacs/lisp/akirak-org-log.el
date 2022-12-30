@@ -23,11 +23,8 @@
   ""
   :type 'function)
 
-(defcustom akirak-org-log-week-entry-hook
-  '(org-fold-hide-subtree
-    org-fold-show-children
-    (lambda () (org-fold-show-entry t)))
-  ""
+(defcustom akirak-org-log-week-entry-hook nil
+  "Hook run after `akirak-org-log-goto-week-entry' jumps to a weekly entry."
   :type 'hook)
 
 ;;;###autoload

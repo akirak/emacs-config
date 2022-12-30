@@ -2473,10 +2473,7 @@ A programmable workflow layer for Org mode
     (with-eval-after-load 'org-id
       (org-dog-id-mode t))
     (add-hook 'org-mode-hook #'org-dog-file-mode-maybe)
-    (add-hook 'org-agenda-after-show-hook
-              (defun akirak/org-agenda-show-entry ()
-                (switch-to-buffer (org-dog-indirect-buffer))))
-
+  
     (:global "M-g M-/" #'org-dog-find-file)
     (define-key help-map (kbd "M-o") #'org-dog-overview)
 
@@ -2933,21 +2930,6 @@ Org Query Language, search command, and agenda-like view
                 :before-while
                 (defun akirak/org-ql-view-link-needed-p (&rest _args)
                   (eq this-command 'org-store-link))))
-#+end_src
-**** org-ql-find
-#+begin_src emacs-lisp
-  (setup org-ql-find
-    (:set org-ql-find-goto-hook '(org-show-context
-                                  org-show-children
-                                  org-show-entry
-                                  akirak/org-recenter-toplevel-at-top))
-    (defun akirak/org-recenter-toplevel-at-top ()
-      (unless (org-before-first-heading-p)
-        (save-excursion
-          (let ((regexp (rx bol "*" blank)))
-            (when (or (looking-at regexp)
-                      (re-search-backward regexp nil t))
-              (recenter-top-bottom 0)))))))
 #+end_src
 *** org-recur
 :PROPERTIES:
@@ -6775,6 +6757,7 @@ A major mode for the Zig programming language
 :ID:       5bc8a05a-c4c4-4fd4-85b3-bb5dba2b05c9
 :END:
 *** Org mode
+Define how Org entries are displayed by certain commands.
 #+begin_src emacs-lisp
   (add-hook 'org-follow-link-hook
             (defun akirak/org-follow-link-reveal ()
@@ -6793,6 +6776,31 @@ A major mode for the Zig programming language
                         (pop-to-buffer (current-buffer))
                         (org-show-context 'bookmark-jump))
                     (org-show-context 'bookmark-jump))))))
+
+  (add-hook 'org-agenda-after-show-hook
+            (defun akirak/org-agenda-show-entry ()
+              (switch-to-buffer (org-dog-indirect-buffer))))
+
+  (setq org-ql-find-goto-hook '(org-show-context
+                                org-show-children
+                                org-show-entry
+                                akirak/org-recenter-toplevel-at-top))
+
+  (defun akirak/org-recenter-toplevel-at-top ()
+    (unless (org-before-first-heading-p)
+      (save-excursion
+        (let ((regexp (rx bol "*" blank)))
+          (when (or (looking-at regexp)
+                    (re-search-backward regexp nil t))
+            (recenter-top-bottom 0))))))
+
+  (setq akirak-org-clock-open-hook '(org-show-entry
+                                     org-show-children))
+
+  (setq akirak-org-log-week-entry-hook
+        '(org-fold-hide-subtree
+          org-fold-show-children
+          (lambda () (org-fold-show-entry t))))
 #+end_src
 **** Advices and el-patches
 Org frequently calls =delete-other-windows=, some of which I find annoying.
