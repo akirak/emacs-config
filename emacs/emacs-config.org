@@ -4392,6 +4392,10 @@ Consult integration for Embark
 :PROPERTIES:
 :CREATED_TIME: [2022-12-30 Fri 12:44]
 :END:
+#+begin_quote
+Matrix client
+[[https://github.com/alphapapa/ement.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package ement))
@@ -5536,6 +5540,9 @@ Major mode for Markdown-formatted text
 :PROPERTIES:
 :CREATED_TIME: [2022-12-30 Fri 12:37]
 :END:
+#+begin_quote
+Client for Mastodon, a federated social network
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package mastodon))
@@ -7087,7 +7094,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |  10 |
-| [[org-ql-search:tags:library][library]]             |  10 |
+| [[org-ql-search:tags:library][library]]             |   9 |
 | [[org-ql-search:tags:VC][VC]]                  |   8 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -7114,6 +7121,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:@extra][@extra]]              |   2 |
+| [[org-ql-search:tags:social][social]]              |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   2 |
