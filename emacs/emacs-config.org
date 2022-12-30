@@ -1253,11 +1253,12 @@ Operations on the current project
                   (require 'which-key)
                   (if-let (keymap (or repeat-map
                                       (repeat--command-property 'repeat-map)))
-                      (run-at-time
-                       which-key-idle-delay nil
-                       `(lambda ()
-                          (which-key--create-buffer-and-show
-                           nil (symbol-value ',keymap))))
+                      (when (eq keymap 'diff-hl-command-map)
+                        (run-at-time
+                         which-key-idle-delay nil
+                         `(lambda ()
+                            (which-key--create-buffer-and-show
+                             nil (symbol-value ',keymap)))))
                     (which-key--hide-popup)))))
 #+end_src
 *** savehist                                               :history:
