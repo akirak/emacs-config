@@ -2821,7 +2821,6 @@ Time blocking with Org
                 (defun akirak/org-memento-save-some-buffers ()
                   (ignore-errors (akirak-org-clock-snooze))
                   (save-some-buffers)))
-      (add-hook 'org-memento-checkin-hook #'akirak-org-log-generate-memento-blocks 80)
       (add-hook 'org-memento-checkin-hook
                 (defun akirak/org-memento-set-frame-title ()
                   (setq frame-title-format
