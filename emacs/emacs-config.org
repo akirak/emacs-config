@@ -5753,6 +5753,14 @@ Major mode for Markdown-formatted text
 
     (:bind "C-c '" #'markdown-edit-code-block))
 #+end_src
+*** mastodon                                                            :social:
+:PROPERTIES:
+:CREATED_TIME: [2022-12-30 Fri 12:37]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package mastodon))
+#+end_src
 *** mermaid-mode                                                        :@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
