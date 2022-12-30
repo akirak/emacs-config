@@ -4618,6 +4618,14 @@ Consult integration for Embark
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
 #+end_src
+*** ement                                                               :social:
+:PROPERTIES:
+:CREATED_TIME: [2022-12-30 Fri 12:44]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package ement))
+#+end_src
 *** COMMENT engine-mode                                    :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-18 Mon 12:32]
