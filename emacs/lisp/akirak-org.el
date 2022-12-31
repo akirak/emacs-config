@@ -514,7 +514,8 @@ The point should be at the heading."
   (interactive)
   (if (region-active-p)
       (kill-region (region-beginning) (region-end))
-    (if (looking-back (rx bol (* "*") (* space)) (line-beginning-position))
+    (if (or (looking-back (rx bol (* "*") (* space)) (line-beginning-position))
+            (thing-at-point-looking-at org-link-any-re))
         (user-error "Protected by org-protected-mode")
       (call-interactively #'backward-kill-word))))
 
