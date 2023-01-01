@@ -6782,6 +6782,8 @@ Define how Org entries are displayed by certain commands.
                                  (string-match-p "^id:" uri)))
                            (not (and (thing-at-point-looking-at org-link-any-re)
                                      (match-string 1))))
+                  (when (bound-and-true-p winner-mode)
+                    (winner-undo))
                   (if-let (indirect-buf (and (not (buffer-base-buffer buffer))
                                              (fboundp 'org-dog-indirect-buffer)
                                              (with-current-buffer buffer
