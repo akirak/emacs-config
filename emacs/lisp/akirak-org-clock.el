@@ -184,6 +184,7 @@
               t))
     ad-do-it))
 
+;;;###autoload
 (defun akirak-org-clock-in-dwim ()
   (interactive)
   (cond
