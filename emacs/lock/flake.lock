@@ -1653,6 +1653,22 @@
         "type": "github"
       }
     },
+    "magit-nix3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1672586608,
+        "narHash": "sha256-Uupwc+700NxTv1sODUOGWkt5fetxxRJNl2l3sMXt9qI=",
+        "owner": "emacs-twist",
+        "repo": "nix3.el",
+        "rev": "bd92f7cf12edad16cb611987951636edc9060c30",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-twist",
+        "repo": "nix3.el",
+        "type": "github"
+      }
+    },
     "magit-section": {
       "flake": false,
       "locked": {
@@ -1880,11 +1896,11 @@
     "nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1672371769,
-        "narHash": "sha256-8hdRF35eSF1evVJ4vH9vCH6CiQnVdKMLL2E14B96Aro=",
+        "lastModified": 1672586608,
+        "narHash": "sha256-Uupwc+700NxTv1sODUOGWkt5fetxxRJNl2l3sMXt9qI=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "8d718fae7a34dfbea99f663714d57dab95fa8c39",
+        "rev": "bd92f7cf12edad16cb611987951636edc9060c30",
         "type": "github"
       },
       "original": {
@@ -2529,11 +2545,11 @@
     "plz": {
       "flake": false,
       "locked": {
-        "lastModified": 1670560457,
-        "narHash": "sha256-i96EQqqA/AlMI0buTFDORCPuUYQ+8VXeDYRBOJdRH3Q=",
+        "lastModified": 1672525865,
+        "narHash": "sha256-GVVDX0sASrl3Ivl87B9+fz/VBHp9bq9K6ZauVzoyVfo=",
         "owner": "alphapapa",
         "repo": "plz.el",
-        "rev": "00a82492ae5b756eb2a007e965b22616c0a39476",
+        "rev": "b6072edeec1f0e2465d273db74a8f2f7726e6bce",
         "type": "github"
       },
       "original": {
@@ -2855,6 +2871,7 @@
         "macrostep": "macrostep",
         "magit": "magit",
         "magit-delta": "magit-delta",
+        "magit-nix3": "magit-nix3",
         "magit-section": "magit-section",
         "magit-todos": "magit-todos",
         "marginalia": "marginalia",

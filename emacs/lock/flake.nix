@@ -621,6 +621,12 @@
       repo = "magit-delta";
       type = "github";
     };
+    magit-nix3 = {
+      flake = false;
+      owner = "emacs-twist";
+      repo = "nix3.el";
+      type = "github";
+    };
     magit-section = {
       flake = false;
       owner = "magit";
