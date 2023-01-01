@@ -5726,8 +5726,47 @@ Frontend to experimental commands of Nix
 
 #+begin_src emacs-lisp
   (setup (:package nix3)
+    (:set nix3-flake-worktree-promise-fn #'akirak/nix3-flake-find-repo)
+
+    (defun akirak/nix3-flake-find-repo (alist)
+      (let-alist alist
+        (let ((dir (expand-file-name
+                    (pcase-exhaustive \.type
+                      ("github"
+                       (format "github.com/%s/%s" \.owner \.repo))
+                      ("gitlab"
+                       (format "gitlab.com/%s/%s" \.owner \.repo))
+                      ("sourcehut"
+                       (format "git.sr.ht/%s/%s" \.owner \.repo))
+                      ("git"
+                       (let ((url (url-generic-parse-url \.url)))
+                         (format "%s/%s" (url-host url) (url-filename url)))))
+                    "~/archives/oss/"))
+              (origin (if (equal \.type "git")
+                          \.url
+                        (thread-last
+                          (nix3-flake-ref-alist-to-url alist)
+                          (akirak-git-clone--parse)
+                          (akirak-git-clone-source-origin)))))
+          (promise-new
+           `(lambda (resolve _)
+              (let ((dir ,dir)
+                    (origin ,origin))
+                (if (file-directory-p dir)
+                    (funcall resolve dir)
+                  (let ((parent (file-name-directory dir)))
+                    (unless (file-directory-p parent)
+                      (make-directory parent t)))
+                  (akirak-git-clone--clone origin dir :callback resolve))))))))
+
     (:global "C-c n" #'nix3-transient
              "M-s M-n" #'nix3-registry-list))
+#+end_src
+**** magit-nix3
+#+begin_src emacs-lisp
+  (setup (:package magit-nix3)
+    (with-eval-after-load 'magit-diff
+      (magit-nix3-flake-lock-mode t)))
 #+end_src
 *** nix-mode                                                   :Nix:
 :PROPERTIES:
