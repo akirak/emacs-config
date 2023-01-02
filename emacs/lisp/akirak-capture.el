@@ -326,60 +326,71 @@
                        (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                              akirak-capture-template-options '(:todo "UNDERWAY")
                              akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                       (akirak-capture-doct)))
+                       (akirak-capture-doct))
+    :transient t)
    ("t" "Todo" (lambda ()
                  (interactive)
                  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                        akirak-capture-template-options '(:todo "TODO")
                        akirak-capture-doct-options nil)
-                 (akirak-capture-doct)))
-   ("#" "Ticket" akirak-capture-ticket)
+                 (akirak-capture-doct))
+    :transient t)
+   ("#" "Ticket" akirak-capture-ticket
+    :transient t)
    ("q" "Question" (lambda ()
                      (interactive)
                      (setq akirak-capture-headline (akirak-capture--maybe-read-heading
                                                     "Question: ")
                            akirak-capture-template-options nil
                            akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                     (akirak-capture-doct)))
+                     (akirak-capture-doct))
+    :transient t)
    ("!" "Troubleshooting" (lambda ()
                             (interactive)
                             (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                                   akirak-capture-template-options (list :todo "UNDERWAY"
                                                                         :tags "@troubleshooting")
                                   akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                            (akirak-capture-doct)))
+                            (akirak-capture-doct))
+    :transient t)
    ("i" "Ideate" (lambda ()
                    (interactive)
                    (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                          akirak-capture-template-options '(:todo "IDEATE" :tags "@ideate")
                          akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                   (akirak-capture-doct)))
-   ("j" "Journal" akirak-capture-journal)
+                   (akirak-capture-doct))
+    :transient t)
+   ("j" "Journal" akirak-capture-journal
+    :transient t)
    ("E" "Epic" (lambda ()
                  (interactive)
                  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                        akirak-capture-template-options '(:todo "EPIC" :tags "@epic")
                        akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                 (akirak-capture-doct)))
+                 (akirak-capture-doct))
+    :transient t)
    ("l" "With link" (lambda ()
                       (interactive)
                       (setq akirak-capture-headline "%a"
                             akirak-capture-template-options '(:todo "UNDERWAY")
                             akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                      (akirak-capture-doct)))
+                      (akirak-capture-doct))
+    :transient t)
    ("m" "Message" (lambda ()
                     (interactive)
                     (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                           akirak-capture-template-options '(:todo "UNDERWAY" :tags "@message")
                           akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                    (akirak-capture-doct)))
+                    (akirak-capture-doct))
+    :transient t)
    ("r" "Rule" (lambda ()
                  (interactive)
                  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
                        akirak-capture-template-options nil
                        akirak-capture-doct-options '(:function akirak-capture--goto-rules
                                                                :clock-in t :clock-resume t))
-                 (akirak-capture-doct)))]
+                 (akirak-capture-doct))
+    :transient t)]
 
   ["Information (input, events, etc.)"
    :class transient-subgroups
@@ -391,10 +402,13 @@
        (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
              akirak-capture-template-options nil
              akirak-capture-doct-options nil)
-       (akirak-capture-doct)))
+       (akirak-capture-doct))
+     :transient t)
     ("u" "Url" akirak-capture-url
-     :if (lambda () (not akirak-capture-initial)))
-    ("v" "Vocabulary" akirak-capture-vocabulary)]
+     :if (lambda () (not akirak-capture-initial))
+     :transient t)
+    ("v" "Vocabulary" akirak-capture-vocabulary
+     :transient t)]
 
    ["Schedule an event / org-memento"
     :class transient-row
@@ -402,7 +416,8 @@
      (lambda ()
        (interactive)
        (akirak-capture-short-note
-        (akirak-capture--maybe-read-heading "Add an event or note: "))))
+        (akirak-capture--maybe-read-heading "Add an event or note: ")))
+     :transient t)
     ("aa" "Schedule block"
      (lambda ()
        (interactive)
@@ -422,19 +437,23 @@
                      :body ("- Participants :: %^{Participants}"
                             ""
                             "%?")))
-       (akirak-capture-appointment)))
+       (akirak-capture-appointment))
+     :transient t)
     ("as" "Session"
      (lambda ()
        (interactive)
        (setq akirak-capture-template-options
              '(:tags "@session"
                      :body ("%?")))
-       (akirak-capture-appointment)))
-    ("ae" "Errand" akirak-capture-errand)]]
+       (akirak-capture-appointment))
+     :transient t)
+    ("ae" "Errand" akirak-capture-errand
+     :transient t)]]
 
   ["Convenience and specific projects"
    :class transient-row
-   ("sc" "Command snippet" akirak-capture-command-snippet)
+   ("sc" "Command snippet" akirak-capture-command-snippet
+    :transient t)
    ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
    ("L" "Journal" akirak-capture-journal-item
@@ -477,7 +496,8 @@
                                             (goto-char (region-beginning))
                                             (which-function)))
                               :type "src"
-                              :clock-in t :clock-resume t)))
+                              :clock-in t :clock-resume t))
+    :transient t)
    ("S" "Source (no clock-in)"
     (lambda ()
       (interactive)
@@ -485,23 +505,27 @@
                                           (save-excursion
                                             (goto-char (region-beginning))
                                             (which-function)))
-                              :type "src")))
+                              :type "src"))
+    :transient t)
    ("q" "Quote (with link)"
     (lambda ()
       (interactive)
       (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
                               :annotation t
-                              :type "quote")))
+                              :type "quote"))
+    :transient t)
    ("n" "Other"
     (lambda ()
       (interactive)
       (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
-                              :clock-in t :clock-resume t)))
+                              :clock-in t :clock-resume t))
+    :transient t)
    ("N" "Other (immediate finish)"
     (lambda ()
       (interactive)
       (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
-                              :immediate-finish t)))
+                              :immediate-finish t))
+    :transient t)
 
    ("t" "Troubleshooting"
     (lambda ()
@@ -511,7 +535,8 @@
                               :todo "UNDERWAY"
                               :tags '("@troubleshooting")
                               :type "example"
-                              :clock-in t :clock-resume t)))
+                              :clock-in t :clock-resume t))
+    :transient t)
    ("l" "Language study" akirak-capture-language-study)]
   ["Others"
    ("a" "Append to clock" akirak-capture-append-block-to-clock
