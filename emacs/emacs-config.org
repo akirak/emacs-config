@@ -3070,6 +3070,14 @@ Github Flavored Markdown Back-End for Org Export Engine
 #+begin_src emacs-lisp
 (setup (:package ox-gfm))
 #+end_src
+*** ox-hugo
+:PROPERTIES:
+:CREATED_TIME: [2023-01-02 Mon 23:26]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package ox-hugo))
+#+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
