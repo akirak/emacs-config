@@ -1656,11 +1656,11 @@
     "magit-nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1672586608,
-        "narHash": "sha256-Uupwc+700NxTv1sODUOGWkt5fetxxRJNl2l3sMXt9qI=",
+        "lastModified": 1672626848,
+        "narHash": "sha256-Ek8YBm+kdSGXOwH+xxpP48b5Y4PhmWnWFB2Mv+FKtak=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "bd92f7cf12edad16cb611987951636edc9060c30",
+        "rev": "09e2bdeafbfdd0677e6d00143e443d46f5b5012e",
         "type": "github"
       },
       "original": {
@@ -1896,11 +1896,11 @@
     "nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1672586608,
-        "narHash": "sha256-Uupwc+700NxTv1sODUOGWkt5fetxxRJNl2l3sMXt9qI=",
+        "lastModified": 1672626848,
+        "narHash": "sha256-Ek8YBm+kdSGXOwH+xxpP48b5Y4PhmWnWFB2Mv+FKtak=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "bd92f7cf12edad16cb611987951636edc9060c30",
+        "rev": "09e2bdeafbfdd0677e6d00143e443d46f5b5012e",
         "type": "github"
       },
       "original": {
@@ -2091,11 +2091,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1672241539,
-        "narHash": "sha256-W6cpg8grBHdKiAtkZ5+UHAZ7x0x1nsGJiXAikuATKyk=",
+        "lastModified": 1672718296,
+        "narHash": "sha256-FVDNc4oWM4keN692jscSNj7VjyjTR5y/hJzrooamt/0=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "246723a968bc660f2cafcaa49b1b05dec3b40e08",
+        "rev": "0533be0cbbcc9445d15de92934bc778770328dae",
         "type": "github"
       },
       "original": {
@@ -2208,11 +2208,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1672250030,
-        "narHash": "sha256-RTTa56Acdj3vpJVqb4KFuYbG7FBH3uaH84zWkNRZJP4=",
+        "lastModified": 1672726234,
+        "narHash": "sha256-C32szGMxFp7nYeoxBUmrt1wsrOlfxkV9l7V50RlPqMc=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "471c040b9fe288dfec222eadef2101be332eb858",
+        "rev": "81a90b1811009cd1b6faf7847667635bf2635998",
         "type": "github"
       },
       "original": {
@@ -2257,11 +2257,11 @@
     "org-placeholder": {
       "flake": false,
       "locked": {
-        "lastModified": 1672306485,
-        "narHash": "sha256-tsFlKJoYCDxOGcHAO6wg/ciYY49kkjnd6eba5T4ON+k=",
+        "lastModified": 1672651947,
+        "narHash": "sha256-E8eMa8WlSgb8uChDMxe1GQV6bWAPNOmbIqAtRzaPUoI=",
         "owner": "akirak",
         "repo": "org-placeholder",
-        "rev": "3365c6ffacbacf49603511e4d5ca878641551f0e",
+        "rev": "ed685771653c81af4378d5af5df038f9a18b0c07",
         "type": "github"
       },
       "original": {
@@ -2427,6 +2427,22 @@
       "original": {
         "owner": "larstvei",
         "repo": "ox-gfm",
+        "type": "github"
+      }
+    },
+    "ox-hugo": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1669851508,
+        "narHash": "sha256-7m9B647uOBnSWYsxIfavlTCsT8loDm33v/epqYSUhLw=",
+        "owner": "kaushalmodi",
+        "repo": "ox-hugo",
+        "rev": "706b5f622d168bb8e0cf503e0525d2db9177c83e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kaushalmodi",
+        "repo": "ox-hugo",
         "type": "github"
       }
     },
@@ -2919,6 +2935,7 @@
         "orgit": "orgit",
         "ov": "ov",
         "ox-gfm": "ox-gfm",
+        "ox-hugo": "ox-hugo",
         "package-lint": "package-lint",
         "page-break-lines": "page-break-lines",
         "parsebib": "parsebib",
@@ -2957,7 +2974,7 @@
         "taxy": "taxy",
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
-        "transient": "transient",
+        "tomelr": "tomelr",
         "treepy": "treepy",
         "ts": "ts",
         "typescript-mode": "typescript-mode",
@@ -3255,19 +3272,19 @@
         "url": "https://codeberg.org/acdw/titlecase.el.git"
       }
     },
-    "transient": {
+    "tomelr": {
       "flake": false,
       "locked": {
-        "lastModified": 1670002043,
-        "narHash": "sha256-ql8cLd/cPbSyPu56KfYJoSQIyRBrqAvMosI5UbYuDPQ=",
-        "owner": "magit",
-        "repo": "transient",
-        "rev": "c6cf2f2705ab56cd89d807e723ce45b9fcdfb9e1",
+        "lastModified": 1652319442,
+        "narHash": "sha256-0+Z2gS8VUJRfRIKGoANOofykFX1dbHLbQ89RmdWBMQ4=",
+        "owner": "kaushalmodi",
+        "repo": "tomelr",
+        "rev": "670e0a08f625175fd80137cf69e799619bf8a381",
         "type": "github"
       },
       "original": {
-        "owner": "magit",
-        "repo": "transient",
+        "owner": "kaushalmodi",
+        "repo": "tomelr",
         "type": "github"
       }
     },
