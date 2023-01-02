@@ -3074,6 +3074,10 @@ Github Flavored Markdown Back-End for Org Export Engine
 :PROPERTIES:
 :CREATED_TIME: [2023-01-02 Mon 23:26]
 :END:
+#+begin_quote
+Hugo Markdown Back-End for Org Export Engine
+[[https://ox-hugo.scripter.co]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package ox-hugo))
@@ -7144,7 +7148,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 223 |
+| [[org-ql-search:tags:packages][packages]]            | 224 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
