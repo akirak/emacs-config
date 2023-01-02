@@ -3,6 +3,8 @@
 (require 'org-clock)
 (require 'thunk)
 
+(defvar akirak-emacs-org-config-file)
+
 (defcustom akirak-org-clock-history-threshold (* 3600 24 2)
   "Number of seconds for which you want to take account for clock
  activities."

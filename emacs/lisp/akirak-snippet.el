@@ -186,7 +186,7 @@ This is also useful for completion.")
                      ((pred symbolp)
                       (symbol-name name))
                      ;; string
-                     (t
+                     (_
                       name)))
                  name)
        :args args
