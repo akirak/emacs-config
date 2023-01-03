@@ -3,7 +3,7 @@ name: Update elisp
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 5 * * 6'
+    - cron: '0 5 * * 0,6'
 
 jobs:
   update:
