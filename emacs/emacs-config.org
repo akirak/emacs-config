@@ -1568,6 +1568,21 @@ Thus I will explicitly install this package rather than using the built-in versi
       (add-hook 'json-mode-hook 'json-ts-mode)
       (add-hook 'go-mode-hook 'go-ts-mode)))
 #+end_src
+*** tsx-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-01-03 Tue 11:20]
+:END:
+
+#+begin_src emacs-lisp
+  (setup tsx-ts-mode
+    (:file-match "\\.tsx\\'")
+
+    ;; Maybe unnecessary
+    ;; (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
+    ;;             end-of-defun-function #'akirak-typescript-end-of-defun)
+
+    (:bind "C-c C-e" #'akirak-jsx-close-tag))
+#+end_src
 *** vc-hooks                                                    :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -6518,14 +6533,14 @@ Major mode for editing typescript
      (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
                2 3 4 (1 . 1))))
 #+end_src
-**** akirak-typescript
+**** COMMENT akirak-typescript                                                 :ARCHIVE:
 #+begin_src emacs-lisp
   (setup akirak-typescript
     (:with-mode typescript-mode
       (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
                   end-of-defun-function #'akirak-typescript-end-of-defun)))
 #+end_src
-**** typescript-tsx-mode
+**** COMMENT typescript-tsx-mode                                               :ARCHIVE:
 #+begin_src emacs-lisp
   (setup tsx-mode
     (:file-match "\\.tsx\\'")
