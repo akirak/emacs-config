@@ -285,6 +285,16 @@
 
             wordnet-sqlite = channels.nixpkgs.wordnet-sqlite;
 
+            elisp-author-statistics = channels.nixpkgs.writeShellApplication {
+              name = "elisp-author-statistics";
+              runtimeInputs = [
+                channels.nixpkgs.deno
+              ];
+              text = ''
+                deno run --allow-read scripts/elisp-author-statistics.ts
+              '';
+            };
+
             emacs-installer =
               channels.nixpkgs.callPackage
               ./pkgs/development/emacs-sandboxed/multi-installer.nix {}
