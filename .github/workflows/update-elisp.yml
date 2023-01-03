@@ -1,0 +1,27 @@
+name: Update elisp
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * 6'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        author: [magit, abo-abo, alphapapa, purcell, minad, oantolin, jwiegley]
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v18
+    - run: ./update-by-owner.bash ${{ matrix.author }}
+      working-directory: emacs/lock
+    - uses: peter-evans/create-pull-request@v4
+      with:
+        commit-message: 'emacs: Update packages by ${{ matrix.author }}'
+        base: master
+        title: 'Update Emacs Lisp packages by ${{ matrix.author }}'
+        branch: update/elisp/${{ matrix.author }}
+        labels: automation,update,emacs
