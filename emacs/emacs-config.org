@@ -2752,7 +2752,10 @@ Time blocking with Org
           org-memento-timeline-window-width akirak/default-body-width
           org-memento-state-trigger-alist
           '(("HALFWAY" :todo-keyword "EXTENDED")
-            ("FAILED" :todo-keyword "RETRY")))
+            ("FAILED" :todo-keyword "RETRY"))
+          org-memento-timeline-hide-planning
+          (lambda (group)
+            (not (equal (car group) "organising"))))
     (:with-feature org-memento-timeline
       (:with-map org-memento-timeline-mode-map
         (:bind "C-c ." #'akirak-org-edit-active-ts)))
