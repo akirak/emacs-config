@@ -3746,8 +3746,8 @@ Consulting completing-read
       (:global "M-s i" #'consult-imenu
                "M-s M-i" #'consult-imenu-multi))
 
-    (:with-feature consult-flymake
-      (:global "M-s f" #'consult-flymake))
+    ;; (:with-feature consult-flymake
+    ;;   (:global "M-s f" #'consult-flymake))
 
     (:with-feature consult-xref
       (:set xref-show-xrefs-function #'consult-xref
@@ -6021,6 +6021,7 @@ Summon and dismiss buffers as popups
                                      "^\\*scratch from selection\\*"
                                      "^\\*eldoc"
                                      "^\\*Select Link\\*"
+                                     "^\\*Flymake diagnostics"
                                      "^\\*hoogle\\*"
                                      inferior-haskell-mode
                                      lisp-interaction-mode))
@@ -6042,6 +6043,7 @@ Summon and dismiss buffers as popups
     (:bind "M-\"" #'popper-cycle
            "M-' k" #'popper-kill-latest-popup
            "M-' M-'" #'popper-toggle-latest
+           "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-vterm-for-project
            "M-' s" #'scratch-buffer
            "M-' b" (defun akirak/backtrace-buffer ()
