@@ -3256,8 +3256,7 @@ This is a collection of extra utilities for various packages.
 
     ;; These settings are specific to my environment.
     (:status personal
-      (:defer 1 #'akirak-files-ensure-abbrev-list)
-      (run-with-idle-timer 300 nil #'akirak-project-rescan)))
+      (:defer 1 #'akirak-files-ensure-abbrev-list)))
 #+end_src
 **** akirak-avy
 #+begin_src emacs-lisp
