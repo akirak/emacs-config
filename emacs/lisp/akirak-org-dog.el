@@ -50,6 +50,7 @@
                      (if chapter
                          (concat chapter " - " title)
                        title)
+                     :todo "UNDERWAY"
                      :tags (seq-difference (org-get-tags)
                                            filetags
                                            #'equal)
