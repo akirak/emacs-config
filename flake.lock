@@ -464,6 +464,7 @@
         "utils": "utils_2",
         "zsh-fast-syntax-highlighting": "zsh-fast-syntax-highlighting",
         "zsh-fzy": "zsh-fzy",
+        "zsh-history-filter": "zsh-history-filter",
         "zsh-nix-shell": "zsh-nix-shell"
       }
     },
@@ -611,6 +612,22 @@
       "original": {
         "owner": "aperezdc",
         "repo": "zsh-fzy",
+        "type": "github"
+      }
+    },
+    "zsh-history-filter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1617627915,
+        "narHash": "sha256-DSq/4j4KEtirrjB3nW8fR7BOFtLdaLhlnIMv2A6Ec6s=",
+        "owner": "MichaelAquilina",
+        "repo": "zsh-history-filter",
+        "rev": "49d7987f093374fb72f0f7eef2d63e641085a226",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MichaelAquilina",
+        "repo": "zsh-history-filter",
         "type": "github"
       }
     },

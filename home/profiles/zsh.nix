@@ -39,6 +39,10 @@
         name = "fast-syntax-highlighting";
         src = pkgs.zsh-fast-syntax-highlighting;
       }
+      {
+        name = "history-filter";
+        src = pkgs.zsh-history-filter;
+      }
     ];
     sessionVariables = {
       "DIRSTACKSIZE" = "20";
@@ -107,6 +111,9 @@
       }
 
       eval "$(${pkgs.starship}/bin/starship init zsh)"
+
+      # https://github.com/MichaelAquilina/zsh-history-filter
+      export HISTORY_FILTER_EXCLUDE=("TOKEN")
 
       # if [[ -f ~/.asdf/asdf.sh ]]; then
       #    source ~/.asdf/asdf.sh

@@ -54,6 +54,10 @@
       url = "github:aperezdc/zsh-fzy";
       flake = false;
     };
+    zsh-history-filter = {
+      url = "github:MichaelAquilina/zsh-history-filter";
+      flake = false;
+    };
 
     # other packages
     epubinfo.url = "github:akirak/epubinfo";
