@@ -805,7 +805,8 @@ The built-in =electric= package provides the following modes:
           delete-old-versions t
           version-control t
           view-read-only t
-          auto-mode-case-fold nil)
+          auto-mode-case-fold nil
+          large-file-warning-threshold (* 1024 1024))
 
     (define-key ctl-x-x-map (kbd "R") #'rename-visited-file)
 
