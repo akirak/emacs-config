@@ -405,8 +405,7 @@
        (akirak-capture-doct))
      :transient t)
     ("u" "Url" akirak-capture-url
-     :if (lambda () (not akirak-capture-initial))
-     :transient t)
+     :if (lambda () (not akirak-capture-initial)))
     ("v" "Vocabulary" akirak-capture-vocabulary
      :transient t)]
 
