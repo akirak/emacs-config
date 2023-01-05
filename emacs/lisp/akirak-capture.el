@@ -568,10 +568,9 @@
                   :file ,(akirak-capture--vocabulary-file)
                   :function akirak-capture--goto-backlog
                   :template ,(akirak-org-capture-make-entry-body
-                               "%l"
+                               "%A"
                                :tags '("@input")
-                               :body (akirak-capture--org-block "quote"))
-                  :immediate-finish t))))))
+                               :body (akirak-capture--org-block "example"))))))))
     (org-capture)))
 
 (cl-defun akirak-capture--region (&rest doct-options
