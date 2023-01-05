@@ -2311,7 +2311,7 @@ Outline-based notes management and organizer
 ***** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    ;; (:hook-into emacs-startup-hook)
+    (:hook-into emacs-startup-hook)
 
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
