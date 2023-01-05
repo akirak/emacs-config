@@ -5791,6 +5791,7 @@ Frontend to experimental commands of Nix
                   (akirak-git-clone--clone origin dir :callback resolve))))))))
 
     (:global "C-c n" #'nix3-transient
+             "M-g M-f" #'nix3-flake-edit
              "M-s M-n" #'nix3-registry-list))
 #+end_src
 **** magit-nix3
