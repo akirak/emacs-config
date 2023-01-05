@@ -535,7 +535,8 @@
                               :type "example"
                               :clock-in t :clock-resume t))
     :transient t)
-   ("l" "Language study" akirak-capture-language-study)]
+   ("l" "Language study (input)" akirak-capture-language-study)
+   ("v" "Vocabulary" akirak-capture-vocabulary)]
   ["Others"
    ("a" "Append to clock" akirak-capture-append-block-to-clock
     :if org-clocking-p)]
