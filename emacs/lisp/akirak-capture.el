@@ -1123,6 +1123,9 @@ provided as a separate command for integration, e.g. with embark."
       (when bullet-regexp
         (while (re-search-forward bullet-regexp nil t)
           (replace-match "\\1- ")))
+      (goto-char (point-max))
+      (while (looking-back (rx bol (* blank)) (pos-bol))
+        (delete-region (1- (match-beginning 0)) (match-end 0)))
       (buffer-string))))
 
 (defun akirak-capture--unindent (string)
