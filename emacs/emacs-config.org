@@ -1516,6 +1516,31 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
   (setup terminal
     (:set ring-bell-function 'ignore))
 #+end_src
+*** thingatpt
+:PROPERTIES:
+:CREATED_TIME: [2023-01-05 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup thingatpt
+    (define-prefix-command 'akirak/thingatpt-map)
+    (global-set-key (kbd "M-m") akirak/thingatpt-map)
+
+    (defmacro akirak/thingatpt-def-region (thing)
+      `(defun ,(intern (format "akirak/select-%s" thing)) ()
+         (interactive)
+         (pcase (bounds-of-thing-at-point ',thing)
+           (`(,beg . ,end)
+            (goto-char beg)
+            (push-mark)
+            (goto-char end)
+            (activate-mark)))))
+
+    (akirak/thingatpt-def-region sentence)
+    (define-key akirak/thingatpt-map "s" #'akirak/select-sentence)
+    (akirak/thingatpt-def-region paragraph)
+    (define-key akirak/thingatpt-map "p" #'akirak/select-paragraph))
+#+end_src
 *** tooltip                                                     :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
