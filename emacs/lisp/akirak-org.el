@@ -285,8 +285,6 @@ character."
             (point)))
      ((bolp)
       (cond
-       ((eolp)
-        (insert "- [ ] "))
        ((looking-at (rx (* blank) (group "- [" (any " X") "]")))
         (save-excursion
           (replace-match "-" nil nil nil 1)))
@@ -294,7 +292,7 @@ character."
         (save-excursion
           (replace-match "- [ ] " nil nil nil 1)))
        (t
-        (org-self-insert-command (or 1 n)))))
+        (insert "- [ ] "))))
      (t
       (org-self-insert-command (or 1 n))))))
 
