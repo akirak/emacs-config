@@ -80,17 +80,14 @@ async function gitDiffFile(file: string): Promise<boolean> {
 for (const owner of owners) {
   const inputs = entries.filter((x: string[]) => x[1] === owner).map(x => x[0])
 
-  if (inputs.length == 1) {
-    continue
-  }
-
   await updateFlakeInputs(inputs)
 
   const updated = await gitDiffFile("flake.lock")
   if (updated) {
-    const p = Deno.run({cmd: ["git", "commit", "-m", `emacs: Update packages owned by ${owner}`,
-      "flake.lock"
-    ]})
+    const message = (inputs.length == 1) ?
+      `emacs: Update ${inputs[0]}` :
+      `emacs: Update packages owned by ${owner}`
+    const p = Deno.run({cmd: [ "git", "commit", "-m", message, "flake.lock" ]})
     await p.status()
   }
 }
