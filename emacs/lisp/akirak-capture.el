@@ -360,8 +360,7 @@
                          akirak-capture-doct-options '(:clock-in t :clock-resume t))
                    (akirak-capture-doct))
     :transient t)
-   ("j" "Journal" akirak-capture-journal
-    :transient t)
+   ("j" "Journal" akirak-capture-journal)
    ("E" "Epic" (lambda ()
                  (interactive)
                  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
