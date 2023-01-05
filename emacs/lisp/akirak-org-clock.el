@@ -60,8 +60,9 @@
                               (buffer-name))
               (string-match-p akirak-org-clock-file-name-whitelist
                               filename)
-              (string-equal (expand-file-name akirak-emacs-org-config-file)
-                            filename)
+              (and (bound-and-true-p akirak-emacs-org-config-file)
+                   (string-equal (expand-file-name akirak-emacs-org-config-file)
+                                 filename))
               (bound-and-true-p url-http-content-type)
               (and (derived-mode-p 'org-mode 'org-memento-policy-mode)
                    (or (bound-and-true-p org-capture-mode)
