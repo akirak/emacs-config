@@ -13,22 +13,19 @@ jobs:
   update:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        author: [magit, abo-abo, alphapapa, purcell, minad, oantolin, jwiegley]
-
     steps:
     - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - run: ./update-by-owner.bash ${{ matrix.author }}
-      working-directory: emacs/lock
+    - run: |
+        git config --add user.name 'github-actions[bot]'
+        git config --add user.email '6270544+github-actions[bot]@users.noreply.github.com'
+    - run: nix run .#update-elisp-lock
     - uses: peter-evans/create-pull-request@v4
       with:
-        commit-message: 'emacs: Update packages by ${{ matrix.author }}'
         base: master
-        title: 'Update Emacs Lisp packages by ${{ matrix.author }}'
-        branch: update/elisp/${{ matrix.author }}
+        title: 'Update Emacs Lisp packages'
+        branch: update/elisp-packages
         labels: automation,update,emacs

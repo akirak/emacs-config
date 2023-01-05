@@ -289,13 +289,14 @@
 
             wordnet-sqlite = channels.nixpkgs.wordnet-sqlite;
 
-            elisp-author-statistics = channels.nixpkgs.writeShellApplication {
-              name = "elisp-author-statistics";
+            update-elisp-lock = channels.nixpkgs.writeShellApplication {
+              name = "update-elisp-lock";
               runtimeInputs = [
                 channels.nixpkgs.deno
               ];
               text = ''
-                deno run --allow-read scripts/elisp-author-statistics.ts
+                cd emacs/lock
+                deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
               '';
             };
 
