@@ -38,7 +38,8 @@ in
         --dev-bind-try /dev/video0 /dev/video0 \
         --dev-bind-try /dev/video1 /dev/video1 \
         --dev-bind /dev/dri /dev/dri \
-        --ro-bind /nix /nix \
+        --ro-bind /nix/store /nix/store \
+        --bind /nix/var /nix/var \
         --ro-bind /etc /etc \
         --ro-bind-try /bin /bin \
         --ro-bind-try /usr/bin/env /usr/bin/env \
