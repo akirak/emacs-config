@@ -17,6 +17,11 @@
       flake = false;
     };
 
+    flake-pins = {
+      url = "github:akirak/flake-pins";
+      flake = false;
+    };
+
     # NixOS modules
     impermanence.url = "github:nix-community/impermanence";
     # nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -97,6 +102,8 @@
 
     emacsOverlay = import ./emacs/overlay.nix {
       inherit inputs;
+      emacsPackageForSystem = system:
+        (import inputs.flake-pins).packages.${system}.emacs-pgtk;
     };
   in
     flake-utils-plus.lib.mkFlake {

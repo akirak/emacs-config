@@ -1,4 +1,7 @@
-{inputs}: final: prev:
+{
+  inputs,
+  emacsPackageForSystem,
+}: final: prev:
 with builtins; let
   inherit (inputs.twist.lib {inherit (inputs.nixpkgs) lib;}) parseSetup;
   inherit (inputs.twist.overlays.default final prev) emacsTwist;
@@ -8,7 +11,7 @@ with builtins; let
   org = inputs.org-babel.lib;
   inherit (prev) lib;
 
-  emacsPackage = inputs.emacs-overlay.packages.${system}.emacsPgtk;
+  emacsPackage = emacsPackageForSystem system;
 
   # releaseVersions = import ./versions.nix;
   inventories = [
