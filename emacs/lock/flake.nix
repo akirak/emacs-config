@@ -597,6 +597,12 @@
       repo = "lispy";
       type = "github";
     };
+    llama = {
+      flake = false;
+      owner = "~tarsius";
+      repo = "llama";
+      type = "sourcehut";
+    };
     lv = {
       flake = false;
       owner = "abo-abo";

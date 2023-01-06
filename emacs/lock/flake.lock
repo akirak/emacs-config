@@ -1589,6 +1589,22 @@
         "type": "github"
       }
     },
+    "llama": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1669477271,
+        "narHash": "sha256-YehV3eO0izZf/XjBS+AhHQU1mahqsHB7A1+DiFaXMAA=",
+        "owner": "~tarsius",
+        "repo": "llama",
+        "rev": "e919c6e55c091c360d708295f9f832f896d3a457",
+        "type": "sourcehut"
+      },
+      "original": {
+        "owner": "~tarsius",
+        "repo": "llama",
+        "type": "sourcehut"
+      }
+    },
     "lv": {
       "flake": false,
       "locked": {
@@ -1993,11 +2009,11 @@
     "octopus": {
       "flake": false,
       "locked": {
-        "lastModified": 1672718296,
-        "narHash": "sha256-FVDNc4oWM4keN692jscSNj7VjyjTR5y/hJzrooamt/0=",
+        "lastModified": 1672983369,
+        "narHash": "sha256-GU5yyC8qgl9TgTNycrf+tRgI2lraom6Mr9Rl96gCawo=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "0533be0cbbcc9445d15de92934bc778770328dae",
+        "rev": "ee506ceb37ec3012578877207d826b3787222d85",
         "type": "github"
       },
       "original": {
@@ -2883,6 +2899,7 @@
         "license-templates": "license-templates",
         "link-hint": "link-hint",
         "lispy": "lispy",
+        "llama": "llama",
         "lv": "lv",
         "macrostep": "macrostep",
         "magit": "magit",
