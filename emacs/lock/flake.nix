@@ -118,8 +118,9 @@
     };
     compat = {
       flake = false;
-      type = "git";
-      url = "https://git.sr.ht/~pkal/compat";
+      owner = "emacs-compat";
+      repo = "compat";
+      type = "github";
     };
     consult = {
       flake = false;

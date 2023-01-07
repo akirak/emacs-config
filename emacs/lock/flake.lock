@@ -307,17 +307,17 @@
     "compat": {
       "flake": false,
       "locked": {
-        "lastModified": 1672943277,
-        "narHash": "sha256-erpBMvN5QqgRx+H/aroxx4jhFiKQw/J2affwjNkwu3M=",
-        "ref": "refs/heads/master",
-        "rev": "8a32564247ad3baee571252a2004c3d347962d01",
-        "revCount": 750,
-        "type": "git",
-        "url": "https://git.sr.ht/~pkal/compat"
+        "lastModified": 1673124789,
+        "narHash": "sha256-+DQRJqNi/W/25vp68LlTwut3a2uaLyn7+iit5gyHToA=",
+        "owner": "emacs-compat",
+        "repo": "compat",
+        "rev": "887ec71fa3a90bc0d333ae9c333436148e909dbd",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://git.sr.ht/~pkal/compat"
+        "owner": "emacs-compat",
+        "repo": "compat",
+        "type": "github"
       }
     },
     "consult": {
@@ -1656,11 +1656,11 @@
     "magit-nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1672894499,
-        "narHash": "sha256-cTYSUA015UDt1KF4t+cyoQcHP0SerD04xZkPA6+wg/Y=",
+        "lastModified": 1673093085,
+        "narHash": "sha256-kU5FvR5O86rHxwQnwsPbavr/VIGTR6mK+Rly7tkkQ9U=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "4e636252107026b3bd7065dcab6d45486bb9edf8",
+        "rev": "cd8ca55da8f7da65242f0ea97ab33fdf1c88b2fb",
         "type": "github"
       },
       "original": {
@@ -1896,11 +1896,11 @@
     "nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1672894499,
-        "narHash": "sha256-cTYSUA015UDt1KF4t+cyoQcHP0SerD04xZkPA6+wg/Y=",
+        "lastModified": 1673157473,
+        "narHash": "sha256-ECCLJbpnaL1xEspWcTMrjlNXfEizJn2d8WT9RoEtHxc=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "4e636252107026b3bd7065dcab6d45486bb9edf8",
+        "rev": "e467c203c7fcdfe35d5babf6b42440aef11ea736",
         "type": "github"
       },
       "original": {
