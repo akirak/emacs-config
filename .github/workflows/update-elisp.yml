@@ -4,10 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 5 * * 6'
-  push:
-    branches: master
-    paths:
-    - emacs/lock/flake.lock
 
 jobs:
   update:
