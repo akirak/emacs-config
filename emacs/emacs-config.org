@@ -5786,6 +5786,7 @@ Frontend to experimental commands of Nix
     (:set nix3-flake-worktree-promise-fn #'akirak/nix3-flake-find-repo)
 
     (defun akirak/nix3-flake-find-repo (alist)
+      (require 'akirak-git-clone)
       (let-alist alist
         (let ((dir (expand-file-name
                     (pcase-exhaustive \.type
