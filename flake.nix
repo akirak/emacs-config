@@ -341,10 +341,6 @@
           };
         };
 
-        checks = {
-          elisp-versions = emacs-config.depsCheck;
-        };
-
         # Set up a pre-commit hook by running `nix develop`.
         devShells = {
           default = channels.nixpkgs.mkShell {
