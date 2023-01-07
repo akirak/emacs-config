@@ -18,6 +18,9 @@ with builtins; let
     {
       type = "melpa";
       path = inputs.melpa.outPath + "/recipes";
+      exclude = [
+        "async"
+      ];
     }
     {
       type = "elpa";
@@ -26,6 +29,7 @@ with builtins; let
       exclude = [
         # Use tarball, as it contains info
         "org-transclusion"
+        "async"
       ];
     }
     {

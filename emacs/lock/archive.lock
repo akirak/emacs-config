@@ -1,4 +1,19 @@
 {
+  "async": {
+    "archive": {
+      "narHash": "sha256-TANS6qsjI05Gq6dJWoPdEtVBDFvi9YPyTA8IoaOLuJo=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/async-1.9.7.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "emacs": "24.4"
+    },
+    "version": "1.9.7"
+  },
   "dired-du": {
     "archive": {
       "narHash": "sha256-WTdSclzo4eiM+VABjgWYM0L4fLgWhXIe0QLnLOvA2hU=",
@@ -45,6 +60,19 @@
       "emacs": "25"
     },
     "version": "1.0.1"
+  },
+  "queue": {
+    "archive": {
+      "narHash": "sha256-cbv1sqH7LJXdRZ/teyScnysvsn8/JcaPqrRBc7jGrZw=",
+      "type": "file",
+      "url": "https://elpa.gnu.org/packages/queue-0.2.el"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {},
+    "version": "0.2"
   },
   "rainbow-mode": {
     "archive": {

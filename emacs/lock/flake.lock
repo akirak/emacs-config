@@ -96,22 +96,6 @@
         "type": "github"
       }
     },
-    "async": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1451290400,
-        "narHash": "sha256-5nTkAnB6SOsFg9aXOxI5oON9RBByVO3Lq/vrmqHVgw4=",
-        "owner": "jwiegley",
-        "repo": "emacs-async",
-        "rev": "1794ea4955c6eeb62471b232a2d4fd6a6925a2c9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jwiegley",
-        "repo": "emacs-async",
-        "type": "github"
-      }
-    },
     "auto-yasnippet": {
       "flake": false,
       "locked": {
@@ -2670,22 +2654,6 @@
         "type": "github"
       }
     },
-    "queue": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1435143947,
-        "narHash": "sha256-ePELBeb7/Ta/zS7sNNaGPmASNAp9UKUX8ZBaxDKU1Cg=",
-        "owner": "dmgerman",
-        "repo": "predictive",
-        "rev": "3019c7cb4195f42b20fbc28af5be5b0ca06bd03c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dmgerman",
-        "repo": "predictive",
-        "type": "github"
-      }
-    },
     "rainbow-delimiters": {
       "flake": false,
       "locked": {
@@ -2806,7 +2774,6 @@
         "aggressive-indent": "aggressive-indent",
         "akirak": "akirak",
         "anzu": "anzu",
-        "async": "async",
         "auto-yasnippet": "auto-yasnippet",
         "avy": "avy",
         "avy-menu": "avy-menu",
@@ -2966,7 +2933,6 @@
         "posframe": "posframe",
         "promise": "promise",
         "puni": "puni",
-        "queue": "queue",
         "rainbow-delimiters": "rainbow-delimiters",
         "reformatter": "reformatter",
         "repl-toggle": "repl-toggle",

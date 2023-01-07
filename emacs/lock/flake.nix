@@ -38,12 +38,6 @@
       repo = "anzu";
       type = "github";
     };
-    async = {
-      flake = false;
-      owner = "jwiegley";
-      repo = "emacs-async";
-      type = "github";
-    };
     auto-yasnippet = {
       flake = false;
       owner = "abo-abo";
@@ -1004,12 +998,6 @@
       flake = false;
       owner = "AmaiKinono";
       repo = "puni";
-      type = "github";
-    };
-    queue = {
-      flake = false;
-      owner = "dmgerman";
-      repo = "predictive";
       type = "github";
     };
     rainbow-delimiters = {
