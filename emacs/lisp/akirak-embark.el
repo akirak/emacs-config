@@ -349,7 +349,8 @@
      `(image-file . ,file))))
 
 (defun akirak-embark-target-magit-section ()
-  (when-let (section (magit-current-section))
+  (when-let (section (and (featurep 'magit-section)
+                          (magit-current-section)))
     (cons 'magit-section section)))
 
 (defun akirak-embark-send-to-vterm (string)
