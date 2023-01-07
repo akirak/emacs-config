@@ -275,11 +275,11 @@
     "citeproc": {
       "flake": false,
       "locked": {
-        "lastModified": 1643008878,
-        "narHash": "sha256-Gzvb+TL0b95JpoZvcaMVnfzC0TTHnydGLCOrM0r/uf8=",
+        "lastModified": 1671194298,
+        "narHash": "sha256-fD7QDYBxrxGolGqtbhdjVV6DC9IASvxHM6S+s1WQR+I=",
         "owner": "andras-simonyi",
         "repo": "citeproc-el",
-        "rev": "ba49516265fa24b138346c4918d39d19b4de8a62",
+        "rev": "3cb83db147bdda208520246e82dbf9878fa3cbd0",
         "type": "github"
       },
       "original": {
@@ -323,11 +323,11 @@
     "compat": {
       "flake": false,
       "locked": {
-        "lastModified": 1650874979,
-        "narHash": "sha256-We4kbkUTzoibcAZAIl2Coma7eiEXdryFY62190O5ji8=",
-        "ref": "master",
-        "rev": "afea8e9943940ca2f0c0b1e0632e3ce2705f60cd",
-        "revCount": 334,
+        "lastModified": 1672943277,
+        "narHash": "sha256-erpBMvN5QqgRx+H/aroxx4jhFiKQw/J2affwjNkwu3M=",
+        "ref": "refs/heads/master",
+        "rev": "8a32564247ad3baee571252a2004c3d347962d01",
+        "revCount": 750,
         "type": "git",
         "url": "https://git.sr.ht/~pkal/compat"
       },
@@ -853,11 +853,11 @@
     "epkg": {
       "flake": false,
       "locked": {
-        "lastModified": 1672939733,
-        "narHash": "sha256-5DDhra2/Bbr0sKrhQfhqTT5rxhIuzPvhpyBCi+RLi1Y=",
+        "lastModified": 1672946798,
+        "narHash": "sha256-9r+shekUhKeI8XxG/F20yWwx8rkSk0+KhLa0YHNNiQ0=",
         "owner": "emacscollective",
         "repo": "epkg",
-        "rev": "c7535c9446a4ea35eecd8abac016a6863d287274",
+        "rev": "5bff5be316d4edd406aa1c38e8f5695f2f8c606c",
         "type": "github"
       },
       "original": {
@@ -1334,11 +1334,11 @@
     "hl-todo": {
       "flake": false,
       "locked": {
-        "lastModified": 1652127612,
-        "narHash": "sha256-SpwM8SHpzXHzybDfDpzdqPgfx6dMiYJKfbJumbmNxNA=",
+        "lastModified": 1666264561,
+        "narHash": "sha256-nX+CYvdkEUbkWyZeyPGWr5YkzMVYf8E93kRmgUbV5sk=",
         "owner": "tarsius",
         "repo": "hl-todo",
-        "rev": "2337eac8cab0d4b73a96fb3936d2ac87600e3c91",
+        "rev": "8dbe52b83f859ba12c77cf281043a132839358c6",
         "type": "github"
       },
       "original": {
@@ -3178,11 +3178,11 @@
     "svg-lib": {
       "flake": false,
       "locked": {
-        "lastModified": 1641296107,
-        "narHash": "sha256-+LEvWkvF/KBBPP35IT39dDqcd1bTvys/R5XdFMVVasY=",
+        "lastModified": 1663752251,
+        "narHash": "sha256-vzP+xTzkDXVsUWcGs2A+hA5HSohKJ5xK2NJMCop/Sc8=",
         "owner": "rougier",
         "repo": "svg-lib",
-        "rev": "8a07b62bbdf3d45c18dc0414c8d0b00253118627",
+        "rev": "67d4a38bd724c49ad15806e6ca118236cdb1cf26",
         "type": "github"
       },
       "original": {
@@ -3565,11 +3565,11 @@
     "yaml": {
       "flake": false,
       "locked": {
-        "lastModified": 1646969555,
-        "narHash": "sha256-Fdi+r0cy9Db7Ctu9EJa55Z16IQdqJvdekqHXftiokNM=",
+        "lastModified": 1658361598,
+        "narHash": "sha256-pebgO9Ug4G/bEJSe9RpmQ/4ZF9omBnb6Ypvc61W1XRY=",
         "owner": "zkry",
         "repo": "yaml.el",
-        "rev": "34c300b08579b72c7c92aefee1f4b500913f0c85",
+        "rev": "73fde9d8fbbaf2596449285df9eb412ae9dd74d9",
         "type": "github"
       },
       "original": {
