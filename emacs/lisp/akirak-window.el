@@ -258,8 +258,7 @@ The target window is determined according to the same logic as
                         (akirak-window--popup-p window)))))))))
 
 (defun akirak-window--popup-p (&optional window)
-  (and (featurep 'popper)
-       (popper-popup-p (window-buffer (or window (selected-window))))))
+  (window-parameter window 'window-side))
 
 (defun akirak-window--find-column (n)
   "Return a window in N-th column of the frame."
