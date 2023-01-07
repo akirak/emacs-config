@@ -22,6 +22,6 @@ jobs:
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
         pushFilter: '-source$'
 
-    - run: nix build .#emacs-config
+    - run: nix build .#emacs-config --print-build-logs
 
-    - run: nix build .#emacs-config.depsCheck
+    - run: nix build .#emacs-config.depsCheck --print-build-logs
