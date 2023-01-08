@@ -43,6 +43,10 @@ for (const x of entries) {
   owners.add(x[1] as string)
 }
 
+const gitEntries = Object.entries(nodes)
+  .filter(x => x[1].type === "git")
+  .map(x => x[0])
+
 //////////////////
 // Print tables //
 //////////////////
@@ -94,4 +98,9 @@ for (const owner of owners) {
       `emacs: Update ${inputs[0]}` :
       `emacs: Update packages owned by ${owner}`
   )
+}
+
+for (const name of gitEntries) {
+  await updateFlakeInputs([name])
+  await maybeGitCommit(`emacs: Update ${name}`)
 }
