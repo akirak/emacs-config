@@ -187,6 +187,7 @@
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
+  (define-key embark-file-map "t" #'akirak-tailscale-copy-file)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
