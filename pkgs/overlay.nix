@@ -10,6 +10,8 @@ final: prev: {
     inherit (final) bubblewrapGUI;
   };
 
+  emacs-root = prev.callPackage ./development/emacs-root {};
+
   wordnet-sqlite = final.callPackage ./data/wordnet/wordnet-sqlite {};
 
   listEmacsProjects = final.writeShellScriptBin "ls-emacs-projects" ''

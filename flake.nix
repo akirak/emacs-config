@@ -285,6 +285,7 @@
             inherit (channels.nixpkgs) readability-cli;
 
             inherit emacs-config;
+            inherit (channels.nixpkgs) emacs-root;
 
             test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
 
