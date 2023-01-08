@@ -911,7 +911,9 @@
                                           :body (list "#+begin_example"
                                                       body
                                                       "#+end_example"
-                                                      "%?"))
+                                                      "%?"
+                                                      "#+begin: wordnet"
+                                                      "#+end:"))
                              :file ,file
                              :function akirak-capture--goto-backlog))))))
               (when in-org-entry
