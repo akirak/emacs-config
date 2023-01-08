@@ -63,8 +63,4 @@
       cd ..
     '';
   });
-
-  queue = esuper.queue.overrideAttrs (old: {
-    outputs = ["out"];
-  });
 }
