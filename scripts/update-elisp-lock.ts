@@ -84,7 +84,7 @@ async function gitDiffFile(file: string): Promise<boolean> {
 async function maybeGitCommit(message: string): Promise<void> {
   const updated = await gitDiffFile("flake.lock")
   if (updated) {
-    const p = Deno.run({cmd: [ "git", "commit", "-m", message, "flake.lock" ]})
+    const p = Deno.run({cmd: [ "git", "commit", "-m", message, "--no-verify", "flake.lock" ]})
     await p.status()
   }
 }
