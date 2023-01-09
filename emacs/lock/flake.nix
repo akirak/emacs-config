@@ -396,8 +396,9 @@
     };
     gcmh = {
       flake = false;
-      type = "git";
-      url = "https://gitlab.com/koral/gcmh.git";
+      owner = "koral";
+      repo = "gcmh";
+      type = "gitlab";
     };
     ghub = {
       flake = false;
@@ -407,8 +408,9 @@
     };
     gif-screencast = {
       flake = false;
-      type = "git";
-      url = "https://gitlab.com/Ambrevar/emacs-gif-screencast.git";
+      owner = "Ambrevar";
+      repo = "emacs-gif-screencast";
+      type = "gitlab";
     };
     git-attr = {
       flake = false;

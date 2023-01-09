@@ -1048,15 +1048,15 @@
       "locked": {
         "lastModified": 1605567102,
         "narHash": "sha256-RXSs1ANy04eZAoz0ZdVVguNOEPome3AzIX1seNFVAXo=",
-        "ref": "refs/heads/master",
+        "owner": "koral",
+        "repo": "gcmh",
         "rev": "0089f9c3a6d4e9a310d0791cf6fa8f35642ecfd9",
-        "revCount": 34,
-        "type": "git",
-        "url": "https://gitlab.com/koral/gcmh.git"
+        "type": "gitlab"
       },
       "original": {
-        "type": "git",
-        "url": "https://gitlab.com/koral/gcmh.git"
+        "owner": "koral",
+        "repo": "gcmh",
+        "type": "gitlab"
       }
     },
     "ghub": {
@@ -1078,17 +1078,17 @@
     "gif-screencast": {
       "flake": false,
       "locked": {
-        "lastModified": 1626538614,
-        "narHash": "sha256-aN266oiQZ1g45+XKKkNyiXc1bY7n+XCP7EgHFiZpD1g=",
-        "ref": "master",
-        "rev": "5517a557a17d8016c9e26b0acb74197550f829b9",
-        "revCount": 41,
-        "type": "git",
-        "url": "https://gitlab.com/Ambrevar/emacs-gif-screencast.git"
+        "lastModified": 1657803635,
+        "narHash": "sha256-/qC9oM49xddWErRXHqUYIBbD4enUWDm36iBDksCn+m0=",
+        "owner": "Ambrevar",
+        "repo": "emacs-gif-screencast",
+        "rev": "adec408e6adab2e8e057fe0ad828749f473bfb83",
+        "type": "gitlab"
       },
       "original": {
-        "type": "git",
-        "url": "https://gitlab.com/Ambrevar/emacs-gif-screencast.git"
+        "owner": "Ambrevar",
+        "repo": "emacs-gif-screencast",
+        "type": "gitlab"
       }
     },
     "git-attr": {
