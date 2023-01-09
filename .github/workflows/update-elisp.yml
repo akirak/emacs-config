@@ -11,6 +11,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        ref: develop
     - uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
@@ -21,7 +23,7 @@ jobs:
     - run: nix run .#update-elisp-lock
     - uses: peter-evans/create-pull-request@v4
       with:
-        base: master
+        base: develop
         title: 'Update Emacs Lisp packages'
         branch: update/elisp-packages
         labels: automation,update,emacs
