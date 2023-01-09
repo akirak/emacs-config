@@ -4197,6 +4197,14 @@ Jump to definition for 50+ languages without configuration
                 (add-to-list 'xref-backend-functions
                              #'dumb-jump-xref-activate))))
 #+end_src
+*** dune                                                    :OCaml:@extra:fstar:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-10 Tue 17:26]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package dune))
+#+end_src
 *** COMMENT ediprolog                               :Prolog:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
@@ -4696,6 +4704,16 @@ Access Git forges from Magit
 
 #+begin_src emacs-lisp
 (setup (:package forge))
+#+end_src
+*** fstar-mode                                                    :@extra:fstar:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-09 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package fstar-mode)
+    (:file-match "\\.fst\\'")
+    (:nixpkgs "fstar" "z3" "gnumake"))
 #+end_src
 *** fwb-cmds                                                :window:
 :PROPERTIES:
@@ -6532,6 +6550,16 @@ Grammar bundle for tree-sitter
       (:hook-into typescript-mode-hook
                   typescript-tsx-mode-hook)))
 #+end_src
+*** tuareg                                                  :OCaml:@extra:fstar:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-10 Tue 16:51]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package tuareg)
+    (:nixpkgs "opam")
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"))
+#+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:55]
@@ -6892,6 +6920,14 @@ Major mode for editing YAML files
                                       "runs-on: ubuntu-latest" n
                                       "  steps:" n
                                       "  - uses: actions/checkout@v3" n))))
+#+end_src
+*** z3-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-01-09 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package z3-mode))
 #+end_src
 *** zig-mode
 :PROPERTIES:

@@ -86,6 +86,12 @@
       repo = "emacs-buttercup";
       type = "github";
     };
+    caml = {
+      flake = false;
+      owner = "ocaml";
+      repo = "caml-mode";
+      type = "github";
+    };
     cape = {
       flake = false;
       owner = "minad";
@@ -114,6 +120,18 @@
       flake = false;
       owner = "wandersoncferreira";
       repo = "code-review";
+      type = "github";
+    };
+    company = {
+      flake = false;
+      owner = "company-mode";
+      repo = "company-mode";
+      type = "github";
+    };
+    company-quickhelp = {
+      flake = false;
+      owner = "company-mode";
+      repo = "company-quickhelp";
       type = "github";
     };
     compat = {
@@ -236,6 +254,12 @@
       repo = "dumb-jump";
       type = "github";
     };
+    dune = {
+      flake = false;
+      owner = "ocaml";
+      repo = "dune";
+      type = "github";
+    };
     edit-indirect = {
       flake = false;
       owner = "Fanael";
@@ -327,6 +351,12 @@
       repo = "epkg-marginalia";
       type = "github";
     };
+    epl = {
+      flake = false;
+      owner = "cask";
+      repo = "epl";
+      type = "github";
+    };
     erlang = {
       flake = false;
       owner = "erlang";
@@ -358,6 +388,12 @@
       repo = "fanyi.el";
       type = "github";
     };
+    flycheck = {
+      flake = false;
+      owner = "flycheck";
+      repo = "flycheck";
+      type = "github";
+    };
     flymake-eslint = {
       flake = false;
       owner = "orzechowskid";
@@ -380,6 +416,12 @@
       flake = false;
       owner = "magit";
       repo = "forge";
+      type = "github";
+    };
+    fstar-mode = {
+      flake = false;
+      owner = "FStarLang";
+      repo = "fstar-mode.el";
       type = "github";
     };
     fullframe = {
@@ -967,6 +1009,12 @@
       repo = "pinyin.el";
       type = "github";
     };
+    pkg-info = {
+      flake = false;
+      owner = "emacsorphanage";
+      repo = "pkg-info";
+      type = "github";
+    };
     plz = {
       flake = false;
       owner = "alphapapa";
@@ -985,6 +1033,12 @@
       repo = "popup-el";
       type = "github";
     };
+    pos-tip = {
+      flake = false;
+      owner = "pitkali";
+      repo = "pos-tip";
+      type = "github";
+    };
     posframe = {
       flake = false;
       owner = "tumashu";
@@ -1001,6 +1055,12 @@
       flake = false;
       owner = "AmaiKinono";
       repo = "puni";
+      type = "github";
+    };
+    quick-peek = {
+      flake = false;
+      owner = "cpitclaudel";
+      repo = "quick-peek";
       type = "github";
     };
     rainbow-delimiters = {
@@ -1165,6 +1225,12 @@
       repo = "ts.el";
       type = "github";
     };
+    tuareg = {
+      flake = false;
+      owner = "ocaml";
+      repo = "tuareg";
+      type = "github";
+    };
     typescript-mode = {
       flake = false;
       owner = "emacs-typescript";
@@ -1265,6 +1331,12 @@
       flake = false;
       owner = "joaotavora";
       repo = "yasnippet";
+      type = "github";
+    };
+    z3-mode = {
+      flake = false;
+      owner = "zv";
+      repo = "z3-mode";
       type = "github";
     };
     zig-mode = {
