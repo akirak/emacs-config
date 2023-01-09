@@ -6895,23 +6895,25 @@ Define how Org entries are displayed by certain commands.
 #+begin_src emacs-lisp
   (add-hook 'org-follow-link-hook
             (defun akirak/org-follow-link-reveal ()
-              (let ((buffer (window-buffer (selected-window))))
-                (when (and (eq 'org-mode (buffer-local-value 'major-mode buffer))
-                           (or (looking-at org-heading-regexp)
-                               (when-let (uri (cadr (get-char-property (point) 'htmlize-link)))
-                                 (string-match-p "^id:" uri)))
-                           (not (and (thing-at-point-looking-at org-link-any-re)
-                                     (match-string 1))))
-                  (when (bound-and-true-p winner-mode)
-                    (winner-undo))
-                  (if-let (indirect-buf (and (not (buffer-base-buffer buffer))
-                                             (fboundp 'org-dog-indirect-buffer)
-                                             (with-current-buffer buffer
-                                               (org-dog-indirect-buffer))))
-                      (with-current-buffer indirect-buf
-                        (pop-to-buffer (current-buffer))
-                        (org-show-context 'bookmark-jump))
-                    (org-show-context 'bookmark-jump))))))
+              (when-let* ((buffer (window-buffer (selected-window)))
+                          (marker (and (eq 'org-mode (buffer-local-value 'major-mode buffer))
+                                       (or (looking-at org-heading-regexp)
+                                           (when-let (uri (cadr (get-char-property (point) 'htmlize-link)))
+                                             (string-match-p "^id:" uri)))
+                                       (not (and (thing-at-point-looking-at org-link-any-re)
+                                                 (match-string 1)))
+                                       (point-marker)))
+                          (indirect-buffer (and (fboundp 'org-dog-indirect-buffer)
+                                                (org-with-point-at marker
+                                                  (org-dog-indirect-buffer)))))
+                (set-window-configuration org-window-config-before-follow-link)
+                (switch-to-buffer indirect-buffer)
+                (with-current-buffer indirect-buffer
+                  (goto-char marker)
+                  (when org-dog-new-indirect-buffer-p
+                    (org-show-context)
+                    (org-show-entry)
+                    (org-show-children))))))
 
   (add-hook 'org-agenda-after-show-hook
             (defun akirak/org-agenda-show-entry ()
