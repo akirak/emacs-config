@@ -5391,6 +5391,17 @@ For Emacs Lisp, I use lispy.
 
 Lispy is not turned on by default.
 Its configuration is about my habits, so it is put in [[file:compat.el::(setup lispy][compat.el]].
+*** lsp-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-01-09 Mon 23:59]
+:END:
+#+begin_src emacs-lisp
+  (put 'lsp-defun 'lisp-indent-function 'defun)
+  (put 'lsp-with-current-buffer 'lisp-indent-function 1)
+  (put 'lsp-save-restriction-and-excursion 'lisp-indent-function 0)
+  (put 'lsp-define-conditional-key 'lisp-indent-function 'defun)
+  (put 'lsp-with-filename 'lisp-indent-function 1)
+#+end_src
 *** macrostep                               :emacs_lisp:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:52]
