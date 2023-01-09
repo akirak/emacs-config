@@ -809,6 +809,13 @@ The built-in =electric= package provides the following modes:
           auto-mode-case-fold nil
           large-file-warning-threshold (* 1024 1024))
 
+    (advice-add 'abort-if-file-too-large
+                :before-while
+                (defun akirak/ad-before-abort-if-file-too-large (_size
+                                                                 _op-type
+                                                                 filename &rest _)
+                  (not (string-suffix-p ".org" filename))))
+
     (define-key ctl-x-x-map (kbd "R") #'rename-visited-file)
 
     (:status opinionated
