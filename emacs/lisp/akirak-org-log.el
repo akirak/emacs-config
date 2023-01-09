@@ -140,5 +140,40 @@
         (insert "** [#A] " (clean-heading item) "\n"
                 link "\n")))))
 
+;;;###autoload
+(defun org-dblock-write:planning (_params)
+  "Generate a check list of items with a planning timestamp in the range."
+  (pcase-let*
+      ((heading (org-get-heading t t t t))
+       (today (decode-time))
+       (`(,start ,end ,desc)
+        (pcase heading
+          ((rx bos "W" (group (+ digit)))
+           (let ((weeknum (string-to-number (match-string 1 heading))))
+             (org-clock-special-range
+              'week (encode-time
+                     (make-decoded-time :year (decoded-time-year today)
+                                        :month 1 :day (* 7 weeknum)
+                                        :hour 0 :minute 0 :second 0))
+              'as-strings))))))
+    (cl-flet
+        ((format-element (element)
+           (let ((done (eq 'done (org-element-property :todo-type element)))
+                 (headline (org-link-display-format (org-element-property :raw-value element)))
+                 (id (org-element-property :ID element)))
+             (format "- [%s] %s"
+                     (if done "X" " ")
+                     (org-link-make-string (if id
+                                               (concat "id:" id)
+                                             (concat "*" headline))
+                                           headline)))))
+      (insert "Plans for " desc ":\n\n"
+              (mapconcat #'format-element
+                         (org-ql-select (current-buffer)
+                           `(and (planning :to ,end)
+                                 (not (closed :to ,start)))
+                           :sort 'scheduled)
+                         "\n")))))
+
 (provide 'akirak-org-log)
 ;;; akirak-org-log.el ends here
