@@ -420,11 +420,11 @@
     "consult-org-nlink": {
       "flake": false,
       "locked": {
-        "lastModified": 1672936242,
-        "narHash": "sha256-RnGSPytFO3ILY2lWr5VxbhNGerpYbgQSk+cyLpN6RxI=",
+        "lastModified": 1673355271,
+        "narHash": "sha256-dOsfwGWHYhk6Yph2GlcE0jvpvy61n/EkgYXFJZsEwEQ=",
         "owner": "akirak",
         "repo": "org-nlink.el",
-        "rev": "e4c6c24c9f0ca5e1d5734046c837dc2e90055a05",
+        "rev": "a90467a0edd70d9cdf5af1cf83d230426bf27dab",
         "type": "github"
       },
       "original": {
@@ -1622,16 +1622,15 @@
     "lean4-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1670599238,
-        "narHash": "sha256-yhhEsoa9ZiN6tEUNTKbFOB54E1hJpzDhp8uGB3RaKcs=",
-        "owner": "akirak",
+        "lastModified": 1673356720,
+        "narHash": "sha256-NtykvEgu/hV04+N5DWXXx4vxFAc6HWDpTpCZT/fJm9U=",
+        "owner": "leanprover",
         "repo": "lean4-mode",
-        "rev": "99443cfd82db92fe500bf3e719b12e61fe0af9ce",
+        "rev": "ca945cdb8903a306937874b2ec831b9eba548680",
         "type": "github"
       },
       "original": {
-        "owner": "akirak",
-        "ref": "develop",
+        "owner": "leanprover",
         "repo": "lean4-mode",
         "type": "github"
       }
@@ -1699,6 +1698,22 @@
         "owner": "~tarsius",
         "repo": "llama",
         "type": "sourcehut"
+      }
+    },
+    "lsp-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673187348,
+        "narHash": "sha256-1npJmvp2NhyYwh8OxBENrfjDD205U/cn1XSCBm7LYBo=",
+        "owner": "emacs-lsp",
+        "repo": "lsp-mode",
+        "rev": "a78f04ea4b6720609fb499e89f7cf089a6e19d7e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-lsp",
+        "repo": "lsp-mode",
+        "type": "github"
       }
     },
     "lv": {
@@ -2353,11 +2368,11 @@
     "org-nlink": {
       "flake": false,
       "locked": {
-        "lastModified": 1672936242,
-        "narHash": "sha256-RnGSPytFO3ILY2lWr5VxbhNGerpYbgQSk+cyLpN6RxI=",
+        "lastModified": 1673355271,
+        "narHash": "sha256-dOsfwGWHYhk6Yph2GlcE0jvpvy61n/EkgYXFJZsEwEQ=",
         "owner": "akirak",
         "repo": "org-nlink.el",
-        "rev": "e4c6c24c9f0ca5e1d5734046c837dc2e90055a05",
+        "rev": "a90467a0edd70d9cdf5af1cf83d230426bf27dab",
         "type": "github"
       },
       "original": {
@@ -3034,6 +3049,7 @@
         "link-hint": "link-hint",
         "lispy": "lispy",
         "llama": "llama",
+        "lsp-mode": "lsp-mode",
         "lv": "lv",
         "macrostep": "macrostep",
         "magit": "magit",

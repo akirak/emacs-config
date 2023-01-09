@@ -612,8 +612,7 @@
     };
     lean4-mode = {
       flake = false;
-      owner = "akirak";
-      ref = "develop";
+      owner = "leanprover";
       repo = "lean4-mode";
       type = "github";
     };
@@ -641,6 +640,12 @@
       owner = "~tarsius";
       repo = "llama";
       type = "sourcehut";
+    };
+    lsp-mode = {
+      flake = false;
+      owner = "emacs-lsp";
+      repo = "lsp-mode";
+      type = "github";
     };
     lv = {
       flake = false;

@@ -185,15 +185,6 @@
     };
   };
 
-  lean4-mode = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "lean4-mode";
-      ref = "develop";
-    };
-  };
-
   lispy = _: super: {
     # le-js depends on indium, which I don't want to install.
     files = builtins.removeAttrs super.files ["le-js.el"];

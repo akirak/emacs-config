@@ -5310,7 +5310,7 @@ Automatic language detection from code snippets
 #+begin_src emacs-lisp
 (setup (:package language-detection))
 #+end_src
-*** lean4-mode
+*** lean4-mode                                                    :Lean4:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-09 Fri 19:50]
 :END:
@@ -5321,9 +5321,7 @@ A major mode for the Lean language
 
 #+begin_src emacs-lisp
   (setup (:package lean4-mode)
-    (:file-match "\\.lean\\'")
-    (:when-loaded
-      (lean4-input-setup)))
+    (:file-match "\\.lean\\'"))
 #+end_src
 *** license-templates                              :development:OSS:
 :PROPERTIES:
@@ -5410,7 +5408,15 @@ For Emacs Lisp, I use lispy.
 
 Lispy is not turned on by default.
 Its configuration is about my habits, so it is put in [[file:compat.el::(setup lispy][compat.el]].
-*** lsp-mode
+*** lsp-mode                                                   :@extra:lsp_mode:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-11 Wed 19:03]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package lsp-mode))
+#+end_src
+*** lsp-mode (stub)
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
 :END:
