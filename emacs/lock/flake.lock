@@ -449,6 +449,22 @@
         "url": "https://codeberg.org/jao/consult-recoll.git"
       }
     },
+    "copilot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673126472,
+        "narHash": "sha256-K51HH8/ZkXXzmxCFqxsWn+o2hR3IPejkfQv7vgWBArQ=",
+        "owner": "zerolfx",
+        "repo": "copilot.el",
+        "rev": "05ffaddc5025d0d4e2424213f4989fc1a636ee31",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zerolfx",
+        "repo": "copilot.el",
+        "type": "github"
+      }
+    },
     "corfu": {
       "flake": false,
       "locked": {
@@ -2496,11 +2512,11 @@
     "orgabilize": {
       "flake": false,
       "locked": {
-        "lastModified": 1672940839,
-        "narHash": "sha256-9aLN9f/QYTc+21/NHdqgHmm+j7TOrrUKVkivIU/OsBQ=",
+        "lastModified": 1673514912,
+        "narHash": "sha256-537Tn0z+ifgjvmdlIHecRF/9uTj9y2kF7xAqRwxGDlk=",
         "owner": "akirak",
         "repo": "orgabilize.el",
-        "rev": "63737326cef207775bbcab0bcb1692e4b9ed9505",
+        "rev": "8ebcce8579d1094d00e9fe17258a88735055b174",
         "type": "github"
       },
       "original": {
@@ -2971,6 +2987,7 @@
         "consult-org-dog": "consult-org-dog",
         "consult-org-nlink": "consult-org-nlink",
         "consult-recoll": "consult-recoll",
+        "copilot": "copilot",
         "corfu": "corfu",
         "dash": "dash",
         "deadgrep": "deadgrep",
