@@ -1990,7 +1990,7 @@ Org-Memento integration for oahu
         (:with-map org-memento-timeline-mode-map
           (:bind "v" #'oahu-memento-group-view)))))
 #+end_src
-*** ob-mermaid
+*** ob-mermaid                                             
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:53]
 :END:
@@ -5643,7 +5643,7 @@ Client for Mastodon, a federated social network
 #+begin_src emacs-lisp
 (setup (:package mastodon))
 #+end_src
-*** mermaid-mode                                                        :@extra:
+*** mermaid-mode                                                :@extra:mermaid:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
 :END:
