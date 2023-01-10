@@ -3840,6 +3840,9 @@ Recoll queries using consult
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
+#+begin_quote
+An unofficial Copilot plugin for Emacs
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package copilot)
@@ -4218,6 +4221,10 @@ Jump to definition for 50+ languages without configuration
 :PROPERTIES:
 :CREATED_TIME: [2023-01-10 Tue 17:26]
 :END:
+#+begin_quote
+Integration with the dune build system
+[[https://github.com/ocaml/dune]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package dune))
@@ -4676,6 +4683,10 @@ See modules.
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 22:53]
 :END:
+#+begin_quote
+On-the-fly syntax checking
+[[http://www.flycheck.org]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package flycheck))
@@ -4734,6 +4745,10 @@ Access Git forges from Magit
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
 :END:
+#+begin_quote
+Support for F* programming
+[[https://github.com/FStarLang/fstar-mode.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package fstar-mode)
@@ -5437,6 +5452,10 @@ Its configuration is about my habits, so it is put in [[file:compat.el::(setup l
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 19:03]
 :END:
+#+begin_quote
+LSP mode
+[[https://github.com/emacs-lsp/lsp-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package lsp-mode))
@@ -5445,6 +5464,11 @@ Its configuration is about my habits, so it is put in [[file:compat.el::(setup l
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
 :END:
+#+begin_quote
+LSP mode
+[[https://github.com/emacs-lsp/lsp-mode]]
+#+end_quote
+
 #+begin_src emacs-lisp
   (put 'lsp-defun 'lisp-indent-function 'defun)
   (put 'lsp-with-current-buffer 'lisp-indent-function 1)
@@ -6585,6 +6609,9 @@ Grammar bundle for tree-sitter
 :PROPERTIES:
 :CREATED_TIME: [2023-01-10 Tue 16:51]
 :END:
+#+begin_quote
+OCaml mode
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package tuareg)
@@ -6956,6 +6983,9 @@ Major mode for editing YAML files
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
 :END:
+#+begin_quote
+A z3/SMTLIBv2 interactive development environment
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package z3-mode))
@@ -7300,12 +7330,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 222 |
+| [[org-ql-search:tags:packages][packages]]            | 230 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |  10 |
 | [[org-ql-search:tags:library][library]]             |   9 |
+| [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:VC][VC]]                  |   8 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -7324,6 +7355,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
+| [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -7331,8 +7363,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
-| [[org-ql-search:tags:@extra][@extra]]              |   2 |
+| [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:social][social]]              |   2 |
+| [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
@@ -7351,6 +7384,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
+| [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
@@ -7361,8 +7395,10 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
+| [[org-ql-search:tags:Lean4][Lean4]]               |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
+| [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:themes][themes]]              |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |
@@ -7426,7 +7462,14 @@ To use these features, they need to be turned on at build time.
 | Heading      | Todo |
 |--------------+------|
 | [[beancount][beancount]]    |      |
+| [[copilot][copilot]]      |      |
+| [[dune][dune]]         |      |
+| [[flycheck][flycheck]]     |      |
+| [[fstar-mode][fstar-mode]]   |      |
+| [[lean4-mode][lean4-mode]]   |      |
+| [[lsp-mode][lsp-mode]]     |      |
 | [[mermaid-mode][mermaid-mode]] |      |
+| [[tuareg][tuareg]]       |      |
 #+END:
 *** Links
 :PROPERTIES:
