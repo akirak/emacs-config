@@ -883,7 +883,11 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup frame
     (blink-cursor-mode -1)
-    (set-frame-parameter nil 'alpha '(98 . 96)))
+    (set-frame-parameter nil 'alpha '(98 . 96))
+    (setq frame-title-format '("%b - "
+                               (akirak/emacs-profile-name
+                                akirak/emacs-profile-name
+                                (:eval (concat "GNU Emacs " emacs-version))))))
 #+end_src
 *** help
 :PROPERTIES:
@@ -2883,6 +2887,7 @@ Time blocking with Org
                   (setq frame-title-format
                         '((org-memento-current-block
                            org-memento-frame-title-format
+                           akirak/emacs-profile-name
                            ;; akirak/org-memento-fallback-frame-title
                            )))))
       (add-hook 'org-memento-block-exit-hook #'akirak/org-memento-cleanup-buffers)))

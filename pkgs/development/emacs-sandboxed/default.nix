@@ -42,6 +42,7 @@ in
         ;; Turn off automatic native compilation
         (setq inhibit-automatic-native-compilation t)
       ''}
+      (setq akirak/emacs-profile-name "${name}")
       ${lib.optionalString enableOpinionatedSettings ''
         ;; Turn on settings inside :status clauses
         (setq akirak/enabled-status-tags t)
