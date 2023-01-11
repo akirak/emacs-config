@@ -4655,6 +4655,14 @@ Not only English-Chinese translator
 
 You should also load ol-fanyi library to enable fanyi link type.
 See modules.
+*** flycheck                                                   :lsp_mode:@extra:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-11 Wed 22:53]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package flycheck))
+#+end_src
 *** flymake-eslint
 :PROPERTIES:
 :CREATED_TIME: [2022-07-01 Fri 23:59]
