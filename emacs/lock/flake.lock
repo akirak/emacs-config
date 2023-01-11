@@ -1638,15 +1638,16 @@
     "lean4-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1673356720,
-        "narHash": "sha256-NtykvEgu/hV04+N5DWXXx4vxFAc6HWDpTpCZT/fJm9U=",
-        "owner": "leanprover",
+        "lastModified": 1673433158,
+        "narHash": "sha256-sK5Waj+e8JqcyIBejnEArOt8LMQK923C/h7kbnxCHVM=",
+        "owner": "akirak",
         "repo": "lean4-mode",
-        "rev": "ca945cdb8903a306937874b2ec831b9eba548680",
+        "rev": "4220857dcf3acd27b0a418c0d07fc84e89467867",
         "type": "github"
       },
       "original": {
-        "owner": "leanprover",
+        "owner": "akirak",
+        "ref": "develop",
         "repo": "lean4-mode",
         "type": "github"
       }

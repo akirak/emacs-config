@@ -618,7 +618,8 @@
     };
     lean4-mode = {
       flake = false;
-      owner = "leanprover";
+      owner = "akirak";
+      ref = "develop";
       repo = "lean4-mode";
       type = "github";
     };
