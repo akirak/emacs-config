@@ -814,7 +814,10 @@ The built-in =electric= package provides the following modes:
                 (defun akirak/ad-before-abort-if-file-too-large (_size
                                                                  _op-type
                                                                  filename &rest _)
-                  (not (string-suffix-p ".org" filename))))
+                  (not (string-match-p (rx (or ".org"
+                                               ".epub")
+                                           eos)
+                                       filename))))
 
     (define-key ctl-x-x-map (kbd "R") #'rename-visited-file)
 
