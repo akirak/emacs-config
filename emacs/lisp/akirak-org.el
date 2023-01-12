@@ -635,8 +635,8 @@ The point should be at the heading."
 
 ;;;###autoload
 (defun akirak-org-insert-vocabulary-info ()
-  ;; TODO
-  )
+  (insert "#+begin: wordnet\n"
+          "#+end:\n"))
 
 (provide 'akirak-org)
 ;;; akirak-org.el ends here

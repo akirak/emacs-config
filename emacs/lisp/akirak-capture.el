@@ -847,7 +847,8 @@
                    (buffer-substring-no-properties (region-beginning)
                                                    (region-end))
                  (thing-at-point 'word 'no-properties)))
-         (text (or (akirak-capture--find-dictionary-word text)
+         (text (or (when text
+                     (akirak-capture--find-dictionary-word text))
                    text))
          (derivations (when text
                         (akirak-wordnet-word-derivations text)))
@@ -888,8 +889,10 @@
                    (selection (if sentence-example
                                   (thing-at-point 'sentence t)
                                 (thing-at-point 'paragraph t)))
-                   (body (if sentence-example
-                             (string-trim selection)
+                   (body (cond
+                          (sentence-example
+                           (string-trim selection))
+                          (selection
                            (with-temp-buffer
                              (insert (string-trim selection))
                              (goto-char (point-min))
@@ -898,7 +901,7 @@
                                                            (* blank))
                                                        nil t)
                                (replace-match " "))
-                             (buffer-string))))
+                             (buffer-string)))))
                    (org-capture-entry
                     (car (doct
                           `((""
@@ -908,21 +911,20 @@
                                           :tags (if (string-match-p " " input)
                                                     nil
                                                   '("@word"))
-                                          :body (list "#+begin_example"
-                                                      body
-                                                      "#+end_example"
-                                                      "%?"
-                                                      "#+begin: wordnet"
-                                                      "#+end:"))
+                                          :body (append (when body
+                                                          (list "#+begin_example"
+                                                                body
+                                                                "#+end_example"
+                                                                "%?"))))
                              :file ,file
                              :function akirak-capture--goto-backlog))))))
-              (when in-org-entry
-                (org-super-links-store-link))
-              (org-capture)
-              (when in-org-entry
-                (org-super-links-insert-link))
-              (newline 2)
-              (akirak-org-insert-vocabulary-info))))))))
+              (if (and body in-org-entry)
+                  (progn
+                    (org-super-links-store-link)
+                    (org-capture)
+                    (org-super-links-insert-link)
+                    (newline 2))
+                (org-capture)))))))))
 
 (defun akirak-capture--vocabulary-file ()
   (require 'akirak-org-dog)
