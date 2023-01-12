@@ -1325,6 +1325,12 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup server
     (when window-system
+      (defcustom akirak/server-start-hook nil "" :type 'hook)
+
+      (defun akirak/server-start ()
+        (server-start)
+        (run-hooks 'akirak/server-start-hook))
+
       (add-hook 'emacs-startup-hook
                 (defun akirak/start-server-at-startup ()
                   (require 'server)
@@ -1333,8 +1339,8 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                       (run-with-timer (* 3 60) nil
                                       (lambda ()
                                         (unless (server-running-p)
-                                          (server-start))))
-                    (server-start))))))
+                                          (akirak/server-start))))
+                    (akirak/server-start))))))
 #+end_src
 *** sgml-mode
 :PROPERTIES:
@@ -2351,7 +2357,7 @@ Outline-based notes management and organizer
 ***** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    (:hook-into emacs-startup-hook)
+    (:hook-into akirak/server-start-hook)
 
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
