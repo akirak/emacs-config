@@ -7045,10 +7045,25 @@ Define how Org entries are displayed by certain commands.
             (defun akirak/org-agenda-show-entry ()
               (switch-to-buffer (org-dog-indirect-buffer))))
 
-  (setq org-ql-find-goto-hook '(org-show-context
-                                org-show-children
-                                org-show-entry
-                                akirak/org-recenter-toplevel-at-top))
+  (defun akirak/org-goto-narrow-hook ()
+    (org-show-context)
+    (org-show-entry)
+    (org-show-children)
+    (akirak/org-recenter-toplevel-at-top))
+
+  (defun akirak/org-goto-indirect-hook ()
+    (when (fboundp 'org-dog-indirect-buffer)
+      (let ((buffer (org-dog-indirect-buffer)))
+        (switch-to-buffer buffer)
+        (when org-dog-new-indirect-buffer-p
+          (with-current-buffer buffer
+            (org-show-context)
+            (org-show-entry)
+            (org-show-children)
+            (akirak/org-recenter-toplevel-at-top))))))
+
+  (setq org-ql-find-goto-hook #'akirak/org-goto-narrow-hook)
+  (setq org-placeholder-find-hook #'akirak/org-goto-indirect-hook)
 
   (defun akirak/org-recenter-toplevel-at-top ()
     (unless (org-before-first-heading-p)
