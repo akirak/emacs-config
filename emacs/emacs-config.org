@@ -455,7 +455,6 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 *** browse-url
 :PROPERTIES:
 :CREATED_TIME: [2022-04-06 Wed 17:15]
-:ID:       02a91209-86f8-412b-98f3-19a56e481df0
 :END:
 
 #+begin_src emacs-lisp
@@ -3736,7 +3735,6 @@ Perform code review from Github, Gitlab, and Bitbucket Cloud
 *** consult                                             :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:33]
-:ID:       846a6979-065b-46cc-94b7-bfffb4e1fdff
 :END:
 #+begin_quote
 Consulting completing-read
@@ -4851,7 +4849,6 @@ Make vendored and generated files read only.
 *** git-auto-commit-mode                                        :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-26 Sat 20:33]
-:ID:       0ec2d09e-7e97-40ba-aa5a-7af027187f62
 :END:
 #+begin_quote
 Emacs Minor mode to automatically commit and push
@@ -7013,9 +7010,6 @@ A major mode for the Zig programming language
     (:file-match "\\.zig\\'"))
 #+end_src
 ** Various Hooks and hacks related to window management
-:PROPERTIES:
-:ID:       5bc8a05a-c4c4-4fd4-85b3-bb5dba2b05c9
-:END:
 *** Org mode
 Define how Org entries are displayed by certain commands.
 #+begin_src emacs-lisp
