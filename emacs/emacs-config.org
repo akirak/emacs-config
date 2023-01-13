@@ -6092,7 +6092,8 @@ HTTP library
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package plz))
+  (setup (:package plz)
+    (:nixpkgs "curl"))
 #+end_src
 *** COMMENT pocket-reader                                              :reading:ARCHIVE:
 :PROPERTIES:
