@@ -5885,6 +5885,19 @@ Frontend to experimental commands of Nix
   (setup (:package nix3)
     (:set nix3-flake-worktree-promise-fn #'akirak/nix3-flake-find-repo)
 
+    (defconst akirak/nix3-registry-url
+      "https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json")
+
+    (defun akirak/nix3-flake-lock-from-pins ()
+      (compile (mapconcat #'shell-quote-argument
+                          `("nix" "flake" "lock"
+                            "--registry" ,akirak/nix3-registry-url)
+                          " ")))
+
+    (:when-loaded
+      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-lock-from-pins
+                nil t))
+
     (defun akirak/nix3-flake-find-repo (alist)
       (require 'akirak-git-clone)
       (let-alist alist
