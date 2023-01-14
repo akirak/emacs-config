@@ -3166,6 +3166,7 @@
         "ts": "ts",
         "tuareg": "tuareg",
         "typescript-mode": "typescript-mode",
+        "utop": "utop",
         "uuidgen": "uuidgen",
         "vertico": "vertico",
         "visual-fill-column": "visual-fill-column",
@@ -3538,6 +3539,22 @@
       "original": {
         "owner": "emacs-typescript",
         "repo": "typescript.el",
+        "type": "github"
+      }
+    },
+    "utop": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1672929054,
+        "narHash": "sha256-IsTemeCl6taGpKKul3mESJYXAW+8JKKNRuZfc+KscSg=",
+        "owner": "diml",
+        "repo": "utop",
+        "rev": "595002e6f07e6a3c6abc6e94a1b2448006115f1b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "diml",
+        "repo": "utop",
         "type": "github"
       }
     },
