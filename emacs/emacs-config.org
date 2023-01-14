@@ -6719,6 +6719,15 @@ I don't use use-package, but I only need indentation:
 #+begin_src emacs-lisp
   (put 'use-package 'lisp-indent-function 1)
 #+end_src
+*** utop                                                          :@extra:OCaml:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-14 Sat 17:17]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package utop)
+    (:nixpkgs "ocamlPackages.utop"))
+#+end_src
 *** valign
 :PROPERTIES:
 :CREATED_TIME: [2022-11-04 Fri 23:59]

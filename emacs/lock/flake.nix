@@ -1249,6 +1249,12 @@
       repo = "typescript.el";
       type = "github";
     };
+    utop = {
+      flake = false;
+      owner = "diml";
+      repo = "utop";
+      type = "github";
+    };
     uuidgen = {
       flake = false;
       owner = "kanru";
