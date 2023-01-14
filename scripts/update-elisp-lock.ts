@@ -96,7 +96,7 @@ for (const owner of owners) {
   await maybeGitCommit(
     (inputs.length == 1) ?
       `emacs: Update ${inputs[0]}` :
-      `emacs: Update packages owned by ${owner}`
+      `emacs: Update packages by ${owner}`
   )
 }
 

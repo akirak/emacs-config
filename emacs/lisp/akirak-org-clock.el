@@ -173,18 +173,19 @@
 (defadvice org-self-insert-command (around akirak-org-clock activate)
   (when (or (org-clocking-p)
             (bound-and-true-p org-capture-mode)
-            ;; Pass non-file buffers like *Org Note* buffers.
-            (not buffer-file-name)
-            (bound-and-true-p org-memento-file-mode)
-            ;; I sometimes edit Org file inside `user-emacs-directory', and
-            ;; I don't want to
-            (string-match-p akirak-org-clock-file-name-whitelist
-                            buffer-file-name)
-            (if (bound-and-true-p org-dog-file-mode)
-                (or (org-before-first-heading-p)
-                    (akirak-org-clock--snoozed-p)
-                    (user-error "Please clock-in first"))
-              t))
+            (let ((filename (buffer-file-name (org-base-buffer (current-buffer)))))
+              ;; Pass non-file buffers like *Org Note* buffers.
+              (or (not filename)
+                  (bound-and-true-p org-memento-file-mode)
+                  ;; I sometimes edit Org file inside `user-emacs-directory', and
+                  ;; I don't want to
+                  (string-match-p akirak-org-clock-file-name-whitelist
+                                  filename)
+                  (if (bound-and-true-p org-dog-file-mode)
+                      (or (org-before-first-heading-p)
+                          (akirak-org-clock--snoozed-p)
+                          (user-error "Please clock-in first"))
+                    t))))
     ad-do-it))
 
 ;;;###autoload

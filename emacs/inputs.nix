@@ -80,6 +80,15 @@
     };
   };
 
+  lean4-mode = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "lean4-mode";
+      ref = "develop";
+    };
+  };
+
   org-bookmark-heading = _: _: {
     origin = {
       type = "github";
@@ -182,15 +191,6 @@
       owner = "akirak";
       repo = "nov.el";
       ref = "abbr-file-name";
-    };
-  };
-
-  lean4-mode = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "lean4-mode";
-      ref = "develop";
     };
   };
 

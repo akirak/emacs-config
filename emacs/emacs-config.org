@@ -455,7 +455,6 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 *** browse-url
 :PROPERTIES:
 :CREATED_TIME: [2022-04-06 Wed 17:15]
-:ID:       02a91209-86f8-412b-98f3-19a56e481df0
 :END:
 
 #+begin_src emacs-lisp
@@ -809,6 +808,16 @@ The built-in =electric= package provides the following modes:
           auto-mode-case-fold nil
           large-file-warning-threshold (* 1024 1024))
 
+    (advice-add 'abort-if-file-too-large
+                :before-while
+                (defun akirak/ad-before-abort-if-file-too-large (_size
+                                                                 _op-type
+                                                                 filename &rest _)
+                  (not (string-match-p (rx (or ".org"
+                                               ".epub")
+                                           eos)
+                                       filename))))
+
     (define-key ctl-x-x-map (kbd "R") #'rename-visited-file)
 
     (:status opinionated
@@ -873,7 +882,11 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup frame
     (blink-cursor-mode -1)
-    (set-frame-parameter nil 'alpha '(98 . 96)))
+    (set-frame-parameter nil 'alpha '(98 . 96))
+    (setq frame-title-format '("%b - "
+                               (akirak/emacs-profile-name
+                                akirak/emacs-profile-name
+                                (:eval (concat "GNU Emacs " emacs-version))))))
 #+end_src
 *** help
 :PROPERTIES:
@@ -1311,6 +1324,12 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup server
     (when window-system
+      (defcustom akirak/server-start-hook nil "" :type 'hook)
+
+      (defun akirak/server-start ()
+        (server-start)
+        (run-hooks 'akirak/server-start-hook))
+
       (add-hook 'emacs-startup-hook
                 (defun akirak/start-server-at-startup ()
                   (require 'server)
@@ -1319,8 +1338,8 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                       (run-with-timer (* 3 60) nil
                                       (lambda ()
                                         (unless (server-running-p)
-                                          (server-start))))
-                    (server-start))))))
+                                          (akirak/server-start))))
+                    (akirak/server-start))))))
 #+end_src
 *** sgml-mode
 :PROPERTIES:
@@ -1373,6 +1392,10 @@ This is a recommended setting for use with vertico. See https://github.com/minad
              [remap upcase-word] #'upcase-dwim
              [remap downcase-word] #'downcase-dwim
              [remap capitalize-word] #'capitalize-dwim)
+
+    ;; I often type this sequence unintensionally. I never use this command, so
+    ;; just disable the keybinding.
+    (:global "C-x C-n" nil)
 
     (defun akirak/count-words-dwim ()
       (interactive)
@@ -1983,7 +2006,7 @@ Org-Memento integration for oahu
         (:with-map org-memento-timeline-mode-map
           (:bind "v" #'oahu-memento-group-view)))))
 #+end_src
-*** ob-mermaid
+*** ob-mermaid                                             
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:53]
 :END:
@@ -2337,7 +2360,7 @@ Outline-based notes management and organizer
 ***** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    (:hook-into emacs-startup-hook)
+    (:hook-into akirak/server-start-hook)
 
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
@@ -2873,6 +2896,7 @@ Time blocking with Org
                   (setq frame-title-format
                         '((org-memento-current-block
                            org-memento-frame-title-format
+                           akirak/emacs-profile-name
                            ;; akirak/org-memento-fallback-frame-title
                            )))))
       (add-hook 'org-memento-block-exit-hook #'akirak/org-memento-cleanup-buffers)))
@@ -3711,7 +3735,6 @@ Perform code review from Github, Gitlab, and Bitbucket Cloud
 *** consult                                             :completion:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:33]
-:ID:       846a6979-065b-46cc-94b7-bfffb4e1fdff
 :END:
 #+begin_quote
 Consulting completing-read
@@ -3820,6 +3843,18 @@ Recoll queries using consult
                                           (string-remove-prefix "file://")
                                           (abbreviate-file-name)))
                                 'face 'font-lock-doc-face)))))
+#+end_src
+*** copilot                                                     :@extra:copilot:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-11 Wed 05:46]
+:END:
+#+begin_quote
+An unofficial Copilot plugin for Emacs
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package copilot)
+    (:nixpkgs "nodejs"))
 #+end_src
 *** corfu                                            :completion:UI:
 :PROPERTIES:
@@ -4190,6 +4225,18 @@ Jump to definition for 50+ languages without configuration
                 (add-to-list 'xref-backend-functions
                              #'dumb-jump-xref-activate))))
 #+end_src
+*** dune                                                    :OCaml:@extra:fstar:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-10 Tue 17:26]
+:END:
+#+begin_quote
+Integration with the dune build system
+[[https://github.com/ocaml/dune]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package dune))
+#+end_src
 *** COMMENT ediprolog                               :Prolog:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
@@ -4265,6 +4312,7 @@ Client for Language Server Protocol (LSP) servers
                    '(elixir-mode . ("elixir-ls"))))
 
     (put 'tsx-mode 'eglot-language-id "typescriptreact")
+    (put 'lean4-mode 'eglot-language-id "lean")
 
     (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
 
@@ -4639,6 +4687,18 @@ Not only English-Chinese translator
 
 You should also load ol-fanyi library to enable fanyi link type.
 See modules.
+*** flycheck                                                   :lsp_mode:@extra:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-11 Wed 22:53]
+:END:
+#+begin_quote
+On-the-fly syntax checking
+[[http://www.flycheck.org]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package flycheck))
+#+end_src
 *** flymake-eslint
 :PROPERTIES:
 :CREATED_TIME: [2022-07-01 Fri 23:59]
@@ -4688,6 +4748,20 @@ Access Git forges from Magit
 
 #+begin_src emacs-lisp
 (setup (:package forge))
+#+end_src
+*** fstar-mode                                                    :@extra:fstar:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-09 Mon 23:59]
+:END:
+#+begin_quote
+Support for F* programming
+[[https://github.com/FStarLang/fstar-mode.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package fstar-mode)
+    (:file-match "\\.fst\\'")
+    (:nixpkgs "fstar" "z3" "gnumake"))
 #+end_src
 *** fwb-cmds                                                :window:
 :PROPERTIES:
@@ -4775,7 +4849,6 @@ Make vendored and generated files read only.
 *** git-auto-commit-mode                                        :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-26 Sat 20:33]
-:ID:       0ec2d09e-7e97-40ba-aa5a-7af027187f62
 :END:
 #+begin_quote
 Emacs Minor mode to automatically commit and push
@@ -5284,7 +5357,7 @@ Automatic language detection from code snippets
 #+begin_src emacs-lisp
 (setup (:package language-detection))
 #+end_src
-*** lean4-mode
+*** lean4-mode                                                    :Lean4:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-09 Fri 19:50]
 :END:
@@ -5295,9 +5368,7 @@ A major mode for the Lean language
 
 #+begin_src emacs-lisp
   (setup (:package lean4-mode)
-    (:file-match "\\.lean\\'")
-    (:when-loaded
-      (lean4-input-setup)))
+    (:file-match "\\.lean\\'"))
 #+end_src
 *** license-templates                              :development:OSS:
 :PROPERTIES:
@@ -5384,6 +5455,34 @@ For Emacs Lisp, I use lispy.
 
 Lispy is not turned on by default.
 Its configuration is about my habits, so it is put in [[file:compat.el::(setup lispy][compat.el]].
+*** lsp-mode                                                   :@extra:lsp_mode:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-11 Wed 19:03]
+:END:
+#+begin_quote
+LSP mode
+[[https://github.com/emacs-lsp/lsp-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package lsp-mode))
+#+end_src
+*** lsp-mode (stub)
+:PROPERTIES:
+:CREATED_TIME: [2023-01-09 Mon 23:59]
+:END:
+#+begin_quote
+LSP mode
+[[https://github.com/emacs-lsp/lsp-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (put 'lsp-defun 'lisp-indent-function 'defun)
+  (put 'lsp-with-current-buffer 'lisp-indent-function 1)
+  (put 'lsp-save-restriction-and-excursion 'lisp-indent-function 0)
+  (put 'lsp-define-conditional-key 'lisp-indent-function 'defun)
+  (put 'lsp-with-filename 'lisp-indent-function 1)
+#+end_src
 *** macrostep                               :emacs_lisp:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:52]
@@ -5606,7 +5705,7 @@ Client for Mastodon, a federated social network
 #+begin_src emacs-lisp
 (setup (:package mastodon))
 #+end_src
-*** mermaid-mode                                                        :@extra:
+*** mermaid-mode                                                :@extra:mermaid:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
 :END:
@@ -5993,7 +6092,8 @@ HTTP library
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package plz))
+  (setup (:package plz)
+    (:nixpkgs "curl"))
 #+end_src
 *** COMMENT pocket-reader                                              :reading:ARCHIVE:
 :PROPERTIES:
@@ -6513,6 +6613,19 @@ Grammar bundle for tree-sitter
       (:hook-into typescript-mode-hook
                   typescript-tsx-mode-hook)))
 #+end_src
+*** tuareg                                                  :OCaml:@extra:fstar:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-10 Tue 16:51]
+:END:
+#+begin_quote
+OCaml mode
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package tuareg)
+    (:nixpkgs "opam")
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"))
+#+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:55]
@@ -6860,6 +6973,17 @@ Major mode for editing YAML files
   (setup (:package yaml-mode)
     (:file-match "\\.ya?ml\\'"))
 #+end_src
+*** z3-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-01-09 Mon 23:59]
+:END:
+#+begin_quote
+A z3/SMTLIBv2 interactive development environment
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package z3-mode))
+#+end_src
 *** zig-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 14:14]
@@ -6873,40 +6997,54 @@ A major mode for the Zig programming language
     (:file-match "\\.zig\\'"))
 #+end_src
 ** Various Hooks and hacks related to window management
-:PROPERTIES:
-:ID:       5bc8a05a-c4c4-4fd4-85b3-bb5dba2b05c9
-:END:
 *** Org mode
 Define how Org entries are displayed by certain commands.
 #+begin_src emacs-lisp
   (add-hook 'org-follow-link-hook
             (defun akirak/org-follow-link-reveal ()
-              (let ((buffer (window-buffer (selected-window))))
-                (when (and (eq 'org-mode (buffer-local-value 'major-mode buffer))
-                           (or (looking-at org-heading-regexp)
-                               (when-let (uri (cadr (get-char-property (point) 'htmlize-link)))
-                                 (string-match-p "^id:" uri)))
-                           (not (and (thing-at-point-looking-at org-link-any-re)
-                                     (match-string 1))))
-                  (when (bound-and-true-p winner-mode)
-                    (winner-undo))
-                  (if-let (indirect-buf (and (not (buffer-base-buffer buffer))
-                                             (fboundp 'org-dog-indirect-buffer)
-                                             (with-current-buffer buffer
-                                               (org-dog-indirect-buffer))))
-                      (with-current-buffer indirect-buf
-                        (pop-to-buffer (current-buffer))
-                        (org-show-context 'bookmark-jump))
-                    (org-show-context 'bookmark-jump))))))
+              (when-let* ((buffer (window-buffer (selected-window)))
+                          (marker (and (eq 'org-mode (buffer-local-value 'major-mode buffer))
+                                       (or (looking-at org-heading-regexp)
+                                           (when-let (uri (cadr (get-char-property (point) 'htmlize-link)))
+                                             (string-match-p "^id:" uri)))
+                                       (not (and (thing-at-point-looking-at org-link-any-re)
+                                                 (match-string 1)))
+                                       (point-marker)))
+                          (indirect-buffer (and (fboundp 'org-dog-indirect-buffer)
+                                                (org-with-point-at marker
+                                                  (org-dog-indirect-buffer)))))
+                (set-window-configuration org-window-config-before-follow-link)
+                (switch-to-buffer indirect-buffer)
+                (with-current-buffer indirect-buffer
+                  (goto-char marker)
+                  (when org-dog-new-indirect-buffer-p
+                    (org-show-context)
+                    (org-show-entry)
+                    (org-show-children))))))
 
   (add-hook 'org-agenda-after-show-hook
             (defun akirak/org-agenda-show-entry ()
               (switch-to-buffer (org-dog-indirect-buffer))))
 
-  (setq org-ql-find-goto-hook '(org-show-context
-                                org-show-children
-                                org-show-entry
-                                akirak/org-recenter-toplevel-at-top))
+  (defun akirak/org-goto-narrow-hook ()
+    (org-show-context)
+    (org-show-entry)
+    (org-show-children)
+    (akirak/org-recenter-toplevel-at-top))
+
+  (defun akirak/org-goto-indirect-hook ()
+    (when (fboundp 'org-dog-indirect-buffer)
+      (let ((buffer (org-dog-indirect-buffer)))
+        (switch-to-buffer buffer)
+        (when org-dog-new-indirect-buffer-p
+          (with-current-buffer buffer
+            (org-show-context)
+            (org-show-entry)
+            (org-show-children)
+            (akirak/org-recenter-toplevel-at-top))))))
+
+  (setq org-ql-find-goto-hook #'akirak/org-goto-narrow-hook)
+  (setq org-placeholder-find-hook #'akirak/org-goto-indirect-hook)
 
   (defun akirak/org-recenter-toplevel-at-top ()
     (unless (org-before-first-heading-p)
@@ -7198,12 +7336,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 222 |
+| [[org-ql-search:tags:packages][packages]]            | 230 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |  10 |
 | [[org-ql-search:tags:library][library]]             |   9 |
+| [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:VC][VC]]                  |   8 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -7222,6 +7361,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
+| [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -7229,8 +7369,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
-| [[org-ql-search:tags:@extra][@extra]]              |   2 |
+| [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:social][social]]              |   2 |
+| [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
@@ -7249,6 +7390,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
+| [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
@@ -7259,8 +7401,10 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
+| [[org-ql-search:tags:Lean4][Lean4]]               |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
+| [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:themes][themes]]              |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |
@@ -7324,7 +7468,14 @@ To use these features, they need to be turned on at build time.
 | Heading      | Todo |
 |--------------+------|
 | [[beancount][beancount]]    |      |
+| [[copilot][copilot]]      |      |
+| [[dune][dune]]         |      |
+| [[flycheck][flycheck]]     |      |
+| [[fstar-mode][fstar-mode]]   |      |
+| [[lean4-mode][lean4-mode]]   |      |
+| [[lsp-mode][lsp-mode]]     |      |
 | [[mermaid-mode][mermaid-mode]] |      |
+| [[tuareg][tuareg]]       |      |
 #+END:
 *** Links
 :PROPERTIES:
