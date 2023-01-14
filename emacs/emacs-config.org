@@ -6971,21 +6971,7 @@ Major mode for editing YAML files
 
 #+begin_src emacs-lisp
   (setup (:package yaml-mode)
-    (:file-match "\\.ya?ml\\'")
-    (:auto-insert
-     ("/.github/workflows/.+\\'" . (> "name: " _ n
-                                      "on:" n
-                                      "  workflow_dispatch:" n
-                                      "  pull_request:" n
-                                      "  push:" n
-                                      "  schedule:" n
-                                      "  - cron: '0 5 * * *'" n
-                                      "  " n
-                                      "jobs:" n
-                                      "  _:" n
-                                      "runs-on: ubuntu-latest" n
-                                      "  steps:" n
-                                      "  - uses: actions/checkout@v3" n))))
+    (:file-match "\\.ya?ml\\'"))
 #+end_src
 *** z3-mode
 :PROPERTIES:
