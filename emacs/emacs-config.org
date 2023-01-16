@@ -2365,8 +2365,8 @@ Outline-based notes management and organizer
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
     (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
-    (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
-    (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
+    ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
+    ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
     (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
     (define-key akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
 
@@ -2635,6 +2635,10 @@ Transient commands for Org Dog
   (setup (:package octopus)
     (:global "M-g M-o" #'octopus-find-file
              "M-s M-o" #'octopus-find-node)
+
+    (define-key akirak/c-z-map "I" #'octopus-clock-in)
+    (define-key akirak/c-z-map "C-i" #'octopus-clock-in)
+
     (:set octopus-find-node-verbs
           '((?f "Display a node" nil akirak-org-ql-find-default)
             (?v "Display a search view" nil akirak/org-ql-search-files)
