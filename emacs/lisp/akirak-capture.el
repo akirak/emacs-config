@@ -673,6 +673,13 @@
           (insert block-text))
         (newline)))))
 
+(transient-define-suffix akirak-capture-url-to-clock ()
+  :description 'octopus-clocked-entry-description
+  :if 'org-clocking-p
+  (interactive)
+  (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
+  (octopus--dispatch (octopus-current-command) org-clock-marker))
+
 ;;;###autoload (autoload 'akirak-capture-url "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture-url (url)
   [:class
@@ -713,11 +720,7 @@
                        :file ,(org-dog-resolve-relative-file "news.org")
                        :function ,jump-func))))))
         (org-capture))))
-   ("@" "Clock"
-    (lambda ()
-      (interactive)
-      (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
-      (octopus--dispatch (octopus-current-command) org-clock-marker)))
+   ("@" akirak-capture-url-to-clock)
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
   (interactive (list (or (akirak-url-latest)
