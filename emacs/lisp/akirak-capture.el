@@ -405,8 +405,7 @@
      :transient t)
     ("u" "Url" akirak-capture-url
      :if (lambda () (not akirak-capture-initial)))
-    ("v" "Vocabulary" akirak-capture-vocabulary
-     :transient t)]
+    ("v" "Vocabulary" akirak-capture-vocabulary)]
 
    ["Schedule an event / org-memento"
     :class transient-row
