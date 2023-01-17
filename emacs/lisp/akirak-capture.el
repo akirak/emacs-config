@@ -281,7 +281,6 @@
    :class transient-row
    ("'" octopus-avy-org-heading-suffix)
    ("@" octopus-clock-marker-suffix)
-   ("$" octopus-last-capture-marker-suffix)
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
   (interactive)
