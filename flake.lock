@@ -325,6 +325,26 @@
         "type": "github"
       }
     },
+    "nix-index-database": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1673752441,
+        "narHash": "sha256-/g4ImZWV05CrXRWTSJsda6ztIp7LAPxs2L6RCrbQ66U=",
+        "owner": "Mic92",
+        "repo": "nix-index-database",
+        "rev": "391180f77505c1c8cdd45fe1a59dc89d3e40300a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "nix-index-database",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1673180965,
@@ -482,6 +502,7 @@
         "impermanence": "impermanence",
         "melpa": "melpa",
         "nix-filter": "nix-filter",
+        "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_4",
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks",

@@ -28,6 +28,9 @@
     # agenix.url = "github:ryantm/agenix";
     # agenix.inputs.nixpkgs.follows = "latest";
 
+    nix-index-database.url = "github:Mic92/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+
     # Emacs
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     org-babel.url = "github:emacs-twist/org-babel";
@@ -91,7 +94,10 @@
       config
       // {
         homeModules =
-          nixpkgs.lib.attrVals config.homeModules homeProfiles
+          [
+            inputs.nix-index-database.hmModules.nix-index
+          ]
+          ++ nixpkgs.lib.attrVals config.homeModules homeProfiles
           ++ (config.extraHomeModules or []);
       };
     importSite = src: resolveHomeModules (import src);
