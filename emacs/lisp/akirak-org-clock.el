@@ -75,6 +75,7 @@
 (defun akirak-org-clock--check-before-save ()
   (require 'org-clock)
   (require 'akirak-org-dog)
+  (require 'org-dog-overview)
   (pcase-exhaustive (akirak-org-clock--target)
     (`(,files ,query-prefix ,tag ,further)
      (or (and (org-clocking-p)
