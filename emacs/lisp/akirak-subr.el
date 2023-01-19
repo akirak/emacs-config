@@ -1,5 +1,7 @@
 ;;; akirak-subr.el --- Basic utilities -*- lexical-binding: t -*-
 
+(defvar org-src-lang-modes)
+
 (defun akirak-major-mode-list ()
   "Return a list of major modes defined in the current Emacs instance."
   (let (modes)
@@ -17,8 +19,13 @@
     modes))
 
 ;;;###autoload
-(defun akirak-complete-major-mode (prompt &optional initial history)
-  (completing-read prompt (akirak-major-mode-list) nil t initial history))
+(cl-defun akirak-complete-major-mode (prompt &optional initial history
+                                             &key org-src-langs)
+  (completing-read prompt (append (when org-src-langs
+                                    (require 'org-src)
+                                    (mapcar #'car org-src-lang-modes))
+                                  (akirak-major-mode-list))
+                   nil t initial history))
 
 (provide 'akirak-subr)
 ;;; akirak-subr.el ends here

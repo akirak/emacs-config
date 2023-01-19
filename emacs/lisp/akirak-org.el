@@ -167,7 +167,8 @@ With ARG, pick a text from the kill ring instead of the last one."
               (goto-char begin)
               (when (looking-at (rx (* space) "#+begin_src" space))
                 (let ((lang (thread-last
-                              (akirak-complete-major-mode "Source language: ")
+                              (akirak-complete-major-mode "Source language: " nil nil
+                                                          :org-src-langs t)
                               (string-remove-suffix "-mode"))))
                   (end-of-line 1)
                   (insert lang))))
@@ -257,7 +258,8 @@ With ARG, pick a text from the kill ring instead of the last one."
                        (when (and (commandp sym)
                                   (not (memq sym minor-mode-list)))
                          sym))
-                     (akirak-complete-major-mode "Language: " needle)))
+                     (akirak-complete-major-mode "Language: " needle nil
+                                                 :org-src-langs t)))
            (lang (string-remove-suffix "-mode" (symbol-name mode))))
       (or (car (rassq (intern lang)
                       org-src-lang-modes))
