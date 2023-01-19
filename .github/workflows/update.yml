@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        ref: develop
     - uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
@@ -20,5 +22,6 @@ jobs:
     - uses: DeterminateSystems/update-flake-lock@v15
       with:
         pr-title: "Update flake.lock"
+        base: develop
         pr-labels: |
           automation
