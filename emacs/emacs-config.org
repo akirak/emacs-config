@@ -4710,6 +4710,7 @@ On-the-fly syntax checking
 :END:
 #+begin_quote
 A Flymake backend for Javascript using eslint
+[[https://github.com/orzechowskid/flymake-eslint]]
 #+end_quote
 
 #+begin_src emacs-lisp
