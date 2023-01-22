@@ -291,6 +291,47 @@
         ];
       };
 
+      hosts.hui = {
+        system = "x86_64-linux";
+        channelName = "unstable";
+        extraArgs = {
+          site = importSite ./sites/hui;
+        };
+
+        modules = [
+          inputs.homelab.nixosModules.asus-br1100
+          inputs.disko.nixosModules.disko
+          ./sites/hui/boot.nix
+          {
+            networking.hostName = "hui";
+
+            disko.devices = import ./sites/hui/disko.nix {};
+
+            networking.firewall.enable = true;
+            networking.useDHCP = false;
+            networking.networkmanager.enable = true;
+            # systemd.services.NetworkManager-wait-online.enable = true;
+
+            services.journald.extraConfig = ''
+              SystemMaxFiles=5
+            '';
+
+            services.auto-cpufreq.enable = true;
+
+            system.stateVersion = "22.11";
+          }
+
+          ({site, ...}: {
+            home-manager.users.${site.username}.home.stateVersion = "22.11";
+          })
+
+          ./nixos/profiles/default-user.nix
+          # ./nixos/desktop.nix
+          ./nixos/development.nix
+          ./nixos/profiles/tailscale.nix
+        ];
+      };
+
       #############################
       ### flake outputs builder ###
       #############################
@@ -435,6 +476,8 @@
         };
       };
 
-      # abc = 132;
+      diskoConfigurations = {
+        hui = import ./sites/hui/disko.nix;
+      };
     };
 }
