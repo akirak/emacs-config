@@ -255,7 +255,7 @@
             # networking.interfaces.enp0s31f6.useDHCP = true;
             # networking.interfaces.wlp2s0.useDHCP = true;
             networking.networkmanager.enable = true;
-            systemd.services.NetworkManager-wait-online.enable = true;
+            # systemd.services.NetworkManager-wait-online.enable = true;
 
             services.journald.extraConfig = ''
               SystemMaxFiles=5
