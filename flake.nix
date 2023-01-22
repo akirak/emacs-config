@@ -8,13 +8,37 @@
     stable.url = "github:NixOS/nixpkgs/nixos-22.11";
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
     nix-filter.url = "github:numtide/nix-filter";
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
+    cachix-deploy-flake = {
+      url = "github:cachix/cachix-deploy-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.disko.follows = "disko";
+      inputs.home-manager.follows = "home-manager";
+      inputs.darwin.follows = "nix-darwin";
+    };
 
     # Switch to a private profile by overriding this input
     site = {
       url = "git+https://git.sr.ht/~akirak/default-host";
       flake = false;
+    };
+
+    homelab = {
+      url = "github:akirak/homelab";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.unstable.follows = "unstable";
     };
 
     flake-pins = {
@@ -27,6 +51,9 @@
     # nixos-hardware.url = "github:nixos/nixos-hardware";
     # agenix.url = "github:ryantm/agenix";
     # agenix.inputs.nixpkgs.follows = "latest";
+
+    nix-index-database.url = "github:Mic92/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     # Emacs
     emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -91,7 +118,10 @@
       config
       // {
         homeModules =
-          nixpkgs.lib.attrVals config.homeModules homeProfiles
+          [
+            inputs.nix-index-database.hmModules.nix-index
+          ]
+          ++ nixpkgs.lib.attrVals config.homeModules homeProfiles
           ++ (config.extraHomeModules or []);
       };
     importSite = src: resolveHomeModules (import src);

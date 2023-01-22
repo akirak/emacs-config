@@ -75,6 +75,7 @@
 (defun akirak-org-clock--check-before-save ()
   (require 'org-clock)
   (require 'akirak-org-dog)
+  (require 'org-dog-overview)
   (pcase-exhaustive (akirak-org-clock--target)
     (`(,files ,query-prefix ,tag ,further)
      (or (and (org-clocking-p)
@@ -108,7 +109,13 @@
 
 (defun akirak-org-clock--target ()
   (pcase (project-root (or (project-current)
-                           (user-error "Not in a project. First create a project")))
+                           (if (yes-or-no-p "Not in a project. Run git init?")
+                               (progn
+                                 (let ((default-directory (read-directory-name "Run git init at: ")))
+                                   (call-process "git" nil nil nil "init"))
+                                 (or (project-current)
+                                     (user-error "The directory is not inside a project")))
+                             (user-error "Must be in a project"))))
     ((rx "/foss/contributions/")
      (list (list (car (akirak-org-dog-major-mode-files)))
            "tag:@contribution "

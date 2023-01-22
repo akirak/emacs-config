@@ -2365,8 +2365,8 @@ Outline-based notes management and organizer
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
     (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
-    (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
-    (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
+    ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
+    ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
     (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
     (define-key akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
 
@@ -2635,11 +2635,16 @@ Transient commands for Org Dog
   (setup (:package octopus)
     (:global "M-g M-o" #'octopus-find-file
              "M-s M-o" #'octopus-find-node)
+
+    (define-key akirak/c-z-map "I" #'octopus-clock-in)
+    (define-key akirak/c-z-map "C-i" #'octopus-clock-in)
+
     (:set octopus-find-node-verbs
           '((?f "Display a node" nil akirak-org-ql-find-default)
             (?v "Display a search view" nil akirak/org-ql-search-files)
             (?o "Open a heading link" nil akirak-org-ql-open-link)
-            (?i "Insert a target" nil org-nlink-insert-plain)))
+            (?i "Insert a target" nil org-nlink-insert-plain))
+          octopus-super-link-drawer-list '("BLOCKING"))
 
     (:with-feature org
       (:when-loaded
@@ -4705,6 +4710,7 @@ On-the-fly syntax checking
 :END:
 #+begin_quote
 A Flymake backend for Javascript using eslint
+[[https://github.com/orzechowskid/flymake-eslint]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5885,6 +5891,19 @@ Frontend to experimental commands of Nix
   (setup (:package nix3)
     (:set nix3-flake-worktree-promise-fn #'akirak/nix3-flake-find-repo)
 
+    (defconst akirak/nix3-registry-url
+      "https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json")
+
+    (defun akirak/nix3-flake-lock-from-pins ()
+      (compile (mapconcat #'shell-quote-argument
+                          `("nix" "flake" "lock"
+                            "--registry" ,akirak/nix3-registry-url)
+                          " ")))
+
+    (:when-loaded
+      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-lock-from-pins
+                nil t))
+
     (defun akirak/nix3-flake-find-repo (alist)
       (require 'akirak-git-clone)
       (let-alist alist
@@ -6624,6 +6643,7 @@ OCaml mode
 #+begin_src emacs-lisp
   (setup (:package tuareg)
     (:nixpkgs "opam")
+    (:mode-repl utop)
     (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"))
 #+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
@@ -6718,6 +6738,21 @@ I don't use use-package, but I only need indentation:
 
 #+begin_src emacs-lisp
   (put 'use-package 'lisp-indent-function 1)
+#+end_src
+*** utop                                                          :@extra:OCaml:
+:PROPERTIES:
+:CREATED_TIME: [2023-01-14 Sat 17:17]
+:END:
+#+begin_quote
+Universal toplevel for OCaml
+[[https://github.com/ocaml-community/utop]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package utop)
+    (:nixpkgs "ocamlPackages.utop")
+    (:set utop-edit-command nil)
+    (add-hook 'utop-exit-hook #'kill-buffer))
 #+end_src
 *** valign
 :PROPERTIES:
@@ -7336,13 +7371,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 230 |
+| [[org-ql-search:tags:packages][packages]]            | 231 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |  10 |
+| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:library][library]]             |   9 |
-| [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:VC][VC]]                  |   8 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -7361,6 +7396,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
+| [[org-ql-search:tags:OCaml][OCaml]]               |   3 |
 | [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
@@ -7369,7 +7405,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
-| [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:social][social]]              |   2 |
 | [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
@@ -7476,6 +7511,7 @@ To use these features, they need to be turned on at build time.
 | [[lsp-mode][lsp-mode]]     |      |
 | [[mermaid-mode][mermaid-mode]] |      |
 | [[tuareg][tuareg]]       |      |
+| [[utop][utop]]         |      |
 #+END:
 *** Links
 :PROPERTIES:

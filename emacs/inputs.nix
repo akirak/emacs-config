@@ -30,6 +30,10 @@
     files = builtins.removeAttrs super.files [".dir-locals.el"];
   };
 
+  reformatter = _: _: {
+    version = "0.6";
+  };
+
   # Quite a few dired extension packages have missing dependencies.
   dired-collapse = _: super: {
     packageRequires =

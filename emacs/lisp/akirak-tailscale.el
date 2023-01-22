@@ -32,11 +32,11 @@
   "Copy a file to another machine in the tailscale network."
   (interactive "f")
   (with-current-buffer (get-buffer-create "*tailscale*")
-    (call-process "tailscale" nil (list t nil) nil
-                  "file" "copy" file
-                  (concat (akirak-tailscale-complete-peer-name
-                           "Copy file to: ")
-                          ":"))))
+    (let ((file (expand-file-name file))
+          (dest (akirak-tailscale-complete-peer-name "Copy file to: ")))
+      (call-process "tailscale" nil t nil
+                    "file" "cp" file (concat dest ":"))
+      (message "Copied file to %s" dest))))
 
 (provide 'akirak-tailscale)
 ;;; akirak-tailscale.el ends here

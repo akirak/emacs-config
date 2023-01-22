@@ -193,7 +193,7 @@
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
   (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
-  (add-to-list 'embark-target-finders #'akirak-embark-target-magit-section)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-magit-section t)
 
   (embark-define-thingatpt-target sentence
     nov-mode eww-mode)

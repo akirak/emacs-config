@@ -167,7 +167,8 @@ With ARG, pick a text from the kill ring instead of the last one."
               (goto-char begin)
               (when (looking-at (rx (* space) "#+begin_src" space))
                 (let ((lang (thread-last
-                              (akirak-complete-major-mode "Source language: ")
+                              (akirak-complete-major-mode "Source language: " nil nil
+                                                          :org-src-langs t)
                               (string-remove-suffix "-mode"))))
                   (end-of-line 1)
                   (insert lang))))
@@ -216,20 +217,11 @@ With ARG, pick a text from the kill ring instead of the last one."
        ((and (looking-at (rx ">" eol))
              (looking-back (rx bol "<" (group (+ (any alnum "-"))))
                            (line-beginning-position)))
-        (let* ((needle (match-string 1))
-               (mode (or (cl-some (pcase-lambda (`(,pat . ,mode))
-                                    (when (string-match-p pat (concat "." needle))
-                                      mode))
-                                  auto-mode-alist)
-                         (let ((sym (intern (concat needle "-mode"))))
-                           (when (and (commandp sym)
-                                      (not (memq sym minor-mode-list)))
-                             sym))
-                         (akirak-complete-major-mode "Language: " needle))))
+        (let ((lang (akirak-org--find-src-lang (match-string 1))))
           (delete-region (line-beginning-position)
                          (line-end-position))
           (org-insert-structure-template
-           (concat "src " (string-remove-suffix "-mode" (symbol-name mode))))
+           (concat "src " lang))
           (if arg
               (progn
                 (org-end-of-line 0)
@@ -254,6 +246,24 @@ With ARG, pick a text from the kill ring instead of the last one."
           (insert (make-string count ?<)
                   (make-string count ?>))
           (backward-char count)))))))
+
+(defun akirak-org--find-src-lang (needle)
+  (if (assoc needle org-src-lang-modes)
+      needle
+    (let* ((mode (or (cl-some (pcase-lambda (`(,pat . ,mode))
+                                (when (string-match-p pat (concat "." needle))
+                                  mode))
+                              auto-mode-alist)
+                     (let ((sym (intern (concat needle "-mode"))))
+                       (when (and (commandp sym)
+                                  (not (memq sym minor-mode-list)))
+                         sym))
+                     (akirak-complete-major-mode "Language: " needle nil
+                                                 :org-src-langs t)))
+           (lang (string-remove-suffix "-mode" (symbol-name mode))))
+      (or (car (rassq (intern lang)
+                      org-src-lang-modes))
+          lang))))
 
 ;;;###autoload
 (defun akirak-org-square-open (&optional n)
