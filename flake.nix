@@ -326,7 +326,8 @@
           })
 
           ./nixos/profiles/default-user.nix
-          # ./nixos/desktop.nix
+          ./nixos/desktop.nix
+          ./nixos/river.nix
           ./nixos/development.nix
           ./nixos/profiles/tailscale.nix
         ];
