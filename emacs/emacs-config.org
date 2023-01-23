@@ -6866,6 +6866,7 @@ major mode for editing web templates
 #+begin_src emacs-lisp
   (setup (:package web-mode)
     (:set web-mode-enable-front-matter-block t)
+    (:org-src-lang "html")
     (:file-match "\\.mdx\\'"
                  "\\.html?\\'"
                  "\\.html\\.h?eex\\'"
