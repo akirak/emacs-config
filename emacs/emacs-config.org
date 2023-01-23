@@ -201,6 +201,24 @@ I am interested to see if it can reduce the amount of configuration code.
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
+*** :org-src-lang
+:PROPERTIES:
+:CREATED_TIME: [2023-01-23 Mon 19:37]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :org-src-lang (lang)
+     "Add an entry to `org-src-lang-modes' for the mode."
+     `(with-eval-after-load "org-src"
+        (add-to-list 'org-src-lang-modes
+                     (cons ,lang ',(thread-last
+                                     (setup-get 'mode)
+                                     (symbol-name)
+                                     (string-remove-suffix "-mode")
+                                     (intern)))))))
+#+end_src
 *** :reformatters
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
