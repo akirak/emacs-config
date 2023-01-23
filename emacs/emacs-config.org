@@ -6705,7 +6705,8 @@ Major mode for editing typescript
 
     ;; C-c ' should be bound to separedit globally, and I don't want to override
     ;; it in typescript-mode.
-    (:bind "C-c `" #'typescript-convert-to-template)
+    (:bind "C-c `" #'typescript-convert-to-template
+           "C-c C-e" #'akirak-jsx-close-tag)
     (:unbind "C-c '")
 
     (:hook (defun akirak/typescript-setup ()
