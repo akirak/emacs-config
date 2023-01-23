@@ -7,12 +7,14 @@
 ;;;###autoload
 (defun akirak-puni-mode-setup ()
   (cl-case (derived-mode-p 'elixir-mode
+                           'elixir-ts-mode
                            'tsx-mode
                            'js-jsx-mode
+                           'typescript-ts-mode
                            'svelte-mode)
-    (elixir-mode
+    ((elixir-mode elixir-ts-mode)
      (akirak-puni-elixir-setup))
-    ((tsx-mode js-jsx-mode)
+    ((tsx-mode js-jsx-mode typescript-ts-mode)
      (if (require 'tagedit nil t)
          (akirak-puni-jsx-setup)
        (message "Warning[akirak-puni]: JSX is detected, but tagedit is unavailable.")))
