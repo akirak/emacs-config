@@ -13,6 +13,7 @@
 - [[#typography-settings][Typography settings]]
 - [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#org][Org]]
+- [[#treesit-based-major-modes][Treesit-based major modes]]
 - [[#packages][Packages]]
 - [[#various-hooks-and-hacks-related-to-window-management][Various Hooks and hacks related to window management]]
 - [[#post-init][Post init]]
@@ -1637,21 +1638,6 @@ Thus I will explicitly install this package rather than using the built-in versi
       (add-hook 'json-mode-hook 'json-ts-mode)
       (add-hook 'go-mode-hook 'go-ts-mode)))
 #+end_src
-*** tsx-ts-mode
-:PROPERTIES:
-:CREATED_TIME: [2023-01-03 Tue 11:20]
-:END:
-
-#+begin_src emacs-lisp
-  (setup tsx-ts-mode
-    (:file-match "\\.tsx\\'")
-
-    ;; Maybe unnecessary
-    ;; (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
-    ;;             end-of-defun-function #'akirak-typescript-end-of-defun)
-
-    (:bind "C-c C-e" #'akirak-jsx-close-tag))
-#+end_src
 *** vc-hooks                                                    :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -3174,6 +3160,66 @@ Hugo Markdown Back-End for Org Export Engine
 
 #+begin_src emacs-lisp
 (setup (:package ox-hugo))
+#+end_src
+** Treesit-based major modes
+*** tsx-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-01-03 Tue 11:20]
+:END:
+
+#+begin_src emacs-lisp
+  (setup tsx-ts-mode
+    (:org-src-lang "react")
+
+    (:bind "C-c C-e" #'akirak-jsx-close-tag))
+#+end_src
+*** typescript-ts-mode                                              :major_mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-06 Thu 18:39]
+:END:
+#+begin_quote
+Major mode for editing typescript
+[[http://github.com/ananthakumaran/typescript.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup typescript-ts-mode
+    ;; (:also-load akirak-typescript)
+
+    (:org-src-lang "typescript")
+
+    (:hook (defun akirak/typescript-setup ()
+             (add-to-list (make-local-variable 'electric-pair-pairs)
+                          '(?< . ?>))))
+
+    (:compilation-error
+     (tsc "\\([^z-a]+\\.tsx?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\) - \\(error\\) "
+          1 2 3 (4 . 4))
+     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+             2 3 4 (1 . 1))
+     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
+                 1 2 3 (4 . 4))
+     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
+               2 3 4 (1 . 1))))
+#+end_src
+**** COMMENT akirak-typescript                                                 :ARCHIVE:
+#+begin_src emacs-lisp
+  (setup akirak-typescript
+    (:with-mode typescript-mode
+      (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
+                  end-of-defun-function #'akirak-typescript-end-of-defun)))
+#+end_src
+**** COMMENT typescript-tsx-mode                                               :ARCHIVE:
+#+begin_src emacs-lisp
+  (setup tsx-mode
+    (:file-match "\\.tsx\\'")
+
+    ;; https://github.com/emacs-typescript/typescript.el/issues/4#issuecomment-849355222
+    (define-derived-mode tsx-mode typescript-mode
+      "tsx")
+
+    (with-eval-after-load 'typescript-mode
+      (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
@@ -6687,58 +6733,6 @@ Frontend to Twist configuration
 
 #+begin_src emacs-lisp
 (setup (:package twist))
-#+end_src
-*** typescript-mode                                     :major_mode:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-06 Thu 18:39]
-:END:
-#+begin_quote
-Major mode for editing typescript
-[[http://github.com/ananthakumaran/typescript.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package typescript-mode)
-    (:file-match "\\.ts\\'")
-    (:set typescript-indent-level 2)
-    (:also-load akirak-typescript)
-
-    ;; C-c ' should be bound to separedit globally, and I don't want to override
-    ;; it in typescript-mode.
-    (:bind "C-c `" #'typescript-convert-to-template
-           "C-c C-e" #'akirak-jsx-close-tag)
-    (:unbind "C-c '")
-
-    (:hook (defun akirak/typescript-setup ()
-             (add-to-list (make-local-variable 'electric-pair-pairs)
-                          '(?< . ?>))))
-
-    (:compilation-error
-     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
-             2 3 4 (1 . 1))
-     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
-                 1 2 3 (4 . 4))
-     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
-               2 3 4 (1 . 1))))
-#+end_src
-**** COMMENT akirak-typescript                                                 :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup akirak-typescript
-    (:with-mode typescript-mode
-      (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
-                  end-of-defun-function #'akirak-typescript-end-of-defun)))
-#+end_src
-**** COMMENT typescript-tsx-mode                                               :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup tsx-mode
-    (:file-match "\\.tsx\\'")
-
-    ;; https://github.com/emacs-typescript/typescript.el/issues/4#issuecomment-849355222
-    (define-derived-mode tsx-mode typescript-mode
-      "tsx")
-
-    (with-eval-after-load 'typescript-mode
-      (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
