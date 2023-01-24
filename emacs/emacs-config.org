@@ -2706,7 +2706,10 @@ Facade Org files
     (add-hook 'org-capture-prepare-finalize-hook
               #'akirak/org-dog-datetree-propagate)
     (:set org-dog-datetree-propagate-on-refile t
-          org-dog-datetree-generate-id-on-refile t)
+          org-dog-datetree-generate-id-on-refile t
+          org-dog-datetree-tag-predicate
+          (defun akirak/org-dog-datetree-tag-propagated-p (tag)
+            (not (string-prefix-p "@" tag))))
 
     (defun akirak/org-dog-datetree-propagate ()
       (require 'org-reverse-datetree)
