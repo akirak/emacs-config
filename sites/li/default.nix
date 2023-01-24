@@ -8,7 +8,7 @@ in {
     "river"
     "symlinks"
     "personal"
-    # "work"
+    "work"
   ];
 
   extraHomeModules = [
