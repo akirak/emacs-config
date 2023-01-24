@@ -6768,8 +6768,7 @@ Universal toplevel for OCaml
 #+begin_src emacs-lisp
   (setup (:package utop)
     (:nixpkgs "ocamlPackages.utop")
-    (:set utop-edit-command nil)
-    (add-hook 'utop-exit-hook #'kill-buffer))
+    (:set utop-edit-command nil))
 #+end_src
 *** valign
 :PROPERTIES:
