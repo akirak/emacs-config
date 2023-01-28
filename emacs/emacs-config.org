@@ -1217,7 +1217,7 @@ Operations on the current project
           (:unbind "p")
           ;; Rebind the key
           (:bind "p" #'akirak-consult-project-file))
-        (global-set-key (kbd "C-c p") project-prefix-map))))
+        (global-set-key (kbd "C-x M") project-prefix-map))))
 #+end_src
 **** akirak-project
 #+begin_src emacs-lisp
@@ -6950,33 +6950,7 @@ Compilation helpers
     (with-eval-after-load 'project
       (define-key project-prefix-map "m" #'workbox-run-some-package-manager))
 
-    (:set workbox-mix-command-runner #'akirak-vterm-run-in-project)
-
-    ;; (:when-loaded
-    ;;   (defmacro akirak/define-nix-run (name package &optional args)
-    ;;     (declare (indent 1))
-    ;;     `(defun ,(intern (concat "akirak/" name)) (args)
-    ;;        (interactive (list (if current-prefix-arg
-    ;;                               (read-string "Arguments: " ,args)
-    ;;                             ,args)))
-    ;;        (let ((default-directory (project-root (project-current))))
-    ;;          (compile (concat "nix run .#" ,package
-    ;;                           " --print-build-logs"
-    ;;                           (if args (concat " " args) ""))))))
-
-    ;;   (require 'akirak-twist)
-    ;;   (let ((map (project-hercules-make-map akirak-twist-root-directory
-    ;;                                         :transient t)))
-    ;;     (define-key map (kbd "E")
-    ;;                 (akirak/define-nix-run "run-emacs"
-    ;;                   "emacs-personalized" "--impure"))
-    ;;     (define-key map (kbd "L")
-    ;;                 (akirak/define-nix-run "lock-elisp-packages"
-    ;;                   "lock" "--impure"))
-    ;;     (define-key map (kbd "U")
-    ;;                 (akirak/define-nix-run "update-elisp-packages"
-    ;;                   "update-elisp"))))
-    )
+    (:set workbox-mix-command-runner #'akirak-vterm-run-in-project))
 #+end_src
 *** ws-butler                                           :formatting:
 :PROPERTIES:
