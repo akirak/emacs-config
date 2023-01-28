@@ -74,6 +74,12 @@
       repo = "blamer.el";
       type = "github";
     };
+    browse-at-remote = {
+      flake = false;
+      owner = "rmuslimov";
+      repo = "browse-at-remote";
+      type = "github";
+    };
     burly = {
       flake = false;
       owner = "alphapapa";
@@ -1241,12 +1247,6 @@
       flake = false;
       owner = "ocaml";
       repo = "tuareg";
-      type = "github";
-    };
-    typescript-mode = {
-      flake = false;
-      owner = "emacs-typescript";
-      repo = "typescript.el";
       type = "github";
     };
     utop = {
