@@ -92,5 +92,24 @@
                                         'transient-value
                                       'transient-inactive-value))))))
 
+;;;; akirak-transient-string-variable
+
+(defclass akirak-transient-string-variable (akirak-transient-variable)
+  ())
+
+(cl-defmethod transient-infix-read ((obj akirak-transient-string-variable))
+  (let ((value (oref obj value)))
+    (if value
+        nil
+      (read-from-minibuffer (oref obj prompt)))))
+
+(cl-defmethod transient-format-value ((obj akirak-transient-string-variable))
+  (if-let (value (oref obj value))
+      (concat
+       (propertize "(" 'face 'transient-inactive-value)
+       (propertize value 'face 'transient-value)
+       (propertize ")" 'face 'transient-inactive-value))
+    ""))
+
 (provide 'akirak-transient)
 ;;; akirak-transient.el ends here

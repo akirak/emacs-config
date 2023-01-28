@@ -127,6 +127,14 @@
   :if (lambda () (string-match-p (rx "#") akirak-capture-current-url))
   :description "Url fragment")
 
+(defvar akirak-capture-url-title nil)
+
+(transient-define-infix akirak-capture-url-title ()
+  :class 'akirak-transient-string-variable
+  :variable 'akirak-capture-url-title
+  :prompt "Title: "
+  :description "Title")
+
 ;;;; akirak-capture-doct: A generic prefix command
 
 (defvar akirak-capture-headline nil)
@@ -684,7 +692,8 @@
   [:class
    transient-row
    ("SPC" akirak-capture-source-url)
-   ("-f" akirak-capture-url-fragment)]
+   ("-f" akirak-capture-url-fragment)
+   ("C-l" akirak-capture-url-title)]
   ["Options"
    :class transient-row
    ("-t" akirak-capture-todo-infix)
@@ -708,7 +717,8 @@
     (lambda ()
       (interactive)
       (let* ((url akirak-capture-current-url)
-             (heading (org-link-make-string url (orgabilize-document-title url)))
+             (heading (org-link-make-string url (or akirak-capture-url-title
+                                                    (orgabilize-document-title url))))
              (jump-func #'akirak-capture--goto-backlog)
              (org-capture-entry
               (car (doct
@@ -725,6 +735,7 @@
   (interactive (list (or (akirak-url-latest)
                          (akirak-url-complete "Capture URL: "))))
   (setq akirak-capture-current-url url
+        akirak-capture-url-title nil
         akirak-capture-doct-options nil
         akirak-capture-template-options nil)
   (transient-setup 'akirak-capture-url))
@@ -733,7 +744,9 @@
                                  target)
   (require 'orgabilize)
   (let* ((url akirak-capture-current-url)
-         (heading (orgabilize-make-link-string url akirak-capture-include-url-fragment))
+         (heading (if akirak-capture-url-title
+                      (org-link-make-string url akirak-capture-url-title)
+                    (orgabilize-make-link-string url akirak-capture-include-url-fragment)))
          (org-capture-entry
           (car (doct
                 `(("Url"

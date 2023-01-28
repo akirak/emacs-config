@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
-    wpsoffice
+    # Fail to build
+    # wpsoffice
     ipafont
   ];
 }

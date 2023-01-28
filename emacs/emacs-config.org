@@ -13,6 +13,7 @@
 - [[#typography-settings][Typography settings]]
 - [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#org][Org]]
+- [[#treesit-based-major-modes][Treesit-based major modes]]
 - [[#packages][Packages]]
 - [[#various-hooks-and-hacks-related-to-window-management][Various Hooks and hacks related to window management]]
 - [[#post-init][Post init]]
@@ -200,6 +201,24 @@ I am interested to see if it can reduce the amount of configuration code.
   (eval-when-compile
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
+#+end_src
+*** :org-src-lang
+:PROPERTIES:
+:CREATED_TIME: [2023-01-23 Mon 19:37]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :org-src-lang (lang)
+     "Add an entry to `org-src-lang-modes' for the mode."
+     `(with-eval-after-load "org-src"
+        (add-to-list 'org-src-lang-modes
+                     (cons ,lang ',(thread-last
+                                     (setup-get 'mode)
+                                     (symbol-name)
+                                     (string-remove-suffix "-mode")
+                                     (intern)))))))
 #+end_src
 *** :reformatters
 :PROPERTIES:
@@ -1198,7 +1217,7 @@ Operations on the current project
           (:unbind "p")
           ;; Rebind the key
           (:bind "p" #'akirak-consult-project-file))
-        (global-set-key (kbd "C-c p") project-prefix-map))))
+        (global-set-key (kbd "C-x M") project-prefix-map))))
 #+end_src
 **** akirak-project
 #+begin_src emacs-lisp
@@ -1618,21 +1637,6 @@ Thus I will explicitly install this package rather than using the built-in versi
       (add-hook 'typescript-mode-hook 'typescript-ts-mode)
       (add-hook 'json-mode-hook 'json-ts-mode)
       (add-hook 'go-mode-hook 'go-ts-mode)))
-#+end_src
-*** tsx-ts-mode
-:PROPERTIES:
-:CREATED_TIME: [2023-01-03 Tue 11:20]
-:END:
-
-#+begin_src emacs-lisp
-  (setup tsx-ts-mode
-    (:file-match "\\.tsx\\'")
-
-    ;; Maybe unnecessary
-    ;; (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
-    ;;             end-of-defun-function #'akirak-typescript-end-of-defun)
-
-    (:bind "C-c C-e" #'akirak-jsx-close-tag))
 #+end_src
 *** vc-hooks                                                    :VC:
 :PROPERTIES:
@@ -2548,6 +2552,7 @@ A programmable workflow layer for Org mode
           `(("^\\.github/" . "services/github.com")
             ("\\.h?eex\\'" . "programming/elixir")
             ("package\\.yaml\\'" . "programming/haskell")
+            ("tsconfig\\." . "programming/typescript")
             ("hie\\.yaml\\'" . "programming/haskell"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
 
@@ -2701,7 +2706,10 @@ Facade Org files
     (add-hook 'org-capture-prepare-finalize-hook
               #'akirak/org-dog-datetree-propagate)
     (:set org-dog-datetree-propagate-on-refile t
-          org-dog-datetree-generate-id-on-refile t)
+          org-dog-datetree-generate-id-on-refile t
+          org-dog-datetree-tag-predicate
+          (defun akirak/org-dog-datetree-tag-propagated-p (tag)
+            (not (string-prefix-p "@" tag))))
 
     (defun akirak/org-dog-datetree-propagate ()
       (require 'org-reverse-datetree)
@@ -3156,6 +3164,59 @@ Hugo Markdown Back-End for Org Export Engine
 
 #+begin_src emacs-lisp
 (setup (:package ox-hugo))
+#+end_src
+** Treesit-based major modes
+*** typescript-ts-mode                                              :major_mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-06 Thu 18:39]
+:END:
+#+begin_quote
+Major mode for editing typescript
+[[http://github.com/ananthakumaran/typescript.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup typescript-ts-mode
+    ;; (:also-load akirak-typescript)
+
+    (:org-src-lang "typescript")
+
+    (:hook (defun akirak/typescript-setup ()
+             (add-to-list (make-local-variable 'electric-pair-pairs)
+                          '(?< . ?>))))
+
+    (:with-mode tsx-ts-mode
+      (:org-src-lang "react")
+      (:bind "C-c C-e" #'akirak-jsx-close-tag))
+
+    (:compilation-error
+     (tsc "\\([^z-a]+\\.tsx?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\) - \\(error\\) "
+          1 2 3 (4 . 4))
+     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+             2 3 4 (1 . 1))
+     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
+                 1 2 3 (4 . 4))
+     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
+               2 3 4 (1 . 1))))
+#+end_src
+**** COMMENT akirak-typescript                                                 :ARCHIVE:
+#+begin_src emacs-lisp
+  (setup akirak-typescript
+    (:with-mode typescript-mode
+      (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
+                  end-of-defun-function #'akirak-typescript-end-of-defun)))
+#+end_src
+**** COMMENT typescript-tsx-mode                                               :ARCHIVE:
+#+begin_src emacs-lisp
+  (setup tsx-mode
+    (:file-match "\\.tsx\\'")
+
+    ;; https://github.com/emacs-typescript/typescript.el/issues/4#issuecomment-849355222
+    (define-derived-mode tsx-mode typescript-mode
+      "tsx")
+
+    (with-eval-after-load 'typescript-mode
+      (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
@@ -6670,57 +6731,6 @@ Frontend to Twist configuration
 #+begin_src emacs-lisp
 (setup (:package twist))
 #+end_src
-*** typescript-mode                                     :major_mode:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-06 Thu 18:39]
-:END:
-#+begin_quote
-Major mode for editing typescript
-[[http://github.com/ananthakumaran/typescript.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package typescript-mode)
-    (:file-match "\\.ts\\'")
-    (:set typescript-indent-level 2)
-    (:also-load akirak-typescript)
-
-    ;; C-c ' should be bound to separedit globally, and I don't want to override
-    ;; it in typescript-mode.
-    (:bind "C-c `" #'typescript-convert-to-template)
-    (:unbind "C-c '")
-
-    (:hook (defun akirak/typescript-setup ()
-             (add-to-list (make-local-variable 'electric-pair-pairs)
-                          '(?< . ?>))))
-
-    (:compilation-error
-     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
-             2 3 4 (1 . 1))
-     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
-                 1 2 3 (4 . 4))
-     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
-               2 3 4 (1 . 1))))
-#+end_src
-**** COMMENT akirak-typescript                                                 :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup akirak-typescript
-    (:with-mode typescript-mode
-      (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
-                  end-of-defun-function #'akirak-typescript-end-of-defun)))
-#+end_src
-**** COMMENT typescript-tsx-mode                                               :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup tsx-mode
-    (:file-match "\\.tsx\\'")
-
-    ;; https://github.com/emacs-typescript/typescript.el/issues/4#issuecomment-849355222
-    (define-derived-mode tsx-mode typescript-mode
-      "tsx")
-
-    (with-eval-after-load 'typescript-mode
-      (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
-#+end_src
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]
@@ -6751,8 +6761,7 @@ Universal toplevel for OCaml
 #+begin_src emacs-lisp
   (setup (:package utop)
     (:nixpkgs "ocamlPackages.utop")
-    (:set utop-edit-command nil)
-    (add-hook 'utop-exit-hook #'kill-buffer))
+    (:set utop-edit-command nil))
 #+end_src
 *** valign
 :PROPERTIES:
@@ -6848,6 +6857,7 @@ major mode for editing web templates
 #+begin_src emacs-lisp
   (setup (:package web-mode)
     (:set web-mode-enable-front-matter-block t)
+    (:org-src-lang "html")
     (:file-match "\\.mdx\\'"
                  "\\.html?\\'"
                  "\\.html\\.h?eex\\'"
@@ -6940,33 +6950,7 @@ Compilation helpers
     (with-eval-after-load 'project
       (define-key project-prefix-map "m" #'workbox-run-some-package-manager))
 
-    (:set workbox-mix-command-runner #'akirak-vterm-run-in-project)
-
-    ;; (:when-loaded
-    ;;   (defmacro akirak/define-nix-run (name package &optional args)
-    ;;     (declare (indent 1))
-    ;;     `(defun ,(intern (concat "akirak/" name)) (args)
-    ;;        (interactive (list (if current-prefix-arg
-    ;;                               (read-string "Arguments: " ,args)
-    ;;                             ,args)))
-    ;;        (let ((default-directory (project-root (project-current))))
-    ;;          (compile (concat "nix run .#" ,package
-    ;;                           " --print-build-logs"
-    ;;                           (if args (concat " " args) ""))))))
-
-    ;;   (require 'akirak-twist)
-    ;;   (let ((map (project-hercules-make-map akirak-twist-root-directory
-    ;;                                         :transient t)))
-    ;;     (define-key map (kbd "E")
-    ;;                 (akirak/define-nix-run "run-emacs"
-    ;;                   "emacs-personalized" "--impure"))
-    ;;     (define-key map (kbd "L")
-    ;;                 (akirak/define-nix-run "lock-elisp-packages"
-    ;;                   "lock" "--impure"))
-    ;;     (define-key map (kbd "U")
-    ;;                 (akirak/define-nix-run "update-elisp-packages"
-    ;;                   "update-elisp"))))
-    )
+    (:set workbox-mix-command-runner #'akirak-vterm-run-in-project))
 #+end_src
 *** ws-butler                                           :formatting:
 :PROPERTIES:
@@ -7371,7 +7355,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 231 |
+| [[org-ql-search:tags:packages][packages]]            | 230 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -7405,9 +7389,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
+| [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:social][social]]              |   2 |
 | [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
-| [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:performance][performance]]         |   1 |

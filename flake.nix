@@ -255,15 +255,15 @@
             # networking.interfaces.enp0s31f6.useDHCP = true;
             # networking.interfaces.wlp2s0.useDHCP = true;
             networking.networkmanager.enable = true;
-            systemd.services.NetworkManager-wait-online.enable = true;
+            # systemd.services.NetworkManager-wait-online.enable = true;
 
             services.journald.extraConfig = ''
               SystemMaxFiles=5
             '';
 
-            virtualisation.virtualbox.host = {
-              enable = true;
-            };
+            # virtualisation.virtualbox.host = {
+            #   enable = true;
+            # };
 
             system.stateVersion = "22.11";
           }
@@ -281,9 +281,9 @@
           # Optional toy environment for experimenting with services
           # ./nixos/toy.nix
 
-          ./nixos/frontend.nix
-          ./nixos/development.nix
-          ./nixos/profiles/docker.nix
+          # ./nixos/frontend.nix
+          # ./nixos/development.nix
+          # ./nixos/profiles/docker.nix
           ./nixos/profiles/tailscale.nix
           # ./nixos/profiles/fcitx.nix
 
@@ -326,7 +326,8 @@
           })
 
           ./nixos/profiles/default-user.nix
-          # ./nixos/desktop.nix
+          ./nixos/desktop.nix
+          ./nixos/river.nix
           ./nixos/development.nix
           ./nixos/profiles/tailscale.nix
         ];
