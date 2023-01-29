@@ -6352,7 +6352,19 @@ Define commands which run reformatters on the current buffer
      ;; If you use prettier, you need to install its executable separately.
      (prettier
       :program "prettier"
-      :args (list "--stdin-filepath" (buffer-file-name)))))
+      :args (list "--stdin-filepath" (buffer-file-name)))
+     (treefmt
+      :program "treefmt"
+      :stdin nil :stdout nil :mode nil
+      :args (list (buffer-file-name))))
+
+    (define-minor-mode treefmt-mode
+      "Run treefmt after saving."
+      :global nil
+      :lighter " Treefmt"
+      (if (bound-and-true-p treefmt-mode)
+          (add-hook 'after-save-hook 'treefmt-buffer 90 t)
+        (remove-hook 'after-save-hook 'treefmt-buffer t))))
 #+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
@@ -6435,7 +6447,9 @@ Clean-up and Beautify the list of minor-modes.
 
 #+begin_src emacs-lisp
   (setup (:package rich-minority)
-    (:set rm-whitelist (rx (or "envrc" "OrgMemento")))
+    (:set rm-whitelist (rx (or "envrc"
+                               "OrgMemento"
+                               "Treefmt")))
     (:hook-into after-init-hook))
 #+end_src
 *** ruby-end
