@@ -3702,7 +3702,7 @@ Show git blame info about current line
     (define-key ctl-x-x-map (kbd "b") #'blamer-mode)
     (define-key help-map (kbd "M-g") #'blamer-show-commit-info))
 #+end_src
-*** COMMENT browse-at-remote                               :ARCHIVE:
+*** browse-at-remote
 :PROPERTIES:
 :CREATED_TIME: [2022-07-08 Fri 12:35]
 :END:
