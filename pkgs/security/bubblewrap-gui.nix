@@ -51,7 +51,7 @@ in
         --ro-bind-try /run/opengl-driver /run/opengl-driver \
         --tmpfs /tmp \
         --setenv DISPLAY ":0" \
-        --ro-bind /tmp/.X11-unix/X0 /tmp/.X11-unix/X0 \
+        --ro-bind-try /tmp/.X11-unix/X0 /tmp/.X11-unix/X0 \
         ''${xauthority_args} \
         ''${dbus_args} \
         --unshare-all \
