@@ -197,34 +197,6 @@
       ### hosts ###
       #############
 
-      hosts.container = {
-        extraArgs = {
-          site = importSite ./sites/container.nix;
-        };
-
-        modules = [
-          ({site, ...}: {
-            boot.isContainer = true;
-            networking.useDHCP = false;
-            networking.firewall = {
-              enable = true;
-              allowedTCPPorts = [];
-            };
-
-            services.openssh = {
-              enable = true;
-            };
-
-            system.stateVersion = "22.11";
-            home-manager.users.${site.username}.home.stateVersion = "22.11";
-          })
-
-          ./nixos/profiles/default-user.nix
-
-          ./nixos/base.nix
-        ];
-      };
-
       hosts.li = {
         system = "x86_64-linux";
         channelName = "unstable";
