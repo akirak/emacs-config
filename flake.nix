@@ -119,6 +119,7 @@
       // {
         homeModules =
           [
+            inputs.twist.homeModules.emacs-twist
             inputs.nix-index-database.hmModules.nix-index
           ]
           ++ nixpkgs.lib.attrVals config.homeModules homeProfiles
