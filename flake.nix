@@ -251,6 +251,8 @@
           # ./nixos/xmonad.nix
           ./nixos/river.nix
 
+          ./nixos/profiles/postgresql.nix
+
           # Optional toy environment for experimenting with services
           # ./nixos/toy.nix
 

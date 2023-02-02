@@ -7,7 +7,7 @@
       port = 5432;
 
       # Specify an explicit major version
-      package = pkgs.postgresql_14;
+      # package = pkgs.postgresql_14;
 
       # Trust local access
       authentication = pkgs.lib.mkOverride 12 ''
@@ -21,8 +21,7 @@
         }
       ];
       ensureDatabases = [
-        "postgres"
-        "hasura"
+        "metasub_dev"
       ];
 
       # Allow access from web applications
@@ -33,7 +32,8 @@
     };
 
     pgadmin = {
-      enable = true;
+      # Currently fails to build
+      # enable = true;
       # Default
       port = 5050;
       initialEmail = "akira.komamura@gmail.com";
