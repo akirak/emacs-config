@@ -2291,6 +2291,13 @@ Outline-based notes management and organizer
 
 #+begin_src emacs-lisp
   (setup org-capture
+    ;; org-capture adds an item after a note in the logbook. This is likely to be
+    ;; a bug, but I will work around it for now.
+    (advice-add 'org-capture-place-item
+                :before
+                (defun akirak/ad-before-org-capture-place-item (&rest _)
+                  (org-end-of-meta-data t)))
+
     (add-hook 'org-capture-prepare-finalize-hook
               (defun akirak/org-capture-maybe-fill-headline ()
                 "Edit the headline if it is missing."
