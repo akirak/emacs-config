@@ -509,6 +509,7 @@ This function returns the current buffer."
   (akirak-org-clock-require-clock
     (org-with-clock-position (list org-clock-marker)
       (akirak-org-clock--finalize-capture
+       (org-schedule nil)
        ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
        ;; will be tirggered when you switch to the state.
        (org-todo "REVIEW")))))
