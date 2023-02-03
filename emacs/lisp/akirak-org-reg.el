@@ -151,7 +151,8 @@
                   transient-suffix
                   ,(list :key (char-to-string key)
                          :description (propertize description 'face 'font-lock-doc-face)
-                         :command symbol))
+                         :command symbol
+                         :transient nil))
                 entries))))
     (nreverse entries)))
 
@@ -161,9 +162,12 @@
 (transient-define-prefix akirak-org-reg-transient ()
   "Dispatch an action on a place."
   ["Dynamic"
-   ("j" akirak-org-reg-dispatch-on-clock)
-   ("m" akirak-org-reg-dispatch-on-memento)
-   ("c" akirak-org-reg-dispatch-on-last-capture)]
+   ("j" akirak-org-reg-dispatch-on-clock
+    :transient nil)
+   ("m" akirak-org-reg-dispatch-on-memento
+    :transient nil)
+   ("c" akirak-org-reg-dispatch-on-last-capture
+    :transient nil)]
   ["Registry"
    :setup-children akirak-org-reg-register-suffixes]
   (interactive)
