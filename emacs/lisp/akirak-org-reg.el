@@ -1,6 +1,7 @@
 ;;; akirak-org-reg.el --- Transient for Org places -*- lexical-binding: t -*-
 
 (require 'org)
+(require 'org-capture)
 (require 'transient)
 
 (defcustom akirak-org-reg-action-fn #'akirak-embark-on-org-hd-marker
