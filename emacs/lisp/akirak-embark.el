@@ -147,7 +147,9 @@
     (org-open-at-point)
     (let ((buffer (current-buffer)))
       (set-window-configuration org-window-config-before-follow-link)
-      (switch-to-buffer buffer))))
+      (switch-to-buffer buffer)
+      (when (fboundp 'pulse-momentary-highlight-one-line)
+        (pulse-momentary-highlight-one-line)))))
 
 (defun akirak-embark-org-point-to-register ()
   (interactive)
