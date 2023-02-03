@@ -144,7 +144,10 @@
     ;; beginning of the entry. It works if the point is not on the marker.
     (when (looking-at org-complex-heading-regexp)
       (goto-char (match-beginning 4)))
-    (org-open-at-point)))
+    (org-open-at-point)
+    (let ((buffer (current-buffer)))
+      (set-window-configuration org-window-config-before-follow-link)
+      (switch-to-buffer buffer))))
 
 (defun akirak-embark-org-point-to-register ()
   (interactive)
