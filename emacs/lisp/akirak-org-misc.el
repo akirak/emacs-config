@@ -45,7 +45,7 @@
                                           group-path (taxy-flatten taxy)))))
                   (weekly-goal (seq-find #'weekly-goal-p budgets)))
              (list (if id
-                       (org-link-make-string id title)
+                       (org-link-make-string (concat "id:" id) title)
                      title)
                    file-link
                    todo
