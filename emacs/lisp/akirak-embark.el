@@ -140,6 +140,10 @@
   (require 'akirak-org)
   (org-with-point-at akirak-embark-target-org-marker
     (org-back-to-heading)
+    ;; org-open-at-point sometimes doesn't work when the point is at the
+    ;; beginning of the entry. It works if the point is not on the marker.
+    (when (looking-at org-complex-heading-regexp)
+      (goto-char (match-beginning 4)))
     (org-open-at-point)))
 
 (defun akirak-embark-org-point-to-register ()
