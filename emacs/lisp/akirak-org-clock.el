@@ -507,11 +507,13 @@ This function returns the current buffer."
 (defun akirak-org-clock-set-review ()
   (interactive)
   (akirak-org-clock-require-clock
-    (org-with-clock-position (list org-clock-marker)
-      (akirak-org-clock--finalize-capture
-       ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
-       ;; will be tirggered when you switch to the state.
-       (org-todo "REVIEW")))))
+    (let ((date (org-read-date nil nil nil "Review date")))
+      (org-with-clock-position (list org-clock-marker)
+        (akirak-org-clock--finalize-capture
+         (org-schedule date)
+         ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
+         ;; will be tirggered when you switch to the state.
+         (org-todo "REVIEW"))))))
 
 ;;;; Stack
 
