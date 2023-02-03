@@ -2709,7 +2709,9 @@ Facade Org files
           org-dog-datetree-generate-id-on-refile t
           org-dog-datetree-tag-predicate
           (defun akirak/org-dog-datetree-tag-propagated-p (tag)
-            (not (string-prefix-p "@" tag))))
+            (string-match-p (rx bol (or "@tldr"
+                                        (not (any "@"))))
+                            tag)))
 
     (defun akirak/org-dog-datetree-propagate ()
       (require 'org-reverse-datetree)
