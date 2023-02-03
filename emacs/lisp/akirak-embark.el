@@ -338,9 +338,10 @@
     (embark-act)))
 
 ;;;###autoload
-(defun akirak-embark-on-org-hd-marker (marker)
+(defun akirak-embark-on-org-headline (marker)
   (interactive)
   (org-with-point-at marker
+    (org-back-to-heading)
     (embark-act)))
 
 (defun akirak-embark-target-grep-input ()

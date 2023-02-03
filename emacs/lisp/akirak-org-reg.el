@@ -4,7 +4,7 @@
 (require 'org-capture)
 (require 'transient)
 
-(defcustom akirak-org-reg-action-fn #'akirak-embark-on-org-hd-marker
+(defcustom akirak-org-reg-action-fn #'akirak-embark-on-org-headline
   "Function called on an Org marker."
   :type 'function)
 
