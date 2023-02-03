@@ -1,7 +1,6 @@
 ;;; akirak-org-beancount.el ---  -*- lexical-binding: t -*-
 
 (require 'org)
-(require 'akirak-beancount)
 
 (defgroup akirak-org-beancount nil
   ""
@@ -29,11 +28,14 @@
 (define-minor-mode akirak-org-beancount-mode
   "Minor mode for tracking items in `org-mode'."
   :init-value nil
-  (if akirak-org-beancount-mode
-      (add-hook 'before-save-hook #'akirak-org-beancount-sort-tables
-                nil t)
-    (remove-hook 'before-save-hook #'akirak-org-beancount-sort-tables
-                 t)))
+  (if (and (require 'beancount nil t)
+           (require 'akirak-beancount))
+      (if akirak-org-beancount-mode
+          (add-hook 'before-save-hook #'akirak-org-beancount-sort-tables
+                    nil t)
+        (remove-hook 'before-save-hook #'akirak-org-beancount-sort-tables
+                     t))
+    (setq akirak-org-beancount-mode nil)))
 
 ;;;###autoload
 (defun akirak-org-beancount-start-receipt ()
