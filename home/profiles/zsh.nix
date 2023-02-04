@@ -141,6 +141,7 @@
       "list-unit-files" = "systemctl --user list-unit-files";
       "reset" = "systemctl --user reset-failed";
       "nsearch" = "nix search --no-update-lock-file nixpkgs";
+      "ssh-victim" = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
       "npupgrade" = "nix profile upgrade $(nix profile list | fzy | cut -d' ' -f1)";
       "npremove" = "nix profile remove $(nix profile list | fzy | cut -d' ' -f1)";
     };
