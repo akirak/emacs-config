@@ -1,4 +1,4 @@
-# -*- org-id-link-to-org-use-id: nil; org-complete-tags-always-offer-all-agenda-tags: nil; -*-
+# -*- org-id-link-to-org-use-id: nil; org-complete-tags-always-offer-all-agenda-tags: nil; eval: (org-make-toc-mode t) -*-
 * A Progressive Emacs Configuration
 :PROPERTIES:
 :TOC:      :include descendants :depth 1
