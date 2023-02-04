@@ -3796,7 +3796,7 @@ Completion At Point Extensions
              "C-x r M-l" #'cape-line
              "C-M-/" #'cape-dabbrev))
 #+end_src
-*** code-review
+*** COMMENT code-review                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-23 Fri 21:19]
 :END:
