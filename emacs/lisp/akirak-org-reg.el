@@ -1,9 +1,10 @@
 ;;; akirak-org-reg.el --- Transient for Org places -*- lexical-binding: t -*-
 
 (require 'org)
+(require 'org-capture)
 (require 'transient)
 
-(defcustom akirak-org-reg-action-fn #'akirak-embark-on-org-hd-marker
+(defcustom akirak-org-reg-action-fn #'akirak-embark-on-org-headline
   "Function called on an Org marker."
   :type 'function)
 
@@ -69,7 +70,7 @@
     (format "\"%s\" in %s"
             (org-with-point-at marker
               (and (looking-at org-complex-heading-regexp)
-                   (match-string-no-properties 4)))
+                   (org-link-display-format (match-string-no-properties 4))))
             (buffer-name (marker-buffer marker)))))
 
 ;;;;; Concrete marker class
@@ -150,7 +151,8 @@
                   transient-suffix
                   ,(list :key (char-to-string key)
                          :description (propertize description 'face 'font-lock-doc-face)
-                         :command symbol))
+                         :command symbol
+                         :transient nil))
                 entries))))
     (nreverse entries)))
 
@@ -160,9 +162,12 @@
 (transient-define-prefix akirak-org-reg-transient ()
   "Dispatch an action on a place."
   ["Dynamic"
-   ("j" akirak-org-reg-dispatch-on-clock)
-   ("m" akirak-org-reg-dispatch-on-memento)
-   ("c" akirak-org-reg-dispatch-on-last-capture)]
+   ("j" akirak-org-reg-dispatch-on-clock
+    :transient nil)
+   ("m" akirak-org-reg-dispatch-on-memento
+    :transient nil)
+   ("c" akirak-org-reg-dispatch-on-last-capture
+    :transient nil)]
   ["Registry"
    :setup-children akirak-org-reg-register-suffixes]
   (interactive)

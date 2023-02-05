@@ -1,4 +1,4 @@
-# -*- org-id-link-to-org-use-id: nil; org-complete-tags-always-offer-all-agenda-tags: nil; -*-
+# -*- org-id-link-to-org-use-id: nil; org-complete-tags-always-offer-all-agenda-tags: nil; eval: (org-make-toc-mode t) -*-
 * A Progressive Emacs Configuration
 :PROPERTIES:
 :TOC:      :include descendants :depth 1
@@ -644,7 +644,8 @@ The other variables must not be saved, and they should be put in configuration:
 #+begin_src emacs-lisp
   (setup dired
     (:set dired-recursive-copies 'always
-          dired-recursive-deletes 'top)
+          dired-recursive-deletes 'top
+          dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-vterm-for-dir)
 
     (:bind "h" #'dired-up-directory)
@@ -1410,7 +1411,9 @@ This is a recommended setting for use with vertico. See https://github.com/minad
              [remap delete-horizontal-space] #'cycle-spacing
              [remap upcase-word] #'upcase-dwim
              [remap downcase-word] #'downcase-dwim
-             [remap capitalize-word] #'capitalize-dwim)
+             [remap capitalize-word] #'capitalize-dwim
+             ;; Originally bound to C-S-backspace
+             "C-c k" #'kill-whole-line)
 
     ;; I often type this sequence unintensionally. I never use this command, so
     ;; just disable the keybinding.
@@ -2291,6 +2294,13 @@ Outline-based notes management and organizer
 
 #+begin_src emacs-lisp
   (setup org-capture
+    ;; org-capture adds an item after a note in the logbook. This is likely to be
+    ;; a bug, but I will work around it for now.
+    (advice-add 'org-capture-place-item
+                :before
+                (defun akirak/ad-before-org-capture-place-item (&rest _)
+                  (org-end-of-meta-data t)))
+
     (add-hook 'org-capture-prepare-finalize-hook
               (defun akirak/org-capture-maybe-fill-headline ()
                 "Edit the headline if it is missing."
@@ -2709,7 +2719,9 @@ Facade Org files
           org-dog-datetree-generate-id-on-refile t
           org-dog-datetree-tag-predicate
           (defun akirak/org-dog-datetree-tag-propagated-p (tag)
-            (not (string-prefix-p "@" tag))))
+            (string-match-p (rx bol (or "@tldr"
+                                        (not (any "@"))))
+                            tag)))
 
     (defun akirak/org-dog-datetree-propagate ()
       (require 'org-reverse-datetree)
@@ -3702,7 +3714,7 @@ Show git blame info about current line
     (define-key ctl-x-x-map (kbd "b") #'blamer-mode)
     (define-key help-map (kbd "M-g") #'blamer-show-commit-info))
 #+end_src
-*** COMMENT browse-at-remote                               :ARCHIVE:
+*** browse-at-remote
 :PROPERTIES:
 :CREATED_TIME: [2022-07-08 Fri 12:35]
 :END:
@@ -3787,7 +3799,7 @@ Completion At Point Extensions
              "C-x r M-l" #'cape-line
              "C-M-/" #'cape-dabbrev))
 #+end_src
-*** code-review
+*** COMMENT code-review                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-23 Fri 21:19]
 :END:
@@ -6352,7 +6364,19 @@ Define commands which run reformatters on the current buffer
      ;; If you use prettier, you need to install its executable separately.
      (prettier
       :program "prettier"
-      :args (list "--stdin-filepath" (buffer-file-name)))))
+      :args (list "--stdin-filepath" (buffer-file-name)))
+     (treefmt
+      :program "treefmt"
+      :stdin nil :stdout nil :mode nil
+      :args (list (buffer-file-name))))
+
+    (define-minor-mode treefmt-mode
+      "Run treefmt after saving."
+      :global nil
+      :lighter " Treefmt"
+      (if (bound-and-true-p treefmt-mode)
+          (add-hook 'after-save-hook 'treefmt-buffer 90 t)
+        (remove-hook 'after-save-hook 'treefmt-buffer t))))
 #+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
@@ -6435,7 +6459,9 @@ Clean-up and Beautify the list of minor-modes.
 
 #+begin_src emacs-lisp
   (setup (:package rich-minority)
-    (:set rm-whitelist (rx (or "envrc" "OrgMemento")))
+    (:set rm-whitelist (rx (or "envrc"
+                               "OrgMemento"
+                               "Treefmt")))
     (:hook-into after-init-hook))
 #+end_src
 *** ruby-end

@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_0;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
 
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
 

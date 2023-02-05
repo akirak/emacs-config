@@ -326,6 +326,15 @@
 ;;;###autoload (autoload 'akirak-capture "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture (&optional initial)
   "Main entry point to capture commands."
+  [:description
+   (lambda ()
+     (format "Into the clocked entry \"%s\""
+             (octopus--marker-heading org-clock-hd-marker)))
+   :class transient-row
+   :if org-clocking-p
+   ("c" "Check item" akirak-capture-check-item-to-clock)
+   ("b" "Link to the current location" akirak-capture-link-item-to-clock)]
+
   ["Actions (generic / specific type)"
    :class transient-row
    ("T" "Start todo" (lambda ()
@@ -852,6 +861,26 @@
                                              ,(org-memento--today-string))
                              ,(akirak-org-capture-make-entry-body string)
                              :immediate-finish t)))
+    (org-capture)))
+
+(defun akirak-capture-check-item-to-clock ()
+  (interactive)
+  ;; Don't use %A. I want to keep the window configuration while typing the
+  ;; description.
+  (let ((org-capture-entry `("" "" checkitem (clock))))
+    (org-capture)))
+
+(defun akirak-capture-link-item-to-clock ()
+  (interactive)
+  ;; Don't use %A. I want to keep the window configuration while typing the
+  ;; description.
+  (let* ((description (akirak-capture--maybe-read-heading "Description: "))
+         (link (progn
+                 (org-store-link nil t)
+                 (org-link-make-string (car (pop org-stored-links))
+                                       description)))
+         (org-capture-entry `("" "" item (clock)
+                              ,(concat link " :: %?"))))
     (org-capture)))
 
 (defun akirak-capture-vocabulary ()

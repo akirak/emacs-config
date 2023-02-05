@@ -48,6 +48,7 @@ with builtins; let
 
   makeEmacsProfile = {
     extraFeatures,
+    prependToInitFile ? null,
     extraInitFiles,
     withXwidgets,
     nativeCompileAheadDefault ? true,
@@ -63,7 +64,8 @@ with builtins; let
         else emacsPackage;
       inherit nativeCompileAheadDefault;
       initFiles =
-        [
+        (lib.optional (prependToInitFile != null) (prev.writeText "init.el" prependToInitFile))
+        ++ [
           (tangleOrgBabelFile "init.el" ./emacs-config.org {
             processLines = org.excludeHeadlines (s:
               org.tag "ARCHIVE" s

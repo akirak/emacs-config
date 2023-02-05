@@ -37,69 +37,74 @@
   (interactive "s")
   (find-file (read-file-name "File: " dir)))
 
-(embark-define-keymap akirak-embark-directory-map
-  "Keymap on a directory"
-  ("d" dired)
-  ("K" akirak-embark-kill-directory-buffers)
-  ("f" akirak-find-file-in-directory)
-  ("o" find-file-other-window)
-  ("t" find-file-other-tab)
-  ("p" akirak-consult-project-file)
-  ("v" akirak-embark-vterm)
-  ("V" akirak-embark-vterm-other-window)
-  ("lh" akirak-embark-magit-log-head)
-  ("la" akirak-embark-magit-log-all)
-  ("n" nix3-flake-show))
+(defvar akirak-embark-directory-map
+  (let ((map (make-composed-keymap nil embark-general-map)))
+    (define-key map "d" #'dired)
+    (define-key map "K" #'akirak-embark-kill-directory-buffers)
+    (define-key map "f" #'akirak-find-file-in-directory)
+    (define-key map "o" #'find-file-other-window)
+    (define-key map "t" #'find-file-other-tab)
+    (define-key map "p" #'akirak-consult-project-file)
+    (define-key map "v" #'akirak-embark-vterm)
+    (define-key map "V" #'akirak-embark-vterm-other-window)
+    (define-key map "lh" #'akirak-embark-magit-log-head)
+    (define-key map "la" #'akirak-embark-magit-log-all)
+    (define-key map "n" #'nix3-flake-show)
+    map))
 
-(embark-define-keymap akirak-embark-project-root-map
-  "Keymap on a project root directory."
-  :parent akirak-embark-directory-map
-  ("r" akirak-project-find-most-recent-file)
-  ("C-o" org-dog-context-find-project-file)
-  ("m" magit-status)
-  ("t" akirak-project-new-tab))
+(defvar akirak-embark-project-root-map
+  (let ((map (make-composed-keymap nil akirak-embark-directory-map)))
+    (define-key map "r" #'akirak-project-find-most-recent-file)
+    (define-key map (kbd "C-o") #'org-dog-context-find-project-file)
+    (define-key map "m" #'magit-status)
+    (define-key map "t" #'akirak-project-new-tab)
+    map))
 
-(embark-define-keymap akirak-embark-package-shell-command-map
-  "Keymap on a package root directory."
-  ("t" akirak-vterm-run-in-package-root))
+(defvar akirak-embark-package-shell-command-map
+  (let ((map (make-composed-keymap nil embark-general-map)))
+    (define-key map "t" #'akirak-vterm-run-in-package-root)
+    map))
 
-(embark-define-keymap akirak-embark-org-src-map
-  "Keymap on an Org src block."
-  :parent nil
-  ("w" embark-copy-as-kill))
+(defvar akirak-embark-org-src-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "w" #'embark-copy-as-kill)
+    map))
 
-(embark-define-keymap akirak-embark-org-sh-src-map
-  "Keymap on a shell Org src block."
-  :parent akirak-embark-org-src-map
-  ("v" akirak-embark-send-to-vterm)
-  ("V" akirak-embark-send-to-new-vterm))
+(defvar akirak-embark-org-sh-src-map
+  (let ((map (make-composed-keymap nil akirak-embark-org-src-map)))
+    (define-key map "v" #'akirak-embark-send-to-vterm)
+    (define-key map "V" #'akirak-embark-send-to-new-vterm)
+    map))
 
-(embark-define-keymap akirak-embark-git-file-map
-  "Keymap on files in a Git repository."
-  ("k" akirak-consult-git-revert-file)
-  ("c" akirak-consult-magit-stage-file-and-commit))
+(defvar akirak-embark-git-file-map
+  (let ((map (make-composed-keymap nil embark-general-map)))
+    (define-key map "k" #'akirak-consult-git-revert-file)
+    (define-key map "c" #'akirak-consult-magit-stage-file-and-commit)
+    map))
 
-(embark-define-keymap akirak-embark-package-map
-  "Keymap on emacs package."
-  ("f" akirak-twist-find-git-source)
-  ("b" akirak-twist-build-packages)
-  ("u" akirak-twist-update-emacs-inputs)
-  ("h" akirak-twist-browse-homepage)
-  ("o" akirak-emacs-org-goto-headline)
-  ("d" epkg-describe-package)
-  ("gc" akirak-git-clone-elisp-package))
+(defvar akirak-embark-package-map
+  (let ((map (make-composed-keymap nil embark-general-map)))
+    (define-key map "f" #'akirak-twist-find-git-source)
+    (define-key map "b" #'akirak-twist-build-packages)
+    (define-key map "u" #'akirak-twist-update-emacs-inputs)
+    (define-key map "h" #'akirak-twist-browse-homepage)
+    (define-key map "o" #'akirak-emacs-org-goto-headline)
+    (define-key map "d" #'epkg-describe-package)
+    (define-key map "gc" #'akirak-git-clone-elisp-package)
+    map))
 
-(embark-define-keymap akirak-embark-nix-installable-map
-  "Keymap on Nix package."
-  ("b" akirak-nix-browse-output)
-  ("&" akirak-embark-nix-run-async)
-  ("s" akirak-embark-nix-shell))
+(defvar akirak-embark-nix-installable-map
+  (let ((map (make-composed-keymap nil embark-general-map)))
+    (define-key map "b" #'akirak-nix-browse-output)
+    (define-key map "&" #'akirak-embark-nix-run-async)
+    (define-key map "s" #'akirak-embark-nix-shell)
+    map))
 
-(embark-define-keymap akirak-embark-magit-section-map
-  "Keymap on Magit section."
-  :parent nil
-  ("h" magit-section-hide-children)
-  ("s" magit-section-show-children))
+(defvar akirak-embark-magit-section-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "h" #'magit-section-hide-children)
+    (define-key map "s" #'magit-section-show-children)
+    map))
 
 (defun akirak-embark-prefix-nixpkgs-installable (_type package)
   (cons 'nix-installable (concat "nixpkgs#" package)))
@@ -140,7 +145,16 @@
   (require 'akirak-org)
   (org-with-point-at akirak-embark-target-org-marker
     (org-back-to-heading)
-    (org-open-at-point)))
+    ;; org-open-at-point sometimes doesn't work when the point is at the
+    ;; beginning of the entry. It works if the point is not on the marker.
+    (when (looking-at org-complex-heading-regexp)
+      (goto-char (match-beginning 4)))
+    (org-open-at-point)
+    (let ((buffer (current-buffer)))
+      (set-window-configuration org-window-config-before-follow-link)
+      (switch-to-buffer buffer)
+      (when (fboundp 'pulse-momentary-highlight-one-line)
+        (pulse-momentary-highlight-one-line)))))
 
 (defun akirak-embark-org-point-to-register ()
   (interactive)
@@ -152,26 +166,28 @@
     (set-register register marker)
     (message "Saved to register %c" register)))
 
-(embark-define-keymap akirak-embark-org-heading-map
-  "Keymap for actions on an Org heading or entry."
-  ("g" (akirak-embark-run-at-marker ignore t
-         akirak-embark-goto-org-marker))
-  ("G" akirak-embark-org-clock-in-and-show)
-  ("o" akirak-embark-org-indirect-buffer)
-  ("I" (akirak-embark-run-at-marker org-clock-in))
-  ("l" (akirak-embark-run-at-marker org-store-link))
-  ("t" (akirak-embark-run-at-marker org-todo))
-  ("C-o" akirak-embark-org-open-link-in-entry)
-  ("?" akirak-embark-org-point-to-register))
+(defvar akirak-embark-org-heading-map
+  (let ((map (make-composed-keymap nil embark-general-map)))
+    (define-key map "g" (akirak-embark-run-at-marker akirak-embark-goto-org-marker))
+    (define-key map "G" #'akirak-embark-org-clock-in-and-show)
+    (define-key map "o" #'akirak-embark-org-indirect-buffer)
+    (define-key map "I" (akirak-embark-run-at-marker org-clock-in))
+    (define-key map "l" (akirak-embark-run-at-marker org-store-link))
+    (define-key map "t" (akirak-embark-run-at-marker org-todo))
+    (define-key map (kbd "C-o") #'akirak-embark-org-open-link-in-entry)
+    (define-key map "?" #'akirak-embark-org-point-to-register)
+    map))
 
-(embark-define-keymap akirak-embark-grep-map
-  ""
-  ("d" deadgrep)
-  ("R" project-query-replace-regexp))
+(defvar akirak-embark-grep-map
+  (let ((map (make-composed-keymap nil embark-general-map)))
+    (define-key map "d" #'deadgrep)
+    (define-key map "R" #'project-query-replace-regexp)
+    map))
 
-(embark-define-keymap akirak-embark-image-file-map
-  ""
-  ("I" akirak-image-import-file))
+(defvar akirak-embark-image-file-map
+  (let ((map (make-composed-keymap nil embark-general-map)))
+    (define-key map "I" #'akirak-image-import-file)
+    map))
 
 ;;;###autoload
 (defun akirak-embark-setup ()
@@ -329,9 +345,10 @@
     (embark-act)))
 
 ;;;###autoload
-(defun akirak-embark-on-org-hd-marker (marker)
+(defun akirak-embark-on-org-headline (marker)
   (interactive)
   (org-with-point-at marker
+    (org-back-to-heading)
     (embark-act)))
 
 (defun akirak-embark-target-grep-input ()

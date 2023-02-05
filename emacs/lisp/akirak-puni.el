@@ -4,24 +4,26 @@
 
 ;;;; Generic setup command
 
+(defcustom akirak-puni-setup-alist
+  '(((elixir-mode elixir-ts-mode)
+     akirak-puni-elixir-setup)
+    ((tsx-mode js-jsx-mode tsx-ts-mode typescript-ts-mode)
+     akirak-puni-jsx-setup)
+    ((svelte-mode)
+     akirak-puni-svelte-setup))
+  ""
+  :type '(alist :key-type (repeat symbol)
+                :value-type (cons function (cons nil))))
+
 ;;;###autoload
 (defun akirak-puni-mode-setup ()
-  (cl-case (derived-mode-p 'elixir-mode
-                           'elixir-ts-mode
-                           'tsx-mode
-                           'js-jsx-mode
-                           'typescript-ts-mode
-                           'svelte-mode)
-    ((elixir-mode elixir-ts-mode)
-     (akirak-puni-elixir-setup))
-    ((tsx-mode js-jsx-mode typescript-ts-mode)
-     (if (require 'tagedit nil t)
-         (akirak-puni-jsx-setup)
-       (message "Warning[akirak-puni]: JSX is detected, but tagedit is unavailable.")))
-    (svelte-mode
-     (if (require 'tagedit nil t)
-         (akirak-puni-svelte-setup)
-       (message "Warning[akirak-puni]: JSX is detected, but tagedit is unavailable.")))))
+  (when-let* ((mode (apply #'derived-mode-p
+                           (apply #'append (mapcar #'car akirak-puni-setup-alist))))
+              (ent (seq-find `(lambda (cell) (memq ',mode (car cell)))
+                             akirak-puni-setup-alist))
+              (setup-fn (cadr ent)))
+    (message "Detected %s: Running %s" mode setup-fn)
+    (funcall setup-fn)))
 
 ;;;; Mode-specific
 
@@ -31,7 +33,9 @@
 (defun akirak-puni-jsx-setup ()
   "Setup puni bindings for jsx."
   (interactive)
-  (local-set-key [remap puni-kill-line] #'akirak-puni-jsx-kill-line))
+  (if (require 'tagedit nil t)
+      (local-set-key [remap puni-kill-line] #'akirak-puni-jsx-kill-line)
+    (message "Warning[akirak-puni]: JSX is detected, but tagedit is unavailable.")))
 
 ;;;###autoload
 (defun akirak-puni-jsx-kill-line ()
@@ -76,7 +80,9 @@
 (defun akirak-puni-svelte-setup ()
   "Setup puni bindings for jsx."
   (interactive)
-  (local-set-key [remap puni-kill-line] #'akirak-puni-svelte-kill-line))
+  (if (require 'tagedit nil t)
+      (local-set-key [remap puni-kill-line] #'akirak-puni-svelte-kill-line)
+    (message "Warning[akirak-puni]: Svelte is detected, but tagedit is unavailable.")))
 
 (defalias 'akirak-puni-svelte-kill-line #'akirak-puni-jsx-kill-line)
 

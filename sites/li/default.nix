@@ -31,6 +31,29 @@ in {
         pkgs.wine
         pkgs.tenacity
       ];
+
+      programs.emacs-twist = {
+        enable = true;
+        emacsclient.enable = true;
+        directory = "emacs";
+        earlyInitFile = ../../emacs/early-init.el;
+        config = pkgs.emacs-config.override {
+          extraFeatures = [
+            # "beancount"
+            "mermaid"
+            # "ChatGPT"
+            "copilot"
+            "OCaml"
+            # "Lean4"
+            # "lsp_mode"
+          ];
+          prependToInitFile = ''
+            ;; -*- lexical-binding: t; no-byte-compile: t; -*-
+            (setq custom-file (locate-user-emacs-file "custom.el"))
+            (setq akirak/enabled-status-tags t)
+          '';
+        };
+      };
     })
   ];
 
