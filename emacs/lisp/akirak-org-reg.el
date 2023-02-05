@@ -70,7 +70,7 @@
     (format "\"%s\" in %s"
             (org-with-point-at marker
               (and (looking-at org-complex-heading-regexp)
-                   (match-string-no-properties 4)))
+                   (org-link-display-format (match-string-no-properties 4))))
             (buffer-name (marker-buffer marker)))))
 
 ;;;;; Concrete marker class
