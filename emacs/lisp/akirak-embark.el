@@ -168,12 +168,12 @@
 
 (defvar akirak-embark-org-heading-map
   (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "g" #'(akirak-embark-run-at-marker ignore t akirak-embark-goto-org-marker))
+    (define-key map "g" (akirak-embark-run-at-marker akirak-embark-goto-org-marker))
     (define-key map "G" #'akirak-embark-org-clock-in-and-show)
     (define-key map "o" #'akirak-embark-org-indirect-buffer)
-    (define-key map "I" #'(akirak-embark-run-at-marker org-clock-in))
-    (define-key map "l" #'(akirak-embark-run-at-marker org-store-link))
-    (define-key map "t" #'(akirak-embark-run-at-marker org-todo))
+    (define-key map "I" (akirak-embark-run-at-marker org-clock-in))
+    (define-key map "l" (akirak-embark-run-at-marker org-store-link))
+    (define-key map "t" (akirak-embark-run-at-marker org-todo))
     (define-key map (kbd "C-o") #'akirak-embark-org-open-link-in-entry)
     (define-key map "?" #'akirak-embark-org-point-to-register)
     map))
