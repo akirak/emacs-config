@@ -51,7 +51,8 @@
                   "\n"))))))
 
 (defun akirak-git-commit-log-to-org-clock ()
-  (when (org-clocking-p)
+  (when (and (featurep 'org-clock)
+             (org-clocking-p))
     ;; Delay logging so it starts after magit commands finishes
     (run-with-timer 2 nil
                     `(lambda ()
