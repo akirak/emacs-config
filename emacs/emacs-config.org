@@ -644,7 +644,8 @@ The other variables must not be saved, and they should be put in configuration:
 #+begin_src emacs-lisp
   (setup dired
     (:set dired-recursive-copies 'always
-          dired-recursive-deletes 'top)
+          dired-recursive-deletes 'top
+          dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-vterm-for-dir)
 
     (:bind "h" #'dired-up-directory)
