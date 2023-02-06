@@ -3189,6 +3189,7 @@ Major mode for editing typescript
 
 #+begin_src emacs-lisp
   (setup typescript-ts-mode
+    (:file-match "\\.ts\\'")
     ;; (:also-load akirak-typescript)
 
     (:org-src-lang "typescript")
@@ -3198,6 +3199,7 @@ Major mode for editing typescript
                           '(?< . ?>))))
 
     (:with-mode tsx-ts-mode
+      (:file-match "\\.tsx\\'")
       (:org-src-lang "react")
       (:bind "C-c C-e" #'akirak-jsx-close-tag))
 
