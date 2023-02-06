@@ -2299,7 +2299,10 @@ Outline-based notes management and organizer
     (advice-add 'org-capture-place-item
                 :before
                 (defun akirak/ad-before-org-capture-place-item (&rest _)
-                  (org-end-of-meta-data t)))
+                  (org-end-of-meta-data t)
+                  (when (and (looking-at-p org-heading-regexp)
+                             (re-search-backward (rx anything "\n") nil t))
+                    (beginning-of-line 2))))
 
     (add-hook 'org-capture-prepare-finalize-hook
               (defun akirak/org-capture-maybe-fill-headline ()
