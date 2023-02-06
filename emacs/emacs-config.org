@@ -3494,6 +3494,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-git-commit
     (add-hook 'after-init-hook #'akirak-git-commit-log-to-org-clock-mode))
 #+end_src
+**** akirak-github
+#+begin_src elisp
+  (define-key help-map (kbd "C-g") #'akirak-github-search-code)
+#+end_src
 **** akirak-header-line                                        :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-18 Mon 08:15]
