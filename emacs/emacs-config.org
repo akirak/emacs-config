@@ -6258,8 +6258,7 @@ Summon and dismiss buffers as popups
                                      "^\\*Select Link\\*"
                                      "^\\*Flymake diagnostics"
                                      "^\\*hoogle\\*"
-                                     inferior-haskell-mode
-                                     lisp-interaction-mode))
+                                     inferior-haskell-mode))
 
     (:hook-into after-init-hook)
     (:hook popper-echo-mode)
