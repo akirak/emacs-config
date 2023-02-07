@@ -2011,6 +2011,9 @@ Org-Memento integration for oahu
 
       (:with-feature org-memento-timeline
         (:with-map org-memento-timeline-mode-map
+          (:bind "v" #'oahu-memento-group-view)))
+      (:with-feature org-memento-zone
+        (:with-map org-memento-zone-mode-map
           (:bind "v" #'oahu-memento-group-view)))))
 #+end_src
 *** ob-mermaid                                             
@@ -2863,6 +2866,7 @@ Time blocking with Org
       (define-key akirak/c-z-map "i" #'org-memento-policy-find-in-source)
       (define-key akirak/c-z-map "j" #'org-memento-open-journal)
       (define-key akirak/c-z-map "k" #'akirak/org-memento-cleanup-buffers)
+      (define-key akirak/c-z-map "n" #'org-memento-pick-next-action)
       (define-key akirak/c-z-map "t" #'org-memento-timeline)
       (define-key akirak/c-z-map (kbd "C-z") #'org-memento-status)
       (define-key akirak/c-z-map (kbd "C-o") #'org-memento-finish-block)
