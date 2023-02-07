@@ -230,12 +230,25 @@ The target window is determined according to the same logic as
 (defun akirak-window--other-window (&optional window arg)
   "Return the other window in a pair."
   (cond
-   ((eq arg '-)
-    (while (and (setq window (next-window window))
-                (akirak-window--popup-p window)))
-    window)
-   ((numberp arg)
+   ;; Select a window that is not a popup.
+   ;; ((eq arg '-)
+   ;;  (while (and (setq window (next-window window))
+   ;;              (akirak-window--popup-p window)))
+   ;;  window)
+   ((and (numberp arg)
+         (> arg 0))
     (akirak-window--find-column arg))
+   ((eq arg '-)
+    (window-in-direction 'left window))
+   ((eq arg 0)
+    (catch 'window
+      (let ((w window))
+        (while (setq w (next-window w))
+          (when (akirak-window--popup-p w)
+            (throw 'window w))
+          ;; Prevent infinite loop
+          (when (equal window w)
+            (throw 'window nil))))))
    (t
     (cl-macrolet
         ((try-window (exp)
