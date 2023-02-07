@@ -6263,6 +6263,11 @@ Summon and dismiss buffers as popups
     (:hook-into after-init-hook)
     (:hook popper-echo-mode)
 
+    (advice-add 'popper-select-popup-at-bottom
+                :before
+                (defun akirak/popper-store-current-window (&rest _)
+                  (setq akirak-window-last-non-popup-window (selected-window))))
+
     (defun akirak/popper-restart ()
       (interactive)
       (when (bound-and-true-p popper-mode)
