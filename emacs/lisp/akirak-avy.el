@@ -94,6 +94,12 @@ If CALLBACK is a function, it is called with the selected url."
            nil t))))
 
 ;;;###autoload
+(defun akirak-avy-symbol-overlay-put ()
+  (interactive)
+  (call-interactively #'avy-goto-char-timer)
+  (symbol-overlay-put))
+
+;;;###autoload
 (defun akirak-avy-insert-org-super-link ()
   (interactive)
   (progn

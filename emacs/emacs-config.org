@@ -3418,7 +3418,8 @@ This is a collection of extra utilities for various packages.
 **** akirak-avy
 #+begin_src emacs-lisp
   (setup akirak-avy
-    (:global "C-;" #'akirak-avy-insert-symbol))
+    (:global "C-;" #'akirak-avy-insert-symbol
+             "C-\"" #'akirak-avy-symbol-overlay-put))
 #+end_src
 **** akirak-capture
 #+begin_src emacs-lisp
