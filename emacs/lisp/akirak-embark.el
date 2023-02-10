@@ -123,6 +123,15 @@
         (org-goto-marker-or-bmk akirak-embark-target-org-marker)
         (call-interactively ',command)))))
 
+(defun akirak-embark-find-org-buffer-file ()
+  (interactive)
+  (thread-last
+    akirak-embark-target-org-marker
+    (marker-buffer)
+    (org-base-buffer)
+    (buffer-file-name)
+    (find-file)))
+
 (defun akirak-embark-org-indirect-buffer ()
   (interactive)
   (pop-to-buffer (org-dog-indirect-buffer akirak-embark-target-org-marker))
@@ -166,6 +175,7 @@
 
 (defvar akirak-embark-org-heading-map
   (let ((map (make-composed-keymap nil embark-general-map)))
+    (define-key map "\\" #'akirak-embark-find-org-buffer-file)
     (define-key map "g" (akirak-embark-run-at-marker ignore t
                           akirak-embark-goto-org-marker))
     (define-key map "G" #'akirak-embark-org-clock-in-and-show)
