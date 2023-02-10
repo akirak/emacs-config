@@ -2871,6 +2871,27 @@ Time blocking with Org
       (define-key akirak/c-z-map "t" #'org-memento-timeline)
       (define-key akirak/c-z-map (kbd "C-z") #'org-memento-status)
       (define-key akirak/c-z-map (kbd "C-o") #'org-memento-finish-block)
+      (define-key akirak/c-z-map "5"
+                  (defun akirak/org-memento-switch-to-tab (&optional arg)
+                    (interactive "P")
+                    (if org-memento-current-block
+                        (let* ((name (if (string-match (rx bol "Cont. "
+                                                           (?  "(" (+ digit) ")" (* blank)))
+                                                       org-memento-current-block)
+                                         (substring org-memento-current-block
+                                                    (match-end 0))
+                                       org-memento-current-block))
+                               (tab-index (tab-bar--tab-index-by-name name)))
+                          (if tab-index
+                              (tab-bar-select-tab (1+ tab-index))
+                            (tab-bar-new-tab)
+                            (tab-bar-rename-tab org-memento-current-block))
+                          (when (or (not tab-index)
+                                    arg)
+                            (delete-other-windows)
+                            (akirak/oahu-goto-context)
+                            (call-interactively #'oahu-view)))
+                      (user-error "No current block"))))
 
       (:set org-memento-agenda-excluded-tags '("ARCHIVE" "@epic")
             org-memento-timeline-hidden-sections '((daily-progress .t))
