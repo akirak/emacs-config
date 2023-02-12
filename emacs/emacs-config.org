@@ -3635,6 +3635,7 @@ This is an extra functions for window management.
                "C-4" #'akirak-window-setup-columns
                "C-x o" #'akirak-window-cycle-two-windows
                "C-x M-o" #'akirak-window-swap-two-windows
+               "C-c v" #'akirak-window-open-in-new-tab
                "M-o" #'akirak-window-moderate-1
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
