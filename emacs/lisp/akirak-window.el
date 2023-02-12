@@ -315,5 +315,25 @@ Otherwise, it calls `akirak-window-duplicate-state'."
       (toggle-window-split)
     (akirak-window-duplicate-state arg)))
 
+(defvar akirak-window-last-window-configuration nil)
+
+;;;###autoload
+(defun akirak-window-open-in-new-tab ()
+  "Open the next command in a new tab."
+  (interactive)
+  (add-hook 'pre-command-hook 'akira-window--save-wconf-1))
+
+(defun akira-window--save-wconf-1 ()
+  (setq akirak-window-last-window-configuration (current-window-configuration))
+  (remove-hook 'pre-command-hook 'akira-window--save-wconf-1)
+  (add-hook 'post-command-hook 'akirak-window--new-tab-1))
+
+(defun akirak-window--new-tab-1 ()
+  (let ((buf (window-buffer (selected-window))))
+    (set-window-configuration akirak-window-last-window-configuration)
+    (tab-bar-new-tab)
+    (switch-to-buffer buf)
+    (remove-hook 'post-command-hook 'akirak-window--new-tab-1)))
+
 (provide 'akirak-window)
 ;;; akirak-window.el ends here
