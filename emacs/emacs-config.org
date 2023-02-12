@@ -2569,7 +2569,7 @@ A programmable workflow layer for Org mode
             ("\\.h?eex\\'" . "programming/elixir")
             ("package\\.yaml\\'" . "programming/haskell")
             ("tsconfig\\." . "programming/typescript")
-            ("dune\\'" . "programming/ocaml")
+            ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
             ("hie\\.yaml\\'" . "programming/haskell"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
 
