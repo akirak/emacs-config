@@ -4,6 +4,8 @@
   "List of buffer names whose windows should never be selected."
   :type '(repeat string))
 
+(defvar akirak-window-last-non-popup-window nil)
+
 ;;;; Predicates
 
 (defun akirak-window-left-side-window-p (&optional window)
@@ -210,10 +212,13 @@ With a '- argument, the window will be `next-window'.
 With a single universal argument, it swaps two windows and keeps
 focus on the same buffer."
   (interactive "P")
-  (when-let (window (akirak-window--other-window nil arg))
-    (if (equal arg '(4))
-        (window-swap-states window (selected-window))
-      (select-window window))))
+  (if (and (akirak-window--popup-p)
+           (windowp akirak-window-last-non-popup-window))
+      (select-window akirak-window-last-non-popup-window)
+    (when-let (window (akirak-window--other-window nil arg))
+      (if (equal arg '(4))
+          (window-swap-states window (selected-window))
+        (select-window window)))))
 
 ;;;###autoload
 (defun akirak-window-swap-two-windows (&optional arg)
@@ -230,12 +235,27 @@ The target window is determined according to the same logic as
 (defun akirak-window--other-window (&optional window arg)
   "Return the other window in a pair."
   (cond
-   ((eq arg '-)
-    (while (and (setq window (next-window window))
-                (akirak-window--popup-p window)))
-    window)
-   ((numberp arg)
+   ;; Select a window that is not a popup.
+   ;; ((eq arg '-)
+   ;;  (while (and (setq window (next-window window))
+   ;;              (akirak-window--popup-p window)))
+   ;;  window)
+   ((and (numberp arg)
+         (> arg 0))
     (akirak-window--find-column arg))
+   ((eq arg '-)
+    (window-in-direction 'left window))
+   ((eq arg 0)
+    (catch 'window
+      (let ((window (or window (selected-window)))
+            (w window))
+        (while (setq w (next-window w))
+          (when (akirak-window--popup-p w)
+            (setq akirak-window-last-non-popup-window window)
+            (throw 'window w))
+          ;; Prevent infinite loop
+          (when (equal window w)
+            (throw 'window nil))))))
    (t
     (cl-macrolet
         ((try-window (exp)

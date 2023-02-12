@@ -19,7 +19,8 @@
                                      '("Elisp Scratch ("
                                        default-directory
                                        ")"))
-                         (current-buffer))))))
+                         (current-buffer)))
+                   '(display-buffer-below-selected . nil))))
 
 (defvar akirak-scratch-mode-map
   (let ((map (make-sparse-keymap)))

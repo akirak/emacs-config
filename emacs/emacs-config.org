@@ -2011,6 +2011,9 @@ Org-Memento integration for oahu
 
       (:with-feature org-memento-timeline
         (:with-map org-memento-timeline-mode-map
+          (:bind "v" #'oahu-memento-group-view)))
+      (:with-feature org-memento-zone
+        (:with-map org-memento-zone-mode-map
           (:bind "v" #'oahu-memento-group-view)))))
 #+end_src
 *** ob-mermaid                                             
@@ -2299,7 +2302,10 @@ Outline-based notes management and organizer
     (advice-add 'org-capture-place-item
                 :before
                 (defun akirak/ad-before-org-capture-place-item (&rest _)
-                  (org-end-of-meta-data t)))
+                  (org-end-of-meta-data t)
+                  (when (and (looking-at-p org-heading-regexp)
+                             (re-search-backward (rx anything "\n") nil t))
+                    (beginning-of-line 2))))
 
     (add-hook 'org-capture-prepare-finalize-hook
               (defun akirak/org-capture-maybe-fill-headline ()
@@ -2563,6 +2569,7 @@ A programmable workflow layer for Org mode
             ("\\.h?eex\\'" . "programming/elixir")
             ("package\\.yaml\\'" . "programming/haskell")
             ("tsconfig\\." . "programming/typescript")
+            ("dune\\'" . "programming/ocaml")
             ("hie\\.yaml\\'" . "programming/haskell"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
 
@@ -2860,9 +2867,31 @@ Time blocking with Org
       (define-key akirak/c-z-map "i" #'org-memento-policy-find-in-source)
       (define-key akirak/c-z-map "j" #'org-memento-open-journal)
       (define-key akirak/c-z-map "k" #'akirak/org-memento-cleanup-buffers)
+      (define-key akirak/c-z-map "n" #'org-memento-pick-next-action)
       (define-key akirak/c-z-map "t" #'org-memento-timeline)
       (define-key akirak/c-z-map (kbd "C-z") #'org-memento-status)
       (define-key akirak/c-z-map (kbd "C-o") #'org-memento-finish-block)
+      (define-key akirak/c-z-map "5"
+                  (defun akirak/org-memento-switch-to-tab (&optional arg)
+                    (interactive "P")
+                    (if org-memento-current-block
+                        (let* ((name (if (string-match (rx bol "Cont. "
+                                                           (?  "(" (+ digit) ")" (* blank)))
+                                                       org-memento-current-block)
+                                         (substring org-memento-current-block
+                                                    (match-end 0))
+                                       org-memento-current-block))
+                               (tab-index (tab-bar--tab-index-by-name name)))
+                          (if tab-index
+                              (tab-bar-select-tab (1+ tab-index))
+                            (tab-bar-new-tab)
+                            (tab-bar-rename-tab org-memento-current-block))
+                          (when (or (not tab-index)
+                                    arg)
+                            (delete-other-windows)
+                            (akirak/oahu-goto-context)
+                            (call-interactively #'oahu-view)))
+                      (user-error "No current block"))))
 
       (:set org-memento-agenda-excluded-tags '("ARCHIVE" "@epic")
             org-memento-timeline-hidden-sections '((daily-progress .t))
@@ -3189,6 +3218,7 @@ Major mode for editing typescript
 
 #+begin_src emacs-lisp
   (setup typescript-ts-mode
+    (:file-match "\\.ts\\'")
     ;; (:also-load akirak-typescript)
 
     (:org-src-lang "typescript")
@@ -3198,6 +3228,7 @@ Major mode for editing typescript
                           '(?< . ?>))))
 
     (:with-mode tsx-ts-mode
+      (:file-match "\\.tsx\\'")
       (:org-src-lang "react")
       (:bind "C-c C-e" #'akirak-jsx-close-tag))
 
@@ -3409,7 +3440,8 @@ This is a collection of extra utilities for various packages.
 **** akirak-avy
 #+begin_src emacs-lisp
   (setup akirak-avy
-    (:global "C-;" #'akirak-avy-insert-symbol))
+    (:global "C-;" #'akirak-avy-insert-symbol
+             "C-\"" #'akirak-avy-symbol-overlay-put))
 #+end_src
 **** akirak-capture
 #+begin_src emacs-lisp
@@ -3488,6 +3520,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-git-commit
     (add-hook 'after-init-hook #'akirak-git-commit-log-to-org-clock-mode))
+#+end_src
+**** akirak-github
+#+begin_src elisp
+  (define-key help-map (kbd "C-g") #'akirak-github-search-code)
 #+end_src
 **** akirak-header-line                                        :UI:
 :PROPERTIES:
@@ -6245,11 +6281,15 @@ Summon and dismiss buffers as popups
                                      "^\\*Select Link\\*"
                                      "^\\*Flymake diagnostics"
                                      "^\\*hoogle\\*"
-                                     inferior-haskell-mode
-                                     lisp-interaction-mode))
+                                     inferior-haskell-mode))
 
     (:hook-into after-init-hook)
     (:hook popper-echo-mode)
+
+    (advice-add 'popper-select-popup-at-bottom
+                :before
+                (defun akirak/popper-store-current-window (&rest _)
+                  (setq akirak-window-last-non-popup-window (selected-window))))
 
     (defun akirak/popper-restart ()
       (interactive)
@@ -7381,7 +7421,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 230 |
+| [[org-ql-search:tags:packages][packages]]            | 231 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

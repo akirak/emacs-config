@@ -113,17 +113,24 @@
   (when-let (url (consult-recoll--candidate-url candidate))
     (cons 'file (abbreviate-file-name (string-remove-prefix "file://" url)))))
 
-(defmacro akirak-embark-run-at-marker (command &optional move name documentation)
+(defmacro akirak-embark-run-at-marker (command &optional move name)
   (declare (indent 2))
-  (let ((name (or name
-                  (intern (concat "akirak-embark-" (symbol-name command))))))
-    `(defun ,name ()
-       ,@(when documentation
-           (list documentation))
+  (let ((symbol (or name
+                    (intern (concat "akirak-embark-" (symbol-name command))))))
+    `(defun ,symbol ()
        (interactive)
        (,(if move 'progn 'save-window-excursion)
         (org-goto-marker-or-bmk akirak-embark-target-org-marker)
         (call-interactively ',command)))))
+
+(defun akirak-embark-find-org-buffer-file ()
+  (interactive)
+  (thread-last
+    akirak-embark-target-org-marker
+    (marker-buffer)
+    (org-base-buffer)
+    (buffer-file-name)
+    (find-file)))
 
 (defun akirak-embark-org-indirect-buffer ()
   (interactive)
@@ -168,7 +175,9 @@
 
 (defvar akirak-embark-org-heading-map
   (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "g" (akirak-embark-run-at-marker akirak-embark-goto-org-marker))
+    (define-key map "\\" #'akirak-embark-find-org-buffer-file)
+    (define-key map "g" (akirak-embark-run-at-marker ignore t
+                          akirak-embark-goto-org-marker))
     (define-key map "G" #'akirak-embark-org-clock-in-and-show)
     (define-key map "o" #'akirak-embark-org-indirect-buffer)
     (define-key map "I" (akirak-embark-run-at-marker org-clock-in))
