@@ -459,10 +459,11 @@ The point should be at the heading."
                                 (?p . ,(if planning
                                            (propertize planning 'face 'font-lock-comment-face)
                                          "")))))
-         (width (frame-width)))
+         (width (- (frame-width) (length prefix) (length suffix))))
     (concat prefix
             (org-no-properties
-             (org-format-outline-path olp (max 0 (- width (length prefix) (length suffix)))))
+             (org-format-outline-path olp (when (> width 0)
+                                            width)))
             suffix)))
 
 (defun akirak-org--default-scale (text)
