@@ -273,46 +273,44 @@
       outputsBuilder = channels: let
         inherit (channels.nixpkgs) emacs-config emacsSandboxed;
       in {
-        packages =
-          {
-            tryout-emacs = emacsSandboxed {
-              name = "tryout-emacs";
-              nativeCompileAheadDefault = false;
-              automaticNativeCompile = false;
-              enableOpinionatedSettings = false;
-              extraFeatures = [];
-              protectHome = false;
-              shareNet = false;
-              inheritPath = false;
-            };
+        packages = {
+          tryout-emacs = emacsSandboxed {
+            name = "tryout-emacs";
+            nativeCompileAheadDefault = false;
+            automaticNativeCompile = false;
+            enableOpinionatedSettings = false;
+            extraFeatures = [];
+            protectHome = false;
+            shareNet = false;
+            inheritPath = false;
+          };
 
-            inherit (channels.nixpkgs) readability-cli;
+          inherit (channels.nixpkgs) readability-cli;
 
-            inherit emacs-config;
-            inherit (channels.nixpkgs) emacs-root;
+          inherit emacs-config;
+          inherit (channels.nixpkgs) emacs-root;
 
-            test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
+          test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
 
-            update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
-              nix flake lock --update-input melpa --update-input gnu-elpa
+          update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
+            nix flake lock --update-input melpa --update-input gnu-elpa
+            cd emacs/lock
+            bash ./update.bash "$@"
+          '';
+
+          wordnet-sqlite = channels.nixpkgs.wordnet-sqlite;
+
+          update-elisp-lock = channels.nixpkgs.writeShellApplication {
+            name = "update-elisp-lock";
+            runtimeInputs = [
+              channels.nixpkgs.deno
+            ];
+            text = ''
               cd emacs/lock
-              bash ./update.bash "$@"
+              deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
             '';
-
-            wordnet-sqlite = channels.nixpkgs.wordnet-sqlite;
-
-            update-elisp-lock = channels.nixpkgs.writeShellApplication {
-              name = "update-elisp-lock";
-              runtimeInputs = [
-                channels.nixpkgs.deno
-              ];
-              text = ''
-                cd emacs/lock
-                deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
-              '';
-            };
-          }
-          // (builtins.mapAttrs (_: emacsSandboxed) (site.emacsProfiles or {}));
+          };
+        };
 
         apps = emacs-config.makeApps {
           lockDirName = "emacs/lock";
