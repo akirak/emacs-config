@@ -1350,16 +1350,18 @@ This is a recommended setting for use with vertico. See https://github.com/minad
         (server-start)
         (run-hooks 'akirak/server-start-hook))
 
-      (add-hook 'emacs-startup-hook
-                (defun akirak/start-server-at-startup ()
-                  (require 'server)
-                  (if (server-running-p)
-                      ;; Try to start an Emacs server again in 3 minutes.
-                      (run-with-timer (* 3 60) nil
-                                      (lambda ()
-                                        (unless (server-running-p)
-                                          (akirak/server-start))))
-                    (akirak/server-start))))))
+      (defun akirak/start-server-at-startup ()
+        (require 'server)
+        (if (server-running-p)
+            ;; Try to start an Emacs server again in 3 minutes.
+            (run-with-timer (* 3 60) nil
+                            (lambda ()
+                              (unless (server-running-p)
+                                (akirak/server-start))))
+          (akirak/server-start)))
+
+      (:status personal
+        (add-hook 'emacs-startup-hook #'akirak/start-server-at-startup))))
 #+end_src
 *** sgml-mode
 :PROPERTIES:
