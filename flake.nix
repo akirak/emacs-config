@@ -311,11 +311,6 @@
                 deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
               '';
             };
-
-            emacs-installer =
-              channels.nixpkgs.callPackage
-              ./pkgs/development/emacs-sandboxed/multi-installer.nix {}
-              {inherit (site) siteConfigDir nixConfigDir;} (site.emacsProfiles or {});
           }
           // (builtins.mapAttrs (_: emacsSandboxed) (site.emacsProfiles or {}));
 
