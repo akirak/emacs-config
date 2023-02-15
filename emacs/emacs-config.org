@@ -2855,9 +2855,14 @@ Time blocking with Org
         (if-let (buffers (thread-last
                            (buffer-list)
                            (seq-filter #'pred)
-                           (mapc #'kill-buffer)))
+                           (mapc #'akirak/kill-buffer-in-directory)))
             (message "Killed %d indirect buffers" (length buffers))
           (message "No buffer to kill"))))
+
+    (defun akirak/kill-buffer-in-directory (buffer)
+      (let ((default-directory (buffer-local-value 'default-directory buffer)))
+        (with-existing-directory
+          (kill-buffer buffer))))
 
     (:status personal
       (:when-loaded
