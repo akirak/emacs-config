@@ -260,7 +260,10 @@ With ARG, pick a text from the kill ring instead of the last one."
                          sym))
                      (akirak-complete-major-mode "Language: " needle nil
                                                  :org-src-langs t)))
-           (lang (string-remove-suffix "-mode" (symbol-name mode))))
+           (lang (thread-last
+                   (symbol-name mode)
+                   (string-remove-suffix "-mode")
+                   (string-remove-suffix "-ts"))))
       (or (car (rassq (intern lang)
                       org-src-lang-modes))
           lang))))
