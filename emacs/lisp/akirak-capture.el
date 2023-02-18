@@ -1106,8 +1106,10 @@ provided as a separate command for integration, e.g. with embark."
                                (if (equal body-type "src")
                                    (format " %s"
                                            (if (use-region-p)
-                                               (string-remove-suffix
-                                                "-mode" (symbol-name major-mode))
+                                               (thread-last
+                                                 (symbol-name major-mode)
+                                                 (string-remove-suffix "-mode")
+                                                 (string-remove-suffix "-ts"))
                                              (completing-read
                                               "Mode: " (akirak-capture--major-mode-list))))
                                  "")))
@@ -1139,8 +1141,10 @@ provided as a separate command for integration, e.g. with embark."
                                (if (equal body-type "src")
                                    (format " %s"
                                            (if (use-region-p)
-                                               (string-remove-suffix
-                                                "-mode" (symbol-name major-mode))
+                                               (thread-last
+                                                 (symbol-name major-mode)
+                                                 (string-remove-suffix "-mode")
+                                                 (string-remove-suffix "-ts"))
                                              (completing-read
                                               "Mode: " (akirak-capture--major-mode-list))))
                                  "")))
@@ -1204,7 +1208,10 @@ provided as a separate command for integration, e.g. with embark."
                  (string-suffix-p "-mode" (symbol-name sym))
                  (not (or (memq sym minor-mode-list)
                           (memq sym global-minor-modes))))
-        (push (string-remove-suffix "-mode" (symbol-name sym))
+        (push (thread-last
+                (symbol-name sym)
+                (string-remove-suffix "-mode")
+                (string-remove-suffix "-ts"))
               modes)))
     modes))
 
@@ -1233,6 +1240,7 @@ provided as a separate command for integration, e.g. with embark."
                      (thread-last
                        (symbol-name major-mode)
                        (string-remove-suffix "-mode")
+                       (string-remove-suffix "-ts")
                        (concat " "))))
            (replace-regexp-in-string
             "%" "%%" (buffer-substring-no-properties (region-beginning) (region-end)))

@@ -260,7 +260,10 @@ With ARG, pick a text from the kill ring instead of the last one."
                          sym))
                      (akirak-complete-major-mode "Language: " needle nil
                                                  :org-src-langs t)))
-           (lang (string-remove-suffix "-mode" (symbol-name mode))))
+           (lang (thread-last
+                   (symbol-name mode)
+                   (string-remove-suffix "-mode")
+                   (string-remove-suffix "-ts"))))
       (or (car (rassq (intern lang)
                       org-src-lang-modes))
           lang))))
@@ -459,10 +462,11 @@ The point should be at the heading."
                                 (?p . ,(if planning
                                            (propertize planning 'face 'font-lock-comment-face)
                                          "")))))
-         (width (frame-width)))
+         (width (- (frame-width) (length prefix) (length suffix))))
     (concat prefix
             (org-no-properties
-             (org-format-outline-path olp (max 0 (- width (length prefix) (length suffix)))))
+             (org-format-outline-path olp (when (> width 0)
+                                            width)))
             suffix)))
 
 (defun akirak-org--default-scale (text)

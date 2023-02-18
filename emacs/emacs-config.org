@@ -1350,16 +1350,18 @@ This is a recommended setting for use with vertico. See https://github.com/minad
         (server-start)
         (run-hooks 'akirak/server-start-hook))
 
-      (add-hook 'emacs-startup-hook
-                (defun akirak/start-server-at-startup ()
-                  (require 'server)
-                  (if (server-running-p)
-                      ;; Try to start an Emacs server again in 3 minutes.
-                      (run-with-timer (* 3 60) nil
-                                      (lambda ()
-                                        (unless (server-running-p)
-                                          (akirak/server-start))))
-                    (akirak/server-start))))))
+      (defun akirak/start-server-at-startup ()
+        (require 'server)
+        (if (server-running-p)
+            ;; Try to start an Emacs server again in 3 minutes.
+            (run-with-timer (* 3 60) nil
+                            (lambda ()
+                              (unless (server-running-p)
+                                (akirak/server-start))))
+          (akirak/server-start)))
+
+      (:status personal
+        (add-hook 'emacs-startup-hook #'akirak/start-server-at-startup))))
 #+end_src
 *** sgml-mode
 :PROPERTIES:
@@ -1947,7 +1949,7 @@ Following sections in this configuration file assume my extras are available.
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
-*** citar                                             :bibliography:
+*** COMMENT citar                                                 :bibliography:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-23 Wed 23:59]
 :END:
@@ -2059,7 +2061,7 @@ Outline-based notes management and organizer
             ;; Enlarge for olivetti-mode
             org-tags-column -80
             org-track-ordered-property-with-tag t
-            org-extend-today-until 5
+            org-extend-today-until 6
             ;; Consider org-extend-today-until in org-reverse-datetree
             org-use-effective-time t
             ;; Use the last clocked time in org-todo
@@ -2569,7 +2571,7 @@ A programmable workflow layer for Org mode
             ("\\.h?eex\\'" . "programming/elixir")
             ("package\\.yaml\\'" . "programming/haskell")
             ("tsconfig\\." . "programming/typescript")
-            ("dune\\'" . "programming/ocaml")
+            ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
             ("hie\\.yaml\\'" . "programming/haskell"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
 
@@ -2853,9 +2855,14 @@ Time blocking with Org
         (if-let (buffers (thread-last
                            (buffer-list)
                            (seq-filter #'pred)
-                           (mapc #'kill-buffer)))
+                           (mapc #'akirak/kill-buffer-in-directory)))
             (message "Killed %d indirect buffers" (length buffers))
           (message "No buffer to kill"))))
+
+    (defun akirak/kill-buffer-in-directory (buffer)
+      (let ((default-directory (buffer-local-value 'default-directory buffer)))
+        (with-existing-directory
+          (kill-buffer buffer))))
 
     (:status personal
       (:when-loaded
@@ -3635,6 +3642,7 @@ This is an extra functions for window management.
                "C-4" #'akirak-window-setup-columns
                "C-x o" #'akirak-window-cycle-two-windows
                "C-x M-o" #'akirak-window-swap-two-windows
+               "C-c v" #'akirak-window-open-in-new-tab
                "M-o" #'akirak-window-moderate-1
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
@@ -7421,7 +7429,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 231 |
+| [[org-ql-search:tags:packages][packages]]            | 230 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -7467,7 +7475,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:text][text]]                |   1 |
 | [[org-ql-search:tags:profiling][profiling]]           |   1 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   1 |
-| [[org-ql-search:tags:bibliography][bibliography]]        |   1 |
 | [[org-ql-search:tags:capture][capture]]             |   1 |
 | [[org-ql-search:tags:documentation][documentation]]       |   1 |
 | [[org-ql-search:tags:secrets][secrets]]             |   1 |
