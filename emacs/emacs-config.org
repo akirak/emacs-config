@@ -2860,7 +2860,9 @@ Time blocking with Org
           (message "No buffer to kill"))))
 
     (defun akirak/kill-buffer-in-directory (buffer)
-      (let ((default-directory (buffer-local-value 'default-directory buffer)))
+      (let ((default-directory (buffer-local-value 'default-directory buffer))
+            (exec-path (or (buffer-local-value 'exec-path buffer)
+                           exec-path)))
         (with-existing-directory
           (kill-buffer buffer))))
 
