@@ -3411,6 +3411,10 @@ Smart line-wrapping with wrap-prefix
 :PROPERTIES:
 :CREATED_TIME: [2023-02-19 Sun 09:09]
 :END:
+#+begin_quote
+Add node_modules to your exec-path
+[[https://github.com/codesuki/add-node-modules-path]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package add-node-modules-path)
@@ -7463,7 +7467,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 230 |
+| [[org-ql-search:tags:packages][packages]]            | 231 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
