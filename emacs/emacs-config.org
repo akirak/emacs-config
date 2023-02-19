@@ -4443,7 +4443,10 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
       (add-to-list 'eglot-server-programs
-                   '(elixir-mode . ("elixir-ls"))))
+                   '(elixir-mode . ("elixir-ls")))
+      (add-to-list 'eglot-server-programs
+                   `(web-mode . ,(eglot-alternatives
+                                  '(("astro-ls" "--stdio")))))
 
     (put 'tsx-mode 'eglot-language-id "typescriptreact")
     (put 'lean4-mode 'eglot-language-id "lean")
