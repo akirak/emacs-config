@@ -651,6 +651,24 @@ The other variables must not be saved, and they should be put in configuration:
     (:bind "h" #'dired-up-directory)
     (:unbind "C-x M-o"))
 #+end_src
+*** dir-locals
+:PROPERTIES:
+:CREATED_TIME: [2023-02-19 Sun 09:44]
+:END:
+
+#+begin_src emacs-lisp
+  (setup dir-locals
+    (:status personal
+      (dir-locals-set-class-variables
+       'default
+       (mapcar (lambda (mode)
+                 `(,mode . ((eval . (eglot-ensure)))))
+               '(web-mode
+                 css-mode
+                 typescript-ts-mode
+                 tuareg-mode)))
+      (dir-locals-set-directory-class "~/work2/personal/" 'default)))
+#+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
 :CREATED_TIME: [2022-11-13 Sun 17:44]
