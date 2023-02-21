@@ -261,6 +261,13 @@
   :description "Select a parent heading"
   :variable 'akirak-capture-select-heading)
 
+(defvar akirak-capture-date nil)
+
+(transient-define-infix akirak-capture-change-date-infix ()
+  :class 'akirak-transient-flag-variable
+  :description "Select a date"
+  :variable 'akirak-capture-date)
+
 (defun akirak-capture--goto-some-heading ()
   (goto-char (org-ql-completing-read (org-base-buffer (current-buffer))
                :prompt "Select a heading: ")))
@@ -769,7 +776,9 @@
 
 (transient-define-prefix akirak-capture-journal ()
   ["Options"
-   ("-a" akirak-capture-doct-add-annotation)]
+   :class transient-row
+   ("-a" akirak-capture-doct-add-annotation)
+   ("-j" akirak-capture-change-date-infix)]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
@@ -781,7 +790,8 @@
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
   (interactive)
-  (setq akirak-capture-template-options nil)
+  (setq akirak-capture-template-options nil
+        akirak-capture-date nil)
   (transient-setup 'akirak-capture-journal))
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-journal))
@@ -798,7 +808,9 @@
                                      :body "%?"
                                      akirak-capture-template-options)
                    :file ,file
-                   :function org-reverse-datetree-goto-date-in-file
+                   :function ,(if akirak-capture-date
+                                  #'org-reverse-datetree-goto-read-date-in-file
+                                #'org-reverse-datetree-goto-date-in-file)
                    :clock-in t :clock-resume t))))))
     (org-capture)))
 
