@@ -28,13 +28,17 @@
   :type 'hook)
 
 ;;;###autoload
-(defun akirak-org-log-goto-week-entry ()
-  (interactive)
+(defun akirak-org-log-goto-week-entry (&optional arg)
+  (interactive "P")
   (find-file akirak-org-log-file)
   (widen)
-  (let ((org-use-last-clock-out-time-as-effective-time nil)
-        (org-use-effective-time t))
-    (org-reverse-datetree-goto-date-in-file (org-current-effective-time)))
+  (org-reverse-datetree-goto-date-in-file
+   (if arg
+       (org-read-date nil t (when (numberp arg)
+                              (format "%dW" arg)))
+     (let ((org-use-last-clock-out-time-as-effective-time nil)
+           (org-use-effective-time t))
+       (org-current-effective-time))))
   (beginning-of-line)
   (switch-to-buffer (org-dog-indirect-buffer))
   (run-hooks 'akirak-org-log-week-entry-hook))
