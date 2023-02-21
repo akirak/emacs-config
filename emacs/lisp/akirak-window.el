@@ -1,5 +1,7 @@
 ;;; akirak-window.el ---  -*- lexical-binding: t -*-
 
+(declare-function fwb-toggle-window-split "ext:fwb-cmds")
+
 (defcustom akirak-window-skipped-buffers nil
   "List of buffer names whose windows should never be selected."
   :type '(repeat string))
@@ -312,7 +314,7 @@ If a universal prefix ARG is given, the function calls
 Otherwise, it calls `akirak-window-duplicate-state'."
   (interactive "P")
   (if (equal arg '(4))
-      (toggle-window-split)
+      (fwb-toggle-window-split)
     (akirak-window-duplicate-state arg)))
 
 (defvar akirak-window-last-window-configuration nil)

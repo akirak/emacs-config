@@ -3340,7 +3340,7 @@ Quickly switch windows.
               (?m akirak/aw-mirror-window "Mirror window")
               ;; Unused.
               ;; (?k akirak/aw-quit-window "Quit window")
-              (32 toggle-window-split)
+              (32 fwb-toggle-window-split)
               ;; tab-bar-mode.
               (?Q tab-bar-close-tab)
               (?R tab-bar-rename-tab)
@@ -4935,7 +4935,7 @@ misc frame, window and buffer commands
 (setup (:package fwb-cmds))
 #+end_src
 
-I need this package for =toggle-window-split= command.
+I need this package for =fwb-toggle-window-split= command.
 *** COMMENT ghelp                                        :reference:development:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:45]
