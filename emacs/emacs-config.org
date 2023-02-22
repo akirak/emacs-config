@@ -6602,6 +6602,21 @@ Syntax highlighting code block in HTML
       (add-to-list 'shr-external-rendering-functions
                    '(pre . shr-tag-pre-highlight))))
 #+end_src
+*** sqlformat
+:PROPERTIES:
+:CREATED_TIME: [2023-02-21 Tue 17:18]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package sqlformat)
+    (:nixpkgs "pgformatter")
+    ;; Override the formatter settings when necessary
+    (:set sqlformat-command 'pgformatter
+          sqlformat-args '("-s2" "-g"))
+    (:with-feature sql
+      (:with-mode sql-mode
+        (:bind "C-c C-f" #'sqlformat-buffer))))
+#+end_src
 *** string-inflection                                      :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:07]
