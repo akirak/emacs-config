@@ -3878,6 +3878,15 @@ Completion At Point Extensions
              "C-x r M-l" #'cape-line
              "C-M-/" #'cape-dabbrev))
 #+end_src
+*** COMMENT codeium                                                 :completion:ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2023-02-22 Wed 22:41]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package codeium)
+    (add-to-list 'completion-at-point-functions #'codeium-completion-at-point))
+#+end_src
 *** COMMENT code-review                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-23 Fri 21:19]
