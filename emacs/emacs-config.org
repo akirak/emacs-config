@@ -2308,7 +2308,8 @@ Outline-based notes management and organizer
             (emacs-lisp . t)
             (restclient . t)
             (mermaid . t)
-            (sqlite . t))))
+            (sqlite . t)
+            (sql . t))))
 #+end_src
 **** org-capture
 :PROPERTIES:
