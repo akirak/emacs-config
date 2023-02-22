@@ -667,7 +667,15 @@ The other variables must not be saved, and they should be put in configuration:
                  css-mode
                  typescript-ts-mode
                  tuareg-mode)))
-      (dir-locals-set-directory-class "~/work2/personal/" 'default)))
+      (dir-locals-set-class-variables
+       'web
+       (mapcar (lambda (mode)
+                 `(,mode . ((eval . (prettier-on-save-mode)))))
+               '(web-mode
+                 css-mode
+                 typescript-ts-mode)))
+      (dir-locals-set-directory-class "~/work2/personal/" 'default)
+      (dir-locals-set-directory-class "~/work2/personal/" 'web)))
 #+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
