@@ -6627,6 +6627,10 @@ Syntax highlighting code block in HTML
 :PROPERTIES:
 :CREATED_TIME: [2023-02-21 Tue 17:18]
 :END:
+#+begin_quote
+Reformat SQL using sqlformat or pgformatter
+[[https://github.com/purcell/sqlformat]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package sqlformat)
