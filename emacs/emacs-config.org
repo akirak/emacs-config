@@ -3408,7 +3408,7 @@ Smart line-wrapping with wrap-prefix
 #+begin_src emacs-lisp
   (setup (:package adaptive-wrap))
 #+end_src
-*** add-node-modules-path
+*** COMMENT add-node-modules-path                                              :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-02-19 Sun 09:09]
 :END:
