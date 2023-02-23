@@ -4623,7 +4623,9 @@ EmacSQL back-end for SQLite
 
 #+begin_src emacs-lisp
   (setup (:package emacsql-sqlite)
-    (:nixpkgs "sqlite"))
+    (:nixpkgs "sqlite")
+    (:when-loaded
+      (:set emacsql-sqlite-executable (executable-find "sqlite3"))))
 #+end_src
 *** embark
 :PROPERTIES:
