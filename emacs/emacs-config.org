@@ -2397,7 +2397,11 @@ Outline-based notes management and organizer
       "An advice to block unindesirable `org-clock-in'."
       (when (memq this-command '(org-clock-in
                                  org-agenda-clock-in))
-        (if-let (filename (buffer-file-name (org-base-buffer (current-buffer))))
+        (if-let* ((filename (buffer-file-name (org-base-buffer (current-buffer))))
+                  (filename (thread-last
+                              filename
+                              (abbreviate-file-name)
+                              (expand-file-name))))
             ;; Skip unconditionally if org-dog is unavailable
             (when (and (require 'org-dog-core nil t)
                        (or (not (string-match-p org-dog--root-regexp filename))
