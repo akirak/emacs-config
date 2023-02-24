@@ -3247,6 +3247,15 @@ Hugo Markdown Back-End for Org Export Engine
 (setup (:package ox-hugo))
 #+end_src
 ** Treesit-based major modes
+*** js-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-02-23 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup js-ts-mode
+    (:file-match "\\.m?js$"))
+#+end_src
 *** typescript-ts-mode                                              :major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 18:39]
