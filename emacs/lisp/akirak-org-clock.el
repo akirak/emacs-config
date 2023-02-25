@@ -17,6 +17,14 @@
        (with-current-buffer capture-buffer
          (org-capture-finalize)))))
 
+(defcustom akirak-org-clock-target nil
+  "(FILES QUERY-PREFIX TAG FURTHER)."
+  :local t
+  :type '(list (repeat filename)
+               string
+               string
+               boolean))
+
 ;;;; Global mode to ensure clocking
 
 (defvar akirak-org-clock-snooze-until nil)
@@ -117,43 +125,44 @@
            t)))))
 
 (defun akirak-org-clock--target ()
-  (pcase (project-root (or (project-current)
-                           (if (yes-or-no-p "Not in a project. Run git init?")
-                               (progn
-                                 (let ((default-directory (read-directory-name "Run git init at: ")))
-                                   (call-process "git" nil nil nil "init"))
-                                 (or (project-current)
-                                     (user-error "The directory is not inside a project")))
-                             (user-error "Must be in a project"))))
-    ((rx "/foss/contributions/")
-     (list (list (car (akirak-org-dog-major-mode-files)))
-           "tag:@contribution "
-           "@contribution"
-           nil))
-    ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
-          (app (match-string 1) category))
-     (list (org-dog-select 'absolute
-             `(relative :regexp ,(rx-to-string `(and "/" ,category
-                                                     (? "." (+ (not (any "/"))))
-                                                     ".org"))))
-           ""
-           nil
-           nil))
-    ("~/org/"
-     (if (eq major-mode 'org-memento-policy-mode)
-         (list (list "~/org/focus.org" "~/org/meta.org")
+  (or akirak-org-clock-target
+      (pcase (project-root (or (project-current)
+                               (if (yes-or-no-p "Not in a project. Run git init?")
+                                   (progn
+                                     (let ((default-directory (read-directory-name "Run git init at: ")))
+                                       (call-process "git" nil nil nil "init"))
+                                     (or (project-current)
+                                         (user-error "The directory is not inside a project")))
+                                 (user-error "Must be in a project"))))
+        ((rx "/foss/contributions/")
+         (list (list (car (akirak-org-dog-major-mode-files)))
+               "tag:@contribution "
+               "@contribution"
+               nil))
+        ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
+              (app (match-string 1) category))
+         (list (org-dog-select 'absolute
+                 `(relative :regexp ,(rx-to-string `(and "/" ,category
+                                                         (? "." (+ (not (any "/"))))
+                                                         ".org"))))
                ""
                nil
-               nil)
-       (list (list "~/org/meta.org")
-             "todo: "
-             nil
-             nil)))
-    (_
-     (list (akirak-org-dog-project-files)
-           "todo: "
-           nil
-           t))))
+               nil))
+        ("~/org/"
+         (if (eq major-mode 'org-memento-policy-mode)
+             (list (list "~/org/focus.org" "~/org/meta.org")
+                   ""
+                   nil
+                   nil)
+           (list (list "~/org/meta.org")
+                 "todo: "
+                 nil
+                 nil)))
+        (_
+         (list (akirak-org-dog-project-files)
+               "todo: "
+               nil
+               t)))))
 
 ;;;###autoload
 (defun akirak-org-clock-in-to-project ()
