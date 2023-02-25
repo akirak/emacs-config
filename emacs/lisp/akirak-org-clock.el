@@ -100,14 +100,20 @@
          (progn
            (require 'org-dog-clock)
            (message "You must clock in")
-           (org-dog-clock-in (if further
-                                 (thread-last
-                                   (org-dog-overview-scan files :fast t)
-                                   (mapcar #'car))
-                               files)
-                             :query-prefix query-prefix
-                             :tags tag
-                             :prompt "Clock in: ")
+           (let ((files (if further
+                            (thread-last
+                              (org-dog-overview-scan files :fast t)
+                              (mapcar #'car))
+                          files)))
+             (if files
+                 (org-dog-clock-in files
+                                   :query-prefix query-prefix
+                                   :tags tag
+                                   :prompt
+                                   (format "Clock in (%s): "
+                                           (mapconcat #'file-name-nondirectory
+                                                      files ", ")))
+               (message "No Org file to clock in to")))
            t)))))
 
 (defun akirak-org-clock--target ()
@@ -156,14 +162,18 @@
   (require 'akirak-org-dog)
   (pcase-exhaustive (akirak-org-clock--target)
     (`(,files ,query-prefix ,_tag ,further)
-     (org-dog-clock-in (if further
-                           (thread-last
-                             (org-dog-overview-scan files
-                                                    :fast t)
-                             (mapcar #'car))
-                         files)
-                       :query-prefix query-prefix
-                       :prompt "Clock in: "))))
+     (let ((files (if further
+                      (thread-last
+                        (org-dog-overview-scan files
+                                               :fast t)
+                        (mapcar #'car))
+                    files)))
+       (org-dog-clock-in files
+                         :query-prefix query-prefix
+                         :prompt
+                         (format "Clock in to project file (%s): "
+                                 (mapconcat #'file-name-nondirectory
+                                            files ", ")))))))
 
 (defun akirak-org-clock--project-name (pr)
   "Return the name of the project for use in prompt."
