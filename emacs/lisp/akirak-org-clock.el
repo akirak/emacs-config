@@ -553,5 +553,39 @@ This function returns the current buffer."
      (set-window-configuration wconf)
      (org-clock-clock-in (list marker)))))
 
+;;;; Edit
+
+;;;###autoload
+(defun akirak-org-clock-edit ()
+  (interactive)
+  (cl-flet
+      ((to-cell (elem)
+         (let ((ts (thread-last
+                     elem
+                     (org-element-property :value))))
+           (cons (org-element-property :raw-value ts)
+                 ts))))
+    (let* ((alist (mapcar #'to-cell (akirak-org-clock--entries)))
+           (choice (completing-read "Clock: " alist nil t))
+           (ts (cdr (assoc choice alist)))
+           (new-value (read-from-minibuffer "Edit clock: " choice)))
+      (save-excursion
+        (goto-char (org-element-property :begin ts))
+        (atomic-change-group
+          (delete-region (org-element-property :begin ts)
+                         (org-element-property :end ts))
+          (insert new-value
+                  (if (rx blank) "" " "))
+          (org-clock-update-time-maybe))))))
+
+(defun akirak-org-clock--entries ()
+  (let* ((bound (org-entry-end-position))
+         clocks)
+    (save-excursion
+      (org-back-to-heading)
+      (while (re-search-forward org-clock-line-re bound t)
+        (push (org-element-clock-parser (pos-eol)) clocks)))
+    (nreverse clocks)))
+
 (provide 'akirak-org-clock)
 ;;; akirak-org-clock.el ends here
