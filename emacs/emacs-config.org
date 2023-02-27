@@ -2718,7 +2718,11 @@ Transient commands for Org Dog
     (:when-loaded
       (transient-append-suffix #'octopus-find-node
         'octopus-clocked-file-suffix
-        '("b" "Placeholder" org-placeholder-find-or-create))))
+        '("b" "Placeholder" org-placeholder-find-or-create))
+
+      (transient-append-suffix #'octopus-clock-in
+        'octopus-read-dog-file-suffix
+        '("." "Project" akirak-org-clock-in-to-project))))
 #+end_src
 **** org-dog-embark
 :PROPERTIES:
