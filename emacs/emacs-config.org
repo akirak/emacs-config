@@ -2604,7 +2604,10 @@ A programmable workflow layer for Org mode
             ("tsconfig\\." . "programming/typescript")
             ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
             ("hie\\.yaml\\'" . "programming/haskell"))
-          org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
+          org-dog-clock-in-fallback-fn #'akirak-capture-clock-in
+          org-dog-clock-default-query-filter
+          (lambda (query)
+            (concat "!tags:ARCHIVE " query)))
 
     (defun akirak/org-dog-turn-on-transclusion ()
       (org-transclusion-mode t))
