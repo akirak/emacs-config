@@ -136,7 +136,13 @@
       (let ((input (car ent)))
         (if (url-type (url-generic-parse-url input))
             (akirak-git-clone input)
-          (akirak-project-init input))))))
+          (if (file-name-absolute-p input)
+              (akirak-project-init input)
+            (let ((dir (read-directory-name "Create a directory: "
+                                            (expand-file-name input "~/work2/"))))
+              (unless (file-directory-p dir)
+                (make-directory dir t))
+              (dired dir))))))))
 
 (provide 'akirak-consult-dir)
 ;;; akirak-consult-dir.el ends here
