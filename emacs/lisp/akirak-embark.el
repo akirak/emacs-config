@@ -86,7 +86,6 @@
   (let ((map (make-composed-keymap nil embark-general-map)))
     (define-key map "f" #'akirak-twist-find-git-source)
     (define-key map "b" #'akirak-twist-build-packages)
-    (define-key map "u" #'akirak-twist-update-emacs-inputs)
     (define-key map "h" #'akirak-twist-browse-homepage)
     (define-key map "o" #'akirak-emacs-org-goto-headline)
     (define-key map "d" #'epkg-describe-package)

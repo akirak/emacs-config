@@ -3656,9 +3656,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (with-eval-after-load 'embark
       (define-key embark-library-map
                   "f" #'akirak-twist-find-git-source))
-    (:global "<f12> e b" #'akirak-twist-build-packages
-             "<f12> e f" #'akirak-twist-find-git-source
-             "<f12> e u" #'akirak-twist-update-emacs-inputs))
+    (:global "<f12> e u" #'akirak-twist-update-emacs-inputs))
 #+end_src
 **** akirak-unknown
 #+begin_src emacs-lisp

@@ -178,15 +178,9 @@
 (defvar akirak-twist-last-updated-inputs nil)
 
 ;;;###autoload
-(defun akirak-twist-update-emacs-inputs (inputs)
-  (interactive (list (akirak-twist-read-flake-input-names
-                      (format "Update inputs: " crm-separator)
-                      akirak-twist-lock-directory)))
-  (let ((inputs (if (listp inputs)
-                    inputs
-                  (list inputs))))
-    (setq akirak-twist-last-updated-inputs inputs)
-    (akirak-twist--update-inputs akirak-twist-lock-directory inputs)))
+(defun akirak-twist-update-emacs-inputs ()
+  (interactive)
+  (nix3-flake-update-inputs akirak-twist-lock-directory))
 
 ;;;###autoload
 (defun akirak-twist-update-config-inputs (inputs)
