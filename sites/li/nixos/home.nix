@@ -15,6 +15,11 @@
     position = "2560,100";
   };
 in {
+  environment.systemPackages = [
+    pkgs.hunspellDicts.en_US
+    pkgs.hunspellDicts.en_GB-ise
+  ];
+
   home-manager.users.${homeUser} = {
     programs.chromium = {
       enable = true;
