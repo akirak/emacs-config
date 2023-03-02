@@ -104,6 +104,7 @@
             "steam-run"
             "steam-original"
             "symbola"
+            "vscode"
           ];
       };
 
