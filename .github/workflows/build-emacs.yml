@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'emacs/lock/**'
+  workflow_dispatch:
 
 jobs:
   build:
