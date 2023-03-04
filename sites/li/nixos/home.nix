@@ -50,6 +50,7 @@ in {
       emacsclient.enable = true;
       directory = "emacs";
       earlyInitFile = ../../../emacs/early-init.el;
+      createInitFile = true;
       config = pkgs.emacs-config.override {
         extraFeatures = [
           # "beancount"
