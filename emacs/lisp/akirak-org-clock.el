@@ -557,7 +557,12 @@ This function returns the current buffer."
 
 ;;;###autoload
 (defun akirak-org-clock-edit ()
+  "Edit a clock entry in the logbook of the node."
   (interactive)
+  (unless (derived-mode-p 'org-mode)
+    (user-error "You must run this command inside org-mode"))
+  (when (org-before-first-heading-p)
+    (user-error "Please run this command inside an Org entry"))
   (cl-flet
       ((to-cell (elem)
          (let ((ts (thread-last
@@ -566,7 +571,9 @@ This function returns the current buffer."
            (cons (org-element-property :raw-value ts)
                  ts))))
     (let* ((alist (mapcar #'to-cell (akirak-org-clock--entries)))
-           (choice (completing-read "Clock: " alist nil t))
+           (choice (if (= 1 (length alist))
+                       (caar alist)
+                     (completing-read "Clock: " alist nil t)))
            (ts (cdr (assoc choice alist)))
            (new-value (read-from-minibuffer "Edit clock: " choice)))
       (save-excursion
