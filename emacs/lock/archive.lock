@@ -85,9 +85,9 @@
   },
   "kind-icon": {
     "archive": {
-      "narHash": "sha256-KTLkVshJJvqnCkIF93Rxkn60IenDjxwMqPq98roN2tQ=",
+      "narHash": "sha256-Co3utKtafcn4CYptpJhi0nORyweAnWuRRDS7S9IUXQ8=",
       "type": "tarball",
-      "url": "https://elpa.gnu.org/packages/kind-icon-0.1.9.tar"
+      "url": "https://elpa.gnu.org/packages/kind-icon-0.2.0.tar"
     },
     "inventory": {
       "type": "archive",
@@ -97,7 +97,7 @@
       "emacs": "27.1",
       "svg-lib": "0"
     },
-    "version": "0.1.9"
+    "version": "0.2.0"
   },
   "org-transclusion": {
     "archive": {
@@ -233,9 +233,9 @@
   },
   "taxy-magit-section": {
     "archive": {
-      "narHash": "sha256-+/H+akfgujI4+BySL+qkEqLGUz/nXL14490ECpZJrXI=",
+      "narHash": "sha256-vTkFJzlE9S+MEWZeHAueMr0D6CpQ00rJkYEuLGhsP6w=",
       "type": "tarball",
-      "url": "https://elpa.gnu.org/packages/taxy-magit-section-0.12.1.tar"
+      "url": "https://elpa.gnu.org/packages/taxy-magit-section-0.12.2.tar"
     },
     "inventory": {
       "type": "archive",
@@ -246,7 +246,7 @@
       "magit-section": "3.2.1",
       "taxy": "0.10"
     },
-    "version": "0.12.1"
+    "version": "0.12.2"
   },
   "tomelr": {
     "archive": {
