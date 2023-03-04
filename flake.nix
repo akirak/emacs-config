@@ -71,6 +71,8 @@
       inputs.flake-utils.follows = "utils";
       inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     };
+
+    my-overlay.url = "github:akirak/nixpkgs-overlay";
   };
 
   outputs = {
@@ -110,6 +112,7 @@
 
       sharedOverlays = [
         (import ./pkgs/overlay.nix)
+        inputs.my-overlay.overlays.default
         inputs.flake-no-path.overlay
         emacsOverlay
       ];
