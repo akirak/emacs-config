@@ -7,24 +7,12 @@
     stable.url = "github:NixOS/nixpkgs/nixos-22.11";
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
     nix-filter.url = "github:numtide/nix-filter";
 
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixos-hardware.url = "github:NixOS/nixos-hardware";
-    cachix-deploy-flake = {
-      url = "github:cachix/cachix-deploy-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.disko.follows = "disko";
-      inputs.darwin.follows = "nix-darwin";
     };
 
     homelab = {
