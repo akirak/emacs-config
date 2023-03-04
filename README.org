@@ -11,9 +11,6 @@ It is a Nix flake, and the entire [[file:flake.nix][flake.nix]] is organized usi
 :CONTENTS:
 - [[#configuration-files][Configuration Files]]
   - [[#emacs-configuration][Emacs Configuration]]
-  - [[#home-manager][Home-Manager]]
-  - [[#nixos][NixOS]]
-  - [[#other-flake-outputs][Other Flake Outputs]]
 - [[#development-workflow][Development Workflow]]
 - [[#resources][Resources]]
 - [[#license][License]]
@@ -43,33 +40,6 @@ Now you can try out the configuration:
 
 It assumes that your existing Emacs configuration resides in the XDG config directory (i.e. =~/.config/emacs= by default).
 If your configuration is installed in =~/.emacs.d=, the sandboxed app won't work.
-*** Home-Manager
-Directory: [[file:home/][home]]
-
-I manage my preferences using [[https://github.com/nix-community/home-manager][home-manager]].
-It should work on both NixOS and non-NixOS Linux distributions, but I am currently using it only on NixOS.
-
-On NixOS, home-manager can be managed via a NixOS module, so I don't use a separate command for updating home-manager.
-*** NixOS
-Directory: [[file:nixos/][nixos]]
-
-This repository contains my NixOS configuration.
-It is meant for my personal use.
-*** Other Flake Outputs
-**** NixOS Container
-This repository contains a NixOS container, but I am not using it for any real purpose.
-***** Build the container
-#+begin_src sh
-sudo nixos-rebuild build --flake .#container  
-#+end_src
-***** Create and start the container
-#+begin_src sh
-nixos-container create flake-test --flake .
-#+end_src
-
-#+begin_src sh
-nixos-container start flake-test  
-#+end_src
 ** Development Workflow
 This repository uses [[https://github.com/cachix/pre-commit-hooks.nix/][pre-commit-hooks.nix]] for streamlining development.
 Hooks are defined in [[file:hooks.nix][hooks.nix]].

@@ -2,7 +2,6 @@
   inputs = {
     # Should be updated from flake-pins: <https://github.com/akirak/flake-pins>
     utils.url = "github:numtide/flake-utils";
-    home-manager.url = "github:nix-community/home-manager";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
     stable.url = "github:NixOS/nixpkgs/nixos-22.11";
@@ -25,14 +24,7 @@
       url = "github:cachix/cachix-deploy-flake";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.disko.follows = "disko";
-      inputs.home-manager.follows = "home-manager";
       inputs.darwin.follows = "nix-darwin";
-    };
-
-    # Switch to a private profile by overriding this input
-    site = {
-      url = "git+https://git.sr.ht/~akirak/default-host";
-      flake = false;
     };
 
     homelab = {
@@ -72,28 +64,6 @@
       flake = false;
     };
 
-    # zsh plugins
-    zsh-fast-syntax-highlighting = {
-      url = "github:zdharma-continuum/fast-syntax-highlighting";
-      flake = false;
-    };
-    zsh-nix-shell = {
-      url = "github:chisui/zsh-nix-shell";
-      flake = false;
-    };
-    zsh-fzy = {
-      url = "github:aperezdc/zsh-fzy";
-      flake = false;
-    };
-    zsh-history-filter = {
-      url = "github:MichaelAquilina/zsh-history-filter";
-      flake = false;
-    };
-
-    # other packages
-    epubinfo.url = "github:akirak/epubinfo";
-    squasher.url = "github:akirak/squasher";
-
     # pre-commit
     flake-no-path = {
       url = "github:akirak/flake-no-path";
@@ -101,6 +71,8 @@
       inputs.flake-utils.follows = "utils";
       inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     };
+
+    my-overlay.url = "github:akirak/nixpkgs-overlay";
   };
 
   outputs = {
@@ -108,27 +80,11 @@
     nixpkgs,
     flake-utils-plus,
     utils,
-    home-manager,
     impermanence,
     ...
   } @ inputs: let
     mkApp = utils.lib.mkApp;
     homeProfiles = import ./home {inherit (nixpkgs) lib;};
-    resolveHomeModules = config:
-      config
-      // {
-        homeModules =
-          [
-            inputs.twist.homeModules.emacs-twist
-            inputs.nix-index-database.hmModules.nix-index
-          ]
-          ++ nixpkgs.lib.attrVals config.homeModules homeProfiles
-          ++ (config.extraHomeModules or []);
-      };
-    importSite = src: resolveHomeModules (import src);
-    site = importSite inputs.site;
-
-    inherit (inputs.home-manager.lib) homeManagerConfiguration;
 
     emacsOverlay = import ./emacs/overlay.nix {
       inherit inputs;
@@ -150,25 +106,15 @@
             "steam-run"
             "steam-original"
             "symbola"
+            "vscode"
           ];
       };
 
       sharedOverlays = [
         (import ./pkgs/overlay.nix)
+        inputs.my-overlay.overlays.default
         inputs.flake-no-path.overlay
-        (_: prev: {
-          inherit (inputs.epubinfo.packages.${prev.system}) epubinfo;
-        })
-        (_: prev: {
-          inherit (inputs.squasher.packages.${prev.system}) squasher;
-        })
         emacsOverlay
-        # zsh plugins used in the home-managerconfiguration
-        (_: _:
-          import ./pkgs/zsh-plugins.nix {
-            inherit inputs;
-            inherit (nixpkgs) lib;
-          })
       ];
 
       # Nixpkgs flake reference to be used in the configuration.
@@ -186,11 +132,6 @@
         modules = [
           impermanence.nixosModules.impermanence
           ./nixos/profiles/defaults.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            environment.etc."nix/inputs/nixpkgs".source = inputs.unstable.outPath;
-          }
         ];
       };
 
@@ -201,11 +142,14 @@
       hosts.li = {
         system = "x86_64-linux";
         channelName = "unstable";
-        extraArgs = {
-          site = importSite ./sites/li;
+        extraArgs = rec {
+          homeUser = "akirakomamura";
         };
 
         modules = [
+          inputs.homelab.nixosModules.hmProfile
+          ./sites/li/nixos/home.nix
+
           {
             imports = [
               ./sites/li/nixos/boot.nix
@@ -214,6 +158,7 @@
               ./sites/li/nixos/filesystems.nix
               ./sites/li/nixos/zfs.nix
               ./sites/li/nixos/rpool2
+              ./sites/li/nixos/default-user.nix
             ];
 
             networking.hostName = "li";
@@ -240,12 +185,6 @@
 
             system.stateVersion = "22.11";
           }
-
-          ({site, ...}: {
-            home-manager.users.${site.username}.home.stateVersion = "22.11";
-          })
-
-          ./nixos/profiles/default-user.nix
 
           ./nixos/desktop.nix
           # ./nixos/xmonad.nix
@@ -288,7 +227,6 @@
           inherit (channels.nixpkgs) readability-cli;
 
           inherit emacs-config;
-          inherit (channels.nixpkgs) emacs-root;
 
           test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
 
@@ -314,29 +252,6 @@
 
         apps = emacs-config.makeApps {
           lockDirName = "emacs/lock";
-        };
-
-        homeConfigurations = {
-          ${site.username + "@" + site.hostName} = homeManagerConfiguration {
-            # unfree must be turned on for wpsoffice
-            pkgs = channels.unstable;
-            extraSpecialArgs = {
-              inherit site;
-            };
-            modules =
-              [
-                ./home/modules/crostini.nix
-                {
-                  home = {
-                    inherit (site) username;
-                    homeDirectory = "/home/${site.username}";
-                    stateVersion = "22.11";
-                  };
-                }
-                ./home/profiles/update.nix
-              ]
-              ++ site.homeModules;
-          };
         };
 
         # Set up a pre-commit hook by running `nix develop`.
@@ -395,12 +310,5 @@
         nixpkgs.lib.composeExtensions
         (import ./pkgs/overlay.nix)
         emacsOverlay;
-
-      templates = {
-        site = {
-          description = "Configuration for home-manager and Emacs";
-          path = "${inputs.site}";
-        };
-      };
     };
 }

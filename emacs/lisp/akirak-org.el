@@ -517,7 +517,8 @@ The point should be at the heading."
   (interactive)
   (if (and (memq (org-element-type (org-element-context))
                  '(headline link))
-           (looking-at "\\*"))
+           (looking-at "\\*")
+           (member "crypt" (org-get-tags)))
       (user-error "Protected by org-protected-mode")
     (call-interactively #'kill-word)))
 
@@ -527,7 +528,8 @@ The point should be at the heading."
   (if (region-active-p)
       (kill-region (region-beginning) (region-end))
     (if (or (looking-back (rx bol (* "*") (* space)) (line-beginning-position))
-            (thing-at-point-looking-at org-link-any-re))
+            (thing-at-point-looking-at org-link-any-re)
+            (member "crypt" (org-get-tags)))
         (user-error "Protected by org-protected-mode")
       (call-interactively #'backward-kill-word))))
 
@@ -536,6 +538,8 @@ The point should be at the heading."
   (interactive "P")
   (unless arg
     (user-error "In org-mode, you need a universal prefix to run transpose-chars"))
+  (when (member "crypt" (org-get-tags))
+    (user-error "Protected by org-protected-mode"))
   (call-interactively #'transpose-chars))
 
 ;;;###autoload

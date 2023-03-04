@@ -651,6 +651,27 @@ The other variables must not be saved, and they should be put in configuration:
     (:bind "h" #'dired-up-directory)
     (:unbind "C-x M-o"))
 #+end_src
+*** dir-locals
+:PROPERTIES:
+:CREATED_TIME: [2023-02-19 Sun 09:44]
+:END:
+
+#+begin_src emacs-lisp
+  (setup dir-locals
+    (:status personal
+      (let ((prettier '((eval . (prettier-on-save-mode))))
+            (lsp '((eval . (eglot-ensure)))))
+        (dir-locals-set-class-variables
+         'default
+         `((web-mode . (,@prettier ,@lsp))
+           (css-mode . (,@prettier ,@lsp))
+           (tsx-ts-mode . (,@prettier ,@lsp))
+           (typescript-ts-mode . (,@prettier ,@lsp))
+           (tuareg-mode . (,@lsp))
+           (haskell-mode . (,@lsp)))))
+      (dir-locals-set-directory-class "~/work2/learning/" 'default)
+      (dir-locals-set-directory-class "~/work2/personal/" 'default)))
+#+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
 :CREATED_TIME: [2022-11-13 Sun 17:44]
@@ -2290,7 +2311,8 @@ Outline-based notes management and organizer
             (emacs-lisp . t)
             (restclient . t)
             (mermaid . t)
-            (sqlite . t))))
+            (sqlite . t)
+            (sql . t))))
 #+end_src
 **** org-capture
 :PROPERTIES:
@@ -2370,7 +2392,11 @@ Outline-based notes management and organizer
       "An advice to block unindesirable `org-clock-in'."
       (when (memq this-command '(org-clock-in
                                  org-agenda-clock-in))
-        (if-let (filename (buffer-file-name (org-base-buffer (current-buffer))))
+        (if-let* ((filename (buffer-file-name (org-base-buffer (current-buffer))))
+                  (filename (thread-last
+                              filename
+                              (abbreviate-file-name)
+                              (expand-file-name))))
             ;; Skip unconditionally if org-dog is unavailable
             (when (and (require 'org-dog-core nil t)
                        (or (not (string-match-p org-dog--root-regexp filename))
@@ -2573,7 +2599,10 @@ A programmable workflow layer for Org mode
             ("tsconfig\\." . "programming/typescript")
             ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
             ("hie\\.yaml\\'" . "programming/haskell"))
-          org-dog-clock-in-fallback-fn #'akirak-capture-clock-in)
+          org-dog-clock-in-fallback-fn #'akirak-capture-clock-in
+          org-dog-clock-default-query-filter
+          (lambda (query)
+            (concat "!tags:ARCHIVE " query)))
 
     (defun akirak/org-dog-turn-on-transclusion ()
       (org-transclusion-mode t))
@@ -2684,7 +2713,11 @@ Transient commands for Org Dog
     (:when-loaded
       (transient-append-suffix #'octopus-find-node
         'octopus-clocked-file-suffix
-        '("b" "Placeholder" org-placeholder-find-or-create))))
+        '("b" "Placeholder" org-placeholder-find-or-create))
+
+      (transient-append-suffix #'octopus-clock-in
+        'octopus-read-dog-file-suffix
+        '("." "Project" akirak-org-clock-in-to-project))))
 #+end_src
 **** org-dog-embark
 :PROPERTIES:
@@ -2860,7 +2893,9 @@ Time blocking with Org
           (message "No buffer to kill"))))
 
     (defun akirak/kill-buffer-in-directory (buffer)
-      (let ((default-directory (buffer-local-value 'default-directory buffer)))
+      (let ((default-directory (buffer-local-value 'default-directory buffer))
+            (exec-path (or (buffer-local-value 'exec-path buffer)
+                           exec-path)))
         (with-existing-directory
           (kill-buffer buffer))))
 
@@ -3214,6 +3249,15 @@ Hugo Markdown Back-End for Org Export Engine
 (setup (:package ox-hugo))
 #+end_src
 ** Treesit-based major modes
+*** js-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-02-23 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup js-ts-mode
+    (:file-match "\\.m?js$"))
+#+end_src
 *** typescript-ts-mode                                              :major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 18:39]
@@ -3320,7 +3364,7 @@ Quickly switch windows.
               (?m akirak/aw-mirror-window "Mirror window")
               ;; Unused.
               ;; (?k akirak/aw-quit-window "Quit window")
-              (32 toggle-window-split)
+              (32 fwb-toggle-window-split)
               ;; tab-bar-mode.
               (?Q tab-bar-close-tab)
               (?R tab-bar-rename-tab)
@@ -3386,6 +3430,20 @@ Smart line-wrapping with wrap-prefix
 
 #+begin_src emacs-lisp
   (setup (:package adaptive-wrap))
+#+end_src
+*** COMMENT add-node-modules-path                                              :ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2023-02-19 Sun 09:09]
+:END:
+#+begin_quote
+Add node_modules to your exec-path
+[[https://github.com/codesuki/add-node-modules-path]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package add-node-modules-path)
+    (add-hook 'web-mode-hook #'add-node-modules-path)
+    (add-hook 'typescript-ts-mode-hook #'add-node-modules-path))
 #+end_src
 *** COMMENT affe                           :completion:grep:ARCHIVE:
 :PROPERTIES:
@@ -3593,9 +3651,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (with-eval-after-load 'embark
       (define-key embark-library-map
                   "f" #'akirak-twist-find-git-source))
-    (:global "<f12> e b" #'akirak-twist-build-packages
-             "<f12> e f" #'akirak-twist-find-git-source
-             "<f12> e u" #'akirak-twist-update-emacs-inputs))
+    (:global "<f12> e u" #'akirak-twist-update-emacs-inputs))
 #+end_src
 **** akirak-unknown
 #+begin_src emacs-lisp
@@ -3842,6 +3898,15 @@ Completion At Point Extensions
     (:global "C-x r M-f" #'cape-file
              "C-x r M-l" #'cape-line
              "C-M-/" #'cape-dabbrev))
+#+end_src
+*** COMMENT codeium                                                 :completion:ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2023-02-22 Wed 22:41]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package codeium)
+    (add-to-list 'completion-at-point-functions #'codeium-completion-at-point))
 #+end_src
 *** COMMENT code-review                                                        :ARCHIVE:
 :PROPERTIES:
@@ -4431,17 +4496,20 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
       (add-to-list 'eglot-server-programs
-                   '(elixir-mode . ("elixir-ls"))))
+                   '(elixir-mode . ("elixir-ls")))
+      (add-to-list 'eglot-server-programs
+                   `(web-mode . ,(eglot-alternatives
+                                  '(("astro-ls" "--stdio")))))
 
-    (put 'tsx-mode 'eglot-language-id "typescriptreact")
-    (put 'lean4-mode 'eglot-language-id "lean")
+      (put 'tsx-mode 'eglot-language-id "typescriptreact")
+      (put 'lean4-mode 'eglot-language-id "lean")
 
-    (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
+      (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
 
-    (defun akirak/eglot-setup-buffer ()
-      (if (eglot-managed-p)
-          (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-        (remove-hook 'before-save-hook #'eglot-format-buffer t))))
+      (defun akirak/eglot-setup-buffer ()
+        (if (eglot-managed-p)
+            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+          (remove-hook 'before-save-hook #'eglot-format-buffer t)))))
 #+end_src
 *** eldoc-eval                                               :Emacs:
 :PROPERTIES:
@@ -4568,7 +4636,9 @@ EmacSQL back-end for SQLite
 
 #+begin_src emacs-lisp
   (setup (:package emacsql-sqlite)
-    (:nixpkgs "sqlite"))
+    (:nixpkgs "sqlite")
+    (:when-loaded
+      (:set emacsql-sqlite-executable (executable-find "sqlite3"))))
 #+end_src
 *** embark
 :PROPERTIES:
@@ -4898,7 +4968,7 @@ misc frame, window and buffer commands
 (setup (:package fwb-cmds))
 #+end_src
 
-I need this package for =toggle-window-split= command.
+I need this package for =fwb-toggle-window-split= command.
 *** COMMENT ghelp                                        :reference:development:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 12:45]
@@ -4982,6 +5052,28 @@ Emacs Minor mode to automatically commit and push
   (setup (:package git-auto-commit-mode)
     (:set gac-silent-message-p t
           gac-default-message #'akirak/git-auto-commit-message)
+
+    (defcustom akirak/git-auto-commit-directory-list nil
+      "List of directories in which `git-auto-commit-mode' is turned on."
+      :type '(repeat directory))
+
+    (with-eval-after-load 'dir-locals
+      (dir-locals-set-class-variables
+       'git-auto-commit
+       '((nil . ((eval . (git-auto-commit-mode t))
+                 (gac-debounce-interval . 300)))))
+      (dolist (dir akirak/git-auto-commit-directory-list)
+        (dir-locals-set-directory-class dir 'git-auto-commit)))
+
+    (defun akirak/git-auto-commit-enable-for-project ()
+      "Enable `git-auto-commit-mode' in the directory."
+      (interactive)
+      (if-let (dir (abbreviate-file-name (project-root (project-current))))
+          (progn
+            (customize-push-and-save 'akirak/git-auto-commit-directory-list
+                                     (list dir))
+            (dir-locals-set-directory-class dir 'git-auto-commit))
+        (user-error "No project")))
 
     (defun akirak/git-auto-commit-message (filename)
       (let ((root (project-root (project-current nil (file-name-directory filename)))))
@@ -5553,6 +5645,7 @@ For Emacs Lisp, I use lispy.
       (:set lispy-key-theme '(special lispy))
 
       (:hook-into lisp-mode
+                  dune-mode
                   emacs-lisp-mode
                   lisp-data-mode
                   lisp-interaction-mode
@@ -6412,7 +6505,10 @@ Define commands which run reformatters on the current buffer
      ;; If you use prettier, you need to install its executable separately.
      (prettier
       :program "prettier"
-      :args (list "--stdin-filepath" (buffer-file-name)))
+      :args (list (concat "--plugin-search-dir="
+                          (expand-file-name
+                           (locate-dominating-file default-directory "package.json")))
+                  "--stdin-filepath" (buffer-file-name)))
      (treefmt
       :program "treefmt"
       :stdin nil :stdout nil :mode nil
@@ -6563,6 +6659,25 @@ Syntax highlighting code block in HTML
     (with-eval-after-load 'shr
       (add-to-list 'shr-external-rendering-functions
                    '(pre . shr-tag-pre-highlight))))
+#+end_src
+*** sqlformat
+:PROPERTIES:
+:CREATED_TIME: [2023-02-21 Tue 17:18]
+:END:
+#+begin_quote
+Reformat SQL using sqlformat or pgformatter
+[[https://github.com/purcell/sqlformat]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package sqlformat)
+    (:nixpkgs "pgformatter")
+    ;; Override the formatter settings when necessary
+    (:set sqlformat-command 'pgformatter
+          sqlformat-args '("-s2" "-g"))
+    (:with-feature sql
+      (:with-mode sql-mode
+        (:bind "C-c C-f" #'sqlformat-buffer))))
 #+end_src
 *** string-inflection                                      :editing:
 :PROPERTIES:
@@ -7429,7 +7544,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 230 |
+| [[org-ql-search:tags:packages][packages]]            | 231 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

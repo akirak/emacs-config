@@ -17,6 +17,14 @@
        (with-current-buffer capture-buffer
          (org-capture-finalize)))))
 
+(defcustom akirak-org-clock-target nil
+  "(FILES QUERY-PREFIX TAG FURTHER)."
+  :local t
+  :type '(list (repeat filename)
+               string
+               string
+               boolean))
+
 ;;;; Global mode to ensure clocking
 
 (defvar akirak-org-clock-snooze-until nil)
@@ -100,54 +108,61 @@
          (progn
            (require 'org-dog-clock)
            (message "You must clock in")
-           (org-dog-clock-in (if further
-                                 (thread-last
-                                   (org-dog-overview-scan files :fast t)
-                                   (mapcar #'car))
-                               files)
-                             :query-prefix query-prefix
-                             :tags tag
-                             :prompt "Clock in: ")
+           (let ((files (if further
+                            (thread-last
+                              (org-dog-overview-scan files :fast t)
+                              (mapcar #'car))
+                          files)))
+             (if files
+                 (org-dog-clock-in files
+                                   :query-prefix query-prefix
+                                   :tags tag
+                                   :prompt
+                                   (format "Clock in (%s): "
+                                           (mapconcat #'file-name-nondirectory
+                                                      files ", ")))
+               (message "No Org file to clock in to")))
            t)))))
 
 (defun akirak-org-clock--target ()
-  (pcase (project-root (or (project-current)
-                           (if (yes-or-no-p "Not in a project. Run git init?")
-                               (progn
-                                 (let ((default-directory (read-directory-name "Run git init at: ")))
-                                   (call-process "git" nil nil nil "init"))
-                                 (or (project-current)
-                                     (user-error "The directory is not inside a project")))
-                             (user-error "Must be in a project"))))
-    ((rx "/foss/contributions/")
-     (list (list (car (akirak-org-dog-major-mode-files)))
-           "tag:@contribution "
-           "@contribution"
-           nil))
-    ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
-          (app (match-string 1) category))
-     (list (org-dog-select 'absolute
-             `(relative :regexp ,(rx-to-string `(and "/" ,category
-                                                     (? "." (+ (not (any "/"))))
-                                                     ".org"))))
-           ""
-           nil
-           nil))
-    ("~/org/"
-     (if (eq major-mode 'org-memento-policy-mode)
-         (list (list "~/org/focus.org" "~/org/meta.org")
+  (or akirak-org-clock-target
+      (pcase (project-root (or (project-current)
+                               (if (yes-or-no-p "Not in a project. Run git init?")
+                                   (progn
+                                     (let ((default-directory (read-directory-name "Run git init at: ")))
+                                       (call-process "git" nil nil nil "init"))
+                                     (or (project-current)
+                                         (user-error "The directory is not inside a project")))
+                                 (user-error "Must be in a project"))))
+        ((rx "/foss/contributions/")
+         (list (list (car (akirak-org-dog-major-mode-files)))
+               "tag:@contribution "
+               "@contribution"
+               nil))
+        ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
+              (app (match-string 1) category))
+         (list (org-dog-select 'absolute
+                 `(relative :regexp ,(rx-to-string `(and "/" ,category
+                                                         (? "." (+ (not (any "/"))))
+                                                         ".org"))))
                ""
                nil
-               nil)
-       (list (list "~/org/meta.org")
-             "todo: "
-             nil
-             nil)))
-    (_
-     (list (akirak-org-dog-project-files)
-           "todo: "
-           nil
-           t))))
+               nil))
+        ("~/org/"
+         (if (eq major-mode 'org-memento-policy-mode)
+             (list (list "~/org/focus.org" "~/org/meta.org")
+                   ""
+                   nil
+                   nil)
+           (list (list "~/org/meta.org")
+                 "todo: "
+                 nil
+                 nil)))
+        (_
+         (list (akirak-org-dog-project-files)
+               "todo: "
+               nil
+               t)))))
 
 ;;;###autoload
 (defun akirak-org-clock-in-to-project ()
@@ -156,14 +171,18 @@
   (require 'akirak-org-dog)
   (pcase-exhaustive (akirak-org-clock--target)
     (`(,files ,query-prefix ,_tag ,further)
-     (org-dog-clock-in (if further
-                           (thread-last
-                             (org-dog-overview-scan files
-                                                    :fast t)
-                             (mapcar #'car))
-                         files)
-                       :query-prefix query-prefix
-                       :prompt "Clock in: "))))
+     (let ((files (if further
+                      (thread-last
+                        (org-dog-overview-scan files
+                                               :fast t)
+                        (mapcar #'car))
+                    files)))
+       (org-dog-clock-in files
+                         :query-prefix query-prefix
+                         :prompt
+                         (format "Clock in to project file (%s): "
+                                 (mapconcat #'file-name-nondirectory
+                                            files ", ")))))))
 
 (defun akirak-org-clock--project-name (pr)
   "Return the name of the project for use in prompt."
@@ -533,6 +552,40 @@ This function returns the current buffer."
     (`(,marker . ,wconf)
      (set-window-configuration wconf)
      (org-clock-clock-in (list marker)))))
+
+;;;; Edit
+
+;;;###autoload
+(defun akirak-org-clock-edit ()
+  (interactive)
+  (cl-flet
+      ((to-cell (elem)
+         (let ((ts (thread-last
+                     elem
+                     (org-element-property :value))))
+           (cons (org-element-property :raw-value ts)
+                 ts))))
+    (let* ((alist (mapcar #'to-cell (akirak-org-clock--entries)))
+           (choice (completing-read "Clock: " alist nil t))
+           (ts (cdr (assoc choice alist)))
+           (new-value (read-from-minibuffer "Edit clock: " choice)))
+      (save-excursion
+        (goto-char (org-element-property :begin ts))
+        (atomic-change-group
+          (delete-region (org-element-property :begin ts)
+                         (org-element-property :end ts))
+          (insert new-value
+                  (if (rx blank) "" " "))
+          (org-clock-update-time-maybe))))))
+
+(defun akirak-org-clock--entries ()
+  (let* ((bound (org-entry-end-position))
+         clocks)
+    (save-excursion
+      (org-back-to-heading)
+      (while (re-search-forward org-clock-line-re bound t)
+        (push (org-element-clock-parser (pos-eol)) clocks)))
+    (nreverse clocks)))
 
 (provide 'akirak-org-clock)
 ;;; akirak-org-clock.el ends here

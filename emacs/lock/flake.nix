@@ -2,12 +2,6 @@
   description =
     "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
-    "a" = {
-      flake = false;
-      owner = "plexus";
-      repo = "a.el";
-      type = "github";
-    };
     academic-phrases = {
       flake = false;
       owner = "nashamri";
@@ -104,28 +98,16 @@
       repo = "cape";
       type = "github";
     };
-    citar = {
-      flake = false;
-      owner = "emacs-citar";
-      repo = "citar";
-      type = "github";
-    };
-    citeproc = {
-      flake = false;
-      owner = "andras-simonyi";
-      repo = "citeproc-el";
-      type = "github";
-    };
     closql = {
       flake = false;
       owner = "magit";
       repo = "closql";
       type = "github";
     };
-    code-review = {
+    codeium = {
       flake = false;
-      owner = "wandersoncferreira";
-      repo = "code-review";
+      owner = "Exafunction";
+      repo = "codeium.el";
       type = "github";
     };
     company = {
@@ -138,12 +120,6 @@
       flake = false;
       owner = "company-mode";
       repo = "company-quickhelp";
-      type = "github";
-    };
-    compat = {
-      flake = false;
-      owner = "emacs-compat";
-      repo = "compat";
       type = "github";
     };
     consult = {
@@ -182,12 +158,6 @@
       repo = "copilot.el";
       type = "github";
     };
-    corfu = {
-      flake = false;
-      owner = "minad";
-      repo = "corfu";
-      type = "github";
-    };
     dash = {
       flake = false;
       owner = "magnars";
@@ -198,12 +168,6 @@
       flake = false;
       owner = "Wilfred";
       repo = "deadgrep";
-      type = "github";
-    };
-    deferred = {
-      flake = false;
-      owner = "kiwanami";
-      repo = "emacs-deferred";
       type = "github";
     };
     devdocs = {
@@ -330,19 +294,6 @@
       flake = false;
       owner = "oantolin";
       repo = "embark";
-      type = "github";
-    };
-    ement = {
-      flake = false;
-      owner = "alphapapa";
-      ref = "stable";
-      repo = "ement.el";
-      type = "github";
-    };
-    emojify = {
-      flake = false;
-      owner = "iqbalansari";
-      repo = "emacs-emojify";
       type = "github";
     };
     envrc = {
@@ -602,12 +553,6 @@
       flake = false;
       owner = "iwahbe";
       repo = "jsonian";
-      type = "github";
-    };
-    kind-icon = {
-      flake = false;
-      owner = "jdtsmith";
-      repo = "kind-icon";
       type = "github";
     };
     kv = {
@@ -998,12 +943,6 @@
       repo = "page-break-lines";
       type = "github";
     };
-    parsebib = {
-      flake = false;
-      owner = "joostkremers";
-      repo = "parsebib";
-      type = "github";
-    };
     parsec = {
       flake = false;
       owner = "cute-jumper";
@@ -1016,11 +955,6 @@
       repo = "pcre2el";
       type = "github";
     };
-    persist = {
-      flake = false;
-      type = "git";
-      url = "https://gitlab.com/phillord/persist";
-    };
     pinyin = {
       flake = false;
       owner = "xuchunyang";
@@ -1031,12 +965,6 @@
       flake = false;
       owner = "emacsorphanage";
       repo = "pkg-info";
-      type = "github";
-    };
-    plz = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "plz.el";
       type = "github";
     };
     popper = {
@@ -1141,21 +1069,16 @@
       repo = "separedit.el";
       type = "github";
     };
-    setup = {
-      flake = false;
-      type = "git";
-      url = "https://git.sr.ht/~pkal/setup";
-    };
     shr-tag-pre-highlight = {
       flake = false;
       owner = "xuchunyang";
       repo = "shr-tag-pre-highlight.el";
       type = "github";
     };
-    spinner = {
+    sqlformat = {
       flake = false;
-      owner = "Malabarba";
-      repo = "spinner.el";
+      owner = "purcell";
+      repo = "sqlformat";
       type = "github";
     };
     ssass-mode = {
@@ -1182,12 +1105,6 @@
       repo = "svelte-mode";
       type = "github";
     };
-    svg-lib = {
-      flake = false;
-      owner = "rougier";
-      repo = "svg-lib";
-      type = "github";
-    };
     swiper = {
       flake = false;
       owner = "abo-abo";
@@ -1207,29 +1124,10 @@
       repo = "tagedit";
       type = "github";
     };
-    taxy = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "taxy.el";
-      type = "github";
-    };
-    taxy-magit-section = {
-      flake = false;
-      owner = "alphapapa";
-      ref = "package/taxy-magit-section";
-      repo = "taxy.el";
-      type = "github";
-    };
     titlecase = {
       flake = false;
       type = "git";
       url = "https://codeberg.org/acdw/titlecase.el.git";
-    };
-    tomelr = {
-      flake = false;
-      owner = "kaushalmodi";
-      repo = "tomelr";
-      type = "github";
     };
     treepy = {
       flake = false;
@@ -1253,18 +1151,6 @@
       flake = false;
       owner = "diml";
       repo = "utop";
-      type = "github";
-    };
-    uuidgen = {
-      flake = false;
-      owner = "kanru";
-      repo = "uuidgen-el";
-      type = "github";
-    };
-    vertico = {
-      flake = false;
-      owner = "minad";
-      repo = "vertico";
       type = "github";
     };
     visual-fill-column = {
