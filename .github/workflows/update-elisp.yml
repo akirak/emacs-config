@@ -20,6 +20,12 @@ jobs:
     - run: |
         git config --add user.name 'github-actions[bot]'
         git config --add user.email '6270544+github-actions[bot]@users.noreply.github.com'
+    - run: |
+        nix flake lock \
+          --update-input melpa \
+          --update-input gnu-elpa \
+          --update-input epkgs
+    - run: nix run .#update
     - run: nix run .#update-elisp-lock
     - uses: peter-evans/create-pull-request@v4
       with:
