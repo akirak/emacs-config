@@ -1,5 +1,0 @@
-{
-  imports = [
-    ./profiles/smartd.nix
-  ];
-}
