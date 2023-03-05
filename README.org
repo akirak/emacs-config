@@ -1,28 +1,13 @@
 # -*- eval: (org-make-toc-mode t); -*-
-* Nix/NixOS Configuration Monorepo
+* Emacs Configuration
 :PROPERTIES:
 :TOC:      :include descendants :depth 2
 :END:
 [[https://akirak.cachix.org][file:https://img.shields.io/badge/cachix-akirak-blue.svg]]
-
-This is a monorepo for my Nix configuration files.
-It is a Nix flake, and the entire [[file:flake.nix][flake.nix]] is organized using [[https://github.com/gytis-ivaskevicius/flake-utils-plus][flake-utils-plus]].
-
-:CONTENTS:
-- [[#configuration-files][Configuration Files]]
-  - [[#emacs-configuration][Emacs Configuration]]
-- [[#development-workflow][Development Workflow]]
-- [[#resources][Resources]]
-- [[#license][License]]
-:END:
-** Configuration Files
-*** Emacs Configuration
-Directory: [[file:emacs/][emacs]]
-
 This repository contains my Emacs configuration which is built using [[https://github.com/akirak/emacs-twist][emacs-twist]].
 
 I use home-manager for installation.
-**** Trying out the configuration on Linux
+** Trying out the configuration on Linux
 If you are using Linux with Nix 2.4 installed, you can try out the Emacs configuration without replacing your user-emacs-directory.
 MacOS is not supported, because the Nix app depends on bubblewrap, which is only supported on Linux.
 
@@ -40,21 +25,3 @@ Now you can try out the configuration:
 
 It assumes that your existing Emacs configuration resides in the XDG config directory (i.e. =~/.config/emacs= by default).
 If your configuration is installed in =~/.emacs.d=, the sandboxed app won't work.
-** Development Workflow
-This repository uses [[https://github.com/cachix/pre-commit-hooks.nix/][pre-commit-hooks.nix]] for streamlining development.
-Hooks are defined in [[file:hooks.nix][hooks.nix]].
-
-Latest commits are likely to be available on [[https://github.com/akirak/nix-config/tree/develop][develop]] branch, if it exists.
-I merge it into master at some random intervals.
-I often squash commits on the non-master branch, so if you need to create a permalink to a particular file in my repository, please pick a commit on master branch.
-** Resources
-- [[https://www.tweag.io/blog/2020-07-31-nixos-flakes/][Nix Flakes, Part 3: Managing NixOS systems - Tweag]]
-- [[https://digga.divnix.com/#modules-profiles--suites][Modules, Profiles & Suites]]
-** License
-Most of the configuration was written by the author of this repository (Akira Komamura), with exceptions of:
-
-- [[file:dotfiles/starship.toml][starship.toml]] which was copied from the repository of [[https://github.com/divnix/devos][devos]] (written by [[https://github.com/nrdxp][Timothy DeHerrera]])
-- Some code snippets were pasted from sources on the internet, e.g. blogs, Git repositories, reddit, etc. They have respective notes on sources.
-
-My code in this repository are licensed under [[file:LICENSE][MIT License]].
-starship.toml is licensed under [[file:dotfiles/COPYING][MIT License]] too.
