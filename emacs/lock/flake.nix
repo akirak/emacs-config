@@ -104,12 +104,6 @@
       repo = "closql";
       type = "github";
     };
-    codeium = {
-      flake = false;
-      owner = "Exafunction";
-      repo = "codeium.el";
-      type = "github";
-    };
     company = {
       flake = false;
       owner = "company-mode";
@@ -463,6 +457,12 @@
       flake = false;
       owner = "lorniu";
       repo = "go-translate";
+      type = "github";
+    };
+    gptel = {
+      flake = false;
+      owner = "karthink";
+      repo = "gptel";
       type = "github";
     };
     graphql-mode = {
@@ -995,6 +995,12 @@
       flake = false;
       owner = "chuntaro";
       repo = "emacs-promise";
+      type = "github";
+    };
+    proof-general = {
+      flake = false;
+      owner = "ProofGeneral";
+      repo = "PG";
       type = "github";
     };
     puni = {
