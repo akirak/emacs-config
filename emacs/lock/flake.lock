@@ -272,22 +272,6 @@
         "type": "github"
       }
     },
-    "codeium": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1677091495,
-        "narHash": "sha256-aYZ299Vb2NQG+nGCamgz/jmyI19VV5JNMVcY3BUyUgQ=",
-        "owner": "Exafunction",
-        "repo": "codeium.el",
-        "rev": "28913fe8cdf5bb3c7471e5f39a6a162116427581",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Exafunction",
-        "repo": "codeium.el",
-        "type": "github"
-      }
-    },
     "company": {
       "flake": false,
       "locked": {
@@ -1960,11 +1944,11 @@
     "oahu-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1674477318,
-        "narHash": "sha256-j/bxXMU1NNjiiY3PsAmEE/y8aM5pg37pCG39NEr7wyg=",
+        "lastModified": 1678164647,
+        "narHash": "sha256-AnGsRIPgkP96u8VkZjg1/7KfCvdvxBK58YTbBWHl+jw=",
         "owner": "~akirak",
         "repo": "oahu.el",
-        "rev": "ffef720e7ed56460815bcedfe42eda03ad7e7d0b",
+        "rev": "63743485c96b6bcaba97bd2008eb5d796d4da7ab",
         "type": "sourcehut"
       },
       "original": {
@@ -2223,11 +2207,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1677859656,
-        "narHash": "sha256-MZfsIVzTRYdvDAR99y/Rhk7n1HTZT1od+2yOTfDU6bo=",
+        "lastModified": 1678289127,
+        "narHash": "sha256-PdwR0IjWSQq3N94tvKk4vg67olH5s1XBDdEP7I8xkac=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "3ef7240209a2ca8270ad768ea86abbf704992651",
+        "rev": "af12f943ecba1a72676e806e9d69a07a82c8a575",
         "type": "github"
       },
       "original": {
@@ -2637,6 +2621,22 @@
         "type": "github"
       }
     },
+    "proof-general": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1675074257,
+        "narHash": "sha256-IZXRu2EwkuvyzaA5D8zwDubSDiLMF6K4DxNEFeUeevE=",
+        "owner": "ProofGeneral",
+        "repo": "PG",
+        "rev": "8416875696cb0c4283e96fe721d343277882ecea",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ProofGeneral",
+        "repo": "PG",
+        "type": "github"
+      }
+    },
     "puni": {
       "flake": false,
       "locked": {
@@ -2800,7 +2800,6 @@
         "caml": "caml",
         "cape": "cape",
         "closql": "closql",
-        "codeium": "codeium",
         "company": "company",
         "company-quickhelp": "company-quickhelp",
         "consult": "consult",
@@ -2947,6 +2946,7 @@
         "pos-tip": "pos-tip",
         "posframe": "posframe",
         "promise": "promise",
+        "proof-general": "proof-general",
         "puni": "puni",
         "quick-peek": "quick-peek",
         "rainbow-delimiters": "rainbow-delimiters",
