@@ -73,7 +73,9 @@ This is also useful for completion.")
 
 (defun akirak-snippet--org-files ()
   (append (akirak-org-dog-path-files)
-          (akirak-org-dog-major-mode-files)))
+          (akirak-org-dog-major-mode-files)
+          (when (derived-mode-p 'text-mode)
+            (akirak-org-dog-language-files))))
 
 (defun akirak-snippet--search ()
   (if-let (files (akirak-snippet--org-files))
@@ -141,7 +143,7 @@ This is also useful for completion.")
       (setq result
             (thread-last
               (org-ql-select file
-                '(tags "@snippet")
+                '(tags "@snippet" "@input")
                 :action
                 `(org-with-wide-buffer
                   (narrow-to-region (point) (org-entry-end-position))
