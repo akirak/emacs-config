@@ -146,6 +146,7 @@ With ARG, pick a text from the kill ring instead of the last one."
     (user-error "Not in org-mode"))
   (beginning-of-line 1)
   (let ((begin (point))
+        indent
         done)
     (unwind-protect
         (progn
@@ -156,6 +157,8 @@ With ARG, pick a text from the kill ring instead of the last one."
           (goto-char begin)
           (when (looking-at (rx (+ "\n")))
             (delete-region (point) (match-end 0)))
+          (when (looking-at (rx (+ blank)))
+            (setq indent (match-string-no-properties 0)))
           ;; Select the pasted text.
           (setq mark-active t)
           (call-interactively #'org-insert-structure-template)
@@ -173,12 +176,12 @@ With ARG, pick a text from the kill ring instead of the last one."
                   (end-of-line 1)
                   (insert lang))))
             (re-search-forward (rx bol (* space) "#+end_")))
-          ;; If there is whitespace at the beginning of the pasted text,
-          ;; the block will have preceding space as well.
-          ;;
-          ;; Thus you have to re-indent the entire block to ensure
-          ;; that it has no preceding space at the bol.
-          (indent-region begin (point))
+          ;; Remove trailing whitespaces.
+          (when indent
+            (replace-regexp-in-region
+             (concat "^" (regexp-quote indent))
+             ""
+             begin (point)))
           (forward-line 1)
           ;; Insert an empty line.
           (unless (looking-at (rx eol))
