@@ -4496,6 +4496,8 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
       (add-to-list 'eglot-server-programs
+                   '(coq-mode . ("coq-lsp")))
+      (add-to-list 'eglot-server-programs
                    '(elixir-mode . ("elixir-ls")))
       (add-to-list 'eglot-server-programs
                    `(web-mode . ,(eglot-alternatives
@@ -6436,6 +6438,23 @@ Pop a posframe (just a frame) at point
 #+begin_src emacs-lisp
 (setup (:package posframe))
 #+end_src
+*** proof-general   
+:PROPERTIES:
+:CREATED_TIME: [2023-03-08 Wed 14:53]
+:END:
+#+begin_quote
+A generic Emacs interface for proof assistants
+[[https://proofgeneral.github.io/]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package proof-general))
+#+end_src
+**** Coq                                                            :@extra:Coq:
+#+begin_src elisp
+  (setup coq
+    (:nixpkgs "coq" "coq-lsp"))
+#+end_src
 *** puni                                       :structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:24]
@@ -7552,12 +7571,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 231 |
+| [[org-ql-search:tags:packages][packages]]            | 233 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:development][development]]         |  10 |
-| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:library][library]]             |   9 |
 | [[org-ql-search:tags:VC][VC]]                  |   8 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
@@ -7625,6 +7644,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:Chinese][Chinese]]             |   1 |
+| [[org-ql-search:tags:Coq][Coq]]                 |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
 | [[org-ql-search:tags:terminal][terminal]]            |   1 |
@@ -7690,6 +7710,7 @@ To use these features, they need to be turned on at build time.
 | [[lean4-mode][lean4-mode]]   |      |
 | [[lsp-mode][lsp-mode]]     |      |
 | [[mermaid-mode][mermaid-mode]] |      |
+| [[Coq][Coq]]          |      |
 | [[tuareg][tuareg]]       |      |
 | [[utop][utop]]         |      |
 #+END:

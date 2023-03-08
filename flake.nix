@@ -68,6 +68,10 @@
         inputs.my-overlay.overlays.default
         inputs.flake-no-path.overlay
         emacsOverlay
+        (final: _: {
+          coq = inputs.unstable.legacyPackages.${final.system}.coq;
+          coq-lsp = inputs.unstable.legacyPackages.${final.system}.coqPackages.coq-lsp;
+        })
       ];
 
       outputsBuilder = channels: let
