@@ -53,9 +53,6 @@
     utils,
     ...
   } @ inputs: let
-    mkApp = utils.lib.mkApp;
-    homeProfiles = import ./home {inherit (nixpkgs) lib;};
-
     emacsOverlay = import ./emacs/overlay.nix {
       inherit inputs;
       emacsPackageForSystem = system:
