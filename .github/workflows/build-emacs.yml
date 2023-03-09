@@ -3,7 +3,8 @@ name: Build Emacs packages
 on:
   push:
     paths:
-    - 'emacs/lock/**'
+    - 'emacs/**'
+    - 'flake.*'
   workflow_dispatch:
 
 jobs:
