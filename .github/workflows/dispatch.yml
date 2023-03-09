@@ -1,9 +1,7 @@
-name: Trigger rebuild and deploy
+name: Trigger deploys
 
 on:
-  push:
-    branches:
-    - develop
+  workflow_call:
 
 jobs:
   dispatch:
