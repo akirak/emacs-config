@@ -32,3 +32,4 @@ jobs:
     if: ${{ github.ref_name == 'develop' }}
     needs: build
     uses: ./.github/workflows/dispatch.yml
+    secrets: inherit
