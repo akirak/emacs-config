@@ -7,6 +7,7 @@
 :CONTENTS:
 - [[#setupel][Setup.el]]
 - [[#performance][Performance]]
+- [[#supported-systems][Supported systems]]
 - [[#custom-conventions][Custom conventions]]
 - [[#macro-packages][Macro packages]]
 - [[#built-ins][Built-ins]]
@@ -301,6 +302,25 @@ the Garbage Collector Magic Hack
     (:hook-into after-init-hook)
     (:set gcmh-verbose init-file-debug
           gcmh-high-cons-threshold (* 128 1024 1024)))
+#+end_src
+** Supported systems
+*** os-release
+#+begin_src elisp
+  (defconst akirak/os-release
+    (when (file-readable-p "/etc/os-release")
+      (with-temp-buffer
+        (insert-file-contents "/etc/os-release")
+        (when (re-search-forward "^PRETTY_NAME=" nil t)
+          (replace-regexp-in-string
+           "\"" ""
+           (buffer-substring-no-properties
+            (point) (pos-eol)))))))
+#+end_src
+*** NixOS
+#+begin_src elisp
+  (defconst akirak/nixos-configuration-version
+    (when-let (exe (executable-find "nixos-version"))
+      (car (process-lines exe "--configuration-revision"))))
 #+end_src
 ** Custom conventions
 *** Prefix for mode-specific commands
@@ -924,10 +944,26 @@ The built-in =electric= package provides the following modes:
   (setup frame
     (blink-cursor-mode -1)
     (set-frame-parameter nil 'alpha '(98 . 96))
-    (setq frame-title-format '("%b - "
-                               (akirak/emacs-profile-name
-                                akirak/emacs-profile-name
-                                (:eval (concat "GNU Emacs " emacs-version))))))
+
+    (defconst akirak/base-frame-title-format
+      '((akirak/emacs-profile-name
+         (" - " akirak/emacs-profile-name))
+        (akirak/os-release
+         (" - " akirak/os-release))
+        (akirak/nixos-configuration-version
+         ("@" akirak/nixos-configuration-version))))
+
+    (defconst akirak/default-frame-title-format
+      (cons '(org-memento-current-block
+              org-memento-frame-title-format
+              "%b")
+            akirak/base-frame-title-format))
+
+    (setq org-clock-frame-title-format
+          (cons '(t org-mode-line-string)
+                akirak/base-frame-title-format))
+
+    (setq frame-title-format akirak/default-frame-title-format))
 #+end_src
 *** help
 :PROPERTIES:
@@ -2373,10 +2409,6 @@ Outline-based notes management and organizer
                     (org-link-display-format
                      (org-no-properties (org-get-heading t t t t)))))
 
-          org-clock-frame-title-format '((org-memento-current-block
-                                          org-memento-frame-title-format)
-                                         org-mode-line-string)
-
           org-clocktable-defaults
           (list :fileskip0 t :stepskip0 t :tcolumns 1
                 ;; Remaining arguments are the same as defaults
@@ -2987,14 +3019,7 @@ Time blocking with Org
                 (defun akirak/org-memento-save-some-buffers ()
                   (ignore-errors (akirak-org-clock-snooze))
                   (save-some-buffers)))
-      (add-hook 'org-memento-checkin-hook
-                (defun akirak/org-memento-set-frame-title ()
-                  (setq frame-title-format
-                        '((org-memento-current-block
-                           org-memento-frame-title-format
-                           akirak/emacs-profile-name
-                           ;; akirak/org-memento-fallback-frame-title
-                           )))))
+
       (add-hook 'org-memento-block-exit-hook #'akirak/org-memento-cleanup-buffers)))
 #+end_src
 
