@@ -29,6 +29,6 @@ jobs:
     - run: nix build .#emacs-config --print-build-logs
 
   deploy:
-    if: '${{ github.ref_name == "develop" }}'
+    if: ${{ github.ref_name == 'develop' }}
     needs: build
-    uses: ./.github/workflows/dispatch.yaml@develop
+    uses: ./.github/workflows/dispatch.yml
