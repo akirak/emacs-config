@@ -60,6 +60,14 @@
         inputs.flake-parts.flakeModules.easyOverlay
       ];
 
+      flake = {
+        homeModules.twist = {
+          imports = [
+            inputs.twist.homeModules.emacs-twist
+          ];
+        };
+      };
+
       perSystem = {
         config,
         system,
