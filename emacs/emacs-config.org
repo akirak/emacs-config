@@ -4576,17 +4576,17 @@ Automatically add spaces around operators
                 java-mode
                 rust-mode))
 #+end_src
-*** elixir-mode
+*** elixir-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 19:08]
 :END:
 #+begin_quote
-Major mode for editing Elixir files
-[[https://github.com/elixir-editors/emacs-elixir]]
+Major mode for Elixir with tree-sitter support
+[[https://github.com/wkirschbaum/elixir-ts-mode]]
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package elixir-mode)
+  (setup (:package elixir-ts-mode)
     (:file-match "\\.exs?\\'")
 
     (:auto-insert
@@ -4610,7 +4610,7 @@ Major mode for editing Elixir files
            "\nend\n")))
 
     (:when-loaded
-      (define-abbrev elixir-mode-abbrev-table
+      (define-abbrev elixir-ts-mode-abbrev-table
         "case" "" (define-skeleton akirak-elixir-case
                     "Insert case"
                     ""
@@ -4618,7 +4618,7 @@ Major mode for editing Elixir files
                     > @ _ n
                     > -2 "end"))
 
-      (define-abbrev elixir-mode-abbrev-table
+      (define-abbrev elixir-ts-mode-abbrev-table
         "fn" "" (define-skeleton akirak-elixir-fn
                   "Insert fn"
                   ""
@@ -7589,7 +7589,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 233 |
+| [[org-ql-search:tags:packages][packages]]            | 232 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
