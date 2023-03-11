@@ -51,17 +51,17 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1672740648,
-        "narHash": "sha256-0xb3IGtpzgWmbQvUoLq+1IHFtfKSdsZHqkmQ9Gyl968=",
-        "owner": "~akirak",
-        "repo": "nix-config",
-        "rev": "e605d8ef13cf58c85f1c10e0d67b03b973ed20fd",
-        "type": "sourcehut"
+        "lastModified": 1678004222,
+        "narHash": "sha256-MLoC6ncBct1uFBJ4QcAnPNGboIakmf7FiL55OvBs/0E=",
+        "owner": "akirak",
+        "repo": "emacs-config",
+        "rev": "fe02be78c162c0502541c2c80a30e3abc0f27622",
+        "type": "github"
       },
       "original": {
-        "owner": "~akirak",
-        "repo": "nix-config",
-        "type": "sourcehut"
+        "owner": "akirak",
+        "repo": "emacs-config",
+        "type": "github"
       }
     },
     "anzu": {
@@ -673,19 +673,19 @@
         "type": "github"
       }
     },
-    "elixir-mode": {
+    "elixir-ts-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1675623415,
-        "narHash": "sha256-09Btb3vHCcBuLBzzl6xK4EJ6dfSyOhm0bluktne8el8=",
-        "owner": "elixir-editors",
-        "repo": "emacs-elixir",
-        "rev": "7641373f0563cab67cc5459c34534a8176b5e676",
+        "lastModified": 1676813913,
+        "narHash": "sha256-8y+OyEYXyz/+85a306oSdfcqPusyOtxVdKy7YYbuLRc=",
+        "owner": "wkirschbaum",
+        "repo": "elixir-ts-mode",
+        "rev": "9a397f8135468a9ec853a869033946a08d57a1c0",
         "type": "github"
       },
       "original": {
-        "owner": "elixir-editors",
-        "repo": "emacs-elixir",
+        "owner": "wkirschbaum",
+        "repo": "elixir-ts-mode",
         "type": "github"
       }
     },
@@ -1298,6 +1298,22 @@
         "type": "github"
       }
     },
+    "heex-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1676553874,
+        "narHash": "sha256-kj7ma3C2euaUmJWraSw0d6RtdPZdGF+Tnis7dK4B5bM=",
+        "owner": "wkirschbaum",
+        "repo": "heex-ts-mode",
+        "rev": "a405438af4ca617133e7ccd5548a787e0011445d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wkirschbaum",
+        "repo": "heex-ts-mode",
+        "type": "github"
+      }
+    },
     "highlight-indent-guides": {
       "flake": false,
       "locked": {
@@ -1844,22 +1860,6 @@
         "type": "github"
       }
     },
-    "nickel-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1645519244,
-        "narHash": "sha256-cSKF0KqQmMQImZZPAdiA6t4xz4Wy4aRTO3rnHfEZx4Q=",
-        "owner": "GTrunSec",
-        "repo": "nickel-mode",
-        "rev": "491c8e93e432c35d03573e5e88214a6f80838602",
-        "type": "github"
-      },
-      "original": {
-        "owner": "GTrunSec",
-        "repo": "nickel-mode",
-        "type": "github"
-      }
-    },
     "nix-mode": {
       "flake": false,
       "locked": {
@@ -2207,11 +2207,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1678514510,
-        "narHash": "sha256-dweH25tw9m97XR2jFJzCUqad/FExgiS1FIvnIdipIP0=",
+        "lastModified": 1678563746,
+        "narHash": "sha256-r5SHRMj+8OjETdcNsxCogapodcYutsJfOacjK84wIic=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "2287c640714dd6f54f66703a5f98da6cd1d9654d",
+        "rev": "9f6dfd5b14e9857b316631ff36eb0de4689144c8",
         "type": "github"
       },
       "original": {
@@ -2825,7 +2825,7 @@
         "editorconfig": "editorconfig",
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
-        "elixir-mode": "elixir-mode",
+        "elixir-ts-mode": "elixir-ts-mode",
         "elx": "elx",
         "emacsql": "emacsql",
         "emacsql-sqlite": "emacsql-sqlite",
@@ -2864,6 +2864,7 @@
         "guess-language": "guess-language",
         "haskell-mode": "haskell-mode",
         "hcl-mode": "hcl-mode",
+        "heex-ts-mode": "heex-ts-mode",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
         "ht": "ht",
@@ -2898,7 +2899,6 @@
         "mmm-mode": "mmm-mode",
         "modus-themes": "modus-themes",
         "move-dup": "move-dup",
-        "nickel-mode": "nickel-mode",
         "nix-mode": "nix-mode",
         "nix-update": "nix-update",
         "nix3": "nix3",

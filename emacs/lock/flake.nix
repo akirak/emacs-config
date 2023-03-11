@@ -22,9 +22,9 @@
     };
     akirak = {
       flake = false;
-      owner = "~akirak";
-      repo = "nix-config";
-      type = "sourcehut";
+      owner = "akirak";
+      repo = "emacs-config";
+      type = "github";
     };
     anzu = {
       flake = false;
@@ -254,10 +254,10 @@
       repo = "eldoc-eval";
       type = "github";
     };
-    elixir-mode = {
+    elixir-ts-mode = {
       flake = false;
-      owner = "elixir-editors";
-      repo = "emacs-elixir";
+      owner = "wkirschbaum";
+      repo = "elixir-ts-mode";
       type = "github";
     };
     elx = {
@@ -489,6 +489,12 @@
       repo = "emacs-hcl-mode";
       type = "github";
     };
+    heex-ts-mode = {
+      flake = false;
+      owner = "wkirschbaum";
+      repo = "heex-ts-mode";
+      type = "github";
+    };
     highlight-indent-guides = {
       flake = false;
       owner = "DarthFennec";
@@ -692,12 +698,6 @@
       flake = false;
       owner = "wyuenho";
       repo = "move-dup";
-      type = "github";
-    };
-    nickel-mode = {
-      flake = false;
-      owner = "GTrunSec";
-      repo = "nickel-mode";
       type = "github";
     };
     nix-mode = {
