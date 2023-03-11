@@ -6116,18 +6116,6 @@ Eclipse-like moving and duplicating lines or rectangles
                 (unless (derived-mode-p 'org-mode 'markdown-mode)
                   (move-dup-mode 1)))))
 #+end_src
-*** nickel-mode
-:PROPERTIES:
-:CREATED_TIME: [2022-03-27 Sun 18:25]
-:END:
-#+begin_quote
-description
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package nickel-mode)
-    (:file-match "\\.ncl\\'"))
-#+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
