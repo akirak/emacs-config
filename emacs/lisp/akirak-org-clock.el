@@ -47,7 +47,8 @@
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
                                   ,(expand-file-name "~/resources/articles/")
-                                  (and (any "-/") "config/")
+                                  (and "emacs-config.org" eol)
+                                  "/private-config/"
                                   "/tmp"))
                      "/.")))
 
