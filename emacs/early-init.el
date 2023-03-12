@@ -16,3 +16,6 @@
              (setq file-name-handler-alist ',file-name-handler-alist))
           0)
 (setq file-name-handler-alist nil)
+
+(setq initial-frame-alist '((width . 190)
+                            (height . 50)))
