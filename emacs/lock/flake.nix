@@ -116,6 +116,12 @@
       repo = "company-quickhelp";
       type = "github";
     };
+    compat = {
+      flake = false;
+      owner = "emacs-compat";
+      repo = "compat";
+      type = "github";
+    };
     consult = {
       flake = false;
       owner = "minad";
@@ -150,6 +156,12 @@
       flake = false;
       owner = "zerolfx";
       repo = "copilot.el";
+      type = "github";
+    };
+    corfu = {
+      flake = false;
+      owner = "minad";
+      repo = "corfu";
       type = "github";
     };
     dash = {
@@ -288,6 +300,13 @@
       flake = false;
       owner = "oantolin";
       repo = "embark";
+      type = "github";
+    };
+    ement = {
+      flake = false;
+      owner = "alphapapa";
+      ref = "stable";
+      repo = "ement.el";
       type = "github";
     };
     envrc = {
@@ -559,6 +578,12 @@
       flake = false;
       owner = "iwahbe";
       repo = "jsonian";
+      type = "github";
+    };
+    kind-icon = {
+      flake = false;
+      owner = "jdtsmith";
+      repo = "kind-icon";
       type = "github";
     };
     kv = {
@@ -955,6 +980,11 @@
       repo = "pcre2el";
       type = "github";
     };
+    persist = {
+      flake = false;
+      type = "git";
+      url = "https://gitlab.com/phillord/persist";
+    };
     pinyin = {
       flake = false;
       owner = "xuchunyang";
@@ -965,6 +995,12 @@
       flake = false;
       owner = "emacsorphanage";
       repo = "pkg-info";
+      type = "github";
+    };
+    plz = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "plz.el";
       type = "github";
     };
     popper = {
@@ -1075,10 +1111,21 @@
       repo = "separedit.el";
       type = "github";
     };
+    setup = {
+      flake = false;
+      type = "git";
+      url = "https://git.sr.ht/~pkal/setup";
+    };
     shr-tag-pre-highlight = {
       flake = false;
       owner = "xuchunyang";
       repo = "shr-tag-pre-highlight.el";
+      type = "github";
+    };
+    spinner = {
+      flake = false;
+      owner = "Malabarba";
+      repo = "spinner.el";
       type = "github";
     };
     sqlformat = {
@@ -1111,6 +1158,12 @@
       repo = "svelte-mode";
       type = "github";
     };
+    svg-lib = {
+      flake = false;
+      owner = "rougier";
+      repo = "svg-lib";
+      type = "github";
+    };
     swiper = {
       flake = false;
       owner = "abo-abo";
@@ -1130,10 +1183,29 @@
       repo = "tagedit";
       type = "github";
     };
+    taxy = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "taxy.el";
+      type = "github";
+    };
+    taxy-magit-section = {
+      flake = false;
+      owner = "alphapapa";
+      ref = "package/taxy-magit-section";
+      repo = "taxy.el";
+      type = "github";
+    };
     titlecase = {
       flake = false;
       type = "git";
       url = "https://codeberg.org/acdw/titlecase.el.git";
+    };
+    tomelr = {
+      flake = false;
+      owner = "kaushalmodi";
+      repo = "tomelr";
+      type = "github";
     };
     treepy = {
       flake = false;
@@ -1157,6 +1229,18 @@
       flake = false;
       owner = "diml";
       repo = "utop";
+      type = "github";
+    };
+    valign = {
+      flake = false;
+      owner = "casouri";
+      repo = "valign";
+      type = "github";
+    };
+    vertico = {
+      flake = false;
+      owner = "minad";
+      repo = "vertico";
       type = "github";
     };
     visual-fill-column = {
