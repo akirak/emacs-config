@@ -306,15 +306,26 @@ the Garbage Collector Magic Hack
 ** Supported systems
 *** os-release
 #+begin_src elisp
-  (defconst akirak/os-release
+  (defun akirak/os-release ()
     (when (file-readable-p "/etc/os-release")
       (with-temp-buffer
         (insert-file-contents "/etc/os-release")
-        (when (re-search-forward "^PRETTY_NAME=" nil t)
-          (replace-regexp-in-string
-           "\"" ""
-           (buffer-substring-no-properties
-            (point) (pos-eol)))))))
+        (let (result)
+          (while (re-search-forward (rx bol (group (+ (any "_" upper)))
+                                        "=")
+                                    nil t)
+            (push (cons (match-string 1)
+                        (replace-regexp-in-string
+                         "\"" ""
+                         (buffer-substring (point) (pos-eol))))
+                  result))
+          result))))
+
+  (let ((alist (akirak/os-release)))
+    (defconst akirak/os-id
+      (cdr (assoc "ID" alist)))
+    (defconst akirak/os-pretty-name
+      (cdr (assoc "PRETTY_NAME" alist))))
 #+end_src
 *** NixOS
 #+begin_src elisp
@@ -948,8 +959,8 @@ The built-in =electric= package provides the following modes:
     (defconst akirak/base-frame-title-format
       '((akirak/emacs-profile-name
          (" - " akirak/emacs-profile-name))
-        (akirak/os-release
-         (" - " akirak/os-release))
+        (akirak/os-pretty-name
+         (" - " akirak/os-pretty-name))
         (akirak/nixos-configuration-version
          ("@" akirak/nixos-configuration-version))))
 
