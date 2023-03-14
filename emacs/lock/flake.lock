@@ -930,6 +930,22 @@
         "type": "github"
       }
     },
+    "exec-path-from-shell": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1663078242,
+        "narHash": "sha256-nStiBkOVpb+rE6LiZX7wU3/wB7AkiHjmFMC4j4LM8W8=",
+        "owner": "purcell",
+        "repo": "exec-path-from-shell",
+        "rev": "ddd24dc823de9a94435b4d8ea7569161657f31e2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purcell",
+        "repo": "exec-path-from-shell",
+        "type": "github"
+      }
+    },
     "f": {
       "flake": false,
       "locked": {
@@ -2954,6 +2970,7 @@
         "erlang": "erlang",
         "eros": "eros",
         "esxml": "esxml",
+        "exec-path-from-shell": "exec-path-from-shell",
         "f": "f",
         "fanyi": "fanyi",
         "flycheck": "flycheck",

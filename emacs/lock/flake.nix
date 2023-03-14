@@ -351,6 +351,12 @@
       repo = "esxml";
       type = "github";
     };
+    exec-path-from-shell = {
+      flake = false;
+      owner = "purcell";
+      repo = "exec-path-from-shell";
+      type = "github";
+    };
     "f" = {
       flake = false;
       owner = "rejeep";
