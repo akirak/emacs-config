@@ -4,11 +4,13 @@
 :TOC:      :include descendants :depth 2
 :END:
 [[https://akirak.cachix.org][file:https://img.shields.io/badge/cachix-akirak-blue.svg]]
-This repository contains my Emacs configuration which is built using [[https://github.com/akirak/emacs-twist][emacs-twist]].
 
-I use home-manager for installation.
+This repository contains my Emacs configuration which is built using [[https://github.com/akirak/emacs-twist][emacs-twist]].
+I use home-manager to install the configuration.
+
+It is an org-babel configuration defined within [[file:emacs/emacs-config.org][a single file]].
 ** Trying out the configuration on Linux
-If you are using Linux with Nix 2.4 installed, you can try out the Emacs configuration without replacing your user-emacs-directory.
+If you are using Linux with Nix 2.9+ installed, you can try out the Emacs configuration without replacing your user-emacs-directory.
 MacOS is not supported, because the Nix app depends on bubblewrap, which is only supported on Linux.
 
 You can save time to build GccEmacs by taking advantage of binary cache of Nix:
@@ -20,7 +22,7 @@ cachix use akirak
 Now you can try out the configuration:
 
 #+begin_src sh
-  nix run github:akirak/nix-config#tryout-emacs -- DIR
+  nix run github:akirak/emacs-config#tryout-emacs -- DIR
 #+end_src
 
 It assumes that your existing Emacs configuration resides in the XDG config directory (i.e. =~/.config/emacs= by default).
