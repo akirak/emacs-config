@@ -4847,6 +4847,10 @@ Comment/uncomment lines efficiently. Like Nerd Commenter in Vim
 :PROPERTIES:
 :CREATED_TIME: [2023-03-14 Tue 15:54]
 :END:
+#+begin_quote
+Get environment variables such as $PATH from the shell
+[[https://github.com/purcell/exec-path-from-shell]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package exec-path-from-shell)
@@ -7617,7 +7621,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 232 |
+| [[org-ql-search:tags:packages][packages]]            | 233 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
