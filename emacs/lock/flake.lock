@@ -1845,22 +1845,6 @@
         "url": "https://codeberg.org/martianh/mastodon.el.git"
       }
     },
-    "mermaid-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1675180867,
-        "narHash": "sha256-y4qJ9/uJmcGCLqewqfZpM0/8ZxWWThP4P7qdnqLVbpI=",
-        "owner": "abrochard",
-        "repo": "mermaid-mode",
-        "rev": "f0c9b5202d70bce783494a971d3c67d4700cff53",
-        "type": "github"
-      },
-      "original": {
-        "owner": "abrochard",
-        "repo": "mermaid-mode",
-        "type": "github"
-      }
-    },
     "mini-modeline": {
       "flake": false,
       "locked": {
@@ -2036,22 +2020,6 @@
         "owner": "~akirak",
         "repo": "oahu.el",
         "type": "sourcehut"
-      }
-    },
-    "ob-mermaid": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1645801123,
-        "narHash": "sha256-aHEh65YEziG8bvEsJzcQ46xi/bsoc6WFxEbeF4gYEjo=",
-        "owner": "arnm",
-        "repo": "ob-mermaid",
-        "rev": "b4ce25699e3ebff054f523375d1cf5a17bd0dbaf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "arnm",
-        "repo": "ob-mermaid",
-        "type": "github"
       }
     },
     "ob-restclient": {
@@ -3011,7 +2979,6 @@
         "marginalia": "marginalia",
         "markdown-mode": "markdown-mode",
         "mastodon": "mastodon",
-        "mermaid-mode": "mermaid-mode",
         "mini-modeline": "mini-modeline",
         "mlscroll": "mlscroll",
         "mmm-mode": "mmm-mode",
@@ -3023,7 +2990,6 @@
         "nov": "nov",
         "oahu": "oahu",
         "oahu-memento": "oahu-memento",
-        "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
         "octopus": "octopus",
         "olivetti": "olivetti",
