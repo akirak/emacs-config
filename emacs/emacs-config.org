@@ -3366,6 +3366,77 @@ Major mode for editing typescript
     (with-eval-after-load 'typescript-mode
       (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
+*** elixir-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-04-29 Fri 19:08]
+:END:
+#+begin_quote
+Major mode for Elixir with tree-sitter support
+[[https://github.com/wkirschbaum/elixir-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package elixir-ts-mode)
+    (:file-match "\\.exs?\\'")
+
+    (:auto-insert
+     ("/config/config\\.exs\\'"
+      . (> "use Mix.Config\n\n"
+           _))
+     ("/lib/.+\\.ex\\'"
+      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+           "  " _
+           "\nend\n"))
+     ("/test/.+_test\\.exs\\'"
+      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+           "  use ExUnit.Case\n\n"
+           "  alias " (string-remove-suffix
+                       "Test" (akirak/elixir-module-name-from-file))
+           "\n"
+           "  doctest " (string-remove-suffix
+                         "Test" (akirak/elixir-module-name-from-file))
+           "\n"
+           "  " _
+           "\nend\n")))
+
+    (:when-loaded
+      (define-abbrev elixir-ts-mode-abbrev-table
+        "case" "" (define-skeleton akirak-elixir-case
+                    "Insert case"
+                    ""
+                    > "case " - " do" n
+                    > @ _ n
+                    > -2 "end"))
+
+      (define-abbrev elixir-ts-mode-abbrev-table
+        "fn" "" (define-skeleton akirak-elixir-fn
+                  "Insert fn"
+                  ""
+                  > "fn " - " ->" n
+                  > @ _ n
+                  > -2 "end")))
+
+
+    (:compilation-error
+     ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
+     (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
+          1 2 3 (4 . 4)))
+
+    (defun akirak/elixir-module-name-from-file ()
+      (require 'f)
+      (require 'dash)
+      (let ((segments (f-split (buffer-file-name))))
+        (when-let (i (-find-last-index
+                      (lambda (x) (member x '("lib" "test")))
+                      segments))
+          (mapconcat (lambda (s)
+                       (->> (split-string s "_")
+                            (mapcar #'capitalize)
+                            (string-join)))
+                     (append (-slice segments (1+ i) -1)
+                             (list (f-base (-last-item segments))))
+                     ".")))))
+#+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -4600,77 +4671,6 @@ Automatically add spaces around operators
                 java-mode
                 rust-mode))
 #+end_src
-*** elixir-ts-mode
-:PROPERTIES:
-:CREATED_TIME: [2022-04-29 Fri 19:08]
-:END:
-#+begin_quote
-Major mode for Elixir with tree-sitter support
-[[https://github.com/wkirschbaum/elixir-ts-mode]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package elixir-ts-mode)
-    (:file-match "\\.exs?\\'")
-
-    (:auto-insert
-     ("/config/config\\.exs\\'"
-      . (> "use Mix.Config\n\n"
-           _))
-     ("/lib/.+\\.ex\\'"
-      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
-           "  " _
-           "\nend\n"))
-     ("/test/.+_test\\.exs\\'"
-      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
-           "  use ExUnit.Case\n\n"
-           "  alias " (string-remove-suffix
-                       "Test" (akirak/elixir-module-name-from-file))
-           "\n"
-           "  doctest " (string-remove-suffix
-                         "Test" (akirak/elixir-module-name-from-file))
-           "\n"
-           "  " _
-           "\nend\n")))
-
-    (:when-loaded
-      (define-abbrev elixir-ts-mode-abbrev-table
-        "case" "" (define-skeleton akirak-elixir-case
-                    "Insert case"
-                    ""
-                    > "case " - " do" n
-                    > @ _ n
-                    > -2 "end"))
-
-      (define-abbrev elixir-ts-mode-abbrev-table
-        "fn" "" (define-skeleton akirak-elixir-fn
-                  "Insert fn"
-                  ""
-                  > "fn " - " ->" n
-                  > @ _ n
-                  > -2 "end")))
-
-
-    (:compilation-error
-     ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
-     (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
-          1 2 3 (4 . 4)))
-
-    (defun akirak/elixir-module-name-from-file ()
-      (require 'f)
-      (require 'dash)
-      (let ((segments (f-split (buffer-file-name))))
-        (when-let (i (-find-last-index
-                      (lambda (x) (member x '("lib" "test")))
-                      segments))
-          (mapconcat (lambda (s)
-                       (->> (split-string s "_")
-                            (mapcar #'capitalize)
-                            (string-join)))
-                     (append (-slice segments (1+ i) -1)
-                             (list (f-base (-last-item segments))))
-                     ".")))))
-#+end_src
 *** elx                            :Emacs__Lisp:development:library:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
@@ -4682,7 +4682,7 @@ Extract information from Emacs Lisp libraries
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
-*** emacsql-sqlite                                         :library:
+*** COMMENT emacsql-sqlite                                             :library:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:46]
 :END:
