@@ -3437,6 +3437,25 @@ Major mode for Elixir with tree-sitter support
                              (list (f-base (-last-item segments))))
                      ".")))))
 #+end_src
+*** go-ts-mode                                                     :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-12 Tue 23:59]
+:END:
+#+begin_quote
+Major mode for the Go programming language
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup go-ts-mode
+    (:file-match "\\.go\\'")
+
+    (:auto-insert
+     ("\\.go\\'"
+      . (> "package "
+           (file-name-base (or buffer-file-name (buffer-name)))
+           "\n\nimport (\n"
+           ")\n\n"))))
+#+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -5353,25 +5372,6 @@ Major mode for Gleam
 #+begin_src emacs-lisp
   (setup (:package gleam-mode)
     (:file-match "\\.gleam\\'"))
-#+end_src
-*** go-mode                                            :major__mode:
-:PROPERTIES:
-:CREATED_TIME: [2022-04-12 Tue 23:59]
-:END:
-#+begin_quote
-Major mode for the Go programming language
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package go-mode)
-    (:file-match "\\.go\\'")
-
-    (:auto-insert
-     ("\\.go\\'"
-      . (> "package "
-           (file-name-base (or buffer-file-name (buffer-name)))
-           "\n\nimport (\n"
-           ")\n\n"))))
 #+end_src
 *** go-translate                                       :translation:
 :PROPERTIES:
