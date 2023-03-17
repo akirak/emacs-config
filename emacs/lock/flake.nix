@@ -701,12 +701,6 @@
       type = "git";
       url = "https://codeberg.org/martianh/mastodon.el.git";
     };
-    mermaid-mode = {
-      flake = false;
-      owner = "abrochard";
-      repo = "mermaid-mode";
-      type = "github";
-    };
     mini-modeline = {
       flake = false;
       owner = "kiennq";
@@ -773,12 +767,6 @@
       owner = "~akirak";
       repo = "oahu.el";
       type = "sourcehut";
-    };
-    ob-mermaid = {
-      flake = false;
-      owner = "arnm";
-      repo = "ob-mermaid";
-      type = "github";
     };
     ob-restclient = {
       flake = false;
