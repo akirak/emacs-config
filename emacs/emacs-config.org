@@ -2622,6 +2622,19 @@ Emacs bookmark support for org-mode
   (setup (:package org-bookmark-heading)
     (:set org-bookmark-heading-make-ids t))
 #+end_src
+*** org-crypt
+:PROPERTIES:
+:CREATED_TIME: [2023-03-17 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-crypt
+    (defun akirak/setup-org-crypt ()
+      (setq-local buffer-auto-save-file-name nil)
+      (add-hook 'before-save-hook #'org-encrypt-entries nil t)
+      (when (bound-and-true-p super-save-mode)
+        (super-save-mode -1))))
+#+end_src
 *** org-dog
 :PROPERTIES:
 :CREATED_TIME: [2022-03-03 Thu 16:26]
