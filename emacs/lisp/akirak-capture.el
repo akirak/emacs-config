@@ -1315,7 +1315,7 @@ provided as a separate command for integration, e.g. with embark."
     (org-reverse-datetree-goto-date-in-file nil :return 'marker)))
 
 ;;;###autoload
-(cl-defun akirak-capture-clock-in (file headline &key tags)
+(cl-defun akirak-capture-clock-in (file headline &key tags (body "%?"))
   "Create a new heading with a title and clock into it.
 
 This is intended as the value of `org-dog-clock-in-fallback-fn'."
@@ -1335,7 +1335,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 headline
                                 :todo "UNDERWAY"
                                 :tags tags
-                                :body "%?")
+                                :body body)
                    :file ,file
                    :function ,jump-func
                    :clock-in t :clock-resume t))))))
