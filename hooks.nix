@@ -1,7 +1,4 @@
-{
-  pkgs,
-  emacsBinaryPackage,
-}: let
+{pkgs}: let
   emacsConfig = {
     name,
     stages,

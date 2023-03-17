@@ -82,6 +82,7 @@
           {
             coq = inputs.unstable.legacyPackages.${final.system}.coq;
             coq-lsp = inputs.unstable.legacyPackages.${final.system}.coqPackages.coq-lsp;
+            flake-no-path = inputs.flake-no-path.defaultPackage.${system};
           }
           // (
             inputs.my-overlay.overlays.default final pkgs
@@ -141,8 +142,7 @@
               (inputs.pre-commit-hooks.lib.${system}.run {
                 src = ./.;
                 hooks = import ./hooks.nix {
-                  inherit pkgs;
-                  emacsBinaryPackage = "emacs-config.emacs";
+                  pkgs = final;
                 };
               })
               shellHook
