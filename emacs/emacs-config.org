@@ -4807,7 +4807,8 @@ Browse the Emacsmirror package database
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package epkg))
+  (setup (:package epkg)
+    (:set epkg-database-connector 'sqlite-builtin))
 #+end_src
 **** epkg-marginalia                             :Emacs:completion:
 :PROPERTIES:
