@@ -3437,6 +3437,23 @@ Major mode for Elixir with tree-sitter support
                              (list (f-base (-last-item segments))))
                      ".")))))
 #+end_src
+*** heex-ts-mode
+#+begin_src elisp
+  (setup heex-ts-mode
+    (:file-match "\\.heex\\'")
+    (:when-loaded
+      ;; These workarounds are only necessary due to upstream inconsistencies.
+      ;; Hopefully they will resolve the issues in the mean time.
+      (unless (fboundp 'heex-ts-mode-treesit-ready-p)
+        (defun heex-ts-mode-treesit-ready-p ()
+          (treesit-ready-p 'heex)))
+      (unless (boundp 'heex-ts-mode--indent-rules)
+        (setq heex-ts-mode--indent-rules
+              heex-ts--indent-rules))
+      (unless (boundp 'heex-ts-mode--font-lock-settings)
+        (setq heex-ts-mode--font-lock-settings
+              heex-ts--font-lock-settings))))
+#+end_src
 *** go-ts-mode                                                     :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 23:59]
