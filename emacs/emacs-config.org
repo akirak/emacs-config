@@ -6158,7 +6158,6 @@ Frontend to experimental commands of Nix
 
 #+begin_src emacs-lisp
   (setup (:package nix3)
-    (:set nix3-flake-worktree-promise-fn #'akirak/nix3-flake-find-repo)
 
     (defconst akirak/nix3-registry-url
       "https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json")
@@ -6172,38 +6171,6 @@ Frontend to experimental commands of Nix
     (:when-loaded
       (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-lock-from-pins
                 nil t))
-
-    (defun akirak/nix3-flake-find-repo (alist)
-      (require 'akirak-git-clone)
-      (let-alist alist
-        (let ((dir (expand-file-name
-                    (pcase-exhaustive \.type
-                      ("github"
-                       (format "github.com/%s/%s" \.owner \.repo))
-                      ("gitlab"
-                       (format "gitlab.com/%s/%s" \.owner \.repo))
-                      ("sourcehut"
-                       (format "git.sr.ht/%s/%s" \.owner \.repo))
-                      ("git"
-                       (let ((url (url-generic-parse-url \.url)))
-                         (format "%s/%s" (url-host url) (url-filename url)))))
-                    "~/archives/oss/"))
-              (origin (if (equal \.type "git")
-                          \.url
-                        (thread-last
-                          (nix3-flake-ref-alist-to-url alist)
-                          (akirak-git-clone--parse)
-                          (akirak-git-clone-source-origin)))))
-          (promise-new
-           `(lambda (resolve _)
-              (let ((dir ,dir)
-                    (origin ,origin))
-                (if (file-directory-p dir)
-                    (funcall resolve dir)
-                  (let ((parent (file-name-directory dir)))
-                    (unless (file-directory-p parent)
-                      (make-directory parent t)))
-                  (akirak-git-clone--clone origin dir :callback resolve))))))))
 
     (:global "C-c n" #'nix3-transient
              "M-g M-f" #'nix3-flake-edit
