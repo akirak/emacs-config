@@ -697,12 +697,12 @@ The other variables must not be saved, and they should be put in configuration:
          'default
          `((web-mode . (,@prettier ,@lsp))
            (css-mode . (,@prettier ,@lsp))
+           (elixir-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp))
            (haskell-mode . (,@lsp)))))
-      (dir-locals-set-directory-class "~/work2/learning/" 'default)
-      (dir-locals-set-directory-class "~/work2/personal/" 'default)))
+      (dir-locals-set-directory-class "~/work2/" 'default)))
 #+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
@@ -4707,6 +4707,8 @@ Client for Language Server Protocol (LSP) servers
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
                    '(elixir-mode . ("elixir-ls")))
+      (add-to-list 'eglot-server-programs
+                   '(elixir-ts-mode . ("elixir-ls")))
       (add-to-list 'eglot-server-programs
                    `(web-mode . ,(eglot-alternatives
                                   '(("astro-ls" "--stdio")))))
