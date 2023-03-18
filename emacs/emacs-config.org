@@ -7010,7 +7010,7 @@ OCaml mode
 
 #+begin_src emacs-lisp
   (setup (:package tuareg)
-    (:nixpkgs "opam")
+    ;; (:nixpkgs "opam")
     (:mode-repl utop)
     (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"))
 #+end_src
@@ -7067,7 +7067,7 @@ Universal toplevel for OCaml
 
 #+begin_src emacs-lisp
   (setup (:package utop)
-    (:nixpkgs "ocamlPackages.utop")
+    ;; (:nixpkgs "ocamlPackages.utop")
     (:set utop-edit-command nil))
 #+end_src
 *** valign
