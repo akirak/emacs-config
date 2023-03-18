@@ -249,4 +249,13 @@
       }
       // super.packageRequires;
   };
+
+  apprentice = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "Apprentice";
+      ref = "prefix-map";
+    };
+  };
 }

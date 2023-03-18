@@ -3909,6 +3909,49 @@ Show number of matches in mode-line while searching
     (:global [remap query-replace] #'anzu-query-replace
              [remap query-replace-regexp] #'anzu-query-replace-regexp))
 #+end_src
+*** apprentice                                                          :Elixir:
+:PROPERTIES:
+:CREATED_TIME: [2023-03-18 Sat 15:40]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package apprentice)
+    (:hook-into elixir-ts-mode-hook)
+    (:set apprentice-key-command-prefix (kbd "C-, ,"))
+    (:with-mode elixir-ts-mode
+      (:mode-repl apprentice-iex-project-run))
+
+    (:bind "C-c C-l" #'apprentice-iex-reload-module
+           "C-c C-c" #'apprentice-iex-compile-this-buffer
+           "C-c C-r" (defun akirak/apprentice-send-line-or-region (&optional arg)
+                       (interactive "P")
+                       (require 'whole-line-or-region)
+                       (whole-line-or-region-wrap-beg-end
+                        ;; #'apprentice-iex-send-region-and-go
+                        #'apprentice-iex-send-region
+                        (if (numberp arg)
+                            arg
+                          1)))
+           ;; undefined
+           ;; "C-c C-v" (defun akirak/apprentice-eval-line-or-region (&optional arg)
+           ;;             (interactive "P")
+           ;;             (require 'whole-line-or-region)
+           ;;             (whole-line-or-region-wrap-modified-region
+           ;;              #'apprentice-eval-region
+           ;;              ;; #'apprentice-eval-print-region
+           ;;              (if (numberp arg)
+           ;;                  arg
+           ;;                1)))
+           "C-c C-q" #'apprentice-eval-close-popup)
+
+    (:el-patch
+      (el-patch-defun apprentice-iex-command (arg)
+        (split-string-and-unquote
+         (if (null arg) apprentice-iex-program-name
+           (el-patch-swap
+             (read-string "Command to run Elixir IEx: " (concat apprentice-iex-program-name arg))
+             (concat apprentice-iex-program-name arg)))))))
+#+end_src
 *** auto-yasnippet                                       :expansion:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 15:39]
