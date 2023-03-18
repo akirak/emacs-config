@@ -5,12 +5,16 @@
 ;;;; Generic setup command
 
 (defcustom akirak-puni-setup-alist
-  '(((elixir-mode elixir-ts-mode)
-     akirak-puni-elixir-setup)
+  '(((heex-ts-mode)
+     akirak-puni-heex-ts-setup)
+    ((elixir-ts-mode)
+     akirak-puni-elixir-ts-setup)
     ((tsx-mode js-jsx-mode tsx-ts-mode typescript-ts-mode)
      akirak-puni-jsx-setup)
     ((svelte-mode)
-     akirak-puni-svelte-setup))
+     akirak-puni-svelte-setup)
+    ((elixir-mode)
+     akirak-puni-elixir-setup))
   ""
   :type '(alist :key-type (repeat symbol)
                 :value-type (cons function (cons nil))))
@@ -87,6 +91,82 @@
 (defalias 'akirak-puni-svelte-kill-line #'akirak-puni-jsx-kill-line)
 
 ;;;;; Elixir
+
+;;;###autoload
+(defun akirak-puni-heex-ts-setup ()
+  "Setup puni bindings for heex."
+  (interactive)
+  (if (require 'tagedit nil t)
+      (local-set-key [remap puni-kill-line] #'akirak-puni-heex-ts-kill-line)
+    (message "Warning[akirak-puni]: Heex is detected, but tagedit is unavailable.")))
+
+(defun akirak-puni-heex-ts-kill-line ()
+  (interactive)
+  (let* ((node (treesit-node-at (point)))
+         (parent (treesit-node-parent node)))
+    (if (string-prefix-p "<%" (treesit-node-text parent))
+        (let ((start (treesit-node-start node)))
+          (save-excursion
+            (if (search-forward "\n" (treesit-node-end parent) t)
+                (delete-region start (point))
+              (delete-region start
+                             (treesit-node-end (car (last (treesit-node-children parent)
+                                                          2)))))))
+      (akirak-puni-jsx-kill-line))))
+
+(defun akirak-puni-elixir-ts-setup ()
+  (local-set-key [remap puni-kill-line] #'akirak-puni-elixir-ts-kill-line))
+
+;;;###autoload
+(defun akirak-puni-elixir-ts-kill-line (&optional arg)
+  "Kill a line forward while keeping expressions balanced."
+  (interactive "P")
+  (require 'pcase)
+  (require 'rx)
+  (cond
+   ((numberp arg)
+    (kill-line arg))
+   ((looking-at (rx (* blank) eol))
+    (if (looking-back (rx bol (* blank)) (line-beginning-position))
+        (progn
+          (delete-blank-lines)
+          (back-to-indentation))
+      (delete-region (point) (line-beginning-position 2))))
+   (t
+    (let* ((node (treesit-node-at (point)))
+           (parent (treesit-node-parent node)))
+      (pcase (treesit-node-text node)
+        ((rx bos
+             (or (any "~@%\"{[(")
+                 "test"
+                 "do")
+             eos)
+         (delete-region (point) (treesit-node-end parent)))
+        ((rx bos "def" (* lower))
+         (delete-region (point) (treesit-node-end parent)))
+        ((rx bos "<" (?  "%"))
+         (delete-region (point) (treesit-node-end parent)))
+        (_
+         (pcase (treesit-node-text (treesit-node-parent node))
+           ((rx bos (any "{[(\""))
+            (delete-region
+             (point)
+             (min (line-end-position)
+                  (treesit-node-end (car (last (treesit-node-children parent)
+                                               2))))))
+           ((rx bos "<%")
+            (let ((start (treesit-node-start node)))
+              (save-excursion
+                (if (search-forward "\n" (treesit-node-end parent) t)
+                    (delete-region start (point))
+                  (delete-region start (treesit-node-end (car (last (treesit-node-children parent)
+                                                                    2))))))))
+           (_
+            (if (< (treesit-node-end parent) (line-end-position))
+                (delete-region (point) (treesit-node-end parent))
+              (kill-line arg))))))
+      (when (looking-at (rx "," (* blank) eol))
+        (delete-region (point) (match-end 0)))))))
 
 (defvar akirak-puni-elixir-opener-regexp nil)
 
