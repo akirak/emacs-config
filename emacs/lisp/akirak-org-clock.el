@@ -115,13 +115,15 @@
                               (mapcar #'car))
                           files)))
              (if files
-                 (org-dog-clock-in files
-                                   :query-prefix query-prefix
-                                   :tags tag
-                                   :prompt
-                                   (format "Clock in (%s): "
-                                           (mapconcat #'file-name-nondirectory
-                                                      files ", ")))
+                 (progn
+                   (org-dog-clock-in files
+                                     :query-prefix query-prefix
+                                     :tags tag
+                                     :prompt
+                                     (format "Clock in (%s): "
+                                             (mapconcat #'file-name-nondirectory
+                                                        files ", ")))
+                   t)
                (message "No Org file to clock in to")))
            t)))))
 

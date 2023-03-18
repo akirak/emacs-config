@@ -1339,7 +1339,8 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                    :file ,file
                    :function ,jump-func
                    :clock-in t :clock-resume t))))))
-    (org-capture)))
+    (save-window-excursion
+      (org-capture))))
 
 (defun akirak-capture-read-string (prompt &optional initial-contents)
   (minibuffer-with-setup-hook
