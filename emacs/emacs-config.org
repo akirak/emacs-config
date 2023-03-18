@@ -1717,6 +1717,12 @@ Thus I will explicitly install this package rather than using the built-in versi
       (add-hook 'json-mode-hook 'json-ts-mode)
       (add-hook 'go-mode-hook 'go-ts-mode)))
 #+end_src
+**** akirak-treesit
+#+begin_src elisp
+  (setup akirak-treesit
+    (:hook-into elixir-ts-mode-hook
+                heex-ts-mode-hook))
+#+end_src
 *** vc-hooks                                                    :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -6568,7 +6574,7 @@ Parentheses Universalistic
                 sgml-mode
                 nxml-mode)
 
-    (:unbind "C-M-a" "C-M-e" "C-w")
+    (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
 
     ;; TODO: Bind commands
     ;;
