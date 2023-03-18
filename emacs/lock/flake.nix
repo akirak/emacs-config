@@ -32,6 +32,13 @@
       repo = "anzu";
       type = "github";
     };
+    apprentice = {
+      flake = false;
+      owner = "akirak";
+      ref = "prefix-map";
+      repo = "Apprentice";
+      type = "github";
+    };
     auto-yasnippet = {
       flake = false;
       owner = "abo-abo";
@@ -266,6 +273,12 @@
       repo = "eldoc-eval";
       type = "github";
     };
+    elixir-mode = {
+      flake = false;
+      owner = "elixir-editors";
+      repo = "emacs-elixir";
+      type = "github";
+    };
     elixir-ts-mode = {
       flake = false;
       owner = "wkirschbaum";
@@ -472,12 +485,6 @@
       repo = "github-linguist.el";
       type = "github";
     };
-    go-mode = {
-      flake = false;
-      owner = "dominikh";
-      repo = "go-mode.el";
-      type = "github";
-    };
     go-translate = {
       flake = false;
       owner = "lorniu";
@@ -518,12 +525,6 @@
       flake = false;
       owner = "purcell";
       repo = "emacs-hcl-mode";
-      type = "github";
-    };
-    heex-ts-mode = {
-      flake = false;
-      owner = "wkirschbaum";
-      repo = "heex-ts-mode";
       type = "github";
     };
     highlight-indent-guides = {
@@ -602,13 +603,6 @@
       flake = false;
       owner = "andreasjansson";
       repo = "language-detection.el";
-      type = "github";
-    };
-    lean4-mode = {
-      flake = false;
-      owner = "akirak";
-      ref = "develop";
-      repo = "lean4-mode";
       type = "github";
     };
     license-templates = {

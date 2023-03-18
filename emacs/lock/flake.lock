@@ -80,6 +80,23 @@
         "type": "github"
       }
     },
+    "apprentice": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1679125401,
+        "narHash": "sha256-Gb1Owj4FyI+a0RimFILPW3bVTRUFV5wtYvcZMWi9w1Y=",
+        "owner": "akirak",
+        "repo": "Apprentice",
+        "rev": "1f0f82e200cca51ba2eb2a862d3b14cdb07adfdf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "ref": "prefix-map",
+        "repo": "Apprentice",
+        "type": "github"
+      }
+    },
     "auto-yasnippet": {
       "flake": false,
       "locked": {
@@ -705,6 +722,22 @@
         "type": "github"
       }
     },
+    "elixir-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1675623415,
+        "narHash": "sha256-09Btb3vHCcBuLBzzl6xK4EJ6dfSyOhm0bluktne8el8=",
+        "owner": "elixir-editors",
+        "repo": "emacs-elixir",
+        "rev": "7641373f0563cab67cc5459c34534a8176b5e676",
+        "type": "github"
+      },
+      "original": {
+        "owner": "elixir-editors",
+        "repo": "emacs-elixir",
+        "type": "github"
+      }
+    },
     "elixir-ts-mode": {
       "flake": false,
       "locked": {
@@ -1251,22 +1284,6 @@
         "type": "github"
       }
     },
-    "go-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1672247204,
-        "narHash": "sha256-SEqDeF5F/DQ5/NOi3n6mYhlkYg+VxY/EPAvxtt5wUG0=",
-        "owner": "dominikh",
-        "repo": "go-mode.el",
-        "rev": "166dfb1e090233c4609a50c2ec9f57f113c1da72",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dominikh",
-        "repo": "go-mode.el",
-        "type": "github"
-      }
-    },
     "go-translate": {
       "flake": false,
       "locked": {
@@ -1376,22 +1393,6 @@
       "original": {
         "owner": "purcell",
         "repo": "emacs-hcl-mode",
-        "type": "github"
-      }
-    },
-    "heex-ts-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1676553874,
-        "narHash": "sha256-kj7ma3C2euaUmJWraSw0d6RtdPZdGF+Tnis7dK4B5bM=",
-        "owner": "wkirschbaum",
-        "repo": "heex-ts-mode",
-        "rev": "a405438af4ca617133e7ccd5548a787e0011445d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "wkirschbaum",
-        "repo": "heex-ts-mode",
         "type": "github"
       }
     },
@@ -1600,23 +1601,6 @@
       "original": {
         "owner": "andreasjansson",
         "repo": "language-detection.el",
-        "type": "github"
-      }
-    },
-    "lean4-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1673433158,
-        "narHash": "sha256-sK5Waj+e8JqcyIBejnEArOt8LMQK923C/h7kbnxCHVM=",
-        "owner": "akirak",
-        "repo": "lean4-mode",
-        "rev": "4220857dcf3acd27b0a418c0d07fc84e89467867",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "ref": "develop",
-        "repo": "lean4-mode",
         "type": "github"
       }
     },
@@ -2885,6 +2869,7 @@
         "aggressive-indent": "aggressive-indent",
         "akirak": "akirak",
         "anzu": "anzu",
+        "apprentice": "apprentice",
         "auto-yasnippet": "auto-yasnippet",
         "avy": "avy",
         "avy-menu": "avy-menu",
@@ -2924,6 +2909,7 @@
         "editorconfig": "editorconfig",
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
+        "elixir-mode": "elixir-mode",
         "elixir-ts-mode": "elixir-ts-mode",
         "elx": "elx",
         "emacsql": "emacsql",
@@ -2958,7 +2944,6 @@
         "git-identity": "git-identity",
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
-        "go-mode": "go-mode",
         "go-translate": "go-translate",
         "gptel": "gptel",
         "graphql-mode": "graphql-mode",
@@ -2966,7 +2951,6 @@
         "guess-language": "guess-language",
         "haskell-mode": "haskell-mode",
         "hcl-mode": "hcl-mode",
-        "heex-ts-mode": "heex-ts-mode",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
         "ht": "ht",
@@ -2980,7 +2964,6 @@
         "kind-icon": "kind-icon",
         "kv": "kv",
         "language-detection": "language-detection",
-        "lean4-mode": "lean4-mode",
         "license-templates": "license-templates",
         "link-hint": "link-hint",
         "lispy": "lispy",
