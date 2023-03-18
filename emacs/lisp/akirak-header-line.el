@@ -85,7 +85,7 @@
      ((and (numberp val)
            (< (- (float-time) val) 2))
       nil)
-     ((not (numberp val))
+     ((and val (not (numberp val)))
       val)
      (t
       (if-let (pr (project-current))
