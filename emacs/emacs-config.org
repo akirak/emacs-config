@@ -5513,6 +5513,10 @@ Translation framework supports multiple engines such as Google/Bing/DeepL
 :PROPERTIES:
 :CREATED_TIME: [2023-03-20 Mon 23:59]
 :END:
+#+begin_quote
+A simple ChatGPT client
+[[https://github.com/karthink/gptel]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package gptel)
@@ -7721,7 +7725,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 229 |
+| [[org-ql-search:tags:packages][packages]]            | 227 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -7729,9 +7733,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:VC][VC]]                  |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
@@ -7749,7 +7753,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:OCaml][OCaml]]               |   3 |
 | [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
-| [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
@@ -7787,6 +7790,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
+| [[org-ql-search:tags:structured__editing][structured__editing]] |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:themes][themes]]              |   1 |
