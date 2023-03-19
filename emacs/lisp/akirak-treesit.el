@@ -9,6 +9,7 @@
     (define-key map [remap kill-word] #'akirak-treesit-kill-word)
     (define-key map [remap down-list] #'akirak-treesit-down-list)
     (define-key map [remap backward-up-list] #'akirak-treesit-backward-up-list)
+    (define-key map [remap kill-line] #'akirak-treesit-smart-kill-line)
     map))
 
 ;;;###autoload
@@ -126,6 +127,40 @@
     (push-mark)
     (goto-char start)
     (setq akirak-treesit-expand-region-node node)))
+
+(defun akirak-treesit-smart-kill-line (&optional arg)
+  (interactive "P")
+  (if (numberp arg)
+      (kill-line arg)
+    (let ((start (point))
+          (node (if (looking-at (rx (+ blank)))
+                    (treesit-node-at (match-end 0))
+                  (treesit-node-at (point))))
+          parent)
+      (if (< (treesit-node-start node) (point))
+          (kill-region (point) (treesit-node-end node))
+        (catch 'stop
+          (while (setq parent (treesit-node-parent node))
+            (when (< (treesit-node-start parent) start)
+              (throw 'stop t))
+            (setq node parent)))
+        (if parent
+            (let ((nodes (thread-last
+                           (cl-member node (treesit-node-children parent)
+                                      :test #'treesit-node-eq)
+                           (seq-take-while `(lambda (x)
+                                              (< (treesit-node-start x) ,(line-end-position))))))
+                  (inside-bracket (or (memq (char-after (treesit-node-start parent))
+                                            (string-to-list "\"'<"))
+                                      (save-excursion
+                                        (goto-char (treesit-node-start parent))
+                                        (funcall show-paren-data-function)))))
+              (if nodes
+                  (kill-region (point) (treesit-node-end (car (last nodes
+                                                                    (when inside-bracket
+                                                                      2)))))
+                (error "Empty nodes")))
+          (kill-region (point) (treesit-node-end node)))))))
 
 (provide 'akirak-treesit)
 ;;; akirak-treesit.el ends here
