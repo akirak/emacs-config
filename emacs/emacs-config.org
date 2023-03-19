@@ -1601,8 +1601,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subword
-    (:global "M-SPC" #'akirak/run-with-superword-inversed)
+    ;; (:global "M-SPC" #'akirak/run-with-superword-inversed)
 
+    ;; Deprecated.
     (defun akirak/run-with-superword-inversed (key)
       "Run a command with `superword-mode' inversed."
       (interactive "K")
@@ -1720,6 +1721,7 @@ Thus I will explicitly install this package rather than using the built-in versi
 **** akirak-treesit
 #+begin_src elisp
   (setup akirak-treesit
+    (:bind "M-SPC" #'akirak-treesit-expand-region)
     (:hook-into elixir-ts-mode-hook
                 heex-ts-mode-hook))
 #+end_src
