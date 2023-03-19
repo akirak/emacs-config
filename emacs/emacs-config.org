@@ -3344,7 +3344,7 @@ Major mode for Elixir with tree-sitter support
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package elixir-ts-mode)
+  (setup elixir-ts-mode
     (:file-match "\\.exs?\\'")
 
     (:auto-insert
