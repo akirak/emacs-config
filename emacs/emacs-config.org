@@ -3311,69 +3311,9 @@ Hugo Markdown Back-End for Org Export Engine
 (setup (:package ox-hugo))
 #+end_src
 ** Treesit-based major modes
-*** js-ts-mode
 :PROPERTIES:
-:CREATED_TIME: [2023-02-23 Thu 23:59]
+:SORTING_TYPE: a
 :END:
-
-#+begin_src emacs-lisp
-  (setup js-ts-mode
-    (:file-match "\\.m?js$"))
-#+end_src
-*** typescript-ts-mode                                              :major_mode:
-:PROPERTIES:
-:CREATED_TIME: [2022-01-06 Thu 18:39]
-:END:
-#+begin_quote
-Major mode for editing typescript
-[[http://github.com/ananthakumaran/typescript.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup typescript-ts-mode
-    (:file-match "\\.ts\\'")
-    ;; (:also-load akirak-typescript)
-
-    (:org-src-lang "typescript")
-
-    (:hook (defun akirak/typescript-setup ()
-             (add-to-list (make-local-variable 'electric-pair-pairs)
-                          '(?< . ?>))))
-
-    (:with-mode tsx-ts-mode
-      (:file-match "\\.tsx\\'")
-      (:org-src-lang "react")
-      (:bind "C-c C-e" #'akirak-jsx-close-tag))
-
-    (:compilation-error
-     (tsc "\\([^z-a]+\\.tsx?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\) - \\(error\\) "
-          1 2 3 (4 . 4))
-     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
-             2 3 4 (1 . 1))
-     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
-                 1 2 3 (4 . 4))
-     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
-               2 3 4 (1 . 1))))
-#+end_src
-**** COMMENT akirak-typescript                                                 :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup akirak-typescript
-    (:with-mode typescript-mode
-      (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
-                  end-of-defun-function #'akirak-typescript-end-of-defun)))
-#+end_src
-**** COMMENT typescript-tsx-mode                                               :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup tsx-mode
-    (:file-match "\\.tsx\\'")
-
-    ;; https://github.com/emacs-typescript/typescript.el/issues/4#issuecomment-849355222
-    (define-derived-mode tsx-mode typescript-mode
-      "tsx")
-
-    (with-eval-after-load 'typescript-mode
-      (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
-#+end_src
 *** elixir-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 19:08]
@@ -3445,23 +3385,6 @@ Major mode for Elixir with tree-sitter support
                              (list (f-base (-last-item segments))))
                      ".")))))
 #+end_src
-*** heex-ts-mode
-#+begin_src elisp
-  (setup heex-ts-mode
-    (:file-match "\\.heex\\'")
-    (:when-loaded
-      ;; These workarounds are only necessary due to upstream inconsistencies.
-      ;; Hopefully they will resolve the issues in the mean time.
-      (unless (fboundp 'heex-ts-mode-treesit-ready-p)
-        (defun heex-ts-mode-treesit-ready-p ()
-          (treesit-ready-p 'heex)))
-      (unless (boundp 'heex-ts-mode--indent-rules)
-        (setq heex-ts-mode--indent-rules
-              heex-ts--indent-rules))
-      (unless (boundp 'heex-ts-mode--font-lock-settings)
-        (setq heex-ts-mode--font-lock-settings
-              heex-ts--font-lock-settings))))
-#+end_src
 *** go-ts-mode                                                     :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 23:59]
@@ -3480,6 +3403,86 @@ Major mode for the Go programming language
            (file-name-base (or buffer-file-name (buffer-name)))
            "\n\nimport (\n"
            ")\n\n"))))
+#+end_src
+*** heex-ts-mode
+#+begin_src elisp
+  (setup heex-ts-mode
+    (:file-match "\\.heex\\'")
+    (:when-loaded
+      ;; These workarounds are only necessary due to upstream inconsistencies.
+      ;; Hopefully they will resolve the issues in the mean time.
+      (unless (fboundp 'heex-ts-mode-treesit-ready-p)
+        (defun heex-ts-mode-treesit-ready-p ()
+          (treesit-ready-p 'heex)))
+      (unless (boundp 'heex-ts-mode--indent-rules)
+        (setq heex-ts-mode--indent-rules
+              heex-ts--indent-rules))
+      (unless (boundp 'heex-ts-mode--font-lock-settings)
+        (setq heex-ts-mode--font-lock-settings
+              heex-ts--font-lock-settings))))
+#+end_src
+*** js-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-02-23 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup js-ts-mode
+    (:file-match "\\.m?js$"))
+#+end_src
+*** typescript-ts-mode                                              :major_mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-01-06 Thu 18:39]
+:END:
+#+begin_quote
+Major mode for editing typescript
+[[http://github.com/ananthakumaran/typescript.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup typescript-ts-mode
+    (:file-match "\\.ts\\'")
+    ;; (:also-load akirak-typescript)
+
+    (:org-src-lang "typescript")
+
+    (:hook (defun akirak/typescript-setup ()
+             (add-to-list (make-local-variable 'electric-pair-pairs)
+                          '(?< . ?>))))
+
+    (:with-mode tsx-ts-mode
+      (:file-match "\\.tsx\\'")
+      (:org-src-lang "react")
+      (:bind "C-c C-e" #'akirak-jsx-close-tag))
+
+    (:compilation-error
+     (tsc "\\([^z-a]+\\.tsx?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\) - \\(error\\) "
+          1 2 3 (4 . 4))
+     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+             2 3 4 (1 . 1))
+     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
+                 1 2 3 (4 . 4))
+     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
+               2 3 4 (1 . 1))))
+#+end_src
+**** COMMENT akirak-typescript                                                 :ARCHIVE:
+#+begin_src emacs-lisp
+  (setup akirak-typescript
+    (:with-mode typescript-mode
+      (:local-set beginning-of-defun-function #'akirak-typescript-beginning-of-defun
+                  end-of-defun-function #'akirak-typescript-end-of-defun)))
+#+end_src
+**** COMMENT typescript-tsx-mode                                               :ARCHIVE:
+#+begin_src emacs-lisp
+  (setup tsx-mode
+    (:file-match "\\.tsx\\'")
+
+    ;; https://github.com/emacs-typescript/typescript.el/issues/4#issuecomment-849355222
+    (define-derived-mode tsx-mode typescript-mode
+      "tsx")
+
+    (with-eval-after-load 'typescript-mode
+      (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
