@@ -3314,6 +3314,24 @@ Hugo Markdown Back-End for Org Export Engine
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
+*** css-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-03-19 Sun 21:20]
+:END:
+
+#+begin_src emacs-lisp
+  (setup css-ts-mode
+    :file-match "\\.css\\'")
+#+end_src
+*** dockerfile-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-03-19 Sun 21:28]
+:END:
+
+#+begin_src emacs-lisp
+  (setup dockerfile-ts-mode
+    :file-match "\\(?:\\(?:\\.d\\|D\\)ockerfile\\)$")
+#+end_src
 *** elixir-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 19:08]
@@ -3430,6 +3448,15 @@ Major mode for the Go programming language
   (setup js-ts-mode
     (:file-match "\\.m?js$"))
 #+end_src
+*** toml-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-03-19 Sun 21:27]
+:END:
+
+#+begin_src emacs-lisp
+  (setup toml-ts-mode
+    :file-match "\\.toml\\'")
+#+end_src
 *** typescript-ts-mode                                              :major_mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 18:39]
@@ -3483,6 +3510,19 @@ Major mode for editing typescript
 
     (with-eval-after-load 'typescript-mode
       (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
+#+end_src
+*** yaml-ts-mode 
+:PROPERTIES:
+:CREATED_TIME: [2022-03-07 Mon 16:07]
+:END:
+#+begin_quote
+Major mode for editing YAML files
+[[https://github.com/yoshiki/yaml-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup yaml-ts-mode
+    (:file-match "\\.ya?ml\\'"))
 #+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
@@ -7303,19 +7343,6 @@ ANSI, XTERM 256 and Truecolor support
 #+end_src
 
 This package is required by the configuration for buttercup now.
-*** yaml-mode                                          :major__mode:
-:PROPERTIES:
-:CREATED_TIME: [2022-03-07 Mon 16:07]
-:END:
-#+begin_quote
-Major mode for editing YAML files
-[[https://github.com/yoshiki/yaml-mode]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package yaml-mode)
-    (:file-match "\\.ya?ml\\'"))
-#+end_src
 *** z3-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
