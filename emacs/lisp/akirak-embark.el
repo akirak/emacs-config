@@ -212,6 +212,7 @@
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
   (define-key embark-file-map "t" #'akirak-tailscale-copy-file)
+  (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
@@ -484,6 +485,11 @@
       (akirak-org-store-link-to-file outfile))))
 
 (defun akirak-embark-store-link-to-file (file))
+
+(defun akirak-embark-goto-region-end (_begin end)
+  (interactive "r")
+  (goto-char end)
+  (deactivate-mark))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
