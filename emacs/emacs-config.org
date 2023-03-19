@@ -6560,7 +6560,7 @@ A generic Emacs interface for proof assistants
   (setup coq
     (:nixpkgs "coq" "coq-lsp"))
 #+end_src
-*** puni                                       :structured__editing:
+*** COMMENT puni                                           :structured__editing:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:24]
 :END:
