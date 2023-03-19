@@ -1722,8 +1722,10 @@ Thus I will explicitly install this package rather than using the built-in versi
 #+begin_src elisp
   (setup akirak-treesit
     (:bind "M-SPC" #'akirak-treesit-expand-region)
-    (:hook-into elixir-ts-mode-hook
-                heex-ts-mode-hook))
+    (add-hook 'after-change-major-mode-hook
+              (defun akirak/enable-treesit-mode ()
+                (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
+                  (akirak-treesit-mode t)))))
 #+end_src
 *** vc-hooks                                                    :VC:
 :PROPERTIES:
