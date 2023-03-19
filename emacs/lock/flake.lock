@@ -738,22 +738,6 @@
         "type": "github"
       }
     },
-    "elixir-ts-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1676813913,
-        "narHash": "sha256-8y+OyEYXyz/+85a306oSdfcqPusyOtxVdKy7YYbuLRc=",
-        "owner": "wkirschbaum",
-        "repo": "elixir-ts-mode",
-        "rev": "9a397f8135468a9ec853a869033946a08d57a1c0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "wkirschbaum",
-        "repo": "elixir-ts-mode",
-        "type": "github"
-      }
-    },
     "elx": {
       "flake": false,
       "locked": {
@@ -2718,22 +2702,6 @@
         "type": "github"
       }
     },
-    "puni": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1676375793,
-        "narHash": "sha256-xIrDodJrjS6NCcYvkAs6TgeC6LM55s1rZpoGmMGZIHw=",
-        "owner": "AmaiKinono",
-        "repo": "puni",
-        "rev": "a39a4ecac7279bed1a150a895bbc80baa7272888",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AmaiKinono",
-        "repo": "puni",
-        "type": "github"
-      }
-    },
     "quick-peek": {
       "flake": false,
       "locked": {
@@ -2910,7 +2878,6 @@
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
         "elixir-mode": "elixir-mode",
-        "elixir-ts-mode": "elixir-ts-mode",
         "elx": "elx",
         "emacsql": "emacsql",
         "emacsql-sqlite": "emacsql-sqlite",
@@ -3033,7 +3000,6 @@
         "posframe": "posframe",
         "promise": "promise",
         "proof-general": "proof-general",
-        "puni": "puni",
         "quick-peek": "quick-peek",
         "rainbow-delimiters": "rainbow-delimiters",
         "reformatter": "reformatter",
@@ -3079,7 +3045,6 @@
         "ws-butler": "ws-butler",
         "xterm-color": "xterm-color",
         "yaml": "yaml",
-        "yaml-mode": "yaml-mode",
         "yasnippet": "yasnippet",
         "z3-mode": "z3-mode",
         "zig-mode": "zig-mode",
@@ -3678,22 +3643,6 @@
       "original": {
         "owner": "zkry",
         "repo": "yaml.el",
-        "type": "github"
-      }
-    },
-    "yaml-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1666522747,
-        "narHash": "sha256-hqoBbwngqt6O6wnUg19HEt5Uh5vBZ9T2Yjum4LpfPxE=",
-        "owner": "yoshiki",
-        "repo": "yaml-mode",
-        "rev": "3fcb36d6039bef57e2a0f6e24c51f623c0bf5fb7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "yoshiki",
-        "repo": "yaml-mode",
         "type": "github"
       }
     },

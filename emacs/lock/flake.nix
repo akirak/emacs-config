@@ -279,12 +279,6 @@
       repo = "emacs-elixir";
       type = "github";
     };
-    elixir-ts-mode = {
-      flake = false;
-      owner = "wkirschbaum";
-      repo = "elixir-ts-mode";
-      type = "github";
-    };
     elx = {
       flake = false;
       owner = "emacscollective";
@@ -1027,12 +1021,6 @@
       repo = "PG";
       type = "github";
     };
-    puni = {
-      flake = false;
-      owner = "AmaiKinono";
-      repo = "puni";
-      type = "github";
-    };
     quick-peek = {
       flake = false;
       owner = "cpitclaudel";
@@ -1301,12 +1289,6 @@
       flake = false;
       owner = "zkry";
       repo = "yaml.el";
-      type = "github";
-    };
-    yaml-mode = {
-      flake = false;
-      owner = "yoshiki";
-      repo = "yaml-mode";
       type = "github";
     };
     yasnippet = {
