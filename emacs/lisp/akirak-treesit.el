@@ -102,5 +102,30 @@
       (setq node parent))
     (goto-char (treesit-node-start parent))))
 
+(defvar akirak-treesit-expand-region-node nil)
+
+;;;###autoload
+(defun akirak-treesit-expand-region ()
+  (interactive)
+  (unless (and akirak-treesit-expand-region-node
+               (use-region-p)
+               (eq (treesit-node-start akirak-treesit-expand-region-node)
+                   (region-beginning))
+               (eq (treesit-node-end akirak-treesit-expand-region-node)
+                   (region-end)))
+    (setq akirak-treesit-expand-region-node nil))
+  (let* ((node (if akirak-treesit-expand-region-node
+                   (treesit-node-parent akirak-treesit-expand-region-node)
+                 (treesit-node-at (point))))
+         (start (treesit-node-start node)))
+    (when (use-region-p)
+      (deactivate-mark))
+    (goto-char start)
+    (activate-mark)
+    (goto-char (treesit-node-end node))
+    (push-mark)
+    (goto-char start)
+    (setq akirak-treesit-expand-region-node node)))
+
 (provide 'akirak-treesit)
 ;;; akirak-treesit.el ends here
