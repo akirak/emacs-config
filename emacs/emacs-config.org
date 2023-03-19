@@ -1041,7 +1041,7 @@ The built-in =electric= package provides the following modes:
   (setup jit-lock
     (:set jit-lock-defer-time 0))
 #+end_src
-*** js-jsx-mode
+*** COMMENT js-jsx-mode                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-05-03 Tue 23:14]
 :END:
