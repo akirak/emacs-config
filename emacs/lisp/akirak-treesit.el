@@ -14,7 +14,8 @@
 
 ;;;###autoload
 (define-minor-mode akirak-treesit-mode
-  "Navigation mode based on treesit.el.")
+  "Navigation mode based on treesit.el."
+  :lighter " TSit")
 
 (defun akirak-treesit-forward-word (n)
   (interactive "P")
