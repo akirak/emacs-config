@@ -346,11 +346,13 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
 #+begin_src emacs-lisp
   (with-eval-after-load 'which-key
     (pcase-dolist (`(,key . ,description)
-                   '(("c" . "capture")
+                   '(("a" . "ai")
+                     ("c" . "capture")
                      ("c f" . "frame")
                      ("c s" . "screenshot")
                      ("c r" . "record screen")
                      ("e" . "emacs")
+                     ("n" . "nix")
                      ("S" . "secrets")))
       (which-key-add-keymap-based-replacements
         global-map (concat "<f12> " key) description)))
