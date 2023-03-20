@@ -5507,6 +5507,16 @@ Translation framework supports multiple engines such as Google/Bing/DeepL
     (:set gts-translate-list '(("ja" "en")
                                ("zh" "en"))))
 #+end_src
+*** gptel
+:PROPERTIES:
+:CREATED_TIME: [2023-03-20 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package gptel)
+    (:global "C-c p" #'gptel-send
+             "<f12> a g" #'gptel))
+#+end_src
 *** graphql-mode                                               :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
