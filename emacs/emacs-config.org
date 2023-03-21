@@ -6795,12 +6795,16 @@ Clean-up and Beautify the list of minor-modes.
 #+end_quote
 
 #+begin_src emacs-lisp
-    (setup (:package rich-minority)
-      (:set rm-whitelist (rx (or "envrc"
-                                 "OrgMemento"
-                                 "TSit"
-                                 "Treefmt")))
-      (:hook-into after-init-hook))
+  (setup (:package rich-minority)
+    (:set rm-whitelist (rx symbol-start
+                           (or "envrc"
+                               "TSit"
+                               "OClk"
+                               "Memento"
+                               "ga"
+                               "Treefmt")
+                           symbol-end))
+    (:hook-into after-init-hook))
 #+end_src
 *** ruby-end
 :PROPERTIES:
