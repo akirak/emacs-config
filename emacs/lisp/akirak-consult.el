@@ -192,7 +192,10 @@ which file(s) to commit beforehand."
 (defun akirak-consult-git-revert-file (file)
   (interactive "f")
   (magit-with-toplevel
-    (magit-run-git "checkout" "HEAD" "--" file)))
+    (magit-run-git "checkout" "HEAD" "--" file)
+    (when-let (buffer (find-buffer-visiting file))
+      (with-current-buffer buffer
+        (revert-buffer-quick)))))
 
 (provide 'akirak-consult)
 ;;; akirak-consult.el ends here
