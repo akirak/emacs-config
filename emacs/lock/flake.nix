@@ -1021,6 +1021,12 @@
       repo = "PG";
       type = "github";
     };
+    puni = {
+      flake = false;
+      owner = "AmaiKinono";
+      repo = "puni";
+      type = "github";
+    };
     quick-peek = {
       flake = false;
       owner = "cpitclaudel";
