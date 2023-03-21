@@ -391,12 +391,19 @@
                        akirak-capture-doct-options '(:clock-in t :clock-resume t))
                  (akirak-capture-doct))
     :transient t)
-   ("l" "With link" (lambda ()
-                      (interactive)
-                      (setq akirak-capture-headline "%a"
-                            akirak-capture-template-options '(:todo "UNDERWAY")
-                            akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                      (akirak-capture-doct))
+   ("L" "Start todo with link" (lambda ()
+                                 (interactive)
+                                 (setq akirak-capture-headline (akirak-capture--make-org-link)
+                                       akirak-capture-template-options '(:todo "UNDERWAY")
+                                       akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                                 (akirak-capture-doct))
+    :transient t)
+   ("l" "Bookmark as link" (lambda ()
+                             (interactive)
+                             (setq akirak-capture-headline (akirak-capture--make-org-link)
+                                   akirak-capture-template-options '(:tags "@bookmark")
+                                   akirak-capture-doct-options nil)
+                             (akirak-capture-doct))
     :transient t)
    ("m" "Message" (lambda ()
                     (interactive)
@@ -499,6 +506,12 @@
 (defun akirak-capture--maybe-read-heading (&optional prompt)
   (or akirak-capture-initial
       (akirak-capture-read-string (or prompt "Heading: "))))
+
+(defun akirak-capture--make-org-link ()
+  (call-interactively #'org-store-link)
+  (let ((link (pop org-stored-links)))
+    (org-link-make-string (car link)
+                          (read-from-minibuffer "Description: " (cdr link)))))
 
 (transient-define-prefix akirak-capture-active-region ()
   ["Snippet"
