@@ -5274,7 +5274,7 @@ Emacs Minor mode to automatically commit and push
       "List of directories in which `git-auto-commit-mode' is turned on."
       :type '(repeat directory))
 
-    (with-eval-after-load 'dir-locals
+    (with-eval-after-load 'files
       (dir-locals-set-class-variables
        'git-auto-commit
        '((nil . ((eval . (git-auto-commit-mode t))
