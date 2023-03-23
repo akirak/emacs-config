@@ -6626,9 +6626,7 @@ Parentheses Universalistic
 
 #+begin_src emacs-lisp
   (setup (:package puni)
-    (:hook-into prog-mode
-                sgml-mode
-                nxml-mode)
+    (:hook-into nix-mode)
 
     (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
 
