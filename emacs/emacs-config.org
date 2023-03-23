@@ -6614,7 +6614,7 @@ A generic Emacs interface for proof assistants
   (setup coq
     (:nixpkgs "coq" "coq-lsp"))
 #+end_src
-*** COMMENT puni                                           :structured__editing:ARCHIVE:
+*** puni                                       :structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:24]
 :END:
