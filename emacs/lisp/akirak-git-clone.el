@@ -261,15 +261,36 @@ URL can be either a Git url or url representation of a flake ref."
     (x
      (error "Mismatched pattern: %s" x))))
 
-(defun akirak-git-clone-read-parent (prompt)
-  (let ((dir (completing-read prompt
-                              (thread-last
-                                (akirak-project-parents)
-                                (seq-filter (lambda (dir)
-                                              (string-prefix-p "~/work2/" dir)))))))
+(defun akirak-git-clone-read-parent (prompt &optional default-category)
+  (let* ((parents (akirak-git-clone--parents))
+         (default (when default-category
+                    (akirak-git-clone-default-parent default-category parents)))
+         (dir (completing-read prompt parents
+                               nil nil nil nil
+                               default)))
     (unless (file-directory-p dir)
       (make-directory dir 'parents))
     dir))
+
+(defun akirak-git-clone-default-parent (category &optional parents)
+  (let* ((parents (or parents (akirak-git-clone--parents))))
+    (seq-find `(lambda (dir)
+                 (string-suffix-p ,(format "/%s/" category)
+                                  dir))
+              parents)))
+
+(defun akirak-git-clone--parents ()
+  (seq-filter (lambda (dir)
+                (string-prefix-p "~/work2/" dir))
+              (akirak-project-parents)))
+
+(defun akirak-git-clone--clock-category ()
+  (when (org-clocking-p)
+    (thread-last
+      (marker-buffer org-clock-marker)
+      (buffer-file-name)
+      (file-name-base)
+      (string-remove-suffix "-dev"))))
 
 ;;;###autoload
 (cl-defun akirak-git-clone-elisp-package (node &key filename char)
