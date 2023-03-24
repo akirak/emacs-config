@@ -81,6 +81,7 @@
                                 (and (featurep 'org-dog)
                                      (org-dog-buffer-object))))))
               (akirak-org-clock--snoozed-p)
+              (file-remote-p filename)
               (akirak-org-clock--check-before-save))
       ad-do-it)))
 
