@@ -5982,6 +5982,13 @@ A Git porcelain inside Emacs
                       (recenter-top-bottom -1))))))))
 
     (:status personal
+      (:when-loaded
+        (transient-remove-suffix 'magit-branch
+          'magit-worktree-checkout)
+        (transient-replace-suffix 'magit-branch
+          'magit-worktree-branch
+          '("w" "new worktree" akirak-magit-worktree-default)))
+
       (:set magit-repository-directories '(("~/" . 1)
                                            ("~/.config" . 1)
                                            ("~/work" . 3)
