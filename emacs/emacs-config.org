@@ -7727,7 +7727,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 227 |
+| [[org-ql-search:tags:packages][packages]]            | 229 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -7755,6 +7755,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:OCaml][OCaml]]               |   3 |
 | [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
+| [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
@@ -7792,7 +7793,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
-| [[org-ql-search:tags:structured__editing][structured__editing]] |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:themes][themes]]              |   1 |
