@@ -4,10 +4,10 @@
 
 (defvar akirak-treesit-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [remap forward-word] #'akirak-treesit-forward-word)
-    (define-key map [remap backward-word] #'akirak-treesit-backward-word)
-    (define-key map [remap kill-word] #'akirak-treesit-kill-word)
-    (define-key map [remap down-list] #'akirak-treesit-down-list)
+    ;; (define-key map [remap forward-word] #'akirak-treesit-forward-word)
+    ;; (define-key map [remap backward-word] #'akirak-treesit-backward-word)
+    ;; (define-key map [remap kill-word] #'akirak-treesit-kill-word)
+    ;; (define-key map [remap down-list] #'akirak-treesit-down-list)
     (define-key map [remap backward-up-list] #'akirak-treesit-backward-up-list)
     (define-key map [remap kill-line] #'akirak-treesit-smart-kill-line)
     map))
