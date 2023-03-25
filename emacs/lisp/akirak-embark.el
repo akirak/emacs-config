@@ -360,6 +360,33 @@
     (org-back-to-heading)
     (embark-act)))
 
+;;;###autoload
+(defun akirak-embark-on-org-item (marker)
+  (interactive)
+  (org-with-point-at (akirak-embark--org-item-in-entry marker)
+    (save-window-excursion
+      (display-buffer-same-window (current-buffer) nil)
+      (embark-act))))
+
+(defun akirak-embark--org-item-in-entry (marker)
+  (org-with-point-at marker
+    (org-back-to-heading)
+    (let (items
+          (headline (progn
+                      (org-match-line org-complex-heading-regexp)
+                      (match-string 4)))
+          (bound (org-entry-end-position)))
+      (while (re-search-forward org-list-full-item-re bound t)
+        (push (cons (buffer-substring-no-properties (match-beginning 0) (pos-eol))
+                    (point-marker))
+              items))
+      (let* ((vertico-sort-function nil)
+             (item (completing-read (format "Select an item in the entry %s: "
+                                            headline)
+                                    (reverse items)
+                                    nil t)))
+        (cdr (assoc item items))))))
+
 (defun akirak-embark-target-grep-input ()
   ;; This depends on a private API of embark, so it may not work in
   ;; the future.
