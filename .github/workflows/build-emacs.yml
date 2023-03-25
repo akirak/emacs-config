@@ -5,6 +5,8 @@ on:
     paths:
     - 'emacs/**'
     - 'flake.*'
+    branches-ignore:
+    - master
   workflow_dispatch:
 
 jobs:
