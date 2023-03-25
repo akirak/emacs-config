@@ -7102,6 +7102,14 @@ Grammar bundle for tree-sitter
       (:hook-into typescript-mode-hook
                   typescript-tsx-mode-hook)))
 #+end_src
+*** triples
+:PROPERTIES:
+:CREATED_TIME: [2023-03-25 Sat 18:13]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package triples))
+#+end_src
 *** tuareg                                                  :OCaml:@extra:fstar:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-10 Tue 16:51]
