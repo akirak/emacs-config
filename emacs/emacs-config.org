@@ -1854,13 +1854,13 @@ Thus I will explicitly install this package rather than using the built-in versi
 #+begin_src emacs-lisp
   (setup winner
     (:hook-into after-init-hook)
+    (:when-loaded
+      (cl-pushnew "*Calendar*" winner-boring-buffers))
 
     (:status opinionated
       (:with-map ctl-x-map
         (:bind "," #'winner-undo
-               "." #'winner-redo))
-      (:repeat ctl-x-map
-        winner-undo)))
+               "." #'winner-redo))))
 #+end_src
 *** woman
 :PROPERTIES:
