@@ -1287,11 +1287,11 @@
     "gptel": {
       "flake": false,
       "locked": {
-        "lastModified": 1679281099,
-        "narHash": "sha256-nSv3J4xg9yN+6Bh0hj2PQpAxCptmYkK7ZgK+MqGnFmQ=",
+        "lastModified": 1679706220,
+        "narHash": "sha256-nAV25Io0Qhs/GD3Bxix7wjS38RCZr57Juuu9XYPlAKM=",
         "owner": "karthink",
         "repo": "gptel",
-        "rev": "4f3ca234545a3643eb3bed2baf55645463b6f728",
+        "rev": "1828dd3fa445fd558d4f9ac00574fe3644cbcb7e",
         "type": "github"
       },
       "original": {
@@ -2401,11 +2401,11 @@
     "orgabilize": {
       "flake": false,
       "locked": {
-        "lastModified": 1677763503,
-        "narHash": "sha256-IZv13kAiR6juY/9jeru9zi2zqWFyv7CMiFb6VR2hU5c=",
+        "lastModified": 1680429966,
+        "narHash": "sha256-jtrW62Vv/z+pzCY5AbYp4M4umPgV3r31d9OcAXDD+fg=",
         "owner": "akirak",
         "repo": "orgabilize.el",
-        "rev": "e944be371374ec4de1fe86e7c818d08da9b79922",
+        "rev": "cffb755ee359994947fdba8ef249a09848babfe7",
         "type": "github"
       },
       "original": {
@@ -3045,6 +3045,7 @@
         "titlecase": "titlecase",
         "tomelr": "tomelr",
         "treepy": "treepy",
+        "triples": "triples",
         "ts": "ts",
         "tuareg": "tuareg",
         "utop": "utop",
@@ -3387,6 +3388,22 @@
       "original": {
         "owner": "volrath",
         "repo": "treepy.el",
+        "type": "github"
+      }
+    },
+    "triples": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1677721743,
+        "narHash": "sha256-CcYS/eMe3BeoK+eYIjd5b84Hus91qyMUg4KylNC3g30=",
+        "owner": "ahyatt",
+        "repo": "triples",
+        "rev": "1626dc4c8ecf9b7492cf540495d2ffa1be2ecbba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ahyatt",
+        "repo": "triples",
         "type": "github"
       }
     },

@@ -1195,6 +1195,12 @@
       repo = "treepy.el";
       type = "github";
     };
+    triples = {
+      flake = false;
+      owner = "ahyatt";
+      repo = "triples";
+      type = "github";
+    };
     ts = {
       flake = false;
       owner = "alphapapa";
