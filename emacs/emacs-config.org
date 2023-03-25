@@ -4875,6 +4875,15 @@ Consult integration for Embark
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
 #+end_src
+*** embark-org
+:PROPERTIES:
+:CREATED_TIME: [2023-03-25 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup embark-org
+    (eval-after-load 'org #'akirak-embark-setup-org-heading))
+#+end_src
 *** ement                                                               :social:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-30 Fri 12:44]

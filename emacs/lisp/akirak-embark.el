@@ -199,8 +199,6 @@
 
 ;;;###autoload
 (defun akirak-embark-setup ()
-  (akirak-embark-setup-org-heading)
-
   (define-key embark-bookmark-map "p" #'akirak-bookmark-alter-property)
   (define-key embark-library-map "t"
               (akirak-embark-new-tab-action find-library
@@ -253,7 +251,9 @@
                '(project-query-replace-regexp
                  embark--beginning-of-target embark--unmark-target)))
 
+;;;###autoload
 (defun akirak-embark-setup-org-heading ()
+  (require 'embark-org)
   ;; If the point is at the very beginning of the heading, I want this finder to
   ;; match.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading-1)
