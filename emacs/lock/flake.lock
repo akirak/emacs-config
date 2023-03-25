@@ -51,11 +51,11 @@
     "akirak": {
       "flake": false,
       "locked": {
-        "lastModified": 1678004222,
-        "narHash": "sha256-MLoC6ncBct1uFBJ4QcAnPNGboIakmf7FiL55OvBs/0E=",
+        "lastModified": 1679772795,
+        "narHash": "sha256-wjkIdujDX/Vbpyuv+Ju9SKlxvK4/u3WOLRHwaKaX6iU=",
         "owner": "akirak",
         "repo": "emacs-config",
-        "rev": "fe02be78c162c0502541c2c80a30e3abc0f27622",
+        "rev": "67af8a36742342d04bf2a75ee7f969801bc07a18",
         "type": "github"
       },
       "original": {
@@ -148,11 +148,11 @@
     "avy-riben": {
       "flake": false,
       "locked": {
-        "lastModified": 1672302795,
-        "narHash": "sha256-DX+pmQ94sA4N+UYYRZEQ+2bv1G2ZDUYF6vBXjX6y+60=",
+        "lastModified": 1679410349,
+        "narHash": "sha256-seHdxqfjUeB4bg5Oc2SF7Y7Tnz6PBfmOZkzufBYWZzk=",
         "owner": "akirak",
         "repo": "emacs-dumb-japanese",
-        "rev": "4fdda5f259f720f4b0c1b6cc67bdc8ade29ddb19",
+        "rev": "a30e2814e51ae10f82ea7d6476a715041ac6169e",
         "type": "github"
       },
       "original": {
@@ -372,11 +372,11 @@
     "consult-org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1675718912,
-        "narHash": "sha256-AlDZpa1sO5kTCj3psX70/qzO2XNqwfGN4WdPtu1TOgo=",
+        "lastModified": 1679578333,
+        "narHash": "sha256-3t0oMo9dLserxNVd0AR8tfMEfxlJeAvDgQvURGQH7WU=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "1c94ab16717ae243234a7b7c8a31b3ce652c46df",
+        "rev": "844326d88bc5e78ab479e82d4ec463b068bd1308",
         "type": "github"
       },
       "original": {
@@ -2123,11 +2123,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1679474251,
-        "narHash": "sha256-BSvc45mUTtiLDf1zEfhdNb8YjTte6W/x2eSvd5W6qA8=",
+        "lastModified": 1679578333,
+        "narHash": "sha256-3t0oMo9dLserxNVd0AR8tfMEfxlJeAvDgQvURGQH7WU=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "0f0301d378463603e782cf47970a574966385cf0",
+        "rev": "844326d88bc5e78ab479e82d4ec463b068bd1308",
         "type": "github"
       },
       "original": {
@@ -2140,11 +2140,11 @@
     "org-dog-embark": {
       "flake": false,
       "locked": {
-        "lastModified": 1677128361,
-        "narHash": "sha256-1HkZLdoUjV1xW70nVwiWFaPa+MbToZEAaxDCJCcOTw4=",
+        "lastModified": 1679578333,
+        "narHash": "sha256-3t0oMo9dLserxNVd0AR8tfMEfxlJeAvDgQvURGQH7WU=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "c452936ef5822f78d1775744ada79c6246864906",
+        "rev": "844326d88bc5e78ab479e82d4ec463b068bd1308",
         "type": "github"
       },
       "original": {
@@ -2157,11 +2157,11 @@
     "org-dog-export": {
       "flake": false,
       "locked": {
-        "lastModified": 1675718912,
-        "narHash": "sha256-AlDZpa1sO5kTCj3psX70/qzO2XNqwfGN4WdPtu1TOgo=",
+        "lastModified": 1679578333,
+        "narHash": "sha256-3t0oMo9dLserxNVd0AR8tfMEfxlJeAvDgQvURGQH7WU=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "1c94ab16717ae243234a7b7c8a31b3ce652c46df",
+        "rev": "844326d88bc5e78ab479e82d4ec463b068bd1308",
         "type": "github"
       },
       "original": {
@@ -2174,11 +2174,11 @@
     "org-dog-facade": {
       "flake": false,
       "locked": {
-        "lastModified": 1678903991,
-        "narHash": "sha256-yVQFNRWRZ03IMJtCc54EfvAa22Lc3k2Mz3TXF85Sq0A=",
+        "lastModified": 1679578333,
+        "narHash": "sha256-3t0oMo9dLserxNVd0AR8tfMEfxlJeAvDgQvURGQH7WU=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "64e578764cf37ed31a87dbf595138db332bf011d",
+        "rev": "844326d88bc5e78ab479e82d4ec463b068bd1308",
         "type": "github"
       },
       "original": {
@@ -2240,11 +2240,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1679460821,
-        "narHash": "sha256-I1Ww3xjcqwzXcYNew50+jzW5dzkL9Mv3CQzM3ZErj1Y=",
+        "lastModified": 1679732339,
+        "narHash": "sha256-ta4+ZVwNHjuBkEPnrRHAGO7tTwhO8r3Iwz4iKXvVeP8=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "e78b58614f15a8d2dae12de699d2cbeaff18a5b2",
+        "rev": "80f91159bf6d2715d5403cd9504ea2c7b6693862",
         "type": "github"
       },
       "original": {
