@@ -2343,7 +2343,20 @@ Outline-based notes management and organizer
     (:with-map akirak/org-agenda-prefix-map
       (:bind "r" #'octopus-refile
              "S" (akirak/org-agenda-wrap-orig-command
-                  org-super-links-store-link)))
+                  org-super-links-store-link)
+             "C" (defun akirak/org-agenda-make-check-list ()
+                   (interactive)
+                   (let (result)
+                     (save-excursion
+                       (while (text-property-search-forward 'org-agenda-structural-header)
+                         (push (string-trim (buffer-substring-no-properties
+                                             (pos-bol) (pos-eol)))
+                               result)))
+                     (kill-new (mapconcat (lambda (s)
+                                            (concat "- [ ] " s))
+                                          (nreverse result)
+                                          "\n"))
+                     (message "Stored a check list to the kill ring")))))
 
     (define-key help-map (kbd "M-a")
                 (defun akirak/org-default-agenda ()
