@@ -199,8 +199,6 @@
 
 ;;;###autoload
 (defun akirak-embark-setup ()
-  (akirak-embark-setup-org-heading)
-
   (define-key embark-bookmark-map "p" #'akirak-bookmark-alter-property)
   (define-key embark-library-map "t"
               (akirak-embark-new-tab-action find-library
@@ -212,6 +210,7 @@
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
   (define-key embark-file-map "t" #'akirak-tailscale-copy-file)
+  (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
@@ -252,7 +251,9 @@
                '(project-query-replace-regexp
                  embark--beginning-of-target embark--unmark-target)))
 
+;;;###autoload
 (defun akirak-embark-setup-org-heading ()
+  (require 'embark-org)
   ;; If the point is at the very beginning of the heading, I want this finder to
   ;; match.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading-1)
@@ -358,6 +359,33 @@
   (org-with-point-at marker
     (org-back-to-heading)
     (embark-act)))
+
+;;;###autoload
+(defun akirak-embark-on-org-item (marker)
+  (interactive)
+  (org-with-point-at (akirak-embark--org-item-in-entry marker)
+    (save-window-excursion
+      (display-buffer-same-window (current-buffer) nil)
+      (embark-act))))
+
+(defun akirak-embark--org-item-in-entry (marker)
+  (org-with-point-at marker
+    (org-back-to-heading)
+    (let (items
+          (headline (progn
+                      (org-match-line org-complex-heading-regexp)
+                      (match-string 4)))
+          (bound (org-entry-end-position)))
+      (while (re-search-forward org-list-full-item-re bound t)
+        (push (cons (buffer-substring-no-properties (match-beginning 0) (pos-eol))
+                    (point-marker))
+              items))
+      (let* ((vertico-sort-function nil)
+             (item (completing-read (format "Select an item in the entry %s: "
+                                            headline)
+                                    (reverse items)
+                                    nil t)))
+        (cdr (assoc item items))))))
 
 (defun akirak-embark-target-grep-input ()
   ;; This depends on a private API of embark, so it may not work in
@@ -484,6 +512,11 @@
       (akirak-org-store-link-to-file outfile))))
 
 (defun akirak-embark-store-link-to-file (file))
+
+(defun akirak-embark-goto-region-end (_begin end)
+  (interactive "r")
+  (goto-char end)
+  (deactivate-mark))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here

@@ -391,12 +391,19 @@
                        akirak-capture-doct-options '(:clock-in t :clock-resume t))
                  (akirak-capture-doct))
     :transient t)
-   ("l" "With link" (lambda ()
-                      (interactive)
-                      (setq akirak-capture-headline "%a"
-                            akirak-capture-template-options '(:todo "UNDERWAY")
-                            akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                      (akirak-capture-doct))
+   ("L" "Start todo with link" (lambda ()
+                                 (interactive)
+                                 (setq akirak-capture-headline (akirak-capture--make-org-link)
+                                       akirak-capture-template-options '(:todo "UNDERWAY")
+                                       akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                                 (akirak-capture-doct))
+    :transient t)
+   ("l" "Bookmark as link" (lambda ()
+                             (interactive)
+                             (setq akirak-capture-headline (akirak-capture--make-org-link)
+                                   akirak-capture-template-options '(:tags "@bookmark")
+                                   akirak-capture-doct-options nil)
+                             (akirak-capture-doct))
     :transient t)
    ("m" "Message" (lambda ()
                     (interactive)
@@ -499,6 +506,12 @@
 (defun akirak-capture--maybe-read-heading (&optional prompt)
   (or akirak-capture-initial
       (akirak-capture-read-string (or prompt "Heading: "))))
+
+(defun akirak-capture--make-org-link ()
+  (call-interactively #'org-store-link)
+  (let ((link (pop org-stored-links)))
+    (org-link-make-string (car link)
+                          (read-from-minibuffer "Description: " (cdr link)))))
 
 (transient-define-prefix akirak-capture-active-region ()
   ["Snippet"
@@ -1315,7 +1328,7 @@ provided as a separate command for integration, e.g. with embark."
     (org-reverse-datetree-goto-date-in-file nil :return 'marker)))
 
 ;;;###autoload
-(cl-defun akirak-capture-clock-in (file headline &key tags)
+(cl-defun akirak-capture-clock-in (file headline &key tags (body "%?"))
   "Create a new heading with a title and clock into it.
 
 This is intended as the value of `org-dog-clock-in-fallback-fn'."
@@ -1335,11 +1348,12 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 headline
                                 :todo "UNDERWAY"
                                 :tags tags
-                                :body "%?")
+                                :body body)
                    :file ,file
                    :function ,jump-func
                    :clock-in t :clock-resume t))))))
-    (org-capture)))
+    (save-window-excursion
+      (org-capture))))
 
 (defun akirak-capture-read-string (prompt &optional initial-contents)
   (minibuffer-with-setup-hook

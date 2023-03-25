@@ -36,6 +36,9 @@
 (require 'rx)
 (require 'project)
 
+(declare-function nix3-flake-clone-promise "ext:nix3-flake-clone")
+(declare-function promise-wait "ext:promise")
+
 (defgroup akirak-git-clone
   nil
   "Clone Git repositories efficiently."
@@ -258,15 +261,36 @@ URL can be either a Git url or url representation of a flake ref."
     (x
      (error "Mismatched pattern: %s" x))))
 
-(defun akirak-git-clone-read-parent (prompt)
-  (let ((dir (completing-read prompt
-                              (thread-last
-                                (akirak-project-parents)
-                                (seq-filter (lambda (dir)
-                                              (string-prefix-p "~/work2/" dir)))))))
+(defun akirak-git-clone-read-parent (prompt &optional default-category)
+  (let* ((parents (akirak-git-clone--parents))
+         (default (when default-category
+                    (akirak-git-clone-default-parent default-category parents)))
+         (dir (completing-read prompt parents
+                               nil nil nil nil
+                               default)))
     (unless (file-directory-p dir)
       (make-directory dir 'parents))
     dir))
+
+(defun akirak-git-clone-default-parent (category &optional parents)
+  (let* ((parents (or parents (akirak-git-clone--parents))))
+    (seq-find `(lambda (dir)
+                 (string-suffix-p ,(format "/%s/" category)
+                                  dir))
+              parents)))
+
+(defun akirak-git-clone--parents ()
+  (seq-filter (lambda (dir)
+                (string-prefix-p "~/work2/" dir))
+              (akirak-project-parents)))
+
+(defun akirak-git-clone--clock-category ()
+  (when (org-clocking-p)
+    (thread-last
+      (marker-buffer org-clock-marker)
+      (buffer-file-name)
+      (file-name-base)
+      (string-remove-suffix "-dev"))))
 
 ;;;###autoload
 (cl-defun akirak-git-clone-elisp-package (node &key filename char)
@@ -337,6 +361,22 @@ URL can be either a Git url or url representation of a flake ref."
   (let ((root (file-name-as-directory dir)))
     (project-remember-project (project-current nil root))
     (funcall akirak-git-clone-browser-function root)))
+
+(defcustom akirak-git-clone-wait 120
+  ""
+  :type 'number)
+
+;;;###autoload
+(defun akirak-git-clone-dir (url)
+  "Clone a Git repository from URL and print its local working directory."
+  (require 'promise)
+  (promise-wait-value
+   (promise-wait akirak-git-clone-wait
+     (thread-last
+       (akirak-git-clone--parse url)
+       (akirak-git-clone-source-origin)
+       (nix3-git-url-to-flake-alist)
+       (nix3-flake-clone-promise)))))
 
 (provide 'akirak-git-clone)
 ;;; akirak-git-clone.el ends here

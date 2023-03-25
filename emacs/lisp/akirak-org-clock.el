@@ -33,7 +33,7 @@
 (define-minor-mode akirak-org-clock-mode
   "Ensure clocking"
   :global t
-  :lighter " OrgClock"
+  :lighter " OClk"
   (cond
    ((bound-and-true-p akirak-org-clock-mode)
     (ad-activate 'save-buffer)
@@ -47,7 +47,8 @@
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
                                   ,(expand-file-name "~/resources/articles/")
-                                  (and (any "-/") "config/")
+                                  (and "emacs-config.org" eol)
+                                  "/private-config/"
                                   "/tmp"))
                      "/.")))
 
@@ -80,6 +81,7 @@
                                 (and (featurep 'org-dog)
                                      (org-dog-buffer-object))))))
               (akirak-org-clock--snoozed-p)
+              (file-remote-p filename)
               (akirak-org-clock--check-before-save))
       ad-do-it)))
 
@@ -114,13 +116,15 @@
                               (mapcar #'car))
                           files)))
              (if files
-                 (org-dog-clock-in files
-                                   :query-prefix query-prefix
-                                   :tags tag
-                                   :prompt
-                                   (format "Clock in (%s): "
-                                           (mapconcat #'file-name-nondirectory
-                                                      files ", ")))
+                 (progn
+                   (org-dog-clock-in files
+                                     :query-prefix query-prefix
+                                     :tags tag
+                                     :prompt
+                                     (format "Clock in (%s): "
+                                             (mapconcat #'file-name-nondirectory
+                                                        files ", ")))
+                   t)
                (message "No Org file to clock in to")))
            t)))))
 

@@ -28,7 +28,8 @@
 ;;;###autoload
 (defun akirak-org-ql-find-default (files)
   (require 'org-ql-find)
-  (org-ql-find files :query-prefix akirak-org-ql-default-query-prefix))
+  (let ((org-ql-find-display-buffer-action '(pop-to-buffer)))
+    (org-ql-find files :query-prefix akirak-org-ql-default-query-prefix)))
 
 (defvar akirak-org-ql-link-query nil)
 

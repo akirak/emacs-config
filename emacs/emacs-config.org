@@ -7,6 +7,7 @@
 :CONTENTS:
 - [[#setupel][Setup.el]]
 - [[#performance][Performance]]
+- [[#supported-systems][Supported systems]]
 - [[#custom-conventions][Custom conventions]]
 - [[#macro-packages][Macro packages]]
 - [[#built-ins][Built-ins]]
@@ -302,6 +303,36 @@ the Garbage Collector Magic Hack
     (:set gcmh-verbose init-file-debug
           gcmh-high-cons-threshold (* 128 1024 1024)))
 #+end_src
+** Supported systems
+*** os-release
+#+begin_src elisp
+  (defun akirak/os-release ()
+    (when (file-readable-p "/etc/os-release")
+      (with-temp-buffer
+        (insert-file-contents "/etc/os-release")
+        (let (result)
+          (while (re-search-forward (rx bol (group (+ (any "_" upper)))
+                                        "=")
+                                    nil t)
+            (push (cons (match-string 1)
+                        (replace-regexp-in-string
+                         "\"" ""
+                         (buffer-substring (point) (pos-eol))))
+                  result))
+          result))))
+
+  (let ((alist (akirak/os-release)))
+    (defconst akirak/os-id
+      (cdr (assoc "ID" alist)))
+    (defconst akirak/os-pretty-name
+      (cdr (assoc "PRETTY_NAME" alist))))
+#+end_src
+*** NixOS
+#+begin_src elisp
+  (defconst akirak/nixos-configuration-version
+    (when-let (exe (executable-find "nixos-version"))
+      (car (process-lines exe "--configuration-revision"))))
+#+end_src
 ** Custom conventions
 *** Prefix for mode-specific commands
 #+begin_src emacs-lisp
@@ -315,11 +346,13 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
 #+begin_src emacs-lisp
   (with-eval-after-load 'which-key
     (pcase-dolist (`(,key . ,description)
-                   '(("c" . "capture")
+                   '(("a" . "ai")
+                     ("c" . "capture")
                      ("c f" . "frame")
                      ("c s" . "screenshot")
                      ("c r" . "record screen")
                      ("e" . "emacs")
+                     ("n" . "nix")
                      ("S" . "secrets")))
       (which-key-add-keymap-based-replacements
         global-map (concat "<f12> " key) description)))
@@ -604,6 +637,7 @@ The following variable defines variables that can be saved to =custom-file=:
       smtpmail-stream-type
       smtpmail-smtp-service
       akirak-git-clone-root
+      nix3-flake-clone-root
       akirak-org-clock-mode
       akirak-org-log-file
       akirak/font-height
@@ -650,27 +684,6 @@ The other variables must not be saved, and they should be put in configuration:
 
     (:bind "h" #'dired-up-directory)
     (:unbind "C-x M-o"))
-#+end_src
-*** dir-locals
-:PROPERTIES:
-:CREATED_TIME: [2023-02-19 Sun 09:44]
-:END:
-
-#+begin_src emacs-lisp
-  (setup dir-locals
-    (:status personal
-      (let ((prettier '((eval . (prettier-on-save-mode))))
-            (lsp '((eval . (eglot-ensure)))))
-        (dir-locals-set-class-variables
-         'default
-         `((web-mode . (,@prettier ,@lsp))
-           (css-mode . (,@prettier ,@lsp))
-           (tsx-ts-mode . (,@prettier ,@lsp))
-           (typescript-ts-mode . (,@prettier ,@lsp))
-           (tuareg-mode . (,@lsp))
-           (haskell-mode . (,@lsp)))))
-      (dir-locals-set-directory-class "~/work2/learning/" 'default)
-      (dir-locals-set-directory-class "~/work2/personal/" 'default)))
 #+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
@@ -862,7 +875,21 @@ The built-in =electric= package provides the following modes:
     (define-key ctl-x-x-map (kbd "R") #'rename-visited-file)
 
     (:status opinionated
-      (:global "<f5>" #'revert-buffer)))
+      (:global "<f5>" #'revert-buffer))
+
+    (:status personal
+      (let ((prettier '((eval . (prettier-on-save-mode))))
+            (lsp '((eval . (eglot-ensure)))))
+        (dir-locals-set-class-variables
+         'default
+         `((web-mode . (,@prettier ,@lsp))
+           (css-mode . (,@prettier ,@lsp))
+           (elixir-ts-mode . (,@lsp))
+           (tsx-ts-mode . (,@prettier ,@lsp))
+           (typescript-ts-mode . (,@prettier ,@lsp))
+           (tuareg-mode . (,@lsp))
+           (haskell-mode . (,@lsp)))))
+      (dir-locals-set-directory-class "~/work2/" 'default)))
 #+end_src
 
 - Use =akirak-files-ensure-abbrev-list= to update =directory-abbrev-alist=. (see [[*akirak][akirak]]).
@@ -924,10 +951,26 @@ The built-in =electric= package provides the following modes:
   (setup frame
     (blink-cursor-mode -1)
     (set-frame-parameter nil 'alpha '(98 . 96))
-    (setq frame-title-format '("%b - "
-                               (akirak/emacs-profile-name
-                                akirak/emacs-profile-name
-                                (:eval (concat "GNU Emacs " emacs-version))))))
+
+    (defconst akirak/base-frame-title-format
+      '((akirak/emacs-profile-name
+         (" - " akirak/emacs-profile-name))
+        (akirak/os-pretty-name
+         (" - " akirak/os-pretty-name))
+        (akirak/nixos-configuration-version
+         ("@" akirak/nixos-configuration-version))))
+
+    (defconst akirak/default-frame-title-format
+      (cons '(org-memento-current-block
+              org-memento-frame-title-format
+              "%b")
+            akirak/base-frame-title-format))
+
+    (setq org-clock-frame-title-format
+          (cons '(t org-mode-line-string)
+                akirak/base-frame-title-format))
+
+    (setq frame-title-format akirak/default-frame-title-format))
 #+end_src
 *** help
 :PROPERTIES:
@@ -993,7 +1036,7 @@ The built-in =electric= package provides the following modes:
   (setup jit-lock
     (:set jit-lock-defer-time 0))
 #+end_src
-*** js-jsx-mode
+*** COMMENT js-jsx-mode                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-05-03 Tue 23:14]
 :END:
@@ -1421,6 +1464,11 @@ This is a recommended setting for use with vertico. See https://github.com/minad
   (setup shr
     (:set shr-bullet " ‣ "))
 #+end_src
+**** akirak-shr
+#+begin_src elisp
+  (setup akirak-shr
+    (:hook-into nov-mode-hook))
+#+end_src
 *** simple                                      :formatting:writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
@@ -1548,8 +1596,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subword
-    (:global "M-SPC" #'akirak/run-with-superword-inversed)
+    ;; (:global "M-SPC" #'akirak/run-with-superword-inversed)
 
+    ;; Deprecated.
     (defun akirak/run-with-superword-inversed (key)
       "Run a command with `superword-mode' inversed."
       (interactive "K")
@@ -1663,6 +1712,15 @@ Thus I will explicitly install this package rather than using the built-in versi
       (add-hook 'typescript-mode-hook 'typescript-ts-mode)
       (add-hook 'json-mode-hook 'json-ts-mode)
       (add-hook 'go-mode-hook 'go-ts-mode)))
+#+end_src
+**** akirak-treesit
+#+begin_src elisp
+  (setup akirak-treesit
+    (:bind "M-SPC" #'akirak-treesit-expand-region)
+    (add-hook 'after-change-major-mode-hook
+              (defun akirak/enable-treesit-mode ()
+                (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
+                  (akirak-treesit-mode t)))))
 #+end_src
 *** vc-hooks                                                    :VC:
 :PROPERTIES:
@@ -2039,7 +2097,7 @@ Org-Memento integration for oahu
         (:with-map org-memento-zone-mode-map
           (:bind "v" #'oahu-memento-group-view)))))
 #+end_src
-*** ob-mermaid                                             
+*** COMMENT ob-mermaid                                                         :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:53]
 :END:
@@ -2285,7 +2343,20 @@ Outline-based notes management and organizer
     (:with-map akirak/org-agenda-prefix-map
       (:bind "r" #'octopus-refile
              "S" (akirak/org-agenda-wrap-orig-command
-                  org-super-links-store-link)))
+                  org-super-links-store-link)
+             "C" (defun akirak/org-agenda-make-check-list ()
+                   (interactive)
+                   (let (result)
+                     (save-excursion
+                       (while (text-property-search-forward 'org-agenda-structural-header)
+                         (push (string-trim (buffer-substring-no-properties
+                                             (pos-bol) (pos-eol)))
+                               result)))
+                     (kill-new (mapconcat (lambda (s)
+                                            (concat "- [ ] " s))
+                                          (nreverse result)
+                                          "\n"))
+                     (message "Stored a check list to the kill ring")))))
 
     (define-key help-map (kbd "M-a")
                 (defun akirak/org-default-agenda ()
@@ -2310,7 +2381,6 @@ Outline-based notes management and organizer
           '((shell . t)
             (emacs-lisp . t)
             (restclient . t)
-            (mermaid . t)
             (sqlite . t)
             (sql . t))))
 #+end_src
@@ -2372,10 +2442,6 @@ Outline-based notes management and organizer
             (concat (file-name-base (buffer-name)) ": "
                     (org-link-display-format
                      (org-no-properties (org-get-heading t t t t)))))
-
-          org-clock-frame-title-format '((org-memento-current-block
-                                          org-memento-frame-title-format)
-                                         org-mode-line-string)
 
           org-clocktable-defaults
           (list :fileskip0 t :stepskip0 t :tcolumns 1
@@ -2573,6 +2639,19 @@ Emacs bookmark support for org-mode
 #+begin_src emacs-lisp
   (setup (:package org-bookmark-heading)
     (:set org-bookmark-heading-make-ids t))
+#+end_src
+*** org-crypt
+:PROPERTIES:
+:CREATED_TIME: [2023-03-17 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup org-crypt
+    (defun akirak/setup-org-crypt ()
+      (setq-local buffer-auto-save-file-name nil)
+      (add-hook 'before-save-hook #'org-encrypt-entries nil t)
+      (when (bound-and-true-p super-save-mode)
+        (super-save-mode -1))))
 #+end_src
 *** org-dog
 :PROPERTIES:
@@ -2987,14 +3066,7 @@ Time blocking with Org
                 (defun akirak/org-memento-save-some-buffers ()
                   (ignore-errors (akirak-org-clock-snooze))
                   (save-some-buffers)))
-      (add-hook 'org-memento-checkin-hook
-                (defun akirak/org-memento-set-frame-title ()
-                  (setq frame-title-format
-                        '((org-memento-current-block
-                           org-memento-frame-title-format
-                           akirak/emacs-profile-name
-                           ;; akirak/org-memento-fallback-frame-title
-                           )))))
+
       (add-hook 'org-memento-block-exit-hook #'akirak/org-memento-cleanup-buffers)))
 #+end_src
 
@@ -3249,6 +3321,134 @@ Hugo Markdown Back-End for Org Export Engine
 (setup (:package ox-hugo))
 #+end_src
 ** Treesit-based major modes
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
+*** css-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-03-19 Sun 21:20]
+:END:
+
+#+begin_src emacs-lisp
+  (setup css-ts-mode
+    :file-match "\\.css\\'")
+#+end_src
+*** dockerfile-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-03-19 Sun 21:28]
+:END:
+
+#+begin_src emacs-lisp
+  (setup dockerfile-ts-mode
+    :file-match "\\(?:\\(?:\\.d\\|D\\)ockerfile\\)$")
+#+end_src
+*** elixir-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2022-04-29 Fri 19:08]
+:END:
+#+begin_quote
+Major mode for Elixir with tree-sitter support
+[[https://github.com/wkirschbaum/elixir-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup elixir-ts-mode
+    (:file-match "\\.exs?\\'")
+
+    (:auto-insert
+     ("/config/config\\.exs\\'"
+      . (> "use Mix.Config\n\n"
+           _))
+     ("/lib/.+\\.ex\\'"
+      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+           "  " _
+           "\nend\n"))
+     ("/test/.+_test\\.exs\\'"
+      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+           "  use ExUnit.Case\n\n"
+           "  alias " (string-remove-suffix
+                       "Test" (akirak/elixir-module-name-from-file))
+           "\n"
+           "  doctest " (string-remove-suffix
+                         "Test" (akirak/elixir-module-name-from-file))
+           "\n"
+           "  " _
+           "\nend\n")))
+
+    (:when-loaded
+      (define-abbrev elixir-ts-mode-abbrev-table
+        "case" "" (define-skeleton akirak-elixir-case
+                    "Insert case"
+                    ""
+                    > "case " - " do" n
+                    > @ _ n
+                    > -2 "end"))
+
+      (define-abbrev elixir-ts-mode-abbrev-table
+        "fn" "" (define-skeleton akirak-elixir-fn
+                  "Insert fn"
+                  ""
+                  > "fn " - " ->" n
+                  > @ _ n
+                  > -2 "end")))
+
+
+    (:compilation-error
+     ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
+     (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
+          1 2 3 (4 . 4)))
+
+    (defun akirak/elixir-module-name-from-file ()
+      (require 'f)
+      (require 'dash)
+      (let ((segments (f-split (buffer-file-name))))
+        (when-let (i (-find-last-index
+                      (lambda (x) (member x '("lib" "test")))
+                      segments))
+          (mapconcat (lambda (s)
+                       (->> (split-string s "_")
+                            (mapcar #'capitalize)
+                            (string-join)))
+                     (append (-slice segments (1+ i) -1)
+                             (list (f-base (-last-item segments))))
+                     ".")))))
+#+end_src
+*** go-ts-mode                                                     :major__mode:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-12 Tue 23:59]
+:END:
+#+begin_quote
+Major mode for the Go programming language
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup go-ts-mode
+    (:file-match "\\.go\\'")
+
+    (:auto-insert
+     ("\\.go\\'"
+      . (> "package "
+           (file-name-base (or buffer-file-name (buffer-name)))
+           "\n\nimport (\n"
+           ")\n\n"))))
+#+end_src
+*** heex-ts-mode
+#+begin_src elisp
+  (setup heex-ts-mode
+    (:file-match "\\.heex\\'")
+    (:when-loaded
+      ;; These workarounds are only necessary due to upstream inconsistencies.
+      ;; Hopefully they will resolve the issues in the mean time.
+      (unless (fboundp 'heex-ts-mode-treesit-ready-p)
+        (defun heex-ts-mode-treesit-ready-p ()
+          (treesit-ready-p 'heex)))
+      (unless (boundp 'heex-ts-mode--indent-rules)
+        (setq heex-ts-mode--indent-rules
+              heex-ts--indent-rules))
+      (unless (boundp 'heex-ts-mode--font-lock-settings)
+        (setq heex-ts-mode--font-lock-settings
+              heex-ts--font-lock-settings))))
+#+end_src
 *** js-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-02-23 Thu 23:59]
@@ -3257,6 +3457,15 @@ Hugo Markdown Back-End for Org Export Engine
 #+begin_src emacs-lisp
   (setup js-ts-mode
     (:file-match "\\.m?js$"))
+#+end_src
+*** toml-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-03-19 Sun 21:27]
+:END:
+
+#+begin_src emacs-lisp
+  (setup toml-ts-mode
+    :file-match "\\.toml\\'")
 #+end_src
 *** typescript-ts-mode                                              :major_mode:
 :PROPERTIES:
@@ -3311,6 +3520,19 @@ Major mode for editing typescript
 
     (with-eval-after-load 'typescript-mode
       (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
+#+end_src
+*** yaml-ts-mode 
+:PROPERTIES:
+:CREATED_TIME: [2022-03-07 Mon 16:07]
+:END:
+#+begin_quote
+Major mode for editing YAML files
+[[https://github.com/yoshiki/yaml-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup yaml-ts-mode
+    (:file-match "\\.ya?ml\\'"))
 #+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
@@ -3747,6 +3969,53 @@ Show number of matches in mode-line while searching
 
     (:global [remap query-replace] #'anzu-query-replace
              [remap query-replace-regexp] #'anzu-query-replace-regexp))
+#+end_src
+*** apprentice                                                          :Elixir:
+:PROPERTIES:
+:CREATED_TIME: [2023-03-18 Sat 15:40]
+:END:
+#+begin_quote
+Elixir tooling integration into Emacs
+[[https://github.com/Sasanidas/Apprentice]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package apprentice)
+    (:hook-into elixir-ts-mode-hook)
+    (:set apprentice-key-command-prefix (kbd "C-, ,"))
+    (:with-mode elixir-ts-mode
+      (:mode-repl apprentice-iex-project-run))
+
+    (:bind "C-c C-l" #'apprentice-iex-reload-module
+           "C-c C-c" #'apprentice-iex-compile-this-buffer
+           "C-c C-r" (defun akirak/apprentice-send-line-or-region (&optional arg)
+                       (interactive "P")
+                       (require 'whole-line-or-region)
+                       (whole-line-or-region-wrap-beg-end
+                        ;; #'apprentice-iex-send-region-and-go
+                        #'apprentice-iex-send-region
+                        (if (numberp arg)
+                            arg
+                          1)))
+           ;; undefined
+           ;; "C-c C-v" (defun akirak/apprentice-eval-line-or-region (&optional arg)
+           ;;             (interactive "P")
+           ;;             (require 'whole-line-or-region)
+           ;;             (whole-line-or-region-wrap-modified-region
+           ;;              #'apprentice-eval-region
+           ;;              ;; #'apprentice-eval-print-region
+           ;;              (if (numberp arg)
+           ;;                  arg
+           ;;                1)))
+           "C-c C-q" #'apprentice-eval-close-popup)
+
+    (:el-patch
+      (el-patch-defun apprentice-iex-command (arg)
+        (split-string-and-unquote
+         (if (null arg) apprentice-iex-program-name
+           (el-patch-swap
+             (read-string "Command to run Elixir IEx: " (concat apprentice-iex-program-name arg))
+             (concat apprentice-iex-program-name arg)))))))
 #+end_src
 *** auto-yasnippet                                       :expansion:
 :PROPERTIES:
@@ -4496,7 +4765,11 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
       (add-to-list 'eglot-server-programs
+                   '(coq-mode . ("coq-lsp")))
+      (add-to-list 'eglot-server-programs
                    '(elixir-mode . ("elixir-ls")))
+      (add-to-list 'eglot-server-programs
+                   '(elixir-ts-mode . ("elixir-ls")))
       (add-to-list 'eglot-server-programs
                    `(web-mode . ,(eglot-alternatives
                                   '(("astro-ls" "--stdio")))))
@@ -4544,77 +4817,6 @@ Automatically add spaces around operators
                 java-mode
                 rust-mode))
 #+end_src
-*** elixir-mode
-:PROPERTIES:
-:CREATED_TIME: [2022-04-29 Fri 19:08]
-:END:
-#+begin_quote
-Major mode for editing Elixir files
-[[https://github.com/elixir-editors/emacs-elixir]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package elixir-mode)
-    (:file-match "\\.exs?\\'")
-
-    (:auto-insert
-     ("/config/config\\.exs\\'"
-      . (> "use Mix.Config\n\n"
-           _))
-     ("/lib/.+\\.ex\\'"
-      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
-           "  " _
-           "\nend\n"))
-     ("/test/.+_test\\.exs\\'"
-      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
-           "  use ExUnit.Case\n\n"
-           "  alias " (string-remove-suffix
-                       "Test" (akirak/elixir-module-name-from-file))
-           "\n"
-           "  doctest " (string-remove-suffix
-                         "Test" (akirak/elixir-module-name-from-file))
-           "\n"
-           "  " _
-           "\nend\n")))
-
-    (:when-loaded
-      (define-abbrev elixir-mode-abbrev-table
-        "case" "" (define-skeleton akirak-elixir-case
-                    "Insert case"
-                    ""
-                    > "case " - " do" n
-                    > @ _ n
-                    > -2 "end"))
-
-      (define-abbrev elixir-mode-abbrev-table
-        "fn" "" (define-skeleton akirak-elixir-fn
-                  "Insert fn"
-                  ""
-                  > "fn " - " ->" n
-                  > @ _ n
-                  > -2 "end")))
-
-
-    (:compilation-error
-     ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
-     (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
-          1 2 3 (4 . 4)))
-
-    (defun akirak/elixir-module-name-from-file ()
-      (require 'f)
-      (require 'dash)
-      (let ((segments (f-split (buffer-file-name))))
-        (when-let (i (-find-last-index
-                      (lambda (x) (member x '("lib" "test")))
-                      segments))
-          (mapconcat (lambda (s)
-                       (->> (split-string s "_")
-                            (mapcar #'capitalize)
-                            (string-join)))
-                     (append (-slice segments (1+ i) -1)
-                             (list (f-base (-last-item segments))))
-                     ".")))))
-#+end_src
 *** elx                            :Emacs__Lisp:development:library:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
@@ -4626,7 +4828,7 @@ Extract information from Emacs Lisp libraries
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
-*** emacsql-sqlite                                         :library:
+*** COMMENT emacsql-sqlite                                             :library:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:46]
 :END:
@@ -4686,6 +4888,15 @@ Consult integration for Embark
     (:with-mode embark-collect-mode
       (:hook consult-preview-at-point-mode)))
 #+end_src
+*** embark-org
+:PROPERTIES:
+:CREATED_TIME: [2023-03-25 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup embark-org
+    (eval-after-load 'org #'akirak-embark-setup-org-heading))
+#+end_src
 *** ement                                                               :social:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-30 Fri 12:44]
@@ -4732,7 +4943,8 @@ Browse the Emacsmirror package database
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package epkg))
+  (setup (:package epkg)
+    (:set epkg-database-connector 'sqlite-builtin))
 #+end_src
 **** epkg-marginalia                             :Emacs:completion:
 :PROPERTIES:
@@ -4798,6 +5010,26 @@ Comment/uncomment lines efficiently. Like Nerd Commenter in Vim
     (:global "M-;" #'evilnc-comment-or-uncomment-lines
              ;; "C-c p" #'evilnc-comment-or-uncomment-paragraphs
              ))
+#+end_src
+*** exec-path-from-shell
+:PROPERTIES:
+:CREATED_TIME: [2023-03-14 Tue 15:54]
+:END:
+#+begin_quote
+Get environment variables such as $PATH from the shell
+[[https://github.com/purcell/exec-path-from-shell]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package exec-path-from-shell)
+    (when (and window-system
+               (not (equal akirak/os-id "nixos")))
+      (require 'exec-path-from-shell)
+      (unless (eq system-type 'darwin)
+        (push "XDG_CONFIG_HOME" exec-path-from-shell-variables)
+        (push "XDG_CACHE_HOME" exec-path-from-shell-variables)
+        (push "XDG_DATA_HOME" exec-path-from-shell-variables))
+      (exec-path-from-shell-initialize)))
 #+end_src
 *** COMMENT fancy-dabbrev                                           :completion:ARCHIVE:
 :PROPERTIES:
@@ -5057,7 +5289,7 @@ Emacs Minor mode to automatically commit and push
       "List of directories in which `git-auto-commit-mode' is turned on."
       :type '(repeat directory))
 
-    (with-eval-after-load 'dir-locals
+    (with-eval-after-load 'files
       (dir-locals-set-class-variables
        'git-auto-commit
        '((nil . ((eval . (git-auto-commit-mode t))
@@ -5278,25 +5510,6 @@ Major mode for Gleam
   (setup (:package gleam-mode)
     (:file-match "\\.gleam\\'"))
 #+end_src
-*** go-mode                                            :major__mode:
-:PROPERTIES:
-:CREATED_TIME: [2022-04-12 Tue 23:59]
-:END:
-#+begin_quote
-Major mode for the Go programming language
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package go-mode)
-    (:file-match "\\.go\\'")
-
-    (:auto-insert
-     ("\\.go\\'"
-      . (> "package "
-           (file-name-base (or buffer-file-name (buffer-name)))
-           "\n\nimport (\n"
-           ")\n\n"))))
-#+end_src
 *** go-translate                                       :translation:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-02 Sat 23:59]
@@ -5310,6 +5523,22 @@ Translation framework supports multiple engines such as Google/Bing/DeepL
   (setup (:package go-translate)
     (:set gts-translate-list '(("ja" "en")
                                ("zh" "en"))))
+#+end_src
+*** gptel
+:PROPERTIES:
+:CREATED_TIME: [2023-03-20 Mon 23:59]
+:END:
+#+begin_quote
+A simple ChatGPT client
+[[https://github.com/karthink/gptel]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package gptel)
+    (:global "C-c p" #'gptel-send
+             "<f12> a g" #'gptel)
+    (:when-loaded
+      (fset 'gptel--update-header-line #'ignore)))
 #+end_src
 *** graphql-mode                                               :web:
 :PROPERTIES:
@@ -5572,7 +5801,7 @@ Automatic language detection from code snippets
 #+begin_src emacs-lisp
 (setup (:package language-detection))
 #+end_src
-*** lean4-mode                                                    :Lean4:@extra:
+*** COMMENT lean4-mode                                            :Lean4:@extra:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-09 Fri 19:50]
 :END:
@@ -5741,13 +5970,21 @@ A Git porcelain inside Emacs
     ;; Replace the binding to compose-message
     (define-key ctl-x-map "m" #'magit-dispatch)
     (define-key ctl-x-map "j" #'magit-status)
-    (define-key ctl-x-x-map "e" (defun akirak/edit-source-file ()
-                                  "Visit a corresponding file in a Git repository."
-                                  (interactive)
-                                  (if (and buffer-file-name
-                                           (file-in-directory-p buffer-file-name "/nix/store/"))
-                                      (call-interactively #'akirak-twist-find-git-source)
-                                    (magit-blob-visit-file))))
+    (define-key ctl-x-x-map "e"
+                (defun akirak/edit-source-file ()
+                  "Visit a corresponding file in a Git repository."
+                  (interactive)
+                  (cond
+                   ((and buffer-file-name
+                         (file-in-directory-p buffer-file-name "/nix/store/"))
+                    (call-interactively #'akirak-twist-find-git-source))
+                   ((and (derived-mode-p 'org-mode)
+                         (featurep 'org-transclusion)
+                         (org-transclusion-within-transclusion-p))
+                    (same-window-prefix)
+                    (org-transclusion-open-source t))
+                   (t
+                    (magit-blob-visit-file)))))
     (define-key ctl-x-x-map "m" #'magit-file-dispatch)
 
     (:status opinionated
@@ -5769,11 +6006,18 @@ A Git porcelain inside Emacs
                       (recenter-top-bottom -1))))))))
 
     (:status personal
+      (:when-loaded
+        (transient-remove-suffix 'magit-branch
+          'magit-worktree-checkout)
+        (transient-replace-suffix 'magit-branch
+          'magit-worktree-branch
+          '("w" "new worktree" akirak-magit-worktree-default)))
+
       (:set magit-repository-directories '(("~/" . 1)
                                            ("~/.config" . 1)
                                            ("~/work" . 3)
                                            ("~/work2" . 3)
-                                           ("~/archives/oss/" . 3)))
+                                           ("~/archives/oss/" . 4)))
 
       (:when-loaded
         ;; Run the following commands to set up SSH_AUTH_SOCK environment
@@ -5921,7 +6165,7 @@ Client for Mastodon, a federated social network
 #+begin_src emacs-lisp
 (setup (:package mastodon))
 #+end_src
-*** mermaid-mode                                                :@extra:mermaid:
+*** COMMENT mermaid-mode                                        :@extra:mermaid:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
 :END:
@@ -6076,18 +6320,6 @@ Eclipse-like moving and duplicating lines or rectangles
                 (unless (derived-mode-p 'org-mode 'markdown-mode)
                   (move-dup-mode 1)))))
 #+end_src
-*** nickel-mode
-:PROPERTIES:
-:CREATED_TIME: [2022-03-27 Sun 18:25]
-:END:
-#+begin_quote
-description
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package nickel-mode)
-    (:file-match "\\.ncl\\'"))
-#+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
@@ -6099,7 +6331,7 @@ Frontend to experimental commands of Nix
 
 #+begin_src emacs-lisp
   (setup (:package nix3)
-    (:set nix3-flake-worktree-promise-fn #'akirak/nix3-flake-find-repo)
+    (:set nix3-flake-remote-wait 20)
 
     (defconst akirak/nix3-registry-url
       "https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json")
@@ -6114,41 +6346,9 @@ Frontend to experimental commands of Nix
       (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-lock-from-pins
                 nil t))
 
-    (defun akirak/nix3-flake-find-repo (alist)
-      (require 'akirak-git-clone)
-      (let-alist alist
-        (let ((dir (expand-file-name
-                    (pcase-exhaustive \.type
-                      ("github"
-                       (format "github.com/%s/%s" \.owner \.repo))
-                      ("gitlab"
-                       (format "gitlab.com/%s/%s" \.owner \.repo))
-                      ("sourcehut"
-                       (format "git.sr.ht/%s/%s" \.owner \.repo))
-                      ("git"
-                       (let ((url (url-generic-parse-url \.url)))
-                         (format "%s/%s" (url-host url) (url-filename url)))))
-                    "~/archives/oss/"))
-              (origin (if (equal \.type "git")
-                          \.url
-                        (thread-last
-                          (nix3-flake-ref-alist-to-url alist)
-                          (akirak-git-clone--parse)
-                          (akirak-git-clone-source-origin)))))
-          (promise-new
-           `(lambda (resolve _)
-              (let ((dir ,dir)
-                    (origin ,origin))
-                (if (file-directory-p dir)
-                    (funcall resolve dir)
-                  (let ((parent (file-name-directory dir)))
-                    (unless (file-directory-p parent)
-                      (make-directory parent t)))
-                  (akirak-git-clone--clone origin dir :callback resolve))))))))
-
     (:global "C-c n" #'nix3-transient
              "M-g M-f" #'nix3-flake-edit
-             "M-s M-n" #'nix3-registry-list))
+             "<f12> n n" #'nix3-flake-show-url))
 #+end_src
 **** magit-nix3
 #+begin_quote
@@ -6428,6 +6628,23 @@ Pop a posframe (just a frame) at point
 #+begin_src emacs-lisp
 (setup (:package posframe))
 #+end_src
+*** proof-general   
+:PROPERTIES:
+:CREATED_TIME: [2023-03-08 Wed 14:53]
+:END:
+#+begin_quote
+A generic Emacs interface for proof assistants
+[[https://proofgeneral.github.io/]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package proof-general))
+#+end_src
+**** Coq                                                            :@extra:Coq:
+#+begin_src elisp
+  (setup coq
+    (:nixpkgs "coq" "coq-lsp"))
+#+end_src
 *** puni                                       :structured__editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:24]
@@ -6440,11 +6657,9 @@ Parentheses Universalistic
 
 #+begin_src emacs-lisp
   (setup (:package puni)
-    (:hook-into prog-mode
-                sgml-mode
-                nxml-mode)
+    (:hook-into nix-mode)
 
-    (:unbind "C-M-a" "C-M-e" "C-w")
+    (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
 
     ;; TODO: Bind commands
     ;;
@@ -6603,9 +6818,14 @@ Clean-up and Beautify the list of minor-modes.
 
 #+begin_src emacs-lisp
   (setup (:package rich-minority)
-    (:set rm-whitelist (rx (or "envrc"
-                               "OrgMemento"
-                               "Treefmt")))
+    (:set rm-whitelist (rx symbol-start
+                           (or "envrc"
+                               "TSit"
+                               "OClk"
+                               "Memento"
+                               "ga"
+                               "Treefmt")
+                           symbol-end))
     (:hook-into after-init-hook))
 #+end_src
 *** ruby-end
@@ -6892,7 +7112,7 @@ OCaml mode
 
 #+begin_src emacs-lisp
   (setup (:package tuareg)
-    (:nixpkgs "opam")
+    ;; (:nixpkgs "opam")
     (:mode-repl utop)
     (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"))
 #+end_src
@@ -6949,7 +7169,7 @@ Universal toplevel for OCaml
 
 #+begin_src emacs-lisp
   (setup (:package utop)
-    (:nixpkgs "ocamlPackages.utop")
+    ;; (:nixpkgs "ocamlPackages.utop")
     (:set utop-edit-command nil))
 #+end_src
 *** valign
@@ -7168,19 +7388,6 @@ ANSI, XTERM 256 and Truecolor support
 #+end_src
 
 This package is required by the configuration for buttercup now.
-*** yaml-mode                                          :major__mode:
-:PROPERTIES:
-:CREATED_TIME: [2022-03-07 Mon 16:07]
-:END:
-#+begin_quote
-Major mode for editing YAML files
-[[https://github.com/yoshiki/yaml-mode]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package yaml-mode)
-    (:file-match "\\.ya?ml\\'"))
-#+end_src
 *** z3-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
@@ -7544,17 +7751,17 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 231 |
+| [[org-ql-search:tags:packages][packages]]            | 229 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |  10 |
-| [[org-ql-search:tags:@extra][@extra]]              |  10 |
-| [[org-ql-search:tags:library][library]]             |   9 |
+| [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:VC][VC]]                  |   8 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |   7 |
+| [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
@@ -7595,6 +7802,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:secrets][secrets]]             |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
+| [[org-ql-search:tags:Elixir][Elixir]]              |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
 | [[org-ql-search:tags:copilot][copilot]]             |   1 |
@@ -7608,15 +7816,14 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
-| [[org-ql-search:tags:Lean4][Lean4]]               |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
-| [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:themes][themes]]              |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:Chinese][Chinese]]             |   1 |
+| [[org-ql-search:tags:Coq][Coq]]                 |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
 | [[org-ql-search:tags:terminal][terminal]]            |   1 |
@@ -7682,6 +7889,7 @@ To use these features, they need to be turned on at build time.
 | [[lean4-mode][lean4-mode]]   |      |
 | [[lsp-mode][lsp-mode]]     |      |
 | [[mermaid-mode][mermaid-mode]] |      |
+| [[Coq][Coq]]          |      |
 | [[tuareg][tuareg]]       |      |
 | [[utop][utop]]         |      |
 #+END:

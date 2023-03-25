@@ -98,6 +98,9 @@
 (defun akirak-org-dog-language-files ()
   (akirak-org-dog-context-files 'language t))
 
+(defun akirak-org-dog-org-tags-files ()
+  (akirak-org-dog-context-files 'org-tags t))
+
 ;;;; In-file capture functions
 
 ;;;###autoload

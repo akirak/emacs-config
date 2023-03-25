@@ -78,23 +78,36 @@
 ;;;###autoload
 (defun akirak-vterm-for-project (&optional arg)
   (interactive "P")
-  (let ((pr (project-current)))
-    (if-let (buffer (cond
-                     ((equal arg '(4))
-                      (thread-last
-                        (akirak-vterm--buffers)
-                        (mapcar #'buffer-name)
-                        (completing-read "Buffer: ")))
-                     (pr
-                      (car (akirak-vterm--project-buffers pr)))
-                     (t
-                      (car (akirak-vterm--buffers)))))
-        (pop-to-buffer buffer)
-      (if pr
-          (akirak-vterm (project-root pr)
-                        (akirak-vterm--project-buffer-name
-                         (project-root pr) ""))
-        (akirak-vterm)))))
+  (let* ((pr (project-current))
+         (buffer-or-name (cond
+                          ((equal arg '(4))
+                           (akirak-vterm--select-buffer))
+                          (pr
+                           (car (akirak-vterm--project-buffers pr)))
+                          (t
+                           (car (akirak-vterm--buffers))))))
+    (if (bufferp buffer-or-name)
+        (pop-to-buffer buffer-or-name)
+      (akirak-vterm (when pr
+                      (project-root pr))
+                    (generate-new-buffer-name
+                     (if pr
+                         (akirak-vterm--project-buffer-name
+                          (project-root pr)
+                          (or buffer-or-name ""))
+                       (if buffer-or-name
+                           (format "*vterm:%s*" buffer-or-name)
+                         "*vterm*")))))))
+
+(defun akirak-vterm--select-buffer ()
+  (let* ((buffers (thread-last
+                    (akirak-vterm--buffers)
+                    (mapcar #'buffer-name)))
+         (input (completing-read "Buffer: " buffers)))
+    (if-let (bufname (car (member input buffers)))
+        (get-buffer bufname)
+      (unless (string-empty-p input)
+        input))))
 
 ;;;###autoload
 (defun akirak-vterm-for-dir (&optional dir)

@@ -7,7 +7,7 @@
     stable.url = "github:NixOS/nixpkgs/nixos-22.11";
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     nix-filter.url = "github:numtide/nix-filter";
 
     flake-pins = {
@@ -49,61 +49,80 @@
   outputs = {
     self,
     nixpkgs,
-    flake-utils-plus,
+    flake-parts,
     utils,
     ...
-  } @ inputs: let
-    mkApp = utils.lib.mkApp;
-    homeProfiles = import ./home {inherit (nixpkgs) lib;};
+  } @ inputs:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = ["x86_64-linux"];
 
-    emacsOverlay = import ./emacs/overlay.nix {
-      inherit inputs;
-      emacsPackageForSystem = system:
-        (import inputs.flake-pins).packages.${system}.emacs-pgtk;
-    };
-  in
-    flake-utils-plus.lib.mkFlake {
-      inherit self inputs;
-
-      supportedSystems = ["x86_64-linux"];
-
-      sharedOverlays = [
-        inputs.my-overlay.overlays.default
-        inputs.flake-no-path.overlay
-        emacsOverlay
+      imports = [
+        inputs.flake-parts.flakeModules.easyOverlay
       ];
 
-      outputsBuilder = channels: let
-        inherit (channels.nixpkgs) emacs-config emacsSandboxed;
-      in {
-        packages = {
-          tryout-emacs = emacsSandboxed {
-            name = "tryout-emacs";
-            nativeCompileAheadDefault = false;
-            automaticNativeCompile = false;
-            enableOpinionatedSettings = false;
-            extraFeatures = [];
-            protectHome = false;
-            shareNet = false;
-            inheritPath = false;
-          };
+      flake = {
+        homeModules.twist = {
+          imports = [
+            inputs.twist.homeModules.emacs-twist
+            (import ./emacs/home-module.nix self.packages)
+          ];
+        };
+      };
 
-          inherit (channels.nixpkgs) readability-cli;
+      perSystem = {
+        config,
+        system,
+        pkgs,
+        final,
+        ...
+      }: let
+        inherit (final) emacs-config;
+      in {
+        overlayAttrs =
+          {
+            coq = inputs.unstable.legacyPackages.${final.system}.coq;
+            coq-lsp = inputs.unstable.legacyPackages.${final.system}.coqPackages.coq-lsp;
+            flake-no-path = inputs.flake-no-path.defaultPackage.${system};
+          }
+          // (
+            inputs.my-overlay.overlays.default final pkgs
+          )
+          // (
+            import ./emacs/overlay.nix {
+              inherit inputs;
+              emacsPackageForSystem = system:
+                (import inputs.flake-pins).packages.${system}.emacs-pgtk;
+            }
+            final
+            pkgs
+          );
+
+        packages = {
+          # tryout-emacs = emacsSandboxed {
+          #   name = "tryout-emacs";
+          #   nativeCompileAheadDefault = false;
+          #   automaticNativeCompile = false;
+          #   enableOpinionatedSettings = false;
+          #   extraFeatures = [];
+          #   protectHome = false;
+          #   shareNet = false;
+          #   inheritPath = false;
+          # };
 
           inherit emacs-config;
 
-          test-emacs-config = channels.nixpkgs.callPackage ./emacs/tests {};
+          # test-emacs-config = pkgs.callPackage ./emacs/tests {};
 
-          update-elisp = channels.nixpkgs.writeShellScriptBin "update-elisp" ''
+          update-elisp = pkgs.writeShellScriptBin "update-elisp" ''
             nix flake lock --update-input melpa --update-input gnu-elpa
             cd emacs/lock
             bash ./update.bash "$@"
           '';
 
-          update-elisp-lock = channels.nixpkgs.writeShellApplication {
+          update-elisp-lock = pkgs.writeShellApplication {
             name = "update-elisp-lock";
             runtimeInputs = [
-              channels.nixpkgs.deno
+              pkgs.deno
             ];
             text = ''
               cd emacs/lock
@@ -118,13 +137,12 @@
 
         # Set up a pre-commit hook by running `nix develop`.
         devShells = {
-          default = channels.nixpkgs.mkShell {
+          default = pkgs.mkShell {
             inherit
-              (inputs.pre-commit-hooks.lib.${channels.nixpkgs.system}.run {
+              (inputs.pre-commit-hooks.lib.${system}.run {
                 src = ./.;
                 hooks = import ./hooks.nix {
-                  pkgs = channels.nixpkgs;
-                  emacsBinaryPackage = "emacs-config.emacs";
+                  pkgs = final;
                 };
               })
               shellHook

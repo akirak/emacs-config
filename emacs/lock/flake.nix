@@ -22,14 +22,21 @@
     };
     akirak = {
       flake = false;
-      owner = "~akirak";
-      repo = "nix-config";
-      type = "sourcehut";
+      owner = "akirak";
+      repo = "emacs-config";
+      type = "github";
     };
     anzu = {
       flake = false;
       owner = "emacsorphanage";
       repo = "anzu";
+      type = "github";
+    };
+    apprentice = {
+      flake = false;
+      owner = "akirak";
+      ref = "prefix-map";
+      repo = "Apprentice";
       type = "github";
     };
     auto-yasnippet = {
@@ -104,12 +111,6 @@
       repo = "closql";
       type = "github";
     };
-    codeium = {
-      flake = false;
-      owner = "Exafunction";
-      repo = "codeium.el";
-      type = "github";
-    };
     company = {
       flake = false;
       owner = "company-mode";
@@ -120,6 +121,12 @@
       flake = false;
       owner = "company-mode";
       repo = "company-quickhelp";
+      type = "github";
+    };
+    compat = {
+      flake = false;
+      owner = "emacs-compat";
+      repo = "compat";
       type = "github";
     };
     consult = {
@@ -156,6 +163,12 @@
       flake = false;
       owner = "zerolfx";
       repo = "copilot.el";
+      type = "github";
+    };
+    corfu = {
+      flake = false;
+      owner = "minad";
+      repo = "corfu";
       type = "github";
     };
     dash = {
@@ -296,6 +309,13 @@
       repo = "embark";
       type = "github";
     };
+    ement = {
+      flake = false;
+      owner = "alphapapa";
+      ref = "stable";
+      repo = "ement.el";
+      type = "github";
+    };
     envrc = {
       flake = false;
       owner = "purcell";
@@ -336,6 +356,12 @@
       flake = false;
       owner = "tali713";
       repo = "esxml";
+      type = "github";
+    };
+    exec-path-from-shell = {
+      flake = false;
+      owner = "purcell";
+      repo = "exec-path-from-shell";
       type = "github";
     };
     "f" = {
@@ -453,16 +479,16 @@
       repo = "github-linguist.el";
       type = "github";
     };
-    go-mode = {
-      flake = false;
-      owner = "dominikh";
-      repo = "go-mode.el";
-      type = "github";
-    };
     go-translate = {
       flake = false;
       owner = "lorniu";
       repo = "go-translate";
+      type = "github";
+    };
+    gptel = {
+      flake = false;
+      owner = "karthink";
+      repo = "gptel";
       type = "github";
     };
     graphql-mode = {
@@ -555,6 +581,12 @@
       repo = "jsonian";
       type = "github";
     };
+    kind-icon = {
+      flake = false;
+      owner = "jdtsmith";
+      repo = "kind-icon";
+      type = "github";
+    };
     kv = {
       flake = false;
       owner = "nicferrier";
@@ -565,13 +597,6 @@
       flake = false;
       owner = "andreasjansson";
       repo = "language-detection.el";
-      type = "github";
-    };
-    lean4-mode = {
-      flake = false;
-      owner = "akirak";
-      ref = "develop";
-      repo = "lean4-mode";
       type = "github";
     };
     license-templates = {
@@ -664,12 +689,6 @@
       type = "git";
       url = "https://codeberg.org/martianh/mastodon.el.git";
     };
-    mermaid-mode = {
-      flake = false;
-      owner = "abrochard";
-      repo = "mermaid-mode";
-      type = "github";
-    };
     mini-modeline = {
       flake = false;
       owner = "kiennq";
@@ -698,12 +717,6 @@
       flake = false;
       owner = "wyuenho";
       repo = "move-dup";
-      type = "github";
-    };
-    nickel-mode = {
-      flake = false;
-      owner = "GTrunSec";
-      repo = "nickel-mode";
       type = "github";
     };
     nix-mode = {
@@ -742,12 +755,6 @@
       owner = "~akirak";
       repo = "oahu.el";
       type = "sourcehut";
-    };
-    ob-mermaid = {
-      flake = false;
-      owner = "arnm";
-      repo = "ob-mermaid";
-      type = "github";
     };
     ob-restclient = {
       flake = false;
@@ -955,6 +962,11 @@
       repo = "pcre2el";
       type = "github";
     };
+    persist = {
+      flake = false;
+      type = "git";
+      url = "https://gitlab.com/phillord/persist";
+    };
     pinyin = {
       flake = false;
       owner = "xuchunyang";
@@ -965,6 +977,12 @@
       flake = false;
       owner = "emacsorphanage";
       repo = "pkg-info";
+      type = "github";
+    };
+    plz = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "plz.el";
       type = "github";
     };
     popper = {
@@ -995,6 +1013,12 @@
       flake = false;
       owner = "chuntaro";
       repo = "emacs-promise";
+      type = "github";
+    };
+    proof-general = {
+      flake = false;
+      owner = "ProofGeneral";
+      repo = "PG";
       type = "github";
     };
     puni = {
@@ -1069,10 +1093,21 @@
       repo = "separedit.el";
       type = "github";
     };
+    setup = {
+      flake = false;
+      type = "git";
+      url = "https://git.sr.ht/~pkal/setup";
+    };
     shr-tag-pre-highlight = {
       flake = false;
       owner = "xuchunyang";
       repo = "shr-tag-pre-highlight.el";
+      type = "github";
+    };
+    spinner = {
+      flake = false;
+      owner = "Malabarba";
+      repo = "spinner.el";
       type = "github";
     };
     sqlformat = {
@@ -1105,6 +1140,12 @@
       repo = "svelte-mode";
       type = "github";
     };
+    svg-lib = {
+      flake = false;
+      owner = "rougier";
+      repo = "svg-lib";
+      type = "github";
+    };
     swiper = {
       flake = false;
       owner = "abo-abo";
@@ -1124,10 +1165,29 @@
       repo = "tagedit";
       type = "github";
     };
+    taxy = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "taxy.el";
+      type = "github";
+    };
+    taxy-magit-section = {
+      flake = false;
+      owner = "alphapapa";
+      ref = "package/taxy-magit-section";
+      repo = "taxy.el";
+      type = "github";
+    };
     titlecase = {
       flake = false;
       type = "git";
       url = "https://codeberg.org/acdw/titlecase.el.git";
+    };
+    tomelr = {
+      flake = false;
+      owner = "kaushalmodi";
+      repo = "tomelr";
+      type = "github";
     };
     treepy = {
       flake = false;
@@ -1151,6 +1211,18 @@
       flake = false;
       owner = "diml";
       repo = "utop";
+      type = "github";
+    };
+    valign = {
+      flake = false;
+      owner = "casouri";
+      repo = "valign";
+      type = "github";
+    };
+    vertico = {
+      flake = false;
+      owner = "minad";
+      repo = "vertico";
       type = "github";
     };
     visual-fill-column = {
@@ -1223,12 +1295,6 @@
       flake = false;
       owner = "zkry";
       repo = "yaml.el";
-      type = "github";
-    };
-    yaml-mode = {
-      flake = false;
-      owner = "yoshiki";
-      repo = "yaml-mode";
       type = "github";
     };
     yasnippet = {

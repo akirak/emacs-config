@@ -5,12 +5,12 @@
 ;;;; Generic setup command
 
 (defcustom akirak-puni-setup-alist
-  '(((elixir-mode elixir-ts-mode)
-     akirak-puni-elixir-setup)
-    ((tsx-mode js-jsx-mode tsx-ts-mode typescript-ts-mode)
+  '(((tsx-mode js-jsx-mode)
      akirak-puni-jsx-setup)
     ((svelte-mode)
-     akirak-puni-svelte-setup))
+     akirak-puni-svelte-setup)
+    ((elixir-mode)
+     akirak-puni-elixir-setup))
   ""
   :type '(alist :key-type (repeat symbol)
                 :value-type (cons function (cons nil))))

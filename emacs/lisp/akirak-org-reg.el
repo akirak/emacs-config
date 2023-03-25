@@ -3,12 +3,27 @@
 (require 'org)
 (require 'org-capture)
 (require 'transient)
+(require 'akirak-transient)
 
 (defcustom akirak-org-reg-action-fn #'akirak-embark-on-org-headline
-  "Function called on an Org marker."
+  "Default function called on an Org marker."
   :type 'function)
 
+(defcustom akirak-org-reg-action-fn-alist
+  '(("item" .  akirak-embark-on-org-item))
+  "Function called on an Org marker."
+  :type '(alist :key-type string :value-type function))
+
 ;;;; Infixes
+
+(defvar akirak-org-reg-target-type nil)
+
+(transient-define-infix akirak-org-reg-switch-target ()
+  :description "Change target type"
+  :class 'akirak-transient-choice-variable
+  :choices '("item"
+             "heading")
+  :variable 'akirak-org-reg-target-type)
 
 (defclass akirak-org-reg-action (transient-variable)
   ((function-symbol :initarg :function-symbol)
@@ -65,13 +80,14 @@
                                       'face 'font-lock-doc-face))))))
 
 (defun akirak-org-reg--format-marker (marker)
-  (when (and (markerp marker)
-             (buffer-live-p (marker-buffer marker)))
-    (format "\"%s\" in %s"
-            (org-with-point-at marker
-              (and (looking-at org-complex-heading-regexp)
-                   (org-link-display-format (match-string-no-properties 4))))
-            (buffer-name (marker-buffer marker)))))
+  (if (and (markerp marker)
+           (buffer-live-p (marker-buffer marker)))
+      (format "\"%s\" in %s"
+              (org-with-point-at marker
+                (and (looking-at org-complex-heading-regexp)
+                     (org-link-display-format (match-string-no-properties 4))))
+              (buffer-name (marker-buffer marker)))
+    "(buffer not live)"))
 
 ;;;;; Concrete marker class
 
@@ -161,6 +177,7 @@
 ;;;###autoload (autoload 'akirak-org-reg-transient "akirak-org-reg" nil 'interactive)
 (transient-define-prefix akirak-org-reg-transient ()
   "Dispatch an action on a place."
+  [("-t" akirak-org-reg-switch-target)]
   ["Dynamic"
    ("j" akirak-org-reg-dispatch-on-clock
     :transient nil)
@@ -176,7 +193,10 @@
 (defun akirak-org-reg-dispatch (target)
   (cl-etypecase target
     (symbol (akirak-org-reg-dispatch (symbol-value target)))
-    (marker (funcall akirak-org-reg-action-fn target))))
+    (marker
+     (if-let (fn (cdr (assoc akirak-org-reg-target-type akirak-org-reg-action-fn-alist)))
+         (funcall fn target)
+       (funcall akirak-org-reg-action-fn target)))))
 
 (provide 'akirak-org-reg)
 ;;; akirak-org-reg.el ends here

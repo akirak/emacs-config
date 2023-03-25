@@ -8,6 +8,9 @@
 (cl-defstruct akirak-snippet-entry
   name filename language description args body olp)
 
+(cl-defstruct akirak-snippet-prompt-entry
+  prompt filename)
+
 (defcustom akirak-snippet-capture-target
   #'akirak-snippet-select-location
   ""
@@ -32,7 +35,11 @@ This is also useful for completion.")
   (let* ((entries (akirak-snippet--search))
          (name (completing-read "Snippet: " #'akirak-snippet--completions)))
     (when-let (entry (cdr (assoc name entries)))
-      (akirak-snippet--expand entry))))
+      (cl-etypecase entry
+        (akirak-snippet-entry
+         (akirak-snippet--expand entry))
+        (akirak-snippet-prompt-entry
+         (akirak-snippet--run-prompt entry))))))
 
 (defun akirak-snippet--completions (string pred action)
   (if (eq action 'metadata)
@@ -43,19 +50,23 @@ This is also useful for completion.")
 
 (defun akirak-snippet--annotator (name)
   (when-let (entry (cdr (assoc name (cdr akirak-snippet-entries-with-context))))
-    (let ((description (akirak-snippet-entry-description entry))
-          (olp (akirak-snippet--filter-olp (akirak-snippet-entry-olp entry))))
-      (when (or description olp)
-        (concat " "
-                (when description
-                  (propertize description 'face 'font-lock-comment-face))
-                (when olp
-                  (propertize (format " (%s)"
-                                      (thread-first
-                                        olp
-                                        (nreverse)
-                                        (org-format-outline-path nil nil " < ")))
-                              'face 'font-lock-comment-face)))))))
+    (cl-etypecase entry
+      (akirak-snippet-entry
+       (let ((description (akirak-snippet-entry-description entry))
+             (olp (akirak-snippet--filter-olp (akirak-snippet-entry-olp entry))))
+         (when (or description olp)
+           (concat " "
+                   (when description
+                     (propertize description 'face 'font-lock-comment-face))
+                   (when olp
+                     (propertize (format " (%s)"
+                                         (thread-first
+                                           olp
+                                           (nreverse)
+                                           (org-format-outline-path nil nil " < ")))
+                                 'face 'font-lock-comment-face))))))
+      (akirak-snippet-prompt-entry
+       " (prompt)"))))
 
 (defun akirak-snippet--filter-olp (olp)
   (cl-remove-if (lambda (s)
@@ -63,17 +74,23 @@ This is also useful for completion.")
                 olp))
 
 (defun akirak-snippet--group (completion transform)
-  (let ((filename (thread-last
-                    (cdr (assoc completion (cdr akirak-snippet-entries-with-context)))
-                    (akirak-snippet-entry-filename)
-                    (file-name-nondirectory))))
-    (if transform
-        completion
-      filename)))
+  (when-let (entry (cdr (assoc completion (cdr akirak-snippet-entries-with-context))))
+    (let ((filename (thread-last
+                      (cl-etypecase entry
+                        (akirak-snippet-entry (akirak-snippet-entry-filename entry))
+                        (akirak-snippet-prompt-entry (akirak-snippet-prompt-entry-filename entry)))
+                      (file-name-nondirectory))))
+      (if transform
+          completion
+        filename))))
 
 (defun akirak-snippet--org-files ()
-  (append (akirak-org-dog-path-files)
-          (akirak-org-dog-major-mode-files)))
+  (seq-uniq (append (akirak-org-dog-path-files)
+                    (akirak-org-dog-major-mode-files)
+                    (when (derived-mode-p 'text-mode)
+                      (akirak-org-dog-language-files))
+                    (akirak-org-dog-org-tags-files))
+            #'string-equal))
 
 (defun akirak-snippet--search ()
   (if-let (files (akirak-snippet--org-files))
@@ -116,6 +133,13 @@ This is also useful for completion.")
       (when (and post (listp post))
         (eval post)))))
 
+(defun akirak-snippet--run-prompt (prompt-entry)
+  (unless (thing-at-point-looking-at (rx bol (* blank) eol))
+    (open-line 1))
+  (comment-dwim nil)
+  (insert (akirak-snippet-prompt-entry-prompt prompt-entry))
+  (gptel-send))
+
 (defun akirak-snippet-reload ()
   "Reload snippets from the current file."
   (interactive)
@@ -141,21 +165,23 @@ This is also useful for completion.")
       (setq result
             (thread-last
               (org-ql-select file
-                '(tags "@snippet")
+                '(tags "@snippet" "@input" "@prompt")
                 :action
-                `(org-with-wide-buffer
-                  (narrow-to-region (point) (org-entry-end-position))
-                  (org-match-line org-complex-heading-regexp)
-                  (let ((name (match-string-no-properties 4))
-                        description)
-                    (org-end-of-meta-data t)
-                    (org-skip-whitespace)
-                    (unless (or (org-at-keyword-p)
-                                (org-at-block-p))
-                      (setq description (thing-at-point 'sentence t)))
-                    (akirak-snippet--next-block :file ,file
-                                                :name name
-                                                :description description))))
+                `(if (member "@prompt" (org-get-tags nil 'local))
+                     (akirak-snippet--load-prompt :file ,file)
+                   (org-with-wide-buffer
+                    (narrow-to-region (point) (org-entry-end-position))
+                    (org-match-line org-complex-heading-regexp)
+                    (let ((name (match-string-no-properties 4))
+                          description)
+                      (org-end-of-meta-data t)
+                      (org-skip-whitespace)
+                      (unless (or (org-at-keyword-p)
+                                  (org-at-block-p))
+                        (setq description (thing-at-point 'sentence t)))
+                      (akirak-snippet--next-block :file ,file
+                                                  :name name
+                                                  :description description)))))
               (delq nil)))
       (puthash file result akirak-snippet-file-cache))
     result))
@@ -191,6 +217,13 @@ This is also useful for completion.")
                  name)
        :args args
        :body body))))
+
+(cl-defun akirak-snippet--load-prompt (&key file)
+  (org-match-line org-complex-heading-regexp)
+  (let ((prompt (match-string-no-properties 4)))
+    (make-akirak-snippet-prompt-entry
+     :filename file
+     :prompt prompt)))
 
 (defun akirak-snippet--substring (string start end)
   (if (> (length string) end)
