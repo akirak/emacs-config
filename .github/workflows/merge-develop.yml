@@ -1,0 +1,22 @@
+name: Post-merge tasks
+
+on:
+  pull_request:
+    types:
+    - closed
+    branches:
+    - develop
+
+jobs:
+  update_develop:
+    if: |
+      github.event.pull_request.merged == true &&
+      github.base_ref == 'master' &&
+      github.event.pull_request.head.repo.owner == github.event.pull_request.base.repo.owner
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: master
+    - run: git switch -c develop HEAD
+    - run: git push origin HEAD --force-with-lease
