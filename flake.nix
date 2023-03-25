@@ -113,12 +113,6 @@
 
           # test-emacs-config = pkgs.callPackage ./emacs/tests {};
 
-          update-elisp = pkgs.writeShellScriptBin "update-elisp" ''
-            nix flake lock --update-input melpa --update-input gnu-elpa
-            cd emacs/lock
-            bash ./update.bash "$@"
-          '';
-
           update-elisp-lock = pkgs.writeShellApplication {
             name = "update-elisp-lock";
             runtimeInputs = [
