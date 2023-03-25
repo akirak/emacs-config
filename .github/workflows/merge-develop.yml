@@ -20,3 +20,8 @@ jobs:
         ref: master
     - run: git switch -c develop HEAD
     - run: git push origin HEAD --force-with-lease
+
+  update_packages:
+    needs: update_develop
+    runs-on: ubuntu-latest
+    uses: ./.github/workflows/update-elisp.yml
