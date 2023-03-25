@@ -346,12 +346,6 @@
       repo = "otp";
       type = "github";
     };
-    eros = {
-      flake = false;
-      owner = "xiongtx";
-      repo = "eros";
-      type = "github";
-    };
     esxml = {
       flake = false;
       owner = "tali713";
@@ -634,12 +628,6 @@
       flake = false;
       owner = "abo-abo";
       repo = "hydra";
-      type = "github";
-    };
-    macrostep = {
-      flake = false;
-      owner = "emacsorphanage";
-      repo = "macrostep";
       type = "github";
     };
     magit = {
