@@ -4971,7 +4971,7 @@ Major modes for editing and running Erlang
 #+begin_src emacs-lisp
 (setup (:package erlang))
 #+end_src
-*** eros                                   :Emacs__Lisp:development:
+*** COMMENT eros                                       :Emacs__Lisp:development:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:05]
 :END:
@@ -5928,7 +5928,7 @@ LSP mode
   (put 'lsp-define-conditional-key 'lisp-indent-function 'defun)
   (put 'lsp-with-filename 'lisp-indent-function 1)
 #+end_src
-*** macrostep                               :emacs_lisp:development:
+*** COMMENT macrostep                                   :emacs_lisp:development:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:52]
 :END:
