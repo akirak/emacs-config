@@ -387,22 +387,19 @@ This function returns the current buffer."
             (delete-blank-lines)
             (newline))
           capture-buffer)
-      (with-current-buffer (marker-buffer org-clock-marker)
-        (let ((initial-position (point)))
-          (goto-char org-clock-marker)
-          (with-current-buffer (org-dog-indirect-buffer)
-            (when (or (< (point) (point-min))
-                      (> (point) (point-max)))
-              (goto-char (point-min)))
-            (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer))
-            (when org-dog-new-indirect-buffer-p
-              (org-back-to-heading)
-              (run-hooks 'akirak-org-clock-open-hook))
-            (when arg
-              (goto-char (org-entry-end-position))
-              (delete-blank-lines)
-              (newline))
-            (current-buffer)))))))
+      (with-current-buffer (org-dog-indirect-buffer org-clock-marker)
+        (when (or (< (point) (point-min))
+                  (> (point) (point-max)))
+          (goto-char (point-min)))
+        (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer))
+        (when org-dog-new-indirect-buffer-p
+          (org-back-to-heading)
+          (run-hooks 'akirak-org-clock-open-hook))
+        (when arg
+          (goto-char (org-entry-end-position))
+          (delete-blank-lines)
+          (newline))
+        (current-buffer)))))
 
 ;;;###autoload
 (defun akirak-org-clock-goto ()
