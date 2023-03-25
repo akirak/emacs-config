@@ -31,6 +31,7 @@ Each function is run without an argument in the new working tree."
                                                                 remote
                                                                 (or default "master"))))
        (origin-name (akirak-magit--repo-name (car (akirak-magit--remote-url remote))))
+       (direnv-allowed (akirak-magit--direnv-allowed-p))
        (name (concat origin-name akirak-magit-branch-delim branch))
        (category (akirak-git-clone--clock-category))
        (parent (or (when category
@@ -41,6 +42,9 @@ Each function is run without an argument in the new working tree."
     (magit-worktree-branch (concat (file-name-as-directory (or parent "~/work2/"))
                                    name)
                            branch start-point)
+    (when (and direnv-allowed
+               (fboundp 'envrc-allow))
+      (envrc-allow))
     (run-hooks 'akirak-magit-worktree-hook)))
 
 (defun akirak-magit--remote-url (remote)
@@ -51,6 +55,17 @@ Each function is run without an argument in the new working tree."
                     git-url)
       (match-string 1 git-url)
     (error "Failed to parse the repository name from %s" git-url)))
+
+(defun akirak-magit--direnv-allowed-p ()
+  "Return non-nil if the working tree has .envrc and direnv is allowed."
+  (magit-with-toplevel
+    (and (file-exists-p ".envrc")
+         (with-temp-buffer
+           (call-process "direnv" nil (list t nil) nil
+                         "status")
+           (goto-char (point-min))
+           (search-forward "Found RC allowed true" nil t))
+         t)))
 
 (provide 'akirak-magit)
 ;;; akirak-magit.el ends here
