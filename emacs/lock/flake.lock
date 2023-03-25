@@ -915,22 +915,6 @@
         "type": "github"
       }
     },
-    "eros": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1523773120,
-        "narHash": "sha256-czxuMkILuWijSBdl6qFEcTkYTQSSn61FfJ5wCtSQkCE=",
-        "owner": "xiongtx",
-        "repo": "eros",
-        "rev": "dd8910279226259e100dab798b073a52f9b4233a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "xiongtx",
-        "repo": "eros",
-        "type": "github"
-      }
-    },
     "esxml": {
       "flake": false,
       "locked": {
@@ -1685,22 +1669,6 @@
         "type": "github"
       }
     },
-    "macrostep": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1666792071,
-        "narHash": "sha256-cHjrSCnv2fs1ERnIxGkXSc9+hEYuQkbAk6TofrnsC9Y=",
-        "owner": "emacsorphanage",
-        "repo": "macrostep",
-        "rev": "75ecd041219239f0dceab4883594ea2fe366b484",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacsorphanage",
-        "repo": "macrostep",
-        "type": "github"
-      }
-    },
     "magit": {
       "flake": false,
       "locked": {
@@ -2123,11 +2091,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1679578333,
-        "narHash": "sha256-3t0oMo9dLserxNVd0AR8tfMEfxlJeAvDgQvURGQH7WU=",
+        "lastModified": 1679776661,
+        "narHash": "sha256-iURyopvlb6umE7tsjdzPTrxnocV8xVacZ8m5KNcbefY=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "844326d88bc5e78ab479e82d4ec463b068bd1308",
+        "rev": "17559c4f642ef12637d938276d735b0eb537e060",
         "type": "github"
       },
       "original": {
@@ -2905,7 +2873,6 @@
         "epkg-marginalia": "epkg-marginalia",
         "epl": "epl",
         "erlang": "erlang",
-        "eros": "eros",
         "esxml": "esxml",
         "exec-path-from-shell": "exec-path-from-shell",
         "f": "f",
@@ -2953,7 +2920,6 @@
         "llama": "llama",
         "lsp-mode": "lsp-mode",
         "lv": "lv",
-        "macrostep": "macrostep",
         "magit": "magit",
         "magit-delta": "magit-delta",
         "magit-nix3": "magit-nix3",
