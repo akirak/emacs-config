@@ -83,11 +83,11 @@
     "apprentice": {
       "flake": false,
       "locked": {
-        "lastModified": 1679125401,
-        "narHash": "sha256-Gb1Owj4FyI+a0RimFILPW3bVTRUFV5wtYvcZMWi9w1Y=",
+        "lastModified": 1680175992,
+        "narHash": "sha256-RZOpfONDon2ILdg8UfUkuTiuFU1ZyDxYYICQnAmPlgo=",
         "owner": "akirak",
         "repo": "Apprentice",
-        "rev": "1f0f82e200cca51ba2eb2a862d3b14cdb07adfdf",
+        "rev": "1e390c56fe4bb11973afe0c8fdd9b10c2f806534",
         "type": "github"
       },
       "original": {
@@ -1733,22 +1733,6 @@
         "type": "github"
       }
     },
-    "magit-todos": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1677029552,
-        "narHash": "sha256-t4TjuXEn6UqiscuZmeRG8NRVgoGfs0RSmtGBFMepvto=",
-        "owner": "alphapapa",
-        "repo": "magit-todos",
-        "rev": "c6f3fd03aa5b750636c2647253f21cc03329566c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "alphapapa",
-        "repo": "magit-todos",
-        "type": "github"
-      }
-    },
     "marginalia": {
       "flake": false,
       "locked": {
@@ -1912,11 +1896,11 @@
     "nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1679553481,
-        "narHash": "sha256-vW+vEnYwgE/QkzRx4KIy0G2jIupV1BXlq48UUm5vcAE=",
+        "lastModified": 1680115135,
+        "narHash": "sha256-Jf+PsLNFiqedF/LMWLXrXM4Z8zWa40tUvohWOsXFpgo=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "cf3bd335dfa703f1a8444aa81825a77b9032a91b",
+        "rev": "cc2535a7957ef4e533dfeee1b398cfcc4eed25e4",
         "type": "github"
       },
       "original": {
@@ -1961,11 +1945,11 @@
     "oahu-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1678164647,
-        "narHash": "sha256-AnGsRIPgkP96u8VkZjg1/7KfCvdvxBK58YTbBWHl+jw=",
+        "lastModified": 1679814662,
+        "narHash": "sha256-0czbo2qkANXTU0bzGb0me3kdldJKfcOJb5fqK9eZjY0=",
         "owner": "~akirak",
         "repo": "oahu.el",
-        "rev": "63743485c96b6bcaba97bd2008eb5d796d4da7ab",
+        "rev": "7c643fe5971da6ab61b51405e7a53712821bc720",
         "type": "sourcehut"
       },
       "original": {
@@ -1993,11 +1977,11 @@
     "octopus": {
       "flake": false,
       "locked": {
-        "lastModified": 1679578333,
-        "narHash": "sha256-3t0oMo9dLserxNVd0AR8tfMEfxlJeAvDgQvURGQH7WU=",
+        "lastModified": 1680069933,
+        "narHash": "sha256-ddrfPfehPSEutJJKSYuhIFnOmqj2NI0QfUZgSKtvzw0=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "844326d88bc5e78ab479e82d4ec463b068bd1308",
+        "rev": "eeb0963bafb242da0b7e8e183f54c9220995db86",
         "type": "github"
       },
       "original": {
@@ -2091,11 +2075,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1679776661,
-        "narHash": "sha256-iURyopvlb6umE7tsjdzPTrxnocV8xVacZ8m5KNcbefY=",
+        "lastModified": 1680111855,
+        "narHash": "sha256-nmqS4x2w/ym7NB8WgaC8DvPl4vVceJbdmitT+wfhdGc=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "17559c4f642ef12637d938276d735b0eb537e060",
+        "rev": "9992cf5ea090ecb52a370cf444e033f4017c40bd",
         "type": "github"
       },
       "original": {
@@ -2208,11 +2192,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1679732339,
-        "narHash": "sha256-ta4+ZVwNHjuBkEPnrRHAGO7tTwhO8r3Iwz4iKXvVeP8=",
+        "lastModified": 1679825601,
+        "narHash": "sha256-D7lcnDZmrLi0HztPvRKDRd9doOUuggVVnrhKNPcTsKc=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "80f91159bf6d2715d5403cd9504ea2c7b6693862",
+        "rev": "3abca229897d05210bd98858481edaa7eb8b7f1e",
         "type": "github"
       },
       "original": {
@@ -2491,22 +2475,6 @@
       "original": {
         "owner": "cute-jumper",
         "repo": "parsec.el",
-        "type": "github"
-      }
-    },
-    "pcre2el": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1479675834,
-        "narHash": "sha256-P0TvERZZx8aqucnM8K2PHcaIudYacyHQDx2jEZoyeZE=",
-        "owner": "joddie",
-        "repo": "pcre2el",
-        "rev": "0b5b2a2c173aab3fd14aac6cf5e90ad3bf58fa7d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "joddie",
-        "repo": "pcre2el",
         "type": "github"
       }
     },
@@ -2924,7 +2892,6 @@
         "magit-delta": "magit-delta",
         "magit-nix3": "magit-nix3",
         "magit-section": "magit-section",
-        "magit-todos": "magit-todos",
         "marginalia": "marginalia",
         "markdown-mode": "markdown-mode",
         "mastodon": "mastodon",
@@ -2971,7 +2938,6 @@
         "package-lint": "package-lint",
         "page-break-lines": "page-break-lines",
         "parsec": "parsec",
-        "pcre2el": "pcre2el",
         "persist": "persist",
         "pinyin": "pinyin",
         "pkg-info": "pkg-info",

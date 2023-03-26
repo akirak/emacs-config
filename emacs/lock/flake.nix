@@ -654,12 +654,6 @@
       repo = "magit";
       type = "github";
     };
-    magit-todos = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "magit-todos";
-      type = "github";
-    };
     marginalia = {
       flake = false;
       owner = "minad";
@@ -942,12 +936,6 @@
       flake = false;
       owner = "cute-jumper";
       repo = "parsec.el";
-      type = "github";
-    };
-    pcre2el = {
-      flake = false;
-      owner = "joddie";
-      repo = "pcre2el";
       type = "github";
     };
     persist = {
