@@ -860,7 +860,22 @@ The built-in =electric= package provides the following modes:
           version-control t
           view-read-only t
           auto-mode-case-fold nil
-          large-file-warning-threshold (* 1024 1024))
+          large-file-warning-threshold (* 1024 1024)
+          find-sibling-rules
+          `((,(rx "lib/" (group (+ anything)) ".ex" (?  "s") eos)
+             "test/\\1_test.ex"
+             "test/\\1_test.exs")
+            (,(rx "test/" (group (+ anything)) "_test.ex" (?  "s") eos)
+             "lib/\\1.ex"
+             "lib/\\1.exs")
+            (,(rx "/__tests__/" (group (+ (not (any "/")))) ".ts" (?  "x") eos)
+             "/\\1.ts"
+             "/\\1.tsx")
+            (,(rx "/" (group (+ (not (any "/")))) ".ts" (?  "x") eos)
+             "/__tests__/\\1.ts"
+             "/__tests__/\\1.tsx")))
+
+    (:global "<f7>" #'find-sibling-file)
 
     (advice-add 'abort-if-file-too-large
                 :before-while
