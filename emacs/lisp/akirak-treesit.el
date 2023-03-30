@@ -160,7 +160,8 @@
                   (kill-region (point) (treesit-node-end (car (last nodes
                                                                     (when inside-bracket
                                                                       2)))))
-                (error "Empty nodes")))
+                ;; No node to delete, fallback to the default behavior
+                (kill-line)))
           (kill-region (point) (treesit-node-end node)))))))
 
 (provide 'akirak-treesit)
