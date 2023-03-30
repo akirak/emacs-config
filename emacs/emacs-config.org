@@ -3399,8 +3399,14 @@ Major mode for Elixir with tree-sitter support
                   ""
                   > "fn " - " ->" n
                   > @ _ n
+                  > -2 "end"))
+      (define-abbrev elixir-ts-mode-abbrev-table
+        "do" "" (define-skeleton akirak-elixir-fn
+                  "do ... end"
+                  ""
+                  > "do" n
+                  > @ _ n
                   > -2 "end")))
-
 
     (:compilation-error
      ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
