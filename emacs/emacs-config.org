@@ -1031,6 +1031,15 @@ The built-in =electric= package provides the following modes:
     (dolist (mode-hook '(makefile-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
 #+end_src
+*** isearch
+:PROPERTIES:
+:CREATED_TIME: [2023-03-30 Thu 21:42]
+:END:
+
+#+begin_src emacs-lisp
+  (setup isearch
+    (:bind "M-q" #'isearch-query-replace))
+#+end_src
 *** jit-lock
 #+begin_src emacs-lisp
   (setup jit-lock
@@ -4240,11 +4249,7 @@ Consulting completing-read
              [remap bookmark-jump] #'consult-bookmark
              [remap yank-pop] #'consult-yank-pop
              "M-s o" #'consult-outline
-             ;; Remap `isearch-forward' that is bound to C-s. `isearch-forward' is
-             ;; bound to "s" in `View-mode-map', but don't remap it.
-             ;; `isearch-backward' is still bound to C-r, so you can use it to
-             ;; dispatch the built-in isearch.
-             "C-s" #'consult-line
+             "C-S-s" #'consult-line
              "C-c f" #'consult-focus-lines
              "C-x /" #'consult-ripgrep)
 
