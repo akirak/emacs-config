@@ -143,9 +143,17 @@
                   --gc-roots-dir gcroot \
                   --flake "$flake" \
                   | while read -r line; do
-                  drv=$(jq -r .drvPath <(echo "$line"))
-                  echo "Building $drv"
-                  time nix build "$drv" --derivation --no-link --print-build-logs
+                  out=$(jq -r .outputs.out <<<"$line")
+                  if [[ $(nix path-info "$out" --json --store https://akirak.cachix.org \
+                     2> /dev/null \
+                     | jq '.[0].valid') = false ]]
+                  then
+                    drv=$(jq -r .drvPath <<<"$line")
+                    echo "Building $drv"
+                    time nix build "$drv" --derivation --no-link --print-build-logs
+                  else
+                    echo "$out is already built, skipping"
+                  fi
               done
             '';
           };
