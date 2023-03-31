@@ -28,7 +28,8 @@ jobs:
 
     - run: nix build .#emacs-config.depsCheck --print-build-logs
 
-    - run: nix build .#emacs-config --print-build-logs
+    - name: Build packages
+      run: nix run .#build-packages
 
   deploy:
     if: ${{ github.ref_name == 'develop' }}
