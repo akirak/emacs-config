@@ -1524,6 +1524,22 @@
         "type": "github"
       }
     },
+    "keycast": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1676232985,
+        "narHash": "sha256-AHM/zJ1ohpyzHpIu1lJFr2IyQo3xQFWSiZP5sUc8eH8=",
+        "owner": "tarsius",
+        "repo": "keycast",
+        "rev": "cabb3fac1ccf2980ff3bcdbc1648d2a15ebe7cb1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tarsius",
+        "repo": "keycast",
+        "type": "github"
+      }
+    },
     "kind-icon": {
       "flake": false,
       "locked": {
@@ -1896,11 +1912,11 @@
     "nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1680115135,
-        "narHash": "sha256-Jf+PsLNFiqedF/LMWLXrXM4Z8zWa40tUvohWOsXFpgo=",
+        "lastModified": 1680277379,
+        "narHash": "sha256-QopGkAefljm+JvS2WgsF6rpUZl58xVWckOhbMFjfFck=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "cc2535a7957ef4e533dfeee1b398cfcc4eed25e4",
+        "rev": "0d1364df6ca6598b60e313df3da403e4648cff62",
         "type": "github"
       },
       "original": {
@@ -2879,6 +2895,7 @@
         "ivy": "ivy",
         "jq-mode": "jq-mode",
         "jsonian": "jsonian",
+        "keycast": "keycast",
         "kind-icon": "kind-icon",
         "kv": "kv",
         "language-detection": "language-detection",

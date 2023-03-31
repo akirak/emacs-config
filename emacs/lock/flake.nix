@@ -575,6 +575,12 @@
       repo = "jsonian";
       type = "github";
     };
+    keycast = {
+      flake = false;
+      owner = "tarsius";
+      repo = "keycast";
+      type = "github";
+    };
     kind-icon = {
       flake = false;
       owner = "jdtsmith";
