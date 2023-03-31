@@ -5798,6 +5798,15 @@ Major mode for editing JSON files.
   (setup (:package json-mode)
     (:file-match "\\.json\\'" "\\.lock\\'"))
 #+end_src
+*** keycast
+:PROPERTIES:
+:CREATED_TIME: [2023-03-31 Fri 23:59]
+:ID:       2c1614dd-a2e5-4815-96dd-10b090cddcf4
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package keycast))
+#+end_src
 *** kind-icon                                                   :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:22]
