@@ -30,9 +30,3 @@ jobs:
 
     - name: Build packages
       run: nix run .#build-packages
-
-  deploy:
-    if: ${{ github.ref_name == 'develop' }}
-    needs: build
-    uses: ./.github/workflows/dispatch.yml
-    secrets: inherit
