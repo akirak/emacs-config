@@ -30,9 +30,9 @@
     buildInputs = old.buildInputs ++ [pkgs.git];
   });
 
-  code-review = esuper.code-review.overrideAttrs (old: {
-    buildInputs = old.buildInputs ++ [pkgs.git];
-  });
+  # code-review = esuper.code-review.overrideAttrs (old: {
+  #   buildInputs = old.buildInputs ++ [pkgs.git];
+  # });
 
   vterm = esuper.vterm.overrideAttrs (old: {
     # Based on the configuration in nixpkgs available at the following URL:
