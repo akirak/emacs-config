@@ -7505,16 +7505,17 @@ Define how Org entries are displayed by certain commands.
             (org-show-children)
             (akirak/org-recenter-toplevel-at-top))))))
 
-  (setq org-ql-find-goto-hook #'akirak/org-goto-narrow-hook)
+  (setq org-ql-find-goto-hook #'akirak/org-goto-indirect-hook)
   (setq org-placeholder-find-hook #'akirak/org-goto-indirect-hook)
 
   (defun akirak/org-recenter-toplevel-at-top ()
     (unless (org-before-first-heading-p)
-      (save-excursion
-        (let ((regexp (rx bol "*" blank)))
-          (when (or (looking-at regexp)
-                    (re-search-backward regexp nil t))
-            (recenter-top-bottom 0))))))
+      ;; (save-excursion
+      ;;   (let ((regexp (rx bol "*" blank)))
+      ;;     (when (or (looking-at regexp)
+      ;;               (re-search-backward regexp nil t))
+      ;;       (recenter-top-bottom 0))))
+      (recenter-top-bottom 0)))
 
   (setq akirak-org-clock-open-hook '(org-show-entry
                                      org-show-children))
