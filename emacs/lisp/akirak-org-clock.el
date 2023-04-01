@@ -253,12 +253,15 @@
        (org-clock-clock-in (list marker))))))
 
 ;;;###autoload
-(defun akirak-org-clock-snooze ()
-  (interactive)
-  (setq akirak-org-clock-snooze-until
-        (+ (float-time) akirak-org-clock-snooze-duration))
-  (message "Snoozing org clock mode for %s seconds" akirak-org-clock-snooze-duration)
-  (add-hook 'org-clock-in #'akiraik-org-clock-stop-snoozing))
+(defun akirak-org-clock-snooze (&optional seconds)
+  (interactive "P")
+  (let ((seconds (or (when (numberp seconds)
+                       seconds)
+                     akirak-org-clock-snooze-duration)))
+    (setq akirak-org-clock-snooze-until
+          (+ (float-time) seconds))
+    (message "Snoozing org clock mode for %s seconds" seconds)
+    (add-hook 'org-clock-in #'akiraik-org-clock-stop-snoozing)))
 
 (defun akiraik-org-clock-stop-snoozing ()
   (setq akirak-org-clock-snooze-until nil))
