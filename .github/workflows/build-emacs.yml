@@ -8,12 +8,16 @@ on:
     branches-ignore:
     - master
   workflow_dispatch:
+  repository_dispatch:
+    types: [rebuild]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event_name == 'repository_dispatch' && 'develop' }}
 
     - uses: cachix/install-nix-action@v20
       with:
@@ -27,6 +31,16 @@ jobs:
         pushFilter: '-source$'
 
     - run: nix build .#emacs-config.depsCheck --print-build-logs
+    # repository_dispatch should be used to rebuild the Emacs with different
+    # inputs to the root flake, so it shouldn't affect the dependencies between
+    # Emacs Lisp packages. Thus this step can be skipped.
+      if: ${{ github.event_name != 'repository_dispatch' }}
 
     - name: Build packages
-      run: nix run .#build-packages
+      run: |
+        nix run .#build-packages --inputs-from $pins
+      env:
+      # Allow building packages against different flake inputs by passing a
+      # client payload via repository_dispatch event.
+        pins:
+          ${{ github.event.client_payload.flake_inputs_from || 'github:akirak/flake-pins' }}
