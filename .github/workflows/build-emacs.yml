@@ -5,6 +5,8 @@ on:
     paths:
     - 'emacs/**'
     - 'flake.*'
+    branches-ignore:
+    - master
   workflow_dispatch:
 
 jobs:
@@ -26,10 +28,5 @@ jobs:
 
     - run: nix build .#emacs-config.depsCheck --print-build-logs
 
-    - run: nix build .#emacs-config --print-build-logs
-
-  deploy:
-    if: ${{ github.ref_name == 'develop' }}
-    needs: build
-    uses: ./.github/workflows/dispatch.yml
-    secrets: inherit
+    - name: Build packages
+      run: nix run .#build-packages

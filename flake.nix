@@ -129,6 +129,34 @@
               deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
             '';
           };
+
+          build-packages = pkgs.writeShellApplication {
+            name = "build-packages";
+            runtimeInputs = [
+              pkgs.nix-eval-jobs
+              pkgs.jq
+            ];
+            text = ''
+              system=$(nix eval --expr builtins.currentSystem --impure --raw)
+              flake="path:$(readlink -f "$PWD")#packages.$system.emacs-config.elispPackages"
+              nix-eval-jobs \
+                  --gc-roots-dir gcroot \
+                  --flake "$flake" \
+                  | while read -r line; do
+                  out=$(jq -r .outputs.out <<<"$line")
+                  if [[ $(nix path-info "$out" --json --store https://akirak.cachix.org \
+                     2> /dev/null \
+                     | jq '.[0].valid') = false ]]
+                  then
+                    drv=$(jq -r .drvPath <<<"$line")
+                    echo "Building $drv"
+                    time nix build "$drv" --derivation --no-link --print-build-logs
+                  else
+                    echo "$out is already built, skipping"
+                  fi
+              done
+            '';
+          };
         };
 
         apps = emacs-config.makeApps {
