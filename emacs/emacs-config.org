@@ -641,6 +641,7 @@ The following variable defines variables that can be saved to =custom-file=:
       akirak-org-clock-mode
       akirak-org-log-file
       akirak/font-height
+      akirak/org-memento-export-directory
       ;; Dynamic
       safe-local-variable-values))
 #+end_src
@@ -3096,6 +3097,22 @@ Time blocking with Org
                 (defun akirak/org-memento-save-some-buffers ()
                   (ignore-errors (akirak-org-clock-snooze))
                   (save-some-buffers)))
+
+      (defcustom akirak/org-memento-export-directory nil
+        ""
+        :type '(choice directory (const nil)))
+
+      (add-hook 'org-memento-checkout-hook
+                (defun akirak/org-memento-export-day-at-point ()
+                  (when akirak/org-memento-export-directory
+                    (if (file-equal-p org-memento-file (buffer-file-name))
+                        (let ((date (org-get-heading t t t t)))
+                          (unless (file-directory-p akirak/org-memento-export-directory)
+                            (make-directory akirak/org-memento-export-directory t))
+                          (org-memento-export-to-json date date
+                            (expand-file-name (concat "org-memento_" date ".json")
+                                              akirak/org-memento-export-directory)))
+                      (message "Not in org-memento-file buffer")))))
 
       (add-hook 'org-memento-block-exit-hook #'akirak/org-memento-cleanup-buffers)))
 #+end_src
