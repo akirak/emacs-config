@@ -3480,6 +3480,15 @@ Major mode for the Go programming language
         (setq heex-ts-mode--font-lock-settings
               heex-ts--font-lock-settings))))
 #+end_src
+*** json-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-04-01 Sat 18:52]
+:END:
+
+#+begin_src emacs-lisp
+  (setup json-ts-mode
+    (:file-match "\\.json\\'" "\\.lock\\'"))
+#+end_src
 *** js-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-02-23 Thu 23:59]
@@ -5767,7 +5776,7 @@ Edit jq scripts.
 #+begin_src emacs-lisp
 (setup (:package jq-mode))
 #+end_src
-*** jsonian
+*** COMMENT jsonian                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-06-28 Tue 23:59]
 :END:
