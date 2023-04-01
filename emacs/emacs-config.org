@@ -5804,6 +5804,9 @@ Major mode for editing JSON files.
 :CREATED_TIME: [2023-03-31 Fri 23:59]
 :ID:       2c1614dd-a2e5-4815-96dd-10b090cddcf4
 :END:
+#+begin_quote
+Show current command and its binding
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package keycast))
@@ -7799,7 +7802,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 228 |
+| [[org-ql-search:tags:packages][packages]]            | 229 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
