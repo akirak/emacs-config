@@ -6626,7 +6626,7 @@ Summon and dismiss buffers as popups
                                      "^\\*edit string\\*"
                                      "^\\*edit-indirect"
                                      "^\\*scratch from selection\\*"
-                                     "^\\*eldoc"
+                                     ;; "^\\*eldoc"
                                      "^\\*Select Link\\*"
                                      "^\\*Flymake diagnostics"
                                      "^\\*hoogle\\*"
