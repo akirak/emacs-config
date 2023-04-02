@@ -1165,7 +1165,8 @@ provided as a separate command for integration, e.g. with embark."
          (start-string (concat "#+begin_" body-type
                                (if (equal body-type "src")
                                    (format " %s"
-                                           (if (use-region-p)
+                                           (if (and (use-region-p)
+                                                    (not (derived-mode-p 'special-mode)))
                                                (thread-last
                                                  (symbol-name major-mode)
                                                  (string-remove-suffix "-mode")
