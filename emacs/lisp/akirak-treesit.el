@@ -153,8 +153,8 @@
                                       :test #'treesit-node-eq)
                            (seq-take-while `(lambda (x)
                                               (< (treesit-node-start x) ,bound)))))
-                  (inside-bracket (or (memq (char-after (treesit-node-start parent))
-                                            (string-to-list "\"'<"))
+                  (inside-bracket (or (memq (char-after (1- (treesit-node-end parent)))
+                                            (string-to-list "\"'>"))
                                       (save-excursion
                                         (goto-char (treesit-node-start parent))
                                         (funcall show-paren-data-function)))))
