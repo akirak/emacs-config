@@ -1229,6 +1229,8 @@ provided as a separate command for integration, e.g. with embark."
                 (replace-match ""))))
           (while (re-search-forward (rx (+ blank) eol) nil t)
             (replace-match ""))
+          (when (re-search-forward (rx (+ "\n") eos) nil t)
+            (replace-match ""))
           (buffer-string))))))
 
 (defun akirak-capture--major-mode-list ()
