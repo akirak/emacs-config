@@ -895,11 +895,13 @@ The built-in =electric= package provides the following modes:
 
     (:status personal
       (let ((prettier '((eval . (prettier-on-save-mode))))
-            (lsp '((eval . (eglot-ensure)))))
+            (lsp '((eval . (eglot-ensure))))
+            (flymake-eslint '((eval . (flymake-eslint-enable)))))
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@prettier ,@lsp))
            (css-mode . (,@prettier ,@lsp))
+           (svelte-mode . (,@prettier ,@lsp ,@flymake-eslint))
            (elixir-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
@@ -6727,7 +6729,7 @@ Parentheses Universalistic
 
 #+begin_src emacs-lisp
   (setup (:package puni)
-    (:hook-into nix-mode)
+    (:hook-into nix-mode svelte-mode)
 
     (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
 
