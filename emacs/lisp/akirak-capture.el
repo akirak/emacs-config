@@ -1211,18 +1211,20 @@ provided as a separate command for integration, e.g. with embark."
            (when (string-match (rx bol (group (+ " ")) (not (any space))) s)
              (- (match-end 1)
                 (match-beginning 1)))))
-      (let* ((min-indent (thread-last
-                           (mapcar #'indent lines)
-                           (delq nil)
-                           (apply #'min)))
-             (regexp (concat "^" (make-string min-indent ?\s))))
+      (let* ((indents (thread-last
+                        (mapcar #'indent lines)
+                        (delq nil)))
+             (regexp (when indents
+                       (concat "^" (make-string (apply #'min indents)
+                                                ?\s)))))
         (with-temp-buffer
           (insert string)
           (goto-char (point-min))
           (when (looking-at (rx (+ "\n")))
             (replace-match ""))
-          (while (re-search-forward regexp nil t)
-            (replace-match ""))
+          (when regexp
+            (while (re-search-forward regexp nil t)
+              (replace-match "")))
           (buffer-string))))))
 
 (defun akirak-capture--major-mode-list ()
