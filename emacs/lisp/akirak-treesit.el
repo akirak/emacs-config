@@ -143,7 +143,8 @@
           (kill-region (point) (min bound (treesit-node-end node)))
         (catch 'stop
           (while (setq parent (treesit-node-parent node))
-            (when (< (treesit-node-start parent) start)
+            (when (or (< (treesit-node-start parent) start)
+                      (> (treesit-node-end parent) bound))
               (throw 'stop t))
             (setq node parent)))
         (if parent
