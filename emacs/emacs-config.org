@@ -6405,18 +6405,19 @@ Frontend to experimental commands of Nix
   (setup (:package nix3)
     (:set nix3-flake-remote-wait 20)
 
-    (defconst akirak/nix3-registry-url
-      "https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json")
-
-    (defun akirak/nix3-flake-lock-from-pins ()
-      (compile (mapconcat #'shell-quote-argument
-                          `("nix" "flake" "lock"
-                            "--registry" ,akirak/nix3-registry-url)
-                          " ")))
+    (defun akirak/nix3-flake-update-from-pins ()
+      (interactive)
+      (when (and (file-exists-p "flake.nix")
+                 (not (file-exists-p "flake.lock")))
+        (start-process "nix-flake-lock" "*nix flake lock*"
+                       "nix" "flake" "update"
+                       "--inputs-from" "github:akirak/flake-pins")))
 
     (:when-loaded
-      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-lock-from-pins
-                nil t))
+      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-update-from-pins
+                90)
+      (add-hook 'nix3-flake-init-hook #'akirak/nix3-flake-update-from-pins
+                90))
 
     (:global "C-c n" #'nix3-transient
              "M-g M-f" #'nix3-flake-edit
