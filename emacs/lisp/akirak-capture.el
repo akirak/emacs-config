@@ -1181,7 +1181,7 @@ provided as a separate command for integration, e.g. with embark."
                   (let ((region-source (buffer-substring-no-properties
                                         (region-beginning) (region-end))))
                     (if (equal body-type "src")
-                        (akirak-capture--unindent region-source)
+                        (akirak-capture--sanitize-source region-source)
                       (akirak-capture--to-org region-source))))
                 "")
             "\n" end-string "\n")))
@@ -1205,7 +1205,7 @@ provided as a separate command for integration, e.g. with embark."
         (delete-region (1- (match-beginning 0)) (match-end 0)))
       (buffer-string))))
 
-(defun akirak-capture--unindent (string)
+(defun akirak-capture--sanitize-source (string)
   (let ((lines (split-string string "\n")))
     (cl-flet
         ((indent (s)
@@ -1224,8 +1224,11 @@ provided as a separate command for integration, e.g. with embark."
           (when (looking-at (rx (+ "\n")))
             (replace-match ""))
           (when regexp
-            (while (re-search-forward regexp nil t)
-              (replace-match "")))
+            (save-excursion
+              (while (re-search-forward regexp nil t)
+                (replace-match ""))))
+          (while (re-search-forward (rx (+ blank) eol) nil t)
+            (replace-match ""))
           (buffer-string))))))
 
 (defun akirak-capture--major-mode-list ()
