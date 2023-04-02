@@ -156,7 +156,7 @@
                   (inside-bracket (or (memq (char-after (1- (treesit-node-end parent)))
                                             (string-to-list "\"'>"))
                                       (save-excursion
-                                        (goto-char (treesit-node-start parent))
+                                        (goto-char (treesit-node-end parent))
                                         (funcall show-paren-data-function)))))
               (if nodes
                   (kill-region (point) (treesit-node-end (car (last nodes
