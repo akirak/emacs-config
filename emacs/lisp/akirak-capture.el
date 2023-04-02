@@ -1206,7 +1206,9 @@ provided as a separate command for integration, e.g. with embark."
       (buffer-string))))
 
 (defun akirak-capture--sanitize-source (string)
-  (let ((lines (split-string string "\n")))
+  ;; Replace zero-width space.
+  (let* ((string (replace-regexp-in-string "​" "" string))
+         (lines (split-string string "\n")))
     (cl-flet
         ((indent (s)
            (when (string-match (rx bol (group (+ " ")) (not (any space))) s)
