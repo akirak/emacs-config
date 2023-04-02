@@ -137,9 +137,10 @@
           (node (if (looking-at (rx (+ blank)))
                     (treesit-node-at (match-end 0))
                   (treesit-node-at (point))))
+          (bound (pos-eol))
           parent)
       (if (< (treesit-node-start node) (point))
-          (kill-region (point) (treesit-node-end node))
+          (kill-region (point) (min bound (treesit-node-end node)))
         (catch 'stop
           (while (setq parent (treesit-node-parent node))
             (when (< (treesit-node-start parent) start)
@@ -150,7 +151,7 @@
                            (cl-member node (treesit-node-children parent)
                                       :test #'treesit-node-eq)
                            (seq-take-while `(lambda (x)
-                                              (< (treesit-node-start x) ,(line-end-position))))))
+                                              (< (treesit-node-start x) ,bound)))))
                   (inside-bracket (or (memq (char-after (treesit-node-start parent))
                                             (string-to-list "\"'<"))
                                       (save-excursion
