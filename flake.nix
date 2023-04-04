@@ -15,9 +15,6 @@
       flake = false;
     };
 
-    nix-index-database.url = "github:Mic92/nix-index-database";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
-
     # Emacs
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     org-babel.url = "github:emacs-twist/org-babel";
