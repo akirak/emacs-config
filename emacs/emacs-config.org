@@ -7569,7 +7569,7 @@ Define how Org entries are displayed by certain commands.
             (org-show-children)
             (akirak/org-recenter-toplevel-at-top))))))
 
-  (setq org-ql-find-goto-hook #'akirak/org-goto-indirect-hook)
+  (setq org-ql-find-goto-hook #'akirak/org-goto-narrow-hook)
   (setq org-placeholder-find-hook #'akirak/org-goto-indirect-hook)
 
   (defun akirak/org-recenter-toplevel-at-top ()
