@@ -4856,6 +4856,8 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(elixir-ts-mode . ("elixir-ls")))
       (add-to-list 'eglot-server-programs
+                   '(heex-ts-mode . ("elixir-ls")))
+      (add-to-list 'eglot-server-programs
                    `(web-mode . ,(eglot-alternatives
                                   '(("astro-ls" "--stdio")))))
 
