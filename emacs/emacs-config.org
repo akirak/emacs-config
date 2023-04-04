@@ -2449,6 +2449,7 @@ Outline-based notes management and organizer
           org-clock-goto-may-find-recent-task nil
           org-clock-mode-line-total 'today
           org-clock-out-remove-zero-time-clocks t
+          org-clock-in-resume t
 
           org-clock-persist t
           ;; I may simply close Emacs to leave the work
