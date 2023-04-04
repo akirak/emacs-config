@@ -2300,6 +2300,8 @@ Outline-based notes management and organizer
                ;; alternative bindings for commands bound on those keys.
                "M-n" #'org-metadown
                "M-p" #'org-metaup
+               "M-N" #'org-shiftmetadown
+               "M-P" #'org-shiftmetaup
                "M-H" #'org-shiftmetaleft
                "M-L" #'org-shiftmetaright
                "M-g a" (defun akirak/org-goto-beginnning-of-content ()
