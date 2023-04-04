@@ -560,7 +560,7 @@ This function returns the current buffer."
 ;;;; Edit
 
 ;;;###autoload
-(defun akirak-org-clock-edit ()
+(defun akirak-org-clock-edit-log-entry ()
   "Edit a clock entry in the logbook of the node."
   (interactive)
   (unless (derived-mode-p 'org-mode)
