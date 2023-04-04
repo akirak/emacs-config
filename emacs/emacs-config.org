@@ -6373,6 +6373,7 @@ Elegant, highly legible and customizable themes
 *** move-dup                                               :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 20:59]
+:ID:       4aed6213-0bcf-4dc7-943e-a94ea8a1fbe3
 :END:
 #+begin_quote
 Eclipse-like moving and duplicating lines or rectangles
@@ -6382,9 +6383,7 @@ Eclipse-like moving and duplicating lines or rectangles
 #+begin_src emacs-lisp
   (setup (:package move-dup)
     (:bind "M-p" #'move-dup-move-lines-up
-           "M-n" #'move-dup-move-lines-down
-           "C-M-p" #'move-dup-duplicate-up
-           "C-M-n" #'move-dup-duplicate-down)
+           "M-n" #'move-dup-move-lines-down)
 
     (add-hook 'prog-mode-hook #'move-dup-mode)
     (add-hook 'text-mode-hook
