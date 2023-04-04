@@ -513,13 +513,13 @@ This function returns the current buffer."
 ;;;; Clock out commands
 
 ;;;###autoload
-(defun akirak-org-clock-out ()
-  (interactive)
+(defun akirak-org-clock-out (&optional arg)
+  (interactive "P")
   (akirak-org-clock-require-clock
     (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
         (with-current-buffer capture-buffer
           (org-capture-finalize))
-      (org-clock-out))))
+      (org-clock-out arg))))
 
 ;;;###autoload
 (defun akirak-org-clock-done ()
