@@ -4370,7 +4370,29 @@ An unofficial Copilot plugin for Emacs
 
 #+begin_src emacs-lisp
   (setup (:package copilot)
-    (:nixpkgs "nodejs"))
+    (:nixpkgs "nodejs")
+    (:bind [remap expand-abbrev] #'akirak-copilot-abbrev-or-complete
+           ;; Remap repl-toggle in the minor mode map.
+           "M-RET" #'akirak-copilot-accept-dwim
+           "C-M-n" #'copilot-next-completion
+           "C-M-p" #'copilot-previous-completion
+           "M-F" #'copilot-accept-completion-by-word
+           "M-E" #'copilot-accept-completion-by-line)
+    (:when-loaded
+      ;; Look up the command bound in global-map and use it as the fallback
+      ;; command.
+      (when-let* ((keys (where-is-internal #'akirak-copilot-accept-dwim
+                                           copilot-mode-map))
+                  (command (lookup-key global-map (car keys))))
+        (setq akirak-copilot-accept-fallback command)))
+
+    ;; Enable copilot if LSP (eglot) is turned on. This is directory-local.
+    (dir-locals-set-class-variables
+     'copilot-if-lsp
+     '((nil . ((eval . (add-hook 'eglot-managed-mode-hook 'copilot-mode nil t))))))
+    (:status personal
+      ;; Enable copilot by setting the directory class.
+      (dir-locals-set-directory-class "~/work2/foss/" 'copilot-if-lsp)))
 #+end_src
 *** corfu                                            :completion:UI:
 :PROPERTIES:
@@ -6895,6 +6917,7 @@ Clean-up and Beautify the list of minor-modes.
                                "TSit"
                                "OClk"
                                "Memento"
+                               "Copilot"
                                "ga"
                                "Treefmt")
                            symbol-end))
