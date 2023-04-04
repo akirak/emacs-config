@@ -424,6 +424,46 @@ This function returns the current buffer."
                        (when (eq (point-min) ,point)
                          (current-buffer)))))))))
 
+;;;; Clock in with preserving the state
+
+(defvar akirak-org-clock-preserved-clocks nil)
+
+;;;###autoload
+(defun akirak-org-clock-in-with-current-state (marker)
+  (require 'org-clock)
+  (let ((previous-clock (when (org-clocking-p)
+                          org-clock-marker))
+        (previous-clock-heading org-clock-heading)
+        (wconf (current-window-configuration)))
+    (org-clock-in marker)
+    (push (list (org-id-get marker t)
+                :window-configuration wconf
+                :clock-heading previous-clock-heading
+                :clock-marker previous-clock)
+          akirak-org-clock-preserved-clocks)
+    (add-hook 'org-clock-out-hook 'akirak-org-clock-restore)))
+
+;;;###autoload
+(defun akirak-org-clock-restore ()
+  "Restore the clock."
+  (when-let* ((id (org-id-get org-clock-marker))
+              (cell (assoc id akirak-org-clock-preserved-clocks))
+              (plist (cdr cell)))
+    (when-let (marker (plist-get plist :clock-marker))
+      (org-clock-in marker))
+    (if-let* ((heading (plist-get plist :clock-heading))
+              (tab (when (bound-and-true-p tab-bar-mode)
+                     (thread-last
+                       (tab-bar-tabs)
+                       (mapcar (lambda (cell)
+                                 (alist-get 'name (cdr cell))))
+                       (member heading)
+                       (car)))))
+        (tab-bar-switch-to-tab heading)
+      (when-let (wconf (plist-get plist :window-configuration))
+        (set-window-configuration wconf)))
+    (delete cell akirak-org-clock-preserved-clocks)))
+
 ;;;; Other utilities
 
 (defun akirak-org-clock-transfer-entries (dest)
