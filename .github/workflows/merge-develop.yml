@@ -23,5 +23,4 @@ jobs:
 
   update_packages:
     needs: update_develop
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/update-elisp.yml
