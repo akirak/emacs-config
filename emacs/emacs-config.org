@@ -6404,8 +6404,8 @@ Eclipse-like moving and duplicating lines or rectangles
 
 #+begin_src emacs-lisp
   (setup (:package move-dup)
-    (:bind "M-p" #'move-dup-move-lines-up
-           "M-n" #'move-dup-move-lines-down)
+    (:bind "M-P" #'move-dup-move-lines-up
+           "M-N" #'move-dup-move-lines-down)
 
     (add-hook 'prog-mode-hook #'move-dup-mode)
     (add-hook 'text-mode-hook
