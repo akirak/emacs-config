@@ -8,6 +8,5 @@ updates:
     time: '03:00'
     timezone: Asia/Tokyo
   open-pull-requests-limit: 10
-  target-branch: develop
   commit-message:
     prefix: "deps(ci)"
