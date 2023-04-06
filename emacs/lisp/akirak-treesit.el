@@ -129,6 +129,11 @@
     (goto-char start)
     (setq akirak-treesit-expand-region-node node)))
 
+(defcustom akirak-treesit-balanced-nodes
+  '("jsx_opening_element")
+  "List of node types that needs balancing."
+  :type '(repeat string))
+
 (defun akirak-treesit-smart-kill-line (&optional arg)
   (interactive "P")
   (if (numberp arg)
@@ -143,8 +148,10 @@
           (kill-region (point) (min bound (treesit-node-end node)))
         (catch 'stop
           (while (setq parent (treesit-node-parent node))
-            (when (or (< (treesit-node-start parent) start)
-                      (> (treesit-node-end parent) bound))
+            (when (and (or (< (treesit-node-start parent) start)
+                           (> (treesit-node-end parent) bound))
+                       (not (member (treesit-node-type node)
+                                    akirak-treesit-balanced-nodes)))
               (throw 'stop t))
             (setq node parent)))
         (if parent
