@@ -9,7 +9,7 @@ This repository contains my Emacs configuration which is built using [[https://g
 I use home-manager to install the configuration.
 
 It is an org-babel configuration defined within [[file:emacs/emacs-config.org][a single file]].
-** Trying out the configuration on Linux
+** COMMENT Trying out the configuration on Linux
 If you are using Linux with Nix 2.9+ installed, you can try out the Emacs configuration without replacing your user-emacs-directory.
 MacOS is not supported, because the Nix app depends on bubblewrap, which is only supported on Linux.
 
