@@ -208,8 +208,9 @@
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
+  (define-key embark-file-map "t" #'find-file-other-tab)
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
-  (define-key embark-file-map "t" #'akirak-tailscale-copy-file)
+  (define-key embark-file-map (kbd "C-c C-T") #'akirak-tailscale-copy-file)
   (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
