@@ -5222,7 +5222,8 @@ A Flymake backend for Javascript using eslint
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package flymake-eslint))
+  (setup (:package flymake-eslint)
+    (:set flymake-eslint-defer-binary-check t))
 #+end_src
 *** flyspell-correct
 :PROPERTIES:
