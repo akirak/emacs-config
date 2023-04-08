@@ -2205,6 +2205,7 @@ Outline-based notes management and organizer
               (seq-sort-by #'car #'string-collate-lessp
                            (cl-remove-duplicates
                             (append '(("d" . "definition")
+                                      ("g" . "generative")
                                       ("t" . "toc"))
                                     org-structure-template-alist)
                             :key #'car
