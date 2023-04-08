@@ -894,7 +894,7 @@ The built-in =electric= package provides the following modes:
       (:global "<f5>" #'revert-buffer))
 
     (:status personal
-      (let ((prettier '((eval . (prettier-on-save-mode))))
+      (let ((prettier '((eval . (prettier-on-save-mode t))))
             (lsp '((eval . (eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable)))))
         (dir-locals-set-class-variables
