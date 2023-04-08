@@ -907,7 +907,8 @@ The built-in =electric= package provides the following modes:
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp))
            (haskell-mode . (,@lsp)))))
-      (dir-locals-set-directory-class "~/work2/" 'default)))
+      (dir-locals-set-directory-class "~/work2/learning/" 'default)
+      (dir-locals-set-directory-class "~/work2/foss/" 'default)))
 #+end_src
 
 - Use =akirak-files-ensure-abbrev-list= to update =directory-abbrev-alist=. (see [[*akirak][akirak]]).
