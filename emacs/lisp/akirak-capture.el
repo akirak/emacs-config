@@ -705,7 +705,7 @@
         (goto-char (org-entry-end-position))
         (delete-blank-lines)
         (save-excursion
-          (newline 2)
+          (newline)
           (insert block-text))
         (newline)))))
 
