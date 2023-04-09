@@ -1636,6 +1636,16 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
             (call-interactively cmd)
           (superword-mode)))))
 #+end_src
+*** tab-bar
+:PROPERTIES:
+:CREATED_TIME: [2023-04-09 Sun 23:03]
+:END:
+
+#+begin_src emacs-lisp
+  (setup tab-bar
+    (define-key akirak/c-z-map "=" #'tab-bar-duplicate-tab)
+    (define-key akirak/c-z-map "-" #'tab-bar-close-tab))
+#+end_src
 *** tempo
 :PROPERTIES:
 :CREATED_TIME: [2022-08-09 Tue 23:30]
