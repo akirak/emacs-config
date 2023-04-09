@@ -33,8 +33,7 @@
                      :narrow (consult-org--narrow)
                      :state (consult--jump-state)
                      :lookup #'consult--lookup-candidate))))
-    (akirak-org-clock-in-with-current-state selected)
-    (tab-bar-switch-to-tab org-clock-heading)))
+    (org-clock-clock-in (list selected))))
 
 ;;;###autoload
 (defun akirak-consult-org-heading-target (_type olp)
