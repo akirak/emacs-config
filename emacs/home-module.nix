@@ -32,6 +32,7 @@ in {
           (setq akirak/enabled-status-tags t)
         '';
       };
+      serviceIntegration.enable = true;
     };
 
     home.packages = with pkgs; [
@@ -42,5 +43,8 @@ in {
       noto-fonts-emoji
       symbola
     ];
+
+    # Generate a desktop file for emacsclient
+    services.emacs.client.enable = true;
   };
 }

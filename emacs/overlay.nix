@@ -98,6 +98,7 @@ with builtins; let
             };
           };
         };
+      exportDigest = true;
     })
     .overrideScope' (self: super: {
       elispPackages = super.elispPackages.overrideScope' (import ./overrides.nix {

@@ -151,14 +151,6 @@
     };
   };
 
-  twist = _: _: {
-    origin = {
-      type = "github";
-      owner = "emacs-twist";
-      repo = "twist.el";
-      ref = "develop";
-    };
-  };
   poly-astro = _: _: {
     origin = {
       type = "github";

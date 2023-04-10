@@ -7254,6 +7254,16 @@ Frontend to Twist configuration
 #+begin_src emacs-lisp
 (setup (:package twist))
 #+end_src
+*** twist
+:PROPERTIES:
+:CREATED_TIME: [2023-04-10 Mon 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package twist)
+    (:global "<f12> e R" #'twist-update
+             "<f12> e !" #'twist-reload-emacs-service))
+#+end_src
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]
