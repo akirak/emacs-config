@@ -1428,33 +1428,6 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     (:with-mode save-place-mode
       (:hook-into after-init-hook)))
 #+end_src
-*** server
-:PROPERTIES:
-:CREATED_TIME: [2022-10-15 Sat 13:04]
-:END:
-
-#+begin_src emacs-lisp
-  (setup server
-    (when window-system
-      (defcustom akirak/server-start-hook nil "" :type 'hook)
-
-      (defun akirak/server-start ()
-        (server-start)
-        (run-hooks 'akirak/server-start-hook))
-
-      (defun akirak/start-server-at-startup ()
-        (require 'server)
-        (if (server-running-p)
-            ;; Try to start an Emacs server again in 3 minutes.
-            (run-with-timer (* 3 60) nil
-                            (lambda ()
-                              (unless (server-running-p)
-                                (akirak/server-start))))
-          (akirak/server-start)))
-
-      (:status personal
-        (add-hook 'emacs-startup-hook #'akirak/start-server-at-startup))))
-#+end_src
 *** sgml-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-08 Fri 21:08]
@@ -1947,6 +1920,21 @@ You can load a theme on startup by adding command line arguments to Emacs, e.g.
 You need to install the font separately.
 
 #+begin_src emacs-lisp
+  (defun akirak/enable-fonts (&optional value skip-check)
+    (let ((families (font-family-list))
+          (value (or value akirak/font-family-alist)))
+      (pcase-dolist (`(,face ,family . ,plist) value)
+        (if (or (member family families)
+                skip-check)
+            (if-let (fontset (plist-get plist :fontset))
+                (set-fontset-font fontset face family nil
+                                  (plist-get plist :add))
+              (set-face-attribute face nil :family family))
+          (message "Font family %s is not installed" family)
+          ;; (delq (assq face value) value)
+          ;; (set symbol value)
+          ))))
+
   (defcustom akirak/font-family-alist
     '((default "Cascadia Code")
       (fixed-pitch "Cascadia Code")
@@ -1965,17 +1953,15 @@ You need to install the font separately.
                                           (string :tag "Name of a fontset")))))))
     :set (lambda (symbol value)
            (set symbol value)
-           (when window-system
-             (let ((families (font-family-list)))
-               (pcase-dolist (`(,face ,family . ,plist) value)
-                 (if (member family families)
-                     (if-let (fontset (plist-get plist :fontset))
-                         (set-fontset-font fontset face family nil
-                                           (plist-get plist :add))
-                       (set-face-attribute face nil :family family))
-                   (message "Font family %s is not installed" family)
-                   (delq (assq face value) value)
-                   (set symbol value)))))))
+           (when (or window-system
+                     (daemonp))
+             (akirak/enable-fonts value (daemonp)))))
+
+  (when (daemonp)
+    (add-hook 'server-after-make-frame-hook
+              (defun akirak/server-set-fonts ()
+                (akirak/enable-fonts nil t)
+                (remove-hook 'server-after-make-frame-hook #'akirak/server-set-fonts))))
 
   (eval-after-load 'outline
     (defun akirak/set-outline-families ()
@@ -2516,7 +2502,8 @@ Outline-based notes management and organizer
 ***** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    (:hook-into akirak/server-start-hook)
+    (when (daemonp)
+      (:hook-into emacs-startup-hook))
 
     (advice-add 'save-buffers-kill-terminal
                 :before
@@ -5122,7 +5109,8 @@ Get environment variables such as $PATH from the shell
 
 #+begin_src emacs-lisp
   (setup (:package exec-path-from-shell)
-    (when (and window-system
+    (when (and (or window-system
+                   (daemonp))
                (not (equal akirak/os-id "nixos")))
       (require 'exec-path-from-shell)
       (unless (eq system-type 'darwin)
@@ -6407,7 +6395,8 @@ Elegant, highly legible and customizable themes
             (2 . (rainbow overline variable-pitch 1.1))
             (4 . (variable-pitch))))
 
-    (when window-system
+    (when (or window-system
+              (daemonp))
       (modus-themes-load-themes)
       (modus-themes-load-operandi)))
 #+end_src
