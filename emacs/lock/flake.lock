@@ -1271,11 +1271,11 @@
     "gptel": {
       "flake": false,
       "locked": {
-        "lastModified": 1681040579,
-        "narHash": "sha256-K0pO/LxtDYFwbMlADrndCbQQyZz8zcEN/zH9YDAz7+A=",
+        "lastModified": 1681365733,
+        "narHash": "sha256-JDFti8LmUzDwse68lhY1VrShVwSpDZ8Yw61fb2rquPo=",
         "owner": "karthink",
         "repo": "gptel",
-        "rev": "dcd66c8690e7abd292218ed6df5387f7d538115c",
+        "rev": "a5be53d5e3733ed48023e4862b59ac12fa98be07",
         "type": "github"
       },
       "original": {
@@ -1505,22 +1505,6 @@
       "original": {
         "owner": "ljos",
         "repo": "jq-mode",
-        "type": "github"
-      }
-    },
-    "jsonian": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1673993544,
-        "narHash": "sha256-/yIQN6nIoAaB6jmqQASR4GLHu6cXnAXADQU3lqo7l7E=",
-        "owner": "iwahbe",
-        "repo": "jsonian",
-        "rev": "d0583a890a8e43845935c31de9f069192011451e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "iwahbe",
-        "repo": "jsonian",
         "type": "github"
       }
     },
@@ -1993,11 +1977,11 @@
     "octopus": {
       "flake": false,
       "locked": {
-        "lastModified": 1680154088,
-        "narHash": "sha256-M4K+sjdHMw04ptzAdYGdZL6r+B2UxEq3rVexsewZjns=",
+        "lastModified": 1681225859,
+        "narHash": "sha256-IE/+OjJ9bF4yjrWTeFVVPsYmV97MPN8rK5ISXq4Ep2k=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "399ef8645e0b1560f3ec874a87e86b814649a93c",
+        "rev": "ff35fc983056c11bb48f52fc589afe0a0369b89f",
         "type": "github"
       },
       "original": {
@@ -2091,11 +2075,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1680154088,
-        "narHash": "sha256-M4K+sjdHMw04ptzAdYGdZL6r+B2UxEq3rVexsewZjns=",
+        "lastModified": 1681225859,
+        "narHash": "sha256-IE/+OjJ9bF4yjrWTeFVVPsYmV97MPN8rK5ISXq4Ep2k=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "399ef8645e0b1560f3ec874a87e86b814649a93c",
+        "rev": "ff35fc983056c11bb48f52fc589afe0a0369b89f",
         "type": "github"
       },
       "original": {
@@ -2894,7 +2878,6 @@
         "inheritenv": "inheritenv",
         "ivy": "ivy",
         "jq-mode": "jq-mode",
-        "jsonian": "jsonian",
         "keycast": "keycast",
         "kind-icon": "kind-icon",
         "kv": "kv",
@@ -2997,6 +2980,7 @@
         "triples": "triples",
         "ts": "ts",
         "tuareg": "tuareg",
+        "twist": "twist",
         "utop": "utop",
         "valign": "valign",
         "vertico": "vertico",
@@ -3385,6 +3369,22 @@
       "original": {
         "owner": "ocaml",
         "repo": "tuareg",
+        "type": "github"
+      }
+    },
+    "twist": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1681186540,
+        "narHash": "sha256-xDdRXLAGzOTIBLrWl3gexHf/wg6/QoFaPeuai7dlaVk=",
+        "owner": "emacs-twist",
+        "repo": "twist.el",
+        "rev": "cb530b84962eff1ff1f3bd173d4be8992f458ec4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-twist",
+        "repo": "twist.el",
         "type": "github"
       }
     },

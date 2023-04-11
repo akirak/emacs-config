@@ -569,12 +569,6 @@
       repo = "jq-mode";
       type = "github";
     };
-    jsonian = {
-      flake = false;
-      owner = "iwahbe";
-      repo = "jsonian";
-      type = "github";
-    };
     keycast = {
       flake = false;
       owner = "tarsius";
@@ -1193,6 +1187,12 @@
       flake = false;
       owner = "ocaml";
       repo = "tuareg";
+      type = "github";
+    };
+    twist = {
+      flake = false;
+      owner = "emacs-twist";
+      repo = "twist.el";
       type = "github";
     };
     utop = {
