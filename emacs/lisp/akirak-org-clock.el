@@ -543,7 +543,7 @@ This function returns the current buffer."
 
 ;;;; Stack
 
-;; Currently unused.
+(defvar akirak-org-clock-stack nil)
 
 ;;;###autoload
 (defun akirak-org-clock-push (marker)
