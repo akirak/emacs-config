@@ -1,6 +1,7 @@
 {
   inputs,
   emacsPackageForSystem,
+  configurationRevision,
 }: final: prev:
 with builtins; let
   inherit (inputs.twist.lib {inherit (inputs.nixpkgs) lib;}) parseSetup;
@@ -54,6 +55,7 @@ with builtins; let
     nativeCompileAheadDefault ? true,
   }:
     (emacsTwist {
+      inherit configurationRevision;
       emacsPackage =
         if withXwidgets
         then

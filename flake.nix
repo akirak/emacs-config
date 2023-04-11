@@ -74,6 +74,7 @@
         ...
       }: let
         inherit (final) emacs-config;
+        inherit (builtins) substring;
       in {
         overlayAttrs =
           {
@@ -87,6 +88,11 @@
           // (
             import ./emacs/overlay.nix {
               inherit inputs;
+              configurationRevision = "${substring 0 8 self.lastModifiedDate}.${
+                if self ? rev
+                then substring 0 7 self.rev
+                else "dirty"
+              }";
               emacsPackageForSystem = system:
                 (import inputs.flake-pins).packages.${system}.emacs-pgtk;
             }
