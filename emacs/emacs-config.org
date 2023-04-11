@@ -876,7 +876,7 @@ The built-in =electric= package provides the following modes:
              "/__tests__/\\1.ts"
              "/__tests__/\\1.tsx")))
 
-    (:global "<f7>" #'find-sibling-file)
+    (define-key ctl-x-map "," #'find-sibling-file)
 
     (advice-add 'abort-if-file-too-large
                 :before-while
@@ -1324,11 +1324,12 @@ Operations on the current project
     (run-with-idle-timer 180 nil #'akirak-project-rescan)
 
     (with-eval-after-load "bindings"
-      (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
-      (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
-      (define-key ctl-x-x-map "C" #'akirak-project-find-css)
-      (define-key ctl-x-x-map "T" #'akirak-project-find-test)
-      (define-key ctl-x-x-map "S" #'akirak-project-find-stories))
+      ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
+      ;; (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
+      ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
+      ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
+      ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
+      )
 
     (with-eval-after-load 'embark
       (define-key embark-file-map (kbd "+") #'akirak-project-init)))
@@ -1874,9 +1875,8 @@ Thus I will explicitly install this package rather than using the built-in versi
       (cl-pushnew "*Calendar*" winner-boring-buffers))
 
     (:status opinionated
-      (:with-map ctl-x-map
-        (:bind "," #'winner-undo
-               "." #'winner-redo))))
+      (:global "<f7>" #'winner-undo
+               "<S-f7>" #'winner-redo)))
 #+end_src
 *** woman
 :PROPERTIES:
@@ -4313,7 +4313,7 @@ Consulting completing-read
              [remap yank-pop] #'consult-yank-pop
              "M-s o" #'consult-outline
              "C-S-s" #'consult-line
-             "C-c f" #'consult-focus-lines
+             "M-s l" #'consult-focus-lines
              "C-x /" #'consult-ripgrep)
 
     (:with-feature consult-imenu
