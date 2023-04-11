@@ -972,12 +972,17 @@ The built-in =electric= package provides the following modes:
     (set-frame-parameter nil 'alpha '(98 . 96))
 
     (defconst akirak/base-frame-title-format
-      '((akirak/emacs-profile-name
-         (" - " akirak/emacs-profile-name))
+      '(" - GNU Emacs"
+        (emacs-version
+         (" " emacs-version))
+        (twist-configuration-revision
+         (" @ " akirak/nixos-configuration-version))
+        (akirak/emacs-profile-name
+         (" (" akirak/emacs-profile-name ")"))
         (akirak/os-pretty-name
-         (" - " akirak/os-pretty-name))
+         (" on " akirak/os-pretty-name))
         (akirak/nixos-configuration-version
-         ("@" akirak/nixos-configuration-version))))
+         (" @ " akirak/nixos-configuration-version))))
 
     (defconst akirak/default-frame-title-format
       (cons '(org-memento-current-block
