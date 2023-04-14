@@ -512,8 +512,16 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup browse-url
     (:status personal
-      (:set browse-url-browser-function #'akirak-browse-url-external-browser
-            browse-url-secondary-browser-function #'akirak-browse-url-external-browser)))
+      (:set browse-url-handlers `((,(rx bos "http" (?  "s") "://"
+                                        (or "localhost"
+                                            (and (+ digit) (* "." (+ digit))))
+                                        (or (any ":/") eos))
+                                   . akirak-browse-url-private-url)
+                                  (,(rx bos "http" (?  "s") "://"
+                                        (or "airtable.com"
+                                            "figma.com")
+                                        (or "/" eos))
+                                   . akirak-browse-url-chromium-default)))))
 #+end_src
 *** buffer.c                                     :formatting:visual:
 :PROPERTIES:
