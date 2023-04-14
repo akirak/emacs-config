@@ -147,7 +147,7 @@
                   then
                     drv=$(jq -r .drvPath <<<"$line")
                     echo "Building $drv"
-                    time nix build "$drv" --derivation --no-link --print-build-logs
+                    time nix build "$drv" --no-link --print-build-logs
                   else
                     echo "$out is already built, skipping"
                   fi
