@@ -160,6 +160,10 @@
           lockDirName = "emacs/lock";
         };
 
+        checks = {
+          elispDeps = inputs.self.packages.${system}.emacs-config.depsCheck;
+        };
+
         # Set up a pre-commit hook by running `nix develop`.
         devShells = {
           default = pkgs.mkShell {
