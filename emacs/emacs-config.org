@@ -6721,14 +6721,10 @@ Summon and dismiss buffers as popups
                 (recenter -1 t)))
 
     (:bind "M-\"" #'popper-cycle
-           "M-' k" #'popper-kill-latest-popup
            "M-' M-'" #'popper-toggle-latest
            "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-vterm-for-project
            "M-' s" #'scratch-buffer
-           "M-' b" (defun akirak/backtrace-buffer ()
-                     (interactive)
-                     (pop-to-buffer "*Backtrace*"))
            "M-' c" (defun akirak/compilation-buffer ()
                      (interactive)
                      (pop-to-buffer "*compilation*"))))
