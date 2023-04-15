@@ -33,6 +33,7 @@ in {
         '';
       };
       serviceIntegration.enable = true;
+      stateFile = "twist.json";
     };
 
     home.packages = with pkgs; [
