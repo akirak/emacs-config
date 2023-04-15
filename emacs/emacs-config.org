@@ -7284,8 +7284,8 @@ Hot-reload packages with twist
 
 #+begin_src emacs-lisp
   (setup (:package twist)
-    (:global "<f12> e R" #'twist-update
-             "<f12> e !" #'twist-reload-emacs-service))
+    (add-hook 'emacs-startup-hook #'twist-watch-mode)
+    (:global "<f12> e R" #'twist-update))
 #+end_src
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
