@@ -6847,16 +6847,7 @@ Define commands which run reformatters on the current buffer
                   "--stdin-filepath" (buffer-file-name)))
      (treefmt
       :program "treefmt"
-      :stdin nil :stdout nil :mode nil
-      :args (list (buffer-file-name))))
-
-    (define-minor-mode treefmt-mode
-      "Run treefmt after saving."
-      :global nil
-      :lighter " Treefmt"
-      (if (bound-and-true-p treefmt-mode)
-          (add-hook 'after-save-hook 'treefmt-buffer 90 t)
-        (remove-hook 'after-save-hook 'treefmt-buffer t))))
+      :args (list "--stdin" (buffer-file-name)))))
 #+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
