@@ -22,6 +22,7 @@ jobs:
     - uses: DeterminateSystems/update-flake-lock@v18
       with:
         pr-title: "Update flake.lock"
+        token: ${{ secrets.PAT_FOR_PR }}
         base: develop
         pr-labels: |
           automation

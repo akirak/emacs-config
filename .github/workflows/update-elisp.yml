@@ -29,6 +29,7 @@ jobs:
     - uses: peter-evans/create-pull-request@v4
       with:
         base: develop
+        token: ${{ secrets.PAT_FOR_PR }}
         title: 'Update Emacs Lisp packages'
         branch: update/elisp-packages
         labels: automation,update,emacs
