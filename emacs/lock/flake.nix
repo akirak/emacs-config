@@ -944,11 +944,6 @@
       repo = "pdf-tools";
       type = "github";
     };
-    persist = {
-      flake = false;
-      type = "git";
-      url = "https://gitlab.com/phillord/persist";
-    };
     pinyin = {
       flake = false;
       owner = "xuchunyang";

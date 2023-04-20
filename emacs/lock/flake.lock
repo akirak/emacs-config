@@ -2494,22 +2494,6 @@
         "type": "github"
       }
     },
-    "persist": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1562619671,
-        "narHash": "sha256-RrWopxRphQ9YpPc3Xl6A1lgLHJ+rMcPf+PgE7csgYDw=",
-        "ref": "refs/heads/master",
-        "rev": "2a2f83b4d63734ed48603008c813cfacd9e99404",
-        "revCount": 18,
-        "type": "git",
-        "url": "https://gitlab.com/phillord/persist"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://gitlab.com/phillord/persist"
-      }
-    },
     "pinyin": {
       "flake": false,
       "locked": {
@@ -2955,7 +2939,6 @@
         "page-break-lines": "page-break-lines",
         "parsec": "parsec",
         "pdf-tools": "pdf-tools",
-        "persist": "persist",
         "pinyin": "pinyin",
         "pkg-info": "pkg-info",
         "plz": "plz",
