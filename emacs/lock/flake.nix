@@ -35,7 +35,7 @@
     apprentice = {
       flake = false;
       owner = "akirak";
-      ref = "prefix-map";
+      ref = "fix-warns";
       repo = "Apprentice";
       type = "github";
     };
@@ -346,12 +346,6 @@
       repo = "otp";
       type = "github";
     };
-    eros = {
-      flake = false;
-      owner = "xiongtx";
-      repo = "eros";
-      type = "github";
-    };
     esxml = {
       flake = false;
       owner = "tali713";
@@ -575,10 +569,10 @@
       repo = "jq-mode";
       type = "github";
     };
-    jsonian = {
+    keycast = {
       flake = false;
-      owner = "iwahbe";
-      repo = "jsonian";
+      owner = "tarsius";
+      repo = "keycast";
       type = "github";
     };
     kind-icon = {
@@ -636,12 +630,6 @@
       repo = "hydra";
       type = "github";
     };
-    macrostep = {
-      flake = false;
-      owner = "emacsorphanage";
-      repo = "macrostep";
-      type = "github";
-    };
     magit = {
       flake = false;
       owner = "magit";
@@ -664,12 +652,6 @@
       flake = false;
       owner = "magit";
       repo = "magit";
-      type = "github";
-    };
-    magit-todos = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "magit-todos";
       type = "github";
     };
     marginalia = {
@@ -956,10 +938,10 @@
       repo = "parsec.el";
       type = "github";
     };
-    pcre2el = {
+    pdf-tools = {
       flake = false;
-      owner = "joddie";
-      repo = "pcre2el";
+      owner = "vedang";
+      repo = "pdf-tools";
       type = "github";
     };
     persist = {
@@ -1159,6 +1141,12 @@
       repo = "symbol-overlay";
       type = "github";
     };
+    tablist = {
+      flake = false;
+      owner = "emacsorphanage";
+      repo = "tablist";
+      type = "github";
+    };
     tagedit = {
       flake = false;
       owner = "magnars";
@@ -1195,6 +1183,12 @@
       repo = "treepy.el";
       type = "github";
     };
+    triples = {
+      flake = false;
+      owner = "ahyatt";
+      repo = "triples";
+      type = "github";
+    };
     ts = {
       flake = false;
       owner = "alphapapa";
@@ -1205,6 +1199,12 @@
       flake = false;
       owner = "ocaml";
       repo = "tuareg";
+      type = "github";
+    };
+    twist = {
+      flake = false;
+      owner = "emacs-twist";
+      repo = "twist.el";
       type = "github";
     };
     utop = {

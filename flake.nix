@@ -15,9 +15,6 @@
       flake = false;
     };
 
-    nix-index-database.url = "github:Mic92/nix-index-database";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
-
     # Emacs
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     org-babel.url = "github:emacs-twist/org-babel";
@@ -77,6 +74,7 @@
         ...
       }: let
         inherit (final) emacs-config;
+        inherit (builtins) substring;
       in {
         overlayAttrs =
           {
@@ -90,6 +88,11 @@
           // (
             import ./emacs/overlay.nix {
               inherit inputs;
+              configurationRevision = "${substring 0 8 self.lastModifiedDate}.${
+                if self ? rev
+                then substring 0 7 self.rev
+                else "dirty"
+              }";
               emacsPackageForSystem = system:
                 (import inputs.flake-pins).packages.${system}.emacs-pgtk;
             }
@@ -112,12 +115,6 @@
           inherit emacs-config;
 
           # test-emacs-config = pkgs.callPackage ./emacs/tests {};
-
-          update-elisp = pkgs.writeShellScriptBin "update-elisp" ''
-            nix flake lock --update-input melpa --update-input gnu-elpa
-            cd emacs/lock
-            bash ./update.bash "$@"
-          '';
 
           update-elisp-lock = pkgs.writeShellApplication {
             name = "update-elisp-lock";
@@ -150,7 +147,7 @@
                   then
                     drv=$(jq -r .drvPath <<<"$line")
                     echo "Building $drv"
-                    time nix build "$drv" --derivation --no-link --print-build-logs
+                    time nix build "$drv" --no-link --print-build-logs
                   else
                     echo "$out is already built, skipping"
                   fi
@@ -161,6 +158,10 @@
 
         apps = emacs-config.makeApps {
           lockDirName = "emacs/lock";
+        };
+
+        checks = {
+          elispDeps = inputs.self.packages.${system}.emacs-config.depsCheck;
         };
 
         # Set up a pre-commit hook by running `nix develop`.

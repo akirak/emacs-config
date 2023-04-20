@@ -23,8 +23,10 @@
 (defun akirak-tailscale-complete-peer-name (prompt)
   (completing-read prompt
                    (mapcar (lambda (alist)
-                             (cons (alist-get 'HostName alist)
-                                   alist))
+                             (let ((name (alist-get 'DNSName alist)))
+                               (when (string-match (rx bol (+ (not (any "."))))
+                                                   name)
+                                 (match-string 0 name))))
                            (akirak-tailscale--peers))))
 
 ;;;###autoload
@@ -34,9 +36,10 @@
   (with-current-buffer (get-buffer-create "*tailscale*")
     (let ((file (expand-file-name file))
           (dest (akirak-tailscale-complete-peer-name "Copy file to: ")))
-      (call-process "tailscale" nil t nil
-                    "file" "cp" file (concat dest ":"))
-      (message "Copied file to %s" dest))))
+      (if (zerop (call-process "tailscale" nil t nil
+                               "file" "cp" file (concat dest ":")))
+          (message "Copied file to %s" dest)
+        (signal 'tailscale-error (buffer-string))))))
 
 (provide 'akirak-tailscale)
 ;;; akirak-tailscale.el ends here

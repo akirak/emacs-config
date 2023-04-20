@@ -129,6 +129,11 @@
     (goto-char start)
     (setq akirak-treesit-expand-region-node node)))
 
+(defcustom akirak-treesit-balanced-nodes
+  '("jsx_opening_element")
+  "List of node types that needs balancing."
+  :type '(repeat string))
+
 (defun akirak-treesit-smart-kill-line (&optional arg)
   (interactive "P")
   (if (numberp arg)
@@ -137,12 +142,16 @@
           (node (if (looking-at (rx (+ blank)))
                     (treesit-node-at (match-end 0))
                   (treesit-node-at (point))))
+          (bound (pos-eol))
           parent)
       (if (< (treesit-node-start node) (point))
-          (kill-region (point) (treesit-node-end node))
+          (kill-region (point) (min bound (treesit-node-end node)))
         (catch 'stop
           (while (setq parent (treesit-node-parent node))
-            (when (< (treesit-node-start parent) start)
+            (when (and (or (< (treesit-node-start parent) start)
+                           (> (treesit-node-end parent) bound))
+                       (not (member (treesit-node-type node)
+                                    akirak-treesit-balanced-nodes)))
               (throw 'stop t))
             (setq node parent)))
         (if parent
@@ -150,17 +159,18 @@
                            (cl-member node (treesit-node-children parent)
                                       :test #'treesit-node-eq)
                            (seq-take-while `(lambda (x)
-                                              (< (treesit-node-start x) ,(line-end-position))))))
-                  (inside-bracket (or (memq (char-after (treesit-node-start parent))
-                                            (string-to-list "\"'<"))
+                                              (< (treesit-node-start x) ,bound)))))
+                  (inside-bracket (or (memq (char-after (1- (treesit-node-end parent)))
+                                            (string-to-list "\"'>"))
                                       (save-excursion
-                                        (goto-char (treesit-node-start parent))
+                                        (goto-char (treesit-node-end parent))
                                         (funcall show-paren-data-function)))))
               (if nodes
                   (kill-region (point) (treesit-node-end (car (last nodes
                                                                     (when inside-bracket
                                                                       2)))))
-                (error "Empty nodes")))
+                ;; No node to delete, fallback to the default behavior
+                (kill-line)))
           (kill-region (point) (treesit-node-end node)))))))
 
 (provide 'akirak-treesit)

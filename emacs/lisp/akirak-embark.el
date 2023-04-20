@@ -65,16 +65,21 @@
     (define-key map "t" #'akirak-vterm-run-in-package-root)
     map))
 
-(defvar akirak-embark-org-src-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "w" #'embark-copy-as-kill)
-    map))
+(defvar-keymap akirak-embark-org-block-map
+  :doc "Keymap for Org blocks."
+  "c" #'org-ctrl-c-ctrl-c)
 
-(defvar akirak-embark-org-sh-src-map
-  (let ((map (make-composed-keymap nil akirak-embark-org-src-map)))
-    (define-key map "v" #'akirak-embark-send-to-vterm)
-    (define-key map "V" #'akirak-embark-send-to-new-vterm)
-    map))
+(defvar-keymap akirak-embark-org-src-map
+  :parent akirak-embark-org-block-map
+  "w" #'embark-copy-as-kill)
+
+(defvar-keymap akirak-embark-org-sh-src-map
+  :parent akirak-embark-org-src-map
+  "v" #'akirak-embark-send-to-vterm
+  "V" #'akirak-embark-send-to-new-vterm)
+
+(defvar-keymap akirak-embark-org-prompt-map
+  :parent akirak-embark-org-block-map)
 
 (defvar akirak-embark-git-file-map
   (let ((map (make-composed-keymap nil embark-general-map)))
@@ -208,8 +213,9 @@
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
+  (define-key embark-file-map "t" #'find-file-other-tab)
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
-  (define-key embark-file-map "t" #'akirak-tailscale-copy-file)
+  (define-key embark-file-map (kbd "C-c C-T") #'akirak-tailscale-copy-file)
   (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
@@ -232,6 +238,8 @@
                '(org-src-block . akirak-embark-org-src-map))
   (add-to-list 'embark-keymap-alist
                '(org-sh-src-block . akirak-embark-org-sh-src-map))
+  (add-to-list 'embark-keymap-alist
+               '(org-prompt-special-block . akirak-embark-org-prompt-map))
   (add-to-list 'embark-keymap-alist
                '(workbox-shell-command . akirak-embark-package-shell-command-map))
   (add-to-list 'embark-transformer-alist
@@ -311,7 +319,16 @@
               'org-src-block)
            ,(string-trim (org-element-property :value element))
            . ,(cons (org-element-property :begin element)
-                    (org-element-property :end element))))))))
+                    (org-element-property :end element))))
+        (special-block
+         (pcase (org-element-property :type element)
+           ("prompt"
+            `(org-prompt-special-block
+              ,(buffer-substring-no-properties
+                (org-element-property :contents-begin element)
+                (org-element-property :contents-end element))
+              . ,(cons (org-element-property :begin element)
+                       (org-element-property :end element))))))))))
 
 (defun akirak-embark-target-org-heading ()
   (when (derived-mode-p 'org-mode)

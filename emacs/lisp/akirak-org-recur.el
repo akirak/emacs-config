@@ -71,7 +71,7 @@
         (when (yes-or-no-p "Add to the file header?")
           (save-excursion
             (add-file-local-variable-prop-line 'mode 'org)
-            (add-file-local-variable-prop-line 'mode 'org-recur)))))
+            (add-file-local-variable-prop-line 'eval '(org-recur-mode t))))))
     (unless (akirak-org-recur-next-date)
       (akirak-org-recur-set))
     (unless (org-entry-get nil "SCHEDULED")

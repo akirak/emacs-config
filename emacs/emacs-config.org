@@ -1,5 +1,5 @@
 # -*- org-id-link-to-org-use-id: nil; org-complete-tags-always-offer-all-agenda-tags: nil; eval: (org-make-toc-mode t) -*-
-* A Progressive Emacs Configuration
+* A Progressively Enhanced Emacs Configuration
 :PROPERTIES:
 :TOC:      :include descendants :depth 1
 :END:
@@ -512,8 +512,16 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup browse-url
     (:status personal
-      (:set browse-url-browser-function #'akirak-browse-url-external-browser
-            browse-url-secondary-browser-function #'akirak-browse-url-external-browser)))
+      (:set browse-url-handlers `((,(rx bos "http" (?  "s") "://"
+                                        (or "localhost"
+                                            (and (+ digit) (* "." (+ digit))))
+                                        (or (any ":/") eos))
+                                   . akirak-browse-url-private-url)
+                                  (,(rx bos "http" (?  "s") "://"
+                                        (or "airtable.com"
+                                            "figma.com")
+                                        (or "/" eos))
+                                   . akirak-browse-url-chromium-default)))))
 #+end_src
 *** buffer.c                                     :formatting:visual:
 :PROPERTIES:
@@ -641,6 +649,7 @@ The following variable defines variables that can be saved to =custom-file=:
       akirak-org-clock-mode
       akirak-org-log-file
       akirak/font-height
+      akirak/org-memento-export-directory
       ;; Dynamic
       safe-local-variable-values))
 #+end_src
@@ -860,7 +869,22 @@ The built-in =electric= package provides the following modes:
           version-control t
           view-read-only t
           auto-mode-case-fold nil
-          large-file-warning-threshold (* 1024 1024))
+          large-file-warning-threshold (* 1024 1024)
+          find-sibling-rules
+          `((,(rx "lib/" (group (+ anything)) ".ex" (?  "s") eos)
+             "test/\\1_test.ex"
+             "test/\\1_test.exs")
+            (,(rx "test/" (group (+ anything)) "_test.ex" (?  "s") eos)
+             "lib/\\1.ex"
+             "lib/\\1.exs")
+            (,(rx "/__tests__/" (group (+ (not (any "/")))) ".ts" (?  "x") eos)
+             "/\\1.ts"
+             "/\\1.tsx")
+            (,(rx "/" (group (+ (not (any "/")))) ".ts" (?  "x") eos)
+             "/__tests__/\\1.ts"
+             "/__tests__/\\1.tsx")))
+
+    (define-key ctl-x-map "," #'find-sibling-file)
 
     (advice-add 'abort-if-file-too-large
                 :before-while
@@ -868,6 +892,7 @@ The built-in =electric= package provides the following modes:
                                                                  _op-type
                                                                  filename &rest _)
                   (not (string-match-p (rx (or ".org"
+                                               ".pdf"
                                                ".epub")
                                            eos)
                                        filename))))
@@ -878,18 +903,21 @@ The built-in =electric= package provides the following modes:
       (:global "<f5>" #'revert-buffer))
 
     (:status personal
-      (let ((prettier '((eval . (prettier-on-save-mode))))
-            (lsp '((eval . (eglot-ensure)))))
+      (let ((prettier '((eval . (prettier-on-save-mode t))))
+            (lsp '((eval . (eglot-ensure))))
+            (flymake-eslint '((eval . (flymake-eslint-enable)))))
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@prettier ,@lsp))
            (css-mode . (,@prettier ,@lsp))
+           (svelte-mode . (,@prettier ,@lsp ,@flymake-eslint))
            (elixir-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp))
            (haskell-mode . (,@lsp)))))
-      (dir-locals-set-directory-class "~/work2/" 'default)))
+      (dir-locals-set-directory-class "~/work2/learning/" 'default)
+      (dir-locals-set-directory-class "~/work2/foss/" 'default)))
 #+end_src
 
 - Use =akirak-files-ensure-abbrev-list= to update =directory-abbrev-alist=. (see [[*akirak][akirak]]).
@@ -953,12 +981,17 @@ The built-in =electric= package provides the following modes:
     (set-frame-parameter nil 'alpha '(98 . 96))
 
     (defconst akirak/base-frame-title-format
-      '((akirak/emacs-profile-name
-         (" - " akirak/emacs-profile-name))
+      '(" - GNU Emacs"
+        (emacs-version
+         (" " emacs-version))
+        (twist-configuration-revision
+         (" @ " akirak/nixos-configuration-version))
+        (akirak/emacs-profile-name
+         (" (" akirak/emacs-profile-name ")"))
         (akirak/os-pretty-name
-         (" - " akirak/os-pretty-name))
+         (" on " akirak/os-pretty-name))
         (akirak/nixos-configuration-version
-         ("@" akirak/nixos-configuration-version))))
+         (" @ " akirak/nixos-configuration-version))))
 
     (defconst akirak/default-frame-title-format
       (cons '(org-memento-current-block
@@ -1030,6 +1063,15 @@ The built-in =electric= package provides the following modes:
 
     (dolist (mode-hook '(makefile-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
+#+end_src
+*** isearch
+:PROPERTIES:
+:CREATED_TIME: [2023-03-30 Thu 21:42]
+:END:
+
+#+begin_src emacs-lisp
+  (setup isearch
+    (:bind "M-q" #'isearch-query-replace))
 #+end_src
 *** jit-lock
 #+begin_src emacs-lisp
@@ -1291,11 +1333,12 @@ Operations on the current project
     (run-with-idle-timer 180 nil #'akirak-project-rescan)
 
     (with-eval-after-load "bindings"
-      (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
-      (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
-      (define-key ctl-x-x-map "C" #'akirak-project-find-css)
-      (define-key ctl-x-x-map "T" #'akirak-project-find-test)
-      (define-key ctl-x-x-map "S" #'akirak-project-find-stories))
+      ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
+      ;; (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
+      ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
+      ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
+      ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
+      )
 
     (with-eval-after-load 'embark
       (define-key embark-file-map (kbd "+") #'akirak-project-init)))
@@ -1399,33 +1442,6 @@ This is a recommended setting for use with vertico. See https://github.com/minad
   (setup saveplace
     (:with-mode save-place-mode
       (:hook-into after-init-hook)))
-#+end_src
-*** server
-:PROPERTIES:
-:CREATED_TIME: [2022-10-15 Sat 13:04]
-:END:
-
-#+begin_src emacs-lisp
-  (setup server
-    (when window-system
-      (defcustom akirak/server-start-hook nil "" :type 'hook)
-
-      (defun akirak/server-start ()
-        (server-start)
-        (run-hooks 'akirak/server-start-hook))
-
-      (defun akirak/start-server-at-startup ()
-        (require 'server)
-        (if (server-running-p)
-            ;; Try to start an Emacs server again in 3 minutes.
-            (run-with-timer (* 3 60) nil
-                            (lambda ()
-                              (unless (server-running-p)
-                                (akirak/server-start))))
-          (akirak/server-start)))
-
-      (:status personal
-        (add-hook 'emacs-startup-hook #'akirak/start-server-at-startup))))
 #+end_src
 *** sgml-mode
 :PROPERTIES:
@@ -1607,6 +1623,16 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
         (unwind-protect
             (call-interactively cmd)
           (superword-mode)))))
+#+end_src
+*** tab-bar
+:PROPERTIES:
+:CREATED_TIME: [2023-04-09 Sun 23:03]
+:END:
+
+#+begin_src emacs-lisp
+  (setup tab-bar
+    (define-key akirak/c-z-map "=" #'tab-bar-duplicate-tab)
+    (define-key akirak/c-z-map "-" #'tab-bar-close-tab))
 #+end_src
 *** tempo
 :PROPERTIES:
@@ -1854,13 +1880,12 @@ Thus I will explicitly install this package rather than using the built-in versi
 #+begin_src emacs-lisp
   (setup winner
     (:hook-into after-init-hook)
+    (:when-loaded
+      (cl-pushnew "*Calendar*" winner-boring-buffers))
 
     (:status opinionated
-      (:with-map ctl-x-map
-        (:bind "," #'winner-undo
-               "." #'winner-redo))
-      (:repeat ctl-x-map
-        winner-undo)))
+      (:global "<f7>" #'winner-undo
+               "<S-f7>" #'winner-redo)))
 #+end_src
 *** woman
 :PROPERTIES:
@@ -1909,6 +1934,21 @@ You can load a theme on startup by adding command line arguments to Emacs, e.g.
 You need to install the font separately.
 
 #+begin_src emacs-lisp
+  (defun akirak/enable-fonts (&optional value skip-check)
+    (let ((families (font-family-list))
+          (value (or value akirak/font-family-alist)))
+      (pcase-dolist (`(,face ,family . ,plist) value)
+        (if (or (member family families)
+                skip-check)
+            (if-let (fontset (plist-get plist :fontset))
+                (set-fontset-font fontset face family nil
+                                  (plist-get plist :add))
+              (set-face-attribute face nil :family family))
+          (message "Font family %s is not installed" family)
+          ;; (delq (assq face value) value)
+          ;; (set symbol value)
+          ))))
+
   (defcustom akirak/font-family-alist
     '((default "Cascadia Code")
       (fixed-pitch "Cascadia Code")
@@ -1927,17 +1967,15 @@ You need to install the font separately.
                                           (string :tag "Name of a fontset")))))))
     :set (lambda (symbol value)
            (set symbol value)
-           (when window-system
-             (let ((families (font-family-list)))
-               (pcase-dolist (`(,face ,family . ,plist) value)
-                 (if (member family families)
-                     (if-let (fontset (plist-get plist :fontset))
-                         (set-fontset-font fontset face family nil
-                                           (plist-get plist :add))
-                       (set-face-attribute face nil :family family))
-                   (message "Font family %s is not installed" family)
-                   (delq (assq face value) value)
-                   (set symbol value)))))))
+           (when (or window-system
+                     (daemonp))
+             (akirak/enable-fonts value (daemonp)))))
+
+  (when (daemonp)
+    (add-hook 'server-after-make-frame-hook
+              (defun akirak/server-set-fonts ()
+                (akirak/enable-fonts nil t)
+                (remove-hook 'server-after-make-frame-hook #'akirak/server-set-fonts))))
 
   (eval-after-load 'outline
     (defun akirak/set-outline-families ()
@@ -2178,6 +2216,7 @@ Outline-based notes management and organizer
               (seq-sort-by #'car #'string-collate-lessp
                            (cl-remove-duplicates
                             (append '(("d" . "definition")
+                                      ("p" . "prompt")
                                       ("t" . "toc"))
                                     org-structure-template-alist)
                             :key #'car
@@ -2273,6 +2312,8 @@ Outline-based notes management and organizer
                ;; alternative bindings for commands bound on those keys.
                "M-n" #'org-metadown
                "M-p" #'org-metaup
+               "M-N" #'org-shiftmetadown
+               "M-P" #'org-shiftmetaup
                "M-H" #'org-shiftmetaleft
                "M-L" #'org-shiftmetaright
                "M-g a" (defun akirak/org-goto-beginnning-of-content ()
@@ -2420,6 +2461,7 @@ Outline-based notes management and organizer
           org-clock-goto-may-find-recent-task nil
           org-clock-mode-line-total 'today
           org-clock-out-remove-zero-time-clocks t
+          org-clock-in-resume t
 
           org-clock-persist t
           ;; I may simply close Emacs to leave the work
@@ -2474,7 +2516,13 @@ Outline-based notes management and organizer
 ***** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    (:hook-into akirak/server-start-hook)
+    (when (daemonp)
+      (:hook-into emacs-startup-hook))
+
+    (advice-add 'save-buffers-kill-terminal
+                :before
+                (defun akirak/snooze-before-kill (&rest _)
+                  (akirak-org-clock-snooze 20)))
 
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
@@ -2676,6 +2724,7 @@ A programmable workflow layer for Org mode
             ("\\.h?eex\\'" . "programming/elixir")
             ("package\\.yaml\\'" . "programming/haskell")
             ("tsconfig\\." . "programming/typescript")
+            ("\\.envrc\\'" . "programming/envrc")
             ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
             ("hie\\.yaml\\'" . "programming/haskell"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in
@@ -2984,6 +3033,7 @@ Time blocking with Org
 
       (define-key help-map (kbd "<tab>") #'org-memento-next-action)
       (define-key akirak/c-z-map (kbd "<tab>") #'org-memento-next-action)
+      (define-key akirak/c-z-map "!" #'org-memento-quick-start-event)
       (define-key akirak/c-z-map "a" #'org-memento-agenda)
       (define-key akirak/c-z-map "i" #'org-memento-policy-find-in-source)
       (define-key akirak/c-z-map "j" #'org-memento-open-journal)
@@ -3066,6 +3116,22 @@ Time blocking with Org
                 (defun akirak/org-memento-save-some-buffers ()
                   (ignore-errors (akirak-org-clock-snooze))
                   (save-some-buffers)))
+
+      (defcustom akirak/org-memento-export-directory nil
+        ""
+        :type '(choice directory (const nil)))
+
+      (add-hook 'org-memento-checkout-hook
+                (defun akirak/org-memento-export-day-at-point ()
+                  (when akirak/org-memento-export-directory
+                    (if (file-equal-p org-memento-file (buffer-file-name))
+                        (let ((date (org-get-heading t t t t)))
+                          (unless (file-directory-p akirak/org-memento-export-directory)
+                            (make-directory akirak/org-memento-export-directory t))
+                          (org-memento-export-to-json date date
+                            (expand-file-name (concat "org-memento_" date ".json")
+                                              akirak/org-memento-export-directory)))
+                      (message "Not in org-memento-file buffer")))))
 
       (add-hook 'org-memento-block-exit-hook #'akirak/org-memento-cleanup-buffers)))
 #+end_src
@@ -3390,8 +3456,14 @@ Major mode for Elixir with tree-sitter support
                   ""
                   > "fn " - " ->" n
                   > @ _ n
+                  > -2 "end"))
+      (define-abbrev elixir-ts-mode-abbrev-table
+        "do" "" (define-skeleton akirak-elixir-fn
+                  "do ... end"
+                  ""
+                  > "do" n
+                  > @ _ n
                   > -2 "end")))
-
 
     (:compilation-error
      ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
@@ -3448,6 +3520,15 @@ Major mode for the Go programming language
       (unless (boundp 'heex-ts-mode--font-lock-settings)
         (setq heex-ts-mode--font-lock-settings
               heex-ts--font-lock-settings))))
+#+end_src
+*** json-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-04-01 Sat 18:52]
+:END:
+
+#+begin_src emacs-lisp
+  (setup json-ts-mode
+    (:file-match "\\.json\\'" "\\.lock\\'"))
 #+end_src
 *** js-ts-mode
 :PROPERTIES:
@@ -3776,6 +3857,12 @@ This is a collection of extra utilities for various packages.
              "<f12> S s" #'akirak-org-secrets-show
              "<f12> S c" #'akirak-org-secrets-capture))
 #+end_src
+**** akirak-org-special
+#+begin_src elisp
+  (setup akirak-org-special
+    (with-eval-after-load 'org
+      (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-org-special-prompt-send)))
+#+end_src
 **** akirak-elec-pair                                 :parentheses:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:39]
@@ -3975,7 +4062,7 @@ Show number of matches in mode-line while searching
 :CREATED_TIME: [2023-03-18 Sat 15:40]
 :END:
 #+begin_quote
-Elixir tooling integration into Emacs
+Elixir tooling integration
 [[https://github.com/Sasanidas/Apprentice]]
 #+end_quote
 
@@ -4240,12 +4327,8 @@ Consulting completing-read
              [remap bookmark-jump] #'consult-bookmark
              [remap yank-pop] #'consult-yank-pop
              "M-s o" #'consult-outline
-             ;; Remap `isearch-forward' that is bound to C-s. `isearch-forward' is
-             ;; bound to "s" in `View-mode-map', but don't remap it.
-             ;; `isearch-backward' is still bound to C-r, so you can use it to
-             ;; dispatch the built-in isearch.
-             "C-s" #'consult-line
-             "C-c f" #'consult-focus-lines
+             "C-S-s" #'consult-line
+             "M-s l" #'consult-focus-lines
              "C-x /" #'consult-ripgrep)
 
     (:with-feature consult-imenu
@@ -4310,7 +4393,29 @@ An unofficial Copilot plugin for Emacs
 
 #+begin_src emacs-lisp
   (setup (:package copilot)
-    (:nixpkgs "nodejs"))
+    (:nixpkgs "nodejs")
+    (:bind [remap expand-abbrev] #'akirak-copilot-abbrev-or-complete
+           ;; Remap repl-toggle in the minor mode map.
+           "M-RET" #'akirak-copilot-accept-dwim
+           "C-M-n" #'copilot-next-completion
+           "C-M-p" #'copilot-previous-completion
+           "M-F" #'copilot-accept-completion-by-word
+           "M-E" #'copilot-accept-completion-by-line)
+    (:when-loaded
+      ;; Look up the command bound in global-map and use it as the fallback
+      ;; command.
+      (when-let* ((keys (where-is-internal #'akirak-copilot-accept-dwim
+                                           copilot-mode-map))
+                  (command (lookup-key global-map (car keys))))
+        (setq akirak-copilot-accept-fallback command)))
+
+    ;; Enable copilot if LSP (eglot) is turned on. This is directory-local.
+    (dir-locals-set-class-variables
+     'copilot-if-lsp
+     '((nil . ((eval . (add-hook 'eglot-managed-mode-hook 'copilot-mode nil t))))))
+    (:status personal
+      ;; Enable copilot by setting the directory class.
+      (dir-locals-set-directory-class "~/work2/foss/" 'copilot-if-lsp)))
 #+end_src
 *** corfu                                            :completion:UI:
 :PROPERTIES:
@@ -4771,6 +4876,8 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(elixir-ts-mode . ("elixir-ls")))
       (add-to-list 'eglot-server-programs
+                   '(heex-ts-mode . ("elixir-ls")))
+      (add-to-list 'eglot-server-programs
                    `(web-mode . ,(eglot-alternatives
                                   '(("astro-ls" "--stdio")))))
 
@@ -4971,7 +5078,7 @@ Major modes for editing and running Erlang
 #+begin_src emacs-lisp
 (setup (:package erlang))
 #+end_src
-*** eros                                   :Emacs__Lisp:development:
+*** COMMENT eros                                       :Emacs__Lisp:development:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:05]
 :END:
@@ -5022,7 +5129,8 @@ Get environment variables such as $PATH from the shell
 
 #+begin_src emacs-lisp
   (setup (:package exec-path-from-shell)
-    (when (and window-system
+    (when (and (or window-system
+                   (daemonp))
                (not (equal akirak/os-id "nixos")))
       (require 'exec-path-from-shell)
       (unless (eq system-type 'darwin)
@@ -5133,7 +5241,8 @@ A Flymake backend for Javascript using eslint
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package flymake-eslint))
+  (setup (:package flymake-eslint)
+    (:set flymake-eslint-defer-binary-check t))
 #+end_src
 *** flyspell-correct
 :PROPERTIES:
@@ -5740,7 +5849,7 @@ Edit jq scripts.
 #+begin_src emacs-lisp
 (setup (:package jq-mode))
 #+end_src
-*** jsonian
+*** COMMENT jsonian                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-06-28 Tue 23:59]
 :END:
@@ -5771,6 +5880,18 @@ Major mode for editing JSON files.
 #+begin_src emacs-lisp
   (setup (:package json-mode)
     (:file-match "\\.json\\'" "\\.lock\\'"))
+#+end_src
+*** keycast
+:PROPERTIES:
+:CREATED_TIME: [2023-03-31 Fri 23:59]
+:ID:       2c1614dd-a2e5-4815-96dd-10b090cddcf4
+:END:
+#+begin_quote
+Show current command and its binding
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package keycast))
 #+end_src
 *** kind-icon                                                   :UI:
 :PROPERTIES:
@@ -5928,7 +6049,7 @@ LSP mode
   (put 'lsp-define-conditional-key 'lisp-indent-function 'defun)
   (put 'lsp-with-filename 'lisp-indent-function 1)
 #+end_src
-*** macrostep                               :emacs_lisp:development:
+*** COMMENT macrostep                                   :emacs_lisp:development:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:52]
 :END:
@@ -5986,6 +6107,16 @@ A Git porcelain inside Emacs
                    (t
                     (magit-blob-visit-file)))))
     (define-key ctl-x-x-map "m" #'magit-file-dispatch)
+    (define-key ctl-x-x-map "s"
+                (defun akirak-magit-stage-file-and-commit ()
+                  (interactive)
+                  (unless (buffer-file-name)
+                    (user-error "Not in a file buffer"))
+                  (when (save-window-excursion
+                          (magit-diff-buffer-file)
+                          (yes-or-no-p "Stage all changes in this file?"))
+                    (magit-stage-file (buffer-file-name))
+                    (magit-commit))))
 
     (:status opinionated
       (:set magit-display-buffer-function
@@ -6101,7 +6232,7 @@ Sections for read-only buffers
       (:unbind "M-1" "M-2" "M-3" "M-4"
                [C-tab] [M-tab])))
 #+end_src
-*** magit-todos                                                 :VC:
+*** COMMENT magit-todos                                                     :VC:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
@@ -6294,13 +6425,15 @@ Elegant, highly legible and customizable themes
             (2 . (rainbow overline variable-pitch 1.1))
             (4 . (variable-pitch))))
 
-    (when window-system
+    (when (or window-system
+              (daemonp))
       (modus-themes-load-themes)
       (modus-themes-load-operandi)))
 #+end_src
 *** move-dup                                               :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 20:59]
+:ID:       4aed6213-0bcf-4dc7-943e-a94ea8a1fbe3
 :END:
 #+begin_quote
 Eclipse-like moving and duplicating lines or rectangles
@@ -6309,10 +6442,8 @@ Eclipse-like moving and duplicating lines or rectangles
 
 #+begin_src emacs-lisp
   (setup (:package move-dup)
-    (:bind "M-p" #'move-dup-move-lines-up
-           "M-n" #'move-dup-move-lines-down
-           "C-M-p" #'move-dup-duplicate-up
-           "C-M-n" #'move-dup-duplicate-down)
+    (:bind "M-P" #'move-dup-move-lines-up
+           "M-N" #'move-dup-move-lines-down)
 
     (add-hook 'prog-mode-hook #'move-dup-mode)
     (add-hook 'text-mode-hook
@@ -6333,18 +6464,19 @@ Frontend to experimental commands of Nix
   (setup (:package nix3)
     (:set nix3-flake-remote-wait 20)
 
-    (defconst akirak/nix3-registry-url
-      "https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json")
-
-    (defun akirak/nix3-flake-lock-from-pins ()
-      (compile (mapconcat #'shell-quote-argument
-                          `("nix" "flake" "lock"
-                            "--registry" ,akirak/nix3-registry-url)
-                          " ")))
+    (defun akirak/nix3-flake-update-from-pins ()
+      (interactive)
+      (when (and (file-exists-p "flake.nix")
+                 (not (file-exists-p "flake.lock")))
+        (start-process "nix-flake-lock" "*nix flake lock*"
+                       "nix" "flake" "update"
+                       "--inputs-from" "github:akirak/flake-pins")))
 
     (:when-loaded
-      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-lock-from-pins
-                nil t))
+      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-update-from-pins
+                90)
+      (add-hook 'nix3-flake-init-hook #'akirak/nix3-flake-update-from-pins
+                90))
 
     (:global "C-c n" #'nix3-transient
              "M-g M-f" #'nix3-flake-edit
@@ -6500,6 +6632,23 @@ Display ^L page breaks as tidy horizontal lines
                 compilation-mode-hook
                 haskell-mode-hook))
 #+end_src
+*** pdf-tools
+:PROPERTIES:
+:CREATED_TIME: [2023-04-20 Thu 23:59]
+:END:
+#+begin_quote
+Support library for PDF documents
+[[http://github.com/vedang/pdf-tools/]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package pdf-tools))
+
+  (setup pdf-view
+    ;; Workaround for missing autoload
+    (autoload 'pdf-view-mode "pdf-view")
+    (:file-match "\\.pdf\\'"))
+#+end_src
 *** pinyin                                                 :Chinese:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-23 Tue 23:59]
@@ -6578,7 +6727,7 @@ Summon and dismiss buffers as popups
                                      "^\\*edit string\\*"
                                      "^\\*edit-indirect"
                                      "^\\*scratch from selection\\*"
-                                     "^\\*eldoc"
+                                     ;; "^\\*eldoc"
                                      "^\\*Select Link\\*"
                                      "^\\*Flymake diagnostics"
                                      "^\\*hoogle\\*"
@@ -6604,14 +6753,10 @@ Summon and dismiss buffers as popups
                 (recenter -1 t)))
 
     (:bind "M-\"" #'popper-cycle
-           "M-' k" #'popper-kill-latest-popup
            "M-' M-'" #'popper-toggle-latest
            "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-vterm-for-project
            "M-' s" #'scratch-buffer
-           "M-' b" (defun akirak/backtrace-buffer ()
-                     (interactive)
-                     (pop-to-buffer "*Backtrace*"))
            "M-' c" (defun akirak/compilation-buffer ()
                      (interactive)
                      (pop-to-buffer "*compilation*"))))
@@ -6657,7 +6802,7 @@ Parentheses Universalistic
 
 #+begin_src emacs-lisp
   (setup (:package puni)
-    (:hook-into nix-mode)
+    (:hook-into nix-mode svelte-mode)
 
     (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
 
@@ -6726,16 +6871,7 @@ Define commands which run reformatters on the current buffer
                   "--stdin-filepath" (buffer-file-name)))
      (treefmt
       :program "treefmt"
-      :stdin nil :stdout nil :mode nil
-      :args (list (buffer-file-name))))
-
-    (define-minor-mode treefmt-mode
-      "Run treefmt after saving."
-      :global nil
-      :lighter " Treefmt"
-      (if (bound-and-true-p treefmt-mode)
-          (add-hook 'after-save-hook 'treefmt-buffer 90 t)
-        (remove-hook 'after-save-hook 'treefmt-buffer t))))
+      :args (list "--stdin" (buffer-file-name)))))
 #+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
@@ -6823,6 +6959,7 @@ Clean-up and Beautify the list of minor-modes.
                                "TSit"
                                "OClk"
                                "Memento"
+                               "Copilot"
                                "ga"
                                "Treefmt")
                            symbol-end))
@@ -7102,6 +7239,17 @@ Grammar bundle for tree-sitter
       (:hook-into typescript-mode-hook
                   typescript-tsx-mode-hook)))
 #+end_src
+*** triples
+:PROPERTIES:
+:CREATED_TIME: [2023-03-25 Sat 18:13]
+:END:
+#+begin_quote
+A flexible triple-based database for use in apps
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package triples))
+#+end_src
 *** tuareg                                                  :OCaml:@extra:fstar:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-10 Tue 16:51]
@@ -7139,6 +7287,20 @@ Frontend to Twist configuration
 
 #+begin_src emacs-lisp
 (setup (:package twist))
+#+end_src
+*** twist
+:PROPERTIES:
+:CREATED_TIME: [2023-04-10 Mon 23:59]
+:END:
+#+begin_quote
+Hot-reload packages with twist
+[[https://github.com/emacs-twist/twist.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package twist)
+    (add-hook 'emacs-startup-hook #'twist-watch-mode)
+    (:global "<f12> e R" #'twist-update))
 #+end_src
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
@@ -7463,11 +7625,12 @@ Define how Org entries are displayed by certain commands.
 
   (defun akirak/org-recenter-toplevel-at-top ()
     (unless (org-before-first-heading-p)
-      (save-excursion
-        (let ((regexp (rx bol "*" blank)))
-          (when (or (looking-at regexp)
-                    (re-search-backward regexp nil t))
-            (recenter-top-bottom 0))))))
+      ;; (save-excursion
+      ;;   (let ((regexp (rx bol "*" blank)))
+      ;;     (when (or (looking-at regexp)
+      ;;               (re-search-backward regexp nil t))
+      ;;       (recenter-top-bottom 0))))
+      (recenter-top-bottom 0)))
 
   (setq akirak-org-clock-open-hook '(org-show-entry
                                      org-show-children))
@@ -7751,21 +7914,21 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 229 |
+| [[org-ql-search:tags:packages][packages]]            | 231 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
-| [[org-ql-search:tags:development][development]]         |  10 |
 | [[org-ql-search:tags:@extra][@extra]]              |   9 |
-| [[org-ql-search:tags:VC][VC]]                  |   8 |
+| [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
+| [[org-ql-search:tags:VC][VC]]                  |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
-| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
+| [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
@@ -7817,7 +7980,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
-| [[org-ql-search:tags:emacs_lisp][emacs_lisp]]          |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:themes][themes]]              |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |

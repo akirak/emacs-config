@@ -74,6 +74,25 @@ display alternative actions."
       (dired dir))))
 
 ;;;###autoload
+(defun akirak-project-move ()
+  "Move the current project to another parent directory."
+  (interactive)
+  (let* ((root (vc-root-dir))
+         (name (file-name-nondirectory (string-remove-prefix root)))
+         (worktrees (magit-list-worktrees))
+         (new-parent (akirak-project-prompt-parent "Move the project to somewhere else: "))
+         (dest (concat (file-name-as-directory new-parent) name)))
+    (when (file-exists-p dest)
+      (user-error "Already exists: %s" dest))
+    (if (and worktrees
+             (> (length worktrees) 1))
+        (magit-worktree-move root dest)
+      (user-error "Multiple worktrees")
+      (dired-rename-subdir root dest))
+    (project-forget-project root)
+    (akirak-project-remember-this)))
+
+;;;###autoload
 (defun akirak-project-remember-this ()
   (interactive)
   (when-let (pr (project-current))
@@ -173,10 +192,13 @@ display alternative actions."
 ;;;###autoload
 (defun akirak-project-init (dir)
   "Initialize a project at DIR interactively."
-  (interactive (let* ((name (read-string "Name: "))
-                      (parent (akirak-project-prompt-parent
-                               (format "Parent directory for %s: " name))))
-                 (list (file-name-as-directory (expand-file-name name parent)))))
+  (interactive (let ((name (read-string "Name: ")))
+                 (list (if (file-name-absolute-p name)
+                           name
+                         (file-name-as-directory
+                          (expand-file-name name
+                                            (akirak-project-prompt-parent
+                                             (format "Parent directory for %s: " name))))))))
   (cond
    ((file-directory-p dir)
     (if (file-directory-p (expand-file-name ".git" dir))
@@ -189,10 +211,12 @@ display alternative actions."
     (user-error "Is a file: %s" dir))
    ((file-name-absolute-p dir)
     (make-directory dir)
-    (let ((default-directory dir))
-      (call-process "git" nil nil nil "init" (expand-file-name dir))
-      (project-remember-project (project-current nil dir))
-      (vterm)))
+    (if (locate-dominating-file dir ".git")
+        (message "Already inside a Git repository, so not running git init")
+      (let ((default-directory dir))
+        (call-process "git" nil nil nil "init" (expand-file-name dir))
+        (project-remember-project (project-current nil dir))
+        (vterm))))
    ((string-match-p (rx bol (+ (not (any "/"))) eol) dir)
     (let ((parent (completing-read "Parent directory: "
                                    (akirak-project-parents))))

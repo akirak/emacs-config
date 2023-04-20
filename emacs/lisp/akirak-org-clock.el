@@ -74,6 +74,7 @@
                    (string-equal (expand-file-name akirak-emacs-org-config-file)
                                  filename))
               (bound-and-true-p url-http-content-type)
+              (eq this-command 'magit-show-commit)
               (when-let (mode (derived-mode-p 'org-mode 'org-memento-policy-mode))
                 (cl-case mode
                   (org-memento-policy-mode t)
@@ -253,12 +254,15 @@
        (org-clock-clock-in (list marker))))))
 
 ;;;###autoload
-(defun akirak-org-clock-snooze ()
-  (interactive)
-  (setq akirak-org-clock-snooze-until
-        (+ (float-time) akirak-org-clock-snooze-duration))
-  (message "Snoozing org clock mode for %s seconds" akirak-org-clock-snooze-duration)
-  (add-hook 'org-clock-in #'akiraik-org-clock-stop-snoozing))
+(defun akirak-org-clock-snooze (&optional seconds)
+  (interactive "P")
+  (let ((seconds (or (when (numberp seconds)
+                       seconds)
+                     akirak-org-clock-snooze-duration)))
+    (setq akirak-org-clock-snooze-until
+          (+ (float-time) seconds))
+    (message "Snoozing org clock mode for %s seconds" seconds)
+    (add-hook 'org-clock-in #'akiraik-org-clock-stop-snoozing)))
 
 (defun akiraik-org-clock-stop-snoozing ()
   (setq akirak-org-clock-snooze-until nil))
@@ -387,22 +391,19 @@ This function returns the current buffer."
             (delete-blank-lines)
             (newline))
           capture-buffer)
-      (with-current-buffer (marker-buffer org-clock-marker)
-        (let ((initial-position (point)))
-          (goto-char org-clock-marker)
-          (with-current-buffer (org-dog-indirect-buffer)
-            (when (or (< (point) (point-min))
-                      (> (point) (point-max)))
-              (goto-char (point-min)))
-            (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer))
-            (when org-dog-new-indirect-buffer-p
-              (org-back-to-heading)
-              (run-hooks 'akirak-org-clock-open-hook))
-            (when arg
-              (goto-char (org-entry-end-position))
-              (delete-blank-lines)
-              (newline))
-            (current-buffer)))))))
+      (with-current-buffer (org-dog-indirect-buffer org-clock-marker)
+        (when (or (< (point) (point-min))
+                  (> (point) (point-max)))
+          (goto-char (point-min)))
+        (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer))
+        (when org-dog-new-indirect-buffer-p
+          (org-back-to-heading)
+          (run-hooks 'akirak-org-clock-open-hook))
+        (when arg
+          (goto-char (org-entry-end-position))
+          (delete-blank-lines)
+          (newline))
+        (current-buffer)))))
 
 ;;;###autoload
 (defun akirak-org-clock-goto ()
@@ -513,13 +514,13 @@ This function returns the current buffer."
 ;;;; Clock out commands
 
 ;;;###autoload
-(defun akirak-org-clock-out ()
-  (interactive)
+(defun akirak-org-clock-out (&optional arg)
+  (interactive "P")
   (akirak-org-clock-require-clock
     (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
         (with-current-buffer capture-buffer
           (org-capture-finalize))
-      (org-clock-out))))
+      (org-clock-out arg))))
 
 ;;;###autoload
 (defun akirak-org-clock-done ()
@@ -560,7 +561,7 @@ This function returns the current buffer."
 ;;;; Edit
 
 ;;;###autoload
-(defun akirak-org-clock-edit ()
+(defun akirak-org-clock-edit-log-entry ()
   "Edit a clock entry in the logbook of the node."
   (interactive)
   (unless (derived-mode-p 'org-mode)

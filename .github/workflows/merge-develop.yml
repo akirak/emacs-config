@@ -4,14 +4,13 @@ on:
   pull_request:
     types:
     - closed
-    branches:
-    - develop
 
 jobs:
   update_develop:
     if: |
       github.event.pull_request.merged == true &&
       github.base_ref == 'master' &&
+      github.head_ref == 'develop' &&
       github.event.pull_request.head.repo.owner == github.event.pull_request.base.repo.owner
     runs-on: ubuntu-latest
     steps:
@@ -23,5 +22,4 @@ jobs:
 
   update_packages:
     needs: update_develop
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/update-elisp.yml

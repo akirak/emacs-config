@@ -9,8 +9,7 @@
     org-mode
     org-agenda-mode
     dired-mode
-    tabulated-list-mode
-    magit-mode)
+    tabulated-list-mode)
   ""
   :type '(repeat symbol))
 
@@ -105,32 +104,37 @@
                         (file-name-directory filename)))
            (pr (when (and directory (file-directory-p directory))
                  (akirak-header-line--project)))
-           (format (if filename
-                       (concat
-                        (pcase pr
-                          (`nil
-                           (file-name-nondirectory filename))
-                          (`(nix-store ,_)
-                           (let* ((name (thread-last
-                                          (akirak-nix-parse-drv-name (project-name pr))
-                                          (alist-get 'name)))
-                                  (pos (save-match-data
-                                         (string-match (rx bol (+ (any alnum)) "-") name)
-                                         (nth 1 (match-data)))))
-                             (format "[nix:%s] %s"
-                                     (substring name pos)
-                                     (file-relative-name filename (expand-file-name
-                                                                   (project-root pr))))))
-                          (_
-                           (format "[%s] %s"
-                                   (file-name-nondirectory (string-remove-suffix "/"
-                                                                                 (project-root pr)))
-                                   (file-relative-name filename
-                                                       (expand-file-name (project-root pr))))))
-                        (if base
-                            " -> %b"
-                          ""))
-                     "%b")))
+           (format (cond
+                    (filename
+                     (concat
+                      (pcase pr
+                        (`nil
+                         (file-name-nondirectory filename))
+                        (`(nix-store ,_)
+                         (let* ((name (thread-last
+                                        (akirak-nix-parse-drv-name (project-name pr))
+                                        (alist-get 'name)))
+                                (pos (save-match-data
+                                       (string-match (rx bol (+ (any alnum)) "-") name)
+                                       (nth 1 (match-data)))))
+                           (format "[nix:%s] %s"
+                                   (substring name pos)
+                                   (file-relative-name filename (expand-file-name
+                                                                 (project-root pr))))))
+                        (_
+                         (format "[%s] %s"
+                                 (file-name-nondirectory (string-remove-suffix "/"
+                                                                               (project-root pr)))
+                                 (file-relative-name filename
+                                                     (expand-file-name (project-root pr))))))
+                      (if base
+                          " -> %b"
+                        "")))
+                    ((derived-mode-p 'magit-mode)
+                     (format "%%b (%s)"
+                             (abbreviate-file-name default-directory)))
+                    (t
+                     "%b"))))
       (setq akirak-header-line--file (cons (float-time) format))
       format)))
 

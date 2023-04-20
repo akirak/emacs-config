@@ -24,31 +24,33 @@
                      (org-link-make-string
                       (plist-get org-store-link-plist :link)
                       (truncate-string-to-width rev 7))))
+         (buffer (or (akirak-org-clock--capture-buffer org-clock-marker)
+                     (marker-buffer org-clock-marker)))
          (case-fold-search t))
-    (with-current-buffer (or (akirak-org-clock--capture-buffer org-clock-marker)
-                             (marker-buffer org-clock-marker))
-      (when (and (>= (marker-position org-clock-marker) (point-min))
-                 (<= (marker-position org-clock-marker) (point-max)))
-        (save-excursion
-          (goto-char org-clock-marker)
-          (if (re-search-forward akirak-git-commit-log-drawer-start-re
-                                 (org-entry-end-position)
-                                 t)
-              (progn
-                (re-search-forward org-drawer-regexp)
-                (beginning-of-line))
-            ;; It's better for the drawer to not precede a drawer for
-            ;; backlinks (if any), so the commit log drawer should be the last
-            ;; drawer.
-            (org-end-of-meta-data t)
-            (when (re-search-backward (rx nonl "\n") nil t)
-              (goto-char (match-end 0)))
-            (insert ":GITCOMMITS:\n:END:\n")
-            (beginning-of-line 0))
-          (insert (akirak-git-commit--build-log-line
-                    :rev-link rev-link
-                    :message message)
-                  "\n"))))))
+    (when (org-dog-buffer-object buffer)
+      (with-current-buffer buffer
+        (when (and (>= (marker-position org-clock-marker) (point-min))
+                   (<= (marker-position org-clock-marker) (point-max)))
+          (save-excursion
+            (goto-char org-clock-marker)
+            (if (re-search-forward akirak-git-commit-log-drawer-start-re
+                                   (org-entry-end-position)
+                                   t)
+                (progn
+                  (re-search-forward org-drawer-regexp)
+                  (beginning-of-line))
+              ;; It's better for the drawer to not precede a drawer for
+              ;; backlinks (if any), so the commit log drawer should be the last
+              ;; drawer.
+              (org-end-of-meta-data t)
+              (when (re-search-backward (rx nonl "\n") nil t)
+                (goto-char (match-end 0)))
+              (insert ":GITCOMMITS:\n:END:\n")
+              (beginning-of-line 0))
+            (insert (akirak-git-commit--build-log-line
+                      :rev-link rev-link
+                      :message message)
+                    "\n")))))))
 
 (defun akirak-git-commit-log-to-org-clock ()
   (when (and (featurep 'org-clock)

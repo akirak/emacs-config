@@ -705,7 +705,7 @@
         (goto-char (org-entry-end-position))
         (delete-blank-lines)
         (save-excursion
-          (newline 2)
+          (newline)
           (insert block-text))
         (newline)))))
 
@@ -1165,7 +1165,8 @@ provided as a separate command for integration, e.g. with embark."
          (start-string (concat "#+begin_" body-type
                                (if (equal body-type "src")
                                    (format " %s"
-                                           (if (use-region-p)
+                                           (if (and (use-region-p)
+                                                    (not (derived-mode-p 'special-mode)))
                                                (thread-last
                                                  (symbol-name major-mode)
                                                  (string-remove-suffix "-mode")
@@ -1180,7 +1181,7 @@ provided as a separate command for integration, e.g. with embark."
                   (let ((region-source (buffer-substring-no-properties
                                         (region-beginning) (region-end))))
                     (if (equal body-type "src")
-                        (akirak-capture--unindent region-source)
+                        (akirak-capture--sanitize-source region-source)
                       (akirak-capture--to-org region-source))))
                 "")
             "\n" end-string "\n")))
@@ -1204,24 +1205,33 @@ provided as a separate command for integration, e.g. with embark."
         (delete-region (1- (match-beginning 0)) (match-end 0)))
       (buffer-string))))
 
-(defun akirak-capture--unindent (string)
-  (let ((lines (split-string string "\n")))
+(defun akirak-capture--sanitize-source (string)
+  ;; Replace zero-width space.
+  (let* ((string (replace-regexp-in-string "​" "" string))
+         (lines (split-string string "\n")))
     (cl-flet
         ((indent (s)
            (when (string-match (rx bol (group (+ " ")) (not (any space))) s)
              (- (match-end 1)
                 (match-beginning 1)))))
-      (let* ((min-indent (thread-last
-                           (mapcar #'indent lines)
-                           (delq nil)
-                           (apply #'min)))
-             (regexp (concat "^" (make-string min-indent ?\s))))
+      (let* ((indents (thread-last
+                        (mapcar #'indent lines)
+                        (delq nil)))
+             (regexp (when indents
+                       (concat "^" (make-string (apply #'min indents)
+                                                ?\s)))))
         (with-temp-buffer
           (insert string)
           (goto-char (point-min))
           (when (looking-at (rx (+ "\n")))
             (replace-match ""))
-          (while (re-search-forward regexp nil t)
+          (when regexp
+            (save-excursion
+              (while (re-search-forward regexp nil t)
+                (replace-match ""))))
+          (while (re-search-forward (rx (+ blank) eol) nil t)
+            (replace-match ""))
+          (when (re-search-forward (rx (+ "\n") eos) nil t)
             (replace-match ""))
           (buffer-string))))))
 
