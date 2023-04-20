@@ -247,7 +247,7 @@
       type = "github";
       owner = "akirak";
       repo = "Apprentice";
-      ref = "fix-warns";
+      ref = "prefix-map";
     };
   };
 }
