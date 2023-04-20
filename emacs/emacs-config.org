@@ -3856,6 +3856,12 @@ This is a collection of extra utilities for various packages.
              "<f12> S s" #'akirak-org-secrets-show
              "<f12> S c" #'akirak-org-secrets-capture))
 #+end_src
+**** akirak-org-special
+#+begin_src elisp
+  (setup akirak-org-special
+    (with-eval-after-load 'org
+      (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-org-special-prompt-send)))
+#+end_src
 **** akirak-elec-pair                                 :parentheses:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:39]
