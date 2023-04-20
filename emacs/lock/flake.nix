@@ -35,7 +35,7 @@
     apprentice = {
       flake = false;
       owner = "akirak";
-      ref = "fix-warns";
+      ref = "prefix-map";
       repo = "Apprentice";
       type = "github";
     };

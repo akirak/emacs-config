@@ -83,16 +83,16 @@
     "apprentice": {
       "flake": false,
       "locked": {
-        "lastModified": 1681837828,
-        "narHash": "sha256-YwH82lJ62qjgU+vRnPdimUMDtTO7Lb8YzOsWhs4p784=",
+        "lastModified": 1680175992,
+        "narHash": "sha256-RZOpfONDon2ILdg8UfUkuTiuFU1ZyDxYYICQnAmPlgo=",
         "owner": "akirak",
         "repo": "Apprentice",
-        "rev": "e377fb9c0db1ca922d0ab5a5bb14e27e628cd70b",
+        "rev": "1e390c56fe4bb11973afe0c8fdd9b10c2f806534",
         "type": "github"
       },
       "original": {
         "owner": "akirak",
-        "ref": "fix-warns",
+        "ref": "prefix-map",
         "repo": "Apprentice",
         "type": "github"
       }
