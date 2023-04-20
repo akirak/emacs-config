@@ -252,10 +252,12 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1682017008,
-        "narHash": "sha256-JLJ9091iCKimhM+bZBtGz6nY2q+0FnHFhpPoY8R8O8Y=",
-        "path": "/home/akirakomamura/work2/foss/config/melpa/",
-        "type": "path"
+        "lastModified": 1682017575,
+        "narHash": "sha256-wR+2nxCoqXSJPknAWrQKR5/e+nvzWKXnXLpDtRAjLC8=",
+        "owner": "akirak",
+        "repo": "melpa",
+        "rev": "ca5a4cfd9e8d6d53acbb10fb67f79216d882a8c4",
+        "type": "github"
       },
       "original": {
         "owner": "akirak",
