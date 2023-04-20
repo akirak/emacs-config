@@ -2478,6 +2478,22 @@
         "type": "github"
       }
     },
+    "pdf-tools": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1680578876,
+        "narHash": "sha256-VyimrkDf6Y2FbgYjMfzVvH0s6ULUfafMMJJ4188EiDE=",
+        "owner": "vedang",
+        "repo": "pdf-tools",
+        "rev": "7ff6293a25baaae65651b3e1c54b61208279a7ef",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vedang",
+        "repo": "pdf-tools",
+        "type": "github"
+      }
+    },
     "persist": {
       "flake": false,
       "locked": {
@@ -2938,6 +2954,7 @@
         "package-lint": "package-lint",
         "page-break-lines": "page-break-lines",
         "parsec": "parsec",
+        "pdf-tools": "pdf-tools",
         "persist": "persist",
         "pinyin": "pinyin",
         "pkg-info": "pkg-info",
@@ -2971,6 +2988,7 @@
         "svg-lib": "svg-lib",
         "swiper": "swiper",
         "symbol-overlay": "symbol-overlay",
+        "tablist": "tablist",
         "tagedit": "tagedit",
         "taxy": "taxy",
         "taxy-magit-section": "taxy-magit-section",
@@ -3224,6 +3242,22 @@
         "owner": "akirak",
         "ref": "jump-hook",
         "repo": "symbol-overlay",
+        "type": "github"
+      }
+    },
+    "tablist": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1679382345,
+        "narHash": "sha256-wiSdo+e9UU9rIWzzEc8JZ8aFCrvNyiPdOsl3XWHedYc=",
+        "owner": "emacsorphanage",
+        "repo": "tablist",
+        "rev": "5f7b71a92bfb25418d7da86ad9c45f14b149496f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacsorphanage",
+        "repo": "tablist",
         "type": "github"
       }
     },

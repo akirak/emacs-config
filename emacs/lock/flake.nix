@@ -938,6 +938,12 @@
       repo = "parsec.el";
       type = "github";
     };
+    pdf-tools = {
+      flake = false;
+      owner = "vedang";
+      repo = "pdf-tools";
+      type = "github";
+    };
     persist = {
       flake = false;
       type = "git";
@@ -1133,6 +1139,12 @@
       owner = "akirak";
       ref = "jump-hook";
       repo = "symbol-overlay";
+      type = "github";
+    };
+    tablist = {
+      flake = false;
+      owner = "emacsorphanage";
+      repo = "tablist";
       type = "github";
     };
     tagedit = {
