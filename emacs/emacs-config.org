@@ -892,6 +892,7 @@ The built-in =electric= package provides the following modes:
                                                                  _op-type
                                                                  filename &rest _)
                   (not (string-match-p (rx (or ".org"
+                                               ".pdf"
                                                ".epub")
                                            eos)
                                        filename))))
