@@ -6631,6 +6631,19 @@ Display ^L page breaks as tidy horizontal lines
                 compilation-mode-hook
                 haskell-mode-hook))
 #+end_src
+*** pdf-tools
+:PROPERTIES:
+:CREATED_TIME: [2023-04-20 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package pdf-tools))
+
+  (setup pdf-view
+    ;; Workaround for missing autoload
+    (autoload 'pdf-view-mode "pdf-view")
+    (:file-match "\\.pdf\\'"))
+#+end_src
 *** pinyin                                                 :Chinese:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-23 Tue 23:59]

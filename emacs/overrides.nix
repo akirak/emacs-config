@@ -34,6 +34,23 @@
   #   buildInputs = old.buildInputs ++ [pkgs.git];
   # });
 
+  pdf-tools = esuper.pdf-tools.overrideAttrs (old: {
+    CXXFLAGS = "-std=c++17";
+
+    nativeBuildInputs = [
+      pkgs.autoconf
+      pkgs.automake
+      pkgs.pkg-config
+      pkgs.removeReferencesTo
+    ];
+    buildInputs = old.buildInputs ++ [pkgs.libpng pkgs.zlib pkgs.poppler];
+    preBuild = ''
+      make server/epdfinfo
+      cp server/epdfinfo .
+      rm -r Makefile lisp server
+    '';
+  });
+
   vterm = esuper.vterm.overrideAttrs (old: {
     # Based on the configuration in nixpkgs available at the following URL:
     # https://github.com/NixOS/nixpkgs/blob/af21d41260846fb9c9840a75e310e56dfe97d6a3/pkgs/applications/editors/emacs/elisp-packages/melpa-packages.nix#L483
