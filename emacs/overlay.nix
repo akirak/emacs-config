@@ -31,6 +31,7 @@ with builtins; let
         # Use tarball, as it contains info
         "org-transclusion"
         "async"
+        "persist"
       ];
     }
     {
