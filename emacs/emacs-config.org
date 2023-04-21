@@ -884,6 +884,14 @@ The built-in =electric= package provides the following modes:
              "/__tests__/\\1.ts"
              "/__tests__/\\1.tsx")))
 
+    (:when-loaded
+      ;; Based on https://lonely.town/@jvillasante@hachyderm.io/110232974766557148
+      (add-to-list 'backup-directory-alist
+                   (cons (rx bos (or "/tmp/"
+                                     "/dev/shm/"
+                                     "/run/"))
+                         nil)))
+
     (define-key ctl-x-map "," #'find-sibling-file)
 
     (advice-add 'abort-if-file-too-large
@@ -1693,6 +1701,18 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup tooltip
     (tooltip-mode -1))
+#+end_src
+*** tramp
+:PROPERTIES:
+:CREATED_TIME: [2023-04-21 Fri 15:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup tramp
+    (:when-loaded
+      ;; Based on https://lonely.town/@jvillasante@hachyderm.io/110232974766557148
+      (add-to-list 'backup-directory-alist
+                   (cons tramp-file-name-regexp nil))))
 #+end_src
 *** transient
 :PROPERTIES:
