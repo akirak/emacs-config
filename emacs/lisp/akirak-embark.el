@@ -241,6 +241,8 @@
   (add-to-list 'embark-keymap-alist
                '(org-prompt-special-block . akirak-embark-org-prompt-map))
   (add-to-list 'embark-keymap-alist
+               '(org-special-block . akirak-embark-org-block-map))
+  (add-to-list 'embark-keymap-alist
                '(workbox-shell-command . akirak-embark-package-shell-command-map))
   (add-to-list 'embark-transformer-alist
                '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
@@ -321,14 +323,17 @@
            . ,(cons (org-element-property :begin element)
                     (org-element-property :end element))))
         (special-block
-         (pcase (org-element-property :type element)
-           ("prompt"
-            `(org-prompt-special-block
-              ,(buffer-substring-no-properties
-                (org-element-property :contents-begin element)
-                (org-element-property :contents-end element))
-              . ,(cons (org-element-property :begin element)
-                       (org-element-property :end element))))))))))
+         (let ((cbegin (org-element-property :contents-begin element))
+               (cend (org-element-property :contents-end element)))
+           `(,(pcase (org-element-property :type element)
+                ("prompt"
+                 'org-prompt-special-block)
+                (_
+                 'org-special-block))
+             ,(when (and cbegin cend)
+                (buffer-substring-no-properties cbegin cend))
+             . ,(cons (org-element-property :begin element)
+                      (org-element-property :end element)))))))))
 
 (defun akirak-embark-target-org-heading ()
   (when (derived-mode-p 'org-mode)
