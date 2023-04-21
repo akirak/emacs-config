@@ -3943,6 +3943,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 **** akirak-insert
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c a") #'akirak-insert)
+  (global-set-key (kbd "C-x a w") #'akirak-insert-window-title)
 #+end_src
 **** COMMENT akirak-japanese                              :ARCHIVE:
 #+begin_src emacs-lisp
