@@ -1500,7 +1500,9 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
 #+begin_src emacs-lisp
   (setup simple
-    (:set suggest-key-bindings nil)
+    (:set suggest-key-bindings nil
+          ;; Don't auto-save remote files.
+          remote-file-name-inhibit-auto-save t)
 
     (:global [remap count-words-region] #'akirak/count-words-dwim
              [remap delete-horizontal-space] #'cycle-spacing
