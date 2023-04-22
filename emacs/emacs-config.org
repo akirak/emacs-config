@@ -2744,7 +2744,8 @@ A programmable workflow layer for Org mode
             ("tsconfig\\." . "programming/typescript")
             ("\\.envrc\\'" . "programming/envrc")
             ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
-            ("hie\\.yaml\\'" . "programming/haskell"))
+            ("hie\\.yaml\\'" . "programming/haskell")
+            ("\\.editorconfig\\'" . "programming/editorconfig"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in
           org-dog-clock-default-query-filter
           (lambda (query)
