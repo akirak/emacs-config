@@ -816,6 +816,12 @@
       repo = "org-epubinfo";
       type = "github";
     };
+    org-hyprctl = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-hyprctl";
+      type = "github";
+    };
     org-lang-env = {
       flake = false;
       owner = "akirak";

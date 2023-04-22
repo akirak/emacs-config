@@ -2156,6 +2156,22 @@
         "type": "github"
       }
     },
+    "org-hyprctl": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1682143144,
+        "narHash": "sha256-tfkL6B7Wnlu40WVGrieyZsjVqnPu01oLuNYa42IoScw=",
+        "owner": "akirak",
+        "repo": "org-hyprctl",
+        "rev": "bf80046e27db75faab59aa7718026fc0c699a6a6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "org-hyprctl",
+        "type": "github"
+      }
+    },
     "org-lang-env": {
       "flake": false,
       "locked": {
@@ -2918,6 +2934,7 @@
         "org-dog-export": "org-dog-export",
         "org-dog-facade": "org-dog-facade",
         "org-epubinfo": "org-epubinfo",
+        "org-hyprctl": "org-hyprctl",
         "org-lang-env": "org-lang-env",
         "org-make-toc": "org-make-toc",
         "org-memento": "org-memento",
