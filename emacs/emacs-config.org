@@ -327,12 +327,6 @@ the Garbage Collector Magic Hack
     (defconst akirak/os-pretty-name
       (cdr (assoc "PRETTY_NAME" alist))))
 #+end_src
-*** NixOS
-#+begin_src elisp
-  (defconst akirak/nixos-configuration-version
-    (when-let (exe (executable-find "nixos-version"))
-      (car (process-lines exe "--configuration-revision"))))
-#+end_src
 ** Custom conventions
 *** Prefix for mode-specific commands
 #+begin_src emacs-lisp
@@ -993,13 +987,13 @@ The built-in =electric= package provides the following modes:
         (emacs-version
          (" " emacs-version))
         (twist-configuration-revision
-         (" @ " akirak/nixos-configuration-version))
+         (" @ " twist-configuration-revision))
         (akirak/emacs-profile-name
          (" (" akirak/emacs-profile-name ")"))
+        (system-name
+         (" on " system-name))
         (akirak/os-pretty-name
-         (" on " akirak/os-pretty-name))
-        (akirak/nixos-configuration-version
-         (" @ " akirak/nixos-configuration-version))))
+         (", " akirak/os-pretty-name))))
 
     (defconst akirak/default-frame-title-format
       (cons '(org-memento-current-block
