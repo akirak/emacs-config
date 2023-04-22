@@ -2949,6 +2949,18 @@ Integrate Org with epubinfo program
   (setup (:package org-epubinfo)
     (:nixpkgs epubinfo))
 #+end_src
+*** org-hyprctl
+:PROPERTIES:
+:CREATED_TIME: [2023-04-22 Sat 14:22]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package org-hyprctl)
+    (when (equal "Hyprland" (getenv "XDG_CURRENT_DESKTOP"))
+      (define-key akirak/c-z-map "w" #'org-hyprctl-popup)
+      (with-eval-after-load 'org
+        (add-hook 'org-ctrl-c-ctrl-c-hook #'org-hyprctl-update))))
+#+end_src
 *** org-indent
 :PROPERTIES:
 :CREATED_TIME: [2022-09-10 Sat 23:59]
