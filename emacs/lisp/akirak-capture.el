@@ -758,6 +758,7 @@
                        :file ,(org-dog-resolve-relative-file "news.org")
                        :function ,jump-func))))))
         (org-capture))))
+   ("'" octopus-avy-org-heading-suffix)
    ("@" akirak-capture-url-to-clock)
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
