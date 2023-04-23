@@ -7471,6 +7471,17 @@ major mode for editing web templates
                  "\\.astro\\'"
                  "\\.sface\\'")
 
+    (:bind "C-c /" #'akirak-web-mode-surround
+           [remap end-of-defun] #'web-mode-forward-sexp
+           [remap down-list] #'web-mode-element-child
+           [remap backward-up-list] #'web-mode-element-parent
+           [remap forward-sexp] (defun akirak/web-mode-forward-tag-or-sexp ()
+                                  (interactive)
+                                  (if-let (tag-end (and (looking-at "<")
+                                                        (web-mode-tag-end-position)))
+                                      (goto-char (1+ tag-end))
+                                    (forward-sexp))))
+
     (:auto-insert
      ("\\.astro\\'" . (> "---\n" _ "\n---\n"))))
 #+end_src
