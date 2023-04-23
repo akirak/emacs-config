@@ -4047,6 +4047,11 @@ This is an extra functions for window management.
                "M-o" #'akirak-window-moderate-1
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
+**** akirak-wordnet
+#+begin_src elisp
+  (setup akirak-wordnet
+    (:nixpkgs "sqlite"))
+#+end_src
 *** COMMENT all-the-icons                               :UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:28]
