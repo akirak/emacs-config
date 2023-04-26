@@ -40,7 +40,8 @@
                ((or (and (bound-and-true-p c-line-comment-start-regexp)
                          (looking-at c-line-comment-start-regexp))
                     (and comment-start
-                         (looking-at comment-start-skip)))
+                         (looking-at (or comment-start-skip
+                                         comment-start))))
                 (if (equal arg '(4))
                     ;; With a single universal prefix, uncomment a sequence of line
                     ;; comments.
