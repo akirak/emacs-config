@@ -6548,7 +6548,6 @@ Major mode for editing .nix files
     (:mode-repl nix-repl)
     (:bind [remap devdocs-lookup] #'akirak-nix-manix)
     (:reformatters
-     (nixpkgs-fmt :program "nixpkgs-fmt")
      (alejandra :program "alejandra"))
     (:compilation-error
      ;; Unused argument `hsuper` at default.nix:9:24-15:6
