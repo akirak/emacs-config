@@ -370,13 +370,15 @@ URL can be either a Git url or url representation of a flake ref."
 (defun akirak-git-clone-dir (url)
   "Clone a Git repository from URL and print its local working directory."
   (require 'promise)
-  (promise-wait-value
-   (promise-wait akirak-git-clone-wait
-     (thread-last
-       (akirak-git-clone--parse url)
-       (akirak-git-clone-source-origin)
-       (nix3-git-url-to-flake-alist)
-       (nix3-flake-clone-promise)))))
+  (let ((default-directory (promise-wait-value
+                            (promise-wait akirak-git-clone-wait
+                              (thread-last
+                                (akirak-git-clone--parse url)
+                                (akirak-git-clone-source-origin)
+                                (nix3-git-url-to-flake-alist)
+                                (nix3-flake-clone-promise))))))
+    (akirak-project-remember-this)
+    default-directory))
 
 (provide 'akirak-git-clone)
 ;;; akirak-git-clone.el ends here
