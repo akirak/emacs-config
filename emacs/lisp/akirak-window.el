@@ -337,5 +337,11 @@ Otherwise, it calls `akirak-window-duplicate-state'."
     (switch-to-buffer buf)
     (remove-hook 'post-command-hook 'akirak-window--new-tab-1)))
 
+;;;###autoload
+(defun akirak-window-toggle-dedicated ()
+  "Toggle the dedicated state of the selected window."
+  (interactive)
+  (set-window-dedicated-p (selected-window) (not (window-dedicated-p))))
+
 (provide 'akirak-window)
 ;;; akirak-window.el ends here
