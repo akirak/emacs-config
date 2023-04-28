@@ -23,6 +23,7 @@
       (require lib))
     plist))
 
+;;;###autoload
 (defun akirak-window-system-complete-title (prompt)
   "Read the title of a window on the desktop."
   (funcall (plist-get (akirak-window-system--plist)
