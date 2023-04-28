@@ -6183,7 +6183,10 @@ A Git porcelain inside Emacs
           'magit-worktree-checkout)
         (transient-replace-suffix 'magit-branch
           'magit-worktree-branch
-          '("w" "new worktree" akirak-magit-worktree-default)))
+          '("w" "new worktree" akirak-magit-worktree-new-branch))
+        (transient-append-suffix 'magit-worktree
+          'magit-worktree-branch
+          '("d" "worktree in default location" akirak-magit-worktree-checkout)))
 
       (:set magit-repository-directories '(("~/" . 1)
                                            ("~/.config" . 1)
