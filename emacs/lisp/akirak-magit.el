@@ -21,7 +21,7 @@ Each function is run without an argument in the new working tree."
   :type 'hook)
 
 ;;;###autoload
-(defun akirak-magit-worktree-default ()
+(defun akirak-magit-worktree-new-branch ()
   "Check out a new branch in a worktree at the default location."
   (interactive)
   (pcase-let*
@@ -31,17 +31,37 @@ Each function is run without an argument in the new working tree."
                                                                 remote
                                                                 (or default "master"))))
        (origin-name (akirak-magit--repo-name (car (akirak-magit--remote-url remote))))
-       (direnv-allowed (akirak-magit--direnv-allowed-p))
-       (name (concat origin-name akirak-magit-branch-delim branch))
-       (category (akirak-git-clone--clock-category))
-       (parent (or (when category
-                     (akirak-git-clone-default-parent category))
-                   (akirak-git-clone-read-parent (format "Select a parent directory of \"%s\": "
-                                                         name)
-                                                 category))))
-    (magit-worktree-branch (concat (file-name-as-directory (or parent "~/work2/"))
-                                   name)
-                           branch start-point)
+       (name (concat origin-name akirak-magit-branch-delim branch)))
+    (akirak-magit-worktree branch start-point :name name)))
+
+;;;###autoload
+(defun akirak-magit-worktree-checkout ()
+  "Check out an existing branch in a worktree."
+  (interactive)
+  (let ((branch (magit-read-branch-or-commit
+                 "Branch or commit to check out in a new worktree: ")))
+    (akirak-magit-worktree branch)))
+
+(cl-defun akirak-magit-worktree (branch &optional start-point &key name)
+  "Check out a new branch in a worktree at the default location."
+  (interactive)
+  (let* ((direnv-allowed (akirak-magit--direnv-allowed-p))
+         (name (or name
+                   (concat (akirak-magit--repo-name (car (akirak-magit--remote-url
+                                                          (car (magit--get-default-branch)))))
+                           akirak-magit-branch-delim
+                           branch)))
+         (category (akirak-git-clone--clock-category))
+         (parent (or (when category
+                       (akirak-git-clone-default-parent category))
+                     (akirak-git-clone-read-parent (format "Select a parent directory of \"%s\": "
+                                                           name)
+                                                   category)))
+         (path (concat (file-name-as-directory (or parent "~/work2/"))
+                       name)))
+    (if start-point
+        (magit-worktree-branch path branch start-point)
+      (magit-worktree-checkout path branch))
     (when (and direnv-allowed
                (fboundp 'envrc-allow))
       (envrc-allow))
