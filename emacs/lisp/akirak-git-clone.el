@@ -178,17 +178,24 @@
                                  (message "Returned non-zero from git-clone")))))))
 
 ;;;###autoload
-(defun akirak-git-clone (url)
+(defun akirak-git-clone (url &optional dir)
   "Clone a repository from URL.
 
-URL can be either a Git url or url representation of a flake ref."
-  (interactive (list (read-string "Flake ref: ")))
+URL can be either a Git url or url representation of a flake ref.
+
+DIR is an optional destination directory to clone the repository into."
+  (interactive (list (read-string "Flake ref: ")
+                     (when current-prefix-arg
+                       (read-directory-name "Destination directory: "))))
   (unless (file-directory-p akirak-git-clone-root)
     (error "First set akirak-git-clone-root to an existing directory"))
   (let* ((obj (akirak-git-clone--parse url))
          (origin (akirak-git-clone-source-origin obj))
-         (repo (expand-file-name (akirak-git-clone-source-local-path obj)
-                                 akirak-git-clone-root)))
+         (repo (if (and dir
+                        (not (file-exists-p dir)))
+                   dir
+                 (expand-file-name (akirak-git-clone-source-local-path obj)
+                                   (or dir akirak-git-clone-root)))))
     (when (akirak-git-clone-source-rev-or-ref obj)
       (error "Rev or ref is unsupported now"))
     (if (file-directory-p repo)
