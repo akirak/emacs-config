@@ -292,7 +292,8 @@ DIR is an optional destination directory to clone the repository into."
               (akirak-project-parents)))
 
 (defun akirak-git-clone--clock-category ()
-  (when (org-clocking-p)
+  (when (and (featurep 'org-clock)
+             (org-clocking-p))
     (thread-last
       (marker-buffer org-clock-marker)
       (buffer-file-name)
