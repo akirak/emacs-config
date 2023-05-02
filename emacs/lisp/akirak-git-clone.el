@@ -165,7 +165,7 @@
                      "git"
                      "clone"
                      "--filter=blob:none"
-                     origin dest
+                     origin (expand-file-name dest)
                      (when ref
                        (list "-b" ref)))))
     (set-process-sentinel proc
