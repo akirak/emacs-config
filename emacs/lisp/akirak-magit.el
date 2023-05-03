@@ -10,7 +10,8 @@
   ;; https://github.com/NixOS/nix/blob/f7276bc948705f452b2bfcc2a08bc44152f1d5a8/src/libutil/url-parts.hh
   "=")
 
-(defcustom akirak-magit-worktree-category-function #'akirak-git-clone--clock-category
+(defcustom akirak-magit-worktree-category-function
+  #'akirak-git-clone--clock-category
   "Function used to get the current project category.")
 
 (defcustom akirak-magit-worktree-hook
@@ -51,7 +52,7 @@ Each function is run without an argument in the new working tree."
                                                           (car (magit--get-default-branch)))))
                            akirak-magit-branch-delim
                            branch)))
-         (category (akirak-git-clone--clock-category))
+         (category (funcall akirak-magit-worktree-category-function))
          (parent (or (when category
                        (akirak-git-clone-default-parent category))
                      (akirak-git-clone-read-parent (format "Select a parent directory of \"%s\": "
