@@ -2753,9 +2753,6 @@ A programmable workflow layer for Org mode
     (with-eval-after-load 'org-id
       (org-dog-id-mode t))
     (add-hook 'org-mode-hook #'org-dog-file-mode-maybe)
-  
-    (:global "M-g M-/" #'org-dog-find-file)
-    (define-key help-map (kbd "M-o") #'org-dog-overview)
 
     (:set org-dog-context-path-patterns
           `(("^\\.github/" . "services/github.com")
@@ -2841,7 +2838,7 @@ A programmable workflow layer for Org mode
 
 #+begin_src emacs-lisp
   (setup (:package consult-org-dog)
-    (:global "M-s /" #'consult-org-dog))
+    (:global "M-g M-/" #'consult-org-dog))
 #+end_src
 **** octopus
 :PROPERTIES:
