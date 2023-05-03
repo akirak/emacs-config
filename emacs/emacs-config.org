@@ -2820,7 +2820,8 @@ A programmable workflow layer for Org mode
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package consult-org-dog))
+  (setup (:package consult-org-dog)
+    (:global "M-s /" #'consult-org-dog))
 #+end_src
 **** octopus
 :PROPERTIES:
