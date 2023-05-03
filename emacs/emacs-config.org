@@ -624,7 +624,11 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 The following variable defines variables that can be saved to =custom-file=:
 
 #+begin_src emacs-lisp
-  (defconst akirak/custom-variable-whitelist
+  (custom-declare-group
+   'akirak/local
+   (mapcar
+    (lambda (sym)
+      (list sym 'custom-variable))
     '(auth-sources                        ; Can be machine-dependent
       org-agenda-span                     ; Can be dependent on the work context
       ;; Work context
@@ -646,6 +650,7 @@ The following variable defines variables that can be saved to =custom-file=:
       akirak/org-memento-export-directory
       ;; Dynamic
       safe-local-variable-values))
+   "List of variables I save to custom-file.")
 #+end_src
 
 The other variables must not be saved, and they should be put in configuration:
@@ -661,7 +666,7 @@ The other variables must not be saved, and they should be put in configuration:
                   :before
                   (defun akirak/customize-save-variable-check (widget)
                     (unless (memq (widget-value widget)
-                                  akirak/custom-variable-whitelist)
+                                  (mapcar #'car (get 'akirak/local 'custom-group)))
                       (error "Variable %s should not be saved to custom-file. \
   See akirak/custom-variable-whitelist"
                              (widget-value widget)))))))
