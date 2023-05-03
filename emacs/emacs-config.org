@@ -650,6 +650,22 @@ The following variable defines variables that can be saved to =custom-file=:
       ;; Dynamic
       safe-local-variable-values))
    "List of variables I save to custom-file.")
+
+  (defun akirak/customize-local ()
+    "Configure host-local custom variables."
+    (interactive)
+    (dolist (x (get 'akirak/local 'custom-group))
+      (pcase x
+        ((and `(,sym custom-variable)
+              (guard (not (symbol-file sym))))
+         (let ((name (symbol-name sym)))
+           (catch 'loaded
+             (while (string-match (rx bos (group (+ anything)) "-") name)
+               (setq name (match-string 1 name))
+               (when (require (intern name) nil t)
+                 (throw 'loaded t))))))))
+    (require 'cus-edit)
+    (customize-group 'akirak/local))
 #+end_src
 
 The other variables must not be saved, and they should be put in configuration:
