@@ -210,8 +210,7 @@
   :prop :tags
   :reader (lambda (prompt initial history)
             (completing-read-multiple prompt
-                                      (org-global-tags-completion-table
-                                       (org-agenda-files))
+                                      (akirak-capture--org-global-tags)
                                       nil nil
                                       (org-make-tag-string initial)
                                       history)))
@@ -505,8 +504,7 @@
 
 (defun akirak-capture-entry-with-tag (tag)
   (interactive (list (completing-read "Org tag: "
-                                      (org-global-tags-completion-table
-                                       (org-agenda-files))
+                                      (akirak-capture--org-global-tags)
                                       nil nil "@")))
   (let ((plist (cdr (assoc tag akirak-capture-tag-alist))))
     (setq akirak-capture-doct-options (plist-get plist :doct)
@@ -515,6 +513,11 @@
                                             (plist-put :tags tag))
           akirak-capture-headline (akirak-capture--maybe-read-heading))
     (akirak-capture-doct)))
+
+(defun akirak-capture--org-global-tags ()
+  (thread-last
+    (mapcar #'car org-tag-persistent-alist)
+    (cl-remove-if-not #'stringp)))
 
 (transient-define-prefix akirak-capture-active-region ()
   ["Snippet"
