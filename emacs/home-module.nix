@@ -32,7 +32,7 @@ in {
           (setq akirak/enabled-status-tags t)
         '';
       };
-      serviceIntegration.enable = true;
+      serviceIntegration.enable = lib.mkDefault true;
       createManifestFile = true;
     };
 
@@ -46,6 +46,6 @@ in {
     ];
 
     # Generate a desktop file for emacsclient
-    services.emacs.client.enable = true;
+    services.emacs.client.enable = cfg.serviceIntegration.enable;
   };
 }
