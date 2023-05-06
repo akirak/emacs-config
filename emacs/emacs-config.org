@@ -2173,6 +2173,14 @@ Org-Memento integration for oahu
         (:with-map org-memento-zone-mode-map
           (:bind "v" #'oahu-memento-group-view)))))
 #+end_src
+*** ob-graphql
+:PROPERTIES:
+:CREATED_TIME: [2023-05-06 Sat 13:57]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package ob-graphql))
+#+end_src
 *** COMMENT ob-mermaid                                                         :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:53]
@@ -2460,6 +2468,7 @@ Outline-based notes management and organizer
           '((shell . t)
             (emacs-lisp . t)
             (restclient . t)
+            (graphql . t)
             (sqlite . t)
             (sql . t))))
 #+end_src
