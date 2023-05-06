@@ -2177,6 +2177,10 @@ Org-Memento integration for oahu
 :PROPERTIES:
 :CREATED_TIME: [2023-05-06 Sat 13:57]
 :END:
+#+begin_quote
+Org-Babel execution backend for GraphQL source blocks
+[[https://github.com/jdormit/ob-graphql]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package ob-graphql))
@@ -8038,7 +8042,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 233 |
+| [[org-ql-search:tags:packages][packages]]            | 234 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
