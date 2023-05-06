@@ -738,6 +738,12 @@
       repo = "oahu.el";
       type = "sourcehut";
     };
+    ob-graphql = {
+      flake = false;
+      owner = "jdormit";
+      repo = "ob-graphql";
+      type = "github";
+    };
     ob-restclient = {
       flake = false;
       owner = "alf";

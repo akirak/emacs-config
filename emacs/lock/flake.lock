@@ -1958,6 +1958,22 @@
         "type": "sourcehut"
       }
     },
+    "ob-graphql": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1608650116,
+        "narHash": "sha256-/J3hV19ynkcaWJiBf4mp9mcRJcNX0MifXj3LtndTXh8=",
+        "owner": "jdormit",
+        "repo": "ob-graphql",
+        "rev": "7c35419f9eec5dc44967cbcfa13c7135b9a96bfc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jdormit",
+        "repo": "ob-graphql",
+        "type": "github"
+      }
+    },
     "ob-restclient": {
       "flake": false,
       "locked": {
@@ -2075,11 +2091,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1683342494,
-        "narHash": "sha256-tcbtNv8E2DWwdrEkBUmVMKhU/UYcjPgQnDQOJiTuhyE=",
+        "lastModified": 1683362314,
+        "narHash": "sha256-HfW97Er8Hoj43Au5KWT2n/L7wX6K7bVN391FYiM6Qf0=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "4b2b00cb63d40a061c2e82729ceb5272ac772ccf",
+        "rev": "43d816bd42de21c11a5e6e61dc111e5bfb4325db",
         "type": "github"
       },
       "original": {
@@ -2922,6 +2938,7 @@
         "nov": "nov",
         "oahu": "oahu",
         "oahu-memento": "oahu-memento",
+        "ob-graphql": "ob-graphql",
         "ob-restclient": "ob-restclient",
         "octopus": "octopus",
         "olivetti": "olivetti",
