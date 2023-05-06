@@ -5553,18 +5553,21 @@ Emacs Minor mode to automatically commit and push
                     ;; I often refile the clocked entry immediately after clocking
                     ;; out from it, so rather than instantly creating a commit,
                     ;; defer it.
-                    (let ((root (project-root (project-current))))
-                      (run-with-timer
-                       20 nil
-                       `(lambda ()
-                          (let ((default-directory ,root))
-                            (save-some-buffers t (save-some-buffers-root))
-                            (unless (zerop (call-process "git" nil nil nil
-                                                         ;; Reuse the message
-                                                         "commit" "-C" "HEAD"
-                                                         "-a"))
-                              (message "Git auto commit failed in %s"
-                                       default-directory)))))))))))
+                    (when-let* ((pr (project-current))
+                                (root (project-root pr)))
+                      (if (file-directory-p root)
+                          (run-with-timer
+                           20 nil
+                           `(lambda ()
+                              (let ((default-directory ,root))
+                                (save-some-buffers t (save-some-buffers-root))
+                                (unless (zerop (call-process "git" nil nil nil
+                                                             ;; Reuse the message
+                                                             "commit" "-C" "HEAD"
+                                                             "-a"))
+                                  (message "Git auto commit failed in %s"
+                                           default-directory)))))
+                        (message "Directory %s does not exist" root))))))))
 #+end_src
 
 A recommended way to turn on automatic commits is to define local variables in =.dir-locals.el=, e.g.:
