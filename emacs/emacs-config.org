@@ -6049,6 +6049,10 @@ For Emacs Lisp, I use lispy.
                   (save-restriction
                     (apply orig args))))
 
+    ;; Don't override the default command with lispy-goto-symbol.
+    ;; This is especially important to enable the dumb-jump integration.
+    (:unbind "M-.")
+
     ;; Adoption of lispy is opinionated.
     (:status opinionated
       (:set lispy-key-theme '(special lispy))
