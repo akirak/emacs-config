@@ -48,6 +48,24 @@ with builtins; let
     }
   ];
 
+  epkgRepository =
+    prev.runCommandLocal "epkg-repository" {
+      buildInputs = [
+        prev.sqlite
+        prev.git
+      ];
+    } ''
+      mkdir $out
+      cd $out
+      cp -t . "${inputs.epkgs.outPath}/epkg.sql"
+      # A workaround to pass `git rev-parse HEAD`
+      git init
+      git add epkg.sql
+      git -c user.name=nouser -c user.email='nouser@localhost' \
+        commit -a -m 'Initial commit' --allow-empty
+      rm epkg.*
+    '';
+
   makeEmacsProfile = {
     extraFeatures,
     prependToInitFile ? null,
@@ -80,6 +98,10 @@ with builtins; let
                     && ! lib.any (tag: org.tag tag s) extraFeatures)
               ));
           })
+          (prev.writeText "init-paths.el" ''
+            (with-eval-after-load 'epkg
+              (setq epkg-origin-url "${epkgRepository}"))
+          '')
         ]
         # Allow adding private config on specific hosts
         ++ extraInitFiles;
