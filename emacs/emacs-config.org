@@ -2846,6 +2846,10 @@ A programmable workflow layer for Org mode
       (:also-load org-dog-embark
                   org-dog-facade))
 
+    (add-to-list 'display-buffer-alist
+                 '("*Org Dog Tablist Files*"
+                   (display-buffer-in-tab)))
+
     (with-eval-after-load 'org-dog-overview
       (define-key org-dog-overview-mode-map
                   (kbd "+") #'org-dog-add-header-link))
