@@ -1002,6 +1002,12 @@ The built-in =electric= package provides the following modes:
     (blink-cursor-mode -1)
     (set-frame-parameter nil 'alpha '(98 . 96))
 
+    (:set window-divider-default-places 'bottom-only
+          window-divider-default-bottom-width 1)
+    (if (daemonp)
+        (add-hook 'server-after-make-frame-hook #'window-divider-mode)
+      (window-divider-mode 1))
+
     (defconst akirak/base-frame-title-format
       '(" - GNU Emacs"
         (emacs-version
