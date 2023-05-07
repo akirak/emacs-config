@@ -4208,6 +4208,15 @@ Elixir tooling integration into Emacs
              (read-string "Command to run Elixir IEx: " (concat apprentice-iex-program-name arg))
              (concat apprentice-iex-program-name arg)))))))
 #+end_src
+*** auto-minor-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-05-07 Sun 16:21]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package auto-minor-mode)
+    (:require))
+#+end_src
 *** auto-yasnippet                                       :expansion:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 15:39]
