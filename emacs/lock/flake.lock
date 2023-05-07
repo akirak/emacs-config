@@ -97,6 +97,22 @@
         "type": "github"
       }
     },
+    "auto-minor-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1571777456,
+        "narHash": "sha256-CisO+Y1FoSvi6I/q6xq4t5pFn7hgDvWvNVleYcRK+Mk=",
+        "owner": "joewreschnig",
+        "repo": "auto-minor-mode",
+        "rev": "17cfa1b54800fdef2975c0c0531dad34846a5065",
+        "type": "github"
+      },
+      "original": {
+        "owner": "joewreschnig",
+        "repo": "auto-minor-mode",
+        "type": "github"
+      }
+    },
     "auto-yasnippet": {
       "flake": false,
       "locked": {
@@ -1896,11 +1912,11 @@
     "nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1682719298,
-        "narHash": "sha256-3AKumvicpH5ETt47yZxcZfPUk+Nr+BRRZIfxYzW6u1E=",
+        "lastModified": 1683608858,
+        "narHash": "sha256-Al8EbmJazpkwG6ERcgakm89ye3Z+JtwNVvPGIIMYuNQ=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "ec756a99d1f328978d15110f464390478c816d96",
+        "rev": "3654b1bf4e4bea3de146d16bd52a2d76d8d27a80",
         "type": "github"
       },
       "original": {
@@ -2224,11 +2240,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1681630383,
-        "narHash": "sha256-uaBSJ4a5Tk9qvYAaqk46Y8Oog0TWOMtpYcjWN3A7BUs=",
+        "lastModified": 1683535068,
+        "narHash": "sha256-3oPhOFHegk0ZCozVlFGku/FiJ2KHFTAnCs5YJC2cBGo=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "c2ca4d7db6996954954e8aaf27080d76b0393a56",
+        "rev": "dddec3bc700dedb0b2d418629f6f5ed2fd368e1d",
         "type": "github"
       },
       "original": {
@@ -2822,6 +2838,7 @@
         "akirak": "akirak",
         "anzu": "anzu",
         "apprentice": "apprentice",
+        "auto-minor-mode": "auto-minor-mode",
         "auto-yasnippet": "auto-yasnippet",
         "avy": "avy",
         "avy-menu": "avy-menu",

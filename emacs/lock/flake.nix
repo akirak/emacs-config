@@ -39,6 +39,12 @@
       repo = "Apprentice";
       type = "github";
     };
+    auto-minor-mode = {
+      flake = false;
+      owner = "joewreschnig";
+      repo = "auto-minor-mode";
+      type = "github";
+    };
     auto-yasnippet = {
       flake = false;
       owner = "abo-abo";
