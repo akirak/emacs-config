@@ -1869,9 +1869,16 @@ Thus I will explicitly install this package rather than using the built-in versi
 
 #+begin_src emacs-lisp
   (setup window
-    (:set recenter-positions '(top middle bottom)
-          ;; Enable display-buffer-alist in many unsupported functions.
-          switch-to-buffer-obey-display-actions t)
+    (:set recenter-positions '(top middle bottom))
+
+    ;; Delay setting of `switch-to-buffer-obey-display-actions' so initial buffers
+    ;; are displayed using `switch-to-buffer'.
+    (defun akirak/after-frame-window-setup ()
+      ;; Enable display-buffer-alist in many unsupported functions.
+      (setq switch-to-buffer-obey-display-actions t))
+    (if (daemonp)
+        (add-hook 'server-after-make-frame-hook #'akirak/after-frame-window-setup)
+      (add-hook 'emacs-startup-hookk #'akirak/after-frame-window-setup))
 
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
