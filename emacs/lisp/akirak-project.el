@@ -69,7 +69,10 @@ display alternative actions."
                         "Switch to a project: "))))
   (if-let (buffer (akirak-project--recent-file-buffer dir))
       (switch-to-buffer buffer)
-    (if (file-directory-p (expand-file-name ".git" dir))
+    ;; If the visited directory is a non-primary Git working tree, its .git is a
+    ;; symbolic link and not a directory. Thus you have to use `file-exists-p'
+    ;; rather than `file-directory-p' here.
+    (if (file-exists-p (expand-file-name ".git" dir))
         (magit-status dir)
       (dired dir))))
 
