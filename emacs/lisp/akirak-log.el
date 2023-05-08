@@ -74,5 +74,41 @@
                          :tags "project"
                          :message "Switch to a project.")))
 
+;;;###autoload
+(defun akirak-log-memento-activities (start-time end-time)
+  (when (file-readable-p akirak-log-private-file)
+    (let (result
+          (start-time-float (float-time start-time))
+          (end-time-float (float-time end-time)))
+      (with-current-buffer (or (find-buffer-visiting akirak-log-private-file)
+                               (find-file-noselect akirak-log-private-file))
+        (org-with-wide-buffer
+         (goto-char (point-min))
+         (while (re-search-forward (rx bol "* ") nil t)
+           (when (looking-at org-ts-regexp-inactive)
+             (let ((time (save-match-data
+                           (and
+                            (thread-last
+                              (match-string 1)
+                              (parse-time-string)
+                              (encode-time)
+                              (float-time))))))
+               (when (and (>= time start-time-float)
+                          (< time end-time-float))
+                 (goto-char (match-end 0))
+                 (if (org-match-line org-complex-heading-regexp)
+                     (let* ((rem-headline (buffer-substring-no-properties
+                                           (point) (match-end 4)))
+                            (link (when (string-match org-link-bracket-re
+                                                      rem-headline)
+                                    (match-string 1 rem-headline))))
+                       (push (list time time
+                                   (or link rem-headline)
+                                   (copy-marker (line-beginning-position))
+                                   'event)
+                             result))
+                   (error "Failed to match on line: %s" (point-marker)))))))))
+      result)))
+
 (provide 'akirak-log)
 ;;; akirak-log.el ends here

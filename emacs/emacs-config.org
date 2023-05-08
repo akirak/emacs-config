@@ -3223,6 +3223,9 @@ Time blocking with Org
                   (ignore-errors (akirak-org-clock-snooze))
                   (save-some-buffers)))
 
+      (add-hook 'org-memento-extra-activity-sources
+                #'akirak-log-memento-activities)
+
       (defcustom akirak/org-memento-export-directory nil
         ""
         :type '(choice directory (const nil)))
