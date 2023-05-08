@@ -2586,6 +2586,7 @@ Outline-based notes management and organizer
   (setup akirak-org-clock
     (when (daemonp)
       (:hook-into emacs-startup-hook))
+    (:hook akirak-log-mode)
 
     (advice-add 'save-buffers-kill-terminal
                 :before
