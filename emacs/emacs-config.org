@@ -7618,7 +7618,34 @@ Operate on current line if region undefined
                                                           (if (numberp arg)
                                                               arg
                                                             1)
-                                                          arg))))
+                                                          arg)))
+
+    ;; whole-line-or-region version of indent-rigidly. Useful for editing YAML.
+    (defun akirak/indent-rigidly-line-or-region (&optional arg)
+      (interactive "P")
+      (whole-line-or-region-wrap-beg-end #'indent-rigidly
+                                         1
+                                         (if (numberp arg)
+                                             arg
+                                           tab-width)))
+    (defun akirak/indent-rigidly-left-line-or-region (arg)
+      (interactive "P")
+      (whole-line-or-region-wrap-beg-end #'indent-rigidly
+                                         1
+                                         (if (numberp arg)
+                                             (- arg)
+                                           (- tab-width))))
+
+    (defvar akirak/indent-rigidly-map
+      (make-sparse-keymap))
+    (put 'akirak/indent-rigidly-line-or-region 'repeat-map 'akirak/indent-rigidly-map)
+    (put 'akirak/indent-rigidly-left-line-or-region 'repeat-map 'akirak/indent-rigidly-map)
+    (global-set-key (kbd "C-x TAB") #'akirak/indent-rigidly-line-or-region)
+    (global-set-key (kbd "C-x <backtab>") #'akirak/indent-rigidly-left-line-or-region)
+    (define-key akirak/indent-rigidly-map (kbd "TAB")
+                #'akirak/indent-rigidly-line-or-region)
+    (define-key akirak/indent-rigidly-map (kbd "<backtab>")
+                #'akirak/indent-rigidly-left-line-or-region))
 #+end_src
 *** COMMENT windswap                                       :windows:ARCHIVE:
 :PROPERTIES:
