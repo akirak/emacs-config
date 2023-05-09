@@ -7630,6 +7630,7 @@ Operate on current line if region undefined
     ;; whole-line-or-region version of indent-rigidly. Useful for editing YAML.
     (defun akirak/indent-rigidly-line-or-region (&optional arg)
       (interactive "P")
+      (require 'whole-line-or-region)
       (whole-line-or-region-wrap-beg-end #'indent-rigidly
                                          1
                                          (if (numberp arg)
@@ -7637,6 +7638,7 @@ Operate on current line if region undefined
                                            tab-width)))
     (defun akirak/indent-rigidly-left-line-or-region (arg)
       (interactive "P")
+      (require 'whole-line-or-region)
       (whole-line-or-region-wrap-beg-end #'indent-rigidly
                                          1
                                          (if (numberp arg)
