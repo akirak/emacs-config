@@ -4267,7 +4267,7 @@ A major mode to edit Beancount input files.
 
 #+begin_src emacs-lisp
   (setup (:package beancount)
-    (:nixpkgs "beancount" "fava")
+    (:nixpkgs "beancount")
 
     ;; I don't like the default keybindings on C-c, so change the prefix.
     (:set beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
