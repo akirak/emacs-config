@@ -29,12 +29,14 @@
   (with-temp-buffer
     (insert (format-spec "* %t %h%g
 :PROPERTIES:
-:emacs_pid: %p
-:login:     %l
+:emacs_pid:  %p
+:login:      %l
+:exact_time: %u
 :END:\n"
                          `((?t . ,(format-time-string
                                    (org-time-stamp-format t t)
                                    time))
+                           (?u . ,(format-time-string "%FT%H:%M:%S%:z"))
                            (?h . ,heading)
                            (?g . ,(if tags
                                       (concat " "
@@ -86,13 +88,13 @@
          (goto-char (point-min))
          (while (re-search-forward (rx bol "* ") nil t)
            (when (looking-at org-ts-regexp-inactive)
-             (let ((time (save-match-data
-                           (and
-                            (thread-last
-                              (match-string 1)
-                              (parse-time-string)
-                              (encode-time)
-                              (float-time))))))
+             (let ((time (thread-last
+                           (save-match-data
+                             (if-let (string (save-match-data
+                                               (org-entry-get nil "exact_time")))
+                                 (parse-iso8601-time-string string)
+                               (encode-time (parse-time-string (match-string 1)))))
+                           (float-time))))
                (when (and (>= time start-time-float)
                           (< time end-time-float))
                  (goto-char (match-end 0))
