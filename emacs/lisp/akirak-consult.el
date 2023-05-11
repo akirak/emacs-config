@@ -191,6 +191,7 @@ which file(s) to commit beforehand."
 ;;;###autoload
 (defun akirak-consult-git-revert-file (file)
   (interactive "f")
+  (require 'magit)
   (magit-with-toplevel
     (magit-run-git "checkout" "HEAD" "--" file)
     (when-let (buffer (find-buffer-visiting file))
