@@ -2884,7 +2884,12 @@ A programmable workflow layer for Org mode
 
 #+begin_src emacs-lisp
   (setup (:package consult-org-dog)
-    (:global "M-g M-/" #'consult-org-dog))
+    (:global "M-g M-/" #'consult-org-dog)
+    (:set consult-org-dog-tag-super-groups
+          '(("@epic"
+             (:todo "DONE")
+             (:todo "UNDERWAY")
+             (:auto-category t)))))
 #+end_src
 **** octopus
 :PROPERTIES:
