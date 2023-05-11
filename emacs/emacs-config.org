@@ -12,9 +12,9 @@
 - [[#macro-packages][Macro packages]]
 - [[#built-ins][Built-ins]]
 - [[#typography-settings][Typography settings]]
-- [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#org][Org]]
 - [[#treesit-based-major-modes][Treesit-based major modes]]
+- [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#packages][Packages]]
 - [[#various-hooks-and-hacks-related-to-window-management][Various Hooks and hacks related to window management]]
 - [[#post-init][Post init]]
@@ -2111,11 +2111,6 @@ I think it would be better to create my own theme, but I don't have enough time 
 #+begin_src emacs-lisp
   (setq akirak/default-body-width 86)
 #+end_src
-** User package (akirak-*.el)
-Following sections in this configuration file assume my extras are available.
-#+begin_src emacs-lisp
-  (setup (:package akirak))
-#+end_src
 ** Org                                                     :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -3722,6 +3717,248 @@ Major mode for editing YAML files
   (setup yaml-ts-mode
     (:file-match "\\.ya?ml\\'"))
 #+end_src
+** User package (akirak-*.el)
+This is a collection of various utilities to enhance the experience.
+#+begin_src emacs-lisp
+  (setup (:package akirak)
+    (:global "C-x d" #'akirak-consult-dir
+             "C-c i" #'akirak-scratch-elisp
+             "<f12> j" #'akirak-scratch-japanese)
+
+    (with-eval-after-load 'embark
+      (require 'akirak-embark)
+      (add-to-list 'embark-keymap-alist
+                   '(directory . akirak-embark-directory-map))
+      (add-to-list 'embark-keymap-alist
+                   '(project-root . akirak-embark-project-root-map))
+      ;; Since I am not using package.el, it is better to override the default
+      ;; embark map.
+      (add-to-list 'embark-keymap-alist
+                   '(package . akirak-embark-package-map)))
+
+    ;; These settings are specific to my environment.
+    (:status personal
+      (:defer 1 #'akirak-files-ensure-abbrev-list)))
+#+end_src
+*** akirak-avy
+#+begin_src emacs-lisp
+  (setup akirak-avy
+    (:global "C-;" #'akirak-avy-insert-symbol
+             "C-\"" #'akirak-avy-symbol-overlay-put))
+#+end_src
+*** akirak-capture
+#+begin_src emacs-lisp
+  (setup akirak-capture
+    (:global "C-c c" #'akirak-capture))
+#+end_src
+*** akirak-comment
+#+begin_src emacs-lisp
+  (setup akirak-comment
+    (:global "M-;" #'akirak-comment-toggle))
+#+end_src
+*** akirak-consult
+#+begin_src emacs-lisp
+  (setup akirak-consult
+    (:status opinionated
+      (:with-map ctl-x-map
+        (:bind "p" #'akirak-consult-project-file))))
+#+end_src
+*** akirak-consult-elisp
+#+begin_src emacs-lisp
+  (setup akirak-consult-elisp
+    (:global [remap finder-by-keyword] #'akirak-consult-elisp-package))
+#+end_src
+*** akirak-consult-org
+#+begin_src emacs-lisp
+  (setup akirak-consult-org
+    (:global "M-s M-j" #'akirak-consult-org-clock-history))
+#+end_src
+*** akirak-org-log
+#+begin_src emacs-lisp
+  (setup akirak-org-log
+    (:status personal
+      (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
+#+end_src
+*** akirak-org-reg
+#+begin_src emacs-lisp
+  (setup akirak-org-reg
+    (:global "C-c j" #'akirak-org-reg-transient))
+#+end_src
+*** akirak-org-secrets                                                 :secrets:
+#+begin_src emacs-lisp
+  (setup akirak-org-secrets
+    (:global "<f12> S i" #'akirak-org-secrets-insert
+             "<f12> S w" #'akirak-org-secrets-copy
+             "<f12> S s" #'akirak-org-secrets-show
+             "<f12> S c" #'akirak-org-secrets-capture))
+#+end_src
+*** akirak-org-special
+#+begin_src elisp
+  (setup akirak-org-special
+    (with-eval-after-load 'org
+      (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-org-special-prompt-send)))
+#+end_src
+*** akirak-elec-pair                                               :parentheses:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-27 Sun 14:39]
+:END:
+#+begin_src emacs-lisp
+  (setup akirak-elec-pair
+    (:status opinionated
+      (:global "M-i" nil
+               "M-i c" #'akirak-elec-pair-replace
+               "M-i d" #'akirak-elec-pair-delete
+               "M-i y" #'akirak-elec-pair-wrap-post-yank
+               "M-i #" #'akirak-elec-pair-self-insert
+               "M-i $" #'akirak-elec-pair-self-insert
+               "M-i %" #'akirak-elec-pair-self-insert
+               "M-i {" #'akirak-elec-pair-self-insert
+               "M-i [" #'akirak-elec-pair-self-insert
+               "M-i (" #'akirak-elec-pair-self-insert)))
+#+end_src
+
+I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it had dependency on expand-region I wanted to get rid of, so I implemented a simpler alternative.
+*** akirak-elisp
+#+begin_src emacs-lisp
+  (setup akirak-elisp
+    (:with-map emacs-lisp-mode-map
+      (:bind "C-c t l" #'akirak-elisp-let-exp)
+      (:bind "C-c t (" #'akirak-elisp-wrap-exp)))
+#+end_src
+*** akirak-git-commit
+#+begin_src emacs-lisp
+  (setup akirak-git-commit
+    (add-hook 'after-init-hook #'akirak-git-commit-log-to-org-clock-mode))
+#+end_src
+*** akirak-github
+#+begin_src elisp
+  (define-key help-map (kbd "C-g") #'akirak-github-search-code)
+#+end_src
+*** akirak-header-line                                                      :UI:
+:PROPERTIES:
+:CREATED_TIME: [2022-04-18 Mon 08:15]
+:END:
+#+begin_src emacs-lisp
+  (setup akirak-header-line
+    (:hook-into after-init-hook))
+#+end_src
+*** akirak-image
+
+#+begin_src emacs-lisp
+  (setup akirak-image
+    (:nixpkgs "librsvg")
+    (:embark embark-url-map "s"
+      ("d" akirak-image-insert-offline-link akirak/embark-org-insert-image))
+    (:embark embark-file-map nil
+      ("C-c i" akirak-image-import-file akirak/embark-import-image-url))
+    (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
+#+end_src
+*** akirak-insert
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c a") #'akirak-insert)
+  (global-set-key (kbd "C-x a w") #'akirak-insert-window-title)
+#+end_src
+*** COMMENT akirak-japanese                                            :ARCHIVE:
+#+begin_src emacs-lisp
+  (setup akirak-japanese
+    ;; Local search
+    (:global "M-s M-l" #'akirak-japanese-search))
+#+end_src
+*** akirak-narrow
+#+begin_src emacs-lisp
+  (setup akirak-narrow
+    (:global "C-x n" #'akirak-narrow-or-widen-dwim)
+    (with-eval-after-load 'org
+      (define-key org-mode-map (kbd "C-x n") #'akirak-narrow-or-widen-dwim)))
+#+end_src
+*** akirak-nix
+#+begin_src emacs-lisp
+  (setup akirak-nix
+    (:global "<f12> n p" #'akirak-nix-search-nixpkgs))
+#+end_src
+*** akirak-pandoc
+#+begin_src emacs-lisp
+  (setup akirak-pandoc
+    (:nixpkgs "pandoc"))
+#+end_src
+*** akirak-paren
+#+begin_src elisp
+  (setup akirak-paren
+    (:with-mode akirak-paren-jump-mode
+      ;; Don't turn on the mode in special modes, e.g. vterm.
+      (:hook-into prog-mode-hook text-mode-hook)))
+#+end_src
+*** akirak-scratch
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
+#+end_src
+*** akirak-snippet
+#+begin_src emacs-lisp
+  (setup akirak-snippet
+    (define-key ctl-x-r-map "/" #'akirak-snippet-search))
+#+end_src
+*** akirak-twist
+#+begin_src emacs-lisp
+  (setup akirak-twist
+    (with-eval-after-load 'embark
+      (define-key embark-library-map
+                  "f" #'akirak-twist-find-git-source))
+    (:global "<f12> e u" #'akirak-twist-update-emacs-inputs))
+#+end_src
+*** akirak-unknown
+#+begin_src emacs-lisp
+  (setup akirak-unknown
+    (:global "C-c m" #'akirak-unknown)
+    (:when-loaded
+      (akirak-unknown-setup-embark)))
+#+end_src
+*** akirak-url                                                       :clipboard:
+Complete a URL from the clipboard and the kill ring and insert as a link
+
+#+begin_src emacs-lisp
+  (setup akirak-url
+    (:global "C-c w" #'akirak-url-insert-dwim)
+    (:embark embark-url-map "s"
+      ("m" akirak-url-insert-as-markdown akirak/embark-markdown-insert-link)
+      ("c" akirak-capture-url akirak/embark-capture-url)
+      ("g" akirak-git-clone akirak/embark-git-clone-from-url))
+    (:embark embark-file-map "s"
+      ("C-l" akirak-org-store-link-to-file akirak/embark-org-store-file-link)))
+#+end_src
+*** akirak-wayshot                                                  :screenshot:
+#+begin_src emacs-lisp
+  (when (getenv "WAYLAND_DISPLAY")
+    (global-set-key (kbd "<f12> c s w") #'akirak-wayshot))
+#+end_src
+*** akirak-wf-recorder
+#+begin_src emacs-lisp
+  (when (getenv "WAYLAND_DISPLAY")
+    (global-set-key (kbd "<f12> c r w") #'akirak-wf-recorder))
+#+end_src
+*** akirak-window                                                      :windows:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-24 Thu 14:10]
+:END:
+
+This is an extra functions for window management.
+
+#+begin_src emacs-lisp
+  (setup akirak-window
+    (:status opinionated
+      (:global "C-2" #'akirak-window-split-vertically
+               "C-3" #'akirak-window-split-and-select
+               "C-4" #'akirak-window-setup-columns
+               "C-x o" #'akirak-window-cycle-two-windows
+               "C-x M-o" #'akirak-window-swap-two-windows
+               "C-c v" #'akirak-window-open-in-new-tab
+               "M-o" #'akirak-window-moderate-1
+               [remap abort-recursive-edit] #'akirak-window-cleanup)))
+#+end_src
+*** akirak-wordnet
+#+begin_src elisp
+  (setup akirak-wordnet
+    (:nixpkgs "sqlite"))
+#+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -3878,258 +4115,6 @@ Minor mode to aggressively keep your code always indented
 #+begin_src emacs-lisp
   (setup (:package aggressive-indent)
     (:hook-into emacs-lisp-mode-hook))
-#+end_src
-*** akirak
-:PROPERTIES:
-:CREATED_TIME: [2022-02-01 Tue 20:12]
-:END:
-#+begin_quote
-A collection of commands and utilities
-[[https://git.sr.ht/~akirak/akirak-mode]]
-#+end_quote
-
-This is a collection of extra utilities for various packages.
-
-#+begin_src emacs-lisp
-  (setup akirak
-
-    (:global "C-x d" #'akirak-consult-dir
-             "C-c i" #'akirak-scratch-elisp
-             "<f12> j" #'akirak-scratch-japanese)
-
-    (with-eval-after-load 'embark
-      (require 'akirak-embark)
-      (add-to-list 'embark-keymap-alist
-                   '(directory . akirak-embark-directory-map))
-      (add-to-list 'embark-keymap-alist
-                   '(project-root . akirak-embark-project-root-map))
-      ;; Since I am not using package.el, it is better to override the default
-      ;; embark map.
-      (add-to-list 'embark-keymap-alist
-                   '(package . akirak-embark-package-map)))
-
-    ;; These settings are specific to my environment.
-    (:status personal
-      (:defer 1 #'akirak-files-ensure-abbrev-list)))
-#+end_src
-**** akirak-avy
-#+begin_src emacs-lisp
-  (setup akirak-avy
-    (:global "C-;" #'akirak-avy-insert-symbol
-             "C-\"" #'akirak-avy-symbol-overlay-put))
-#+end_src
-**** akirak-capture
-#+begin_src emacs-lisp
-  (setup akirak-capture
-    (:global "C-c c" #'akirak-capture))
-#+end_src
-**** akirak-comment
-#+begin_src emacs-lisp
-  (setup akirak-comment
-    (:global "M-;" #'akirak-comment-toggle))
-#+end_src
-**** akirak-consult
-#+begin_src emacs-lisp
-  (setup akirak-consult
-    (:status opinionated
-      (:with-map ctl-x-map
-        (:bind "p" #'akirak-consult-project-file))))
-#+end_src
-**** akirak-consult-elisp
-#+begin_src emacs-lisp
-  (setup akirak-consult-elisp
-    (:global [remap finder-by-keyword] #'akirak-consult-elisp-package))
-#+end_src
-**** akirak-consult-org
-#+begin_src emacs-lisp
-  (setup akirak-consult-org
-    (:global "M-s M-j" #'akirak-consult-org-clock-history))
-#+end_src
-**** akirak-org-log
-#+begin_src emacs-lisp
-  (setup akirak-org-log
-    (:status personal
-      (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
-#+end_src
-**** akirak-org-reg
-#+begin_src emacs-lisp
-  (setup akirak-org-reg
-    (:global "C-c j" #'akirak-org-reg-transient))
-#+end_src
-**** akirak-org-secrets                                   :secrets:
-#+begin_src emacs-lisp
-  (setup akirak-org-secrets
-    (:global "<f12> S i" #'akirak-org-secrets-insert
-             "<f12> S w" #'akirak-org-secrets-copy
-             "<f12> S s" #'akirak-org-secrets-show
-             "<f12> S c" #'akirak-org-secrets-capture))
-#+end_src
-**** akirak-org-special
-#+begin_src elisp
-  (setup akirak-org-special
-    (with-eval-after-load 'org
-      (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-org-special-prompt-send)))
-#+end_src
-**** akirak-elec-pair                                 :parentheses:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-27 Sun 14:39]
-:END:
-#+begin_src emacs-lisp
-  (setup akirak-elec-pair
-    (:status opinionated
-      (:global "M-i" nil
-               "M-i c" #'akirak-elec-pair-replace
-               "M-i d" #'akirak-elec-pair-delete
-               "M-i y" #'akirak-elec-pair-wrap-post-yank
-               "M-i #" #'akirak-elec-pair-self-insert
-               "M-i $" #'akirak-elec-pair-self-insert
-               "M-i %" #'akirak-elec-pair-self-insert
-               "M-i {" #'akirak-elec-pair-self-insert
-               "M-i [" #'akirak-elec-pair-self-insert
-               "M-i (" #'akirak-elec-pair-self-insert)))
-#+end_src
-
-I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it had dependency on expand-region I wanted to get rid of, so I implemented a simpler alternative.
-**** akirak-elisp
-#+begin_src emacs-lisp
-  (setup akirak-elisp
-    (:with-map emacs-lisp-mode-map
-      (:bind "C-c t l" #'akirak-elisp-let-exp)
-      (:bind "C-c t (" #'akirak-elisp-wrap-exp)))
-#+end_src
-**** akirak-git-commit
-#+begin_src emacs-lisp
-  (setup akirak-git-commit
-    (add-hook 'after-init-hook #'akirak-git-commit-log-to-org-clock-mode))
-#+end_src
-**** akirak-github
-#+begin_src elisp
-  (define-key help-map (kbd "C-g") #'akirak-github-search-code)
-#+end_src
-**** akirak-header-line                                        :UI:
-:PROPERTIES:
-:CREATED_TIME: [2022-04-18 Mon 08:15]
-:END:
-#+begin_src emacs-lisp
-  (setup akirak-header-line
-    (:hook-into after-init-hook))
-#+end_src
-**** akirak-image
-
-#+begin_src emacs-lisp
-  (setup akirak-image
-    (:nixpkgs "librsvg")
-    (:embark embark-url-map "s"
-      ("d" akirak-image-insert-offline-link akirak/embark-org-insert-image))
-    (:embark embark-file-map nil
-      ("C-c i" akirak-image-import-file akirak/embark-import-image-url))
-    (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
-#+end_src
-**** akirak-insert
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c a") #'akirak-insert)
-  (global-set-key (kbd "C-x a w") #'akirak-insert-window-title)
-#+end_src
-**** COMMENT akirak-japanese                              :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup akirak-japanese
-    ;; Local search
-    (:global "M-s M-l" #'akirak-japanese-search))
-#+end_src
-**** akirak-narrow
-#+begin_src emacs-lisp
-  (setup akirak-narrow
-    (:global "C-x n" #'akirak-narrow-or-widen-dwim)
-    (with-eval-after-load 'org
-      (define-key org-mode-map (kbd "C-x n") #'akirak-narrow-or-widen-dwim)))
-#+end_src
-**** akirak-nix
-#+begin_src emacs-lisp
-  (setup akirak-nix
-    (:global "<f12> n p" #'akirak-nix-search-nixpkgs))
-#+end_src
-**** akirak-pandoc
-#+begin_src emacs-lisp
-  (setup akirak-pandoc
-    (:nixpkgs "pandoc"))
-#+end_src
-**** akirak-paren
-#+begin_src elisp
-  (setup akirak-paren
-    (:with-mode akirak-paren-jump-mode
-      ;; Don't turn on the mode in special modes, e.g. vterm.
-      (:hook-into prog-mode-hook text-mode-hook)))
-#+end_src
-**** akirak-scratch
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
-#+end_src
-**** akirak-snippet
-#+begin_src emacs-lisp
-  (setup akirak-snippet
-    (define-key ctl-x-r-map "/" #'akirak-snippet-search))
-#+end_src
-**** akirak-twist
-#+begin_src emacs-lisp
-  (setup akirak-twist
-    (with-eval-after-load 'embark
-      (define-key embark-library-map
-                  "f" #'akirak-twist-find-git-source))
-    (:global "<f12> e u" #'akirak-twist-update-emacs-inputs))
-#+end_src
-**** akirak-unknown
-#+begin_src emacs-lisp
-  (setup akirak-unknown
-    (:global "C-c m" #'akirak-unknown)
-    (:when-loaded
-      (akirak-unknown-setup-embark)))
-#+end_src
-**** akirak-url                                         :clipboard:
-Complete a URL from the clipboard and the kill ring and insert as a link
-
-#+begin_src emacs-lisp
-  (setup akirak-url
-    (:global "C-c w" #'akirak-url-insert-dwim)
-    (:embark embark-url-map "s"
-      ("m" akirak-url-insert-as-markdown akirak/embark-markdown-insert-link)
-      ("c" akirak-capture-url akirak/embark-capture-url)
-      ("g" akirak-git-clone akirak/embark-git-clone-from-url))
-    (:embark embark-file-map "s"
-      ("C-l" akirak-org-store-link-to-file akirak/embark-org-store-file-link)))
-#+end_src
-**** akirak-wayshot                                                 :screenshot:
-#+begin_src emacs-lisp
-  (when (getenv "WAYLAND_DISPLAY")
-    (global-set-key (kbd "<f12> c s w") #'akirak-wayshot))
-#+end_src
-**** akirak-wf-recorder
-#+begin_src emacs-lisp
-  (when (getenv "WAYLAND_DISPLAY")
-    (global-set-key (kbd "<f12> c r w") #'akirak-wf-recorder))
-#+end_src
-**** akirak-window                                        :windows:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-24 Thu 14:10]
-:END:
-
-This is an extra functions for window management.
-
-#+begin_src emacs-lisp
-  (setup akirak-window
-    (:status opinionated
-      (:global "C-2" #'akirak-window-split-vertically
-               "C-3" #'akirak-window-split-and-select
-               "C-4" #'akirak-window-setup-columns
-               "C-x o" #'akirak-window-cycle-two-windows
-               "C-x M-o" #'akirak-window-swap-two-windows
-               "C-c v" #'akirak-window-open-in-new-tab
-               "M-o" #'akirak-window-moderate-1
-               [remap abort-recursive-edit] #'akirak-window-cleanup)))
-#+end_src
-**** akirak-wordnet
-#+begin_src elisp
-  (setup akirak-wordnet
-    (:nixpkgs "sqlite"))
 #+end_src
 *** COMMENT all-the-icons                               :UI:ARCHIVE:
 :PROPERTIES:
