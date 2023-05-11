@@ -77,7 +77,7 @@
                     (akirak-org-dog-major-mode-files)
                     (when (derived-mode-p 'text-mode)
                       (akirak-org-dog-language-files))
-                    (akirak-org-dog-org-tags-files))
+                    (akirak-org-dog-context-files 'org-tags))
             #'string-equal))
 
 (defun akirak-snippet--search ()
