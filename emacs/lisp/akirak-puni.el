@@ -10,7 +10,9 @@
     ((svelte-mode)
      akirak-puni-svelte-setup)
     ((elixir-mode)
-     akirak-puni-elixir-setup))
+     akirak-puni-elixir-setup)
+    ((web-mode)
+     akirak-puni-web-mode-setup))
   ""
   :type '(alist :key-type (repeat symbol)
                 :value-type (cons function (cons nil))))
@@ -26,6 +28,11 @@
     (funcall setup-fn)))
 
 ;;;; Mode-specific
+
+(defun akirak-puni-web-mode-setup ()
+  (interactive)
+  (when (member web-mode-engine '("astro"))
+    (akirak-puni-jsx-setup)))
 
 ;;;;; JSX
 

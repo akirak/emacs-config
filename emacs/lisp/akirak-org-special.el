@@ -10,6 +10,7 @@
                           (org-element-property :contents-begin element)
                           (org-element-property :contents-end element))))
               (end (org-element-property :end element)))
+    (require 'gptel)
     (gptel-request
      content
      :stream t

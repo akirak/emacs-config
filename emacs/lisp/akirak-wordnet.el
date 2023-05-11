@@ -1,6 +1,6 @@
 ;;; akirak-wordnet.el --- WordNet interface -*- lexical-binding: t -*-
 
-(require 'emacsql-sqlite)
+(require 'emacsql-sqlite-common)
 
 (defcustom akirak-wordnet-database-file
   (expand-file-name "~/.nix-profile/share/dict/wordnet.sqlite")
@@ -8,7 +8,8 @@
   :type 'file)
 
 (defmacro akirak-wordnet-with-database (&rest body)
-  `(let ((conn (emacsql-sqlite akirak-wordnet-database-file)))
+  `(let ((conn (make-instance (emacsql-sqlite-default-connection)
+                              :file akirak-wordnet-database-file)))
      (unwind-protect
          (progn ,@body)
        (emacsql-close conn))))

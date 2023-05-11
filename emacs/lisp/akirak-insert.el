@@ -78,5 +78,14 @@
     (org-with-point-at org-clock-marker
       (org-get-heading t t t t))))
 
+;;;###autoload (autoload 'akirak-insert-window-title "akirak-insert" nil 'interactive)
+(define-skeleton akirak-insert-window-title
+  "Insert a string from the title of a window on the desktop"
+  (require 'akirak-window-system)
+  (replace-regexp-in-string
+   (rx " — Mozilla Firefox" eos)
+   ""
+   (akirak-window-system-complete-title "Window title: ")))
+
 (provide 'akirak-insert)
 ;;; akirak-insert.el ends here

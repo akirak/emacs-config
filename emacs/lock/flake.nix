@@ -35,8 +35,14 @@
     apprentice = {
       flake = false;
       owner = "akirak";
-      ref = "fix-warns";
+      ref = "prefix-map";
       repo = "Apprentice";
+      type = "github";
+    };
+    auto-minor-mode = {
+      flake = false;
+      owner = "joewreschnig";
+      repo = "auto-minor-mode";
       type = "github";
     };
     auto-yasnippet = {
@@ -738,6 +744,12 @@
       repo = "oahu.el";
       type = "sourcehut";
     };
+    ob-graphql = {
+      flake = false;
+      owner = "jdormit";
+      repo = "ob-graphql";
+      type = "github";
+    };
     ob-restclient = {
       flake = false;
       owner = "alf";
@@ -814,6 +826,12 @@
       flake = false;
       owner = "akirak";
       repo = "org-epubinfo";
+      type = "github";
+    };
+    org-hyprctl = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-hyprctl";
       type = "github";
     };
     org-lang-env = {
@@ -943,11 +961,6 @@
       owner = "vedang";
       repo = "pdf-tools";
       type = "github";
-    };
-    persist = {
-      flake = false;
-      type = "git";
-      url = "https://gitlab.com/phillord/persist";
     };
     pinyin = {
       flake = false;

@@ -210,8 +210,7 @@
   :prop :tags
   :reader (lambda (prompt initial history)
             (completing-read-multiple prompt
-                                      (org-global-tags-completion-table
-                                       (org-agenda-files))
+                                      (akirak-capture--org-global-tags)
                                       nil nil
                                       (org-make-tag-string initial)
                                       history)))
@@ -368,14 +367,6 @@
                            akirak-capture-doct-options '(:clock-in t :clock-resume t))
                      (akirak-capture-doct))
     :transient t)
-   ("!" "Troubleshooting" (lambda ()
-                            (interactive)
-                            (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-                                  akirak-capture-template-options (list :todo "UNDERWAY"
-                                                                        :tags "@troubleshooting")
-                                  akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                            (akirak-capture-doct))
-    :transient t)
    ("i" "Ideate" (lambda ()
                    (interactive)
                    (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
@@ -405,20 +396,7 @@
                                    akirak-capture-doct-options nil)
                              (akirak-capture-doct))
     :transient t)
-   ("m" "Message" (lambda ()
-                    (interactive)
-                    (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-                          akirak-capture-template-options '(:todo "UNDERWAY" :tags "@message")
-                          akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                    (akirak-capture-doct))
-    :transient t)
-   ("r" "Rule" (lambda ()
-                 (interactive)
-                 (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-                       akirak-capture-template-options nil
-                       akirak-capture-doct-options '(:function akirak-capture--goto-rules
-                                                               :clock-in t :clock-resume t))
-                 (akirak-capture-doct))
+   ("/" "Tag prompt" akirak-capture-entry-with-tag
     :transient t)]
 
   ["Information (input, events, etc.)"
@@ -512,6 +490,34 @@
   (let ((link (pop org-stored-links)))
     (org-link-make-string (car link)
                           (read-from-minibuffer "Description: " (cdr link)))))
+
+(defcustom akirak-capture-tag-alist
+  '(("@troubleshooting"
+     :template (:todo "UNDERWAY")
+     :doct (:clock-in t :clock-resume t))
+    ("@message"
+     :template (:todo "UNDERWAY")
+     :doct (:clock-in t :clock-resume t)))
+  ""
+  :type '(alist :key-type (string :tag "Org tag")
+                :value-type plist))
+
+(defun akirak-capture-entry-with-tag (tag)
+  (interactive (list (completing-read "Org tag: "
+                                      (akirak-capture--org-global-tags)
+                                      nil nil "@")))
+  (let ((plist (cdr (assoc tag akirak-capture-tag-alist))))
+    (setq akirak-capture-doct-options (plist-get plist :doct)
+          akirak-capture-template-options (thread-first
+                                            (plist-get plist :template)
+                                            (plist-put :tags tag))
+          akirak-capture-headline (akirak-capture--maybe-read-heading))
+    (akirak-capture-doct)))
+
+(defun akirak-capture--org-global-tags ()
+  (thread-last
+    (mapcar #'car org-tag-persistent-alist)
+    (cl-remove-if-not #'stringp)))
 
 (transient-define-prefix akirak-capture-active-region ()
   ["Snippet"
@@ -758,6 +764,7 @@
                        :file ,(org-dog-resolve-relative-file "news.org")
                        :function ,jump-func))))))
         (org-capture))))
+   ("'" octopus-avy-org-heading-suffix)
    ("@" akirak-capture-url-to-clock)
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
@@ -1036,30 +1043,6 @@
     (let ((case-fold-search t))
       (when (search-forward word nil t)
         (match-string 0)))))
-
-;;;###autoload
-(defun akirak-capture-troubleshooting (&optional arg)
-  (interactive "P")
-  (let ((text (if (use-region-p)
-                  (buffer-substring-no-properties (region-beginning) (region-end))
-                (akirak-capture-read-string "Error message: "))))
-    (when (string-empty-p (string-trim text))
-      (setq text nil))
-    (setq akirak-capture-headline (if (and text
-                                           (string-match (rx bos (* space) (group (+ nonl)))
-                                                         text))
-                                      (match-string 1 text)
-                                    "%?")
-          akirak-capture-doct-options '(:clock-in t :clock-resume t)
-          akirak-capture-template-options `(:todo "UNDERWAY"
-                                                  :tags "@troubleshooting"
-                                                  :body
-                                                  ,(when text
-                                                     (list "%?"
-                                                           "#+begin_example"
-                                                           text
-                                                           "#+end_example"))))
-    (akirak-capture-doct)))
 
 (defun akirak-capture-ticket ()
   (interactive)

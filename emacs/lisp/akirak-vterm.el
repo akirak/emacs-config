@@ -100,14 +100,25 @@
                          "*vterm*")))))))
 
 (defun akirak-vterm--select-buffer ()
-  (let* ((buffers (thread-last
-                    (akirak-vterm--buffers)
-                    (mapcar #'buffer-name)))
-         (input (completing-read "Buffer: " buffers)))
-    (if-let (bufname (car (member input buffers)))
-        (get-buffer bufname)
-      (unless (string-empty-p input)
-        input))))
+  (let ((buffers (thread-last
+                   (akirak-vterm--buffers)
+                   (mapcar #'buffer-name))))
+    (cl-labels
+        ((group (candidate transform)
+           (if transform
+               candidate
+             (buffer-local-value 'default-directory (get-buffer candidate))))
+         (completions (string pred action)
+           (if (eq action 'metadata)
+               (cons 'metadata
+                     (list (cons 'category 'vterm-buffer)
+                           (cons 'group-function #'group)))
+             (complete-with-action action buffers string pred))))
+      (let ((input (completing-read "Vterm buffer: " #'completions)))
+        (if-let (bufname (car (member input buffers)))
+            (get-buffer bufname)
+          (unless (string-empty-p input)
+            input))))))
 
 ;;;###autoload
 (defun akirak-vterm-for-dir (&optional dir)
