@@ -26,30 +26,32 @@
             (org-clocking-p))))
 
 (cl-defun akirak-log--heading (heading &key time tags message)
-  (with-temp-buffer
-    (insert (format-spec "* %t %h%g
+  (with-current-buffer (or (org-find-base-buffer-visiting akirak-log-private-file)
+                           (find-file-noselect akirak-log-private-file))
+    (org-with-wide-buffer
+     (goto-char (point-max))
+     (insert (format-spec "* %t %h%g
 :PROPERTIES:
 :emacs_pid:  %p
 :login:      %l
 :exact_time: %u
 :END:\n"
-                         `((?t . ,(format-time-string
-                                   (org-time-stamp-format t t)
-                                   time))
-                           (?u . ,(format-time-string "%FT%H:%M:%S%:z"))
-                           (?h . ,heading)
-                           (?g . ,(if tags
-                                      (concat " "
-                                              (org-make-tag-string
-                                               (ensure-list tags)))
-                                    ""))
-                           (?p . ,(emacs-pid))
-                           (?l . ,(concat (user-login-name) "@" (system-name)))))
-            (when message
-              (string-chop-newline message)))
-    (when message
-      (insert-char ?\n))
-    (append-to-file (point-min) (point-max) akirak-log-private-file)))
+                          `((?t . ,(format-time-string
+                                    (org-time-stamp-format t t)
+                                    time))
+                            (?u . ,(format-time-string "%FT%H:%M:%S%:z"))
+                            (?h . ,heading)
+                            (?g . ,(if tags
+                                       (concat " "
+                                               (org-make-tag-string
+                                                (ensure-list tags)))
+                                     ""))
+                            (?p . ,(emacs-pid))
+                            (?l . ,(concat (user-login-name) "@" (system-name)))))
+             (when message
+               (string-chop-newline message)))
+     (when message
+       (insert-char ?\n)))))
 
 (defun akirak-log--format-file-name (file)
   ;; TODO: Prevent loading ol for a shorter initial response time?
