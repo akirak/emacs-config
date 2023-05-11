@@ -127,12 +127,16 @@
       (when (and post (listp post))
         (eval post)))))
 
-(defun akirak-snippet--run-prompt (prompt-entry)
-  (unless (thing-at-point-looking-at (rx bol (* blank) eol))
-    (open-line 1))
-  (comment-dwim nil)
-  (insert (akirak-snippet-prompt-entry-prompt prompt-entry))
-  (gptel-send))
+(defun akirak-snippet--run-prompt (entry)
+  (gptel-request (concat (akirak-snippet-entry-body entry)
+                         (when (use-region-p)
+                           (concat "\n\n"
+                                   (buffer-substring-no-properties
+                                    (region-beginning) (region-end)))))
+                 :system (or (buffer-local-value 'gptel--system-message
+                                                 (find-buffer-visiting
+                                                  (akirak-snippet-entry-filename entry)))
+                             gptel--system-message)))
 
 (cl-defun akirak-snippet--next-block (&key file name description)
   (re-search-forward akirak-snippet-block-regexp)
