@@ -317,6 +317,23 @@ Otherwise, it calls `akirak-window-duplicate-state'."
       (fwb-toggle-window-split)
     (akirak-window-duplicate-state arg)))
 
+;;;###autoload
+(defun akirak-window-column-prefix (&optional n)
+  "Display the buffer of the next command in the window in the N-th column."
+  ;; It would be possible to use (interactive "N") which falls back to "n", but
+  ;; I don't want to press enter.
+  (interactive "P")
+  (let ((n (or n
+               (- (read-char "Column: ") ?0))))
+    (display-buffer-override-next-command
+     `(lambda (buffer alist)
+        (let ((window (akirak-window--find-column ,n)))
+          (cons (progn
+                  (set-window-buffer window buffer)
+                  window)
+                'window)))
+     nil (format "[column %d]" n))))
+
 (defvar akirak-window-last-window-configuration nil)
 
 ;;;###autoload
