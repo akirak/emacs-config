@@ -1151,9 +1151,6 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup menu-bar
     (:status opinionated
-      (:with-map ctl-x-map
-        ;; I don't need kill-buffer when I have consult-buffer
-        (:bind "k" #'kill-this-buffer))
       (:global "<f12> <f12>" #'toggle-debug-on-error)))
 #+end_src
 *** minibuf.c                                           :minibuffer:
@@ -3953,11 +3950,17 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup akirak-window
     (:status opinionated
+      (:with-map ctl-x-map
+        ;; I don't need kill-buffer when I have consult-buffer
+        (:bind "k" #'akirak-window-kill-this-buffer))
+      (:with-map help-map
+        (:bind "h" #'akirak-window-select-help-window))
       (:global "C-2" #'akirak-window-split-vertically
                "C-3" #'akirak-window-split-and-select
                "C-4" #'akirak-window-setup-columns
                "C-x o" #'akirak-window-cycle-two-windows
                "C-x M-o" #'akirak-window-swap-two-windows
+               "C-x `" #'akirak-window-column-prefix
                "C-c v" #'akirak-window-open-in-new-tab
                "M-o" #'akirak-window-moderate-1
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
