@@ -8019,16 +8019,17 @@ They are built into big functions in the library, so I use =el-patch= to remove 
     (:status opinionated
       (defun akirak/ad-reuse-mode-window (&rest _)
         ;; Assume `switch-to-buffer-obey-display-actions' is t.
-        (display-buffer-override-next-command
-         (lambda (buffer alist)
-           (let ((alist (append '((inhibit-same-window . t)) alist))
-                 window type)
-             (if (setq window (display-buffer-reuse-mode-window
-                               buffer alist))
-                 (setq type 'reuse)
-               (setq window (display-buffer-use-some-window buffer alist)
-                     type 'reuse))
-             (cons window type)))))
+        (unless (car-safe display-buffer-overriding-action)
+          (display-buffer-override-next-command
+           (lambda (buffer alist)
+             (let ((alist (append '((inhibit-same-window . t)) alist))
+                   window type)
+               (if (setq window (display-buffer-reuse-mode-window
+                                 buffer alist))
+                   (setq type 'reuse)
+                 (setq window (display-buffer-use-some-window buffer alist)
+                       type 'reuse))
+               (cons window type))))))
 
       (advice-add 'org-agenda-goto
                   :before #'akirak/ad-reuse-mode-window)
