@@ -128,15 +128,20 @@
         (eval post)))))
 
 (defun akirak-snippet--run-prompt (entry)
-  (gptel-request (concat (akirak-snippet-entry-body entry)
-                         (when (use-region-p)
-                           (concat "\n\n"
-                                   (buffer-substring-no-properties
-                                    (region-beginning) (region-end)))))
-                 :system (or (buffer-local-value 'gptel--system-message
-                                                 (find-buffer-visiting
-                                                  (akirak-snippet-entry-filename entry)))
-                             gptel--system-message)))
+  (let* ((string (when (use-region-p)
+                   (buffer-substring-no-properties
+                    (region-beginning) (region-end))))
+         (in-place (not (string-match-p "\n" string))))
+    (when in-place
+      (delete-region (region-beginning) (region-end)))
+    (gptel-request (concat (akirak-snippet-entry-body entry)
+                           (when string
+                             (concat "\n\n" string)))
+                   :in-place in-place
+                   :system (or (buffer-local-value 'gptel--system-message
+                                                   (find-buffer-visiting
+                                                    (akirak-snippet-entry-filename entry)))
+                               gptel--system-message))))
 
 (cl-defun akirak-snippet--next-block (&key file name description)
   (re-search-forward akirak-snippet-block-regexp)
