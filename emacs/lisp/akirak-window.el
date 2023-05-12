@@ -239,6 +239,23 @@ focus on the same buffer."
     (select-window w)))
 
 ;;;###autoload
+(defun akirak-window-kill-this-buffer (&optional n)
+  (interactive "P")
+  (require 'menu-bar)
+  (kill-this-buffer)
+  (let* ((above-window (and (not (window-minibuffer-p))
+                            (window-in-direction 'above)))
+         (deleted-window (when above-window
+                           (selected-window)))
+         (next-window (if (numberp n)
+                          (akirak-window--other-window nil n)
+                        above-window)))
+    (when next-window
+      (select-window next-window))
+    (when deleted-window
+      (delete-window deleted-window))))
+
+;;;###autoload
 (defun akirak-window-swap-two-windows (&optional arg)
   "Swap two windows and select the buffer in the other window.
 
