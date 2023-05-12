@@ -214,13 +214,29 @@ With a '- argument, the window will be `next-window'.
 With a single universal argument, it swaps two windows and keeps
 focus on the same buffer."
   (interactive "P")
-  (if (and (akirak-window--popup-p)
-           (windowp akirak-window-last-non-popup-window))
-      (select-window akirak-window-last-non-popup-window)
-    (when-let (window (akirak-window--other-window nil arg))
-      (if (equal arg '(4))
-          (window-swap-states window (selected-window))
-        (select-window window)))))
+  (if (equal arg '(16))
+      (akirak-window-select-recently-displayed)
+    (if (and (akirak-window--popup-p)
+             (windowp akirak-window-last-non-popup-window))
+        (select-window akirak-window-last-non-popup-window)
+      (when-let (window (akirak-window--other-window nil arg))
+        (if (equal arg '(4))
+            (window-swap-states window (selected-window))
+          (select-window window))))))
+
+;;;###autoload
+(defun akirak-window-select-recently-displayed ()
+  (interactive)
+  (when-let (w (thread-last
+                 (window-list)
+                 (cl-remove-if-not #'window-live-p)
+                 (cl-remove (selected-window))
+                 (seq-sort-by (lambda (w)
+                                (buffer-local-value 'buffer-display-time (window-buffer w)))
+                              (lambda (a b)
+                                (not (time-less-p a b))))
+                 (car)))
+    (select-window w)))
 
 ;;;###autoload
 (defun akirak-window-swap-two-windows (&optional arg)
