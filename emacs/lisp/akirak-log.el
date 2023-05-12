@@ -4,6 +4,12 @@
   ""
   :type 'file)
 
+(defmacro akirak-log-with-wide-buffer (&rest body)
+  `(with-current-buffer (or (org-find-base-buffer-visiting akirak-log-private-file)
+                            (find-file-noselect akirak-log-private-file))
+     (org-with-wide-buffer
+      ,@body)))
+
 ;;;###autoload
 (define-minor-mode akirak-log-mode
   "Global minor mode that logs certain events to an Org file."
@@ -113,6 +119,87 @@
                              result))
                    (error "Failed to match on line: %s" (point-marker)))))))))
       result)))
+
+;;;###autoload
+(cl-defun akirak-log-browse-url (url &key effort tags)
+  (interactive (akirak-log--complete-url-with-effort "Browse url: "))
+  (let (
+        (org-capture-entry
+         (car (doct
+               `((""
+                  :keys ""
+                  :file ,akirak-log-private-file
+                  :template ,(akirak-org-capture-make-entry-body
+                               url
+                               :tags tags
+                               :drawer (format-spec
+                                        ":PROPERTIES:
+:Effort: %e
+:END:
+"
+                                        `((?e . ,effort)))
+                               :body t)
+                  :clock-in t :clock-resume t))))))
+    (browse-url url)
+    (org-capture)))
+
+(defun akirak-log--complete-url-with-effort (prompt)
+  (let* ((alist (akirak-log--url-activities))
+         (urls (seq-uniq (mapcar #'car alist))))
+    (cl-labels
+        ((annotator (candidate)
+           (let* ((date (plist-get (cdr (assoc candidate alist))
+                                   :date))
+                  (date-diff (when date
+                               (floor (/ (- (float-time)
+                                            (float-time (encode-time date)))
+                                         86400)))))
+             (when date
+               (format " (last activity %s)"
+                       (pcase date-diff
+                         (0 "today")
+                         (1 "yesterday")
+                         (_ (format "%d days ago" date-diff)))))))
+         (completions (string pred action)
+           (if (eq action 'metadata)
+               (cons 'metadata
+                     (list (cons 'category 'category)
+                           (cons 'annotation-function #'annotator)))
+             (complete-with-action action urls string pred))))
+      (let* ((url (completing-read prompt #'completions))
+             (efforts (thread-last
+                        alist
+                        (seq-filter `(lambda (cell)
+                                       (equal ,url (car cell))))
+                        (mapcar (lambda (cell)
+                                  (plist-get (cdr cell) :effort)))
+                        (seq-uniq)))
+             (effort (completing-read "Effort: " efforts))
+             (tags (completing-read-multiple
+                    "Tags: "
+                    (flatten-tree (org-tag-alist-to-groups org-tag-persistent-alist))
+                    nil nil
+                    (string-join (plist-get (cdr (assoc url alist))
+                                            :tags)
+                                 crm-separator))))
+        (list url :effort effort :tags tags)))))
+
+(defun akirak-log--url-activities ()
+  (akirak-log-with-wide-buffer
+   (let ((regexp (format org-complex-heading-regexp-format org-link-plain-re))
+         result)
+     (goto-char (point-min))
+     (while (re-search-forward regexp nil t)
+       (push (list (match-string-no-properties 4)
+                   :tags (org-get-tags)
+                   :effort (org-entry-get nil "Effort")
+                   :clock-sum (org-clock-sum-current-item)
+                   :date (when (re-search-forward org-ts-regexp-inactive
+                                                  (org-entry-end-position)
+                                                  t)
+                           (parse-time-string (match-string 1))))
+             result))
+     result)))
 
 (provide 'akirak-log)
 ;;; akirak-log.el ends here
