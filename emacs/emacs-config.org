@@ -3203,7 +3203,10 @@ Time blocking with Org
                            "✲"))
                :template (lambda (tags)
                            (when tags
-                             `(:tags ,tags))))))
+                             `(:tags ,tags)))))
+            org-memento-order-group
+            (defun akirak/org-memento-group-order (x)
+              (car-safe (org-memento-order-group x))))
 
       (add-hook 'org-memento-open-journal-hook
                 (defun akirak/org-memento-goto-entry-end ()
