@@ -502,6 +502,24 @@ The point should be at the heading."
          (go face))))
     props))
 
+;;;; Matching location
+
+;;;###autoload
+(defun akirak-org-matching-pair-location ()
+  "Return the location of a matching pair."
+  (cond
+   ((and (bolp)
+         (or (org-match-line org-block-regexp)
+             (org-match-line org-block-regexp)
+             (org-match-line org-property-drawer-re)
+             (org-match-line org-logbook-drawer-re)))
+    (match-end 0))
+   ((and (bolp) (org-match-line org-dblock-start-re))
+    (org-element-property :end (org-element-context)))
+   ((or (org-match-line (rx bol (* blank) "#+end" (any ":_")))
+        (org-match-line org-property-end-re))
+    (org-element-property :begin (org-element-context)))))
+
 ;;;; akirak-org-protected-mode
 
 (defvar akirak-org-protected-mode-map

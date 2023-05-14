@@ -3908,7 +3908,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-paren
     (:with-mode akirak-paren-jump-mode
       ;; Don't turn on the mode in special modes, e.g. vterm.
-      (:hook-into prog-mode-hook text-mode-hook)))
+      (:hook-into prog-mode-hook text-mode-hook))
+    (add-hook 'org-mode-hook
+              (defun akirak/setup-org-pair-match ()
+                (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
+                          nil t))))
 #+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
