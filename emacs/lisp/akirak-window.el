@@ -468,8 +468,7 @@ Otherwise, it calls `akirak-window-duplicate-state'."
         (progn
           (setq akirak-window-last-nonhelp-window (selected-window))
           (select-window window))
-      (user-error "No help window in the frame"))
-    ))
+      (user-error "No help window in the frame"))))
 
 (provide 'akirak-window)
 ;;; akirak-window.el ends here
