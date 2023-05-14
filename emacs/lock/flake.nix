@@ -551,6 +551,12 @@
       repo = "hydra";
       type = "github";
     };
+    idris-mode = {
+      flake = false;
+      owner = "idris-hackers";
+      repo = "idris-mode";
+      type = "github";
+    };
     iedit = {
       flake = false;
       owner = "victorhge";
@@ -1014,6 +1020,12 @@
       flake = false;
       owner = "ProofGeneral";
       repo = "PG";
+      type = "github";
+    };
+    prop-menu = {
+      flake = false;
+      owner = "david-christiansen";
+      repo = "prop-menu-el";
       type = "github";
     };
     puni = {

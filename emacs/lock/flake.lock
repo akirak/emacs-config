@@ -1460,6 +1460,22 @@
         "type": "github"
       }
     },
+    "idris-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1676065905,
+        "narHash": "sha256-QmcjwisdDNDIz3PlFxWEK4oC4FWHvatVsNRfoajpKAo=",
+        "owner": "idris-hackers",
+        "repo": "idris-mode",
+        "rev": "c96f45d1b8fad193f09fb6139da17092003b5e74",
+        "type": "github"
+      },
+      "original": {
+        "owner": "idris-hackers",
+        "repo": "idris-mode",
+        "type": "github"
+      }
+    },
     "iedit": {
       "flake": false,
       "locked": {
@@ -2240,11 +2256,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1684029672,
-        "narHash": "sha256-bJrmF6Ti1q0nwugsOf5N7BT2L7a4rK46zy4xvujbHA4=",
+        "lastModified": 1684126420,
+        "narHash": "sha256-pUrrNq4D01NCDMG3clfZQ/4+LWoLDNT29Cbyj7RVirQ=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "d5e4ab1bf17cd61c33db557f2f6e0fe941d52517",
+        "rev": "42a45664ec72690db3c8779cd19eb824afbf2590",
         "type": "github"
       },
       "original": {
@@ -2686,6 +2702,22 @@
         "type": "github"
       }
     },
+    "prop-menu": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1438082283,
+        "narHash": "sha256-jMczpilDz58Kwpcuv7SVh1RnnUAh/S+URKrk8iMVV6E=",
+        "owner": "david-christiansen",
+        "repo": "prop-menu-el",
+        "rev": "50b102c1c0935fd3e0c465feed7f27d66b21cdf3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "david-christiansen",
+        "repo": "prop-menu-el",
+        "type": "github"
+      }
+    },
     "puni": {
       "flake": false,
       "locked": {
@@ -2923,6 +2955,7 @@
         "ht": "ht",
         "huan": "huan",
         "hydra": "hydra",
+        "idris-mode": "idris-mode",
         "iedit": "iedit",
         "inheritenv": "inheritenv",
         "ivy": "ivy",
@@ -2999,6 +3032,7 @@
         "posframe": "posframe",
         "promise": "promise",
         "proof-general": "proof-general",
+        "prop-menu": "prop-menu",
         "puni": "puni",
         "quick-peek": "quick-peek",
         "rainbow-delimiters": "rainbow-delimiters",
@@ -3443,11 +3477,11 @@
     "twist": {
       "flake": false,
       "locked": {
-        "lastModified": 1683771589,
-        "narHash": "sha256-j0PgKVhS19AxFedSUWS2GLz10fXYDYqoqB/C5I2ayoE=",
+        "lastModified": 1684074520,
+        "narHash": "sha256-9zqMaXzNswmZflfoF+UKfNOeZNsFyVTQ/b6Ax8mn2qE=",
         "owner": "emacs-twist",
         "repo": "twist.el",
-        "rev": "2d6955bdf281472115fb2cf2c98777bcc2313932",
+        "rev": "9ab672d9fa0f80298d052526799ae77840192857",
         "type": "github"
       },
       "original": {
