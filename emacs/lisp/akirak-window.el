@@ -10,6 +10,11 @@
 
 ;;;; Predicates
 
+(defmacro akirak-window-make-mode-window-predicate (&rest modes)
+  `(lambda (w)
+     (memq (buffer-local-value 'major-mode (window-buffer w))
+           ',modes)))
+
 (defun akirak-window-left-side-window-p (&optional window)
   (and (window-dedicated-p window)
        (not (window-in-direction 'left window))))
@@ -76,6 +81,48 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                   'window alist))
     (set-window-dedicated-p newwin t)
     newwin))
+
+;;;###autoload
+(defun akirak-window-display-org-agenda-buffer (buffer alist)
+  "Reuse the mode window. If none, prefer a pane."
+  (let ((alist-mode-entry (assq 'mode alist))
+        (windows (thread-last
+                   (window-list-1 nil 'never)
+                   (seq-sort-by #'window-height #'>))))
+    (if-let (mode-window (seq-find `(lambda (w)
+                                      (memq (buffer-local-value 'major-mode
+                                                                (window-buffer w))
+                                            ',(cdr alist-mode-entry)))
+                                   windows))
+        (window--display-buffer buffer mode-window 'reuse)
+      (if-let (other-window (car (delete (selected-window) windows)))
+          (window--display-buffer buffer other-window 'reuse)
+        (display-buffer buffer alist)))))
+
+;;;###autoload
+(defun akirak-window-display-org-capture-buffer (buffer _)
+  (let ((other-windows (thread-last
+                         (window-list-1 nil 'never)
+                         (delete (selected-window)))))
+    (if-let (w1 (car (cl-remove-if (lambda (window)
+                                     (string-prefix-p "^CAPTURE-" (buffer-name (window-buffer window))))
+                                   other-windows)))
+        (window--display-buffer buffer w1 'reuse)
+      (when other-windows
+        (window--display-buffer buffer (car other-windows) 'reuse)))))
+
+;;;###autoload
+(defun akirak-window-display-document-buffer (buffer _)
+  (let* ((other-windows (thread-last
+                          (window-list-1 nil 'never)
+                          (delete (selected-window))))
+         (non-org-windows (cl-remove-if (akirak-window-make-mode-window-predicate org-mode)
+                                        other-windows)))
+    (cond
+     (non-org-windows
+      (window--display-buffer buffer (car non-org-windows) 'reuse))
+     (other-windows
+      (window--display-buffer buffer (car other-windows) 'reuse)))))
 
 ;;;; Window manipulation
 

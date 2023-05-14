@@ -1887,6 +1887,19 @@ Thus I will explicitly install this package rather than using the built-in versi
                      display-buffer-reuse-mode-window
                      mode ,@modes)
                    t))
+    (add-to-list 'display-buffer-alist
+                 '((or (major-mode . nov-mode)
+                       (major-mode . pdf-view-mode))
+                   akirak-window-display-document-buffer)
+                 t)
+    (add-to-list 'display-buffer-alist
+                 '((major-mode . org-agenda-mode)
+                   akirak-window-display-org-agenda-buffer
+                   (mode org-agenda-mode)))
+    (add-to-list 'display-buffer-alist
+                 '("^CAPTURE-"
+                   akirak-window-display-org-capture-buffer)
+                 t)
 
     (add-to-list 'display-buffer-alist
                  '("^\\*Async Shell Command\\*"
