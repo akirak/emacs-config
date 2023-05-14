@@ -5981,6 +5981,15 @@ Replace things with predefined alternatives
       (define-key embark-defun-map "`" #'huan-defun)
       (define-key embark-identifier-map "`" #'huan-symbol)))
 #+end_src
+*** idris-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-05-14 Sun 23:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package idris-mode)
+    (:file-match "\\.idr\\'"))
+#+end_src
 *** iedit                                                  :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:51]

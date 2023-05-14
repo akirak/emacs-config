@@ -250,4 +250,8 @@
       ref = "prefix-map";
     };
   };
+
+  idris-mode = _: super: {
+    files = builtins.removeAttrs super.files ["flycheck-idris.el"];
+  };
 }
