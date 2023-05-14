@@ -68,7 +68,8 @@
 (defun akirak-log--find-file ()
   (when (and (or (memq current-minibuffer-command '(consult-recent-file
                                                     consult-buffer))
-                 (not (file-exists-p (buffer-file-name))))
+                 (and (buffer-file-name)
+                      (not (file-exists-p (buffer-file-name)))))
              (akirak-log--enabled-p))
     (akirak-log--heading (akirak-log--format-file-name (buffer-file-name))
                          :tags "file"
