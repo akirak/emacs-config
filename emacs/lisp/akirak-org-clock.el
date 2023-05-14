@@ -385,7 +385,8 @@ This function returns the current buffer."
   (akirak-org-clock-require-clock
     (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
         (with-current-buffer capture-buffer
-          (pop-to-buffer (current-buffer))
+          (unless (get-buffer-window capture-buffer)
+            (pop-to-buffer capture-buffer))
           (when arg
             (goto-char (org-entry-end-position))
             (delete-blank-lines)
