@@ -5985,6 +5985,10 @@ Replace things with predefined alternatives
 :PROPERTIES:
 :CREATED_TIME: [2023-05-14 Sun 23:16]
 :END:
+#+begin_quote
+Major mode for editing Idris code
+[[https://github.com/idris-hackers/idris-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package idris-mode)
@@ -8145,7 +8149,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 205 |
+| [[org-ql-search:tags:packages][packages]]            | 206 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
