@@ -4843,6 +4843,10 @@ dired-k depends on dired-x, which has a poor code quality.
 :PROPERTIES:
 :CREATED_TIME: [2023-05-16 Tue 11:09]
 :END:
+#+begin_quote
+Interface to Docker
+[[https://github.com/Silex/docker.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package docker))
@@ -8157,7 +8161,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 206 |
+| [[org-ql-search:tags:packages][packages]]            | 207 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
