@@ -167,6 +167,19 @@
       (when (fboundp 'pulse-momentary-highlight-one-line)
         (pulse-momentary-highlight-one-line)))))
 
+(defun akirak-embark-org-copy-first-block ()
+  (interactive)
+  (org-with-point-at akirak-embark-target-org-marker
+    (re-search-forward org-block-regexp (org-entry-end-position))
+    (let* ((elem (org-element-context))
+           (content (string-chop-newline
+                     (or (org-element-property :value elem)
+                         (buffer-substring-no-properties
+                          (org-element-property :contents-begin elem)
+                          (org-element-property :contents-end elem))))))
+      (kill-new content)
+      (message "Saved to the kill ring: %s" content))))
+
 (defun akirak-embark-org-point-to-register ()
   (interactive)
   (let ((register (register-read-with-preview "Point to register: "))
@@ -187,6 +200,7 @@
     (define-key map "I" (akirak-embark-run-at-marker org-clock-in))
     (define-key map "l" (akirak-embark-run-at-marker org-store-link))
     (define-key map "t" (akirak-embark-run-at-marker org-todo))
+    (define-key map "W" #'akirak-embark-org-copy-first-block)
     (define-key map (kbd "C-o") #'akirak-embark-org-open-link-in-entry)
     (define-key map "?" #'akirak-embark-org-point-to-register)
     map))
