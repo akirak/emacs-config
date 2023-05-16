@@ -10,10 +10,9 @@
 
 ;;;; Predicates
 
-(defmacro akirak-window-make-mode-window-predicate (&rest modes)
-  `(lambda (w)
-     (memq (buffer-local-value 'major-mode (window-buffer w))
-           ',modes)))
+(defun akirak-window-one-of-modes-p (modes window)
+  (memq (buffer-local-value 'major-mode (window-buffer window))
+        modes))
 
 (defun akirak-window-left-side-window-p (&optional window)
   (and (window-dedicated-p window)
@@ -89,23 +88,23 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
         (windows (thread-last
                    (window-list-1 nil 'never)
                    (seq-sort-by #'window-height #'>))))
-    (if-let (mode-window (seq-find `(lambda (w)
-                                      (memq (buffer-local-value 'major-mode
-                                                                (window-buffer w))
-                                            ',(cdr alist-mode-entry)))
+    (if-let (mode-window (seq-find (apply-partially #'akirak-window-one-of-modes-p
+                                                    (cdr alist-mode-entry))
                                    windows))
         (window--display-buffer buffer mode-window 'reuse)
       (if-let (other-window (car (delete (selected-window) windows)))
           (window--display-buffer buffer other-window 'reuse)
         (display-buffer buffer alist)))))
 
+(defun akirak-window--org-capture-window-p (window)
+  (string-prefix-p "^CAPTURE-" (buffer-name (window-buffer window))))
+
 ;;;###autoload
 (defun akirak-window-display-org-capture-buffer (buffer _)
   (let ((other-windows (thread-last
                          (window-list-1 nil 'never)
                          (delete (selected-window)))))
-    (if-let (w1 (car (cl-remove-if (lambda (window)
-                                     (string-prefix-p "^CAPTURE-" (buffer-name (window-buffer window))))
+    (if-let (w1 (car (cl-remove-if #'akirak-window--org-capture-window-p
                                    other-windows)))
         (window--display-buffer buffer w1 'reuse)
       (when other-windows
@@ -116,7 +115,8 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
   (let* ((other-windows (thread-last
                           (window-list-1 nil 'never)
                           (delete (selected-window))))
-         (non-org-windows (cl-remove-if (akirak-window-make-mode-window-predicate org-mode)
+         (non-org-windows (cl-remove-if (apply-partially #'akirak-window-one-of-modes-p
+                                                         '(org-mode))
                                         other-windows)))
     (cond
      (non-org-windows
