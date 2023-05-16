@@ -20,6 +20,12 @@
       repo = "aggressive-indent-mode";
       type = "github";
     };
+    aio = {
+      flake = false;
+      owner = "skeeto";
+      repo = "emacs-aio";
+      type = "github";
+    };
     akirak = {
       flake = false;
       owner = "akirak";
@@ -217,6 +223,12 @@
       flake = false;
       owner = "Fuco1";
       repo = "dired-hacks";
+      type = "github";
+    };
+    docker = {
+      flake = false;
+      owner = "Silex";
+      repo = "docker.el";
       type = "github";
     };
     docopt = {

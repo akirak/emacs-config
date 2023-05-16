@@ -48,6 +48,22 @@
         "type": "github"
       }
     },
+    "aio": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1591815868,
+        "narHash": "sha256-5jh7UYD6qVo1uLMf1G55xzyODXDQvpIl7C/Tfstf3UI=",
+        "owner": "skeeto",
+        "repo": "emacs-aio",
+        "rev": "da93523e235529fa97d6f251319d9e1d6fc24a41",
+        "type": "github"
+      },
+      "original": {
+        "owner": "skeeto",
+        "repo": "emacs-aio",
+        "type": "github"
+      }
+    },
     "akirak": {
       "flake": false,
       "locked": {
@@ -575,6 +591,22 @@
       "original": {
         "owner": "Fuco1",
         "repo": "dired-hacks",
+        "type": "github"
+      }
+    },
+    "docker": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1677789986,
+        "narHash": "sha256-baDsssaM2OsaXN7jNxboKdjPVrtsTggrI9qvk50PRjk=",
+        "owner": "Silex",
+        "repo": "docker.el",
+        "rev": "4a308e6b2184a1b7745df5a8b8adafb29b3f7157",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Silex",
+        "repo": "docker.el",
         "type": "github"
       }
     },
@@ -2256,11 +2288,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1684126420,
-        "narHash": "sha256-pUrrNq4D01NCDMG3clfZQ/4+LWoLDNT29Cbyj7RVirQ=",
+        "lastModified": 1684210796,
+        "narHash": "sha256-VZy9IQqr2PyfXcSLRGTql7yKrRRtqbpQs+OA43qEx0k=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "42a45664ec72690db3c8779cd19eb824afbf2590",
+        "rev": "e4cd36e60dd93e7517c4ca666b5a6ff410c276c1",
         "type": "github"
       },
       "original": {
@@ -2867,6 +2899,7 @@
         "academic-phrases": "academic-phrases",
         "ace-window": "ace-window",
         "aggressive-indent": "aggressive-indent",
+        "aio": "aio",
         "akirak": "akirak",
         "anzu": "anzu",
         "apprentice": "apprentice",
@@ -2900,6 +2933,7 @@
         "dired-collapse": "dired-collapse",
         "dired-filter": "dired-filter",
         "dired-hacks-utils": "dired-hacks-utils",
+        "docker": "docker",
         "docopt": "docopt",
         "doct": "doct",
         "dotenv-mode": "dotenv-mode",
