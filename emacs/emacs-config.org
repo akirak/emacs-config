@@ -4839,6 +4839,14 @@ Hide dotfiles in dired
 #+end_src
 
 dired-k depends on dired-x, which has a poor code quality.
+*** docker
+:PROPERTIES:
+:CREATED_TIME: [2023-05-16 Tue 11:09]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package docker))
+#+end_src
 *** docopt
 :PROPERTIES:
 :CREATED_TIME: [2022-12-14 Wed 18:22]
