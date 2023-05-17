@@ -883,7 +883,8 @@ The built-in =electric= package provides the following modes:
           version-control t
           view-read-only t
           auto-mode-case-fold nil
-          large-file-warning-threshold (* 1024 1024)
+          ;; pkgs/top-level/all-packages.nix in nixpkgs: 1.5 MB
+          large-file-warning-threshold (* 1024 1024 2)
           find-sibling-rules
           `((,(rx "lib/" (group (+ anything)) ".ex" (?  "s") eos)
              "test/\\1_test.ex"
