@@ -4961,7 +4961,7 @@ Integration with the dune build system
 #+begin_src emacs-lisp
 (setup (:package dune))
 #+end_src
-*** COMMENT ediprolog                               :Prolog:ARCHIVE:
+*** ediprolog                                                           :Prolog:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
 :END:
@@ -4972,7 +4972,6 @@ Emacs Does Interactive Prolog
 #+begin_src emacs-lisp
   (setup (:package ediprolog)
     ;; Set `ediprolog-system' and `ediprolog-program' depending on the system
-    (:nixpkgs "scryer-prolog")
 
     (:with-feature prolog
       ;; In other modes, this key is bound to repl.
