@@ -489,7 +489,8 @@
   (call-interactively #'org-store-link)
   (let ((link (pop org-stored-links)))
     (org-link-make-string (car link)
-                          (read-from-minibuffer "Description: " (cdr link)))))
+                          (read-from-minibuffer "Description: "
+                                                (cadr link)))))
 
 (defcustom akirak-capture-tag-alist
   '(("@troubleshooting"
