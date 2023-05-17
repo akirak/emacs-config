@@ -706,6 +706,22 @@
         "type": "github"
       }
     },
+    "ediprolog": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1664643291,
+        "narHash": "sha256-S1qS8Ef9RyGFs+3KoNCgDvy+XrEaSe9/C5oCmWk87O4=",
+        "owner": "triska",
+        "repo": "ediprolog",
+        "rev": "dc0e51ba579f2eb26ae0cdc733104e8861f04c10",
+        "type": "github"
+      },
+      "original": {
+        "owner": "triska",
+        "repo": "ediprolog",
+        "type": "github"
+      }
+    },
     "edit-indirect": {
       "flake": false,
       "locked": {
@@ -2940,6 +2956,7 @@
         "duckduckgo": "duckduckgo",
         "dumb-jump": "dumb-jump",
         "dune": "dune",
+        "ediprolog": "ediprolog",
         "edit-indirect": "edit-indirect",
         "editorconfig": "editorconfig",
         "el-patch": "el-patch",
@@ -3511,11 +3528,11 @@
     "twist": {
       "flake": false,
       "locked": {
-        "lastModified": 1684074520,
-        "narHash": "sha256-9zqMaXzNswmZflfoF+UKfNOeZNsFyVTQ/b6Ax8mn2qE=",
+        "lastModified": 1684317065,
+        "narHash": "sha256-sNmCKIKMPOqvRFdns/bWob6trmCX14YbOqjc/ntXmC8=",
         "owner": "emacs-twist",
         "repo": "twist.el",
-        "rev": "9ab672d9fa0f80298d052526799ae77840192857",
+        "rev": "01693e70aabfecc5882ed5ec2a16c028712c58af",
         "type": "github"
       },
       "original": {

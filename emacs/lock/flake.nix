@@ -267,6 +267,12 @@
       repo = "dune";
       type = "github";
     };
+    ediprolog = {
+      flake = false;
+      owner = "triska";
+      repo = "ediprolog";
+      type = "github";
+    };
     edit-indirect = {
       flake = false;
       owner = "Fanael";
