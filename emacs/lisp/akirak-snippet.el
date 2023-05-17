@@ -149,6 +149,11 @@
   (let* ((element (org-element-context))
          (olp (org-get-outline-path))
          (args (read (format "(%s)" (org-element-property :parameters element))))
+         (body (akirak-snippet--unindent
+                (or (org-element-property :value element)
+                    (buffer-substring-no-properties
+                     (org-element-property :contents-begin element)
+                     (org-element-property :contents-end element)))))
          (name (or (when-let (name (plist-get args :name))
                      (pcase name
                        ;; When 'literal is given as the :name property,
@@ -163,12 +168,7 @@
                        ;; string
                        (_
                         name)))
-                   name))
-         (body (akirak-snippet--unindent
-                (or (org-element-property :value element)
-                    (buffer-substring-no-properties
-                     (org-element-property :contents-begin element)
-                     (org-element-property :contents-end element))))))
+                   name)))
     (make-akirak-snippet-entry
      :type (cl-ecase (org-element-type element)
              (src-block
