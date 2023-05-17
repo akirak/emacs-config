@@ -128,6 +128,7 @@
         (eval post)))))
 
 (defun akirak-snippet--run-prompt (entry)
+  (require 'gptel)
   (let* ((string (when (use-region-p)
                    (buffer-substring-no-properties
                     (region-beginning) (region-end))))
