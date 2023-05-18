@@ -304,7 +304,6 @@ template."
     (org-capture)))
 
 (defun akirak-snippet--after-capture-finalize ()
-  (akirak-snippet-clear)
   (remove-hook 'org-capture-after-finalize-hook
                #'akirak-snippet--after-capture-finalize))
 
