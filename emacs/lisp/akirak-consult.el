@@ -185,9 +185,20 @@ which file(s) to commit beforehand."
   (interactive "f")
   (require 'magit)
   (magit-with-toplevel
-    (magit-run-git "add" file)
-    (message "Staged %s" file)
-    (magit-commit)))
+   (magit-run-git "add" file)
+   (message "Staged %s" file)
+   (magit-commit)))
+
+;;;###autoload
+(defun akirak-consult-magit-stage-file (file)
+  "Stage a file and commit it to the Git repository.
+
+FILE should be a relative path from the repository root."
+  (interactive "f")
+  (require 'magit)
+  (magit-with-toplevel
+   (magit-run-git "add" file)
+   (message "Staged %s" file)))
 
 ;;;###autoload
 (defun akirak-consult-git-revert-file (file)
