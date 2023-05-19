@@ -183,6 +183,7 @@ files will be committed as well. At present, the transient
 interface of `magit-commit' doesn't allow the user to specify
 which file(s) to commit beforehand."
   (interactive "f")
+  (require 'magit)
   (magit-with-toplevel
     (magit-run-git "add" file)
     (message "Staged %s" file)
