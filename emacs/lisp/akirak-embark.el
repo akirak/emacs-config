@@ -84,6 +84,7 @@
 (defvar akirak-embark-git-file-map
   (let ((map (make-composed-keymap nil embark-general-map)))
     (define-key map "k" #'akirak-consult-git-revert-file)
+    (define-key map "s" #'akirak-consult-magit-stage-file)
     (define-key map "c" #'akirak-consult-magit-stage-file-and-commit)
     map))
 
