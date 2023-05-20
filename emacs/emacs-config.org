@@ -4946,8 +4946,9 @@ Jump to definition for 50+ languages without configuration
               ;; Make dumb-jump take precedence over the builtin backend,
               ;; to search the project code whenever possible.
               (defun akirak/elisp-setup-dumb-jump ()
-                (add-to-list 'xref-backend-functions
-                             #'dumb-jump-xref-activate))))
+                (add-hook 'xref-backend-functions
+                          #'dumb-jump-xref-activate
+                          80 'local))))
 #+end_src
 *** dune                                                    :OCaml:@extra:fstar:
 :PROPERTIES:
