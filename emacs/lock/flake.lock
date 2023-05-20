@@ -1335,11 +1335,11 @@
     "gptel": {
       "flake": false,
       "locked": {
-        "lastModified": 1681365733,
-        "narHash": "sha256-JDFti8LmUzDwse68lhY1VrShVwSpDZ8Yw61fb2rquPo=",
+        "lastModified": 1684560398,
+        "narHash": "sha256-yV0DZRxoH5Fwqvwnu/Nv4REsx2Md+31MqBNUPczBePo=",
         "owner": "karthink",
         "repo": "gptel",
-        "rev": "a5be53d5e3733ed48023e4862b59ac12fa98be07",
+        "rev": "219e163dc76d3cb27d8438816a453ccb686c553b",
         "type": "github"
       },
       "original": {
@@ -1861,6 +1861,22 @@
         "url": "https://codeberg.org/martianh/mastodon.el.git"
       }
     },
+    "mermaid-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1684337265,
+        "narHash": "sha256-i6lt8VsRlsXptIwehgwy8EKWVU2w5sMV0S/y4KSP46Q=",
+        "owner": "abrochard",
+        "repo": "mermaid-mode",
+        "rev": "105271870a872ae7a91838454b064a1153353b5f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abrochard",
+        "repo": "mermaid-mode",
+        "type": "github"
+      }
+    },
     "mini-modeline": {
       "flake": false,
       "locked": {
@@ -2038,6 +2054,22 @@
         "type": "sourcehut"
       }
     },
+    "ob-async": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1619643157,
+        "narHash": "sha256-cIwyuwoyojc6uiNbWleh+inoRTUqMCZYQ3IydhRkEkw=",
+        "owner": "astahlman",
+        "repo": "ob-async",
+        "rev": "9aac486073f5c356ada20e716571be33a350a982",
+        "type": "github"
+      },
+      "original": {
+        "owner": "astahlman",
+        "repo": "ob-async",
+        "type": "github"
+      }
+    },
     "ob-graphql": {
       "flake": false,
       "locked": {
@@ -2051,6 +2083,22 @@
       "original": {
         "owner": "jdormit",
         "repo": "ob-graphql",
+        "type": "github"
+      }
+    },
+    "ob-mermaid": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645801123,
+        "narHash": "sha256-aHEh65YEziG8bvEsJzcQ46xi/bsoc6WFxEbeF4gYEjo=",
+        "owner": "arnm",
+        "repo": "ob-mermaid",
+        "rev": "b4ce25699e3ebff054f523375d1cf5a17bd0dbaf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arnm",
+        "repo": "ob-mermaid",
         "type": "github"
       }
     },
@@ -2304,11 +2352,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1684210796,
-        "narHash": "sha256-VZy9IQqr2PyfXcSLRGTql7yKrRRtqbpQs+OA43qEx0k=",
+        "lastModified": 1684564118,
+        "narHash": "sha256-WRr76PSFKZ27QhpEPibsvddNcjNuxd005R3EoVFIcV8=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "e4cd36e60dd93e7517c4ca666b5a6ff410c276c1",
+        "rev": "e92dd16fc98681177faa8ba6c4e4daab03633107",
         "type": "github"
       },
       "original": {
@@ -3028,6 +3076,7 @@
         "marginalia": "marginalia",
         "markdown-mode": "markdown-mode",
         "mastodon": "mastodon",
+        "mermaid-mode": "mermaid-mode",
         "mini-modeline": "mini-modeline",
         "mlscroll": "mlscroll",
         "mmm-mode": "mmm-mode",
@@ -3039,7 +3088,9 @@
         "nov": "nov",
         "oahu": "oahu",
         "oahu-memento": "oahu-memento",
+        "ob-async": "ob-async",
         "ob-graphql": "ob-graphql",
+        "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
         "octopus": "octopus",
         "olivetti": "olivetti",
