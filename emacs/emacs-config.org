@@ -5812,7 +5812,8 @@ A simple ChatGPT client
 #+begin_src emacs-lisp
   (setup (:package gptel)
     (:global "C-c p" #'gptel-send
-             "<f12> a g" #'gptel)
+             "<f12> a g" #'gptel
+             "<f12> a C-g" #'gptel-abort)
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)))
 #+end_src
