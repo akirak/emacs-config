@@ -2205,7 +2205,7 @@ Org-Babel execution backend for GraphQL source blocks
 #+begin_src emacs-lisp
 (setup (:package ob-graphql))
 #+end_src
-*** COMMENT ob-mermaid                                                         :ARCHIVE:
+*** ob-mermaid
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:53]
 :END:
@@ -6483,7 +6483,7 @@ Client for Mastodon, a federated social network
 #+begin_src emacs-lisp
 (setup (:package mastodon))
 #+end_src
-*** COMMENT mermaid-mode                                        :@extra:mermaid:ARCHIVE:
+*** mermaid-mode                                        :@extra:mermaid:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
 :END:
