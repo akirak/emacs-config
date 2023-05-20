@@ -142,7 +142,7 @@
                    :system (or (buffer-local-value 'gptel--system-message
                                                    (find-buffer-visiting
                                                     (akirak-snippet-entry-filename entry)))
-                               gptel--system-message))))
+                               (alist-get 'default gptel-directives)))))
 
 (cl-defun akirak-snippet--next-block (&key file name description)
   (re-search-forward akirak-snippet-block-regexp)
