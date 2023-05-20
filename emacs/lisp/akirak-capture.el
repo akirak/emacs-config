@@ -1190,33 +1190,35 @@ provided as a separate command for integration, e.g. with embark."
 
 (defun akirak-capture--sanitize-source (string)
   ;; Replace zero-width space.
-  (let* ((string (replace-regexp-in-string "​" "" string))
-         (lines (split-string string "\n")))
-    (cl-flet
-        ((indent (s)
-           (when (string-match (rx bol (group (+ " ")) (not (any space))) s)
-             (- (match-end 1)
-                (match-beginning 1)))))
-      (let* ((indents (thread-last
-                        (mapcar #'indent lines)
-                        (delq nil)))
-             (regexp (when indents
-                       (concat "^" (make-string (apply #'min indents)
-                                                ?\s)))))
-        (with-temp-buffer
-          (insert string)
-          (goto-char (point-min))
-          (when (looking-at (rx (+ "\n")))
-            (replace-match ""))
-          (when regexp
-            (save-excursion
-              (while (re-search-forward regexp nil t)
-                (replace-match ""))))
-          (while (re-search-forward (rx (+ blank) eol) nil t)
-            (replace-match ""))
-          (when (re-search-forward (rx (+ "\n") eos) nil t)
-            (replace-match ""))
-          (buffer-string))))))
+  (cl-flet
+      ((indent (s)
+         (when (string-match (rx bol (group (+ " ")) (not (any space))) s)
+           (- (match-end 1)
+              (match-beginning 1)))))
+    (let* ((string (thread-last
+                     string
+                     (replace-regexp-in-string (rx bol (* blank)
+                                                   ;; zero-width space (8203)
+                                                   "​")
+                                               "")
+                     (replace-regexp-in-string (rx (+ blank) eol)
+                                               "")
+                     (replace-regexp-in-string (rx (+ "\n") eos)
+                                               "")
+                     (replace-regexp-in-string (rx (+ "\n") eos)
+                                               "")
+                     (replace-regexp-in-string (rx bos (* space) eol)
+                                               "")))
+           (lines (split-string string "\n"))
+           (indents (thread-last
+                      (mapcar #'indent lines)
+                      (delq nil)))
+           (regexp (when indents
+                     (concat "^" (make-string (apply #'min indents)
+                                              ?\s)))))
+      (if regexp
+          (replace-regexp-in-string regexp "" string)
+        string))))
 
 (defun akirak-capture--major-mode-list ()
   (let (modes)
