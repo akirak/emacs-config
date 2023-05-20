@@ -421,8 +421,7 @@
      (lambda ()
        (interactive)
        (akirak-capture-short-note
-        (akirak-capture--maybe-read-heading "Add an event or note: ")))
-     :transient t)
+        (akirak-capture--maybe-read-heading "Add an event or note: "))))
     ("aa" "Schedule block"
      (lambda ()
        (interactive)
