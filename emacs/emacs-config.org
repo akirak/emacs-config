@@ -6166,6 +6166,12 @@ For Emacs Lisp, I use lispy.
        (when (featurep 'puni)
          (puni-mode (not lispy-mode)))))
 
+    ;; I have removed lispy-occur.el from the package, so disable the command.
+    (fset 'lispy-occur #'ignore)
+    ;; Undefine this command because I am not using it and it adds ace-window
+    ;; dependency.
+    (fset 'lispy-eval-other-window #'ignore)
+
     (advice-add 'lispy-kill :around
                 (defun akirak/ad-around-lispy-kill (orig &rest args)
                   (save-restriction
@@ -6190,7 +6196,9 @@ For Emacs Lisp, I use lispy.
       (:unbind "M-i")
 
       (:with-map lispy-mode-map-special
-        (:unbind "O"))
+        (:unbind "p"                      ; lispy-eval-other-window
+                 "y"                      ;lispy-occur
+                 "O"))
 
       (:with-map lispy-mode-map-lispy
         ;; Prevent conflicts with other custom keybindings
