@@ -4295,8 +4295,12 @@ A major mode to edit Beancount input files.
     ;; I don't like the default keybindings on C-c, so change the prefix.
     (:set beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
 
+    (:reformatters
+     (bean-format :program "bean-format"))
+
     (:with-mode beancount-mode
       (:file-match "\\.beancount\\'" "\\.bean\\'")
+      (:hook bean-format-on-save-mode)
       (:when-loaded
         (:hook
          (defun akirak/beancount-turn-on-outline-mode ()
