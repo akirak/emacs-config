@@ -4304,9 +4304,7 @@ A major mode to edit Beancount input files.
       (:when-loaded
         (:hook
          (defun akirak/beancount-turn-on-outline-mode ()
-           (outline-minor-mode t)))
-        (:bind
-         "d" #'beancount-insert-date))))
+           (outline-minor-mode t))))))
 #+end_src
 **** flymake-bean-check
 :PROPERTIES:
