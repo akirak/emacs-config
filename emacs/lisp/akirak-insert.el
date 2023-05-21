@@ -23,6 +23,16 @@
       (file-name-base (buffer-file-name))
       (string-inflection-upper-camelcase-function))))
 
+;;;###autoload (autoload 'akirak-insert-directory "akirak-insert")
+(define-skeleton akirak-insert-directory
+  "Insert the current default directory." nil
+  (expand-file-name default-directory))
+
+;;;###autoload (autoload 'akirak-insert-abbreviated-directory "akirak-insert")
+(define-skeleton akirak-insert-abbreviated-directory
+  "Insert the current default directory, abbreviated." nil
+  (abbreviate-file-name default-directory))
+
 ;;;###autoload (autoload 'akirak-insert-project-name "akirak-insert")
 (define-skeleton akirak-insert-project-name
   "Insert the base name of the buffer." nil
