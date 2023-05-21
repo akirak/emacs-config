@@ -387,6 +387,12 @@
       repo = "flycheck";
       type = "github";
     };
+    flymake-bean-check = {
+      flake = false;
+      owner = "akirak";
+      repo = "flymake-bean-check";
+      type = "github";
+    };
     flymake-eslint = {
       flake = false;
       owner = "orzechowskid";

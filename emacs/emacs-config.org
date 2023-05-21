@@ -4200,7 +4200,7 @@ Show number of matches in mode-line while searching
 :CREATED_TIME: [2023-03-18 Sat 15:40]
 :END:
 #+begin_quote
-Elixir tooling integration into Emacs
+Elixir tooling integration
 [[https://github.com/Sasanidas/Apprentice]]
 #+end_quote
 
@@ -4310,6 +4310,10 @@ A major mode to edit Beancount input files.
 :PROPERTIES:
 :CREATED_TIME: [2023-05-21 Sun 18:11]
 :END:
+#+begin_quote
+A Flymake backend for bean-check
+[[https://github.com/akirak/flymake-bean-check]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package flymake-bean-check)
@@ -8193,11 +8197,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 210 |
+| [[org-ql-search:tags:packages][packages]]            | 211 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
-| [[org-ql-search:tags:@extra][@extra]]              |  10 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -8229,6 +8233,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:beancount][beancount]]           |   2 |
 | [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
@@ -8244,7 +8249,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:Elixir][Elixir]]              |   1 |
-| [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
 | [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
@@ -8321,19 +8325,20 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 To use these features, they need to be turned on at build time.
 
 #+BEGIN: org-ql :query "tags:@extra" :columns (heading todo)
-| Heading      | Todo |
-|--------------+------|
-| [[beancount][beancount]]    |      |
-| [[copilot][copilot]]      |      |
-| [[dune][dune]]         |      |
-| [[flycheck][flycheck]]     |      |
-| [[fstar-mode][fstar-mode]]   |      |
-| [[lean4-mode][lean4-mode]]   |      |
-| [[lsp-mode][lsp-mode]]     |      |
-| [[mermaid-mode][mermaid-mode]] |      |
-| [[Coq][Coq]]          |      |
-| [[tuareg][tuareg]]       |      |
-| [[utop][utop]]         |      |
+| Heading            | Todo |
+|--------------------+------|
+| [[beancount][beancount]]          |      |
+| [[flymake-bean-check][flymake-bean-check]] |      |
+| [[copilot][copilot]]            |      |
+| [[dune][dune]]               |      |
+| [[flycheck][flycheck]]           |      |
+| [[fstar-mode][fstar-mode]]         |      |
+| [[lean4-mode][lean4-mode]]         |      |
+| [[lsp-mode][lsp-mode]]           |      |
+| [[mermaid-mode][mermaid-mode]]       |      |
+| [[Coq][Coq]]                |      |
+| [[tuareg][tuareg]]             |      |
+| [[utop][utop]]               |      |
 #+END:
 *** Links
 :PROPERTIES:

@@ -1026,6 +1026,22 @@
         "type": "github"
       }
     },
+    "flymake-bean-check": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1684660118,
+        "narHash": "sha256-c1b/JG43QBz4CpoTUpPsegfaTURgbrYtywB1xlwtCko=",
+        "owner": "akirak",
+        "repo": "flymake-bean-check",
+        "rev": "e2f29586c0b80eeb46ea0ddc38e247eea6ccfd60",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "flymake-bean-check",
+        "type": "github"
+      }
+    },
     "flymake-eslint": {
       "flake": false,
       "locked": {
@@ -2302,11 +2318,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1684564118,
-        "narHash": "sha256-WRr76PSFKZ27QhpEPibsvddNcjNuxd005R3EoVFIcV8=",
+        "lastModified": 1684715327,
+        "narHash": "sha256-ot28f5d5MekTDnJP76RsUqWX4dAi43zH0H0tDP5yyxo=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "e92dd16fc98681177faa8ba6c4e4daab03633107",
+        "rev": "38e06bd03c742d9514e1bd0d5db10bbfe94a4ea1",
         "type": "github"
       },
       "original": {
@@ -2974,6 +2990,7 @@
         "f": "f",
         "fanyi": "fanyi",
         "flycheck": "flycheck",
+        "flymake-bean-check": "flymake-bean-check",
         "flymake-eslint": "flymake-eslint",
         "flyspell-correct": "flyspell-correct",
         "flyspell-correct-avy-menu": "flyspell-correct-avy-menu",
