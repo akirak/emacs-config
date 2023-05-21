@@ -8,12 +8,6 @@
       repo = "academic-phrases";
       type = "github";
     };
-    ace-window = {
-      flake = false;
-      owner = "abo-abo";
-      repo = "ace-window";
-      type = "github";
-    };
     aggressive-indent = {
       flake = false;
       owner = "Malabarba";
@@ -333,13 +327,6 @@
       repo = "embark";
       type = "github";
     };
-    ement = {
-      flake = false;
-      owner = "alphapapa";
-      ref = "stable";
-      repo = "ement.el";
-      type = "github";
-    };
     envrc = {
       flake = false;
       owner = "purcell";
@@ -585,12 +572,6 @@
       flake = false;
       owner = "purcell";
       repo = "inheritenv";
-      type = "github";
-    };
-    ivy = {
-      flake = false;
-      owner = "abo-abo";
-      repo = "swiper";
       type = "github";
     };
     jq-mode = {
@@ -1187,12 +1168,6 @@
       flake = false;
       owner = "rougier";
       repo = "svg-lib";
-      type = "github";
-    };
-    swiper = {
-      flake = false;
-      owner = "abo-abo";
-      repo = "swiper";
       type = "github";
     };
     symbol-overlay = {

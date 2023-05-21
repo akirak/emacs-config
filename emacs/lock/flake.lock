@@ -16,22 +16,6 @@
         "type": "github"
       }
     },
-    "ace-window": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1662868721,
-        "narHash": "sha256-eGmOL272H5X7BmeXRCfMjB3ucf9GH2xThyozgkW62dA=",
-        "owner": "abo-abo",
-        "repo": "ace-window",
-        "rev": "77115afc1b0b9f633084cf7479c767988106c196",
-        "type": "github"
-      },
-      "original": {
-        "owner": "abo-abo",
-        "repo": "ace-window",
-        "type": "github"
-      }
-    },
     "aggressive-indent": {
       "flake": false,
       "locked": {
@@ -882,23 +866,6 @@
         "type": "github"
       }
     },
-    "ement": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1678081732,
-        "narHash": "sha256-CIWVpEtfxPfTCEDm9tKNx3BcWD926SL3Qxs38DeluDo=",
-        "owner": "alphapapa",
-        "repo": "ement.el",
-        "rev": "5bb6c930ff29f22263018b5dff7b45669b8357f5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "alphapapa",
-        "ref": "stable",
-        "repo": "ement.el",
-        "type": "github"
-      }
-    },
     "envrc": {
       "flake": false,
       "locked": {
@@ -1553,22 +1520,6 @@
       "original": {
         "owner": "purcell",
         "repo": "inheritenv",
-        "type": "github"
-      }
-    },
-    "ivy": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1665826606,
-        "narHash": "sha256-3ewe4ZtOBKeWwdUPFhA3bSxG7qS1w9buBX3lkzgAmN8=",
-        "owner": "abo-abo",
-        "repo": "swiper",
-        "rev": "b8be4913a661b557e0d3275726e36871556569d3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "abo-abo",
-        "repo": "swiper",
         "type": "github"
       }
     },
@@ -2961,7 +2912,6 @@
     "root": {
       "inputs": {
         "academic-phrases": "academic-phrases",
-        "ace-window": "ace-window",
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
         "akirak": "akirak",
@@ -3015,7 +2965,6 @@
         "emacsql-sqlite": "emacsql-sqlite",
         "embark": "embark",
         "embark-consult": "embark-consult",
-        "ement": "ement",
         "envrc": "envrc",
         "epkg": "epkg",
         "epkg-marginalia": "epkg-marginalia",
@@ -3057,7 +3006,6 @@
         "idris-mode": "idris-mode",
         "iedit": "iedit",
         "inheritenv": "inheritenv",
-        "ivy": "ivy",
         "jq-mode": "jq-mode",
         "keycast": "keycast",
         "kind-icon": "kind-icon",
@@ -3156,7 +3104,6 @@
         "super-save": "super-save",
         "svelte-mode": "svelte-mode",
         "svg-lib": "svg-lib",
-        "swiper": "swiper",
         "symbol-overlay": "symbol-overlay",
         "tablist": "tablist",
         "tagedit": "tagedit",
@@ -3379,22 +3326,6 @@
       "original": {
         "owner": "rougier",
         "repo": "svg-lib",
-        "type": "github"
-      }
-    },
-    "swiper": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1665826606,
-        "narHash": "sha256-3ewe4ZtOBKeWwdUPFhA3bSxG7qS1w9buBX3lkzgAmN8=",
-        "owner": "abo-abo",
-        "repo": "swiper",
-        "rev": "b8be4913a661b557e0d3275726e36871556569d3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "abo-abo",
-        "repo": "swiper",
         "type": "github"
       }
     },
