@@ -5167,7 +5167,7 @@ Consult integration for Embark
   (setup embark-org
     (eval-after-load 'org #'akirak-embark-setup-org-heading))
 #+end_src
-*** ement                                                               :social:
+*** COMMENT ement                                                       :social:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-30 Fri 12:44]
 :END:
