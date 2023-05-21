@@ -4308,6 +4308,15 @@ A major mode to edit Beancount input files.
         (:bind
          "d" #'beancount-insert-date))))
 #+end_src
+**** flymake-bean-check
+:PROPERTIES:
+:CREATED_TIME: [2023-05-21 Sun 18:11]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-bean-check)
+    (add-hook 'beancount-mode-hook #'flymake-bean-check-enable))
+#+end_src
 *** blamer                                                      :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 17:48]
