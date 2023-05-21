@@ -4573,7 +4573,7 @@ An unofficial Copilot plugin for Emacs
 :CREATED_TIME: [2022-01-05 Wed 20:19]
 :END:
 #+begin_quote
-Completion Overlay Region FUnction
+COmpletion in Region FUnction
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -8182,7 +8182,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 211 |
+| [[org-ql-search:tags:packages][packages]]            | 210 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -8218,7 +8218,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
-| [[org-ql-search:tags:social][social]]              |   2 |
 | [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
@@ -8248,6 +8247,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
+| [[org-ql-search:tags:social][social]]              |   1 |
 | [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:themes][themes]]              |   1 |
