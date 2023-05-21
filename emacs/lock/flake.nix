@@ -34,8 +34,7 @@
     };
     apprentice = {
       flake = false;
-      owner = "akirak";
-      ref = "prefix-map";
+      owner = "Sasanidas";
       repo = "Apprentice";
       type = "github";
     };
