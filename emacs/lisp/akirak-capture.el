@@ -710,10 +710,11 @@
       (with-current-buffer buffer
         (goto-char (org-entry-end-position))
         (delete-blank-lines)
-        (save-excursion
-          (newline)
-          (insert block-text))
-        (newline)))))
+        (newline)
+        (insert block-text))
+      (when-let (window (get-buffer-window buffer))
+        (with-selected-window window
+          (goto-char (org-entry-end-position)))))))
 
 (transient-define-suffix akirak-capture-url-to-clock ()
   :description 'octopus-clocked-entry-description
