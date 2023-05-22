@@ -314,6 +314,11 @@ The target window is determined according to the same logic as
       (window-swap-states window (selected-window))
       (select-window initial-window))))
 
+(defun akirak-window-send-text (text arg &optional window)
+  "Send TEXT to the window at ARG."
+  (with-selected-window (akirak-window--other-window window arg)
+    (insert text)))
+
 (defun akirak-window--other-window (&optional window arg)
   "Return the other window in a pair."
   (cond
