@@ -1187,6 +1187,12 @@ provided as a separate command for integration, e.g. with embark."
       (goto-char (point-max))
       (while (looking-back (rx bol (* blank)) (pos-bol))
         (delete-region (1- (match-beginning 0)) (match-end 0)))
+      (let ((org-inhibit-startup t))
+        (delay-mode-hooks (org-mode)))
+      (goto-char (point-min))
+      (while (looking-at (rx anything))
+        (org-fill-paragraph)
+        (forward-paragraph))
       (buffer-string))))
 
 (defun akirak-capture--sanitize-source (string)
