@@ -7862,7 +7862,8 @@ Define how Org entries are displayed by certain commands.
                                                 (org-with-point-at marker
                                                   (org-dog-indirect-buffer)))))
                 (set-window-configuration org-window-config-before-follow-link)
-                (switch-to-buffer indirect-buffer)
+                (let ((switch-to-buffer-obey-display-actions nil))
+                  (switch-to-buffer indirect-buffer nil t))
                 (with-current-buffer indirect-buffer
                   (goto-char marker)
                   (when org-dog-new-indirect-buffer-p
@@ -7872,7 +7873,8 @@ Define how Org entries are displayed by certain commands.
 
   (add-hook 'org-agenda-after-show-hook
             (defun akirak/org-agenda-show-entry ()
-              (switch-to-buffer (org-dog-indirect-buffer))))
+              (let ((switch-to-buffer-obey-display-actions nil))
+                (switch-to-buffer (org-dog-indirect-buffer) nil t))))
 
   (defun akirak/org-goto-narrow-hook ()
     (org-show-context)
@@ -7882,8 +7884,9 @@ Define how Org entries are displayed by certain commands.
 
   (defun akirak/org-goto-indirect-hook ()
     (when (fboundp 'org-dog-indirect-buffer)
-      (let ((buffer (org-dog-indirect-buffer)))
-        (switch-to-buffer buffer)
+      (let ((buffer (org-dog-indirect-buffer))
+            (switch-to-buffer-obey-display-actions nil))
+        (switch-to-buffer buffer nil t)
         (when org-dog-new-indirect-buffer-p
           (with-current-buffer buffer
             (org-show-context)
