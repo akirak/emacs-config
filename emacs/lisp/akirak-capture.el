@@ -709,7 +709,10 @@
           (buffer (akirak-org-clock-open)))
       (with-current-buffer buffer
         (goto-char (org-entry-end-position))
-        (delete-blank-lines)
+        (save-excursion
+          (beginning-of-line 0)
+          (when (looking-at (rx eol))
+            (delete-blank-lines)))
         (newline)
         (insert block-text))
       (when-let (window (get-buffer-window buffer))
