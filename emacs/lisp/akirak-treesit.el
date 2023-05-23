@@ -158,23 +158,24 @@
               (throw 'stop t))
             (setq node parent)))
         (if parent
-            (let ((nodes (thread-last
-                           (cl-member node (treesit-node-children parent)
-                                      :test #'treesit-node-eq)
-                           (seq-take-while `(lambda (x)
-                                              (< (treesit-node-start x) ,bound)))))
-                  (inside-bracket (or (memq (char-after (1- (treesit-node-end parent)))
-                                            (string-to-list "\"'>"))
-                                      (save-excursion
-                                        (goto-char (treesit-node-end parent))
-                                        (funcall show-paren-data-function)))))
-              (if nodes
-                  (kill-region (point) (treesit-node-end (car (last nodes
-                                                                    (when inside-bracket
-                                                                      2)))))
-                ;; No node to delete, fallback to the default behavior
-                (kill-line)))
+            (if-let (end-node (akirak-treesit--find-last-node node parent bound))
+                (kill-region (point) (treesit-node-end end-node))
+              ;; No node to delete, fallback to the default behavior
+              (kill-line))
           (kill-region (point) (treesit-node-end node)))))))
+
+(defun akirak-treesit--find-last-node (start-node parent bound)
+  (when-let (nodes (thread-last
+                     (cl-member start-node (treesit-node-children parent)
+                                :test #'treesit-node-eq)
+                     (seq-take-while `(lambda (x)
+                                        (< (treesit-node-start x) ,bound)))))
+    (car (last nodes (when (or (memq (char-after (1- (treesit-node-end parent)))
+                                     (string-to-list "\"'>"))
+                               (save-excursion
+                                 (goto-char (treesit-node-end parent))
+                                 (funcall show-paren-data-function)))
+                       2)))))
 
 (provide 'akirak-treesit)
 ;;; akirak-treesit.el ends here
