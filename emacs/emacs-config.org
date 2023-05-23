@@ -4465,6 +4465,11 @@ Consulting completing-read
                                           (when-let (project (project-current))
                                             (project-root project))))
 
+    (advice-add 'consult-buffer :around
+                (defun akirak/ad-around-consult-buffer (orig &rest args)
+                  (let ((switch-to-buffer-obey-display-actions nil))
+                    (apply orig args))))
+
     (:when-loaded
       (:set consult-buffer-sources `(consult--source-project-buffer
                                      consult--source-project-recent-file
