@@ -111,6 +111,28 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
         (window--display-buffer buffer (car other-windows) 'reuse)))))
 
 ;;;###autoload
+(defun akirak-window-display-org-buffer-other-window (buffer alist)
+  (unless (or (car-safe display-buffer-overriding-action)
+              (not (cdr (assq 'inhibit-same-window alist))))
+    (when-let* ((other-windows (thread-last
+                                 (window-list-1 nil 'never)
+                                 (delete (selected-window))))
+                (windows (or (cl-remove-if #'akirak-window--org-capture-window-p
+                                           other-windows)
+                             other-windows))
+                ;; Prefer full-height windows.
+                (windows (seq-sort-by #'window-height #'> windows))
+                (windows (seq-filter `(lambda (w)
+                                        (= (window-height w)
+                                           (window-height ,(car windows))))
+                                     windows))
+                ;; Prefer the least recently displayed window.
+                (windows (seq-sort-by #'akirak-window--display-time
+                                      #'time-less-p
+                                      windows)))
+      (window--display-buffer buffer (car windows) 'reuse))))
+
+;;;###autoload
 (defun akirak-window-display-document-buffer (buffer _)
   (let* ((other-windows (thread-last
                           (window-list-1 nil 'never)
@@ -278,12 +300,14 @@ focus on the same buffer."
                  (window-list)
                  (cl-remove-if-not #'window-live-p)
                  (cl-remove (selected-window))
-                 (seq-sort-by (lambda (w)
-                                (buffer-local-value 'buffer-display-time (window-buffer w)))
+                 (seq-sort-by #'akirak-window--display-time
                               (lambda (a b)
                                 (not (time-less-p a b))))
                  (car)))
     (select-window w)))
+
+(defun akirak-window--display-time (window)
+  (buffer-local-value 'buffer-display-time (window-buffer window)))
 
 ;;;###autoload
 (defun akirak-window-kill-this-buffer (&optional n)
