@@ -75,6 +75,19 @@
   :zero-is-nil t
   :description "Delay in seconds")
 
+;;;; Insert as Org link
+
+(defvar akirak-wayshot-as-org-link nil)
+
+(transient-define-infix akirak-wayshot-enable-org-link ()
+  :class 'akirak-transient-flag-variable
+  :if 'akirak-wayshot--org-mode-p
+  :variable 'akirak-wayshot-as-org-link
+  :description "Insert Org link")
+
+(defun akirak-wayshot--org-mode-p ()
+  (derived-mode-p 'org-mode))
+
 ;;;; Prefix
 
 ;;;###autoload (autoload 'akirak-wayshot "akirak-wayshot" nil 'interactive)
@@ -84,6 +97,7 @@
    ("-c" "Enable cursor" "--cursor")
    ("-s" akirak-wayshot-toggle-slurp)
    ("-e" akirak-wayshot-set-extension)
+   ("-l" akirak-wayshot-enable-org-link)
    ;; TODO: Add output support (Use "wayshot -o" to retrieve the list)
    ;; ("-o" akirak-wayshot-set-output)
    ("-d" "Debug" "--debug")
@@ -100,7 +114,13 @@
           (sleep-for akirak-wayshot-delay-in-seconds))
         (akirak-wayshot--run (append (list "-f" filename)
                                      (akirak-wayshot--args))
-                             `(lambda () (dired-jump nil ,filename))))))
+                             (if (and akirak-wayshot-as-org-link
+                                      (akirak-wayshot--org-mode-p))
+                                 `(lambda ()
+                                    (insert (org-link-make-string
+                                             (concat "file:" (abbreviate-file-name ,filename)))
+                                            "\n"))
+                               `(lambda () (dired-jump nil ,filename)))))))
    ("m" "Take many screenshots"
     (lambda ()
       (interactive)
