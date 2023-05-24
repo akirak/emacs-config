@@ -1891,7 +1891,7 @@ Thus I will explicitly install this package rather than using the built-in versi
       (add-to-list 'display-buffer-alist
                    `((or ,@(mapcar (lambda (mode) (cons 'major-mode mode))
                                    modes))
-                     display-buffer-reuse-mode-window
+                     akirak-window-reuse-mode-window-or-split-below
                      mode ,@modes)
                    t))
     (add-to-list 'display-buffer-alist
