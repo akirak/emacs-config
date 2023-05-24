@@ -1873,7 +1873,7 @@ Thus I will explicitly install this package rather than using the built-in versi
       (setq switch-to-buffer-obey-display-actions t))
     (if (daemonp)
         (add-hook 'server-after-make-frame-hook #'akirak/after-frame-window-setup)
-      (add-hook 'emacs-startup-hookk #'akirak/after-frame-window-setup))
+      (add-hook 'emacs-startup-hook #'akirak/after-frame-window-setup))
 
     (defun akirak/ad-no-obey-display-actions (orig &rest args)
       (let ((switch-to-buffer-obey-display-actions nil))
