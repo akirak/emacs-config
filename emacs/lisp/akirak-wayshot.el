@@ -91,7 +91,10 @@
   [("d" "Save to the directory"
     (lambda ()
       (interactive)
-      (let ((filename (akirak-wayshot--filename)))
+      (let* ((filename (akirak-wayshot--filename))
+             (directory (file-name-directory filename)))
+        (unless (file-exists-p directory)
+          (make-directory directory t))
         (when akirak-wayshot-delay-in-seconds
           (message "Sleeping for %d seconds..." akirak-wayshot-delay-in-seconds)
           (sleep-for akirak-wayshot-delay-in-seconds))
