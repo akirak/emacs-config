@@ -81,7 +81,7 @@ display alternative actions."
   "Move the current project to another parent directory."
   (interactive)
   (let* ((root (vc-root-dir))
-         (name (file-name-nondirectory (string-remove-prefix root)))
+         (name (file-name-nondirectory (string-remove-suffix "/" root)))
          (worktrees (magit-list-worktrees))
          (new-parent (akirak-project-prompt-parent "Move the project to somewhere else: "))
          (dest (concat (file-name-as-directory new-parent) name)))
@@ -90,10 +90,10 @@ display alternative actions."
     (if (and worktrees
              (> (length worktrees) 1))
         (magit-worktree-move root dest)
-      (user-error "Multiple worktrees")
-      (dired-rename-subdir root dest))
+      (rename-file root dest))
     (project-forget-project root)
-    (akirak-project-remember-this)))
+    (akirak-project-remember-this)
+    (find-file dest)))
 
 ;;;###autoload
 (defun akirak-project-remember-this ()
