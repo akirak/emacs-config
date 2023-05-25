@@ -345,6 +345,7 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
                      ("c f" . "frame")
                      ("c s" . "screenshot")
                      ("c r" . "record screen")
+                     ("e" . "disk")
                      ("e" . "emacs")
                      ("n" . "nix")
                      ("S" . "secrets")))
@@ -3798,6 +3799,11 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup akirak-consult-org
     (:global "M-s M-j" #'akirak-consult-org-clock-history))
+#+end_src
+*** akirak-disk
+#+begin_src elisp
+  (setup akirak-disk
+    (:global "<f12> d m" #'akirak-disk-findmnt))
 #+end_src
 *** akirak-org-log
 #+begin_src emacs-lisp
