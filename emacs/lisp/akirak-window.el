@@ -293,7 +293,7 @@ focus on the same buffer."
     (if (and (akirak-window--popup-p)
              (windowp akirak-window-last-non-popup-window))
         (select-window akirak-window-last-non-popup-window)
-      (when-let (window (akirak-window--other-window nil arg))
+      (when-let (window (akirak-window--other-window nil arg t))
         (if (equal arg '(4))
             (window-swap-states window (selected-window))
           (select-window window))))))
@@ -348,7 +348,7 @@ The target window is determined according to the same logic as
   (with-selected-window (akirak-window--other-window window arg)
     (insert text)))
 
-(defun akirak-window--other-window (&optional window arg)
+(defun akirak-window--other-window (&optional window arg allow-new)
   "Return the other window in a pair."
   (cond
    ;; Select a window that is not a popup.
@@ -361,7 +361,10 @@ The target window is determined according to the same logic as
     (if (> arg 10)
         (let ((window (akirak-window--find-column (floor (/ arg 10)))))
           (dotimes (_x (1- (mod arg 10)))
-            (setq window (window-in-direction 'below window)))
+            (setq window (or (window-in-direction 'below window)
+                             (if allow-new
+                                 (split-window-below nil window)
+                               window))))
           window)
       (akirak-window--find-column arg)))
    ((eq arg '-)
@@ -412,7 +415,7 @@ The target window is determined according to the same logic as
   (interactive)
   (let* ((source (selected-window))
          (target (if (numberp arg)
-                     (akirak-window--find-column arg)
+                     (akirak-window--other-window nil arg t)
                    (thread-last
                      (mapcar #'cadr (akirak-window--get-panes))
                      (cl-remove source)
