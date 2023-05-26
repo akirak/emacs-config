@@ -6991,6 +6991,7 @@ Summon and dismiss buffers as popups
                 (recenter -1 t)))
 
     (:bind "M-\"" #'popper-cycle
+           "M-' RET" #'popper-toggle-type
            "M-' M-'" #'popper-toggle-latest
            "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-vterm-for-project
