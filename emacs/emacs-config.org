@@ -6506,7 +6506,8 @@ Major mode for Markdown-formatted text
 
 #+begin_src emacs-lisp
   (setup (:package markdown-mode)
-    (:file-match "\\.md\\'" "\\.markdown\\'")
+    (:file-match "\\.md\\'" "\\.markdown\\'"
+                 "\\.livemd\\'")
     (:with-mode gfm-mode
       (:file-match "README.md\\'"))
 
