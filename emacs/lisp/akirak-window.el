@@ -437,6 +437,17 @@ Otherwise, it calls `akirak-window-duplicate-state'."
     (akirak-window-duplicate-state arg)))
 
 ;;;###autoload
+(defun akirak-window-delete-window (&optional arg)
+  (interactive "P")
+  (let ((target-window (pcase arg
+                         ((pred numberp)
+                          (akirak-window--other-window nil arg))
+                         ('(4)
+                          (or (window-in-direction 'below)
+                              (window-in-direction 'above))))))
+    (delete-window target-window)))
+
+;;;###autoload
 (defun akirak-window-column-prefix (&optional n)
   "Display the buffer of the next command in the window in the N-th column."
   ;; It would be possible to use (interactive "N") which falls back to "n", but

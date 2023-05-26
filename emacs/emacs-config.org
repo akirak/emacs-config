@@ -4013,6 +4013,7 @@ This is an extra functions for window management.
                "C-x `" #'akirak-window-column-prefix
                "C-c v" #'akirak-window-open-in-new-tab
                "M-o" #'akirak-window-moderate-1
+               [remap delete-window] #'akirak-window-delete-window
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
 *** akirak-wordnet
