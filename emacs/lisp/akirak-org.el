@@ -670,6 +670,15 @@ The point should be at the heading."
       (org-memento-timeline-mode
        (revert-buffer)))))
 
+;;;###autoload
+(defun akirak-org-babel-send-block-to-vterm ()
+  (interactive)
+  (pcase (org-babel-get-src-block-info)
+    (`(,_lang ,body ,(map :dir) . ,_)
+     (unless dir
+       (user-error "Please set :dir header argument first (typically in header-args property)"))
+     (akirak-vterm-run-or-send dir (string-chop-newline body)))))
+
 ;;;; Specific applications
 
 ;;;###autoload

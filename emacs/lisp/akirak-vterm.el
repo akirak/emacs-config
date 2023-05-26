@@ -37,6 +37,23 @@
         (vterm-send-return)
         (pop-to-buffer (current-buffer))))))
 
+;;;###autoload
+(defun akirak-vterm-run-or-send (dir string)
+  (let ((buffers (thread-last
+                   (akirak-vterm--buffers)
+                   (seq-filter `(lambda (buf)
+                                  (equal (expand-file-name
+                                          (buffer-local-value 'default-directory buf))
+                                         ,(expand-file-name dir))))))
+        (string (string-chop-newline string)))
+    (if buffers
+        (with-current-buffer (akirak-vterm--select-buffer buffers)
+          (unless (get-buffer-window (current-buffer))
+            (display-buffer (current-buffer)))
+          (vterm-send-string string)
+          (vterm-send-return))
+      (akirak-vterm--run-in-dir dir string))))
+
 (defun akirak-vterm--project-buffer-name (dir command)
   (format "*vterm:%s:%s*"
           (file-name-nondirectory (string-remove-suffix "/" dir))
@@ -99,9 +116,9 @@
                            (format "*vterm:%s*" buffer-or-name)
                          "*vterm*")))))))
 
-(defun akirak-vterm--select-buffer ()
+(defun akirak-vterm--select-buffer (&optional buffers)
   (let ((buffers (thread-last
-                   (akirak-vterm--buffers)
+                   (or buffers (akirak-vterm--buffers))
                    (mapcar #'buffer-name))))
     (cl-labels
         ((group (candidate transform)
