@@ -1348,7 +1348,19 @@ Operations on the current project
           (:unbind "p")
           ;; Rebind the key
           (:bind "p" #'akirak-consult-project-file))
-        (global-set-key (kbd "C-x M") project-prefix-map))))
+        (global-set-key (kbd "C-x M") project-prefix-map)
+
+        (add-hook 'project-find-functions
+                  (defun akirak/project-worktree-group-finder (dir)
+                    (when (string-match-p (rx bol "~/work2/"
+                                              (+ (not (any "/")))
+                                              "/"
+                                              (+ (not (any "/")))
+                                              "/")
+                                          dir)
+                      `(worktree-group ,dir))))
+        (cl-defmethod project-root ((project (head worktree-group)))
+          (cadr project)))))
 #+end_src
 **** akirak-project
 #+begin_src emacs-lisp
