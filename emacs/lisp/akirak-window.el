@@ -403,10 +403,8 @@ The target window is determined according to the same logic as
 
 (defun akirak-window--find-column (n)
   "Return a window in N-th column of the frame."
-  (let ((window (frame-first-window)))
-    (dotimes (_ (1- n))
-      (setq window (window-in-direction 'right window)))
-    window))
+  (when n
+    (cadr (nth (1- n) (akirak-window--get-panes)))))
 
 ;;;###autoload
 (defun akirak-window-duplicate-state (&optional arg)
