@@ -384,28 +384,30 @@ DAYS default to `akirak-org-clock-history-threshold'."
 This function returns the current buffer."
   (interactive "P")
   (akirak-org-clock-require-clock
-    (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
-        (with-current-buffer capture-buffer
-          (unless (get-buffer-window capture-buffer)
-            (pop-to-buffer capture-buffer))
+    (let ((action '(nil . ((inhibit-same-window . t)))))
+      (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
+          (with-current-buffer capture-buffer
+            (unless (get-buffer-window capture-buffer)
+              (pop-to-buffer capture-buffer action))
+            (when arg
+              (goto-char (org-entry-end-position))
+              (delete-blank-lines)
+              (newline))
+            capture-buffer)
+        (with-current-buffer (org-dog-indirect-buffer org-clock-marker)
+          (when (or (< (point) (point-min))
+                    (> (point) (point-max)))
+            (goto-char (point-min)))
+          (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer)
+                   action)
+          (when org-dog-new-indirect-buffer-p
+            (org-back-to-heading)
+            (run-hooks 'akirak-org-clock-open-hook))
           (when arg
             (goto-char (org-entry-end-position))
             (delete-blank-lines)
             (newline))
-          capture-buffer)
-      (with-current-buffer (org-dog-indirect-buffer org-clock-marker)
-        (when (or (< (point) (point-min))
-                  (> (point) (point-max)))
-          (goto-char (point-min)))
-        (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer))
-        (when org-dog-new-indirect-buffer-p
-          (org-back-to-heading)
-          (run-hooks 'akirak-org-clock-open-hook))
-        (when arg
-          (goto-char (org-entry-end-position))
-          (delete-blank-lines)
-          (newline))
-        (current-buffer)))))
+          (current-buffer))))))
 
 ;;;###autoload
 (defun akirak-org-clock-goto ()
