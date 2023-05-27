@@ -69,14 +69,9 @@
   :doc "Keymap for Org blocks."
   "c" #'org-ctrl-c-ctrl-c)
 
-(defvar-keymap akirak-embark-org-src-map
+(defvar-keymap akirak-embark-org-babel-block-map
   :parent akirak-embark-org-block-map
   "w" #'embark-copy-as-kill)
-
-(defvar-keymap akirak-embark-org-sh-src-map
-  :parent akirak-embark-org-src-map
-  "v" #'akirak-embark-send-to-vterm
-  "V" #'akirak-embark-send-to-new-vterm)
 
 (defvar-keymap akirak-embark-org-prompt-map
   :parent akirak-embark-org-block-map)
@@ -250,9 +245,7 @@
   (add-to-list 'embark-keymap-alist
                '(image-file . akirak-embark-image-file-map))
   (add-to-list 'embark-keymap-alist
-               '(org-src-block . akirak-embark-org-src-map))
-  (add-to-list 'embark-keymap-alist
-               '(org-sh-src-block . akirak-embark-org-sh-src-map))
+               '(org-src-block . akirak-embark-org-babel-block-map))
   (add-to-list 'embark-keymap-alist
                '(org-prompt-special-block . akirak-embark-org-prompt-map))
   (add-to-list 'embark-keymap-alist
@@ -325,30 +318,27 @@
              `(url ,href . ,bounds)))))))))
 
 (defun akirak-embark-target-org-element ()
-  (when (derived-mode-p 'org-mode)
-    (require 'org-element)
-    (when-let (element (org-element-context))
-      (cl-case (org-element-type element)
-        (src-block
-         `(,(if (member (org-element-property :language element)
-                        '("sh" "shell"))
-                'org-sh-src-block
-              'org-src-block)
-           ,(string-trim (org-element-property :value element))
-           . ,(cons (org-element-property :begin element)
-                    (org-element-property :end element))))
-        (special-block
-         (let ((cbegin (org-element-property :contents-begin element))
-               (cend (org-element-property :contents-end element)))
-           `(,(pcase (org-element-property :type element)
-                ("prompt"
-                 'org-prompt-special-block)
-                (_
-                 'org-special-block))
-             ,(when (and cbegin cend)
-                (buffer-substring-no-properties cbegin cend))
-             . ,(cons (org-element-property :begin element)
-                      (org-element-property :end element)))))))))
+  (when (and (derived-mode-p 'org-mode)
+             (org-match-line org-block-regexp))
+    (if (equal "src" (match-string 1))
+        (pcase (save-match-data (org-babel-get-src-block-info))
+          (`(,_lang ,body ,plist . ,_)
+           `(org-src-block
+             ,(string-trim body)
+             . ,(cons (match-beginning 0)
+                      (match-end 0)))))
+      (let* ((element (org-element-context))
+             (cbegin (org-element-property :contents-begin element))
+             (cend (org-element-property :contents-end element)))
+        `(,(pcase (org-element-property :type element)
+             ("prompt"
+              'org-prompt-special-block)
+             (_
+              'org-special-block))
+          ,(when (and cbegin cend)
+             (buffer-substring-no-properties cbegin cend))
+          . ,(cons (org-element-property :begin element)
+                   (org-element-property :end element)))))))
 
 (defun akirak-embark-target-org-heading ()
   (when (derived-mode-p 'org-mode)
