@@ -427,17 +427,39 @@ character."
   (let ((plist (text-properties-at (point))))
     (or (when-let* ((link (plist-get plist 'htmlize-link))
                     (uri (plist-get link :uri)))
-          (save-match-data
-            (pcase uri
-              ((rx bol "id:" (group (+ anything)))
-               ;; Possibly heavy computation, but run synchronously anyway
-               (if-let* ((id (match-string-no-properties 1 uri))
-                         (file (org-id-find-id-file id))
-                         (marker (org-id-find-id-in-file id file 'markerp)))
-                   (org-with-point-at marker
-                     (akirak-org--entry-eldoc))
-                 (concat uri " (missing ID location)"))))))
+          (pcase (save-match-data
+                   (akirak-org--parse-link-uri uri))
+            (`("id" . ,id)
+             ;; Possibly heavy computation, but run synchronously anyway
+             (if-let* ((file (org-id-find-id-file id))
+                       (marker (org-id-find-id-in-file id file 'markerp)))
+                 (org-with-point-at marker
+                   (akirak-org--entry-eldoc))
+               (concat uri " (missing ID location)")))
+            (`(nil . ,path)
+             (let* ((pos (if (thing-at-point-looking-at org-link-bracket-re)
+                             (match-beginning 0)
+                           (error "Failed to match org-link-bracket-re")))
+                    (contents (org-with-wide-buffer
+                               ;; Prevent fuzzy links from matching themselves.
+                               (when-let (element (and (org-link-search path pos)
+                                                       (org-element-at-point)))
+                                 (buffer-substring-no-properties
+                                  (org-element-property :begin element)
+                                  (org-element-property :end element))))))
+               (concat "LINK: " path
+                       (when contents
+                         (concat "​— " contents)))))
+            (_
+             uri)))
         (plist-get plist 'help-echo))))
+
+(defun akirak-org--parse-link-uri (uri)
+  "Return a cons cell of (type . rest) from URI."
+  (if (string-match org-link-types-re uri)
+      (cons (match-string 1 uri)
+            (substring-no-properties uri (match-end 0)))
+    (cons nil uri)))
 
 (defun akirak-org--entry-eldoc ()
   "Return a string describing the entry at point.
