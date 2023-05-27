@@ -1908,6 +1908,11 @@ Thus I will explicitly install this package rather than using the built-in versi
                      mode ,@modes)
                    t))
     (add-to-list 'display-buffer-alist
+                 '((major-mode . vterm-mode)
+                   akirak-window-reuse-mode-window-or-split-below
+                   mode (vterm-mode))
+                 t)
+    (add-to-list 'display-buffer-alist
                  '((or (major-mode . nov-mode)
                        (major-mode . pdf-view-mode))
                    akirak-window-display-document-buffer)
