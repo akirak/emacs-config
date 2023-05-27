@@ -22,9 +22,9 @@
   (interactive "sCommand: ")
   (akirak-vterm--run-in-dir default-directory string))
 
-(defun akirak-vterm--run-in-dir (dir string)
+(cl-defun akirak-vterm--run-in-dir (dir string &key name)
   (let* ((default-directory dir)
-         (bufname (akirak-vterm--project-buffer-name dir string))
+         (bufname (akirak-vterm--project-buffer-name dir (or name string)))
          (buffer (get-buffer bufname)))
     (if buffer
         (with-current-buffer buffer
@@ -52,7 +52,7 @@
             (display-buffer (current-buffer)))
           (vterm-send-string string)
           (vterm-send-return))
-      (akirak-vterm--run-in-dir dir string))))
+      (akirak-vterm--run-in-dir dir string :name "send"))))
 
 (defun akirak-vterm--project-buffer-name (dir command)
   (format "*vterm:%s:%s*"
