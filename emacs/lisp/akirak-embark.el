@@ -71,6 +71,7 @@
 
 (defvar-keymap akirak-embark-org-babel-block-map
   :parent akirak-embark-org-block-map
+  "v" #'akirak-org-babel-send-block-to-vterm
   "w" #'embark-copy-as-kill)
 
 (defvar-keymap akirak-embark-org-prompt-map
@@ -267,7 +268,11 @@
                '(copy-to-register embark--mark-target))
   (add-to-list 'embark-pre-action-hooks
                '(project-query-replace-regexp
-                 embark--beginning-of-target embark--unmark-target)))
+                 embark--beginning-of-target embark--unmark-target))
+
+  (add-to-list 'embark-target-injection-hooks
+               '(akirak-org-babel-send-block-to-vterm
+                 embark--ignore-target)))
 
 ;;;###autoload
 (defun akirak-embark-setup-org-heading ()
@@ -433,35 +438,6 @@
   (when-let (section (and (featurep 'magit-section)
                           (magit-current-section)))
     (cons 'magit-section section)))
-
-(defun akirak-embark-send-to-vterm (string)
-  "Send STRING to an existing vterm session."
-  (interactive (list (completing-read
-                      "Vterm: "
-                      (or (thread-last
-                            (buffer-list)
-                            (seq-filter (lambda (buffer)
-                                          (eq (buffer-local-value 'major-mode buffer)
-                                              'vterm-mode)))
-                            (mapcar #'buffer-name))
-                          (user-error "No vterm session")))))
-  (with-current-buffer (get-buffer buffer)
-    (vterm-send-string string)))
-
-(defun akirak-embark-send-to-new-vterm (string)
-  "Send STRING to a new vterm session."
-  (interactive)
-  (let* ((pr (project-current))
-         (root (when pr (project-root pr)))
-         (default-directory (completing-read "Directory: "
-                                             `(,default-directory
-                                               ,@(when (and root
-                                                            (not (file-equal-p root
-                                                                               default-directory)))
-                                                   (list root))
-                                               ,@(akirak-project-parents)))))
-    (with-current-buffer (vterm 'new)
-      (vterm-send-string string))))
 
 (defun akirak-embark-kill-directory-buffers (directory)
   "Kill all buffers in DIRECTORY."
