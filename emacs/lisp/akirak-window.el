@@ -78,7 +78,6 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                   buf
                   (split-window-below height)
                   'window alist))
-    (set-window-dedicated-p newwin t)
     newwin))
 
 ;;;###autoload
