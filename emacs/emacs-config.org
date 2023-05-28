@@ -3322,7 +3322,20 @@ Utilities for in-file links
                       (thread-last
                         (org-dog-overview-scan (list (abbreviate-file-name filename))
                                                :clear t)
-                        (mapcar #'car))))))
+                        (mapcar #'car)))))
+          org-nlink-target-verify-function
+          (defun akirak/org-nlink-verify-location ()
+            (require 'org-dog)
+            (let ((obj (org-dog-buffer-object)))
+              (if (and obj
+                       (object-of-class-p obj 'org-dog-facade-datetree-file)
+                       (looking-at org-complex-heading-regexp)
+                       (= 1 (- (match-end 1) (match-beginning 1)))
+                       (not (equal "Index" (match-string 4))))
+                  (progn
+                    (org-end-of-subtree)
+                    nil)
+                t))))
 
     (add-hook 'org-open-link-functions #'org-nlink-open-link))
 #+end_src
