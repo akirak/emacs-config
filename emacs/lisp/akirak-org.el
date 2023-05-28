@@ -437,19 +437,32 @@ character."
                    (akirak-org--entry-eldoc))
                (concat uri " (missing ID location)")))
             (`(nil . ,path)
-             (let* ((pos (if (thing-at-point-looking-at org-link-bracket-re)
-                             (match-beginning 0)
-                           (error "Failed to match org-link-bracket-re")))
-                    (contents (org-with-wide-buffer
-                               ;; Prevent fuzzy links from matching themselves.
-                               (when-let (element (and (org-link-search path pos)
-                                                       (org-element-at-point)))
-                                 (buffer-substring-no-properties
-                                  (org-element-property :begin element)
-                                  (org-element-property :end element))))))
-               (concat "LINK: " path
-                       (when contents
-                         (concat "​— " contents)))))
+             ;; An implementation that searches only within the same file. I
+             ;; will revert back to this solution if I stop using org-nlink.
+             ;;
+             ;; (let* ((pos (if (thing-at-point-looking-at org-link-bracket-re)
+             ;;                 (match-beginning 0)
+             ;;               (error "Failed to match org-link-bracket-re")))
+             ;;        (contents (org-with-wide-buffer
+             ;;                   ;; Prevent fuzzy links from matching themselves.
+             ;;                   (when-let (element (and (org-link-search path pos)
+             ;;                                           (org-element-at-point)))
+             ;;                     (buffer-substring-no-properties
+             ;;                      (org-element-property :begin element)
+             ;;                      (org-element-property :end element))))))
+             ;;   (concat "LINK: " path
+             ;;           (when contents
+             ;;             (concat "​— " contents))))
+
+             (concat "LINK: " path
+                     (save-current-buffer
+                       (when (org-nlink-open-link path)
+                         (let ((element (org-element-at-point)))
+                           (format " (found in %s): %s"
+                                   (abbreviate-file-name (buffer-file-name))
+                                   (buffer-substring-no-properties
+                                    (org-element-property :begin element)
+                                    (org-element-property :end element))))))))
             (_
              uri)))
         (plist-get plist 'help-echo))))

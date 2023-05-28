@@ -3307,7 +3307,24 @@ Utilities for in-file links
   (setup (:package org-nlink)
     (:with-feature org
       (:with-map org-mode-map
-        (:bind "M-s l" #'org-nlink-occur))))
+        (:bind "M-s l" #'org-nlink-occur)))
+
+    (:set org-nlink-extra-files
+          (defun akirak/org-nlink-extra-org-files ()
+            (require 'org-dog-context)
+            (require 'org-dog-overview)
+            (append (thread-last
+                      (org-dog-context-file-objects
+                       (org-dog-context-org-tags-1 (org-get-tags)))
+                      (mapcar (lambda (obj)
+                                (oref obj absolute))))
+                    (when-let (filename (buffer-file-name (org-base-buffer (current-buffer))))
+                      (thread-last
+                        (org-dog-overview-scan (list (abbreviate-file-name filename))
+                                               :clear t)
+                        (mapcar #'car))))))
+
+    (add-hook 'org-open-link-functions #'org-nlink-open-link))
 #+end_src
 **** consult-org-nlink
 #+begin_quote
