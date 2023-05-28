@@ -84,9 +84,12 @@
 ;;;###autoload (autoload 'akirak-insert-org-clock-heading "akirak-insert" nil 'interactive)
 (define-skeleton akirak-insert-org-clock-heading
   "Insert the heading of the currently clocked entry." nil
-  (save-current-buffer
-    (org-with-point-at org-clock-marker
-      (org-get-heading t t t t))))
+  (if (and (require 'org-clock nil t)
+           (org-clocking-p))
+      (save-current-buffer
+        (require 'ol)
+        (org-link-display-format (org-entry-get org-clock-marker "ITEM")))
+    (user-error "Not clocking in")))
 
 ;;;###autoload (autoload 'akirak-insert-window-title "akirak-insert" nil 'interactive)
 (define-skeleton akirak-insert-window-title
