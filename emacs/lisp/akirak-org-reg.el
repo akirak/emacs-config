@@ -172,6 +172,36 @@
                 entries))))
     (nreverse entries)))
 
+;;;;; Indirect buffers
+
+(defclass akirak-org-reg-completion-suffix (transient-variable)
+  ((format :initform " %k %d")))
+
+(cl-defmethod transient-format ((obj akirak-org-reg-completion-suffix))
+  (format-spec (oref obj format)
+               `((?k . ,(transient-format-key obj))
+                 (?d . ,(transient-format-description obj)))))
+
+(transient-define-suffix akirak-org-reg-dispatch-on-indirect-entry ()
+  :class 'akirak-org-reg-completion-suffix
+  :description "Indirect buffer entries"
+  (interactive)
+  (cl-flet
+      ((buffer-org-mode-p (buffer)
+         (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
+                                  'org-mode))
+       (buffer-entry-cell (buffer)
+         (with-current-buffer buffer
+           (cons (org-entry-get (point-min) "ITEM")
+                 (copy-marker (point-min))))))
+    (let* ((entries (thread-last
+                      (buffer-list)
+                      (seq-filter #'buffer-base-buffer)
+                      (seq-filter #'buffer-org-mode-p)
+                      (mapcar #'buffer-entry-cell)))
+           (name (completing-read "Org entry in indirect buffer: " entries nil t)))
+      (akirak-org-reg-dispatch (cdr (assoc name entries))))))
+
 ;;;; Prefix
 
 ;;;###autoload (autoload 'akirak-org-reg-transient "akirak-org-reg" nil 'interactive)
@@ -184,6 +214,8 @@
    ("m" akirak-org-reg-dispatch-on-memento
     :transient nil)
    ("c" akirak-org-reg-dispatch-on-last-capture
+    :transient nil)
+   ("i" akirak-org-reg-dispatch-on-indirect-entry
     :transient nil)]
   ["Registry"
    :setup-children akirak-org-reg-register-suffixes]
