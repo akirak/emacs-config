@@ -442,7 +442,9 @@ Otherwise, it calls `akirak-window-duplicate-state'."
                          ('(4)
                           (or (window-in-direction 'below)
                               (window-in-direction 'above))))))
-    (delete-window target-window)))
+    (delete-window target-window)
+    (when (and arg (numberp arg) (< arg 10))
+      (balance-windows))))
 
 ;;;###autoload
 (defun akirak-window-column-prefix (&optional n)
