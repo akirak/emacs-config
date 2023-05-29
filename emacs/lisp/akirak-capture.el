@@ -461,12 +461,7 @@
    ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
    ("L" "Journal" akirak-capture-journal-item
-    :if (lambda () (eq major-mode 'org-mode)))
-   ("P" "Placeholder"
-    (lambda ()
-      (interactive)
-      (org-placeholder-capture-input
-       (akirak-capture--maybe-read-heading))))]
+    :if (lambda () (eq major-mode 'org-mode)))]
 
   (interactive)
   (cond
