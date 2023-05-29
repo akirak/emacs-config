@@ -6,117 +6,94 @@
   ""
   :group 'beancount)
 
-(defcustom akirak-beancount-journal-file nil
-  "The master journal file."
-  :type 'file)
+(defvar akirak-beancount-last-date nil)
 
-(defcustom akirak-beancount-currency nil
-  "Default currency."
-  :type 'string)
+(defvar akirak-beancount-last-account nil)
 
-(defcustom akirak-beancount-template-alist nil
-  ""
-  :type '(alist :key-type string
-                :value-type sexp))
+;;;###autoload
+(defun akirak-beancount-add-transaction ()
+  "Insert a transaction into the current buffer."
+  (interactive nil beancount-mode)
+  (let* ((accounts (akirak-beancount--scan-open-accounts))
+         (account (completing-read "Insert a transaction on an account: "
+                                   accounts nil nil nil
+                                   akirak-beancount-last-account)))
+    (if-let (cell (assoc account accounts))
+        (akirak-beancount--insert-transaction account (cdr cell))
+      (when-let (pos (cdr (akirak-beancount--common-ancestor account accounts)))
+        (goto-char pos)
+        (while (looking-at beancount-timestamped-directive-regexp)
+          (forward-line 1))
+        (open-line 1)
+        (insert " open " account)
+        (goto-char (line-beginning-position))
+        (user-error "First open an account %s" account)))))
 
-(defmacro akirak-beancount--with-wide-buffer (&rest progn)
-  `(with-current-buffer (or (find-buffer-visiting akirak-beancount-journal-file)
-                            (find-file-noselect akirak-beancount-journal-file))
-     (org-with-wide-buffer
-      ,@progn)))
+(defun akirak-beancount--common-ancestor (account account-alist)
+  (cl-flet ((parent (account)
+              (string-join (butlast (split-string account ":")) ":")))
+    (catch 'result
+      (while (not (string-empty-p account))
+        (setq account (parent account))
+        (when-let (ca (cl-member-if `(lambda (cell)
+                                       (or (equal ,account (car cell))
+                                           (string-prefix-p ,account (car cell))))
+                                    account-alist))
+          (throw 'result (car ca)))))))
 
-(defun akirak-beancount-complete-outline (prompt)
-  "Jump to an outline heading."
-  (goto-char (point-min))
-  (let (candidates
-        olp)
-    (while (re-search-forward (concat "^" beancount-outline-regexp "[[:blank:]]*")
-                              nil t)
-      (let ((level (beancount-outline-level)))
-        (setq olp (cons (string-trim-left (buffer-substring (point) (line-end-position)))
-                        (seq-drop (copy-sequence olp)
-                                  (- (length olp) (1- level)))))
-        (push (cons (string-join (reverse olp) "/")
-                    (point))
-              candidates)))
-    (let ((input (completing-read prompt candidates)))
-      (if-let (cell (assoc input candidates))
-          (progn
-            (goto-char (cdr cell))
-            (cdr cell))
-        (let* ((ancestor (thread-last
-                           candidates
-                           (seq-filter (pcase-lambda (`(,path-string . ,_))
-                                         (string-prefix-p path-string input)))
-                           (seq-sort-by (pcase-lambda (`(,path-string . ,_))
-                                          (length path-string))
-                                        #'>)
-                           (car)))
-               (rest (thread-first
-                       (car ancestor)
-                       (string-remove-prefix input)
-                       (split-string "/")
-                       (cdr)))
-               (level (1+ (length (split-string (car ancestor) "/"))))
-               node)
-          (goto-char (cdr ancestor))
-          (outline-end-of-subtree)
-          (while (setq node (pop rest))
-            (insert "\n" (make-string level ?\*) " " node)
-            (cl-incf level))
-          (insert "\n"))
-        (point)))))
+(defun akirak-beancount--insert-transaction (account pos)
+  (goto-char pos)
+  (if-let* ((bound (save-excursion
+                     (if (re-search-forward (concat "^" beancount-outline-regexp) nil t)
+                         (line-beginning-position)
+                       (point-max))))
+            (titles (akirak-beancount--scan-transactions account bound)))
+      (let* ((org-read-date-prefer-future nil)
+             (date (org-read-date nil nil nil "Date: " nil akirak-beancount-last-date))
+             (title (completing-read "Title: " titles nil nil nil nil nil 'inherit)))
+        (goto-char bound)
+        (open-line 1)
+        (setq akirak-beancount-last-date date
+              akirak-beancount-last-account account)
+        (skeleton-insert `(> ,date " * \"" ,title "\""
+                             n ,account "  " _)))
+    (re-search-forward (concat "^[[:blank:]]+" (regexp-quote account)) nil t)))
 
-(cl-defun akirak-beancount-add-simple-transaction (&key account date title quantity
-                                                        price-num price-currency
-                                                        payment)
-  (akirak-beancount--with-wide-buffer
-   (akirak-beancount--search-account account)
-   (insert "\n" date " * " (format "\"%s\"" title)
-           "\n  " account "  "
-           (if (= quantity 1)
-               price-num
-             (number-to-string (* quantity (string-to-number price-num))))
-           (or price-currency
-               (concat " " akirak-beancount-currency))
-           "\n  " payment "\n")
-   (beancount-indent-transaction)))
+(defun akirak-beancount--scan-transactions (account bound)
+  "Scan transactions on ACCOUNT until BOUND."
+  (let (result)
+    (cl-flet
+        ((unquote (string)
+           (if (string-match (rx bol "\"" (group (+ anything)) "\"" eol) string)
+               (match-string 1 string)
+             string)))
+      (while (re-search-forward beancount-transaction-regexp bound t)
+        (let ((title (unquote (match-string-no-properties 3))))
+          (forward-line)
+          (catch 'match-account
+            (while (looking-at beancount-posting-regexp)
+              (when (equal (match-string 1) account)
+                (push (cons title (point)) result)
+                (throw 'match-account t))
+              (forward-line))))))
+    result))
 
-(defun akirak-beancount-add-transaction (account)
-  (interactive (list (akirak-beancount-read-account "Select an account: ")))
-  (akirak-beancount--search-account account)
-  (when-let (template (cdr (assoc account akirak-beancount-template-alist)))
-    (insert "\n")
-    (skeleton-insert template)))
+(defun akirak-beancount--scan-open-accounts ()
+  (let (result)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward beancount-timestamped-directive-regexp nil t)
+        (when (equal (match-string 2) "open")
+          (push (cons (string-trim (buffer-substring-no-properties
+                                    (match-end 0) (line-end-position)))
+                      (line-beginning-position))
+                result))))
+    (nreverse result)))
 
-(defun akirak-beancount--search-account (account)
-  (goto-char (point-min))
-  (or (re-search-forward (concat (rx bol (* blank)) (regexp-quote account))
-                         nil t)
-      (akirak-beancount-complete-outline
-       (format "Where to add the transaction \"%s\": " account)))
-  (when (outline-next-heading)
-    (forward-line -1)))
-
-(defun akirak-beancount-read-account (prompt)
-  (let* ((accounts (akirak-beancount-accounts))
-         (input (completing-read prompt accounts)))
-    (unless (member input accounts)
-      (if (akirak-beancount-complete-outline "Open a new account under a heading: ")
-          (let ((date (org-read-date)))
-            (insert date " open " input "\n"))
-        (user-error "Aborted")))
-    input))
-
-(defun akirak-beancount-accounts ()
-  "Return a list of accounts in the file."
-  (akirak-beancount--with-wide-buffer
-   (beancount-collect beancount-account-regexp 0)))
-
-(defalias 'akirak-beancount-account-completions #'akirak-beancount-accounts
-  "Return a completion table for accounts.
-
-For now, it simply returns a list of accounts.")
+;;;###autoload
+(defun akirak-beancount-insert-date ()
+  (interactive)
+  (insert (org-read-date nil nil nil nil nil akirak-beancount-last-date)))
 
 (provide 'akirak-beancount)
 ;;; akirak-beancount.el ends here
