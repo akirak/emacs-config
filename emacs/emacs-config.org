@@ -4364,6 +4364,13 @@ A major mode to edit Beancount input files.
       (:file-match "\\.beancount\\'" "\\.bean\\'")
       (:hook bean-format-on-save-mode)
       (:when-loaded
+        (define-key beancount-mode-map
+                    (vconcat beancount-mode-map-prefix [?i])
+                    #'akirak-beancount-add-transaction)
+        (define-key beancount-mode-map
+                    (vconcat beancount-mode-map-prefix [?d])
+                    #'akirak-beancount-insert-date)
+
         (:hook
          (defun akirak/beancount-turn-on-outline-mode ()
            (outline-minor-mode t))))))
