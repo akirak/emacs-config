@@ -489,28 +489,5 @@ Otherwise, it calls `akirak-window-duplicate-state'."
 
 (defvar akirak-window-last-nonhelp-window nil)
 
-;;;###autoload
-(defun akirak-window-select-help-window (&optional arg)
-  (interactive "P")
-  (if (and (equal arg '(4))
-           akirak-window-last-nonhelp-window
-           (window-live-p akirak-window-last-nonhelp-window))
-      (progn
-        (select-window akirak-window-last-nonhelp-window)
-        (setq akirak-window-last-nonhelp-window nil))
-    (if-let (window (or (get-buffer-window "*Help*")
-                        (thread-last
-                          (buffer-list)
-                          (seq-filter (lambda (buffer)
-                                        (memq (buffer-local-value 'major-mode buffer)
-                                              '(help-mode
-                                                devdocs-mode
-                                                eldoc-mode))))
-                          (seq-some #'get-buffer-window))))
-        (progn
-          (setq akirak-window-last-nonhelp-window (selected-window))
-          (select-window window))
-      (user-error "No help window in the frame"))))
-
 (provide 'akirak-window)
 ;;; akirak-window.el ends here

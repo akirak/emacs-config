@@ -4038,8 +4038,6 @@ This is an extra functions for window management.
       (:with-map ctl-x-map
         ;; I don't need kill-buffer when I have consult-buffer
         (:bind "k" #'akirak-window-kill-this-buffer))
-      (:with-map help-map
-        (:bind "h" #'akirak-window-select-help-window))
       (:global "C-2" #'akirak-window-split-vertically
                "C-3" #'akirak-window-split-and-select
                "C-4" #'akirak-window-setup-columns
