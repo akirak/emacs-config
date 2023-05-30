@@ -960,9 +960,10 @@
             ;; Depends on an experimental feature of org-super-links.
             (let* ((org-super-links-backlink-into-drawer "VOCABULARY")
                    (sentence-example (org-in-block-p '("quote" "verse" "example")))
-                   (selection (if sentence-example
-                                  (thing-at-point 'sentence t)
-                                (thing-at-point 'paragraph t)))
+                   (selection (org-link-display-format
+                               (if sentence-example
+                                   (thing-at-point 'sentence t)
+                                 (thing-at-point 'paragraph t))))
                    (body (cond
                           (sentence-example
                            (string-trim selection))
