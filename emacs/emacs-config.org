@@ -2849,7 +2849,13 @@ A programmable workflow layer for Org mode
                               ((and (rx bos "technology/")
                                     (guard title))
                                (format "You are a large language model and\
-   an engineer experienced in %s. Respond concisely." title)))))
+   an engineer experienced in %s. Respond concisely." title))
+                              ((and (rx bos "languages/"
+                                        (group (+ (not (any "/"))))
+                                        (any "/.")))
+                               (format "You are a large language model and\
+   an interpreter who are good at %s. Respond concisely."
+                                       (match-string 1 (oref obj relative)))))))
                   (when msg
                     (setq gptel--system-message msg)))))
 
