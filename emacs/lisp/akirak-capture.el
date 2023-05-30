@@ -396,6 +396,7 @@
                                    akirak-capture-doct-options nil)
                              (akirak-capture-doct))
     :transient t)
+   ("F" "Hotfix" akirak-capture-hotfix)
    ("/" "Tag prompt" akirak-capture-entry-with-tag
     :transient t)]
 
@@ -669,6 +670,29 @@
              (cl-etypecase target
                (org-dog-file (oref target absolute))
                (string target)))))
+
+(defun akirak-capture-hotfix ()
+  "Start clocking a hotfix activity on the current line."
+  (interactive)
+  ;; Similar to `akirak-capture-clock-in'.
+  (pcase (akirak-org-clock-find-commit-entry)
+    ((and (map :marker :summary)
+          (guard marker))
+     (let ((org-capture-entry
+            (car (doct
+                  `((""
+                     :keys ""
+                     :template ,(akirak-org-capture-make-entry-body
+                                  (format "Hotfix of %s" summary)
+                                  :todo "TODO"
+                                  :tags "@hotfix")
+                     :function (lambda ()
+                                 (org-goto-marker-or-bmk ,marker))
+                     :clock-in t :clock-resume t))))))
+       (save-window-excursion
+         (org-capture))))
+    (_
+     (user-error "Cannot find an Org entry"))))
 
 (defun akirak-capture-simple-tempo-snippet ()
   (interactive)
