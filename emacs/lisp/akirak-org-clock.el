@@ -507,6 +507,76 @@ This function returns the current buffer."
       (org-clock-update-time-maybe))))
 
 ;;;###autoload
+(defun akirak-org-clock-display-commit-entry ()
+  "Display an Org entry that refers to the commit."
+  (interactive)
+  (pcase (akirak-org-clock-find-commit-entry)
+    ((and (map :marker)
+          (guard marker))
+     (message "Found an entry")
+     (with-current-buffer (org-dog-indirect-buffer marker)
+       (funcall #'display-buffer (current-buffer)
+                '(nil . ((inhibit-same-window . t))))
+       (org-back-to-heading)
+       (run-hooks 'akirak-org-clock-open-hook)))
+    ((and (map :multi)
+          (guard multi))
+     (user-error "Found multiple matches"))
+    (_
+     (user-error "No entry found"))))
+
+(defun akirak-org-clock-find-commit-entry ()
+  "Return a plist containing information of the Git commit at the current line."
+  (unless (buffer-file-name)
+    (user-error "Not visiting a file"))
+  (unless (vc-git-root (buffer-file-name))
+    (user-error "Not inside a Git repository"))
+  (pcase-let*
+      ((filename (file-name-nondirectory (buffer-file-name)))
+       (line-number (save-restriction
+                      (widen)
+                      (line-number-at-pos)))
+       (`(,rev ,message) (with-temp-buffer
+                           (unless (zerop (call-process "git" nil (list t nil) nil
+                                                        "--no-pager"
+                                                        "blame"
+                                                        "-L" (format "%d,%d"
+                                                                     line-number
+                                                                     line-number)
+                                                        "--porcelain"
+                                                        "--" filename))
+                             (error "Git blame failed"))
+                           (list (progn
+                                   (goto-char (point-min))
+                                   (looking-at (rx (+ hex)))
+                                   (match-string-no-properties 0))
+                                 (progn
+                                   (re-search-forward (rx bol "summary "))
+                                   (buffer-substring-no-properties
+                                    (point) (line-end-position))))))
+       (`(,files1 ,_query-prefix ,_ ,further) (akirak-org-clock--target))
+       (files2 (if further
+                   (thread-last
+                     (org-dog-overview-scan files1 :fast t)
+                     (mapcar #'car))
+                 files1)))
+    (pcase (or (catch 'exact-match
+                 (org-ql-select files2
+                   `(regexp ,(rx-to-string `(and "[[orgit-rev:" (+ nonl) "::"
+                                                 ,rev "][" (+ nonl) "]]")))
+                   :action `(throw 'exact-match (list (point-marker)))))
+               (org-ql-select files2
+                 `(regexp ,(rx-to-string `(and bol (regexp ,org-ts-regexp-inactive)
+                                               (+ blank) ,message)))
+                 :action '(point-marker)))
+      (`(,marker)
+       (list :marker marker :rev rev :summary message))
+      (`nil
+       (list :rev rev :summary message))
+      (markers
+       (list :multi t :markers markers :rev rev :summary message)))))
+
+;;;###autoload
 (defun akirak-org-clock-transfer-avy ()
   (interactive)
   (let ((dest (save-selected-window
