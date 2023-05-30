@@ -2835,30 +2835,6 @@ A programmable workflow layer for Org mode
 
     (add-hook 'org-dog-file-mode-hook #'org-dog-header-line-enable)
 
-    (add-hook 'org-dog-file-mode-hook
-              (defun akirak/org-dog-setup-gpt-system ()
-                (let* ((obj (org-dog-buffer-object))
-                       (title (org-dog-file-title obj))
-                       ;; Based on `gptel-directives'
-                       (msg (pcase (oref obj relative)
-                              ((rx bos "programming/")
-                               (format "You are a large language model and\
-   a programmer experienced in %s. Respond concisely."
-                                       (or title
-                                           (file-name-base (oref obj relative)))))
-                              ((and (rx bos "technology/")
-                                    (guard title))
-                               (format "You are a large language model and\
-   an engineer experienced in %s. Respond concisely." title))
-                              ((and (rx bos "languages/"
-                                        (group (+ (not (any "/"))))
-                                        (any "/.")))
-                               (format "You are a large language model and\
-   an interpreter who are good at %s. Respond concisely."
-                                       (match-string 1 (oref obj relative)))))))
-                  (when msg
-                    (setq gptel--system-message msg)))))
-
     (add-hook 'org-dog-file-registration-hook
               (defun akirak/org-dog-add-agenda-file (file-obj)
                 (when (string-match-p (rx bol
@@ -5905,7 +5881,37 @@ A simple ChatGPT client
              "<f12> a g" #'gptel
              "<f12> a C-g" #'gptel-abort)
     (:when-loaded
-      (fset 'gptel--update-header-line #'ignore)))
+      (fset 'gptel--update-header-line #'ignore))
+
+    (add-hook 'org-mode-hook
+              (defun akirak/org-dog-setup-gpt-system ()
+                (when-let* ((obj (org-dog-buffer-object))
+                            (title (or (org-dog-file-title obj)
+                                       (thread-first
+                                         (file-name-base (oref obj absolute))
+                                         (split-string "-")
+                                         (string-join " "))))
+                            (msg (pcase (oref obj relative)
+                                   ;; System messages are based on examples in
+                                   ;; `gptel-directives'.
+                                   ((rx bos "programming/")
+                                    (format "You are a large language model and\
+   a programmer experienced in %s. Respond concisely."
+                                            (or title
+                                                (file-name-base (oref obj relative)))))
+                                   ((and (rx bos "technology/")
+                                         (guard title))
+                                    (format "You are a large language model and\
+   an engineer experienced in %s. Respond concisely." title))
+                                   ((and (rx bos "languages/"
+                                             (group (+ (not (any "/"))))
+                                             (any "/.")))
+                                    (format "You are a large language model and\
+   an interpreter who are good at %s. Respond concisely."
+                                            (match-string 1 (oref obj relative)))))))
+                  ;; In case gptel.el has not been loaded yet, use
+                  ;; `setq-local' to ensure it is set as a local variable.
+                  (setq-local gptel--system-message msg)))))
 #+end_src
 *** graphql-mode                                               :web:
 :PROPERTIES:
