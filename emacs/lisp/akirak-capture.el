@@ -1309,6 +1309,33 @@ provided as a separate command for integration, e.g. with embark."
                       ',(org-timestamp-to-time timestamp)))))))))
     (org-capture)))
 
+;;;###autoload
+(cl-defun akirak-capture-quick-translation (word &key (dest-language "English"))
+  (interactive "sWord or phrase: ")
+  (let* ((file (oref (or (org-dog-find-file-object
+                          (org-dog-file-pred-1
+                           `(relative ,(format "languages/%s/vocabulary.org"
+                                               dest-language))))
+                         (error "Failed to locate the file"))
+                     absolute))
+         (prompt (format "What are some translations of %s? Provide a word list\
+ in a plain Markdown list. Also, describe each word concisely. You don't have \
+to quote words." word))
+         ;; I don't have an insight on what this system prompt should be.
+         (system-prompt (format "You are a large language model and an \
+interpreter who are good at %s. Please respond concisely." dest-language))
+         (org-capture-entry
+          (car (doct
+                `((""
+                   :keys ""
+                   :template ,(akirak-org-capture-make-entry-body
+                                (format "Translation of %s" word)
+                                :body "%?")
+                   :file ,file
+                   :headline "Backlog"))))))
+    (org-capture)
+    (gptel-request prompt :in-place t :system system-prompt)))
+
 ;;;; Helper functions
 
 (defun akirak-capture--goto-backlog ()
