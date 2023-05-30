@@ -50,7 +50,6 @@
                                   (and "emacs-config.org" eol)
                                   "/private-config/"
                                   "/tmp"))
-                     (and "/akirak-" (+ (not (any "/"))) ".el" eol)
                      "/.")))
 
 (defconst akirak-org-clock-buffer-name-whitelist
