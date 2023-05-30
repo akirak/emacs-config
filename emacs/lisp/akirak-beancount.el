@@ -93,7 +93,8 @@
 ;;;###autoload
 (defun akirak-beancount-insert-date ()
   (interactive)
-  (insert (org-read-date nil nil nil nil nil akirak-beancount-last-date)))
+  (let ((org-read-date-prefer-future nil))
+    (insert (org-read-date nil nil nil nil nil akirak-beancount-last-date))))
 
 (provide 'akirak-beancount)
 ;;; akirak-beancount.el ends here
