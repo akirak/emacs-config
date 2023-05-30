@@ -136,18 +136,23 @@
   (let* ((filename (file-truename
                     (find-library-name library)))
          (package (akirak-twist--file-package-name filename)))
-    (if (equal package "akirak")
-        ;; Visit a corresponding file in the same repository as the config
-        (let ((default-directory akirak-twist-root-directory))
-          (require 'akirak-git-clone)
-          (find-file (akirak-git-clone--file-path-in-repo
-                      (file-name-nondirectory filename)))
-          (when pos
-            (goto-char pos)))
-      (akirak-git-clone-elisp-package
-       package
-       :filename (file-name-nondirectory filename)
-       :char (point)))))
+    (pcase package
+      ("akirak"
+       ;; Visit a corresponding file in the same repository as the config
+       (let ((default-directory akirak-twist-root-directory))
+         (require 'akirak-git-clone)
+         (find-file (akirak-git-clone--file-path-in-repo
+                     (file-name-nondirectory filename)))
+         (when pos
+           (goto-char pos))))
+      ((rx bos (+ digit) "." (+ digit) eos)
+       ;; Only the version number follows the prefix, so it's a built-in package
+       (user-error "Built-in package"))
+      (_
+       (akirak-git-clone-elisp-package
+        package
+        :filename (file-name-nondirectory filename)
+        :char (point))))))
 
 (defun akirak-twist--file-package-name (filename)
   (if (string-match (rx "/nix/store/" (group (+ (not (any "/")))) "/")
