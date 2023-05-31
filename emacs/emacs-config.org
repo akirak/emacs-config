@@ -3396,7 +3396,15 @@ Org Query Language, search command, and agenda-like view
     (advice-add 'org-ql-view--link-store
                 :before-while
                 (defun akirak/org-ql-view-link-needed-p (&rest _args)
-                  (eq this-command 'org-store-link))))
+                  (eq this-command 'org-store-link)))
+
+    (:when-loaded
+      (require 'akirak-org-ql-view)
+      (:set akirak-org-ql-view-super-group-alist
+            (akirak-org-ql-view-update-super-group-alist))
+      (transient-replace-suffix 'org-ql-view-dispatch
+        'org-ql-view--transient-super-groups
+        '("g" "Groups" akirak-org-ql-view-set-super-groups))))
 #+end_src
 *** org-recur
 :PROPERTIES:
