@@ -56,7 +56,7 @@
   (when (and (featurep 'org-clock)
              (org-clocking-p))
     ;; Delay logging so it starts after magit commands finishes
-    (run-with-timer 2 nil
+    (run-with-timer 4 nil
                     `(lambda ()
                        (akirak-git-commit-log-to-org-clock-1
                         :dir ,(magit-toplevel)
