@@ -2625,6 +2625,10 @@ Outline-based notes management and organizer
 
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
+    (:with-feature org
+      (:with-map org-mode-map
+        [remap org-clock-in] #'akirak-org-clock-in))
+
     (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
     (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
     ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
