@@ -762,6 +762,9 @@
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
+  ["Static files"
+   :class transient-row
+   :setup-children octopus-setup-static-targets]
   ["Other locations"
    :class transient-row
    ("n" "News"
