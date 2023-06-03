@@ -5515,7 +5515,7 @@ Correcting words with flyspell via avy-menu interface
     (with-eval-after-load "flyspell-correct"
       (require 'flyspell-correct-avy-menu)))
 #+end_src
-*** forge                                               :VC:project:
+*** COMMENT forge                                                   :VC:project:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
 :END:
