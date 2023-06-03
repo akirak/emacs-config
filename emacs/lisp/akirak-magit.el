@@ -88,5 +88,32 @@ Each function is run without an argument in the new working tree."
            (search-forward "Found RC allowed true" nil t))
          t)))
 
+;;;###autoload
+(defun akirak-magit-blame-line ()
+  "Display the commit that updated the current line."
+  (interactive)
+  (unless (buffer-file-name)
+    (user-error "Not visiting a file"))
+  (unless (vc-git-root (buffer-file-name))
+    (user-error "Not inside a Git repository"))
+  (let* ((filename (file-name-nondirectory (buffer-file-name)))
+         (line-number (save-restriction
+                        (widen)
+                        (line-number-at-pos)))
+         (rev (with-temp-buffer
+                (unless (zerop (call-process "git" nil (list t nil) nil
+                                             "--no-pager"
+                                             "blame"
+                                             "-L" (format "%d,%d"
+                                                          line-number
+                                                          line-number)
+                                             "--porcelain"
+                                             "--" filename))
+                  (error "Git blame failed"))
+                (goto-char (point-min))
+                (looking-at (rx (+ hex)))
+                (match-string-no-properties 0))))
+    (magit-show-commit rev)))
+
 (provide 'akirak-magit)
 ;;; akirak-magit.el ends here

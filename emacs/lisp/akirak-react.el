@@ -10,6 +10,13 @@
   :variable 'akirak-react-transient-has-children
   :description "Has children property")
 
+(defvar akirak-react-transient-async nil)
+
+(transient-define-infix akirak-react-transient-async ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-react-transient-async
+  :description "Async")
+
 (defvar akirak-react-transient-no-properties nil)
 
 (transient-define-infix akirak-react-transient-no-properties ()
@@ -27,7 +34,8 @@
 
 ;;;###autoload (autoload 'akirak-react-insert-component "akirak-react" nil 'interactive)
 (transient-define-prefix akirak-react-insert-component ()
-  [("c" akirak-react-transient-has-children)
+  [("a" akirak-react-transient-async)
+   ("c" akirak-react-transient-has-children)
    ("n" akirak-react-transient-no-properties)
    ("f" akirak-react-transient-syntax)]
   [("e" "Export" (lambda ()

@@ -10,6 +10,10 @@
 
 ;;;; Predicates
 
+(defun akirak-window-one-of-modes-p (modes window)
+  (memq (buffer-local-value 'major-mode (window-buffer window))
+        modes))
+
 (defun akirak-window-left-side-window-p (&optional window)
   (and (window-dedicated-p window)
        (not (window-in-direction 'left window))))
@@ -64,18 +68,84 @@
 
 Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
   (let ((window (selected-window))
-        (height (cdr (assq 'window-height alist)))
-        newwin)
+        (height (cdr (assq 'window-height alist))))
     (when height
       (when (floatp height)
         (setq height (round (* height (frame-height)))))
       (setq height (- (max height window-min-height))))
-    (setq newwin (window--display-buffer
-                  buf
-                  (split-window-below height)
-                  'window alist))
-    (set-window-dedicated-p newwin t)
-    newwin))
+    (window--display-buffer buf
+                            (split-window-below height)
+                            'window alist)))
+
+;;;###autoload
+(defun akirak-window-reuse-mode-window-or-split-below (buf alist)
+  (or (display-buffer-reuse-mode-window buf alist)
+      (akirak-window-display-buffer-split-below buf alist)))
+
+;;;###autoload
+(defun akirak-window-display-org-agenda-buffer (buffer alist)
+  "Reuse the mode window. If none, prefer a pane."
+  (let ((alist-mode-entry (assq 'mode alist))
+        (windows (thread-last
+                   (window-list-1 nil 'never)
+                   (seq-sort-by #'window-height #'>))))
+    (if-let (mode-window (seq-find (apply-partially #'akirak-window-one-of-modes-p
+                                                    (cdr alist-mode-entry))
+                                   windows))
+        (window--display-buffer buffer mode-window 'reuse)
+      (if-let (other-window (car (delete (selected-window) windows)))
+          (window--display-buffer buffer other-window 'reuse)
+        (display-buffer buffer alist)))))
+
+(defun akirak-window--org-capture-window-p (window)
+  (string-prefix-p "^CAPTURE-" (buffer-name (window-buffer window))))
+
+;;;###autoload
+(defun akirak-window-display-org-capture-buffer (buffer _)
+  (let ((other-windows (thread-last
+                         (window-list-1 nil 'never)
+                         (delete (selected-window)))))
+    (if-let (w1 (car (cl-remove-if #'akirak-window--org-capture-window-p
+                                   other-windows)))
+        (window--display-buffer buffer w1 'reuse)
+      (when other-windows
+        (window--display-buffer buffer (car other-windows) 'reuse)))))
+
+;;;###autoload
+(defun akirak-window-display-org-buffer-other-window (buffer alist)
+  (unless (or (car-safe display-buffer-overriding-action)
+              (not (cdr (assq 'inhibit-same-window alist))))
+    (when-let* ((other-windows (thread-last
+                                 (window-list-1 nil 'never)
+                                 (delete (selected-window))))
+                (windows (or (cl-remove-if #'akirak-window--org-capture-window-p
+                                           other-windows)
+                             other-windows))
+                ;; Prefer full-height windows.
+                (windows (seq-sort-by #'window-height #'> windows))
+                (windows (seq-filter `(lambda (w)
+                                        (= (window-height w)
+                                           (window-height ,(car windows))))
+                                     windows))
+                ;; Prefer the least recently displayed window.
+                (windows (seq-sort-by #'akirak-window--display-time
+                                      #'time-less-p
+                                      windows)))
+      (window--display-buffer buffer (car windows) 'reuse))))
+
+;;;###autoload
+(defun akirak-window-display-document-buffer (buffer _)
+  (let* ((other-windows (thread-last
+                          (window-list-1 nil 'never)
+                          (delete (selected-window))))
+         (non-org-windows (cl-remove-if (apply-partially #'akirak-window-one-of-modes-p
+                                                         '(org-mode))
+                                        other-windows)))
+    (cond
+     (non-org-windows
+      (window--display-buffer buffer (car non-org-windows) 'reuse))
+     (other-windows
+      (window--display-buffer buffer (car other-windows) 'reuse)))))
 
 ;;;; Window manipulation
 
@@ -214,13 +284,48 @@ With a '- argument, the window will be `next-window'.
 With a single universal argument, it swaps two windows and keeps
 focus on the same buffer."
   (interactive "P")
-  (if (and (akirak-window--popup-p)
-           (windowp akirak-window-last-non-popup-window))
-      (select-window akirak-window-last-non-popup-window)
-    (when-let (window (akirak-window--other-window nil arg))
-      (if (equal arg '(4))
-          (window-swap-states window (selected-window))
-        (select-window window)))))
+  (if (equal arg '(16))
+      (akirak-window-select-recently-displayed)
+    (if (and (akirak-window--popup-p)
+             (windowp akirak-window-last-non-popup-window))
+        (select-window akirak-window-last-non-popup-window)
+      (when-let (window (akirak-window--other-window nil arg t))
+        (if (equal arg '(4))
+            (window-swap-states window (selected-window))
+          (select-window window))))))
+
+;;;###autoload
+(defun akirak-window-select-recently-displayed ()
+  (interactive)
+  (when-let (w (thread-last
+                 (window-list)
+                 (cl-remove-if-not #'window-live-p)
+                 (cl-remove (selected-window))
+                 (seq-sort-by #'akirak-window--display-time
+                              (lambda (a b)
+                                (not (time-less-p a b))))
+                 (car)))
+    (select-window w)))
+
+(defun akirak-window--display-time (window)
+  (buffer-local-value 'buffer-display-time (window-buffer window)))
+
+;;;###autoload
+(defun akirak-window-kill-this-buffer (&optional n)
+  (interactive "P")
+  (require 'menu-bar)
+  (kill-this-buffer)
+  (let* ((above-window (and (not (window-minibuffer-p))
+                            (window-in-direction 'above)))
+         (deleted-window (when above-window
+                           (selected-window)))
+         (next-window (if (numberp n)
+                          (akirak-window--other-window nil n)
+                        above-window)))
+    (when next-window
+      (select-window next-window))
+    (when deleted-window
+      (delete-window deleted-window))))
 
 ;;;###autoload
 (defun akirak-window-swap-two-windows (&optional arg)
@@ -234,7 +339,12 @@ The target window is determined according to the same logic as
       (window-swap-states window (selected-window))
       (select-window initial-window))))
 
-(defun akirak-window--other-window (&optional window arg)
+(defun akirak-window-send-text (text arg &optional window)
+  "Send TEXT to the window at ARG."
+  (with-selected-window (akirak-window--other-window window arg)
+    (insert text)))
+
+(defun akirak-window--other-window (&optional window arg allow-new)
   "Return the other window in a pair."
   (cond
    ;; Select a window that is not a popup.
@@ -244,7 +354,15 @@ The target window is determined according to the same logic as
    ;;  window)
    ((and (numberp arg)
          (> arg 0))
-    (akirak-window--find-column arg))
+    (if (> arg 10)
+        (let ((window (akirak-window--find-column (floor (/ arg 10)))))
+          (dotimes (_x (1- (mod arg 10)))
+            (setq window (or (window-in-direction 'below window)
+                             (if allow-new
+                                 (split-window-below nil window)
+                               window))))
+          window)
+      (akirak-window--find-column arg)))
    ((eq arg '-)
     (window-in-direction 'left window))
    ((eq arg 0)
@@ -284,10 +402,8 @@ The target window is determined according to the same logic as
 
 (defun akirak-window--find-column (n)
   "Return a window in N-th column of the frame."
-  (let ((window (frame-first-window)))
-    (dotimes (_ (1- n))
-      (setq window (window-in-direction 'right window)))
-    window))
+  (when n
+    (cadr (nth (1- n) (akirak-window--get-panes)))))
 
 ;;;###autoload
 (defun akirak-window-duplicate-state (&optional arg)
@@ -295,7 +411,7 @@ The target window is determined according to the same logic as
   (interactive)
   (let* ((source (selected-window))
          (target (if (numberp arg)
-                     (akirak-window--find-column arg)
+                     (akirak-window--other-window nil arg t)
                    (thread-last
                      (mapcar #'cadr (akirak-window--get-panes))
                      (cl-remove source)
@@ -316,6 +432,36 @@ Otherwise, it calls `akirak-window-duplicate-state'."
   (if (equal arg '(4))
       (fwb-toggle-window-split)
     (akirak-window-duplicate-state arg)))
+
+;;;###autoload
+(defun akirak-window-delete-window (&optional arg)
+  (interactive "P")
+  (let ((target-window (pcase arg
+                         ((pred numberp)
+                          (akirak-window--other-window nil arg))
+                         ('(4)
+                          (or (window-in-direction 'below)
+                              (window-in-direction 'above))))))
+    (delete-window target-window)
+    (when (and arg (numberp arg) (< arg 10))
+      (balance-windows))))
+
+;;;###autoload
+(defun akirak-window-column-prefix (&optional n)
+  "Display the buffer of the next command in the window in the N-th column."
+  ;; It would be possible to use (interactive "N") which falls back to "n", but
+  ;; I don't want to press enter.
+  (interactive "P")
+  (let ((n (or n
+               (- (read-char "Column: ") ?0))))
+    (display-buffer-override-next-command
+     `(lambda (buffer alist)
+        (let ((window (akirak-window--find-column ,n)))
+          (cons (progn
+                  (set-window-buffer window buffer)
+                  window)
+                'window)))
+     nil (format "[column %d]" n))))
 
 (defvar akirak-window-last-window-configuration nil)
 
@@ -342,6 +488,8 @@ Otherwise, it calls `akirak-window-duplicate-state'."
   "Toggle the dedicated state of the selected window."
   (interactive)
   (set-window-dedicated-p (selected-window) (not (window-dedicated-p))))
+
+(defvar akirak-window-last-nonhelp-window nil)
 
 (provide 'akirak-window)
 ;;; akirak-window.el ends here

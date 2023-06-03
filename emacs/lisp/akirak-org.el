@@ -427,17 +427,52 @@ character."
   (let ((plist (text-properties-at (point))))
     (or (when-let* ((link (plist-get plist 'htmlize-link))
                     (uri (plist-get link :uri)))
-          (save-match-data
-            (pcase uri
-              ((rx bol "id:" (group (+ anything)))
-               ;; Possibly heavy computation, but run synchronously anyway
-               (if-let* ((id (match-string-no-properties 1 uri))
-                         (file (org-id-find-id-file id))
-                         (marker (org-id-find-id-in-file id file 'markerp)))
-                   (org-with-point-at marker
-                     (akirak-org--entry-eldoc))
-                 (concat uri " (missing ID location)"))))))
+          (pcase (save-match-data
+                   (akirak-org--parse-link-uri uri))
+            (`("id" . ,id)
+             ;; Possibly heavy computation, but run synchronously anyway
+             (if-let* ((file (org-id-find-id-file id))
+                       (marker (org-id-find-id-in-file id file 'markerp)))
+                 (org-with-point-at marker
+                   (akirak-org--entry-eldoc))
+               (concat uri " (missing ID location)")))
+            (`(nil . ,path)
+             ;; An implementation that searches only within the same file. I
+             ;; will revert back to this solution if I stop using org-nlink.
+             ;;
+             ;; (let* ((pos (if (thing-at-point-looking-at org-link-bracket-re)
+             ;;                 (match-beginning 0)
+             ;;               (error "Failed to match org-link-bracket-re")))
+             ;;        (contents (org-with-wide-buffer
+             ;;                   ;; Prevent fuzzy links from matching themselves.
+             ;;                   (when-let (element (and (org-link-search path pos)
+             ;;                                           (org-element-at-point)))
+             ;;                     (buffer-substring-no-properties
+             ;;                      (org-element-property :begin element)
+             ;;                      (org-element-property :end element))))))
+             ;;   (concat "LINK: " path
+             ;;           (when contents
+             ;;             (concat "​— " contents))))
+
+             (concat "LINK: " path
+                     (save-current-buffer
+                       (when (org-nlink-open-link path)
+                         (let ((element (org-element-at-point)))
+                           (format " (found in %s): %s"
+                                   (abbreviate-file-name (buffer-file-name))
+                                   (buffer-substring-no-properties
+                                    (org-element-property :begin element)
+                                    (org-element-property :end element))))))))
+            (_
+             uri)))
         (plist-get plist 'help-echo))))
+
+(defun akirak-org--parse-link-uri (uri)
+  "Return a cons cell of (type . rest) from URI."
+  (if (string-match org-link-types-re uri)
+      (cons (match-string 1 uri)
+            (substring-no-properties uri (match-end 0)))
+    (cons nil uri)))
 
 (defun akirak-org--entry-eldoc ()
   "Return a string describing the entry at point.
@@ -501,6 +536,24 @@ The point should be at the heading."
         (symbol
          (go face))))
     props))
+
+;;;; Matching location
+
+;;;###autoload
+(defun akirak-org-matching-pair-location ()
+  "Return the location of a matching pair."
+  (cond
+   ((and (bolp)
+         (or (org-match-line org-block-regexp)
+             (org-match-line org-block-regexp)
+             (org-match-line org-property-drawer-re)
+             (org-match-line org-logbook-drawer-re)))
+    (match-end 0))
+   ((and (bolp) (org-match-line org-dblock-start-re))
+    (org-element-property :end (org-element-context)))
+   ((or (org-match-line (rx bol (* blank) "#+end" (any ":_")))
+        (org-match-line org-property-end-re))
+    (org-element-property :begin (org-element-context)))))
 
 ;;;; akirak-org-protected-mode
 
@@ -651,6 +704,15 @@ The point should be at the heading."
        (org-agenda-redo))
       (org-memento-timeline-mode
        (revert-buffer)))))
+
+;;;###autoload
+(defun akirak-org-babel-send-block-to-vterm ()
+  (interactive)
+  (pcase (org-babel-get-src-block-info)
+    (`(,_lang ,body ,(map :dir) . ,_)
+     (unless dir
+       (user-error "Please set :dir header argument first (typically in header-args property)"))
+     (akirak-vterm-run-or-send dir (string-chop-newline body)))))
 
 ;;;; Specific applications
 

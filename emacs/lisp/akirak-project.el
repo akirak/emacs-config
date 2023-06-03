@@ -81,7 +81,7 @@ display alternative actions."
   "Move the current project to another parent directory."
   (interactive)
   (let* ((root (vc-root-dir))
-         (name (file-name-nondirectory (string-remove-prefix root)))
+         (name (file-name-nondirectory (string-remove-suffix "/" root)))
          (worktrees (magit-list-worktrees))
          (new-parent (akirak-project-prompt-parent "Move the project to somewhere else: "))
          (dest (concat (file-name-as-directory new-parent) name)))
@@ -90,10 +90,10 @@ display alternative actions."
     (if (and worktrees
              (> (length worktrees) 1))
         (magit-worktree-move root dest)
-      (user-error "Multiple worktrees")
-      (dired-rename-subdir root dest))
+      (rename-file root dest))
     (project-forget-project root)
-    (akirak-project-remember-this)))
+    (akirak-project-remember-this)
+    (find-file dest)))
 
 ;;;###autoload
 (defun akirak-project-remember-this ()
@@ -214,12 +214,11 @@ display alternative actions."
     (user-error "Is a file: %s" dir))
    ((file-name-absolute-p dir)
     (make-directory dir)
-    (if (locate-dominating-file dir ".git")
-        (message "Already inside a Git repository, so not running git init")
-      (let ((default-directory dir))
+    (let ((default-directory dir))
+      (when (yes-or-no-p "Initialize a new Git repository?")
         (call-process "git" nil nil nil "init" (expand-file-name dir))
-        (project-remember-project (project-current nil dir))
-        (vterm))))
+        (project-remember-project (project-current nil dir)))
+      (vterm)))
    ((string-match-p (rx bol (+ (not (any "/"))) eol) dir)
     (let ((parent (completing-read "Parent directory: "
                                    (akirak-project-parents))))

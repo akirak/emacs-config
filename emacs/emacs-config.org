@@ -345,6 +345,7 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
                      ("c f" . "frame")
                      ("c s" . "screenshot")
                      ("c r" . "record screen")
+                     ("e" . "disk")
                      ("e" . "emacs")
                      ("n" . "nix")
                      ("S" . "secrets")))
@@ -883,7 +884,8 @@ The built-in =electric= package provides the following modes:
           version-control t
           view-read-only t
           auto-mode-case-fold nil
-          large-file-warning-threshold (* 1024 1024)
+          ;; pkgs/top-level/all-packages.nix in nixpkgs: 1.5 MB
+          large-file-warning-threshold (* 1024 1024 2)
           find-sibling-rules
           `((,(rx "lib/" (group (+ anything)) ".ex" (?  "s") eos)
              "test/\\1_test.ex"
@@ -1151,9 +1153,6 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup menu-bar
     (:status opinionated
-      (:with-map ctl-x-map
-        ;; I don't need kill-buffer when I have consult-buffer
-        (:bind "k" #'kill-this-buffer))
       (:global "<f12> <f12>" #'toggle-debug-on-error)))
 #+end_src
 *** minibuf.c                                           :minibuffer:
@@ -1349,7 +1348,19 @@ Operations on the current project
           (:unbind "p")
           ;; Rebind the key
           (:bind "p" #'akirak-consult-project-file))
-        (global-set-key (kbd "C-x M") project-prefix-map))))
+        (global-set-key (kbd "C-x M") project-prefix-map)
+
+        (add-hook 'project-find-functions
+                  (defun akirak/project-worktree-group-finder (dir)
+                    (when (string-match-p (rx bol "~/work2/"
+                                              (+ (not (any "/")))
+                                              "/"
+                                              (+ (not (any "/")))
+                                              "/")
+                                          dir)
+                      `(worktree-group ,dir))))
+        (cl-defmethod project-root ((project (head worktree-group)))
+          (cadr project)))))
 #+end_src
 **** akirak-project
 #+begin_src emacs-lisp
@@ -1875,7 +1886,13 @@ Thus I will explicitly install this package rather than using the built-in versi
       (setq switch-to-buffer-obey-display-actions t))
     (if (daemonp)
         (add-hook 'server-after-make-frame-hook #'akirak/after-frame-window-setup)
-      (add-hook 'emacs-startup-hookk #'akirak/after-frame-window-setup))
+      (add-hook 'emacs-startup-hook #'akirak/after-frame-window-setup))
+
+    (defun akirak/ad-no-obey-display-actions (orig &rest args)
+      (let ((switch-to-buffer-obey-display-actions nil))
+        (apply orig args)))
+    (advice-add 'consult-buffer :around #'akirak/ad-no-obey-display-actions)
+    (advice-add 'org-dog-find-file :around #'akirak/ad-no-obey-display-actions)
 
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
@@ -1887,9 +1904,31 @@ Thus I will explicitly install this package rather than using the built-in versi
       (add-to-list 'display-buffer-alist
                    `((or ,@(mapcar (lambda (mode) (cons 'major-mode mode))
                                    modes))
-                     display-buffer-reuse-mode-window
+                     akirak-window-reuse-mode-window-or-split-below
                      mode ,@modes)
                    t))
+    (add-to-list 'display-buffer-alist
+                 '((major-mode . vterm-mode)
+                   akirak-window-reuse-mode-window-or-split-below
+                   mode (vterm-mode))
+                 t)
+    (add-to-list 'display-buffer-alist
+                 '((or (major-mode . nov-mode)
+                       (major-mode . pdf-view-mode))
+                   akirak-window-display-document-buffer)
+                 t)
+    (add-to-list 'display-buffer-alist
+                 '((major-mode . org-agenda-mode)
+                   akirak-window-display-org-agenda-buffer
+                   (mode org-agenda-mode)))
+    (add-to-list 'display-buffer-alist
+                 '("^CAPTURE-"
+                   akirak-window-display-org-capture-buffer)
+                 t)
+    (add-to-list 'display-buffer-alist
+                 '((major-mode . org-mode)
+                   akirak-window-display-org-buffer-other-window)
+                 t)
 
     (add-to-list 'display-buffer-alist
                  '("^\\*Async Shell Command\\*"
@@ -2194,7 +2233,7 @@ Org-Babel execution backend for GraphQL source blocks
 #+begin_src emacs-lisp
 (setup (:package ob-graphql))
 #+end_src
-*** COMMENT ob-mermaid                                                         :ARCHIVE:
+*** ob-mermaid
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:53]
 :END:
@@ -2586,6 +2625,7 @@ Outline-based notes management and organizer
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
     (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
+    (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
     ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
     ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
     (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
@@ -2795,24 +2835,6 @@ A programmable workflow layer for Org mode
     (add-hook 'org-dog-before-search-hook #'akirak/org-dog-turn-on-transclusion)
 
     (add-hook 'org-dog-file-mode-hook #'org-dog-header-line-enable)
-
-    (add-hook 'org-dog-file-mode-hook
-              (defun akirak/org-dog-setup-gpt-system ()
-                (let* ((obj (org-dog-buffer-object))
-                       (title (org-dog-file-title obj))
-                       ;; Based on `gptel-directives'
-                       (msg (pcase (oref obj relative)
-                              ((rx bos "programming/")
-                               (format "You are a large language model and\
-   a programmer experienced in %s. Respond concisely."
-                                       (or title
-                                           (file-name-base (oref obj relative)))))
-                              ((and (rx bos "technology/")
-                                    (guard title))
-                               (format "You are a large language model and\
-   an engineer experienced in %s. Respond concisely." title)))))
-                  (when msg
-                    (setq gptel--system-message msg)))))
 
     (add-hook 'org-dog-file-registration-hook
               (defun akirak/org-dog-add-agenda-file (file-obj)
@@ -3206,7 +3228,10 @@ Time blocking with Org
                            "✲"))
                :template (lambda (tags)
                            (when tags
-                             `(:tags ,tags))))))
+                             `(:tags ,tags)))))
+            org-memento-order-group
+            (defun akirak/org-memento-group-order (x)
+              (car-safe (org-memento-order-group x))))
 
       (add-hook 'org-memento-open-journal-hook
                 (defun akirak/org-memento-goto-entry-end ()
@@ -3265,7 +3290,37 @@ Utilities for in-file links
   (setup (:package org-nlink)
     (:with-feature org
       (:with-map org-mode-map
-        (:bind "M-s l" #'org-nlink-occur))))
+        (:bind "M-s l" #'org-nlink-occur)))
+
+    (:set org-nlink-extra-files
+          (defun akirak/org-nlink-extra-org-files ()
+            (require 'org-dog-context)
+            (require 'org-dog-overview)
+            (append (thread-last
+                      (org-dog-context-file-objects
+                       (org-dog-context-org-tags-1 (org-get-tags)))
+                      (mapcar (lambda (obj)
+                                (oref obj absolute))))
+                    (when-let (filename (buffer-file-name (org-base-buffer (current-buffer))))
+                      (thread-last
+                        (org-dog-overview-scan (list (abbreviate-file-name filename))
+                                               :clear t)
+                        (mapcar #'car)))))
+          org-nlink-target-verify-function
+          (defun akirak/org-nlink-verify-location ()
+            (require 'org-dog)
+            (let ((obj (org-dog-buffer-object)))
+              (if (and obj
+                       (object-of-class-p obj 'org-dog-facade-datetree-file)
+                       (looking-at org-complex-heading-regexp)
+                       (= 1 (- (match-end 1) (match-beginning 1)))
+                       (not (equal "Index" (match-string 4))))
+                  (progn
+                    (org-end-of-subtree)
+                    nil)
+                t))))
+
+    (add-hook 'org-open-link-functions #'org-nlink-open-link))
 #+end_src
 **** consult-org-nlink
 #+begin_quote
@@ -3342,7 +3397,15 @@ Org Query Language, search command, and agenda-like view
     (advice-add 'org-ql-view--link-store
                 :before-while
                 (defun akirak/org-ql-view-link-needed-p (&rest _args)
-                  (eq this-command 'org-store-link))))
+                  (eq this-command 'org-store-link)))
+
+    (:when-loaded
+      (require 'akirak-org-ql-view)
+      (:set akirak-org-ql-view-super-group-alist
+            (akirak-org-ql-view-update-super-group-alist))
+      (transient-replace-suffix 'org-ql-view-dispatch
+        'org-ql-view--transient-super-groups
+        '("g" "Groups" akirak-org-ql-view-set-super-groups))))
 #+end_src
 *** org-recur
 :PROPERTIES:
@@ -3775,6 +3838,11 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-consult-org
     (:global "M-s M-j" #'akirak-consult-org-clock-history))
 #+end_src
+*** akirak-disk
+#+begin_src elisp
+  (setup akirak-disk
+    (:global "<f12> d m" #'akirak-disk-findmnt))
+#+end_src
 *** akirak-org-log
 #+begin_src emacs-lisp
   (setup akirak-org-log
@@ -3860,6 +3928,13 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (global-set-key (kbd "C-c a") #'akirak-insert)
   (global-set-key (kbd "C-x a w") #'akirak-insert-window-title)
 #+end_src
+*** akirak-log
+#+begin_src elisp
+  (setup akirak-log
+    (:set akirak-log-private-file (locate-user-emacs-file "log/latest.org"))
+    (with-eval-after-load 'org-agenda
+      (add-to-list 'org-agenda-files akirak-log-private-file)))
+#+end_src
 *** COMMENT akirak-japanese                                            :ARCHIVE:
 #+begin_src emacs-lisp
   (setup akirak-japanese
@@ -3888,7 +3963,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-paren
     (:with-mode akirak-paren-jump-mode
       ;; Don't turn on the mode in special modes, e.g. vterm.
-      (:hook-into prog-mode-hook text-mode-hook)))
+      (:hook-into prog-mode-hook text-mode-hook))
+    (add-hook 'org-mode-hook
+              (defun akirak/setup-org-pair-match ()
+                (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
+                          nil t))))
 #+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
@@ -3947,13 +4026,18 @@ This is an extra functions for window management.
 #+begin_src emacs-lisp
   (setup akirak-window
     (:status opinionated
+      (:with-map ctl-x-map
+        ;; I don't need kill-buffer when I have consult-buffer
+        (:bind "k" #'akirak-window-kill-this-buffer))
       (:global "C-2" #'akirak-window-split-vertically
                "C-3" #'akirak-window-split-and-select
                "C-4" #'akirak-window-setup-columns
                "C-x o" #'akirak-window-cycle-two-windows
                "C-x M-o" #'akirak-window-swap-two-windows
+               "C-x `" #'akirak-window-column-prefix
                "C-c v" #'akirak-window-open-in-new-tab
                "M-o" #'akirak-window-moderate-1
+               [remap delete-window] #'akirak-window-delete-window
                [remap abort-recursive-edit] #'akirak-window-cleanup)))
 #+end_src
 *** akirak-wordnet
@@ -4169,7 +4253,7 @@ Show number of matches in mode-line while searching
 :CREATED_TIME: [2023-03-18 Sat 15:40]
 :END:
 #+begin_quote
-Elixir tooling integration into Emacs
+Elixir tooling integration
 [[https://github.com/Sasanidas/Apprentice]]
 #+end_quote
 
@@ -4264,14 +4348,36 @@ A major mode to edit Beancount input files.
     ;; I don't like the default keybindings on C-c, so change the prefix.
     (:set beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
 
+    (:reformatters
+     (bean-format :program "bean-format"))
+
     (:with-mode beancount-mode
       (:file-match "\\.beancount\\'" "\\.bean\\'")
+      (:hook bean-format-on-save-mode)
       (:when-loaded
+        (define-key beancount-mode-map
+                    (vconcat beancount-mode-map-prefix [?i])
+                    #'akirak-beancount-add-transaction)
+        (define-key beancount-mode-map
+                    (vconcat beancount-mode-map-prefix [?d])
+                    #'akirak-beancount-insert-date)
+
         (:hook
          (defun akirak/beancount-turn-on-outline-mode ()
-           (outline-minor-mode t)))
-        (:bind
-         "d" #'beancount-insert-date))))
+           (outline-minor-mode t))))))
+#+end_src
+**** flymake-bean-check
+:PROPERTIES:
+:CREATED_TIME: [2023-05-21 Sun 18:11]
+:END:
+#+begin_quote
+A Flymake backend for bean-check
+[[https://github.com/akirak/flymake-bean-check]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-bean-check)
+    (add-hook 'beancount-mode-hook #'flymake-bean-check-enable))
 #+end_src
 *** blamer                                                      :VC:
 :PROPERTIES:
@@ -4542,7 +4648,7 @@ An unofficial Copilot plugin for Emacs
 :CREATED_TIME: [2022-01-05 Wed 20:19]
 :END:
 #+begin_quote
-Completion Overlay Region FUnction
+COmpletion in Region FUnction
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -4809,6 +4915,18 @@ Hide dotfiles in dired
 #+end_src
 
 dired-k depends on dired-x, which has a poor code quality.
+*** docker
+:PROPERTIES:
+:CREATED_TIME: [2023-05-16 Tue 11:09]
+:END:
+#+begin_quote
+Interface to Docker
+[[https://github.com/Silex/docker.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package docker))
+#+end_src
 *** docopt
 :PROPERTIES:
 :CREATED_TIME: [2022-12-14 Wed 18:22]
@@ -4903,8 +5021,9 @@ Jump to definition for 50+ languages without configuration
               ;; Make dumb-jump take precedence over the builtin backend,
               ;; to search the project code whenever possible.
               (defun akirak/elisp-setup-dumb-jump ()
-                (add-to-list 'xref-backend-functions
-                             #'dumb-jump-xref-activate))))
+                (add-hook 'xref-backend-functions
+                          #'dumb-jump-xref-activate
+                          80 'local))))
 #+end_src
 *** dune                                                    :OCaml:@extra:fstar:
 :PROPERTIES:
@@ -4918,7 +5037,7 @@ Integration with the dune build system
 #+begin_src emacs-lisp
 (setup (:package dune))
 #+end_src
-*** COMMENT ediprolog                               :Prolog:ARCHIVE:
+*** ediprolog                                                           :Prolog:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
 :END:
@@ -4929,7 +5048,6 @@ Emacs Does Interactive Prolog
 #+begin_src emacs-lisp
   (setup (:package ediprolog)
     ;; Set `ediprolog-system' and `ediprolog-program' depending on the system
-    (:nixpkgs "scryer-prolog")
 
     (:with-feature prolog
       ;; In other modes, this key is bound to repl.
@@ -5124,7 +5242,7 @@ Consult integration for Embark
   (setup embark-org
     (eval-after-load 'org #'akirak-embark-setup-org-heading))
 #+end_src
-*** ement                                                               :social:
+*** COMMENT ement                                                       :social:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-30 Fri 12:44]
 :END:
@@ -5769,9 +5887,40 @@ A simple ChatGPT client
 #+begin_src emacs-lisp
   (setup (:package gptel)
     (:global "C-c p" #'gptel-send
-             "<f12> a g" #'gptel)
+             "<f12> a g" #'gptel
+             "<f12> a C-g" #'gptel-abort)
     (:when-loaded
-      (fset 'gptel--update-header-line #'ignore)))
+      (fset 'gptel--update-header-line #'ignore))
+
+    (add-hook 'org-mode-hook
+              (defun akirak/org-dog-setup-gpt-system ()
+                (when-let* ((obj (org-dog-buffer-object))
+                            (title (or (org-dog-file-title obj)
+                                       (thread-first
+                                         (file-name-base (oref obj absolute))
+                                         (split-string "-")
+                                         (string-join " "))))
+                            (msg (pcase (oref obj relative)
+                                   ;; System messages are based on examples in
+                                   ;; `gptel-directives'.
+                                   ((rx bos "programming/")
+                                    (format "You are a large language model and\
+   a programmer experienced in %s. Respond concisely."
+                                            (or title
+                                                (file-name-base (oref obj relative)))))
+                                   ((and (rx bos "technology/")
+                                         (guard title))
+                                    (format "You are a large language model and\
+   an engineer experienced in %s. Respond concisely." title))
+                                   ((and (rx bos "languages/"
+                                             (group (+ (not (any "/"))))
+                                             (any "/.")))
+                                    (format "You are a large language model and\
+   an interpreter who are good at %s. Respond concisely."
+                                            (match-string 1 (oref obj relative)))))))
+                  ;; In case gptel.el has not been loaded yet, use
+                  ;; `setq-local' to ensure it is set as a local variable.
+                  (setq-local gptel--system-message msg)))))
 #+end_src
 *** graphql-mode                                               :web:
 :PROPERTIES:
@@ -5951,6 +6100,19 @@ Replace things with predefined alternatives
       (define-key embark-defun-map "`" #'huan-defun)
       (define-key embark-identifier-map "`" #'huan-symbol)))
 #+end_src
+*** idris-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-05-14 Sun 23:16]
+:END:
+#+begin_quote
+Major mode for editing Idris code
+[[https://github.com/idris-hackers/idris-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package idris-mode)
+    (:file-match "\\.idr\\'"))
+#+end_src
 *** iedit                                                  :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 16:51]
@@ -6109,6 +6271,12 @@ For Emacs Lisp, I use lispy.
        (when (featurep 'puni)
          (puni-mode (not lispy-mode)))))
 
+    ;; I have removed lispy-occur.el from the package, so disable the command.
+    (fset 'lispy-occur #'ignore)
+    ;; Undefine this command because I am not using it and it adds ace-window
+    ;; dependency.
+    (fset 'lispy-eval-other-window #'ignore)
+
     (advice-add 'lispy-kill :around
                 (defun akirak/ad-around-lispy-kill (orig &rest args)
                   (save-restriction
@@ -6133,7 +6301,9 @@ For Emacs Lisp, I use lispy.
       (:unbind "M-i")
 
       (:with-map lispy-mode-map-special
-        (:unbind "O"))
+        (:unbind "p"                      ; lispy-eval-other-window
+                 "y"                      ;lispy-occur
+                 "O"))
 
       (:with-map lispy-mode-map-lispy
         ;; Prevent conflicts with other custom keybindings
@@ -6410,7 +6580,8 @@ Major mode for Markdown-formatted text
 
 #+begin_src emacs-lisp
   (setup (:package markdown-mode)
-    (:file-match "\\.md\\'" "\\.markdown\\'")
+    (:file-match "\\.md\\'" "\\.markdown\\'"
+                 "\\.livemd\\'")
     (:with-mode gfm-mode
       (:file-match "README.md\\'"))
 
@@ -6427,7 +6598,7 @@ Client for Mastodon, a federated social network
 #+begin_src emacs-lisp
 (setup (:package mastodon))
 #+end_src
-*** COMMENT mermaid-mode                                        :@extra:mermaid:ARCHIVE:
+*** mermaid-mode                                        :@extra:mermaid:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
 :END:
@@ -6681,6 +6852,17 @@ Featureful EPUB reader mode
                          #'nov-render-document
                          nil t)))))
 #+end_src
+*** ob-async
+:PROPERTIES:
+:CREATED_TIME: [2023-05-20 Sat 18:46]
+:END:
+#+begin_quote
+Asynchronous org-babel src block execution
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package ob-async))
+#+end_src
 *** olivetti                                               :writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-22 Fri 23:59]
@@ -6855,6 +7037,7 @@ Summon and dismiss buffers as popups
                                      "^\\*Scratch-Input-Method"
                                      "^ \\*Agenda Commands\\*"
                                      "^\\*Register Preview\\*"
+                                     "^\\*Shell Command Output\\*"
                                      "^\\*edit string\\*"
                                      "^\\*edit-indirect"
                                      "^\\*scratch from selection\\*"
@@ -6884,6 +7067,7 @@ Summon and dismiss buffers as popups
                 (recenter -1 t)))
 
     (:bind "M-\"" #'popper-cycle
+           "M-' RET" #'popper-toggle-type
            "M-' M-'" #'popper-toggle-latest
            "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-vterm-for-project
@@ -7533,7 +7717,9 @@ Fully-featured terminal emulator
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package vterm))
+  (setup (:package vterm)
+    (:unbind "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9" "M-0"
+             "M-:" "M-g"))
 #+end_src
 *** vue-mode
 :PROPERTIES:
@@ -7762,7 +7948,8 @@ Define how Org entries are displayed by certain commands.
                                                 (org-with-point-at marker
                                                   (org-dog-indirect-buffer)))))
                 (set-window-configuration org-window-config-before-follow-link)
-                (switch-to-buffer indirect-buffer)
+                (let ((switch-to-buffer-obey-display-actions nil))
+                  (switch-to-buffer indirect-buffer nil t))
                 (with-current-buffer indirect-buffer
                   (goto-char marker)
                   (when org-dog-new-indirect-buffer-p
@@ -7772,7 +7959,8 @@ Define how Org entries are displayed by certain commands.
 
   (add-hook 'org-agenda-after-show-hook
             (defun akirak/org-agenda-show-entry ()
-              (switch-to-buffer (org-dog-indirect-buffer))))
+              (let ((switch-to-buffer-obey-display-actions nil))
+                (switch-to-buffer (org-dog-indirect-buffer) nil t))))
 
   (defun akirak/org-goto-narrow-hook ()
     (org-show-context)
@@ -7782,8 +7970,9 @@ Define how Org entries are displayed by certain commands.
 
   (defun akirak/org-goto-indirect-hook ()
     (when (fboundp 'org-dog-indirect-buffer)
-      (let ((buffer (org-dog-indirect-buffer)))
-        (switch-to-buffer buffer)
+      (let ((buffer (org-dog-indirect-buffer))
+            (switch-to-buffer-obey-display-actions nil))
+        (switch-to-buffer buffer nil t)
         (when org-dog-new-indirect-buffer-p
           (with-current-buffer buffer
             (org-show-context)
@@ -8013,16 +8202,17 @@ They are built into big functions in the library, so I use =el-patch= to remove 
     (:status opinionated
       (defun akirak/ad-reuse-mode-window (&rest _)
         ;; Assume `switch-to-buffer-obey-display-actions' is t.
-        (display-buffer-override-next-command
-         (lambda (buffer alist)
-           (let ((alist (append '((inhibit-same-window . t)) alist))
-                 window type)
-             (if (setq window (display-buffer-reuse-mode-window
-                               buffer alist))
-                 (setq type 'reuse)
-               (setq window (display-buffer-use-some-window buffer alist)
-                     type 'reuse))
-             (cons window type)))))
+        (unless (car-safe display-buffer-overriding-action)
+          (display-buffer-override-next-command
+           (lambda (buffer alist)
+             (let ((alist (append '((inhibit-same-window . t)) alist))
+                   window type)
+               (if (setq window (display-buffer-reuse-mode-window
+                                 buffer alist))
+                   (setq type 'reuse)
+                 (setq window (display-buffer-use-some-window buffer alist)
+                       type 'reuse))
+               (cons window type))))))
 
       (advice-add 'org-agenda-goto
                   :before #'akirak/ad-reuse-mode-window)
@@ -8105,11 +8295,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 205 |
+| [[org-ql-search:tags:packages][packages]]            | 211 |
 | [[org-ql-search:tags:visual][visual]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
-| [[org-ql-search:tags:@extra][@extra]]              |   9 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -8138,9 +8328,10 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Japanese][Japanese]]            |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
+| [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
-| [[org-ql-search:tags:social][social]]              |   2 |
+| [[org-ql-search:tags:beancount][beancount]]           |   2 |
 | [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
@@ -8150,14 +8341,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:text_mode][text_mode]]           |   1 |
 | [[org-ql-search:tags:text][text]]                |   1 |
 | [[org-ql-search:tags:profiling][profiling]]           |   1 |
-| [[org-ql-search:tags:Prolog][Prolog]]              |   1 |
 | [[org-ql-search:tags:capture][capture]]             |   1 |
 | [[org-ql-search:tags:documentation][documentation]]       |   1 |
 | [[org-ql-search:tags:secrets][secrets]]             |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:Elixir][Elixir]]              |   1 |
-| [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
 | [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
@@ -8171,6 +8360,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
+| [[org-ql-search:tags:social][social]]              |   1 |
+| [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:themes][themes]]              |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |
@@ -8232,19 +8423,20 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 To use these features, they need to be turned on at build time.
 
 #+BEGIN: org-ql :query "tags:@extra" :columns (heading todo)
-| Heading      | Todo |
-|--------------+------|
-| [[beancount][beancount]]    |      |
-| [[copilot][copilot]]      |      |
-| [[dune][dune]]         |      |
-| [[flycheck][flycheck]]     |      |
-| [[fstar-mode][fstar-mode]]   |      |
-| [[lean4-mode][lean4-mode]]   |      |
-| [[lsp-mode][lsp-mode]]     |      |
-| [[mermaid-mode][mermaid-mode]] |      |
-| [[Coq][Coq]]          |      |
-| [[tuareg][tuareg]]       |      |
-| [[utop][utop]]         |      |
+| Heading            | Todo |
+|--------------------+------|
+| [[beancount][beancount]]          |      |
+| [[flymake-bean-check][flymake-bean-check]] |      |
+| [[copilot][copilot]]            |      |
+| [[dune][dune]]               |      |
+| [[flycheck][flycheck]]           |      |
+| [[fstar-mode][fstar-mode]]         |      |
+| [[lean4-mode][lean4-mode]]         |      |
+| [[lsp-mode][lsp-mode]]           |      |
+| [[mermaid-mode][mermaid-mode]]       |      |
+| [[Coq][Coq]]                |      |
+| [[tuareg][tuareg]]             |      |
+| [[utop][utop]]               |      |
 #+END:
 *** Links
 :PROPERTIES:

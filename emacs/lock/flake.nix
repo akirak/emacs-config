@@ -8,16 +8,16 @@
       repo = "academic-phrases";
       type = "github";
     };
-    ace-window = {
-      flake = false;
-      owner = "abo-abo";
-      repo = "ace-window";
-      type = "github";
-    };
     aggressive-indent = {
       flake = false;
       owner = "Malabarba";
       repo = "aggressive-indent-mode";
+      type = "github";
+    };
+    aio = {
+      flake = false;
+      owner = "skeeto";
+      repo = "emacs-aio";
       type = "github";
     };
     akirak = {
@@ -34,8 +34,7 @@
     };
     apprentice = {
       flake = false;
-      owner = "akirak";
-      ref = "prefix-map";
+      owner = "Sasanidas";
       repo = "Apprentice";
       type = "github";
     };
@@ -219,6 +218,12 @@
       repo = "dired-hacks";
       type = "github";
     };
+    docker = {
+      flake = false;
+      owner = "Silex";
+      repo = "docker.el";
+      type = "github";
+    };
     docopt = {
       flake = false;
       owner = "r0man";
@@ -253,6 +258,12 @@
       flake = false;
       owner = "ocaml";
       repo = "dune";
+      type = "github";
+    };
+    ediprolog = {
+      flake = false;
+      owner = "triska";
+      repo = "ediprolog";
       type = "github";
     };
     edit-indirect = {
@@ -315,13 +326,6 @@
       repo = "embark";
       type = "github";
     };
-    ement = {
-      flake = false;
-      owner = "alphapapa";
-      ref = "stable";
-      repo = "ement.el";
-      type = "github";
-    };
     envrc = {
       flake = false;
       owner = "purcell";
@@ -381,6 +385,12 @@
       flake = false;
       owner = "flycheck";
       repo = "flycheck";
+      type = "github";
+    };
+    flymake-bean-check = {
+      flake = false;
+      owner = "akirak";
+      repo = "flymake-bean-check";
       type = "github";
     };
     flymake-eslint = {
@@ -551,6 +561,12 @@
       repo = "hydra";
       type = "github";
     };
+    idris-mode = {
+      flake = false;
+      owner = "idris-hackers";
+      repo = "idris-mode";
+      type = "github";
+    };
     iedit = {
       flake = false;
       owner = "victorhge";
@@ -561,12 +577,6 @@
       flake = false;
       owner = "purcell";
       repo = "inheritenv";
-      type = "github";
-    };
-    ivy = {
-      flake = false;
-      owner = "abo-abo";
-      repo = "swiper";
       type = "github";
     };
     jq-mode = {
@@ -677,6 +687,12 @@
       type = "git";
       url = "https://codeberg.org/martianh/mastodon.el.git";
     };
+    mermaid-mode = {
+      flake = false;
+      owner = "abrochard";
+      repo = "mermaid-mode";
+      type = "github";
+    };
     mini-modeline = {
       flake = false;
       owner = "kiennq";
@@ -744,10 +760,22 @@
       repo = "oahu.el";
       type = "sourcehut";
     };
+    ob-async = {
+      flake = false;
+      owner = "astahlman";
+      repo = "ob-async";
+      type = "github";
+    };
     ob-graphql = {
       flake = false;
       owner = "jdormit";
       repo = "ob-graphql";
+      type = "github";
+    };
+    ob-mermaid = {
+      flake = false;
+      owner = "arnm";
+      repo = "ob-mermaid";
       type = "github";
     };
     ob-restclient = {
@@ -1016,6 +1044,12 @@
       repo = "PG";
       type = "github";
     };
+    prop-menu = {
+      flake = false;
+      owner = "david-christiansen";
+      repo = "prop-menu-el";
+      type = "github";
+    };
     puni = {
       flake = false;
       owner = "AmaiKinono";
@@ -1139,12 +1173,6 @@
       flake = false;
       owner = "rougier";
       repo = "svg-lib";
-      type = "github";
-    };
-    swiper = {
-      flake = false;
-      owner = "abo-abo";
-      repo = "swiper";
       type = "github";
     };
     symbol-overlay = {

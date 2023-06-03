@@ -128,21 +128,32 @@
         (eval post)))))
 
 (defun akirak-snippet--run-prompt (entry)
-  (gptel-request (concat (akirak-snippet-entry-body entry)
-                         (when (use-region-p)
-                           (concat "\n\n"
-                                   (buffer-substring-no-properties
-                                    (region-beginning) (region-end)))))
-                 :system (or (buffer-local-value 'gptel--system-message
-                                                 (find-buffer-visiting
-                                                  (akirak-snippet-entry-filename entry)))
-                             gptel--system-message)))
+  (require 'gptel)
+  (let* ((string (when (use-region-p)
+                   (buffer-substring-no-properties
+                    (region-beginning) (region-end))))
+         (in-place (not (string-match-p "\n" string))))
+    (when in-place
+      (delete-region (region-beginning) (region-end)))
+    (gptel-request (concat (akirak-snippet-entry-body entry)
+                           (when string
+                             (concat "\n\n" string)))
+                   :in-place in-place
+                   :system (or (buffer-local-value 'gptel--system-message
+                                                   (find-buffer-visiting
+                                                    (akirak-snippet-entry-filename entry)))
+                               (alist-get 'default gptel-directives)))))
 
 (cl-defun akirak-snippet--next-block (&key file name description)
   (re-search-forward akirak-snippet-block-regexp)
   (let* ((element (org-element-context))
          (olp (org-get-outline-path))
          (args (read (format "(%s)" (org-element-property :parameters element))))
+         (body (akirak-snippet--unindent
+                (or (org-element-property :value element)
+                    (buffer-substring-no-properties
+                     (org-element-property :contents-begin element)
+                     (org-element-property :contents-end element)))))
          (name (or (when-let (name (plist-get args :name))
                      (pcase name
                        ;; When 'literal is given as the :name property,
@@ -157,12 +168,7 @@
                        ;; string
                        (_
                         name)))
-                   name))
-         (body (akirak-snippet--unindent
-                (or (org-element-property :value element)
-                    (buffer-substring-no-properties
-                     (org-element-property :contents-begin element)
-                     (org-element-property :contents-end element))))))
+                   name)))
     (make-akirak-snippet-entry
      :type (cl-ecase (org-element-type element)
              (src-block
@@ -298,7 +304,6 @@ template."
     (org-capture)))
 
 (defun akirak-snippet--after-capture-finalize ()
-  (akirak-snippet-clear)
   (remove-hook 'org-capture-after-finalize-hook
                #'akirak-snippet--after-capture-finalize))
 

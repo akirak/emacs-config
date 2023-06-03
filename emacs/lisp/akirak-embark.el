@@ -69,14 +69,10 @@
   :doc "Keymap for Org blocks."
   "c" #'org-ctrl-c-ctrl-c)
 
-(defvar-keymap akirak-embark-org-src-map
+(defvar-keymap akirak-embark-org-babel-block-map
   :parent akirak-embark-org-block-map
+  "v" #'akirak-org-babel-send-block-to-vterm
   "w" #'embark-copy-as-kill)
-
-(defvar-keymap akirak-embark-org-sh-src-map
-  :parent akirak-embark-org-src-map
-  "v" #'akirak-embark-send-to-vterm
-  "V" #'akirak-embark-send-to-new-vterm)
 
 (defvar-keymap akirak-embark-org-prompt-map
   :parent akirak-embark-org-block-map)
@@ -84,6 +80,7 @@
 (defvar akirak-embark-git-file-map
   (let ((map (make-composed-keymap nil embark-general-map)))
     (define-key map "k" #'akirak-consult-git-revert-file)
+    (define-key map "s" #'akirak-consult-magit-stage-file)
     (define-key map "c" #'akirak-consult-magit-stage-file-and-commit)
     map))
 
@@ -167,6 +164,19 @@
       (when (fboundp 'pulse-momentary-highlight-one-line)
         (pulse-momentary-highlight-one-line)))))
 
+(defun akirak-embark-org-copy-first-block ()
+  (interactive)
+  (org-with-point-at akirak-embark-target-org-marker
+    (re-search-forward org-block-regexp (org-entry-end-position))
+    (let* ((elem (org-element-context))
+           (content (string-chop-newline
+                     (or (org-element-property :value elem)
+                         (buffer-substring-no-properties
+                          (org-element-property :contents-begin elem)
+                          (org-element-property :contents-end elem))))))
+      (kill-new content)
+      (message "Saved to the kill ring: %s" content))))
+
 (defun akirak-embark-org-point-to-register ()
   (interactive)
   (let ((register (register-read-with-preview "Point to register: "))
@@ -187,6 +197,7 @@
     (define-key map "I" (akirak-embark-run-at-marker org-clock-in))
     (define-key map "l" (akirak-embark-run-at-marker org-store-link))
     (define-key map "t" (akirak-embark-run-at-marker org-todo))
+    (define-key map "W" #'akirak-embark-org-copy-first-block)
     (define-key map (kbd "C-o") #'akirak-embark-org-open-link-in-entry)
     (define-key map "?" #'akirak-embark-org-point-to-register)
     map))
@@ -217,6 +228,7 @@
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
   (define-key embark-file-map (kbd "C-c C-T") #'akirak-tailscale-copy-file)
   (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
+  (define-key embark-region-map "V" #'akirak-gpt-translate-vocabulary)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
@@ -235,9 +247,7 @@
   (add-to-list 'embark-keymap-alist
                '(image-file . akirak-embark-image-file-map))
   (add-to-list 'embark-keymap-alist
-               '(org-src-block . akirak-embark-org-src-map))
-  (add-to-list 'embark-keymap-alist
-               '(org-sh-src-block . akirak-embark-org-sh-src-map))
+               '(org-src-block . akirak-embark-org-babel-block-map))
   (add-to-list 'embark-keymap-alist
                '(org-prompt-special-block . akirak-embark-org-prompt-map))
   (add-to-list 'embark-keymap-alist
@@ -259,7 +269,11 @@
                '(copy-to-register embark--mark-target))
   (add-to-list 'embark-pre-action-hooks
                '(project-query-replace-regexp
-                 embark--beginning-of-target embark--unmark-target)))
+                 embark--beginning-of-target embark--unmark-target))
+
+  (add-to-list 'embark-target-injection-hooks
+               '(akirak-org-babel-send-block-to-vterm
+                 embark--ignore-target)))
 
 ;;;###autoload
 (defun akirak-embark-setup-org-heading ()
@@ -310,30 +324,27 @@
              `(url ,href . ,bounds)))))))))
 
 (defun akirak-embark-target-org-element ()
-  (when (derived-mode-p 'org-mode)
-    (require 'org-element)
-    (when-let (element (org-element-context))
-      (cl-case (org-element-type element)
-        (src-block
-         `(,(if (member (org-element-property :language element)
-                        '("sh" "shell"))
-                'org-sh-src-block
-              'org-src-block)
-           ,(string-trim (org-element-property :value element))
-           . ,(cons (org-element-property :begin element)
-                    (org-element-property :end element))))
-        (special-block
-         (let ((cbegin (org-element-property :contents-begin element))
-               (cend (org-element-property :contents-end element)))
-           `(,(pcase (org-element-property :type element)
-                ("prompt"
-                 'org-prompt-special-block)
-                (_
-                 'org-special-block))
-             ,(when (and cbegin cend)
-                (buffer-substring-no-properties cbegin cend))
-             . ,(cons (org-element-property :begin element)
-                      (org-element-property :end element)))))))))
+  (when (and (derived-mode-p 'org-mode)
+             (org-match-line org-block-regexp))
+    (if (equal "src" (match-string 1))
+        (pcase (save-match-data (org-babel-get-src-block-info))
+          (`(,_lang ,body ,plist . ,_)
+           `(org-src-block
+             ,(string-trim body)
+             . ,(cons (match-beginning 0)
+                      (match-end 0)))))
+      (let* ((element (org-element-context))
+             (cbegin (org-element-property :contents-begin element))
+             (cend (org-element-property :contents-end element)))
+        `(,(pcase (org-element-property :type element)
+             ("prompt"
+              'org-prompt-special-block)
+             (_
+              'org-special-block))
+          ,(when (and cbegin cend)
+             (buffer-substring-no-properties cbegin cend))
+          . ,(cons (org-element-property :begin element)
+                   (org-element-property :end element)))))))
 
 (defun akirak-embark-target-org-heading ()
   (when (derived-mode-p 'org-mode)
@@ -428,35 +439,6 @@
   (when-let (section (and (featurep 'magit-section)
                           (magit-current-section)))
     (cons 'magit-section section)))
-
-(defun akirak-embark-send-to-vterm (string)
-  "Send STRING to an existing vterm session."
-  (interactive (list (completing-read
-                      "Vterm: "
-                      (or (thread-last
-                            (buffer-list)
-                            (seq-filter (lambda (buffer)
-                                          (eq (buffer-local-value 'major-mode buffer)
-                                              'vterm-mode)))
-                            (mapcar #'buffer-name))
-                          (user-error "No vterm session")))))
-  (with-current-buffer (get-buffer buffer)
-    (vterm-send-string string)))
-
-(defun akirak-embark-send-to-new-vterm (string)
-  "Send STRING to a new vterm session."
-  (interactive)
-  (let* ((pr (project-current))
-         (root (when pr (project-root pr)))
-         (default-directory (completing-read "Directory: "
-                                             `(,default-directory
-                                               ,@(when (and root
-                                                            (not (file-equal-p root
-                                                                               default-directory)))
-                                                   (list root))
-                                               ,@(akirak-project-parents)))))
-    (with-current-buffer (vterm 'new)
-      (vterm-send-string string))))
 
 (defun akirak-embark-kill-directory-buffers (directory)
   "Kill all buffers in DIRECTORY."

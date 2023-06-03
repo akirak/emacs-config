@@ -7,6 +7,7 @@
           "const"
           "class")))
 
+;;;###autoload
 (defun akirak-typescript-beginning-of-defun (&optional arg)
   "An alternative `beginning-of-defun' that supports modern styles.
 

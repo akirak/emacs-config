@@ -51,18 +51,20 @@
     (kill-new text)))
 
 (cl-defun akirak-scratch-with-input-method (input-method &key language)
-  (with-current-buffer (get-buffer-create
-                        (format "*Scratch-Input-Method<%s>*"
-                                input-method))
-    (set-input-method input-method)
-    (akirak-scratch-mode 1)
-    (setq-local header-line-format
-                (list (if language
-                          (format "Type %s. " language)
-                        "")
-                      (substitute-command-keys
-                       "\\[akirak-scratch-kill-new-and-close] to save to kill ring, \\[akirak-scratch-duckduckgo] to search, \\[kill-this-buffer] to cancel")))
-    (pop-to-buffer (current-buffer))))
+  ;; Just in case the default directory no longer exists, set it to a safe one.
+  (let ((default-directory user-emacs-directory))
+    (with-current-buffer (get-buffer-create
+                          (format "*Scratch-Input-Method<%s>*"
+                                  input-method))
+      (set-input-method input-method)
+      (akirak-scratch-mode 1)
+      (setq-local header-line-format
+                  (list (if language
+                            (format "Type %s. " language)
+                          "")
+                        (substitute-command-keys
+                         "\\[akirak-scratch-kill-new-and-close] to save to kill ring, \\[akirak-scratch-duckduckgo] to search, \\[kill-this-buffer] to cancel")))
+      (pop-to-buffer (current-buffer)))))
 
 ;;;###autoload
 (defun akirak-scratch-japanese ()

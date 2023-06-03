@@ -396,6 +396,7 @@
                                    akirak-capture-doct-options nil)
                              (akirak-capture-doct))
     :transient t)
+   ("F" "Hotfix" akirak-capture-hotfix)
    ("/" "Tag prompt" akirak-capture-entry-with-tag
     :transient t)]
 
@@ -421,8 +422,7 @@
      (lambda ()
        (interactive)
        (akirak-capture-short-note
-        (akirak-capture--maybe-read-heading "Add an event or note: ")))
-     :transient t)
+        (akirak-capture--maybe-read-heading "Add an event or note: "))))
     ("aa" "Schedule block"
      (lambda ()
        (interactive)
@@ -462,12 +462,7 @@
    ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
    ("L" "Journal" akirak-capture-journal-item
-    :if (lambda () (eq major-mode 'org-mode)))
-   ("P" "Placeholder"
-    (lambda ()
-      (interactive)
-      (org-placeholder-capture-input
-       (akirak-capture--maybe-read-heading))))]
+    :if (lambda () (eq major-mode 'org-mode)))]
 
   (interactive)
   (cond
@@ -489,7 +484,8 @@
   (call-interactively #'org-store-link)
   (let ((link (pop org-stored-links)))
     (org-link-make-string (car link)
-                          (read-from-minibuffer "Description: " (cdr link)))))
+                          (read-from-minibuffer "Description: "
+                                                (cadr link)))))
 
 (defcustom akirak-capture-tag-alist
   '(("@troubleshooting"
@@ -675,6 +671,29 @@
                (org-dog-file (oref target absolute))
                (string target)))))
 
+(defun akirak-capture-hotfix ()
+  "Start clocking a hotfix activity on the current line."
+  (interactive)
+  ;; Similar to `akirak-capture-clock-in'.
+  (pcase (akirak-org-clock-find-commit-entry)
+    ((and (map :marker :summary)
+          (guard marker))
+     (let ((org-capture-entry
+            (car (doct
+                  `((""
+                     :keys ""
+                     :template ,(akirak-org-capture-make-entry-body
+                                  (format "Hotfix of %s" summary)
+                                  :todo "TODO"
+                                  :tags "@hotfix")
+                     :function (lambda ()
+                                 (org-goto-marker-or-bmk ,marker))
+                     :clock-in t :clock-resume t))))))
+       (save-window-excursion
+         (org-capture))))
+    (_
+     (user-error "Cannot find an Org entry"))))
+
 (defun akirak-capture-simple-tempo-snippet ()
   (interactive)
   (require 'akirak-snippet)
@@ -709,11 +728,15 @@
           (buffer (akirak-org-clock-open)))
       (with-current-buffer buffer
         (goto-char (org-entry-end-position))
-        (delete-blank-lines)
         (save-excursion
-          (newline)
-          (insert block-text))
-        (newline)))))
+          (beginning-of-line 0)
+          (when (looking-at (rx eol))
+            (delete-blank-lines)))
+        (newline)
+        (insert block-text))
+      (when-let (window (get-buffer-window buffer))
+        (with-selected-window window
+          (goto-char (org-entry-end-position)))))))
 
 (transient-define-suffix akirak-capture-url-to-clock ()
   :description 'octopus-clocked-entry-description
@@ -961,9 +984,10 @@
             ;; Depends on an experimental feature of org-super-links.
             (let* ((org-super-links-backlink-into-drawer "VOCABULARY")
                    (sentence-example (org-in-block-p '("quote" "verse" "example")))
-                   (selection (if sentence-example
-                                  (thing-at-point 'sentence t)
-                                (thing-at-point 'paragraph t)))
+                   (selection (org-link-display-format
+                               (if sentence-example
+                                   (thing-at-point 'sentence t)
+                                 (thing-at-point 'paragraph t))))
                    (body (cond
                           (sentence-example
                            (string-trim selection))
@@ -1186,37 +1210,45 @@ provided as a separate command for integration, e.g. with embark."
       (goto-char (point-max))
       (while (looking-back (rx bol (* blank)) (pos-bol))
         (delete-region (1- (match-beginning 0)) (match-end 0)))
+      (let ((org-inhibit-startup t))
+        (delay-mode-hooks (org-mode)))
+      (goto-char (point-min))
+      (while (looking-at (rx anything))
+        (org-fill-paragraph)
+        (forward-paragraph))
       (buffer-string))))
 
 (defun akirak-capture--sanitize-source (string)
   ;; Replace zero-width space.
-  (let* ((string (replace-regexp-in-string "​" "" string))
-         (lines (split-string string "\n")))
-    (cl-flet
-        ((indent (s)
-           (when (string-match (rx bol (group (+ " ")) (not (any space))) s)
-             (- (match-end 1)
-                (match-beginning 1)))))
-      (let* ((indents (thread-last
-                        (mapcar #'indent lines)
-                        (delq nil)))
-             (regexp (when indents
-                       (concat "^" (make-string (apply #'min indents)
-                                                ?\s)))))
-        (with-temp-buffer
-          (insert string)
-          (goto-char (point-min))
-          (when (looking-at (rx (+ "\n")))
-            (replace-match ""))
-          (when regexp
-            (save-excursion
-              (while (re-search-forward regexp nil t)
-                (replace-match ""))))
-          (while (re-search-forward (rx (+ blank) eol) nil t)
-            (replace-match ""))
-          (when (re-search-forward (rx (+ "\n") eos) nil t)
-            (replace-match ""))
-          (buffer-string))))))
+  (cl-flet
+      ((indent (s)
+         (when (string-match (rx bol (group (+ " ")) (not (any space))) s)
+           (- (match-end 1)
+              (match-beginning 1)))))
+    (let* ((string (thread-last
+                     string
+                     (replace-regexp-in-string (rx bol (* blank)
+                                                   ;; zero-width space (8203)
+                                                   "​")
+                                               "")
+                     (replace-regexp-in-string (rx (+ blank) eol)
+                                               "")
+                     (replace-regexp-in-string (rx (+ "\n") eos)
+                                               "")
+                     (replace-regexp-in-string (rx (+ "\n") eos)
+                                               "")
+                     (replace-regexp-in-string (rx bos (* space) eol)
+                                               "")))
+           (lines (split-string string "\n"))
+           (indents (thread-last
+                      (mapcar #'indent lines)
+                      (delq nil)))
+           (regexp (when indents
+                     (concat "^" (make-string (apply #'min indents)
+                                              ?\s)))))
+      (if regexp
+          (replace-regexp-in-string regexp "" string)
+        string))))
 
 (defun akirak-capture--major-mode-list ()
   (let (modes)
@@ -1301,6 +1333,33 @@ provided as a separate command for integration, e.g. with embark."
                      (org-reverse-datetree-goto-date-in-file
                       ',(org-timestamp-to-time timestamp)))))))))
     (org-capture)))
+
+;;;###autoload
+(cl-defun akirak-capture-quick-translation (word &key (dest-language "English"))
+  (interactive "sWord or phrase: ")
+  (let* ((file (oref (or (org-dog-find-file-object
+                          (org-dog-file-pred-1
+                           `(relative ,(format "languages/%s/vocabulary.org"
+                                               dest-language))))
+                         (error "Failed to locate the file"))
+                     absolute))
+         (prompt (format "What are some translations of %s? Provide a word list\
+ in a plain Markdown list. Also, describe each word concisely. You don't have \
+to quote words." word))
+         ;; I don't have an insight on what this system prompt should be.
+         (system-prompt (format "You are a large language model and an \
+interpreter who are good at %s. Please respond concisely." dest-language))
+         (org-capture-entry
+          (car (doct
+                `((""
+                   :keys ""
+                   :template ,(akirak-org-capture-make-entry-body
+                                (format "Translation of %s" word)
+                                :body "%?")
+                   :file ,file
+                   :headline "Backlog"))))))
+    (org-capture)
+    (gptel-request prompt :in-place t :system system-prompt)))
 
 ;;;; Helper functions
 

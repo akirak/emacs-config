@@ -221,5 +221,39 @@
     ;; Reload data from the blocks
     (org-dog-reload-files)))
 
+;;;###autoload
+(defun akirak-org-dog-to-plan ()
+  "Search headings that do not have corresponding org-memento rules."
+  (interactive)
+  (require 'org-memento)
+  (require 'org-memento-policy)
+  (org-memento-policy-maybe-load)
+  (let ((file (or (when (derived-mode-p 'org-mode)
+                    (buffer-file-name (org-base-buffer (current-buffer))))
+                  (bound-and-true-p org-ql-view-buffers-files)
+                  (user-error "Not in org-mode")))
+        (files (gensym)))
+    (set files (thread-last
+                 (org-memento-policy-rules
+                  :start-date (format-time-string "%F")
+                  :span 'week)
+                 (seq-filter #'org-memento-yield-instance-p)
+                 (mapcar #'org-memento-group-path)
+                 (seq-uniq)
+                 (mapcar #'org-memento-group-agenda-files)
+                 (mapcar #'car)
+                 (delq nil)
+                 (seq-uniq)))
+    (org-ql-search file
+      `(and (todo "UNDERWAY")
+            (when-let* ((headline (org-get-heading t t t t))
+                        (link (when (string-match org-link-bracket-re headline)
+                                (match-string 1 headline)))
+                        (rel (when (string-prefix-p "org-dog:" link)
+                               (string-remove-prefix "org-dog:" link)))
+                        (file (org-dog-resolve-relative-file rel)))
+              (not (member file ,files))))
+      :super-groups '((:auto-parent t)))))
+
 (provide 'akirak-org-dog)
 ;;; akirak-org-dog.el ends here

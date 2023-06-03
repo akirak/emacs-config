@@ -20,9 +20,9 @@
     `(unknown-text ,(minibuffer-contents-no-properties))))
 
 ;;;###autoload
-(defun akirak-unknown ()
+(defun akirak-unknown (&optional arg)
   "Type a free text and run some action on it."
-  (interactive)
+  (interactive "P")
   (let* ((region-text (when (use-region-p)
                         (prog1 (buffer-substring-no-properties
                                 (region-beginning) (region-end))
@@ -40,7 +40,11 @@
                                          (or (thing-at-point 'symbol t)
                                              (akirak-unknown--default-text)))
                                        'inherit-input-method))))
-    (akirak-capture-text text)))
+    (if (and arg (numberp arg))
+        (progn
+          (require 'akirak-window)
+          (akirak-window-send-text (concat text "\n") arg))
+      (akirak-capture-text text))))
 
 (defun akirak-unknown--default-text ()
   (run-hook-with-args-until-success 'akirak-unknown-default-text-hook))
