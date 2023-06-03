@@ -1090,22 +1090,6 @@
         "type": "github"
       }
     },
-    "forge": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1683710719,
-        "narHash": "sha256-E5j13cEzC+9KLMIQ7XSgznRM9pJoZi2kH9jUmutZk8w=",
-        "owner": "magit",
-        "repo": "forge",
-        "rev": "d2bdd2ca14d7a97dce751c122174896c35a34aa1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "magit",
-        "repo": "forge",
-        "type": "github"
-      }
-    },
     "fstar-mode": {
       "flake": false,
       "locked": {
@@ -1168,22 +1152,6 @@
         "owner": "koral",
         "repo": "gcmh",
         "type": "gitlab"
-      }
-    },
-    "ghub": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1677679352,
-        "narHash": "sha256-lcZCd6astKPRVllv3R8waL6944Z/jT3LL7iU5tAsyfY=",
-        "owner": "magit",
-        "repo": "ghub",
-        "rev": "6a5de97649ff3eca9aa20b79f3526b4b3ab86b13",
-        "type": "github"
-      },
-      "original": {
-        "owner": "magit",
-        "repo": "ghub",
-        "type": "github"
       }
     },
     "gif-screencast": {
@@ -2995,12 +2963,10 @@
         "flymake-eslint": "flymake-eslint",
         "flyspell-correct": "flyspell-correct",
         "flyspell-correct-avy-menu": "flyspell-correct-avy-menu",
-        "forge": "forge",
         "fstar-mode": "fstar-mode",
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",
         "gcmh": "gcmh",
-        "ghub": "ghub",
         "gif-screencast": "gif-screencast",
         "git-attr": "git-attr",
         "git-auto-commit-mode": "git-auto-commit-mode",
@@ -3128,7 +3094,6 @@
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
         "tomelr": "tomelr",
-        "treepy": "treepy",
         "triples": "triples",
         "ts": "ts",
         "tuareg": "tuareg",
@@ -3147,7 +3112,6 @@
         "workbox": "workbox",
         "ws-butler": "ws-butler",
         "xterm-color": "xterm-color",
-        "yaml": "yaml",
         "yasnippet": "yasnippet",
         "z3-mode": "z3-mode",
         "zig-mode": "zig-mode",
@@ -3460,22 +3424,6 @@
         "type": "github"
       }
     },
-    "treepy": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1670279072,
-        "narHash": "sha256-mdZN3S2KkXBSAXXekwh5p7QQIty2y8VZNnNZOrJlvOA=",
-        "owner": "volrath",
-        "repo": "treepy.el",
-        "rev": "7c4a0d21322506a4d4b2301b4274ec955b429b47",
-        "type": "github"
-      },
-      "original": {
-        "owner": "volrath",
-        "repo": "treepy.el",
-        "type": "github"
-      }
-    },
     "triples": {
       "flake": false,
       "locked": {
@@ -3762,22 +3710,6 @@
       "original": {
         "owner": "atomontage",
         "repo": "xterm-color",
-        "type": "github"
-      }
-    },
-    "yaml": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1678589401,
-        "narHash": "sha256-ldXlBGMePNOSNvjdHr5bH5s7H+yW4+1n9R3EqzQF+hY=",
-        "owner": "zkry",
-        "repo": "yaml.el",
-        "rev": "a19fbf948a945571300e5a20ff1dbfa6ecfa0d16",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zkry",
-        "repo": "yaml.el",
         "type": "github"
       }
     },

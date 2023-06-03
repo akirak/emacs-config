@@ -411,12 +411,6 @@
       repo = "flyspell-correct";
       type = "github";
     };
-    forge = {
-      flake = false;
-      owner = "magit";
-      repo = "forge";
-      type = "github";
-    };
     fstar-mode = {
       flake = false;
       owner = "FStarLang";
@@ -440,12 +434,6 @@
       owner = "koral";
       repo = "gcmh";
       type = "gitlab";
-    };
-    ghub = {
-      flake = false;
-      owner = "magit";
-      repo = "ghub";
-      type = "github";
     };
     gif-screencast = {
       flake = false;
@@ -1219,12 +1207,6 @@
       repo = "tomelr";
       type = "github";
     };
-    treepy = {
-      flake = false;
-      owner = "volrath";
-      repo = "treepy.el";
-      type = "github";
-    };
     triples = {
       flake = false;
       owner = "ahyatt";
@@ -1331,12 +1313,6 @@
       flake = false;
       owner = "atomontage";
       repo = "xterm-color";
-      type = "github";
-    };
-    yaml = {
-      flake = false;
-      owner = "zkry";
-      repo = "yaml.el";
       type = "github";
     };
     yasnippet = {
