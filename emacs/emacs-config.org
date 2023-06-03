@@ -1893,6 +1893,7 @@ Thus I will explicitly install this package rather than using the built-in versi
         (apply orig args)))
     (advice-add 'consult-buffer :around #'akirak/ad-no-obey-display-actions)
     (advice-add 'org-dog-find-file :around #'akirak/ad-no-obey-display-actions)
+    (advice-add 'org-src-switch-to-buffer :around #'akirak/ad-no-obey-display-actions)
 
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
