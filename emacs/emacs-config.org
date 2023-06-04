@@ -3331,9 +3331,12 @@ Consult interface for org-nlink
 
 #+begin_src emacs-lisp
   (setup (:package consult-org-nlink)
-      (:with-feature org
-        (:with-map org-mode-map
-          (:bind "C-x i" #'consult-org-nlink-insert))))
+    (:with-feature org
+      (:with-map org-mode-map
+        (:bind "C-x i" #'consult-org-nlink-insert)))
+    (:with-feature isearch
+      (:with-map isearch-mode-map
+        (:bind "C-x i" #'consult-org-nlink-isearch))))
 #+end_src
 *** COMMENT org-noter                                                          :ARCHIVE:
 :PROPERTIES:
