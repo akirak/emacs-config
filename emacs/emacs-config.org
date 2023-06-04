@@ -3926,8 +3926,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+end_src
 *** akirak-insert
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-c a") #'akirak-insert)
-  (global-set-key (kbd "C-x a w") #'akirak-insert-window-title)
+  (setup akirak-insert
+    (:global "C-c a" #'akirak-insert
+             "C-x a f" #'akirak-insert-which-function
+             "C-x a w" #'akirak-insert-window-title))
 #+end_src
 *** akirak-log
 #+begin_src elisp
