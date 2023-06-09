@@ -112,37 +112,6 @@
                                             (string-prefix-p ,account (car cell)))
                                          alist)))))))
 
-;;;###autoload
-(defun akirak-beancount-add-transaction ()
-  "Insert a transaction into the current buffer."
-  (interactive nil beancount-mode)
-  (let* ((accounts (akirak-beancount--scan-open-accounts))
-         (account (completing-read "Insert a transaction on an account: "
-                                   accounts nil nil nil
-                                   akirak-beancount-last-account)))
-    (if-let (cell (assoc account accounts))
-        (akirak-beancount--insert-transaction account (cdr cell))
-      (when-let (pos (cdr (akirak-beancount--common-ancestor account accounts)))
-        (goto-char pos)
-        (while (looking-at beancount-timestamped-directive-regexp)
-          (forward-line 1))
-        (open-line 1)
-        (insert " open " account)
-        (goto-char (line-beginning-position))
-        (user-error "First open an account %s" account)))))
-
-(defun akirak-beancount--common-ancestor (account account-alist)
-  (cl-flet ((parent (account)
-              (string-join (butlast (split-string account ":")) ":")))
-    (catch 'result
-      (while (not (string-empty-p account))
-        (setq account (parent account))
-        (when-let (ca (cl-member-if `(lambda (cell)
-                                       (or (equal ,account (car cell))
-                                           (string-prefix-p ,account (car cell))))
-                                    account-alist))
-          (throw 'result (car ca)))))))
-
 (defun akirak-beancount--insert-transaction (account pos)
   (goto-char pos)
   (if-let* ((bound (save-excursion
