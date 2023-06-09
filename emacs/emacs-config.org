@@ -4361,9 +4361,7 @@ A major mode to edit Beancount input files.
       (:file-match "\\.beancount\\'" "\\.bean\\'")
       (:hook bean-format-on-save-mode)
       (:when-loaded
-        (define-key beancount-mode-map
-                    (vconcat beancount-mode-map-prefix [?i])
-                    #'akirak-beancount-add-transaction)
+        (:bind "C-c C-o" #'akirak-beancount-locate-account-transactions)
         (define-key beancount-mode-map
                     (vconcat beancount-mode-map-prefix [?d])
                     #'akirak-beancount-insert-date)
