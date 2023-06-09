@@ -235,6 +235,7 @@
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
   (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
   (add-to-list 'embark-target-finders #'akirak-embark-target-magit-section t)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-beancount t)
 
   (embark-define-thingatpt-target sentence
     nov-mode eww-mode)
@@ -439,6 +440,35 @@
   (when-let (section (and (featurep 'magit-section)
                           (magit-current-section)))
     (cons 'magit-section section)))
+
+(defun akirak-embark-target-beancount ()
+  (when (eq major-mode 'beancount-mode)
+    (cl-flet
+        ((unquote (string)
+           (save-match-data
+             (if (string-match (rx bol "\"" (group (+ anything)) "\"" eol) string)
+                 (match-string 1 string)
+               string)))
+         (transaction-end ()
+           (save-excursion
+             (forward-line)
+             (while (looking-at beancount-posting-regexp)
+               (forward-line))
+             (point))))
+      (cond
+       ((thing-at-point-looking-at beancount-transaction-regexp)
+        (let ((string (unquote (match-string-no-properties 3)))
+              (begin (match-beginning 0))
+              (end (transaction-end)))
+          `(beancount-transaction
+            ,string . (,begin . ,end))))
+       ((thing-at-point-looking-at beancount-posting-regexp)
+        (re-search-backward beancount-transaction-regexp)
+        (let ((string (unquote (match-string-no-properties 3)))
+              (begin (match-beginning 0))
+              (end (transaction-end)))
+          `(beancount-transaction
+            ,string . (,begin . ,end))))))))
 
 (defun akirak-embark-kill-directory-buffers (directory)
   "Kill all buffers in DIRECTORY."
