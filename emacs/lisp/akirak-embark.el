@@ -77,6 +77,10 @@
 (defvar-keymap akirak-embark-org-prompt-map
   :parent akirak-embark-org-block-map)
 
+(defvar-keymap akirak-embark-beancount-account-map
+  :parent embark-general-map
+  "r" #'akirak-beancount-rename-account)
+
 (defvar akirak-embark-git-file-map
   (let ((map (make-composed-keymap nil embark-general-map)))
     (define-key map "k" #'akirak-consult-git-revert-file)
@@ -263,6 +267,8 @@
                '(nix-installable . akirak-embark-nix-installable-map))
   (add-to-list 'embark-keymap-alist
                '(magit-section . akirak-embark-magit-section-map))
+  (add-to-list 'embark-keymap-alist
+               '(beancount-account . akirak-embark-beancount-account-map))
 
   (add-to-list 'embark-pre-action-hooks
                '(nix3-flake-show embark--universal-argument))

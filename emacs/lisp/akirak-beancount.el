@@ -188,5 +188,25 @@
   (let ((org-read-date-prefer-future nil))
     (insert (org-read-date nil nil nil nil nil akirak-beancount-last-date))))
 
+;;;###autoload
+(defun akirak-beancount-rename-account (old-account new-account)
+  "Rename an account in the ledger."
+  (interactive (let* ((accounts (akirak-beancount--scan-open-accounts))
+                      (old-account (completing-read "Select an account to rename: "
+                                                    accounts
+                                                    nil t)))
+                 (list old-account
+                       (completing-read "New name of the account: "
+                                        accounts
+                                        nil nil old-account)))
+               beancount-mode)
+  (when (member new-account (akirak-beancount--scan-open-accounts))
+    (user-error "Don't select an existing name: \"%s\"" new-account))
+  (save-excursion
+    (goto-char (point-min))
+    (let ((regexp (rx-to-string `(and word-start ,old-account word-end))))
+      (while (re-search-forward regexp nil t)
+        (replace-match new-account)))))
+
 (provide 'akirak-beancount)
 ;;; akirak-beancount.el ends here
