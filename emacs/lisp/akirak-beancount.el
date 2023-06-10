@@ -208,5 +208,22 @@
       (while (re-search-forward regexp nil t)
         (replace-match new-account)))))
 
+;;;###autoload
+(defun akirak-beancount-balance (account)
+  (interactive (list (completing-read "New name of the account: "
+                                      (akirak-beancount--scan-open-accounts)
+                                      nil t)))
+  (goto-char (point-min))
+  (if-let (pos (cdr (assoc account (akirak-beancount--scan-open-accounts))))
+      (let ((date (org-read-date)))
+        (goto-char pos)
+        (if (re-search-forward (concat "^" beancount-outline-regexp) nil t)
+            (end-of-line 0)
+          (goto-char (point-max)))
+        (newline)
+        (insert date " balance " account " "
+                (read-from-minibuffer "Enter the current balance: ")))
+    (user-error "Account not found in the buffer: %s" account)))
+
 (provide 'akirak-beancount)
 ;;; akirak-beancount.el ends here
