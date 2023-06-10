@@ -1356,7 +1356,8 @@ Operations on the current project
                                               (+ (not (any "/")))
                                               "/"
                                               (+ (not (any "/")))
-                                              "/")
+                                              "/"
+                                              eol)
                                           dir)
                       `(worktree-group ,dir))))
         (cl-defmethod project-root ((project (head worktree-group)))
