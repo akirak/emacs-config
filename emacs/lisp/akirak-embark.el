@@ -79,6 +79,7 @@
 
 (defvar-keymap akirak-embark-beancount-account-map
   :parent embark-general-map
+  "q" #'akirak-beancount-query-account
   "b" #'akirak-beancount-balance
   "r" #'akirak-beancount-rename-account)
 

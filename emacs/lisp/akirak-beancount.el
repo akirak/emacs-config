@@ -12,6 +12,11 @@
 
 (defvar-local akirak-beancount-highlighted-regexp nil)
 
+(defvar-local akirak-beancount-query nil)
+
+(defvar-local akirak-beancount-query-buffer nil)
+(defvar-local akirak-beancount-query-source nil)
+
 (defun akirak-beancount-highlight-regexp (regexp)
   (when akirak-beancount-highlighted-regexp
     (unhighlight-regexp akirak-beancount-highlighted-regexp))
@@ -187,6 +192,48 @@
         (insert date " balance " account " "
                 (read-from-minibuffer "Enter the current balance: ")))
     (user-error "Account not found in the buffer: %s" account)))
+
+;;;###autoload
+(defun akirak-beancount-query-account (account)
+  (interactive (list (completing-read "Balance "
+                                      (akirak-beancount--scan-open-accounts)
+                                      nil t)))
+  (akirak-beancount-query
+   ;; TODO: Allow customization of the query via transient
+   (format "select date, narration, position, balance \
+where account = \"%s\" \
+order by date desc;" account)))
+
+(defun akirak-beancount-query (query)
+  "Dispatch bean-query command from within a journal."
+  (let ((buffer (if (and akirak-beancount-query-buffer
+                         (buffer-live-p akirak-beancount-query-buffer))
+                    akirak-beancount-query-buffer
+                  (setq akirak-beancount-query-buffer
+                        (generate-new-buffer "*bean-query*"))))
+        (file (buffer-file-name)))
+    (add-hook 'after-save-hook #'akirak-beancount-query-rerun nil t)
+    (with-current-buffer buffer
+      (setq akirak-beancount-query query)
+      (setq akirak-beancount-query-source file)
+      (setq-local revert-buffer-function #'akirak-beancount--rerun-query)
+      (read-only-mode t)
+      (revert-buffer)
+      (display-buffer buffer))))
+
+(defun akirak-beancount-query-rerun ()
+  (when (and akirak-beancount-query-buffer
+             (buffer-live-p akirak-beancount-query-buffer))
+    (with-current-buffer akirak-beancount-query-buffer
+      (revert-buffer))))
+
+(defun akirak-beancount--rerun-query (&rest _)
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (call-process "bean-query" nil (list t nil) nil
+                  akirak-beancount-query-source
+                  akirak-beancount-query)
+    (goto-char (point-min))))
 
 (provide 'akirak-beancount)
 ;;; akirak-beancount.el ends here
