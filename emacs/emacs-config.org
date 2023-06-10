@@ -7046,6 +7046,7 @@ Summon and dismiss buffers as popups
                                      "^\\*Shell Command Output\\*"
                                      "^\\*edit string\\*"
                                      "^\\*edit-indirect"
+                                     "^\\*bean-query"
                                      "^\\*scratch from selection\\*"
                                      ;; "^\\*eldoc"
                                      "^\\*Select Link\\*"
