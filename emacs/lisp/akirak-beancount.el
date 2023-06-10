@@ -112,43 +112,6 @@
                                             (string-prefix-p ,account (car cell)))
                                          alist)))))))
 
-(defun akirak-beancount--insert-transaction (account pos)
-  (goto-char pos)
-  (if-let* ((bound (save-excursion
-                     (if (re-search-forward (concat "^" beancount-outline-regexp) nil t)
-                         (line-beginning-position)
-                       (point-max))))
-            (titles (akirak-beancount--scan-transactions account bound)))
-      (let* ((org-read-date-prefer-future nil)
-             (date (org-read-date nil nil nil "Date: " nil akirak-beancount-last-date))
-             (title (completing-read "Title: " titles nil nil nil nil nil 'inherit)))
-        (goto-char bound)
-        (open-line 1)
-        (setq akirak-beancount-last-date date
-              akirak-beancount-last-account account)
-        (skeleton-insert `(> ,date " * \"" ,title "\""
-                             n ,account "  " _)))
-    (re-search-forward (concat "^[[:blank:]]+" (regexp-quote account)) nil t)))
-
-(defun akirak-beancount--scan-transactions (account bound)
-  "Scan transactions on ACCOUNT until BOUND."
-  (let (result)
-    (cl-flet
-        ((unquote (string)
-           (if (string-match (rx bol "\"" (group (+ anything)) "\"" eol) string)
-               (match-string 1 string)
-             string)))
-      (while (re-search-forward beancount-transaction-regexp bound t)
-        (let ((title (unquote (match-string-no-properties 3))))
-          (forward-line)
-          (catch 'match-account
-            (while (looking-at beancount-posting-regexp)
-              (when (equal (match-string 1) account)
-                (push (cons title (point)) result)
-                (throw 'match-account t))
-              (forward-line))))))
-    result))
-
 (defun akirak-beancount--scan-open-accounts ()
   (let (result)
     (save-excursion
