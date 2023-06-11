@@ -742,7 +742,8 @@
         (insert block-text))
       (when-let (window (get-buffer-window buffer))
         (with-selected-window window
-          (goto-char (org-entry-end-position)))))))
+          (unless (looking-at org-heading-regexp)
+            (goto-char (org-entry-end-position))))))))
 
 (transient-define-suffix akirak-capture-url-to-clock ()
   :description 'octopus-clocked-entry-description
