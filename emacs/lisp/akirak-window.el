@@ -114,7 +114,8 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 ;;;###autoload
 (defun akirak-window-display-org-buffer-other-window (buffer alist)
   (unless (or (car-safe display-buffer-overriding-action)
-              (not (cdr (assq 'inhibit-same-window alist))))
+              (equal (assq 'inhibit-same-window alist)
+                     '(inhibit-same-window . nil)))
     (when-let* ((other-windows (thread-last
                                  (window-list-1 nil 'never)
                                  (delete (selected-window))))
