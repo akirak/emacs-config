@@ -285,7 +285,8 @@
                  embark--ignore-target)))
 
 ;;;###autoload
-(defun akirak-embark-setup-org-heading ()
+(defun akirak-embark-setup-org ()
+  "Apply extra settings for embark-org."
   (require 'embark-org)
   ;; If the point is at the very beginning of the heading, I want this finder to
   ;; match.

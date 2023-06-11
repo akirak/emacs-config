@@ -5245,7 +5245,7 @@ Consult integration for Embark
 
 #+begin_src emacs-lisp
   (setup embark-org
-    (eval-after-load 'org #'akirak-embark-setup-org-heading))
+    (eval-after-load 'org #'akirak-embark-setup-org))
 #+end_src
 *** COMMENT ement                                                       :social:ARCHIVE:
 :PROPERTIES:
