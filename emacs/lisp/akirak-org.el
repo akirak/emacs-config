@@ -465,6 +465,29 @@ character."
                                     (org-element-property :end element))))))))
             (_
              uri)))
+        (when (eq (plist-get plist 'face) 'org-target)
+          (cl-flet
+              ((count-match (regexp)
+                 (with-current-buffer (org-base-buffer (current-buffer))
+                   (org-with-wide-buffer
+                    (goto-char (point-min))
+                    (let ((count 0))
+                      (while (re-search-forward regexp nil t)
+                        (unless (eq ?< (char-after (point)))
+                          (cl-incf count)))
+                      count)))))
+            (cond
+             ((thing-at-point-looking-at org-radio-target-regexp)
+              (let ((target (match-string 1)))
+                (message "%s: %d references in the file"
+                         target
+                         (count-match (regexp-quote target)))))
+             ((thing-at-point-looking-at org-target-regexp)
+              (let ((target (match-string 1)))
+                (message "%s: %d references in the file"
+                         target
+                         (count-match (rx-to-string `(and "[[" ,target"]"
+                                                          "[" (* nonl) "]]")))))))))
         (plist-get plist 'help-echo))))
 
 (defun akirak-org--parse-link-uri (uri)
