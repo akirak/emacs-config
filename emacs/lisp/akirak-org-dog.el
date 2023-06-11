@@ -39,10 +39,12 @@
                  (org-get-heading t t t t)))
          (first-link (save-excursion
                        (org-back-to-heading)
-                       (save-match-data
-                         (when (re-search-forward org-link-any-re (org-entry-end-position)
-                                                  t)
-                           (match-string 0)))))
+                       (org-end-of-meta-data t)
+                       (unless (looking-at org-heading-regexp)
+                         (save-match-data
+                           (when (re-search-forward org-link-any-re (org-entry-end-position)
+                                                    t)
+                             (match-string 0))))))
          (filetags (buffer-local-value 'org-file-tags
                                        (or (find-buffer-visiting absolute)
                                            (find-file-noselect absolute))))
