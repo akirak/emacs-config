@@ -74,6 +74,14 @@
   "v" #'akirak-org-babel-send-block-to-vterm
   "w" #'embark-copy-as-kill)
 
+(defvar-keymap akirak-embark-org-target-map
+  :parent embark-general-map
+  "o" #'akirak-embark-org-occur-target-references)
+
+(defvar-keymap akirak-embark-org-radio-target-map
+  :parent embark-general-map
+  "o" #'akirak-embark-org-occur-radio-references)
+
 (defvar-keymap akirak-embark-org-prompt-map
   :parent akirak-embark-org-block-map)
 
@@ -294,9 +302,14 @@
   ;; but I can still use this finder by running `embark-act' multiple times.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading t)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-org-target)
 
   (add-to-list 'embark-keymap-alist
                '(org-heading . akirak-embark-org-heading-map))
+  (add-to-list 'embark-keymap-alist
+               '(org-target . akirak-embark-org-target-map))
+  (add-to-list 'embark-keymap-alist
+               '(org-radio-target . akirak-embark-org-radio-target-map))
 
   (add-to-list 'embark-transformer-alist
                '(org-placeholder-item . akirak-embark-transform-org-placeholder))
@@ -334,6 +347,18 @@
              `(file ,(match-string 1 href) . ,bounds))
             ((rx bol "http" (?  "s") ":")
              `(url ,href . ,bounds)))))))))
+
+(defun akirak-embark-target-org-target ()
+  (when (and (derived-mode-p 'org-mode)
+             (thing-at-point-looking-at org-target-regexp))
+    (or (save-match-data
+          (when (thing-at-point-looking-at org-radio-target-regexp)
+            `(org-radio-target
+              ,(match-string-no-properties 1)
+              . (,(match-beginning 0) . ,(match-end 0)))))
+        `(org-target
+          ,(match-string-no-properties 1)
+          . (,(match-beginning 0) . ,(match-end 0))))))
 
 (defun akirak-embark-target-org-element ()
   (when (and (derived-mode-p 'org-mode)
@@ -520,6 +545,22 @@
   (interactive "sTarget: " org-mode)
   (require 'org-dog)
   (org-dog-link-target-occur target))
+
+(defun akirak-embark-org-occur-radio-references (target)
+  (interactive "sTarget: " org-mode)
+  ;; TODO: Create a separate buffer
+  (let ((buffer-name (format "*org-occur<%s>*" target)))
+    (when (get-buffer buffer-name)
+      (kill-buffer buffer-name))
+    (with-current-buffer (make-indirect-buffer (org-base-buffer (current-buffer))
+                                               buffer-name
+                                               'clone)
+      (org-occur (regexp-quote target))
+      (setq next-error-last-buffer (current-buffer))
+      (goto-char (point-min))
+      (next-error)
+      (pop-to-buffer (current-buffer))
+      (recenter))))
 
 (defun akirak-embark-nix-run-async (installable)
   (interactive "s")
