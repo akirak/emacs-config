@@ -71,6 +71,11 @@ with builtins; let
     prependToInitFile ? null,
     extraInitFiles,
     withXwidgets,
+    extraTreeSitterGrammars ? [
+      final.tree-sitter-grammars.tree-sitter-eex
+      final.tree-sitter-grammars.tree-sitter-heex
+      final.tree-sitter-grammars.tree-sitter-elixir
+    ],
     nativeCompileAheadDefault ? true,
   }:
     (emacsTwist {
@@ -103,6 +108,24 @@ with builtins; let
               (setq epkg-origin-url "${epkgRepository}"))
           '')
         ]
+        ++ (lib.optional (length extraTreeSitterGrammars > 0) (
+          # Based on the fake package in nixpkgs at
+          # https://github.com/NixOS/nixpkgs/blob/8f0515dbf74c886b61639ccad5a1ea7c2f51265d/pkgs/applications/editors/emacs/elisp-packages/manual-packages/treesit-grammars/default.nix
+          prev.writeText "init-treesit.el" ''
+            (add-to-list 'treesit-extra-load-path  "${
+              prev.linkFarm "treesit-grammars"
+              (map (drv: {
+                  name = "lib${
+                    lib.removeSuffix "-grammar" (lib.getName drv)
+                  }${
+                    prev.stdenv.targetPlatform.extensions.sharedLibrary
+                  }";
+                  path = "${drv}/parser";
+                })
+                extraTreeSitterGrammars)
+            }/")
+          ''
+        ))
         # Allow adding private config on specific hosts
         ++ extraInitFiles;
       extraPackages = [
