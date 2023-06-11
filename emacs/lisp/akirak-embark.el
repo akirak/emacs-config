@@ -305,7 +305,9 @@
 
   (add-to-list 'embark-target-injection-hooks
                '(akirak-consult-org-clock-history
-                 embark--ignore-target)))
+                 embark--ignore-target))
+
+  (define-key embark-org-link-map "o" #'akirak-embark-org-occur-target-references))
 
 (defun akirak-embark-target-org-link-at-point ()
   (cond
@@ -512,6 +514,11 @@
             (list description)))
   (message "Stored a link with the description \"%s\": %s"
            description (caar org-stored-links)))
+
+(defun akirak-embark-org-occur-target-references (target)
+  (interactive "sTarget: " org-mode)
+  (require 'org-dog)
+  (org-dog-link-target-occur target))
 
 (defun akirak-embark-nix-run-async (installable)
   (interactive "s")
