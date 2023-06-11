@@ -237,7 +237,6 @@
   (define-key embark-region-map "V" #'akirak-gpt-translate-vocabulary)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
-  (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
   (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
   (add-to-list 'embark-target-finders #'akirak-embark-target-magit-section t)
@@ -294,6 +293,7 @@
   ;; Added as a fallback. Other finder such as the link finder should precede,
   ;; but I can still use this finder by running `embark-act' multiple times.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading t)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
 
   (add-to-list 'embark-keymap-alist
                '(org-heading . akirak-embark-org-heading-map))
