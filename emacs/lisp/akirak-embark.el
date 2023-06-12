@@ -504,6 +504,19 @@
               (begin (match-beginning 0))
               (end (transaction-end)))
           `(beancount-transaction
+            ,string . (,begin . ,end))))
+       ((thing-at-point-looking-at beancount-posting-regexp)
+        (re-search-backward beancount-transaction-regexp)
+        (let ((string (unquote (match-string-no-properties 3)))
+              (begin (match-beginning 0))
+              (end (transaction-end)))
+          `(beancount-transaction
+            ,string . (,begin . ,end))))
+       ((thing-at-point-looking-at beancount-account-regexp)
+        (let ((string (match-string-no-properties 0))
+              (begin (match-beginning 0))
+              (end (match-end 0)))
+          `(beancount-account
             ,string . (,begin . ,end))))))))
 
 (defun akirak-embark-kill-directory-buffers (directory)
