@@ -170,6 +170,8 @@
                beancount-mode)
   (when (member new-account (akirak-beancount--scan-open-accounts))
     (user-error "Don't select an existing name: \"%s\"" new-account))
+  (when (equal old-account new-account)
+    (user-error "Same account name"))
   (save-excursion
     (goto-char (point-min))
     (let ((regexp (rx-to-string `(and word-start ,old-account word-end))))
