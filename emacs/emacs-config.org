@@ -4813,7 +4813,8 @@ Ibuffer-like filtering for dired
     (:hook-into dired-mode-hook)
     (:hook dired-filter-group-mode)
 
-    (:set dired-filter-group-saved-groups
+    (:set dired-filter-stack nil
+          dired-filter-group-saved-groups
           `(("default"
              ("Directories"
               (directory . t))
