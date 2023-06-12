@@ -4848,8 +4848,8 @@ Ibuffer-like filtering for dired
                    (extension "xlsx" "xls" "docx" "doc"))
                   ("Programs"
                    (extension "exe" "run" "deb"))
-                  ("Objects and binary files"
-                   (extension "o" "elc"))
+                  ("Object files and libraries"
+                   (extension "o" "elc" "eln" "so"))
                   ("Meta data"
                    (extension "torrent" "acsm"))
                   ("Web"
