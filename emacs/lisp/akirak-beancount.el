@@ -204,7 +204,7 @@
    ;; TODO: Allow customization of the query via transient
    (format "select date, narration, position, balance \
 where account = \"%s\" \
-order by date desc;" account)))
+order by date;" account)))
 
 (defun akirak-beancount-query (query)
   "Dispatch bean-query command from within a journal."
@@ -234,8 +234,7 @@ order by date desc;" account)))
     (erase-buffer)
     (call-process "bean-query" nil (list t nil) nil
                   akirak-beancount-query-source
-                  akirak-beancount-query)
-    (goto-char (point-min))))
+                  akirak-beancount-query)))
 
 (provide 'akirak-beancount)
 ;;; akirak-beancount.el ends here
