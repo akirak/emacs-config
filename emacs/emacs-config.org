@@ -2017,11 +2017,40 @@ Thus I will explicitly install this package rather than using the built-in versi
 # Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
 # I want a separate section for themes to add this comment.
 
-No theme is set by default.
-You can load a theme on startup by adding command line arguments to Emacs, e.g.
 
-#+begin_src sh
-  emacs --eval "(when init-file-user (require 'doom-themes) (load-theme 'doom-tomorrow-night t))"
+**** modus-themes
+:PROPERTIES:
+:CREATED_TIME: [2022-09-20 Tue 20:43]
+:END:
+#+begin_quote
+Elegant, highly legible and customizable themes
+[[https://git.sr.ht/~protesilaos/modus-themes]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package modus-themes)
+    ;; See [[info:modus-themes#Override colors]]
+    ;; and [[info:modus-themes#Customization Options]]
+    (:set modus-themes-operandi-color-overrides
+          '((bg-main . "#e1d9c2")
+            (fg-main . "#333333"))
+
+          modus-themes-bold-constructs nil
+          modus-themes-italic-constructs t
+          modus-themes-paren-match '(bold intence)
+          modus-themes-org-blocks 'gray-background
+
+          modus-themes-links '(neutral-underline)
+
+          modus-themes-headings
+          '((1 . (background medium variable-pitch 1.5))
+            (2 . (rainbow overline variable-pitch 1.1))
+            (4 . (variable-pitch))))
+
+    (when (or window-system
+              (daemonp))
+      (modus-themes-load-themes)
+      (modus-themes-load-operandi)))
 #+end_src
 *** Font families
 You need to install the font separately.
@@ -6704,40 +6733,6 @@ A scroll bar for the modeline
           mlscroll-out-color (face-attribute 'default :background nil t))
     (:with-mode mlscroll-mode
       (:hook-into after-init-hook)))
-#+end_src
-*** modus-themes                                                        :themes:
-:PROPERTIES:
-:CREATED_TIME: [2022-09-20 Tue 20:43]
-:END:
-#+begin_quote
-Elegant, highly legible and customizable themes
-[[https://git.sr.ht/~protesilaos/modus-themes]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package modus-themes)
-    ;; See [[info:modus-themes#Override colors]]
-    ;; and [[info:modus-themes#Customization Options]]
-    (:set modus-themes-operandi-color-overrides
-          '((bg-main . "#e1d9c2")
-            (fg-main . "#333333"))
-
-          modus-themes-bold-constructs nil
-          modus-themes-italic-constructs t
-          modus-themes-paren-match '(bold intence)
-          modus-themes-org-blocks 'gray-background
-
-          modus-themes-links '(neutral-underline)
-
-          modus-themes-headings
-          '((1 . (background medium variable-pitch 1.5))
-            (2 . (rainbow overline variable-pitch 1.1))
-            (4 . (variable-pitch))))
-
-    (when (or window-system
-              (daemonp))
-      (modus-themes-load-themes)
-      (modus-themes-load-operandi)))
 #+end_src
 *** move-dup                                               :editing:
 :PROPERTIES:
