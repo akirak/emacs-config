@@ -364,20 +364,30 @@
             . ,(cons (org-element-property :begin element)
                      (org-element-property :end element))))))
      (t
-      (when-let (href (cond
-                       ((thing-at-point-looking-at org-link-bracket-re)
-                        (match-string 1))
-                       ((thing-at-point-looking-at org-link-plain-re)
-                        (match-string 0))))
-        (let* ((bounds (cons (marker-position (nth 0 (match-data)))
-                             (marker-position (nth 1 (match-data)))))
-               (href (substring-no-properties href)))
-          (pcase href
-            ;; TODO Add org-link type
-            ((rx bol "file:" (group (+ anything)))
-             `(file ,(match-string 1 href) . ,bounds))
-            ((rx bol "http" (?  "s") ":")
-             `(url ,href . ,bounds)))))))))
+      (if-let (href (cond
+                     ((thing-at-point-looking-at org-link-bracket-re)
+                      (match-string 1))
+                     ((thing-at-point-looking-at org-link-plain-re)
+                      (match-string 0))))
+          (let* ((bounds (cons (marker-position (nth 0 (match-data)))
+                               (marker-position (nth 1 (match-data)))))
+                 (href (substring-no-properties href)))
+            (pcase href
+              ;; TODO Add org-link type
+              ((rx bol "file:" (group (+ anything)))
+               `(file ,(match-string 1 href) . ,bounds))
+              ((rx bol "http" (?  "s") ":")
+               `(url ,href . ,bounds))))
+        (when (and (not (thing-at-point-looking-at org-link-any-re))
+                   (eq (get-text-property (point) 'face)
+                       'org-link))
+          ;; radio target
+          (when-let (element (org-element-context))
+            (when (and (eq 'link (org-element-type element))
+                       (equal "radio" (org-element-property :type element)))
+              `(identifier ,(org-element-property :path element)
+                           . (,(org-element-property :begin element)
+                              . ,(org-element-property :end element)))))))))))
 
 (defun akirak-embark-target-org-heading ()
   (when (derived-mode-p 'org-mode)
