@@ -6768,18 +6768,35 @@ Frontend to experimental commands of Nix
   (setup (:package nix3)
     (:set nix3-flake-remote-wait 20)
 
+    (defun akirak/nix3-flake-maybe-update-from-pins ()
+      "Generate flake.lock from the pins."
+      (when (not (file-exists-p "flake.lock"))
+        (akirak/nix3-flake-update-from-pins)))
+
     (defun akirak/nix3-flake-update-from-pins ()
       (interactive)
-      (when (and (file-exists-p "flake.nix")
-                 (not (file-exists-p "flake.lock")))
-        (start-process "nix-flake-lock" "*nix flake lock*"
-                       "nix" "flake" "update"
-                       "--inputs-from" "github:akirak/flake-pins")))
+      (if (file-exists-p "flake.nix")
+          (make-process :buffer "*nix flake update*"
+                        :name "nix-flake-update"
+                        :command
+                        (list "nix" "flake" "update" "."
+                              "--commit-lock-file"
+                              "--inputs-from" "github:akirak/flake-pins")
+                        :sentinel
+                        (lambda (proc event)
+                          (if (string= event "finished\n")
+                              (message "Successfully updated flake.lock")
+                            (when (> (process-exit-status proc)
+                                     0)
+                              (message "Failed to update flake.lock: %s"
+                                       (with-current-buffer "*nix flake update*"
+                                         (buffer-string)))))))
+        (user-error "There is no flake.nix in default-directory")))
 
     (:when-loaded
-      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-update-from-pins
+      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-maybe-update-from-pins
                 90)
-      (add-hook 'nix3-flake-init-hook #'akirak/nix3-flake-update-from-pins
+      (add-hook 'nix3-flake-init-hook #'akirak/nix3-flake-maybe-update-from-pins
                 90))
 
     (:global "C-c n" #'nix3-transient
