@@ -244,7 +244,6 @@
   (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
   (define-key embark-region-map "V" #'akirak-gpt-translate-vocabulary)
 
-  (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
   (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
   (add-to-list 'embark-target-finders #'akirak-embark-target-magit-section t)
@@ -301,7 +300,7 @@
   ;; Added as a fallback. Other finder such as the link finder should precede,
   ;; but I can still use this finder by running `embark-act' multiple times.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading t)
-  (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
+  ;; (add-to-list 'embark-target-finders #'akirak-embark-target-pocket-reader)
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-target)
 
   (add-to-list 'embark-keymap-alist
@@ -323,16 +322,48 @@
 
   (define-key embark-org-link-map "o" #'akirak-embark-org-occur-target-references))
 
-(defun akirak-embark-target-org-link-at-point ()
-  (cond
-   ((eq major-mode 'pocket-reader-mode)
+(defun akirak-embark-target-pocket-reader ()
+  (when (eq major-mode 'pocket-reader-mode)
     ;; Based on `pocket-reader-copy-url' from pocket-reader.el
     (when-let* ((id (tabulated-list-get-id))
                 (item (ht-get pocket-reader-items id))
                 (url (pocket-reader--get-url item)))
-      `(url ,url . ,(bounds-of-thing-at-point 'line))))
-   ((bound-and-true-p org-link-bracket-re)
-    (save-match-data
+      `(url ,url . ,(bounds-of-thing-at-point 'line)))))
+
+(defun akirak-embark-target-org-target ()
+  "Possibly match an element other than a heading in Org."
+  (when (derived-mode-p 'org-mode)
+    (cond
+     ((thing-at-point-looking-at org-target-regexp)
+      (or (save-match-data
+            (when (thing-at-point-looking-at org-radio-target-regexp)
+              `(org-radio-target
+                ,(match-string-no-properties 1)
+                . (,(match-beginning 0) . ,(match-end 0)))))
+          `(org-target
+            ,(match-string-no-properties 1)
+            . (,(match-beginning 0) . ,(match-end 0)))))
+     ((org-match-line org-block-regexp)
+      (if (equal "src" (match-string 1))
+          (pcase (save-match-data (org-babel-get-src-block-info))
+            (`(,_lang ,body ,plist . ,_)
+             `(org-src-block
+               ,(string-trim body)
+               . ,(cons (match-beginning 0)
+                        (match-end 0)))))
+        (let* ((element (org-element-context))
+               (cbegin (org-element-property :contents-begin element))
+               (cend (org-element-property :contents-end element)))
+          `(,(pcase (org-element-property :type element)
+               ("prompt"
+                'org-prompt-special-block)
+               (_
+                'org-special-block))
+            ,(when (and cbegin cend)
+               (buffer-substring-no-properties cbegin cend))
+            . ,(cons (org-element-property :begin element)
+                     (org-element-property :end element))))))
+     (t
       (when-let (href (cond
                        ((thing-at-point-looking-at org-link-bracket-re)
                         (match-string 1))
@@ -347,41 +378,6 @@
              `(file ,(match-string 1 href) . ,bounds))
             ((rx bol "http" (?  "s") ":")
              `(url ,href . ,bounds)))))))))
-
-(defun akirak-embark-target-org-target ()
-  (when (and (derived-mode-p 'org-mode)
-             (thing-at-point-looking-at org-target-regexp))
-    (or (save-match-data
-          (when (thing-at-point-looking-at org-radio-target-regexp)
-            `(org-radio-target
-              ,(match-string-no-properties 1)
-              . (,(match-beginning 0) . ,(match-end 0)))))
-        `(org-target
-          ,(match-string-no-properties 1)
-          . (,(match-beginning 0) . ,(match-end 0))))))
-
-(defun akirak-embark-target-org-element ()
-  (when (and (derived-mode-p 'org-mode)
-             (org-match-line org-block-regexp))
-    (if (equal "src" (match-string 1))
-        (pcase (save-match-data (org-babel-get-src-block-info))
-          (`(,_lang ,body ,plist . ,_)
-           `(org-src-block
-             ,(string-trim body)
-             . ,(cons (match-beginning 0)
-                      (match-end 0)))))
-      (let* ((element (org-element-context))
-             (cbegin (org-element-property :contents-begin element))
-             (cend (org-element-property :contents-end element)))
-        `(,(pcase (org-element-property :type element)
-             ("prompt"
-              'org-prompt-special-block)
-             (_
-              'org-special-block))
-          ,(when (and cbegin cend)
-             (buffer-substring-no-properties cbegin cend))
-          . ,(cons (org-element-property :begin element)
-                   (org-element-property :end element)))))))
 
 (defun akirak-embark-target-org-heading ()
   (when (derived-mode-p 'org-mode)
