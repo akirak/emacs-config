@@ -238,6 +238,7 @@
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
+  (define-key embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
   (define-key embark-file-map "t" #'find-file-other-tab)
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
   (define-key embark-file-map (kbd "C-c C-T") #'akirak-tailscale-copy-file)
@@ -627,6 +628,11 @@
   (interactive "r")
   (goto-char end)
   (deactivate-mark))
+
+(defun akirak-embark-devdocs-lookup (initial-input)
+  (interactive "s")
+  (require 'devdocs)
+  (devdocs-lookup nil initial-input))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
