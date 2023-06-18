@@ -2336,6 +2336,11 @@ Outline-based notes management and organizer
       (:global "C-c o" #'org-open-at-point-global)
 
       (:when-loaded
+        (add-to-list 'org-file-apps
+                     `("\\.sqlite3?\\'"
+                       . ,(defun akirak/org-file-open-sqlite (file &rest _)
+                            (sqlite-mode-open-file file))))
+
         (add-to-list 'display-buffer-alist
                      '("\\*Org Select\\*"
                        (display-buffer-in-side-window
