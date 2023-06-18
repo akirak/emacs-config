@@ -242,6 +242,7 @@
   (define-key embark-file-map "t" #'find-file-other-tab)
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
   (define-key embark-file-map (kbd "C-c C-T") #'akirak-tailscale-copy-file)
+  (define-key embark-file-map (kbd "C-o") #'akirak-embark-org-open-file)
   (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
   (define-key embark-region-map "V" #'akirak-gpt-translate-vocabulary)
 
@@ -633,6 +634,10 @@
   (interactive "s")
   (require 'devdocs)
   (devdocs-lookup nil initial-input))
+
+(defun akirak-embark-org-open-file (file)
+  (interactive "f")
+  (org-open-file file))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
