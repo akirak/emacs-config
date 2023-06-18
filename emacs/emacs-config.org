@@ -4867,6 +4867,8 @@ Ibuffer-like filtering for dired
                    (extension "beancount"))
                   ("Data files"
                    (extension "csv" "json" "sql" "lock"))
+                  ("Databases"
+                   (extension "db" "sqlite" "sqlite3"))
                   ;; Binary files
                   ("Books and papers"
                    (extension "pdf" "mobi" "epub" "azw"))
@@ -4890,6 +4892,8 @@ Ibuffer-like filtering for dired
                    (extension "jpg" "jpeg" "png" "gif" "svg"))
                   ("Nix"
                    (extension "nix"))
+                  ("Programming languages"
+                   (extension "pl" "kk" "py" "ex" "exs"))
                   ;; Source code
                   ("Configuration"
                    (or (name . "Makefile")
