@@ -103,7 +103,7 @@
                   narName = "emacs-profile-${profileName}.nar";
                   outName = "emacs-profile-${profileName}-${
                     builtins.substring 0 8 (inputs.self.lastModifiedDate)
-                  }.tar.zstd";
+                  }-${system}.tar.zstd";
                 }
                 drv;
             }

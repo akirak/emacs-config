@@ -1,0 +1,33 @@
+name: Upload release assets
+
+on:
+  push:
+    tags:
+      - "r*"
+
+jobs:
+  upload-archive:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: cachix/install-nix-action@v22
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+    - uses: cachix/cachix-action@v12
+      with:
+        name: akirak
+        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+        pushFilter: '-source$'
+
+    - name: Build an offline archive
+      run: |
+        nix run .#build-developer-archive
+
+    - uses: akirak/action-gh-release@master
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          *.zstd
