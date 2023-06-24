@@ -32,6 +32,8 @@
       flake = false;
     };
 
+    archiver.url = "github:emacs-twist/twist-archiver";
+
     # pre-commit
     flake-no-path = {
       url = "github:akirak/flake-no-path";
@@ -84,9 +86,29 @@
         final,
         ...
       }: let
+        inherit (pkgs) lib;
         inherit (final) emacs-config;
         inherit (builtins) substring;
         profiles = import ./emacs/profiles.nix emacs-config;
+        archiveBuilders =
+          lib.concatMapAttrs (
+            profileName: drv: let
+              name = "build-${profileName}-archive";
+            in {
+              ${name} =
+                (inputs.archiver.overlays.default final pkgs).makeEmacsTwistArchive
+                {
+                  inherit name;
+                  earlyInitFile = ./emacs/early-init.el;
+                  narName = "emacs-profile-${profileName}.nar";
+                  outName = "emacs-profile-${profileName}-${
+                    builtins.substring 0 8 (inputs.self.lastModifiedDate)
+                  }.tar.zstd";
+                }
+                drv;
+            }
+          )
+          profiles;
       in {
         overlayAttrs =
           {
@@ -112,60 +134,64 @@
             pkgs
           );
 
-        packages = {
-          # tryout-emacs = emacsSandboxed {
-          #   name = "tryout-emacs";
-          #   nativeCompileAheadDefault = false;
-          #   automaticNativeCompile = false;
-          #   enableOpinionatedSettings = false;
-          #   extraFeatures = [];
-          #   protectHome = false;
-          #   shareNet = false;
-          #   inheritPath = false;
-          # };
-          inherit emacs-config;
+        packages =
+          {
+            # tryout-emacs = emacsSandboxed {
+            #   name = "tryout-emacs";
+            #   nativeCompileAheadDefault = false;
+            #   automaticNativeCompile = false;
+            #   enableOpinionatedSettings = false;
+            #   extraFeatures = [];
+            #   protectHome = false;
+            #   shareNet = false;
+            #   inheritPath = false;
+            # };
 
-          # test-emacs-config = pkgs.callPackage ./emacs/tests {};
+            inherit emacs-config;
 
-          update-elisp-lock = pkgs.writeShellApplication {
-            name = "update-elisp-lock";
-            runtimeInputs = [
-              pkgs.deno
-            ];
-            text = ''
-              cd emacs/lock
-              deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
-            '';
-          };
+            # test-emacs-config = pkgs.callPackage ./emacs/tests {};
 
-          build-packages = pkgs.writeShellApplication {
-            name = "build-packages";
-            runtimeInputs = [
-              pkgs.nix-eval-jobs
-              pkgs.jq
-            ];
-            text = ''
-              system=$(nix eval --expr builtins.currentSystem --impure --raw)
-              flake="path:$(readlink -f "$PWD")#packages.$system.emacs-config.elispPackages"
-              nix-eval-jobs \
-                  --gc-roots-dir gcroot \
-                  --flake "$flake" \
-                  | while read -r line; do
-                  out=$(jq -r .outputs.out <<<"$line")
-                  if [[ $(nix path-info "$out" --json --store https://akirak.cachix.org \
-                     2> /dev/null \
-                     | jq '.[0].valid') = false ]]
-                  then
-                    drv=$(jq -r .drvPath <<<"$line")
-                    echo "Building $drv"
-                    time nix build "$drv" --no-link --print-build-logs
-                  else
-                    echo "$out is already built, skipping"
-                  fi
-              done
-            '';
-          };
-        } // profiles;
+            update-elisp-lock = pkgs.writeShellApplication {
+              name = "update-elisp-lock";
+              runtimeInputs = [
+                pkgs.deno
+              ];
+              text = ''
+                cd emacs/lock
+                deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
+              '';
+            };
+
+            build-packages = pkgs.writeShellApplication {
+              name = "build-packages";
+              runtimeInputs = [
+                pkgs.nix-eval-jobs
+                pkgs.jq
+              ];
+              text = ''
+                system=$(nix eval --expr builtins.currentSystem --impure --raw)
+                flake="path:$(readlink -f "$PWD")#packages.$system.emacs-config.elispPackages"
+                nix-eval-jobs \
+                    --gc-roots-dir gcroot \
+                    --flake "$flake" \
+                    | while read -r line; do
+                    out=$(jq -r .outputs.out <<<"$line")
+                    if [[ $(nix path-info "$out" --json --store https://akirak.cachix.org \
+                       2> /dev/null \
+                       | jq '.[0].valid') = false ]]
+                    then
+                      drv=$(jq -r .drvPath <<<"$line")
+                      echo "Building $drv"
+                      time nix build "$drv" --no-link --print-build-logs
+                    else
+                      echo "$out is already built, skipping"
+                    fi
+                done
+              '';
+            };
+          }
+          // profiles
+          // archiveBuilders;
 
         apps = emacs-config.makeApps {
           lockDirName = "emacs/lock";
