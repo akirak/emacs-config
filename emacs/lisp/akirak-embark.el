@@ -74,8 +74,22 @@
   "v" #'akirak-org-babel-send-block-to-vterm
   "w" #'embark-copy-as-kill)
 
+(defvar-keymap akirak-embark-org-target-map
+  :parent embark-general-map
+  "o" #'akirak-embark-org-occur-target-references)
+
+(defvar-keymap akirak-embark-org-radio-target-map
+  :parent embark-general-map
+  "o" #'akirak-embark-org-occur-radio-references)
+
 (defvar-keymap akirak-embark-org-prompt-map
   :parent akirak-embark-org-block-map)
+
+(defvar-keymap akirak-embark-beancount-account-map
+  :parent embark-general-map
+  "q" #'akirak-beancount-query-account
+  "b" #'akirak-beancount-balance
+  "r" #'akirak-beancount-rename-account)
 
 (defvar akirak-embark-git-file-map
   (let ((map (make-composed-keymap nil embark-general-map)))
@@ -224,17 +238,18 @@
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
+  (define-key embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
   (define-key embark-file-map "t" #'find-file-other-tab)
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
   (define-key embark-file-map (kbd "C-c C-T") #'akirak-tailscale-copy-file)
+  (define-key embark-file-map (kbd "C-o") #'akirak-embark-org-open-file)
   (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
   (define-key embark-region-map "V" #'akirak-gpt-translate-vocabulary)
 
-  (add-to-list 'embark-target-finders #'akirak-embark-target-org-element)
-  (add-to-list 'embark-target-finders #'akirak-embark-target-org-link-at-point)
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
   (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
   (add-to-list 'embark-target-finders #'akirak-embark-target-magit-section t)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-beancount t)
 
   (embark-define-thingatpt-target sentence
     nov-mode eww-mode)
@@ -262,6 +277,8 @@
                '(nix-installable . akirak-embark-nix-installable-map))
   (add-to-list 'embark-keymap-alist
                '(magit-section . akirak-embark-magit-section-map))
+  (add-to-list 'embark-keymap-alist
+               '(beancount-account . akirak-embark-beancount-account-map))
 
   (add-to-list 'embark-pre-action-hooks
                '(nix3-flake-show embark--universal-argument))
@@ -276,7 +293,8 @@
                  embark--ignore-target)))
 
 ;;;###autoload
-(defun akirak-embark-setup-org-heading ()
+(defun akirak-embark-setup-org ()
+  "Apply extra settings for embark-org."
   (require 'embark-org)
   ;; If the point is at the very beginning of the heading, I want this finder to
   ;; match.
@@ -284,9 +302,15 @@
   ;; Added as a fallback. Other finder such as the link finder should precede,
   ;; but I can still use this finder by running `embark-act' multiple times.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading t)
+  ;; (add-to-list 'embark-target-finders #'akirak-embark-target-pocket-reader)
+  (add-to-list 'embark-target-finders #'akirak-embark-target-org-target)
 
   (add-to-list 'embark-keymap-alist
                '(org-heading . akirak-embark-org-heading-map))
+  (add-to-list 'embark-keymap-alist
+               '(org-target . akirak-embark-org-target-map))
+  (add-to-list 'embark-keymap-alist
+               '(org-radio-target . akirak-embark-org-radio-target-map))
 
   (add-to-list 'embark-transformer-alist
                '(org-placeholder-item . akirak-embark-transform-org-placeholder))
@@ -296,55 +320,76 @@
 
   (add-to-list 'embark-target-injection-hooks
                '(akirak-consult-org-clock-history
-                 embark--ignore-target)))
+                 embark--ignore-target))
 
-(defun akirak-embark-target-org-link-at-point ()
-  (cond
-   ((eq major-mode 'pocket-reader-mode)
+  (define-key embark-org-link-map "o" #'akirak-embark-org-occur-target-references))
+
+(defun akirak-embark-target-pocket-reader ()
+  (when (eq major-mode 'pocket-reader-mode)
     ;; Based on `pocket-reader-copy-url' from pocket-reader.el
     (when-let* ((id (tabulated-list-get-id))
                 (item (ht-get pocket-reader-items id))
                 (url (pocket-reader--get-url item)))
-      `(url ,url . ,(bounds-of-thing-at-point 'line))))
-   ((bound-and-true-p org-link-bracket-re)
-    (save-match-data
-      (when-let (href (cond
-                       ((thing-at-point-looking-at org-link-bracket-re)
-                        (match-string 1))
-                       ((thing-at-point-looking-at org-link-plain-re)
-                        (match-string 0))))
-        (let* ((bounds (cons (marker-position (nth 0 (match-data)))
-                             (marker-position (nth 1 (match-data)))))
-               (href (substring-no-properties href)))
-          (pcase href
-            ;; TODO Add org-link type
-            ((rx bol "file:" (group (+ anything)))
-             `(file ,(match-string 1 href) . ,bounds))
-            ((rx bol "http" (?  "s") ":")
-             `(url ,href . ,bounds)))))))))
+      `(url ,url . ,(bounds-of-thing-at-point 'line)))))
 
-(defun akirak-embark-target-org-element ()
-  (when (and (derived-mode-p 'org-mode)
-             (org-match-line org-block-regexp))
-    (if (equal "src" (match-string 1))
-        (pcase (save-match-data (org-babel-get-src-block-info))
-          (`(,_lang ,body ,plist . ,_)
-           `(org-src-block
-             ,(string-trim body)
-             . ,(cons (match-beginning 0)
-                      (match-end 0)))))
-      (let* ((element (org-element-context))
-             (cbegin (org-element-property :contents-begin element))
-             (cend (org-element-property :contents-end element)))
-        `(,(pcase (org-element-property :type element)
-             ("prompt"
-              'org-prompt-special-block)
-             (_
-              'org-special-block))
-          ,(when (and cbegin cend)
-             (buffer-substring-no-properties cbegin cend))
-          . ,(cons (org-element-property :begin element)
-                   (org-element-property :end element)))))))
+(defun akirak-embark-target-org-target ()
+  "Possibly match an element other than a heading in Org."
+  (when (derived-mode-p 'org-mode)
+    (cond
+     ((thing-at-point-looking-at org-target-regexp)
+      (or (save-match-data
+            (when (thing-at-point-looking-at org-radio-target-regexp)
+              `(org-radio-target
+                ,(match-string-no-properties 1)
+                . (,(match-beginning 0) . ,(match-end 0)))))
+          `(org-target
+            ,(match-string-no-properties 1)
+            . (,(match-beginning 0) . ,(match-end 0)))))
+     ((org-match-line org-block-regexp)
+      (if (equal "src" (match-string 1))
+          (pcase (save-match-data (org-babel-get-src-block-info))
+            (`(,_lang ,body ,plist . ,_)
+             `(org-src-block
+               ,(string-trim body)
+               . ,(cons (match-beginning 0)
+                        (match-end 0)))))
+        (let* ((element (org-element-context))
+               (cbegin (org-element-property :contents-begin element))
+               (cend (org-element-property :contents-end element)))
+          `(,(pcase (org-element-property :type element)
+               ("prompt"
+                'org-prompt-special-block)
+               (_
+                'org-special-block))
+            ,(when (and cbegin cend)
+               (buffer-substring-no-properties cbegin cend))
+            . ,(cons (org-element-property :begin element)
+                     (org-element-property :end element))))))
+     (t
+      (if-let (href (cond
+                     ((thing-at-point-looking-at org-link-bracket-re)
+                      (match-string 1))
+                     ((thing-at-point-looking-at org-link-plain-re)
+                      (match-string 0))))
+          (let* ((bounds (cons (marker-position (nth 0 (match-data)))
+                               (marker-position (nth 1 (match-data)))))
+                 (href (substring-no-properties href)))
+            (pcase href
+              ;; TODO Add org-link type
+              ((rx bol "file:" (group (+ anything)))
+               `(file ,(match-string 1 href) . ,bounds))
+              ((rx bol "http" (?  "s") ":")
+               `(url ,href . ,bounds))))
+        (when (and (not (thing-at-point-looking-at org-link-any-re))
+                   (eq (get-text-property (point) 'face)
+                       'org-link))
+          ;; radio target
+          (when-let (element (org-element-context))
+            (when (and (eq 'link (org-element-type element))
+                       (equal "radio" (org-element-property :type element)))
+              `(identifier ,(org-element-property :path element)
+                           . (,(org-element-property :begin element)
+                              . ,(org-element-property :end element)))))))))))
 
 (defun akirak-embark-target-org-heading ()
   (when (derived-mode-p 'org-mode)
@@ -440,6 +485,48 @@
                           (magit-current-section)))
     (cons 'magit-section section)))
 
+(defun akirak-embark-target-beancount ()
+  (when (eq major-mode 'beancount-mode)
+    (cl-flet
+        ((unquote (string)
+           (save-match-data
+             (if (string-match (rx bol "\"" (group (+ anything)) "\"" eol) string)
+                 (match-string 1 string)
+               string)))
+         (transaction-end ()
+           (save-excursion
+             (forward-line)
+             (while (looking-at beancount-posting-regexp)
+               (forward-line))
+             (point))))
+      (cond
+       ((thing-at-point-looking-at beancount-transaction-regexp)
+        (let ((string (unquote (match-string-no-properties 3)))
+              (begin (match-beginning 0))
+              (end (transaction-end)))
+          `(beancount-transaction
+            ,string . (,begin . ,end))))
+       ((thing-at-point-looking-at beancount-posting-regexp)
+        (re-search-backward beancount-transaction-regexp)
+        (let ((string (unquote (match-string-no-properties 3)))
+              (begin (match-beginning 0))
+              (end (transaction-end)))
+          `(beancount-transaction
+            ,string . (,begin . ,end))))
+       ((thing-at-point-looking-at beancount-posting-regexp)
+        (re-search-backward beancount-transaction-regexp)
+        (let ((string (unquote (match-string-no-properties 3)))
+              (begin (match-beginning 0))
+              (end (transaction-end)))
+          `(beancount-transaction
+            ,string . (,begin . ,end))))
+       ((thing-at-point-looking-at beancount-account-regexp)
+        (let ((string (match-string-no-properties 0))
+              (begin (match-beginning 0))
+              (end (match-end 0)))
+          `(beancount-account
+            ,string . (,begin . ,end))))))))
+
 (defun akirak-embark-kill-directory-buffers (directory)
   "Kill all buffers in DIRECTORY."
   (interactive "DKill buffers: ")
@@ -474,6 +561,27 @@
             (list description)))
   (message "Stored a link with the description \"%s\": %s"
            description (caar org-stored-links)))
+
+(defun akirak-embark-org-occur-target-references (target)
+  (interactive "sTarget: " org-mode)
+  (require 'org-dog)
+  (org-dog-link-target-occur target))
+
+(defun akirak-embark-org-occur-radio-references (target)
+  (interactive "sTarget: " org-mode)
+  ;; TODO: Create a separate buffer
+  (let ((buffer-name (format "*org-occur<%s>*" target)))
+    (when (get-buffer buffer-name)
+      (kill-buffer buffer-name))
+    (with-current-buffer (make-indirect-buffer (org-base-buffer (current-buffer))
+                                               buffer-name
+                                               'clone)
+      (org-occur (regexp-quote target))
+      (setq next-error-last-buffer (current-buffer))
+      (goto-char (point-min))
+      (next-error)
+      (pop-to-buffer (current-buffer))
+      (recenter))))
 
 (defun akirak-embark-nix-run-async (installable)
   (interactive "s")
@@ -521,6 +629,15 @@
   (interactive "r")
   (goto-char end)
   (deactivate-mark))
+
+(defun akirak-embark-devdocs-lookup (initial-input)
+  (interactive "s")
+  (require 'devdocs)
+  (devdocs-lookup nil initial-input))
+
+(defun akirak-embark-org-open-file (file)
+  (interactive "f")
+  (org-open-file file))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here

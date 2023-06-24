@@ -114,24 +114,44 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 ;;;###autoload
 (defun akirak-window-display-org-buffer-other-window (buffer alist)
   (unless (or (car-safe display-buffer-overriding-action)
-              (not (cdr (assq 'inhibit-same-window alist))))
-    (when-let* ((other-windows (thread-last
+              (equal (assq 'inhibit-same-window alist)
+                     '(inhibit-same-window . nil)))
+    (or (akirak-window--display-org-occur buffer)
+        (when-let* ((other-windows (thread-last
+                                     (window-list-1 nil 'never)
+                                     (delete (selected-window))))
+                    (windows (or (cl-remove-if #'akirak-window--org-capture-window-p
+                                               other-windows)
+                                 other-windows))
+                    ;; Prefer full-height windows.
+                    (windows (seq-sort-by #'window-height #'> windows))
+                    (windows (seq-filter `(lambda (w)
+                                            (= (window-height w)
+                                               (window-height ,(car windows))))
+                                         windows))
+                    ;; Prefer the least recently displayed window.
+                    (windows (seq-sort-by #'akirak-window--display-time
+                                          #'time-less-p
+                                          windows)))
+          (window--display-buffer buffer (car windows) 'reuse)))))
+
+(defconst akirak-window-org-occur-buffer-regexp
+  (rx bol (or "*org-dog-occur<"
+              "*org-occur<")))
+
+(defun akirak-window--display-org-occur (buffer)
+  (when (string-match-p akirak-window-org-occur-buffer-regexp (buffer-name buffer))
+    (if (string-match-p akirak-window-org-occur-buffer-regexp (buffer-name (window-buffer)))
+        (window--display-buffer buffer (selected-window) 'reuse)
+      (if-let (existing-window (thread-last
                                  (window-list-1 nil 'never)
-                                 (delete (selected-window))))
-                (windows (or (cl-remove-if #'akirak-window--org-capture-window-p
-                                           other-windows)
-                             other-windows))
-                ;; Prefer full-height windows.
-                (windows (seq-sort-by #'window-height #'> windows))
-                (windows (seq-filter `(lambda (w)
-                                        (= (window-height w)
-                                           (window-height ,(car windows))))
-                                     windows))
-                ;; Prefer the least recently displayed window.
-                (windows (seq-sort-by #'akirak-window--display-time
-                                      #'time-less-p
-                                      windows)))
-      (window--display-buffer buffer (car windows) 'reuse))))
+                                 (seq-filter (lambda (w)
+                                               (string-match-p akirak-window-org-occur-buffer-regexp
+                                                               (buffer-name (window-buffer w)))))
+                                 (car)))
+          (window--display-buffer buffer existing-window 'reuse)
+        (when-let (below-window (window-in-direction 'below))
+          (window--display-buffer buffer below-window 'reuse))))))
 
 ;;;###autoload
 (defun akirak-window-display-document-buffer (buffer _)

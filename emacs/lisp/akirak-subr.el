@@ -25,7 +25,7 @@
                                     (require 'org-src)
                                     (mapcar #'car org-src-lang-modes))
                                   (akirak-major-mode-list))
-                   nil t initial history))
+                   nil nil initial history))
 
 (provide 'akirak-subr)
 ;;; akirak-subr.el ends here

@@ -47,7 +47,9 @@
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
                                   ,(expand-file-name "~/resources/articles/")
-                                  (and "emacs-config.org" eol)
+                                  (and (or "emacs-config.org"
+                                           "/org/config.el")
+                                       eol)
                                   "/private-config/"
                                   "/tmp"))
                      "/.")))
@@ -583,6 +585,15 @@ This function returns the current buffer."
                   (akirak-org-avy-heading t)
                   (point-marker)))))
     (akirak-org-clock-transfer-entries dest)))
+
+;;;###autoload
+(defun akirak-org-clock-in (&optional arg)
+  "A custom variant of `org-clock-in'."
+  (interactive "P")
+  (if (equal arg '(4))
+      (let ((org-clock-in-switch-to-state nil))
+        (org-clock-in))
+    (org-clock-in)))
 
 ;;;; Clock out commands
 

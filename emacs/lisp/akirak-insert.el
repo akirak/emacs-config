@@ -100,5 +100,15 @@
    ""
    (akirak-window-system-complete-title "Window title: ")))
 
+;;;###autoload (autoload 'akirak-insert-which-function "akirak-insert" nil 'interactive)
+(define-skeleton akirak-insert-which-function
+  "Insert the function name retrieved by `which-function'."
+  nil
+  (or (if (minibufferp)
+          (with-minibuffer-selected-window
+            (which-function))
+        (which-function))
+      (user-error "No name is returned by which-function")))
+
 (provide 'akirak-insert)
 ;;; akirak-insert.el ends here

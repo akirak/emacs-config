@@ -375,6 +375,12 @@
                    (akirak-capture-doct))
     :transient t)
    ("j" "Journal" akirak-capture-journal)
+   ("n" "Note" (lambda ()
+                 (interactive)
+                 (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
+                       akirak-capture-template-options '(:tags "@note")
+                       akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                 (akirak-capture-doct)))
    ("E" "Epic" (lambda ()
                  (interactive)
                  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
@@ -736,7 +742,8 @@
         (insert block-text))
       (when-let (window (get-buffer-window buffer))
         (with-selected-window window
-          (goto-char (org-entry-end-position)))))))
+          (unless (looking-at org-heading-regexp)
+            (goto-char (org-entry-end-position))))))))
 
 (transient-define-suffix akirak-capture-url-to-clock ()
   :description 'octopus-clocked-entry-description
@@ -762,6 +769,9 @@
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
+  ["Static files"
+   :class transient-row
+   :setup-children octopus-setup-static-targets]
   ["Other locations"
    :class transient-row
    ("n" "News"

@@ -1356,7 +1356,8 @@ Operations on the current project
                                               (+ (not (any "/")))
                                               "/"
                                               (+ (not (any "/")))
-                                              "/")
+                                              "/"
+                                              eol)
                                           dir)
                       `(worktree-group ,dir))))
         (cl-defmethod project-root ((project (head worktree-group)))
@@ -1893,6 +1894,7 @@ Thus I will explicitly install this package rather than using the built-in versi
         (apply orig args)))
     (advice-add 'consult-buffer :around #'akirak/ad-no-obey-display-actions)
     (advice-add 'org-dog-find-file :around #'akirak/ad-no-obey-display-actions)
+    (advice-add 'org-src-switch-to-buffer :around #'akirak/ad-no-obey-display-actions)
 
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
@@ -2015,11 +2017,40 @@ Thus I will explicitly install this package rather than using the built-in versi
 # Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
 # I want a separate section for themes to add this comment.
 
-No theme is set by default.
-You can load a theme on startup by adding command line arguments to Emacs, e.g.
 
-#+begin_src sh
-  emacs --eval "(when init-file-user (require 'doom-themes) (load-theme 'doom-tomorrow-night t))"
+**** modus-themes
+:PROPERTIES:
+:CREATED_TIME: [2022-09-20 Tue 20:43]
+:END:
+#+begin_quote
+Elegant, highly legible and customizable themes
+[[https://git.sr.ht/~protesilaos/modus-themes]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package modus-themes)
+    ;; See [[info:modus-themes#Override colors]]
+    ;; and [[info:modus-themes#Customization Options]]
+    (:set modus-themes-operandi-color-overrides
+          '((bg-main . "#e1d9c2")
+            (fg-main . "#333333"))
+
+          modus-themes-bold-constructs nil
+          modus-themes-italic-constructs t
+          modus-themes-paren-match '(bold intence)
+          modus-themes-org-blocks 'gray-background
+
+          modus-themes-links '(neutral-underline)
+
+          modus-themes-headings
+          '((1 . (background medium variable-pitch 1.5))
+            (2 . (rainbow overline variable-pitch 1.1))
+            (4 . (variable-pitch))))
+
+    (when (or window-system
+              (daemonp))
+      (modus-themes-load-themes)
+      (modus-themes-load-operandi)))
 #+end_src
 *** Font families
 You need to install the font separately.
@@ -2305,6 +2336,11 @@ Outline-based notes management and organizer
       (:global "C-c o" #'org-open-at-point-global)
 
       (:when-loaded
+        (add-to-list 'org-file-apps
+                     `("\\.sqlite3?\\'"
+                       . ,(defun akirak/org-file-open-sqlite (file &rest _)
+                            (sqlite-mode-open-file file))))
+
         (add-to-list 'display-buffer-alist
                      '("\\*Org Select\\*"
                        (display-buffer-in-side-window
@@ -2415,13 +2451,9 @@ Outline-based notes management and organizer
                "M-g a" (defun akirak/org-goto-beginnning-of-content ()
                          (interactive)
                          (org-back-to-heading)
-                         (org-end-of-meta-data)
-                         (when (looking-at org-logbook-drawer-re)
-                           (goto-char (match-end 0))
-                           (unless (bolp)
-                             (beginning-of-line 2)))
-                         (when (org-at-heading-p)
-                           (org-open-line 1)))
+                         (org-end-of-meta-data t)
+                         (when (re-search-backward (rx bol nonl) nil t)
+                           (forward-line)))
                "M-g e" (defun akirak/org-goto-before-next-heading ()
                          (interactive)
                          (org-next-visible-heading 1)
@@ -2623,6 +2655,10 @@ Outline-based notes management and organizer
                   (akirak-org-clock-snooze 20)))
 
     (:global "M-g M-j" #'akirak-org-clock-goto)
+
+    (:with-feature org
+      (:with-map org-mode-map
+        [remap org-clock-in] #'akirak-org-clock-in))
 
     (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
     (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
@@ -2885,12 +2921,13 @@ A programmable workflow layer for Org mode
                   (kbd "+") #'org-dog-add-header-link))
 
     (:status personal
-      (:defer 1
-              (defun akirak/org-dog-load-on-startup ()
-                ;; I don't want to hide the init time in the echo area.
-                (let ((inhibit-message t))
-                  (require 'org-dog)
-                  (org-dog-reload-files t))))))
+      (when (daemonp)
+        (:defer 1
+                (defun akirak/org-dog-load-on-startup ()
+                  ;; I don't want to hide the init time in the echo area.
+                  (let ((inhibit-message t))
+                    (require 'org-dog)
+                    (org-dog-reload-files t)))))))
 #+end_src
 **** consult-org-dog
 :PROPERTIES:
@@ -3330,9 +3367,12 @@ Consult interface for org-nlink
 
 #+begin_src emacs-lisp
   (setup (:package consult-org-nlink)
-      (:with-feature org
-        (:with-map org-mode-map
-          (:bind "C-x i" #'consult-org-nlink-insert))))
+    (:with-feature org
+      (:with-map org-mode-map
+        (:bind "C-x i" #'consult-org-nlink-insert)))
+    (:with-feature isearch
+      (:with-map isearch-mode-map
+        (:bind "C-x i" #'consult-org-nlink-isearch))))
 #+end_src
 *** COMMENT org-noter                                                          :ARCHIVE:
 :PROPERTIES:
@@ -3925,8 +3965,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+end_src
 *** akirak-insert
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-c a") #'akirak-insert)
-  (global-set-key (kbd "C-x a w") #'akirak-insert-window-title)
+  (setup akirak-insert
+    (:global "C-c a" #'akirak-insert
+             "C-x a f" #'akirak-insert-which-function
+             "C-x a w" #'akirak-insert-window-title))
 #+end_src
 *** akirak-log
 #+begin_src elisp
@@ -4355,9 +4397,7 @@ A major mode to edit Beancount input files.
       (:file-match "\\.beancount\\'" "\\.bean\\'")
       (:hook bean-format-on-save-mode)
       (:when-loaded
-        (define-key beancount-mode-map
-                    (vconcat beancount-mode-map-prefix [?i])
-                    #'akirak-beancount-add-transaction)
+        (:bind "C-c C-o" #'akirak-beancount-locate-account-transactions)
         (define-key beancount-mode-map
                     (vconcat beancount-mode-map-prefix [?d])
                     #'akirak-beancount-insert-date)
@@ -4418,7 +4458,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
-*** burly
+*** COMMENT burly                                                              :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-28 Wed 23:59]
 :END:
@@ -4808,7 +4848,8 @@ Ibuffer-like filtering for dired
     (:hook-into dired-mode-hook)
     (:hook dired-filter-group-mode)
 
-    (:set dired-filter-group-saved-groups
+    (:set dired-omit-extensions nil
+          dired-filter-group-saved-groups
           `(("default"
              ("Directories"
               (directory . t))
@@ -4831,6 +4872,8 @@ Ibuffer-like filtering for dired
                    (extension "beancount"))
                   ("Data files"
                    (extension "csv" "json" "sql" "lock"))
+                  ("Databases"
+                   (extension "db" "sqlite" "sqlite3"))
                   ;; Binary files
                   ("Books and papers"
                    (extension "pdf" "mobi" "epub" "azw"))
@@ -4842,8 +4885,8 @@ Ibuffer-like filtering for dired
                    (extension "xlsx" "xls" "docx" "doc"))
                   ("Programs"
                    (extension "exe" "run" "deb"))
-                  ("Objects and binary files"
-                   (extension "o" "elc"))
+                  ("Object files and libraries"
+                   (extension "o" "elc" "eln" "so"))
                   ("Meta data"
                    (extension "torrent" "acsm"))
                   ("Web"
@@ -4854,6 +4897,8 @@ Ibuffer-like filtering for dired
                    (extension "jpg" "jpeg" "png" "gif" "svg"))
                   ("Nix"
                    (extension "nix"))
+                  ("Programming languages"
+                   (extension "pl" "kk" "py" "ex" "exs"))
                   ;; Source code
                   ("Configuration"
                    (or (name . "Makefile")
@@ -5240,7 +5285,7 @@ Consult integration for Embark
 
 #+begin_src emacs-lisp
   (setup embark-org
-    (eval-after-load 'org #'akirak-embark-setup-org-heading))
+    (eval-after-load 'org #'akirak-embark-setup-org))
 #+end_src
 *** COMMENT ement                                                       :social:ARCHIVE:
 :PROPERTIES:
@@ -5510,7 +5555,7 @@ Correcting words with flyspell via avy-menu interface
     (with-eval-after-load "flyspell-correct"
       (require 'flyspell-correct-avy-menu)))
 #+end_src
-*** forge                                               :VC:project:
+*** COMMENT forge                                                   :VC:project:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
 :END:
@@ -6698,40 +6743,6 @@ A scroll bar for the modeline
     (:with-mode mlscroll-mode
       (:hook-into after-init-hook)))
 #+end_src
-*** modus-themes                                                        :themes:
-:PROPERTIES:
-:CREATED_TIME: [2022-09-20 Tue 20:43]
-:END:
-#+begin_quote
-Elegant, highly legible and customizable themes
-[[https://git.sr.ht/~protesilaos/modus-themes]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package modus-themes)
-    ;; See [[info:modus-themes#Override colors]]
-    ;; and [[info:modus-themes#Customization Options]]
-    (:set modus-themes-operandi-color-overrides
-          '((bg-main . "#e1d9c2")
-            (fg-main . "#333333"))
-
-          modus-themes-bold-constructs nil
-          modus-themes-italic-constructs t
-          modus-themes-paren-match '(bold intence)
-          modus-themes-org-blocks 'gray-background
-
-          modus-themes-links '(neutral-underline)
-
-          modus-themes-headings
-          '((1 . (background medium variable-pitch 1.5))
-            (2 . (rainbow overline variable-pitch 1.1))
-            (4 . (variable-pitch))))
-
-    (when (or window-system
-              (daemonp))
-      (modus-themes-load-themes)
-      (modus-themes-load-operandi)))
-#+end_src
 *** move-dup                                               :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 20:59]
@@ -6766,18 +6777,35 @@ Frontend to experimental commands of Nix
   (setup (:package nix3)
     (:set nix3-flake-remote-wait 20)
 
+    (defun akirak/nix3-flake-maybe-update-from-pins ()
+      "Generate flake.lock from the pins."
+      (when (not (file-exists-p "flake.lock"))
+        (akirak/nix3-flake-update-from-pins)))
+
     (defun akirak/nix3-flake-update-from-pins ()
       (interactive)
-      (when (and (file-exists-p "flake.nix")
-                 (not (file-exists-p "flake.lock")))
-        (start-process "nix-flake-lock" "*nix flake lock*"
-                       "nix" "flake" "update"
-                       "--inputs-from" "github:akirak/flake-pins")))
+      (if (file-exists-p "flake.nix")
+          (make-process :buffer "*nix flake update*"
+                        :name "nix-flake-update"
+                        :command
+                        (list "nix" "flake" "update" "."
+                              "--commit-lock-file"
+                              "--inputs-from" "github:akirak/flake-pins")
+                        :sentinel
+                        (lambda (proc event)
+                          (if (string= event "finished\n")
+                              (message "Successfully updated flake.lock")
+                            (when (> (process-exit-status proc)
+                                     0)
+                              (message "Failed to update flake.lock: %s"
+                                       (with-current-buffer "*nix flake update*"
+                                         (buffer-string)))))))
+        (user-error "There is no flake.nix in default-directory")))
 
     (:when-loaded
-      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-update-from-pins
+      (add-hook 'nix3-flake-new-hook #'akirak/nix3-flake-maybe-update-from-pins
                 90)
-      (add-hook 'nix3-flake-init-hook #'akirak/nix3-flake-update-from-pins
+      (add-hook 'nix3-flake-init-hook #'akirak/nix3-flake-maybe-update-from-pins
                 90))
 
     (:global "C-c n" #'nix3-transient
@@ -7034,12 +7062,14 @@ Summon and dismiss buffers as popups
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
                                      "^\\*scratch\\*"
+                                     "^\\*Compile-Log\\*"
                                      "^\\*Scratch-Input-Method"
                                      "^ \\*Agenda Commands\\*"
                                      "^\\*Register Preview\\*"
                                      "^\\*Shell Command Output\\*"
                                      "^\\*edit string\\*"
                                      "^\\*edit-indirect"
+                                     "^\\*bean-query"
                                      "^\\*scratch from selection\\*"
                                      ;; "^\\*eldoc"
                                      "^\\*Select Link\\*"
@@ -8295,17 +8325,17 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 211 |
-| [[org-ql-search:tags:visual][visual]]              |  13 |
+| [[org-ql-search:tags:packages][packages]]            | 209 |
+| [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
-| [[org-ql-search:tags:VC][VC]]                  |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
+| [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
@@ -8315,7 +8345,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:writing][writing]]             |   4 |
 | [[org-ql-search:tags:navigation][navigation]]          |   4 |
 | [[org-ql-search:tags:windows][windows]]             |   4 |
-| [[org-ql-search:tags:project][project]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
@@ -8325,6 +8354,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
+| [[org-ql-search:tags:project][project]]             |   3 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
@@ -8363,7 +8393,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:social][social]]              |   1 |
 | [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
 | [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
-| [[org-ql-search:tags:themes][themes]]              |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:Chinese][Chinese]]             |   1 |

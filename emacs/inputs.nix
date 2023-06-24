@@ -257,4 +257,13 @@
   idris-mode = _: super: {
     files = builtins.removeAttrs super.files ["flycheck-idris.el"];
   };
+
+  ob-graphql = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "ob-graphql";
+      ref = "graphql-dep";
+    };
+  };
 }
