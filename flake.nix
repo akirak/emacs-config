@@ -86,6 +86,7 @@
       }: let
         inherit (final) emacs-config;
         inherit (builtins) substring;
+        profiles = import ./emacs/profiles.nix emacs-config;
       in {
         overlayAttrs =
           {
@@ -122,7 +123,6 @@
           #   shareNet = false;
           #   inheritPath = false;
           # };
-
           inherit emacs-config;
 
           # test-emacs-config = pkgs.callPackage ./emacs/tests {};
@@ -165,7 +165,7 @@
               done
             '';
           };
-        };
+        } // profiles;
 
         apps = emacs-config.makeApps {
           lockDirName = "emacs/lock";
