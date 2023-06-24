@@ -4,3 +4,8 @@ result-*
 .pre-commit-config.yaml
 .direnv
 gcroot
+
+# Archives
+*.zstd
+*.nar
+files.txt
