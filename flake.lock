@@ -1,5 +1,20 @@
 {
   "nodes": {
+    "archiver": {
+      "locked": {
+        "lastModified": 1687530515,
+        "narHash": "sha256-sZXDRkYvlp7qD/31+fRn4obkqYJWoxQlsHuYLrh+5ok=",
+        "owner": "emacs-twist",
+        "repo": "twist-archiver",
+        "rev": "1427b891b0485233c1c0ad58d4bd7d660b7e1c24",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-twist",
+        "repo": "twist-archiver",
+        "type": "github"
+      }
+    },
     "cachix": {
       "inputs": {
         "devenv": "devenv",
@@ -810,6 +825,7 @@
     },
     "root": {
       "inputs": {
+        "archiver": "archiver",
         "emacs-overlay": "emacs-overlay",
         "epkgs": "epkgs",
         "flake-no-path": "flake-no-path",
