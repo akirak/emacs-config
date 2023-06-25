@@ -424,7 +424,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup abbrev
     (:set save-abbrevs nil)
-    (:hook-into prog-mode text-mode minibuffer-setup)
+    ;; (:hook-into prog-mode text-mode minibuffer-setup)
     (:when-loaded
       (define-abbrev-table 'global-abbrev-table
         '(("wip" "WIP")
