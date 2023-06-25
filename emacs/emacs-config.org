@@ -214,12 +214,16 @@ I am interested to see if it can reduce the amount of configuration code.
      :org-src-lang (lang)
      "Add an entry to `org-src-lang-modes' for the mode."
      `(with-eval-after-load "org-src"
-        (add-to-list 'org-src-lang-modes
-                     (cons ,lang ',(thread-last
-                                     (setup-get 'mode)
-                                     (symbol-name)
-                                     (string-remove-suffix "-mode")
-                                     (intern)))))))
+        (let* ((lang ,lang)
+               (name ',(thread-last
+                         (setup-get 'mode)
+                         (symbol-name)
+                         (string-remove-suffix "-mode"))))
+          (add-to-list 'org-src-lang-modes
+                       (cons (if (stringp lang)
+                                 lang
+                               (string-remove-suffix "-ts" name))
+                             (intern name)))))))
 #+end_src
 *** :reformatters
 :PROPERTIES:
