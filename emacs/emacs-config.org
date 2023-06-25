@@ -3608,7 +3608,8 @@ Hugo Markdown Back-End for Org Export Engine
 
 #+begin_src emacs-lisp
   (setup css-ts-mode
-    :file-match "\\.css\\'")
+    (:org-src-lang t)
+    (:file-match "\\.css\\'"))
 #+end_src
 *** dockerfile-ts-mode
 :PROPERTIES:
@@ -3617,7 +3618,8 @@ Hugo Markdown Back-End for Org Export Engine
 
 #+begin_src emacs-lisp
   (setup dockerfile-ts-mode
-    :file-match "\\(?:\\(?:\\.d\\|D\\)ockerfile\\)$")
+    (:org-src-lang t)
+    (:file-match "\\(?:\\(?:\\.d\\|D\\)ockerfile\\)$"))
 #+end_src
 *** elixir-ts-mode
 :PROPERTIES:
@@ -3630,6 +3632,7 @@ Major mode for Elixir with tree-sitter support
 
 #+begin_src emacs-lisp
   (setup elixir-ts-mode
+    (:org-src-lang t)
     (:file-match "\\.exs?\\'")
 
     (:auto-insert
@@ -3706,6 +3709,7 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup go-ts-mode
+    (:org-src-lang t)
     (:file-match "\\.go\\'")
 
     (:auto-insert
@@ -3739,6 +3743,7 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup json-ts-mode
+    (:org-src-lang t)
     (:file-match "\\.json\\'" "\\.lock\\'"))
 #+end_src
 *** js-ts-mode
@@ -3748,6 +3753,7 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup js-ts-mode
+    (:org-src-lang "javascript")
     (:file-match "\\.m?js$"))
 #+end_src
 *** toml-ts-mode
@@ -3757,7 +3763,8 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup toml-ts-mode
-    :file-match "\\.toml\\'")
+    (:org-src-lang t)
+    (:file-match "\\.toml\\'"))
 #+end_src
 *** typescript-ts-mode                                              :major_mode:
 :PROPERTIES:
@@ -3824,6 +3831,7 @@ Major mode for editing YAML files
 
 #+begin_src emacs-lisp
   (setup yaml-ts-mode
+    (:org-src-lang t)
     (:file-match "\\.ya?ml\\'"))
 #+end_src
 ** User package (akirak-*.el)
