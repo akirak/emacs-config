@@ -3672,7 +3672,7 @@ Major mode for Elixir with tree-sitter support
                   > @ _ n
                   > -2 "end"))
       (define-abbrev elixir-ts-mode-abbrev-table
-        "do" "" (define-skeleton akirak-elixir-fn
+        "do" "" (define-skeleton akirak-elixir-do
                   "do ... end"
                   ""
                   > "do" n
