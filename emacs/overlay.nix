@@ -1,6 +1,5 @@
 {
   inputs,
-  emacsPackageForSystem,
   configurationRevision,
 }: final: prev:
 with builtins; let
@@ -12,7 +11,7 @@ with builtins; let
   org = inputs.org-babel.lib;
   inherit (prev) lib;
 
-  emacsPackage = emacsPackageForSystem system;
+  emacsPackages = (import inputs.flake-pins).packages.${system};
 
   # releaseVersions = import ./versions.nix;
   inventories = [
@@ -77,20 +76,24 @@ with builtins; let
     extraFeatures,
     prependToInitFile ? null,
     extraInitFiles,
+    pgtk ? true,
     withXwidgets,
     extraTreeSitterGrammars ? [],
     nativeCompileAheadDefault ? true,
-  }:
+  }: let
+    emacsPackage =
+      (
+        if pgtk
+        then emacsPackages.emacs-pgtk
+        else emacsPackages.emacs
+      )
+      .override (_: {
+        inherit withXwidgets;
+      });
+  in
     (emacsTwist {
       inherit configurationRevision;
-      emacsPackage =
-        if withXwidgets
-        then
-          emacsPackage.override
-          (_: {
-            withXwidgets = true;
-          })
-        else emacsPackage;
+      inherit emacsPackage;
       inherit nativeCompileAheadDefault;
       initFiles =
         (lib.optional (prependToInitFile != null) (prev.writeText "init.el" prependToInitFile))
@@ -163,6 +166,8 @@ with builtins; let
         emacs = emacsPackage;
       });
     });
+
+  defaultEmacsPackage = emacsPackages.emacs-pgtk;
 in {
   emacs-config = lib.makeOverridable makeEmacsProfile {
     extraFeatures = true;
@@ -172,7 +177,7 @@ in {
 
   # A configuration with the packages for the Git hooks.
   emacs-batch = emacsTwist {
-    inherit emacsPackage;
+    emacsPackage = defaultEmacsPackage;
     initFiles = [];
     extraPackages = ["org-ql" "org-make-toc"];
     inherit inventories;
@@ -181,9 +186,9 @@ in {
 
   emacsclient =
     inputs.nixpkgs.legacyPackages.${system}.runCommandLocal "emacsclient" {
-      propagatedBuildInputs = [emacsPackage];
+      propagatedBuildInputs = [defaultEmacsPackage];
     } ''
       mkdir -p $out/bin
-      ln -t $out/bin -s ${emacsPackage}/bin/emacsclient
+      ln -t $out/bin -s ${defaultEmacsPackage}/bin/emacsclient
     '';
 }
