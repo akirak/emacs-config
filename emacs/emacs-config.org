@@ -2819,7 +2819,7 @@ Defining todo blockers in a block
 :CREATED_TIME: [2022-02-25 Fri 19:26]
 :END:
 #+begin_quote
-Emacs bookmark support for org-mode
+Emacs bookmark support for Org mode
 [[http://github.com/alphapapa/org-bookmark-heading]]
 #+end_quote
 
@@ -7322,7 +7322,7 @@ Clean-up and Beautify the list of minor-modes.
                            symbol-end))
     (:hook-into after-init-hook))
 #+end_src
-*** ruby-end                                                           :ARCHIVE:
+*** COMMENT ruby-end                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 23:59]
 :END:
@@ -8337,7 +8337,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 209 |
+| [[org-ql-search:tags:packages][packages]]            | 208 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
