@@ -11,5 +11,5 @@ jobs:
       - name: Tag the current head
         run: |
           tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
-          git tag -a "$tag" "Manually tagged release."
+          git tag "$tag"
           git push origin "$tag"
