@@ -14,8 +14,10 @@ jobs:
 
     - name: Tag the current head
       if: ${{ github.event_name == 'workflow_dispatch' }}
+      id: tag
       run: |
         tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
+        echo "RELEASE_TAG=$tag" >> "$GITHUB_OUTPUT"
         git tag "$tag"
         git push origin "$tag"
 
@@ -35,7 +37,7 @@ jobs:
         nix run .#build-developer-archive
 
     - uses: akirak/action-gh-release@master
-      if: startsWith(github.ref, 'refs/tags/')
       with:
+        tag_name: ${{ steps.tag.outputs.RELEASE_TAG || github.ref }}
         files: |
           *.zstd
