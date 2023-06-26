@@ -1049,6 +1049,21 @@ The built-in =electric= package provides the following modes:
     (:set help-window-keep-selected t)
     (define-key help-map (kbd "C-h") nil))
 #+end_src
+*** hippie-exp
+:PROPERTIES:
+:CREATED_TIME: [2023-06-26 Mon 23:02]
+:END:
+
+#+begin_src emacs-lisp
+  (setup hippie-exp
+    (:global "C-M-/" #'hippie-expand)
+    (:set hippie-expand-try-functions-list
+          '(try-complete-file-name-partially
+            try-complete-file-name
+            try-expand-dabbrev
+            try-expand-dabbrev-visible
+            try-expand-dabbrev-from-kill)))
+#+end_src
 *** hl-line                                                 :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
