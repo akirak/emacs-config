@@ -1,6 +1,8 @@
 name: Upload release assets
 
 on:
+  create:
+    ref: 'tags/r*'
   push:
     tags:
       - "r*"
