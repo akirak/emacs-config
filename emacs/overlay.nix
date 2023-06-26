@@ -87,9 +87,13 @@ with builtins; let
         then emacsPackages.emacs-pgtk
         else emacsPackages.emacs
       )
-      .override (_: {
-        inherit withXwidgets;
-      });
+      .override (_: (
+        if withXwidgets
+        then {
+          inherit withXwidgets;
+        }
+        else {}
+      ));
   in
     (emacsTwist {
       inherit configurationRevision;
