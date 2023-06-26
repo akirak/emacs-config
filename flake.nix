@@ -127,8 +127,6 @@
                 then substring 0 7 self.rev
                 else "dirty"
               }";
-              emacsPackageForSystem = system:
-                (import inputs.flake-pins).packages.${system}.emacs-pgtk;
             }
             final
             pkgs

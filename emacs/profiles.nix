@@ -8,15 +8,21 @@ emacs-config: let
     (setq custom-file (locate-user-emacs-file "custom.el"))
     (setq akirak/enabled-status-tags t)
   '';
-in {
+in rec {
   /*
-    Generally useful configuration for developer's work.
+  Generally useful configuration for developer's work.
   */
-  developer = emacs-config.override (_: {
+  developer-pgtk = emacs-config.override (_: {
+    pgtk = true;
+
     prependToInitFile = personalInitPreamble;
 
     extraFeatures = [
       "mermaid"
     ];
+  });
+
+  developer = developer-pgtk.override (_: {
+    pgtk = false;
   });
 }
