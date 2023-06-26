@@ -1,8 +1,7 @@
 name: Upload release assets
 
 on:
-  create:
-    ref: 'tags/r*'
+  workflow_dispatch:
   push:
     tags:
       - "r*"
@@ -12,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
+    - name: Tag the current head
+      if: ${{ github.event_name == 'workflow_dispatch' }}
+      run: |
+        tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
+        git tag "$tag"
+        git push origin "$tag"
 
     - uses: cachix/install-nix-action@v22
       with:
