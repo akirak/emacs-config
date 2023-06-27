@@ -2355,6 +2355,9 @@ Outline-based notes management and organizer
       (:global "C-c o" #'org-open-at-point-global)
 
       (:when-loaded
+        (:status personal
+          (akirak-org-setup-todo))
+
         (add-to-list 'org-file-apps
                      `("\\.sqlite3?\\'"
                        . ,(defun akirak/org-file-open-sqlite (file &rest _)
@@ -2940,6 +2943,33 @@ A programmable workflow layer for Org mode
                   (kbd "+") #'org-dog-add-header-link))
 
     (:status personal
+      (:auto-insert
+       (("\\.org\\'" . "Org Dog files")
+        . akirak/org-dog-auto-insert))
+      (with-eval-after-load "autoinsert"
+        (add-to-list 'auto-insert-alist
+                     `
+                     t))
+
+      (defun akirak/org-dog-auto-insert ()
+        (when-let (obj (org-dog-buffer-object))
+          (cl-typecase obj
+            (org-dog-facade-datetree-file
+             (skeleton-insert
+              `(> "#+title: " _
+                  n "#+REVERSE_DATETREE_USE_WEEK_TREE: nil"
+                  n "#+REVERSE_DATETREE_DATE_FORMAT: %Y-%m-%d %A"
+                  n "#+REVERSE_DATETREE_MONTH_FORMAT: %Y-%m"
+                  n "#+REVERSE_DATETREE_YEAR_FORMAT: %Y"
+                  n
+                  n "* Backlog"
+                  n "* " (format-time-string "%Y")
+                  n "* Activities"
+                  ,@(when (string-prefix-p "programming/" (oref obj relative))
+                      '(n "* Libraries"))
+                  n "* Index"
+                  n "* Resources"))))))
+
       (when (daemonp)
         (:defer 1
                 (defun akirak/org-dog-load-on-startup ()
@@ -3009,6 +3039,30 @@ Transient commands for Org Dog
       (transient-append-suffix #'octopus-clock-in
         'octopus-read-dog-file-suffix
         '("." "Project" akirak-org-clock-in-to-project))))
+#+end_src
+**** org-dog-context
+#+begin_src elisp
+  (setup org-dog-context
+    (:status personal
+      (:when-loaded
+        (org-dog-context-set-alist 'project
+          :callback
+          ;; I usually override this with a more personalized one
+          (defun akirak/org-dog-project-context-1 (project)
+            ;; Based on `org-dog-context-project-1'.
+            (require 'project)
+            (pcase (thread-last
+                     project
+                     project-root
+                     abbreviate-file-name
+                     file-name-split)
+              (`("~" "work2" ,_ ,group ,name "")
+               (make-org-dog-context-in-directory
+                :directory (list "projects/" "programming/")
+                :filenames (list (concat name "-dev")
+                                 name
+                                 (concat group "-dev")
+                                 group)))))))))
 #+end_src
 **** org-dog-embark
 :PROPERTIES:
@@ -3534,7 +3588,10 @@ Supercharge your agenda
   (setup (:package org-super-agenda)
     (with-eval-after-load 'org-agenda
       (org-super-agenda-mode t))
-    (:also-load akirak-org-super-agenda))
+    (:also-load akirak-org-super-agenda)
+    (:status personal
+      (:set org-super-agenda-groups '((:name "Timeline" :time-grid t)
+                                      (:auto-category t)))))
 #+end_src
 *** org-super-links
 :PROPERTIES:
