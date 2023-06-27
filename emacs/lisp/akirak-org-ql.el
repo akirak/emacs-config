@@ -21,6 +21,18 @@
   :body
   (org-in-archived-heading-p))
 
+(org-ql-defpred recur ()
+  "Return non-nil if the entry has an `org-recur' annotation"
+  :body
+  (org-recur--get-next-date
+   (org-get-heading t t t t)))
+
+(org-ql-defpred edna-blocked ()
+  "Return non-nil if the entry is blocked by org-edna."
+  :body
+  (let ((org-blocker-hook '(org-edna-blocker-function)))
+    (org-entry-blocked-p)))
+
 (defcustom akirak-org-ql-default-query-prefix "!archived: "
   ""
   :type 'string)

@@ -80,7 +80,8 @@ display alternative actions."
 (defun akirak-project-move ()
   "Move the current project to another parent directory."
   (interactive)
-  (let* ((root (vc-root-dir))
+  (let* ((root (or (vc-root-dir)
+                   (error "Failed to retrieve the project root using `vc-root-dir'")))
          (name (file-name-nondirectory (string-remove-suffix "/" root)))
          (worktrees (magit-list-worktrees))
          (new-parent (akirak-project-prompt-parent "Move the project to somewhere else: "))

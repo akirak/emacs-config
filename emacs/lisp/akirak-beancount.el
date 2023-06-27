@@ -6,6 +6,13 @@
   ""
   :group 'beancount)
 
+(defconst akirak-beancount-commodity-regexp
+  (concat "^" beancount-date-regexp
+          (rx (+ blank)
+              "commodity"
+              (+ blank))
+          (rx-to-string `(group (regexp ,beancount-currency-regexp)))))
+
 (defvar akirak-beancount-last-date nil)
 
 (defvar akirak-beancount-last-account nil)
@@ -192,8 +199,29 @@
           (goto-char (point-max)))
         (newline)
         (insert date " balance " account " "
-                (read-from-minibuffer "Enter the current balance: ")))
+                (akirak-beancount--read-amount "Enter the current balance: ")))
     (user-error "Account not found in the buffer: %s" account)))
+
+(defun akirak-beancount--read-amount (prompt)
+  (let* ((value (read-from-minibuffer prompt))
+         (suffix (when (and (string-match-p (rx bos (+ (any digit ",.")) eos)
+                                            value))
+                   (completing-read "Currency: "
+                                    (akirak-beancount--commodities)))))
+    (if suffix
+        (concat value " " suffix)
+      value)))
+
+(defun akirak-beancount--commodities ()
+  (save-restriction
+    (widen)
+    (save-excursion
+      (goto-char (point-min))
+      (let (result)
+        (while (re-search-forward akirak-beancount-commodity-regexp nil t)
+          (push (match-string-no-properties 1)
+                result))
+        (nreverse result)))))
 
 ;;;###autoload
 (defun akirak-beancount-query-account (account)
