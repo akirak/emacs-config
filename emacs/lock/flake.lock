@@ -83,16 +83,17 @@
     "apprentice": {
       "flake": false,
       "locked": {
-        "lastModified": 1683904076,
-        "narHash": "sha256-rNIRnsmIIqhRrOKUqZH8G6D6QhvruahVe5/aeMUyZaU=",
-        "owner": "Sasanidas",
-        "repo": "Apprentice",
-        "rev": "2379ac408fbe9e656450e066b469543ad04d267d",
+        "lastModified": 1688292548,
+        "narHash": "sha256-9Fjk65WLLtNwM9Sd1yYDwZHLdBMg6LnygZNtX0T0c9o=",
+        "owner": "akirak",
+        "repo": "apprentice",
+        "rev": "ca6c9be279a7112ea53c0154a0964dc72cde0e24",
         "type": "github"
       },
       "original": {
-        "owner": "Sasanidas",
-        "repo": "Apprentice",
+        "owner": "akirak",
+        "ref": "no-elixir-mode-dep",
+        "repo": "apprentice",
         "type": "github"
       }
     },
@@ -221,22 +222,6 @@
       "original": {
         "owner": "rmuslimov",
         "repo": "browse-at-remote",
-        "type": "github"
-      }
-    },
-    "burly": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1666642757,
-        "narHash": "sha256-Xr1vmZbLcLzJvGVSl7v5AVgnxxVJmFeHE8jdRvq7VCo=",
-        "owner": "alphapapa",
-        "repo": "burly.el",
-        "rev": "f570fa87ee72a451f535cfb038d81798a01a7e20",
-        "type": "github"
-      },
-      "original": {
-        "owner": "alphapapa",
-        "repo": "burly.el",
         "type": "github"
       }
     },
@@ -2909,7 +2894,6 @@
         "beancount": "beancount",
         "blamer": "blamer",
         "browse-at-remote": "browse-at-remote",
-        "burly": "burly",
         "buttercup": "buttercup",
         "caml": "caml",
         "cape": "cape",
@@ -3075,7 +3059,6 @@
         "restclient": "restclient",
         "riben": "riben",
         "rich-minority": "rich-minority",
-        "ruby-end": "ruby-end",
         "s": "s",
         "separedit": "separedit",
         "setup": "setup",
@@ -3116,22 +3099,6 @@
         "z3-mode": "z3-mode",
         "zig-mode": "zig-mode",
         "zoutline": "zoutline"
-      }
-    },
-    "ruby-end": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1675560306,
-        "narHash": "sha256-jzTApICOCUTW7j2+KQJEPngPpmK/wqch0s6x3jOE5ss=",
-        "owner": "rejeep",
-        "repo": "ruby-end.el",
-        "rev": "ba7d7230f9e3ed75c9982d32bb9fdff1dc10935d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rejeep",
-        "repo": "ruby-end.el",
-        "type": "github"
       }
     },
     "s": {
