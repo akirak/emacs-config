@@ -1913,7 +1913,15 @@ Thus I will explicitly install this package rather than using the built-in versi
         (apply orig args)))
     (advice-add 'consult-buffer :around #'akirak/ad-no-obey-display-actions)
     (advice-add 'org-dog-find-file :around #'akirak/ad-no-obey-display-actions)
-    (advice-add 'org-src-switch-to-buffer :around #'akirak/ad-no-obey-display-actions)
+    (advice-add 'org-src-switch-to-buffer
+                :override
+                (defun akirak/org-src-switch-to-buffer (buffer context)
+                  (unless (eq org-src-window-setup 'current-window)
+                    (message "This function should be used only when
+   `org-src-window-setup' is \='current-window, but it is %s"
+                             org-src-window-setup))
+                  (let ((switch-to-buffer-obey-display-actions nil))
+                    (switch-to-buffer buffer))))
 
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
