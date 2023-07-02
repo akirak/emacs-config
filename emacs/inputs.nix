@@ -246,6 +246,15 @@
     files = builtins.removeAttrs super.files ["persist.texi"];
   };
 
+  apprentice = _: super: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "apprentice";
+      ref = "no-elixir-mode-dep";
+    };
+  };
+
   org-gcal = _: super: {
     packageRequires =
       {
