@@ -4456,7 +4456,8 @@ Quickly create disposable yasnippets
 #+begin_src emacs-lisp
   (setup (:package auto-yasnippet)
     (:global "C-x r e" #'aya-expand
-             "C-x r a" #'akirak-aya-create-1))
+             "C-x r M-e" #'aya-expand-from-history
+             "C-x r a" #'aya-create))
 #+end_src
 *** avy
 :PROPERTIES:
