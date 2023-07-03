@@ -57,7 +57,8 @@
                                                        deadline
                                                        active-ts
                                                        annotation
-                                                       (drawer akirak-org-capture-default-drawer)
+                                                       properties
+                                                       (log-time t)
                                                        (body t))
   "Build the template body of a capture template.
 
@@ -131,7 +132,17 @@ values:
                               (when deadline
                                 (concat "DEADLINE: " (format-ts deadline nil)))))
               (make-planning))
-            (or drawer akirak-org-capture-default-drawer "")
+            (if-let (properties (if log-time
+                                    (cons '("CREATED_TIME" . "%U")
+                                          properties)
+                                  properties))
+
+                (concat ":PROPERTIES:\n"
+                        (mapconcat (pcase-lambda (`(,key . ,value))
+                                     (format ":%s: %s" key value))
+                                   properties "\n")
+                        "\n:END:\n")
+              "")
             (if active-ts
                 (concat (format-ts active-ts t) "\n")
               "")
