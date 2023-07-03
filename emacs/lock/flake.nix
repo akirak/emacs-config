@@ -34,8 +34,9 @@
     };
     apprentice = {
       flake = false;
-      owner = "Sasanidas";
-      repo = "Apprentice";
+      owner = "akirak";
+      ref = "no-elixir-mode-dep";
+      repo = "apprentice";
       type = "github";
     };
     auto-minor-mode = {
@@ -84,12 +85,6 @@
       flake = false;
       owner = "rmuslimov";
       repo = "browse-at-remote";
-      type = "github";
-    };
-    burly = {
-      flake = false;
-      owner = "alphapapa";
-      repo = "burly.el";
       type = "github";
     };
     buttercup = {
@@ -1091,12 +1086,6 @@
       flake = false;
       owner = "Malabarba";
       repo = "rich-minority";
-      type = "github";
-    };
-    ruby-end = {
-      flake = false;
-      owner = "rejeep";
-      repo = "ruby-end.el";
       type = "github";
     };
     "s" = {

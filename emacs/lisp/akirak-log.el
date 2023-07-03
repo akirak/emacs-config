@@ -133,12 +133,8 @@
                   :template ,(akirak-org-capture-make-entry-body
                                url
                                :tags tags
-                               :drawer (format-spec
-                                        ":PROPERTIES:
-:Effort: %e
-:END:
-"
-                                        `((?e . ,effort)))
+                               :properties `(("Effort" . ,effort))
+                               :log-time nil
                                :body t)
                   :clock-in t :clock-resume t))))))
     (browse-url url)

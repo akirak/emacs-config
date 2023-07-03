@@ -177,7 +177,7 @@
   (interactive)
   (require 'akirak-org-dog)
   (pcase-exhaustive (akirak-org-clock--target)
-    (`(,files ,query-prefix ,_tag ,further)
+    (`(,files ,query-prefix ,tags ,further)
      (let ((files (if further
                       (thread-last
                         (org-dog-overview-scan files
@@ -186,6 +186,7 @@
                     files)))
        (org-dog-clock-in files
                          :query-prefix query-prefix
+                         :tags tags
                          :prompt
                          (format "Clock in to project file (%s): "
                                  (mapconcat #'file-name-nondirectory
