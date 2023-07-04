@@ -12,8 +12,8 @@ in rec {
   /*
   Generally useful configuration for developer's work.
   */
-  developer-pgtk = emacs-config.override (_: {
-    pgtk = true;
+  developer = emacs-config.override (_: {
+    pgtk = false;
 
     prependToInitFile = personalInitPreamble;
 
@@ -22,7 +22,7 @@ in rec {
     ];
   });
 
-  developer = developer-pgtk.override (_: {
-    pgtk = false;
-  });
+  # developer-pgtk = developer.override (_: {
+  #   pgtk = true;
+  # });
 }
