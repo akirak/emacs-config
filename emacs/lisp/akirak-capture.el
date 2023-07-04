@@ -1413,12 +1413,12 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 :tags tags
                                 :properties
                                 (when-let (root (and (member "@contribution" tags)
-                                                     (vc-git-root)))
+                                                     (vc-git-root default-directory)))
                                   (require 'magit-git)
                                   `(("GIT_WORKTREE" . ,(org-link-make-string
                                                         (concat "file:" (abbreviate-file-name root))))
-                                    ("GIT_ORIGIN" . ,(magit-config-get-from-cached-list
-                                                      "remote.origin.url"))
+                                    ("GIT_ORIGIN" . ,(car (magit-config-get-from-cached-list
+                                                           "remote.origin.url")))
                                     ("GIT_BRANCH" . ,(magit-get-current-branch))))
                                 :body body)
                    :file ,file
