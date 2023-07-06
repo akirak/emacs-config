@@ -18,11 +18,11 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-          flake-registry = https://raw.githubusercontent.com/akirak/flake-pins/master/registry.json
-    - uses: DeterminateSystems/update-flake-lock@v19
+    - run: nix flake update --inputs-from=github:akirak/flake-pins
+    - uses: peter-evans/create-pull-request@v5
       with:
-        pr-title: "Update flake.lock"
-        token: ${{ secrets.PAT_FOR_PR }}
         base: develop
-        pr-labels: |
-          automation
+        token: ${{ secrets.PAT_FOR_PR }}
+        title: 'deps: Update the root flake.lock'
+        branch: update/flake-lock
+        labels: automation,update,emacs
