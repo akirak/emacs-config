@@ -477,6 +477,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup bookmark
+    (:set bookmark-save-flag 1)
+
     (defun akirak/delete-bookmark-to-here ()
       "Delete a bookmark record to the current location, if any"
       (interactive)
