@@ -693,6 +693,16 @@ The other variables must not be saved, and they should be put in configuration:
   See akirak/custom-variable-whitelist"
                              (widget-value widget)))))))
 #+end_src
+*** delsel
+:PROPERTIES:
+:CREATED_TIME: [2023-07-07 Fri 21:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup delsel
+    (:with-mode delete-selection-mode
+      (:hook-into after-init-hook)))
+#+end_src
 *** desktop
 #+begin_src emacs-lisp
   (setup desktop
