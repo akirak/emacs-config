@@ -719,6 +719,7 @@ The other variables must not be saved, and they should be put in configuration:
   (setup dired
     (:set dired-recursive-copies 'always
           dired-recursive-deletes 'top
+          dired-auto-revert-buffer t
           dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-vterm-for-dir)
 
