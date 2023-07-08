@@ -4511,7 +4511,9 @@ A major mode to edit Beancount input files.
 
     (:with-mode beancount-mode
       (:file-match "\\.beancount\\'" "\\.bean\\'")
-      (:hook bean-format-on-save-mode)
+      (:hook bean-format-on-save-mode
+             flymake-bean-check-enable)
+
       (:when-loaded
         (:bind "C-c C-o" #'akirak-beancount-locate-account-transactions)
         (define-key beancount-mode-map
@@ -4521,19 +4523,6 @@ A major mode to edit Beancount input files.
         (:hook
          (defun akirak/beancount-turn-on-outline-mode ()
            (outline-minor-mode t))))))
-#+end_src
-**** flymake-bean-check
-:PROPERTIES:
-:CREATED_TIME: [2023-05-21 Sun 18:11]
-:END:
-#+begin_quote
-A Flymake backend for bean-check
-[[https://github.com/akirak/flymake-bean-check]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package flymake-bean-check)
-    (add-hook 'beancount-mode-hook #'flymake-bean-check-enable))
 #+end_src
 *** blamer                                                      :VC:
 :PROPERTIES:
