@@ -76,7 +76,8 @@
                    (string-equal (expand-file-name akirak-emacs-org-config-file)
                                  filename))
               (bound-and-true-p url-http-content-type)
-              (eq this-command 'magit-show-commit)
+              (memq this-command '(magit-show-commit
+                                   bookmark-set))
               (when-let (mode (derived-mode-p 'org-mode 'org-memento-policy-mode))
                 (cl-case mode
                   (org-memento-policy-mode t)
