@@ -1412,7 +1412,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 :todo "UNDERWAY"
                                 :tags tags
                                 :properties (akirak-capture--git-properties
-                                             :tags tags)
+                                             obj :tags tags)
                                 :body body)
                    :file ,file
                    :function ,jump-func
@@ -1420,21 +1420,20 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
     (save-window-excursion
       (org-capture))))
 
-(cl-defun akirak-capture--git-properties (&key tags)
+(cl-defun akirak-capture--git-properties (obj &key tags)
   (when-let (root (vc-git-root default-directory))
-    (let ((abbr-root (abbreviate-file-name root)))
-      (when (or (member "@contribution" tags)
-                (string-prefix-p "~/work2/" abbr-root))
-        (require 'magit-git)
-        (thread-last
-          `(("GIT_WORKTREE" . ,(org-link-make-string
-                                (concat "file:" abbr-root)))
-            ("GIT_ORIGIN" . ,(ignore-errors
-                               (car (magit-config-get-from-cached-list
-                                     "remote.origin.url"))))
-            ("GIT_BRANCH" . ,(ignore-errors
-                               (magit-get-current-branch))))
-          (seq-filter #'cdr))))))
+    (when (or (member "@contribution" tags)
+              (string-prefix-p "projects/" (oref obj relative)))
+      (require 'magit-git)
+      (thread-last
+        `(("GIT_WORKTREE" . ,(org-link-make-string
+                              (concat "file:" (abbreviate-file-name root))))
+          ("GIT_ORIGIN" . ,(ignore-errors
+                             (car (magit-config-get-from-cached-list
+                                   "remote.origin.url"))))
+          ("GIT_BRANCH" . ,(ignore-errors
+                             (magit-get-current-branch))))
+        (seq-filter #'cdr)))))
 
 (defun akirak-capture-read-string (prompt &optional initial-contents)
   (minibuffer-with-setup-hook
