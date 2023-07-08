@@ -6011,7 +6011,7 @@ Major mode for Gleam
   (setup (:package gleam-mode)
     (:file-match "\\.gleam\\'"))
 #+end_src
-*** go-translate                                       :translation:
+*** COMMENT go-translate                                           :translation:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-02 Sat 23:59]
 :END:
