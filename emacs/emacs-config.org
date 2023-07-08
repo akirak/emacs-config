@@ -3314,7 +3314,7 @@ Time blocking with Org
                           (when (or (not tab-index)
                                     arg)
                             (delete-other-windows)
-                            (akirak/oahu-goto-context)
+                            (akirak-oahu-goto-context)
                             (call-interactively #'oahu-view)))
                       (user-error "No current block"))))
 
