@@ -754,22 +754,6 @@
         "type": "github"
       }
     },
-    "elixir-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1675623415,
-        "narHash": "sha256-09Btb3vHCcBuLBzzl6xK4EJ6dfSyOhm0bluktne8el8=",
-        "owner": "elixir-editors",
-        "repo": "emacs-elixir",
-        "rev": "7641373f0563cab67cc5459c34534a8176b5e676",
-        "type": "github"
-      },
-      "original": {
-        "owner": "elixir-editors",
-        "repo": "emacs-elixir",
-        "type": "github"
-      }
-    },
     "elx": {
       "flake": false,
       "locked": {
@@ -1011,22 +995,6 @@
         "type": "github"
       }
     },
-    "flymake-bean-check": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1684660272,
-        "narHash": "sha256-KObHQ0wX4ddav9DLjNlE2iHcrcJ4i2Z8ZH390AMSJwo=",
-        "owner": "akirak",
-        "repo": "flymake-bean-check",
-        "rev": "6610cbd7ae80eb91992d964386ee7932552a1160",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "repo": "flymake-bean-check",
-        "type": "github"
-      }
-    },
     "flymake-eslint": {
       "flake": false,
       "locked": {
@@ -1248,22 +1216,6 @@
       "original": {
         "owner": "akirak",
         "repo": "github-linguist.el",
-        "type": "github"
-      }
-    },
-    "go-translate": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1677892203,
-        "narHash": "sha256-8decxI1W9WZvCs9lk64jahgZi3WARETmufV+g6H8Aeg=",
-        "owner": "lorniu",
-        "repo": "go-translate",
-        "rev": "e8a43296fc3e041c3f4e7f4001fcead7ab1cf937",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lorniu",
-        "repo": "go-translate",
         "type": "github"
       }
     },
@@ -2927,7 +2879,6 @@
         "editorconfig": "editorconfig",
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
-        "elixir-mode": "elixir-mode",
         "elx": "elx",
         "emacsql": "emacsql",
         "emacsql-sqlite": "emacsql-sqlite",
@@ -2943,7 +2894,6 @@
         "f": "f",
         "fanyi": "fanyi",
         "flycheck": "flycheck",
-        "flymake-bean-check": "flymake-bean-check",
         "flymake-eslint": "flymake-eslint",
         "flyspell-correct": "flyspell-correct",
         "flyspell-correct-avy-menu": "flyspell-correct-avy-menu",
@@ -2958,7 +2908,6 @@
         "git-identity": "git-identity",
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
-        "go-translate": "go-translate",
         "gptel": "gptel",
         "graphql-mode": "graphql-mode",
         "graphviz-dot-mode": "graphviz-dot-mode",
