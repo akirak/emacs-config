@@ -939,13 +939,19 @@
   (interactive)
   ;; Don't use %A. I want to keep the window configuration while typing the
   ;; description.
-  (let* ((description (akirak-capture--maybe-read-heading "Description: "))
+  (let* ((inhibit-message t)
          (link (progn
                  (org-store-link nil t)
-                 (org-link-make-string (car (pop org-stored-links))
-                                       description)))
+                 (pop org-stored-links)))
+         (link-string (org-link-make-string
+                       (car link)
+                       (if (derived-mode-p 'org-mode)
+                           (cadr link)
+                         (read-from-minibuffer "Description: "
+                                               nil nil nil nil
+                                               (cadr link)))))
          (org-capture-entry `("" "" item (clock)
-                              ,(concat link " :: %?"))))
+                              ,(concat link-string "%?"))))
     (org-capture)))
 
 (defun akirak-capture-vocabulary ()
