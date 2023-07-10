@@ -5801,7 +5801,8 @@ Emacs Minor mode to automatically commit and push
           (progn
             (customize-push-and-save 'akirak/git-auto-commit-directory-list
                                      (list dir))
-            (dir-locals-set-directory-class dir 'git-auto-commit))
+            (dir-locals-set-directory-class dir 'git-auto-commit
+                                            (current-time)))
         (user-error "No project")))
 
     (defun akirak/git-auto-commit-message (filename)
