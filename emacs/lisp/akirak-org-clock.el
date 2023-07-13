@@ -137,7 +137,8 @@
       (pcase (project-root (or (project-current)
                                (if (yes-or-no-p "Not in a project. Run git init?")
                                    (progn
-                                     (let ((default-directory (read-directory-name "Run git init at: ")))
+                                     (let ((default-directory (read-directory-name
+                                                               "Run git init at: ")))
                                        (call-process "git" nil nil nil "init"))
                                      (or (project-current)
                                          (user-error "The directory is not inside a project")))
