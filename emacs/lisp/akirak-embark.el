@@ -78,6 +78,10 @@
   :parent embark-general-map
   "o" #'akirak-embark-org-occur-target-references)
 
+(defvar-keymap akirak-embark-org-property-value-map
+  :parent embark-general-map
+  "." #'akirak-embark-like-in-org)
+
 (defvar-keymap akirak-embark-org-radio-target-map
   :parent embark-general-map
   "o" #'akirak-embark-org-occur-radio-references)
@@ -201,6 +205,15 @@
     (set-register register marker)
     (message "Saved to register %c" register)))
 
+(defun akirak-embark-like-in-org (string)
+  (interactive "s")
+  (with-temp-buffer
+    (insert string)
+    (let ((org-inhibit-startup))
+      (delay-mode-hooks (org-mode))
+      (goto-char (point-min))
+      (embark-act))))
+
 (defvar akirak-embark-org-heading-map
   (let ((map (make-composed-keymap nil embark-general-map)))
     (define-key map "\\" #'akirak-embark-find-org-buffer-file)
@@ -311,6 +324,8 @@
                '(org-target . akirak-embark-org-target-map))
   (add-to-list 'embark-keymap-alist
                '(org-radio-target . akirak-embark-org-radio-target-map))
+  (add-to-list 'embark-keymap-alist
+               '(org-property-value . akirak-embark-org-property-value-map))
 
   (add-to-list 'embark-transformer-alist
                '(org-placeholder-item . akirak-embark-transform-org-placeholder))
