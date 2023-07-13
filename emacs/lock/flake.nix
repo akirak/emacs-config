@@ -285,12 +285,6 @@
       repo = "eldoc-eval";
       type = "github";
     };
-    elixir-mode = {
-      flake = false;
-      owner = "elixir-editors";
-      repo = "emacs-elixir";
-      type = "github";
-    };
     elx = {
       flake = false;
       owner = "emacscollective";
@@ -382,12 +376,6 @@
       repo = "flycheck";
       type = "github";
     };
-    flymake-bean-check = {
-      flake = false;
-      owner = "akirak";
-      repo = "flymake-bean-check";
-      type = "github";
-    };
     flymake-eslint = {
       flake = false;
       owner = "orzechowskid";
@@ -470,12 +458,6 @@
       flake = false;
       owner = "akirak";
       repo = "github-linguist.el";
-      type = "github";
-    };
-    go-translate = {
-      flake = false;
-      owner = "lorniu";
-      repo = "go-translate";
       type = "github";
     };
     gptel = {

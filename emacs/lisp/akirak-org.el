@@ -621,6 +621,8 @@ The point should be at the heading."
     (user-error "Protected by org-protected-mode"))
   (call-interactively #'transpose-chars))
 
+;;;; Other useful commands
+
 ;;;###autoload
 (defun akirak-org-select-body ()
   (interactive)
@@ -727,6 +729,38 @@ The point should be at the heading."
        (org-agenda-redo))
       (org-memento-timeline-mode
        (revert-buffer)))))
+
+;;;###autoload
+(defun akirak-org-copy-property-value (&optional arg)
+  (interactive "P")
+  (let* ((alist (if arg
+                    (akirak-org--ancestor-properties)
+                  (org-entry-properties)))
+         (candidates (thread-last
+                       (mapcar #'cdr alist)
+                       (cl-remove-if #'string-empty-p))))
+    (cl-labels
+        ((annotator (candidate)
+           (concat " " (car (rassoc candidate alist))))
+         (completions (string pred action)
+           (if (eq action 'metadata)
+               (cons 'metadata
+                     (list (cons 'category 'org-property-value)
+                           (cons 'annotation-function #'annotator)))
+             (complete-with-action action candidates string pred))))
+      (kill-new (completing-read "Copy a property to the kill ring: "
+                                 #'completions)))))
+
+(defun akirak-org--ancestor-properties ()
+  (org-with-wide-buffer
+   (unless (looking-at org-heading-regexp)
+     (org-back-to-heading))
+   (let ((alists (list (org-entry-properties))))
+     (while (> (org-outline-level) 1)
+       (org-up-heading-all 1)
+       (push (org-entry-properties nil 'standard)
+             alists))
+     (apply #'map-merge 'alist alists))))
 
 ;;;###autoload
 (defun akirak-org-babel-send-block-to-vterm ()

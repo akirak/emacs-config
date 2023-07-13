@@ -477,6 +477,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup bookmark
+    (:set bookmark-save-flag 1)
+
     (defun akirak/delete-bookmark-to-here ()
       "Delete a bookmark record to the current location, if any"
       (interactive)
@@ -691,6 +693,16 @@ The other variables must not be saved, and they should be put in configuration:
   See akirak/custom-variable-whitelist"
                              (widget-value widget)))))))
 #+end_src
+*** delsel
+:PROPERTIES:
+:CREATED_TIME: [2023-07-07 Fri 21:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup delsel
+    (:with-mode delete-selection-mode
+      (:hook-into after-init-hook)))
+#+end_src
 *** desktop
 #+begin_src emacs-lisp
   (setup desktop
@@ -707,6 +719,7 @@ The other variables must not be saved, and they should be put in configuration:
   (setup dired
     (:set dired-recursive-copies 'always
           dired-recursive-deletes 'top
+          dired-auto-revert-buffer t
           dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-vterm-for-dir)
 
@@ -2472,6 +2485,9 @@ Outline-based notes management and organizer
                "C-c C-x ' c" #'akirak-org-avy-clone-subtree
                "C-c C-x ' r" #'avy-org-refile-as-child
                "C-c C-x C-w" #'org-cut-subtree
+               ;; Overrides the default binding to org-next-link, but I will drop
+               ;; it in favor of link-hint
+               "C-c C-x C-p" #'akirak-org-copy-property-value
                ;; M-up/down/left/right is unavailable on Chromebooks, so I need
                ;; alternative bindings for commands bound on those keys.
                "M-N" #'org-metadown
@@ -2654,21 +2670,29 @@ Outline-based notes management and organizer
                 :formula nil :timestamp nil :level nil
                 :formatter nil))
 
+    (defcustom akirak-org-clock-allow-in-buffer nil
+      "Whether to allow `org-clock-in' in the current buffer.
+
+  Set this variable to t locally if you want to enable `org-clock-in'."
+      :type 'boolean
+      :local t)
+
     (advice-add 'org-clock-in :before #'akirak/block-org-clock-in)
     (defun akirak/block-org-clock-in (&rest _args)
       "An advice to block unindesirable `org-clock-in'."
-      (when (memq this-command '(org-clock-in
-                                 org-agenda-clock-in))
+      (when (and (memq this-command '(org-clock-in
+                                      org-agenda-clock-in))
+                 (require 'org-dog-core nil t)
+                 (not (bound-and-true-p akirak-org-clock-allow-in-buffer)))
         (if-let* ((filename (buffer-file-name (org-base-buffer (current-buffer))))
                   (filename (thread-last
                               filename
                               (abbreviate-file-name)
                               (expand-file-name))))
             ;; Skip unconditionally if org-dog is unavailable
-            (when (and (require 'org-dog-core nil t)
-                       (or (not (string-match-p org-dog--root-regexp filename))
-                           (and (bound-and-true-p org-memento-file)
-                                (equal filename (expand-file-name org-memento-file)))))
+            (when (or (not (string-match-p org-dog--root-regexp filename))
+                      (and (bound-and-true-p org-memento-file)
+                           (equal filename (expand-file-name org-memento-file))))
               (user-error "You cannot clock in to this file"))
           (user-error "You cannot clock in to a heading without a file")))))
 #+end_src
@@ -3301,7 +3325,7 @@ Time blocking with Org
                           (when (or (not tab-index)
                                     arg)
                             (delete-other-windows)
-                            (akirak/oahu-goto-context)
+                            (akirak-oahu-goto-context)
                             (call-interactively #'oahu-view)))
                       (user-error "No current block"))))
 
@@ -4498,7 +4522,9 @@ A major mode to edit Beancount input files.
 
     (:with-mode beancount-mode
       (:file-match "\\.beancount\\'" "\\.bean\\'")
-      (:hook bean-format-on-save-mode)
+      (:hook bean-format-on-save-mode
+             flymake-bean-check-enable)
+
       (:when-loaded
         (:bind "C-c C-o" #'akirak-beancount-locate-account-transactions)
         (define-key beancount-mode-map
@@ -4508,19 +4534,6 @@ A major mode to edit Beancount input files.
         (:hook
          (defun akirak/beancount-turn-on-outline-mode ()
            (outline-minor-mode t))))))
-#+end_src
-**** flymake-bean-check
-:PROPERTIES:
-:CREATED_TIME: [2023-05-21 Sun 18:11]
-:END:
-#+begin_quote
-A Flymake backend for bean-check
-[[https://github.com/akirak/flymake-bean-check]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package flymake-bean-check)
-    (add-hook 'beancount-mode-hook #'flymake-bean-check-enable))
 #+end_src
 *** blamer                                                      :VC:
 :PROPERTIES:
@@ -5799,7 +5812,8 @@ Emacs Minor mode to automatically commit and push
           (progn
             (customize-push-and-save 'akirak/git-auto-commit-directory-list
                                      (list dir))
-            (dir-locals-set-directory-class dir 'git-auto-commit))
+            (dir-locals-set-directory-class dir 'git-auto-commit
+                                            (current-time)))
         (user-error "No project")))
 
     (defun akirak/git-auto-commit-message (filename)
@@ -6009,7 +6023,7 @@ Major mode for Gleam
   (setup (:package gleam-mode)
     (:file-match "\\.gleam\\'"))
 #+end_src
-*** go-translate                                       :translation:
+*** COMMENT go-translate                                           :translation:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-02 Sat 23:59]
 :END:
@@ -8428,11 +8442,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 209 |
+| [[org-ql-search:tags:packages][packages]]            | 207 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
-| [[org-ql-search:tags:@extra][@extra]]              |  11 |
+| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -8464,7 +8478,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
-| [[org-ql-search:tags:beancount][beancount]]           |   2 |
 | [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
@@ -8480,6 +8493,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:Elixir][Elixir]]              |   1 |
+| [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
 | [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
@@ -8490,7 +8504,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
-| [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:social][social]]              |   1 |
@@ -8555,20 +8568,19 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 To use these features, they need to be turned on at build time.
 
 #+BEGIN: org-ql :query "tags:@extra" :columns (heading todo)
-| Heading            | Todo |
-|--------------------+------|
-| [[beancount][beancount]]          |      |
-| [[flymake-bean-check][flymake-bean-check]] |      |
-| [[copilot][copilot]]            |      |
-| [[dune][dune]]               |      |
-| [[flycheck][flycheck]]           |      |
-| [[fstar-mode][fstar-mode]]         |      |
-| [[lean4-mode][lean4-mode]]         |      |
-| [[lsp-mode][lsp-mode]]           |      |
-| [[mermaid-mode][mermaid-mode]]       |      |
-| [[Coq][Coq]]                |      |
-| [[tuareg][tuareg]]             |      |
-| [[utop][utop]]               |      |
+| Heading      | Todo |
+|--------------+------|
+| [[beancount][beancount]]    |      |
+| [[copilot][copilot]]      |      |
+| [[dune][dune]]         |      |
+| [[flycheck][flycheck]]     |      |
+| [[fstar-mode][fstar-mode]]   |      |
+| [[lean4-mode][lean4-mode]]   |      |
+| [[lsp-mode][lsp-mode]]     |      |
+| [[mermaid-mode][mermaid-mode]] |      |
+| [[Coq][Coq]]          |      |
+| [[tuareg][tuareg]]       |      |
+| [[utop][utop]]         |      |
 #+END:
 *** Links
 :PROPERTIES:

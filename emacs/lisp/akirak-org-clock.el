@@ -76,7 +76,8 @@
                    (string-equal (expand-file-name akirak-emacs-org-config-file)
                                  filename))
               (bound-and-true-p url-http-content-type)
-              (eq this-command 'magit-show-commit)
+              (memq this-command '(magit-show-commit
+                                   bookmark-set))
               (when-let (mode (derived-mode-p 'org-mode 'org-memento-policy-mode))
                 (cl-case mode
                   (org-memento-policy-mode t)
@@ -136,7 +137,8 @@
       (pcase (project-root (or (project-current)
                                (if (yes-or-no-p "Not in a project. Run git init?")
                                    (progn
-                                     (let ((default-directory (read-directory-name "Run git init at: ")))
+                                     (let ((default-directory (read-directory-name
+                                                               "Run git init at: ")))
                                        (call-process "git" nil nil nil "init"))
                                      (or (project-current)
                                          (user-error "The directory is not inside a project")))
@@ -265,7 +267,7 @@
     (setq akirak-org-clock-snooze-until
           (+ (float-time) seconds))
     (message "Snoozing org clock mode for %s seconds" seconds)
-    (add-hook 'org-clock-in #'akiraik-org-clock-stop-snoozing)))
+    (add-hook 'org-clock-in-hook #'akiraik-org-clock-stop-snoozing)))
 
 (defun akiraik-org-clock-stop-snoozing ()
   (setq akirak-org-clock-snooze-until nil))

@@ -2,7 +2,10 @@
   system,
   pkgs,
   emacs,
-}: _eself: esuper: {
+}: _eself: esuper:
+builtins.intersectAttrs
+esuper
+{
   akirak = esuper.akirak.overrideAttrs (old: {
     # The libraries are improperly packaged, so disable byte-compilation for now.
     dontByteCompile = true;

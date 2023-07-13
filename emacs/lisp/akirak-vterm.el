@@ -51,7 +51,8 @@
           (unless (get-buffer-window (current-buffer))
             (display-buffer (current-buffer)))
           (vterm-send-string string)
-          (vterm-send-return))
+          ;; Don't send return to the buffer. The user should confirm the input.
+          (select-window (get-buffer-window (current-buffer))))
       (akirak-vterm--run-in-dir dir string :name "send"))))
 
 (defun akirak-vterm--project-buffer-name (dir command)

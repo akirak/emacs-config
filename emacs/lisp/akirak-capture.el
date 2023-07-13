@@ -939,13 +939,19 @@
   (interactive)
   ;; Don't use %A. I want to keep the window configuration while typing the
   ;; description.
-  (let* ((description (akirak-capture--maybe-read-heading "Description: "))
+  (let* ((inhibit-message t)
          (link (progn
                  (org-store-link nil t)
-                 (org-link-make-string (car (pop org-stored-links))
-                                       description)))
+                 (pop org-stored-links)))
+         (link-string (org-link-make-string
+                       (car link)
+                       (if (derived-mode-p 'org-mode)
+                           (cadr link)
+                         (read-from-minibuffer "Description: "
+                                               nil nil nil nil
+                                               (cadr link)))))
          (org-capture-entry `("" "" item (clock)
-                              ,(concat link " :: %?"))))
+                              ,(concat link-string "%?"))))
     (org-capture)))
 
 (defun akirak-capture-vocabulary ()
@@ -1411,21 +1417,29 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 headline
                                 :todo "UNDERWAY"
                                 :tags tags
-                                :properties
-                                (when-let (root (and (member "@contribution" tags)
-                                                     (vc-git-root default-directory)))
-                                  (require 'magit-git)
-                                  `(("GIT_WORKTREE" . ,(org-link-make-string
-                                                        (concat "file:" (abbreviate-file-name root))))
-                                    ("GIT_ORIGIN" . ,(car (magit-config-get-from-cached-list
-                                                           "remote.origin.url")))
-                                    ("GIT_BRANCH" . ,(magit-get-current-branch))))
+                                :properties (akirak-capture--git-properties
+                                             obj :tags tags)
                                 :body body)
                    :file ,file
                    :function ,jump-func
                    :clock-in t :clock-resume t))))))
     (save-window-excursion
       (org-capture))))
+
+(cl-defun akirak-capture--git-properties (obj &key tags)
+  (when-let (root (vc-git-root default-directory))
+    (when (or (member "@contribution" tags)
+              (string-prefix-p "projects/" (oref obj relative)))
+      (require 'magit-git)
+      (thread-last
+        `(("GIT_WORKTREE" . ,(org-link-make-string
+                              (concat "file:" (abbreviate-file-name root))))
+          ("GIT_ORIGIN" . ,(ignore-errors
+                             (car (magit-config-get-from-cached-list
+                                   "remote.origin.url"))))
+          ("GIT_BRANCH" . ,(ignore-errors
+                             (magit-get-current-branch))))
+        (seq-filter #'cdr)))))
 
 (defun akirak-capture-read-string (prompt &optional initial-contents)
   (minibuffer-with-setup-hook

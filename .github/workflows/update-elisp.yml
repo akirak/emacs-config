@@ -24,6 +24,7 @@ jobs:
           --update-input melpa \
           --update-input gnu-elpa \
           --update-input epkgs
+    - run: nix run .#lock --impure
     - run: nix run .#update --impure
     - run: nix run .#update-elisp-lock
     - uses: peter-evans/create-pull-request@v5
