@@ -2667,21 +2667,29 @@ Outline-based notes management and organizer
                 :formula nil :timestamp nil :level nil
                 :formatter nil))
 
+    (defcustom akirak-org-clock-allow-in-buffer nil
+      "Whether to allow `org-clock-in' in the current buffer.
+
+  Set this variable to t locally if you want to enable `org-clock-in'."
+      :type 'boolean
+      :local t)
+
     (advice-add 'org-clock-in :before #'akirak/block-org-clock-in)
     (defun akirak/block-org-clock-in (&rest _args)
       "An advice to block unindesirable `org-clock-in'."
-      (when (memq this-command '(org-clock-in
-                                 org-agenda-clock-in))
+      (when (and (memq this-command '(org-clock-in
+                                      org-agenda-clock-in))
+                 (require 'org-dog-core nil t)
+                 (not (bound-and-true-p akirak-org-clock-allow-in-buffer)))
         (if-let* ((filename (buffer-file-name (org-base-buffer (current-buffer))))
                   (filename (thread-last
                               filename
                               (abbreviate-file-name)
                               (expand-file-name))))
             ;; Skip unconditionally if org-dog is unavailable
-            (when (and (require 'org-dog-core nil t)
-                       (or (not (string-match-p org-dog--root-regexp filename))
-                           (and (bound-and-true-p org-memento-file)
-                                (equal filename (expand-file-name org-memento-file)))))
+            (when (or (not (string-match-p org-dog--root-regexp filename))
+                      (and (bound-and-true-p org-memento-file)
+                           (equal filename (expand-file-name org-memento-file))))
               (user-error "You cannot clock in to this file"))
           (user-error "You cannot clock in to a heading without a file")))))
 #+end_src
