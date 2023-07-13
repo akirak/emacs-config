@@ -266,7 +266,7 @@
     (setq akirak-org-clock-snooze-until
           (+ (float-time) seconds))
     (message "Snoozing org clock mode for %s seconds" seconds)
-    (add-hook 'org-clock-in #'akiraik-org-clock-stop-snoozing)))
+    (add-hook 'org-clock-in-hook #'akiraik-org-clock-stop-snoozing)))
 
 (defun akiraik-org-clock-stop-snoozing ()
   (setq akirak-org-clock-snooze-until nil))
