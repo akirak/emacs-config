@@ -2485,6 +2485,9 @@ Outline-based notes management and organizer
                "C-c C-x ' c" #'akirak-org-avy-clone-subtree
                "C-c C-x ' r" #'avy-org-refile-as-child
                "C-c C-x C-w" #'org-cut-subtree
+               ;; Overrides the default binding to org-next-link, but I will drop
+               ;; it in favor of link-hint
+               "C-c C-x C-p" #'akirak-org-copy-property-value
                ;; M-up/down/left/right is unavailable on Chromebooks, so I need
                ;; alternative bindings for commands bound on those keys.
                "M-N" #'org-metadown
