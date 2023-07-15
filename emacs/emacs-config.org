@@ -1704,7 +1704,15 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup tab-bar
     (define-key akirak/c-z-map "=" #'tab-bar-duplicate-tab)
-    (define-key akirak/c-z-map "-" #'tab-bar-close-tab))
+    (define-key akirak/c-z-map "-" #'tab-bar-close-tab)
+
+    (define-key tab-prefix-map "R"
+                (defun akirak/tab-bar-rename-to-default ()
+                  (interactive)
+                  (if (and (featurep 'org-clock)
+                           (org-clocking-p))
+                      (tab-bar-rename-tab org-clock-heading)
+                    (user-error "Not clocking")))))
 #+end_src
 *** tempo
 :PROPERTIES:
