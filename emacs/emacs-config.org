@@ -3042,7 +3042,8 @@ Transient commands for Org Dog
             (?v "Display a search view" nil akirak/org-ql-search-files)
             (?o "Open a heading link" nil akirak-org-ql-open-link)
             (?i "Insert a target" nil org-nlink-insert-plain))
-          octopus-super-link-drawer-list '("BLOCKING"))
+          octopus-super-link-drawer-list '("BLOCKING")
+          octopus-category-max-entries 4)
 
     (:with-feature org
       (:when-loaded
