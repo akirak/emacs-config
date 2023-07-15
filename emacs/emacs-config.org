@@ -1968,6 +1968,10 @@ Thus I will explicitly install this package rather than using the built-in versi
                    akirak-window-display-org-capture-buffer)
                  t)
     (add-to-list 'display-buffer-alist
+                 '("^org-dog header"
+                   akirak-window-display-buffer-split-1)
+                 t)
+    (add-to-list 'display-buffer-alist
                  '((major-mode . org-mode)
                    akirak-window-display-org-buffer-other-window)
                  t)
