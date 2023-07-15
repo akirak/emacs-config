@@ -1417,8 +1417,11 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 headline
                                 :todo "UNDERWAY"
                                 :tags tags
-                                :properties (akirak-capture--git-properties
-                                             obj :tags tags)
+                                :properties
+                                (cons
+                                 `("context_major_mode" . ,major-mode)
+                                 (akirak-capture--git-properties
+                                  obj :tags tags))
                                 :body body)
                    :file ,file
                    :function ,jump-func
