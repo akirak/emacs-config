@@ -530,6 +530,20 @@ This function returns the current buffer."
     (_
      (user-error "No entry found"))))
 
+;;;###autoload
+(defun akirak-org-clock-reclock-commit-entry ()
+  "If a commit entry is found, `org-clock-in` to it."
+  (interactive)
+  (pcase (akirak-org-clock-find-commit-entry)
+    ((and (map :marker)
+          (guard marker))
+     (org-clock-clock-in (list marker)))
+    ((and (map :multi)
+          (guard multi))
+     (user-error "Found multiple matches"))
+    (_
+     (user-error "No entry found"))))
+
 (defun akirak-org-clock-find-commit-entry ()
   "Return a plist containing information of the Git commit at the current line."
   (unless (buffer-file-name)
