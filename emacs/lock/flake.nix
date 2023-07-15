@@ -460,6 +460,12 @@
       repo = "github-linguist.el";
       type = "github";
     };
+    go-translate = {
+      flake = false;
+      owner = "lorniu";
+      repo = "go-translate";
+      type = "github";
+    };
     gptel = {
       flake = false;
       owner = "karthink";
