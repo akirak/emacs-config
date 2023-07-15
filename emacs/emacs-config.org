@@ -2511,8 +2511,16 @@ Outline-based notes management and organizer
                "M-g e" #'akirak-org-goto-before-next-heading
                "C-M-u" (defun akirak/org-up-element ()
                          (interactive)
-                         (org-up-element)
-                         (org-show-entry)))
+                         (if (org-match-line org-heading-regexp)
+                             (progn
+                               (org-up-element)
+                               (org-fold-show-entry))
+                           (require 'org-element)
+                           (let ((context (org-element-context)))
+                             (while (= (point) (org-element-property :begin context))
+                               (setq context (org-element-property :parent context)))
+                             (goto-char (org-element-property :begin context))
+                             (org-show-context)))))
 
         (:with-map org-read-date-minibuffer-local-map
           (:bind "C-p" (defun akirak/org-calendar-previous-week ()
