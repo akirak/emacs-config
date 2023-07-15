@@ -655,11 +655,15 @@ The point should be at the heading."
 
 ;;;###autoload
 (defun akirak-org-goto-beginnning-of-content ()
+  "Go to beginning of the body of the current Org entry."
   (interactive)
   (org-back-to-heading)
   (org-end-of-meta-data t)
   (when (re-search-backward (rx bol nonl) nil t)
-    (forward-line)))
+    (forward-line))
+  (when (looking-at org-heading-regexp)
+    ;; Insert an empty line to start typing
+    (org-open-line 1)))
 
 ;;;###autoload
 (defun akirak-org-goto-before-next-heading ()
