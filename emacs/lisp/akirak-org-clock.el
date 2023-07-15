@@ -625,12 +625,18 @@ This function returns the current buffer."
       (org-clock-out arg))))
 
 ;;;###autoload
-(defun akirak-org-clock-done ()
+(defun akirak-org-clock-done (&optional arg)
   (interactive)
   (akirak-org-clock-require-clock
     (org-with-clock-position (list org-clock-marker)
       (akirak-org-clock--finalize-capture
-       (org-todo 'done)))))
+       (org-todo (if arg
+                     (or (org-fast-todo-selection)
+                         ;; If SPC is selected inside org-fast-todo-selection,
+                         ;; nil will be returned, but it should be an empty
+                         ;; string when passed to org-todo.
+                         "")
+                   'done))))))
 
 ;;;###autoload
 (defun akirak-org-clock-set-review ()
