@@ -47,11 +47,12 @@
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
                                   ,(expand-file-name "~/resources/articles/")
-                                  (and (or "emacs-config.org"
-                                           "/org/config.el")
-                                       eol)
-                                  "/private-config/"
+
                                   "/tmp"))
+                     (and (or "emacs-config.org"
+                              "/org/config.el")
+                          eol)
+                     "/private-config/"
                      "/.")))
 
 (defconst akirak-org-clock-buffer-name-whitelist
