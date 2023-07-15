@@ -6,7 +6,7 @@ on:
     - closed
 
 jobs:
-  update_develop:
+  recreate_develop:
     if: |
       github.event.pull_request.merged == true &&
       github.base_ref == 'master' &&
@@ -18,7 +18,10 @@ jobs:
       with:
         ref: master
     - run: git switch -c develop HEAD
-    - run: git push origin HEAD --force-with-lease
+    # The develop branch should be deleted already. You can turn on
+    # "Automatically delete head branches" in the general per-repository
+    # settings to ensure this.
+    - run: git push origin HEAD
 
   update_packages:
     needs: update_develop
