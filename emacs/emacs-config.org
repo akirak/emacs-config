@@ -1984,7 +1984,10 @@ Thus I will explicitly install this package rather than using the built-in versi
                  '((major-mode . org-mode)
                    akirak-window-display-org-buffer-other-window)
                  t)
-
+    (add-to-list 'display-buffer-alist
+                 '("^\\*deadgrep"
+                   display-buffer-use-least-recent-window)
+                 t)
     (add-to-list 'display-buffer-alist
                  '("^\\*Async Shell Command\\*"
                    (display-buffer-no-window)))
@@ -4857,7 +4860,8 @@ fast, friendly searching with ripgrep
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package deadgrep))
+  (setup (:package deadgrep)
+    (:set deadgrep-display-buffer-function #'pop-to-buffer))
 #+end_src
 *** devdocs                                              :reference:
 :PROPERTIES:
