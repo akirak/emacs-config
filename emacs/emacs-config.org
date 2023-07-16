@@ -3093,23 +3093,7 @@ Transient commands for Org Dog
     (:status personal
       (:when-loaded
         (org-dog-context-set-alist 'project
-          :callback
-          ;; I usually override this with a more personalized one
-          (defun akirak/org-dog-project-context-1 (project)
-            ;; Based on `org-dog-context-project-1'.
-            (require 'project)
-            (pcase (thread-last
-                     project
-                     project-root
-                     abbreviate-file-name
-                     file-name-split)
-              (`("~" "work2" ,_ ,group ,name "")
-               (make-org-dog-context-in-directory
-                :directory (list "projects/" "programming/")
-                :filenames (list (concat name "-dev")
-                                 name
-                                 (concat group "-dev")
-                                 group)))))))))
+          :callback #'akirak-org-dog-project-context))))
 #+end_src
 **** org-dog-embark
 :PROPERTIES:
