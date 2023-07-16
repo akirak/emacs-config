@@ -2107,11 +2107,11 @@
     "org-dog": {
       "flake": false,
       "locked": {
-        "lastModified": 1689419280,
-        "narHash": "sha256-B4v6YxCr94nFC0P6JodP1yar2NQzppPU5Lamq8OGJUg=",
+        "lastModified": 1689533255,
+        "narHash": "sha256-DLD9RTuqI4WA6QSbEKT58wkp3uhc8m2FCwcHa7Q5D4E=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "b945a8bbbf36638880b77769032bb224ebae6b32",
+        "rev": "60542b2bad15a934101de1063cd6b1005919cc1a",
         "type": "github"
       },
       "original": {
@@ -2273,16 +2273,32 @@
     "org-nlink": {
       "flake": false,
       "locked": {
-        "lastModified": 1686959352,
-        "narHash": "sha256-u9eL8R/FflCYh7eRgFhxgMK2LKzix+x49kTi7wDmDmg=",
+        "lastModified": 1689564616,
+        "narHash": "sha256-m7/Mkie/XgUL4oDQh14dyLs5dBT7GBrSiS8Na47bMDI=",
         "owner": "akirak",
         "repo": "org-nlink.el",
-        "rev": "8dc0d10c20411c126df3da64b33bd6853506f694",
+        "rev": "779996dcd2b16139003a73cd6bbd226579179c74",
         "type": "github"
       },
       "original": {
         "owner": "akirak",
         "repo": "org-nlink.el",
+        "type": "github"
+      }
+    },
+    "org-pivot-search": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1689563950,
+        "narHash": "sha256-63fLsqHpqKEsqeTDLKe5LKWr7eSWulvKZdbV7EYTlyk=",
+        "owner": "akirak",
+        "repo": "org-pivot-search",
+        "rev": "69fd39974d7d58a446899d1d0f634f3835fca89f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "org-pivot-search",
         "type": "github"
       }
     },
@@ -2990,6 +3006,7 @@
         "org-memento": "org-memento",
         "org-ml": "org-ml",
         "org-nlink": "org-nlink",
+        "org-pivot-search": "org-pivot-search",
         "org-placeholder": "org-placeholder",
         "org-ql": "org-ql",
         "org-recur": "org-recur",

@@ -866,6 +866,12 @@
       repo = "org-nlink.el";
       type = "github";
     };
+    org-pivot-search = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-pivot-search";
+      type = "github";
+    };
     org-placeholder = {
       flake = false;
       owner = "akirak";
