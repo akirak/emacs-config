@@ -3064,7 +3064,7 @@ Transient commands for Org Dog
     (define-key akirak/c-z-map "C-i" #'octopus-clock-in)
 
     (:set octopus-find-node-verbs
-          '((?f "Display a node" nil akirak-org-ql-find-default)
+          '((?f "Display a node" nil org-pivot-search-from-files)
             (?v "Display a search view" nil akirak/org-ql-search-files)
             (?o "Open a heading link" nil akirak-org-ql-open-link)
             (?i "Insert a target" nil org-nlink-insert-plain))

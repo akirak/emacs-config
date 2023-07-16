@@ -39,6 +39,7 @@
 
 ;;;###autoload
 (defun akirak-org-ql-find-default (files)
+  ;; Deprecated. Use `org-pivot-search-from-files' instead.
   (require 'org-ql-find)
   (let ((org-ql-find-display-buffer-action '(pop-to-buffer)))
     (org-ql-find files :query-prefix akirak-org-ql-default-query-prefix)))
