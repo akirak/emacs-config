@@ -2504,6 +2504,7 @@ Outline-based notes management and organizer
                ;; Overrides the default binding to org-next-link, but I will drop
                ;; it in favor of link-hint
                "C-c C-x C-p" #'akirak-org-copy-property-value
+               "M-s o" #'org-pivot-search-from-files
                ;; M-up/down/left/right is unavailable on Chromebooks, so I need
                ;; alternative bindings for commands bound on those keys.
                "M-N" #'org-metadown
@@ -3492,6 +3493,14 @@ A synchronized, Org-mode, document annotator
 #+begin_src emacs-lisp
 (setup (:package org-noter))
 #+end_src
+*** org-pivot-search
+:PROPERTIES:
+:CREATED_TIME: [2023-07-16 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package org-pivot-search))
+#+end_src
 *** org-placeholder
 :PROPERTIES:
 :CREATED_TIME: [2022-11-12 Sat 18:39]
@@ -3534,8 +3543,7 @@ Org Query Language, search command, and agenda-like view
     (:set org-ql-completing-read-reverse-paths nil)
 
     (:with-feature org
-      (:bind "M-s o" #'org-ql-find
-             "C-c C-x /" #'org-ql-sparse-tree)))
+      (:bind "C-c C-x /" #'org-ql-sparse-tree)))
 #+end_src
 **** org-ql-view
 #+begin_src emacs-lisp
@@ -8112,12 +8120,6 @@ Define how Org entries are displayed by certain commands.
               (let ((switch-to-buffer-obey-display-actions nil))
                 (switch-to-buffer (org-dog-indirect-buffer) nil t))))
 
-  (defun akirak/org-goto-narrow-hook ()
-    (org-show-context)
-    (org-show-entry)
-    (org-show-children)
-    (akirak/org-recenter-toplevel-at-top))
-
   (defun akirak/org-goto-indirect-hook ()
     (when (fboundp 'org-dog-indirect-buffer)
       (let ((buffer (org-dog-indirect-buffer))
@@ -8130,7 +8132,14 @@ Define how Org entries are displayed by certain commands.
             (org-show-children)
             (akirak/org-recenter-toplevel-at-top))))))
 
-  (setq org-ql-find-goto-hook #'akirak/org-goto-narrow-hook)
+  (add-hook 'org-pivot-search-entry-display-hook
+            (defun akirak/org-pivot-search-after-display ()
+              (org-show-context)
+              (org-show-entry)
+              (org-show-children)
+              (if (buffer-narrowed-p)
+                  (akirak/org-recenter-toplevel-at-top)
+                (recenter))))
   (setq org-placeholder-find-hook #'akirak/org-goto-indirect-hook)
 
   (defun akirak/org-recenter-toplevel-at-top ()
