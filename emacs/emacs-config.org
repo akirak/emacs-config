@@ -4053,6 +4053,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       (:bind "C-c t l" #'akirak-elisp-let-exp)
       (:bind "C-c t (" #'akirak-elisp-wrap-exp)))
 #+end_src
+*** akirak-expand-region
+#+begin_src elisp
+  (setup akirak-expand-region
+    (:global "C-M-SPC" #'akirak-expand-region-default))
+#+end_src
 *** akirak-git-commit
 #+begin_src emacs-lisp
   (setup akirak-git-commit
