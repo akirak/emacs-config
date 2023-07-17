@@ -352,6 +352,7 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
                      ("e" . "disk")
                      ("e" . "emacs")
                      ("n" . "nix")
+                     ("s" . "system")
                      ("S" . "secrets")))
       (which-key-add-keymap-based-replacements
         global-map (concat "<f12> " key) description)))
@@ -4220,6 +4221,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-snippet
     (define-key ctl-x-r-map "/" #'akirak-snippet-search))
+#+end_src
+*** akirak-systemctl
+#+begin_src elisp
+  (setup akirak-systemctl
+    (:global "<f12> s s" #'akirak-systemctl-toggle-unit
+             "<f12> s d" #'akirak-systemctl-daemon-reload))
 #+end_src
 *** akirak-twist
 #+begin_src emacs-lisp
