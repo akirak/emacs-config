@@ -3054,6 +3054,7 @@
         "svelte-mode": "svelte-mode",
         "svg-lib": "svg-lib",
         "symbol-overlay": "symbol-overlay",
+        "systemd": "systemd",
         "tablist": "tablist",
         "tagedit": "tagedit",
         "taxy": "taxy",
@@ -3274,6 +3275,22 @@
         "owner": "akirak",
         "ref": "jump-hook",
         "repo": "symbol-overlay",
+        "type": "github"
+      }
+    },
+    "systemd": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1675220527,
+        "narHash": "sha256-oj/E+b3oS/2QNNxTYDZ5Zwq/OHKI2FgN/eRV5EAexrE=",
+        "owner": "holomorph",
+        "repo": "systemd-mode",
+        "rev": "8742607120fbc440821acbc351fda1e8e68a8806",
+        "type": "github"
+      },
+      "original": {
+        "owner": "holomorph",
+        "repo": "systemd-mode",
         "type": "github"
       }
     },

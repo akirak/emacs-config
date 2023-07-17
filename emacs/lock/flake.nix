@@ -1154,6 +1154,12 @@
       repo = "symbol-overlay";
       type = "github";
     };
+    systemd = {
+      flake = false;
+      owner = "holomorph";
+      repo = "systemd-mode";
+      type = "github";
+    };
     tablist = {
       flake = false;
       owner = "emacsorphanage";
