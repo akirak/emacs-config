@@ -24,6 +24,6 @@ jobs:
     - run: git push origin HEAD
 
   update_packages:
-    needs: update_develop
+    needs: recreate_develop
     uses: ./.github/workflows/update-elisp.yml
     secrets: inherit
