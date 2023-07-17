@@ -1834,7 +1834,7 @@ Thus I will explicitly install this package rather than using the built-in versi
 **** akirak-treesit
 #+begin_src elisp
   (setup akirak-treesit
-    (:bind "M-SPC" #'akirak-treesit-expand-region)
+    (:bind "C-M-SPC" #'akirak-treesit-expand-region)
     (add-hook 'after-change-major-mode-hook
               (defun akirak/enable-treesit-mode ()
                 (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
@@ -4153,6 +4153,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
               (defun akirak/setup-org-pair-match ()
                 (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
                           nil t))))
+#+end_src
+*** akirak-quick-thing
+#+begin_src elisp
+  (setup akirak-quick-thing
+    (:global "M-SPC" #'akirak-quick-thing))
 #+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
