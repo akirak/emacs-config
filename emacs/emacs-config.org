@@ -3963,6 +3963,9 @@ Major mode for editing YAML files
     (:file-match "\\.ya?ml\\'"))
 #+end_src
 ** User package (akirak-*.el)
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
 This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup (:package akirak)
@@ -4022,31 +4025,6 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src elisp
   (setup akirak-disk
     (:global "<f12> d m" #'akirak-disk-findmnt))
-#+end_src
-*** akirak-org-log
-#+begin_src emacs-lisp
-  (setup akirak-org-log
-    (:status personal
-      (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
-#+end_src
-*** akirak-org-reg
-#+begin_src emacs-lisp
-  (setup akirak-org-reg
-    (:global "C-c j" #'akirak-org-reg-transient))
-#+end_src
-*** akirak-org-secrets                                                 :secrets:
-#+begin_src emacs-lisp
-  (setup akirak-org-secrets
-    (:global "<f12> S i" #'akirak-org-secrets-insert
-             "<f12> S w" #'akirak-org-secrets-copy
-             "<f12> S s" #'akirak-org-secrets-show
-             "<f12> S c" #'akirak-org-secrets-capture))
-#+end_src
-*** akirak-org-special
-#+begin_src elisp
-  (setup akirak-org-special
-    (with-eval-after-load 'org
-      (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-org-special-prompt-send)))
 #+end_src
 *** akirak-elec-pair                                               :parentheses:
 :PROPERTIES:
@@ -4110,18 +4088,18 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
              "C-x a f" #'akirak-insert-which-function
              "C-x a w" #'akirak-insert-window-title))
 #+end_src
+*** COMMENT akirak-japanese                                            :ARCHIVE:
+#+begin_src emacs-lisp
+  (setup akirak-japanese
+    ;; Local search
+    (:global "M-s M-l" #'akirak-japanese-search))
+#+end_src
 *** akirak-log
 #+begin_src elisp
   (setup akirak-log
     (:set akirak-log-private-file (locate-user-emacs-file "log/latest.org"))
     (with-eval-after-load 'org-agenda
       (add-to-list 'org-agenda-files akirak-log-private-file)))
-#+end_src
-*** COMMENT akirak-japanese                                            :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup akirak-japanese
-    ;; Local search
-    (:global "M-s M-l" #'akirak-japanese-search))
 #+end_src
 *** akirak-narrow
 #+begin_src emacs-lisp
@@ -4134,6 +4112,31 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-nix
     (:global "<f12> n p" #'akirak-nix-search-nixpkgs))
+#+end_src
+*** akirak-org-log
+#+begin_src emacs-lisp
+  (setup akirak-org-log
+    (:status personal
+      (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
+#+end_src
+*** akirak-org-reg
+#+begin_src emacs-lisp
+  (setup akirak-org-reg
+    (:global "C-c j" #'akirak-org-reg-transient))
+#+end_src
+*** akirak-org-secrets                                                 :secrets:
+#+begin_src emacs-lisp
+  (setup akirak-org-secrets
+    (:global "<f12> S i" #'akirak-org-secrets-insert
+             "<f12> S w" #'akirak-org-secrets-copy
+             "<f12> S s" #'akirak-org-secrets-show
+             "<f12> S c" #'akirak-org-secrets-capture))
+#+end_src
+*** akirak-org-special
+#+begin_src elisp
+  (setup akirak-org-special
+    (with-eval-after-load 'org
+      (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-org-special-prompt-send)))
 #+end_src
 *** akirak-pandoc
 #+begin_src emacs-lisp
