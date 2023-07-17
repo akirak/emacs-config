@@ -1,8 +1,8 @@
 ;;; akirak-log.el ---  -*- lexical-binding: t -*-
 
-(defcustom akirak-log-private-file (locate-user-emacs-file "log/latest.org")
+(defcustom akirak-log-private-file nil
   ""
-  :type 'file)
+  :type '(choice file (const nil)))
 
 (defmacro akirak-log-with-wide-buffer (&rest body)
   `(with-current-buffer (or (org-find-base-buffer-visiting akirak-log-private-file)
@@ -15,9 +15,12 @@
   "Global minor mode that logs certain events to an Org file."
   :global t
   (when akirak-log-mode
-    (let ((dir (file-name-directory akirak-log-private-file)))
-      (unless (file-directory-p dir)
-        (make-directory dir t))))
+    (if (and akirak-log-private-file
+             (file-writable-p akirak-log-private-file))
+        (let ((dir (file-name-directory akirak-log-private-file)))
+          (unless (file-directory-p dir)
+            (make-directory dir t)))
+      (setq akirak-log-mode nil)))
   (funcall (if akirak-log-mode
                #'add-hook
              #'remove-hook)
@@ -32,32 +35,35 @@
             (org-clocking-p))))
 
 (cl-defun akirak-log--heading (heading &key time tags message)
-  (with-current-buffer (or (org-find-base-buffer-visiting akirak-log-private-file)
-                           (find-file-noselect akirak-log-private-file))
-    (org-with-wide-buffer
-     (goto-char (point-max))
-     (insert (format-spec "* %t %h%g
+  (if (and akirak-log-private-file
+           (file-readable-p akirak-log-private-file))
+      (with-current-buffer (or (org-find-base-buffer-visiting akirak-log-private-file)
+                               (find-file-noselect akirak-log-private-file))
+        (org-with-wide-buffer
+         (goto-char (point-max))
+         (insert (format-spec "* %t %h%g
 :PROPERTIES:
 :emacs_pid:  %p
 :login:      %l
 :exact_time: %u
 :END:\n"
-                          `((?t . ,(format-time-string
-                                    (org-time-stamp-format t t)
-                                    time))
-                            (?u . ,(format-time-string "%FT%H:%M:%S%:z"))
-                            (?h . ,heading)
-                            (?g . ,(if tags
-                                       (concat " "
-                                               (org-make-tag-string
-                                                (ensure-list tags)))
-                                     ""))
-                            (?p . ,(emacs-pid))
-                            (?l . ,(concat (user-login-name) "@" (system-name)))))
-             (when message
-               (string-chop-newline message)))
-     (when message
-       (insert-char ?\n)))))
+                              `((?t . ,(format-time-string
+                                        (org-time-stamp-format t t)
+                                        time))
+                                (?u . ,(format-time-string "%FT%H:%M:%S%:z"))
+                                (?h . ,heading)
+                                (?g . ,(if tags
+                                           (concat " "
+                                                   (org-make-tag-string
+                                                    (ensure-list tags)))
+                                         ""))
+                                (?p . ,(emacs-pid))
+                                (?l . ,(concat (user-login-name) "@" (system-name)))))
+                 (when message
+                   (string-chop-newline message)))
+         (when message
+           (insert-char ?\n))))
+    (user-error "akirak-log-private-file is nil or not readable")))
 
 (defun akirak-log--format-file-name (file)
   ;; TODO: Prevent loading ol for a shorter initial response time?
@@ -124,8 +130,10 @@
 ;;;###autoload
 (cl-defun akirak-log-browse-url (url &key effort tags)
   (interactive (akirak-log--complete-url-with-effort "Browse url: "))
-  (let (
-        (org-capture-entry
+  (unless (and akirak-log-private-file
+               (file-writable-p akirak-log-private-file))
+    (user-error "akirak-log-private-file is nil or not writable"))
+  (let ((org-capture-entry
          (car (doct
                `((""
                   :keys ""

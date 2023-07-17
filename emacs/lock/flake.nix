@@ -460,6 +460,12 @@
       repo = "github-linguist.el";
       type = "github";
     };
+    go-translate = {
+      flake = false;
+      owner = "lorniu";
+      repo = "go-translate";
+      type = "github";
+    };
     gptel = {
       flake = false;
       owner = "karthink";
@@ -858,6 +864,12 @@
       flake = false;
       owner = "akirak";
       repo = "org-nlink.el";
+      type = "github";
+    };
+    org-pivot-search = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-pivot-search";
       type = "github";
     };
     org-placeholder = {

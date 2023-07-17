@@ -90,5 +90,39 @@
                         (member (plist-get change-plist :to)
                                 org-done-keywords))))))
 
+(defun akirak-org-dog-project-context (project)
+  ;; Based on `org-dog-context-project-1'.
+  (require 'project)
+  (pcase (thread-last
+           project
+           project-root
+           abbreviate-file-name
+           file-name-split)
+    (`("~" "work2" "learning" ,group ,name "")
+     (make-org-dog-context-in-directory
+      :directory (list "technology/" "programming/")
+      :filenames (list name
+                       group)))
+    (`("~" "work2" ,_ ,group ,name "")
+     (make-org-dog-context-in-directory
+      :directory (list "projects/" "programming/")
+      :filenames (list (concat name "-dev")
+                       name
+                       (concat group "-dev")
+                       group)))
+    (`("~" "work2" "learning" ,group "")
+     (make-org-dog-context-in-directory
+      :directory (list "technology/" "programming/")
+      :filenames (list group)))
+    (`("~" "work2" ,_ ,group "")
+     (make-org-dog-context-in-directory
+      :directory (list "projects/")
+      :filenames (list (concat group "-dev")
+                       group)))
+    (`("~" ,name "")
+     (make-org-dog-context-in-directory
+      :directory (list "projects/" "programming/" "skills/")
+      :filenames (list name)))))
+
 (provide 'akirak-org-config)
 ;;; akirak-org-config.el ends here

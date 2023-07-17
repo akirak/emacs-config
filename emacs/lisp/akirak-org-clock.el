@@ -47,11 +47,12 @@
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
                                   ,(expand-file-name "~/resources/articles/")
-                                  (and (or "emacs-config.org"
-                                           "/org/config.el")
-                                       eol)
-                                  "/private-config/"
+
                                   "/tmp"))
+                     (and (or "emacs-config.org"
+                              "/org/config.el")
+                          eol)
+                     "/private-config/"
                      "/.")))
 
 (defconst akirak-org-clock-buffer-name-whitelist
@@ -529,6 +530,20 @@ This function returns the current buffer."
     (_
      (user-error "No entry found"))))
 
+;;;###autoload
+(defun akirak-org-clock-reclock-commit-entry ()
+  "If a commit entry is found, `org-clock-in` to it."
+  (interactive)
+  (pcase (akirak-org-clock-find-commit-entry)
+    ((and (map :marker)
+          (guard marker))
+     (org-clock-clock-in (list marker)))
+    ((and (map :multi)
+          (guard multi))
+     (user-error "Found multiple matches"))
+    (_
+     (user-error "No entry found"))))
+
 (defun akirak-org-clock-find-commit-entry ()
   "Return a plist containing information of the Git commit at the current line."
   (unless (buffer-file-name)
@@ -610,12 +625,18 @@ This function returns the current buffer."
       (org-clock-out arg))))
 
 ;;;###autoload
-(defun akirak-org-clock-done ()
+(defun akirak-org-clock-done (&optional arg)
   (interactive)
   (akirak-org-clock-require-clock
     (org-with-clock-position (list org-clock-marker)
       (akirak-org-clock--finalize-capture
-       (org-todo 'done)))))
+       (org-todo (if arg
+                     (or (org-fast-todo-selection)
+                         ;; If SPC is selected inside org-fast-todo-selection,
+                         ;; nil will be returned, but it should be an empty
+                         ;; string when passed to org-todo.
+                         "")
+                   'done))))))
 
 ;;;###autoload
 (defun akirak-org-clock-set-review ()

@@ -651,6 +651,7 @@ The following variable defines variables that can be saved to =custom-file=:
       smtpmail-smtp-service
       akirak-git-clone-root
       nix3-flake-clone-root
+      akirak-log-private-file
       akirak-org-log-file
       akirak/font-height
       akirak/org-memento-export-directory
@@ -1703,7 +1704,15 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup tab-bar
     (define-key akirak/c-z-map "=" #'tab-bar-duplicate-tab)
-    (define-key akirak/c-z-map "-" #'tab-bar-close-tab))
+    (define-key akirak/c-z-map "-" #'tab-bar-close-tab)
+
+    (define-key tab-prefix-map "R"
+                (defun akirak/tab-bar-rename-to-default ()
+                  (interactive)
+                  (if (and (featurep 'org-clock)
+                           (org-clocking-p))
+                      (tab-bar-rename-tab org-clock-heading)
+                    (user-error "Not clocking")))))
 #+end_src
 *** tempo
 :PROPERTIES:
@@ -1825,7 +1834,7 @@ Thus I will explicitly install this package rather than using the built-in versi
 **** akirak-treesit
 #+begin_src elisp
   (setup akirak-treesit
-    (:bind "M-SPC" #'akirak-treesit-expand-region)
+    (:bind "C-M-SPC" #'akirak-treesit-expand-region)
     (add-hook 'after-change-major-mode-hook
               (defun akirak/enable-treesit-mode ()
                 (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
@@ -1968,10 +1977,17 @@ Thus I will explicitly install this package rather than using the built-in versi
                    akirak-window-display-org-capture-buffer)
                  t)
     (add-to-list 'display-buffer-alist
+                 '("^org-dog header"
+                   akirak-window-display-buffer-split-1)
+                 t)
+    (add-to-list 'display-buffer-alist
                  '((major-mode . org-mode)
                    akirak-window-display-org-buffer-other-window)
                  t)
-
+    (add-to-list 'display-buffer-alist
+                 '("^\\*deadgrep"
+                   display-buffer-use-least-recent-window)
+                 t)
     (add-to-list 'display-buffer-alist
                  '("^\\*Async Shell Command\\*"
                    (display-buffer-no-window)))
@@ -2488,26 +2504,27 @@ Outline-based notes management and organizer
                ;; Overrides the default binding to org-next-link, but I will drop
                ;; it in favor of link-hint
                "C-c C-x C-p" #'akirak-org-copy-property-value
+               "M-s o" #'org-pivot-search-from-files
                ;; M-up/down/left/right is unavailable on Chromebooks, so I need
                ;; alternative bindings for commands bound on those keys.
                "M-N" #'org-metadown
                "M-P" #'org-metaup
                "M-H" #'org-shiftmetaleft
                "M-L" #'org-shiftmetaright
-               "M-g a" (defun akirak/org-goto-beginnning-of-content ()
-                         (interactive)
-                         (org-back-to-heading)
-                         (org-end-of-meta-data t)
-                         (when (re-search-backward (rx bol nonl) nil t)
-                           (forward-line)))
-               "M-g e" (defun akirak/org-goto-before-next-heading ()
-                         (interactive)
-                         (org-next-visible-heading 1)
-                         (re-search-backward (rx (+ (any "\n"))) nil t))
+               "M-g a" #'akirak-org-goto-beginnning-of-content
+               "M-g e" #'akirak-org-goto-before-next-heading
                "C-M-u" (defun akirak/org-up-element ()
                          (interactive)
-                         (org-up-element)
-                         (org-show-entry)))
+                         (if (org-match-line org-heading-regexp)
+                             (progn
+                               (org-up-element)
+                               (org-fold-show-entry))
+                           (require 'org-element)
+                           (let ((context (org-element-context)))
+                             (while (= (point) (org-element-property :begin context))
+                               (setq context (org-element-property :parent context)))
+                             (goto-char (org-element-property :begin context))
+                             (org-show-context)))))
 
         (:with-map org-read-date-minibuffer-local-map
           (:bind "C-p" (defun akirak/org-calendar-previous-week ()
@@ -2715,6 +2732,7 @@ Outline-based notes management and organizer
         [remap org-clock-in] #'akirak-org-clock-in))
 
     (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
+    (define-key akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
     (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
     ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
     ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
@@ -3046,11 +3064,12 @@ Transient commands for Org Dog
     (define-key akirak/c-z-map "C-i" #'octopus-clock-in)
 
     (:set octopus-find-node-verbs
-          '((?f "Display a node" nil akirak-org-ql-find-default)
+          '((?f "Display a node" nil org-pivot-search-from-files)
             (?v "Display a search view" nil akirak/org-ql-search-files)
             (?o "Open a heading link" nil akirak-org-ql-open-link)
             (?i "Insert a target" nil org-nlink-insert-plain))
-          octopus-super-link-drawer-list '("BLOCKING"))
+          octopus-super-link-drawer-list '("BLOCKING")
+          octopus-category-max-entries 4)
 
     (:with-feature org
       (:when-loaded
@@ -3078,23 +3097,7 @@ Transient commands for Org Dog
     (:status personal
       (:when-loaded
         (org-dog-context-set-alist 'project
-          :callback
-          ;; I usually override this with a more personalized one
-          (defun akirak/org-dog-project-context-1 (project)
-            ;; Based on `org-dog-context-project-1'.
-            (require 'project)
-            (pcase (thread-last
-                     project
-                     project-root
-                     abbreviate-file-name
-                     file-name-split)
-              (`("~" "work2" ,_ ,group ,name "")
-               (make-org-dog-context-in-directory
-                :directory (list "projects/" "programming/")
-                :filenames (list (concat name "-dev")
-                                 name
-                                 (concat group "-dev")
-                                 group)))))))))
+          :callback #'akirak-org-dog-project-context))))
 #+end_src
 **** org-dog-embark
 :PROPERTIES:
@@ -3490,6 +3493,18 @@ A synchronized, Org-mode, document annotator
 #+begin_src emacs-lisp
 (setup (:package org-noter))
 #+end_src
+*** org-pivot-search
+:PROPERTIES:
+:CREATED_TIME: [2023-07-16 Sun 23:59]
+:END:
+#+begin_quote
+Experimental search command for Org files
+[[https://github.com/akirak/org-pivot-search]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package org-pivot-search))
+#+end_src
 *** org-placeholder
 :PROPERTIES:
 :CREATED_TIME: [2022-11-12 Sat 18:39]
@@ -3532,8 +3547,7 @@ Org Query Language, search command, and agenda-like view
     (:set org-ql-completing-read-reverse-paths nil)
 
     (:with-feature org
-      (:bind "M-s o" #'org-ql-find
-             "C-c C-x /" #'org-ql-sparse-tree)))
+      (:bind "C-c C-x /" #'org-ql-sparse-tree)))
 #+end_src
 **** org-ql-view
 #+begin_src emacs-lisp
@@ -3949,6 +3963,9 @@ Major mode for editing YAML files
     (:file-match "\\.ya?ml\\'"))
 #+end_src
 ** User package (akirak-*.el)
+:PROPERTIES:
+:SORTING_TYPE: a
+:END:
 This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup (:package akirak)
@@ -4009,31 +4026,6 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-disk
     (:global "<f12> d m" #'akirak-disk-findmnt))
 #+end_src
-*** akirak-org-log
-#+begin_src emacs-lisp
-  (setup akirak-org-log
-    (:status personal
-      (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
-#+end_src
-*** akirak-org-reg
-#+begin_src emacs-lisp
-  (setup akirak-org-reg
-    (:global "C-c j" #'akirak-org-reg-transient))
-#+end_src
-*** akirak-org-secrets                                                 :secrets:
-#+begin_src emacs-lisp
-  (setup akirak-org-secrets
-    (:global "<f12> S i" #'akirak-org-secrets-insert
-             "<f12> S w" #'akirak-org-secrets-copy
-             "<f12> S s" #'akirak-org-secrets-show
-             "<f12> S c" #'akirak-org-secrets-capture))
-#+end_src
-*** akirak-org-special
-#+begin_src elisp
-  (setup akirak-org-special
-    (with-eval-after-load 'org
-      (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-org-special-prompt-send)))
-#+end_src
 *** akirak-elec-pair                                               :parentheses:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:39]
@@ -4060,6 +4052,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:with-map emacs-lisp-mode-map
       (:bind "C-c t l" #'akirak-elisp-let-exp)
       (:bind "C-c t (" #'akirak-elisp-wrap-exp)))
+#+end_src
+*** akirak-expand-region
+#+begin_src elisp
+  (setup akirak-expand-region
+    (:global "C-M-SPC" #'akirak-expand-region-default))
 #+end_src
 *** akirak-git-commit
 #+begin_src emacs-lisp
@@ -4096,18 +4093,18 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
              "C-x a f" #'akirak-insert-which-function
              "C-x a w" #'akirak-insert-window-title))
 #+end_src
+*** COMMENT akirak-japanese                                            :ARCHIVE:
+#+begin_src emacs-lisp
+  (setup akirak-japanese
+    ;; Local search
+    (:global "M-s M-l" #'akirak-japanese-search))
+#+end_src
 *** akirak-log
 #+begin_src elisp
   (setup akirak-log
     (:set akirak-log-private-file (locate-user-emacs-file "log/latest.org"))
     (with-eval-after-load 'org-agenda
       (add-to-list 'org-agenda-files akirak-log-private-file)))
-#+end_src
-*** COMMENT akirak-japanese                                            :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup akirak-japanese
-    ;; Local search
-    (:global "M-s M-l" #'akirak-japanese-search))
 #+end_src
 *** akirak-narrow
 #+begin_src emacs-lisp
@@ -4120,6 +4117,31 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-nix
     (:global "<f12> n p" #'akirak-nix-search-nixpkgs))
+#+end_src
+*** akirak-org-log
+#+begin_src emacs-lisp
+  (setup akirak-org-log
+    (:status personal
+      (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
+#+end_src
+*** akirak-org-reg
+#+begin_src emacs-lisp
+  (setup akirak-org-reg
+    (:global "C-c j" #'akirak-org-reg-transient))
+#+end_src
+*** akirak-org-secrets                                                 :secrets:
+#+begin_src emacs-lisp
+  (setup akirak-org-secrets
+    (:global "<f12> S i" #'akirak-org-secrets-insert
+             "<f12> S w" #'akirak-org-secrets-copy
+             "<f12> S s" #'akirak-org-secrets-show
+             "<f12> S c" #'akirak-org-secrets-capture))
+#+end_src
+*** akirak-org-special
+#+begin_src elisp
+  (setup akirak-org-special
+    (with-eval-after-load 'org
+      (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-org-special-prompt-send)))
 #+end_src
 *** akirak-pandoc
 #+begin_src emacs-lisp
@@ -4136,6 +4158,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
               (defun akirak/setup-org-pair-match ()
                 (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
                           nil t))))
+#+end_src
+*** akirak-quick-thing
+#+begin_src elisp
+  (setup akirak-quick-thing
+    (:global "M-SPC" #'akirak-quick-thing))
 #+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
@@ -4858,7 +4885,8 @@ fast, friendly searching with ripgrep
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package deadgrep))
+  (setup (:package deadgrep)
+    (:set deadgrep-display-buffer-function #'pop-to-buffer))
 #+end_src
 *** devdocs                                              :reference:
 :PROPERTIES:
@@ -6023,7 +6051,7 @@ Major mode for Gleam
   (setup (:package gleam-mode)
     (:file-match "\\.gleam\\'"))
 #+end_src
-*** COMMENT go-translate                                           :translation:ARCHIVE:
+*** go-translate                                                   :translation:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-02 Sat 23:59]
 :END:
@@ -8109,12 +8137,6 @@ Define how Org entries are displayed by certain commands.
               (let ((switch-to-buffer-obey-display-actions nil))
                 (switch-to-buffer (org-dog-indirect-buffer) nil t))))
 
-  (defun akirak/org-goto-narrow-hook ()
-    (org-show-context)
-    (org-show-entry)
-    (org-show-children)
-    (akirak/org-recenter-toplevel-at-top))
-
   (defun akirak/org-goto-indirect-hook ()
     (when (fboundp 'org-dog-indirect-buffer)
       (let ((buffer (org-dog-indirect-buffer))
@@ -8127,7 +8149,14 @@ Define how Org entries are displayed by certain commands.
             (org-show-children)
             (akirak/org-recenter-toplevel-at-top))))))
 
-  (setq org-ql-find-goto-hook #'akirak/org-goto-narrow-hook)
+  (add-hook 'org-pivot-search-entry-display-hook
+            (defun akirak/org-pivot-search-after-display ()
+              (org-show-context)
+              (org-show-entry)
+              (org-show-children)
+              (if (buffer-narrowed-p)
+                  (akirak/org-recenter-toplevel-at-top)
+                (recenter))))
   (setq org-placeholder-find-hook #'akirak/org-goto-indirect-hook)
 
   (defun akirak/org-recenter-toplevel-at-top ()
@@ -8442,7 +8471,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 207 |
+| [[org-ql-search:tags:packages][packages]]            | 209 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -8504,6 +8533,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
+| [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:social][social]]              |   1 |

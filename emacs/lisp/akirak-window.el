@@ -78,6 +78,14 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                             'window alist)))
 
 ;;;###autoload
+(defun akirak-window-display-buffer-split-1 (buffer &optional alist)
+  (if-let (window (or (window-in-direction 'below)
+                      (window-in-direction 'above)))
+      (window--display-buffer buffer window 'reuse alist)
+    (when (> (window-height) (* 2 20))
+      (window--display-buffer buffer (split-window-below) 'window alist))))
+
+;;;###autoload
 (defun akirak-window-reuse-mode-window-or-split-below (buf alist)
   (or (display-buffer-reuse-mode-window buf alist)
       (akirak-window-display-buffer-split-below buf alist)))
