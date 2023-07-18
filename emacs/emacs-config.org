@@ -352,6 +352,7 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
                      ("e" . "disk")
                      ("e" . "emacs")
                      ("n" . "nix")
+                     ("s" . "system")
                      ("S" . "secrets")))
       (which-key-add-keymap-based-replacements
         global-map (concat "<f12> " key) description)))
@@ -2275,6 +2276,19 @@ Manage Org searches
   (setup (:package oahu)
     (:status personal
       (define-key akirak/c-z-map (kbd "SPC") #'oahu-view)
+      (define-key ctl-x-map "g"
+                  (defun akirak-oahu-goto-context (&optional view)
+                    (interactive)
+                    (require 'oahu)
+                    (pcase (or view oahu-last-view)
+                      (`(Project ,pr . ,_)
+                       (akirak-project-switch (project-root pr)))
+                      (`(Org ,x . ,_)
+                       (when-let* ((file (seq-find #'stringp x))
+                                   (file (org-dog-resolve-relative-file file)))
+                         (find-file file)))
+                      (`(OrgBookmark . ,bookmark)
+                       (org-placeholder-view bookmark)))))
       (:global "<menu>" #'oahu-view
                "<S-menu>" #'oahu-alternative-view
                "<C-menu>" #'oahu-view-global)))
@@ -2393,7 +2407,7 @@ Outline-based notes management and organizer
 
       (:when-loaded
         (:status personal
-          (akirak-org-setup-todo))
+          (akirak-org-config-setup))
 
         (add-to-list 'org-file-apps
                      `("\\.sqlite3?\\'"
@@ -3299,6 +3313,12 @@ Time blocking with Org
       (:when-loaded
         (org-memento-mode t))
 
+      (:with-feature org-memento-timeline
+        (:with-map org-memento-timeline-mode-map
+          (:bind "j" (defun akirak-oahu-goto-context-from-timeline ()
+                       (interactive)
+                       (akirak-oahu-goto-context (oahu-memento-group-view-at-point))))))
+
       (define-key help-map (kbd "<tab>") #'org-memento-next-action)
       (define-key akirak/c-z-map (kbd "<tab>") #'org-memento-next-action)
       (define-key akirak/c-z-map "!" #'org-memento-quick-start-event)
@@ -3841,6 +3861,7 @@ Major mode for the Go programming language
 #+begin_src elisp
   (setup heex-ts-mode
     (:file-match "\\.heex\\'")
+    (:local-set electric-pair-pairs '((?% . ?%)))
     (:when-loaded
       ;; These workarounds are only necessary due to upstream inconsistencies.
       ;; Hopefully they will resolve the issues in the mean time.
@@ -4106,6 +4127,35 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (with-eval-after-load 'org-agenda
       (add-to-list 'org-agenda-files akirak-log-private-file)))
 #+end_src
+*** akirak-magit
+#+begin_src elisp
+  (setup akirak-magit
+    (:status personal
+      (:set akirak-magit-worktree-category-function
+            (defun akirak-git-worktree-category ()
+              (or (akirak-git-clone--clock-category)
+                  (progn
+                    (require 'oahu)
+                    (pcase oahu-last-view
+                      (`(Project ,pr . ,_)
+                       (thread-last
+                         (project-root pr)
+                         (string-remove-suffix "/")
+                         (file-name-directory)
+                         (string-remove-suffix "/")
+                         (file-name-nondirectory)))
+                      (`(Org ,x . ,_)
+                       (when-let (file (seq-find #'stringp x))
+                         (thread-last
+                           (file-name-base file)
+                           (string-remove-suffix "-dev"))))
+                      (`(OrgBookmark . ,bookmark)
+                       nil)
+                      (_
+                       (message "Unsupported type: %s"
+                                oahu-last-view)
+                       nil))))))))
+#+end_src
 *** akirak-narrow
 #+begin_src emacs-lisp
   (setup akirak-narrow
@@ -4172,6 +4222,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-snippet
     (define-key ctl-x-r-map "/" #'akirak-snippet-search))
+#+end_src
+*** akirak-systemctl
+#+begin_src elisp
+  (setup akirak-systemctl
+    (:global "<f12> s s" #'akirak-systemctl-toggle-unit
+             "<f12> s d" #'akirak-systemctl-daemon-reload))
 #+end_src
 *** akirak-twist
 #+begin_src emacs-lisp
@@ -7633,6 +7689,17 @@ Highlight symbols with keymap-enabled overlays
 #+end_src
 
 =embark= can substitute for most of the functionalities of the package, but I am used to this package.
+*** systemd
+:PROPERTIES:
+:CREATED_TIME: [2023-07-17 Mon 22:03]
+:END:
+#+begin_quote
+Major mode for editing systemd units
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package systemd))
+#+end_src
 *** tagedit                                                    :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-08 Fri 21:12]
@@ -8471,7 +8538,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 209 |
+| [[org-ql-search:tags:packages][packages]]            | 210 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
