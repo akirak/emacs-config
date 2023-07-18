@@ -3861,6 +3861,7 @@ Major mode for the Go programming language
 #+begin_src elisp
   (setup heex-ts-mode
     (:file-match "\\.heex\\'")
+    (:local-set electric-pair-pairs '((?% . ?%)))
     (:when-loaded
       ;; These workarounds are only necessary due to upstream inconsistencies.
       ;; Hopefully they will resolve the issues in the mean time.
