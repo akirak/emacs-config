@@ -130,7 +130,9 @@
     (setq akirak-treesit-expand-region-node node)))
 
 (defcustom akirak-treesit-balanced-nodes
-  '("jsx_opening_element")
+  '("jsx_opening_element"
+    ;; heex
+    "start_tag")
   "List of node types that needs balancing."
   :type '(repeat string))
 
