@@ -138,7 +138,8 @@
 
 (defun akirak-treesit-smart-kill-line (&optional arg)
   (interactive "P")
-  (if (numberp arg)
+  (if (or (numberp arg)
+          (looking-at (rx (* blank) eol)))
       (kill-line arg)
     (let ((start (point))
           (node (if (looking-at (rx (+ blank)))
