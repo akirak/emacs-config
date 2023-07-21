@@ -1247,7 +1247,10 @@ provided as a separate command for integration, e.g. with embark."
                                                    ;; zero-width space (8203)
                                                    "​")
                                                "")
-                     (replace-regexp-in-string (rx (+ blank) eol)
+                     (replace-regexp-in-string (rx (+ (any blank
+                                                           ;; zero-width space
+                                                           "​" ))
+                                                   eol)
                                                "")
                      (replace-regexp-in-string (rx (+ "\n") eos)
                                                "")
