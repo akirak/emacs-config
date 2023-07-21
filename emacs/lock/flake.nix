@@ -694,6 +694,12 @@
       repo = "move-dup";
       type = "github";
     };
+    mpv = {
+      flake = false;
+      owner = "kljohann";
+      repo = "mpv.el";
+      type = "github";
+    };
     nix-mode = {
       flake = false;
       owner = "NixOS";
