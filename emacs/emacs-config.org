@@ -1381,6 +1381,7 @@ Resources:
 *** project
 :PROPERTIES:
 :CREATED_TIME: [2022-02-06 Sun 17:00]
+:ID:       f9efbe39-b9f9-4b15-93d6-b7b2433aca36
 :END:
 #+begin_quote
 Operations on the current project
@@ -7002,6 +7003,21 @@ Eclipse-like moving and duplicating lines or rectangles
               (defun akirak/turn-on-move-dup-mode ()
                 (unless (derived-mode-p 'org-mode 'markdown-mode)
                   (move-dup-mode 1)))))
+#+end_src
+*** mpv
+:PROPERTIES:
+:CREATED_TIME: [2023-07-21 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package mpv)
+    (with-eval-after-load 'mailcap
+      (dolist (major '("video" "audio"))
+        (mailcap-add-mailcap-entry major ".+"
+                                   `((viewer . mpv-play)
+                                     (test . (or (getenv "DISPLAY")
+                                                 (getenv "WAYLAND_DISPLAY")))
+                                     (type . ,(concat major "/.+")))))))
 #+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
