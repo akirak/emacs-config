@@ -375,12 +375,6 @@
                    (akirak-capture-doct))
     :transient t)
    ("j" "Journal" akirak-capture-journal)
-   ("n" "Note" (lambda ()
-                 (interactive)
-                 (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-                       akirak-capture-template-options '(:tags "@note")
-                       akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                 (akirak-capture-doct)))
    ("E" "Epic" (lambda ()
                  (interactive)
                  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
@@ -500,6 +494,8 @@
      :doct (:clock-in t :clock-resume t))
     ("@message"
      :template (:todo "UNDERWAY")
+     :doct (:clock-in t :clock-resume t))
+    ("@note"
      :doct (:clock-in t :clock-resume t)))
   ""
   :type '(alist :key-type (string :tag "Org tag")
