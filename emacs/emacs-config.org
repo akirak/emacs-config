@@ -1402,6 +1402,7 @@ Operations on the current project
   (setup akirak-project
     (run-with-idle-timer 70 nil #'akirak-project-remember-this)
     (run-with-idle-timer 180 nil #'akirak-project-rescan)
+    (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit)
 
     (with-eval-after-load "bindings"
       ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
