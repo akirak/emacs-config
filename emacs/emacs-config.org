@@ -2013,47 +2013,33 @@ Thus I will explicitly install this package rather than using the built-in versi
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
 
-    (let ((modes '(help-mode
-                   devdocs-mode)))
-      (add-to-list 'display-buffer-alist
-                   `((or ,@(mapcar (lambda (mode) (cons 'major-mode mode))
-                                   modes))
-                     akirak-window-reuse-mode-window-or-split-below
-                     mode ,@modes)
-                   t))
-    (add-to-list 'display-buffer-alist
-                 '((major-mode . vterm-mode)
-                   akirak-window-reuse-mode-window-or-split-below
-                   mode (vterm-mode))
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '((or (major-mode . nov-mode)
-                       (major-mode . pdf-view-mode))
-                   akirak-window-display-document-buffer)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '((major-mode . org-agenda-mode)
-                   akirak-window-display-org-agenda-buffer
-                   (mode org-agenda-mode)))
-    (add-to-list 'display-buffer-alist
-                 '("^CAPTURE-"
-                   akirak-window-display-org-capture-buffer)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '("^org-dog header"
-                   akirak-window-display-buffer-split-1)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '((major-mode . org-mode)
-                   akirak-window-display-org-buffer-other-window)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '("^\\*deadgrep"
-                   display-buffer-use-least-recent-window)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '("^\\*Async Shell Command\\*"
-                   (display-buffer-no-window)))
+    (cl-macrolet
+        ((major-modes (&rest modes)
+           `(or (mapcar (lambda (mode)
+                          (cons 'major-mode mode))
+                        ',modes))))
+      (dolist (entry `((,(major-modes help-mode devdocs-mode)
+                        akirak-window-reuse-mode-window-or-split-below
+                        mode (help-mode devdocs-mode))
+                       ((major-mode . vterm-mode)
+                        akirak-window-reuse-mode-window-or-split-below
+                        mode (vterm-mode))
+                       (,(major-modes nov-mode pdf-view-mode)
+                        akirak-window-display-document-buffer)
+                       ((major-mode . org-agenda-mode)
+                        akirak-window-display-org-agenda-buffer
+                        (mode org-agenda-mode))
+                       ("^CAPTURE-"
+                        akirak-window-display-org-capture-buffer)
+                       ("^org-dog header"
+                        akirak-window-display-buffer-split-1)
+                       ((major-mode . org-mode)
+                        akirak-window-display-org-buffer-other-window)
+                       ("^\\*deadgrep"
+                        display-buffer-use-least-recent-window)
+                       ("^\\*Async Shell Command\\*"
+                        display-buffer-no-window)))
+        (add-to-list 'display-buffer-alist entry t)))
 
     ;; I use a normal keyboard, so it is hard to access cursor keys.
     (define-key ctl-x-map "9" #'previous-buffer)
