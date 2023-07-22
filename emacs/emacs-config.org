@@ -4161,6 +4161,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-narrow
     (:global "C-x n" #'akirak-narrow-or-widen-dwim)
+    (advice-add 'org-defkey
+            :before-while
+            (defun akirak/ad-org-defkey-skip (_keymap key _def)
+              (not (equal (kbd "C-x n")
+                          (seq-take key 2)))))
     (with-eval-after-load 'org
       (define-key org-mode-map (kbd "C-x n") #'akirak-narrow-or-widen-dwim)))
 #+end_src
