@@ -357,8 +357,8 @@
                        akirak-capture-doct-options nil)
                  (akirak-capture-doct))
     :transient t)
-   ("#" "Ticket" akirak-capture-ticket
-    :transient t)
+   ;; ("#" "Ticket" akirak-capture-ticket
+   ;;  :transient t)
    ("q" "Question" (lambda ()
                      (interactive)
                      (setq akirak-capture-headline (akirak-capture--maybe-read-heading
@@ -388,13 +388,13 @@
                        akirak-capture-doct-options '(:clock-in t :clock-resume t))
                  (akirak-capture-doct))
     :transient t)
-   ("L" "Start todo with link" (lambda ()
-                                 (interactive)
-                                 (setq akirak-capture-headline (akirak-capture--make-org-link)
-                                       akirak-capture-template-options '(:todo "UNDERWAY")
-                                       akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                                 (akirak-capture-doct))
-    :transient t)
+   ;; ("L" "Start todo with link" (lambda ()
+   ;;                               (interactive)
+   ;;                               (setq akirak-capture-headline (akirak-capture--make-org-link)
+   ;;                                     akirak-capture-template-options '(:todo "UNDERWAY")
+   ;;                                     akirak-capture-doct-options '(:clock-in t :clock-resume t))
+   ;;                               (akirak-capture-doct))
+   ;;  :transient t)
    ("l" "Bookmark as link" (lambda ()
                              (interactive)
                              (setq akirak-capture-headline (akirak-capture--make-org-link)
@@ -440,32 +440,33 @@
        (org-memento-start-quick-event
         (akirak-capture--maybe-read-heading "Describe the current event: "))))
 
-    ("am" "Meeting w/ someone"
-     (lambda ()
-       (interactive)
-       (setq akirak-capture-template-options
-             '(:tags "@meeting"
-                     :body ("- Participants :: %^{Participants}"
-                            ""
-                            "%?")))
-       (akirak-capture-appointment))
-     :transient t)
-    ("as" "Session"
-     (lambda ()
-       (interactive)
-       (setq akirak-capture-template-options
-             '(:tags "@session"
-                     :body ("%?")))
-       (akirak-capture-appointment))
-     :transient t)
-    ("ae" "Errand" akirak-capture-errand
-     :transient t)]]
+    ;; ("am" "Meeting w/ someone"
+    ;;  (lambda ()
+    ;;    (interactive)
+    ;;    (setq akirak-capture-template-options
+    ;;          '(:tags "@meeting"
+    ;;                  :body ("- Participants :: %^{Participants}"
+    ;;                         ""
+    ;;                         "%?")))
+    ;;    (akirak-capture-appointment))
+    ;;  :transient t)
+    ;; ("as" "Session"
+    ;;  (lambda ()
+    ;;    (interactive)
+    ;;    (setq akirak-capture-template-options
+    ;;          '(:tags "@session"
+    ;;                  :body ("%?")))
+    ;;    (akirak-capture-appointment))
+    ;;  :transient t)
+    ;; ("ae" "Errand" akirak-capture-errand
+    ;;  :transient t)
+    ]]
 
   ["Convenience and specific projects"
    :class transient-row
-   ("sc" "Command snippet" akirak-capture-command-snippet
-    :transient t)
-   ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
+   ;; ("sc" "Command snippet" akirak-capture-command-snippet
+   ;;  :transient t)
+   ;; ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
    ("L" "Journal" akirak-capture-journal-item
     :if (lambda () (eq major-mode 'org-mode)))]
