@@ -110,5 +110,20 @@ If CALLBACK is a function, it is called with the selected url."
                           (org-super-links-store-link))))
     (org-super-links-insert-link)))
 
+(defconst akirak-avy-ffap-regexp
+  (rx (or (and (syntax string-quote)
+               (+ (any alnum graph))
+               (syntax string-quote))
+          (and word-start (? "~") "/" (any "." alnum)))))
+
+;;;###autoload
+(defun akirak-avy-ffap ()
+  (interactive)
+  (avy-with akirak-avy-ffap
+    (when (avy-jump akirak-avy-ffap-regexp)
+      (when (looking-at (rx (syntax string-quote)))
+        (goto-char (match-end 0)))
+      (ffap))))
+
 (provide 'akirak-avy)
 ;;; akirak-avy.el ends here
