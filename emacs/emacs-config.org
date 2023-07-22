@@ -1202,6 +1202,23 @@ The built-in =electric= package provides the following modes:
         (:bind "C-u" #'backward-kill-sentence
                "C-w" #'backward-kill-word))))
 #+end_src
+*** mailcap
+:PROPERTIES:
+:CREATED_TIME: [2023-07-22 Sat 12:49]
+:END:
+
+#+begin_src emacs-lisp
+  (setup mailcap
+    (:when-loaded
+      (advice-add 'mailcap-parse-mailcaps
+                  :around
+                  (defun akirak/ad-around-mailcap-parse-mailcaps (orig &rest args)
+                    (if (and (not args)
+                             (not mailcap-parsed-p))
+                        (or (akirak-mime-set-mailcap-extensions)
+                            (funcall orig))
+                      (apply orig args))))))
+#+end_src
 *** menu-bar
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:22]
@@ -2439,14 +2456,19 @@ Outline-based notes management and organizer
 
       (:global "C-c o" #'org-open-at-point-global)
 
+      (defvar akirak/org-file-apps-set-from-mime nil)
+      (advice-add 'org-open-file
+                  :before
+                  (defun akirak/ad-org-open-file-set-apps (&rest _)
+                    (unless akirak/org-file-apps-set-from-mime
+                      (akirak-mime-update-org-file-apps)
+                      (setq akirak/org-file-apps-set-from-mime t))))
+
       (:when-loaded
         (:status personal
           (akirak-org-config-setup))
 
-        (add-to-list 'org-file-apps
-                     `("\\.sqlite3?\\'"
-                       . ,(defun akirak/org-file-open-sqlite (file &rest _)
-                            (sqlite-mode-open-file file))))
+        (add-to-list 'org-file-apps '(t . mailcap) t)
 
         (add-to-list 'display-buffer-alist
                      '("\\*Org Select\\*"
@@ -7012,12 +7034,12 @@ Eclipse-like moving and duplicating lines or rectangles
 #+begin_src emacs-lisp
   (setup (:package mpv)
     (with-eval-after-load 'mailcap
-      (dolist (major '("video" "audio"))
-        (mailcap-add-mailcap-entry major ".+"
-                                   `((viewer . mpv-play)
-                                     (test . (or (getenv "DISPLAY")
-                                                 (getenv "WAYLAND_DISPLAY")))
-                                     (type . ,(concat major "/.+")))))))
+      (add-to-list 'mailcap-user-mime-data
+                   `((viewer . mpv-play)
+                     (test . (or (getenv "DISPLAY")
+                                 (getenv "WAYLAND_DISPLAY")))
+                     (type . ,(rx (or "audio" "video")
+                                  "/" (+ anything)))))))
 #+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
