@@ -203,6 +203,27 @@ I am interested to see if it can reduce the amount of configuration code.
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
+*** :org-open
+:PROPERTIES:
+:CREATED_TIME: [2023-07-22 Sat 10:28]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :org-open (file command &rest plist)
+     `(with-eval-after-load 'org
+        (cl-pushnew (cons ,file
+                          ,(if (plist-get plist :file)
+                               `(defun ,(intern (format "akirak/org-open-%s"
+                                                        (if (string-match (rx (+ alnum)) file)
+                                                            (match-string 0 file)
+                                                          file)))
+                                    (filename _)
+                                  (,command filename))
+                             `,command))
+                    org-file-apps))))
+#+end_src
 *** :org-src-lang
 :PROPERTIES:
 :CREATED_TIME: [2023-01-23 Mon 19:37]
@@ -1639,6 +1660,15 @@ This is a recommended setting for use with vertico. See https://github.com/minad
         (if skeleton-positions
             (message "Remaining %d positions" (length skeleton-positions))
           (local-unset-key [tab])))))
+#+end_src
+*** sqlite-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-07-22 Sat 11:17]
+:END:
+
+#+begin_src emacs-lisp
+  (setup sqlite-mode
+    (:org-open "\\.sqlite3?\\'" sqlite-mode-open-file :file t))
 #+end_src
 *** startup
 :PROPERTIES:
