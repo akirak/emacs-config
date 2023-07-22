@@ -534,6 +534,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup browse-url
+;;    (:org-open "\\.x?html?\\'" browse-url)
+
     (:status personal
       (:set browse-url-handlers `((,(rx bos "http" (?  "s") "://"
                                         (or "localhost"
