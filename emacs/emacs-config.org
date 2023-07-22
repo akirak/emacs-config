@@ -2014,9 +2014,7 @@ Thus I will explicitly install this package rather than using the built-in versi
       (/ (1- (window-height (or window (selected-window)))) 2))
 
     (let ((modes '(help-mode
-                   helpful-mode
-                   devdocs-mode
-                   ghelp-page-mode)))
+                   devdocs-mode)))
       (add-to-list 'display-buffer-alist
                    `((or ,@(mapcar (lambda (mode) (cons 'major-mode mode))
                                    modes))
