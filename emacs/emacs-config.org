@@ -5109,67 +5109,10 @@ Ibuffer-like filtering for dired
     (:hook-into dired-mode-hook)
     (:hook dired-filter-group-mode)
 
-    (:set dired-omit-extensions nil
-          dired-filter-group-saved-groups
-          `(("default"
-             ("Directories"
-              (directory . t))
-             ,@(mapcar
-                (lambda (filter-stack)
-                  `(,(car filter-stack)
-                    (file . t)
-                    ,@(cdr filter-stack)))
-                '(("Dotfiles"
-                   (name . "^\\."))
-                  ;; Text files
-                  ("Text"
-                   (or (name . "README")
-                       (name . "TODO")
-                       (name . "LICENSE")
-                       (extension "txt" "md" "mkd" "markdown" "rst")))
-                  ("Org"
-                   (extension "org" "org_archive" "bib"))
-                  ("Ledger"
-                   (extension "beancount"))
-                  ("Data files"
-                   (extension "csv" "json" "sql" "lock"))
-                  ("Databases"
-                   (extension "db" "sqlite" "sqlite3"))
-                  ;; Binary files
-                  ("Books and papers"
-                   (extension "pdf" "mobi" "epub" "azw"))
-                  ("Archives"
-                   (extension "zip" "rar" "gz" "bz2" "tar"))
-                  ("Disk images"
-                   (extension "iso" "ova"))
-                  ("Office docs"
-                   (extension "xlsx" "xls" "docx" "doc"))
-                  ("Programs"
-                   (extension "exe" "run" "deb"))
-                  ("Object files and libraries"
-                   (extension "o" "elc" "eln" "so"))
-                  ("Meta data"
-                   (extension "torrent" "acsm"))
-                  ("Web"
-                   (extension "html" "css" "scss"))
-                  ;; Images are often thumbnails, so they should come
-                  ;; after other binary files
-                  ("Images and graphics"
-                   (extension "jpg" "jpeg" "png" "gif" "svg"))
-                  ("Nix"
-                   (extension "nix"))
-                  ("Programming languages"
-                   (extension "pl" "kk" "py" "ex" "exs"))
-                  ;; Source code
-                  ("Configuration"
-                   (or (name . "Makefile")
-                       (name . "Dockerfile")
-                       (extension "yml" "yaml" "cabal"
-                                  "prisma" "hcl" "terraform"
-                                  "dockerfile"
-                                  "mk" "makefile")))
-                  ("Emacs Lisp"
-                   (extension "el"))))))))
+    (:set dired-omit-extensions nil)
+    (:when-loaded
+      (:set dired-filter-group-saved-groups
+            `(("default" ,@(akirak-dired-filter-build-default-groups))))))
 #+end_src
 *** dired-hacks-utils                                        :dired:
 :PROPERTIES:
