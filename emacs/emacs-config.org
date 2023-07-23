@@ -2551,7 +2551,10 @@ Outline-based notes management and organizer
         (:unbind "C-'"
                  ;; I don't use any of these bindings and want to use them for other purposes
                  "C-c ["
-                 "C-c ]")
+                 "C-c ]"
+                 ;; C-c C-x u is bound to org-metaup, but I use another binding
+                 ;; (currently M-P) for the command.
+                 "C-c C-x u")
         (:bind akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
                "<" #'akirak-org-angle-open
                "[" #'akirak-org-square-open
@@ -2571,6 +2574,8 @@ Outline-based notes management and organizer
                ;; Overrides the default binding to org-next-link, but I will drop
                ;; it in favor of link-hint
                "C-c C-x C-p" #'akirak-org-copy-property-value
+               "C-c C-x u r" #'org-update-radio-target-regexp
+               "C-c C-x u _" #'akirak-org-auto-decorate-words
                "M-s o" #'org-pivot-search-from-files
                ;; M-up/down/left/right is unavailable on Chromebooks, so I need
                ;; alternative bindings for commands bound on those keys.
