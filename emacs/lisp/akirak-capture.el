@@ -1416,18 +1416,23 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                    :template ,(akirak-org-capture-make-entry-body
                                 headline
                                 :todo "UNDERWAY"
-                                :tags tags
+                                :tags (append tags
+                                              (akirak-capture--mode-tags file))
                                 :properties
-                                (cons
-                                 `("context_major_mode" . ,major-mode)
-                                 (akirak-capture--git-properties
-                                  obj :tags tags))
+                                (akirak-capture--git-properties
+                                 obj :tags tags)
                                 :body body)
                    :file ,file
                    :function ,jump-func
                    :clock-in t :clock-resume t))))))
     (save-window-excursion
       (org-capture))))
+
+(defun akirak-capture--mode-tags (target-file)
+  (when-let* ((file (car (akirak-org-dog-context-files 'major-mode)))
+              (obj (unless (equal target-file file)
+                     (org-dog-file-object file))))
+    (org-dog-file-tags obj)))
 
 (cl-defun akirak-capture--git-properties (obj &key tags)
   (when-let (root (vc-git-root default-directory))
