@@ -718,6 +718,50 @@ The point should be at the heading."
       (call-interactively this-command)))))
 
 ;;;###autoload
+(defun akirak-org-auto-decorate-words ()
+  "Wrap certain words so they don't look weird.
+
+At this point, the function works with the following pattern:
+
+ * Wrap underscore-infixed words with code brackets."
+  (interactive nil org-mode)
+  (require 'org-element)
+  (let ((start (window-start))
+        (end (window-end))
+        (n 0))
+    (save-excursion
+      (goto-char start)
+      (cl-flet
+          ((end-of-word ()
+             (re-search-forward (rx space) end t)))
+        (while (search-forward "_" end t)
+          (cond
+           ((let ((props (text-properties-at (point))))
+              (or (plist-get props 'org-linked-text)
+                  (plist-get props 'htmlize-link)
+                  (cl-intersection (ensure-list (plist-get props 'face))
+                                   '(org-verbatim org-code org-target)
+                                   :test #'eq)))
+            (end-of-word))
+           ((org-match-line org-block-regexp)
+            (goto-char (match-end 0)))
+           ((org-at-property-p)
+            (org-end-of-meta-data t))
+           ((org-in-block-p '("src"))
+            (goto-char (org-element-property :end (org-element-at-point))))
+           (t
+            (pcase (bounds-of-thing-at-point 'symbol)
+              (`(,word-start . ,word-end)
+               (goto-char word-start)
+               (if (looking-at org-target-link-regexp)
+                   (end-of-word)
+                 (insert-char ?~)
+                 (goto-char (1+ word-end))
+                 (insert-char ?~)
+                 (cl-incf n)))))))
+        (message "Performed %d replacements" n)))))
+
+;;;###autoload
 (defun akirak-org-edit-active-ts ()
   "Edit the first active timestamp in the entry body."
   (interactive)
