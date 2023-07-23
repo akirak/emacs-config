@@ -357,8 +357,8 @@
                        akirak-capture-doct-options nil)
                  (akirak-capture-doct))
     :transient t)
-   ("#" "Ticket" akirak-capture-ticket
-    :transient t)
+   ;; ("#" "Ticket" akirak-capture-ticket
+   ;;  :transient t)
    ("q" "Question" (lambda ()
                      (interactive)
                      (setq akirak-capture-headline (akirak-capture--maybe-read-heading
@@ -375,12 +375,6 @@
                    (akirak-capture-doct))
     :transient t)
    ("j" "Journal" akirak-capture-journal)
-   ("n" "Note" (lambda ()
-                 (interactive)
-                 (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-                       akirak-capture-template-options '(:tags "@note")
-                       akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                 (akirak-capture-doct)))
    ("E" "Epic" (lambda ()
                  (interactive)
                  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
@@ -388,13 +382,13 @@
                        akirak-capture-doct-options '(:clock-in t :clock-resume t))
                  (akirak-capture-doct))
     :transient t)
-   ("L" "Start todo with link" (lambda ()
-                                 (interactive)
-                                 (setq akirak-capture-headline (akirak-capture--make-org-link)
-                                       akirak-capture-template-options '(:todo "UNDERWAY")
-                                       akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                                 (akirak-capture-doct))
-    :transient t)
+   ;; ("L" "Start todo with link" (lambda ()
+   ;;                               (interactive)
+   ;;                               (setq akirak-capture-headline (akirak-capture--make-org-link)
+   ;;                                     akirak-capture-template-options '(:todo "UNDERWAY")
+   ;;                                     akirak-capture-doct-options '(:clock-in t :clock-resume t))
+   ;;                               (akirak-capture-doct))
+   ;;  :transient t)
    ("l" "Bookmark as link" (lambda ()
                              (interactive)
                              (setq akirak-capture-headline (akirak-capture--make-org-link)
@@ -440,32 +434,33 @@
        (org-memento-start-quick-event
         (akirak-capture--maybe-read-heading "Describe the current event: "))))
 
-    ("am" "Meeting w/ someone"
-     (lambda ()
-       (interactive)
-       (setq akirak-capture-template-options
-             '(:tags "@meeting"
-                     :body ("- Participants :: %^{Participants}"
-                            ""
-                            "%?")))
-       (akirak-capture-appointment))
-     :transient t)
-    ("as" "Session"
-     (lambda ()
-       (interactive)
-       (setq akirak-capture-template-options
-             '(:tags "@session"
-                     :body ("%?")))
-       (akirak-capture-appointment))
-     :transient t)
-    ("ae" "Errand" akirak-capture-errand
-     :transient t)]]
+    ;; ("am" "Meeting w/ someone"
+    ;;  (lambda ()
+    ;;    (interactive)
+    ;;    (setq akirak-capture-template-options
+    ;;          '(:tags "@meeting"
+    ;;                  :body ("- Participants :: %^{Participants}"
+    ;;                         ""
+    ;;                         "%?")))
+    ;;    (akirak-capture-appointment))
+    ;;  :transient t)
+    ;; ("as" "Session"
+    ;;  (lambda ()
+    ;;    (interactive)
+    ;;    (setq akirak-capture-template-options
+    ;;          '(:tags "@session"
+    ;;                  :body ("%?")))
+    ;;    (akirak-capture-appointment))
+    ;;  :transient t)
+    ;; ("ae" "Errand" akirak-capture-errand
+    ;;  :transient t)
+    ]]
 
   ["Convenience and specific projects"
    :class transient-row
-   ("sc" "Command snippet" akirak-capture-command-snippet
-    :transient t)
-   ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
+   ;; ("sc" "Command snippet" akirak-capture-command-snippet
+   ;;  :transient t)
+   ;; ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
    ("L" "Journal" akirak-capture-journal-item
     :if (lambda () (eq major-mode 'org-mode)))]
@@ -499,6 +494,8 @@
      :doct (:clock-in t :clock-resume t))
     ("@message"
      :template (:todo "UNDERWAY")
+     :doct (:clock-in t :clock-resume t))
+    ("@note"
      :doct (:clock-in t :clock-resume t)))
   ""
   :type '(alist :key-type (string :tag "Org tag")
@@ -1247,7 +1244,10 @@ provided as a separate command for integration, e.g. with embark."
                                                    ;; zero-width space (8203)
                                                    "​")
                                                "")
-                     (replace-regexp-in-string (rx (+ blank) eol)
+                     (replace-regexp-in-string (rx (+ (any blank
+                                                           ;; zero-width space
+                                                           "​" ))
+                                                   eol)
                                                "")
                      (replace-regexp-in-string (rx (+ "\n") eos)
                                                "")
@@ -1416,18 +1416,23 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                    :template ,(akirak-org-capture-make-entry-body
                                 headline
                                 :todo "UNDERWAY"
-                                :tags tags
+                                :tags (append tags
+                                              (akirak-capture--mode-tags file))
                                 :properties
-                                (cons
-                                 `("context_major_mode" . ,major-mode)
-                                 (akirak-capture--git-properties
-                                  obj :tags tags))
+                                (akirak-capture--git-properties
+                                 obj :tags tags)
                                 :body body)
                    :file ,file
                    :function ,jump-func
                    :clock-in t :clock-resume t))))))
     (save-window-excursion
       (org-capture))))
+
+(defun akirak-capture--mode-tags (target-file)
+  (when-let* ((file (car (akirak-org-dog-context-files 'major-mode)))
+              (obj (unless (equal target-file file)
+                     (org-dog-file-object file))))
+    (org-dog-file-tags obj)))
 
 (cl-defun akirak-capture--git-properties (obj &key tags)
   (when-let (root (vc-git-root default-directory))

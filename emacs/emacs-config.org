@@ -203,6 +203,27 @@ I am interested to see if it can reduce the amount of configuration code.
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
+*** :org-open
+:PROPERTIES:
+:CREATED_TIME: [2023-07-22 Sat 10:28]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :org-open (file command &rest plist)
+     `(with-eval-after-load 'org
+        (cl-pushnew (cons ,file
+                          ,(if (plist-get plist :file)
+                               `(defun ,(intern (format "akirak/org-open-%s"
+                                                        (if (string-match (rx (+ alnum)) file)
+                                                            (match-string 0 file)
+                                                          file)))
+                                    (filename _)
+                                  (,command filename))
+                             `,command))
+                    org-file-apps))))
+#+end_src
 *** :org-src-lang
 :PROPERTIES:
 :CREATED_TIME: [2023-01-23 Mon 19:37]
@@ -513,6 +534,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup browse-url
+;;    (:org-open "\\.x?html?\\'" browse-url)
+
     (:status personal
       (:set browse-url-handlers `((,(rx bos "http" (?  "s") "://"
                                         (or "localhost"
@@ -870,6 +893,19 @@ The built-in =electric= package provides the following modes:
   (setup executable
     (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p))
 #+end_src
+*** ffap
+:PROPERTIES:
+:CREATED_TIME: [2023-07-22 Sat 21:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup ffap
+    (:global "C-c f" (defun akirak/ffap (&optional arg)
+                       (interactive "P")
+                       (if arg
+                           (akirak-avy-ffap)
+                         (ffap)))))
+#+end_src
 *** fileio.c                                                 :files:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -1179,6 +1215,23 @@ The built-in =electric= package provides the following modes:
         (:bind "C-u" #'backward-kill-sentence
                "C-w" #'backward-kill-word))))
 #+end_src
+*** mailcap
+:PROPERTIES:
+:CREATED_TIME: [2023-07-22 Sat 12:49]
+:END:
+
+#+begin_src emacs-lisp
+  (setup mailcap
+    (:when-loaded
+      (advice-add 'mailcap-parse-mailcaps
+                  :around
+                  (defun akirak/ad-around-mailcap-parse-mailcaps (orig &rest args)
+                    (if (and (not args)
+                             (not mailcap-parsed-p))
+                        (or (akirak-mime-set-mailcap-extensions)
+                            (funcall orig))
+                      (apply orig args))))))
+#+end_src
 *** menu-bar
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:22]
@@ -1358,6 +1411,7 @@ Resources:
 *** project
 :PROPERTIES:
 :CREATED_TIME: [2022-02-06 Sun 17:00]
+:ID:       f9efbe39-b9f9-4b15-93d6-b7b2433aca36
 :END:
 #+begin_quote
 Operations on the current project
@@ -1402,6 +1456,7 @@ Operations on the current project
   (setup akirak-project
     (run-with-idle-timer 70 nil #'akirak-project-remember-this)
     (run-with-idle-timer 180 nil #'akirak-project-rescan)
+    (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit)
 
     (with-eval-after-load "bindings"
       ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
@@ -1638,6 +1693,15 @@ This is a recommended setting for use with vertico. See https://github.com/minad
         (if skeleton-positions
             (message "Remaining %d positions" (length skeleton-positions))
           (local-unset-key [tab])))))
+#+end_src
+*** sqlite-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-07-22 Sat 11:17]
+:END:
+
+#+begin_src emacs-lisp
+  (setup sqlite-mode
+    (:org-open "\\.sqlite3?\\'" sqlite-mode-open-file :file t))
 #+end_src
 *** startup
 :PROPERTIES:
@@ -1949,49 +2013,33 @@ Thus I will explicitly install this package rather than using the built-in versi
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
 
-    (let ((modes '(help-mode
-                   helpful-mode
-                   devdocs-mode
-                   ghelp-page-mode)))
-      (add-to-list 'display-buffer-alist
-                   `((or ,@(mapcar (lambda (mode) (cons 'major-mode mode))
-                                   modes))
-                     akirak-window-reuse-mode-window-or-split-below
-                     mode ,@modes)
-                   t))
-    (add-to-list 'display-buffer-alist
-                 '((major-mode . vterm-mode)
-                   akirak-window-reuse-mode-window-or-split-below
-                   mode (vterm-mode))
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '((or (major-mode . nov-mode)
-                       (major-mode . pdf-view-mode))
-                   akirak-window-display-document-buffer)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '((major-mode . org-agenda-mode)
-                   akirak-window-display-org-agenda-buffer
-                   (mode org-agenda-mode)))
-    (add-to-list 'display-buffer-alist
-                 '("^CAPTURE-"
-                   akirak-window-display-org-capture-buffer)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '("^org-dog header"
-                   akirak-window-display-buffer-split-1)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '((major-mode . org-mode)
-                   akirak-window-display-org-buffer-other-window)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '("^\\*deadgrep"
-                   display-buffer-use-least-recent-window)
-                 t)
-    (add-to-list 'display-buffer-alist
-                 '("^\\*Async Shell Command\\*"
-                   (display-buffer-no-window)))
+    (cl-macrolet
+        ((major-modes (&rest modes)
+           `(or (mapcar (lambda (mode)
+                          (cons 'major-mode mode))
+                        ',modes))))
+      (dolist (entry `((,(major-modes help-mode devdocs-mode)
+                        akirak-window-reuse-mode-window-or-split-below
+                        mode (help-mode devdocs-mode))
+                       ((major-mode . vterm-mode)
+                        akirak-window-reuse-mode-window-or-split-below
+                        mode (vterm-mode))
+                       (,(major-modes nov-mode pdf-view-mode)
+                        akirak-window-display-document-buffer)
+                       ((major-mode . org-agenda-mode)
+                        akirak-window-display-org-agenda-buffer
+                        (mode org-agenda-mode))
+                       ("^CAPTURE-"
+                        akirak-window-display-org-capture-buffer)
+                       ("^org-dog header"
+                        akirak-window-display-buffer-split-1)
+                       ((major-mode . org-mode)
+                        akirak-window-display-org-buffer-other-window)
+                       ("^\\*deadgrep"
+                        display-buffer-use-least-recent-window)
+                       ("^\\*Async Shell Command\\*"
+                        display-buffer-no-window)))
+        (add-to-list 'display-buffer-alist entry t)))
 
     ;; I use a normal keyboard, so it is hard to access cursor keys.
     (define-key ctl-x-map "9" #'previous-buffer)
@@ -2405,14 +2453,19 @@ Outline-based notes management and organizer
 
       (:global "C-c o" #'org-open-at-point-global)
 
+      (defvar akirak/org-file-apps-set-from-mime nil)
+      (advice-add 'org-open-file
+                  :before
+                  (defun akirak/ad-org-open-file-set-apps (&rest _)
+                    (unless akirak/org-file-apps-set-from-mime
+                      (akirak-mime-update-org-file-apps)
+                      (setq akirak/org-file-apps-set-from-mime t))))
+
       (:when-loaded
         (:status personal
           (akirak-org-config-setup))
 
-        (add-to-list 'org-file-apps
-                     `("\\.sqlite3?\\'"
-                       . ,(defun akirak/org-file-open-sqlite (file &rest _)
-                            (sqlite-mode-open-file file))))
+        (add-to-list 'org-file-apps '(t . mailcap) t)
 
         (add-to-list 'display-buffer-alist
                      '("\\*Org Select\\*"
@@ -2498,7 +2551,10 @@ Outline-based notes management and organizer
         (:unbind "C-'"
                  ;; I don't use any of these bindings and want to use them for other purposes
                  "C-c ["
-                 "C-c ]")
+                 "C-c ]"
+                 ;; C-c C-x u is bound to org-metaup, but I use another binding
+                 ;; (currently M-P) for the command.
+                 "C-c C-x u")
         (:bind akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
                "<" #'akirak-org-angle-open
                "[" #'akirak-org-square-open
@@ -2518,6 +2574,8 @@ Outline-based notes management and organizer
                ;; Overrides the default binding to org-next-link, but I will drop
                ;; it in favor of link-hint
                "C-c C-x C-p" #'akirak-org-copy-property-value
+               "C-c C-x u r" #'org-update-radio-target-regexp
+               "C-c C-x u _" #'akirak-org-auto-decorate-words
                "M-s o" #'org-pivot-search-from-files
                ;; M-up/down/left/right is unavailable on Chromebooks, so I need
                ;; alternative bindings for commands bound on those keys.
@@ -4160,6 +4218,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-narrow
     (:global "C-x n" #'akirak-narrow-or-widen-dwim)
+    (advice-add 'org-defkey
+            :before-while
+            (defun akirak/ad-org-defkey-skip (_keymap key _def)
+              (not (equal (kbd "C-x n")
+                          (seq-take key 2)))))
     (with-eval-after-load 'org
       (define-key org-mode-map (kbd "C-x n") #'akirak-narrow-or-widen-dwim)))
 #+end_src
@@ -5048,67 +5111,10 @@ Ibuffer-like filtering for dired
     (:hook-into dired-mode-hook)
     (:hook dired-filter-group-mode)
 
-    (:set dired-omit-extensions nil
-          dired-filter-group-saved-groups
-          `(("default"
-             ("Directories"
-              (directory . t))
-             ,@(mapcar
-                (lambda (filter-stack)
-                  `(,(car filter-stack)
-                    (file . t)
-                    ,@(cdr filter-stack)))
-                '(("Dotfiles"
-                   (name . "^\\."))
-                  ;; Text files
-                  ("Text"
-                   (or (name . "README")
-                       (name . "TODO")
-                       (name . "LICENSE")
-                       (extension "txt" "md" "mkd" "markdown" "rst")))
-                  ("Org"
-                   (extension "org" "org_archive" "bib"))
-                  ("Ledger"
-                   (extension "beancount"))
-                  ("Data files"
-                   (extension "csv" "json" "sql" "lock"))
-                  ("Databases"
-                   (extension "db" "sqlite" "sqlite3"))
-                  ;; Binary files
-                  ("Books and papers"
-                   (extension "pdf" "mobi" "epub" "azw"))
-                  ("Archives"
-                   (extension "zip" "rar" "gz" "bz2" "tar"))
-                  ("Disk images"
-                   (extension "iso" "ova"))
-                  ("Office docs"
-                   (extension "xlsx" "xls" "docx" "doc"))
-                  ("Programs"
-                   (extension "exe" "run" "deb"))
-                  ("Object files and libraries"
-                   (extension "o" "elc" "eln" "so"))
-                  ("Meta data"
-                   (extension "torrent" "acsm"))
-                  ("Web"
-                   (extension "html" "css" "scss"))
-                  ;; Images are often thumbnails, so they should come
-                  ;; after other binary files
-                  ("Images and graphics"
-                   (extension "jpg" "jpeg" "png" "gif" "svg"))
-                  ("Nix"
-                   (extension "nix"))
-                  ("Programming languages"
-                   (extension "pl" "kk" "py" "ex" "exs"))
-                  ;; Source code
-                  ("Configuration"
-                   (or (name . "Makefile")
-                       (name . "Dockerfile")
-                       (extension "yml" "yaml" "cabal"
-                                  "prisma" "hcl" "terraform"
-                                  "dockerfile"
-                                  "mk" "makefile")))
-                  ("Emacs Lisp"
-                   (extension "el"))))))))
+    (:set dired-omit-extensions nil)
+    (:when-loaded
+      (:set dired-filter-group-saved-groups
+            `(("default" ,@(akirak-dired-filter-build-default-groups))))))
 #+end_src
 *** dired-hacks-utils                                        :dired:
 :PROPERTIES:
@@ -5897,7 +5903,12 @@ Emacs Minor mode to automatically commit and push
             (customize-push-and-save 'akirak/git-auto-commit-directory-list
                                      (list dir))
             (dir-locals-set-directory-class dir 'git-auto-commit
-                                            (current-time)))
+                                            (current-time))
+            (let ((expanded-dir (expand-file-name (file-name-as-directory dir))))
+              (dolist (buffer (buffer-list))
+                (when-let (file (buffer-file-name buffer))
+                  (when (string-prefix-p expanded-dir file)
+                    (git-auto-commit-mode t))))))
         (user-error "No project")))
 
     (defun akirak/git-auto-commit-message (filename)
@@ -6964,6 +6975,25 @@ Eclipse-like moving and duplicating lines or rectangles
               (defun akirak/turn-on-move-dup-mode ()
                 (unless (derived-mode-p 'org-mode 'markdown-mode)
                   (move-dup-mode 1)))))
+#+end_src
+*** mpv
+:PROPERTIES:
+:CREATED_TIME: [2023-07-21 Fri 23:59]
+:END:
+#+begin_quote
+control mpv for easy note-taking
+[[https://github.com/kljohann/mpv.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package mpv)
+    (with-eval-after-load 'mailcap
+      (add-to-list 'mailcap-user-mime-data
+                   `((viewer . mpv-play)
+                     (test . (or (getenv "DISPLAY")
+                                 (getenv "WAYLAND_DISPLAY")))
+                     (type . ,(rx (or "audio" "video")
+                                  "/" (+ anything)))))))
 #+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
@@ -8538,7 +8568,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 210 |
+| [[org-ql-search:tags:packages][packages]]            | 211 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

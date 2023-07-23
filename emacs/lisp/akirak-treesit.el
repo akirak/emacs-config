@@ -136,9 +136,15 @@
   "List of node types that needs balancing."
   :type '(repeat string))
 
+(defcustom akirak-treesit-sexp-end-delimiters
+  '("," ";" ";;")
+  ""
+  :type '(repeat string))
+
 (defun akirak-treesit-smart-kill-line (&optional arg)
   (interactive "P")
-  (if (numberp arg)
+  (if (or (numberp arg)
+          (looking-at (rx (* blank) eol)))
       (kill-line arg)
     (let ((start (point))
           (node (if (looking-at (rx (+ blank)))
@@ -159,12 +165,21 @@
                                     akirak-treesit-balanced-nodes)))
               (throw 'stop t))
             (setq node parent)))
+        (message "node: %s" node)
         (if parent
             (if-let (end-node (akirak-treesit--find-last-node node parent bound))
-                (kill-region (point) (treesit-node-end end-node))
+                (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end end-node)))
               ;; No node to delete, fallback to the default behavior
               (kill-line))
-          (kill-region (point) (treesit-node-end node)))))))
+          (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end node))))))))
+
+(defun akirak-treesit--after-last-node (pos)
+  (save-excursion
+    (goto-char pos)
+    (if (looking-at (rx-to-string `(and (or ,@akirak-treesit-sexp-end-delimiters)
+                                        (* blank))))
+        (match-end 0)
+      pos)))
 
 (defun akirak-treesit--find-last-node (start-node parent bound)
   (when-let (nodes (thread-last

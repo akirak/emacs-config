@@ -153,27 +153,22 @@
            project-root
            abbreviate-file-name
            file-name-split)
-    (`("~" "work2" "learning" ,group ,name "")
+    ((or `("~" "work2" "learning" ,group ,name "")
+         `("~" "work2" "learning" ,group ""))
      (make-org-dog-context-in-directory
-      :directory (list "technology/" "programming/")
-      :filenames (list name
-                       group)))
-    (`("~" "work2" ,_ ,group ,name "")
+      :directory (list "projects/" "technology/" "programming/")
+      :filenames (append (list group)
+                         (when name
+                           (list name)))))
+    ((or `("~" "work2" ,_ ,group ,name "")
+         `("~" "work2" ,_ ,group ""))
      (make-org-dog-context-in-directory
       :directory (list "projects/" "programming/")
-      :filenames (list (concat name "-dev")
-                       name
-                       (concat group "-dev")
-                       group)))
-    (`("~" "work2" "learning" ,group "")
-     (make-org-dog-context-in-directory
-      :directory (list "technology/" "programming/")
-      :filenames (list group)))
-    (`("~" "work2" ,_ ,group "")
-     (make-org-dog-context-in-directory
-      :directory (list "projects/")
-      :filenames (list (concat group "-dev")
-                       group)))
+      :filenames (append (when name
+                           (list (concat name "-dev")
+                                 name))
+                         (list (concat group "-dev")
+                               group))))
     (`("~" ,name "")
      (make-org-dog-context-in-directory
       :directory (list "projects/" "programming/" "skills/")

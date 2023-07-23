@@ -12,14 +12,30 @@
 ;;;###autoload
 (defun akirak-project-rescan ()
   (interactive)
-  (project-forget-zombie-projects)
-  (akirak-project-import-from-magit)
-  (akirak-project-maintain-list)
+  (let* ((modified (akirak-project--clean))
+         (modified (or (akirak-project-import-from-magit nil t)
+                       modified))
+         (modified (or (akirak-project-maintain-list)
+                       modified)))
+    (when modified
+      (project--write-project-list)))
   (when (fboundp 'github-linguist-update-projects)
     (github-linguist-update-projects)))
 
+(defun akirak-project--clean ()
+  "Forget projects that no longer exists.
+
+This is a slightly faster version of
+`project-forget-zombie-projects'. It simply doesn't perform
+persistence, so a succeeding step should call
+`project--write-project-list'."
+  (dolist (dir (project-known-project-roots))
+    (unless (file-exists-p dir)
+      (when-let (ent (assoc dir project--list))
+        (delq ent project--list)))))
+
 ;;;###autoload
-(defun akirak-project-import-from-magit ()
+(defun akirak-project-import-from-magit (&optional _ no-save)
   "Add projects from `magit-repository-directories'."
   (interactive)
   (require 'magit-repos)
@@ -32,11 +48,13 @@
           (add-to-list 'project--list (list dir) 'append)
           (cl-incf n))))
     (when (> n 0)
-      (project--write-project-list)
-      (message "Added %d projects" n))))
+      (unless no-save
+        (project--write-project-list))
+      (message "Added %d projects" n)
+      n)))
 
 ;;;###autoload
-(defun akirak-project-maintain-list ()
+(defun akirak-project-maintain-list (&optional _ no-save)
   "Update paths in the project list to conform to the policy."
   (interactive)
   (project--ensure-read-project-list)
@@ -53,8 +71,9 @@
             (unless (equal abbr path)
               (setcar cell abbr)
               (setq modified t)))))))
-    (when modified
-      (project--write-project-list))))
+    (when (and modified (not no-save))
+      (project--write-project-list)
+      t)))
 
 ;;;###autoload
 (defun akirak-project-switch (dir)
