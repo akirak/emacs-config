@@ -925,9 +925,18 @@ The built-in =electric= package provides the following modes:
 
     (:global "C-c f" (defun akirak/ffap (&optional arg)
                        (interactive "P")
-                       (if arg
-                           (akirak-avy-ffap)
-                         (ffap)))))
+                       (if-let (window (and (numberp arg)
+                                            (akirak-window--other-window nil arg)))
+                           (progn
+                             (display-buffer-override-next-command
+                              `(lambda (buffer _)
+                                 (window--display-buffer buffer ,(selected-window)
+                                                         'reuse)))
+                             (with-selected-window window
+                               (akirak-avy-ffap)))
+                         (if arg
+                             (akirak-avy-ffap)
+                           (ffap))))))
 #+end_src
 *** fileio.c                                                 :files:
 :PROPERTIES:
