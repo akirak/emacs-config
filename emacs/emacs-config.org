@@ -901,7 +901,7 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup ffap
     (:set ffap-file-finder (defun akirak/ffap-file-finder (file)
-                             (if (akirak/ffap-prefer-other-window-p)
+                             (if (akirak/ffap-prefer-other-window-p file)
                                  (find-file-other-window file)
                                (find-file file)))
           ffap-directory-finder (defun akirak/ffap-directory-finder (dir)
@@ -914,11 +914,14 @@ The built-in =electric= package provides the following modes:
       (not (and (buffer-file-name)
                 ;; If not visiting a file in the same project, prefer other
                 ;; window.
-                (equal (project-root (project-current nil default-directory))
-                       (project-root (project-current nil (if dirp
-                                                              file
-                                                            (file-name-directory
-                                                             file))))))))
+                (equal (when-let (pr (project-current nil
+                                                      default-directory))
+                         (project-root pr))
+                       (when-let (pr (project-current nil
+                                                      (if dirp
+                                                          file
+                                                        (file-name-directory file))))
+                         (project-root pr))))))
 
     (:global "C-c f" (defun akirak/ffap (&optional arg)
                        (interactive "P")
