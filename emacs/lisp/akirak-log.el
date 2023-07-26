@@ -31,8 +31,9 @@
            'magit-status-mode-hook #'akirak-log--project))
 
 (defun akirak-log--enabled-p ()
-  (not (and (fboundp 'org-clocking-p)
-            (org-clocking-p))))
+  (and akirak-log-private-file
+       (not (and (fboundp 'org-clocking-p)
+                 (org-clocking-p)))))
 
 (cl-defun akirak-log--heading (heading &key time tags message)
   (if (and akirak-log-private-file
