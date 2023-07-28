@@ -389,11 +389,11 @@
     "consult-org-nlink": {
       "flake": false,
       "locked": {
-        "lastModified": 1686959352,
-        "narHash": "sha256-u9eL8R/FflCYh7eRgFhxgMK2LKzix+x49kTi7wDmDmg=",
+        "lastModified": 1690553524,
+        "narHash": "sha256-rPVPJFBUBEPVVcr4Bmjg0h2fKMpU4395oW0GKbtNdd4=",
         "owner": "akirak",
         "repo": "org-nlink.el",
-        "rev": "8dc0d10c20411c126df3da64b33bd6853506f694",
+        "rev": "94dd0e2e3b07863f8a2f3c0ad78ea8337be79ac1",
         "type": "github"
       },
       "original": {
@@ -2256,11 +2256,11 @@
     "org-memento": {
       "flake": false,
       "locked": {
-        "lastModified": 1688946031,
-        "narHash": "sha256-N3O/HAc8i4euhdQ43McBYQlQuvyquSCVhpS5GVB+8g4=",
+        "lastModified": 1690597318,
+        "narHash": "sha256-KyvYum+guM9NNXmUl0EpanpnUWU2ryWEbjut3sIinMM=",
         "owner": "akirak",
         "repo": "org-memento",
-        "rev": "a69c47bfc76adb80b979667150b424d6a5350b53",
+        "rev": "5dd4d5be530f8e06fc3a0249b3da6e422131acb5",
         "type": "github"
       },
       "original": {
@@ -2289,11 +2289,11 @@
     "org-nlink": {
       "flake": false,
       "locked": {
-        "lastModified": 1689564616,
-        "narHash": "sha256-m7/Mkie/XgUL4oDQh14dyLs5dBT7GBrSiS8Na47bMDI=",
+        "lastModified": 1690544617,
+        "narHash": "sha256-noOhtdG4U8XMokvC4g7amvGXqXBnUHduKWGMvrioo+g=",
         "owner": "akirak",
         "repo": "org-nlink.el",
-        "rev": "779996dcd2b16139003a73cd6bbd226579179c74",
+        "rev": "79984fcb5ae9bb0aba1b9cdb649ce9f5eccd62aa",
         "type": "github"
       },
       "original": {
@@ -3281,16 +3281,15 @@
     "symbol-overlay": {
       "flake": false,
       "locked": {
-        "lastModified": 1660005445,
-        "narHash": "sha256-ChE0urAjJDstdZJpRRL+6CmCDKxbCj+5KwHtrQoGQs8=",
-        "owner": "akirak",
+        "lastModified": 1690617452,
+        "narHash": "sha256-d0/Yxh9pUQtmHKfMoXt1ciK2KE1Cq9VmY7qr/4+ysXk=",
+        "owner": "wolray",
         "repo": "symbol-overlay",
-        "rev": "eb219ae20434971b19de0db880db2272f70ed8a7",
+        "rev": "a5fb0a3079fec2073fc9124597d85485984822ad",
         "type": "github"
       },
       "original": {
-        "owner": "akirak",
-        "ref": "jump-hook",
+        "owner": "wolray",
         "repo": "symbol-overlay",
         "type": "github"
       }
@@ -3652,11 +3651,11 @@
     "workbox": {
       "flake": false,
       "locked": {
-        "lastModified": 1667113833,
-        "narHash": "sha256-GMBfxh7N0LCqwetX/l09nJ5JZgYJrrvl5nOAiYoO+QI=",
+        "lastModified": 1690636023,
+        "narHash": "sha256-gR7DU0SLb896NLfe/ETh++TR2i3+4QG18ncVKlXV960=",
         "owner": "akirak",
         "repo": "workbox.el",
-        "rev": "cdf51c92d55e1ded6c25d352e5576082f836ddc5",
+        "rev": "da547b7aaa5584169539c1b34c3d01b5fd5f60f5",
         "type": "github"
       },
       "original": {
