@@ -2047,15 +2047,21 @@ Thus I will explicitly install this package rather than using the built-in versi
 
     (cl-macrolet
         ((major-modes (&rest modes)
-           `(or (mapcar (lambda (mode)
-                          (cons 'major-mode mode))
-                        ',modes))))
+           `'(or ,@(mapcar (lambda (mode)
+                             (cons 'major-mode mode))
+                           modes)))
+         (reuse-mode-window (modes function &rest alist)
+           `(lambda (buffer alist)
+              (or (display-buffer-reuse-mode-window buffer '((mode . ,modes)))
+                  (,function buffer alist)))))
       (dolist (entry `((,(major-modes help-mode devdocs-mode)
-                        akirak-window-reuse-mode-window-or-split-below
-                        mode (help-mode devdocs-mode))
+                        ,(reuse-mode-window
+                          (help-mode devdocs-mode)
+                          akirak-window-display-document-buffer))
                        ((major-mode . vterm-mode)
-                        akirak-window-reuse-mode-window-or-split-below
-                        mode (vterm-mode))
+                        ,(reuse-mode-window
+                          (vterm-mode)
+                          akirak-window-display-buffer-split-below))
                        (,(major-modes nov-mode pdf-view-mode)
                         akirak-window-display-document-buffer)
                        ((major-mode . org-agenda-mode)

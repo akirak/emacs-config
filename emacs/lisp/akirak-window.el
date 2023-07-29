@@ -86,11 +86,6 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
       (window--display-buffer buffer (split-window-below) 'window alist))))
 
 ;;;###autoload
-(defun akirak-window-reuse-mode-window-or-split-below (buf alist)
-  (or (display-buffer-reuse-mode-window buf alist)
-      (akirak-window-display-buffer-split-below buf alist)))
-
-;;;###autoload
 (defun akirak-window-display-org-agenda-buffer (buffer alist)
   "Reuse the mode window. If none, prefer a pane."
   (let ((alist-mode-entry (assq 'mode alist))
