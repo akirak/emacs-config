@@ -218,7 +218,8 @@
 (defadvice org-insert-heading (around akirak-org-clock activate)
   (if (akirak-org-clock--org-allow-p)
       ad-do-it
-    (user-error "Please clock in first")))
+    (or (apply #'akirak-capture-org-ins-heading-fallback (ad-get-args 0))
+        ad-do-it)))
 
 (defun akirak-org-clock--org-allow-p ()
   (or (org-clocking-p)

@@ -1481,5 +1481,56 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
       (goto-char (point-min))
       (akirak-org-goto-or-create-olp (split-string input "/")))))
 
+(defun akirak-capture-org-ins-heading-fallback (&optional arg invisible-ok top)
+  "A fallback for `org-insert-heading'.
+
+If `org-insert-heading' should behave as expected, it should
+return nil. This is expected in the advice for
+`org-insert-heading' defined in akirak-org-clock.el."
+  (pcase-let*
+      ((`(,direction ,todo) (pcase-exhaustive this-command
+                              ;; C-RET
+                              (`org-insert-heading-respect-content
+                               '(below nil))
+                              ;; C-S-RET
+                              (`org-insert-todo-heading-respect-content
+                               '(below t))
+                              ;; M-RET
+                              (`org-meta-return
+                               '(above nil))
+                              ;; M-S-RET
+                              (`org-insert-todo-heading
+                               '(above t))))
+       (level (org-outline-level))
+       (expected-level (max level 1))
+       (org-dog-obj (when (featurep 'org-dog)
+                      (org-dog-buffer-object))))
+    (cl-flet
+        ((capture (&optional parent)
+           (let* ((heading (akirak-capture-read-string "Heading: "))
+                  (org-capture-entry
+                   (car (doct
+                         `((""
+                            :keys ""
+                            :template ,(akirak-org-capture-make-entry-body heading)
+                            :todo ,(when todo
+                                     "TODO")
+                            :clock-in ,(not todo)
+                            :clock-resume ,(not todo)
+                            :file ,(buffer-file-name (org-base-buffer (current-buffer)))
+                            :function ,(when parent
+                                         `(lambda ()
+                                            (org-goto-marker-or-bmk
+                                             ,(save-excursion
+                                                (org-up-heading-all 1)
+                                                (point-marker)))))))))))
+             (org-capture)
+             t)))
+      (if (and org-dog-obj
+               (object-of-class-p org-dog-obj 'org-dog-facade-datetree-file))
+          (unless (= expected-level 1)
+            (capture 'parent))
+        (capture (> expected-level 1))))))
+
 (provide 'akirak-capture)
 ;;; akirak-capture.el ends here
