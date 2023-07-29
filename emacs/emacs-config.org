@@ -1015,6 +1015,7 @@ The built-in =electric= package provides the following modes:
 
     (:status personal
       (let ((prettier '((eval . (prettier-on-save-mode t))))
+            (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable)))))
         (dir-locals-set-class-variables
@@ -1026,6 +1027,7 @@ The built-in =electric= package provides the following modes:
            (tsx-ts-mode . (,@prettier ,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp))
+           (sql-mode . (,@sqlformat))
            (haskell-mode . (,@lsp)))))
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)))
@@ -7416,7 +7418,7 @@ Parentheses Universalistic
 
 #+begin_src emacs-lisp
   (setup (:package puni)
-    (:hook-into nix-mode svelte-mode web-mode)
+    (:hook-into nix-mode svelte-mode web-mode sql-mode)
 
     (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
 
