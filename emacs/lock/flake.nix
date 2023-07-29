@@ -1155,8 +1155,7 @@
     };
     symbol-overlay = {
       flake = false;
-      owner = "akirak";
-      ref = "jump-hook";
+      owner = "wolray";
       repo = "symbol-overlay";
       type = "github";
     };
