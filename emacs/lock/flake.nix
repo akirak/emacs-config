@@ -544,6 +544,12 @@
       repo = "iedit";
       type = "github";
     };
+    indent-bars = {
+      flake = false;
+      owner = "jdtsmith";
+      repo = "indent-bars";
+      type = "github";
+    };
     inheritenv = {
       flake = false;
       owner = "purcell";

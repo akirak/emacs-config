@@ -6421,6 +6421,14 @@ Edit multiple regions in the same way simultaneously.
 #+begin_src emacs-lisp
 (setup (:package iedit))
 #+end_src
+*** indent-bars
+:PROPERTIES:
+:CREATED_TIME: [2023-07-30 Sun 09:16]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package indent-bars))
+#+end_src
 *** jq-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-05-30 Mon 14:03]
