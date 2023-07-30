@@ -165,7 +165,6 @@
                                     akirak-treesit-balanced-nodes)))
               (throw 'stop t))
             (setq node parent)))
-        (message "node: %s" node)
         (if parent
             (if-let (end-node (akirak-treesit--find-last-node node parent bound))
                 (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end end-node)))

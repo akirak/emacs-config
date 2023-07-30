@@ -207,15 +207,6 @@
       };
   };
 
-  symbol-overlay = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "symbol-overlay";
-      ref = "jump-hook";
-    };
-  };
-
   org-memento = _: _: {
     origin = {
       type = "github";
