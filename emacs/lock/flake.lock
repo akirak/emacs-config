@@ -1443,6 +1443,22 @@
         "type": "github"
       }
     },
+    "indent-bars": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1690664116,
+        "narHash": "sha256-aLQ8qk6v6W5pM+dhppfzvisdAERpPlwQD8Qb9H+4JSo=",
+        "owner": "jdtsmith",
+        "repo": "indent-bars",
+        "rev": "c534bb5b5d7fd3549e62ee31be339ecff3e91eaf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jdtsmith",
+        "repo": "indent-bars",
+        "type": "github"
+      }
+    },
     "inheritenv": {
       "flake": false,
       "locked": {
@@ -2970,6 +2986,7 @@
         "hydra": "hydra",
         "idris-mode": "idris-mode",
         "iedit": "iedit",
+        "indent-bars": "indent-bars",
         "inheritenv": "inheritenv",
         "jq-mode": "jq-mode",
         "keycast": "keycast",
