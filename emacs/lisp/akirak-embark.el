@@ -258,6 +258,7 @@
   (define-key embark-file-map (kbd "C-o") #'akirak-embark-org-open-file)
   (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
   (define-key embark-region-map "V" #'akirak-gpt-translate-vocabulary)
+  (define-key embark-bookmark-map "t" #'akirak-embark-bookmark-jump-other-tab)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
   (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
@@ -653,6 +654,11 @@
 (defun akirak-embark-org-open-file (file)
   (interactive "f")
   (org-open-file file))
+
+(defun akirak-embark-bookmark-jump-other-tab (bookmark)
+  (interactive (list (bookmark-completing-read "Jump to bookmark (in another tab)"
+                                               bookmark-current-bookmark)))
+  (bookmark-jump bookmark 'switch-to-buffer-switch-to-buffer-other-tab))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
