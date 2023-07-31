@@ -6421,6 +6421,17 @@ Edit multiple regions in the same way simultaneously.
 #+begin_src emacs-lisp
 (setup (:package iedit))
 #+end_src
+*** indent-bars
+:PROPERTIES:
+:CREATED_TIME: [2023-07-30 Sun 09:16]
+:END:
+#+begin_quote
+highlight indentation with bars
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package indent-bars))
+#+end_src
 *** jq-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-05-30 Mon 14:03]
@@ -8608,7 +8619,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 211 |
+| [[org-ql-search:tags:packages][packages]]            | 212 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

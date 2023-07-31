@@ -1481,6 +1481,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
       (goto-char (point-min))
       (akirak-org-goto-or-create-olp (split-string input "/")))))
 
+;;;###autoload
 (defun akirak-capture-org-ins-heading-fallback (&optional arg invisible-ok top)
   "A fallback for `org-insert-heading'.
 
