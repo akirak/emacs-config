@@ -658,7 +658,7 @@
 (defun akirak-embark-bookmark-jump-other-tab (bookmark)
   (interactive (list (bookmark-completing-read "Jump to bookmark (in another tab)"
                                                bookmark-current-bookmark)))
-  (bookmark-jump bookmark 'switch-to-buffer-switch-to-buffer-other-tab))
+  (bookmark-jump bookmark 'switch-to-buffer-other-tab))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
