@@ -74,7 +74,7 @@
                       (goto-char (match-end 0)))
                     (unless (looking-at (rx (* blank) eol))
                       (open-line 1))
-                    (akirak-comment--comment-region start (point)))
+                    (comment-region start (point)))
                    ((< eol-depth initial-depth)
                     (goto-char start)
                     (forward-sexp)
@@ -82,7 +82,7 @@
                       (goto-char (match-end 0)))
                     (unless (looking-at (rx (* blank) eol))
                       (open-line 1))
-                    (akirak-comment--comment-region start (point)))
+                    (comment-region start (point)))
                    (t
                     (comment-line 1))))))))))))))
 
@@ -97,7 +97,8 @@
             (uncomment-region start (point)))
         (error "Non-ppss is currently unsupported")))))
 
-(defun akirak-comment--comment-region (begin end)
+;;;###autoload
+(defun akirak-comment-region-1 (begin end &optional arg)
   "Comment a region."
   (let ((block-comment-start (or block-comment-start
                                  (bound-and-true-p c-block-comment-starter)))
@@ -122,7 +123,7 @@
             (goto-char end-marker)
             (newline-and-indent)
             (insert block-comment-end)))
-      (comment-region begin end))))
+      (comment-region-default begin end arg))))
 
 (provide 'akirak-comment)
 ;;; akirak-comment.el ends here

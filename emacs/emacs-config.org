@@ -4121,6 +4121,7 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-comment
 #+begin_src emacs-lisp
   (setup akirak-comment
+    (:set comment-region-function #'akirak-comment-region-1)
     (:global "M-;" #'akirak-comment-toggle))
 #+end_src
 *** akirak-consult
