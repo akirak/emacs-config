@@ -3,10 +3,6 @@
 (require 'newcomment)
 (require 'syntax)
 
-(defcustom akirak-comment-prefer-block-comment nil
-  "Whether to use block comments if available."
-  :type 'boolean)
-
 ;;;###autoload
 (defun akirak-comment-toggle (&optional arg)
   (interactive "P")
@@ -101,10 +97,15 @@
 (defun akirak-comment-region-1 (begin end &optional arg)
   "Comment a region."
   (let ((block-comment-start (or block-comment-start
-                                 (bound-and-true-p c-block-comment-starter)))
+                                 (bound-and-true-p c-block-comment-starter)
+                                 comment-start))
         (block-comment-end (or block-comment-end
-                               (bound-and-true-p c-block-comment-ender))))
-    (if (and akirak-comment-prefer-block-comment
+                               (bound-and-true-p c-block-comment-ender)
+                               (unless (string-empty-p comment-end)
+                                 comment-end))))
+    (if (and (save-excursion
+               (goto-char begin)
+               (> end (line-end-position)))
              block-comment-start
              block-comment-end
              (save-excursion
@@ -116,13 +117,14 @@
             (goto-char begin)
             (let ((prefix (buffer-substring (line-beginning-position) (point))))
               (open-line 1)
-              (insert block-comment-start)
+              (insert block-comment-start " ")
               (when (string-match-p (rx bol (+ blank) eol) prefix)
                 (beginning-of-line 2)
                 (insert prefix)))
             (goto-char end-marker)
-            (newline-and-indent)
-            (insert block-comment-end)))
+            (insert " " block-comment-end)
+            (unless (looking-at (rx (* blank) "\n"))
+              (newline-and-indent))))
       (comment-region-default begin end arg))))
 
 (provide 'akirak-comment)
