@@ -4033,6 +4033,10 @@ Major mode for editing typescript
              (add-to-list (make-local-variable 'electric-pair-pairs)
                           '(?< . ?>))))
 
+    (:with-mode typescript-ts-base-mode
+      (:local-set block-comment-start "/*"
+                  block-comment-end "*/"))
+
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
       (:org-src-lang "react")
@@ -4121,6 +4125,7 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-comment
 #+begin_src emacs-lisp
   (setup akirak-comment
+    (:set comment-region-function #'akirak-comment-region-1)
     (:global "M-;" #'akirak-comment-toggle))
 #+end_src
 *** akirak-consult
