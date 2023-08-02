@@ -193,5 +193,24 @@
                                  (funcall show-paren-data-function)))
                        2)))))
 
+;;;###autoload
+(defun akirak-treesit-raise-node ()
+  "Replace the parent node with the current node.
+
+This is primarily intended for editing JSX/TSX."
+  (interactive)
+  (let* ((node (treesit-node-at (point)))
+         (start (treesit-node-start node))
+         (parent node))
+    (while (= start (treesit-node-start parent))
+      (setq node parent)
+      (setq parent (treesit-node-parent node)))
+    (let ((string (buffer-substring (treesit-node-start node)
+                                    (treesit-node-end node)))
+          (pos (treesit-node-start parent)))
+      (delete-region pos (treesit-node-end parent))
+      (goto-char pos)
+      (save-excursion (insert string)))))
+
 (provide 'akirak-treesit)
 ;;; akirak-treesit.el ends here
