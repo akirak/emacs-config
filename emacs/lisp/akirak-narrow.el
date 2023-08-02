@@ -3,6 +3,7 @@
 (defcustom akirak-narrow-narrow-command-alist
   '((org-mode . org-narrow-to-subtree)
     (latex-mode . LaTeX-narrow-to-environment)
+    (nxml-mode . akirak-nxml-narrow-to-element)
     (restclient-mode . restclient-narrow-to-current))
   ""
   :type '(alist :key-type symbol :value-type function))
