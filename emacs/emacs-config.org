@@ -7434,7 +7434,11 @@ Parentheses Universalistic
 
 #+begin_src emacs-lisp
   (setup (:package puni)
-    (:hook-into nix-mode svelte-mode web-mode sql-mode)
+    (:hook-into nix-mode
+                svelte-mode
+                web-mode
+                sql-mode
+                nxml-mode)
 
     (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
 
