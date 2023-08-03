@@ -123,11 +123,13 @@
     (when (use-region-p)
       (deactivate-mark))
     (goto-char start)
-    (activate-mark)
+    (let ((inhibit-message t))
+      (activate-mark))
     (goto-char (treesit-node-end node))
     (push-mark)
     (goto-char start)
-    (setq akirak-treesit-expand-region-node node)))
+    (setq akirak-treesit-expand-region-node node)
+    (message "%s" (treesit-node-type node))))
 
 (defcustom akirak-treesit-balanced-nodes
   '("jsx_opening_element"
