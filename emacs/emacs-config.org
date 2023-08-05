@@ -1864,6 +1864,22 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
     (akirak/thingatpt-def-region paragraph)
     (define-key akirak/thingatpt-map "p" #'akirak/select-paragraph))
 #+end_src
+*** timer
+:PROPERTIES:
+:CREATED_TIME: [2023-08-05 Sat 09:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup timer
+    ;; Suspending may run after 5 minutes of idle, so the buffers should be saved
+    ;; sooner than that.
+    (run-with-idle-timer 240 nil
+                         (defun akirak/save-all-buffers-non-interactively ()
+                           (when (fboundp 'akirak-org-clock-snooze)
+                             (akirak-org-clock-snooze 3))
+                           (let ((save-some-buffers-default-predicate nil))
+                             (save-some-buffers nil)))))
+#+end_src
 *** tooltip                                                     :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
