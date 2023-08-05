@@ -141,5 +141,14 @@
       (unless (string-empty-p comment-end)
         comment-end)))
 
+;;;###autoload
+(defun akirak-uncomment-region-1 (begin end &optional arg)
+  (uncomment-region-default-1 begin end arg)
+  (save-excursion
+    (goto-char begin)
+    (delete-matching-lines (rx bol (* blank) eol)
+                           (line-beginning-position)
+                           (line-end-position))))
+
 (provide 'akirak-comment)
 ;;; akirak-comment.el ends here
