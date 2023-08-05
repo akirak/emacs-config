@@ -66,19 +66,15 @@
                    ((> eol-depth initial-depth)
                     (backward-up-list (- eol-depth initial-depth))
                     (forward-sexp)
-                    (when (looking-at ";")
-                      (goto-char (match-end 0)))
-                    (unless (looking-at (rx (* blank) eol))
-                      (open-line 1))
-                    (comment-region start (point)))
+                    (comment-region start (if (looking-at ";")
+                                              (match-end 0)
+                                            (point))))
                    ((< eol-depth initial-depth)
                     (goto-char start)
                     (forward-sexp)
-                    (when (looking-at ";")
-                      (goto-char (match-end 0)))
-                    (unless (looking-at (rx (* blank) eol))
-                      (open-line 1))
-                    (comment-region start (point)))
+                    (comment-region start (if (looking-at ";")
+                                              (match-end 0)
+                                            (point))))
                    (t
                     (comment-line 1))))))))))))))
 
@@ -96,36 +92,54 @@
 ;;;###autoload
 (defun akirak-comment-region-1 (begin end &optional arg)
   "Comment a region."
-  (let ((block-comment-start (or block-comment-start
-                                 (bound-and-true-p c-block-comment-starter)
-                                 comment-start))
-        (block-comment-end (or block-comment-end
-                               (bound-and-true-p c-block-comment-ender)
-                               (unless (string-empty-p comment-end)
-                                 comment-end))))
-    (if (and (save-excursion
-               (goto-char begin)
-               (> end (line-end-position)))
-             block-comment-start
-             block-comment-end
-             (save-excursion
-               (goto-char begin)
-               (not (search-forward block-comment-start end t))))
-        (progn
-          (goto-char end)
-          (let ((end-marker (point-marker)))
-            (goto-char begin)
-            (let ((prefix (buffer-substring (line-beginning-position) (point))))
-              (open-line 1)
-              (insert block-comment-start " ")
-              (when (string-match-p (rx bol (+ blank) eol) prefix)
-                (beginning-of-line 2)
-                (insert prefix)))
-            (goto-char end-marker)
-            (insert " " block-comment-end)
-            (unless (looking-at (rx (* blank) "\n"))
-              (newline-and-indent))))
-      (comment-region-default begin end arg))))
+  (pcase (akirak-comment--multi-line-info begin end)
+    (`(,block-comemnt-start ,block-comment-end ,indentation)
+     (let ((end-marker (progn
+                         (goto-char end)
+                         (point-marker))))
+       (goto-char begin)
+       (unless (looking-at (rx (* blank) eol))
+         (open-line 1))
+       (delete-region (line-beginning-position) (point))
+       (insert (make-string indentation ?\s) block-comment-start)
+       (forward-line)
+       (let ((content-start (point)))
+         (goto-char end-marker)
+         (if (looking-back (rx bol (* blank)) (line-beginning-position))
+             (delete-region (match-beginning 0) (point))
+           (newline))
+         ;; (replace-regexp-in-region (rx bol)
+         ;;                           (make-string (1+ (length block-comment-start)) ?\s)
+         ;;                           content-start (line-end-position 0))
+         (insert (make-string indentation ?\s) block-comment-end)
+         (unless (looking-at (rx (* blank) eol))
+           (newline-and-indent)))))
+    (_
+     (comment-region-default begin end arg))))
+
+(defun akirak-comment--multi-line-info (begin end)
+  (when-let* ((block-comment-start (akirak-comment--block-start-syntax))
+              (block-comment-end (akirak-comment--block-end-syntax)))
+    (save-excursion
+      (goto-char begin)
+      (when (and (> end (line-end-position))
+                 (not (search-forward block-comment-start end t)))
+        (while (looking-at (rx (* blank) eol))
+          (beginning-of-line 2))
+        (list block-comment-start
+              block-comment-end
+              (current-indentation))))))
+
+(defun akirak-comment--block-start-syntax ()
+  (or block-comment-start
+      (bound-and-true-p c-block-comment-starter)
+      comment-start))
+
+(defun akirak-comment--block-end-syntax ()
+  (or block-comment-end
+      (bound-and-true-p c-block-comment-ender)
+      (unless (string-empty-p comment-end)
+        comment-end)))
 
 (provide 'akirak-comment)
 ;;; akirak-comment.el ends here
