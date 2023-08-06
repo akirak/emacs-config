@@ -1,5 +1,7 @@
 ;;; akirak-jsx.el ---  -*- lexical-binding: t -*-
 
+;; Deprecated. Use `akirak-treesit-jsx-close-tag' instead.
+
 ;; (require 'tree-sitter)
 (require 'treesit)
 (require 'sgml-mode)

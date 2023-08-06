@@ -1864,6 +1864,22 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
     (akirak/thingatpt-def-region paragraph)
     (define-key akirak/thingatpt-map "p" #'akirak/select-paragraph))
 #+end_src
+*** timer
+:PROPERTIES:
+:CREATED_TIME: [2023-08-05 Sat 09:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup timer
+    ;; Suspending may run after 5 minutes of idle, so the buffers should be saved
+    ;; sooner than that.
+    (run-with-idle-timer 240 nil
+                         (defun akirak/save-all-buffers-non-interactively ()
+                           (when (fboundp 'akirak-org-clock-snooze)
+                             (akirak-org-clock-snooze 3))
+                           (let ((save-some-buffers-default-predicate nil))
+                             (save-some-buffers nil)))))
+#+end_src
 *** tooltip                                                     :UI:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -3837,26 +3853,89 @@ Hugo Markdown Back-End for Org Export Engine
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
-*** css-ts-mode
-:PROPERTIES:
-:CREATED_TIME: [2023-03-19 Sun 21:20]
-:END:
+Generate settings by evaluating the following org-babel source block within
+Emacs:
 
-#+begin_src emacs-lisp
-  (setup css-ts-mode
-    (:org-src-lang t)
-    (:file-match "\\.css\\'"))
+#+begin_src elisp :results value code :tangle no
+  (cl-flet*
+      ((lib-language-name (filename)
+         (when (string-match (rx-to-string
+                              `(and bol "libtree-sitter-"
+                                    (group (+ anything))
+                                    ,(car dynamic-library-suffixes) eol))
+                             filename)
+           (match-string 1 filename)))
+       (get-languages (dir)
+         (thread-last
+           (directory-files dir)
+           (mapcar #'lib-language-name)
+           (delq nil)))
+       (to-mapping (lang)
+         (let* ((ts-sym (intern-soft (concat lang "-ts-mode")))
+                (non-ts-sym (intern-soft (concat lang "-mode"))))
+           (when (and ts-sym (commandp ts-sym))
+             (cons lang (when (commandp non-ts-sym)
+                          non-ts-sym))))))
+    (let ((mappings (thread-last
+                     treesit-extra-load-path
+                     (mapcar #'get-languages)
+                     (flatten-list)
+                     (mapcar #'to-mapping)
+                     (delq nil))))
+      `(progn
+         (let ((remappings ',(thread-last
+                               mappings
+                               (cl-remove-if-not #'cdr)
+                               (mapcar (lambda (pair)
+                                         (cons (cdr pair)
+                                               (intern (concat (car pair) "-ts-mode"))))))))
+           (cl-flet
+               ((modify-entry (pair)
+                  (if-let (remapping (assq (cdr pair) remappings))
+                      (cons (car pair) (cdr remapping))
+                    pair)))
+             (dolist (var-sym '(auto-mode-alist
+                                interpreter-mode-alist))
+               (set var-sym (mapcar #'modify-entry (symbol-value var-sym))))))
+         (with-eval-after-load 'org
+           (dolist (pair ',(thread-last
+                             mappings
+                             (mapcar #'car)
+                             (mapcar (lambda (lang)
+                                       (cons lang (intern (concat lang "-ts")))))))
+             (add-to-list 'org-src-lang-modes pair))))))
 #+end_src
-*** dockerfile-ts-mode
-:PROPERTIES:
-:CREATED_TIME: [2023-03-19 Sun 21:28]
-:END:
 
-#+begin_src emacs-lisp
-  (setup dockerfile-ts-mode
-    (:org-src-lang t)
-    (:file-match "\\(?:\\(?:\\.d\\|D\\)ockerfile\\)$"))
+#+RESULTS:
+#+begin_src elisp
+  (progn
+    (let
+        ((remappings
+          '((c-mode . c-ts-mode) (css-mode . css-ts-mode)
+            (html-mode . html-ts-mode) (java-mode . java-ts-mode)
+            (python-mode . python-ts-mode) (ruby-mode . ruby-ts-mode))))
+      (cl-flet
+          ((modify-entry (pair)
+             (if-let (remapping (assq (cdr pair) remappings))
+                 (cons (car pair) (cdr remapping))
+               pair)))
+        (dolist (var-sym '(auto-mode-alist interpreter-mode-alist))
+          (set var-sym (mapcar #'modify-entry (symbol-value var-sym))))))
+    (with-eval-after-load 'org
+      (dolist
+          (pair
+           '(("bash" . bash-ts) ("c" . c-ts) ("cmake" . cmake-ts) ("css" . css-ts)
+             ("dockerfile" . dockerfile-ts) ("elixir" . elixir-ts) ("go" . go-ts)
+             ("heex" . heex-ts) ("html" . html-ts) ("java" . java-ts)
+             ("json" . json-ts) ("python" . python-ts) ("ruby" . ruby-ts)
+             ("rust" . rust-ts) ("toml" . toml-ts) ("tsx" . tsx-ts)
+             ("typescript" . typescript-ts) ("yaml" . yaml-ts)))
+        (add-to-list 'org-src-lang-modes pair))))
 #+end_src
+
+The generated remappings do have limitations, but it is possible to work around
+manually by adding extra entries in the following subsections.
+
 *** elixir-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 19:08]
@@ -3868,9 +3947,6 @@ Major mode for Elixir with tree-sitter support
 
 #+begin_src emacs-lisp
   (setup elixir-ts-mode
-    (:org-src-lang t)
-    (:file-match "\\.exs?\\'")
-
     (:auto-insert
      ("/config/config\\.exs\\'"
       . (> "use Mix.Config\n\n"
@@ -3945,9 +4021,6 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup go-ts-mode
-    (:org-src-lang t)
-    (:file-match "\\.go\\'")
-
     (:auto-insert
      ("\\.go\\'"
       . (> "package "
@@ -3979,9 +4052,7 @@ Major mode for the Go programming language
 :END:
 
 #+begin_src emacs-lisp
-  (setup java-ts-mode
-    (:org-src-lang t)
-    (:file-match "\\.java\\'"))
+  (setup java-ts-mode)
 #+end_src
 *** json-ts-mode
 :PROPERTIES:
@@ -3990,8 +4061,7 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup json-ts-mode
-    (:org-src-lang t)
-    (:file-match "\\.json\\'" "\\.lock\\'"))
+    (:file-match "\\.lock\\'"))
 #+end_src
 *** js-ts-mode
 :PROPERTIES:
@@ -4001,7 +4071,7 @@ Major mode for the Go programming language
 #+begin_src emacs-lisp
   (setup js-ts-mode
     (:org-src-lang "javascript")
-    (:file-match "\\.m?js$"))
+    (:file-match "\\.[cm]?js$"))
 #+end_src
 *** toml-ts-mode
 :PROPERTIES:
@@ -4010,7 +4080,6 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup toml-ts-mode
-    (:org-src-lang t)
     (:file-match "\\.toml\\'"))
 #+end_src
 *** typescript-ts-mode                                              :major_mode:
@@ -4024,11 +4093,7 @@ Major mode for editing typescript
 
 #+begin_src emacs-lisp
   (setup typescript-ts-mode
-    (:file-match "\\.ts\\'")
     ;; (:also-load akirak-typescript)
-
-    (:org-src-lang "typescript")
-
     (:hook (defun akirak/typescript-setup ()
              (add-to-list (make-local-variable 'electric-pair-pairs)
                           '(?< . ?>))))
@@ -4040,7 +4105,7 @@ Major mode for editing typescript
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
       (:org-src-lang "react")
-      (:bind "C-c C-e" #'akirak-jsx-close-tag))
+      (:bind "C-c C-e" #'akirak-treesit-jsx-close-tag))
 
     (:compilation-error
      (tsc "\\([^z-a]+\\.tsx?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\) - \\(error\\) "
@@ -4082,7 +4147,6 @@ Major mode for editing YAML files
 
 #+begin_src emacs-lisp
   (setup yaml-ts-mode
-    (:org-src-lang t)
     (:file-match "\\.ya?ml\\'"))
 #+end_src
 ** User package (akirak-*.el)
@@ -4125,7 +4189,8 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-comment
 #+begin_src emacs-lisp
   (setup akirak-comment
-    (:set comment-region-function #'akirak-comment-region-1)
+    (:set comment-region-function #'akirak-comment-region-1
+          uncomment-region-function #'akirak-uncomment-region-1)
     (:global "M-;" #'akirak-comment-toggle))
 #+end_src
 *** akirak-consult
@@ -7434,7 +7499,11 @@ Parentheses Universalistic
 
 #+begin_src emacs-lisp
   (setup (:package puni)
-    (:hook-into nix-mode svelte-mode web-mode sql-mode)
+    (:hook-into nix-mode
+                svelte-mode
+                web-mode
+                sql-mode
+                nxml-mode)
 
     (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
 
