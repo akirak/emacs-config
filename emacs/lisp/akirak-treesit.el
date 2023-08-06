@@ -214,5 +214,30 @@ This is primarily intended for editing JSX/TSX."
       (goto-char pos)
       (save-excursion (insert string)))))
 
+;;;###autoload
+(defun akirak-treesit-jsx-close-tag ()
+  (interactive)
+  (if-let (open-tag (save-excursion
+                      (catch 'jsx-open-tag
+                        (let ((bound (point)))
+                          (while (search-backward "<" nil t)
+                            (let ((node (thread-last
+                                          (treesit-node-at (point))
+                                          (treesit-node-parent)
+                                          (treesit-node-parent))))
+                              (when (> (treesit-node-end node)
+                                       bound)
+                                (throw 'jsx-open-tag
+                                       (thread-last
+                                         (treesit-node-at (point))
+                                         (treesit-node-parent))))
+                              (goto-char (treesit-node-start node))))))))
+      (pcase-exhaustive (treesit-node-children open-tag)
+        ((and `(,_ ,identifier ,_ . ,_)
+              (guard (equal (treesit-node-type identifier)
+                            "identifier")))
+         (insert (format "</%s>" (treesit-node-text identifier)))))
+    (error "Cannot find")))
+
 (provide 'akirak-treesit)
 ;;; akirak-treesit.el ends here
