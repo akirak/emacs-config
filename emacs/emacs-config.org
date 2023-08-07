@@ -4093,6 +4093,8 @@ Major mode for editing typescript
 
 #+begin_src emacs-lisp
   (setup typescript-ts-mode
+    (:file-match "\\.ts\\'")
+
     ;; (:also-load akirak-typescript)
     (:hook (defun akirak/typescript-setup ()
              (add-to-list (make-local-variable 'electric-pair-pairs)
