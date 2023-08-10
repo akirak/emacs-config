@@ -3877,12 +3877,12 @@ Emacs:
              (cons lang (when (commandp non-ts-sym)
                           non-ts-sym))))))
     (let ((mappings (thread-last
-                     treesit-extra-load-path
-                     (mapcar #'get-languages)
-                     (flatten-list)
-                     (mapcar #'to-mapping)
-                     (delq nil))))
-      `(progn
+                      treesit-extra-load-path
+                      (mapcar #'get-languages)
+                      (flatten-list)
+                      (mapcar #'to-mapping)
+                      (delq nil))))
+      `(when (treesit-available-p)
          (let ((remappings ',(thread-last
                                mappings
                                (cl-remove-if-not #'cdr)
@@ -3908,29 +3908,29 @@ Emacs:
 
 #+RESULTS:
 #+begin_src elisp
-  (progn
-    (let
-        ((remappings
-          '((c-mode . c-ts-mode) (css-mode . css-ts-mode)
-            (html-mode . html-ts-mode) (java-mode . java-ts-mode)
-            (python-mode . python-ts-mode) (ruby-mode . ruby-ts-mode))))
-      (cl-flet
-          ((modify-entry (pair)
-             (if-let (remapping (assq (cdr pair) remappings))
-                 (cons (car pair) (cdr remapping))
-               pair)))
-        (dolist (var-sym '(auto-mode-alist interpreter-mode-alist))
-          (set var-sym (mapcar #'modify-entry (symbol-value var-sym))))))
-    (with-eval-after-load 'org
-      (dolist
-          (pair
-           '(("bash" . bash-ts) ("c" . c-ts) ("cmake" . cmake-ts) ("css" . css-ts)
-             ("dockerfile" . dockerfile-ts) ("elixir" . elixir-ts) ("go" . go-ts)
-             ("heex" . heex-ts) ("html" . html-ts) ("java" . java-ts)
-             ("json" . json-ts) ("python" . python-ts) ("ruby" . ruby-ts)
-             ("rust" . rust-ts) ("toml" . toml-ts) ("tsx" . tsx-ts)
-             ("typescript" . typescript-ts) ("yaml" . yaml-ts)))
-        (add-to-list 'org-src-lang-modes pair))))
+(when (treesit-available-p)
+  (let
+      ((remappings
+        '((c-mode . c-ts-mode) (css-mode . css-ts-mode)
+          (html-mode . html-ts-mode) (java-mode . java-ts-mode)
+          (python-mode . python-ts-mode) (ruby-mode . ruby-ts-mode))))
+    (cl-flet
+        ((modify-entry (pair)
+           (if-let (remapping (assq (cdr pair) remappings))
+               (cons (car pair) (cdr remapping))
+             pair)))
+      (dolist (var-sym '(auto-mode-alist interpreter-mode-alist))
+        (set var-sym (mapcar #'modify-entry (symbol-value var-sym))))))
+  (with-eval-after-load 'org
+    (dolist
+        (pair
+         '(("bash" . bash-ts) ("c" . c-ts) ("cmake" . cmake-ts) ("css" . css-ts)
+           ("dockerfile" . dockerfile-ts) ("elixir" . elixir-ts) ("go" . go-ts)
+           ("heex" . heex-ts) ("html" . html-ts) ("java" . java-ts)
+           ("json" . json-ts) ("python" . python-ts) ("ruby" . ruby-ts)
+           ("rust" . rust-ts) ("toml" . toml-ts) ("tsx" . tsx-ts)
+           ("typescript" . typescript-ts) ("yaml" . yaml-ts)))
+      (add-to-list 'org-src-lang-modes pair))))
 #+end_src
 
 The generated remappings do have limitations, but it is possible to work around
