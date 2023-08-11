@@ -89,7 +89,7 @@
         inherit (pkgs) lib;
         inherit (final) emacs-config;
         inherit (builtins) substring;
-        profiles = import ./emacs/profiles.nix emacs-config;
+        profiles = import ./emacs/profiles.nix {inherit lib;} emacs-config;
       in {
         overlayAttrs =
           {

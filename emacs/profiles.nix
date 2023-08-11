@@ -1,28 +1,69 @@
-/*
-This is a function that takes an Emacs configuration defined in ./overlay.nix
-and returns an attribute set of alternative configuration profiles.
-*/
-emacs-config: let
-  personalInitPreamble = ''
-    ;; -*- lexical-binding: t; no-byte-compile: t; -*-
-    (setq custom-file (locate-user-emacs-file "custom.el"))
-    (setq akirak/enabled-status-tags t)
-  '';
-in rec {
-  /*
-  Generally useful configuration for developer's work.
-  */
-  developer = emacs-config.override (_: {
-    pgtk = false;
+{lib}: emacs-config: let
+  makeProfile = {
+    presets,
+    personalized,
+    otherSettings,
+  }:
+    lib.nameValuePair
+    "${presets.name}-${otherSettings.name}${
+      if personalized
+      then "-personalized"
+      else ""
+    }"
+    (
+      emacs-config.override (_:
+        {
+          extraFeatures = presets.value;
 
-    prependToInitFile = personalInitPreamble;
+          prependToInitFile = ''
+            ;; -*- lexical-binding: t; no-byte-compile: t; -*-
+              (setq custom-file (locate-user-emacs-file "custom.el"))
+              (setq akirak/enabled-status-tags ${
+              if personalized
+              then "t"
+              else "nil"
+            })
+          '';
+        }
+        // otherSettings.value)
+    );
 
-    extraFeatures = [
-      "mermaid"
+  matrix = {
+    presets = lib.mapAttrsToList lib.nameValuePair {
+      developer = [
+        "mermaid"
+      ];
+    };
+
+    personalized = [
+      true
+      false
     ];
-  });
 
-  # developer-pgtk = developer.override (_: {
-  #   pgtk = true;
-  # });
-}
+    otherSettings = lib.mapAttrsToList lib.nameValuePair {
+      x11 = {
+        pgtk = false;
+      };
+      pgtk = {
+        pgtk = true;
+      };
+    };
+  };
+
+  go = acc: {
+    key,
+    values,
+  }:
+    lib.flatten
+    (builtins.map (
+        prev:
+          builtins.map (value: prev // {${key} = value;}) values
+      )
+      acc);
+in
+  lib.pipe matrix [
+    (lib.mapAttrsToList (key: values: {inherit key values;}))
+    (builtins.foldl' go [{}])
+    (builtins.map makeProfile)
+    lib.listToAttrs
+  ]
