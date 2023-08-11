@@ -167,6 +167,10 @@
                     pkgs.callPackage ./nix/overlayfsWrapper.nix {}
                     "emacs-${name}"
                     emacs-env;
+                  tmpdir =
+                    pkgs.callPackage ./nix/tmpInitDirWrapper.nix {}
+                    "emacs-${name}"
+                    emacs-env;
                 };
 
                 archive-builder =
