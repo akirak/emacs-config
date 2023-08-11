@@ -748,8 +748,7 @@ The other variables must not be saved, and they should be put in configuration:
           dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-vterm-for-dir)
 
-    (:bind "h" #'dired-up-directory)
-    (:unbind "C-x M-o"))
+    (:bind "h" #'dired-up-directory))
 #+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
@@ -5278,6 +5277,12 @@ Hide dotfiles in dired
 #+end_src
 
 dired-k depends on dired-x, which has a poor code quality.
+*** dired-x
+#+begin_src elisp
+  (setup dired-x
+    (:with-map dired-mode-map
+      (:unbind "C-x M-o")))
+#+end_src
 *** docker
 :PROPERTIES:
 :CREATED_TIME: [2023-05-16 Tue 11:09]
