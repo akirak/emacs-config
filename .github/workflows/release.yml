@@ -7,19 +7,31 @@ on:
       - "r*"
 
 jobs:
-  upload-archive:
+  tag:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v3
 
     - name: Tag the current head
       if: ${{ github.event_name == 'workflow_dispatch' }}
-      id: tag
       run: |
         tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
         echo "RELEASE_TAG=$tag" >> "$GITHUB_OUTPUT"
         git tag "$tag"
         git push origin "$tag"
+
+  build-archive:
+    needs: tag
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        package: [developer-x11]
+
+    steps:
+    - uses: actions/checkout@v3
 
     - uses: cachix/install-nix-action@v22
       with:
@@ -33,17 +45,10 @@ jobs:
         pushFilter: '-source$'
 
     - name: Build an offline archive
-      run: |
-        system=$(nix eval --expr builtins.currentSystem --impure --raw)
-        nix eval .#packages.$system --apply builtins.attrNames --json \
-          | jq -r '.[]' \
-          | grep -E '^build-.+-archive$' \
-          | while read pkg; do
-          nix run .#$pkg
-        done
+      run: nix run .#${{ matrix.package }}.archive-builder
 
     - uses: akirak/action-gh-release@master
       with:
-        tag_name: ${{ steps.tag.outputs.RELEASE_TAG || github.ref }}
+        tag_name: ${{ needs.tag.outputs.RELEASE_TAG || github.ref }}
         files: |
           *.zstd
