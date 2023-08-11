@@ -115,17 +115,6 @@
 
         packages =
           {
-            # tryout-emacs = emacsSandboxed {
-            #   name = "tryout-emacs";
-            #   nativeCompileAheadDefault = false;
-            #   automaticNativeCompile = false;
-            #   enableOpinionatedSettings = false;
-            #   extraFeatures = [];
-            #   protectHome = false;
-            #   shareNet = false;
-            #   inheritPath = false;
-            # };
-
             inherit emacs-config;
 
             # test-emacs-config = pkgs.callPackage ./emacs/tests {};
