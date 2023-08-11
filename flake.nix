@@ -188,7 +188,19 @@
               '';
             };
           }
-          // profiles
+          // (
+            builtins.mapAttrs (name: emacs-env:
+              emacs-env
+              // {
+                wrappers = lib.optionalAttrs pkgs.stdenv.isLinux {
+                  fuse-overlayfs =
+                    pkgs.callPackage ./nix/overlayfsWrapper.nix {}
+                    "emacs-${name}"
+                    emacs-env;
+                };
+              })
+            profiles
+          )
           // archiveBuilders;
 
         apps = emacs-config.makeApps {
