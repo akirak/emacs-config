@@ -31,6 +31,7 @@
       url = "github:emacsmirror/epkgs";
       flake = false;
     };
+    emacs-config-features.url = "github:akirak/emacs-config/develop?dir=presets/default";
 
     archiver.url = "github:emacs-twist/twist-archiver";
 
@@ -89,7 +90,12 @@
         inherit (pkgs) lib;
         inherit (final) emacs-config;
         inherit (builtins) substring;
-        profiles = import ./emacs/profiles.nix {inherit lib;} emacs-config;
+        profiles =
+          import ./emacs/profiles.nix {
+            inherit lib;
+            defaultFeatures = import inputs.emacs-config-features;
+          }
+          emacs-config;
       in {
         overlayAttrs =
           {

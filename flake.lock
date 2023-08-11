@@ -114,6 +114,24 @@
         "type": "github"
       }
     },
+    "emacs-config-features": {
+      "locked": {
+        "dir": "presets/default",
+        "lastModified": 1691808340,
+        "narHash": "sha256-+s+WxpzhWUhL/gcx9VKpAElwiYKoBHmNpybaPr+a+DQ=",
+        "owner": "akirak",
+        "repo": "emacs-config",
+        "rev": "1755cd2de6b07339f59635abf8a58770b52e97ef",
+        "type": "github"
+      },
+      "original": {
+        "dir": "presets/default",
+        "owner": "akirak",
+        "ref": "develop",
+        "repo": "emacs-config",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -849,6 +867,7 @@
     "root": {
       "inputs": {
         "archiver": "archiver",
+        "emacs-config-features": "emacs-config-features",
         "emacs-overlay": "emacs-overlay",
         "epkgs": "epkgs",
         "flake-no-path": "flake-no-path",

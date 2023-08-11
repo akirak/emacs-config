@@ -1,4 +1,7 @@
-{lib}: emacs-config: let
+{
+  defaultFeatures,
+  lib,
+}: emacs-config: let
   makeProfile = {
     presets,
     personalized,
@@ -30,9 +33,7 @@
 
   matrix = {
     presets = lib.mapAttrsToList lib.nameValuePair {
-      developer = [
-        "mermaid"
-      ];
+      default = defaultFeatures;
     };
 
     personalized = [
