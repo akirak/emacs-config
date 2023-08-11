@@ -90,25 +90,6 @@
         inherit (final) emacs-config;
         inherit (builtins) substring;
         profiles = import ./emacs/profiles.nix emacs-config;
-        archiveBuilders =
-          lib.concatMapAttrs (
-            profileName: drv: let
-              name = "build-${profileName}-archive";
-            in {
-              ${name} =
-                (inputs.archiver.overlays.default final pkgs).makeEmacsTwistArchive
-                {
-                  inherit name;
-                  earlyInitFile = ./emacs/early-init.el;
-                  narName = "emacs-profile-${profileName}.nar";
-                  outName = "emacs-profile-${profileName}-${
-                    builtins.substring 0 8 (inputs.self.lastModifiedDate)
-                  }-${system}.tar.zstd";
-                }
-                drv;
-            }
-          )
-          profiles;
       in {
         overlayAttrs =
           {
@@ -198,10 +179,21 @@
                     "emacs-${name}"
                     emacs-env;
                 };
+
+                archive-builder =
+                  (inputs.archiver.overlays.default final pkgs).makeEmacsTwistArchive
+                  {
+                    name = "build-emacs-${name}-archive";
+                    earlyInitFile = ./emacs/early-init.el;
+                    narName = "emacs-profile-${name}.nar";
+                    outName = "emacs-profile-${name}-${
+                      builtins.substring 0 8 (inputs.self.lastModifiedDate)
+                    }-${system}.tar.zstd";
+                  }
+                  emacs-env;
               })
             profiles
-          )
-          // archiveBuilders;
+          );
 
         apps = emacs-config.makeApps {
           lockDirName = "emacs/lock";
