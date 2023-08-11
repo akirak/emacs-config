@@ -6547,6 +6547,14 @@ Major mode for editing JSON files.
   (setup (:package json-mode)
     (:file-match "\\.json\\'" "\\.lock\\'"))
 #+end_src
+*** justl
+:PROPERTIES:
+:CREATED_TIME: [2023-08-11 Fri 14:07]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package justl))
+#+end_src
 *** keycast
 :PROPERTIES:
 :CREATED_TIME: [2023-03-31 Fri 23:59]
