@@ -28,5 +28,5 @@ Another is non-pgtk one:
    nix run github:akirak/emacs-config#default-x11.wrappers.tmpdir
 #+end_src
 
-Both commands creates a temporary directory which will be used as ~user-emacs-directory~ containing an init file.
+Both commands create a temporary directory which will be used as ~user-emacs-directory~ containing an init file.
 The temporary directory will be cleaned up when Emacs exits.
