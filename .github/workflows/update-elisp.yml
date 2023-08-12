@@ -19,6 +19,7 @@ jobs:
     - run: |
         git config --add user.name 'github-actions[bot]'
         git config --add user.email '6270544+github-actions[bot]@users.noreply.github.com'
+    - run: git switch -C update/elisp-packages
     - run: |
         nix flake lock \
           --update-input melpa \
@@ -27,10 +28,4 @@ jobs:
     - run: nix run .#lock --impure
     - run: nix run .#update --impure
     - run: nix run .#update-elisp-lock
-    - uses: peter-evans/create-pull-request@v5
-      with:
-        base: develop
-        token: ${{ secrets.PAT_FOR_PR }}
-        title: 'Update Emacs Lisp packages'
-        branch: update/elisp-packages
-        labels: automation,update,emacs
+    - run: git push origin HEAD --force-with-lease
