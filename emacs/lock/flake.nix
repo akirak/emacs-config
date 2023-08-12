@@ -562,6 +562,12 @@
       repo = "jq-mode";
       type = "github";
     };
+    justl = {
+      flake = false;
+      owner = "psibi";
+      repo = "justl.el";
+      type = "github";
+    };
     keycast = {
       flake = false;
       owner = "tarsius";

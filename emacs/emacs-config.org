@@ -748,8 +748,7 @@ The other variables must not be saved, and they should be put in configuration:
           dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-vterm-for-dir)
 
-    (:bind "h" #'dired-up-directory)
-    (:unbind "C-x M-o"))
+    (:bind "h" #'dired-up-directory))
 #+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
@@ -3877,12 +3876,12 @@ Emacs:
              (cons lang (when (commandp non-ts-sym)
                           non-ts-sym))))))
     (let ((mappings (thread-last
-                     treesit-extra-load-path
-                     (mapcar #'get-languages)
-                     (flatten-list)
-                     (mapcar #'to-mapping)
-                     (delq nil))))
-      `(progn
+                      treesit-extra-load-path
+                      (mapcar #'get-languages)
+                      (flatten-list)
+                      (mapcar #'to-mapping)
+                      (delq nil))))
+      `(when (treesit-available-p)
          (let ((remappings ',(thread-last
                                mappings
                                (cl-remove-if-not #'cdr)
@@ -3908,29 +3907,29 @@ Emacs:
 
 #+RESULTS:
 #+begin_src elisp
-  (progn
-    (let
-        ((remappings
-          '((c-mode . c-ts-mode) (css-mode . css-ts-mode)
-            (html-mode . html-ts-mode) (java-mode . java-ts-mode)
-            (python-mode . python-ts-mode) (ruby-mode . ruby-ts-mode))))
-      (cl-flet
-          ((modify-entry (pair)
-             (if-let (remapping (assq (cdr pair) remappings))
-                 (cons (car pair) (cdr remapping))
-               pair)))
-        (dolist (var-sym '(auto-mode-alist interpreter-mode-alist))
-          (set var-sym (mapcar #'modify-entry (symbol-value var-sym))))))
-    (with-eval-after-load 'org
-      (dolist
-          (pair
-           '(("bash" . bash-ts) ("c" . c-ts) ("cmake" . cmake-ts) ("css" . css-ts)
-             ("dockerfile" . dockerfile-ts) ("elixir" . elixir-ts) ("go" . go-ts)
-             ("heex" . heex-ts) ("html" . html-ts) ("java" . java-ts)
-             ("json" . json-ts) ("python" . python-ts) ("ruby" . ruby-ts)
-             ("rust" . rust-ts) ("toml" . toml-ts) ("tsx" . tsx-ts)
-             ("typescript" . typescript-ts) ("yaml" . yaml-ts)))
-        (add-to-list 'org-src-lang-modes pair))))
+(when (treesit-available-p)
+  (let
+      ((remappings
+        '((c-mode . c-ts-mode) (css-mode . css-ts-mode)
+          (html-mode . html-ts-mode) (java-mode . java-ts-mode)
+          (python-mode . python-ts-mode) (ruby-mode . ruby-ts-mode))))
+    (cl-flet
+        ((modify-entry (pair)
+           (if-let (remapping (assq (cdr pair) remappings))
+               (cons (car pair) (cdr remapping))
+             pair)))
+      (dolist (var-sym '(auto-mode-alist interpreter-mode-alist))
+        (set var-sym (mapcar #'modify-entry (symbol-value var-sym))))))
+  (with-eval-after-load 'org
+    (dolist
+        (pair
+         '(("bash" . bash-ts) ("c" . c-ts) ("cmake" . cmake-ts) ("css" . css-ts)
+           ("dockerfile" . dockerfile-ts) ("elixir" . elixir-ts) ("go" . go-ts)
+           ("heex" . heex-ts) ("html" . html-ts) ("java" . java-ts)
+           ("json" . json-ts) ("python" . python-ts) ("ruby" . ruby-ts)
+           ("rust" . rust-ts) ("toml" . toml-ts) ("tsx" . tsx-ts)
+           ("typescript" . typescript-ts) ("yaml" . yaml-ts)))
+      (add-to-list 'org-src-lang-modes pair))))
 #+end_src
 
 The generated remappings do have limitations, but it is possible to work around
@@ -4093,6 +4092,8 @@ Major mode for editing typescript
 
 #+begin_src emacs-lisp
   (setup typescript-ts-mode
+    (:file-match "\\.ts\\'")
+
     ;; (:also-load akirak-typescript)
     (:hook (defun akirak/typescript-setup ()
              (add-to-list (make-local-variable 'electric-pair-pairs)
@@ -5276,6 +5277,12 @@ Hide dotfiles in dired
 #+end_src
 
 dired-k depends on dired-x, which has a poor code quality.
+*** dired-x
+#+begin_src elisp
+  (setup dired-x
+    (:with-map dired-mode-map
+      (:unbind "C-x M-o")))
+#+end_src
 *** docker
 :PROPERTIES:
 :CREATED_TIME: [2023-05-16 Tue 11:09]
@@ -6544,6 +6551,18 @@ Major mode for editing JSON files.
 #+begin_src emacs-lisp
   (setup (:package json-mode)
     (:file-match "\\.json\\'" "\\.lock\\'"))
+#+end_src
+*** justl
+:PROPERTIES:
+:CREATED_TIME: [2023-08-11 Fri 14:07]
+:END:
+#+begin_quote
+Major mode for driving just files
+[[https://github.com/psibi/justl.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package justl))
 #+end_src
 *** keycast
 :PROPERTIES:
@@ -8693,7 +8712,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 212 |
+| [[org-ql-search:tags:packages][packages]]            | 214 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

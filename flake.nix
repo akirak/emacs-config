@@ -31,6 +31,7 @@
       url = "github:emacsmirror/epkgs";
       flake = false;
     };
+    emacs-config-features.url = "github:akirak/emacs-config/develop?dir=presets/default";
 
     archiver.url = "github:emacs-twist/twist-archiver";
 
@@ -89,26 +90,12 @@
         inherit (pkgs) lib;
         inherit (final) emacs-config;
         inherit (builtins) substring;
-        profiles = import ./emacs/profiles.nix emacs-config;
-        archiveBuilders =
-          lib.concatMapAttrs (
-            profileName: drv: let
-              name = "build-${profileName}-archive";
-            in {
-              ${name} =
-                (inputs.archiver.overlays.default final pkgs).makeEmacsTwistArchive
-                {
-                  inherit name;
-                  earlyInitFile = ./emacs/early-init.el;
-                  narName = "emacs-profile-${profileName}.nar";
-                  outName = "emacs-profile-${profileName}-${
-                    builtins.substring 0 8 (inputs.self.lastModifiedDate)
-                  }-${system}.tar.zstd";
-                }
-                drv;
-            }
-          )
-          profiles;
+        profiles =
+          import ./emacs/profiles.nix {
+            inherit lib;
+            defaultFeatures = import inputs.emacs-config-features;
+          }
+          emacs-config;
       in {
         overlayAttrs =
           {
@@ -134,17 +121,6 @@
 
         packages =
           {
-            # tryout-emacs = emacsSandboxed {
-            #   name = "tryout-emacs";
-            #   nativeCompileAheadDefault = false;
-            #   automaticNativeCompile = false;
-            #   enableOpinionatedSettings = false;
-            #   extraFeatures = [];
-            #   protectHome = false;
-            #   shareNet = false;
-            #   inheritPath = false;
-            # };
-
             inherit emacs-config;
 
             # test-emacs-config = pkgs.callPackage ./emacs/tests {};
@@ -188,8 +164,35 @@
               '';
             };
           }
-          // profiles
-          // archiveBuilders;
+          // (
+            builtins.mapAttrs (name: emacs-env:
+              emacs-env
+              // {
+                wrappers = lib.optionalAttrs pkgs.stdenv.isLinux {
+                  fuse-overlayfs =
+                    pkgs.callPackage ./nix/overlayfsWrapper.nix {}
+                    "emacs-${name}"
+                    emacs-env;
+                  tmpdir =
+                    pkgs.callPackage ./nix/tmpInitDirWrapper.nix {}
+                    "emacs-${name}"
+                    emacs-env;
+                };
+
+                archive-builder =
+                  (inputs.archiver.overlays.default final pkgs).makeEmacsTwistArchive
+                  {
+                    name = "build-emacs-${name}-archive";
+                    earlyInitFile = ./emacs/early-init.el;
+                    narName = "emacs-profile-${name}.nar";
+                    outName = "emacs-profile-${name}-${
+                      builtins.substring 0 8 (inputs.self.lastModifiedDate)
+                    }-${system}.tar.zstd";
+                  }
+                  emacs-env;
+              })
+            profiles
+          );
 
         apps = emacs-config.makeApps {
           lockDirName = "emacs/lock";
