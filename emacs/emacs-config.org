@@ -5275,8 +5275,6 @@ Hide dotfiles in dired
     ;;             #'akirak/ad-override-dired-k--highlight-by-file-attribyte)
     )
 #+end_src
-
-dired-k depends on dired-x, which has a poor code quality.
 *** dired-x
 #+begin_src elisp
   (setup dired-x
