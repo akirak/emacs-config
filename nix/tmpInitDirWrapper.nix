@@ -16,7 +16,7 @@ in
     set +u
     set -x
 
-    initdir="$(mktemp -d \"${name}-XXX\")"
+    initdir="$(mktemp --tmpdir -d \"${name}-XXX\")"
 
     cleanup() {
       rm -rf "$initdir"
