@@ -22,8 +22,8 @@ jobs:
       run: |
         tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
         echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
-        git tag "$tag"
-        git push origin "$tag"
+        git tag -f "$tag"
+        git push --force origin "tags/$tag"
 
   build-archive:
     needs: tag
