@@ -33,7 +33,7 @@ jobs:
     strategy:
       matrix:
         package:
-        - default-x11
+        - default-x11-personalized
 
     steps:
     - uses: actions/checkout@v3
