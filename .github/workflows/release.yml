@@ -28,7 +28,8 @@ jobs:
 
     strategy:
       matrix:
-        package: [developer-x11]
+        package:
+        - default-x11
 
     steps:
     - uses: actions/checkout@v3
