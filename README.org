@@ -9,6 +9,8 @@ This repository contains my Emacs configuration which is built using [[https://g
 I use home-manager to install the configuration.
 
 It is an org-babel configuration defined within [[file:emacs/emacs-config.org][a single file]].
+
+Note: This configuration is currently built and tested only on Linux.
 ** Trying out
 :PROPERTIES:
 :ID:       3cc635d1-7bad-4d28-946e-e204b04aafaa
