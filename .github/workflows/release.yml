@@ -54,6 +54,6 @@ jobs:
 
     - uses: akirak/action-gh-release@master
       with:
-        tag_name: ${{ needs.tag.outputs.release-tag || github.ref }}
+        tag_name: ${{ needs.tag.outputs.release-tag }}
         files: |
           *.zstd
