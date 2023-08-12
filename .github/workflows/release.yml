@@ -10,16 +10,20 @@ jobs:
   tag:
     runs-on: ubuntu-latest
 
+    outputs:
+      release-tag: ${{ steps.tag.outputs.release_tag }}
+
     steps:
     - uses: actions/checkout@v3
 
     - name: Tag the current head
+      id: tag
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
         tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
-        echo "RELEASE_TAG=$tag" >> "$GITHUB_OUTPUT"
-        git tag "$tag"
-        git push origin "$tag"
+        echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
+        git tag -f "$tag"
+        git push --force origin "tags/$tag"
 
   build-archive:
     needs: tag
@@ -29,7 +33,7 @@ jobs:
     strategy:
       matrix:
         package:
-        - default-x11
+        - default-x11-personalized
 
     steps:
     - uses: actions/checkout@v3
@@ -50,6 +54,6 @@ jobs:
 
     - uses: akirak/action-gh-release@master
       with:
-        tag_name: ${{ needs.tag.outputs.RELEASE_TAG || github.ref }}
+        tag_name: ${{ needs.tag.outputs.release-tag }}
         files: |
           *.zstd
