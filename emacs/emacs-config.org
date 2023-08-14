@@ -1920,30 +1920,7 @@ Thus I will explicitly install this package rather than using the built-in versi
 :END:
 
 #+begin_src emacs-lisp
-  (setup treesit
-    (defmacro akirak/gen-treesit ()
-      (macroexp-progn
-       (let (exps)
-         (cl-do-all-symbols (sym)
-           (when-let* ((name (and (commandp sym)
-                                  (symbol-name sym)))
-                       (hook (and (string-suffix-p "-ts-mode" name)
-                                  (intern-soft (concat (string-remove-suffix "-ts-mode" name)
-                                                       "-mode-hook")))))
-             (push `(add-hook ',hook ',sym)
-                   exps)))
-         exps)))
-
-    ;; Macro-expand (akirak/gen-treesit).
-    (progn
-      (add-hook 'js-mode-hook 'js-ts-mode)
-      (add-hook 'c-mode-hook 'c-ts-mode)
-      (add-hook 'yaml-mode-hook 'yaml-ts-mode)
-      (add-hook 'tsx-mode-hook 'tsx-ts-mode)
-      (add-hook 'python-mode-hook 'python-ts-mode)
-      (add-hook 'typescript-mode-hook 'typescript-ts-mode)
-      (add-hook 'json-mode-hook 'json-ts-mode)
-      (add-hook 'go-mode-hook 'go-ts-mode)))
+  (setup treesit)
 #+end_src
 **** akirak-treesit
 #+begin_src elisp
