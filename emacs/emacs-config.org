@@ -3922,6 +3922,8 @@ Major mode for Elixir with tree-sitter support
 
 #+begin_src emacs-lisp
   (setup elixir-ts-mode
+    (:file-match "\\.exs?\\'")
+
     (:auto-insert
      ("/config/config\\.exs\\'"
       . (> "use Mix.Config\n\n"
