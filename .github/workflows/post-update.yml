@@ -1,0 +1,23 @@
+name: "After updating the flake inputs"
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - update/flake-lock
+
+jobs:
+  update-downstream:
+    if: github.event.pull_request.merged == true
+    strategy:
+      matrix:
+        repo:
+        - akirak/emacs-config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ${{ matrix.repo }}
+          event-type: flake-update
