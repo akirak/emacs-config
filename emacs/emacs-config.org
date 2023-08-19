@@ -1077,7 +1077,8 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup fns
-    (:set use-dialog-box nil))
+    (:set use-dialog-box nil
+          use-short-answers t))
 
   (setup xfns
     (:set x-gtk-use-system-tooltips nil))
@@ -1767,8 +1768,6 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subr
-    (fset 'yes-or-no-p 'y-or-n-p)
-
     (:status opinionated
       ;; (:global "C-h" 'backward-delete-char)
       ))
