@@ -6,6 +6,10 @@ on:
     tags:
       - "r*"
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   tag:
     runs-on: ubuntu-latest
