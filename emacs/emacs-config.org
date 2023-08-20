@@ -3625,6 +3625,12 @@ Placeholders for Org
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
+    (:when-loaded
+      (require 'akirak-org-capture)
+      (:set org-placeholder-default-capture-template
+            (concat "* %i\n\n"
+                    akirak-org-capture-default-drawer
+                    "%?")))
     (:global "M-s M-p" #'org-placeholder-find-or-create))
 #+end_src
 *** COMMENT org-pretty-table                                                   :ARCHIVE:
