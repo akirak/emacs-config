@@ -78,6 +78,7 @@
                                  filename))
               (bound-and-true-p url-http-content-type)
               (memq this-command '(magit-show-commit
+                                   magit-status
                                    bookmark-set))
               (when-let (mode (derived-mode-p 'org-mode 'org-memento-policy-mode))
                 (cl-case mode

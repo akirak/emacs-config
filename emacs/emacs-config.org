@@ -1077,7 +1077,8 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup fns
-    (:set use-dialog-box nil))
+    (:set use-dialog-box nil
+          use-short-answers t))
 
   (setup xfns
     (:set x-gtk-use-system-tooltips nil))
@@ -1767,8 +1768,6 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subr
-    (fset 'yes-or-no-p 'y-or-n-p)
-
     (:status opinionated
       ;; (:global "C-h" 'backward-delete-char)
       ))
@@ -1920,30 +1919,7 @@ Thus I will explicitly install this package rather than using the built-in versi
 :END:
 
 #+begin_src emacs-lisp
-  (setup treesit
-    (defmacro akirak/gen-treesit ()
-      (macroexp-progn
-       (let (exps)
-         (cl-do-all-symbols (sym)
-           (when-let* ((name (and (commandp sym)
-                                  (symbol-name sym)))
-                       (hook (and (string-suffix-p "-ts-mode" name)
-                                  (intern-soft (concat (string-remove-suffix "-ts-mode" name)
-                                                       "-mode-hook")))))
-             (push `(add-hook ',hook ',sym)
-                   exps)))
-         exps)))
-
-    ;; Macro-expand (akirak/gen-treesit).
-    (progn
-      (add-hook 'js-mode-hook 'js-ts-mode)
-      (add-hook 'c-mode-hook 'c-ts-mode)
-      (add-hook 'yaml-mode-hook 'yaml-ts-mode)
-      (add-hook 'tsx-mode-hook 'tsx-ts-mode)
-      (add-hook 'python-mode-hook 'python-ts-mode)
-      (add-hook 'typescript-mode-hook 'typescript-ts-mode)
-      (add-hook 'json-mode-hook 'json-ts-mode)
-      (add-hook 'go-mode-hook 'go-ts-mode)))
+  (setup treesit)
 #+end_src
 **** akirak-treesit
 #+begin_src elisp
@@ -3649,6 +3625,12 @@ Placeholders for Org
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
+    (:when-loaded
+      (require 'akirak-org-capture)
+      (:set org-placeholder-default-capture-template
+            (concat "* %i\n\n"
+                    akirak-org-capture-default-drawer
+                    "%?")))
     (:global "M-s M-p" #'org-placeholder-find-or-create))
 #+end_src
 *** COMMENT org-pretty-table                                                   :ARCHIVE:
@@ -3946,6 +3928,8 @@ Major mode for Elixir with tree-sitter support
 
 #+begin_src emacs-lisp
   (setup elixir-ts-mode
+    (:file-match "\\.exs?\\'")
+
     (:auto-insert
      ("/config/config\\.exs\\'"
       . (> "use Mix.Config\n\n"
@@ -5275,8 +5259,6 @@ Hide dotfiles in dired
     ;;             #'akirak/ad-override-dired-k--highlight-by-file-attribyte)
     )
 #+end_src
-
-dired-k depends on dired-x, which has a poor code quality.
 *** dired-x
 #+begin_src elisp
   (setup dired-x
