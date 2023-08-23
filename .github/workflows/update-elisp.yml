@@ -28,4 +28,4 @@ jobs:
     - run: nix run .#lock --impure
     - run: nix run .#update --impure
     - run: nix run .#update-elisp-lock
-    - run: git push origin HEAD --force-with-lease
+    - run: git push origin HEAD --force
