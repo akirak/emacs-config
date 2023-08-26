@@ -4056,6 +4056,19 @@ Major mode for the Go programming language
     (:org-src-lang "javascript")
     (:file-match "\\.[cm]?js$"))
 #+end_src
+*** nix-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-08-26 Sat 11:56]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nix-ts-mode)
+    (:file-match "\\.nix\\'")
+    (:mode-repl nix-repl)
+    (:bind [remap devdocs-lookup] #'akirak-nix-manix)
+    (:reformatters
+     (alejandra :program "alejandra")))
+#+end_src
 *** toml-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-03-19 Sun 21:27]
@@ -7176,7 +7189,7 @@ Nix3.el integration for Magit
     (with-eval-after-load 'magit-diff
       (magit-nix3-flake-lock-mode t)))
 #+end_src
-*** nix-mode                                                   :Nix:
+*** nix-mode                                                               :Nix:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -7185,16 +7198,19 @@ Major mode for editing .nix files
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package nix-mode)
-    (:file-match "\\.nix\\'")
-    (:mode-repl nix-repl)
-    (:bind [remap devdocs-lookup] #'akirak-nix-manix)
-    (:reformatters
-     (alejandra :program "alejandra"))
-    (:compilation-error
-     ;; Unused argument `hsuper` at default.nix:9:24-15:6
-     (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
-                 1 2 3)))
+  ;; Install nix-mode for nix-repl.
+  (setup (:package nix-mode))
+
+  ;; (setup (:package nix-mode)
+  ;;   (:file-match "\\.nix\\'")
+  ;;   (:mode-repl nix-repl)
+  ;;   (:bind [remap devdocs-lookup] #'akirak-nix-manix)
+  ;;   (:reformatters
+  ;;    (alejandra :program "alejandra"))
+  ;;   (:compilation-error
+  ;;    ;; Unused argument `hsuper` at default.nix:9:24-15:6
+  ;;    (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
+  ;;                1 2 3)))
 #+end_src
 *** nix-update
 :PROPERTIES:
