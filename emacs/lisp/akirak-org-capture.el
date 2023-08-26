@@ -59,7 +59,8 @@
                                                        annotation
                                                        properties
                                                        (log-time t)
-                                                       (body t))
+                                                       (body t)
+                                                       level)
   "Build the template body of a capture template.
 
 HEADLINE is a string put in the headline.
@@ -92,7 +93,9 @@ values:
 
  - A string literal.
 
- - t, which means the cursor is moved to the point."
+ - t, which means the cursor is moved to the point.
+
+Finally, you can specify LEVEL, but you have to set the type of the to plain."
   (declare (indent 0))
   (cl-flet
       ((format-ts (time long)
@@ -110,9 +113,12 @@ values:
          (if strings
              (concat (string-join strings " ") "\n")
            "")))
-    (concat "* " (if todo
-                     (concat todo " ")
-                   "")
+    (concat (if level
+                (concat (make-string level ?\*) " ")
+              "* ")
+            (if todo
+                (concat todo " ")
+              "")
             (pcase headline
               ((pred stringp) headline)
               (`(url ,url) (org-link-make-string url (orgabilize-document-title url)))

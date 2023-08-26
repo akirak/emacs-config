@@ -219,7 +219,7 @@
 (defadvice org-insert-heading (around akirak-org-clock activate)
   (if (akirak-org-clock--org-allow-p)
       ad-do-it
-    (or (apply #'akirak-capture-org-ins-heading-fallback (ad-get-args 0))
+    (or (akirak-capture-org-ins-heading-fallback current-prefix-arg)
         ad-do-it)))
 
 (defun akirak-org-clock--org-allow-p ()
