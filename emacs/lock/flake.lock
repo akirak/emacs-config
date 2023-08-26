@@ -1908,6 +1908,22 @@
         "type": "github"
       }
     },
+    "nix-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1692797733,
+        "narHash": "sha256-EK3tRl/7WnSFB/aLpx5ZkUmklLz24GZnSCmzTQxh2CI=",
+        "owner": "remi-gelinas",
+        "repo": "nix-ts-mode",
+        "rev": "d9c362048b17e499d62e907818c00f571bd6fcb1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "remi-gelinas",
+        "repo": "nix-ts-mode",
+        "type": "github"
+      }
+    },
     "nix-update": {
       "flake": false,
       "locked": {
@@ -3031,6 +3047,7 @@
         "move-dup": "move-dup",
         "mpv": "mpv",
         "nix-mode": "nix-mode",
+        "nix-ts-mode": "nix-ts-mode",
         "nix-update": "nix-update",
         "nix3": "nix3",
         "nov": "nov",
