@@ -47,6 +47,10 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
+    - uses: DeterminateSystems/magic-nix-cache-action@v2
+      with:
+        upstream-cache: https://akirak.cachix.org
+
     - uses: cachix/cachix-action@v12
       with:
         name: akirak
