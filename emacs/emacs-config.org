@@ -4060,6 +4060,9 @@ Major mode for the Go programming language
 :PROPERTIES:
 :CREATED_TIME: [2023-08-26 Sat 11:56]
 :END:
+#+begin_quote
+Major mode for Nix expressions, powered by tree-sitter
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package nix-ts-mode)
@@ -8710,7 +8713,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 214 |
+| [[org-ql-search:tags:packages][packages]]            | 213 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -8738,7 +8741,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
-| [[org-ql-search:tags:Nix][Nix]]                 |   3 |
 | [[org-ql-search:tags:project][project]]             |   3 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
@@ -8749,6 +8751,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
+| [[org-ql-search:tags:Nix][Nix]]                 |   2 |
 | [[org-ql-search:tags:performance][performance]]         |   1 |
 | [[org-ql-search:tags:help][help]]                |   1 |
 | [[org-ql-search:tags:prog_mode][prog_mode]]           |   1 |
