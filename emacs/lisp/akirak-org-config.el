@@ -156,7 +156,7 @@
     ((or `("~" "work2" "learning" ,group ,name "")
          `("~" "work2" "learning" ,group ""))
      (make-org-dog-context-in-directory
-      :directory (list "projects/" "technology/" "programming/")
+      :directory (list "projects/" "technology/" "programming/" "software/")
       :filenames (append (list group)
                          (when name
                            (list name)))))
