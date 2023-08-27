@@ -253,6 +253,12 @@
   :variable 'akirak-capture-doct-options
   :prop :clock-resume)
 
+(transient-define-infix akirak-capture-doct-immediate-finish ()
+  :class 'akirak-capture-doct-boolean-option
+  :description "Immediate finish"
+  :variable 'akirak-capture-doct-options
+  :prop :immediate-finish)
+
 (defvar akirak-capture-select-heading nil)
 
 (transient-define-infix akirak-capture-select-heading ()
@@ -284,6 +290,7 @@
    ("-d" akirak-capture-deadline-infix)
    ("-i" akirak-capture-doct-clock-in)
    ("-r" akirak-capture-doct-clock-resume)
+   ("-I" akirak-capture-doct-immediate-finish)
    ("-a" akirak-capture-doct-add-annotation)]
   ["Context"
    :class transient-columns
@@ -762,6 +769,7 @@
    ("-g" akirak-capture-tags-infix)
    ("-i" akirak-capture-doct-clock-in)
    ("-r" akirak-capture-doct-clock-resume)
+   ("-I" akirak-capture-doct-immediate-finish)
    ("=" akirak-capture-select-heading)]
   ["Context"
    :class transient-columns
