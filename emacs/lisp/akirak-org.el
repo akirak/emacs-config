@@ -762,6 +762,40 @@ At this point, the function works with the following pattern:
         (message "Performed %d replacements" n)))))
 
 ;;;###autoload
+(defun akirak-org-annotate-targets-in-subtree ()
+  "Annotate targets in children."
+  (interactive)
+  (let ((bound (save-excursion
+                 (org-end-of-subtree)))
+        replacements)
+    (while (re-search-forward org-complex-heading-regexp bound t)
+      (let* ((name (match-string-no-properties 4))
+             (regexp (concat "\\<"
+                             (replace-regexp-in-string " +" "\\s-+" (regexp-quote name) t t)
+                             "\\<")))
+        (org-end-of-meta-data t)
+        (catch 'finished-on-entry
+          (while (re-search-forward regexp (org-entry-end-position) t)
+            (unless (cl-intersection (text-properties-at (point))
+                                     '(org-emphasis htmlize-link)
+                                     :test #'eq)
+              (when (memq 'org-target (ensure-list (get-text-property (point) 'face)))
+                (throw 'finished-on-entry t))
+              (let ((begin (match-beginning 0))
+                    (end (match-end 0)))
+                (goto-char begin)
+                (insert "<<")
+                (goto-char (+ 2 end))
+                (insert ">>")
+                (push name replacements)
+                (throw 'finished-on-entry t)))))))
+    (if replacements
+        (message "%d replacements have been done (%s)"
+                 (length replacements)
+                 (string-join replacements ", "))
+      (message "No replacement has been done"))))
+
+;;;###autoload
 (defun akirak-org-edit-active-ts ()
   "Edit the first active timestamp in the entry body."
   (interactive)
