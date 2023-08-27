@@ -821,7 +821,14 @@
                                      heading :body t
                                      akirak-capture-template-options)
                    ,@akirak-capture-doct-options
-                   ,@(akirak-capture--target-plist target)))))))
+                   ,@(akirak-capture--target-plist target))))))
+         ;; If the current buffer is `org-mode', override `display-buffer-alist'
+         ;; to display the capture buffer in the same window.
+         (display-buffer-alist (if (eq major-mode 'org-mode)
+                                   '(("^CAPTURE-"
+                                      display-buffer-same-window
+                                      (inhibit-same-window . nil)))
+                                 display-buffer-alist)))
     (org-capture)))
 
 (transient-define-prefix akirak-capture-journal ()
