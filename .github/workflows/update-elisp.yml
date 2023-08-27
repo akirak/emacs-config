@@ -19,7 +19,7 @@ jobs:
     - run: |
         git config --add user.name 'github-actions[bot]'
         git config --add user.email '6270544+github-actions[bot]@users.noreply.github.com'
-    - run: git switch -C update/elisp-packages
+    - run: git switch -C update/elisp-packages develop
     - run: |
         nix flake lock \
           --update-input melpa \
