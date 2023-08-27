@@ -253,6 +253,12 @@
   :variable 'akirak-capture-doct-options
   :prop :clock-resume)
 
+(transient-define-infix akirak-capture-doct-immediate-finish ()
+  :class 'akirak-capture-doct-boolean-option
+  :description "Immediate finish"
+  :variable 'akirak-capture-doct-options
+  :prop :immediate-finish)
+
 (defvar akirak-capture-select-heading nil)
 
 (transient-define-infix akirak-capture-select-heading ()
@@ -284,6 +290,7 @@
    ("-d" akirak-capture-deadline-infix)
    ("-i" akirak-capture-doct-clock-in)
    ("-r" akirak-capture-doct-clock-resume)
+   ("-I" akirak-capture-doct-immediate-finish)
    ("-a" akirak-capture-doct-add-annotation)]
   ["Context"
    :class transient-columns
@@ -762,6 +769,7 @@
    ("-g" akirak-capture-tags-infix)
    ("-i" akirak-capture-doct-clock-in)
    ("-r" akirak-capture-doct-clock-resume)
+   ("-I" akirak-capture-doct-immediate-finish)
    ("=" akirak-capture-select-heading)]
   ["Context"
    :class transient-columns
@@ -821,7 +829,14 @@
                                      heading :body t
                                      akirak-capture-template-options)
                    ,@akirak-capture-doct-options
-                   ,@(akirak-capture--target-plist target)))))))
+                   ,@(akirak-capture--target-plist target))))))
+         ;; If the current buffer is `org-mode', override `display-buffer-alist'
+         ;; to display the capture buffer in the same window.
+         (display-buffer-alist (if (eq major-mode 'org-mode)
+                                   '(("^CAPTURE-"
+                                      display-buffer-same-window
+                                      (inhibit-same-window . nil)))
+                                 display-buffer-alist)))
     (org-capture)))
 
 (transient-define-prefix akirak-capture-journal ()
@@ -1482,7 +1497,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
       (akirak-org-goto-or-create-olp (split-string input "/")))))
 
 ;;;###autoload
-(defun akirak-capture-org-ins-heading-fallback (&optional arg invisible-ok top)
+(defun akirak-capture-org-ins-heading-fallback (&optional arg)
   "A fallback for `org-insert-heading'.
 
 If `org-insert-heading' should behave as expected, it should
@@ -1502,36 +1517,54 @@ return nil. This is expected in the advice for
                               ;; M-S-RET
                               (`org-insert-todo-heading
                                '(above t))))
+       (subheadingp (equal arg '(4)))
        (level (org-outline-level))
-       (expected-level (max level 1))
+       (expected-level (if subheadingp
+                           (1+ level)
+                         (max level 1)))
        (org-dog-obj (when (featurep 'org-dog)
-                      (org-dog-buffer-object))))
-    (cl-flet
-        ((capture (&optional parent)
-           (let* ((heading (akirak-capture-read-string "Heading: "))
-                  (org-capture-entry
-                   (car (doct
-                         `((""
-                            :keys ""
-                            :template ,(akirak-org-capture-make-entry-body heading)
-                            :todo ,(when todo
-                                     "TODO")
-                            :clock-in ,(not todo)
-                            :clock-resume ,(not todo)
-                            :file ,(buffer-file-name (org-base-buffer (current-buffer)))
-                            :function ,(when parent
-                                         `(lambda ()
-                                            (org-goto-marker-or-bmk
-                                             ,(save-excursion
-                                                (org-up-heading-all 1)
-                                                (point-marker)))))))))))
-             (org-capture)
-             t)))
-      (if (and org-dog-obj
-               (object-of-class-p org-dog-obj 'org-dog-facade-datetree-file))
-          (unless (= expected-level 1)
-            (capture 'parent))
-        (capture (> expected-level 1))))))
+                      (org-dog-buffer-object)))
+       (org-capture-before-finalize-hook nil)
+       (org-capture-after-finalize-hook nil)
+       (org-capture-prepare-finalize-hook nil)
+       (display-buffer-alist '(("^CAPTURE-"
+                                akirak-window-display-buffer-split-below)))
+       (func (if (= level 0)
+                 (cl-ecase direction
+                   ;; If there is no heading in the buffer,
+                   ;; `outline-next-heading' moves the point to the end of
+                   ;; the buffer, so this is sufficient for any cases.
+                   (above #'outline-next-heading)
+                   ;; Provide no function to add the last top-level heading.
+                   (below nil))
+               (cl-case direction
+                 (above (if subheadingp
+                            ;; Insert the heading as the first child of the
+                            ;; entry. If there is no subheading of the
+                            ;; entry, it will be simply before the next
+                            ;; same-level heading.
+                            #'outline-next-heading
+                          #'org-back-to-heading))
+                 (below #'org-end-of-subtree))))
+       (org-capture-entry
+        (car (doct
+              `((""
+                 :keys ""
+                 :template ,(akirak-org-capture-make-entry-body
+                              "%?" :level expected-level)
+                 ;; This needs to be plain instead of entry if you
+                 ;; specify a concrete level of the heading.
+                 :type plain
+                 :todo ,(when todo "TODO")
+                 :jump-to-captured t
+                 :file ,(buffer-file-name (org-base-buffer (current-buffer)))
+                 :function
+                 (lambda ()
+                   (funcall ',func)
+                   (when (looking-at org-heading-regexp)
+                     (end-of-line 0)))))))))
+    (org-capture)
+    t))
 
 (provide 'akirak-capture)
 ;;; akirak-capture.el ends here

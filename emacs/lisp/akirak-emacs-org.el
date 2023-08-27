@@ -40,7 +40,7 @@
            :src "(setup (:package %\\1)%?)")
           ("Tree-sitter mode" :keys "t"
            :function ,(level2 "Treesit-based major modes")
-           :src "(setup %\\1\n  :file-match %?)")
+           :src "(setup %\\1\n  (:file-match %?)")
 
           ;; ("Macro package" :keys "M"
           ;;  :function ,(level2 "Macro packages")

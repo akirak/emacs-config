@@ -3612,7 +3612,8 @@ Experimental search command for Org files
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package org-pivot-search))
+  (setup (:package org-pivot-search)
+    (:set org-pivot-search-annotation-function #'akirak-org-entry-annotation))
 #+end_src
 *** org-placeholder
 :PROPERTIES:
@@ -3838,80 +3839,65 @@ Generate settings by evaluating the following org-babel source block within
 Emacs:
 
 #+begin_src elisp :results value code :tangle no
-  (cl-flet*
-      ((lib-language-name (filename)
-         (when (string-match (rx-to-string
-                              `(and bol "libtree-sitter-"
-                                    (group (+ anything))
-                                    ,(car dynamic-library-suffixes) eol))
-                             filename)
-           (match-string 1 filename)))
-       (get-languages (dir)
-         (thread-last
-           (directory-files dir)
-           (mapcar #'lib-language-name)
-           (delq nil)))
-       (to-mapping (lang)
-         (let* ((ts-sym (intern-soft (concat lang "-ts-mode")))
-                (non-ts-sym (intern-soft (concat lang "-mode"))))
-           (when (and ts-sym (commandp ts-sym))
-             (cons lang (when (commandp non-ts-sym)
-                          non-ts-sym))))))
-    (let ((mappings (thread-last
-                      treesit-extra-load-path
-                      (mapcar #'get-languages)
-                      (flatten-list)
-                      (mapcar #'to-mapping)
-                      (delq nil))))
-      `(when (treesit-available-p)
-         (let ((remappings ',(thread-last
-                               mappings
-                               (cl-remove-if-not #'cdr)
-                               (mapcar (lambda (pair)
-                                         (cons (cdr pair)
-                                               (intern (concat (car pair) "-ts-mode"))))))))
-           (cl-flet
-               ((modify-entry (pair)
-                  (if-let (remapping (assq (cdr pair) remappings))
-                      (cons (car pair) (cdr remapping))
-                    pair)))
-             (dolist (var-sym '(auto-mode-alist
-                                interpreter-mode-alist))
-               (set var-sym (mapcar #'modify-entry (symbol-value var-sym))))))
-         (with-eval-after-load 'org
-           (dolist (pair ',(thread-last
-                             mappings
-                             (mapcar #'car)
-                             (mapcar (lambda (lang)
-                                       (cons lang (intern (concat lang "-ts")))))))
-             (add-to-list 'org-src-lang-modes pair))))))
+  (let (ts-modes)
+    (cl-do-all-symbols (sym)
+      (when (and (commandp sym)
+                 (string-suffix-p "-ts-mode" (symbol-name sym)))
+        (push sym ts-modes)))
+    `(when (treesit-available-p)
+       (let ((alist ',(mapcar (lambda (ts-mode)
+                                (cons (intern
+                                       (concat (thread-last
+                                                 (symbol-name ts-mode)
+                                                 (string-remove-suffix "-ts-mode"))
+                                               "-mode"))
+                                      ts-mode))
+                              ts-modes)))
+         (if major-mode-remap-alist
+             (dolist (x alist)
+               (add-to-list 'major-mode-remap-alist x))
+           (setq major-mode-remap-alist alist)))
+       (with-eval-after-load 'org
+         (dolist (x ',(mapcar (lambda (ts-mode)
+                                (let ((name (symbol-name ts-mode)))
+                                  (cons (string-remove-suffix "-ts-mode" name)
+                                        (intern (string-remove-suffix "-mode" name)))))
+                              ts-modes))
+           (add-to-list 'org-src-lang-modes x)))))
 #+end_src
 
 #+RESULTS:
 #+begin_src elisp
-(when (treesit-available-p)
-  (let
-      ((remappings
-        '((c-mode . c-ts-mode) (css-mode . css-ts-mode)
-          (html-mode . html-ts-mode) (java-mode . java-ts-mode)
-          (python-mode . python-ts-mode) (ruby-mode . ruby-ts-mode))))
-    (cl-flet
-        ((modify-entry (pair)
-           (if-let (remapping (assq (cdr pair) remappings))
-               (cons (car pair) (cdr remapping))
-             pair)))
-      (dolist (var-sym '(auto-mode-alist interpreter-mode-alist))
-        (set var-sym (mapcar #'modify-entry (symbol-value var-sym))))))
-  (with-eval-after-load 'org
-    (dolist
-        (pair
-         '(("bash" . bash-ts) ("c" . c-ts) ("cmake" . cmake-ts) ("css" . css-ts)
-           ("dockerfile" . dockerfile-ts) ("elixir" . elixir-ts) ("go" . go-ts)
-           ("heex" . heex-ts) ("html" . html-ts) ("java" . java-ts)
-           ("json" . json-ts) ("python" . python-ts) ("ruby" . ruby-ts)
-           ("rust" . rust-ts) ("toml" . toml-ts) ("tsx" . tsx-ts)
-           ("typescript" . typescript-ts) ("yaml" . yaml-ts)))
-      (add-to-list 'org-src-lang-modes pair))))
+  (when (treesit-available-p)
+    (let
+        ((alist
+          '((html-mode . html-ts-mode) (js-mode . js-ts-mode) (c-mode . c-ts-mode)
+            (yaml-mode . yaml-ts-mode) (tsx-mode . tsx-ts-mode)
+            (css-mode . css-ts-mode) (csharp-mode . csharp-ts-mode)
+            (dockerfile-mode . dockerfile-ts-mode) (heex-mode . heex-ts-mode)
+            (bash-mode . bash-ts-mode) (c-or-c++-mode . c-or-c++-ts-mode)
+            (ruby-mode . ruby-ts-mode) (java-mode . java-ts-mode)
+            (python-mode . python-ts-mode) (elixir-mode . elixir-ts-mode)
+            (toml-mode . toml-ts-mode) (typescript-mode . typescript-ts-mode)
+            (nix-mode . nix-ts-mode) (go-mod-mode . go-mod-ts-mode)
+            (cmake-mode . cmake-ts-mode) (c++-mode . c++-ts-mode)
+            (json-mode . json-ts-mode) (go-mode . go-ts-mode)
+            (rust-mode . rust-ts-mode))))
+      (if major-mode-remap-alist
+          (dolist (x alist) (add-to-list 'major-mode-remap-alist x))
+        (setq major-mode-remap-alist alist)))
+    (with-eval-after-load 'org
+      (dolist
+          (x
+           '(("html" . html-ts) ("js" . js-ts) ("c" . c-ts) ("yaml" . yaml-ts)
+             ("tsx" . tsx-ts) ("css" . css-ts) ("csharp" . csharp-ts)
+             ("dockerfile" . dockerfile-ts) ("heex" . heex-ts) ("bash" . bash-ts)
+             ("c-or-c++" . c-or-c++-ts) ("ruby" . ruby-ts) ("java" . java-ts)
+             ("python" . python-ts) ("elixir" . elixir-ts) ("toml" . toml-ts)
+             ("typescript" . typescript-ts) ("nix" . nix-ts)
+             ("go-mod" . go-mod-ts) ("cmake" . cmake-ts) ("c++" . c++-ts)
+             ("json" . json-ts) ("go" . go-ts) ("rust" . rust-ts)))
+        (add-to-list 'org-src-lang-modes x))))
 #+end_src
 
 The generated remappings do have limitations, but it is possible to work around
@@ -4055,6 +4041,22 @@ Major mode for the Go programming language
   (setup js-ts-mode
     (:org-src-lang "javascript")
     (:file-match "\\.[cm]?js$"))
+#+end_src
+*** nix-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-08-26 Sat 11:56]
+:END:
+#+begin_quote
+Major mode for Nix expressions, powered by tree-sitter
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package nix-ts-mode)
+    (:file-match "\\.nix\\'")
+    (:mode-repl nix-repl)
+    (:bind [remap devdocs-lookup] #'akirak-nix-manix)
+    (:reformatters
+     (alejandra :program "alejandra")))
 #+end_src
 *** toml-ts-mode
 :PROPERTIES:
@@ -7176,7 +7178,7 @@ Nix3.el integration for Magit
     (with-eval-after-load 'magit-diff
       (magit-nix3-flake-lock-mode t)))
 #+end_src
-*** nix-mode                                                   :Nix:
+*** nix-mode                                                               :Nix:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
 :END:
@@ -7185,16 +7187,19 @@ Major mode for editing .nix files
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package nix-mode)
-    (:file-match "\\.nix\\'")
-    (:mode-repl nix-repl)
-    (:bind [remap devdocs-lookup] #'akirak-nix-manix)
-    (:reformatters
-     (alejandra :program "alejandra"))
-    (:compilation-error
-     ;; Unused argument `hsuper` at default.nix:9:24-15:6
-     (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
-                 1 2 3)))
+  ;; Install nix-mode for nix-repl.
+  (setup (:package nix-mode))
+
+  ;; (setup (:package nix-mode)
+  ;;   (:file-match "\\.nix\\'")
+  ;;   (:mode-repl nix-repl)
+  ;;   (:bind [remap devdocs-lookup] #'akirak-nix-manix)
+  ;;   (:reformatters
+  ;;    (alejandra :program "alejandra"))
+  ;;   (:compilation-error
+  ;;    ;; Unused argument `hsuper` at default.nix:9:24-15:6
+  ;;    (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
+  ;;                1 2 3)))
 #+end_src
 *** nix-update
 :PROPERTIES:
