@@ -477,5 +477,23 @@
                                   (list files)
                                 files)))
 
+;;;; Programmable completion
+
+(defun akirak-org-entry-annotation (org-marker)
+  (when (member "@glossary" (org-get-tags org-marker))
+    (org-with-point-at org-marker
+      (org-end-of-meta-data t)
+      (unless (looking-at org-heading-regexp)
+        (let ((element (org-element-at-point (point))))
+          (pcase (org-element-type element)
+            (`paragraph
+             (concat " "
+                     (thread-first
+                       (buffer-substring-no-properties
+                        (org-element-property :begin element)
+                        (org-element-property :end element))
+                       (string-trim)
+                       (propertize 'face 'italic))))))))))
+
 (provide 'akirak-org-config)
 ;;; akirak-org-config.el ends here

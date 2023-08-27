@@ -3612,7 +3612,8 @@ Experimental search command for Org files
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package org-pivot-search))
+  (setup (:package org-pivot-search)
+    (:set org-pivot-search-annotation-function #'akirak-org-entry-annotation))
 #+end_src
 *** org-placeholder
 :PROPERTIES:
