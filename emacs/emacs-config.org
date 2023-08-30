@@ -3629,7 +3629,7 @@ Placeholders for Org
     (:when-loaded
       (require 'akirak-org-capture)
       (:set org-placeholder-default-capture-template
-            (concat "* %i\n\n"
+            (concat "* %i\n"
                     akirak-org-capture-default-drawer
                     "%?")))
     (:global "M-s M-p" #'org-placeholder-find-or-create))
