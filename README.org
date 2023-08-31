@@ -18,7 +18,7 @@ Note: This configuration is currently built and tested only on Linux.
 If you have Nix 2.9+ installed, you can try out the Emacs configuration without installing it.
 
 There are two variants of the configuration.
-One is pgtk one, which works on Wayland:
+One is pgtk one, which runs on Wayland:
 
 #+begin_src bash
    nix run github:akirak/emacs-config#default-pgtk.wrappers.tmpdir
