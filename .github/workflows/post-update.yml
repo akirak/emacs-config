@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         repo:
-        - akirak/emacs-config
+        - akirak/homelab
     runs-on: ubuntu-latest
     steps:
       - uses: peter-evans/repository-dispatch@v2
