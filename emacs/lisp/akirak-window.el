@@ -429,6 +429,11 @@ The target window is determined according to the same logic as
     (cadr (nth (1- n) (akirak-window--get-panes)))))
 
 ;;;###autoload
+(defun akirak-window-single-column-p ()
+  "Return non-nil if the frame has only one column."
+  (= 1 (length (akirak-window--get-panes))))
+
+;;;###autoload
 (defun akirak-window-duplicate-state (&optional arg)
   "Duplicate the current window state to another pane/window."
   (interactive)

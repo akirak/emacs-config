@@ -68,7 +68,14 @@
                                      :file ,absolute
                                      :function akirak-capture--goto-backlog
                                      :clock-in t :clock-resume t
-                                     :template ,template))))))
+                                     :template ,template)))))
+         ;; If the current buffer is `org-mode', override `display-buffer-alist'
+         ;; to display the capture buffer in the same window.
+         (display-buffer-alist (if (akirak-window-single-column-p)
+                                   '(("^CAPTURE-"
+                                      display-buffer-same-window
+                                      (inhibit-same-window . nil)))
+                                 display-buffer-alist)))
     (org-capture)))
 
 (defun akirak-org-dog-context-files (type &optional deep)
