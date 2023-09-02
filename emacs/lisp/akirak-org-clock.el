@@ -69,7 +69,8 @@
   (when-let (filename (if-let (base (buffer-base-buffer))
                           (buffer-file-name base)
                         buffer-file-name))
-    (when (or (string-match-p akirak-org-clock-buffer-name-whitelist
+    (when (or (not (eq this-command #'save-buffer))
+              (string-match-p akirak-org-clock-buffer-name-whitelist
                               (buffer-name))
               (string-match-p akirak-org-clock-file-name-whitelist
                               filename)
@@ -77,9 +78,9 @@
                    (string-equal (expand-file-name akirak-emacs-org-config-file)
                                  filename))
               (bound-and-true-p url-http-content-type)
-              (memq this-command '(magit-show-commit
-                                   magit-status
-                                   bookmark-set))
+              ;; (memq this-command '(magit-show-commit
+              ;;                      magit-status
+              ;;                      bookmark-set))
               (when-let (mode (derived-mode-p 'org-mode 'org-memento-policy-mode))
                 (cl-case mode
                   (org-memento-policy-mode t)
