@@ -2497,7 +2497,8 @@ Outline-based notes management and organizer
 
       (:when-loaded
         (:status personal
-          (akirak-org-config-setup))
+          (akirak-org-config-setup)
+          (run-with-idle-timer 240 nil #'akirak-org-scan-type-tags))
 
         (add-to-list 'org-file-apps '(t . mailcap) t)
 
