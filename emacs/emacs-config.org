@@ -814,7 +814,9 @@ The built-in =electric= package provides the following modes:
 - [ ] =electric-quote-mode= :: Maybe I'll turn it on in some specific projects
 
 #+begin_src emacs-lisp
-  (setup electric)
+  (setup electric
+    (:with-mode electric-quote-mode
+      (:hook-into org-mode)))
 #+end_src
 *** elisp-mode                             :Emacs__Lisp:major__mode:
 :PROPERTIES:
