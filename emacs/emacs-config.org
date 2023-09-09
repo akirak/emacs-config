@@ -1208,7 +1208,16 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup isearch
-    (:bind "M-q" #'isearch-query-replace))
+    (:bind "M-q" #'isearch-query-replace
+           "M-RET" (defun akirak/isearch-quit-with-region ()
+                     (interactive)
+                     (pcase-exhaustive isearch-match-data
+                       (`(,begin ,end ,_)
+                        (isearch-exit)
+                        (goto-char begin)
+                        (push-mark)
+                        (goto-char end)
+                        (activate-mark))))))
 #+end_src
 *** jit-lock
 #+begin_src emacs-lisp
