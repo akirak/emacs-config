@@ -1053,6 +1053,7 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup flymake
+    (:set flymake-show-diagnostics-at-end-of-line t)
     (:bind "M-g M-n" #'flymake-goto-next-error
            "M-g M-p" #'flymake-goto-prev-error))
 #+end_src
