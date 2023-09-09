@@ -195,6 +195,25 @@
       (kill-new content)
       (message "Saved to the kill ring: %s" content))))
 
+(defun akirak-embark-org-schedule (_)
+  (interactive "s")
+  (save-window-excursion
+    (org-with-point-at akirak-embark-target-org-marker
+      (let* ((default (org-entry-get nil "SCHEDULED"))
+             (default-ts (when default
+                           (org-timestamp-from-string default)))
+             (default-time (when default-ts
+                             (org-timestamp-to-time
+                              (if (org-element-property :hour-start default-ts)
+                                  default-ts
+                                (thread-first
+                                  default-ts
+                                  (org-element-put-property :hour-start org-extend-today-until)
+                                  (org-element-put-property :minute-start 0))))))
+             (org-read-date-prefer-future t)
+             (date (org-read-date nil nil nil nil default-time)))
+        (org-schedule nil date)))))
+
 (defun akirak-embark-org-point-to-register ()
   (interactive)
   (let ((register (register-read-with-preview "Point to register: "))
@@ -226,6 +245,7 @@
     (define-key map "t" (akirak-embark-run-at-marker org-todo))
     (define-key map "W" #'akirak-embark-org-copy-first-block)
     (define-key map (kbd "C-o") #'akirak-embark-org-open-link-in-entry)
+    (define-key map (kbd "C-s") #'akirak-embark-org-schedule)
     (define-key map "?" #'akirak-embark-org-point-to-register)
     map))
 
