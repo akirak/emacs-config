@@ -108,7 +108,8 @@
                       (member filename
                               (thread-last
                                 (org-dog-overview-scan files :fast t)
-                                (mapcar #'car))))))
+                                (mapcar #'car))))
+                    (member filename (akirak-org-clock--mode-or-path-files))))
               (or (not tag)
                   (member tag
                           (save-current-buffer
@@ -134,6 +135,11 @@
                    t)
                (message "No Org file to clock in to")))
            t)))))
+
+(defun akirak-org-clock--mode-or-path-files ()
+  (cl-remove-duplicates (append (akirak-org-dog-major-mode-files)
+                                (akirak-org-dog-path-files))
+                        :test #'equal))
 
 (defun akirak-org-clock--target ()
   (or akirak-org-clock-target

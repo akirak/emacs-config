@@ -814,7 +814,9 @@ The built-in =electric= package provides the following modes:
 - [ ] =electric-quote-mode= :: Maybe I'll turn it on in some specific projects
 
 #+begin_src emacs-lisp
-  (setup electric)
+  (setup electric
+    (:with-mode electric-quote-mode
+      (:hook-into org-mode)))
 #+end_src
 *** elisp-mode                             :Emacs__Lisp:major__mode:
 :PROPERTIES:
@@ -1053,6 +1055,7 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup flymake
+    (:set flymake-show-diagnostics-at-end-of-line t)
     (:bind "M-g M-n" #'flymake-goto-next-error
            "M-g M-p" #'flymake-goto-prev-error))
 #+end_src
@@ -1205,7 +1208,16 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup isearch
-    (:bind "M-q" #'isearch-query-replace))
+    (:bind "M-q" #'isearch-query-replace
+           "M-RET" (defun akirak/isearch-quit-with-region ()
+                     (interactive)
+                     (pcase-exhaustive isearch-match-data
+                       (`(,begin ,end ,_)
+                        (isearch-exit)
+                        (goto-char begin)
+                        (push-mark)
+                        (goto-char end)
+                        (activate-mark))))))
 #+end_src
 *** jit-lock
 #+begin_src emacs-lisp
@@ -2494,7 +2506,8 @@ Outline-based notes management and organizer
 
       (:when-loaded
         (:status personal
-          (akirak-org-config-setup))
+          (akirak-org-config-setup)
+          (run-with-idle-timer 240 nil #'akirak-org-scan-type-tags))
 
         (add-to-list 'org-file-apps '(t . mailcap) t)
 

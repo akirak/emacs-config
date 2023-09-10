@@ -130,18 +130,62 @@
                         (member (plist-get change-plist :to)
                                 org-done-keywords))))))
 
+(defcustom akirak-org-type-tags-file
+  (locate-user-emacs-file "org-type-tags.eld")
+  "File that keeps a list of global Org tags"
+  :type 'file)
+
+;;;###autoload
+(defun akirak-org-scan-type-tags ()
+  (let (tags
+        (start-time (float-time)))
+    (message "Scanning org tags...")
+    (dolist (file (org-dog-select 'absolute))
+      (setq tags
+            (thread-last
+              (if-let (buffer (find-buffer-visiting file))
+                  (with-current-buffer buffer
+                    (org-with-wide-buffer
+                     (goto-char (point-min))
+                     (org-get-buffer-tags)))
+                (with-temp-buffer
+                  (insert-file-contents file)
+                  (let ((org-inhibit-startup t)
+                        (org-element-use-cache nil))
+                    (delay-mode-hooks (org-mode))
+                    (org-get-buffer-tags))))
+              (mapcar #'ensure-list)
+              (mapcar #'car)
+              (cl-remove-if-not (lambda (s) (string-prefix-p "@" s)))
+              (append tags))))
+    (message "Finished scanning tags in %.2f sec" (- (float-time) start-time))
+    (with-temp-buffer
+      (let ((print-level nil)
+            (print-length nil))
+        (insert (prin1-to-string (cl-remove-duplicates tags :test #'equal))))
+      (write-region (point-min) (point-max) akirak-org-type-tags-file))))
+
+(defun akirak-org-load-type-tags ()
+  (when (file-readable-p akirak-org-type-tags-file)
+    (with-temp-buffer
+      (insert-file-contents akirak-org-type-tags-file)
+      (goto-char (point-min))
+      (read (current-buffer)))))
+
 (defun akirak-org-setup-tags ()
   (setq org-tag-persistent-alist
-        `((:startgrouptag)
-          ("@task")
-          ("@epic")
-          (:grouptags)
-          ,@(mapcar #'ensure-list akirak-org-task-type-tags)
-          (:endgrouptag)
-          (:startgrouptag)
-          ("@note")
-          (:grouptags)
-          (:endgrouptag)))
+        (cl-remove-duplicates
+         (append `((:startgrouptag)
+                   ("@task") ("@epic") (:grouptags)
+                   ,@(mapcar #'ensure-list akirak-org-task-type-tags)
+                   (:endgrouptag)
+                   (:startgrouptag)
+                   ("@note")
+                   (:grouptags)
+                   (:endgrouptag))
+                 (mapcar #'ensure-list (akirak-org-load-type-tags)))
+         :test #'equal
+         :from-end t))
 
   (setq org-agenda-hide-tags-regexp
         (rx-to-string `(or ,@akirak-org-task-type-tags))))
