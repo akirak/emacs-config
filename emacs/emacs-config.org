@@ -7632,6 +7632,7 @@ A dumb Japanese input method
 
 #+begin_src emacs-lisp
   (setup (:package riben)
+    (:set riben-google-timeout 5)
     (:bind "C-j" #'riben-dispatch
            "C-S-j" #'riben-inc-counter
            "q" #'riben-mode-disable
