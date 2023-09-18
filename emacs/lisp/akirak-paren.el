@@ -25,7 +25,9 @@ location, or nil."
       ((= tb (point))
        he)
       ((= te (point))
-       hb)))
+       hb)
+      (t
+       (run-hook-with-args-until-success 'akirak-paren-match-hook))))
     (_
      (run-hook-with-args-until-success 'akirak-paren-match-hook))))
 
