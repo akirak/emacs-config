@@ -4043,7 +4043,28 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup json-ts-mode
-    (:file-match "\\.lock\\'"))
+    (:file-match "\\.lock\\'")
+    (:hook (defun akirak/json-ts-setup ()
+             (add-hook 'eldoc-documentation-functions
+                       (defun akirak/json-ts-path-eldoc (cb)
+                         (when-let (points (cdr (ppss-open-parens (syntax-ppss))))
+                           (funcall cb (mapconcat
+                                        (lambda (pos)
+                                          (let* ((node (treesit-node-parent
+                                                        (treesit-node-at pos)))
+                                                 (prev-sibling (treesit-node-prev-sibling node)))
+                                            (pcase (treesit-node-type prev-sibling)
+                                              (":"
+                                               (thread-first
+                                                 prev-sibling
+                                                 (treesit-node-prev-sibling)
+                                                 (treesit-node-text)
+                                                 (substring-no-properties)))
+                                              (","
+                                               "[]"))))
+                                        points
+                                        "."))))
+                       nil t))))
 #+end_src
 *** js-ts-mode
 :PROPERTIES:
