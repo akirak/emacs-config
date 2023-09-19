@@ -25,9 +25,39 @@ location, or nil."
       ((= tb (point))
        he)
       ((= te (point))
-       hb)))
+       hb)
+      (t
+       (run-hook-with-args-until-success 'akirak-paren-match-hook))))
     (_
      (run-hook-with-args-until-success 'akirak-paren-match-hook))))
+
+(defun akirak-paren-syntax-table-match ()
+  "A syntax-based matching function for `akirak-paren-match-hook’."
+  (let ((syn (syntax-after (point))))
+    (pcase (syntax-class syn)
+      ;; open parenthesis
+      (4
+       (save-excursion
+         (forward-sexp)
+         (point)))
+      ;; close parenthesis
+      (5
+       ;; TODO: Support delimiters that consists of more than one characters
+       (1+ (car (last (ppss-open-parens (syntax-ppss))))))
+      (_
+       (let ((syn2 (syntax-after (1- (point)))))
+         (pcase (syntax-class syn2)
+           (4
+            ;; There may be a more efficient implementation
+            (save-excursion
+              (backward-up-list)
+              (forward-sexp)
+              (backward-char)
+              (point)))
+           (5
+            (save-excursion
+              (backward-sexp)
+              (point)))))))))
 
 (defvar akirak-paren-jump-mode-map
   (let ((map (make-sparse-keymap)))

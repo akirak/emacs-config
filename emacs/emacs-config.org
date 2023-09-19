@@ -1055,7 +1055,7 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup flymake
-    (:set flymake-show-diagnostics-at-end-of-line t)
+    (:set flymake-show-diagnostics-at-end-of-line nil)
     (:bind "M-g M-n" #'flymake-goto-next-error
            "M-g M-p" #'flymake-goto-prev-error))
 #+end_src
@@ -4043,7 +4043,28 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup json-ts-mode
-    (:file-match "\\.lock\\'"))
+    (:file-match "\\.lock\\'")
+    (:hook (defun akirak/json-ts-setup ()
+             (add-hook 'eldoc-documentation-functions
+                       (defun akirak/json-ts-path-eldoc (cb)
+                         (when-let (points (cdr (ppss-open-parens (syntax-ppss))))
+                           (funcall cb (mapconcat
+                                        (lambda (pos)
+                                          (let* ((node (treesit-node-parent
+                                                        (treesit-node-at pos)))
+                                                 (prev-sibling (treesit-node-prev-sibling node)))
+                                            (pcase (treesit-node-type prev-sibling)
+                                              (":"
+                                               (thread-first
+                                                 prev-sibling
+                                                 (treesit-node-prev-sibling)
+                                                 (treesit-node-text)
+                                                 (substring-no-properties)))
+                                              (","
+                                               "[]"))))
+                                        points
+                                        "."))))
+                       nil t))))
 #+end_src
 *** js-ts-mode
 :PROPERTIES:
@@ -4377,6 +4398,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:with-mode akirak-paren-jump-mode
       ;; Don't turn on the mode in special modes, e.g. vterm.
       (:hook-into prog-mode-hook text-mode-hook))
+    (add-hook 'akirak-paren-match-hook #'akirak-paren-syntax-table-match)
     (add-hook 'org-mode-hook
               (defun akirak/setup-org-pair-match ()
                 (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
@@ -7632,6 +7654,7 @@ A dumb Japanese input method
 
 #+begin_src emacs-lisp
   (setup (:package riben)
+    (:set riben-google-timeout 5)
     (:bind "C-j" #'riben-dispatch
            "C-S-j" #'riben-inc-counter
            "q" #'riben-mode-disable
@@ -8135,7 +8158,7 @@ Fully-featured terminal emulator
 #+begin_src emacs-lisp
   (setup (:package vterm)
     (:unbind "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9" "M-0"
-             "M-:" "M-g"))
+             "M-:" "M-g" "M-s"))
 #+end_src
 *** vue-mode
 :PROPERTIES:
