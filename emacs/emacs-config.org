@@ -4677,7 +4677,8 @@ Minor mode to aggressively keep your code always indented
 
 #+begin_src emacs-lisp
   (setup (:package aggressive-indent)
-    (:hook-into emacs-lisp-mode-hook))
+    (:hook-into emacs-lisp-mode-hook
+                dune-mode-hook))
 #+end_src
 *** COMMENT all-the-icons                               :UI:ARCHIVE:
 :PROPERTIES:
