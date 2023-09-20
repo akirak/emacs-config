@@ -1914,7 +1914,10 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
                            (when (fboundp 'akirak-org-clock-snooze)
                              (akirak-org-clock-snooze 3))
                            (let ((save-some-buffers-default-predicate nil))
-                             (save-some-buffers nil)))))
+                             (save-some-buffers nil))))
+    ;; Also run when the user explicitly leaves the computer.
+    (add-hook 'akirak/system-leave-hook
+              #'akirak/save-all-buffers-non-interactively))
 #+end_src
 *** tooltip                                                     :UI:
 :PROPERTIES:
@@ -2828,6 +2831,8 @@ Outline-based notes management and organizer
                 :narrow '40! :indent t :filetitle nil :hidefiles nil
                 :formula nil :timestamp nil :level nil
                 :formatter nil))
+
+    (add-hook 'akirak/system-leave-hook #'org-clock-out)
 
     (defcustom akirak-org-clock-allow-in-buffer nil
       "Whether to allow `org-clock-in' in the current buffer.
