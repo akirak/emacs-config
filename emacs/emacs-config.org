@@ -352,6 +352,32 @@ the Garbage Collector Magic Hack
     (defconst akirak/os-pretty-name
       (cdr (assoc "PRETTY_NAME" alist))))
 #+end_src
+*** Interacting with the underling system
+#+begin_src elisp
+  (defcustom akirak/system-leave-hook nil
+    "Hook to run when the user leaves the computer."
+    :type 'hook)
+
+  (defun akirak/system-leave-hook ()
+    (run-hook-wrapped
+     'akirak/system-leave-hook
+     (lambda (fn)
+       (condition-case err
+           (funcall fn)
+         (error
+          (message "Error while running %s as part of akirak/system-leave-hook: %s"
+                   fn err))))))
+#+end_src
+*** Specific systems
+#+begin_src elisp
+  (defun akirak/wsl-p ()
+    "Return non-nil if the session is running inside Windows Subsystem for Linux."
+    (with-temp-buffer
+      (when (ignore-errors (call-process "uname" nil (list t nil) nil "-a"))
+        (goto-char (point-min))
+        (let ((case-fold-search t))
+          (re-search-forward "microsoft" nil t)))))
+#+end_src
 ** Custom conventions
 *** Prefix for mode-specific commands
 #+begin_src emacs-lisp
@@ -7895,7 +7921,17 @@ Major mode for editing systemd units
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package systemd))
+  (setup (:package systemd)
+    (defun akirak/systemd-suspend ()
+      "Suspend the system via systemd."
+      (interactive)
+      (if (and (eq system-type 'gnu/linux)
+               (executable-find "systemctl")
+               (not (akirak/wsl-p)))
+          (progn
+            (akirak/system-leave-hook)
+            (call-process "systemctl" nil nil nil "suspend"))
+        (user-error "This system doesn’t support session control using systemd"))))
 #+end_src
 *** tagedit                                                    :web:
 :PROPERTIES:
