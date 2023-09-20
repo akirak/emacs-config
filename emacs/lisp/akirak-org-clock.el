@@ -177,6 +177,7 @@
                  nil
                  nil)))
         (_
+         (require 'akirak-org-dog)
          (list (akirak-org-dog-project-files)
                "todo: "
                nil
