@@ -145,7 +145,9 @@
   (or akirak-org-clock-target
       (pcase (project-root (or (project-current)
                                (if (yes-or-no-p "Not in a project. Run git init?")
-                                   (progn
+                                   (let ((dir (file-name-directory (buffer-file-name))))
+                                     (unless (file-directory-p dir)
+                                       (make-directory dir 'parents))
                                      (let ((default-directory (read-directory-name
                                                                "Run git init at: ")))
                                        (call-process "git" nil nil nil "init"))
