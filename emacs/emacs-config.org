@@ -4188,7 +4188,7 @@ Major mode for editing typescript
     (with-eval-after-load 'typescript-mode
       (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
-*** yaml-ts-mode 
+*** yaml-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-03-07 Mon 16:07]
 :END:
