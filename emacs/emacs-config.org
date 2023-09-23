@@ -3967,6 +3967,10 @@ Major mode for Elixir with tree-sitter support
   (setup elixir-ts-mode
     (:file-match "\\.exs?\\'")
 
+    (:reformatters
+     (mix-format :program "mix"
+                 :args (list "format" "--stdin-filename" (buffer-file-name) "-")))
+
     (:auto-insert
      ("/config/config\\.exs\\'"
       . (> "use Mix.Config\n\n"
