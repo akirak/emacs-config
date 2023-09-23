@@ -1040,6 +1040,7 @@ The built-in =electric= package provides the following modes:
 
     (:status personal
       (let ((prettier '((eval . (prettier-on-save-mode t))))
+            (mix-format '((eval . (mix-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable)))))
@@ -1048,7 +1049,8 @@ The built-in =electric= package provides the following modes:
          `((web-mode . (,@prettier ,@lsp))
            (css-mode . (,@prettier ,@lsp))
            (svelte-mode . (,@prettier ,@lsp ,@flymake-eslint))
-           (elixir-ts-mode . (,@lsp))
+           (elixir-ts-mode . (,@lsp ,@mix-format))
+           (heex-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp))
