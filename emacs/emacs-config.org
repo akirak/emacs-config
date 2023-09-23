@@ -3947,6 +3947,15 @@ Emacs:
 The generated remappings do have limitations, but it is possible to work around
 manually by adding extra entries in the following subsections.
 
+*** dockerfile-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-09-23 Sat 11:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup dockerfile-ts-mode
+    (:file-match "Dockerfile\\'" "\\.dockerfile\\'"))
+#+end_src
 *** elixir-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 19:08]
