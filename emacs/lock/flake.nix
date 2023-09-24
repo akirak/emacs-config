@@ -670,10 +670,10 @@
       type = "git";
       url = "https://codeberg.org/martianh/mastodon.el.git";
     };
-    mermaid-mode = {
+    mermaid-ts-mode = {
       flake = false;
-      owner = "abrochard";
-      repo = "mermaid-mode";
+      owner = "JonathanHope";
+      repo = "mermaid-ts-mode";
       type = "github";
     };
     mini-modeline = {
