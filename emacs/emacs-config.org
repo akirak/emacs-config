@@ -1991,6 +1991,8 @@ Thus I will explicitly install this package rather than using the built-in versi
     (:set view-inhibit-help-message t)
 
     (:with-map view-mode-map
+      ;; conflict with a binding in lispy-mode
+      (:unbind "d")
       (:bind
        [remap scroll-up-command] #'View-scroll-half-page-forward
        [remap scroll-down-command] #'View-scroll-half-page-backward)))
