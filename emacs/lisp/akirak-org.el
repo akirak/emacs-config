@@ -313,6 +313,26 @@ character."
       (org-self-insert-command (or 1 n))))))
 
 ;;;###autoload
+(defun akirak-org-inline-code (&optional n)
+  "Insert an inline code."
+  (interactive "P" org-mode)
+  (cond
+   ((use-region-p)
+    (goto-char (region-beginning))
+    (insert-char ?~)
+    (goto-char (1+ (region-end)))
+    (insert-char ?~))
+   ;; If the cursor is inside code, insert the character literally.
+   ((or (cl-intersection (ensure-list (get-char-property (point) 'face))
+                         '(org-code org-verbatim)
+                         :test #'eq)
+        (org-in-src-block-p))
+    (org-self-insert-command (or 1 n)))
+   (t
+    (insert "~~")
+    (backward-char))))
+
+;;;###autoload
 (defun akirak-org-clocked-entry-or-agenda (&optional arg)
   "Toggle display of the clocked entry or display an agenda."
   (interactive "P")
