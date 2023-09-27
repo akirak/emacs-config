@@ -467,11 +467,11 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1695521893,
-        "narHash": "sha256-NCG0toDS0EEvjZHnAaTcB3AAcXG2Im22mwd5w6xk+JM=",
+        "lastModified": 1695836396,
+        "narHash": "sha256-+B2rVJ4NYHyVWRuZXBXFbc7qPvoTzY18Zur7l9Iuw70=",
         "owner": "akirak",
         "repo": "melpa",
-        "rev": "0759b9c9639c3fe1fcc09f1e7c9b8e551af44609",
+        "rev": "1181c0d7f14dcddbca2bba1e0637966372bf5149",
         "type": "github"
       },
       "original": {
@@ -986,11 +986,11 @@
         "elisp-helpers": "elisp-helpers"
       },
       "locked": {
-        "lastModified": 1694004980,
-        "narHash": "sha256-0sESyIQigObvy14+qYMVIQaEnUila6zk8/PLAQ+4rRQ=",
+        "lastModified": 1695838126,
+        "narHash": "sha256-AVLtFbXk7KphOe3J3d8gzU9UjdMm6TZgWMowogr6T+s=",
         "owner": "emacs-twist",
         "repo": "twist.nix",
-        "rev": "1f8d955e5ca0ac87e6d079fb4f003a82bab721ae",
+        "rev": "62f64112e87f6b67450776da42657f0f5c716fea",
         "type": "github"
       },
       "original": {
@@ -1001,11 +1001,11 @@
     },
     "twist-overrides": {
       "locked": {
-        "lastModified": 1695818450,
-        "narHash": "sha256-FQbWvTpBtcPWpwVrdjFJZN9nROZr3UCqTF3mcYVDBPs=",
+        "lastModified": 1695841997,
+        "narHash": "sha256-t23Bi6ApQF0sBvEkWYb2Msd2crh0VZWCPoqUi+1RZlo=",
         "owner": "emacs-twist",
         "repo": "overrides",
-        "rev": "f04119c4045f1ef1f7aa307d0519440fc8050efa",
+        "rev": "862d16f79482c2a0d269aacdc9abc52b1a77fc25",
         "type": "github"
       },
       "original": {
