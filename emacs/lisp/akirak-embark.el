@@ -249,10 +249,11 @@
     (define-key map "o" #'akirak-embark-org-indirect-buffer)
     (define-key map "I" (akirak-embark-run-at-marker org-clock-in))
     (define-key map "l" (akirak-embark-run-at-marker org-store-link))
-    (define-key map "t" (akirak-embark-run-at-marker org-todo))
+    (define-key map (kbd "C-c C-t") (akirak-embark-run-at-marker org-todo))
     (define-key map "W" #'akirak-embark-org-copy-first-block)
     (define-key map (kbd "C-o") #'akirak-embark-org-open-link-in-entry)
-    (define-key map (kbd "C-s") #'akirak-embark-org-schedule)
+    (define-key map (kbd "C-c C-s") #'akirak-embark-org-schedule)
+    (define-key map (kbd "C-c C-d") #'akirak-embark-org-deadline)
     (define-key map "?" #'akirak-embark-org-point-to-register)
     map))
 
