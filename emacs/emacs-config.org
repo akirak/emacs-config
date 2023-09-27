@@ -6597,6 +6597,9 @@ highlight indentation with bars
 :PROPERTIES:
 :CREATED_TIME: [2023-09-27 Wed 23:59]
 :END:
+#+begin_quote
+Enchanted Spell Checker
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package jinx)
@@ -6665,6 +6668,10 @@ Major mode for driving just files
 :PROPERTIES:
 :CREATED_TIME: [2023-09-27 Wed 14:27]
 :END:
+#+begin_quote
+Justfile editing mode
+[[https://github.com/leon-barrett/just-mode.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package just-mode)
@@ -6826,6 +6833,10 @@ Its configuration is about my habits, so it is put in [[file:compat.el::(setup l
 :PROPERTIES:
 :CREATED_TIME: [2023-09-27 Wed 23:59]
 :END:
+#+begin_quote
+LSP bridge
+[[https://github.com/manateelazycat/lsp-bridge]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package lsp-bridge)
@@ -8875,7 +8886,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 214 |
+| [[org-ql-search:tags:packages][packages]]            | 216 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
