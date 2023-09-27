@@ -6576,6 +6576,19 @@ highlight indentation with bars
 #+begin_src emacs-lisp
 (setup (:package indent-bars))
 #+end_src
+*** jinx
+:PROPERTIES:
+:CREATED_TIME: [2023-09-27 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package jinx)
+    (:hook-into markdown-mode
+                ;; For org-mode, set up hooks in .dir-locals.el of individual
+                ;; projects
+                git-commit-mode-hook)
+    (:bind "C-M-;" #'jinx-correct-nearest))
+#+end_src
 *** jq-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-05-30 Mon 14:03]

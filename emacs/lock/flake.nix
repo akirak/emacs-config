@@ -556,6 +556,12 @@
       repo = "inheritenv";
       type = "github";
     };
+    jinx = {
+      flake = false;
+      owner = "minad";
+      repo = "jinx";
+      type = "github";
+    };
     jq-mode = {
       flake = false;
       owner = "ljos";
