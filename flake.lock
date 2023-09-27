@@ -882,6 +882,7 @@
         "pre-commit-hooks": "pre-commit-hooks_2",
         "stable": "stable",
         "twist": "twist",
+        "twist-overrides": "twist-overrides",
         "unstable": "unstable",
         "utils": "utils"
       }
@@ -995,6 +996,21 @@
       "original": {
         "owner": "emacs-twist",
         "repo": "twist.nix",
+        "type": "github"
+      }
+    },
+    "twist-overrides": {
+      "locked": {
+        "lastModified": 1695818450,
+        "narHash": "sha256-FQbWvTpBtcPWpwVrdjFJZN9nROZr3UCqTF3mcYVDBPs=",
+        "owner": "emacs-twist",
+        "repo": "overrides",
+        "rev": "f04119c4045f1ef1f7aa307d0519440fc8050efa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-twist",
+        "repo": "overrides",
         "type": "github"
       }
     },
