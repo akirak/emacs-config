@@ -6806,6 +6806,14 @@ For Emacs Lisp, I use lispy.
 
 Lispy is not turned on by default.
 Its configuration is about my habits, so it is put in [[file:compat.el::(setup lispy][compat.el]].
+*** lsp-bridge
+:PROPERTIES:
+:CREATED_TIME: [2023-09-27 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package lsp-bridge))
+#+end_src
 *** lsp-mode                                                   :@extra:lsp_mode:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 19:03]

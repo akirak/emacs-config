@@ -1,0 +1,16 @@
+{
+  "name": "elixirLSNix",
+  "languageId": "elixir",
+  "command": ["elixir-ls"],
+  "settings": {
+    "elixirLS": {
+      "dialyzerEnabled": true,
+      "dialyzerWarnOpts": [],
+      "dialyzerFormat": "dialyxir_short",
+      "fetchDeps": true,
+      "suggestSpecs": true,
+      "signatureAfterComplete": true,
+      "enableTestLenses": false
+    }
+  }
+}
