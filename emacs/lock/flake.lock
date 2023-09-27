@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "acm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1694994873,
+        "narHash": "sha256-1NxJgaEfYX7dsOx75zmMwsXyvSEftA44auwKtcOVE5k=",
+        "owner": "manateelazycat",
+        "repo": "lsp-bridge",
+        "rev": "e37e962d108889fbba93c926788766f73aa54e6a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "manateelazycat",
+        "repo": "lsp-bridge",
+        "type": "github"
+      }
+    },
     "aggressive-indent": {
       "flake": false,
       "locked": {
@@ -142,22 +158,6 @@
       "original": {
         "owner": "abo-abo",
         "repo": "avy",
-        "type": "github"
-      }
-    },
-    "avy-menu": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1678093178,
-        "narHash": "sha256-LL5Jp6QQc6BJ70g3EeZJQBCTP7ns6a9jXbDEgldWvw8=",
-        "owner": "mrkkrp",
-        "repo": "avy-menu",
-        "rev": "6eceae55e73b5dd759ccb95ca4179a082e708827",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mrkkrp",
-        "repo": "avy-menu",
         "type": "github"
       }
     },
@@ -1011,38 +1011,6 @@
         "type": "github"
       }
     },
-    "flyspell-correct": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1653028215,
-        "narHash": "sha256-ta6MMC2UaVaWTJvS/klogIc8n3aGb1dHCy29XiUf0Kw=",
-        "owner": "d12frosted",
-        "repo": "flyspell-correct",
-        "rev": "7d7b6b01188bd28e20a13736ac9f36c3367bd16e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "d12frosted",
-        "repo": "flyspell-correct",
-        "type": "github"
-      }
-    },
-    "flyspell-correct-avy-menu": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1653028215,
-        "narHash": "sha256-ta6MMC2UaVaWTJvS/klogIc8n3aGb1dHCy29XiUf0Kw=",
-        "owner": "d12frosted",
-        "repo": "flyspell-correct",
-        "rev": "7d7b6b01188bd28e20a13736ac9f36c3367bd16e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "d12frosted",
-        "repo": "flyspell-correct",
-        "type": "github"
-      }
-    },
     "fstar-mode": {
       "flake": false,
       "locked": {
@@ -1475,6 +1443,22 @@
         "type": "github"
       }
     },
+    "jinx": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1695542206,
+        "narHash": "sha256-ZaA5CFpAc3P5WdZyNjxzN8Cn2AT8Pka7icc3G2IjKNY=",
+        "owner": "minad",
+        "repo": "jinx",
+        "rev": "10485e0682fb828eea7fdf3c13ecd64e0ecb0450",
+        "type": "github"
+      },
+      "original": {
+        "owner": "minad",
+        "repo": "jinx",
+        "type": "github"
+      }
+    },
     "jq-mode": {
       "flake": false,
       "locked": {
@@ -1650,6 +1634,22 @@
         "owner": "~tarsius",
         "repo": "llama",
         "type": "sourcehut"
+      }
+    },
+    "lsp-bridge": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1694994873,
+        "narHash": "sha256-1NxJgaEfYX7dsOx75zmMwsXyvSEftA44auwKtcOVE5k=",
+        "owner": "manateelazycat",
+        "repo": "lsp-bridge",
+        "rev": "e37e962d108889fbba93c926788766f73aa54e6a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "manateelazycat",
+        "repo": "lsp-bridge",
+        "type": "github"
       }
     },
     "lsp-mode": {
@@ -2945,6 +2945,7 @@
     "root": {
       "inputs": {
         "academic-phrases": "academic-phrases",
+        "acm": "acm",
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
         "akirak": "akirak",
@@ -2953,7 +2954,6 @@
         "auto-minor-mode": "auto-minor-mode",
         "auto-yasnippet": "auto-yasnippet",
         "avy": "avy",
-        "avy-menu": "avy-menu",
         "avy-riben": "avy-riben",
         "beancount": "beancount",
         "blamer": "blamer",
@@ -3007,8 +3007,6 @@
         "fanyi": "fanyi",
         "flycheck": "flycheck",
         "flymake-eslint": "flymake-eslint",
-        "flyspell-correct": "flyspell-correct",
-        "flyspell-correct-avy-menu": "flyspell-correct-avy-menu",
         "fstar-mode": "fstar-mode",
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",
@@ -3036,6 +3034,7 @@
         "iedit": "iedit",
         "indent-bars": "indent-bars",
         "inheritenv": "inheritenv",
+        "jinx": "jinx",
         "jq-mode": "jq-mode",
         "just-mode": "just-mode",
         "justl": "justl",
@@ -3047,6 +3046,7 @@
         "link-hint": "link-hint",
         "lispy": "lispy",
         "llama": "llama",
+        "lsp-bridge": "lsp-bridge",
         "lsp-mode": "lsp-mode",
         "lv": "lv",
         "magit": "magit",
