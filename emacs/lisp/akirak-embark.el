@@ -197,9 +197,16 @@
 
 (defun akirak-embark-org-schedule (_)
   (interactive "s")
+  (akirak-embark-org-timestamp "SCHEDULED" #'org-schedule))
+
+(defun akirak-embark-org-deadline (_)
+  (interactive "s")
+  (akirak-embark-org-timestamp "DEADLINE" #'org-deadline))
+
+(defun akirak-embark-org-timestamp (property func)
   (save-window-excursion
     (org-with-point-at akirak-embark-target-org-marker
-      (let* ((default (org-entry-get nil "SCHEDULED"))
+      (let* ((default (org-entry-get nil property))
              (default-ts (when default
                            (org-timestamp-from-string default)))
              (default-time (when default-ts
@@ -212,7 +219,7 @@
                                   (org-element-put-property :minute-start 0))))))
              (org-read-date-prefer-future t)
              (date (org-read-date nil nil nil nil default-time)))
-        (org-schedule nil date)))))
+        (funcall func nil date)))))
 
 (defun akirak-embark-org-point-to-register ()
   (interactive)
