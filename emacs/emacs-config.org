@@ -1085,7 +1085,7 @@ The built-in =electric= package provides the following modes:
     (:bind "M-g M-n" #'flymake-goto-next-error
            "M-g M-p" #'flymake-goto-prev-error))
 #+end_src
-*** flyspell
+*** COMMENT flyspell                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-03 Sat 23:59]
 :END:
@@ -1399,12 +1399,13 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup mule-cmds
-    (add-hook 'set-language-environment-hook
-              (defun akirak/post-set-language-environment ()
-                "Turn off `flyspell-mode' depending on the language."
-                (when (member current-language-environment
-                              '("Japanese"))
-                  (flyspell-mode -1)))))
+    ;; (add-hook 'set-language-environment-hook
+    ;;           (defun akirak/post-set-language-environment ()
+    ;;             "Turn off `flyspell-mode' depending on the language."
+    ;;             (when (member current-language-environment
+    ;;                           '("Japanese"))
+    ;;               (flyspell-mode -1))))
+    )
 #+end_src
 *** outline                                                :editing:
 :PROPERTIES:
@@ -5917,7 +5918,7 @@ A Flymake backend for Javascript using eslint
   (setup (:package flymake-eslint)
     (:set flymake-eslint-defer-binary-check t))
 #+end_src
-*** flyspell-correct
+*** COMMENT flyspell-correct                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-03 Sat 23:59]
 :END:
@@ -5931,7 +5932,7 @@ Correcting words with flyspell via custom interface
     (with-eval-after-load "flyspell"
       (define-key flyspell-mode-map (kbd "C-M-;") #'flyspell-correct-wrapper)))
 #+end_src
-*** flyspell-correct-avy-menu
+*** COMMENT flyspell-correct-avy-menu                                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-03 Sat 23:59]
 :END:
