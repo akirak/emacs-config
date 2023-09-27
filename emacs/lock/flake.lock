@@ -1491,6 +1491,22 @@
         "type": "github"
       }
     },
+    "just-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1677884146,
+        "narHash": "sha256-cBOP4IVykT2z4putD1ghvKM+ruzr5oJQrvC28erkcoA=",
+        "owner": "leon-barrett",
+        "repo": "just-mode.el",
+        "rev": "d7f52eab8fa3828106f80acb1e2176e5877b7191",
+        "type": "github"
+      },
+      "original": {
+        "owner": "leon-barrett",
+        "repo": "just-mode.el",
+        "type": "github"
+      }
+    },
     "justl": {
       "flake": false,
       "locked": {
@@ -3021,6 +3037,7 @@
         "indent-bars": "indent-bars",
         "inheritenv": "inheritenv",
         "jq-mode": "jq-mode",
+        "just-mode": "just-mode",
         "justl": "justl",
         "keycast": "keycast",
         "kind-icon": "kind-icon",
