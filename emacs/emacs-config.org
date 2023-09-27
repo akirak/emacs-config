@@ -6631,6 +6631,15 @@ Major mode for driving just files
 #+begin_src emacs-lisp
 (setup (:package justl))
 #+end_src
+*** just-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-09-27 Wed 14:27]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package just-mode)
+    (:file-match "/justfile\\'"))
+#+end_src
 *** keycast
 :PROPERTIES:
 :CREATED_TIME: [2023-03-31 Fri 23:59]

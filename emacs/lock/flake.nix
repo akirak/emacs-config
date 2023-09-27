@@ -562,6 +562,12 @@
       repo = "jq-mode";
       type = "github";
     };
+    just-mode = {
+      flake = false;
+      owner = "leon-barrett";
+      repo = "just-mode.el";
+      type = "github";
+    };
     justl = {
       flake = false;
       owner = "psibi";
