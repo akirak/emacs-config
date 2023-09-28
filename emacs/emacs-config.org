@@ -1042,7 +1042,7 @@ The built-in =electric= package provides the following modes:
       (let ((prettier '((eval . (prettier-on-save-mode t))))
             (mix-format '((eval . (mix-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
-            (lsp '((eval . (lsp-bridge-mode t))))
+            (lsp '((eval . (eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable)))))
         (dir-locals-set-class-variables
          'default
