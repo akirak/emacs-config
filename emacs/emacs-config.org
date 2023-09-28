@@ -1699,9 +1699,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
              [remap delete-horizontal-space] #'cycle-spacing
              [remap upcase-word] #'upcase-dwim
              [remap downcase-word] #'downcase-dwim
-             [remap capitalize-word] #'capitalize-dwim
-             ;; Originally bound to C-S-backspace
-             "C-c k" #'kill-whole-line)
+             [remap capitalize-word] #'capitalize-dwim)
 
     ;; I often type this sequence unintensionally. I never use this command, so
     ;; just disable the keybinding.
