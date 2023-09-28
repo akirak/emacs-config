@@ -4647,6 +4647,24 @@ Quickly switch windows.
                         (when (window-live-p initial-window)
                           (select-window initial-window))))))))
 #+end_src
+*** acm
+:PROPERTIES:
+:CREATED_TIME: [2023-09-28 Thu 14:38]
+:END:
+
+#+begin_src emacs-lisp
+  ;; only installed alongside lsp-bridge
+  (setup acm
+    (:set acm-enable-doc t
+          acm-enable-doc-markdown-render t
+          acm-enable-search-file-words t
+          acm-enable-search-sdcv-words nil
+          acm-enable-telega nil
+          acm-enable-tabnine nil
+          acm-enable-yas t
+          acm-enable-copilot nil
+          acm-enable-codeium nil))
+#+end_src
 *** COMMENT adaptive-wrap                                               :visual:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 17:56]
@@ -6812,7 +6830,38 @@ Its configuration is about my habits, so it is put in [[file:compat.el::(setup l
 :END:
 
 #+begin_src emacs-lisp
-(setup (:package lsp-bridge))
+  (setup (:package lsp-bridge)
+    (:set lsp-bridge-complete-manually t
+          ;; Check what function to use
+          ;; lsp-bridge-find-def-fallback-function #'dumb-jump-go
+          lsp-bridge-enable-search-words nil
+          lsp-bridge-enable-auto-format-code nil
+          lsp-bridge-symbols-enable-which-func t)
+
+    (define-prefix-command 'akirak/lsp-bridge-prefix-map)
+    (:bind akirak/mode-prefix-key akirak/lsp-bridge-prefix-map
+           [remap xref-find-definitions] #'lsp-bridge-find-def
+           [remap xref-find-definitions-other-window] #'lsp-bridge-find-def-other-window
+           "C-x 4 g t" #'lsp-bridge-find-type-def-other-window
+           "C-x 4 g i" #'lsp-bridge-find-impl-other-window
+           [remap xref-go-back] #'lsp-bridge-find-def-return
+           [remap previous-error] #'lsp-bridge-diagnostic-jump-prev
+           [remap next-error] #'lsp-bridge-diagnostic-jump-next
+           "M-' e" #'lsp-bridge-diagnostic-list
+           ;; #'lsp-bridge-diagnostic-ignore
+           "M-s M-i" #'lsp-bridge-workspace-list-symbols
+           [remap consult-imenu-multi] #'lsp-bridge-workspace-list-symbols
+           [remap completion-at-point] #'lsp-bridge-popup-complete-menu)
+
+    (:with-map akirak/lsp-bridge-prefix-map
+      (:bind "g t" #'lsp-bridge-find-type-def
+             "g i" #'lsp-bridge-find-impl
+             "g r" #'lsp-bridge-find-references
+             "h" #'lsp-bridge-popup-documentation
+             "a" #'lsp-bridge-code-action
+             "r" #'lsp-bridge-rename
+             "w" #'lsp-bridge-diagnostic-copy
+             "R" #'lsp-bridge-restart-process)))
 #+end_src
 *** lsp-mode                                                   :@extra:lsp_mode:
 :PROPERTIES:
