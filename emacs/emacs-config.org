@@ -7679,6 +7679,7 @@ Parentheses Universalistic
 #+begin_src emacs-lisp
   (setup (:package puni)
     (:hook-into nix-mode
+                tuareg-mode
                 svelte-mode
                 web-mode
                 sql-mode
