@@ -8,12 +8,6 @@
       repo = "academic-phrases";
       type = "github";
     };
-    acm = {
-      flake = false;
-      owner = "manateelazycat";
-      repo = "lsp-bridge";
-      type = "github";
-    };
     aggressive-indent = {
       flake = false;
       owner = "Malabarba";
@@ -616,12 +610,6 @@
       owner = "~tarsius";
       repo = "llama";
       type = "sourcehut";
-    };
-    lsp-bridge = {
-      flake = false;
-      owner = "manateelazycat";
-      repo = "lsp-bridge";
-      type = "github";
     };
     lsp-mode = {
       flake = false;

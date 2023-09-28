@@ -16,22 +16,6 @@
         "type": "github"
       }
     },
-    "acm": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1694994873,
-        "narHash": "sha256-1NxJgaEfYX7dsOx75zmMwsXyvSEftA44auwKtcOVE5k=",
-        "owner": "manateelazycat",
-        "repo": "lsp-bridge",
-        "rev": "e37e962d108889fbba93c926788766f73aa54e6a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "manateelazycat",
-        "repo": "lsp-bridge",
-        "type": "github"
-      }
-    },
     "aggressive-indent": {
       "flake": false,
       "locked": {
@@ -1636,22 +1620,6 @@
         "type": "sourcehut"
       }
     },
-    "lsp-bridge": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1694994873,
-        "narHash": "sha256-1NxJgaEfYX7dsOx75zmMwsXyvSEftA44auwKtcOVE5k=",
-        "owner": "manateelazycat",
-        "repo": "lsp-bridge",
-        "rev": "e37e962d108889fbba93c926788766f73aa54e6a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "manateelazycat",
-        "repo": "lsp-bridge",
-        "type": "github"
-      }
-    },
     "lsp-mode": {
       "flake": false,
       "locked": {
@@ -2945,7 +2913,6 @@
     "root": {
       "inputs": {
         "academic-phrases": "academic-phrases",
-        "acm": "acm",
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
         "akirak": "akirak",
@@ -3046,7 +3013,6 @@
         "link-hint": "link-hint",
         "lispy": "lispy",
         "llama": "llama",
-        "lsp-bridge": "lsp-bridge",
         "lsp-mode": "lsp-mode",
         "lv": "lv",
         "magit": "magit",
