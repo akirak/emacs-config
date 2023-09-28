@@ -7830,6 +7830,7 @@ Clean-up and Beautify the list of minor-modes.
                                "Memento"
                                "Copilot"
                                "ga"
+                               "LSPB"
                                "Treefmt")
                            symbol-end))
     (:hook-into after-init-hook))
