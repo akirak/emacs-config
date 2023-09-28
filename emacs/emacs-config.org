@@ -4645,7 +4645,7 @@ Quickly switch windows.
                         (when (window-live-p initial-window)
                           (select-window initial-window))))))))
 #+end_src
-*** acm
+*** COMMENT acm                                                                :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-09-28 Thu 14:38]
 :END:
@@ -6829,7 +6829,7 @@ For Emacs Lisp, I use lispy.
 
 Lispy is not turned on by default.
 Its configuration is about my habits, so it is put in [[file:compat.el::(setup lispy][compat.el]].
-*** lsp-bridge
+*** COMMENT lsp-bridge                                                         :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-09-27 Wed 23:59]
 :END:
