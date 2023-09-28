@@ -3175,7 +3175,8 @@ A programmable workflow layer for Org mode
                   ;; I don't want to hide the init time in the echo area.
                   (let ((inhibit-message t))
                     (require 'org-dog)
-                    (org-dog-reload-files t)))))))
+                    (org-dog-reload-files t)
+                    (akirak-org-clock-rebuild-history)))))))
 #+end_src
 **** consult-org-dog
 :PROPERTIES:
