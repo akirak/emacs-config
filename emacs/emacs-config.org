@@ -2834,7 +2834,11 @@ Outline-based notes management and organizer
                 :formula nil :timestamp nil :level nil
                 :formatter nil))
 
-    (add-hook 'akirak/system-leave-hook #'org-clock-out)
+    (add-hook 'akirak/system-leave-hook
+              (defun akirak/org-clock-out-maybe ()
+                (when (org-clocking-p)
+                  (org-clock-out)))
+              10)
 
     (defcustom akirak-org-clock-allow-in-buffer nil
       "Whether to allow `org-clock-in' in the current buffer.
