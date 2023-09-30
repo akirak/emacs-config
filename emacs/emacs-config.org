@@ -359,6 +359,8 @@ the Garbage Collector Magic Hack
     :type 'hook)
 
   (defun akirak/system-leave-hook ()
+    ;; It may be better to run the hooks outside of any project context, but I
+    ;; haven't found any actual situation that needs it yet.
     (run-hook-wrapped
      'akirak/system-leave-hook
      (lambda (fn)
