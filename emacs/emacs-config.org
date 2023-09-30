@@ -1916,7 +1916,8 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
                              (save-some-buffers nil))))
     ;; Also run when the user explicitly leaves the computer.
     (add-hook 'akirak/system-leave-hook
-              #'akirak/save-all-buffers-non-interactively))
+              #'akirak/save-all-buffers-non-interactively
+              50))
 #+end_src
 *** tooltip                                                     :UI:
 :PROPERTIES:
