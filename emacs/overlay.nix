@@ -140,12 +140,6 @@ with builtins; let
               }/")
             ''
           )
-          (
-            prev.writeText "lsp-bridge-extra.el" ''
-              (setq lsp-bridge-user-langserver-dir "${./lsp-bridge/langserver}/")
-              (setq lsp-bridge-elixir-lsp-server "elixirLSNix")
-            ''
-          )
         ]
         # Allow adding private config on specific hosts
         ++ extraInitFiles;
