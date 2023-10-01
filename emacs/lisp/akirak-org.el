@@ -264,7 +264,9 @@ With ARG, pick a text from the kill ring instead of the last one."
                      (akirak-complete-major-mode "Language: " needle nil
                                                  :org-src-langs t)))
            (lang (thread-last
-                   (symbol-name mode)
+                   (if (symbolp mode)
+                       (symbol-name mode)
+                     mode)
                    (string-remove-suffix "-mode")
                    (string-remove-suffix "-ts"))))
       (or (car (rassq (intern lang)
