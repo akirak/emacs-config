@@ -165,6 +165,18 @@
   ;; FIXME: Don't directly depend on org-ql-find for hooks
   (run-hooks 'org-ql-find-goto-hook))
 
+(defun akirak-embark-org-clock-in-and-show-other-tab ()
+  (interactive)
+  (org-with-point-at akirak-embark-target-org-marker
+    (org-clock-in))
+  (let* ((buffer (org-dog-indirect-buffer akirak-embark-target-org-marker))
+         (name (with-current-buffer buffer
+                 (org-entry-get (point-min) "ITEM"))))
+    (tab-bar-select-tab-by-name name)
+    (switch-to-buffer buffer))
+  ;; FIXME: Don't directly depend on org-ql-find for hooks
+  (run-hooks 'org-ql-find-goto-hook))
+
 (defun akirak-embark-org-open-link-in-entry ()
   "Follow a link in the entry."
   (interactive)
@@ -197,9 +209,16 @@
 
 (defun akirak-embark-org-schedule (_)
   (interactive "s")
+  (akirak-embark-org-timestamp "SCHEDULED" #'org-schedule))
+
+(defun akirak-embark-org-deadline (_)
+  (interactive "s")
+  (akirak-embark-org-timestamp "DEADLINE" #'org-deadline))
+
+(defun akirak-embark-org-timestamp (property func)
   (save-window-excursion
     (org-with-point-at akirak-embark-target-org-marker
-      (let* ((default (org-entry-get nil "SCHEDULED"))
+      (let* ((default (org-entry-get nil property))
              (default-ts (when default
                            (org-timestamp-from-string default)))
              (default-time (when default-ts
@@ -212,7 +231,7 @@
                                   (org-element-put-property :minute-start 0))))))
              (org-read-date-prefer-future t)
              (date (org-read-date nil nil nil nil default-time)))
-        (org-schedule nil date)))))
+        (funcall func nil date)))))
 
 (defun akirak-embark-org-point-to-register ()
   (interactive)
@@ -239,13 +258,15 @@
     (define-key map "g" (akirak-embark-run-at-marker ignore t
                           akirak-embark-goto-org-marker))
     (define-key map "G" #'akirak-embark-org-clock-in-and-show)
+    (define-key map "T" #'akirak-embark-org-clock-in-and-show-other-tab)
     (define-key map "o" #'akirak-embark-org-indirect-buffer)
     (define-key map "I" (akirak-embark-run-at-marker org-clock-in))
     (define-key map "l" (akirak-embark-run-at-marker org-store-link))
-    (define-key map "t" (akirak-embark-run-at-marker org-todo))
+    (define-key map (kbd "C-c C-t") (akirak-embark-run-at-marker org-todo))
     (define-key map "W" #'akirak-embark-org-copy-first-block)
     (define-key map (kbd "C-o") #'akirak-embark-org-open-link-in-entry)
-    (define-key map (kbd "C-s") #'akirak-embark-org-schedule)
+    (define-key map (kbd "C-c C-s") #'akirak-embark-org-schedule)
+    (define-key map (kbd "C-c C-d") #'akirak-embark-org-deadline)
     (define-key map "?" #'akirak-embark-org-point-to-register)
     map))
 

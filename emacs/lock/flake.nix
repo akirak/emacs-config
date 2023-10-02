@@ -57,12 +57,6 @@
       repo = "avy";
       type = "github";
     };
-    avy-menu = {
-      flake = false;
-      owner = "mrkkrp";
-      repo = "avy-menu";
-      type = "github";
-    };
     avy-riben = {
       flake = false;
       owner = "akirak";
@@ -382,18 +376,6 @@
       repo = "flymake-eslint";
       type = "github";
     };
-    flyspell-correct = {
-      flake = false;
-      owner = "d12frosted";
-      repo = "flyspell-correct";
-      type = "github";
-    };
-    flyspell-correct-avy-menu = {
-      flake = false;
-      owner = "d12frosted";
-      repo = "flyspell-correct";
-      type = "github";
-    };
     fstar-mode = {
       flake = false;
       owner = "FStarLang";
@@ -556,10 +538,22 @@
       repo = "inheritenv";
       type = "github";
     };
+    jinx = {
+      flake = false;
+      owner = "minad";
+      repo = "jinx";
+      type = "github";
+    };
     jq-mode = {
       flake = false;
       owner = "ljos";
       repo = "jq-mode";
+      type = "github";
+    };
+    just-mode = {
+      flake = false;
+      owner = "leon-barrett";
+      repo = "just-mode.el";
       type = "github";
     };
     justl = {

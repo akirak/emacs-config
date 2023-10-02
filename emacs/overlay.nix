@@ -163,13 +163,15 @@ with builtins; let
         };
       exportManifest = true;
     })
-    .overrideScope' (self: super: {
-      elispPackages = super.elispPackages.overrideScope' (import ./overrides.nix {
-        pkgs = prev;
-        inherit (prev) system;
-        emacs = emacsPackage;
-      });
-    });
+    .overrideScope' (lib.composeExtensions
+      inputs.twist-overrides.overlays.twistScope
+      (self: super: {
+        elispPackages = super.elispPackages.overrideScope' (import ./overrides.nix {
+          pkgs = prev;
+          inherit (prev) system;
+          emacs = emacsPackage;
+        });
+      }));
 
   defaultEmacsPackage = emacsPackages.emacs-pgtk;
 in {

@@ -1202,10 +1202,11 @@ provided as a separate command for integration, e.g. with embark."
                                    (format " %s"
                                            (if (and (use-region-p)
                                                     (not (derived-mode-p 'special-mode)))
-                                               (thread-last
-                                                 (symbol-name major-mode)
-                                                 (string-remove-suffix "-mode")
-                                                 (string-remove-suffix "-ts"))
+                                               (akirak-org--find-src-lang
+                                                (thread-last
+                                                  (symbol-name major-mode)
+                                                  (string-remove-suffix "-mode")
+                                                  (string-remove-suffix "-ts")))
                                              (completing-read
                                               "Mode: " (akirak-capture--major-mode-list))))
                                  "")))

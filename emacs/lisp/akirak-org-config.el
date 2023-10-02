@@ -75,16 +75,30 @@
                   "REVIEW"
                   "ARCHIVED"))
 
-  (setq-default org-todo-state-tags-triggers
-                '(("ARCHIVED" ("ARCHIVE" . t))
-                  ("INVALID" ("ARCHIVE" . t))
-                  ("TODO" ("noexport"))
-                  ("DONE" ("noexport"))
-                  ("EPIC" ("@epic" . t))
-                  ("REWATCH" ("@rewatch" . t))
-                  ("IDEATE" ("@idea" . t))
-                  ("STARTED" ("@ideate"))
-                  ("PURCHASE" ("@wishlist" . t))))
+  (let (result)
+    (pcase-dolist (`(,_ . ,ents) (default-value 'org-todo-keywords))
+      (dolist (x ents)
+        (when (string-match (rx bol (+ upper)) x)
+          (let ((kw (match-string 0 x)))
+            (push (cons kw (pcase kw
+                             ("ARCHIVED" '(("ARCHIVE" . t)))
+                             ("INVALID" '(("ARCHIVE" . t)))
+                             ((or "TODO" "DONE")
+                              '(("noexport")
+                                ("ARCHIVE")))
+                             ("EPIC" '(("@epic" . t)
+                                       ("ARCHIVE")))
+                             ("REWATCH" '(("@rewatch" . t)
+                                          ("ARCHIVE")))
+                             ("IDEATE" '(("@idea" . t)
+                                         ("ARCHIVE")))
+                             ("STARTED" '(("@ideate")
+                                          ("ARCHIVE")))
+                             ("PURCHASE" '(("@wishlist" . t)
+                                           ("ARCHIVE")))
+                             (_ '(("ARCHIVE")))))
+                  result)))))
+    (setq-default org-todo-state-tags-triggers result))
 
   (setq org-todo-keyword-faces
         `(("TODO" . (:foreground "DodgerBlue"))
@@ -524,20 +538,25 @@
 ;;;; Programmable completion
 
 (defun akirak-org-entry-annotation (org-marker)
-  (when (member "@glossary" (org-get-tags org-marker))
-    (org-with-point-at org-marker
-      (org-end-of-meta-data t)
-      (unless (looking-at org-heading-regexp)
-        (let ((element (org-element-at-point (point))))
-          (pcase (org-element-type element)
-            (`paragraph
-             (concat " "
-                     (thread-first
-                       (buffer-substring-no-properties
-                        (org-element-property :begin element)
-                        (org-element-property :end element))
-                       (string-trim)
-                       (propertize 'face 'italic))))))))))
+  (when-let* ((tags (org-get-tags org-marker))
+              (tags-string (concat " " (propertize (org-make-tag-string tags)
+                                                   'face 'org-tag))))
+    (if (member "@glossary" tags)
+        (concat tags-string
+                (org-with-point-at org-marker
+                  (org-end-of-meta-data t)
+                  (unless (looking-at org-heading-regexp)
+                    (let ((element (org-element-at-point (point))))
+                      (pcase (org-element-type element)
+                        (`paragraph
+                         (concat " "
+                                 (thread-first
+                                   (buffer-substring-no-properties
+                                    (org-element-property :begin element)
+                                    (org-element-property :end element))
+                                   (string-trim)
+                                   (propertize 'face 'italic)))))))))
+      tags-string)))
 
 (provide 'akirak-org-config)
 ;;; akirak-org-config.el ends here

@@ -1,15 +1,17 @@
-name: "After updating the flake inputs"
+name: "Update other repositories"
 
 on:
   pull_request:
     types:
       - closed
-    branches:
-      - update/flake-lock
 
 jobs:
-  update-downstream:
-    if: github.event.pull_request.merged == true
+  downstream-flakes:
+    if: |
+      github.event.pull_request.merged == true &&
+      github.base_ref == 'develop' &&
+      github.head_ref == 'update/flake-lock' &&
+      github.event.pull_request.head.repo.id == github.event.pull_request.base.repo.id
     strategy:
       matrix:
         repo:

@@ -32,13 +32,13 @@
                      :history '(:input consult-org--history)
                      :narrow (consult-org--narrow)
                      :state (consult--jump-state)
-                     :lookup #'consult--lookup-candidate))))
+                     :lookup (apply-partially #'consult--lookup-prop 'org-marker)))))
     (org-clock-clock-in (list selected))))
 
 ;;;###autoload
 (defun akirak-consult-org-heading-target (_type olp)
   (require 'akirak-embark)
-  (when-let (marker (get-char-property 0 'consult--candidate olp))
+  (when-let (marker (get-char-property 0 'org-marker olp))
     (akirak-embark-make-org-heading-target marker)))
 
 (defun consult-org-clock--headings ()
@@ -78,9 +78,10 @@
                                           (abbr-buffer-file-name buffer)))))
                 (setq cand (concat cand (consult--tofu-encode (point))))
                 (add-text-properties 0 1
-                                     `(consult--candidate
+                                     `(org-marker
                                        ,(point-marker)
-                                       consult-org--heading (,level ,todo . ,prio))
+                                       org-heading
+                                       (,level ,todo . ,prio))
                                      cand)
                 cand)))))
       (thread-last

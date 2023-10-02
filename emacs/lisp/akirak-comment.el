@@ -93,7 +93,7 @@
 (defun akirak-comment-region-1 (begin end &optional arg)
   "Comment a region."
   (pcase (akirak-comment--multi-line-info begin end)
-    (`(,block-comemnt-start ,block-comment-end ,indentation)
+    (`(,block-comment-start ,block-comment-end ,indentation)
      (let ((end-marker (progn
                          (goto-char end)
                          (point-marker))))

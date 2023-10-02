@@ -145,7 +145,9 @@
   (or akirak-org-clock-target
       (pcase (project-root (or (project-current)
                                (if (yes-or-no-p "Not in a project. Run git init?")
-                                   (progn
+                                   (let ((dir (file-name-directory (buffer-file-name))))
+                                     (unless (file-directory-p dir)
+                                       (make-directory dir 'parents))
                                      (let ((default-directory (read-directory-name
                                                                "Run git init at: ")))
                                        (call-process "git" nil nil nil "init"))
@@ -177,6 +179,7 @@
                  nil
                  nil)))
         (_
+         (require 'akirak-org-dog)
          (list (akirak-org-dog-project-files)
                "todo: "
                nil
@@ -285,9 +288,9 @@
       (setq akirak-org-clock-snooze-until
             (+ (float-time) seconds))
       (message "Snoozing org clock mode for %s seconds" seconds)
-      (add-hook 'org-clock-in-hook #'akiraik-org-clock-stop-snoozing))))
+      (add-hook 'org-clock-in-hook #'akirak-org-clock-stop-snoozing))))
 
-(defun akiraik-org-clock-stop-snoozing ()
+(defun akirak-org-clock-stop-snoozing ()
   (setq akirak-org-clock-snooze-until nil))
 
 (defun akirak-org-clock-reclock-in ()

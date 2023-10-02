@@ -1,5 +1,5 @@
 # -*- org-id-link-to-org-use-id: nil; org-complete-tags-always-offer-all-agenda-tags: nil; eval: (org-make-toc-mode t) -*-
-* A Progressively Enhanced Emacs Configuration
+* An Emacs Configuration
 :PROPERTIES:
 :TOC:      :include descendants :depth 1
 :END:
@@ -351,6 +351,34 @@ the Garbage Collector Magic Hack
       (cdr (assoc "ID" alist)))
     (defconst akirak/os-pretty-name
       (cdr (assoc "PRETTY_NAME" alist))))
+#+end_src
+*** Interacting with the underling system
+#+begin_src elisp
+  (defcustom akirak/system-leave-hook nil
+    "Hook to run when the user leaves the computer."
+    :type 'hook)
+
+  (defun akirak/system-leave-hook ()
+    ;; It may be better to run the hooks outside of any project context, but I
+    ;; haven't found any actual situation that needs it yet.
+    (run-hook-wrapped
+     'akirak/system-leave-hook
+     (lambda (fn)
+       (condition-case err
+           (funcall fn)
+         (error
+          (message "Error while running %s as part of akirak/system-leave-hook: %s"
+                   fn err))))))
+#+end_src
+*** Specific systems
+#+begin_src elisp
+  (defun akirak/wsl-p ()
+    "Return non-nil if the session is running inside Windows Subsystem for Linux."
+    (with-temp-buffer
+      (when (ignore-errors (call-process "uname" nil (list t nil) nil "-a"))
+        (goto-char (point-min))
+        (let ((case-fold-search t))
+          (re-search-forward "microsoft" nil t)))))
 #+end_src
 ** Custom conventions
 *** Prefix for mode-specific commands
@@ -814,9 +842,7 @@ The built-in =electric= package provides the following modes:
 - [ ] =electric-quote-mode= :: Maybe I'll turn it on in some specific projects
 
 #+begin_src emacs-lisp
-  (setup electric
-    (:with-mode electric-quote-mode
-      (:hook-into org-mode)))
+  (setup electric)
 #+end_src
 *** elisp-mode                             :Emacs__Lisp:major__mode:
 :PROPERTIES:
@@ -1016,6 +1042,7 @@ The built-in =electric= package provides the following modes:
 
     (:status personal
       (let ((prettier '((eval . (prettier-on-save-mode t))))
+            (mix-format '((eval . (mix-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable)))))
@@ -1024,7 +1051,8 @@ The built-in =electric= package provides the following modes:
          `((web-mode . (,@prettier ,@lsp))
            (css-mode . (,@prettier ,@lsp))
            (svelte-mode . (,@prettier ,@lsp ,@flymake-eslint))
-           (elixir-ts-mode . (,@lsp))
+           (elixir-ts-mode . (,@lsp ,@mix-format))
+           (heex-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp))
@@ -1059,7 +1087,7 @@ The built-in =electric= package provides the following modes:
     (:bind "M-g M-n" #'flymake-goto-next-error
            "M-g M-p" #'flymake-goto-prev-error))
 #+end_src
-*** flyspell
+*** COMMENT flyspell                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-03 Sat 23:59]
 :END:
@@ -1373,12 +1401,13 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup mule-cmds
-    (add-hook 'set-language-environment-hook
-              (defun akirak/post-set-language-environment ()
-                "Turn off `flyspell-mode' depending on the language."
-                (when (member current-language-environment
-                              '("Japanese"))
-                  (flyspell-mode -1)))))
+    ;; (add-hook 'set-language-environment-hook
+    ;;           (defun akirak/post-set-language-environment ()
+    ;;             "Turn off `flyspell-mode' depending on the language."
+    ;;             (when (member current-language-environment
+    ;;                           '("Japanese"))
+    ;;               (flyspell-mode -1))))
+    )
 #+end_src
 *** outline                                                :editing:
 :PROPERTIES:
@@ -1672,9 +1701,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
              [remap delete-horizontal-space] #'cycle-spacing
              [remap upcase-word] #'upcase-dwim
              [remap downcase-word] #'downcase-dwim
-             [remap capitalize-word] #'capitalize-dwim
-             ;; Originally bound to C-S-backspace
-             "C-c k" #'kill-whole-line)
+             [remap capitalize-word] #'capitalize-dwim)
 
     ;; I often type this sequence unintensionally. I never use this command, so
     ;; just disable the keybinding.
@@ -1888,7 +1915,11 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
                            (when (fboundp 'akirak-org-clock-snooze)
                              (akirak-org-clock-snooze 3))
                            (let ((save-some-buffers-default-predicate nil))
-                             (save-some-buffers nil)))))
+                             (save-some-buffers nil))))
+    ;; Also run when the user explicitly leaves the computer.
+    (add-hook 'akirak/system-leave-hook
+              #'akirak/save-all-buffers-non-interactively
+              50))
 #+end_src
 *** tooltip                                                     :UI:
 :PROPERTIES:
@@ -1962,6 +1993,8 @@ Thus I will explicitly install this package rather than using the built-in versi
     (:set view-inhibit-help-message t)
 
     (:with-map view-mode-map
+      ;; conflict with a binding in lispy-mode
+      (:unbind "d")
       (:bind
        [remap scroll-up-command] #'View-scroll-half-page-forward
        [remap scroll-down-command] #'View-scroll-half-page-backward)))
@@ -2606,6 +2639,7 @@ Outline-based notes management and organizer
                "/" #'akirak-org-italic
                "_" #'akirak-org-underlined
                "=" #'akirak-org-verbatim
+               "`" #'akirak-org-inline-code
                "~" #'akirak-org-code
                "+" #'akirak-org-strike-through
                "C-c b" #'akirak-org-select-region-dwim
@@ -2802,6 +2836,12 @@ Outline-based notes management and organizer
                 :narrow '40! :indent t :filetitle nil :hidefiles nil
                 :formula nil :timestamp nil :level nil
                 :formatter nil))
+
+    (add-hook 'akirak/system-leave-hook
+              (defun akirak/org-clock-out-maybe ()
+                (when (org-clocking-p)
+                  (org-clock-out)))
+              10)
 
     (defcustom akirak-org-clock-allow-in-buffer nil
       "Whether to allow `org-clock-in' in the current buffer.
@@ -3142,7 +3182,8 @@ A programmable workflow layer for Org mode
                   ;; I don't want to hide the init time in the echo area.
                   (let ((inhibit-message t))
                     (require 'org-dog)
-                    (org-dog-reload-files t)))))))
+                    (org-dog-reload-files t)
+                    (akirak-org-clock-rebuild-history)))))))
 #+end_src
 **** consult-org-dog
 :PROPERTIES:
@@ -3916,6 +3957,15 @@ Emacs:
 The generated remappings do have limitations, but it is possible to work around
 manually by adding extra entries in the following subsections.
 
+*** dockerfile-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-09-23 Sat 11:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup dockerfile-ts-mode
+    (:file-match "Dockerfile\\'" "\\.dockerfile\\'"))
+#+end_src
 *** elixir-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 19:08]
@@ -3928,6 +3978,10 @@ Major mode for Elixir with tree-sitter support
 #+begin_src emacs-lisp
   (setup elixir-ts-mode
     (:file-match "\\.exs?\\'")
+
+    (:reformatters
+     (mix-format :program "mix"
+                 :args (list "format" "--stdin-filename" (buffer-file-name) "-")))
 
     (:auto-insert
      ("/config/config\\.exs\\'"
@@ -4157,7 +4211,7 @@ Major mode for editing typescript
     (with-eval-after-load 'typescript-mode
       (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
 #+end_src
-*** yaml-ts-mode 
+*** yaml-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-03-07 Mon 16:07]
 :END:
@@ -4599,6 +4653,24 @@ Quickly switch windows.
                         (when (window-live-p initial-window)
                           (select-window initial-window))))))))
 #+end_src
+*** COMMENT acm                                                                :ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2023-09-28 Thu 14:38]
+:END:
+
+#+begin_src emacs-lisp
+  ;; only installed alongside lsp-bridge
+  (setup acm
+    (:set acm-enable-doc t
+          acm-enable-doc-markdown-render t
+          acm-enable-search-file-words t
+          acm-enable-search-sdcv-words nil
+          acm-enable-telega nil
+          acm-enable-tabnine nil
+          acm-enable-yas t
+          acm-enable-copilot nil
+          acm-enable-codeium nil))
+#+end_src
 *** COMMENT adaptive-wrap                                               :visual:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 17:56]
@@ -4646,7 +4718,8 @@ Minor mode to aggressively keep your code always indented
 
 #+begin_src emacs-lisp
   (setup (:package aggressive-indent)
-    (:hook-into emacs-lisp-mode-hook))
+    (:hook-into emacs-lisp-mode-hook
+                dune-mode-hook))
 #+end_src
 *** COMMENT all-the-icons                               :UI:ARCHIVE:
 :PROPERTIES:
@@ -5869,7 +5942,7 @@ A Flymake backend for Javascript using eslint
   (setup (:package flymake-eslint)
     (:set flymake-eslint-defer-binary-check t))
 #+end_src
-*** flyspell-correct
+*** COMMENT flyspell-correct                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-03 Sat 23:59]
 :END:
@@ -5883,7 +5956,7 @@ Correcting words with flyspell via custom interface
     (with-eval-after-load "flyspell"
       (define-key flyspell-mode-map (kbd "C-M-;") #'flyspell-correct-wrapper)))
 #+end_src
-*** flyspell-correct-avy-menu
+*** COMMENT flyspell-correct-avy-menu                                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-03 Sat 23:59]
 :END:
@@ -6528,6 +6601,22 @@ highlight indentation with bars
 #+begin_src emacs-lisp
 (setup (:package indent-bars))
 #+end_src
+*** jinx
+:PROPERTIES:
+:CREATED_TIME: [2023-09-27 Wed 23:59]
+:END:
+#+begin_quote
+Enchanted Spell Checker
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package jinx)
+    (:hook-into markdown-mode
+                ;; For org-mode, set up hooks in .dir-locals.el of individual
+                ;; projects
+                git-commit-mode-hook)
+    (:bind "C-M-;" #'jinx-correct-nearest))
+#+end_src
 *** jq-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-05-30 Mon 14:03]
@@ -6582,6 +6671,19 @@ Major mode for driving just files
 
 #+begin_src emacs-lisp
 (setup (:package justl))
+#+end_src
+*** just-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-09-27 Wed 14:27]
+:END:
+#+begin_quote
+Justfile editing mode
+[[https://github.com/leon-barrett/just-mode.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package just-mode)
+    (:file-match "/justfile\\'"))
 #+end_src
 *** keycast
 :PROPERTIES:
@@ -6735,6 +6837,49 @@ For Emacs Lisp, I use lispy.
 
 Lispy is not turned on by default.
 Its configuration is about my habits, so it is put in [[file:compat.el::(setup lispy][compat.el]].
+*** COMMENT lsp-bridge                                                         :ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2023-09-27 Wed 23:59]
+:END:
+#+begin_quote
+LSP bridge
+[[https://github.com/manateelazycat/lsp-bridge]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package lsp-bridge)
+    (:set lsp-bridge-complete-manually t
+          ;; Check what function to use
+          ;; lsp-bridge-find-def-fallback-function #'dumb-jump-go
+          lsp-bridge-enable-search-words nil
+          lsp-bridge-enable-auto-format-code nil
+          lsp-bridge-symbols-enable-which-func t)
+
+    (define-prefix-command 'akirak/lsp-bridge-prefix-map)
+    (:bind akirak/mode-prefix-key akirak/lsp-bridge-prefix-map
+           [remap xref-find-definitions] #'lsp-bridge-find-def
+           [remap xref-find-definitions-other-window] #'lsp-bridge-find-def-other-window
+           "C-x 4 g t" #'lsp-bridge-find-type-def-other-window
+           "C-x 4 g i" #'lsp-bridge-find-impl-other-window
+           [remap xref-go-back] #'lsp-bridge-find-def-return
+           [remap previous-error] #'lsp-bridge-diagnostic-jump-prev
+           [remap next-error] #'lsp-bridge-diagnostic-jump-next
+           "M-' e" #'lsp-bridge-diagnostic-list
+           ;; #'lsp-bridge-diagnostic-ignore
+           "M-s M-i" #'lsp-bridge-workspace-list-symbols
+           [remap consult-imenu-multi] #'lsp-bridge-workspace-list-symbols
+           [remap completion-at-point] #'lsp-bridge-popup-complete-menu)
+
+    (:with-map akirak/lsp-bridge-prefix-map
+      (:bind "g t" #'lsp-bridge-find-type-def
+             "g i" #'lsp-bridge-find-impl
+             "g r" #'lsp-bridge-find-references
+             "h" #'lsp-bridge-popup-documentation
+             "a" #'lsp-bridge-code-action
+             "r" #'lsp-bridge-rename
+             "w" #'lsp-bridge-diagnostic-copy
+             "R" #'lsp-bridge-restart-process)))
+#+end_src
 *** lsp-mode                                                   :@extra:lsp_mode:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 19:03]
@@ -7541,6 +7686,7 @@ Parentheses Universalistic
 #+begin_src emacs-lisp
   (setup (:package puni)
     (:hook-into nix-mode
+                tuareg-mode
                 svelte-mode
                 web-mode
                 sql-mode
@@ -7704,6 +7850,7 @@ Clean-up and Beautify the list of minor-modes.
                                "Memento"
                                "Copilot"
                                "ga"
+                               "LSPB"
                                "Treefmt")
                            symbol-end))
     (:hook-into after-init-hook))
@@ -7895,7 +8042,17 @@ Major mode for editing systemd units
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package systemd))
+  (setup (:package systemd)
+    (defun akirak/systemd-suspend ()
+      "Suspend the system via systemd."
+      (interactive)
+      (if (and (eq system-type 'gnu/linux)
+               (executable-find "systemctl")
+               (not (akirak/wsl-p)))
+          (progn
+            (akirak/system-leave-hook)
+            (call-process "systemctl" nil nil nil "suspend"))
+        (user-error "This system doesn’t support session control using systemd"))))
 #+end_src
 *** tagedit                                                    :web:
 :PROPERTIES:
@@ -8158,7 +8315,10 @@ Fully-featured terminal emulator
 #+begin_src emacs-lisp
   (setup (:package vterm)
     (:unbind "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9" "M-0"
-             "M-:" "M-g" "M-s"))
+             "M-:" "M-g" "M-s" "C-z"
+             "<f1>" "<f2>" "<f3>" "<f4>" "<f5>" "<f6>"
+             "<f7>" "<f8>" "<f9>" "<f10>" "<f11>" "<f12>")
+    (:bind "<f8>" #'vterm-send-next-key))
 #+end_src
 *** vue-mode
 :PROPERTIES:

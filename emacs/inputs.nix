@@ -246,6 +246,23 @@
     };
   };
 
+  lsp-bridge = _: super: {
+    packageRequires =
+      super.packageRequires
+      // {
+        acm = "0";
+        posframe = "0";
+      };
+  };
+
+  acm = _: super: {
+    packageRequires =
+      super.packageRequires
+      // {
+        yasnippet = "0";
+      };
+  };
+
   org-gcal = _: super: {
     packageRequires =
       {

@@ -19,6 +19,7 @@
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     org-babel.url = "github:emacs-twist/org-babel";
     twist.url = "github:emacs-twist/twist.nix";
+    twist-overrides.url = "github:emacs-twist/overrides";
     melpa = {
       url = "github:akirak/melpa/akirak";
       flake = false;
