@@ -1054,6 +1054,7 @@ The built-in =electric= package provides the following modes:
            (elixir-ts-mode . (,@lsp ,@mix-format))
            (heex-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
+           (rust-ts-mode . (,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp))
            (sql-mode . (,@sqlformat))
@@ -4145,6 +4146,15 @@ Major mode for Nix expressions, powered by tree-sitter
     (:bind [remap devdocs-lookup] #'akirak-nix-manix)
     (:reformatters
      (alejandra :program "alejandra")))
+#+end_src
+*** rust-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-10-02 Mon 21:09]
+:END:
+
+#+begin_src emacs-lisp
+  (setup rust-ts-mode
+    (:file-match "\\.rs\\'"))
 #+end_src
 *** toml-ts-mode
 :PROPERTIES:
