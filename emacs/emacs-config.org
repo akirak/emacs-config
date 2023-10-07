@@ -400,6 +400,7 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
                      ("c r" . "record screen")
                      ("d" . "disk")
                      ("e" . "emacs")
+                     ("g" . "forge")
                      ("n" . "nix")
                      ("s" . "system")
                      ("S" . "secrets")))
@@ -4931,7 +4932,9 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package browse-at-remote))
+  (setup (:package browse-at-remote)
+    (:global "<f12> g g" #'browse-at-remote
+             "<f12> g w" #'browse-at-remote-kill))
 #+end_src
 *** COMMENT bufler                                         :ARCHIVE:
 :PROPERTIES:
