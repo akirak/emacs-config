@@ -472,12 +472,6 @@
       repo = "guess-language.el";
       type = "github";
     };
-    haskell-mode = {
-      flake = false;
-      owner = "haskell";
-      repo = "haskell-mode";
-      type = "github";
-    };
     hcl-mode = {
       flake = false;
       owner = "purcell";

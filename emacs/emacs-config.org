@@ -6447,7 +6447,7 @@ Robust automatic language detection
 #+begin_src emacs-lisp
 (setup (:package guess-language))
 #+end_src
-*** haskell-mode                                       :major__mode:
+*** COMMENT haskell-mode                                           :major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
