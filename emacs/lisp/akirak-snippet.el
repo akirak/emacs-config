@@ -6,7 +6,7 @@
 (require 'org-dog-context)
 
 (cl-defstruct akirak-snippet-entry
-  name filename language description args body olp type)
+  name filename language description args body olp type id)
 
 (defconst akirak-snippet-block-regexp
   (rx bol (* blank) "#+begin_" (or "src" "example" "prompt") (or blank eol)))
@@ -80,7 +80,7 @@
                     (akirak-org-dog-context-files 'org-tags))
             #'string-equal))
 
-(defun akirak-snippet--search ()
+(cl-defun akirak-snippet--search (&key require-id)
   (if-let (files (akirak-snippet--org-files))
       (org-ql-select files
         `(and (tags "@snippet" "@input")
@@ -95,6 +95,7 @@
                            (org-at-block-p))
                  (setq description (thing-at-point 'sentence t)))
                (akirak-snippet--next-block
+                :require-id require-id
                 :file (buffer-file-name)
                 :name name
                 :description description))
@@ -144,7 +145,7 @@
                                                     (akirak-snippet-entry-filename entry)))
                                (alist-get 'default gptel-directives)))))
 
-(cl-defun akirak-snippet--next-block (&key file name description)
+(cl-defun akirak-snippet--next-block (&key file name description require-id)
   (re-search-forward akirak-snippet-block-regexp)
   (let* ((element (org-element-context))
          (olp (org-get-outline-path))
@@ -154,6 +155,9 @@
                     (buffer-substring-no-properties
                      (org-element-property :contents-begin element)
                      (org-element-property :contents-end element)))))
+         (id (or (org-element-property :id element)
+                 (when require-id
+                   (org-id-get nil 'create))))
          (name (or (when-let (name (plist-get args :name))
                      (pcase name
                        ;; When 'literal is given as the :name property,
@@ -180,6 +184,7 @@
      :description description
      :language (org-element-property :language element)
      :filename file
+     :id id
      :olp olp
      :name name
      :args args
