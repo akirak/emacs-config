@@ -398,7 +398,7 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
                      ("c f" . "frame")
                      ("c s" . "screenshot")
                      ("c r" . "record screen")
-                     ("e" . "disk")
+                     ("d" . "disk")
                      ("e" . "emacs")
                      ("n" . "nix")
                      ("s" . "system")
