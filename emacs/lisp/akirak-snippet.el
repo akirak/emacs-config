@@ -27,7 +27,9 @@
 (defun akirak-snippet-search ()
   "Search a snippet and expand it."
   (interactive)
-  (let* ((entries (akirak-snippet--search))
+  (let* ((entries (mapcan #'akirak-snippet--scan
+                          (or (akirak-snippet--org-files)
+                              (user-error "No files"))))
          (names (mapcar #'akirak-snippet-entry-name entries)))
     (cl-labels
         ((annotator (name)
@@ -80,27 +82,25 @@
                     (akirak-org-dog-context-files 'org-tags))
             #'string-equal))
 
-(cl-defun akirak-snippet--search (&key require-id)
-  (if-let (files (akirak-snippet--org-files))
-      (org-ql-select files
-        `(and (tags "@snippet" "@input")
-              (regexp ,akirak-snippet-block-regexp))
-        :action
-        '(if (org-match-line org-complex-heading-regexp)
-             (let ((name (match-string-no-properties 4))
-                   description)
-               (org-end-of-meta-data t)
-               (org-skip-whitespace)
-               (unless (or (org-at-keyword-p)
-                           (org-at-block-p))
-                 (setq description (thing-at-point 'sentence t)))
-               (akirak-snippet--next-block
-                :require-id require-id
-                :file (buffer-file-name)
-                :name name
-                :description description))
-           (error "Not on headline")))
-    (user-error "No files")))
+(cl-defun akirak-snippet--scan (file &key require-id)
+  (org-ql-select file
+    `(and (tags "@snippet" "@input")
+          (regexp ,akirak-snippet-block-regexp))
+    :action
+    `(if (org-match-line org-complex-heading-regexp)
+         (let ((name (match-string-no-properties 4))
+               description)
+           (org-end-of-meta-data t)
+           (org-skip-whitespace)
+           (unless (or (org-at-keyword-p)
+                       (org-at-block-p))
+             (setq description (thing-at-point 'sentence t)))
+           (akirak-snippet--next-block
+            :require-id require-id
+            :file ,file
+            :name name
+            :description description))
+       (error "Not on headline"))))
 
 (defun akirak-snippet--expand (entry)
   (let ((pre (plist-get (akirak-snippet-entry-args entry) :pre))
