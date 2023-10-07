@@ -570,6 +570,15 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
                                             (and (+ digit) (* "." (+ digit))))
                                         (or (any ":/") eos))
                                    . akirak-browse-url-private-url)
+                                  ;; Some web sites don't support alternative
+                                  ;; browsers well. I don't blame those services.
+                                  ;; It would be sometimes necessary to rely on
+                                  ;; non-standard browser technologies in order to
+                                  ;; implement an advanced user experience on web.
+                                  ;; Instead of avoiding those services entirely,
+                                  ;; I will force use of a chromium-compatible
+                                  ;; browser only in specific web sites to keep
+                                  ;; using my preferred browser elsewhere.
                                   (,(rx bos "http" (?  "s") "://"
                                         (or "airtable.com"
                                             "figma.com")
