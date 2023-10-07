@@ -5407,7 +5407,11 @@ Interface to Docker
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package docker))
+  (setup (:package docker)
+    (:global "<f12> k k" #'docker-containers
+             "<f12> k i" #'docker-images
+             "<f12> k v" #'docker-volumes
+             "<f12> k n" #'docker-networks))
 #+end_src
 *** docopt
 :PROPERTIES:
