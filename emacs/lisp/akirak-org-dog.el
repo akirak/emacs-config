@@ -35,16 +35,19 @@
                       org-list-full-item-re
                       ""
                       (string-chop-newline (thing-at-point 'line))))))
-         (title (org-link-display-format
-                 (org-get-heading t t t t)))
-         (first-link (save-excursion
-                       (org-back-to-heading)
-                       (org-end-of-meta-data t)
-                       (unless (looking-at org-heading-regexp)
-                         (save-match-data
-                           (when (re-search-forward org-link-any-re (org-entry-end-position)
-                                                    t)
-                             (match-string 0))))))
+         (item (org-entry-get nil "ITEM"))
+         (title (org-link-display-format item))
+         (first-link (if (string-match-p org-link-any-re item)
+                         item
+                       (save-excursion
+                         (org-back-to-heading)
+                         (org-end-of-meta-data t)
+                         (unless (looking-at org-heading-regexp)
+                           (save-match-data
+                             (when (re-search-forward org-link-any-re (org-entry-end-position)
+                                                      t)
+                               (unless (string-prefix-p "id:" (match-string 1))
+                                 (match-string 0))))))))
          (filetags (buffer-local-value 'org-file-tags
                                        (or (find-buffer-visiting absolute)
                                            (find-file-noselect absolute))))
