@@ -2883,7 +2883,10 @@ Outline-based notes management and organizer
 ***** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    (when (daemonp)
+    (when (and (daemonp)
+               ;; Don't enable the mode when troubleshooting.
+               (or (getenv "WAYLAND_DISPLAY")
+                   (getenv "DISPLAY")))
       (:hook-into emacs-startup-hook))
     (:hook akirak-log-mode)
 
