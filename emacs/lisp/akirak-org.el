@@ -320,10 +320,12 @@ character."
   (interactive "P" org-mode)
   (cond
    ((use-region-p)
-    (goto-char (region-beginning))
-    (insert-char ?~)
-    (goto-char (1+ (region-end)))
-    (insert-char ?~))
+    (let ((begin (region-beginning))
+          (end (region-end)))
+      (goto-char begin)
+      (insert-char ?~)
+      (goto-char (1+ end))
+      (insert-char ?~)))
    ;; If the cursor is inside code, insert the character literally.
    ((or (cl-intersection (ensure-list (get-char-property (point) 'face))
                          '(org-code org-verbatim)
