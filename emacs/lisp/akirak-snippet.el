@@ -96,7 +96,7 @@
                        (org-at-block-p))
              (setq description (thing-at-point 'sentence t)))
            (akirak-snippet--next-block
-            :require-id require-id
+            :require-id ,require-id
             :file ,file
             :name name
             :description description))
