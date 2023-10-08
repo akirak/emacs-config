@@ -1251,22 +1251,6 @@
         "type": "github"
       }
     },
-    "haskell-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1695188497,
-        "narHash": "sha256-ohGN9TpzA2WntAORQMvXEyOcUppsLWKLJELvBD6Eexg=",
-        "owner": "haskell",
-        "repo": "haskell-mode",
-        "rev": "020707430d40a216e1c7deea34082eb3897ba943",
-        "type": "github"
-      },
-      "original": {
-        "owner": "haskell",
-        "repo": "haskell-mode",
-        "type": "github"
-      }
-    },
     "hcl-mode": {
       "flake": false,
       "locked": {
@@ -2321,11 +2305,11 @@
     "org-nlink": {
       "flake": false,
       "locked": {
-        "lastModified": 1693735556,
-        "narHash": "sha256-a/ofUgCDISmCuZxP30npOGQ35Xr3w7eSH6y3r+k8WhM=",
+        "lastModified": 1696731048,
+        "narHash": "sha256-VP1V2XOq5NI8FuVVWVDrhxN8rgTYicT8omsKI6UZUC4=",
         "owner": "akirak",
         "repo": "org-nlink.el",
-        "rev": "d8efcdd204ec057a142f7fb90f6eb0438c743847",
+        "rev": "d99779e8f5c653a8d06d22bf93d44826790ea104",
         "type": "github"
       },
       "original": {
@@ -2990,7 +2974,6 @@
         "graphql-mode": "graphql-mode",
         "graphviz-dot-mode": "graphviz-dot-mode",
         "guess-language": "guess-language",
-        "haskell-mode": "haskell-mode",
         "hcl-mode": "hcl-mode",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
