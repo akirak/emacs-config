@@ -5530,6 +5530,9 @@ Integration with the dune build system
 :PROPERTIES:
 :CREATED_TIME: [2023-10-09 Mon 13:39]
 :END:
+#+begin_quote
+Emulate A Terminal, in a region, in a buffer and in Eshell
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package eat)
@@ -8933,7 +8936,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 213 |
+| [[org-ql-search:tags:packages][packages]]            | 214 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
