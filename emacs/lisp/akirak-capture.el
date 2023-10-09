@@ -1445,6 +1445,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
       (org-capture))))
 
 (defun akirak-capture--mode-tags (target-file)
+  (require 'akirak-org-dog)
   (when-let* ((file (car (akirak-org-dog-context-files 'major-mode)))
               (obj (unless (equal target-file file)
                      (org-dog-file-object file))))
