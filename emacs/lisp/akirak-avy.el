@@ -114,7 +114,7 @@ If CALLBACK is a function, it is called with the selected url."
   (rx (or (and (syntax string-quote)
                (+ (any alnum graph))
                (syntax string-quote))
-          (and word-start (? "~") "/" (any "." alnum)))))
+          (and symbol-start (? "~") "/" (any "." alnum)))))
 
 ;;;###autoload
 (defun akirak-avy-ffap ()
