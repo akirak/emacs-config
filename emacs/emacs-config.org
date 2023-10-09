@@ -7449,6 +7449,7 @@ Featureful EPUB reader mode
     (:nixpkgs unzip)
     (:file-match "\\.epub\\'")
     (:set nov-text-width akirak/default-body-width)
+    (:bind "i" #'imenu)
 
     (:hook (defun akirak/nov-setup ()
              (when (require 'olivetti nil t)
