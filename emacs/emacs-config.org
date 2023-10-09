@@ -398,8 +398,9 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
                      ("c f" . "frame")
                      ("c s" . "screenshot")
                      ("c r" . "record screen")
-                     ("e" . "disk")
+                     ("d" . "disk")
                      ("e" . "emacs")
+                     ("g" . "forge")
                      ("n" . "nix")
                      ("s" . "system")
                      ("S" . "secrets")))
@@ -570,6 +571,15 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
                                             (and (+ digit) (* "." (+ digit))))
                                         (or (any ":/") eos))
                                    . akirak-browse-url-private-url)
+                                  ;; Some web sites don't support alternative
+                                  ;; browsers well. I don't blame those services.
+                                  ;; It would be sometimes necessary to rely on
+                                  ;; non-standard browser technologies in order to
+                                  ;; implement an advanced user experience on web.
+                                  ;; Instead of avoiding those services entirely,
+                                  ;; I will force use of a chromium-compatible
+                                  ;; browser only in specific web sites to keep
+                                  ;; using my preferred browser elsewhere.
                                   (,(rx bos "http" (?  "s") "://"
                                         (or "airtable.com"
                                             "figma.com")
@@ -1054,6 +1064,7 @@ The built-in =electric= package provides the following modes:
            (elixir-ts-mode . (,@lsp ,@mix-format))
            (heex-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
+           (rust-ts-mode . (,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp))
            (sql-mode . (,@sqlformat))
@@ -1755,7 +1766,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
     (add-hook 'skeleton-end-hook
               (defun akirak/skeleton-start ()
-                (setq skeleton-positions (nreverse skeleton-positions))
+                (setq skeleton-positions (cdr (nreverse skeleton-positions)))
                 (when skeleton-positions
                   (local-set-key [tab] #'akirak/skeleton-pop-positions))))
 
@@ -2872,7 +2883,10 @@ Outline-based notes management and organizer
 ***** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    (when (daemonp)
+    (when (and (daemonp)
+               ;; Don't enable the mode when troubleshooting.
+               (or (getenv "WAYLAND_DISPLAY")
+                   (getenv "DISPLAY")))
       (:hook-into emacs-startup-hook))
     (:hook akirak-log-mode)
 
@@ -4146,6 +4160,15 @@ Major mode for Nix expressions, powered by tree-sitter
     (:reformatters
      (alejandra :program "alejandra")))
 #+end_src
+*** rust-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2023-10-02 Mon 21:09]
+:END:
+
+#+begin_src emacs-lisp
+  (setup rust-ts-mode
+    (:file-match "\\.rs\\'"))
+#+end_src
 *** toml-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-03-19 Sun 21:27]
@@ -4912,7 +4935,9 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package browse-at-remote))
+  (setup (:package browse-at-remote)
+    (:global "<f12> g g" #'browse-at-remote
+             "<f12> g w" #'browse-at-remote-kill))
 #+end_src
 *** COMMENT bufler                                         :ARCHIVE:
 :PROPERTIES:
@@ -5066,6 +5091,7 @@ Consulting completing-read
 
     (:with-feature consult-imenu
       (:global "M-s i" #'consult-imenu
+               [remap imenu] #'consult-imenu
                "M-s M-i" #'consult-imenu-multi))
 
     ;; (:with-feature consult-flymake
@@ -5385,7 +5411,11 @@ Interface to Docker
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package docker))
+  (setup (:package docker)
+    (:global "<f12> k k" #'docker-containers
+             "<f12> k i" #'docker-images
+             "<f12> k v" #'docker-volumes
+             "<f12> k n" #'docker-networks))
 #+end_src
 *** docopt
 :PROPERTIES:
@@ -5496,6 +5526,18 @@ Integration with the dune build system
 
 #+begin_src emacs-lisp
 (setup (:package dune))
+#+end_src
+*** eat
+:PROPERTIES:
+:CREATED_TIME: [2023-10-09 Mon 13:39]
+:END:
+#+begin_quote
+Emulate A Terminal, in a region, in a buffer and in Eshell
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package eat)
+    (add-hook 'after-init-hook #'eat-eshell-mode))
 #+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
@@ -6425,7 +6467,7 @@ Robust automatic language detection
 #+begin_src emacs-lisp
 (setup (:package guess-language))
 #+end_src
-*** haskell-mode                                       :major__mode:
+*** COMMENT haskell-mode                                           :major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
@@ -7408,6 +7450,7 @@ Featureful EPUB reader mode
     (:nixpkgs unzip)
     (:file-match "\\.epub\\'")
     (:set nov-text-width akirak/default-body-width)
+    (:bind "i" #'imenu)
 
     (:hook (defun akirak/nov-setup ()
              (when (require 'olivetti nil t)
@@ -8904,9 +8947,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |   6 |
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   5 |
 | [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |

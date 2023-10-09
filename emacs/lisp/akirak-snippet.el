@@ -6,7 +6,7 @@
 (require 'org-dog-context)
 
 (cl-defstruct akirak-snippet-entry
-  name filename language description args body olp type)
+  name filename language description args body olp type id)
 
 (defconst akirak-snippet-block-regexp
   (rx bol (* blank) "#+begin_" (or "src" "example" "prompt") (or blank eol)))
@@ -27,7 +27,9 @@
 (defun akirak-snippet-search ()
   "Search a snippet and expand it."
   (interactive)
-  (let* ((entries (akirak-snippet--search))
+  (let* ((entries (mapcan #'akirak-snippet--scan
+                          (or (akirak-snippet--org-files)
+                              (user-error "No files"))))
          (names (mapcar #'akirak-snippet-entry-name entries)))
     (cl-labels
         ((annotator (name)
@@ -80,26 +82,25 @@
                     (akirak-org-dog-context-files 'org-tags))
             #'string-equal))
 
-(defun akirak-snippet--search ()
-  (if-let (files (akirak-snippet--org-files))
-      (org-ql-select files
-        `(and (tags "@snippet" "@input")
-              (regexp ,akirak-snippet-block-regexp))
-        :action
-        '(if (org-match-line org-complex-heading-regexp)
-             (let ((name (match-string-no-properties 4))
-                   description)
-               (org-end-of-meta-data t)
-               (org-skip-whitespace)
-               (unless (or (org-at-keyword-p)
-                           (org-at-block-p))
-                 (setq description (thing-at-point 'sentence t)))
-               (akirak-snippet--next-block
-                :file (buffer-file-name)
-                :name name
-                :description description))
-           (error "Not on headline")))
-    (user-error "No files")))
+(cl-defun akirak-snippet--scan (file &key require-id)
+  (org-ql-select file
+    `(and (tags "@snippet" "@input")
+          (regexp ,akirak-snippet-block-regexp))
+    :action
+    `(if (org-match-line org-complex-heading-regexp)
+         (let ((name (match-string-no-properties 4))
+               description)
+           (org-end-of-meta-data t)
+           (org-skip-whitespace)
+           (unless (or (org-at-keyword-p)
+                       (org-at-block-p))
+             (setq description (thing-at-point 'sentence t)))
+           (akirak-snippet--next-block
+            :require-id ,require-id
+            :file ,file
+            :name name
+            :description description))
+       (error "Not on headline"))))
 
 (defun akirak-snippet--expand (entry)
   (let ((pre (plist-get (akirak-snippet-entry-args entry) :pre))
@@ -144,7 +145,7 @@
                                                     (akirak-snippet-entry-filename entry)))
                                (alist-get 'default gptel-directives)))))
 
-(cl-defun akirak-snippet--next-block (&key file name description)
+(cl-defun akirak-snippet--next-block (&key file name description require-id)
   (re-search-forward akirak-snippet-block-regexp)
   (let* ((element (org-element-context))
          (olp (org-get-outline-path))
@@ -154,6 +155,9 @@
                     (buffer-substring-no-properties
                      (org-element-property :contents-begin element)
                      (org-element-property :contents-end element)))))
+         (id (or (org-element-property :id element)
+                 (when require-id
+                   (org-id-get nil 'create))))
          (name (or (when-let (name (plist-get args :name))
                      (pcase name
                        ;; When 'literal is given as the :name property,
@@ -180,6 +184,7 @@
      :description description
      :language (org-element-property :language element)
      :filename file
+     :id id
      :olp olp
      :name name
      :args args
