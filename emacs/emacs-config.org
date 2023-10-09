@@ -5526,6 +5526,15 @@ Integration with the dune build system
 #+begin_src emacs-lisp
 (setup (:package dune))
 #+end_src
+*** eat
+:PROPERTIES:
+:CREATED_TIME: [2023-10-09 Mon 13:39]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package eat)
+    (add-hook 'after-init-hook #'eat-eshell-mode))
+#+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
