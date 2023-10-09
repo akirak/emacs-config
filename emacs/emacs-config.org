@@ -5091,6 +5091,7 @@ Consulting completing-read
 
     (:with-feature consult-imenu
       (:global "M-s i" #'consult-imenu
+               [remap imenu] #'consult-imenu
                "M-s M-i" #'consult-imenu-multi))
 
     ;; (:with-feature consult-flymake
