@@ -46,12 +46,7 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-    - uses: cachix/cachix-action@v12
-      with:
-        name: akirak
-        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-        pushFilter: '-source$'
+          accept-flake-config = true
 
     - name: Build an offline archive
       run: nix run .#${{ matrix.package }}.archive-builder
