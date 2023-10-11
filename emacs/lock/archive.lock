@@ -32,9 +32,9 @@
   },
   "eat": {
     "archive": {
-      "narHash": "sha256-snfWXjBgwcXyp/aOBtwKtjZhXcbYS5EuZvjk4Jt8KRE=",
+      "narHash": "sha256-noJ6yzhRHXLTtTvHyFwO6IB5CmtCwX0tRkTr2pznH58=",
       "type": "tarball",
-      "url": "https://elpa.nongnu.org/nongnu/eat-0.9.1.tar"
+      "url": "https://elpa.nongnu.org/nongnu/eat-0.9.2.tar"
     },
     "inventory": {
       "type": "archive",
@@ -44,7 +44,7 @@
       "compat": "29.1",
       "emacs": "26.1"
     },
-    "version": "0.9.1"
+    "version": "0.9.2"
   },
   "org-transclusion": {
     "archive": {
