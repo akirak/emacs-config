@@ -1008,6 +1008,7 @@ The built-in =electric= package provides the following modes:
           version-control t
           view-read-only t
           auto-mode-case-fold nil
+          require-final-newline t
           ;; pkgs/top-level/all-packages.nix in nixpkgs: 1.5 MB
           large-file-warning-threshold (* 1024 1024 2)
           find-sibling-rules
