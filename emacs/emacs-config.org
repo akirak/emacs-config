@@ -1071,7 +1071,16 @@ The built-in =electric= package provides the following modes:
            (sql-mode . (,@sqlformat))
            (haskell-mode . (,@lsp)))))
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
-      (dir-locals-set-directory-class "~/work2/foss/" 'default)))
+      (dir-locals-set-directory-class "~/work2/foss/" 'default)
+
+      (:set ignored-local-variable-values
+            ;; github:melpa/melpa
+            '((eval . (and buffer-file-name
+                           (not (eq major-mode 'package-recipe-mode))
+                           (or (require 'package-recipe-mode nil t)
+                               (let ((load-path (cons "../package-build" load-path)))
+                                 (require 'package-recipe-mode nil t)))
+                           (package-recipe-mode)))))))
 #+end_src
 
 - Use =akirak-files-ensure-abbrev-list= to update =directory-abbrev-alist=. (see [[*akirak][akirak]]).
