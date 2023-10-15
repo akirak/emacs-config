@@ -1008,6 +1008,7 @@ The built-in =electric= package provides the following modes:
           version-control t
           view-read-only t
           auto-mode-case-fold nil
+          require-final-newline t
           ;; pkgs/top-level/all-packages.nix in nixpkgs: 1.5 MB
           large-file-warning-threshold (* 1024 1024 2)
           find-sibling-rules
@@ -1070,7 +1071,16 @@ The built-in =electric= package provides the following modes:
            (sql-mode . (,@sqlformat))
            (haskell-mode . (,@lsp)))))
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
-      (dir-locals-set-directory-class "~/work2/foss/" 'default)))
+      (dir-locals-set-directory-class "~/work2/foss/" 'default)
+
+      (:set ignored-local-variable-values
+            ;; github:melpa/melpa
+            '((eval . (and buffer-file-name
+                           (not (eq major-mode 'package-recipe-mode))
+                           (or (require 'package-recipe-mode nil t)
+                               (let ((load-path (cons "../package-build" load-path)))
+                                 (require 'package-recipe-mode nil t)))
+                           (package-recipe-mode)))))))
 #+end_src
 
 - Use =akirak-files-ensure-abbrev-list= to update =directory-abbrev-alist=. (see [[*akirak][akirak]]).
@@ -4389,9 +4399,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-log
 #+begin_src elisp
   (setup akirak-log
-    (:set akirak-log-private-file (locate-user-emacs-file "log/latest.org"))
-    (with-eval-after-load 'org-agenda
-      (add-to-list 'org-agenda-files akirak-log-private-file)))
+    (let ((file (locate-user-emacs-file "log/latest.org")))
+      (when (file-readable-p file)
+        (:set akirak-log-private-file file)
+        (with-eval-after-load 'org-agenda
+          (add-to-list 'org-agenda-files akirak-log-private-file)))))
 #+end_src
 *** akirak-magit
 #+begin_src elisp
