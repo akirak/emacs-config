@@ -658,6 +658,22 @@
         "type": "github"
       }
     },
+    "eat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1697652856,
+        "narHash": "sha256-Yv7FpzV781Nip2HhkE1/mebGHLaSbrgkszd3ijUIytI=",
+        "ref": "refs/heads/master",
+        "rev": "c890bb240b64f8157b70cd1c2f42170d2d5bc77d",
+        "revCount": 237,
+        "type": "git",
+        "url": "https://codeberg.org/akib/emacs-eat"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/akib/emacs-eat"
+      }
+    },
     "ediprolog": {
       "flake": false,
       "locked": {
@@ -2937,6 +2953,7 @@
         "duckduckgo": "duckduckgo",
         "dumb-jump": "dumb-jump",
         "dune": "dune",
+        "eat": "eat",
         "ediprolog": "ediprolog",
         "edit-indirect": "edit-indirect",
         "editorconfig": "editorconfig",
