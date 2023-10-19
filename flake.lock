@@ -793,6 +793,23 @@
         "type": "github"
       }
     },
+    "nongnu-elpa": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1696866121,
+        "narHash": "sha256-8ZtodqVDMaxErOVAfM+Z8gOXxKdd+6Irpb4U6tn9juc=",
+        "ref": "main",
+        "rev": "f901d857ea534934c6df1dc23261be19533488a3",
+        "revCount": 295,
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/emacs/nongnu.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/emacs/nongnu.git"
+      }
+    },
     "org-babel": {
       "locked": {
         "lastModified": 1669954182,
@@ -878,6 +895,7 @@
         "my-overlay": "my-overlay",
         "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs_7",
+        "nongnu-elpa": "nongnu-elpa",
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks_2",
         "stable": "stable",
