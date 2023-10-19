@@ -38,6 +38,10 @@ with builtins; let
       url = "https://elpa.gnu.org/packages/";
     }
     {
+      type = "elpa";
+      path = inputs.nongnu-elpa.outPath + "/elpa-packages";
+    }
+    {
       type = "archive";
       url = "https://elpa.nongnu.org/nongnu/";
     }

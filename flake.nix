@@ -28,6 +28,10 @@
       url = "git+https://git.savannah.gnu.org/git/emacs/elpa.git?ref=main";
       flake = false;
     };
+    nongnu-elpa = {
+      url = "git+https://git.savannah.gnu.org/git/emacs/nongnu.git?ref=main";
+      flake = false;
+    };
     epkgs = {
       url = "github:emacsmirror/epkgs";
       flake = false;
