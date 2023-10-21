@@ -13,6 +13,8 @@ with builtins; let
 
   emacsPackages = (import inputs.flake-pins).packages.${system};
 
+  initialLibraries = (import inputs.flake-pins).data.emacs.libraries;
+
   # releaseVersions = import ./versions.nix;
   inventories = [
     {
@@ -150,6 +152,7 @@ with builtins; let
       extraPackages = [
         "setup"
       ];
+      inherit initialLibraries;
       initParser = parseSetup {};
       inherit inventories;
       lockDir = ./lock;
