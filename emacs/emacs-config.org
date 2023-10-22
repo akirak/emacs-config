@@ -4287,7 +4287,8 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup akirak-avy
     (:global "C-;" #'akirak-avy-insert-symbol
-             "C-\"" #'akirak-avy-symbol-overlay-put))
+             "C-\"" #'akirak-avy-symbol-overlay-put
+             "M-g `" #'akirak-avy-org-block))
 #+end_src
 *** akirak-capture
 #+begin_src emacs-lisp
