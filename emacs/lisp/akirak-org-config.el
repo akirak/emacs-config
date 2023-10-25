@@ -37,6 +37,12 @@
   (akirak-org-setup-todo)
   (akirak-org-setup-tags)
   (setq octopus-view-function #'akirak-org-ql-search-files)
+  (setq oahu-fallback-view-function
+        (defun akirak-oahu-view-from-string (string)
+          (list #'akirak-oahu-org-ql-search
+                `(and (not (tags "ARCHIVE"))
+                      ,(org-ql--query-string-to-sexp string))
+                :title string)))
   (eval-after-load 'oahu
     #'akirak-org-config-setup-oahu))
 
