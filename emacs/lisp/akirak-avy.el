@@ -125,5 +125,11 @@ If CALLBACK is a function, it is called with the selected url."
         (goto-char (match-end 0)))
       (ffap))))
 
+;;;###autoload
+(defun akirak-avy-org-block ()
+  (interactive)
+  (avy-with akirak-avy-org-block
+    (avy-jump org-block-regexp)))
+
 (provide 'akirak-avy)
 ;;; akirak-avy.el ends here

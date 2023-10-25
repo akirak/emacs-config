@@ -249,6 +249,11 @@
       repo = "dune";
       type = "github";
     };
+    eat = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/akib/emacs-eat";
+    };
     ediprolog = {
       flake = false;
       owner = "triska";

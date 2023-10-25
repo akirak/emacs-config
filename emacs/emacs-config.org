@@ -475,17 +475,21 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup abbrev
     (:set save-abbrevs nil)
-    ;; (:hook-into prog-mode text-mode minibuffer-setup)
-    (:when-loaded
-      (define-abbrev-table 'global-abbrev-table
-        '(("wip" "WIP")
-          ("fixme" "FIXME")
-          ("afaik" "AFAIK")
-          ("imo" "IMO")
-          ("imho" "IMHO")
-          ;; Common mistypes
-          ("ort" "org")
-          ("meang" "meant")))))
+    (:status personal
+      (:when-loaded
+        (:hook-into gitcommit-mode
+                    markdown-mode
+                    org-mode)
+        (define-abbrev-table 'global-abbrev-table
+          '(("wip" "WIP")
+            ("fixme" "FIXME")
+            ("afaik" "AFAIK")
+            ("imo" "IMO")
+            ("imho" "IMHO")
+            ;; Common mistypes
+            ("teh" "the")
+            ("ort" "org")
+            ("meang" "meant"))))))
 #+end_src
 *** autoinsert                                           :expansion:
 :PROPERTIES:
@@ -4287,7 +4291,8 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup akirak-avy
     (:global "C-;" #'akirak-avy-insert-symbol
-             "C-\"" #'akirak-avy-symbol-overlay-put))
+             "C-\"" #'akirak-avy-symbol-overlay-put
+             "M-g `" #'akirak-avy-org-block))
 #+end_src
 *** akirak-capture
 #+begin_src emacs-lisp
@@ -7654,7 +7659,6 @@ Summon and dismiss buffers as popups
                                      "^\\*envrc-debug\\*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
-                                     "^\\*scratch\\*"
                                      "^\\*Compile-Log\\*"
                                      "^\\*Scratch-Input-Method"
                                      "^ \\*Agenda Commands\\*"
