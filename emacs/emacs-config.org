@@ -475,17 +475,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup abbrev
     (:set save-abbrevs nil)
-    ;; (:hook-into prog-mode text-mode minibuffer-setup)
-    (:when-loaded
-      (define-abbrev-table 'global-abbrev-table
-        '(("wip" "WIP")
-          ("fixme" "FIXME")
-          ("afaik" "AFAIK")
-          ("imo" "IMO")
-          ("imho" "IMHO")
-          ;; Common mistypes
-          ("ort" "org")
-          ("meang" "meant")))))
+    (:status personal
+      (:when-loaded
+        (define-abbrev-table 'global-abbrev-table
+          '(("wip" "WIP")
+            ("fixme" "FIXME")
+            ("afaik" "AFAIK")
+            ("imo" "IMO")
+            ("imho" "IMHO")
+            ;; Common mistypes
+            ("ort" "org")
+            ("meang" "meant"))))))
 #+end_src
 *** autoinsert                                           :expansion:
 :PROPERTIES:
