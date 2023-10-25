@@ -477,6 +477,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:set save-abbrevs nil)
     (:status personal
       (:when-loaded
+        (:hook-into gitcommit-mode
+                    markdown-mode
+                    org-mode)
         (define-abbrev-table 'global-abbrev-table
           '(("wip" "WIP")
             ("fixme" "FIXME")
