@@ -145,11 +145,16 @@
                                   (string-prefix-p ,abbr-root filename))))
                  (mapcar 'bookmark-name-from-full-record))))))
 
+(defvar akirak-consult-source-git-status
+  (when (require 'consult-ls-git nil t)
+    (append consult-ls-git--source-status-files
+            (list :enabled (lambda () (vc-git-root default-directory))))))
+
 (defvar akirak-consult-project-sources
   `(akirak-consult-source-project-file-buffer
     ;; Require consult-ls-git
-    ,@(when (require 'consult-ls-git nil t)
-        '(consult-ls-git--source-status-files))
+    ,@(when akirak-consult-source-git-status
+        '(akirak-consult-source-git-status))
     akirak-consult-source-project-bookmark
     akirak-consult-source-project-file))
 
