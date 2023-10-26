@@ -95,7 +95,7 @@
           :enabled ,(lambda () consult-project-function)
           :items
           ,(lambda ()
-             (when-let (root (consult--project-root))
+             (when-let (root (akirak-consult--project-root))
                (let ((len (length root)))
                  (thread-last
                    (consult--buffer-query :sort 'visibility
@@ -116,15 +116,14 @@
           :history file-name-history
           :items
           ,(lambda ()
-             (when-let (root (consult--project-root))
-               (let ((default-directory root))
-                 (process-lines "rg" "--files"
-                                "--color=never"
-                                "--iglob=!.git"
-                                "--iglob=!.svn"
-                                "--hidden"
-                                "--one-file-system"
-                                "--sortr" "modified"))))))
+             (when-let (default-directory (akirak-consult--project-root))
+               (process-lines "rg" "--files"
+                              "--color=never"
+                              "--iglob=!.git"
+                              "--iglob=!.svn"
+                              "--hidden"
+                              "--one-file-system"
+                              "--sortr" "modified")))))
 
 (defvar akirak-consult-source-project-bookmark
   `(:name "Bookmark"
@@ -135,7 +134,7 @@
           :history bookmark-history
           :items
           ,(lambda ()
-             (when-let* ((root (consult--project-root))
+             (when-let* ((root (akirak-consult--project-root))
                          (abbr-root (abbreviate-file-name root)))
                (bookmark-maybe-load-default-file)
                (thread-last
@@ -158,6 +157,14 @@
     akirak-consult-source-project-bookmark
     akirak-consult-source-project-file))
 
+(defun akirak-consult--project-root ()
+  (if-let (pr (project-current))
+      (project-root pr)
+    ;; TODO: Better heuristics
+    (when (string-match-p (rx bol (repeat 3 (and "/" (+ anything))) "/")
+                          default-directory)
+      default-directory)))
+
 ;; Based on `consult-buffer'.
 ;;;###autoload
 (defun akirak-consult-project-file (dir)
@@ -172,7 +179,7 @@
                                    :sort nil)))
     (cl-case (plist-get (cdr selected) :category)
       (file (find-file (expand-file-name (car selected)
-                                         (consult--project-root))))
+                                         (akirak-consult--project-root))))
       (bookmark (bookmark-jump (car selected))))))
 
 ;;;; Actions for project files (e.g. consult-ls-git)
