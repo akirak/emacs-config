@@ -5554,7 +5554,8 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 
 #+begin_src emacs-lisp
   (setup (:package eat)
-    (add-hook 'after-init-hook #'eat-eshell-mode))
+    (with-eval-after-load 'eshell
+      (eat-shell-mode t)))
 #+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
