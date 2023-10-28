@@ -3761,6 +3761,8 @@ Org Query Language, search command, and agenda-like view
 #+begin_src emacs-lisp
   (setup (:package org-ql)
     (:also-load akirak-org-ql)
+    (with-eval-after-load 'akirak-org-ql
+      (akirak-org-ql-define-todo-predicates))
     ;; Temporarily workaround
     (autoload 'org-dblock-write:org-ql "org-ql-search")
 
