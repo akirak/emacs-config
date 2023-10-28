@@ -103,7 +103,8 @@
                                 (marker-buffer org-clock-marker)
                                 (buffer-file-name)
                                 (abbreviate-file-name))))
-                (or (member filename files)
+                (or (not (string-prefix-p "~/" filename))
+                    (member filename files)
                     (when further
                       (member filename
                               (thread-last
