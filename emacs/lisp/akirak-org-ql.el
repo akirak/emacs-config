@@ -11,6 +11,19 @@
             (org-dog-meaningful-in-file-p obj)
           t))
 
+(org-ql-defpred (proj my-project) ()
+  "Filter entries that are related to the current project."
+  :normalizers ((`(,predicate-names)
+                 (when-let (pr (project-current))
+                   (let ((root (abbreviate-file-name (project-root pr)))
+                         (origin (ignore-errors
+                                   ;; TODO: Break the host and path
+                                   (car (magit-config-get-from-cached-list
+                                         "remote.origin.url")))))
+                     `(or (regexp ,(regexp-quote root))
+                          (property "GIT_ORIGIN" ,origin :inherit t))))))
+  :body t)
+
 (org-ql-defpred datetree ()
   "Return non-nil if the entry is a direct child of a date entry."
   :body
