@@ -420,18 +420,21 @@ This function returns the current buffer."
               (newline))
             capture-buffer)
         (with-current-buffer (org-dog-indirect-buffer org-clock-marker)
-          (when (or (< (point) (point-min))
-                    (> (point) (point-max)))
-            (goto-char (point-min)))
           (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer)
                    action)
-          (when org-dog-new-indirect-buffer-p
-            (org-back-to-heading)
-            (run-hooks 'akirak-org-clock-open-hook))
-          (when arg
+          (cond
+           ((or arg
+                (org-match-line org-clock-line-re)
+                (org-match-line org-logbook-drawer-re))
             (goto-char (org-entry-end-position))
             (delete-blank-lines)
             (newline))
+           ;; I don't know if this path actually happens.
+           ((or (< (point) (point-min))
+                (> (point) (point-max)))
+            (goto-char (point-min))))
+          (when org-dog-new-indirect-buffer-p
+            (run-hooks 'akirak-org-clock-open-hook))
           (current-buffer))))))
 
 ;;;###autoload
