@@ -3164,6 +3164,28 @@ A programmable workflow layer for Org mode
               (defun akirak/org-dog-clock-in-push ()
                 (akirak-org-clock-push org-dog-clock-last-marker)))
 
+    (:status personal
+      (add-hook 'org-dog-clock-in-success-hook
+                (defun akirak/org-dog-add-git-properties-on-clock-in (pom)
+                  "Add Git properties to the entry at POM if it has none."
+                  ;; TODO: Which is faster, org-element or regular expressions?
+                  ;;
+                  ;; TODO: Check inherited properties?
+                  (let ((element (org-with-point-at pom
+                                   (org-back-to-heading)
+                                   (org-element-at-point-no-context))))
+                    (unless (org-element-property :GIT_ORIGIN element)
+                      (require 'akirak-capture)
+                      (let* ((file (buffer-file-name (marker-buffer pom)))
+                             (obj (org-dog-file-object file))
+                             (prop-alist (akirak-capture-git-properties
+                                          obj :tags (org-element-property :tags element))))
+                        (when prop-alist
+                          (org-with-point-at pom
+                            (pcase-dolist (`(,prop . ,value) prop-alist)
+                              (org-entry-put nil prop value)))
+                          (message "Added Git properties to the clocked org-mode entry"))))))))
+
     (:when-loaded
       (:also-load org-dog-embark
                   org-dog-facade))
