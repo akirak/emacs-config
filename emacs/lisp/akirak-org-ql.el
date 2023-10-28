@@ -58,6 +58,32 @@
   (let ((org-blocker-hook '(org-edna-blocker-function)))
     (org-entry-blocked-p)))
 
+(defmacro akirak-org-ql-define-todo-predicates ()
+  (let ((kwds (with-temp-buffer
+                (let ((org-inhibit-startup t))
+                  (delay-mode-hooks (org-mode))
+                  org-todo-keywords-1)))
+        (existing-names (mapcar #'car org-ql-predicates)))
+    (cl-flet
+        ((names-for-kwd (kwd)
+           (cl-set-difference
+            (list (intern (downcase kwd))
+                  (intern (downcase (substring kwd 0 3))))
+            existing-names
+            :test #'eq)))
+      `(let ((byte-compile-warnings nil))
+         (org-ql-defpred (my-todo ,@(mapcan #'names-for-kwd kwds))
+           ()
+           "Filter entries with a todo keyword."
+           :normalizers
+           ,(mapcar (lambda (kwd)
+                      `(`(,(or ,@(mapcar (lambda (sym)
+                                           (list 'quote sym))
+                                         (names-for-kwd kwd))))
+                        '(todo ,kwd)))
+                    kwds)
+           :body t)))))
+
 (defcustom akirak-org-ql-default-query-prefix "!archived: "
   ""
   :type 'string)
