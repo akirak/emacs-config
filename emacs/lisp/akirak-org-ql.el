@@ -24,6 +24,18 @@
                           (property "GIT_ORIGIN" ,origin :inherit t))))))
   :body t)
 
+(org-ql-defpred (cl my-clocked) (&optional arg)
+  "A convenient version of `clocked' predicate "
+  :normalizers ((`(,predicate-names)
+                 '(clocked :from -3))
+                (`(,predicate-names ,arg)
+                 (pcase arg
+                   ((pred (string-match-p (rx bol (+ digit) eol)))
+                    `(clocked :from ,(- (string-to-number arg))))
+                   (_
+                    '(clocked :from -3)))))
+  :body t)
+
 (org-ql-defpred datetree ()
   "Return non-nil if the entry is a direct child of a date entry."
   :body
