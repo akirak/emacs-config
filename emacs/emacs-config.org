@@ -4845,6 +4845,19 @@ Elixir tooling integration
   (setup (:package apprentice)
     (:hook-into elixir-ts-mode-hook)
     (:set apprentice-key-command-prefix (kbd "C-, ,"))
+    (:when-loaded
+      (when (require 'which-key nil t)
+        (let ((prefix (key-description apprentice-key-command-prefix)))
+          (pcase-dolist (`(,key ,replacement)
+                         '(("m" "mix")
+                           ("c" "compile")
+                           ("e" "execute")
+                           ("h" "help")
+                           ("p" "project files")
+                           ("i" "iex")
+                           ("X" "hex")))
+            (which-key-add-keymap-based-replacements
+              apprentice-mode-map (concat prefix " " key) replacement)))))
     (:with-mode elixir-ts-mode
       (:mode-repl apprentice-iex-project-run))
 
