@@ -249,37 +249,6 @@
             (akirak-org-clock--snoozed-p)))))
 
 ;;;###autoload
-(defun akirak-org-clock-in-dwim ()
-  (interactive)
-  (cond
-   ((bound-and-true-p org-dog-file-mode)
-    (akirak-org-clock-in-to-dog))
-   (t
-    (akirak-org-clock-in-to-project))))
-
-(defun akirak-org-clock-in-to-dog ()
-  (interactive)
-  (cl-assert (bound-and-true-p org-dog-file-mode))
-  (let* ((link (progn
-                 (org-dog-store-file-link)
-                 (car (pop org-stored-links))))
-         (width (frame-width))
-         (candidates (org-ql-select "~/org/meta.org"
-                       `(and (todo)
-                             (or (ancestors (link nil :target ,link))
-                                 (link nil :target ,link)
-                                 (parent (heading "General"))))
-                       :action `(cons (org-format-outline-path
-                                       (org-get-outline-path t t)
-                                       ,width
-                                       (org-get-todo-state))
-                                      (point-marker)))))
-    (pcase-exhaustive (cdr (assoc (completing-read "Clock in: " candidates nil t)
-                                  candidates))
-      ((and marker (cl-type marker))
-       (org-clock-clock-in (list marker))))))
-
-;;;###autoload
 (defun akirak-org-clock-snooze (&optional seconds)
   (interactive "P")
   (when akirak-org-clock-mode
