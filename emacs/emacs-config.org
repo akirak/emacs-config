@@ -2916,6 +2916,7 @@ Outline-based notes management and organizer
         [remap org-clock-in] #'akirak-org-clock-in))
 
     (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
+    (define-key akirak/c-z-map "p" #'akirak-org-clock-in-to-project)
     (define-key akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
     (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
     ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
@@ -3164,6 +3165,28 @@ A programmable workflow layer for Org mode
               (defun akirak/org-dog-clock-in-push ()
                 (akirak-org-clock-push org-dog-clock-last-marker)))
 
+    (:status personal
+      (add-hook 'org-dog-clock-in-success-hook
+                (defun akirak/org-dog-add-git-properties-on-clock-in (pom)
+                  "Add Git properties to the entry at POM if it has none."
+                  ;; TODO: Which is faster, org-element or regular expressions?
+                  ;;
+                  ;; TODO: Check inherited properties?
+                  (let ((element (org-with-point-at pom
+                                   (org-back-to-heading)
+                                   (org-element-at-point-no-context))))
+                    (unless (org-element-property :GIT_ORIGIN element)
+                      (require 'akirak-capture)
+                      (let* ((file (buffer-file-name (marker-buffer pom)))
+                             (obj (org-dog-file-object file))
+                             (prop-alist (akirak-capture-git-properties
+                                          obj :tags (org-element-property :tags element))))
+                        (when prop-alist
+                          (org-with-point-at pom
+                            (pcase-dolist (`(,prop . ,value) prop-alist)
+                              (org-entry-put nil prop value)))
+                          (message "Added Git properties to the clocked org-mode entry"))))))))
+
     (:when-loaded
       (:also-load org-dog-embark
                   org-dog-facade))
@@ -3250,7 +3273,7 @@ Transient commands for Org Dog
 
     (:set octopus-find-node-verbs
           '((?f "Display a node" nil org-pivot-search-from-files)
-            (?v "Display a search view" nil akirak/org-ql-search-files)
+            (?v "Display a search view" nil akirak-org-ql-search-files)
             (?o "Open a heading link" nil akirak-org-ql-open-link)
             (?i "Insert a target" nil org-nlink-insert-plain))
           octopus-super-link-drawer-list '("BLOCKING")
@@ -3739,6 +3762,8 @@ Org Query Language, search command, and agenda-like view
 #+begin_src emacs-lisp
   (setup (:package org-ql)
     (:also-load akirak-org-ql)
+    (with-eval-after-load 'akirak-org-ql
+      (akirak-org-ql-define-todo-predicates))
     ;; Temporarily workaround
     (autoload 'org-dblock-write:org-ql "org-ql-search")
 
@@ -7666,7 +7691,6 @@ Summon and dismiss buffers as popups
                                      "^\\*Register Preview\\*"
                                      "^\\*Shell Command Output\\*"
                                      "^\\*edit string\\*"
-                                     "^\\*edit-indirect"
                                      "^\\*bean-query"
                                      "^\\*scratch from selection\\*"
                                      ;; "^\\*eldoc"

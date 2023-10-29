@@ -1435,8 +1435,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 :tags (append tags
                                               (akirak-capture--mode-tags file))
                                 :properties
-                                (akirak-capture--git-properties
-                                 obj :tags tags)
+                                (akirak-capture-git-properties obj :tags tags)
                                 :body body)
                    :file ,file
                    :function ,jump-func
@@ -1451,7 +1450,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                      (org-dog-file-object file))))
     (org-dog-file-tags obj)))
 
-(cl-defun akirak-capture--git-properties (obj &key tags)
+(cl-defun akirak-capture-git-properties (obj &key tags)
   (when-let (root (vc-git-root default-directory))
     (when (or (member "@contribution" tags)
               (string-prefix-p "projects/" (oref obj relative)))

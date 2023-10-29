@@ -103,7 +103,8 @@
                                 (marker-buffer org-clock-marker)
                                 (buffer-file-name)
                                 (abbreviate-file-name))))
-                (or (member filename files)
+                (or (not (string-prefix-p "~/" filename))
+                    (member filename files)
                     (when further
                       (member filename
                               (thread-last
@@ -248,37 +249,6 @@
             (akirak-org-clock--snoozed-p)))))
 
 ;;;###autoload
-(defun akirak-org-clock-in-dwim ()
-  (interactive)
-  (cond
-   ((bound-and-true-p org-dog-file-mode)
-    (akirak-org-clock-in-to-dog))
-   (t
-    (akirak-org-clock-in-to-project))))
-
-(defun akirak-org-clock-in-to-dog ()
-  (interactive)
-  (cl-assert (bound-and-true-p org-dog-file-mode))
-  (let* ((link (progn
-                 (org-dog-store-file-link)
-                 (car (pop org-stored-links))))
-         (width (frame-width))
-         (candidates (org-ql-select "~/org/meta.org"
-                       `(and (todo)
-                             (or (ancestors (link nil :target ,link))
-                                 (link nil :target ,link)
-                                 (parent (heading "General"))))
-                       :action `(cons (org-format-outline-path
-                                       (org-get-outline-path t t)
-                                       ,width
-                                       (org-get-todo-state))
-                                      (point-marker)))))
-    (pcase-exhaustive (cdr (assoc (completing-read "Clock in: " candidates nil t)
-                                  candidates))
-      ((and marker (cl-type marker))
-       (org-clock-clock-in (list marker))))))
-
-;;;###autoload
 (defun akirak-org-clock-snooze (&optional seconds)
   (interactive "P")
   (when akirak-org-clock-mode
@@ -420,18 +390,21 @@ This function returns the current buffer."
               (newline))
             capture-buffer)
         (with-current-buffer (org-dog-indirect-buffer org-clock-marker)
-          (when (or (< (point) (point-min))
-                    (> (point) (point-max)))
-            (goto-char (point-min)))
           (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer)
                    action)
-          (when org-dog-new-indirect-buffer-p
-            (org-back-to-heading)
-            (run-hooks 'akirak-org-clock-open-hook))
-          (when arg
+          (cond
+           ((or arg
+                (org-match-line org-clock-line-re)
+                (org-match-line org-logbook-drawer-re))
             (goto-char (org-entry-end-position))
             (delete-blank-lines)
             (newline))
+           ;; I don't know if this path actually happens.
+           ((or (< (point) (point-min))
+                (> (point) (point-max)))
+            (goto-char (point-min))))
+          (when org-dog-new-indirect-buffer-p
+            (run-hooks 'akirak-org-clock-open-hook))
           (current-buffer))))))
 
 ;;;###autoload
@@ -640,8 +613,14 @@ This function returns the current buffer."
   (interactive "P")
   (akirak-org-clock-require-clock
     (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
-        (with-current-buffer capture-buffer
-          (org-capture-finalize))
+        (let ((need-explicit-clock-out (and (not org-capture-clock-was-started)
+                                            org-clock-marker
+                                            (equal capture-buffer
+                                                   (marker-buffer org-clock-marker)))))
+          (with-current-buffer capture-buffer
+            (org-capture-finalize))
+          (when need-explicit-clock-out
+            (org-clock-out arg)))
       (org-clock-out arg))))
 
 ;;;###autoload
