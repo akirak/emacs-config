@@ -194,6 +194,22 @@
       (when (fboundp 'pulse-momentary-highlight-one-line)
         (pulse-momentary-highlight-one-line)))))
 
+(defun akirak-embark-insert-link-to-org (&optional arg)
+  "Insert a link to the entry. With a prefix, insert a super link."
+  (interactive "P")
+  (if (derived-mode-p 'org-mode)
+      (progn
+        (org-with-point-at akirak-embark-target-org-marker
+          (call-interactively #'org-store-link))
+        (org-insert-last-stored-link nil)
+        (when (and arg
+                   (fboundp 'org-super-links-convert-link-to-super))
+          (save-excursion
+            (re-search-backward org-link-bracket-re)
+            (org-super-links-convert-link-to-super nil))
+          (message "Added a backlink also")))
+    (user-error "Non-org-mode is not supported yet")))
+
 (defun akirak-embark-org-copy-first-block ()
   (interactive)
   (org-with-point-at akirak-embark-target-org-marker
@@ -263,6 +279,7 @@
     (define-key map "I" (akirak-embark-run-at-marker org-clock-in))
     (define-key map "l" (akirak-embark-run-at-marker org-store-link))
     (define-key map (kbd "C-c C-t") (akirak-embark-run-at-marker org-todo))
+    (define-key map (kbd "C-c C-l") #'akirak-embark-insert-link-to-org)
     (define-key map "W" #'akirak-embark-org-copy-first-block)
     (define-key map (kbd "C-o") #'akirak-embark-org-open-link-in-entry)
     (define-key map (kbd "C-c C-s") #'akirak-embark-org-schedule)
