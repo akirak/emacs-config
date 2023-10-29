@@ -644,8 +644,14 @@ This function returns the current buffer."
   (interactive "P")
   (akirak-org-clock-require-clock
     (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
-        (with-current-buffer capture-buffer
-          (org-capture-finalize))
+        (let ((need-explicit-clock-out (and (not org-capture-clock-was-started)
+                                            org-clock-marker
+                                            (equal capture-buffer
+                                                   (marker-buffer org-clock-marker)))))
+          (with-current-buffer capture-buffer
+            (org-capture-finalize))
+          (when need-explicit-clock-out
+            (org-clock-out arg)))
       (org-clock-out arg))))
 
 ;;;###autoload
