@@ -290,6 +290,7 @@
   (define-key embark-identifier-map "R" #'project-query-replace-regexp)
   (define-key embark-expression-map "R" #'project-query-replace-regexp)
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
+  (define-key embark-variable-map "k" #'akirak-embark-describe-key-briefly-in-map)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
   (define-key embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
@@ -603,6 +604,12 @@
              (file-readable-p value))
         (find-file value)
       (user-error "Not a file name: %s" value))))
+
+(defun akirak-embark-describe-key-briefly-in-map (symbol)
+  (interactive "S")
+  (with-temp-buffer
+    (use-local-map (symbol-value symbol))
+    (call-interactively #'describe-key-briefly)))
 
 (defun akirak-embark-transform-org-placeholder (_type item)
   (let ((marker (org-placeholder-item-marker item)))
