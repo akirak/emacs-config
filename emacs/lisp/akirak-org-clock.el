@@ -74,6 +74,7 @@
                               (buffer-name))
               (string-match-p akirak-org-clock-file-name-whitelist
                               filename)
+              (not (string-prefix-p "~/" (abbreviate-file-name filename)))
               (and (bound-and-true-p akirak-emacs-org-config-file)
                    (string-equal (expand-file-name akirak-emacs-org-config-file)
                                  filename))
