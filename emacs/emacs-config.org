@@ -5668,11 +5668,8 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
-                   '(elixir-mode . ("elixir-ls")))
-      (add-to-list 'eglot-server-programs
-                   '(elixir-ts-mode . ("elixir-ls")))
-      (add-to-list 'eglot-server-programs
-                   '(heex-ts-mode . ("elixir-ls")))
+                   '((elixir-mode elixir-ts-mode heex-ts-mode) .
+                     ("elixir-ls")))
       (add-to-list 'eglot-server-programs
                    '((elixir-ts-mode heex-ts-mode elixir-mode) .
                      ("nextls" "--stdio=true")))
