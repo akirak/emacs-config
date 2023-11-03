@@ -6,7 +6,19 @@ on:
     - closed
 
 jobs:
+  tag-release:
+    if: |
+      github.event.pull_request.merged == true &&
+      github.base_ref == 'master' &&
+      github.head_ref == 'develop' &&
+      github.event.pull_request.head.repo.id == github.event.pull_request.base.repo.id
+    uses: ./.github/workflows/tag-release.yml
+    with:
+      ref: 'master'
+    secrets: inherit
+
   recreate_develop:
+    # Use the same condition as tag-release
     if: |
       github.event.pull_request.merged == true &&
       github.base_ref == 'master' &&
