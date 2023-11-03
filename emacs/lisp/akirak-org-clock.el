@@ -164,7 +164,8 @@
                           (user-error "Must be in a project")))))
         (pcase (project-root pr)
           ((rx "/foss/contributions/")
-           (list (list (car (akirak-org-dog-major-mode-files)))
+           (list (delq nil (list (car (akirak-org-dog-path-files))
+                                 (car (akirak-org-dog-major-mode-files))))
                  "tag:@contribution "
                  "@contribution"
                  nil))
