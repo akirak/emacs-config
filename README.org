@@ -5,6 +5,8 @@
 :END:
 [[https://akirak.cachix.org][file:https://img.shields.io/badge/cachix-akirak-blue.svg]]
 
+[[https://flakehub.com/flake/akirak/emacs-config][file:https://img.shields.io/endpoint?url=https://flakehub.com/f/akirak/emacs-config/badge]]
+
 This repository contains my Emacs configuration which is built using [[https://github.com/akirak/emacs-twist][emacs-twist]].
 I use home-manager to install the configuration.
 
