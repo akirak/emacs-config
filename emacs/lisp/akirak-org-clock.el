@@ -187,6 +187,9 @@
                    "todo: "
                    nil
                    nil)))
+          ((rx bol "/nix/store/")
+           ;; You cannot store in Nix
+           nil)
           (_
            (require 'akirak-org-dog)
            (list (akirak-org-dog-project-files)
@@ -200,20 +203,25 @@
   (interactive)
   (require 'akirak-org-dog)
   (pcase-exhaustive (akirak-org-clock--target)
+    (`nil
+     (user-error "You are not in a project or the project is not suitable for\
+ clocking in" ))
     (`(,files ,query-prefix ,tags ,further)
-     (let ((files (if further
-                      (thread-last
-                        (org-dog-overview-scan files
-                                               :fast t)
-                        (mapcar #'car))
-                    files)))
-       (org-dog-clock-in files
-                         :query-prefix query-prefix
-                         :tags tags
-                         :prompt
-                         (format "Clock in to project file (%s): "
-                                 (mapconcat #'file-name-nondirectory
-                                            files ", ")))))))
+     (if-let (files (if further
+                        (thread-last
+                          (org-dog-overview-scan files
+                                                 :fast t)
+                          (mapcar #'car))
+                      files))
+         (org-dog-clock-in files
+                           :query-prefix query-prefix
+                           :tags tags
+                           :prompt
+                           (format "Clock in to project file (%s): "
+                                   (mapconcat #'file-name-nondirectory
+                                              files ", ")))
+       (message "No default clock target, so fall back to octopus-clock-in")
+       (octopus-clock-in)))))
 
 (defun akirak-org-clock--project-name (pr)
   "Return the name of the project for use in prompt."
