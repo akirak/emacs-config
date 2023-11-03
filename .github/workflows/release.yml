@@ -43,3 +43,22 @@ jobs:
         tag_name: ${{ inputs.release-tag || github.ref_name }}
         files: |
           *.zstd
+
+  publish-flakehub:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: cachix/install-nix-action@v23
+
+    - name: Push to flakehub
+      uses: determinatesystems/flakehub-push@main
+      with:
+        visibility: "public"
+        name: "akirak/emacs-config"
+        tag: "${{ inputs.release-tag }}"
