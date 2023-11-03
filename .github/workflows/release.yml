@@ -1,37 +1,22 @@
 name: Upload release assets
 
 on:
-  workflow_dispatch:
   push:
     tags:
       - "r*"
+
+  workflow_call:
+    inputs:
+      release-tag:
+        required: true
+        type: string
 
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  tag:
-    runs-on: ubuntu-latest
-
-    outputs:
-      release-tag: ${{ steps.tag.outputs.release_tag }}
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Tag the current head
-      id: tag
-      if: ${{ github.event_name == 'workflow_dispatch' }}
-      run: |
-        tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
-        echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
-        git tag -f "$tag"
-        git push --force origin "tags/$tag"
-
   build-archive:
-    needs: tag
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -41,6 +26,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.release-tag }}
 
     - uses: cachix/install-nix-action@v23
       with:
@@ -53,6 +40,6 @@ jobs:
 
     - uses: akirak/action-gh-release@master
       with:
-        tag_name: ${{ needs.tag.outputs.release-tag }}
+        tag_name: ${{ inputs.release-tag || github.ref_name }}
         files: |
           *.zstd

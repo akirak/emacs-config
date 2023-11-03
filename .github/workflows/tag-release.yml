@@ -1,0 +1,38 @@
+name: Tag a release
+
+on:
+  workflow_dispatch:
+
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    outputs:
+      release-tag: ${{ steps.tag.outputs.release_tag }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref }}
+
+    - name: Tag the current head
+      id: tag
+      if: ${{ github.event_name == 'workflow_dispatch' }}
+      run: |
+        tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
+        echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
+        git tag -f "$tag"
+        git push --force origin "tags/$tag"
+
+  release:
+    needs: tag
+    uses: ./.github/workflows/release.yml
+    with:
+      release-tag: ${{ needs.tag.outputs.release-tag }}
+    secrets: inherit
