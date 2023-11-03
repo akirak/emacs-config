@@ -68,7 +68,8 @@ Each function is run without an argument in the new working tree."
 (defun akirak-magit--worktree-name (remote-url branch)
   (concat (akirak-magit--repo-name remote-url)
           akirak-magit-branch-delim
-          branch))
+          ;; Don't include slash as it is a path delimiter
+          (string-replace "/" "_" branch)))
 
 (defun akirak-magit--remote-url (remote)
   (car (magit-config-get-from-cached-list (format "remote.%s.url" remote))))
