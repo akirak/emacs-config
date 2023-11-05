@@ -387,6 +387,12 @@
       repo = "flymake-eslint";
       type = "github";
     };
+    flymake-shellcheck = {
+      flake = false;
+      owner = "federicotdn";
+      repo = "flymake-shellcheck";
+      type = "github";
+    };
     fstar-mode = {
       flake = false;
       owner = "FStarLang";

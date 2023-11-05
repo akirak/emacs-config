@@ -6061,6 +6061,15 @@ A Flymake backend for Javascript using eslint
   (setup (:package flymake-eslint)
     (:set flymake-eslint-defer-binary-check t))
 #+end_src
+*** flymake-shellcheck
+:PROPERTIES:
+:CREATED_TIME: [2023-11-05 Sun 19:02]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-shellcheck)
+    (:nixpkgs "shellcheck"))
+#+end_src
 *** COMMENT flyspell-correct                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-09-03 Sat 23:59]
