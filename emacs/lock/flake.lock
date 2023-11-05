@@ -995,6 +995,22 @@
         "type": "github"
       }
     },
+    "flymake-actionlint1": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1699181276,
+        "narHash": "sha256-K9C3gKaxd+rrfmj0lpsl4wYIJfHRQLWV00yo+cKJyo8=",
+        "owner": "akirak",
+        "repo": "flymake-actionlint1",
+        "rev": "b9f8b89909b34658f37d5902a3e9ae841a1c7878",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "flymake-actionlint1",
+        "type": "github"
+      }
+    },
     "flymake-eslint": {
       "flake": false,
       "locked": {
@@ -1288,14 +1304,14 @@
       "locked": {
         "lastModified": 1677753243,
         "narHash": "sha256-8Q6yA5jbAOvaIxTuQ3tROe99P7kX1SGOkEIQxaHV8CM=",
-        "owner": "purcell",
-        "repo": "emacs-hcl-mode",
+        "owner": "hcl-emacs",
+        "repo": "hcl-mode",
         "rev": "751b79247f326ab52e00032e805775c37ad9f080",
         "type": "github"
       },
       "original": {
-        "owner": "purcell",
-        "repo": "emacs-hcl-mode",
+        "owner": "hcl-emacs",
+        "repo": "hcl-mode",
         "type": "github"
       }
     },
@@ -2990,6 +3006,7 @@
         "f": "f",
         "fanyi": "fanyi",
         "flycheck": "flycheck",
+        "flymake-actionlint1": "flymake-actionlint1",
         "flymake-eslint": "flymake-eslint",
         "flymake-shellcheck": "flymake-shellcheck",
         "fstar-mode": "fstar-mode",
@@ -3573,16 +3590,15 @@
     "visual-fill-column": {
       "flake": false,
       "locked": {
-        "lastModified": 1637195632,
-        "narHash": "sha256-23AFjF7pT7Ixj3bcLl6hWh6T/qHejTq5D/hYHbBhRnI=",
-        "ref": "main",
-        "rev": "cf3e2bc632b68d54145c79beede85d3458a337de",
-        "revCount": 137,
+        "lastModified": 1699004619,
+        "narHash": "sha256-Yt5uey+noTPkGrzRo0TzCRVTXqxCDt08JxI3qWO3cVs=",
+        "ref": "refs/heads/main",
+        "rev": "db7c7c236555c9c684e1294a277efefdc25fa5c4",
+        "revCount": 144,
         "type": "git",
         "url": "https://codeberg.org/joostkremers/visual-fill-column.git"
       },
       "original": {
-        "ref": "main",
         "type": "git",
         "url": "https://codeberg.org/joostkremers/visual-fill-column.git"
       }
