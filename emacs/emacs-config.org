@@ -4302,6 +4302,10 @@ Major mode for editing YAML files
 :PROPERTIES:
 :CREATED_TIME: [2023-11-05 Sun 19:29]
 :END:
+#+begin_quote
+Another flymake backend for actionlint
+[[https://github.com/akirak/flymake-actionlint1]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package flymake-actionlint1)
@@ -6065,6 +6069,9 @@ A Flymake backend for Javascript using eslint
 :PROPERTIES:
 :CREATED_TIME: [2023-11-05 Sun 19:02]
 :END:
+#+begin_quote
+A bash/sh Flymake backend powered by ShellCheck
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package flymake-shellcheck)
@@ -9026,7 +9033,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:packages][packages]]            | 215 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
-| [[org-ql-search:tags:formatting][formatting]]          |  12 |
+| [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
