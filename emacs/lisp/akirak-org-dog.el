@@ -215,18 +215,21 @@
   (interactive)
   (let (files)
     (dolist (file (org-agenda-files))
-      (with-current-buffer (or (find-buffer-visiting file)
-                               (find-file-noselect file))
-        (org-with-wide-buffer
-         (goto-char (point-min))
-         (let ((bound (save-excursion (re-search-forward org-heading-regexp nil t))))
-           (when bound
-             (narrow-to-region (point-min) bound)
-             (when-let (pos (org-babel-find-named-block "auto-update"))
-               (goto-char pos)
-               (message "Executing a babel block at %d in %s" pos file)
-               (org-babel-execute-src-block)
-               (push file files)))))))
+      (if (file-readable-p file)
+          (with-current-buffer (or (find-buffer-visiting file)
+                                   (find-file-noselect file))
+            (org-with-wide-buffer
+             (goto-char (point-min))
+             (let ((bound (save-excursion (re-search-forward org-heading-regexp nil t))))
+               (when bound
+                 (narrow-to-region (point-min) bound)
+                 (when-let (pos (org-babel-find-named-block "auto-update"))
+                   (goto-char pos)
+                   (message "Executing a babel block at %d in %s" pos file)
+                   (org-babel-execute-src-block)
+                   (push file files))))))
+        (delete file org-agenda-files)
+        (delete (abbreviate-file-name file) org-agenda-files)))
     (when files
       (message "Executed source blocks in %s"
                (mapconcat #'abbreviate-file-name files " ")))
