@@ -7706,6 +7706,7 @@ Summon and dismiss buffers as popups
                                      "^\\*edit string\\*"
                                      "^\\*bean-query"
                                      "^\\*scratch from selection\\*"
+                                     "^\\*[[:word:]]+ errors\\*"
                                      ;; "^\\*eldoc"
                                      "^\\*Select Link\\*"
                                      "^\\*Flymake diagnostics"
