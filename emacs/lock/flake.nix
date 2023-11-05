@@ -491,8 +491,8 @@
     };
     hcl-mode = {
       flake = false;
-      owner = "purcell";
-      repo = "emacs-hcl-mode";
+      owner = "hcl-emacs";
+      repo = "hcl-mode";
       type = "github";
     };
     highlight-indent-guides = {
@@ -1268,7 +1268,6 @@
     };
     visual-fill-column = {
       flake = false;
-      ref = "main";
       type = "git";
       url = "https://codeberg.org/joostkremers/visual-fill-column.git";
     };
