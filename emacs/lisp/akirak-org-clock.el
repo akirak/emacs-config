@@ -152,14 +152,15 @@
                          ((not (string-prefix-p "~/" (abbreviate-file-name default-directory)))
                           nil)
                          ((yes-or-no-p "Not in a project. Run git init?")
-                          (let ((dir (file-name-directory (buffer-file-name))))
-                            (unless (file-directory-p dir)
-                              (make-directory dir 'parents))
-                            (let ((default-directory (read-directory-name
-                                                      "Run git init at: ")))
-                              (call-process "git" nil nil nil "init"))
-                            (or (project-current)
-                                (user-error "The directory is not inside a project"))))
+                          (when (buffer-file-name)
+                            (let ((dir (file-name-directory (buffer-file-name))))
+                              (unless (file-directory-p dir)
+                                (make-directory dir 'parents))))
+                          (let ((default-directory (read-directory-name
+                                                    "Run git init at: ")))
+                            (call-process "git" nil nil nil "init"))
+                          (or (project-current)
+                              (user-error "The directory is not inside a project")))
                          (t
                           (user-error "Must be in a project")))))
         (pcase (project-root pr)
