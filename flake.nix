@@ -174,10 +174,6 @@
               emacs-env
               // {
                 wrappers = lib.optionalAttrs pkgs.stdenv.isLinux {
-                  fuse-overlayfs =
-                    pkgs.callPackage ./nix/overlayfsWrapper.nix {}
-                    "emacs-${name}"
-                    emacs-env;
                   tmpdir =
                     pkgs.callPackage ./nix/tmpInitDirWrapper.nix {}
                     "emacs-${name}"
