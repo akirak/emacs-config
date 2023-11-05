@@ -1011,6 +1011,22 @@
         "type": "github"
       }
     },
+    "flymake-shellcheck": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1668379502,
+        "narHash": "sha256-Gk5SU2HOtIwqJbpzKW5nJKIkXsqKOk6H/MBhU2Pfea0=",
+        "owner": "federicotdn",
+        "repo": "flymake-shellcheck",
+        "rev": "ab7d44f42446fc4ff2bcda78a8622bdda6111870",
+        "type": "github"
+      },
+      "original": {
+        "owner": "federicotdn",
+        "repo": "flymake-shellcheck",
+        "type": "github"
+      }
+    },
     "fstar-mode": {
       "flake": false,
       "locked": {
@@ -2975,6 +2991,7 @@
         "fanyi": "fanyi",
         "flycheck": "flycheck",
         "flymake-eslint": "flymake-eslint",
+        "flymake-shellcheck": "flymake-shellcheck",
         "fstar-mode": "fstar-mode",
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",
