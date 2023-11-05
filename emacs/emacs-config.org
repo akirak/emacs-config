@@ -14,6 +14,7 @@
 - [[#typography-settings][Typography settings]]
 - [[#org][Org]]
 - [[#treesit-based-major-modes][Treesit-based major modes]]
+- [[#working-with-specific-services][Working with specific services]]
 - [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#packages][Packages]]
 - [[#various-hooks-and-hacks-related-to-window-management][Various Hooks and hacks related to window management]]
@@ -4286,6 +4287,7 @@ Major mode for editing YAML files
   (setup yaml-ts-mode
     (:file-match "\\.ya?ml\\'"))
 #+end_src
+** Working with specific services
 ** User package (akirak-*.el)
 :PROPERTIES:
 :SORTING_TYPE: a
