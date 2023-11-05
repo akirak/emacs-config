@@ -375,6 +375,12 @@
       repo = "flycheck";
       type = "github";
     };
+    flymake-actionlint1 = {
+      flake = false;
+      owner = "akirak";
+      repo = "flymake-actionlint1";
+      type = "github";
+    };
     flymake-eslint = {
       flake = false;
       owner = "orzechowskid";
