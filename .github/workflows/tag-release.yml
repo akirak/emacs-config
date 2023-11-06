@@ -33,5 +33,5 @@ jobs:
     needs: tag
     uses: ./.github/workflows/release.yml
     with:
-      release-tag: ${{ needs.tag.outputs.release-tag }}
+      release-tag: ${{ needs.tag.outputs.release_tag }}
     secrets: inherit
