@@ -23,7 +23,6 @@ jobs:
 
     - name: Tag the current head
       id: tag
-      if: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
         tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
         echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
