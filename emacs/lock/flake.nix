@@ -375,10 +375,22 @@
       repo = "flycheck";
       type = "github";
     };
+    flymake-actionlint1 = {
+      flake = false;
+      owner = "akirak";
+      repo = "flymake-actionlint1";
+      type = "github";
+    };
     flymake-eslint = {
       flake = false;
       owner = "orzechowskid";
       repo = "flymake-eslint";
+      type = "github";
+    };
+    flymake-shellcheck = {
+      flake = false;
+      owner = "federicotdn";
+      repo = "flymake-shellcheck";
       type = "github";
     };
     fstar-mode = {
@@ -479,8 +491,8 @@
     };
     hcl-mode = {
       flake = false;
-      owner = "purcell";
-      repo = "emacs-hcl-mode";
+      owner = "hcl-emacs";
+      repo = "hcl-mode";
       type = "github";
     };
     highlight-indent-guides = {
@@ -1256,7 +1268,6 @@
     };
     visual-fill-column = {
       flake = false;
-      ref = "main";
       type = "git";
       url = "https://codeberg.org/joostkremers/visual-fill-column.git";
     };

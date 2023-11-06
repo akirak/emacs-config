@@ -74,6 +74,7 @@
                               (buffer-name))
               (string-match-p akirak-org-clock-file-name-whitelist
                               filename)
+              (not (string-prefix-p "~/" (abbreviate-file-name filename)))
               (and (bound-and-true-p akirak-emacs-org-config-file)
                    (string-equal (expand-file-name akirak-emacs-org-config-file)
                                  filename))
@@ -135,7 +136,9 @@
                                                         files ", ")))
                    t)
                (message "No Org file to clock in to")))
-           t)))))
+           t)))
+    (`nil
+     t)))
 
 (defun akirak-org-clock--mode-or-path-files ()
   (cl-remove-duplicates (append (akirak-org-dog-major-mode-files)
@@ -144,47 +147,57 @@
 
 (defun akirak-org-clock--target ()
   (or akirak-org-clock-target
-      (pcase (project-root (or (project-current)
-                               (if (yes-or-no-p "Not in a project. Run git init?")
-                                   (let ((dir (file-name-directory (buffer-file-name))))
-                                     (unless (file-directory-p dir)
-                                       (make-directory dir 'parents))
-                                     (let ((default-directory (read-directory-name
-                                                               "Run git init at: ")))
-                                       (call-process "git" nil nil nil "init"))
-                                     (or (project-current)
-                                         (user-error "The directory is not inside a project")))
-                                 (user-error "Must be in a project"))))
-        ((rx "/foss/contributions/")
-         (list (list (car (akirak-org-dog-major-mode-files)))
-               "tag:@contribution "
-               "@contribution"
-               nil))
-        ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
-              (app (match-string 1) category))
-         (list (org-dog-select 'absolute
-                 `(relative :regexp ,(rx-to-string `(and "/" ,category
-                                                         (? "." (+ (not (any "/"))))
-                                                         ".org"))))
-               ""
-               nil
-               nil))
-        ("~/org/"
-         (if (eq major-mode 'org-memento-policy-mode)
-             (list (list "~/org/focus.org" "~/org/meta.org")
-                   ""
+      (when-let (pr (or (project-current)
+                        (cond
+                         ((not (string-prefix-p "~/" (abbreviate-file-name default-directory)))
+                          nil)
+                         ((yes-or-no-p "Not in a project. Run git init?")
+                          (when (buffer-file-name)
+                            (let ((dir (file-name-directory (buffer-file-name))))
+                              (unless (file-directory-p dir)
+                                (make-directory dir 'parents))))
+                          (let ((default-directory (read-directory-name
+                                                    "Run git init at: ")))
+                            (call-process "git" nil nil nil "init"))
+                          (or (project-current)
+                              (user-error "The directory is not inside a project")))
+                         (t
+                          (user-error "Must be in a project")))))
+        (pcase (project-root pr)
+          ((rx "/foss/contributions/")
+           (list (delq nil (list (car (akirak-org-dog-path-files))
+                                 (car (akirak-org-dog-major-mode-files))))
+                 "tag:@contribution "
+                 "@contribution"
+                 nil))
+          ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
+                (app (match-string 1) category))
+           (list (org-dog-select 'absolute
+                   `(relative :regexp ,(rx-to-string `(and "/" ,category
+                                                           (?  "." (+ (not (any "/"))))
+                                                           ".org"))))
+                 ""
+                 nil
+                 nil))
+          ("~/org/"
+           (if (eq major-mode 'org-memento-policy-mode)
+               (list (list "~/org/focus.org" "~/org/meta.org")
+                     ""
+                     nil
+                     nil)
+             (list (list "~/org/meta.org")
+                   "todo: "
                    nil
-                   nil)
-           (list (list "~/org/meta.org")
+                   nil)))
+          ((rx bol "/nix/store/")
+           ;; You cannot store in Nix
+           nil)
+          (_
+           (require 'akirak-org-dog)
+           (list (akirak-org-dog-project-files)
                  "todo: "
                  nil
-                 nil)))
-        (_
-         (require 'akirak-org-dog)
-         (list (akirak-org-dog-project-files)
-               "todo: "
-               nil
-               t)))))
+                 t))))))
 
 ;;;###autoload
 (defun akirak-org-clock-in-to-project ()
@@ -192,20 +205,25 @@
   (interactive)
   (require 'akirak-org-dog)
   (pcase-exhaustive (akirak-org-clock--target)
+    (`nil
+     (user-error "You are not in a project or the project is not suitable for\
+ clocking in" ))
     (`(,files ,query-prefix ,tags ,further)
-     (let ((files (if further
-                      (thread-last
-                        (org-dog-overview-scan files
-                                               :fast t)
-                        (mapcar #'car))
-                    files)))
-       (org-dog-clock-in files
-                         :query-prefix query-prefix
-                         :tags tags
-                         :prompt
-                         (format "Clock in to project file (%s): "
-                                 (mapconcat #'file-name-nondirectory
-                                            files ", ")))))))
+     (if-let (files (if further
+                        (thread-last
+                          (org-dog-overview-scan files
+                                                 :fast t)
+                          (mapcar #'car))
+                      files))
+         (org-dog-clock-in files
+                           :query-prefix query-prefix
+                           :tags tags
+                           :prompt
+                           (format "Clock in to project file (%s): "
+                                   (mapconcat #'file-name-nondirectory
+                                              files ", ")))
+       (message "No default clock target, so fall back to octopus-clock-in")
+       (octopus-clock-in)))))
 
 (defun akirak-org-clock--project-name (pr)
   "Return the name of the project for use in prompt."

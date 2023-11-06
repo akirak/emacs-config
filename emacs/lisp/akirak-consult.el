@@ -159,7 +159,7 @@
 
 (defun akirak-consult--project-root ()
   (if-let (pr (project-current))
-      (project-root pr)
+      (expand-file-name (project-root pr))
     ;; TODO: Better heuristics
     (when (string-match-p (rx bol (repeat 3 (and "/" (+ anything))) "/")
                           default-directory)

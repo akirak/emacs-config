@@ -14,6 +14,7 @@
 - [[#typography-settings][Typography settings]]
 - [[#org][Org]]
 - [[#treesit-based-major-modes][Treesit-based major modes]]
+- [[#working-with-specific-services][Working with specific services]]
 - [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#packages][Packages]]
 - [[#various-hooks-and-hacks-related-to-window-management][Various Hooks and hacks related to window management]]
@@ -4284,7 +4285,31 @@ Major mode for editing YAML files
 
 #+begin_src emacs-lisp
   (setup yaml-ts-mode
-    (:file-match "\\.ya?ml\\'"))
+    (:file-match "\\.ya?ml\\'")
+    (:hook (defun akirak/yaml-setup ()
+             "Enable extra settings for YAML."
+             (interactive nil (yaml-mode yaml-ts-mode))
+             (pcase (buffer-file-name)
+               (`nil)
+               ((rx "/.github/workflows/")
+                (message "YAML: Detected GitHub workflow")
+                (when (fboundp 'flymake-actionlint1-enable)
+                  (flymake-actionlint1-enable)))))))
+#+end_src
+** Working with specific services
+*** GitHub
+**** flymake-actionlint1
+:PROPERTIES:
+:CREATED_TIME: [2023-11-05 Sun 19:29]
+:END:
+#+begin_quote
+Another flymake backend for actionlint
+[[https://github.com/akirak/flymake-actionlint1]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-actionlint1)
+    (:nixpkgs "actionlint"))
 #+end_src
 ** User package (akirak-*.el)
 :PROPERTIES:
@@ -4845,6 +4870,19 @@ Elixir tooling integration
   (setup (:package apprentice)
     (:hook-into elixir-ts-mode-hook)
     (:set apprentice-key-command-prefix (kbd "C-, ,"))
+    (:when-loaded
+      (when (require 'which-key nil t)
+        (let ((prefix (key-description apprentice-key-command-prefix)))
+          (pcase-dolist (`(,key ,replacement)
+                         '(("m" "mix")
+                           ("c" "compile")
+                           ("e" "execute")
+                           ("h" "help")
+                           ("p" "project files")
+                           ("i" "iex")
+                           ("X" "hex")))
+            (which-key-add-keymap-based-replacements
+              apprentice-mode-map (concat prefix " " key) replacement)))))
     (:with-mode elixir-ts-mode
       (:mode-repl apprentice-iex-project-run))
 
@@ -5655,11 +5693,11 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
-                   '(elixir-mode . ("elixir-ls")))
+                   '((elixir-mode elixir-ts-mode heex-ts-mode) .
+                     ("elixir-ls")))
       (add-to-list 'eglot-server-programs
-                   '(elixir-ts-mode . ("elixir-ls")))
-      (add-to-list 'eglot-server-programs
-                   '(heex-ts-mode . ("elixir-ls")))
+                   '((elixir-ts-mode heex-ts-mode elixir-mode) .
+                     ("nextls" "--stdio=true")))
       (add-to-list 'eglot-server-programs
                    `(web-mode . ,(eglot-alternatives
                                   '(("astro-ls" "--stdio")))))
@@ -6026,6 +6064,18 @@ A Flymake backend for Javascript using eslint
 #+begin_src emacs-lisp
   (setup (:package flymake-eslint)
     (:set flymake-eslint-defer-binary-check t))
+#+end_src
+*** flymake-shellcheck
+:PROPERTIES:
+:CREATED_TIME: [2023-11-05 Sun 19:02]
+:END:
+#+begin_quote
+A bash/sh Flymake backend powered by ShellCheck
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-shellcheck)
+    (:nixpkgs "shellcheck"))
 #+end_src
 *** COMMENT flyspell-correct                                                   :ARCHIVE:
 :PROPERTIES:
@@ -7693,6 +7743,7 @@ Summon and dismiss buffers as popups
                                      "^\\*edit string\\*"
                                      "^\\*bean-query"
                                      "^\\*scratch from selection\\*"
+                                     "^\\*[[:word:]]+ errors\\*"
                                      ;; "^\\*eldoc"
                                      "^\\*Select Link\\*"
                                      "^\\*Flymake diagnostics"
@@ -7931,6 +7982,7 @@ Clean-up and Beautify the list of minor-modes.
                            (or "envrc"
                                "TSit"
                                "OClk"
+                               "Flymake"
                                "Memento"
                                "Copilot"
                                "ga"
@@ -8979,7 +9031,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 214 |
+| [[org-ql-search:tags:packages][packages]]            | 215 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

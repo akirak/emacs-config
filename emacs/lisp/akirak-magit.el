@@ -31,8 +31,7 @@ Each function is run without an argument in the new working tree."
                                                         (format "%s/%s"
                                                                 remote
                                                                 (or default "master"))))
-       (origin-name (akirak-magit--repo-name (car (akirak-magit--remote-url remote))))
-       (name (concat origin-name akirak-magit-branch-delim branch)))
+       (name (akirak-magit--worktree-name remote branch)))
     (akirak-magit-worktree branch start-point :name name)))
 
 ;;;###autoload
@@ -47,11 +46,9 @@ Each function is run without an argument in the new working tree."
   "Check out a new branch in a worktree at the default location."
   (interactive)
   (let* ((direnv-allowed (akirak-magit--direnv-allowed-p))
+         (remote-url (akirak-magit--remote-url (car (magit--get-default-branch))))
          (name (or name
-                   (concat (akirak-magit--repo-name (car (akirak-magit--remote-url
-                                                          (car (magit--get-default-branch)))))
-                           akirak-magit-branch-delim
-                           branch)))
+                   (akirak-magit--worktree-name remote-url branch)))
          (category (funcall akirak-magit-worktree-category-function))
          (parent (or (when category
                        (akirak-git-clone-default-parent category))
@@ -68,8 +65,14 @@ Each function is run without an argument in the new working tree."
       (envrc-allow))
     (run-hooks 'akirak-magit-worktree-hook)))
 
+(defun akirak-magit--worktree-name (remote-url branch)
+  (concat (akirak-magit--repo-name remote-url)
+          akirak-magit-branch-delim
+          ;; Don't include slash as it is a path delimiter
+          (string-replace "/" "_" branch)))
+
 (defun akirak-magit--remote-url (remote)
-  (magit-config-get-from-cached-list (format "remote.%s.url" remote)))
+  (car (magit-config-get-from-cached-list (format "remote.%s.url" remote))))
 
 (defun akirak-magit--repo-name (git-url)
   (if (string-match (rx (any ":/") (group (+? (not (any "/")))) (?  ".git") eol)
