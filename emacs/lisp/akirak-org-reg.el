@@ -207,7 +207,8 @@
 ;;;###autoload (autoload 'akirak-org-reg-transient "akirak-org-reg" nil 'interactive)
 (transient-define-prefix akirak-org-reg-transient ()
   "Dispatch an action on a place."
-  [("-t" akirak-org-reg-switch-target)]
+  ["Dispatch embark action on an org-mode target"
+   ("-t" akirak-org-reg-switch-target)]
   ["Dynamic"
    ("j" akirak-org-reg-dispatch-on-clock
     :transient nil)
