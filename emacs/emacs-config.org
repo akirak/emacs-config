@@ -2238,26 +2238,29 @@ Elegant, highly legible and customizable themes
   (setup (:package modus-themes)
     ;; See [[info:modus-themes#Override colors]]
     ;; and [[info:modus-themes#Customization Options]]
-    (:set modus-themes-operandi-color-overrides
-          '((bg-main . "#e1d9c2")
-            (fg-main . "#333333"))
+    (:set modus-operandi-palette-overrides
+          '((bg-main "#e1d9c2")
+            (fg-main "#333333")
+            (bg-heading-1 bg-dim)
+            (overline-heading-2 border))
 
           modus-themes-bold-constructs nil
           modus-themes-italic-constructs t
           modus-themes-paren-match '(bold intence)
           modus-themes-org-blocks 'gray-background
+          modus-themes-disable-other-themes t
 
           modus-themes-links '(neutral-underline)
 
           modus-themes-headings
-          '((1 . (background medium variable-pitch 1.5))
-            (2 . (rainbow overline variable-pitch 1.1))
+          '((1 . (medium variable-pitch 1.5))
+            (2 . (rainbow variable-pitch 1.1))
             (4 . (variable-pitch))))
 
     (when (or window-system
               (daemonp))
-      (modus-themes-load-themes)
-      (modus-themes-load-operandi)))
+      (require 'modus-themes)
+      (load-theme 'modus-operandi :no-confirm)))
 #+end_src
 *** Font families
 You need to install the font separately.
