@@ -24,10 +24,17 @@
                      (put symbol 'interactive-only t))
                    `(,transient--default-child-level
                      transient-suffix
-                     ,(list :key (substring (symbol-name type) 0 1)
+                     ,(list :key (akirak-quick-thing--key (symbol-name type))
                             :description (symbol-name type)
                             :command symbol)))))))
     (cl-remove-if #'null)))
+
+(defun akirak-quick-thing--key (name)
+  (thread-first
+    (split-string name "-")
+    (last)
+    (car)
+    (substring 0 1)))
 
 (defun akirak-quick-thing--zip-index (list)
   (let ((i 0)
