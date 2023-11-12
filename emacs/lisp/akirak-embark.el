@@ -370,6 +370,9 @@
 (defun akirak-embark-setup-org ()
   "Apply extra settings for embark-org."
   (require 'embark-org)
+
+  (define-key embark-org-link-map "S" #'org-super-links-convert-link-to-super)
+
   ;; If the point is at the very beginning of the heading, I want this finder to
   ;; match.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading-1)
