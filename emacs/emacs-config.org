@@ -3533,7 +3533,7 @@ Time blocking with Org
       (define-key akirak/c-z-map "5"
                   (defun akirak/org-memento-switch-to-tab (&optional arg)
                     (interactive "P")
-                    (if org-memento-current-block
+                    (if (bound-and-true-p org-memento-current-block)
                         (let* ((name (if (string-match (rx bol "Cont. "
                                                            (?  "(" (+ digit) ")" (* blank)))
                                                        org-memento-current-block)
