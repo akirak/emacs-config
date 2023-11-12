@@ -199,6 +199,14 @@ Finally, you can specify LEVEL, but you have to set the type of the to plain."
       (org-id-find 'marker))))
 
 ;;;###autoload
+(defun akirak-org-capture-history ()
+  "Go to an entry in the `org-capture' history."
+  (interactive)
+  (unless akirak-org-capture-history
+    (user-error "No history"))
+  (org-goto-marker-or-bmk (akirak-org-capture-complete-history "org-capture history: ")))
+
+;;;###autoload
 (defun akirak-org-capture-add-templates (templates)
   "Add TEMPLATES to `org-capture-templates' without duplicates."
   (declare (indent 1))

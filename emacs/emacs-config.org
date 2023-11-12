@@ -4509,6 +4509,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-nix
     (:global "<f12> n p" #'akirak-nix-search-nixpkgs))
 #+end_src
+*** akirak-org-capture
+#+begin_src elisp
+  (setup akirak-org-capture
+    (:global "M-s M-h" #'akirak-org-capture-history))
+#+end_src
 *** akirak-org-log
 #+begin_src emacs-lisp
   (setup akirak-org-log
