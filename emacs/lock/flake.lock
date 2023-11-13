@@ -837,11 +837,11 @@
     "envrc": {
       "flake": false,
       "locked": {
-        "lastModified": 1698074494,
-        "narHash": "sha256-8ssMLaISDknDph5Tpl3Ub6+j+3tGisd5FoxLXahvXcs=",
+        "lastModified": 1699637239,
+        "narHash": "sha256-XzrkMQLVkfmxuKofycqZdh4Z9iMlczqLHwkAA17m9GQ=",
         "owner": "purcell",
         "repo": "envrc",
-        "rev": "4f9ae5d4d1fcb32c844b50ccda34305884d68be3",
+        "rev": "1385e72a730924664697a0961d43516a47a977d7",
         "type": "github"
       },
       "original": {
@@ -933,11 +933,11 @@
     "exec-path-from-shell": {
       "flake": false,
       "locked": {
-        "lastModified": 1696922212,
-        "narHash": "sha256-A7nlbg/Zslw9IyqXFoySzYgi39iXAb3FX6MWpDUMDqg=",
+        "lastModified": 1699637248,
+        "narHash": "sha256-FVoMkbMXhG8tXLSzmLPGg05pPF/pjhNBjojBVhAiwAE=",
         "owner": "purcell",
         "repo": "exec-path-from-shell",
-        "rev": "4e1a938157515734019ad5b4e3cc09d849013da8",
+        "rev": "99b1b731d55614dceb72b6f16602df2b8d030dc9",
         "type": "github"
       },
       "original": {
@@ -1446,11 +1446,11 @@
     "inheritenv": {
       "flake": false,
       "locked": {
-        "lastModified": 1691131871,
-        "narHash": "sha256-K20u+GSKVBOYUl1ECluzdMpdWS9JX8ywlCTN8UdNyhI=",
+        "lastModified": 1699638484,
+        "narHash": "sha256-1s9LUk3bqcNv+hHf9iszpZRbJdjcwUFo0D650NGBHpo=",
         "owner": "purcell",
         "repo": "inheritenv",
-        "rev": "00106bb208d06e5f1ec25d0c2f41c000cbb25076",
+        "rev": "bac62ca6324828623cf8ce5a3d6aee0fcb65d620",
         "type": "github"
       },
       "original": {
@@ -2577,11 +2577,11 @@
     "package-lint": {
       "flake": false,
       "locked": {
-        "lastModified": 1693896898,
-        "narHash": "sha256-LT8zVtBmXXbL+JruMZsRmjbUVrXY2HfjTfJR99TuG1Q=",
+        "lastModified": 1699636219,
+        "narHash": "sha256-VqeXrZhitMbytcLQGEY3XNDIZ2CTOtbTztwv7r93zAQ=",
         "owner": "purcell",
         "repo": "package-lint",
-        "rev": "ee6b670eeaf95ed0fa88ea49e7037a351ed0352a",
+        "rev": "5f2ae2d7745306c761954008336028d100834821",
         "type": "github"
       },
       "original": {
@@ -2593,11 +2593,11 @@
     "page-break-lines": {
       "flake": false,
       "locked": {
-        "lastModified": 1691132331,
-        "narHash": "sha256-4s7tadNpU1ZxOIBoAoVfxaXhGLH56F4i4+r7VDF3fEU=",
+        "lastModified": 1699637476,
+        "narHash": "sha256-kF5wvlz8+PFqQISPy8ItUgyhuox3hedeiqsjO3QVjpg=",
         "owner": "purcell",
         "repo": "page-break-lines",
-        "rev": "5e9ed86bb56fd076b12ae7adaf40eeaa09aed4c5",
+        "rev": "f4568ccba7cc5dc63c82ded1fdb52c6161c15a62",
         "type": "github"
       },
       "original": {
@@ -2849,11 +2849,11 @@
     "reformatter": {
       "flake": false,
       "locked": {
-        "lastModified": 1696922296,
-        "narHash": "sha256-5ILSI2NoBodTHc0sudDBFhE1kHqFJxJoR7+vSBS7Rvo=",
+        "lastModified": 1699637502,
+        "narHash": "sha256-iD1lwP8WmBMps+F0CdhIBd2VNsqVgdLgWcp4t0gxQlo=",
         "owner": "purcell",
         "repo": "emacs-reformatter",
-        "rev": "bca1cf1e4caa87a67b5a39ea938806c6f78ce2e4",
+        "rev": "af56cd5e47c3732f9d972fc8fd64ceca1e0bf4b7",
         "type": "github"
       },
       "original": {
@@ -3253,11 +3253,11 @@
     "sqlformat": {
       "flake": false,
       "locked": {
-        "lastModified": 1691473406,
-        "narHash": "sha256-R6/KO7qtzJnKi7lFzWQZdR2WdTQu0BaJENChO2EisI8=",
+        "lastModified": 1699637539,
+        "narHash": "sha256-khiixRDuQHVriT63wwysX1WdhFbJtmXKjVnKIGXmWDo=",
         "owner": "purcell",
         "repo": "sqlformat",
-        "rev": "ce8f5ea74c260ff0b8353a2df62d36aa39141403",
+        "rev": "6031df714a0cb2c479f26dbe31eecff0bf4d565e",
         "type": "github"
       },
       "original": {
@@ -3686,11 +3686,11 @@
     "whole-line-or-region": {
       "flake": false,
       "locked": {
-        "lastModified": 1663078552,
-        "narHash": "sha256-u9w7FlY/wEFGIIRzN8Miv9jalWvilVr37Jf06DDqRqY=",
+        "lastModified": 1699725854,
+        "narHash": "sha256-TG4t/HZy4UWmivMd3ffCSz17ojKo7JQdI92xdb78Vjo=",
         "owner": "purcell",
         "repo": "whole-line-or-region",
-        "rev": "f7c9b25f8c932cff8239cde4a76e48135bdfa7e6",
+        "rev": "78e07b14b15014f264e655e95e50ac17f23ae5fa",
         "type": "github"
       },
       "original": {
