@@ -164,6 +164,48 @@ Finally, you can specify LEVEL, but you have to set the type of the to plain."
                 "\n%a"
               ""))))
 
+(defvar akirak-org-capture-history nil)
+
+;;;###autoload
+(defun akirak-org-capture-push-history ()
+  (require 'org-bookmark-heading)
+  ;; I don't always want to generate an ID on an org entry created using
+  ;; `org-capture'.
+  (when org-id-link-to-org-use-id
+    (push (org-bookmark-heading-make-record) akirak-org-capture-history)))
+
+(defun akirak-org-capture-complete-history (prompt)
+  "Return a marker to a heading in `org-capture' history."
+  (require 'org-bookmark-heading)
+  (cl-labels
+      ((annotator (candidate)
+         (concat " " (thread-first
+                       (assoc candidate akirak-org-capture-history)
+                       (bookmark-prop-get 'outline-path)
+                       (org-format-outline-path)
+                       (org-no-properties))))
+       (completions (string pred action)
+         (if (eq action 'metadata)
+             (cons 'metadata
+                   (list (cons 'category 'akirak-org-capture-history)
+                         (cons 'annotation-function #'annotator)))
+           (complete-with-action action akirak-org-capture-history string pred))))
+    (thread-first
+      (completing-read prompt #'completions nil t)
+      (assoc akirak-org-capture-history)
+      ;; A proper way would be to use `org-bookmark-heading-jump' to retrieve
+      ;; the location and restore the window, but it does too many things.
+      (bookmark-prop-get 'id)
+      (org-id-find 'marker))))
+
+;;;###autoload
+(defun akirak-org-capture-history ()
+  "Go to an entry in the `org-capture' history."
+  (interactive)
+  (unless akirak-org-capture-history
+    (user-error "No history"))
+  (org-goto-marker-or-bmk (akirak-org-capture-complete-history "org-capture history: ")))
+
 ;;;###autoload
 (defun akirak-org-capture-add-templates (templates)
   "Add TEMPLATES to `org-capture-templates' without duplicates."

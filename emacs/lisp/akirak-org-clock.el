@@ -56,7 +56,7 @@
                      "/.")))
 
 (defconst akirak-org-clock-buffer-name-whitelist
-  ;; Don't block saving buffers created using `with-temp-buffer'
+  ;; Don't block saving certain buffers created using `with-temp-buffer'
   (rx bos (or " *temp*"
               "CAPTURE-")))
 

@@ -148,7 +148,10 @@
                         (equal (plist-get change-plist :from)
                                "CASUAL")
                         (member (plist-get change-plist :to)
-                                org-done-keywords))))))
+                                org-done-keywords)))))
+
+  (with-eval-after-load 'akirak-org-ql
+    (akirak-org-ql-define-todo-predicates)))
 
 (defcustom akirak-org-type-tags-file
   (locate-user-emacs-file "org-type-tags.eld")

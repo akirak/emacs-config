@@ -370,6 +370,9 @@
 (defun akirak-embark-setup-org ()
   "Apply extra settings for embark-org."
   (require 'embark-org)
+
+  (define-key embark-org-link-map "S" #'org-super-links-convert-link-to-super)
+
   ;; If the point is at the very beginning of the heading, I want this finder to
   ;; match.
   (add-to-list 'embark-target-finders #'akirak-embark-target-org-heading-1)
@@ -393,6 +396,8 @@
   (add-to-list 'embark-transformer-alist
                '(akirak-consult-org-olp-with-file
                  . akirak-consult-org-heading-target))
+  (add-to-list 'embark-transformer-alist
+               '(akirak-org-capture-history . akirak-embark-transform-org-capture-history))
 
   (add-to-list 'embark-target-injection-hooks
                '(akirak-consult-org-clock-history
@@ -631,6 +636,16 @@
 
 (defun akirak-embark-transform-org-placeholder (_type item)
   (let ((marker (org-placeholder-item-marker item)))
+    (setq akirak-embark-target-org-marker marker)
+    (cons 'org-heading item)))
+
+(defun akirak-embark-transform-org-capture-history (_type item)
+  (let ((marker (thread-first
+                  (assoc item akirak-org-capture-history)
+                  ;; A proper way would be to use `org-bookmark-heading-jump' to retrieve
+                  ;; the location and restore the window, but it does too many things.
+                  (bookmark-prop-get 'id)
+                  (org-id-find 'marker))))
     (setq akirak-embark-target-org-marker marker)
     (cons 'org-heading item)))
 
