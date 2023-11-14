@@ -478,15 +478,16 @@ character."
              ;;           (when contents
              ;;             (concat "​— " contents))))
 
-             (concat "LINK: " path
-                     (save-current-buffer
-                       (when (org-nlink-open-link path)
-                         (let ((element (org-element-at-point)))
-                           (format " (found in %s): %s"
-                                   (abbreviate-file-name (buffer-file-name))
-                                   (buffer-substring-no-properties
-                                    (org-element-property :begin element)
-                                    (org-element-property :end element))))))))
+             ;; (concat "LINK: " path
+             ;;         (save-current-buffer
+             ;;           (when (org-nlink-open-link path)
+             ;;             (let ((element (org-element-at-point)))
+             ;;               (format " (found in %s): %s"
+             ;;                       (abbreviate-file-name (buffer-file-name))
+             ;;                       (buffer-substring-no-properties
+             ;;                        (org-element-property :begin element)
+             ;;                        (org-element-property :end element)))))))
+             )
             (_
              uri)))
         (when (eq (plist-get plist 'face) 'org-target)
