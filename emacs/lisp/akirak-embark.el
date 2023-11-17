@@ -60,6 +60,11 @@
     (define-key map "t" #'akirak-project-new-tab)
     map))
 
+(defvar akirak-embark-org-dog-link-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "v" #'akirak/oahu-view-org-file)
+    map))
+
 (defvar akirak-embark-package-shell-command-map
   (let ((map (make-composed-keymap nil embark-general-map)))
     (define-key map "t" #'akirak-vterm-run-in-package-root)
@@ -390,6 +395,11 @@
                '(org-radio-target . akirak-embark-org-radio-target-map))
   (add-to-list 'embark-keymap-alist
                '(org-property-value . akirak-embark-org-property-value-map))
+  (add-to-list 'embark-keymap-alist
+               '(org-dog-file-link
+                 akirak-embark-org-dog-link-map
+                 embark-org-link-map
+                 embark-file-map))
 
   (add-to-list 'embark-transformer-alist
                '(org-placeholder-item . akirak-embark-transform-org-placeholder))
@@ -398,6 +408,20 @@
                  . akirak-consult-org-heading-target))
   (add-to-list 'embark-transformer-alist
                '(akirak-org-capture-history . akirak-embark-transform-org-capture-history))
+  (add-to-list 'embark-transformer-alist
+               (cons 'org-link
+                     (defun akirak-embark--transform-org-dog-link (type target)
+                       (if (and (eq type 'org-link)
+                                (string-match org-link-any-re target)
+                                (string-prefix-p "org-dog:"
+                                                 (match-string-no-properties 2 target)))
+                           (cons 'org-dog-file-link
+                                 (thread-last
+                                   (match-string-no-properties 2 target)
+                                   (string-remove-prefix "org-dog:")
+                                   (expand-file-name)
+                                   (abbreviate-file-name)))
+                         (cons type target)))))
 
   (add-to-list 'embark-target-injection-hooks
                '(akirak-consult-org-clock-history
