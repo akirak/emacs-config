@@ -9022,10 +9022,10 @@ Load my personal settings after all the things.
   (setup init
     (:status personal
       (let ((file "~/org/config.el"))
-        (when (file-exists-p file)
+        (when (file-readable-p file)
           (load-file file)))
 
-      (when (and custom-file (file-exists-p custom-file))
+      (when (and custom-file (file-readable-p custom-file))
         (load custom-file))))
 #+end_src
 ** Notes                                                      :@note:
