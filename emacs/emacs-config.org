@@ -1552,25 +1552,6 @@ Operations on the current project
         (cl-defmethod project-root ((project (head worktree-group)))
           (cadr project)))))
 #+end_src
-**** akirak-project
-#+begin_src emacs-lisp
-  (setup akirak-project
-    (run-with-idle-timer 70 nil #'akirak-project-remember-this)
-    (run-with-idle-timer 180 nil #'akirak-project-rescan)
-    (with-eval-after-load 'magit
-      (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit))
-
-    (with-eval-after-load "bindings"
-      ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
-      ;; (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
-      ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
-      ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
-      ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
-      )
-
-    (with-eval-after-load 'embark
-      (define-key embark-file-map (kbd "+") #'akirak-project-init)))
-#+end_src
 *** prolog                                      :major__mode:Prolog:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:33]
@@ -1707,11 +1688,6 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup shr
     (:set shr-bullet " ‣ "))
-#+end_src
-**** akirak-shr
-#+begin_src elisp
-  (setup akirak-shr
-    (:hook-into nov-mode-hook))
 #+end_src
 *** simple                                      :formatting:writing:
 :PROPERTIES:
@@ -1991,15 +1967,6 @@ Thus I will explicitly install this package rather than using the built-in versi
 #+begin_src emacs-lisp
   (setup treesit)
 #+end_src
-**** akirak-treesit
-#+begin_src elisp
-  (setup akirak-treesit
-    (:bind "C-M-SPC" #'akirak-treesit-expand-region)
-    (add-hook 'after-change-major-mode-hook
-              (defun akirak/enable-treesit-mode ()
-                (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
-                  (akirak-treesit-mode t)))))
-#+end_src
 *** vc-hooks                                                    :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -2110,40 +2077,6 @@ Thus I will explicitly install this package rather than using the built-in versi
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
 
-    (cl-macrolet
-        ((major-modes (&rest modes)
-           `'(or ,@(mapcar (lambda (mode)
-                             (cons 'major-mode mode))
-                           modes)))
-         (reuse-mode-window (modes function &rest alist)
-           `(lambda (buffer alist)
-              (or (display-buffer-reuse-mode-window buffer '((mode . ,modes)))
-                  (,function buffer alist)))))
-      (dolist (entry `((,(major-modes help-mode devdocs-mode)
-                        ,(reuse-mode-window
-                          (help-mode devdocs-mode)
-                          akirak-window-display-document-buffer))
-                       ((major-mode . vterm-mode)
-                        ,(reuse-mode-window
-                          (vterm-mode)
-                          akirak-window-display-buffer-split-below))
-                       (,(major-modes nov-mode pdf-view-mode)
-                        akirak-window-display-document-buffer)
-                       ((major-mode . org-agenda-mode)
-                        akirak-window-display-org-agenda-buffer
-                        (mode org-agenda-mode))
-                       ("^CAPTURE-"
-                        akirak-window-display-org-capture-buffer)
-                       ("^org-dog header"
-                        akirak-window-display-buffer-split-1)
-                       ((major-mode . org-mode)
-                        akirak-window-display-org-buffer-other-window)
-                       ("^\\*deadgrep"
-                        display-buffer-use-least-recent-window)
-                       ("^\\*Async Shell Command\\*"
-                        display-buffer-no-window)))
-        (add-to-list 'display-buffer-alist entry t)))
-
     ;; I use a normal keyboard, so it is hard to access cursor keys.
     (define-key ctl-x-map "9" #'previous-buffer)
     (:repeat ctl-x-map previous-buffer)
@@ -2162,11 +2095,6 @@ Thus I will explicitly install this package rather than using the built-in versi
        (if (numberp arg)
            (scroll-down arg)
          (scroll-down (akirak/scroll-half-height))))))
-#+end_src
-**** akirak-visual-scroll
-#+begin_src emacs-lisp
-  (setup akirak-visual-scroll
-    (:hook-into org-mode-hook shr-mode-hook))
 #+end_src
 *** window.c
 #+begin_src emacs-lisp
@@ -2551,14 +2479,6 @@ Outline-based notes management and organizer
             ;; Prevent from saving org-refile and org-capture locations to bookmarks
             org-bookmark-names-plist nil)
 
-      (advice-add #'org-insert-heading-respect-content
-                  :around #'akirak-org-ad-around-insert-heading)
-      (advice-add #'org-insert-todo-heading-respect-content
-                  :around #'akirak-org-ad-around-insert-heading)
-      (advice-add 'org-return
-                  :around #'akirak-org-ad-around-org-return)
-      (advice-add 'org-meta-return
-                  :around #'akirak-org-meta-return-split-block-advice)
       (:when-loaded
         (when (require 'akirak-org nil t)
           (:hook #'akirak-org-protected-mode)))
@@ -2907,42 +2827,6 @@ Outline-based notes management and organizer
                            (equal filename (expand-file-name org-memento-file))))
               (user-error "You cannot clock in to this file"))
           (user-error "You cannot clock in to a heading without a file")))))
-#+end_src
-***** akirak-org-clock
-#+begin_src emacs-lisp
-  (setup akirak-org-clock
-    (when (and (daemonp)
-               ;; Don't enable the mode when troubleshooting.
-               (or (getenv "WAYLAND_DISPLAY")
-                   (getenv "DISPLAY")))
-      (:hook-into emacs-startup-hook))
-    (:hook akirak-log-mode)
-
-    (advice-add 'save-buffers-kill-terminal
-                :before
-                (defun akirak/snooze-before-kill (&rest _)
-                  (when (bound-and-true-p akirak-org-clock-mode)
-                    (akirak-org-clock-snooze 20))))
-
-    (:global "M-g M-j" #'akirak-org-clock-goto)
-
-    (:with-feature org
-      (:with-map org-mode-map
-        [remap org-clock-in] #'akirak-org-clock-in))
-
-    (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
-    (define-key akirak/c-z-map "p" #'akirak-org-clock-in-to-project)
-    (define-key akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
-    (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
-    ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
-    ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
-    (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
-    (define-key akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
-
-    (define-key akirak/c-z-map "O" #'akirak-org-clock-out)
-    (define-key akirak/c-z-map "C-o" #'akirak-org-clock-out)
-    (define-key akirak/c-z-map "d" #'akirak-org-clock-done)
-    (define-key akirak/c-z-map "r" #'akirak-org-clock-set-review))
 #+end_src
 **** org-element
 #+begin_src emacs-lisp
@@ -4520,10 +4404,58 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-nix
     (:global "<f12> n p" #'akirak-nix-search-nixpkgs))
 #+end_src
+*** akirak-org
+#+begin_src emacs-lisp
+  (setup akirak-org
+    (advice-add #'org-insert-heading-respect-content
+                :around #'akirak-org-ad-around-insert-heading)
+    (advice-add #'org-insert-todo-heading-respect-content
+                :around #'akirak-org-ad-around-insert-heading)
+    (advice-add 'org-return
+                :around #'akirak-org-ad-around-org-return)
+    (advice-add 'org-meta-return
+                :around #'akirak-org-meta-return-split-block-advice))
+#+end_src
 *** akirak-org-capture
 #+begin_src elisp
   (setup akirak-org-capture
     (:global "M-s M-h" #'akirak-org-capture-history))
+#+end_src
+*** akirak-org-clock
+#+begin_src emacs-lisp
+  (setup akirak-org-clock
+    (when (and (daemonp)
+               ;; Don't enable the mode when troubleshooting.
+               (or (getenv "WAYLAND_DISPLAY")
+                   (getenv "DISPLAY")))
+      (:hook-into emacs-startup-hook))
+    (:hook akirak-log-mode)
+
+    (advice-add 'save-buffers-kill-terminal
+                :before
+                (defun akirak/snooze-before-kill (&rest _)
+                  (when (bound-and-true-p akirak-org-clock-mode)
+                    (akirak-org-clock-snooze 20))))
+
+    (:global "M-g M-j" #'akirak-org-clock-goto)
+
+    (:with-feature org
+      (:with-map org-mode-map
+        [remap org-clock-in] #'akirak-org-clock-in))
+
+    (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
+    (define-key akirak/c-z-map "p" #'akirak-org-clock-in-to-project)
+    (define-key akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
+    (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
+    ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
+    ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
+    (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
+    (define-key akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
+
+    (define-key akirak/c-z-map "O" #'akirak-org-clock-out)
+    (define-key akirak/c-z-map "C-o" #'akirak-org-clock-out)
+    (define-key akirak/c-z-map "d" #'akirak-org-clock-done)
+    (define-key akirak/c-z-map "r" #'akirak-org-clock-set-review))
 #+end_src
 *** akirak-org-log
 #+begin_src emacs-lisp
@@ -4567,6 +4499,25 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                 (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
                           nil t))))
 #+end_src
+*** akirak-project
+#+begin_src emacs-lisp
+  (setup akirak-project
+    (run-with-idle-timer 70 nil #'akirak-project-remember-this)
+    (run-with-idle-timer 180 nil #'akirak-project-rescan)
+    (with-eval-after-load 'magit
+      (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit))
+
+    (with-eval-after-load "bindings"
+      ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
+      ;; (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
+      ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
+      ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
+      ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
+      )
+
+    (with-eval-after-load 'embark
+      (define-key embark-file-map (kbd "+") #'akirak-project-init)))
+#+end_src
 *** akirak-quick-thing
 #+begin_src elisp
   (setup akirak-quick-thing
@@ -4575,6 +4526,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-scratch
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
+#+end_src
+*** akirak-shr
+#+begin_src elisp
+  (setup akirak-shr
+    (:hook-into nov-mode-hook))
 #+end_src
 *** akirak-snippet
 #+begin_src emacs-lisp
@@ -4586,6 +4542,15 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-systemctl
     (:global "<f12> s s" #'akirak-systemctl-toggle-unit
              "<f12> s d" #'akirak-systemctl-daemon-reload))
+#+end_src
+*** akirak-treesit
+#+begin_src elisp
+  (setup akirak-treesit
+    (:bind "C-M-SPC" #'akirak-treesit-expand-region)
+    (add-hook 'after-change-major-mode-hook
+              (defun akirak/enable-treesit-mode ()
+                (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
+                  (akirak-treesit-mode t)))))
 #+end_src
 *** akirak-twist
 #+begin_src emacs-lisp
@@ -4615,6 +4580,11 @@ Complete a URL from the clipboard and the kill ring and insert as a link
     (:embark embark-file-map "s"
       ("C-l" akirak-org-store-link-to-file akirak/embark-org-store-file-link)))
 #+end_src
+*** akirak-visual-scroll
+#+begin_src emacs-lisp
+  (setup akirak-visual-scroll
+    (:hook-into org-mode-hook shr-mode-hook))
+#+end_src
 *** akirak-wayshot                                                  :screenshot:
 #+begin_src emacs-lisp
   (when (getenv "WAYLAND_DISPLAY")
@@ -4634,6 +4604,40 @@ This is an extra functions for window management.
 
 #+begin_src emacs-lisp
   (setup akirak-window
+    (cl-macrolet
+        ((major-modes (&rest modes)
+           `'(or ,@(mapcar (lambda (mode)
+                             (cons 'major-mode mode))
+                           modes)))
+         (reuse-mode-window (modes function &rest alist)
+           `(lambda (buffer alist)
+              (or (display-buffer-reuse-mode-window buffer '((mode . ,modes)))
+                  (,function buffer alist)))))
+      (dolist (entry `((,(major-modes help-mode devdocs-mode)
+                        ,(reuse-mode-window
+                          (help-mode devdocs-mode)
+                          akirak-window-display-document-buffer))
+                       ((major-mode . vterm-mode)
+                        ,(reuse-mode-window
+                          (vterm-mode)
+                          akirak-window-display-buffer-split-below))
+                       (,(major-modes nov-mode pdf-view-mode)
+                        akirak-window-display-document-buffer)
+                       ((major-mode . org-agenda-mode)
+                        akirak-window-display-org-agenda-buffer
+                        (mode org-agenda-mode))
+                       ("^CAPTURE-"
+                        akirak-window-display-org-capture-buffer)
+                       ("^org-dog header"
+                        akirak-window-display-buffer-split-1)
+                       ((major-mode . org-mode)
+                        akirak-window-display-org-buffer-other-window)
+                       ("^\\*deadgrep"
+                        display-buffer-use-least-recent-window)
+                       ("^\\*Async Shell Command\\*"
+                        display-buffer-no-window)))
+        (add-to-list 'display-buffer-alist entry t)))
+
     (:status opinionated
       (:with-map ctl-x-map
         ;; I don't need kill-buffer when I have consult-buffer
