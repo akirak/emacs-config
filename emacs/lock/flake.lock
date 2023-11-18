@@ -450,6 +450,22 @@
         "type": "github"
       }
     },
+    "dashboard": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1698724859,
+        "narHash": "sha256-UK97h5rSrNZfCSURd3Y+NylDCRkbTrEyp7Z+JwzOZGE=",
+        "owner": "emacs-dashboard",
+        "repo": "emacs-dashboard",
+        "rev": "9c8b0cce865e34340c6d435253f6a3aed3b3ace5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-dashboard",
+        "repo": "emacs-dashboard",
+        "type": "github"
+      }
+    },
     "deadgrep": {
       "flake": false,
       "locked": {
@@ -2972,6 +2988,7 @@
         "copilot": "copilot",
         "corfu": "corfu",
         "dash": "dash",
+        "dashboard": "dashboard",
         "deadgrep": "deadgrep",
         "devdocs": "devdocs",
         "diff-hl": "diff-hl",
