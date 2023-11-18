@@ -85,18 +85,6 @@ I am interested to see if it can reduce the amount of configuration code.
         (dolist (entry (reverse ',entries))
           (add-to-list 'auto-insert-alist entry)))))
 #+end_src
-*** :bind-hash
-#+begin_src emacs-lisp
-  (eval-when-compile
-    (define-setup-macro
-     :bind-hash (keymap command &rest more-commands)
-     "Bind a command to a crazy key."
-     :indent 1
-     `(progn
-        ,@(mapcar (lambda (symbol)
-                    `(define-key ,keymap (vector (sxhash-eq ,symbol)) ,symbol))
-                  (cons command more-commands)))))
-#+end_src
 *** :compilation-error
 #+begin_src emacs-lisp
   (eval-when-compile
