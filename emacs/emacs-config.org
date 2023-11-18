@@ -1557,7 +1557,8 @@ Operations on the current project
   (setup akirak-project
     (run-with-idle-timer 70 nil #'akirak-project-remember-this)
     (run-with-idle-timer 180 nil #'akirak-project-rescan)
-    (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit)
+    (with-eval-after-load 'magit
+      (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit))
 
     (with-eval-after-load "bindings"
       ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
@@ -1638,16 +1639,16 @@ Operations on the current project
     ;; https://karthinks.com/software/it-bears-repeating/#adding-a-hydra-like-prompt-to-repeat-mode
     (advice-add 'repeat-post-hook :after
                 (defun repeat-help--which-key-popup ()
-                  (require 'which-key)
-                  (if-let (keymap (or repeat-map
-                                      (repeat--command-property 'repeat-map)))
-                      (when (eq keymap 'diff-hl-command-map)
-                        (run-at-time
-                         which-key-idle-delay nil
-                         `(lambda ()
-                            (which-key--create-buffer-and-show
-                             nil (symbol-value ',keymap)))))
-                    (which-key--hide-popup)))))
+                  (when (require 'which-key nil t)
+                    (if-let (keymap (or repeat-map
+                                        (repeat--command-property 'repeat-map)))
+                        (when (eq keymap 'diff-hl-command-map)
+                          (run-at-time
+                           which-key-idle-delay nil
+                           `(lambda ()
+                              (which-key--create-buffer-and-show
+                               nil (symbol-value ',keymap)))))
+                      (which-key--hide-popup))))))
 #+end_src
 *** savehist                                               :history:
 :PROPERTIES:
@@ -2485,7 +2486,9 @@ Org-Babel execution backend for GraphQL source blocks
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package ob-graphql))
+  (setup (:package ob-graphql)
+    (with-eval-after-load 'org
+      (add-to-list 'org-babel-load-languages '(graphql . t))))
 #+end_src
 *** ob-mermaid
 :PROPERTIES:
@@ -2508,7 +2511,9 @@ org-babel functions for restclient-mode
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package ob-restclient))
+  (setup (:package ob-restclient)
+    (with-eval-after-load 'org
+      (add-to-list 'org-babel-load-languages '(restclient . t))))
 #+end_src
 *** org
 #+begin_quote
@@ -2554,7 +2559,9 @@ Outline-based notes management and organizer
                   :around #'akirak-org-ad-around-org-return)
       (advice-add 'org-meta-return
                   :around #'akirak-org-meta-return-split-block-advice)
-      (:hook #'akirak-org-protected-mode)
+      (:when-loaded
+        (when (require 'akirak-org nil t)
+          (:hook #'akirak-org-protected-mode)))
 
       (:global "C-c o" #'org-open-at-point-global)
 
@@ -2568,8 +2575,9 @@ Outline-based notes management and organizer
 
       (:when-loaded
         (:status personal
-          (akirak-org-config-setup)
-          (run-with-idle-timer 240 nil #'akirak-org-scan-type-tags))
+          (when (require 'akirak-org-config nil t)
+            (akirak-org-config-setup)
+            (run-with-idle-timer 240 nil #'akirak-org-scan-type-tags)))
 
         (add-to-list 'org-file-apps '(t . mailcap) t)
 
@@ -2650,7 +2658,9 @@ Outline-based notes management and organizer
         (:set org-special-ctrl-a/e t
               org-M-RET-may-split-line nil)
 
-        (:hook #'akirak-org-eldoc-setup)
+        (:when-loaded
+          (when (require 'akirak-org nil t)
+            (:hook #'akirak-org-eldoc-setup)))
 
         (:global "M-g h" #'akirak-org-avy-heading)
 
@@ -2791,8 +2801,6 @@ Outline-based notes management and organizer
           org-babel-load-languages
           '((shell . t)
             (emacs-lisp . t)
-            (restclient . t)
-            (graphql . t)
             (sqlite . t)
             (sql . t))))
 #+end_src
@@ -2913,7 +2921,8 @@ Outline-based notes management and organizer
     (advice-add 'save-buffers-kill-terminal
                 :before
                 (defun akirak/snooze-before-kill (&rest _)
-                  (akirak-org-clock-snooze 20)))
+                  (when (bound-and-true-p akirak-org-clock-mode)
+                    (akirak-org-clock-snooze 20))))
 
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
@@ -3605,7 +3614,8 @@ Time blocking with Org
 
       (add-hook 'org-memento-checkout-hook
                 (defun akirak/org-memento-save-some-buffers ()
-                  (ignore-errors (akirak-org-clock-snooze))
+                  (when (bound-and-true-p akirak-org-clock-mode)
+                    (ignore-errors (akirak-org-clock-snooze)))
                   (save-some-buffers)))
 
       (add-hook 'org-memento-extra-activity-sources
@@ -3806,7 +3816,8 @@ Recurring org-mode tasks
   (setup (:package org-recur)
     (:status opinionated
       (with-eval-after-load 'org
-        (akirak-org-recur-mode t))))
+        (when (require 'akirak-org-recur nil t)
+          (akirak-org-recur-mode t)))))
 #+end_src
 *** org-reverse-datetree
 :PROPERTIES:
@@ -5793,7 +5804,8 @@ Conveniently act on minibuffer completions
 
     (:when-loaded
       (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
-      (akirak-embark-setup)))
+      (when (require 'akirak-embark nil t)
+        (akirak-embark-setup))))
 #+end_src
 
 Some notes:
@@ -5831,7 +5843,9 @@ Consult integration for Embark
 
 #+begin_src emacs-lisp
   (setup embark-org
-    (eval-after-load 'org #'akirak-embark-setup-org))
+    (with-eval-after-load 'org
+      (when (require 'akirak-embark nil t)
+        (akirak-embark-setup-org))))
 #+end_src
 *** COMMENT ement                                                       :social:ARCHIVE:
 :PROPERTIES:
@@ -7128,7 +7142,8 @@ A Git porcelain inside Emacs
                               (cond
                                ((derived-mode-p 'magit-diff-mode)
                                 '(nil (inhibit-same-window . t)))
-                               ((derived-mode-p 'magit-process-mode)
+                               ((and (derived-mode-p 'magit-process-mode)
+                                     (fboundp 'akirak-window-display-buffer-prefer-other-pane))
                                 '(akirak-window-display-buffer-prefer-other-pane))
                                (t
                                 '(display-buffer-same-window))))))
@@ -7369,7 +7384,8 @@ Display modeline in minibuffer
                         3))
                 (cdr akirak/mode-line-directory-memo)
               (let* ((dir (abbreviate-file-name (file-name-directory filename)))
-                     (value (concat (if-let (pr (akirak-header-line--project))
+                     (value (concat (if-let (pr (when (require 'akirak-header-line nil t)
+                                                  (akirak-header-line--project)))
                                         (let ((root (thread-last
                                                       (project-root pr)
                                                       (string-remove-suffix "/"))))
