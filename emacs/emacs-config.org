@@ -2322,7 +2322,19 @@ I think it would be better to create my own theme, but I don't have enough time 
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
-*** COMMENT citar                                                 :bibliography:ARCHIVE:
+
+These variables need to be set in prior to any package settings related to org:
+
+#+begin_src emacs-lisp
+  (setq org-modules
+        '(org-id
+          org-clock
+          org-crypt
+          ;; Built-in link types I need
+          ol-info
+          ol-eww))
+#+end_src
+*** COMMENT citar                                         :bibliography:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-23 Wed 23:59]
 :END:
@@ -2515,23 +2527,6 @@ Outline-based notes management and organizer
                                     org-structure-template-alist)
                             :key #'car
                             :test #'equal))))))
-#+end_src
-**** org-modules
-#+begin_src emacs-lisp
-  (setq org-modules
-        '(org-id
-          org-clock
-          org-crypt
-          ;; Exporters
-          ox-gfm
-          ;; Built-in link types I need
-          ol-info
-          ol-eww
-          ;; Ensure the library is used when creating a bookmark
-          org-bookmark-heading
-          ;; See fanyi
-          ol-fanyi
-          ))
 #+end_src
 **** Completion
 #+begin_src emacs-lisp
@@ -2977,7 +2972,9 @@ Emacs bookmark support for Org mode
 
 #+begin_src emacs-lisp
   (setup (:package org-bookmark-heading)
-    (:set org-bookmark-heading-make-ids t))
+    (:set org-bookmark-heading-make-ids t)
+    ;; Ensure the library is used when creating a bookmark
+    (add-to-list 'org-modules 'org-bookmark-heading))
 #+end_src
 *** org-crypt
 :PROPERTIES:
@@ -3823,7 +3820,8 @@ Github Flavored Markdown Back-End for Org Export Engine
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package ox-gfm))
+  (setup (:package ox-gfm)
+    (add-to-list 'org-modules 'ox-gfm))
 #+end_src
 *** ox-hugo
 :PROPERTIES:
@@ -6053,6 +6051,8 @@ Not only English-Chinese translator
   (setup (:package fanyi)
     (:set fanyi-providers '(fanyi-longman-provider
                             fanyi-etymon-provider))
+    (with-eval-after-load 'org
+      (add-to-list 'org-modules 'ol-fanyi))
     (:when-loaded
       (require 'fanyi-longman)
       (require 'fanyi-etymon))
