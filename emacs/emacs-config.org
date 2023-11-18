@@ -1583,7 +1583,13 @@ Operations on the current project
   (setup recentf
     (:hook-into after-init-hook)
     (:set recentf-max-saved-items 1000
-          recentf-auto-cleanup 'never))
+          recentf-auto-cleanup 'never
+          ;; Default value. Some packages add extra entries after the package is
+          ;; loaded.
+          recentf-exclude (list (concat "^" (regexp-opt (list "/nix/store/"
+                                                              (abbreviate-file-name
+                                                               user-emacs-directory))
+                                                        :group)))))
 #+end_src
 *** register
 :PROPERTIES:
@@ -3011,6 +3017,10 @@ A programmable workflow layer for Org mode
           org-dog-clock-default-query-filter
           (lambda (query)
             (concat "!tags:ARCHIVE " query)))
+    (with-eval-after-load 'recentf
+      (add-to-list 'recentf-exclude
+                   (concat (regexp-opt (mapcar #'car org-dog-repository-alist) :paren)
+                           (rx (+ anything) ".org" eol))))
 
     (defun akirak/org-dog-turn-on-transclusion ()
       (org-transclusion-mode t))
