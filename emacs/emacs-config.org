@@ -1782,7 +1782,8 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     (:set inihibit-startup-screen t
           inhibit-default-init t
           inhibit-startup-echo-area-message t
-          initial-buffer-choice (lambda () (get-buffer "*Messages*"))
+          initial-buffer-choice (lambda () (or (get-buffer "*dashboard*")
+                                               (get-buffer "*Messages*")))
           initial-scratch-message nil
           initial-major-mode 'fundamental-mode))
 #+end_src
@@ -2390,6 +2391,7 @@ Manage Org searches
 **** oahu-memento
 :PROPERTIES:
 :CREATED_TIME: [2022-10-20 Thu 12:06]
+:ID:       d270ae25-077a-400f-a7a9-fee07ade34fd
 :END:
 #+begin_quote
 Org-Memento integration for oahu
@@ -5305,6 +5307,47 @@ COmpletion in Region FUnction
       (:bind "M-/" #'completion-at-point))
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
+#+end_src
+*** dashboard
+:PROPERTIES:
+:CREATED_TIME: [2023-11-18 Sat 23:10]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package dashboard)
+    (:set dashboard-center-content t
+          dashboard-show-shortcuts t
+          dashboard-set-init-info nil
+          dashboard-set-footer nil
+          dashboard-banner-logo-title nil
+          dashboard-display-icons-p #'ignore
+          dashboard-projects-backend 'project-el
+          dashboard-item-shortcuts '((recents . "r")
+                                     (bookmarks . "m")
+                                     ;; Don't use p
+                                     (projects . "j")
+                                     ;; Unused
+                                     (agenda . "a")
+                                     (registers . "e"))
+          dashboard-items '((recents . 15)
+                            (projects . 8)))
+
+    ;; I'm no longer an evil user. Prefer n/p over j/k.
+    (:bind "n" 'dashboard-next-line
+           "p" #'dashboard-previous-line)
+    (:unbind "j" "k")
+
+    (:global "C-z b" #'dashboard-open)
+
+    (when (< (length command-line-args) 2)
+      (add-hook 'after-init-hook
+                (defun akirak/dashboard-init-on-startup ()
+                  (require 'dashboard)
+                  (dashboard-insert-startupify-lists)
+                  (add-hook (if (daemonp)
+                                'server-after-make-frame-hook
+                              'emacs-startup-hook)
+                            #'dashboard-initialize)))))
 #+end_src
 *** COMMENT dash-docs                        :documentation:ARCHIVE:
 :PROPERTIES:

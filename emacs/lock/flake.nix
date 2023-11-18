@@ -171,6 +171,12 @@
       repo = "dash.el";
       type = "github";
     };
+    dashboard = {
+      flake = false;
+      owner = "emacs-dashboard";
+      repo = "emacs-dashboard";
+      type = "github";
+    };
     deadgrep = {
       flake = false;
       owner = "Wilfred";
