@@ -219,7 +219,7 @@
                            :query-prefix query-prefix
                            :tags tags
                            :prompt
-                           (format "Clock in to project file (%s): "
+                           (format "Clock in (files: %s): "
                                    (mapconcat #'file-name-nondirectory
                                               files ", ")))
        (message "No default clock target, so fall back to octopus-clock-in")
