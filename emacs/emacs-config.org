@@ -2000,9 +2000,15 @@ Thus I will explicitly install this package rather than using the built-in versi
 
 #+begin_src emacs-lisp
   (setup which-func
-    (:with-mode which-function-mode
-      (:hook-into prog-mode-hook
-                  conf-mode-hook)))
+    ;; Some packages create a temporary buffer for building transient content. in
+    ;; which a major mode is turned on. `which-function' can be slow even in such
+    ;; a small content, so it should be turned off.
+     (defun akirak/which-func-enable-if-file ()
+       (when (buffer-file-name)
+         (which-function-mode t)))
+     (:with-function akirak/which-func-enable-if-file
+       (:hook-into prog-mode-hook
+                   conf-mode-hook)))
 #+end_src
 *** whitespace                                   :visual:formatting:
 :PROPERTIES:
