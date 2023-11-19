@@ -31,10 +31,14 @@
                    (if (use-region-p)
                        (buffer-substring-no-properties
                         (region-beginning) (region-end))
-                     (replace-regexp-in-string
-                      org-list-full-item-re
-                      ""
-                      (string-chop-newline (thing-at-point 'line))))))
+                     (string-chop-newline
+                      (if-let (element (org-element-at-point-no-context))
+                          (if (eq (org-element-type element) 'item)
+                              (buffer-substring-no-properties
+                               (org-element-property :contents-begin element)
+                               (org-element-property :contents-end element))
+                            (thing-at-point 'line))
+                        (thing-at-point 'line))))))
          (item (org-entry-get nil "ITEM"))
          (title (org-link-display-format item))
          (first-link (if (string-match-p org-link-any-re item)
