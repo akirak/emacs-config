@@ -5312,6 +5312,10 @@ COmpletion in Region FUnction
 :PROPERTIES:
 :CREATED_TIME: [2023-11-18 Sat 23:10]
 :END:
+#+begin_quote
+A startup screen extracted from Spacemacs
+[[https://github.com/emacs-dashboard/emacs-dashboard]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package dashboard)
@@ -6554,7 +6558,7 @@ Translation framework supports multiple engines such as Google/Bing/DeepL
 :CREATED_TIME: [2023-03-20 Mon 23:59]
 :END:
 #+begin_quote
-A simple ChatGPT client
+A simple multi-LLM client
 [[https://github.com/karthink/gptel]]
 #+end_quote
 
@@ -9106,7 +9110,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 215 |
+| [[org-ql-search:tags:packages][packages]]            | 214 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -9124,12 +9128,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
-| [[org-ql-search:tags:navigation][navigation]]          |   4 |
 | [[org-ql-search:tags:windows][windows]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
+| [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   3 |
 | [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
