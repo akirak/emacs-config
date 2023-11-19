@@ -1,7 +1,7 @@
 ;;; akirak-org-log.el ---  -*- lexical-binding: t -*-
 
 (defcustom akirak-org-log-file nil
-  ""
+  "The primary journal file for the organization."
   :type 'file)
 
 ;; Deprecated in favor of defaulting to simple week cycles.
