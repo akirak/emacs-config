@@ -8,6 +8,7 @@
   ())
 
 (defun akirak-org-ql-view-update-super-group-alist ()
+  (require 'oahu)
   (setq akirak-org-ql-view-super-group-alist
         (thread-last
           oahu-process-alist

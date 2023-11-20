@@ -85,18 +85,6 @@ I am interested to see if it can reduce the amount of configuration code.
         (dolist (entry (reverse ',entries))
           (add-to-list 'auto-insert-alist entry)))))
 #+end_src
-*** :bind-hash
-#+begin_src emacs-lisp
-  (eval-when-compile
-    (define-setup-macro
-     :bind-hash (keymap command &rest more-commands)
-     "Bind a command to a crazy key."
-     :indent 1
-     `(progn
-        ,@(mapcar (lambda (symbol)
-                    `(define-key ,keymap (vector (sxhash-eq ,symbol)) ,symbol))
-                  (cons command more-commands)))))
-#+end_src
 *** :compilation-error
 #+begin_src emacs-lisp
   (eval-when-compile
@@ -529,11 +517,13 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 *** bookmark
 :PROPERTIES:
 :CREATED_TIME: [2022-05-14 Sat 09:53]
+:ID:       97f2f3f8-b43c-4e48-a588-4cf3c4413e99
 :END:
 
 #+begin_src emacs-lisp
   (setup bookmark
-    (:set bookmark-save-flag 1)
+    (:set bookmark-save-flag t
+          bookmark-sort-flag 'last-modified)
 
     (defun akirak/delete-bookmark-to-here ()
       "Delete a bookmark record to the current location, if any"
@@ -1323,12 +1313,20 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup mailcap
     (:when-loaded
+      (advice-add 'mailcap-parse-mimetypes
+                  :around
+                  (defun akirak/ad-around-mailcap-parse-mimetypes (orig &rest args)
+                    (if (and (not args)
+                             (not mailcap-mimetypes-parsed-p))
+                        (or (akirak-mime-set-mime-extensions)
+                            (funcall orig))
+                      (apply orig args))))
       (advice-add 'mailcap-parse-mailcaps
                   :around
                   (defun akirak/ad-around-mailcap-parse-mailcaps (orig &rest args)
                     (if (and (not args)
                              (not mailcap-parsed-p))
-                        (or (akirak-mime-set-mailcap-extensions)
+                        (or (akirak-mime-set-mime-extensions)
                             (funcall orig))
                       (apply orig args))))))
 #+end_src
@@ -1552,24 +1550,6 @@ Operations on the current project
         (cl-defmethod project-root ((project (head worktree-group)))
           (cadr project)))))
 #+end_src
-**** akirak-project
-#+begin_src emacs-lisp
-  (setup akirak-project
-    (run-with-idle-timer 70 nil #'akirak-project-remember-this)
-    (run-with-idle-timer 180 nil #'akirak-project-rescan)
-    (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit)
-
-    (with-eval-after-load "bindings"
-      ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
-      ;; (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
-      ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
-      ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
-      ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
-      )
-
-    (with-eval-after-load 'embark
-      (define-key embark-file-map (kbd "+") #'akirak-project-init)))
-#+end_src
 *** prolog                                      :major__mode:Prolog:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:33]
@@ -1613,7 +1593,13 @@ Operations on the current project
   (setup recentf
     (:hook-into after-init-hook)
     (:set recentf-max-saved-items 1000
-          recentf-auto-cleanup 'never))
+          recentf-auto-cleanup 'never
+          ;; Default value. Some packages add extra entries after the package is
+          ;; loaded.
+          recentf-exclude (list (concat "^" (regexp-opt (list "/nix/store/"
+                                                              (abbreviate-file-name
+                                                               user-emacs-directory))
+                                                        :group)))))
 #+end_src
 *** register
 :PROPERTIES:
@@ -1638,16 +1624,16 @@ Operations on the current project
     ;; https://karthinks.com/software/it-bears-repeating/#adding-a-hydra-like-prompt-to-repeat-mode
     (advice-add 'repeat-post-hook :after
                 (defun repeat-help--which-key-popup ()
-                  (require 'which-key)
-                  (if-let (keymap (or repeat-map
-                                      (repeat--command-property 'repeat-map)))
-                      (when (eq keymap 'diff-hl-command-map)
-                        (run-at-time
-                         which-key-idle-delay nil
-                         `(lambda ()
-                            (which-key--create-buffer-and-show
-                             nil (symbol-value ',keymap)))))
-                    (which-key--hide-popup)))))
+                  (when (require 'which-key nil t)
+                    (if-let (keymap (or repeat-map
+                                        (repeat--command-property 'repeat-map)))
+                        (when (eq keymap 'diff-hl-command-map)
+                          (run-at-time
+                           which-key-idle-delay nil
+                           `(lambda ()
+                              (which-key--create-buffer-and-show
+                               nil (symbol-value ',keymap)))))
+                      (which-key--hide-popup))))))
 #+end_src
 *** savehist                                               :history:
 :PROPERTIES:
@@ -1706,11 +1692,6 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup shr
     (:set shr-bullet " ‣ "))
-#+end_src
-**** akirak-shr
-#+begin_src elisp
-  (setup akirak-shr
-    (:hook-into nov-mode-hook))
 #+end_src
 *** simple                                      :formatting:writing:
 :PROPERTIES:
@@ -1811,7 +1792,8 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     (:set inihibit-startup-screen t
           inhibit-default-init t
           inhibit-startup-echo-area-message t
-          initial-buffer-choice (lambda () (get-buffer "*Messages*"))
+          initial-buffer-choice (lambda () (or (get-buffer "*dashboard*")
+                                               (get-buffer "*Messages*")))
           initial-scratch-message nil
           initial-major-mode 'fundamental-mode))
 #+end_src
@@ -1990,15 +1972,6 @@ Thus I will explicitly install this package rather than using the built-in versi
 #+begin_src emacs-lisp
   (setup treesit)
 #+end_src
-**** akirak-treesit
-#+begin_src elisp
-  (setup akirak-treesit
-    (:bind "C-M-SPC" #'akirak-treesit-expand-region)
-    (add-hook 'after-change-major-mode-hook
-              (defun akirak/enable-treesit-mode ()
-                (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
-                  (akirak-treesit-mode t)))))
-#+end_src
 *** vc-hooks                                                    :VC:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -2032,9 +2005,15 @@ Thus I will explicitly install this package rather than using the built-in versi
 
 #+begin_src emacs-lisp
   (setup which-func
-    (:with-mode which-function-mode
-      (:hook-into prog-mode-hook
-                  conf-mode-hook)))
+    ;; Some packages create a temporary buffer for building transient content. in
+    ;; which a major mode is turned on. `which-function' can be slow even in such
+    ;; a small content, so it should be turned off.
+     (defun akirak/which-func-enable-if-file ()
+       (when (buffer-file-name)
+         (which-function-mode t)))
+     (:with-function akirak/which-func-enable-if-file
+       (:hook-into prog-mode-hook
+                   conf-mode-hook)))
 #+end_src
 *** whitespace                                   :visual:formatting:
 :PROPERTIES:
@@ -2109,40 +2088,6 @@ Thus I will explicitly install this package rather than using the built-in versi
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
 
-    (cl-macrolet
-        ((major-modes (&rest modes)
-           `'(or ,@(mapcar (lambda (mode)
-                             (cons 'major-mode mode))
-                           modes)))
-         (reuse-mode-window (modes function &rest alist)
-           `(lambda (buffer alist)
-              (or (display-buffer-reuse-mode-window buffer '((mode . ,modes)))
-                  (,function buffer alist)))))
-      (dolist (entry `((,(major-modes help-mode devdocs-mode)
-                        ,(reuse-mode-window
-                          (help-mode devdocs-mode)
-                          akirak-window-display-document-buffer))
-                       ((major-mode . vterm-mode)
-                        ,(reuse-mode-window
-                          (vterm-mode)
-                          akirak-window-display-buffer-split-below))
-                       (,(major-modes nov-mode pdf-view-mode)
-                        akirak-window-display-document-buffer)
-                       ((major-mode . org-agenda-mode)
-                        akirak-window-display-org-agenda-buffer
-                        (mode org-agenda-mode))
-                       ("^CAPTURE-"
-                        akirak-window-display-org-capture-buffer)
-                       ("^org-dog header"
-                        akirak-window-display-buffer-split-1)
-                       ((major-mode . org-mode)
-                        akirak-window-display-org-buffer-other-window)
-                       ("^\\*deadgrep"
-                        display-buffer-use-least-recent-window)
-                       ("^\\*Async Shell Command\\*"
-                        display-buffer-no-window)))
-        (add-to-list 'display-buffer-alist entry t)))
-
     ;; I use a normal keyboard, so it is hard to access cursor keys.
     (define-key ctl-x-map "9" #'previous-buffer)
     (:repeat ctl-x-map previous-buffer)
@@ -2161,11 +2106,6 @@ Thus I will explicitly install this package rather than using the built-in versi
        (if (numberp arg)
            (scroll-down arg)
          (scroll-down (akirak/scroll-half-height))))))
-#+end_src
-**** akirak-visual-scroll
-#+begin_src emacs-lisp
-  (setup akirak-visual-scroll
-    (:hook-into org-mode-hook shr-mode-hook))
 #+end_src
 *** window.c
 #+begin_src emacs-lisp
@@ -2393,7 +2333,19 @@ I think it would be better to create my own theme, but I don't have enough time 
 :SORTING_TYPE: a
 :END:
 Embrace Org as a common document format for Emacs.
-*** COMMENT citar                                                 :bibliography:ARCHIVE:
+
+These variables need to be set in prior to any package settings related to org:
+
+#+begin_src emacs-lisp
+  (setq org-modules
+        '(org-id
+          org-clock
+          org-crypt
+          ;; Built-in link types I need
+          ol-info
+          ol-eww))
+#+end_src
+*** COMMENT citar                                         :bibliography:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-23 Wed 23:59]
 :END:
@@ -2449,6 +2401,7 @@ Manage Org searches
 **** oahu-memento
 :PROPERTIES:
 :CREATED_TIME: [2022-10-20 Thu 12:06]
+:ID:       d270ae25-077a-400f-a7a9-fee07ade34fd
 :END:
 #+begin_quote
 Org-Memento integration for oahu
@@ -2485,7 +2438,9 @@ Org-Babel execution backend for GraphQL source blocks
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package ob-graphql))
+  (setup (:package ob-graphql)
+    (with-eval-after-load 'org
+      (add-to-list 'org-babel-load-languages '(graphql . t))))
 #+end_src
 *** ob-mermaid
 :PROPERTIES:
@@ -2508,7 +2463,9 @@ org-babel functions for restclient-mode
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package ob-restclient))
+  (setup (:package ob-restclient)
+    (with-eval-after-load 'org
+      (add-to-list 'org-babel-load-languages '(restclient . t))))
 #+end_src
 *** org
 #+begin_quote
@@ -2546,15 +2503,9 @@ Outline-based notes management and organizer
             ;; Prevent from saving org-refile and org-capture locations to bookmarks
             org-bookmark-names-plist nil)
 
-      (advice-add #'org-insert-heading-respect-content
-                  :around #'akirak-org-ad-around-insert-heading)
-      (advice-add #'org-insert-todo-heading-respect-content
-                  :around #'akirak-org-ad-around-insert-heading)
-      (advice-add 'org-return
-                  :around #'akirak-org-ad-around-org-return)
-      (advice-add 'org-meta-return
-                  :around #'akirak-org-meta-return-split-block-advice)
-      (:hook #'akirak-org-protected-mode)
+      (:when-loaded
+        (when (require 'akirak-org nil t)
+          (:hook #'akirak-org-protected-mode)))
 
       (:global "C-c o" #'org-open-at-point-global)
 
@@ -2568,8 +2519,9 @@ Outline-based notes management and organizer
 
       (:when-loaded
         (:status personal
-          (akirak-org-config-setup)
-          (run-with-idle-timer 240 nil #'akirak-org-scan-type-tags))
+          (when (require 'akirak-org-config nil t)
+            (akirak-org-config-setup)
+            (run-with-idle-timer 240 nil #'akirak-org-scan-type-tags)))
 
         (add-to-list 'org-file-apps '(t . mailcap) t)
 
@@ -2587,23 +2539,6 @@ Outline-based notes management and organizer
                                     org-structure-template-alist)
                             :key #'car
                             :test #'equal))))))
-#+end_src
-**** org-modules
-#+begin_src emacs-lisp
-  (setq org-modules
-        '(org-id
-          org-clock
-          org-crypt
-          ;; Exporters
-          ox-gfm
-          ;; Built-in link types I need
-          ol-info
-          ol-eww
-          ;; Ensure the library is used when creating a bookmark
-          org-bookmark-heading
-          ;; See fanyi
-          ol-fanyi
-          ))
 #+end_src
 **** Completion
 #+begin_src emacs-lisp
@@ -2650,7 +2585,9 @@ Outline-based notes management and organizer
         (:set org-special-ctrl-a/e t
               org-M-RET-may-split-line nil)
 
-        (:hook #'akirak-org-eldoc-setup)
+        (:when-loaded
+          (when (require 'akirak-org nil t)
+            (:hook #'akirak-org-eldoc-setup)))
 
         (:global "M-g h" #'akirak-org-avy-heading)
 
@@ -2791,8 +2728,6 @@ Outline-based notes management and organizer
           org-babel-load-languages
           '((shell . t)
             (emacs-lisp . t)
-            (restclient . t)
-            (graphql . t)
             (sqlite . t)
             (sql . t))))
 #+end_src
@@ -2899,41 +2834,6 @@ Outline-based notes management and organizer
                            (equal filename (expand-file-name org-memento-file))))
               (user-error "You cannot clock in to this file"))
           (user-error "You cannot clock in to a heading without a file")))))
-#+end_src
-***** akirak-org-clock
-#+begin_src emacs-lisp
-  (setup akirak-org-clock
-    (when (and (daemonp)
-               ;; Don't enable the mode when troubleshooting.
-               (or (getenv "WAYLAND_DISPLAY")
-                   (getenv "DISPLAY")))
-      (:hook-into emacs-startup-hook))
-    (:hook akirak-log-mode)
-
-    (advice-add 'save-buffers-kill-terminal
-                :before
-                (defun akirak/snooze-before-kill (&rest _)
-                  (akirak-org-clock-snooze 20)))
-
-    (:global "M-g M-j" #'akirak-org-clock-goto)
-
-    (:with-feature org
-      (:with-map org-mode-map
-        [remap org-clock-in] #'akirak-org-clock-in))
-
-    (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
-    (define-key akirak/c-z-map "p" #'akirak-org-clock-in-to-project)
-    (define-key akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
-    (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
-    ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
-    ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
-    (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
-    (define-key akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
-
-    (define-key akirak/c-z-map "O" #'akirak-org-clock-out)
-    (define-key akirak/c-z-map "C-o" #'akirak-org-clock-out)
-    (define-key akirak/c-z-map "d" #'akirak-org-clock-done)
-    (define-key akirak/c-z-map "r" #'akirak-org-clock-set-review))
 #+end_src
 **** org-element
 #+begin_src emacs-lisp
@@ -3084,7 +2984,9 @@ Emacs bookmark support for Org mode
 
 #+begin_src emacs-lisp
   (setup (:package org-bookmark-heading)
-    (:set org-bookmark-heading-make-ids t))
+    (:set org-bookmark-heading-make-ids t)
+    ;; Ensure the library is used when creating a bookmark
+    (add-to-list 'org-modules 'org-bookmark-heading))
 #+end_src
 *** org-crypt
 :PROPERTIES:
@@ -3127,6 +3029,10 @@ A programmable workflow layer for Org mode
           org-dog-clock-default-query-filter
           (lambda (query)
             (concat "!tags:ARCHIVE " query)))
+    (with-eval-after-load 'recentf
+      (add-to-list 'recentf-exclude
+                   (concat (regexp-opt (mapcar #'car org-dog-repository-alist) :paren)
+                           (rx (+ anything) ".org" eol))))
 
     (defun akirak/org-dog-turn-on-transclusion ()
       (org-transclusion-mode t))
@@ -3605,7 +3511,8 @@ Time blocking with Org
 
       (add-hook 'org-memento-checkout-hook
                 (defun akirak/org-memento-save-some-buffers ()
-                  (ignore-errors (akirak-org-clock-snooze))
+                  (when (bound-and-true-p akirak-org-clock-mode)
+                    (ignore-errors (akirak-org-clock-snooze)))
                   (save-some-buffers)))
 
       (add-hook 'org-memento-extra-activity-sources
@@ -3737,6 +3644,7 @@ Placeholders for Org
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
+    (:set org-placeholder-show-archived-entries-in-view t)
     (:when-loaded
       (require 'akirak-org-capture)
       (:set org-placeholder-default-capture-template
@@ -3806,7 +3714,8 @@ Recurring org-mode tasks
   (setup (:package org-recur)
     (:status opinionated
       (with-eval-after-load 'org
-        (akirak-org-recur-mode t))))
+        (when (require 'akirak-org-recur nil t)
+          (akirak-org-recur-mode t)))))
 #+end_src
 *** org-reverse-datetree
 :PROPERTIES:
@@ -3928,7 +3837,8 @@ Github Flavored Markdown Back-End for Org Export Engine
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package ox-gfm))
+  (setup (:package ox-gfm)
+    (add-to-list 'org-modules 'ox-gfm))
 #+end_src
 *** ox-hugo
 :PROPERTIES:
@@ -4509,10 +4419,58 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-nix
     (:global "<f12> n p" #'akirak-nix-search-nixpkgs))
 #+end_src
+*** akirak-org
+#+begin_src emacs-lisp
+  (setup akirak-org
+    (advice-add #'org-insert-heading-respect-content
+                :around #'akirak-org-ad-around-insert-heading)
+    (advice-add #'org-insert-todo-heading-respect-content
+                :around #'akirak-org-ad-around-insert-heading)
+    (advice-add 'org-return
+                :around #'akirak-org-ad-around-org-return)
+    (advice-add 'org-meta-return
+                :around #'akirak-org-meta-return-split-block-advice))
+#+end_src
 *** akirak-org-capture
 #+begin_src elisp
   (setup akirak-org-capture
     (:global "M-s M-h" #'akirak-org-capture-history))
+#+end_src
+*** akirak-org-clock
+#+begin_src emacs-lisp
+  (setup akirak-org-clock
+    (when (and (daemonp)
+               ;; Don't enable the mode when troubleshooting.
+               (or (getenv "WAYLAND_DISPLAY")
+                   (getenv "DISPLAY")))
+      (:hook-into emacs-startup-hook))
+    (:hook akirak-log-mode)
+
+    (advice-add 'save-buffers-kill-terminal
+                :before
+                (defun akirak/snooze-before-kill (&rest _)
+                  (when (bound-and-true-p akirak-org-clock-mode)
+                    (akirak-org-clock-snooze 20))))
+
+    (:global "M-g M-j" #'akirak-org-clock-goto)
+
+    (:with-feature org
+      (:with-map org-mode-map
+        [remap org-clock-in] #'akirak-org-clock-in))
+
+    (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
+    (define-key akirak/c-z-map "p" #'akirak-org-clock-in-to-project)
+    (define-key akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
+    (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
+    ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
+    ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
+    (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
+    (define-key akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
+
+    (define-key akirak/c-z-map "O" #'akirak-org-clock-out)
+    (define-key akirak/c-z-map "C-o" #'akirak-org-clock-out)
+    (define-key akirak/c-z-map "d" #'akirak-org-clock-done)
+    (define-key akirak/c-z-map "r" #'akirak-org-clock-set-review))
 #+end_src
 *** akirak-org-log
 #+begin_src emacs-lisp
@@ -4556,6 +4514,25 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                 (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
                           nil t))))
 #+end_src
+*** akirak-project
+#+begin_src emacs-lisp
+  (setup akirak-project
+    (run-with-idle-timer 70 nil #'akirak-project-remember-this)
+    (run-with-idle-timer 180 nil #'akirak-project-rescan)
+    (with-eval-after-load 'magit
+      (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit))
+
+    (with-eval-after-load "bindings"
+      ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
+      ;; (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
+      ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
+      ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
+      ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
+      )
+
+    (with-eval-after-load 'embark
+      (define-key embark-file-map (kbd "+") #'akirak-project-init)))
+#+end_src
 *** akirak-quick-thing
 #+begin_src elisp
   (setup akirak-quick-thing
@@ -4564,6 +4541,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-scratch
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
+#+end_src
+*** akirak-shr
+#+begin_src elisp
+  (setup akirak-shr
+    (:hook-into nov-mode-hook))
 #+end_src
 *** akirak-snippet
 #+begin_src emacs-lisp
@@ -4575,6 +4557,15 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-systemctl
     (:global "<f12> s s" #'akirak-systemctl-toggle-unit
              "<f12> s d" #'akirak-systemctl-daemon-reload))
+#+end_src
+*** akirak-treesit
+#+begin_src elisp
+  (setup akirak-treesit
+    (:bind "C-M-SPC" #'akirak-treesit-expand-region)
+    (add-hook 'after-change-major-mode-hook
+              (defun akirak/enable-treesit-mode ()
+                (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
+                  (akirak-treesit-mode t)))))
 #+end_src
 *** akirak-twist
 #+begin_src emacs-lisp
@@ -4604,6 +4595,11 @@ Complete a URL from the clipboard and the kill ring and insert as a link
     (:embark embark-file-map "s"
       ("C-l" akirak-org-store-link-to-file akirak/embark-org-store-file-link)))
 #+end_src
+*** akirak-visual-scroll
+#+begin_src emacs-lisp
+  (setup akirak-visual-scroll
+    (:hook-into org-mode-hook shr-mode-hook))
+#+end_src
 *** akirak-wayshot                                                  :screenshot:
 #+begin_src emacs-lisp
   (when (getenv "WAYLAND_DISPLAY")
@@ -4623,6 +4619,40 @@ This is an extra functions for window management.
 
 #+begin_src emacs-lisp
   (setup akirak-window
+    (cl-macrolet
+        ((major-modes (&rest modes)
+           `'(or ,@(mapcar (lambda (mode)
+                             (cons 'major-mode mode))
+                           modes)))
+         (reuse-mode-window (modes function &rest alist)
+           `(lambda (buffer alist)
+              (or (display-buffer-reuse-mode-window buffer '((mode . ,modes)))
+                  (,function buffer alist)))))
+      (dolist (entry `((,(major-modes help-mode devdocs-mode)
+                        ,(reuse-mode-window
+                          (help-mode devdocs-mode)
+                          akirak-window-display-document-buffer))
+                       ((major-mode . vterm-mode)
+                        ,(reuse-mode-window
+                          (vterm-mode)
+                          akirak-window-display-buffer-split-below))
+                       (,(major-modes nov-mode pdf-view-mode)
+                        akirak-window-display-document-buffer)
+                       ((major-mode . org-agenda-mode)
+                        akirak-window-display-org-agenda-buffer
+                        (mode org-agenda-mode))
+                       ("^CAPTURE-"
+                        akirak-window-display-org-capture-buffer)
+                       ("^org-dog header"
+                        akirak-window-display-buffer-split-1)
+                       ((major-mode . org-mode)
+                        akirak-window-display-org-buffer-other-window)
+                       ("^\\*deadgrep"
+                        display-buffer-use-least-recent-window)
+                       ("^\\*Async Shell Command\\*"
+                        display-buffer-no-window)))
+        (add-to-list 'display-buffer-alist entry t)))
+
     (:status opinionated
       (:with-map ctl-x-map
         ;; I don't need kill-buffer when I have consult-buffer
@@ -5014,6 +5044,19 @@ Show git blame info about current line
     (define-key ctl-x-x-map (kbd "b") #'blamer-mode)
     (define-key help-map (kbd "M-g") #'blamer-show-commit-info))
 #+end_src
+*** bookmark-frecency
+:PROPERTIES:
+:CREATED_TIME: [2023-11-20 Mon 12:48]
+:END:
+#+begin_quote
+Sort bookmarks by frecency
+[[https://github.com/akirak/bookmark-frecency.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package bookmark-frecency)
+    (:hook-into after-init-hook))
+#+end_src
 *** browse-at-remote
 :PROPERTIES:
 :CREATED_TIME: [2022-07-08 Fri 12:35]
@@ -5288,6 +5331,54 @@ COmpletion in Region FUnction
       (:bind "M-/" #'completion-at-point))
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
+#+end_src
+*** dashboard
+:PROPERTIES:
+:CREATED_TIME: [2023-11-18 Sat 23:10]
+:END:
+#+begin_quote
+A startup screen extracted from Spacemacs
+[[https://github.com/emacs-dashboard/emacs-dashboard]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package dashboard)
+    (:set dashboard-center-content t
+          dashboard-show-shortcuts t
+          dashboard-set-init-info nil
+          dashboard-set-footer nil
+          dashboard-banner-logo-title nil
+          dashboard-display-icons-p #'ignore
+          dashboard-projects-backend 'project-el
+          dashboard-item-shortcuts '((recents . "r")
+                                     (bookmarks . "m")
+                                     ;; Don't use p
+                                     (projects . "j")
+                                     ;; Unused
+                                     (agenda . "a")
+                                     (registers . "e"))
+          dashboard-items '((recents . 15)
+                            (projects . 8)
+                            (bookmarks . 10)))
+
+    ;; I'm no longer an evil user. Prefer n/p over j/k.
+    (:bind "n" 'dashboard-next-line
+           "p" #'dashboard-previous-line)
+    (:unbind "j" "k")
+
+    (:global "C-z b" #'dashboard-open)
+
+    (when (< (length command-line-args) 2)
+      (add-hook 'after-init-hook
+                (defun akirak/dashboard-init-on-startup ()
+                  (require 'dashboard)
+                  (dashboard-insert-startupify-lists)
+                  (add-hook (if (daemonp)
+                                'server-after-make-frame-hook
+                              'emacs-startup-hook)
+                            #'dashboard-initialize))
+                ;; It should not precede over bookmark-frecency-mode
+                85)))
 #+end_src
 *** COMMENT dash-docs                        :documentation:ARCHIVE:
 :PROPERTIES:
@@ -5793,7 +5884,8 @@ Conveniently act on minibuffer completions
 
     (:when-loaded
       (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
-      (akirak-embark-setup)))
+      (when (require 'akirak-embark nil t)
+        (akirak-embark-setup))))
 #+end_src
 
 Some notes:
@@ -5831,7 +5923,9 @@ Consult integration for Embark
 
 #+begin_src emacs-lisp
   (setup embark-org
-    (eval-after-load 'org #'akirak-embark-setup-org))
+    (with-eval-after-load 'org
+      (when (require 'akirak-embark nil t)
+        (akirak-embark-setup-org))))
 #+end_src
 *** COMMENT ement                                                       :social:ARCHIVE:
 :PROPERTIES:
@@ -6035,6 +6129,8 @@ Not only English-Chinese translator
   (setup (:package fanyi)
     (:set fanyi-providers '(fanyi-longman-provider
                             fanyi-etymon-provider))
+    (with-eval-after-load 'org
+      (add-to-list 'org-modules 'ol-fanyi))
     (:when-loaded
       (require 'fanyi-longman)
       (require 'fanyi-etymon))
@@ -6489,7 +6585,7 @@ Translation framework supports multiple engines such as Google/Bing/DeepL
 :CREATED_TIME: [2023-03-20 Mon 23:59]
 :END:
 #+begin_quote
-A simple ChatGPT client
+A simple multi-LLM client
 [[https://github.com/karthink/gptel]]
 #+end_quote
 
@@ -7128,7 +7224,8 @@ A Git porcelain inside Emacs
                               (cond
                                ((derived-mode-p 'magit-diff-mode)
                                 '(nil (inhibit-same-window . t)))
-                               ((derived-mode-p 'magit-process-mode)
+                               ((and (derived-mode-p 'magit-process-mode)
+                                     (fboundp 'akirak-window-display-buffer-prefer-other-pane))
                                 '(akirak-window-display-buffer-prefer-other-pane))
                                (t
                                 '(display-buffer-same-window))))))
@@ -7369,7 +7466,8 @@ Display modeline in minibuffer
                         3))
                 (cdr akirak/mode-line-directory-memo)
               (let* ((dir (abbreviate-file-name (file-name-directory filename)))
-                     (value (concat (if-let (pr (akirak-header-line--project))
+                     (value (concat (if-let (pr (when (require 'akirak-header-line nil t)
+                                                  (akirak-header-line--project)))
                                         (let ((root (thread-last
                                                       (project-root pr)
                                                       (string-remove-suffix "/"))))
@@ -7779,7 +7877,7 @@ Summon and dismiss buffers as popups
 
     (:bind "M-\"" #'popper-cycle
            "M-' RET" #'popper-toggle-type
-           "M-' M-'" #'popper-toggle-latest
+           "M-' M-'" #'popper-toggle
            "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-vterm-for-project
            "M-' s" #'scratch-buffer
@@ -8996,10 +9094,10 @@ Load my personal settings after all the things.
   (setup init
     (:status personal
       (let ((file "~/org/config.el"))
-        (when (file-exists-p file)
+        (when (file-readable-p file)
           (load-file file)))
 
-      (when (and custom-file (file-exists-p custom-file))
+      (when (and custom-file (file-readable-p custom-file))
         (load custom-file))))
 #+end_src
 ** Notes                                                      :@note:
@@ -9057,12 +9155,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
-| [[org-ql-search:tags:navigation][navigation]]          |   4 |
 | [[org-ql-search:tags:windows][windows]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
+| [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   3 |
 | [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |

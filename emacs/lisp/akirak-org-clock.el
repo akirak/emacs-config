@@ -69,7 +69,11 @@
   (when-let (filename (if-let (base (buffer-base-buffer))
                           (buffer-file-name base)
                         buffer-file-name))
-    (when (or (not (eq this-command #'save-buffer))
+    (when (or (not (memq this-command '(save-buffer
+                                        compile
+                                        project-compile
+                                        recompile
+                                        magit-status)))
               (string-match-p akirak-org-clock-buffer-name-whitelist
                               (buffer-name))
               (string-match-p akirak-org-clock-file-name-whitelist
@@ -219,7 +223,7 @@
                            :query-prefix query-prefix
                            :tags tags
                            :prompt
-                           (format "Clock in to project file (%s): "
+                           (format "Clock in (files: %s): "
                                    (mapconcat #'file-name-nondirectory
                                               files ", ")))
        (message "No default clock target, so fall back to octopus-clock-in")

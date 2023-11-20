@@ -75,6 +75,12 @@
       repo = "blamer.el";
       type = "github";
     };
+    bookmark-frecency = {
+      flake = false;
+      owner = "akirak";
+      repo = "bookmark-frecency.el";
+      type = "github";
+    };
     browse-at-remote = {
       flake = false;
       owner = "rmuslimov";
@@ -169,6 +175,12 @@
       flake = false;
       owner = "magnars";
       repo = "dash.el";
+      type = "github";
+    };
+    dashboard = {
+      flake = false;
+      owner = "emacs-dashboard";
+      repo = "emacs-dashboard";
       type = "github";
     };
     deadgrep = {

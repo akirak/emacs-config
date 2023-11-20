@@ -6,13 +6,24 @@
 (defun akirak-insert ()
   "Complete an insertion command."
   (interactive)
-  (let ((command (read-extended-command-1 "Insert: " "akirak-insert- ")))
+  (let ((command (read-extended-command-1 "Insert: " "akirak-insert-")))
     (call-interactively (intern command))))
+
+(defun akirak-insert--filename ()
+  (if (eq major-mode 'nov-mode)
+      nov-file-name
+    (buffer-file-name (buffer-base-buffer))))
+
+(defun akirak-insert--file-name-maybe-minibuf ()
+  (if (minibufferp)
+      (with-minibuffer-selected-window
+        (akirak-insert--filename))
+    (akirak-insert--filename)))
 
 ;;;###autoload (autoload 'akirak-insert-basename "akirak-insert")
 (define-skeleton akirak-insert-basename
   "Insert the base name of the buffer." nil
-  (file-name-base (buffer-file-name)))
+  (file-name-base (akirak-insert--file-name-maybe-minibuf)))
 
 ;;;###autoload (autoload 'akirak-insert-basename-pascalcased "akirak-insert")
 (define-skeleton akirak-insert-basename-pascalcased
@@ -20,8 +31,16 @@
   (progn
     (require 'string-inflection)
     (thread-last
-      (file-name-base (buffer-file-name))
+      (file-name-base (akirak-insert--file-name-maybe-minibuf))
       (string-inflection-upper-camelcase-function))))
+
+;;;###autoload (autoload 'akirak-insert-filename-from-project "akirak-insert")
+(define-skeleton akirak-insert-filename-from-project
+  "Insert the file name of the buffer, relative from the project root." nil
+  (let* ((filename (akirak-insert--file-name-maybe-minibuf))
+         (root (expand-file-name (project-root (project-current
+                                                nil (file-name-directory filename))))))
+    (file-relative-name filename root)))
 
 ;;;###autoload (autoload 'akirak-insert-directory "akirak-insert")
 (define-skeleton akirak-insert-directory

@@ -171,7 +171,8 @@ Finally, you can specify LEVEL, but you have to set the type of the to plain."
   (require 'org-bookmark-heading)
   ;; I don't always want to generate an ID on an org entry created using
   ;; `org-capture'.
-  (when org-id-link-to-org-use-id
+  (when (and (eq 'entry (plist-get org-capture-current-plist :type))
+             org-id-link-to-org-use-id)
     (push (org-bookmark-heading-make-record) akirak-org-capture-history)))
 
 (defun akirak-org-capture-complete-history (prompt)
