@@ -69,7 +69,11 @@
   (when-let (filename (if-let (base (buffer-base-buffer))
                           (buffer-file-name base)
                         buffer-file-name))
-    (when (or (not (eq this-command #'save-buffer))
+    (when (or (not (memq this-command '(save-buffer
+                                        compile
+                                        project-compile
+                                        recompile
+                                        magit-status)))
               (string-match-p akirak-org-clock-buffer-name-whitelist
                               (buffer-name))
               (string-match-p akirak-org-clock-file-name-whitelist
