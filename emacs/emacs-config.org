@@ -1313,12 +1313,20 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup mailcap
     (:when-loaded
+      (advice-add 'mailcap-parse-mimetypes
+                  :around
+                  (defun akirak/ad-around-mailcap-parse-mimetypes (orig &rest args)
+                    (if (and (not args)
+                             (not mailcap-mimetypes-parsed-p))
+                        (or (akirak-mime-set-mime-extensions)
+                            (funcall orig))
+                      (apply orig args))))
       (advice-add 'mailcap-parse-mailcaps
                   :around
                   (defun akirak/ad-around-mailcap-parse-mailcaps (orig &rest args)
                     (if (and (not args)
                              (not mailcap-parsed-p))
-                        (or (akirak-mime-set-mailcap-extensions)
+                        (or (akirak-mime-set-mime-extensions)
                             (funcall orig))
                       (apply orig args))))))
 #+end_src

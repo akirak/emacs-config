@@ -8,7 +8,7 @@
   :type 'file)
 
 ;;;###autoload
-(defun akirak-mime-set-mailcap-extensions ()
+(defun akirak-mime-set-mime-extensions ()
   (when (file-readable-p akirak-mime-globs-file)
     (with-temp-buffer
       (insert-file-contents akirak-mime-globs-file)
@@ -26,6 +26,7 @@
                 result))
         (setq mailcap-mime-extensions (nreverse result)
               ;; Prevent from being overridden by the built-in function
+              mailcap-mimetypes-parsed-p t
               mailcap-parsed-p t)))))
 
 (defun akirak-mime-matching-suffixes (mime-regexp)
@@ -40,7 +41,7 @@
 (defun akirak-mime-update-org-file-apps ()
   "Update `org-file-apps' from the user mime extensions."
   (require 'mailcap)
-  (akirak-mime-set-mailcap-extensions)
+  (akirak-mime-set-mime-extensions)
   (dolist (x mailcap-user-mime-data)
     (let ((test (cdr (assq 'test x)))
           (suffixes (akirak-mime-matching-suffixes (cdr (assq 'type x))))
