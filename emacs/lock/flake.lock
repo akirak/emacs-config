@@ -193,6 +193,22 @@
         "type": "github"
       }
     },
+    "bookmark-frecency": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1700463750,
+        "narHash": "sha256-BBQ4AFuUDuu1fRwOkx9XI6tz2NlB+IvJWm2WKK6uvnk=",
+        "owner": "akirak",
+        "repo": "bookmark-frecency.el",
+        "rev": "ca9ad38ac92adb434483de615a95998b10944bcd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "bookmark-frecency.el",
+        "type": "github"
+      }
+    },
     "browse-at-remote": {
       "flake": false,
       "locked": {
@@ -2972,6 +2988,7 @@
         "avy-riben": "avy-riben",
         "beancount": "beancount",
         "blamer": "blamer",
+        "bookmark-frecency": "bookmark-frecency",
         "browse-at-remote": "browse-at-remote",
         "buttercup": "buttercup",
         "caml": "caml",
