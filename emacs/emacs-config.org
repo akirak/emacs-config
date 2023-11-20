@@ -5343,7 +5343,8 @@ A startup screen extracted from Spacemacs
                                      (agenda . "a")
                                      (registers . "e"))
           dashboard-items '((recents . 15)
-                            (projects . 8)))
+                            (projects . 8)
+                            (bookmarks . 10)))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
     (:bind "n" 'dashboard-next-line
@@ -5360,7 +5361,9 @@ A startup screen extracted from Spacemacs
                   (add-hook (if (daemonp)
                                 'server-after-make-frame-hook
                               'emacs-startup-hook)
-                            #'dashboard-initialize)))))
+                            #'dashboard-initialize))
+                ;; It should not precede over bookmark-frecency-mode
+                85)))
 #+end_src
 *** COMMENT dash-docs                        :documentation:ARCHIVE:
 :PROPERTIES:
