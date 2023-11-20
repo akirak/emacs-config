@@ -3636,6 +3636,7 @@ Placeholders for Org
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
+    (:set org-placeholder-show-archived-entries-in-view t)
     (:when-loaded
       (require 'akirak-org-capture)
       (:set org-placeholder-default-capture-template
