@@ -5033,6 +5033,15 @@ Show git blame info about current line
     (define-key ctl-x-x-map (kbd "b") #'blamer-mode)
     (define-key help-map (kbd "M-g") #'blamer-show-commit-info))
 #+end_src
+*** bookmark-frecency
+:PROPERTIES:
+:CREATED_TIME: [2023-11-20 Mon 12:48]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package bookmark-frecency)
+    (:hook-into after-init-hook))
+#+end_src
 *** browse-at-remote
 :PROPERTIES:
 :CREATED_TIME: [2022-07-08 Fri 12:35]
