@@ -517,11 +517,13 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 *** bookmark
 :PROPERTIES:
 :CREATED_TIME: [2022-05-14 Sat 09:53]
+:ID:       97f2f3f8-b43c-4e48-a588-4cf3c4413e99
 :END:
 
 #+begin_src emacs-lisp
   (setup bookmark
-    (:set bookmark-save-flag 1)
+    (:set bookmark-save-flag t
+          bookmark-sort-flag 'last-modified)
 
     (defun akirak/delete-bookmark-to-here ()
       "Delete a bookmark record to the current location, if any"
