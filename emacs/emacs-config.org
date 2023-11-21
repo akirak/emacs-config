@@ -2203,7 +2203,7 @@ Elegant, highly legible and customizable themes
       (load-theme 'modus-operandi :no-confirm)))
 #+end_src
 *** Font families
-You need to install the font separately.
+You need to install the fonts separately.
 
 #+begin_src emacs-lisp
   (defun akirak/enable-fonts (&optional value skip-check)
