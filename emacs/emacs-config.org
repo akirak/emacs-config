@@ -1394,9 +1394,13 @@ Resources:
                   (interactive)
                   (if (and minibuffer-completing-file-name
                            (eq ?/ (char-after (1- (point)))))
-                      (progn
+                      (let ((ident (file-remote-p (buffer-substring-no-properties
+                                                   (minibuffer-prompt-end) (point-max))
+                                                  'ident)))
                         (delete-region (minibuffer-prompt-end) (point-max))
                         (goto-char (point-max))
+                        (when ident
+                          (insert ident))
                         (insert "/"))
                     (insert "/")))))
 #+end_src
