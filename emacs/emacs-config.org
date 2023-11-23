@@ -709,6 +709,7 @@ The following variable defines variables that can be saved to =custom-file=:
       akirak-git-clone-root
       nix3-flake-clone-root
       akirak-log-private-file
+      akirak-org-clock-history-threshold
       akirak-org-log-file
       akirak/font-height
       akirak/org-memento-export-directory

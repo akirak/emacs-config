@@ -7,7 +7,15 @@
 
 (defcustom akirak-org-clock-history-threshold (* 3600 24 2)
   "Number of seconds for which you want to take account for clock
- activities."
+ activities.
+
+Example values are shown below:
+
+ * 2 days = 172800 seconds
+ * 3 days = 259200 seconds
+ * 5 days = 432000 seconds
+ * 7 days = 604800 seconds
+ * 10 days = 864000 seconds"
   :type 'number)
 
 (defmacro akirak-org-clock--finalize-capture (&rest progn)
