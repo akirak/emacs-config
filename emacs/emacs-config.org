@@ -4426,6 +4426,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-org
 #+begin_src emacs-lisp
   (setup akirak-org
+    (:with-feature org
+      (:with-map org-mode-map
+        (:bind [remap point-to-register] #'akirak-org-point-to-register)))
+
     (advice-add #'org-insert-heading-respect-content
                 :around #'akirak-org-ad-around-insert-heading)
     (advice-add #'org-insert-todo-heading-respect-content

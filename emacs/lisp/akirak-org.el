@@ -743,6 +743,14 @@ The point should be at the heading."
       (call-interactively this-command)))))
 
 ;;;###autoload
+(defun akirak-org-point-to-register (register)
+  "Set a register to the current point, respecting an indirect buffer if any."
+  (interactive (list (register-read-with-preview "Point to register: ")))
+  (let ((marker (make-marker)))
+    (set-marker marker (point) (org-base-buffer (current-buffer)))
+    (set-register register marker)))
+
+;;;###autoload
 (defun akirak-org-auto-decorate-words ()
   "Wrap certain words so they don't look weird.
 
