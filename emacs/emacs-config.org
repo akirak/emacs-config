@@ -5362,12 +5362,31 @@ A startup screen extracted from Spacemacs
                                      (bookmarks . "m")
                                      ;; Don't use p
                                      (projects . "j")
+                                     (org-clock . "o")
                                      ;; Unused
                                      (agenda . "a")
                                      (registers . "e"))
           dashboard-items '((recents . 15)
                             (projects . 8)
+                            (org-clock . 7)
                             (bookmarks . 10)))
+    (:when-loaded
+      (add-to-list 'dashboard-item-generators
+                   (cons 'org-clock
+                         (defun akirak/dashboard-org-clock-insert (list-size)
+                           (dashboard-insert-section
+                            "Org Clock (unfinished items)"
+                            (when (boundp 'org-clock-history)
+                              (require 'akirak-org-clock)
+                              (akirak-org-clock--dashboard-items list-size))
+                            list-size
+                            'org-clock
+                            (dashboard-get-shortcut 'org-clock)
+                            `(lambda (&rest _)
+                               (require 'org-dog)
+                               (pop-to-buffer (org-dog-indirect-buffer
+                                               (org-element-property :hd-marker ',el))))
+                            (akirak-org-clock--format-dashboard-item el))))))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
     (:bind "n" 'dashboard-next-line
