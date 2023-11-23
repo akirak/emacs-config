@@ -264,6 +264,12 @@
     (set-register register marker)
     (message "Saved to register %c" register)))
 
+(defun akirak-embark-org-store-link-to-buffer (buffer)
+  "Store a link to the current location in a BUFFER."
+  (interactive "bStore link: ")
+  (with-current-buffer buffer
+    (org-store-link nil 'interactive)))
+
 (defun akirak-embark-like-in-org (string)
   (interactive "s")
   (with-temp-buffer
@@ -313,6 +319,7 @@
   (define-key embark-expression-map "R" #'project-query-replace-regexp)
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-variable-map "k" #'akirak-embark-describe-key-briefly-in-map)
+  (define-key embark-buffer-map "l" #'akirak-embark-org-store-link-to-buffer)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
   (define-key embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
