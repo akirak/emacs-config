@@ -1698,6 +1698,15 @@ This is a recommended setting for use with vertico. See https://github.com/minad
   (setup shr
     (:set shr-bullet " ‣ "))
 #+end_src
+*** sh-script
+:PROPERTIES:
+:CREATED_TIME: [2023-11-25 Sat 11:36]
+:END:
+
+#+begin_src emacs-lisp
+  (setup sh-script
+    (:set sh-indentation 2))
+#+end_src
 *** simple                                      :formatting:writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
