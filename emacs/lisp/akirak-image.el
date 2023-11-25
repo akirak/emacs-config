@@ -95,7 +95,11 @@
                           (make-directory outdir))
                         (unless (file-exists-p outfile)
                           (let ((default-directory outdir))
-                            (call-process "xh" nil akirak-image-process-buffer nil
+                            (call-process (or (executable-find "xh")
+                                              (executable-find "curl")
+                                              (user-error "No executable found for downloading data.\
+You need curl or one of its supported alternatives"))
+                                          nil akirak-image-process-buffer nil
                                           url "-o" (file-name-nondirectory outfile))))
                         outfile))))
     (cond
