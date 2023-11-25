@@ -1,9 +1,9 @@
 {
   "async": {
     "archive": {
-      "narHash": "sha256-TANS6qsjI05Gq6dJWoPdEtVBDFvi9YPyTA8IoaOLuJo=",
+      "narHash": "sha256-Uz5knXbkvNesTl1wp3D/2VUHyK/qB/rBXkn0CYjgpTs=",
       "type": "tarball",
-      "url": "https://elpa.gnu.org/packages/async-1.9.7.tar"
+      "url": "https://elpa.gnu.org/packages/async-1.9.8.tar"
     },
     "inventory": {
       "type": "archive",
@@ -12,7 +12,7 @@
     "packageRequires": {
       "emacs": "24.4"
     },
-    "version": "1.9.7"
+    "version": "1.9.8"
   },
   "dired-du": {
     "archive": {
