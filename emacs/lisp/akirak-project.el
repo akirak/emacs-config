@@ -188,7 +188,8 @@ display alternative actions."
       (seq-sort-by (lambda (buffer)
                      (buffer-local-value 'buffer-display-time buffer))
                    #'time-less-p)
-      (car))))
+      (seq-find (lambda (buffer)
+                  (file-exists-p (buffer-file-name buffer)))))))
 
 ;;;###autoload
 (defun akirak-project-add-dir-local-variable (dir)
