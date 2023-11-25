@@ -8170,6 +8170,17 @@ Edit comment/string/docstring/code block in separate buffer
     (:set separedit-default-mode 'markdown-mode)
     (:global "C-c '" #'separedit))
 #+end_src
+*** shfmt
+#+begin_src elisp
+  (setup (:package shfmt)
+    (:nixpkgs "shfmt")
+    ;; My default preferences for formatting bash. Can be overridden for
+    ;; individual projects that are not owned by me. For details, see "shfmt
+    ;; --help".
+    (:set shfmt-arguments '("-i" "2"
+                            "--case-indent"
+                            "--binary-next-line")))
+#+end_src
 *** shr-tag-pre-highlight
 :PROPERTIES:
 :CREATED_TIME: [2022-09-10 Sat 19:48]
