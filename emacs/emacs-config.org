@@ -8171,6 +8171,11 @@ Edit comment/string/docstring/code block in separate buffer
     (:global "C-c '" #'separedit))
 #+end_src
 *** shfmt
+#+begin_quote
+Reformat shell scripts using shfmt
+[[https://github.com/purcell/emacs-shfmt]]
+#+end_quote
+
 #+begin_src elisp
   (setup (:package shfmt)
     (:nixpkgs "shfmt")
@@ -9188,7 +9193,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 215 |
+| [[org-ql-search:tags:packages][packages]]            | 216 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
