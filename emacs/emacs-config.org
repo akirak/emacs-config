@@ -5396,15 +5396,12 @@ A startup screen extracted from Spacemacs
 
     (:global "C-z b" #'dashboard-open)
 
-    (when (< (length command-line-args) 2)
+    (when (daemonp)
       (add-hook 'after-init-hook
                 (defun akirak/dashboard-init-on-startup ()
                   (require 'dashboard)
                   (dashboard-insert-startupify-lists)
-                  (add-hook (if (daemonp)
-                                'server-after-make-frame-hook
-                              'emacs-startup-hook)
-                            #'dashboard-initialize))
+                  (add-hook 'server-after-make-frame-hook #'dashboard-initialize))
                 ;; It should not precede over bookmark-frecency-mode
                 85)))
 #+end_src
