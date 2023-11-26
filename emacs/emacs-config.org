@@ -2549,9 +2549,13 @@ Outline-based notes management and organizer
                            (cl-remove-duplicates
                             (append '(("d" . "definition")
                                       ("p" . "prompt")
-                                      ("t" . "toc"))
+                                      ;; Override CENTER block
+                                      ("c" . "toc")
+                                      ("t" . "takeaway"))
                                     org-structure-template-alist)
                             :key #'car
+                            ;; Needed to override existing bindings
+                            :from-end t
                             :test #'equal))))))
 #+end_src
 **** Completion
