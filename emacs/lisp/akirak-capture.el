@@ -421,6 +421,16 @@
      :transient t)
     ("u" "Url" akirak-capture-url
      :if (lambda () (not akirak-capture-initial)))
+    ("n" "News url (read now)"
+     (lambda ()
+       (interactive)
+       (setq akirak-capture-current-url (or (akirak-url-latest)
+                                            (akirak-url-complete "Capture URL: "))
+             akirak-capture-url-title nil
+             akirak-capture-doct-options '(:clock-in t :clock-resume t)
+             akirak-capture-template-options '(:tags "@news"))
+       (akirak-capture-url nil 'keep-options))
+     :if (lambda () (not akirak-capture-initial)))
     ("v" "Vocabulary" akirak-capture-vocabulary)]
 
    ["Schedule an event / org-memento"
@@ -757,7 +767,7 @@
   (octopus--dispatch (octopus-current-command) org-clock-marker))
 
 ;;;###autoload (autoload 'akirak-capture-url "akirak-capture" nil 'interactive)
-(transient-define-prefix akirak-capture-url (url)
+(transient-define-prefix akirak-capture-url (url &optional keep-options)
   [:class
    transient-row
    ("SPC" akirak-capture-source-url)
@@ -808,10 +818,11 @@
    ("/" octopus-read-dog-file-suffix)]
   (interactive (list (or (akirak-url-latest)
                          (akirak-url-complete "Capture URL: "))))
-  (setq akirak-capture-current-url url
-        akirak-capture-url-title nil
-        akirak-capture-doct-options nil
-        akirak-capture-template-options nil)
+  (unless keep-options
+    (setq akirak-capture-current-url url
+          akirak-capture-url-title nil
+          akirak-capture-doct-options nil
+          akirak-capture-template-options nil))
   (transient-setup 'akirak-capture-url))
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-url))

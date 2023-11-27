@@ -156,11 +156,16 @@
     (buffer-file-name)
     (find-file)))
 
-(defun akirak-embark-org-indirect-buffer ()
+(defun akirak-embark-org-indirect-buffer (&optional switch-fn)
   (interactive)
-  (pop-to-buffer (org-dog-indirect-buffer akirak-embark-target-org-marker))
+  (funcall (or switch-fn #'pop-to-buffer)
+           (org-dog-indirect-buffer akirak-embark-target-org-marker))
   ;; FIXME: Don't directly depend on org-ql-find for hooks
   (run-hooks 'org-ql-find-goto-hook))
+
+(defun akirak-embark-org-indirect-buffer-same-window ()
+  (interactive)
+  (akirak-embark-org-indirect-buffer #'pop-to-buffer-same-window))
 
 (defun akirak-embark-org-clock-in-and-show ()
   (interactive)
@@ -264,6 +269,12 @@
     (set-register register marker)
     (message "Saved to register %c" register)))
 
+(defun akirak-embark-org-store-link-to-buffer (buffer)
+  "Store a link to the current location in a BUFFER."
+  (interactive "bStore link: ")
+  (with-current-buffer buffer
+    (org-store-link nil 'interactive)))
+
 (defun akirak-embark-like-in-org (string)
   (interactive "s")
   (with-temp-buffer
@@ -276,8 +287,7 @@
 (defvar akirak-embark-org-heading-map
   (let ((map (make-composed-keymap nil embark-general-map)))
     (define-key map "\\" #'akirak-embark-find-org-buffer-file)
-    (define-key map "g" (akirak-embark-run-at-marker ignore t
-                          akirak-embark-goto-org-marker))
+    (define-key map "g" #'akirak-embark-org-indirect-buffer-same-window)
     (define-key map "G" #'akirak-embark-org-clock-in-and-show)
     (define-key map "T" #'akirak-embark-org-clock-in-and-show-other-tab)
     (define-key map "o" #'akirak-embark-org-indirect-buffer)
@@ -313,6 +323,7 @@
   (define-key embark-expression-map "R" #'project-query-replace-regexp)
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-variable-map "k" #'akirak-embark-describe-key-briefly-in-map)
+  (define-key embark-buffer-map "l" #'akirak-embark-org-store-link-to-buffer)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
   (define-key embark-identifier-map "H" #'akirak-embark-devdocs-lookup)

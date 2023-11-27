@@ -1140,6 +1140,12 @@
       type = "git";
       url = "https://git.sr.ht/~pkal/setup";
     };
+    shfmt = {
+      flake = false;
+      owner = "purcell";
+      repo = "emacs-shfmt";
+      type = "github";
+    };
     shr-tag-pre-highlight = {
       flake = false;
       owner = "xuchunyang";

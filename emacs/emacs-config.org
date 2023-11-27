@@ -709,6 +709,7 @@ The following variable defines variables that can be saved to =custom-file=:
       akirak-git-clone-root
       nix3-flake-clone-root
       akirak-log-private-file
+      akirak-org-clock-history-threshold
       akirak-org-log-file
       akirak/font-height
       akirak/org-memento-export-directory
@@ -1394,9 +1395,13 @@ Resources:
                   (interactive)
                   (if (and minibuffer-completing-file-name
                            (eq ?/ (char-after (1- (point)))))
-                      (progn
+                      (let ((ident (file-remote-p (buffer-substring-no-properties
+                                                   (minibuffer-prompt-end) (point-max))
+                                                  'ident)))
                         (delete-region (minibuffer-prompt-end) (point-max))
                         (goto-char (point-max))
+                        (when ident
+                          (insert ident))
                         (insert "/"))
                     (insert "/")))))
 #+end_src
@@ -1692,6 +1697,15 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup shr
     (:set shr-bullet " ‣ "))
+#+end_src
+*** sh-script
+:PROPERTIES:
+:CREATED_TIME: [2023-11-25 Sat 11:36]
+:END:
+
+#+begin_src emacs-lisp
+  (setup sh-script
+    (:set sh-indentation 2))
 #+end_src
 *** simple                                      :formatting:writing:
 :PROPERTIES:
@@ -2203,7 +2217,7 @@ Elegant, highly legible and customizable themes
       (load-theme 'modus-operandi :no-confirm)))
 #+end_src
 *** Font families
-You need to install the font separately.
+You need to install the fonts separately.
 
 #+begin_src emacs-lisp
   (defun akirak/enable-fonts (&optional value skip-check)
@@ -2535,9 +2549,13 @@ Outline-based notes management and organizer
                            (cl-remove-duplicates
                             (append '(("d" . "definition")
                                       ("p" . "prompt")
-                                      ("t" . "toc"))
+                                      ;; Override CENTER block
+                                      ("c" . "toc")
+                                      ("t" . "takeaway"))
                                     org-structure-template-alist)
                             :key #'car
+                            ;; Needed to override existing bindings
+                            :from-end t
                             :test #'equal))))))
 #+end_src
 **** Completion
@@ -4422,6 +4440,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-org
 #+begin_src emacs-lisp
   (setup akirak-org
+    (:with-feature org
+      (:with-map org-mode-map
+        (:bind [remap point-to-register] #'akirak-org-point-to-register)))
+
     (advice-add #'org-insert-heading-respect-content
                 :around #'akirak-org-ad-around-insert-heading)
     (advice-add #'org-insert-todo-heading-respect-content
@@ -5354,12 +5376,31 @@ A startup screen extracted from Spacemacs
                                      (bookmarks . "m")
                                      ;; Don't use p
                                      (projects . "j")
+                                     (org-clock . "o")
                                      ;; Unused
                                      (agenda . "a")
                                      (registers . "e"))
           dashboard-items '((recents . 15)
                             (projects . 8)
+                            (org-clock . 7)
                             (bookmarks . 10)))
+    (:when-loaded
+      (add-to-list 'dashboard-item-generators
+                   (cons 'org-clock
+                         (defun akirak/dashboard-org-clock-insert (list-size)
+                           (dashboard-insert-section
+                            "Org Clock (unfinished items)"
+                            (when (boundp 'org-clock-history)
+                              (require 'akirak-org-clock)
+                              (akirak-org-clock--dashboard-items list-size))
+                            list-size
+                            'org-clock
+                            (dashboard-get-shortcut 'org-clock)
+                            `(lambda (&rest _)
+                               (require 'org-dog)
+                               (pop-to-buffer (org-dog-indirect-buffer
+                                               (org-element-property :hd-marker ',el))))
+                            (akirak-org-clock--format-dashboard-item el))))))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
     (:bind "n" 'dashboard-next-line
@@ -5368,15 +5409,18 @@ A startup screen extracted from Spacemacs
 
     (:global "C-z b" #'dashboard-open)
 
-    (when (< (length command-line-args) 2)
+    (when (daemonp)
       (add-hook 'after-init-hook
                 (defun akirak/dashboard-init-on-startup ()
                   (require 'dashboard)
                   (dashboard-insert-startupify-lists)
-                  (add-hook (if (daemonp)
-                                'server-after-make-frame-hook
-                              'emacs-startup-hook)
-                            #'dashboard-initialize))
+                  (add-hook 'server-after-make-frame-hook
+                            (defun akirak/server-dashboard-initialize ()
+                              (unless (seq-find
+                                       (lambda (buf)
+                                         (buffer-local-value 'server-buffer-clients buf))
+                                       (buffer-list))
+                                (dashboard-initialize)))))
                 ;; It should not precede over bookmark-frecency-mode
                 85)))
 #+end_src
@@ -8130,6 +8174,22 @@ Edit comment/string/docstring/code block in separate buffer
     (:set separedit-default-mode 'markdown-mode)
     (:global "C-c '" #'separedit))
 #+end_src
+*** shfmt
+#+begin_quote
+Reformat shell scripts using shfmt
+[[https://github.com/purcell/emacs-shfmt]]
+#+end_quote
+
+#+begin_src elisp
+  (setup (:package shfmt)
+    (:nixpkgs "shfmt")
+    ;; My default preferences for formatting bash. Can be overridden for
+    ;; individual projects that are not owned by me. For details, see "shfmt
+    ;; --help".
+    (:set shfmt-arguments '("-i" "2"
+                            "--case-indent"
+                            "--binary-next-line")))
+#+end_src
 *** shr-tag-pre-highlight
 :PROPERTIES:
 :CREATED_TIME: [2022-09-10 Sat 19:48]
@@ -9137,7 +9197,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 215 |
+| [[org-ql-search:tags:packages][packages]]            | 216 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

@@ -83,9 +83,7 @@
   (if (and (markerp marker)
            (buffer-live-p (marker-buffer marker)))
       (format "\"%s\" in %s"
-              (org-with-point-at marker
-                (and (looking-at org-complex-heading-regexp)
-                     (org-link-display-format (match-string-no-properties 4))))
+              (org-link-display-format (org-entry-get marker "ITEM"))
               (buffer-name (marker-buffer marker)))
     "(buffer not live)"))
 
