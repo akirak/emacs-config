@@ -6947,6 +6947,10 @@ Major mode for editing JSON files.
 :PROPERTIES:
 :CREATED_TIME: [2023-11-27 Mon 20:10]
 :END:
+#+begin_quote
+Extends default support for JSX/TSX
+[[https://github.com/llemaitre19/jtsx]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package jtsx)
@@ -9206,7 +9210,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 216 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
