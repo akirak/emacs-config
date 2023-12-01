@@ -1317,6 +1317,7 @@ The built-in =electric= package provides the following modes:
       (advice-add 'mailcap-parse-mimetypes
                   :around
                   (defun akirak/ad-around-mailcap-parse-mimetypes (orig &rest args)
+                    (require 'akirak-mime)
                     (if (and (not args)
                              (not mailcap-mimetypes-parsed-p))
                         (or (akirak-mime-set-mime-extensions)
@@ -1325,6 +1326,7 @@ The built-in =electric= package provides the following modes:
       (advice-add 'mailcap-parse-mailcaps
                   :around
                   (defun akirak/ad-around-mailcap-parse-mailcaps (orig &rest args)
+                    (require 'akirak-mime)
                     (if (and (not args)
                              (not mailcap-parsed-p))
                         (or (akirak-mime-set-mime-extensions)
