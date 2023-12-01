@@ -3175,7 +3175,9 @@ A programmable workflow layer for Org mode
                   (let ((inhibit-message t))
                     (require 'org-dog)
                     (org-dog-reload-files t)
-                    (akirak-org-clock-rebuild-history)))))))
+                    (akirak-org-clock-rebuild-history)
+                    (when (fboundp 'akirak/dashboard-init-on-startup)
+                      (akirak/dashboard-init-on-startup))))))))
 #+end_src
 **** consult-org-dog
 :PROPERTIES:
@@ -5420,20 +5422,16 @@ A startup screen extracted from Spacemacs
 
     (:global "C-z b" #'dashboard-open)
 
-    (when (daemonp)
-      (add-hook 'after-init-hook
-                (defun akirak/dashboard-init-on-startup ()
-                  (require 'dashboard)
-                  (dashboard-insert-startupify-lists)
-                  (add-hook 'server-after-make-frame-hook
-                            (defun akirak/server-dashboard-initialize ()
-                              (unless (seq-find
-                                       (lambda (buf)
-                                         (buffer-local-value 'server-buffer-clients buf))
-                                       (buffer-list))
-                                (dashboard-initialize)))))
-                ;; It should not precede over bookmark-frecency-mode
-                85)))
+    (defun akirak/dashboard-init-on-startup ()
+      (require 'dashboard)
+      (dashboard-insert-startupify-lists)
+      (add-hook 'server-after-make-frame-hook
+                (defun akirak/server-dashboard-initialize ()
+                  (unless (seq-find
+                           (lambda (buf)
+                             (buffer-local-value 'server-buffer-clients buf))
+                           (buffer-list))
+                    (dashboard-initialize))))))
 #+end_src
 *** COMMENT dash-docs                        :documentation:ARCHIVE:
 :PROPERTIES:
