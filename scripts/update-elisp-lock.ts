@@ -69,8 +69,8 @@ console.table(table.sort((x, y) => y[1] - x[1]))
 //////////////////////////
 
 async function updateFlakeInputs(inputs: string[]): Promise<boolean> {
-  const p = Deno.run({ stderr: 'piped', cmd: ["nix", "flake", "lock"].concat(
-    inputs.map(input => ["--update-input", input]).flat()
+  const p = Deno.run({ stderr: 'piped', cmd: ["nix", "flake", "update"].concat(
+    inputs.map(input => [input]).flat()
   )});
   await p.status()
 }

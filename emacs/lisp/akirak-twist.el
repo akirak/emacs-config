@@ -17,6 +17,20 @@
   "Name of the flake package for the Emacs configuration"
   :type 'string)
 
+(defun akirak-twist--nix-2-19-p ()
+  (let ((str (car (process-lines "nix" "--version"))))
+    (if (string-match (rx (group (+ digit))
+                          (and "." (group (+ digit)))
+                          (and "." (group (+ digit))))
+                      str)
+        (pcase (list (string-to-number (match-string 1 str))
+                     (string-to-number (match-string 2 str)))
+          ((or `(3 ,_)
+               (and `(2 ,minor)
+                    (guard (>= minor 19))))
+           t))
+      (error "Didn't match against the version number"))))
+
 (defun akirak-twist-read-flake-node (prompt dir)
   (let* ((nodes (akirak-twist-flake-nodes dir))
          (node-name (completing-read prompt
@@ -199,11 +213,13 @@
 
 (defun akirak-twist--update-inputs (dir inputs)
   (let ((default-directory dir))
-    (compile (concat "nix flake lock "
-                     (mapconcat (lambda (input)
-                                  (concat "--update-input "
-                                          (shell-quote-argument input)))
-                                inputs " ")))))
+    (compile (if (akirak-twist--nix-2-19-p)
+                 (concat "nix flake update " (mapconcat #'shell-quote-argument inputs ""))
+               (concat "nix flake lock "
+                       (mapconcat (lambda (input)
+                                    (concat "--update-input "
+                                            (shell-quote-argument input)))
+                                  inputs " "))))))
 
 (defvar akirak-twist-packages-to-build nil)
 
