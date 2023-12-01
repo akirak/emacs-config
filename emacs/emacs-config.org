@@ -2014,6 +2014,15 @@ Thus I will explicitly install this package rather than using the built-in versi
        [remap scroll-up-command] #'View-scroll-half-page-forward
        [remap scroll-down-command] #'View-scroll-half-page-backward)))
 #+end_src
+*** warnings
+:PROPERTIES:
+:CREATED_TIME: [2023-12-01 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup warnings
+    (:set warning-minimum-level :error))
+#+end_src
 *** which-func
 :PROPERTIES:
 :CREATED_TIME: [2022-09-09 Fri 12:28]
