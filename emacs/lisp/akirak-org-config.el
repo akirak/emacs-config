@@ -98,7 +98,7 @@
                                           ("ARCHIVE")))
                              ("IDEATE" '(("@idea" . t)
                                          ("ARCHIVE")))
-                             ("STARTED" '(("@ideate")
+                             ("STARTED" '(("@idea")
                                           ("ARCHIVE")))
                              ("PURCHASE" '(("@wishlist" . t)
                                            ("ARCHIVE")))
