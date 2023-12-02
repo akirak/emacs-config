@@ -3633,6 +3633,7 @@ Consult interface for org-nlink
 
 #+begin_src emacs-lisp
   (setup (:package consult-org-nlink)
+    (:set consult-org-nlink-insert-super-link 'ask)
     (:with-feature org
       (:with-map org-mode-map
         (:bind "C-x i" #'consult-org-nlink-insert)))
