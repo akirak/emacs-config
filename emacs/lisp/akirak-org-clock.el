@@ -58,6 +58,7 @@ Example values are shown below:
 
                                   "/tmp"))
                      (and (or "emacs-config.org"
+                              "-log.org"
                               "/org/config.el")
                           eol)
                      "/private-config/"
