@@ -630,7 +630,8 @@
     };
     lispy = {
       flake = false;
-      owner = "abo-abo";
+      owner = "akirak";
+      ref = "safe-print";
       repo = "lispy";
       type = "github";
     };
