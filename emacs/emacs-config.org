@@ -5403,7 +5403,7 @@ A startup screen extracted from Spacemacs
                    (cons 'org-clock
                          (defun akirak/dashboard-org-clock-insert (list-size)
                            (dashboard-insert-section
-                            "Org Clock (unfinished items)"
+                            "Org Clock (unfinished todo items)"
                             (when (boundp 'org-clock-history)
                               (require 'akirak-org-clock)
                               (akirak-org-clock--dashboard-items list-size))
