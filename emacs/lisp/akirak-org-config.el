@@ -109,6 +109,7 @@
   (setq org-todo-keyword-faces
         `(("TODO" . (:foreground "DodgerBlue"))
           ("WATCH" . (:foreground "DodgerBlue"))
+          ("POC" . (:foreground "DodgerBlue"))
           ("NEXT" . (:foreground "MediumPurple3"))
           ("MAINT" . (:foreground "green4"))
           ("UNDERWAY" . (:foreground "DarkOrange" :slant italic))
@@ -120,6 +121,7 @@
           ("SKIM" . (:foreground "OrangeRed"))
           ;; Done-like states
           ("DONE" . (:foreground "black"))
+          ("LGTM" . (:foreground "goldenrod" :bold t))
           ("WATCHED" . (:foreground "black"))
           ("ARCHIVED" . (:foreground "gray55"))
           ;; Inactive states
