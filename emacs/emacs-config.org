@@ -1317,6 +1317,7 @@ The built-in =electric= package provides the following modes:
       (advice-add 'mailcap-parse-mimetypes
                   :around
                   (defun akirak/ad-around-mailcap-parse-mimetypes (orig &rest args)
+                    (require 'akirak-mime)
                     (if (and (not args)
                              (not mailcap-mimetypes-parsed-p))
                         (or (akirak-mime-set-mime-extensions)
@@ -1325,6 +1326,7 @@ The built-in =electric= package provides the following modes:
       (advice-add 'mailcap-parse-mailcaps
                   :around
                   (defun akirak/ad-around-mailcap-parse-mailcaps (orig &rest args)
+                    (require 'akirak-mime)
                     (if (and (not args)
                              (not mailcap-parsed-p))
                         (or (akirak-mime-set-mime-extensions)
@@ -2011,6 +2013,15 @@ Thus I will explicitly install this package rather than using the built-in versi
       (:bind
        [remap scroll-up-command] #'View-scroll-half-page-forward
        [remap scroll-down-command] #'View-scroll-half-page-backward)))
+#+end_src
+*** warnings
+:PROPERTIES:
+:CREATED_TIME: [2023-12-01 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup warnings
+    (:set warning-minimum-level :error))
 #+end_src
 *** which-func
 :PROPERTIES:
@@ -3164,7 +3175,9 @@ A programmable workflow layer for Org mode
                   (let ((inhibit-message t))
                     (require 'org-dog)
                     (org-dog-reload-files t)
-                    (akirak-org-clock-rebuild-history)))))))
+                    (akirak-org-clock-rebuild-history)
+                    (when (fboundp 'akirak/dashboard-init-on-startup)
+                      (akirak/dashboard-init-on-startup))))))))
 #+end_src
 **** consult-org-dog
 :PROPERTIES:
@@ -3620,6 +3633,7 @@ Consult interface for org-nlink
 
 #+begin_src emacs-lisp
   (setup (:package consult-org-nlink)
+    (:set consult-org-nlink-insert-super-link 'ask)
     (:with-feature org
       (:with-map org-mode-map
         (:bind "C-x i" #'consult-org-nlink-insert)))
@@ -5389,7 +5403,7 @@ A startup screen extracted from Spacemacs
                    (cons 'org-clock
                          (defun akirak/dashboard-org-clock-insert (list-size)
                            (dashboard-insert-section
-                            "Org Clock (unfinished items)"
+                            "Org Clock (unfinished todo items)"
                             (when (boundp 'org-clock-history)
                               (require 'akirak-org-clock)
                               (akirak-org-clock--dashboard-items list-size))
@@ -5409,20 +5423,16 @@ A startup screen extracted from Spacemacs
 
     (:global "C-z b" #'dashboard-open)
 
-    (when (daemonp)
-      (add-hook 'after-init-hook
-                (defun akirak/dashboard-init-on-startup ()
-                  (require 'dashboard)
-                  (dashboard-insert-startupify-lists)
-                  (add-hook 'server-after-make-frame-hook
-                            (defun akirak/server-dashboard-initialize ()
-                              (unless (seq-find
-                                       (lambda (buf)
-                                         (buffer-local-value 'server-buffer-clients buf))
-                                       (buffer-list))
-                                (dashboard-initialize)))))
-                ;; It should not precede over bookmark-frecency-mode
-                85)))
+    (defun akirak/dashboard-init-on-startup ()
+      (require 'dashboard)
+      (dashboard-insert-startupify-lists)
+      (add-hook 'server-after-make-frame-hook
+                (defun akirak/server-dashboard-initialize ()
+                  (unless (seq-find
+                           (lambda (buf)
+                             (buffer-local-value 'server-buffer-clients buf))
+                           (buffer-list))
+                    (dashboard-initialize))))))
 #+end_src
 *** COMMENT dash-docs                        :documentation:ARCHIVE:
 :PROPERTIES:
@@ -6942,6 +6952,19 @@ Major mode for editing JSON files.
 #+begin_src emacs-lisp
   (setup (:package json-mode)
     (:file-match "\\.json\\'" "\\.lock\\'"))
+#+end_src
+*** jtsx
+:PROPERTIES:
+:CREATED_TIME: [2023-11-27 Mon 20:10]
+:END:
+#+begin_quote
+Extends default support for JSX/TSX
+[[https://github.com/llemaitre19/jtsx]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package jtsx)
+    (add-hook 'tsx-ts-mode-hook #'jtsx-tsx-mode))
 #+end_src
 *** justl
 :PROPERTIES:
@@ -9197,7 +9220,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 216 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

@@ -33,6 +33,12 @@
                    (<= (marker-position org-clock-marker) (point-max)))
           (save-excursion
             (goto-char org-clock-marker)
+            (when (equal (org-get-todo-state) "REVIEW")
+              (org-todo "UNDERWAY")
+              (org-set-tags (cl-remove-duplicates
+                             (cons "@failed"
+                                   (org-get-tags nil 'local))
+                             :test #'equal)))
             (if (re-search-forward akirak-git-commit-log-drawer-start-re
                                    (org-entry-end-position)
                                    t)

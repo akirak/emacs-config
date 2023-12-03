@@ -58,6 +58,7 @@ Example values are shown below:
 
                                   "/tmp"))
                      (and (or "emacs-config.org"
+                              "-log.org"
                               "/org/config.el")
                           eol)
                      "/private-config/"
@@ -750,7 +751,10 @@ This function returns the current buffer."
             (org-with-point-at marker
               (org-back-to-heading)
               (let ((el (org-element-at-point-no-context)))
-                (when (or (eq 'done (org-element-property :todo-type el))
+                (when (or (memq (org-element-property :todo-type el)
+                                '(nil done))
+                          (equal (org-element-property :todo-keyword el)
+                                 "CASUAL")
                           (org-element-property :archivedp el)
                           (when-let (ts (org-element-property :scheduled el))
                             (time-less-p (current-time) (org-timestamp-to-time ts))))

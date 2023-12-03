@@ -189,7 +189,9 @@ Finally, you can specify LEVEL, but you have to set the type of the to plain."
          (if (eq action 'metadata)
              (cons 'metadata
                    (list (cons 'category 'akirak-org-capture-history)
-                         (cons 'annotation-function #'annotator)))
+                         (cons 'annotation-function #'annotator)
+                         (cons 'cycle-sort-function #'identity)
+                         (cons 'display-sort-function #'identity)))
            (complete-with-action action akirak-org-capture-history string pred))))
     (thread-first
       (completing-read prompt #'completions nil t)

@@ -573,6 +573,12 @@
       repo = "jq-mode";
       type = "github";
     };
+    jtsx = {
+      flake = false;
+      owner = "llemaitre19";
+      repo = "jtsx";
+      type = "github";
+    };
     just-mode = {
       flake = false;
       owner = "leon-barrett";
@@ -624,7 +630,8 @@
     };
     lispy = {
       flake = false;
-      owner = "abo-abo";
+      owner = "akirak";
+      ref = "safe-print";
       repo = "lispy";
       type = "github";
     };

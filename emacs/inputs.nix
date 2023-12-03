@@ -191,6 +191,12 @@
   };
 
   lispy = _: super: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "lispy";
+      ref = "safe-print";
+    };
     files = builtins.removeAttrs super.files [
       # le-js depends on indium, which I don't want to install.
       "le-js.el"
