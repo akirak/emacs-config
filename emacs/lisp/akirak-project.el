@@ -23,16 +23,23 @@
     (github-linguist-update-projects)))
 
 (defun akirak-project--clean ()
-  "Forget projects that no longer exists.
+  "Clean up entries in the project list.
+
+This currently performs the following operations:
+
+(1) Forget projects that no longer exists.
 
 This is a slightly faster version of
 `project-forget-zombie-projects'. It simply doesn't perform
 persistence, so a succeeding step should call
-`project--write-project-list'."
+`project--write-project-list'.
+
+(2) Remove duplicates from the projects."
   (dolist (dir (project-known-project-roots))
     (unless (file-exists-p dir)
       (when-let (ent (assoc dir project--list))
-        (delq ent project--list)))))
+        (delq ent project--list))))
+  (setq project--list (cl-remove-duplicates project--list :key #'car :test #'equal)))
 
 ;;;###autoload
 (defun akirak-project-import-from-magit (&optional _ no-save)
