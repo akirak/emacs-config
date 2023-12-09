@@ -61,7 +61,8 @@
     (let* ((buffer (or (akirak-org-clock--capture-buffer org-clock-marker)
                        (marker-buffer org-clock-marker)))
            (obj (org-dog-buffer-object buffer)))
-      (when obj
+      (when (and obj
+                 (string-match-p (rx bol "projects/") (slot-value obj 'relative)))
         ;; Delay logging so it starts after magit commands finishes
         (run-with-timer 4 nil
                         `(lambda ()
