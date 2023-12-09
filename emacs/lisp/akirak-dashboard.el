@@ -15,6 +15,9 @@
             (org-with-point-at marker
               (org-back-to-heading)
               (let ((el (org-element-at-point-no-context)))
+                ;; Exclude items that I won't work on soon. If I need to work on
+                ;; an item, it should have an active and unfinished todo keyword
+                ;; and it should not have a future scheduled timestamp.
                 (when (or (memq (org-element-property :todo-type el)
                                 '(nil done))
                           (member (org-element-property :todo-keyword el)
