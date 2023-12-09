@@ -62,7 +62,7 @@ jobs:
         tag="${{ inputs.release-tag || github.ref_name }}"
         if [[ $tag =~ r([[:digit:]]{8}) ]]
         then
-          echo "version=0.1.${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+          echo "version=1.${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
         else
           echo "Failed to match against the tag: $tag" >&2
           exit 1
