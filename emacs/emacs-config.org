@@ -5412,8 +5412,10 @@ A startup screen extracted from Spacemacs
                             (dashboard-get-shortcut 'org-clock)
                             `(lambda (&rest _)
                                (require 'org-dog)
-                               (pop-to-buffer (org-dog-indirect-buffer
-                                               (org-element-property :hd-marker ',el))))
+                               (with-current-buffer (org-dog-indirect-buffer
+                                                     (org-element-property :hd-marker ',el))
+                                 (run-hooks 'akirak-org-clock-open-hook)
+                                 (pop-to-buffer (current-buffer))))
                             (akirak-dashboard-org-clock-format-item el))))))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
