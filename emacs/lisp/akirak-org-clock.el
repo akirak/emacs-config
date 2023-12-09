@@ -737,46 +737,5 @@ This function returns the current buffer."
         (push (org-element-clock-parser (pos-eol)) clocks)))
     (nreverse clocks)))
 
-;;;; Dashboard integration
-
-(defun akirak-org-clock--dashboard-items (list-size)
-  (let (els)
-    (catch 'dashboard-org-clock-finish
-      (dolist (marker org-clock-history)
-        (when (= list-size (length els))
-          (throw 'dashboard-org-clock-finish t))
-        (catch 'dashboard-org-clock-skip
-          (when (and (markerp marker)
-                     (buffer-live-p (marker-buffer marker)))
-            (org-with-point-at marker
-              (org-back-to-heading)
-              (let ((el (org-element-at-point-no-context)))
-                (when (or (memq (org-element-property :todo-type el)
-                                '(nil done))
-                          (equal (org-element-property :todo-keyword el)
-                                 "CASUAL")
-                          (org-element-property :archivedp el)
-                          (when-let (ts (org-element-property :scheduled el))
-                            (time-less-p (current-time) (org-timestamp-to-time ts))))
-                  (throw 'dashboard-org-clock-skip t))
-                (push (thread-first
-                        el
-                        (org-element-put-property :CATEGORY (org-entry-get nil "CATEGORY" t))
-                        (org-element-put-property :hd-marker (point-marker)))
-                      els)))))))
-    (nreverse els)))
-
-(defun akirak-org-clock--format-dashboard-item (el)
-  (concat (if-let (kwd (org-element-property :todo-keyword el))
-              (concat (org-no-properties kwd) " ")
-            "")
-          (format "[%s] "
-                  (or (org-element-property :CATEGORY el)
-                      "?"))
-          (org-link-display-format (org-element-property :raw-value el))
-          (if-let (ts (org-element-property :deadline el))
-              (concat " D" (org-element-property :raw-value ts))
-            "")))
-
 (provide 'akirak-org-clock)
 ;;; akirak-org-clock.el ends here

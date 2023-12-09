@@ -5399,14 +5399,14 @@ A startup screen extracted from Spacemacs
                             (org-clock . 7)
                             (bookmarks . 10)))
     (:when-loaded
+      (require 'akirak-dashboard)
       (add-to-list 'dashboard-item-generators
                    (cons 'org-clock
                          (defun akirak/dashboard-org-clock-insert (list-size)
                            (dashboard-insert-section
                             "Org Clock (unfinished todo items)"
                             (when (boundp 'org-clock-history)
-                              (require 'akirak-org-clock)
-                              (akirak-org-clock--dashboard-items list-size))
+                              (akirak-dashboard-org-clock-items list-size))
                             list-size
                             'org-clock
                             (dashboard-get-shortcut 'org-clock)
@@ -5414,7 +5414,7 @@ A startup screen extracted from Spacemacs
                                (require 'org-dog)
                                (pop-to-buffer (org-dog-indirect-buffer
                                                (org-element-property :hd-marker ',el))))
-                            (akirak-org-clock--format-dashboard-item el))))))
+                            (akirak-dashboard-org-clock-format-item el))))))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
     (:bind "n" 'dashboard-next-line
