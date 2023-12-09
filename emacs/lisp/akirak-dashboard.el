@@ -17,8 +17,9 @@
               (let ((el (org-element-at-point-no-context)))
                 (when (or (memq (org-element-property :todo-type el)
                                 '(nil done))
-                          (equal (org-element-property :todo-keyword el)
-                                 "CASUAL")
+                          (member (org-element-property :todo-keyword el)
+                                  '("CASUAL"
+                                    "STOPPED"))
                           (org-element-property :archivedp el)
                           (when-let (ts (org-element-property :scheduled el))
                             (time-less-p (current-time) (org-timestamp-to-time ts))))
