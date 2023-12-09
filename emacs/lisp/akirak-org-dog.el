@@ -32,12 +32,13 @@
                        (buffer-substring-no-properties
                         (region-beginning) (region-end))
                      (string-chop-newline
-                      (if-let (element (org-element-at-point-no-context))
-                          (if (eq (org-element-type element) 'item)
-                              (buffer-substring-no-properties
-                               (org-element-property :contents-begin element)
-                               (org-element-property :contents-end element))
-                            (thing-at-point 'line))
+                      (if (save-excursion
+                            (beginning-of-line)
+                            (looking-at (rx bol (* blank) "-"
+                                            (?  " [" (any "X ") "]")
+                                            (+ blank))))
+                          (buffer-substring-no-properties (match-end 0)
+                                                          (line-end-position))
                         (thing-at-point 'line))))))
          (item (org-entry-get nil "ITEM"))
          (title (org-link-display-format item))
