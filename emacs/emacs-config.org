@@ -3026,9 +3026,7 @@ Emacs bookmark support for Org mode
   (setup org-crypt
     (defun akirak/setup-org-crypt ()
       (setq-local buffer-auto-save-file-name nil)
-      (add-hook 'before-save-hook #'org-encrypt-entries nil t)
-      (when (bound-and-true-p super-save-mode)
-        (super-save-mode -1))))
+      (add-hook 'before-save-hook #'org-encrypt-entries nil t)))
 #+end_src
 *** org-dog
 :PROPERTIES:
@@ -8295,7 +8293,12 @@ Auto-save buffers, based on your activity.
                                 find-file
                                 org-dog-find-file
                                 akirak-consult-project-file
-                                akirak-consult-dir)))
+                                akirak-consult-dir))
+    (:when-loaded
+      (add-hook 'super-save-predicates
+                (defun akirak/super-save-not-org-crypt-p ()
+                  (and (boundp 'org-crypt-key)
+                       (buffer-local-value 'org-crypt-key (current-buffer)))))))
 #+end_src
 
 =super-save-mode= can be annoying when you use org-crypt.
