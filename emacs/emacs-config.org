@@ -2780,10 +2780,11 @@ Outline-based notes management and organizer
     (add-hook 'org-capture-prepare-finalize-hook
               (defun akirak/org-capture-maybe-fill-headline ()
                 "Edit the headline if it is missing."
-                (goto-char (point-min))
-                (let ((headline (org-get-heading t t t t)))
-                  (when (string-empty-p headline)
-                    (org-edit-headline)))))
+                (unless (eq this-command 'org-capture-kill)
+                  (goto-char (point-min))
+                  (let ((headline (org-get-heading t t t t)))
+                    (when (string-empty-p headline)
+                      (org-edit-headline))))))
 
     (add-hook 'org-capture-prepare-finalize-hook #'akirak-org-capture-push-history))
 #+end_src
