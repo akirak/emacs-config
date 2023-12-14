@@ -3057,10 +3057,14 @@ A programmable workflow layer for Org mode
           org-dog-clock-default-query-filter
           (lambda (query)
             (concat "!tags:ARCHIVE " query)))
-    (with-eval-after-load 'recentf
-      (add-to-list 'recentf-exclude
-                   (concat (regexp-opt (mapcar #'car org-dog-repository-alist) :paren)
-                           (rx (+ anything) ".org" eol))))
+
+    (add-to-list 'recentf-exclude
+                 (defun akirak/org-dog-recentf-p (file)
+                   (when (featurep 'org-dog)
+                     (string-match-p (concat (regexp-opt (mapcar #'car org-dog-repository-alist)
+                                                         :paren)
+                                             "[^z-a]+\\.org$")
+                                     file))))
 
     (defun akirak/org-dog-turn-on-transclusion ()
       (org-transclusion-mode t))
