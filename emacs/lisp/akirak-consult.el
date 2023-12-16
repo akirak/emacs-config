@@ -106,24 +106,37 @@
                               filename)))))))
   "Project buffer candidate source for `consult-buffer'.")
 
+(defun akirak-consult--project-files ()
+  (when-let (default-directory (akirak-consult--project-root))
+    (process-lines "rg" "--files"
+                   "--color=never"
+                   "--iglob=!.git"
+                   "--iglob=!.svn"
+                   "--hidden"
+                   "--one-file-system"
+                   "--sortr" "modified")))
+
 ;; Based on `consult--source-project-recent-file'.
-(defvar akirak-consult-source-project-file
-  `(:name "File"
-          :narrow (?f . "File")
+(cl-defun akirak-consult-build-project-file-source (name &key narrow hidden
+                                                         regexp)
+  (declare (indent 1))
+  `(:name ,name
+          :narrow (,narrow . ,name)
           :category file
+          :hidden ,hidden
           :state ,#'consult--file-state
           :face consult-file
           :history file-name-history
-          :items
-          ,(lambda ()
-             (when-let (default-directory (akirak-consult--project-root))
-               (process-lines "rg" "--files"
-                              "--color=never"
-                              "--iglob=!.git"
-                              "--iglob=!.svn"
-                              "--hidden"
-                              "--one-file-system"
-                              "--sortr" "modified")))))
+          :items ,(if regexp
+                      `(lambda ()
+                         (seq-filter (lambda (file) (string-match-p ,regexp file))
+                                     (akirak-consult--project-files)))
+                    #'akirak-consult--project-files)))
+
+(defvar akirak-consult-source-project-file
+  (akirak-consult-build-project-file-source "File"
+    :narrow ?f))
+
 
 (defvar akirak-consult-source-project-bookmark
   `(:name "Bookmark"
