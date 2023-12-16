@@ -7970,9 +7970,12 @@ Summon and dismiss buffers as popups
            "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-vterm-for-project
            "M-' s" #'scratch-buffer
-           "M-' c" (defun akirak/compilation-buffer ()
-                     (interactive)
-                     (pop-to-buffer "*compilation*"))))
+           "M-' c" (defun akirak/compilation-buffer (&optional arg)
+                     (interactive "P")
+                     (if-let (buffer (and (not arg)
+                                          (get-buffer "*compilation*")))
+                         (pop-to-buffer buffer)
+                       (project-compile)))))
 #+end_src
 *** posframe                                            :UI:library:
 :PROPERTIES:
