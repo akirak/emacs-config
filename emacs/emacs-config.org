@@ -17,7 +17,7 @@
 - [[#working-with-specific-services][Working with specific services]]
 - [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#packages][Packages]]
-- [[#various-hooks-and-hacks-related-to-window-management][Various Hooks and hacks related to window management]]
+- [[#workarounds][Workarounds]]
 - [[#post-init][Post init]]
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
@@ -234,6 +234,23 @@ I am interested to see if it can reduce the amount of configuration code.
                                  lang
                                (string-remove-suffix "-ts" name))
                              (intern name)))))))
+#+end_src
+*** :package-files
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 12:56]
+:END:
+
+#+begin_src emacs-lisp
+  (defvar akirak-consult-package-files nil)
+
+  (eval-when-compile
+    (define-setup-macro
+     :package-files (&rest filenames)
+     "Define file names of package files."
+     `(progn
+        (mapcar (lambda (filename)
+                  (add-to-list 'akirak-consult-package-files filename))
+                ',filenames))))
 #+end_src
 *** :reformatters
 :PROPERTIES:
@@ -5763,7 +5780,7 @@ Integration with the dune build system
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package dune))
+  (setup (:package dune))
 #+end_src
 *** eat
 :PROPERTIES:
@@ -8864,7 +8881,41 @@ A major mode for the Zig programming language
   (setup (:package zig-mode)
     (:file-match "\\.zig\\'"))
 #+end_src
-** Various Hooks and hacks related to window management
+** Workarounds
+*** Package management
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 12:54]
+:SORTING_TYPE: a
+:END:
+**** Haskell
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 13:00]
+:END:
+#+begin_src elisp
+  (setup hpack
+    (:package-files "package.yaml"))
+#+end_src
+**** Mix (Elixir)
+#+begin_src elisp
+  (setup mix
+    (:package-files "mix.exs"))
+#+end_src
+**** Node.js and Bun
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 12:59]
+:END:
+#+begin_src elisp
+  (setup npm
+    (:package-files "package.json"))
+#+end_src
+**** OCaml (opam and dune)
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 12:54]
+:END:
+#+begin_src elisp
+  (setup dune
+    (:package-files "dune" "dune-project"))
+#+end_src
 *** Org mode
 Define how Org entries are displayed by certain commands.
 #+begin_src emacs-lisp
@@ -9179,7 +9230,6 @@ They are built into big functions in the library, so I use =el-patch= to remove 
           (setq-local org-capture-current-plist org-capture-plist)
           (org-capture-mode 1)))))
 #+end_src
-
 ** Post init
 Load my personal settings after all the things.
 
