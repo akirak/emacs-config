@@ -118,7 +118,7 @@
 
 ;; Based on `consult--source-project-recent-file'.
 (cl-defun akirak-consult-build-project-file-source (name &key narrow hidden
-                                                         regexp)
+                                                         regexp make-predicate)
   (declare (indent 1))
   `(:name ,name
           :narrow (,narrow . ,name)
@@ -127,16 +127,49 @@
           :state ,#'consult--file-state
           :face consult-file
           :history file-name-history
-          :items ,(if regexp
-                      `(lambda ()
-                         (seq-filter (lambda (file) (string-match-p ,regexp file))
-                                     (akirak-consult--project-files)))
-                    #'akirak-consult--project-files)))
+          :items ,(cond
+                   (regexp
+                    `(lambda ()
+                       (seq-filter (lambda (file) (string-match-p ,regexp file))
+                                   (akirak-consult--project-files))))
+                   (make-predicate
+                    `(lambda ()
+                       (seq-filter (funcall #',make-predicate)
+                                   (akirak-consult--project-files))))
+                   (t
+                    #'akirak-consult--project-files))))
 
 (defvar akirak-consult-source-project-file
   (akirak-consult-build-project-file-source "File"
     :narrow ?f))
 
+(defcustom akirak-consult-package-files
+  nil
+  ""
+  :type '(repeat string))
+
+(defcustom akirak-consult-package-file-extensions
+  nil
+  ""
+  :type '(repeat string))
+
+(defvar akirak-consult-initial-directory nil)
+
+(defun akirak-consult--make-package-file-predicate ()
+  (let ((root (akirak-consult--project-root))
+        (regexp (rx-to-string `(and (or (and (or bos "/")
+                                             (or ,@akirak-consult-package-files))
+                                        ,@akirak-consult-package-file-extensions)
+                                    eol))))
+    `(lambda (file)
+       (and (string-match-p ,regexp file)
+            ;; The directory of the file can be nil, so you can't use
+            ;; `expand-file-name' here.
+            (let ((dir (concat ,root (file-name-directory file))))
+              ;; Consider the same directory, ancestors, and descendants, but
+              ;; not siblings.
+              (or (string-prefix-p dir akirak-consult-initial-directory)
+                  (string-prefix-p akirak-consult-initial-directory dir)))))))
 
 (defvar akirak-consult-source-project-bookmark
   `(:name "Bookmark"
@@ -163,12 +196,48 @@
             (list :enabled (lambda () (vc-git-root default-directory))))))
 
 (defvar akirak-consult-project-sources
-  `(akirak-consult-source-project-file-buffer
-    ;; Require consult-ls-git
-    ,@(when akirak-consult-source-git-status
-        '(akirak-consult-source-git-status))
+  `(akirak-consult-source-project-file-buffer ;; Require consult-ls-git
+    (when akirak-consult-source-git-status
+      '(akirak-consult-source-git-status))
     akirak-consult-source-project-bookmark
-    akirak-consult-source-project-file))
+    akirak-consult-source-project-file
+    ;; Extra sources for quickly navigating to specific files
+    ,(akirak-consult-build-project-file-source "Readme"
+       :narrow ?r
+       :hidden t
+       :regexp (rx (or bos "/")
+                   (or "readme" "README")
+                   (?  "." (+ (not (any "/")))) eol))
+    ,(akirak-consult-build-project-file-source "Docs"
+       :narrow ?d
+       :hidden t
+       :regexp (rx (or (and (or bos "/")
+                            (or (and "doc" (?  "s") "/")
+                                (and (or "CONTRIBUTING"
+                                         "LICENSE"
+                                         "COPYING")
+                                     (?  "." (+ (not (any "/")))) eol)))
+                       (and ".md" eol))))
+    ,(akirak-consult-build-project-file-source "Package"
+       :narrow ?p
+       :hidden t
+       :make-predicate #'akirak-consult--make-package-file-predicate)
+    ,(akirak-consult-build-project-file-source "Hidden"
+       :narrow ?h
+       :hidden t
+       :regexp (rx (or bos "/") "."))
+    ,(akirak-consult-build-project-file-source "Lib"
+       :narrow ?l
+       :hidden t
+       :regexp (rx bos (or "lib" "src") "/"))
+    ,(akirak-consult-build-project-file-source "Tests"
+       :narrow ?t
+       :hidden t
+       :regexp (rx bos "test" (? "s") "/"))
+    ,(akirak-consult-build-project-file-source "Nix"
+       :narrow ?n
+       :hidden t
+       :regexp (rx ".nix" eol))))
 
 (defun akirak-consult--project-root ()
   (if-let (pr (project-current))
@@ -184,7 +253,10 @@
   (interactive (list (if-let (pr (project-current))
                          (project-root pr)
                        default-directory)))
-  (let* ((default-directory (expand-file-name dir))
+  ;; `default-directory' can be abbreviated (e.g. in dired-mode), so it is safer
+  ;; to apply `expand-file-name'.
+  (let* ((akirak-consult-initial-directory (expand-file-name default-directory))
+         (default-directory (expand-file-name dir))
          (selected (consult--multi akirak-consult-project-sources
                                    :require-match (confirm-nonexistent-file-or-buffer)
                                    :prompt "Switch to: "
