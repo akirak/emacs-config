@@ -95,11 +95,16 @@
 ;;;; akirak-transient-string-variable
 
 (defclass akirak-transient-string-variable (akirak-transient-variable)
-  ())
+  ((initial-contents-fn :initarg :initial-contents-fn
+                        :description "Function without an argument to generate \
+the initial value in minibuffer input."
+                        :initform nil)))
 
 (cl-defmethod transient-infix-read ((obj akirak-transient-string-variable))
   (let ((value (read-from-minibuffer (oref obj prompt)
-                                     (oref obj value))))
+                                     (or (oref obj value)
+                                         (when (oref obj initial-contents-fn)
+                                           (funcall (oref obj initial-contents-fn)))))))
     (unless (string-empty-p value)
       value)))
 
