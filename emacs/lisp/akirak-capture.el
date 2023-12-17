@@ -132,8 +132,19 @@
 (transient-define-infix akirak-capture-url-title ()
   :class 'akirak-transient-string-variable
   :variable 'akirak-capture-url-title
+  :initial-contents-fn 'akirak-capture-initial-url-title
   :prompt "Title: "
   :description "Title")
+
+(defun akirak-capture-initial-url-title ()
+  (require 'orgabilize)
+  (let* ((url akirak-capture-current-url)
+         (clean-url (orgabilize--url-for-link url)))
+    (if akirak-capture-include-url-fragment
+        (if-let (fragment (orgabilize-document-fragment url))
+            (orgabilize-document-fragment-title clean-url fragment)
+          (orgabilize-document-title clean-url))
+      (orgabilize-document-title clean-url))))
 
 ;;;; akirak-capture-doct: A generic prefix command
 
