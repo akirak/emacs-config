@@ -98,10 +98,10 @@
   ())
 
 (cl-defmethod transient-infix-read ((obj akirak-transient-string-variable))
-  (let ((value (oref obj value)))
-    (if value
-        nil
-      (read-from-minibuffer (oref obj prompt)))))
+  (let ((value (read-from-minibuffer (oref obj prompt)
+                                     (oref obj value))))
+    (unless (string-empty-p value)
+      value)))
 
 (cl-defmethod transient-format-value ((obj akirak-transient-string-variable))
   (if-let (value (oref obj value))
