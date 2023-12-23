@@ -643,16 +643,28 @@ This function returns the current buffer."
 (defun akirak-org-clock-out (&optional arg)
   (interactive "P")
   (akirak-org-clock-require-clock
-    (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
-        (let ((need-explicit-clock-out (and (not org-capture-clock-was-started)
-                                            org-clock-marker
-                                            (equal capture-buffer
-                                                   (marker-buffer org-clock-marker)))))
-          (with-current-buffer capture-buffer
-            (org-capture-finalize))
-          (when need-explicit-clock-out
-            (org-clock-out arg)))
-      (org-clock-out arg))))
+    (pcase arg
+      ('(16)
+       (let ((current-name (tab-bar-tab-name-current)))
+         (tab-bar-rename-tab org-clock-heading)
+         (tab-bar-duplicate-tab)
+         (akirak-org-clock--out)))
+      ('(4)
+       (akirak-org-clock--out t))
+      (_
+       (akirak-org-clock--out)))))
+
+(defun akirak-org-clock--out (&optional switch-state)
+  (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
+      (let ((need-explicit-clock-out (and (not org-capture-clock-was-started)
+                                          org-clock-marker
+                                          (equal capture-buffer
+                                                 (marker-buffer org-clock-marker)))))
+        (with-current-buffer capture-buffer
+          (org-capture-finalize))
+        (when need-explicit-clock-out
+          (org-clock-out switch-state)))
+    (org-clock-out switch-state)))
 
 ;;;###autoload
 (defun akirak-org-clock-done (&optional arg)
