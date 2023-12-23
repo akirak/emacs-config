@@ -5792,6 +5792,7 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 
 #+begin_src emacs-lisp
   (setup (:package eat)
+    (:set eat-kill-buffer-on-exit t)
     (with-eval-after-load 'eshell
       (eat-shell-mode t)))
 #+end_src
