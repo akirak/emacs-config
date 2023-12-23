@@ -797,7 +797,7 @@ The other variables must not be saved, and they should be put in configuration:
           dired-recursive-deletes 'top
           dired-auto-revert-buffer t
           dired-listing-switches "-alh --time-style=long-iso")
-    (:mode-repl akirak-vterm-for-dir)
+    (:mode-repl akirak-shell-other-window)
 
     (:bind "h" #'dired-up-directory))
 #+end_src
@@ -4688,9 +4688,9 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode)
                           akirak-window-display-document-buffer))
-                       ((major-mode . vterm-mode)
+                       (,(major-modes vterm-mode eat-mode)
                         ,(reuse-mode-window
-                          (vterm-mode)
+                          (vterm-mode eat-mode)
                           akirak-window-display-buffer-split-below))
                        (,(major-modes nov-mode pdf-view-mode)
                         akirak-window-display-document-buffer)
@@ -7969,7 +7969,7 @@ Summon and dismiss buffers as popups
            "M-' RET" #'popper-toggle-type
            "M-' M-'" #'popper-toggle
            "M-' e" #'flymake-show-buffer-diagnostics
-           "M-' t" #'akirak-vterm-for-project
+           "M-' t" #'akirak-shell-other-window
            "M-' s" #'scratch-buffer
            "M-' c" (defun akirak/compilation-buffer (&optional arg)
                      (interactive "P")
@@ -8833,7 +8833,7 @@ Compilation helpers
     (with-eval-after-load 'project
       (define-key project-prefix-map "m" #'workbox-run-some-package-manager))
 
-    (:set workbox-mix-command-runner #'akirak-vterm-run-in-project))
+    (:set workbox-mix-command-runner #'eshell-command))
 #+end_src
 *** ws-butler                                           :formatting:
 :PROPERTIES:
