@@ -643,16 +643,28 @@ This function returns the current buffer."
 (defun akirak-org-clock-out (&optional arg)
   (interactive "P")
   (akirak-org-clock-require-clock
-    (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
-        (let ((need-explicit-clock-out (and (not org-capture-clock-was-started)
-                                            org-clock-marker
-                                            (equal capture-buffer
-                                                   (marker-buffer org-clock-marker)))))
-          (with-current-buffer capture-buffer
-            (org-capture-finalize))
-          (when need-explicit-clock-out
-            (org-clock-out arg)))
-      (org-clock-out arg))))
+    (pcase arg
+      ('(16)
+       (let ((current-name (tab-bar-tab-name-current)))
+         (tab-bar-rename-tab org-clock-heading)
+         (tab-bar-duplicate-tab)
+         (akirak-org-clock--out)))
+      ('(4)
+       (akirak-org-clock--out t))
+      (_
+       (akirak-org-clock--out)))))
+
+(defun akirak-org-clock--out (&optional switch-state)
+  (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
+      (let ((need-explicit-clock-out (and (not org-capture-clock-was-started)
+                                          org-clock-marker
+                                          (equal capture-buffer
+                                                 (marker-buffer org-clock-marker)))))
+        (with-current-buffer capture-buffer
+          (org-capture-finalize))
+        (when need-explicit-clock-out
+          (org-clock-out switch-state)))
+    (org-clock-out switch-state)))
 
 ;;;###autoload
 (defun akirak-org-clock-done (&optional arg)
@@ -736,47 +748,6 @@ This function returns the current buffer."
       (while (re-search-forward org-clock-line-re bound t)
         (push (org-element-clock-parser (pos-eol)) clocks)))
     (nreverse clocks)))
-
-;;;; Dashboard integration
-
-(defun akirak-org-clock--dashboard-items (list-size)
-  (let (els)
-    (catch 'dashboard-org-clock-finish
-      (dolist (marker org-clock-history)
-        (when (= list-size (length els))
-          (throw 'dashboard-org-clock-finish t))
-        (catch 'dashboard-org-clock-skip
-          (when (and (markerp marker)
-                     (buffer-live-p (marker-buffer marker)))
-            (org-with-point-at marker
-              (org-back-to-heading)
-              (let ((el (org-element-at-point-no-context)))
-                (when (or (memq (org-element-property :todo-type el)
-                                '(nil done))
-                          (equal (org-element-property :todo-keyword el)
-                                 "CASUAL")
-                          (org-element-property :archivedp el)
-                          (when-let (ts (org-element-property :scheduled el))
-                            (time-less-p (current-time) (org-timestamp-to-time ts))))
-                  (throw 'dashboard-org-clock-skip t))
-                (push (thread-first
-                        el
-                        (org-element-put-property :CATEGORY (org-entry-get nil "CATEGORY" t))
-                        (org-element-put-property :hd-marker (point-marker)))
-                      els)))))))
-    (nreverse els)))
-
-(defun akirak-org-clock--format-dashboard-item (el)
-  (concat (if-let (kwd (org-element-property :todo-keyword el))
-              (concat (org-no-properties kwd) " ")
-            "")
-          (format "[%s] "
-                  (or (org-element-property :CATEGORY el)
-                      "?"))
-          (org-link-display-format (org-element-property :raw-value el))
-          (if-let (ts (org-element-property :deadline el))
-              (concat " D" (org-element-property :raw-value ts))
-            "")))
 
 (provide 'akirak-org-clock)
 ;;; akirak-org-clock.el ends here

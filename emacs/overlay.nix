@@ -16,7 +16,7 @@ with builtins; let
   initialLibraries = (import inputs.flake-pins).data.emacs.libraries;
 
   # releaseVersions = import ./versions.nix;
-  inventories = [
+  registries = [
     {
       type = "melpa";
       path = inputs.melpa.outPath + "/recipes";
@@ -154,7 +154,7 @@ with builtins; let
       ];
       inherit initialLibraries;
       initParser = parseSetup {};
-      inherit inventories;
+      inherit registries;
       lockDir = ./lock;
       inputOverrides =
         (import ./inputs.nix)
@@ -193,7 +193,7 @@ in {
     emacsPackage = defaultEmacsPackage;
     initFiles = [];
     extraPackages = ["org-ql" "org-make-toc"];
-    inherit inventories;
+    inherit registries;
     lockDir = ./lock;
   };
 

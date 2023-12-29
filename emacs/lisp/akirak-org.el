@@ -892,13 +892,14 @@ At this point, the function works with the following pattern:
      (apply #'map-merge 'alist alists))))
 
 ;;;###autoload
-(defun akirak-org-babel-send-block-to-vterm ()
+(defun akirak-org-babel-send-block-to-shell ()
   (interactive)
   (pcase (org-babel-get-src-block-info)
     (`(,_lang ,body ,(map :dir) . ,_)
-     (unless dir
-       (user-error "Please set :dir header argument first (typically in header-args property)"))
-     (akirak-vterm-run-or-send dir (string-chop-newline body)))))
+     (let ((command (string-chop-newline body)))
+       (if dir
+           (akirak-shell-run-command-at-dir dir command)
+         (akirak-shell-run-command-in-some-buffer command))))))
 
 ;;;; Specific applications
 

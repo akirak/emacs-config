@@ -21,10 +21,7 @@ jobs:
         git config --add user.email '6270544+github-actions[bot]@users.noreply.github.com'
     - run: git switch -C update/elisp-packages develop
     - run: |
-        nix flake lock \
-          --update-input melpa \
-          --update-input gnu-elpa \
-          --update-input epkgs
+        nix flake update melpa gnu-elpa epkgs
     - run: nix run .#lock --impure
     - run: nix run .#update --impure
     - run: nix run .#update-elisp-lock

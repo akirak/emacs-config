@@ -28,8 +28,8 @@
          (call-interactively (symbol-function ',command))
          (tab-bar-rename-tab (funcall ',tabname-fn))))))
 
-(akirak-embark-wrap-project-command vterm)
-(akirak-embark-wrap-project-command vterm-other-window)
+(akirak-embark-wrap-project-command akirak-shell)
+(akirak-embark-wrap-project-command akirak-shell-other-window)
 (akirak-embark-wrap-project-command magit-log-head :require 'magit-log)
 (akirak-embark-wrap-project-command magit-log-all :require 'magit-log)
 
@@ -45,8 +45,8 @@
     (define-key map "o" #'find-file-other-window)
     (define-key map "t" #'find-file-other-tab)
     (define-key map "p" #'akirak-consult-project-file)
-    (define-key map "v" #'akirak-embark-vterm)
-    (define-key map "V" #'akirak-embark-vterm-other-window)
+    (define-key map "v" #'akirak-embark-akirak-shell)
+    (define-key map "V" #'akirak-embark-akirak-shell-other-window)
     (define-key map "lh" #'akirak-embark-magit-log-head)
     (define-key map "la" #'akirak-embark-magit-log-all)
     (define-key map "n" #'nix3-flake-show)
@@ -76,7 +76,7 @@
 
 (defvar-keymap akirak-embark-org-babel-block-map
   :parent akirak-embark-org-block-map
-  "v" #'akirak-org-babel-send-block-to-vterm
+  "v" #'akirak-org-babel-send-block-to-shell
   "w" #'embark-copy-as-kill)
 
 (defvar-keymap akirak-embark-org-target-map
@@ -379,7 +379,7 @@
                  embark--beginning-of-target embark--unmark-target))
 
   (add-to-list 'embark-target-injection-hooks
-               '(akirak-org-babel-send-block-to-vterm
+               '(akirak-org-babel-send-block-to-shell
                  embark--ignore-target)))
 
 ;;;###autoload

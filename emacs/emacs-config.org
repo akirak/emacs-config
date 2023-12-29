@@ -17,7 +17,7 @@
 - [[#working-with-specific-services][Working with specific services]]
 - [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#packages][Packages]]
-- [[#various-hooks-and-hacks-related-to-window-management][Various Hooks and hacks related to window management]]
+- [[#workarounds][Workarounds]]
 - [[#post-init][Post init]]
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
@@ -234,6 +234,23 @@ I am interested to see if it can reduce the amount of configuration code.
                                  lang
                                (string-remove-suffix "-ts" name))
                              (intern name)))))))
+#+end_src
+*** :package-files
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 12:56]
+:END:
+
+#+begin_src emacs-lisp
+  (defvar akirak-consult-package-files nil)
+
+  (eval-when-compile
+    (define-setup-macro
+     :package-files (&rest filenames)
+     "Define file names of package files."
+     `(progn
+        (mapcar (lambda (filename)
+                  (add-to-list 'akirak-consult-package-files filename))
+                ',filenames))))
 #+end_src
 *** :reformatters
 :PROPERTIES:
@@ -780,7 +797,7 @@ The other variables must not be saved, and they should be put in configuration:
           dired-recursive-deletes 'top
           dired-auto-revert-buffer t
           dired-listing-switches "-alh --time-style=long-iso")
-    (:mode-repl akirak-vterm-for-dir)
+    (:mode-repl akirak-shell-other-window)
 
     (:bind "h" #'dired-up-directory))
 #+end_src
@@ -2780,10 +2797,11 @@ Outline-based notes management and organizer
     (add-hook 'org-capture-prepare-finalize-hook
               (defun akirak/org-capture-maybe-fill-headline ()
                 "Edit the headline if it is missing."
-                (goto-char (point-min))
-                (let ((headline (org-get-heading t t t t)))
-                  (when (string-empty-p headline)
-                    (org-edit-headline)))))
+                (unless (eq this-command 'org-capture-kill)
+                  (goto-char (point-min))
+                  (let ((headline (org-get-heading t t t t)))
+                    (when (string-empty-p headline)
+                      (org-edit-headline))))))
 
     (add-hook 'org-capture-prepare-finalize-hook #'akirak-org-capture-push-history))
 #+end_src
@@ -3026,9 +3044,7 @@ Emacs bookmark support for Org mode
   (setup org-crypt
     (defun akirak/setup-org-crypt ()
       (setq-local buffer-auto-save-file-name nil)
-      (add-hook 'before-save-hook #'org-encrypt-entries nil t)
-      (when (bound-and-true-p super-save-mode)
-        (super-save-mode -1))))
+      (add-hook 'before-save-hook #'org-encrypt-entries nil t)))
 #+end_src
 *** org-dog
 :PROPERTIES:
@@ -3058,10 +3074,14 @@ A programmable workflow layer for Org mode
           org-dog-clock-default-query-filter
           (lambda (query)
             (concat "!tags:ARCHIVE " query)))
-    (with-eval-after-load 'recentf
-      (add-to-list 'recentf-exclude
-                   (concat (regexp-opt (mapcar #'car org-dog-repository-alist) :paren)
-                           (rx (+ anything) ".org" eol))))
+
+    (add-to-list 'recentf-exclude
+                 (defun akirak/org-dog-recentf-p (file)
+                   (when (featurep 'org-dog)
+                     (string-match-p (concat (regexp-opt (mapcar #'car org-dog-repository-alist)
+                                                         :paren)
+                                             "[^z-a]+\\.org$")
+                                     file))))
 
     (defun akirak/org-dog-turn-on-transclusion ()
       (org-transclusion-mode t))
@@ -4668,9 +4688,9 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode)
                           akirak-window-display-document-buffer))
-                       ((major-mode . vterm-mode)
+                       (,(major-modes vterm-mode eat-mode)
                         ,(reuse-mode-window
-                          (vterm-mode)
+                          (vterm-mode eat-mode)
                           akirak-window-display-buffer-split-below))
                        (,(major-modes nov-mode pdf-view-mode)
                         akirak-window-display-document-buffer)
@@ -5399,22 +5419,24 @@ A startup screen extracted from Spacemacs
                             (org-clock . 7)
                             (bookmarks . 10)))
     (:when-loaded
+      (require 'akirak-dashboard)
       (add-to-list 'dashboard-item-generators
                    (cons 'org-clock
                          (defun akirak/dashboard-org-clock-insert (list-size)
                            (dashboard-insert-section
                             "Org Clock (unfinished todo items)"
                             (when (boundp 'org-clock-history)
-                              (require 'akirak-org-clock)
-                              (akirak-org-clock--dashboard-items list-size))
+                              (akirak-dashboard-org-clock-items list-size))
                             list-size
                             'org-clock
                             (dashboard-get-shortcut 'org-clock)
                             `(lambda (&rest _)
                                (require 'org-dog)
-                               (pop-to-buffer (org-dog-indirect-buffer
-                                               (org-element-property :hd-marker ',el))))
-                            (akirak-org-clock--format-dashboard-item el))))))
+                               (with-current-buffer (org-dog-indirect-buffer
+                                                     (org-element-property :hd-marker ',el))
+                                 (run-hooks 'akirak-org-clock-open-hook)
+                                 (pop-to-buffer (current-buffer))))
+                            (akirak-dashboard-org-clock-format-item el))))))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
     (:bind "n" 'dashboard-next-line
@@ -5758,7 +5780,7 @@ Integration with the dune build system
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package dune))
+  (setup (:package dune))
 #+end_src
 *** eat
 :PROPERTIES:
@@ -5770,6 +5792,7 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 
 #+begin_src emacs-lisp
   (setup (:package eat)
+    (:set eat-kill-buffer-on-exit t)
     (with-eval-after-load 'eshell
       (eat-shell-mode t)))
 #+end_src
@@ -7946,11 +7969,14 @@ Summon and dismiss buffers as popups
            "M-' RET" #'popper-toggle-type
            "M-' M-'" #'popper-toggle
            "M-' e" #'flymake-show-buffer-diagnostics
-           "M-' t" #'akirak-vterm-for-project
+           "M-' t" #'akirak-shell-other-window
            "M-' s" #'scratch-buffer
-           "M-' c" (defun akirak/compilation-buffer ()
-                     (interactive)
-                     (pop-to-buffer "*compilation*"))))
+           "M-' c" (defun akirak/compilation-buffer (&optional arg)
+                     (interactive "P")
+                     (if-let (buffer (and (not arg)
+                                          (get-buffer "*compilation*")))
+                         (pop-to-buffer buffer)
+                       (project-compile)))))
 #+end_src
 *** posframe                                            :UI:library:
 :PROPERTIES:
@@ -8293,7 +8319,12 @@ Auto-save buffers, based on your activity.
                                 find-file
                                 org-dog-find-file
                                 akirak-consult-project-file
-                                akirak-consult-dir)))
+                                akirak-consult-dir))
+    (:when-loaded
+      (add-hook 'super-save-predicates
+                (defun akirak/super-save-not-org-crypt-p ()
+                  (and (boundp 'org-crypt-key)
+                       (buffer-local-value 'org-crypt-key (current-buffer)))))))
 #+end_src
 
 =super-save-mode= can be annoying when you use org-crypt.
@@ -8802,7 +8833,7 @@ Compilation helpers
     (with-eval-after-load 'project
       (define-key project-prefix-map "m" #'workbox-run-some-package-manager))
 
-    (:set workbox-mix-command-runner #'akirak-vterm-run-in-project))
+    (:set workbox-mix-command-runner #'eshell-command))
 #+end_src
 *** ws-butler                                           :formatting:
 :PROPERTIES:
@@ -8854,7 +8885,41 @@ A major mode for the Zig programming language
   (setup (:package zig-mode)
     (:file-match "\\.zig\\'"))
 #+end_src
-** Various Hooks and hacks related to window management
+** Workarounds
+*** Package management
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 12:54]
+:SORTING_TYPE: a
+:END:
+**** Haskell
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 13:00]
+:END:
+#+begin_src elisp
+  (setup hpack
+    (:package-files "package.yaml"))
+#+end_src
+**** Mix (Elixir)
+#+begin_src elisp
+  (setup mix
+    (:package-files "mix.exs"))
+#+end_src
+**** Node.js and Bun
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 12:59]
+:END:
+#+begin_src elisp
+  (setup npm
+    (:package-files "package.json"))
+#+end_src
+**** OCaml (opam and dune)
+:PROPERTIES:
+:CREATED_TIME: [2023-12-16 Sat 12:54]
+:END:
+#+begin_src elisp
+  (setup dune
+    (:package-files "dune" "dune-project"))
+#+end_src
 *** Org mode
 Define how Org entries are displayed by certain commands.
 #+begin_src emacs-lisp
@@ -9169,7 +9234,6 @@ They are built into big functions in the library, so I use =el-patch= to remove 
           (setq-local org-capture-current-plist org-capture-plist)
           (org-capture-mode 1)))))
 #+end_src
-
 ** Post init
 Load my personal settings after all the things.
 
