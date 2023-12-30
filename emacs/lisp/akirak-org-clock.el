@@ -301,6 +301,59 @@ Example values are shown below:
       (org-with-point-at org-clock-marker
         (org-clock-in)))))
 
+;;;; Persist the context to the clocked entry
+
+;;;###autoload
+(defun akirak-org-clock-add-git-properties-if-none (pom &optional force)
+  "Add Git properties to the entry at POM if it has none."
+  ;; TODO: Which is faster, org-element or regular expressions?
+  ;;
+  ;; TODO: Check inherited properties?
+  (let ((element (org-with-point-at pom
+                   (org-back-to-heading)
+                   (org-element-at-point-no-context))))
+    (when (or force
+              (not (org-element-property :GIT_ORIGIN element)))
+      (require 'akirak-capture)
+      (let* ((file (buffer-file-name (marker-buffer pom)))
+             (obj (org-dog-file-object file))
+             (prop-alist (akirak-capture-git-properties
+                          obj :tags (org-element-property :tags element))))
+        (when prop-alist
+          (org-with-point-at pom
+            (pcase-dolist (`(,prop . ,value) prop-alist)
+              (org-entry-put nil prop value)))
+          (message "Added Git properties to the clocked org-mode entry"))))))
+
+;;;###autoload
+(defun akirak-org-clock-add-git-properties ()
+  "Add Git properties to the entry at POM if it has none."
+  (interactive)
+  (if (org-clocking-p)
+      (if (equal current-prefix-arg '(16))
+          (akirak-org-clock-locate-git-file)
+        (akirak-org-clock-add-git-properties-if-none org-clock-marker 'force))
+    (user-error "You have to be running a clock")))
+
+;;;###autoload
+(defun akirak-org-clock-locate-git-file ()
+  (interactive)
+  (let* ((properties (org-entry-properties org-clock-marker))
+         (worktree-link (cdr (assoc "GIT_WORKTREE" properties)))
+         (worktree (cond
+                    ((not worktree-link)
+                     (user-error "No worktree property"))
+                    ((string-match org-link-bracket-re worktree-link)
+                     (match-string 1 worktree-link))
+                    (t
+                     (error "%s isn't a bracket link" worktree-link))))
+         (origin (cdr (assoc "GIT_ORIGIN" properties))))
+    (if (file-directory-p worktree)
+        (akirak-project-switch worktree)
+      (when (yes-or-no-p (format-message "Clone a repository from %s? into %s"
+                                         origin worktree))
+        (akirak-git-clone origin worktree)))))
+
 ;;;; Rebuild the history
 
 ;;;###autoload
