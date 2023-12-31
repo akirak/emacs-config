@@ -4670,9 +4670,10 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode)
                           akirak-window-display-document-buffer))
-                       (,(major-modes vterm-mode eat-mode)
+                       ((or ,(major-modes vterm-mode eat-mode)
+                            "^\\*Nix-REPL\\*")
                         ,(reuse-mode-window
-                          (vterm-mode eat-mode)
+                          (vterm-mode eat-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below))
                        (,(major-modes nov-mode pdf-view-mode)
                         akirak-window-display-document-buffer)
