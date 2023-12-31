@@ -2138,11 +2138,11 @@
     "octopus": {
       "flake": false,
       "locked": {
-        "lastModified": 1700936376,
-        "narHash": "sha256-RbEe7WK724OhDwBbV7FaCo2aTxaeI0niB388jr2hVKo=",
+        "lastModified": 1703986673,
+        "narHash": "sha256-KFan9EXY9Fzfsm5kgpigza8Cp+QZ69q1LUGv+nyADJg=",
         "owner": "akirak",
         "repo": "org-dog",
-        "rev": "21e26d778745425ed05e60fdcad18ffd19aafe40",
+        "rev": "422261690e824e593aa6c8d68b116188127e1803",
         "type": "github"
       },
       "original": {
@@ -2722,15 +2722,16 @@
     "plz": {
       "flake": false,
       "locked": {
-        "lastModified": 1688957193,
-        "narHash": "sha256-sufK/K+i8wEmlArXzqR6Gm5kueqTsB8XcKizCljH5PM=",
+        "lastModified": 1702896709,
+        "narHash": "sha256-mWsrmahlNXzE44d49Foidv9RSwKUFKym/Ljxp9qEXnQ=",
         "owner": "alphapapa",
         "repo": "plz.el",
-        "rev": "e8440857e5500ae3f223afa7bd90263abf5c4df3",
+        "rev": "c701f5d3722b38d9e1a4223d7c06e879ddba5e69",
         "type": "github"
       },
       "original": {
         "owner": "alphapapa",
+        "ref": "stable",
         "repo": "plz.el",
         "type": "github"
       }

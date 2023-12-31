@@ -1031,6 +1031,7 @@
     plz = {
       flake = false;
       owner = "alphapapa";
+      ref = "stable";
       repo = "plz.el";
       type = "github";
     };
