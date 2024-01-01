@@ -450,6 +450,22 @@
         "type": "github"
       }
     },
+    "cue-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1663354080,
+        "narHash": "sha256-FXIZAnp1LQF0ZHK0XJ41Z/UI2vk3Z/f+StfBmF/7eeM=",
+        "owner": "russell",
+        "repo": "cue-mode",
+        "rev": "a87ba6748a7a1bebe4431ee8e54e414f0c905141",
+        "type": "github"
+      },
+      "original": {
+        "owner": "russell",
+        "repo": "cue-mode",
+        "type": "github"
+      }
+    },
     "dash": {
       "flake": false,
       "locked": {
@@ -3022,6 +3038,7 @@
         "consult-recoll": "consult-recoll",
         "copilot": "copilot",
         "corfu": "corfu",
+        "cue-mode": "cue-mode",
         "dash": "dash",
         "dashboard": "dashboard",
         "deadgrep": "deadgrep",
