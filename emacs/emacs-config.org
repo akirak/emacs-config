@@ -1260,7 +1260,7 @@ The built-in =electric= package provides the following modes:
       (interactive)
       (setq indent-tabs-mode 1))
 
-    (dolist (mode-hook '(makefile-mode-hook))
+    (dolist (mode-hook '(makefile-mode-hook cue-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
 #+end_src
 *** isearch
@@ -5371,6 +5371,19 @@ COmpletion in Region FUnction
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** cue-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-01-01 Mon 15:17]
+:END:
+#+begin_quote
+Major mode for CUE language files
+[[https://github.com/russell/cue-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package cue-mode)
+    (:file-match "\\.cue\\'"))
+#+end_src
 *** dashboard
 :PROPERTIES:
 :CREATED_TIME: [2023-11-18 Sat 23:10]
@@ -9267,7 +9280,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

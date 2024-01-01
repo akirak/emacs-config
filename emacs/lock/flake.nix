@@ -171,6 +171,12 @@
       repo = "corfu";
       type = "github";
     };
+    cue-mode = {
+      flake = false;
+      owner = "russell";
+      repo = "cue-mode";
+      type = "github";
+    };
     dash = {
       flake = false;
       owner = "magnars";
