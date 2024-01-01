@@ -1260,7 +1260,7 @@ The built-in =electric= package provides the following modes:
       (interactive)
       (setq indent-tabs-mode 1))
 
-    (dolist (mode-hook '(makefile-mode-hook cue-mode-hook))
+    (dolist (mode-hook '(makefile-mode-hook go-ts-mode-hook cue-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
 #+end_src
 *** isearch
