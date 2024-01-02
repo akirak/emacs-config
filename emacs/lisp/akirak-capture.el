@@ -314,7 +314,8 @@
    ("'" octopus-avy-org-heading-suffix)
    ("@" octopus-clock-marker-suffix)
    ("\\" octopus-this-file-suffix)
-   ("/" octopus-read-dog-file-suffix)]
+   ("/" octopus-read-dog-file-suffix)
+   ("$" octopus-last-captured-file-suffix)]
   (interactive)
   (transient-setup 'akirak-capture-doct))
 
@@ -826,7 +827,8 @@
    ("'" octopus-avy-org-heading-suffix)
    ("@" akirak-capture-url-to-clock)
    ("\\" octopus-this-file-suffix)
-   ("/" octopus-read-dog-file-suffix)]
+   ("/" octopus-read-dog-file-suffix)
+   ("$" octopus-last-captured-file-suffix)]
   (interactive (list (or (akirak-url-latest)
                          (akirak-url-complete "Capture URL: "))))
   (unless keep-options
