@@ -1069,7 +1069,11 @@ The built-in =electric= package provides the following modes:
             (mix-format '((eval . (mix-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (eglot-ensure))))
-            (flymake-eslint '((eval . (flymake-eslint-enable)))))
+            (flymake-eslint '((eval . (flymake-eslint-enable))))
+            (alejandra '((eval . (alejandra-on-save-mode t)))))
+        (dir-locals-set-class-variables
+         'personal
+         `((nix-ts-mode . (,@alejandra))))
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@prettier ,@lsp))
@@ -1083,6 +1087,8 @@ The built-in =electric= package provides the following modes:
            (tuareg-mode . (,@lsp))
            (sql-mode . (,@sqlformat))
            (haskell-mode . (,@lsp)))))
+      (dir-locals-set-directory-class "~/config/" 'personal)
+      (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)
 
