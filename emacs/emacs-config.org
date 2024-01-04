@@ -1069,7 +1069,11 @@ The built-in =electric= package provides the following modes:
             (mix-format '((eval . (mix-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (eglot-ensure))))
-            (flymake-eslint '((eval . (flymake-eslint-enable)))))
+            (flymake-eslint '((eval . (flymake-eslint-enable))))
+            (alejandra '((eval . (alejandra-on-save-mode t)))))
+        (dir-locals-set-class-variables
+         'personal
+         `((nix-ts-mode . (,@alejandra))))
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@prettier ,@lsp))
@@ -1083,6 +1087,8 @@ The built-in =electric= package provides the following modes:
            (tuareg-mode . (,@lsp))
            (sql-mode . (,@sqlformat))
            (haskell-mode . (,@lsp)))))
+      (dir-locals-set-directory-class "~/config/" 'personal)
+      (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)
 
@@ -1260,7 +1266,7 @@ The built-in =electric= package provides the following modes:
       (interactive)
       (setq indent-tabs-mode 1))
 
-    (dolist (mode-hook '(makefile-mode-hook))
+    (dolist (mode-hook '(makefile-mode-hook go-ts-mode-hook cue-mode-hook))
       (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode)))
 #+end_src
 *** isearch
@@ -3128,25 +3134,7 @@ A programmable workflow layer for Org mode
 
     (:status personal
       (add-hook 'org-dog-clock-in-success-hook
-                (defun akirak/org-dog-add-git-properties-on-clock-in (pom)
-                  "Add Git properties to the entry at POM if it has none."
-                  ;; TODO: Which is faster, org-element or regular expressions?
-                  ;;
-                  ;; TODO: Check inherited properties?
-                  (let ((element (org-with-point-at pom
-                                   (org-back-to-heading)
-                                   (org-element-at-point-no-context))))
-                    (unless (org-element-property :GIT_ORIGIN element)
-                      (require 'akirak-capture)
-                      (let* ((file (buffer-file-name (marker-buffer pom)))
-                             (obj (org-dog-file-object file))
-                             (prop-alist (akirak-capture-git-properties
-                                          obj :tags (org-element-property :tags element))))
-                        (when prop-alist
-                          (org-with-point-at pom
-                            (pcase-dolist (`(,prop . ,value) prop-alist)
-                              (org-entry-put nil prop value)))
-                          (message "Added Git properties to the clocked org-mode entry"))))))))
+                #'akirak-org-clock-add-git-properties-if-none))
 
     (:when-loaded
       (:also-load org-dog-embark
@@ -4688,9 +4676,10 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode)
                           akirak-window-display-document-buffer))
-                       (,(major-modes vterm-mode eat-mode)
+                       ((or ,(major-modes vterm-mode eat-mode)
+                            "^\\*Nix-REPL\\*")
                         ,(reuse-mode-window
-                          (vterm-mode eat-mode)
+                          (vterm-mode eat-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below))
                        (,(major-modes nov-mode pdf-view-mode)
                         akirak-window-display-document-buffer)
@@ -5388,6 +5377,19 @@ COmpletion in Region FUnction
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** cue-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-01-01 Mon 15:17]
+:END:
+#+begin_quote
+Major mode for CUE language files
+[[https://github.com/russell/cue-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package cue-mode)
+    (:file-match "\\.cue\\'"))
+#+end_src
 *** dashboard
 :PROPERTIES:
 :CREATED_TIME: [2023-11-18 Sat 23:10]
@@ -5491,7 +5493,13 @@ fast, friendly searching with ripgrep
 
 #+begin_src emacs-lisp
   (setup (:package deadgrep)
-    (:set deadgrep-display-buffer-function #'pop-to-buffer))
+    (:set deadgrep-display-buffer-function #'pop-to-buffer
+          ;; Show hidden files as well
+          deadgrep-extra-arguments '("--no-config"
+                                     ;; Show files in .github directory, for example.
+                                     "--hidden"
+                                     "--ignore-file=.gitignore"
+                                     "--iglob=!.git")))
 #+end_src
 *** devdocs                                              :reference:
 :PROPERTIES:
@@ -9284,7 +9292,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

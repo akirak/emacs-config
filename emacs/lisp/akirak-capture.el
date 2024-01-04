@@ -314,7 +314,8 @@
    ("'" octopus-avy-org-heading-suffix)
    ("@" octopus-clock-marker-suffix)
    ("\\" octopus-this-file-suffix)
-   ("/" octopus-read-dog-file-suffix)]
+   ("/" octopus-read-dog-file-suffix)
+   ("$" octopus-last-captured-file-suffix)]
   (interactive)
   (transient-setup 'akirak-capture-doct))
 
@@ -826,7 +827,8 @@
    ("'" octopus-avy-org-heading-suffix)
    ("@" akirak-capture-url-to-clock)
    ("\\" octopus-this-file-suffix)
-   ("/" octopus-read-dog-file-suffix)]
+   ("/" octopus-read-dog-file-suffix)
+   ("$" octopus-last-captured-file-suffix)]
   (interactive (list (or (akirak-url-latest)
                          (akirak-url-complete "Capture URL: "))))
   (unless keep-options
@@ -1475,7 +1477,9 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
 (cl-defun akirak-capture-git-properties (obj &key tags)
   (when-let (root (vc-git-root default-directory))
     (when (or (member "@contribution" tags)
-              (string-prefix-p "projects/" (oref obj relative)))
+              (string-prefix-p "projects/" (oref obj relative))
+              ;; Prevent mistakenly logging private projects
+              (string-prefix-p "~/work2/learning/" root))
       (require 'magit-git)
       (thread-last
         `(("GIT_WORKTREE" . ,(org-link-make-string
