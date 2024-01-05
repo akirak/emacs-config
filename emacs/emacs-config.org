@@ -655,7 +655,18 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup calendar
     (add-to-list 'display-buffer-alist
                  '((major-mode . calendar-mode)
-                   (display-buffer-in-side-window))))
+                   (display-buffer-in-side-window)))
+
+    (:global "C-z m"
+             (defun akirak/calendar (&optional arg)
+               (interactive "P")
+               (if (and (derived-mode-p 'org-mode)
+                        (bound-and-true-p org-dog-file-mode)
+                        (memq (object-class (org-dog-buffer-object))
+                              '(org-dog-datetree-file
+                                org-dog-facade-datetree-file)))
+                   (org-reverse-datetree-calendar)
+                 (calendar arg)))))
 #+end_src
 *** callproc.c                                             :process:
 :PROPERTIES:
