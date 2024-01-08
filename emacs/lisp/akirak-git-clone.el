@@ -329,6 +329,7 @@ DIR is an optional destination directory to clone the repository into."
               parents)))
 
 (defun akirak-git-clone--parents ()
+  (require 'akirak-project)
   (seq-filter (lambda (dir)
                 (string-prefix-p "~/work2/" dir))
               (akirak-project-parents)))
