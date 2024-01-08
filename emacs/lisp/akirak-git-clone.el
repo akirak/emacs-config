@@ -58,6 +58,33 @@
                                                                string)
                                                          string)))))
 
+(defcustom akirak-git-clone-use-category nil
+  "Whether to group repositories by parent categories.
+
+If this variable is non-nil, per-host repository directories will
+be created inside a subdirectory, which is called a category,
+under `akirak-git-clone-root'. In that case, the default category
+will be `akirak-git-clone-default-category'."
+  :type 'boolean)
+
+(defcustom akirak-git-clone-default-category "foss"
+  "Directory of the default category
+
+This variable is not effective unless
+`akirak-git-clone-use-category' is set to non-nil."
+  :type 'string)
+
+(defcustom akirak-git-clone-category-alist
+  nil
+  "List of (CATEGORY . HOSTS).
+
+This variable is used to determine the category when
+`akirak-git-clone-use-category' is non-nil. If no category
+matches the host of the repository,
+`akirak-git-clone-default-category' will be used."
+  :type '(alist :key-type (string :tag "Category, or a directory name")
+                :value-type (repeat (string :tag "Host"))))
+
 (defcustom akirak-git-clone-browser-function
   #'dired
   "Function used to open a directory."
@@ -65,7 +92,7 @@
 
 (cl-defstruct akirak-git-clone-source
   "Type for representing a repository."
-  type origin local-path rev-or-ref params)
+  type origin host local-path rev-or-ref params)
 
 (defun akirak-git-clone--parse (flake-ref-or-url)
   "Parse FLAKE-REF."
@@ -93,6 +120,7 @@
                               ("sourcehut:" "")))))
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
+                                     :host host
                                      :local-path local-path
                                      :rev-or-ref rev-or-ref
                                      :params params)))
@@ -112,6 +140,7 @@
             (origin (format "https://%s/%s.git" host path)))
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
+                                     :host host
                                      :local-path local-path)))
     ;; Quick-and-dirty pattern for Git URLs.
     ;; Maybe import more comprehensive regexp from git-identity.el
@@ -133,6 +162,7 @@
             (origin flake-ref-or-url))
        (make-akirak-git-clone-source :type 'git
                                      :origin origin
+                                     :host host
                                      :local-path local-path)))
     (_
      (error "Unsupported ref: %s" flake-ref-or-url))))
@@ -194,15 +224,25 @@ DIR is an optional destination directory to clone the repository into."
                    dir
                  (expand-file-name (akirak-git-clone-source-local-path obj)
                                    (or dir
-                                       akirak-git-clone-root
-                                       (user-error
-                                        "First set akirak-git-clone-root\
- to an existing directory"))))))
+                                       (akirak-git-clone--root-directory
+                                        (akirak-git-clone-source-host obj)))))))
     (when (akirak-git-clone-source-rev-or-ref obj)
       (error "Rev or ref is unsupported now"))
     (if (file-directory-p repo)
         (akirak-git-clone-browse repo)
       (akirak-git-clone--clone origin repo))))
+
+(defun akirak-git-clone--root-directory (host)
+  "Determine the parent directory of the host directory."
+  (unless (and akirak-git-clone-root
+               (file-directory akirak-git-clone-root))
+    (user-error "First set akirak-git-clone-root (currently \"%s\") to an existing directory" akirak-git-clone-root))
+  (if akirak-git-clone-use-category
+      (expand-file-name (or (car (cl-rassoc host akirak-git-clone-category-alist
+                                            :test #'member))
+                            akirak-git-clone-default-category)
+                        akirak-git-clone-root)
+    akirak-git-clone-root))
 
 (defcustom akirak-git-clone-self-owners
   '("akirak" "emacs-twist")
