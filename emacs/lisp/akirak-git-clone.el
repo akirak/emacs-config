@@ -187,15 +187,17 @@ DIR is an optional destination directory to clone the repository into."
   (interactive (list (read-string "Flake ref: ")
                      (when current-prefix-arg
                        (read-directory-name "Destination directory: "))))
-  (unless (file-directory-p akirak-git-clone-root)
-    (error "First set akirak-git-clone-root to an existing directory"))
   (let* ((obj (akirak-git-clone--parse url))
          (origin (akirak-git-clone-source-origin obj))
          (repo (if (and dir
                         (not (file-exists-p dir)))
                    dir
                  (expand-file-name (akirak-git-clone-source-local-path obj)
-                                   (or dir akirak-git-clone-root)))))
+                                   (or dir
+                                       akirak-git-clone-root
+                                       (user-error
+                                        "First set akirak-git-clone-root\
+ to an existing directory"))))))
     (when (akirak-git-clone-source-rev-or-ref obj)
       (error "Rev or ref is unsupported now"))
     (if (file-directory-p repo)
