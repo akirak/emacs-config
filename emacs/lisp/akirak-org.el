@@ -396,8 +396,6 @@ character."
 (akirak-org-def-insert-emphasis ?\_ "underlined")
 ;;;###autoload (autoload 'akirak-org-verbatim "akirak-org")
 (akirak-org-def-insert-emphasis ?= "verbatim")
-;;;###autoload (autoload 'akirak-org-code "akirak-org")
-(akirak-org-def-insert-emphasis ?\~ "code")
 ;;;###autoload (autoload 'akirak-org-strike-through "akirak-org")
 (akirak-org-def-insert-emphasis ?\+ "strike-through")
 
