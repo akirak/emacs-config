@@ -378,13 +378,7 @@ the Garbage Collector Magic Hack
 #+end_src
 *** Specific systems
 #+begin_src elisp
-  (defun akirak/wsl-p ()
-    "Return non-nil if the session is running inside Windows Subsystem for Linux."
-    (with-temp-buffer
-      (when (ignore-errors (call-process "uname" nil (list t nil) nil "-a"))
-        (goto-char (point-min))
-        (let ((case-fold-search t))
-          (re-search-forward "microsoft" nil t)))))
+  (defalias 'akirak/wsl-p #'akirak-wsl-p)
 #+end_src
 ** Custom conventions
 *** Prefix for mode-specific commands
