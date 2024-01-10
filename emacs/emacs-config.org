@@ -572,7 +572,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 ;;    (:org-open "\\.x?html?\\'" browse-url)
 
     (:status personal
-      (:set browse-url-handlers `((,(rx bos "http" (?  "s") "://"
+      (:set browse-url-browser-function #'akirak-open-default
+            browse-url-handlers `((,(rx bos "http" (?  "s") "://"
                                         (or "localhost"
                                             (and (+ digit) (* "." (+ digit))))
                                         (or (any ":/") eos))
