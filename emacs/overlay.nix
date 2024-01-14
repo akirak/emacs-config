@@ -173,6 +173,7 @@ with builtins; let
             "fullframe"
             "modus-themes"
             "repl-toggle"
+            "setup"
           ] (name: _: _: {
             origin = {
               type = "github";
