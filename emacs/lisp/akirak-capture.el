@@ -1250,10 +1250,18 @@ provided as a separate command for integration, e.g. with embark."
   ;; `nov-mode' is not a derived mode of `shr-mode'. There is no `shr-mode', so
   ;; you have to check if the current major mode matches any of the known
   ;; shr-based modes.
-  (let ((bullet-regexp (when (derived-mode-p 'nov-mode 'eww-mode)
-                         (rx-to-string `(and bol (group (*? blank)) ,shr-bullet)))))
+  (let* ((mode (derived-mode-p '(nov-mode
+                                 eww-mode
+                                 markdown-mode)))
+         (bullet-regexp (when (memq mode '(nov-mode eww-mode))
+                          (rx-to-string `(and bol (group (*? blank)) ,shr-bullet)))))
     (with-temp-buffer
       (insert string)
+      (when (and (eq mode 'markdown-mode)
+                 (executable-find "pandoc"))
+        (call-process-region (point-min) (point-max)
+                             "pandoc" t t t
+                             "-f" "markdown" "-t" "org" "-"))
       (goto-char (point-min))
       (when (looking-at (rx (+ (and (* blank) "\n"))))
         (replace-match ""))
