@@ -775,15 +775,15 @@
     };
     oahu = {
       flake = false;
-      owner = "~akirak";
+      owner = "akirak";
       repo = "oahu.el";
-      type = "sourcehut";
+      type = "github";
     };
     oahu-memento = {
       flake = false;
-      owner = "~akirak";
+      owner = "akirak";
       repo = "oahu.el";
-      type = "sourcehut";
+      type = "github";
     };
     ob-async = {
       flake = false;
