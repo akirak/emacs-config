@@ -5261,7 +5261,10 @@ Consulting completing-read
 
                                       ;; Non-default
                                       (?o "Org" org-bookmark-heading-jump)
-                                      (?v "Org Placeholder" org-placeholder-view))))
+                                      (?v "Org Placeholder" org-placeholder-view))
+            consult-ripgrep-args (concat (eval (car (get 'consult-ripgrep-args 'standard-value)) t)
+                                         ;; Show files in .github directory, for example.
+                                         " --hidden --ignore-file=.gitignore --iglob=!.git")))
 
     (:global [remap switch-to-buffer] #'consult-buffer
              [remap bookmark-jump] #'consult-bookmark
