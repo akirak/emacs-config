@@ -569,11 +569,15 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup browse-url
-;;    (:org-open "\\.x?html?\\'" browse-url)
+    ;;    (:org-open "\\.x?html?\\'" browse-url)
 
     (:status personal
-      (:set browse-url-browser-function #'akirak-open-default
-            browse-url-handlers `((,(rx bos "http" (?  "s") "://"
+      (advice-add 'browse-url-can-use-xdg-open
+                  :override #'akirak-open-can-use-default-program)
+      (advice-add 'browse-url-xdg-open
+                  :override #'akirak-open-default)
+
+      (:set browse-url-handlers `((,(rx bos "http" (?  "s") "://"
                                         (or "localhost"
                                             (and (+ digit) (* "." (+ digit))))
                                         (or (any ":/") eos))

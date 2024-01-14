@@ -1,5 +1,7 @@
 ;;; akirak-open.el ---  -*- lexical-binding: t -*-
 
+(defvar akirak-open-default-command nil)
+
 ;;;###autoload
 (defun akirak-open-file-externally (file)
   "Open FILE externally using the default application of the system."
@@ -10,24 +12,36 @@
     (message "Opening %s externally" file)
     (akirak-open-default file)))
 
+;;;###autoload
 (defun akirak-open-default (file-or-url &optional _)
   "Open FILE-OR-URL with the default application."
   (with-current-buffer (generate-new-buffer "*embark open*")
-    (pcase system-type
-      (`darwin
-       (call-process "open" nil t nil file-or-url))
-      (`gnu/linux
-       (ensure-list
-        (or (when (akirak-wsl-p)
-              (when-let (exe (or (executable-find "wslview")
-                                 (executable-find "wsl-open")))
-                (call-process exe nil t nil file-or-url)))
-            (when-let (exe (executable-find "handlr"))
-              (call-process exe nil t nil "open" file-or-url))
-            (when-let (exe (executable-find "xdg-open"))
-              (call-process exe nil t nil file-or-url))
-            (user-error "No command found for opening a file-or-url"))))
-      (_ (user-error "Unsupported system-type: %s" system-type)))))
+    (pcase (if (and akirak-open-default-command
+                    (or (file-exists-p (car akirak-open-default-command))
+                        (executable-find (car akirak-open-default-command))))
+               akirak-open-default-command
+             (akirak-open-default-command))
+      (`(,program . ,options)
+       (call-process program nil t nil (append options (list file-or-url)))))))
+
+(defun akirak-open-default-command ()
+  "Return the default program with args for opening a file.
+
+This function also sets `akirak-open-default-command' variable to
+the returned value to memorize the result."
+  (setq akirak-open-default-command
+        (ensure-list (pcase system-type
+                       (`darwin "open")
+                       (`gnu/linux
+                        (or (when (akirak-wsl-p)
+                              (or (executable-find "wslview")
+                                  (executable-find "wsl-open")))
+                            (when-let (exe (executable-find "handlr"))
+                              (list exe "open"))
+                            (executable-find "xdg-open")))))))
+
+;;;###autoload
+(defalias 'akirak-open-can-use-default-program #'akirak-open-default-command)
 
 (provide 'akirak-open)
 ;;; akirak-open.el ends here
