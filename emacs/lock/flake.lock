@@ -3276,17 +3276,17 @@
     "setup": {
       "flake": false,
       "locked": {
-        "lastModified": 1678615651,
-        "narHash": "sha256-BAdL/DVzoXmQD7rd3frBqdC2jzX5YQ1Ccy0vyehUybE=",
-        "ref": "refs/heads/master",
-        "rev": "383f184addc303d054f7954922a37b07415729c1",
-        "revCount": 209,
-        "type": "git",
-        "url": "https://git.sr.ht/~pkal/setup"
+        "lastModified": 1698739725,
+        "narHash": "sha256-BwLbKi7cDwUjF+FVh5eTkfIc9u0vWJWcwE5Jos8PnI0=",
+        "owner": "emacsmirror",
+        "repo": "setup",
+        "rev": "0afc14756f58673f3766347ce562ecdf54374a86",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://git.sr.ht/~pkal/setup"
+        "owner": "emacsmirror",
+        "repo": "setup",
+        "type": "github"
       }
     },
     "shfmt": {

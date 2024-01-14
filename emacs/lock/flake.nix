@@ -1151,8 +1151,9 @@
     };
     setup = {
       flake = false;
-      type = "git";
-      url = "https://git.sr.ht/~pkal/setup";
+      owner = "emacsmirror";
+      repo = "setup";
+      type = "github";
     };
     shfmt = {
       flake = false;
