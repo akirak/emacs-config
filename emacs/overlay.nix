@@ -156,9 +156,9 @@ with builtins; let
       initParser = parseSetup {};
       inherit registries;
       lockDir = ./lock;
-      inputOverrides =
+      inputOverrides = lib.foldl (a: b: a // b) {} [
         (import ./inputs.nix)
-        // {
+        {
           akirak = _: _: {
             src = inputs.nix-filter.lib {
               root = inputs.self;
@@ -167,7 +167,20 @@ with builtins; let
               ];
             };
           };
-        };
+        }
+        (lib.genAttrs [
+            "llama"
+            "fullframe"
+            "modus-themes"
+            "repl-toggle"
+          ] (name: _: _: {
+            origin = {
+              type = "github";
+              repo = name;
+              owner = "emacsmirror";
+            };
+          }))
+      ];
       exportManifest = true;
     })
     .overrideScope' (lib.composeExtensions
