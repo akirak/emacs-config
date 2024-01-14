@@ -7699,6 +7699,7 @@ Frontend to experimental commands of Nix
 
     (:global "C-c n" #'nix3-transient
              "M-g M-f" #'nix3-flake-edit
+             "<f12> n l" #'nix3-registry-list
              "<f12> n n" #'nix3-flake-show-url))
 #+end_src
 **** magit-nix3
