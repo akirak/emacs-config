@@ -7662,7 +7662,9 @@ Frontend to experimental commands of Nix
 
 #+begin_src emacs-lisp
   (setup (:package nix3)
-    (:set nix3-flake-remote-wait 20)
+    (:set nix3-flake-remote-wait 20
+          nix3-registry-list-completion-options (list :add-to-registry t
+                                                      :require-match nil))
 
     (defun akirak/nix3-flake-maybe-update-from-pins ()
       "Generate flake.lock from the pins."
