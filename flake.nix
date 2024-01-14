@@ -3,9 +3,7 @@
     # Should be updated from flake-pins: <https://github.com/akirak/flake-pins>
     utils.url = "github:numtide/flake-utils";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
-    stable.url = "github:NixOS/nixpkgs/nixos-22.11";
-    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-filter.url = "github:numtide/nix-filter";
