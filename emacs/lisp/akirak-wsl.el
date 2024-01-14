@@ -6,7 +6,7 @@
 (defun akirak-wsl-p ()
   "Return non-nil if the session is running inside Windows Subsystem for Linux."
   (pcase-exhaustive akirak-wsl-p
-    (t t)
+    (`t t)
     (:no nil)
     (`nil (with-temp-buffer
             (when (ignore-errors (call-process "uname" nil (list t nil) nil "-a"))
