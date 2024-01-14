@@ -97,7 +97,9 @@
 (defun akirak-twist-browse-homepage (package-or-library)
   (interactive (list (completing-read "Browse package homepage: "
                                       (thread-last
-                                        (akirak-twist-flake-nodes akirak-twist-lock-directory)
+                                        (akirak-twist--check-directory
+                                         'akirak-twist-lock-directory)
+                                        (akirak-twist-flake-nodes)
                                         (mapcar #'car)))))
   (if-let (url (or (when-let (file (find-library-name (format "%s" package-or-library)))
                      (with-temp-buffer
@@ -201,15 +203,26 @@
   (interactive)
   (nix3-flake-update-inputs akirak-twist-lock-directory))
 
+(defun akirak-twist--check-directory (symbol &optional msg)
+  (unless (and (symbol-value symbol)
+               (file-directory-p (symbol-value symbol)))
+    (user-error (or msg
+                    (user-error "%s (value: \"%s\") is not an existing directory"
+                                symbol (symbol-value symbol)))))
+  dir)
+
 ;;;###autoload
 (defun akirak-twist-update-config-inputs (inputs)
   (interactive (list (akirak-twist-read-flake-input-names
                       (format "Update inputs: " crm-separator)
-                      akirak-twist-root-directory)))
+                      (akirak-twist--check-directory
+                       'akirak-twist-root-directory))))
   (let ((inputs (if (stringp inputs)
                     (list inputs)
                   inputs)))
-    (akirak-twist--update-inputs akirak-twist-root-directory inputs)))
+    (akirak-twist--update-inputs (akirak-twist--check-directory
+                                  'akirak-twist-root-directory)
+                                 inputs)))
 
 (defun akirak-twist--update-inputs (dir inputs)
   (let ((default-directory dir))

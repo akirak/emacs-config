@@ -333,8 +333,16 @@ character."
         (org-in-src-block-p))
     (org-self-insert-command (or 1 n)))
    (t
-    (insert "~~")
-    (backward-char))))
+    ;; This check won't work at bol, but I think it's fine.
+    (let ((need-zws (and (> (point) (point-min))
+                         (/= 32 (char-syntax (char-before)))
+                         (> (aref char-width-table (char-before))
+                            1))))
+      (insert (if need-zws
+                  ;; Wrap with a pair of zero-width spaces
+                  "​~~​"
+                "~~"))
+      (backward-char (when need-zws 2))))))
 
 ;;;###autoload
 (defun akirak-org-clocked-entry-or-agenda (&optional arg)
@@ -396,8 +404,6 @@ character."
 (akirak-org-def-insert-emphasis ?\_ "underlined")
 ;;;###autoload (autoload 'akirak-org-verbatim "akirak-org")
 (akirak-org-def-insert-emphasis ?= "verbatim")
-;;;###autoload (autoload 'akirak-org-code "akirak-org")
-(akirak-org-def-insert-emphasis ?\~ "code")
 ;;;###autoload (autoload 'akirak-org-strike-through "akirak-org")
 (akirak-org-def-insert-emphasis ?\+ "strike-through")
 

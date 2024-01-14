@@ -16,6 +16,8 @@
 
 (defun akirak-github--language-name (&optional mode)
   "Return the name of the language of the current major MODE."
+  ;; To set a proper value of org-src-lang-modes
+  (require 'org-src)
   (let ((lang (string-remove-suffix "-mode" (symbol-name (or mode major-mode)))))
     (or (car (rassq (intern lang) org-src-lang-modes))
         (string-remove-suffix "-ts" lang))))

@@ -378,13 +378,7 @@ the Garbage Collector Magic Hack
 #+end_src
 *** Specific systems
 #+begin_src elisp
-  (defun akirak/wsl-p ()
-    "Return non-nil if the session is running inside Windows Subsystem for Linux."
-    (with-temp-buffer
-      (when (ignore-errors (call-process "uname" nil (list t nil) nil "-a"))
-        (goto-char (point-min))
-        (let ((case-fold-search t))
-          (re-search-forward "microsoft" nil t)))))
+  (defalias 'akirak/wsl-p #'akirak-wsl-p)
 #+end_src
 ** Custom conventions
 *** Prefix for mode-specific commands
@@ -578,7 +572,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 ;;    (:org-open "\\.x?html?\\'" browse-url)
 
     (:status personal
-      (:set browse-url-handlers `((,(rx bos "http" (?  "s") "://"
+      (:set browse-url-browser-function #'akirak-open-default
+            browse-url-handlers `((,(rx bos "http" (?  "s") "://"
                                         (or "localhost"
                                             (and (+ digit) (* "." (+ digit))))
                                         (or (any ":/") eos))
@@ -655,7 +650,18 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup calendar
     (add-to-list 'display-buffer-alist
                  '((major-mode . calendar-mode)
-                   (display-buffer-in-side-window))))
+                   (display-buffer-in-side-window)))
+
+    (:global "C-z m"
+             (defun akirak/calendar (&optional arg)
+               (interactive "P")
+               (if (and (derived-mode-p 'org-mode)
+                        (bound-and-true-p org-dog-file-mode)
+                        (memq (object-class (org-dog-buffer-object))
+                              '(org-dog-datetree-file
+                                org-dog-facade-datetree-file)))
+                   (org-reverse-datetree-calendar)
+                 (calendar arg)))))
 #+end_src
 *** callproc.c                                             :process:
 :PROPERTIES:

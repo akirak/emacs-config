@@ -419,9 +419,9 @@
     };
     fullframe = {
       flake = false;
-      owner = "~tomterl";
+      owner = "emacsmirror";
       repo = "fullframe";
-      type = "sourcehut";
+      type = "github";
     };
     fwb-cmds = {
       flake = false;
@@ -643,9 +643,9 @@
     };
     llama = {
       flake = false;
-      owner = "~tarsius";
+      owner = "emacsmirror";
       repo = "llama";
-      type = "sourcehut";
+      type = "github";
     };
     lsp-mode = {
       flake = false;
@@ -726,9 +726,9 @@
     };
     modus-themes = {
       flake = false;
-      owner = "~protesilaos";
+      owner = "emacsmirror";
       repo = "modus-themes";
-      type = "sourcehut";
+      type = "github";
     };
     move-dup = {
       flake = false;
@@ -775,15 +775,15 @@
     };
     oahu = {
       flake = false;
-      owner = "~akirak";
+      owner = "akirak";
       repo = "oahu.el";
-      type = "sourcehut";
+      type = "github";
     };
     oahu-memento = {
       flake = false;
-      owner = "~akirak";
+      owner = "akirak";
       repo = "oahu.el";
-      type = "sourcehut";
+      type = "github";
     };
     ob-async = {
       flake = false;
@@ -1109,9 +1109,9 @@
     };
     repl-toggle = {
       flake = false;
-      owner = "~tomterl";
+      owner = "emacsmirror";
       repo = "repl-toggle";
-      type = "sourcehut";
+      type = "github";
     };
     request = {
       flake = false;
