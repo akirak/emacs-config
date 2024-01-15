@@ -235,7 +235,7 @@ DIR is an optional destination directory to clone the repository into."
 (defun akirak-git-clone--root-directory (host)
   "Determine the parent directory of the host directory."
   (unless (and akirak-git-clone-root
-               (file-directory akirak-git-clone-root))
+               (file-directory-p akirak-git-clone-root))
     (user-error "First set akirak-git-clone-root (currently \"%s\") to an existing directory" akirak-git-clone-root))
   (if akirak-git-clone-use-category
       (expand-file-name (or (car (cl-rassoc host akirak-git-clone-category-alist
