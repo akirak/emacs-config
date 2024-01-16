@@ -5815,7 +5815,10 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
   (setup (:package eat)
     (:set eat-kill-buffer-on-exit t)
     (with-eval-after-load 'eshell
-      (eat-shell-mode t)))
+      (eat-shell-mode t))
+
+    (:with-map eat-semi-char-mode-map
+      (:unbind "M-:" "M-g" "M-s" "C-z" "M-o")))
 #+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
