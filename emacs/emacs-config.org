@@ -7524,7 +7524,7 @@ major mode for working with mermaid graphs
 
 #+begin_src emacs-lisp
   (setup (:package mermaid-mode)
-    (:nixpkgs "nodePackages.mermaid-cli")
+    (:nixpkgs "mermaid-cli")
 
     (:file-match "\\.mmd\\'"))
 #+end_src

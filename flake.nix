@@ -105,10 +105,13 @@
             coq = inputs.unstable.legacyPackages.${final.system}.coq;
             coq-lsp = inputs.unstable.legacyPackages.${final.system}.coqPackages.coq-lsp;
             flake-no-path = inputs.flake-no-path.defaultPackage.${system};
+            inherit
+              (inputs.my-overlay.packages.${final.system})
+              github-linguist
+              epubinfo
+              squasher
+              ;
           }
-          // (
-            inputs.my-overlay.overlays.default final pkgs
-          )
           // (
             import ./emacs/overlay.nix {
               inherit inputs;
