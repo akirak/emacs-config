@@ -419,9 +419,9 @@
     };
     fullframe = {
       flake = false;
-      owner = "emacsmirror";
+      owner = "~tomterl";
       repo = "fullframe";
-      type = "github";
+      type = "sourcehut";
     };
     fwb-cmds = {
       flake = false;
@@ -643,9 +643,9 @@
     };
     llama = {
       flake = false;
-      owner = "emacsmirror";
+      owner = "~tarsius";
       repo = "llama";
-      type = "github";
+      type = "sourcehut";
     };
     lsp-mode = {
       flake = false;
@@ -726,9 +726,9 @@
     };
     modus-themes = {
       flake = false;
-      owner = "emacsmirror";
+      owner = "~protesilaos";
       repo = "modus-themes";
-      type = "github";
+      type = "sourcehut";
     };
     move-dup = {
       flake = false;
@@ -1109,9 +1109,9 @@
     };
     repl-toggle = {
       flake = false;
-      owner = "emacsmirror";
+      owner = "~tomterl";
       repo = "repl-toggle";
-      type = "github";
+      type = "sourcehut";
     };
     request = {
       flake = false;
@@ -1151,9 +1151,8 @@
     };
     setup = {
       flake = false;
-      owner = "emacsmirror";
-      repo = "setup";
-      type = "github";
+      type = "git";
+      url = "https://git.sr.ht/~pkal/setup";
     };
     shfmt = {
       flake = false;
