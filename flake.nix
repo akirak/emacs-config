@@ -102,8 +102,8 @@
       in {
         overlayAttrs =
           {
-            coq = inputs.unstable.legacyPackages.${final.system}.coq;
-            coq-lsp = inputs.unstable.legacyPackages.${final.system}.coqPackages.coq-lsp;
+            coq = inputs.nixpkgs.legacyPackages.${final.system}.coq;
+            coq-lsp = inputs.nixpkgs.legacyPackages.${final.system}.coqPackages.coq-lsp;
             flake-no-path = inputs.flake-no-path.defaultPackage.${system};
             inherit
               (inputs.my-overlay.packages.${final.system})
