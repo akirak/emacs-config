@@ -3,9 +3,7 @@
     # Should be updated from flake-pins: <https://github.com/akirak/flake-pins>
     utils.url = "github:numtide/flake-utils";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
-    stable.url = "github:NixOS/nixpkgs/nixos-22.11";
-    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-filter.url = "github:numtide/nix-filter";
@@ -104,13 +102,16 @@
       in {
         overlayAttrs =
           {
-            coq = inputs.unstable.legacyPackages.${final.system}.coq;
-            coq-lsp = inputs.unstable.legacyPackages.${final.system}.coqPackages.coq-lsp;
+            coq = inputs.nixpkgs.legacyPackages.${final.system}.coq;
+            coq-lsp = inputs.nixpkgs.legacyPackages.${final.system}.coqPackages.coq-lsp;
             flake-no-path = inputs.flake-no-path.defaultPackage.${system};
+            inherit
+              (inputs.my-overlay.packages.${final.system})
+              github-linguist
+              epubinfo
+              squasher
+              ;
           }
-          // (
-            inputs.my-overlay.overlays.default final pkgs
-          )
           // (
             import ./emacs/overlay.nix {
               inherit inputs;

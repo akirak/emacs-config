@@ -43,34 +43,3 @@ jobs:
         tag_name: ${{ inputs.release-tag || github.ref_name }}
         files: |
           *.zstd
-
-  publish-flakehub:
-    runs-on: ubuntu-latest
-
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - uses: cachix/install-nix-action@v25
-
-    - name: Determine the version
-      id: semver
-      run: |
-        tag="${{ inputs.release-tag || github.ref_name }}"
-        if [[ $tag =~ r([[:digit:]]{8}) ]]
-        then
-          echo "version=1.${BASH_REMATCH[1]}.$(date +%H%M%S)" >> "$GITHUB_OUTPUT"
-        else
-          echo "Failed to match against the tag: $tag" >&2
-          exit 1
-        fi
-
-    - name: Push to flakehub
-      uses: determinatesystems/flakehub-push@main
-      with:
-        visibility: "public"
-        name: "akirak/emacs-config"
-        tag: "${{ steps.semver.outputs.version }}"

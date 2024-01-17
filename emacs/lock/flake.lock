@@ -1112,15 +1112,15 @@
       "locked": {
         "lastModified": 1614337055,
         "narHash": "sha256-S2UagqTTgAZQIuOSfpD4YZbkEiG/yu8/dKk/tcY1R+A=",
-        "owner": "emacsmirror",
+        "owner": "~tomterl",
         "repo": "fullframe",
         "rev": "886b831c001b44ec95aec4ff36e8bc1b3003c786",
-        "type": "github"
+        "type": "sourcehut"
       },
       "original": {
-        "owner": "emacsmirror",
+        "owner": "~tomterl",
         "repo": "fullframe",
-        "type": "github"
+        "type": "sourcehut"
       }
     },
     "fwb-cmds": {
@@ -1706,15 +1706,15 @@
       "locked": {
         "lastModified": 1693520842,
         "narHash": "sha256-nf3H33LzNoBtxNPBzfRNILv/7O/C8HsyMZXxJo3bN+s=",
-        "owner": "emacsmirror",
+        "owner": "~tarsius",
         "repo": "llama",
         "rev": "a938ac0ae7890cfaf3281beb13f5c2fa75b337fa",
-        "type": "github"
+        "type": "sourcehut"
       },
       "original": {
-        "owner": "emacsmirror",
+        "owner": "~tarsius",
         "repo": "llama",
-        "type": "github"
+        "type": "sourcehut"
       }
     },
     "lsp-mode": {
@@ -1930,15 +1930,15 @@
       "locked": {
         "lastModified": 1698736616,
         "narHash": "sha256-+MtzscAV6c5KApb77/3rhvYtmmaGGJPNKBwUB6MRGZs=",
-        "owner": "emacsmirror",
+        "owner": "~protesilaos",
         "repo": "modus-themes",
-        "rev": "b7b60365fbf848622b49ba59f5c7a2dbc6a47f52",
-        "type": "github"
+        "rev": "ff70fd4136df589945d06de6926286d70243345b",
+        "type": "sourcehut"
       },
       "original": {
-        "owner": "emacsmirror",
+        "owner": "~protesilaos",
         "repo": "modus-themes",
-        "type": "github"
+        "type": "sourcehut"
       }
     },
     "move-dup": {
@@ -2024,11 +2024,11 @@
     "nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1683608858,
-        "narHash": "sha256-Al8EbmJazpkwG6ERcgakm89ye3Z+JtwNVvPGIIMYuNQ=",
+        "lastModified": 1705246116,
+        "narHash": "sha256-r96qXfYjaFJEv25Z713ojqVUmuL65xANDbfUInwbbs0=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "3654b1bf4e4bea3de146d16bd52a2d76d8d27a80",
+        "rev": "a2b855302567feebcf86c6a301a1a62b37aba144",
         "type": "github"
       },
       "original": {
@@ -2933,15 +2933,15 @@
       "locked": {
         "lastModified": 1663660366,
         "narHash": "sha256-MelfD/GTlRFyiGt3wA5lTTRfR5QZ+Qb1KhVZm//GDzw=",
-        "owner": "emacsmirror",
+        "owner": "~tomterl",
         "repo": "repl-toggle",
         "rev": "e05996b4a2b988f93ccce67f933cfad00064360f",
-        "type": "github"
+        "type": "sourcehut"
       },
       "original": {
-        "owner": "emacsmirror",
+        "owner": "~tomterl",
         "repo": "repl-toggle",
-        "type": "github"
+        "type": "sourcehut"
       }
     },
     "request": {
@@ -3805,11 +3805,11 @@
     "workbox": {
       "flake": false,
       "locked": {
-        "lastModified": 1690636023,
-        "narHash": "sha256-gR7DU0SLb896NLfe/ETh++TR2i3+4QG18ncVKlXV960=",
+        "lastModified": 1705498905,
+        "narHash": "sha256-TDkIkGFIiGbrCVTFdBt1kjy73gXOpYyl0Axcxcrx8LY=",
         "owner": "akirak",
         "repo": "workbox.el",
-        "rev": "da547b7aaa5584169539c1b34c3d01b5fd5f60f5",
+        "rev": "fec5144b7180507dc3b3da66fb7aa52b6eb3f177",
         "type": "github"
       },
       "original": {

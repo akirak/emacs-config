@@ -569,11 +569,15 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup browse-url
-;;    (:org-open "\\.x?html?\\'" browse-url)
+    ;;    (:org-open "\\.x?html?\\'" browse-url)
 
     (:status personal
-      (:set browse-url-browser-function #'akirak-open-default
-            browse-url-handlers `((,(rx bos "http" (?  "s") "://"
+      (advice-add 'browse-url-can-use-xdg-open
+                  :override #'akirak-open-can-use-default-program)
+      (advice-add 'browse-url-xdg-open
+                  :override #'akirak-open-default)
+
+      (:set browse-url-handlers `((,(rx bos "http" (?  "s") "://"
                                         (or "localhost"
                                             (and (+ digit) (* "." (+ digit))))
                                         (or (any ":/") eos))
@@ -5261,7 +5265,10 @@ Consulting completing-read
 
                                       ;; Non-default
                                       (?o "Org" org-bookmark-heading-jump)
-                                      (?v "Org Placeholder" org-placeholder-view))))
+                                      (?v "Org Placeholder" org-placeholder-view))
+            consult-ripgrep-args (concat (eval (car (get 'consult-ripgrep-args 'standard-value)) t)
+                                         ;; Show files in .github directory, for example.
+                                         " --hidden --ignore-file=.gitignore --iglob=!.git")))
 
     (:global [remap switch-to-buffer] #'consult-buffer
              [remap bookmark-jump] #'consult-bookmark
@@ -5808,7 +5815,10 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
   (setup (:package eat)
     (:set eat-kill-buffer-on-exit t)
     (with-eval-after-load 'eshell
-      (eat-shell-mode t)))
+      (eat-shell-mode t))
+
+    (:with-map eat-semi-char-mode-map
+      (:unbind "M-:" "M-g" "M-s" "C-z" "M-o")))
 #+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
@@ -7514,7 +7524,7 @@ major mode for working with mermaid graphs
 
 #+begin_src emacs-lisp
   (setup (:package mermaid-mode)
-    (:nixpkgs "nodePackages.mermaid-cli")
+    (:nixpkgs "mermaid-cli")
 
     (:file-match "\\.mmd\\'"))
 #+end_src
@@ -7655,7 +7665,9 @@ Frontend to experimental commands of Nix
 
 #+begin_src emacs-lisp
   (setup (:package nix3)
-    (:set nix3-flake-remote-wait 20)
+    (:set nix3-flake-remote-wait 20
+          nix3-registry-list-completion-options (list :add-to-registry t
+                                                      :require-match nil))
 
     (defun akirak/nix3-flake-maybe-update-from-pins ()
       "Generate flake.lock from the pins."
@@ -7690,6 +7702,7 @@ Frontend to experimental commands of Nix
 
     (:global "C-c n" #'nix3-transient
              "M-g M-f" #'nix3-flake-edit
+             "<f12> n l" #'nix3-registry-list
              "<f12> n n" #'nix3-flake-show-url))
 #+end_src
 **** magit-nix3
