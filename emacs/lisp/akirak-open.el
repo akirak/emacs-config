@@ -22,7 +22,7 @@
                akirak-open-default-command
              (akirak-open-default-command))
       (`(,program . ,options)
-       (call-process program nil t nil (append options (list file-or-url)))))))
+       (apply #'call-process program nil t nil (append options (list file-or-url)))))))
 
 (defun akirak-open-default-command ()
   "Return the default program with args for opening a file.
