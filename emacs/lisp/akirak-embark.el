@@ -137,6 +137,9 @@
   (when-let (url (consult-recoll--candidate-url candidate))
     (cons 'file (abbreviate-file-name (string-remove-prefix "file://" url)))))
 
+(defun akirak-embark-transform-mountpoint (_type path)
+  (cons 'directory path))
+
 (defmacro akirak-embark-run-at-marker (command &optional move name)
   (declare (indent 2))
   (let ((symbol (or name
@@ -361,6 +364,8 @@
                '(workbox-shell-command . akirak-embark-package-shell-command-map))
   (add-to-list 'embark-transformer-alist
                '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
+  (add-to-list 'embark-transformer-alist
+               '(mountpoint . akirak-embark-transform-mountpoint))
   (add-to-list 'embark-transformer-alist
                '(recoll-result . akirak-embark-transform-recoll-result))
   (add-to-list 'embark-keymap-alist
