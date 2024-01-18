@@ -4559,7 +4559,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-paren
 #+begin_src elisp
   (setup akirak-paren
-    (:with-mode akirak-paren-jump-mode
+    (defun akirak/turn-on-paren-jump-mode ()
+      (unless (derived-mode-p 'elixir-ts-mode 'heex-ts-mode)
+        (akirak-paren-jump-mode t)))
+
+    (:with-mode akirak/turn-on-paren-jump-mode
       ;; Don't turn on the mode in special modes, e.g. vterm.
       (:hook-into prog-mode-hook text-mode-hook))
     (add-hook 'akirak-paren-match-hook #'akirak-paren-syntax-table-match)
