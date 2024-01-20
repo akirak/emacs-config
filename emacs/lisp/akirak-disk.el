@@ -8,7 +8,7 @@
 
 (defun akirak-disk-read-findmnt (prompt)
   (let* ((alist (thread-last
-                  (akirak-disk--findmnt-run "--real")
+                  (akirak-disk--findmnt-run "--real" "--list")
                   (assq 'filesystems)
                   (cdr)
                   (mapcar (lambda (x)
