@@ -610,7 +610,18 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           ;; They should be configured alongside individual modes.
           truncate-lines nil)
     (:with-mode shr-mode
-      (:local-set truncate-lines t)))
+      (:local-set truncate-lines t))
+
+    ;; A more lightweight version of midnight
+    (run-with-idle-timer
+     600 nil
+     (defun akirak/cleanup-buffers ()
+       (dolist (buffer (buffer-list))
+         (when (and (derived-mode-p 'dired-mode 'special-mode)
+                    (not (file-directory-p (buffer-local-value
+                                            'default-directory buffer))))
+           (message "Kill buffer %s as the directory does not exist" buffer)
+           (kill-buffer buffer))))))
 #+end_src
 **** Line spacing
 #+begin_src emacs-lisp
