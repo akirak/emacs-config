@@ -807,9 +807,7 @@ The other variables must not be saved, and they should be put in configuration:
           dired-recursive-deletes 'top
           dired-auto-revert-buffer t
           dired-listing-switches "-alh --time-style=long-iso")
-    (:mode-repl akirak-shell-other-window)
-
-    (:bind "h" #'dired-up-directory))
+    (:mode-repl akirak-shell-other-window))
 #+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
