@@ -40,7 +40,7 @@ the returned value to memorize the result."
                               (list exe "open"))
                             (executable-find "xdg-open")))))))
 
-;;;###autoload
+;;;###autoload (autoload 'akirak-open-can-use-default-program "akirak-open")
 (defalias 'akirak-open-can-use-default-program #'akirak-open-default-command)
 
 (provide 'akirak-open)
