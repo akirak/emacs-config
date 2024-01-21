@@ -2800,7 +2800,18 @@ Outline-based notes management and organizer
           '((shell . t)
             (emacs-lisp . t)
             (sqlite . t)
-            (sql . t))))
+            (sql . t)))
+
+    ;; By default, org-babel can't execute source block in an indirect buffer,
+    ;; which I find frustrating. This function advice enables that.
+    (advice-add 'org-babel-result-to-file
+                :around
+                (defun akirak/ad-around-org-babel-result-to-file (orig &rest args)
+                  (let ((point (point)))
+                    (with-current-buffer (org-base-buffer (current-buffer))
+                      (save-excursion
+                        (goto-char point)
+                        (apply orig args)))))))
 #+end_src
 **** org-capture
 :PROPERTIES:
