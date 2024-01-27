@@ -4705,7 +4705,7 @@ This is an extra functions for window management.
          (reuse-mode-window (modes function &rest alist)
            `(lambda (buffer alist)
               (or (display-buffer-reuse-mode-window buffer '((mode . ,modes)))
-                  (,function buffer alist)))))
+                  (,function buffer ',alist)))))
       (dolist (entry `((,(major-modes help-mode devdocs-mode)
                         ,(reuse-mode-window
                           (help-mode devdocs-mode)
@@ -4714,7 +4714,8 @@ This is an extra functions for window management.
                             "^\\*Nix-REPL\\*")
                         ,(reuse-mode-window
                           (vterm-mode eat-mode nix-repl-mode)
-                          akirak-window-display-buffer-split-below))
+                          akirak-window-display-buffer-split-below
+                          (dedicated . t)))
                        (,(major-modes nov-mode pdf-view-mode)
                         akirak-window-display-document-buffer)
                        ((major-mode . org-agenda-mode)
