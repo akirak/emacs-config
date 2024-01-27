@@ -9,6 +9,14 @@
 (defalias 'akirak-shell-other-window #'eat-other-window)
 
 ;;;###autoload
+(defalias 'akirak-shell-for-project-other-window #'eat-project-other-window)
+
+;;;###autoload
+(defun akirak-shell-new-other-window ()
+  (interactive)
+  (eat-other-window nil t))
+
+;;;###autoload
 (defun akirak-shell-run-command-at-dir (dir command)
   (pcase (seq-filter `(lambda (buf)
                         (and (eq (buffer-local-value 'major-mode buf)
