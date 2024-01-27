@@ -4731,7 +4731,9 @@ This is an extra functions for window management.
                         display-buffer-use-least-recent-window)
                        ("^\\*Async Shell Command\\*"
                         display-buffer-no-window)))
-        (add-to-list 'display-buffer-alist entry t)))
+        (if-let (cell (assoc (car entry) display-buffer-alist))
+            (setcdr cell (cdr entry))
+          (setq display-buffer-alist (append display-buffer-alist (list entry))))))
 
     (:status opinionated
       (:with-map ctl-x-map
