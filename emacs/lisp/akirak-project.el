@@ -246,7 +246,8 @@ display alternative actions."
       (when (yes-or-no-p "Initialize a new Git repository?")
         (call-process "git" nil nil nil "init" (expand-file-name dir))
         (project-remember-project (project-current nil dir)))
-      (akirak-shell)))
+      (when (yes-or-no-p "Enter shell?")
+        (akirak-shell))))
    ((string-match-p (rx bol (+ (not (any "/"))) eol) dir)
     (let ((parent (completing-read "Parent directory: "
                                    (akirak-project-parents))))

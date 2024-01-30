@@ -610,7 +610,18 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           ;; They should be configured alongside individual modes.
           truncate-lines nil)
     (:with-mode shr-mode
-      (:local-set truncate-lines t)))
+      (:local-set truncate-lines t))
+
+    ;; A more lightweight version of midnight
+    (run-with-idle-timer
+     600 nil
+     (defun akirak/cleanup-buffers ()
+       (dolist (buffer (buffer-list))
+         (when (and (derived-mode-p 'dired-mode 'special-mode)
+                    (not (file-directory-p (buffer-local-value
+                                            'default-directory buffer))))
+           (message "Kill buffer %s as the directory does not exist" buffer)
+           (kill-buffer buffer))))))
 #+end_src
 **** Line spacing
 #+begin_src emacs-lisp
@@ -807,9 +818,7 @@ The other variables must not be saved, and they should be put in configuration:
           dired-recursive-deletes 'top
           dired-auto-revert-buffer t
           dired-listing-switches "-alh --time-style=long-iso")
-    (:mode-repl akirak-shell-other-window)
-
-    (:bind "h" #'dired-up-directory))
+    (:mode-repl akirak-shell-new-other-window))
 #+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
@@ -2791,7 +2800,18 @@ Outline-based notes management and organizer
           '((shell . t)
             (emacs-lisp . t)
             (sqlite . t)
-            (sql . t))))
+            (sql . t)))
+
+    ;; By default, org-babel can't execute source block in an indirect buffer,
+    ;; which I find frustrating. This function advice enables that.
+    (advice-add 'org-babel-result-to-file
+                :around
+                (defun akirak/ad-around-org-babel-result-to-file (orig &rest args)
+                  (let ((point (point)))
+                    (with-current-buffer (org-base-buffer (current-buffer))
+                      (save-excursion
+                        (goto-char point)
+                        (apply orig args)))))))
 #+end_src
 **** org-capture
 :PROPERTIES:
@@ -4559,7 +4579,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-paren
 #+begin_src elisp
   (setup akirak-paren
-    (:with-mode akirak-paren-jump-mode
+    (defun akirak/turn-on-paren-jump-mode ()
+      (unless (derived-mode-p 'elixir-ts-mode 'heex-ts-mode)
+        (akirak-paren-jump-mode t)))
+
+    (:with-mode akirak/turn-on-paren-jump-mode
       ;; Don't turn on the mode in special modes, e.g. vterm.
       (:hook-into prog-mode-hook text-mode-hook))
     (add-hook 'akirak-paren-match-hook #'akirak-paren-syntax-table-match)
@@ -4681,7 +4705,7 @@ This is an extra functions for window management.
          (reuse-mode-window (modes function &rest alist)
            `(lambda (buffer alist)
               (or (display-buffer-reuse-mode-window buffer '((mode . ,modes)))
-                  (,function buffer alist)))))
+                  (,function buffer ',alist)))))
       (dolist (entry `((,(major-modes help-mode devdocs-mode)
                         ,(reuse-mode-window
                           (help-mode devdocs-mode)
@@ -4690,7 +4714,8 @@ This is an extra functions for window management.
                             "^\\*Nix-REPL\\*")
                         ,(reuse-mode-window
                           (vterm-mode eat-mode nix-repl-mode)
-                          akirak-window-display-buffer-split-below))
+                          akirak-window-display-buffer-split-below
+                          (dedicated . t)))
                        (,(major-modes nov-mode pdf-view-mode)
                         akirak-window-display-document-buffer)
                        ((major-mode . org-agenda-mode)
@@ -4706,7 +4731,9 @@ This is an extra functions for window management.
                         display-buffer-use-least-recent-window)
                        ("^\\*Async Shell Command\\*"
                         display-buffer-no-window)))
-        (add-to-list 'display-buffer-alist entry t)))
+        (if-let (cell (assoc (car entry) display-buffer-alist))
+            (setcdr cell (cdr entry))
+          (setq display-buffer-alist (append display-buffer-alist (list entry))))))
 
     (:status opinionated
       (:with-map ctl-x-map
@@ -5512,6 +5539,7 @@ fast, friendly searching with ripgrep
                                      ;; Show files in .github directory, for example.
                                      "--hidden"
                                      "--ignore-file=.gitignore"
+                                     "--iglob=*.local"
                                      "--iglob=!.git")))
 #+end_src
 *** devdocs                                              :reference:
@@ -5896,8 +5924,12 @@ Client for Language Server Protocol (LSP) servers
                    '((elixir-mode elixir-ts-mode heex-ts-mode) .
                      ("elixir-ls")))
       (add-to-list 'eglot-server-programs
-                   '((elixir-ts-mode heex-ts-mode elixir-mode) .
-                     ("nextls" "--stdio=true")))
+                   `((elixir-ts-mode heex-ts-mode elixir-mode) .
+                     ,(eglot-alternatives
+                       '(("lexical")
+                         ("nextls" "--stdio=true"
+                          :initializationOptions
+                          (:experimental (:completions (:enable t))))))))
       (add-to-list 'eglot-server-programs
                    `(web-mode . ,(eglot-alternatives
                                   '(("astro-ls" "--stdio")))))
@@ -7996,7 +8028,7 @@ Summon and dismiss buffers as popups
            "M-' RET" #'popper-toggle-type
            "M-' M-'" #'popper-toggle
            "M-' e" #'flymake-show-buffer-diagnostics
-           "M-' t" #'akirak-shell-other-window
+           "M-' t" #'akirak-shell-for-project-other-window
            "M-' s" #'scratch-buffer
            "M-' c" (defun akirak/compilation-buffer (&optional arg)
                      (interactive "P")
@@ -8099,6 +8131,19 @@ Colorize color names in buffers
 #+begin_src emacs-lisp
   (setup (:package rainbow-mode)
     (:hook-into prog-mode))
+#+end_src
+*** reason-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-01-30 Tue 23:11]
+:END:
+#+begin_quote
+A major mode for editing ReasonML
+[[https://github.com/reasonml-editor/reason-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package reason-mode)
+    (:file-match "\\.re\\'"))
 #+end_src
 *** reformatter                                         :formatting:
 :PROPERTIES:
@@ -9311,7 +9356,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 219 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |

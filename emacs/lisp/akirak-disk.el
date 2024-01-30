@@ -1,5 +1,14 @@
 ;;; akirak-disk.el ---  -*- lexical-binding: t -*-
 
+(defconst akirak-disk-ignore-regexp
+  (rx bol "/"
+      ;; /run can contain systemd-mounted mount points, so don't exclude them
+      ;; entirely.
+      (or "sys"
+          "proc"
+          "dev")
+      (or eol "/")))
+
 ;;;###autoload
 (defun akirak-disk-findmnt ()
   "Visit a mountpoint"
@@ -8,9 +17,18 @@
 
 (defun akirak-disk-read-findmnt (prompt)
   (let* ((alist (thread-last
-                  (akirak-disk--findmnt-run "--real")
+                  ;; Don't use --real as it would exclude systemd-mounted
+                  ;; devices.
+                  (akirak-disk--findmnt-run "--list")
                   (assq 'filesystems)
                   (cdr)
+                  (cl-remove-if (lambda (x)
+                                  (or (member (cdr (assq 'fstype x))
+                                              '("tmpfs"
+                                                "ramfs"
+                                                "overlay"))
+                                      (string-match-p akirak-disk-ignore-regexp
+                                                      (cdr (assq 'target x))))))
                   (mapcar (lambda (x)
                             (cons (file-name-as-directory
                                    (cdr (assq 'target x)))
