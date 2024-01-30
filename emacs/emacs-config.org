@@ -8130,6 +8130,19 @@ Colorize color names in buffers
   (setup (:package rainbow-mode)
     (:hook-into prog-mode))
 #+end_src
+*** reason-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-01-30 Tue 23:11]
+:END:
+#+begin_quote
+A major mode for editing ReasonML
+[[https://github.com/reasonml-editor/reason-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package reason-mode)
+    (:file-match "\\.re\\'"))
+#+end_src
 *** reformatter                                         :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]

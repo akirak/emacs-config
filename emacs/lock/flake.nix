@@ -1101,6 +1101,12 @@
       repo = "rainbow-delimiters";
       type = "github";
     };
+    reason-mode = {
+      flake = false;
+      owner = "reasonml-editor";
+      repo = "reason-mode";
+      type = "github";
+    };
     reformatter = {
       flake = false;
       owner = "purcell";
