@@ -2912,6 +2912,22 @@
         "type": "github"
       }
     },
+    "reason-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1680671858,
+        "narHash": "sha256-HLzKoeXczTosouxe9RcAr2JwNwXox7Uk6OZwn0ApHx8=",
+        "owner": "reasonml-editor",
+        "repo": "reason-mode",
+        "rev": "d657ff75572a8ea7eda6fe22ada3a2ebf5bc6119",
+        "type": "github"
+      },
+      "original": {
+        "owner": "reasonml-editor",
+        "repo": "reason-mode",
+        "type": "github"
+      }
+    },
     "reformatter": {
       "flake": false,
       "locked": {
@@ -3191,6 +3207,7 @@
         "puni": "puni",
         "quick-peek": "quick-peek",
         "rainbow-delimiters": "rainbow-delimiters",
+        "reason-mode": "reason-mode",
         "reformatter": "reformatter",
         "repl-toggle": "repl-toggle",
         "request": "request",
