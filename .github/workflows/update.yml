@@ -19,7 +19,7 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - run: nix flake update --inputs-from github:akirak/flake-pins
-    - uses: peter-evans/create-pull-request@v5
+    - uses: peter-evans/create-pull-request@v6
       with:
         base: develop
         token: ${{ secrets.PAT_FOR_PR }}
