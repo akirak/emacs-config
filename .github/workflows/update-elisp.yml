@@ -24,7 +24,15 @@ jobs:
         for input in melpa gnu-elpa epkgs; do
           nix flake update $input
         done
-    - run: nix run .#lock --impure
-    - run: nix run .#update --impure
+    - run: |
+        nix run .#lock --impure
+        if ! git diff-tree --exit-code HEAD; then
+          git commit -am 'emacs: Update lock entries'
+        fi
+    - run: |
+        nix run .#update --impure
+        if ! git diff-tree --exit-code HEAD; then
+          git commit -am 'emacs: Update ELPA packages'
+        fi
     - run: nix run .#update-elisp-lock
     - run: git push origin HEAD --force
