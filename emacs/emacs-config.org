@@ -9359,7 +9359,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 219 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -9371,7 +9371,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   5 |
-| [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
@@ -9379,6 +9378,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:writing][writing]]             |   4 |
 | [[org-ql-search:tags:windows][windows]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
+| [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
@@ -9433,7 +9433,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Coq][Coq]]                 |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
-| [[org-ql-search:tags:terminal][terminal]]            |   1 |
 | [[org-ql-search:tags:usability][usability]]           |   1 |
 
 Note that the table above is invisible on GitHub.
