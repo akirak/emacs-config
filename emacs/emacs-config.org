@@ -4026,8 +4026,11 @@ Major mode for Elixir with tree-sitter support
            _))
      ("/lib/.+\\.ex\\'"
       . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
-           "  " _
-           "\nend\n"))
+           "  @moduledoc \"\"\"\n"
+           "  " - n
+           "  \"\"\"" n n
+           "  " _ n
+           "end\n"))
      ("/test/.+_test\\.exs\\'"
       . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
            "  use ExUnit.Case\n\n"
