@@ -1309,12 +1309,6 @@
       type = "git";
       url = "https://codeberg.org/joostkremers/visual-fill-column.git";
     };
-    vterm = {
-      flake = false;
-      owner = "akermu";
-      repo = "emacs-libvterm";
-      type = "github";
-    };
     vue-html-mode = {
       flake = false;
       owner = "AdamNiederer";

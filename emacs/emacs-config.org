@@ -8734,7 +8734,7 @@ fill-column for visual-line-mode
     (:set visual-fill-column-center-text t
           visual-fill-column-width 100))
 #+end_src
-*** vterm                                         :terminal:process:
+*** COMMENT vterm                                             :terminal:process:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 16:50]
 :END:
