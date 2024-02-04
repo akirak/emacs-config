@@ -474,8 +474,9 @@ This function returns the current buffer."
               (newline))
             capture-buffer)
         (with-current-buffer (org-dog-indirect-buffer org-clock-marker)
-          (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer)
-                   action)
+          (unless (get-buffer-window (current-buffer))
+            (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer)
+                     action))
           (cond
            ((or arg
                 (org-match-line org-clock-line-re)
