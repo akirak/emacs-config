@@ -68,10 +68,8 @@ console.table(table.sort((x, y) => y[1] - x[1]))
 // Update the lock file //
 //////////////////////////
 
-async function updateFlakeInputs(inputs: string[]): Promise<boolean> {
-  const p = Deno.run({ stderr: 'piped', cmd: ["nix", "flake", "update"].concat(
-    inputs.map(input => [input]).flat()
-  )});
+async function updateFlakeInput(input: string): Promise<boolean> {
+  const p = Deno.run({ stderr: 'piped', cmd: ["nix", "flake", "update", input]});
   await p.status()
 }
 
@@ -92,7 +90,9 @@ async function maybeGitCommit(message: string): Promise<void> {
 for (const owner of owners) {
   const inputs = entries.filter((x: string[]) => x[1] === owner).map(x => x[0])
 
-  await updateFlakeInputs(inputs)
+  for (const input of inputs) {
+    await updateFlakeInput(input)
+  }
   await maybeGitCommit(
     (inputs.length == 1) ?
       `emacs: Update ${inputs[0]}` :
@@ -101,6 +101,6 @@ for (const owner of owners) {
 }
 
 for (const name of gitEntries) {
-  await updateFlakeInputs([name])
+  await updateFlakeInput(name)
   await maybeGitCommit(`emacs: Update ${name}`)
 }
