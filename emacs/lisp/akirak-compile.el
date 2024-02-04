@@ -18,7 +18,7 @@
         ((and command
               (pred stringp))
          (let ((default-directory workspace))
-           (compile command)))))
+           (compile command t)))))
   (user-error "No VC root"))
 
 (defun akirak-compile--root ()
