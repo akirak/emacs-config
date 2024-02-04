@@ -3242,7 +3242,6 @@
         "valign": "valign",
         "vertico": "vertico",
         "visual-fill-column": "visual-fill-column",
-        "vterm": "vterm",
         "vue-html-mode": "vue-html-mode",
         "vue-mode": "vue-mode",
         "web-mode": "web-mode",
@@ -3705,22 +3704,6 @@
       "original": {
         "type": "git",
         "url": "https://codeberg.org/joostkremers/visual-fill-column.git"
-      }
-    },
-    "vterm": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1681705456,
-        "narHash": "sha256-1+AbPtyl1dS73WTMrIUduyWeM4cOiD3CI7d0Ic3jpVw=",
-        "owner": "akermu",
-        "repo": "emacs-libvterm",
-        "rev": "94e2b0b2b4a750e7907dacd5b4c0584900846dd1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akermu",
-        "repo": "emacs-libvterm",
-        "type": "github"
       }
     },
     "vue-html-mode": {
