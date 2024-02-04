@@ -4342,6 +4342,14 @@ This is a collection of various utilities to enhance the experience.
           uncomment-region-function #'akirak-uncomment-region-1)
     (:global "M-;" #'akirak-comment-toggle))
 #+end_src
+*** akirak-compile
+:PROPERTIES:
+:CREATED_TIME: [2024-02-04 Sun 11:34]
+:END:
+#+begin_src elisp
+  (setup akirak-compile
+    (:global "C-x c" #'akirak-compile))
+#+end_src
 *** akirak-consult
 #+begin_src emacs-lisp
   (setup akirak-consult
