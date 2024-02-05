@@ -6729,7 +6729,7 @@ Translation framework supports multiple engines such as Google/Bing/DeepL
 :CREATED_TIME: [2023-03-20 Mon 23:59]
 :END:
 #+begin_quote
-A simple multi-LLM client
+Interact with ChatGPT or other LLMs
 [[https://github.com/karthink/gptel]]
 #+end_quote
 
@@ -8765,6 +8765,7 @@ Fully-featured terminal emulator
 :END:
 #+begin_quote
 Major mode for vue component based on mmm-mode
+[[https://github.com/AdamNiederer/vue-mode]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -9367,7 +9368,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 214 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -9428,7 +9429,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
-| [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
