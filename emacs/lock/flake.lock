@@ -1155,22 +1155,6 @@
         "type": "gitlab"
       }
     },
-    "gif-screencast": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1657803635,
-        "narHash": "sha256-/qC9oM49xddWErRXHqUYIBbD4enUWDm36iBDksCn+m0=",
-        "owner": "Ambrevar",
-        "repo": "emacs-gif-screencast",
-        "rev": "adec408e6adab2e8e057fe0ad828749f473bfb83",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "Ambrevar",
-        "repo": "emacs-gif-screencast",
-        "type": "gitlab"
-      }
-    },
     "git-attr": {
       "flake": false,
       "locked": {
@@ -1443,22 +1427,6 @@
         "type": "github"
       }
     },
-    "idris-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1676065905,
-        "narHash": "sha256-QmcjwisdDNDIz3PlFxWEK4oC4FWHvatVsNRfoajpKAo=",
-        "owner": "idris-hackers",
-        "repo": "idris-mode",
-        "rev": "c96f45d1b8fad193f09fb6139da17092003b5e74",
-        "type": "github"
-      },
-      "original": {
-        "owner": "idris-hackers",
-        "repo": "idris-mode",
-        "type": "github"
-      }
-    },
     "iedit": {
       "flake": false,
       "locked": {
@@ -1584,22 +1552,6 @@
       "original": {
         "owner": "psibi",
         "repo": "justl.el",
-        "type": "github"
-      }
-    },
-    "keycast": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1699186004,
-        "narHash": "sha256-ILBlG1keZnuaZwuztINVCv9xWKqJD2s7AMUUe1ru91g=",
-        "owner": "tarsius",
-        "repo": "keycast",
-        "rev": "6a6f9106270f65b0bae3afb2ccdc52a3b5fbe340",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tarsius",
-        "repo": "keycast",
         "type": "github"
       }
     },
@@ -2848,22 +2800,6 @@
         "type": "github"
       }
     },
-    "prop-menu": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1438082283,
-        "narHash": "sha256-jMczpilDz58Kwpcuv7SVh1RnnUAh/S+URKrk8iMVV6E=",
-        "owner": "david-christiansen",
-        "repo": "prop-menu-el",
-        "rev": "50b102c1c0935fd3e0c465feed7f27d66b21cdf3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "david-christiansen",
-        "repo": "prop-menu-el",
-        "type": "github"
-      }
-    },
     "puni": {
       "flake": false,
       "locked": {
@@ -3098,7 +3034,6 @@
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",
         "gcmh": "gcmh",
-        "gif-screencast": "gif-screencast",
         "git-attr": "git-attr",
         "git-auto-commit-mode": "git-auto-commit-mode",
         "git-commit": "git-commit",
@@ -3116,7 +3051,6 @@
         "ht": "ht",
         "huan": "huan",
         "hydra": "hydra",
-        "idris-mode": "idris-mode",
         "iedit": "iedit",
         "indent-bars": "indent-bars",
         "inheritenv": "inheritenv",
@@ -3125,7 +3059,6 @@
         "jtsx": "jtsx",
         "just-mode": "just-mode",
         "justl": "justl",
-        "keycast": "keycast",
         "kind-icon": "kind-icon",
         "kv": "kv",
         "language-detection": "language-detection",
@@ -3203,7 +3136,6 @@
         "posframe": "posframe",
         "promise": "promise",
         "proof-general": "proof-general",
-        "prop-menu": "prop-menu",
         "puni": "puni",
         "quick-peek": "quick-peek",
         "rainbow-delimiters": "rainbow-delimiters",
@@ -3234,7 +3166,6 @@
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
         "tomelr": "tomelr",
-        "triples": "triples",
         "ts": "ts",
         "tuareg": "tuareg",
         "twist": "twist",
@@ -3575,22 +3506,6 @@
       "original": {
         "owner": "kaushalmodi",
         "repo": "tomelr",
-        "type": "github"
-      }
-    },
-    "triples": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1691637223,
-        "narHash": "sha256-BYiVbPFOjl0HfcSBC7gT9SO8sadHxZ7bwhGBi1NMNuE=",
-        "owner": "ahyatt",
-        "repo": "triples",
-        "rev": "fc824c689d1935932e074d4563b0024a8a923d40",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ahyatt",
-        "repo": "triples",
         "type": "github"
       }
     },
