@@ -435,12 +435,6 @@
       repo = "gcmh";
       type = "gitlab";
     };
-    gif-screencast = {
-      flake = false;
-      owner = "Ambrevar";
-      repo = "emacs-gif-screencast";
-      type = "gitlab";
-    };
     git-attr = {
       flake = false;
       owner = "arnested";
@@ -543,12 +537,6 @@
       repo = "hydra";
       type = "github";
     };
-    idris-mode = {
-      flake = false;
-      owner = "idris-hackers";
-      repo = "idris-mode";
-      type = "github";
-    };
     iedit = {
       flake = false;
       owner = "victorhge";
@@ -595,12 +583,6 @@
       flake = false;
       owner = "psibi";
       repo = "justl.el";
-      type = "github";
-    };
-    keycast = {
-      flake = false;
-      owner = "tarsius";
-      repo = "keycast";
       type = "github";
     };
     kind-icon = {
@@ -1077,12 +1059,6 @@
       repo = "PG";
       type = "github";
     };
-    prop-menu = {
-      flake = false;
-      owner = "david-christiansen";
-      repo = "prop-menu-el";
-      type = "github";
-    };
     puni = {
       flake = false;
       owner = "AmaiKinono";
@@ -1260,12 +1236,6 @@
       flake = false;
       owner = "kaushalmodi";
       repo = "tomelr";
-      type = "github";
-    };
-    triples = {
-      flake = false;
-      owner = "ahyatt";
-      repo = "triples";
       type = "github";
     };
     ts = {

@@ -6426,7 +6426,7 @@ Ghelp+Helpful
 #+begin_src emacs-lisp
 (setup (:package ghelp-helpful))
 #+end_src
-*** gif-screencast                               :screen__recording:
+*** COMMENT gif-screencast                                   :screen__recording:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:38]
 :END:
@@ -6949,7 +6949,7 @@ Replace things with predefined alternatives
       (define-key embark-defun-map "`" #'huan-defun)
       (define-key embark-identifier-map "`" #'huan-symbol)))
 #+end_src
-*** idris-mode
+*** COMMENT idris-mode                                                         :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-05-14 Sun 23:16]
 :END:
@@ -7081,7 +7081,7 @@ Justfile editing mode
   (setup (:package just-mode)
     (:file-match "/justfile\\'"))
 #+end_src
-*** keycast
+*** COMMENT keycast                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-31 Fri 23:59]
 :ID:       2c1614dd-a2e5-4815-96dd-10b090cddcf4
@@ -8589,7 +8589,7 @@ Grammar bundle for tree-sitter
       (:hook-into typescript-mode-hook
                   typescript-tsx-mode-hook)))
 #+end_src
-*** triples
+*** COMMENT triples                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-25 Sat 18:13]
 :END:
