@@ -9,7 +9,11 @@
 (defalias 'akirak-shell-other-window #'eat-other-window)
 
 ;;;###autoload
-(defalias 'akirak-shell-for-project-other-window #'eat-project-other-window)
+(defun akirak-shell-for-project-other-window ()
+  (interactive)
+  (if (project-current)
+      (call-interactively #'eat-project-other-window)
+    (eat-other-window)))
 
 ;;;###autoload
 (defun akirak-shell-new-other-window ()
