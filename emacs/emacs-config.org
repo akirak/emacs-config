@@ -1980,8 +1980,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
                          (defun akirak/save-all-buffers-non-interactively ()
                            (when (fboundp 'akirak-org-clock-snooze)
                              (akirak-org-clock-snooze 3))
-                           (let ((save-some-buffers-default-predicate nil))
-                             (save-some-buffers nil))))
+                           (save-some-buffers 'force)))
     ;; Also run when the user explicitly leaves the computer.
     (add-hook 'akirak/system-leave-hook
               #'akirak/save-all-buffers-non-interactively
