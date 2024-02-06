@@ -9002,7 +9002,16 @@ A major mode for the Zig programming language
 :END:
 #+begin_src elisp
   (setup dune
-    (:package-files "dune" "dune-project"))
+    (:package-files "dune" "dune-project")
+
+    (defun akirak/dune-browse-doc ()
+      "Browse package documentation for the project."
+      (interactive)
+      (let ((root (locate-dominating-file default-directory "dune-project")))
+        (if root
+            (akirak-open-file-externally
+             (expand-file-name "_build/default/_doc/_html/index.html" root))
+          (user-error "dune-project is not found")))))
 #+end_src
 *** Org mode
 Define how Org entries are displayed by certain commands.
