@@ -53,35 +53,34 @@
 
 (defun akirak-compile--complete (projects)
   "Return (command . dir) or command for the next action for PROJECTS."
-  (let (candidates
-        (group-table (make-hash-table :test #'equal))
-        (dir-table (make-hash-table :test #'equal))
-        (ann-table (make-hash-table :test #'equal)))
+  (let (candidates)
     (pcase-dolist (`(,backend . ,dir) projects)
       (let ((command-alist (akirak-compile--gen-commands backend dir))
             (group (format "%s (%s)" backend (abbreviate-file-name dir))))
         (setq candidates (append candidates (mapcar #'car command-alist)))
         (pcase-dolist (`(,command . ,ann) command-alist)
-          (when ann
-            (puthash command ann ann-table))
-          (puthash command dir dir-table)
-          (puthash command group group-table))))
+          (add-text-properties 0 1
+                               (list 'command-directory dir
+                                     'annotation ann
+                                     'completion-group group)
+                               command)
+          (push command candidates))))
     (cl-labels
         ((annotator (candidate)
-           (gethash candidate ann-table))
+           (get-text-property 0 'annotation candidate))
          (group (candidate transform)
            (if transform
                candidate
-             (gethash candidate group-table)))
+             (get-text-property 0 'completion-group candidate)))
          (completions (string pred action)
            (if (eq action 'metadata)
                (cons 'metadata
-                     (list (cons 'category 'command)
+                     (list (cons 'category 'my-command)
                            (cons 'group-function #'group)
                            (cons 'annotation-function #'annotator)))
              (complete-with-action action candidates string pred))))
       (let* ((input (completing-read "Compile: " #'completions))
-             (dir (gethash input dir-table)))
+             (dir (get-text-property 0 'command-directory input)))
         (if dir
             (cons input dir)
           input)))))
