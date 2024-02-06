@@ -89,6 +89,7 @@
   (pcase backend
     (`dune
      '(("dune build")
+       ("dune build @doc" . "Build the documentation ")
        ("dune exec")
        ("opam install ")))))
 
