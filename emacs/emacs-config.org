@@ -5550,7 +5550,6 @@ fast, friendly searching with ripgrep
                                      ;; Show files in .github directory, for example.
                                      "--hidden"
                                      "--ignore-file=.gitignore"
-                                     "--iglob=*.local"
                                      "--iglob=!.git")))
 #+end_src
 *** devdocs                                              :reference:
