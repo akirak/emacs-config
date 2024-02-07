@@ -1089,6 +1089,7 @@ The built-in =electric= package provides the following modes:
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable))))
+            (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
             (alejandra '((eval . (alejandra-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
@@ -1103,7 +1104,7 @@ The built-in =electric= package provides the following modes:
            (tsx-ts-mode . (,@prettier ,@lsp))
            (rust-ts-mode . (,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
-           (tuareg-mode . (,@lsp))
+           (tuareg-mode . (,@lsp ,@ocamlformat))
            (sql-mode . (,@sqlformat))
            (haskell-mode . (,@lsp)))))
       (dir-locals-set-directory-class "~/config/" 'personal)
