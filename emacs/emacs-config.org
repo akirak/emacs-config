@@ -8611,7 +8611,11 @@ OCaml mode
   (setup (:package tuareg)
     ;; (:nixpkgs "opam")
     (:mode-repl utop)
-    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"))
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+
+    (:reformatters
+     (ocamlformat :program "ocamlformat"
+                  :args (list "--name" (buffer-file-name) "-"))))
 #+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
