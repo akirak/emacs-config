@@ -5839,7 +5839,8 @@ Integration with the dune build system
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package dune))
+  (setup (:package dune)
+    (:mode-repl akirak/utop-project))
 #+end_src
 *** eat
 :PROPERTIES:
@@ -8610,7 +8611,7 @@ OCaml mode
 #+begin_src emacs-lisp
   (setup (:package tuareg)
     ;; (:nixpkgs "opam")
-    (:mode-repl utop)
+    (:mode-repl akirak/utop-project)
     (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
 
     (:reformatters
@@ -8673,7 +8674,7 @@ I don't use use-package, but I only need indentation:
 #+begin_src emacs-lisp
   (put 'use-package 'lisp-indent-function 1)
 #+end_src
-*** utop                                                          :@extra:OCaml:
+*** COMMENT utop                                                  :@extra:OCaml:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-14 Sat 17:17]
 :END:
@@ -9014,7 +9015,27 @@ A major mode for the Zig programming language
         (if root
             (akirak-open-file-externally
              (expand-file-name "_build/default/_doc/_html/index.html" root))
-          (user-error "dune-project is not found")))))
+          (user-error "dune-project is not found"))))
+
+    (defun akirak/utop-project ()
+      (interactive)
+      (let* ((root (locate-dominating-file default-directory "dune-project"))
+             (pr (project-current))
+             (name (if pr
+                       (format "utop-%s" (project-name pr))
+                     "utop")))
+        (pop-to-buffer (apply #'eat-make name
+                              (if root
+                                  (list "opam" nil
+                                        "exec" "--" "dune" "utop"
+                                        (shell-quote-argument (file-relative-name root)))
+                                (cond
+                                 ((executable-find "utop")
+                                  '("utop"))
+                                 ((executable-find "opam")
+                                  '("opam" nil "exec" "--" "utop"))
+                                 (t
+                                  (user-error "Neither utop nor opam is available")))))))))
 #+end_src
 *** Org mode
 Define how Org entries are displayed by certain commands.
