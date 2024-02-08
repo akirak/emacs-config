@@ -9401,11 +9401,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 214 |
+| [[org-ql-search:tags:packages][packages]]            | 213 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
-| [[org-ql-search:tags:@extra][@extra]]              |  10 |
+| [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -9425,7 +9425,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
-| [[org-ql-search:tags:OCaml][OCaml]]               |   3 |
 | [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
@@ -9437,6 +9436,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
