@@ -1,7 +1,8 @@
 ;;; akirak-compile.el ---  -*- lexical-binding: t -*-
 
 (defcustom akirak-compile-package-file-alist
-  '(("dune-project" . dune))
+  '(("dune-project" . dune)
+    ("justfile" . just))
   ""
   :type '(alist :key-type (string :tag "File name")
                 :value-type (symbol :tag "Symbol to denote the project type")))
@@ -85,13 +86,27 @@
             (cons input dir)
           input)))))
 
-(defun akirak-compile--gen-commands (backend _dir)
+(defun akirak-compile--gen-commands (backend dir)
   (pcase backend
     (`dune
      '(("dune build")
        ("dune build @doc" . "Build the documentation ")
        ("dune exec")
-       ("opam install ")))))
+       ("opam install ")))
+    (`just
+     (let ((default-directory dir))
+       (with-temp-buffer
+         (unless (zerop (call-process "just" nil (list t nil) nil
+                                      "--dump" "--dump-format" "json"))
+           (error "just failed"))
+         (goto-char (point-min))
+         (thread-last
+           (json-parse-buffer :object-type 'alist :array-type 'list
+                              :null-object nil)
+           (alist-get 'recipes)
+           (mapcar (pcase-lambda (`(,name . ,attrs))
+                     (cons (format "just %s" name)
+                           (alist-get 'doc attrs))))))))))
 
 (provide 'akirak-compile)
 ;;; akirak-compile.el ends here
