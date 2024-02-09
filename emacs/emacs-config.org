@@ -7056,18 +7056,6 @@ Extends default support for JSX/TSX
   (setup (:package jtsx)
     (add-hook 'tsx-ts-mode-hook #'jtsx-tsx-mode))
 #+end_src
-*** justl
-:PROPERTIES:
-:CREATED_TIME: [2023-08-11 Fri 14:07]
-:END:
-#+begin_quote
-Major mode for driving just files
-[[https://github.com/psibi/justl.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-(setup (:package justl))
-#+end_src
 *** just-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-09-27 Wed 14:27]
