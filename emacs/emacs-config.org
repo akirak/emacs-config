@@ -4727,7 +4727,7 @@ This is an extra functions for window management.
                           (vterm-mode eat-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
-                       (,(major-modes nov-mode pdf-view-mode)
+                       (,(major-modes nov-mode pdf-view-mode eww-mode Info-mode)
                         akirak-window-display-document-buffer)
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
