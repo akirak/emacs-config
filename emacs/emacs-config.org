@@ -8027,6 +8027,9 @@ Summon and dismiss buffers as popups
            "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-shell-for-project-other-window
            "M-' s" #'scratch-buffer
+           "M-' w" (defun akirak/revisit-eww-buffer ()
+                     (interactive)
+                     (pop-to-buffer "*eww*"))
            "M-' c" (defun akirak/compilation-buffer (&optional arg)
                      (interactive "P")
                      (if-let (buffer (and (not arg)
