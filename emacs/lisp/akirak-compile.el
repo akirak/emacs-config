@@ -7,19 +7,34 @@
   :type '(alist :key-type (string :tag "File name")
                 :value-type (symbol :tag "Symbol to denote the project type")))
 
+(defvar akirak-compile-per-workspace-history
+  (make-hash-table :test #'equal :size 10))
+
+(defvar akirak-compile-command-cache
+  (make-hash-table :test #'equal :size 50))
+
+(defun akirak-compile-clear-cache ()
+  (interactive)
+  (clrhash akirak-compile-command-cache))
+
 ;;;###autoload
 (defun akirak-compile ()
   (interactive)
   (if-let (workspace (vc-git-root default-directory))
-      (pcase (akirak-compile--complete
-              (akirak-compile--find-projects (expand-file-name workspace)))
-        (`(,command . ,dir)
-         (let ((default-directory dir))
-           (compile command)))
-        ((and command
-              (pred stringp))
-         (let ((default-directory workspace))
-           (compile command t)))))
+      (let* ((key (file-name-nondirectory (directory-file-name workspace)))
+             (history (gethash key akirak-compile-per-workspace-history
+                               :default))
+             (command (akirak-compile--complete
+                       (akirak-compile--find-projects (expand-file-name workspace))
+                       (unless (eq history :default)
+                         history)))
+             (default-directory (or (get-text-property 0 'command-directory command)
+                                    workspace)))
+        (if (eq history :default)
+            (puthash key (list command) akirak-compile-per-workspace-history)
+          (cl-pushnew command history)
+          (puthash key history akirak-compile-per-workspace-history))
+        (compile command t)))
   (user-error "No VC root"))
 
 (defun akirak-compile--root ()
@@ -52,23 +67,23 @@
       (search start))
     result))
 
-(defun akirak-compile--complete (projects)
+(defun akirak-compile--complete (projects history)
   "Return (command . dir) or command for the next action for PROJECTS."
-  (let (candidates)
+  (let ((candidates (copy-sequence history)))
     (pcase-dolist (`(,backend . ,dir) projects)
-      (let ((command-alist (akirak-compile--gen-commands backend dir))
+      (let ((command-alist (akirak-compile--gen-commands-cached backend dir))
             (group (format "%s (%s)" backend (abbreviate-file-name dir))))
         (setq candidates (append candidates (mapcar #'car command-alist)))
-        (pcase-dolist (`(,command . ,ann) command-alist)
+        (pcase-dolist (`(,command . ,properties) command-alist)
           (add-text-properties 0 1
-                               (list 'command-directory dir
-                                     'annotation ann
-                                     'completion-group group)
+                               (append (list 'command-directory dir
+                                             'completion-group group)
+                                       properties)
                                command)
           (push command candidates))))
     (cl-labels
         ((annotator (candidate)
-           (get-text-property 0 'annotation candidate))
+           (concat " " (get-text-property 0 'annotation candidate)))
          (group (candidate transform)
            (if transform
                candidate
@@ -80,17 +95,20 @@
                            (cons 'group-function #'group)
                            (cons 'annotation-function #'annotator)))
              (complete-with-action action candidates string pred))))
-      (let* ((input (completing-read "Compile: " #'completions))
-             (dir (get-text-property 0 'command-directory input)))
-        (if dir
-            (cons input dir)
-          input)))))
+      (completing-read "Compile: " #'completions))))
+
+(defun akirak-compile--gen-commands-cached (backend dir)
+  (let ((key (list backend dir)))
+    (or (gethash key akirak-compile-command-cache)
+        (let ((value (akirak-compile--gen-commands backend dir)))
+          (puthash key value akirak-compile-command-cache)
+          value))))
 
 (defun akirak-compile--gen-commands (backend dir)
   (pcase backend
     (`dune
      '(("dune build")
-       ("dune build @doc" . "Build the documentation ")
+       ("dune build @doc" annotation "Build the documentation ")
        ("dune exec")
        ("opam install ")))
     (`just
@@ -105,8 +123,8 @@
                               :null-object nil)
            (alist-get 'recipes)
            (mapcar (pcase-lambda (`(,name . ,attrs))
-                     (cons (format "just %s" name)
-                           (alist-get 'doc attrs))))))))))
+                     `(,(format "just %s" name)
+                       annotation ,(alist-get 'doc attrs))))))))))
 
 (provide 'akirak-compile)
 ;;; akirak-compile.el ends here
