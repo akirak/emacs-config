@@ -11,15 +11,11 @@
 (defun akirak-compile ()
   (interactive)
   (if-let (workspace (vc-git-root default-directory))
-      (pcase (akirak-compile--complete
-              (akirak-compile--find-projects (expand-file-name workspace)))
-        (`(,command . ,dir)
-         (let ((default-directory dir))
-           (compile command)))
-        ((and command
-              (pred stringp))
-         (let ((default-directory workspace))
-           (compile command t)))))
+      (let* ((command (akirak-compile--complete
+                       (akirak-compile--find-projects (expand-file-name workspace))))
+             (default-directory (or (get-text-property 0 'command-directory command)
+                                    default-directory)))
+        (compile command t)))
   (user-error "No VC root"))
 
 (defun akirak-compile--root ()
@@ -80,11 +76,7 @@
                            (cons 'group-function #'group)
                            (cons 'annotation-function #'annotator)))
              (complete-with-action action candidates string pred))))
-      (let* ((input (completing-read "Compile: " #'completions))
-             (dir (get-text-property 0 'command-directory input)))
-        (if dir
-            (cons input dir)
-          input)))))
+      (completing-read "Compile: " #'completions))))
 
 (defun akirak-compile--gen-commands (backend dir)
   (pcase backend
