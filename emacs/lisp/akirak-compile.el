@@ -59,11 +59,11 @@
       (let ((command-alist (akirak-compile--gen-commands backend dir))
             (group (format "%s (%s)" backend (abbreviate-file-name dir))))
         (setq candidates (append candidates (mapcar #'car command-alist)))
-        (pcase-dolist (`(,command . ,ann) command-alist)
+        (pcase-dolist (`(,command . ,properties) command-alist)
           (add-text-properties 0 1
-                               (list 'command-directory dir
-                                     'annotation ann
-                                     'completion-group group)
+                               (append (list 'command-directory dir
+                                             'completion-group group)
+                                       properties)
                                command)
           (push command candidates))))
     (cl-labels
@@ -90,7 +90,7 @@
   (pcase backend
     (`dune
      '(("dune build")
-       ("dune build @doc" . "Build the documentation ")
+       ("dune build @doc" annotation "Build the documentation ")
        ("dune exec")
        ("opam install ")))
     (`just
@@ -105,8 +105,8 @@
                               :null-object nil)
            (alist-get 'recipes)
            (mapcar (pcase-lambda (`(,name . ,attrs))
-                     (cons (format "just %s" name)
-                           (alist-get 'doc attrs))))))))))
+                     `(,(format "just %s" name)
+                       annotation ,(alist-get 'doc attrs))))))))))
 
 (provide 'akirak-compile)
 ;;; akirak-compile.el ends here
