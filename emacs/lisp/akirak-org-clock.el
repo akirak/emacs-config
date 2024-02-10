@@ -492,6 +492,10 @@ This function returns the current buffer."
             (run-hooks 'akirak-org-clock-open-hook))
           (current-buffer))))))
 
+(defun akirak-org-clock-buffer ()
+  (or (akirak-org-clock--capture-buffer org-clock-marker)
+      (org-dog-indirect-buffer org-clock-marker)))
+
 ;;;###autoload
 (defun akirak-org-clock-goto ()
   "Switch to an indirect buffer of the clocked entry."
