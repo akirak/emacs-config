@@ -579,12 +579,6 @@
       repo = "just-mode.el";
       type = "github";
     };
-    justl = {
-      flake = false;
-      owner = "psibi";
-      repo = "justl.el";
-      type = "github";
-    };
     kind-icon = {
       flake = false;
       owner = "jdtsmith";
@@ -1254,12 +1248,6 @@
       flake = false;
       owner = "emacs-twist";
       repo = "twist.el";
-      type = "github";
-    };
-    utop = {
-      flake = false;
-      owner = "diml";
-      repo = "utop";
       type = "github";
     };
     valign = {
