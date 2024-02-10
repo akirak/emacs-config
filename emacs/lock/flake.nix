@@ -471,6 +471,13 @@
       repo = "github-linguist.el";
       type = "github";
     };
+    gleam-ts-mode = {
+      flake = false;
+      owner = "gleam-lang";
+      ref = "gleam-ts-mode";
+      repo = "gleam-mode";
+      type = "github";
+    };
     go-translate = {
       flake = false;
       owner = "lorniu";
@@ -702,9 +709,9 @@
     };
     modus-themes = {
       flake = false;
-      owner = "~protesilaos";
+      owner = "protesilaos";
       repo = "modus-themes";
-      type = "sourcehut";
+      type = "github";
     };
     move-dup = {
       flake = false;

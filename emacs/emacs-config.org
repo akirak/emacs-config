@@ -4125,6 +4125,15 @@ Major mode for Elixir with tree-sitter support
                              (list (f-base (-last-item segments))))
                      ".")))))
 #+end_src
+*** gleam-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-02-10 Sat 13:08]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package gleam-ts-mode)
+    (:file-match "\\.gleam\\'"))
+#+end_src
 *** go-ts-mode                                                     :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 23:59]
