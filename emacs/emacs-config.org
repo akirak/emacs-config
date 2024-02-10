@@ -8605,7 +8605,28 @@ OCaml mode
 
     (:reformatters
      (ocamlformat :program "ocamlformat"
-                  :args (list "--name" (buffer-file-name) "-"))))
+                  :args (list "--name" (buffer-file-name) "-")))
+
+    (:bind [remap devdocs-lookup]
+           (defun akirak/ocaml-doc-index ()
+             (interactive)
+             (pcase-exhaustive (process-lines (or (executable-find "odig")
+                                                  (user-error "odig is not found"))
+                                              "doc" "-f")
+               (`nil
+                (error "No response returned"))
+               (`(,file . ,_)
+                (eww (concat "file://" file)))))
+
+           [remap apropos-command]
+           (defun akirak/ocaml-sherlodoc ()
+             (interactive)
+             (pop-to-buffer
+              (eat-make (format "sherlodoc-%s"
+                                (project-name (or (project-current)
+                                                  (user-error "Not in a project"))))
+                        "opam" nil
+                        "exec" "--" "sherlodoc" "search")))))
 #+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
