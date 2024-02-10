@@ -1251,6 +1251,23 @@
         "type": "github"
       }
     },
+    "gleam-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1701797178,
+        "narHash": "sha256-qokDHV6O5hq6OLdp3A6XruovcR+rRe2mkSff23C1VOw=",
+        "owner": "gleam-lang",
+        "repo": "gleam-mode",
+        "rev": "6588ea4a051d888007b999371af7b5bd807b5cff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gleam-lang",
+        "ref": "gleam-ts-mode",
+        "repo": "gleam-mode",
+        "type": "github"
+      }
+    },
     "go-translate": {
       "flake": false,
       "locked": {
@@ -1864,17 +1881,17 @@
     "modus-themes": {
       "flake": false,
       "locked": {
-        "lastModified": 1704367379,
-        "narHash": "sha256-ntL1xxc345NV6Acpuy3zTRW1L/0Q9p1HtZ9gX83J5QM=",
-        "owner": "~protesilaos",
+        "lastModified": 1707302824,
+        "narHash": "sha256-aLl/No5EhgS922XYPddli9+Ez8MV9anJcB3SLYmv4wI=",
+        "owner": "protesilaos",
         "repo": "modus-themes",
-        "rev": "64823c7767710207cdf443492e0f712876dc4ee4",
-        "type": "sourcehut"
+        "rev": "41e8f1088b2c83fec43bd511bd660075351d97a7",
+        "type": "github"
       },
       "original": {
-        "owner": "~protesilaos",
+        "owner": "protesilaos",
         "repo": "modus-themes",
-        "type": "sourcehut"
+        "type": "github"
       }
     },
     "move-dup": {
@@ -3024,6 +3041,7 @@
         "git-identity": "git-identity",
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
+        "gleam-ts-mode": "gleam-ts-mode",
         "go-translate": "go-translate",
         "gptel": "gptel",
         "graphql-mode": "graphql-mode",
