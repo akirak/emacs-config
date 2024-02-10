@@ -2276,7 +2276,7 @@ Thus I will explicitly install this package rather than using the built-in versi
 :END:
 #+begin_quote
 Elegant, highly legible and customizable themes
-[[https://git.sr.ht/~protesilaos/modus-themes]]
+[[https://github.com/protesilaos/modus-themes]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -4129,6 +4129,10 @@ Major mode for Elixir with tree-sitter support
 :PROPERTIES:
 :CREATED_TIME: [2024-02-10 Sat 13:08]
 :END:
+#+begin_quote
+Major mode for Gleam
+[[https://github.com/gleam-lang/gleam-ts-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package gleam-ts-mode)
