@@ -953,6 +953,44 @@ The built-in =electric= package provides the following modes:
             (load-file buffer-file-name)
           (eval-buffer)))))
 #+end_src
+*** eww
+:PROPERTIES:
+:CREATED_TIME: [2024-02-10 Sat 11:42]
+:END:
+
+#+begin_src emacs-lisp
+  (setup eww
+    (:bind "^"
+           (defun akirak/eww-directory-up ()
+             (interactive nil eww-mode)
+             (let* ((url (eww-current-url))
+                    (urlobj (url-generic-parse-url url))
+                    (filename (url-filename urlobj)))
+               (when (string-match-p "?" (car (url-path-and-query urlobj)))
+                 (user-error "URL contains a query, so this command won't work"))
+               (unless filename
+                 (error "url-filename is nil"))
+               (when (pcase (file-name-base filename)
+                       (""
+                        (setf (url-filename urlobj)
+                              (file-name-directory (directory-file-name filename))))
+                       ((rx bol "index" (or "." eol))
+                        (let ((dir (file-name-directory (directory-file-name
+                                                         (file-name-directory filename)))))
+                          (if (equal (url-type urlobj) "file")
+                              (let ((basename (file-name-base filename)))
+                                (setf (url-filename urlobj)
+                                      (concat (or (locate-dominating-file dir basename)
+                                                  (user-error "No file named %s in ancestors"
+                                                              basename))
+                                              (file-name-base filename))))
+                            (setf (url-filename urlobj)
+                                  dir))))
+                       (_
+                        (setf (url-filename urlobj)
+                              (file-name-directory filename))))
+                 (eww (url-recreate-url urlobj)))))))
+#+end_src
 *** executable
 :PROPERTIES:
 :CREATED_TIME: [2022-07-09 Sat 23:59]
