@@ -4140,6 +4140,21 @@ Major mode for Elixir with tree-sitter support
                   > @ _ n
                   > -2 "end"))))
 #+end_src
+*** gleam-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-02-10 Sat 13:08]
+:END:
+#+begin_quote
+Major mode for Gleam
+[[https://github.com/gleam-lang/gleam-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package gleam-ts-mode)
+    (:file-match "\\.gleam\\'")
+    ;; Should be fixed in the upstream.
+    (autoload 'gleam-ts-mode "gleam-ts-mode"))
+#+end_src
 *** go-ts-mode                                                     :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 23:59]
@@ -5975,6 +5990,8 @@ Client for Language Server Protocol (LSP) servers
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
       (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
+      (add-to-list 'eglot-server-programs
+                   '(gleam-ts-mode . ("gleam" "lsp")))
       (add-to-list 'eglot-server-programs
                    `((elixir-ts-mode heex-ts-mode elixir-mode) .
                      ,(eglot-alternatives

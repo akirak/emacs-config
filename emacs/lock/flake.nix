@@ -464,6 +464,13 @@
       repo = "github-linguist.el";
       type = "github";
     };
+    gleam-ts-mode = {
+      flake = false;
+      owner = "gleam-lang";
+      ref = "gleam-ts-mode";
+      repo = "gleam-mode";
+      type = "github";
+    };
     go-translate = {
       flake = false;
       owner = "lorniu";
