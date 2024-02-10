@@ -7,14 +7,26 @@
   :type '(alist :key-type (string :tag "File name")
                 :value-type (symbol :tag "Symbol to denote the project type")))
 
+(defvar akirak-compile-per-workspace-history
+  (make-hash-table :test #'equal :size 50))
+
 ;;;###autoload
 (defun akirak-compile ()
   (interactive)
   (if-let (workspace (vc-git-root default-directory))
-      (let* ((command (akirak-compile--complete
-                       (akirak-compile--find-projects (expand-file-name workspace))))
+      (let* ((key (file-name-nondirectory (directory-file-name workspace)))
+             (history (gethash key akirak-compile-per-workspace-history
+                               :default))
+             (command (akirak-compile--complete
+                       (akirak-compile--find-projects (expand-file-name workspace))
+                       (unless (eq history :default)
+                         history)))
              (default-directory (or (get-text-property 0 'command-directory command)
                                     default-directory)))
+        (if (eq history :default)
+            (puthash key (list command) akirak-compile-per-workspace-history)
+          (cl-pushnew command history)
+          (puthash key history akirak-compile-per-workspace-history))
         (compile command t)))
   (user-error "No VC root"))
 
@@ -48,9 +60,9 @@
       (search start))
     result))
 
-(defun akirak-compile--complete (projects)
+(defun akirak-compile--complete (projects history)
   "Return (command . dir) or command for the next action for PROJECTS."
-  (let (candidates)
+  (let ((candidates (copy-sequence history)))
     (pcase-dolist (`(,backend . ,dir) projects)
       (let ((command-alist (akirak-compile--gen-commands backend dir))
             (group (format "%s (%s)" backend (abbreviate-file-name dir))))
