@@ -2,7 +2,8 @@
 
 (defcustom akirak-compile-package-file-alist
   '(("dune-project" . dune)
-    ("justfile" . just))
+    ("justfile" . just)
+    ("gleam.toml" . gleam))
   ""
   :type '(alist :key-type (string :tag "File name")
                 :value-type (symbol :tag "Symbol to denote the project type")))
@@ -97,6 +98,9 @@
        ("dune build @doc" annotation "Build the documentation ")
        ("dune exec")
        ("opam install ")))
+    (`gleam
+     '(("gleam run")
+       ("gleam test")))
     (`just
      (let ((default-directory dir))
        (with-temp-buffer
