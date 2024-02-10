@@ -2,7 +2,8 @@
 
 (defcustom akirak-compile-package-file-alist
   '(("dune-project" . dune)
-    ("justfile" . just))
+    ("justfile" . just)
+    ("mix.exs" . mix))
   ""
   :type '(alist :key-type (string :tag "File name")
                 :value-type (symbol :tag "Symbol to denote the project type")))
@@ -111,6 +112,21 @@
        ("dune build @doc" annotation "Build the documentation ")
        ("dune exec")
        ("opam install ")))
+    (`mix
+     (let (result)
+       (with-temp-buffer
+         (akirak-compile--insert-stdout "mix" "help")
+         (goto-char (point-min))
+         (save-match-data
+           (while (re-search-forward (rx bol (* space) (group "mix" (* (not (any "#"))))
+                                         " # " (group (+ nonl)) eol)
+                                     nil t)
+             (push (list (string-trim-right (match-string 1))
+                         'annotation
+                         (string-trim (match-string 2)))
+                   result))))
+       (cons '("iex -S mix" annotation "Run iex within the context of the application")
+             (nreverse result))))
     (`just
      (let ((default-directory dir))
        (with-temp-buffer
@@ -125,6 +141,28 @@
            (mapcar (pcase-lambda (`(,name . ,attrs))
                      `(,(format "just %s" name)
                        annotation ,(alist-get 'doc attrs))))))))))
+
+(defun akirak-compile--insert-stdout (command &rest args)
+  "Insert the standard output from a command into the buffer."
+  (let ((err-file (make-temp-file command)))
+    (unwind-protect
+        (let ((envrc-dir (locate-dominating-file default-directory ".envrc")))
+          (unless (zerop (if (and envrc-dir (executable-find "direnv"))
+                             (apply #'call-process "direnv"
+                                    nil (list t err-file) nil
+                                    "exec"
+                                    (file-relative-name (expand-file-name envrc-dir))
+                                    command args)
+                           (apply #'call-process command
+                                  nil (list t err-file) nil
+                                  args)))
+            (error "Error from command %s: %s"
+                   (mapconcat #'shell-quote-argument (cons command args)
+                              " ")
+                   (with-temp-buffer
+                     (insert-file-contents err-file)
+                     (buffer-string)))))
+      (delete-file err-file))))
 
 (provide 'akirak-compile)
 ;;; akirak-compile.el ends here
