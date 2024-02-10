@@ -76,7 +76,7 @@
           (push command candidates))))
     (cl-labels
         ((annotator (candidate)
-           (get-text-property 0 'annotation candidate))
+           (concat " " (get-text-property 0 'annotation candidate)))
          (group (candidate transform)
            (if transform
                candidate
