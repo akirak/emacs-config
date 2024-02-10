@@ -1539,22 +1539,6 @@
         "type": "github"
       }
     },
-    "justl": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1706099800,
-        "narHash": "sha256-AnGIsHtIoNgunzHbGgtWjfYORlr99Jlwa8G67jCFgbM=",
-        "owner": "psibi",
-        "repo": "justl.el",
-        "rev": "476bf9c4fc3d753589f1cf2c13dc4e1e14aaba7e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "psibi",
-        "repo": "justl.el",
-        "type": "github"
-      }
-    },
     "kind-icon": {
       "flake": false,
       "locked": {
@@ -3058,7 +3042,6 @@
         "jq-mode": "jq-mode",
         "jtsx": "jtsx",
         "just-mode": "just-mode",
-        "justl": "justl",
         "kind-icon": "kind-icon",
         "kv": "kv",
         "language-detection": "language-detection",
@@ -3169,7 +3152,6 @@
         "ts": "ts",
         "tuareg": "tuareg",
         "twist": "twist",
-        "utop": "utop",
         "valign": "valign",
         "vertico": "vertico",
         "visual-fill-column": "visual-fill-column",
@@ -3554,22 +3536,6 @@
       "original": {
         "owner": "emacs-twist",
         "repo": "twist.el",
-        "type": "github"
-      }
-    },
-    "utop": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1694435893,
-        "narHash": "sha256-fvhmEd38RWcxvAvbHODMWPFsI0BxnMqNNGJUK6mAbLI=",
-        "owner": "diml",
-        "repo": "utop",
-        "rev": "fcb7903603cec5e8a2bb4371ea43b1c01f261170",
-        "type": "github"
-      },
-      "original": {
-        "owner": "diml",
-        "repo": "utop",
         "type": "github"
       }
     },
