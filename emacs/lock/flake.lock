@@ -1866,15 +1866,15 @@
       "locked": {
         "lastModified": 1704367379,
         "narHash": "sha256-ntL1xxc345NV6Acpuy3zTRW1L/0Q9p1HtZ9gX83J5QM=",
-        "owner": "~protesilaos",
+        "owner": "protesilaos",
         "repo": "modus-themes",
         "rev": "64823c7767710207cdf443492e0f712876dc4ee4",
-        "type": "sourcehut"
+        "type": "github"
       },
       "original": {
-        "owner": "~protesilaos",
+        "owner": "protesilaos",
         "repo": "modus-themes",
-        "type": "sourcehut"
+        "type": "github"
       }
     },
     "move-dup": {
@@ -3161,7 +3161,6 @@
         "which-key": "which-key",
         "whole-line-or-region": "whole-line-or-region",
         "with-editor": "with-editor",
-        "workbox": "workbox",
         "ws-butler": "ws-butler",
         "xterm-color": "xterm-color",
         "yasnippet": "yasnippet",
@@ -3680,22 +3679,6 @@
       "original": {
         "owner": "magit",
         "repo": "with-editor",
-        "type": "github"
-      }
-    },
-    "workbox": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1705498905,
-        "narHash": "sha256-TDkIkGFIiGbrCVTFdBt1kjy73gXOpYyl0Axcxcrx8LY=",
-        "owner": "akirak",
-        "repo": "workbox.el",
-        "rev": "fec5144b7180507dc3b3da66fb7aa52b6eb3f177",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "repo": "workbox.el",
         "type": "github"
       }
     },

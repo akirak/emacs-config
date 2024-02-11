@@ -702,9 +702,9 @@
     };
     modus-themes = {
       flake = false;
-      owner = "~protesilaos";
+      owner = "protesilaos";
       repo = "modus-themes";
-      type = "sourcehut";
+      type = "github";
     };
     move-dup = {
       flake = false;
