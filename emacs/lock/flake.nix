@@ -1303,12 +1303,6 @@
       repo = "with-editor";
       type = "github";
     };
-    workbox = {
-      flake = false;
-      owner = "akirak";
-      repo = "workbox.el";
-      type = "github";
-    };
     ws-butler = {
       flake = false;
       owner = "lewang";

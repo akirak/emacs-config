@@ -8952,23 +8952,6 @@ Like windmove, but swaps buffers while moving point
            "<C-S-up>"
            "<C-S-down>")))))
 #+end_src
-*** workbox                                                            :project:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-16 Wed 15:16]
-:END:
-#+begin_quote
-Compilation helpers
-[[https://github.com/akirak/workbox.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package workbox)
-    (:global "C-c SPC" #'workbox-transient)
-    (with-eval-after-load 'project
-      (define-key project-prefix-map "m" #'workbox-run-some-package-manager))
-
-    (:set workbox-mix-command-runner #'eshell-command))
-#+end_src
 *** ws-butler                                           :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:16]
