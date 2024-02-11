@@ -5939,12 +5939,6 @@ Client for Language Server Protocol (LSP) servers
 #+begin_src emacs-lisp
   (setup eglot
 
-    ;; It depends on the project whether it is recommended to turn on LSP.
-    ;;
-    ;; (:with-mode eglot-ensure
-    ;;   (:hook-into haskell-mode-hook
-    ;;               rust-mode-hook))
-
     (:set eglot-confirm-server-initiated-edits nil)
 
     (:bind akirak/mode-prefix-key #'akirak/eglot-prefix-map)
