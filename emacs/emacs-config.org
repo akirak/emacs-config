@@ -170,6 +170,25 @@ I am interested to see if it can reduce the amount of configuration code.
             (push (cons mode entries)
                   huan-mode-symbols-alist))))))
 #+end_src
+*** :mode-project-roots
+:PROPERTIES:
+:CREATED_TIME: [2024-02-12 Mon 10:19]
+:END:
+
+Specify extra root files to help eglot correctly identify project roots.
+
+#+begin_src emacs-lisp
+  (defvar akirak-project-per-mode-root-files nil)
+
+  (eval-when-compile
+    (define-setup-macro
+     :mode-project-roots (&rest filenames)
+     "Define file names indicating the project root."
+     `(add-to-list 'akirak-project-per-mode-root-files
+                   (cons ',(setup-get 'mode) ',filenames)
+                   nil
+                   (lambda (x y) (eq (car x) (car y))))))
+#+end_src
 *** :mode-repl
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:41]
@@ -1624,6 +1643,35 @@ Operations on the current project
           ;; Rebind the key
           (:bind "p" #'akirak-consult-project-file))
         (global-set-key (kbd "C-x M") project-prefix-map)
+
+        ;; Detect package roots for eglot support.
+        ;; See <https://github.com/joaotavora/eglot/discussions/687>
+        (add-hook 'project-find-functions
+                  (defun akirak/project-find-subdir-root (dir)
+                    (when-let* ((matching-mode (apply #'derived-mode-p
+                                                      (mapcar #'car akirak-project-per-mode-root-files)))
+                                (files (alist-get matching-mode akirak-project-per-mode-root-files))
+                                (vc-pr (project-try-vc dir))
+                                (vc-root (abbreviate-file-name
+                                          (file-name-as-directory
+                                           (project-root vc-pr)))))
+                      (catch 'package-root
+                        (let ((cwd (abbreviate-file-name
+                                    (file-name-as-directory dir))))
+                          (while (not (equal cwd vc-root))
+                            (when-let (s (cl-intersection files (directory-files cwd)
+                                                          :test #'equal))
+                              (throw 'package-root `(subdir ,cwd
+                                                            :package-file ,(car s)
+                                                            :vc-root ,vc-root)))
+                            (setq cwd (file-name-directory (directory-file-name cwd)))))))))
+        (cl-defmethod project-root ((project (head subdir)))
+          (cadr project))
+        (cl-defmethod project-roots ((project (head subdir)))
+          (list (cadr project)
+                (plist-get (cddr project) :vc-root)))
+        (cl-defmethod project-external-roots ((project (head subdir)))
+          (list (plist-get (cddr project) :vc-root)))
 
         (add-hook 'project-find-functions
                   (defun akirak/project-worktree-group-finder (dir)
@@ -4053,6 +4101,7 @@ Major mode for Elixir with tree-sitter support
 #+begin_src emacs-lisp
   (setup elixir-ts-mode
     (:file-match "\\.exs?\\'")
+    (:mode-project-roots "mix.exs")
 
     (:reformatters
      (mix-format :program "mix"
@@ -4146,6 +4195,7 @@ Major mode for the Go programming language
 #+begin_src elisp
   (setup heex-ts-mode
     (:file-match "\\.heex\\'")
+    (:mode-project-roots "mix.exs")
     (:local-set electric-pair-pairs '((?% . ?%)))
     (:when-loaded
       ;; These workarounds are only necessary due to upstream inconsistencies.
@@ -4206,7 +4256,8 @@ Major mode for the Go programming language
 #+begin_src emacs-lisp
   (setup js-ts-mode
     (:org-src-lang "javascript")
-    (:file-match "\\.[cm]?js$"))
+    (:file-match "\\.[cm]?js$")
+    (:mode-project-roots "package.json"))
 #+end_src
 *** nix-ts-mode
 :PROPERTIES:
@@ -4231,7 +4282,8 @@ Major mode for Nix expressions, powered by tree-sitter
 
 #+begin_src emacs-lisp
   (setup rust-ts-mode
-    (:file-match "\\.rs\\'"))
+    (:file-match "\\.rs\\'")
+    (:mode-project-roots "Cargo.toml"))
 #+end_src
 *** toml-ts-mode
 :PROPERTIES:
@@ -8632,6 +8684,7 @@ OCaml mode
     ;; (:nixpkgs "opam")
     (:mode-repl akirak/utop-project)
     (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:mode-project-roots "dune-project")
 
     (:reformatters
      (ocamlformat :program "ocamlformat"

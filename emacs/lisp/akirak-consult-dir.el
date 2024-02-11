@@ -13,7 +13,7 @@
           :face consult-file
           :items ,(lambda ()
                     (if-let (project (project-current))
-                        (let ((root (project-root project))
+                        (let ((root (akirak-project-top-root project))
                               (dir (abbreviate-file-name default-directory))
                               items)
                           (if (string-prefix-p root dir)

@@ -176,7 +176,7 @@ Example values are shown below:
                               (user-error "The directory is not inside a project")))
                          (t
                           (user-error "Must be in a project")))))
-        (pcase (project-root pr)
+        (pcase (akirak-project-top-root pr)
           ((rx "/foss/contributions/")
            (list (delq nil (list (car (akirak-org-dog-path-files))
                                  (car (akirak-org-dog-major-mode-files))))
@@ -241,7 +241,7 @@ Example values are shown below:
 (defun akirak-org-clock--project-name (pr)
   "Return the name of the project for use in prompt."
   (thread-last
-    (project-root pr)
+    (akirak-project-top-root pr)
     (string-remove-suffix "/")
     (file-name-nondirectory)))
 
