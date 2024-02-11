@@ -9008,6 +9008,14 @@ A major mode for the Zig programming language
 :CREATED_TIME: [2023-12-16 Sat 12:54]
 :SORTING_TYPE: a
 :END:
+**** Cargo (Rust)
+:PROPERTIES:
+:CREATED_TIME: [2024-02-11 Sun 11:20]
+:END:
+#+begin_src elisp
+  (setup cargo
+    (:package-files "Cargo.toml"))
+#+end_src
 **** Haskell
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 13:00]
