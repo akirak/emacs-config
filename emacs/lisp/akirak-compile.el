@@ -140,7 +140,9 @@
                            (cons 'group-function #'group)
                            (cons 'annotation-function #'annotator)))
              (complete-with-action action candidates string pred))))
-      (completing-read "Compile: " #'completions))))
+      (let ((result (completing-read "Compile: " #'completions)))
+        (or (car (member result candidates))
+            result)))))
 
 (defun akirak-compile--gen-commands-cached (backend dir)
   (let ((key (list backend dir)))
