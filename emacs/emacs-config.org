@@ -5968,15 +5968,13 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
-                   '((elixir-mode elixir-ts-mode heex-ts-mode) .
-                     ("elixir-ls")))
-      (add-to-list 'eglot-server-programs
                    `((elixir-ts-mode heex-ts-mode elixir-mode) .
                      ,(eglot-alternatives
                        '(("lexical")
                          ("nextls" "--stdio=true"
                           :initializationOptions
-                          (:experimental (:completions (:enable t))))))))
+                          (:experimental (:completions (:enable t))))
+                         ("elixir-ls")))))
       (add-to-list 'eglot-server-programs
                    `(web-mode . ,(eglot-alternatives
                                   '(("astro-ls" "--stdio")))))
