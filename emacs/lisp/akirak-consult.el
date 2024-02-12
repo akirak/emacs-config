@@ -251,7 +251,7 @@
 ;;;###autoload
 (defun akirak-consult-project-file (dir)
   (interactive (list (if-let (pr (project-current))
-                         (project-root pr)
+                         (akirak-project-top-root pr)
                        default-directory)))
   ;; `default-directory' can be abbreviated (e.g. in dired-mode), so it is safer
   ;; to apply `expand-file-name'.
