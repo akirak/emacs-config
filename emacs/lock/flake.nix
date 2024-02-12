@@ -435,12 +435,6 @@
       repo = "gcmh";
       type = "gitlab";
     };
-    gif-screencast = {
-      flake = false;
-      owner = "Ambrevar";
-      repo = "emacs-gif-screencast";
-      type = "gitlab";
-    };
     git-attr = {
       flake = false;
       owner = "arnested";
@@ -543,12 +537,6 @@
       repo = "hydra";
       type = "github";
     };
-    idris-mode = {
-      flake = false;
-      owner = "idris-hackers";
-      repo = "idris-mode";
-      type = "github";
-    };
     iedit = {
       flake = false;
       owner = "victorhge";
@@ -589,18 +577,6 @@
       flake = false;
       owner = "leon-barrett";
       repo = "just-mode.el";
-      type = "github";
-    };
-    justl = {
-      flake = false;
-      owner = "psibi";
-      repo = "justl.el";
-      type = "github";
-    };
-    keycast = {
-      flake = false;
-      owner = "tarsius";
-      repo = "keycast";
       type = "github";
     };
     kind-icon = {
@@ -726,9 +702,9 @@
     };
     modus-themes = {
       flake = false;
-      owner = "~protesilaos";
+      owner = "protesilaos";
       repo = "modus-themes";
-      type = "sourcehut";
+      type = "github";
     };
     move-dup = {
       flake = false;
@@ -1077,12 +1053,6 @@
       repo = "PG";
       type = "github";
     };
-    prop-menu = {
-      flake = false;
-      owner = "david-christiansen";
-      repo = "prop-menu-el";
-      type = "github";
-    };
     puni = {
       flake = false;
       owner = "AmaiKinono";
@@ -1262,12 +1232,6 @@
       repo = "tomelr";
       type = "github";
     };
-    triples = {
-      flake = false;
-      owner = "ahyatt";
-      repo = "triples";
-      type = "github";
-    };
     ts = {
       flake = false;
       owner = "alphapapa";
@@ -1286,12 +1250,6 @@
       repo = "twist.el";
       type = "github";
     };
-    utop = {
-      flake = false;
-      owner = "diml";
-      repo = "utop";
-      type = "github";
-    };
     valign = {
       flake = false;
       owner = "casouri";
@@ -1308,12 +1266,6 @@
       flake = false;
       type = "git";
       url = "https://codeberg.org/joostkremers/visual-fill-column.git";
-    };
-    vterm = {
-      flake = false;
-      owner = "akermu";
-      repo = "emacs-libvterm";
-      type = "github";
     };
     vue-html-mode = {
       flake = false;
@@ -1349,12 +1301,6 @@
       flake = false;
       owner = "magit";
       repo = "with-editor";
-      type = "github";
-    };
-    workbox = {
-      flake = false;
-      owner = "akirak";
-      repo = "workbox.el";
       type = "github";
     };
     ws-butler = {

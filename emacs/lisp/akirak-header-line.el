@@ -123,11 +123,10 @@
                                    (file-relative-name filename (expand-file-name
                                                                  (project-root pr))))))
                         (_
-                         (format "[%s] %s"
-                                 (file-name-nondirectory (string-remove-suffix "/"
-                                                                               (project-root pr)))
-                                 (file-relative-name filename
-                                                     (expand-file-name (project-root pr))))))
+                         (let ((root (akirak-project-top-root pr)))
+                           (format "[%s] %s"
+                                   (file-name-nondirectory (string-remove-suffix "/" root))
+                                   (file-relative-name filename (expand-file-name root))))))
                       (if base
                           " -> %b"
                         "")))

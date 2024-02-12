@@ -170,6 +170,25 @@ I am interested to see if it can reduce the amount of configuration code.
             (push (cons mode entries)
                   huan-mode-symbols-alist))))))
 #+end_src
+*** :mode-project-roots
+:PROPERTIES:
+:CREATED_TIME: [2024-02-12 Mon 10:19]
+:END:
+
+Specify extra root files to help eglot correctly identify project roots.
+
+#+begin_src emacs-lisp
+  (defvar akirak-project-per-mode-root-files nil)
+
+  (eval-when-compile
+    (define-setup-macro
+     :mode-project-roots (&rest filenames)
+     "Define file names indicating the project root."
+     `(add-to-list 'akirak-project-per-mode-root-files
+                   (cons ',(setup-get 'mode) ',filenames)
+                   nil
+                   (lambda (x y) (eq (car x) (car y))))))
+#+end_src
 *** :mode-repl
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:41]
@@ -953,6 +972,44 @@ The built-in =electric= package provides the following modes:
             (load-file buffer-file-name)
           (eval-buffer)))))
 #+end_src
+*** eww
+:PROPERTIES:
+:CREATED_TIME: [2024-02-10 Sat 11:42]
+:END:
+
+#+begin_src emacs-lisp
+  (setup eww
+    (:bind "^"
+           (defun akirak/eww-directory-up ()
+             (interactive nil eww-mode)
+             (let* ((url (eww-current-url))
+                    (urlobj (url-generic-parse-url url))
+                    (filename (url-filename urlobj)))
+               (when (string-match-p "?" (car (url-path-and-query urlobj)))
+                 (user-error "URL contains a query, so this command won't work"))
+               (unless filename
+                 (error "url-filename is nil"))
+               (when (pcase (file-name-base filename)
+                       (""
+                        (setf (url-filename urlobj)
+                              (file-name-directory (directory-file-name filename))))
+                       ((rx bol "index" (or "." eol))
+                        (let ((dir (file-name-directory (directory-file-name
+                                                         (file-name-directory filename)))))
+                          (if (equal (url-type urlobj) "file")
+                              (let ((basename (file-name-base filename)))
+                                (setf (url-filename urlobj)
+                                      (concat (or (locate-dominating-file dir basename)
+                                                  (user-error "No file named %s in ancestors"
+                                                              basename))
+                                              (file-name-base filename))))
+                            (setf (url-filename urlobj)
+                                  dir))))
+                       (_
+                        (setf (url-filename urlobj)
+                              (file-name-directory filename))))
+                 (eww (url-recreate-url urlobj)))))))
+#+end_src
 *** executable
 :PROPERTIES:
 :CREATED_TIME: [2022-07-09 Sat 23:59]
@@ -1085,10 +1142,11 @@ The built-in =electric= package provides the following modes:
 
     (:status personal
       (let ((prettier '((eval . (prettier-on-save-mode t))))
-            (mix-format '((eval . (mix-format-on-save-mode t))))
+            ;; (mix-format '((eval . (mix-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable))))
+            (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
             (alejandra '((eval . (alejandra-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
@@ -1098,12 +1156,12 @@ The built-in =electric= package provides the following modes:
          `((web-mode . (,@prettier ,@lsp))
            (css-mode . (,@prettier ,@lsp))
            (svelte-mode . (,@prettier ,@lsp ,@flymake-eslint))
-           (elixir-ts-mode . (,@lsp ,@mix-format))
+           (elixir-ts-mode . (,@lsp))
            (heex-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (rust-ts-mode . (,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
-           (tuareg-mode . (,@lsp))
+           (tuareg-mode . (,@lsp ,@ocamlformat))
            (sql-mode . (,@sqlformat))
            (haskell-mode . (,@lsp)))))
       (dir-locals-set-directory-class "~/config/" 'personal)
@@ -1586,6 +1644,35 @@ Operations on the current project
           (:bind "p" #'akirak-consult-project-file))
         (global-set-key (kbd "C-x M") project-prefix-map)
 
+        ;; Detect package roots for eglot support.
+        ;; See <https://github.com/joaotavora/eglot/discussions/687>
+        (add-hook 'project-find-functions
+                  (defun akirak/project-find-subdir-root (dir)
+                    (when-let* ((matching-mode (apply #'derived-mode-p
+                                                      (mapcar #'car akirak-project-per-mode-root-files)))
+                                (files (alist-get matching-mode akirak-project-per-mode-root-files))
+                                (vc-pr (project-try-vc dir))
+                                (vc-root (abbreviate-file-name
+                                          (file-name-as-directory
+                                           (project-root vc-pr)))))
+                      (catch 'package-root
+                        (let ((cwd (abbreviate-file-name
+                                    (file-name-as-directory dir))))
+                          (while (not (equal cwd vc-root))
+                            (when-let (s (cl-intersection files (directory-files cwd)
+                                                          :test #'equal))
+                              (throw 'package-root `(subdir ,cwd
+                                                            :package-file ,(car s)
+                                                            :vc-root ,vc-root)))
+                            (setq cwd (file-name-directory (directory-file-name cwd)))))))))
+        (cl-defmethod project-root ((project (head subdir)))
+          (cadr project))
+        (cl-defmethod project-roots ((project (head subdir)))
+          (list (cadr project)
+                (plist-get (cddr project) :vc-root)))
+        (cl-defmethod project-external-roots ((project (head subdir)))
+          (list (plist-get (cddr project) :vc-root)))
+
         (add-hook 'project-find-functions
                   (defun akirak/project-worktree-group-finder (dir)
                     (when (string-match-p (rx bol "~/work2/"
@@ -1980,8 +2067,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
                          (defun akirak/save-all-buffers-non-interactively ()
                            (when (fboundp 'akirak-org-clock-snooze)
                              (akirak-org-clock-snooze 3))
-                           (let ((save-some-buffers-default-predicate nil))
-                             (save-some-buffers nil))))
+                           (save-some-buffers 'force)))
     ;; Also run when the user explicitly leaves the computer.
     (add-hook 'akirak/system-leave-hook
               #'akirak/save-all-buffers-non-interactively
@@ -4015,6 +4101,7 @@ Major mode for Elixir with tree-sitter support
 #+begin_src emacs-lisp
   (setup elixir-ts-mode
     (:file-match "\\.exs?\\'")
+    (:mode-project-roots "mix.exs")
 
     (:reformatters
      (mix-format :program "mix"
@@ -4026,8 +4113,11 @@ Major mode for Elixir with tree-sitter support
            _))
      ("/lib/.+\\.ex\\'"
       . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
-           "  " _
-           "\nend\n"))
+           "  @moduledoc \"\"\"\n"
+           "  " - n
+           "  \"\"\"" n n
+           "  " _ n
+           "end\n"))
      ("/test/.+_test\\.exs\\'"
       . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
            "  use ExUnit.Case\n\n"
@@ -4105,6 +4195,7 @@ Major mode for the Go programming language
 #+begin_src elisp
   (setup heex-ts-mode
     (:file-match "\\.heex\\'")
+    (:mode-project-roots "mix.exs")
     (:local-set electric-pair-pairs '((?% . ?%)))
     (:when-loaded
       ;; These workarounds are only necessary due to upstream inconsistencies.
@@ -4165,7 +4256,8 @@ Major mode for the Go programming language
 #+begin_src emacs-lisp
   (setup js-ts-mode
     (:org-src-lang "javascript")
-    (:file-match "\\.[cm]?js$"))
+    (:file-match "\\.[cm]?js$")
+    (:mode-project-roots "package.json"))
 #+end_src
 *** nix-ts-mode
 :PROPERTIES:
@@ -4190,7 +4282,8 @@ Major mode for Nix expressions, powered by tree-sitter
 
 #+begin_src emacs-lisp
   (setup rust-ts-mode
-    (:file-match "\\.rs\\'"))
+    (:file-match "\\.rs\\'")
+    (:mode-project-roots "Cargo.toml"))
 #+end_src
 *** toml-ts-mode
 :PROPERTIES:
@@ -4338,6 +4431,14 @@ This is a collection of various utilities to enhance the experience.
     (:set comment-region-function #'akirak-comment-region-1
           uncomment-region-function #'akirak-uncomment-region-1)
     (:global "M-;" #'akirak-comment-toggle))
+#+end_src
+*** akirak-compile
+:PROPERTIES:
+:CREATED_TIME: [2024-02-04 Sun 11:34]
+:END:
+#+begin_src elisp
+  (setup akirak-compile
+    (:global "C-x c" #'akirak-compile))
 #+end_src
 *** akirak-consult
 #+begin_src emacs-lisp
@@ -4716,7 +4817,7 @@ This is an extra functions for window management.
                           (vterm-mode eat-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
-                       (,(major-modes nov-mode pdf-view-mode)
+                       (,(major-modes nov-mode pdf-view-mode eww-mode Info-mode)
                         akirak-window-display-document-buffer)
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
@@ -5539,7 +5640,6 @@ fast, friendly searching with ripgrep
                                      ;; Show files in .github directory, for example.
                                      "--hidden"
                                      "--ignore-file=.gitignore"
-                                     "--iglob=*.local"
                                      "--iglob=!.git")))
 #+end_src
 *** devdocs                                              :reference:
@@ -5829,7 +5929,8 @@ Integration with the dune build system
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package dune))
+  (setup (:package dune)
+    (:mode-repl akirak/utop-project))
 #+end_src
 *** eat
 :PROPERTIES:
@@ -5842,8 +5943,6 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 #+begin_src emacs-lisp
   (setup (:package eat)
     (:set eat-kill-buffer-on-exit t)
-    (with-eval-after-load 'eshell
-      (eat-shell-mode t))
 
     (:with-map eat-semi-char-mode-map
       (:unbind "M-:" "M-g" "M-s" "C-z" "M-o")))
@@ -5892,12 +5991,6 @@ Client for Language Server Protocol (LSP) servers
 #+begin_src emacs-lisp
   (setup eglot
 
-    ;; It depends on the project whether it is recommended to turn on LSP.
-    ;;
-    ;; (:with-mode eglot-ensure
-    ;;   (:hook-into haskell-mode-hook
-    ;;               rust-mode-hook))
-
     (:set eglot-confirm-server-initiated-edits nil)
 
     (:bind akirak/mode-prefix-key #'akirak/eglot-prefix-map)
@@ -5921,15 +6014,13 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
-                   '((elixir-mode elixir-ts-mode heex-ts-mode) .
-                     ("elixir-ls")))
-      (add-to-list 'eglot-server-programs
                    `((elixir-ts-mode heex-ts-mode elixir-mode) .
                      ,(eglot-alternatives
                        '(("lexical")
                          ("nextls" "--stdio=true"
                           :initializationOptions
-                          (:experimental (:completions (:enable t))))))))
+                          (:experimental (:completions (:enable t))))
+                         ("elixir-ls")))))
       (add-to-list 'eglot-server-programs
                    `(web-mode . ,(eglot-alternatives
                                   '(("astro-ls" "--stdio")))))
@@ -6415,7 +6506,7 @@ Ghelp+Helpful
 #+begin_src emacs-lisp
 (setup (:package ghelp-helpful))
 #+end_src
-*** gif-screencast                               :screen__recording:
+*** COMMENT gif-screencast                                   :screen__recording:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 18:38]
 :END:
@@ -6718,7 +6809,7 @@ Translation framework supports multiple engines such as Google/Bing/DeepL
 :CREATED_TIME: [2023-03-20 Mon 23:59]
 :END:
 #+begin_quote
-A simple multi-LLM client
+Interact with ChatGPT or other LLMs
 [[https://github.com/karthink/gptel]]
 #+end_quote
 
@@ -6938,7 +7029,7 @@ Replace things with predefined alternatives
       (define-key embark-defun-map "`" #'huan-defun)
       (define-key embark-identifier-map "`" #'huan-symbol)))
 #+end_src
-*** idris-mode
+*** COMMENT idris-mode                                                         :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-05-14 Sun 23:16]
 :END:
@@ -7045,18 +7136,6 @@ Extends default support for JSX/TSX
   (setup (:package jtsx)
     (add-hook 'tsx-ts-mode-hook #'jtsx-tsx-mode))
 #+end_src
-*** justl
-:PROPERTIES:
-:CREATED_TIME: [2023-08-11 Fri 14:07]
-:END:
-#+begin_quote
-Major mode for driving just files
-[[https://github.com/psibi/justl.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-(setup (:package justl))
-#+end_src
 *** just-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-09-27 Wed 14:27]
@@ -7070,7 +7149,7 @@ Justfile editing mode
   (setup (:package just-mode)
     (:file-match "/justfile\\'"))
 #+end_src
-*** keycast
+*** COMMENT keycast                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-31 Fri 23:59]
 :ID:       2c1614dd-a2e5-4815-96dd-10b090cddcf4
@@ -7798,7 +7877,9 @@ Featureful EPUB reader mode
     (:nixpkgs unzip)
     (:file-match "\\.epub\\'")
     (:set nov-text-width akirak/default-body-width)
-    (:bind "i" #'imenu)
+    (:bind "i" #'imenu
+           ;; consult-imenu doesn't work, so remap it to imenu
+           [remap consult-imenu] imenu)
 
     (:hook (defun akirak/nov-setup ()
              (when (require 'olivetti nil t)
@@ -8030,6 +8111,9 @@ Summon and dismiss buffers as popups
            "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-shell-for-project-other-window
            "M-' s" #'scratch-buffer
+           "M-' w" (defun akirak/revisit-eww-buffer ()
+                     (interactive)
+                     (pop-to-buffer "*eww*"))
            "M-' c" (defun akirak/compilation-buffer (&optional arg)
                      (interactive "P")
                      (if-let (buffer (and (not arg)
@@ -8578,7 +8662,7 @@ Grammar bundle for tree-sitter
       (:hook-into typescript-mode-hook
                   typescript-tsx-mode-hook)))
 #+end_src
-*** triples
+*** COMMENT triples                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-25 Sat 18:13]
 :END:
@@ -8600,8 +8684,34 @@ OCaml mode
 #+begin_src emacs-lisp
   (setup (:package tuareg)
     ;; (:nixpkgs "opam")
-    (:mode-repl utop)
-    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"))
+    (:mode-repl akirak/utop-project)
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:mode-project-roots "dune-project")
+
+    (:reformatters
+     (ocamlformat :program "ocamlformat"
+                  :args (list "--name" (buffer-file-name) "-")))
+
+    (:bind [remap devdocs-lookup]
+           (defun akirak/ocaml-doc-index ()
+             (interactive)
+             (pcase-exhaustive (process-lines (or (executable-find "odig")
+                                                  (user-error "odig is not found"))
+                                              "doc" "-f")
+               (`nil
+                (error "No response returned"))
+               (`(,file . ,_)
+                (eww (concat "file://" file)))))
+
+           [remap apropos-command]
+           (defun akirak/ocaml-sherlodoc ()
+             (interactive)
+             (pop-to-buffer
+              (eat-make (format "sherlodoc-%s"
+                                (project-name (or (project-current)
+                                                  (user-error "Not in a project"))))
+                        "opam" nil
+                        "exec" "--" "sherlodoc" "search")))))
 #+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
@@ -8659,7 +8769,7 @@ I don't use use-package, but I only need indentation:
 #+begin_src emacs-lisp
   (put 'use-package 'lisp-indent-function 1)
 #+end_src
-*** utop                                                          :@extra:OCaml:
+*** COMMENT utop                                                  :@extra:OCaml:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-14 Sat 17:17]
 :END:
@@ -8731,7 +8841,7 @@ fill-column for visual-line-mode
     (:set visual-fill-column-center-text t
           visual-fill-column-width 100))
 #+end_src
-*** vterm                                         :terminal:process:
+*** COMMENT vterm                                             :terminal:process:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 16:50]
 :END:
@@ -8754,6 +8864,7 @@ Fully-featured terminal emulator
 :END:
 #+begin_quote
 Major mode for vue component based on mmm-mode
+[[https://github.com/AdamNiederer/vue-mode]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -8890,23 +9001,6 @@ Like windmove, but swaps buffers while moving point
            "<C-S-up>"
            "<C-S-down>")))))
 #+end_src
-*** workbox                                                            :project:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-16 Wed 15:16]
-:END:
-#+begin_quote
-Compilation helpers
-[[https://github.com/akirak/workbox.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package workbox)
-    (:global "C-c SPC" #'workbox-transient)
-    (with-eval-after-load 'project
-      (define-key project-prefix-map "m" #'workbox-run-some-package-manager))
-
-    (:set workbox-mix-command-runner #'eshell-command))
-#+end_src
 *** ws-butler                                           :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 19:16]
@@ -8963,6 +9057,14 @@ A major mode for the Zig programming language
 :CREATED_TIME: [2023-12-16 Sat 12:54]
 :SORTING_TYPE: a
 :END:
+**** Cargo (Rust)
+:PROPERTIES:
+:CREATED_TIME: [2024-02-11 Sun 11:20]
+:END:
+#+begin_src elisp
+  (setup cargo
+    (:package-files "Cargo.toml"))
+#+end_src
 **** Haskell
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 13:00]
@@ -8990,7 +9092,36 @@ A major mode for the Zig programming language
 :END:
 #+begin_src elisp
   (setup dune
-    (:package-files "dune" "dune-project"))
+    (:package-files "dune" "dune-project")
+
+    (defun akirak/dune-browse-doc ()
+      "Browse package documentation for the project."
+      (interactive)
+      (let ((root (locate-dominating-file default-directory "dune-project")))
+        (if root
+            (akirak-open-file-externally
+             (expand-file-name "_build/default/_doc/_html/index.html" root))
+          (user-error "dune-project is not found"))))
+
+    (defun akirak/utop-project ()
+      (interactive)
+      (let* ((root (locate-dominating-file default-directory "dune-project"))
+             (pr (project-current))
+             (name (if pr
+                       (format "utop-%s" (project-name pr))
+                     "utop")))
+        (pop-to-buffer (apply #'eat-make name
+                              (if root
+                                  (list "opam" nil
+                                        "exec" "--" "dune" "utop"
+                                        (shell-quote-argument (file-relative-name root)))
+                                (cond
+                                 ((executable-find "utop")
+                                  '("utop"))
+                                 ((executable-find "opam")
+                                  '("opam" nil "exec" "--" "utop"))
+                                 (t
+                                  (user-error "Neither utop nor opam is available")))))))))
 #+end_src
 *** Org mode
 Define how Org entries are displayed by certain commands.
@@ -9356,11 +9487,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 219 |
+| [[org-ql-search:tags:packages][packages]]            | 211 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
-| [[org-ql-search:tags:@extra][@extra]]              |  10 |
+| [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
@@ -9368,7 +9499,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   5 |
-| [[org-ql-search:tags:process][process]]             |   4 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
@@ -9376,25 +9506,26 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:writing][writing]]             |   4 |
 | [[org-ql-search:tags:windows][windows]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
+| [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
-| [[org-ql-search:tags:OCaml][OCaml]]               |   3 |
 | [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
-| [[org-ql-search:tags:project][project]]             |   3 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   3 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
+| [[org-ql-search:tags:project][project]]             |   2 |
 | [[org-ql-search:tags:performance][performance]]         |   1 |
 | [[org-ql-search:tags:help][help]]                |   1 |
 | [[org-ql-search:tags:prog_mode][prog_mode]]           |   1 |
@@ -9417,7 +9548,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
-| [[org-ql-search:tags:screen__recording][screen__recording]]   |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
@@ -9430,7 +9560,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Coq][Coq]]                 |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
-| [[org-ql-search:tags:terminal][terminal]]            |   1 |
 | [[org-ql-search:tags:usability][usability]]           |   1 |
 
 Note that the table above is invisible on GitHub.

@@ -176,7 +176,7 @@ Example values are shown below:
                               (user-error "The directory is not inside a project")))
                          (t
                           (user-error "Must be in a project")))))
-        (pcase (project-root pr)
+        (pcase (akirak-project-top-root pr)
           ((rx "/foss/contributions/")
            (list (delq nil (list (car (akirak-org-dog-path-files))
                                  (car (akirak-org-dog-major-mode-files))))
@@ -241,7 +241,7 @@ Example values are shown below:
 (defun akirak-org-clock--project-name (pr)
   "Return the name of the project for use in prompt."
   (thread-last
-    (project-root pr)
+    (akirak-project-top-root pr)
     (string-remove-suffix "/")
     (file-name-nondirectory)))
 
@@ -474,8 +474,9 @@ This function returns the current buffer."
               (newline))
             capture-buffer)
         (with-current-buffer (org-dog-indirect-buffer org-clock-marker)
-          (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer)
-                   action)
+          (unless (get-buffer-window (current-buffer))
+            (funcall (or show-buffer-fn #'pop-to-buffer) (current-buffer)
+                     action))
           (cond
            ((or arg
                 (org-match-line org-clock-line-re)
@@ -490,6 +491,10 @@ This function returns the current buffer."
           (when org-dog-new-indirect-buffer-p
             (run-hooks 'akirak-org-clock-open-hook))
           (current-buffer))))))
+
+(defun akirak-org-clock-buffer ()
+  (or (akirak-org-clock--capture-buffer org-clock-marker)
+      (org-dog-indirect-buffer org-clock-marker)))
 
 ;;;###autoload
 (defun akirak-org-clock-goto ()

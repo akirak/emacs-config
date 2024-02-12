@@ -446,6 +446,7 @@ The target window is determined according to the same logic as
                      (car)))))
     (window-state-put (window-state-get source)
                       target)
+    (set-window-dedicated-p target nil)
     (select-window source)))
 
 ;;;###autoload

@@ -1263,14 +1263,20 @@ provided as a separate command for integration, e.g. with embark."
                              "pandoc" t t t
                              "-f" "markdown" "-t" "org" "-"))
       (goto-char (point-min))
+      ;; Remove spaces at the beginning of the buffer.
       (when (looking-at (rx (+ (and (* blank) "\n"))))
         (replace-match ""))
+      ;; Replace bullets.
       (when bullet-regexp
         (while (re-search-forward bullet-regexp nil t)
           (replace-match "\\1- ")))
+      ;; Remove blanks at the end of each line.
+      (goto-char (point-min))
+      (while (re-search-forward (rx (+ blank) eol) nil t)
+        (replace-match ""))
+      ;; Remove spaces at the end of the buffer.
       (goto-char (point-max))
-      (while (looking-back (rx bol (* blank)) (pos-bol))
-        (delete-region (1- (match-beginning 0)) (match-end 0)))
+      (delete-all-space 'backward-only)
       (let ((org-inhibit-startup t))
         (delay-mode-hooks (org-mode)))
       (goto-char (point-min))

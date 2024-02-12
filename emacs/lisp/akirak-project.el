@@ -217,6 +217,14 @@ display alternative actions."
               (file-name-directory (string-remove-suffix "/" dir))))
     (delete-dups)))
 
+;;;###autoload
+(defun akirak-project-top-root (&optional pr)
+  (thread-first
+    (project-roots (or pr (project-current)))
+    (sort (lambda (p1 p2)
+            (string-prefix-p p1 p2)))
+    (car)))
+
 (defun akirak-project-prompt-parent (prompt)
   (completing-read prompt (akirak-project-parents)))
 
