@@ -2324,7 +2324,7 @@ Thus I will explicitly install this package rather than using the built-in versi
 :END:
 #+begin_quote
 Elegant, highly legible and customizable themes
-[[https://git.sr.ht/~protesilaos/modus-themes]]
+[[https://github.com/protesilaos/modus-themes]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -9497,7 +9497,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 211 |
+| [[org-ql-search:tags:packages][packages]]            | 210 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  11 |
@@ -9547,7 +9547,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:secrets][secrets]]             |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
-| [[org-ql-search:tags:Elixir][Elixir]]              |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
 | [[org-ql-search:tags:copilot][copilot]]             |   1 |
