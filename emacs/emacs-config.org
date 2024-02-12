@@ -7877,7 +7877,9 @@ Featureful EPUB reader mode
     (:nixpkgs unzip)
     (:file-match "\\.epub\\'")
     (:set nov-text-width akirak/default-body-width)
-    (:bind "i" #'imenu)
+    (:bind "i" #'imenu
+           ;; consult-imenu doesn't work, so remap it to imenu
+           [remap consult-imenu] imenu)
 
     (:hook (defun akirak/nov-setup ()
              (when (require 'olivetti nil t)
