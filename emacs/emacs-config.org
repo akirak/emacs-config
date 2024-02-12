@@ -5078,7 +5078,7 @@ Show number of matches in mode-line while searching
     (:global [remap query-replace] #'anzu-query-replace
              [remap query-replace-regexp] #'anzu-query-replace-regexp))
 #+end_src
-*** apprentice                                                          :Elixir:
+*** COMMENT apprentice                                                  :Elixir:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-18 Sat 15:40]
 :END:

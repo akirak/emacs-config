@@ -32,13 +32,6 @@
       repo = "anzu";
       type = "github";
     };
-    apprentice = {
-      flake = false;
-      owner = "akirak";
-      ref = "no-elixir-mode-dep";
-      repo = "apprentice";
-      type = "github";
-    };
     auto-minor-mode = {
       flake = false;
       owner = "joewreschnig";
