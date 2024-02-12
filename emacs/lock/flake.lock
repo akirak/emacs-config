@@ -80,23 +80,6 @@
         "type": "github"
       }
     },
-    "apprentice": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1688292548,
-        "narHash": "sha256-9Fjk65WLLtNwM9Sd1yYDwZHLdBMg6LnygZNtX0T0c9o=",
-        "owner": "akirak",
-        "repo": "apprentice",
-        "rev": "ca6c9be279a7112ea53c0154a0964dc72cde0e24",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "ref": "no-elixir-mode-dep",
-        "repo": "apprentice",
-        "type": "github"
-      }
-    },
     "auto-minor-mode": {
       "flake": false,
       "locked": {
@@ -2951,7 +2934,6 @@
         "aio": "aio",
         "akirak": "akirak",
         "anzu": "anzu",
-        "apprentice": "apprentice",
         "auto-minor-mode": "auto-minor-mode",
         "auto-yasnippet": "auto-yasnippet",
         "avy": "avy",
