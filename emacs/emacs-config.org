@@ -9076,7 +9076,17 @@ A major mode for the Zig programming language
 **** Mix (Elixir)
 #+begin_src elisp
   (setup mix
-    (:package-files "mix.exs"))
+    (:package-files "mix.exs")
+
+    (defun akirak/mix-browse-ex-docs ()
+      (interactive)
+      (let* ((root (locate-dominating-file default-directory "mix.exs"))
+             (file (expand-file-name "doc/index.html" root)))
+        (unless root
+          (user-error "mix.exs is not found"))
+        (unless (file-readable-p file)
+          (user-error "Documentation hasn't been generated. Run mix docs"))
+        (akirak-open-default file))))
 #+end_src
 **** Node.js and Bun
 :PROPERTIES:
