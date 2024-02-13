@@ -178,7 +178,8 @@
        ("opam install ")))
     (cargo
      '(("cargo build")
-       ("cargo run")))
+       ("cargo run")
+       ("cargo test")))
     (mix
      (let (result)
        (with-temp-buffer
