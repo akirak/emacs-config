@@ -14,6 +14,16 @@
   :type '(alist :key-type (string :tag "File name")
                 :value-type (symbol :tag "Symbol to denote the project type")))
 
+(defcustom akirak-compile-command-backend-alist
+  (append '(("^iex " . mix)
+            ("^opam " . dune))
+          (mapcar (lambda (symbol)
+                    (cons (format "^%s[[:space:]]" symbol) symbol))
+                  '(cargo just mix pnpm yarn npm bun dune)))
+  ""
+  :type '(alist :key-type (regexp :tag "Pattern matching a command line")
+                :value-type (symbol :tag "Symbol to denote the project type")))
+
 (defcustom akirak-compile-subcommand-alist-alist
   '((bun
      ("run" annotation "Run JavaScript with bun, a package.json script, or a bin")
@@ -57,11 +67,13 @@
       (let* ((key (file-name-nondirectory (directory-file-name workspace)))
              (history (gethash key akirak-compile-per-workspace-history
                                :default))
-             (command (akirak-compile--complete
-                       (akirak-compile--find-projects (expand-file-name workspace))
-                       (unless (eq history :default)
-                         history)))
+             (projects (akirak-compile--find-projects (expand-file-name workspace)))
+             (command (akirak-compile--complete projects
+                                                (unless (eq history :default)
+                                                  history)))
              (default-directory (or (get-text-property 0 'command-directory command)
+                                    (cdr (assq (akirak-compile--guess-backend command)
+                                               projects))
                                     workspace)))
         (if (eq history :default)
             (puthash key (list command) akirak-compile-per-workspace-history)
@@ -69,6 +81,12 @@
           (puthash key history akirak-compile-per-workspace-history))
         (compile command t)))
   (user-error "No VC root"))
+
+(defun akirak-compile--guess-backend (command)
+  (seq-some `(lambda (cell)
+               (when (string-match-p (car cell) ,command)
+                 (cdr cell)))
+            akirak-compile-command-backend-alist))
 
 (defun akirak-compile--root ()
   (if-let (workspace (vc-git-root default-directory))
