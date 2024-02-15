@@ -175,6 +175,8 @@
      '(("dune build")
        ("dune build @doc" annotation "Build the documentation ")
        ("dune exec")
+       ("opam exec -- odig odoc")
+       ("opam install ocaml-lsp-server ocamlformat-rpc odig dream sherlodoc")
        ("opam install ")))
     (cargo
      '(("cargo build")
