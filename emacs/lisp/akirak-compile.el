@@ -31,12 +31,13 @@
      ("cargo test"))
     (dune
      ("dune build")
+     ("dune build --watch")
      ("dune build @doc" annotation "Build the documentation ")
      ("dune exec")
+     ("dune runtest")
+     ("dune runtest --watch")
      ("opam exec -- odig odoc")
-     ("opam install ocaml-lsp-server ocamlformat-rpc odig dream sherlodoc")
-     ;; Remove this
-     ("opam install "))
+     ("opam install ocaml-lsp-server ocamlformat-rpc odig dream sherlodoc"))
     (bun
      ("bun run" annotation "Run JavaScript with bun, a package.json script, or a bin")
      ("bun build" annotation "Build TypeScript and JavaScript into a single file")
