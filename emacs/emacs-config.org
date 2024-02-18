@@ -4107,6 +4107,9 @@ Major mode for Elixir with tree-sitter support
      (mix-format :program "mix"
                  :args (list "format" "--stdin-filename" (buffer-file-name) "-")))
 
+    (:huan
+      ("def" "defp"))
+
     (:auto-insert
      ("/config/config\\.exs\\'"
       . (> "use Mix.Config\n\n"
