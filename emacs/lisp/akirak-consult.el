@@ -118,7 +118,8 @@
 
 ;; Based on `consult--source-project-recent-file'.
 (cl-defun akirak-consult-build-project-file-source (name &key narrow hidden
-                                                         regexp make-predicate)
+                                                         regexp make-predicate
+                                                         transform)
   (declare (indent 1))
   `(:name ,name
           :narrow (,narrow . ,name)
@@ -130,14 +131,29 @@
           :items ,(cond
                    (regexp
                     `(lambda ()
-                       (seq-filter (lambda (file) (string-match-p ,regexp file))
-                                   (akirak-consult--project-files))))
+                       (akirak-consult--apply-transformer
+                        (seq-filter (lambda (file) (string-match-p ,regexp file))
+                                    (akirak-consult--project-files))
+                        #',transform)))
                    (make-predicate
                     `(lambda ()
-                       (seq-filter (funcall #',make-predicate)
-                                   (akirak-consult--project-files))))
+                       (akirak-consult--apply-transformer
+                        (seq-filter (funcall #',make-predicate)
+                                    (akirak-consult--project-files))
+                        #',transform)))
                    (t
                     #'akirak-consult--project-files))))
+
+(defun akirak-consult--apply-transformer (orig-result transformer)
+  (if transformer
+      (funcall transformer
+               orig-result
+               (when-let (file (thread-last
+                                 (minibuffer-selected-window)
+                                 (window-buffer)
+                                 (buffer-file-name)))
+                 (file-relative-name file (akirak-consult--project-root))))
+    orig-result))
 
 (defvar akirak-consult-source-project-file
   (akirak-consult-build-project-file-source "File"
@@ -229,10 +245,12 @@
     ,(akirak-consult-build-project-file-source "Lib"
        :narrow ?l
        :hidden t
+       :transform #'akirak-consult--prepend-lib-files
        :regexp (rx bos (or "lib" "src") "/"))
     ,(akirak-consult-build-project-file-source "Tests"
        :narrow ?t
        :hidden t
+       :transform #'akirak-consult--prepend-test-files
        :regexp (rx bos "test" (? "s") "/"))
     ,(akirak-consult-build-project-file-source "Nix"
        :narrow ?n
@@ -246,6 +264,24 @@
     (when (string-match-p (rx bol (repeat 3 (and "/" (+ anything))) "/")
                           default-directory)
       default-directory)))
+
+(defun akirak-consult--prepend-lib-files (files this-file)
+  (pcase this-file
+    (`nil files)
+    ((rx bol "test/" (group (+ anything)) "_test.exs" eol)
+     (let ((default-file (concat "lib/" (match-string 1 this-file) ".ex")))
+       (cons default-file
+             (cl-remove default-file files :test #'equal))))
+    (_ files)))
+
+(defun akirak-consult--prepend-test-files (files this-file)
+  (pcase this-file
+    (`nil files)
+    ((rx bol "lib/" (group (+ anything)) ".ex" eol)
+     (let ((default-file (concat "test/" (match-string 1 this-file) "_test.exs")))
+       (cons default-file
+             (cl-remove default-file files :test #'equal))))
+    (_ files)))
 
 ;; Based on `consult-buffer'.
 ;;;###autoload
