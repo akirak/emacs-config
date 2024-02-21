@@ -7106,7 +7106,7 @@ Major mode for editing JSON files.
   (setup (:package json-mode)
     (:file-match "\\.json\\'" "\\.lock\\'"))
 #+end_src
-*** jtsx
+*** COMMENT jtsx                                                               :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-11-27 Mon 20:10]
 :END:
