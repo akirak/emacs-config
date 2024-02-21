@@ -4803,6 +4803,8 @@ This is an extra functions for window management.
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
+                       ("\\*edit-indirect"
+                        akirak-window-display-buffer-split-below)
                        ("^CAPTURE-"
                         akirak-window-display-org-capture-buffer)
                        ("^org-dog header"
