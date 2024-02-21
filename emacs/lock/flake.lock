@@ -1490,22 +1490,6 @@
         "type": "github"
       }
     },
-    "jtsx": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1705939307,
-        "narHash": "sha256-wlAnPYMfcP48eivm/PfVNkZfTe8uWK8o2ERJuKyFffw=",
-        "owner": "llemaitre19",
-        "repo": "jtsx",
-        "rev": "c62d1cd286b4af70693f300dde1dd00283cc2084",
-        "type": "github"
-      },
-      "original": {
-        "owner": "llemaitre19",
-        "repo": "jtsx",
-        "type": "github"
-      }
-    },
     "just-mode": {
       "flake": false,
       "locked": {
@@ -3022,7 +3006,6 @@
         "inheritenv": "inheritenv",
         "jinx": "jinx",
         "jq-mode": "jq-mode",
-        "jtsx": "jtsx",
         "just-mode": "just-mode",
         "kind-icon": "kind-icon",
         "kv": "kv",
