@@ -560,12 +560,6 @@
       repo = "jq-mode";
       type = "github";
     };
-    jtsx = {
-      flake = false;
-      owner = "llemaitre19";
-      repo = "jtsx";
-      type = "github";
-    };
     just-mode = {
       flake = false;
       owner = "leon-barrett";

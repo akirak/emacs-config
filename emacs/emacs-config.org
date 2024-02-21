@@ -5466,15 +5466,7 @@ An unofficial Copilot plugin for Emacs
       (when-let* ((keys (where-is-internal #'akirak-copilot-accept-dwim
                                            copilot-mode-map))
                   (command (lookup-key global-map (car keys))))
-        (setq akirak-copilot-accept-fallback command)))
-
-    ;; Enable copilot if LSP (eglot) is turned on. This is directory-local.
-    (dir-locals-set-class-variables
-     'copilot-if-lsp
-     '((nil . ((eval . (add-hook 'eglot-managed-mode-hook 'copilot-mode nil t))))))
-    (:status personal
-      ;; Enable copilot by setting the directory class.
-      (dir-locals-set-directory-class "~/work2/foss/" 'copilot-if-lsp)))
+        (setq akirak-copilot-accept-fallback command))))
 #+end_src
 *** corfu                                            :completion:UI:
 :PROPERTIES:
