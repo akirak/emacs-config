@@ -8691,7 +8691,30 @@ OCaml mode
                                 (project-name (or (project-current)
                                                   (user-error "Not in a project"))))
                         "opam" nil
-                        "exec" "--" "sherlodoc" "search")))))
+                        "exec" "--" "sherlodoc" "search"))))
+
+    (:when-loaded
+      (define-abbrev tuareg-mode-abbrev-table
+        "begin" "" (define-skeleton akirak-ocaml-begin-end
+                     "Insert begin..end"
+                     ""
+                     > "begin"
+                     n _
+                     n "end"))
+
+      (define-abbrev tuareg-mode-abbrev-table
+        "match" "" (define-skeleton akirak-ocaml-match
+                     "Insert match"
+                     ""
+                     > "match " - " with" n
+                     @ _))
+
+      (define-abbrev tuareg-mode-abbrev-table
+        "try" "" (define-skeleton akirak-ocaml-try
+                   "Insert try"
+                   ""
+                   > "try " -
+                   n "with" @ _))))
 #+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
