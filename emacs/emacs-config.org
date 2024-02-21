@@ -4115,20 +4115,17 @@ Major mode for Elixir with tree-sitter support
       . (> "use Mix.Config\n\n"
            _))
      ("/lib/.+\\.ex\\'"
-      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
-           "  @moduledoc \"\"\"\n"
-           "  " - n
-           "  \"\"\"" n n
+      . (> "defmodule " (akirak-elixir-module-name-from-file) " do\n"
            "  " _ n
            "end\n"))
      ("/test/.+_test\\.exs\\'"
-      . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+      . (> "defmodule " (akirak-elixir-module-name-from-file) " do\n"
            "  use ExUnit.Case\n\n"
            "  alias " (string-remove-suffix
-                       "Test" (akirak/elixir-module-name-from-file))
+                       "Test" (akirak-elixir-module-name-from-file))
            "\n"
            "  doctest " (string-remove-suffix
-                         "Test" (akirak/elixir-module-name-from-file))
+                         "Test" (akirak-elixir-module-name-from-file))
            "\n"
            "  " _
            "\nend\n")))
@@ -4155,27 +4152,7 @@ Major mode for Elixir with tree-sitter support
                   ""
                   > "do" n
                   > @ _ n
-                  > -2 "end")))
-
-    (:compilation-error
-     ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
-     (iex "^\\*+([^z-a]+)\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*"
-          1 2 3 (4 . 4)))
-
-    (defun akirak/elixir-module-name-from-file ()
-      (require 'f)
-      (require 'dash)
-      (let ((segments (f-split (buffer-file-name))))
-        (when-let (i (-find-last-index
-                      (lambda (x) (member x '("lib" "test")))
-                      segments))
-          (mapconcat (lambda (s)
-                       (->> (split-string s "_")
-                            (mapcar #'capitalize)
-                            (string-join)))
-                     (append (-slice segments (1+ i) -1)
-                             (list (f-base (-last-item segments))))
-                     ".")))))
+                  > -2 "end"))))
 #+end_src
 *** go-ts-mode                                                     :major__mode:
 :PROPERTIES:
