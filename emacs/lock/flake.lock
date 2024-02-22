@@ -3126,7 +3126,6 @@
         "which-key": "which-key",
         "whole-line-or-region": "whole-line-or-region",
         "with-editor": "with-editor",
-        "ws-butler": "ws-butler",
         "xterm-color": "xterm-color",
         "yasnippet": "yasnippet",
         "z3-mode": "z3-mode",
@@ -3644,22 +3643,6 @@
       "original": {
         "owner": "magit",
         "repo": "with-editor",
-        "type": "github"
-      }
-    },
-    "ws-butler": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1605626919,
-        "narHash": "sha256-fRWotEVWKaR/thwQNn8Lo9WsT1MadW99svP+kjl6j+0=",
-        "owner": "lewang",
-        "repo": "ws-butler",
-        "rev": "e3a38d93e01014cd47bf5af4924459bd145fd7c4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lewang",
-        "repo": "ws-butler",
         "type": "github"
       }
     },
