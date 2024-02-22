@@ -1100,20 +1100,7 @@ The built-in =electric= package provides the following modes:
           auto-mode-case-fold nil
           require-final-newline t
           ;; pkgs/top-level/all-packages.nix in nixpkgs: 1.5 MB
-          large-file-warning-threshold (* 1024 1024 2)
-          find-sibling-rules
-          `((,(rx "lib/" (group (+ anything)) ".ex" (?  "s") eos)
-             "test/\\1_test.ex"
-             "test/\\1_test.exs")
-            (,(rx "test/" (group (+ anything)) "_test.ex" (?  "s") eos)
-             "lib/\\1.ex"
-             "lib/\\1.exs")
-            (,(rx "/__tests__/" (group (+ (not (any "/")))) ".ts" (?  "x") eos)
-             "/\\1.ts"
-             "/\\1.tsx")
-            (,(rx "/" (group (+ (not (any "/")))) ".ts" (?  "x") eos)
-             "/__tests__/\\1.ts"
-             "/__tests__/\\1.tsx")))
+          large-file-warning-threshold (* 1024 1024 2))
 
     (:when-loaded
       ;; Based on https://lonely.town/@jvillasante@hachyderm.io/110232974766557148
