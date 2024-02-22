@@ -8206,7 +8206,18 @@ Define commands which run reformatters on the current buffer
                   "--stdin-filepath" (buffer-file-name)))
      (treefmt
       :program "treefmt"
-      :args (list "--stdin" (buffer-file-name)))))
+      :args (list "--stdin" (buffer-file-name)))
+
+     (biome-format
+      :program
+      (cond
+       ((executable-find "bunx")
+        "bunx"))
+      :args (append (cond
+                     ((executable-find "bunx")
+                      nil))
+                    (list "@biomejs/biome" "format" (buffer-file-name)
+                          (concat "--stdin-file-path=" (buffer-file-name)))))))
 #+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
