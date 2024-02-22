@@ -1290,12 +1290,6 @@
       repo = "with-editor";
       type = "github";
     };
-    ws-butler = {
-      flake = false;
-      owner = "lewang";
-      repo = "ws-butler";
-      type = "github";
-    };
     xterm-color = {
       flake = false;
       owner = "atomontage";
