@@ -1123,11 +1123,6 @@ The built-in =electric= package provides the following modes:
                                            eos)
                                        filename))))
 
-    (define-key ctl-x-x-map (kbd "R") #'rename-visited-file)
-
-    (:status opinionated
-      (:global "<f5>" #'revert-buffer))
-
     (:status personal
       (let ((prettier '((eval . (prettier-on-save-mode t))))
             ;; (mix-format '((eval . (mix-format-on-save-mode t))))
