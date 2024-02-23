@@ -4785,6 +4785,8 @@ This is an extra functions for window management.
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
+                       ("^\\*envrc\\*"
+                        display-buffer-no-window)
                        ("\\*edit-indirect"
                         akirak-window-display-buffer-split-below)
                        ("^CAPTURE-"
@@ -8024,7 +8026,6 @@ Summon and dismiss buffers as popups
           popper-reference-buffers `("\\*Messages\\*$"
                                      "\\*Backtrace\\*"
                                      "^\\*Warnings\\*"
-                                     "^\\*envrc\\*"
                                      "^\\*envrc-debug\\*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
