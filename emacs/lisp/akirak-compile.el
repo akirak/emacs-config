@@ -76,7 +76,7 @@
 ;;;###autoload
 (defun akirak-compile ()
   (interactive)
-  (if-let (workspace (vc-git-root default-directory))
+  (if-let (workspace (akirak-compile--workspace-root))
       (let* ((key (file-name-nondirectory (directory-file-name workspace)))
              (history (gethash key akirak-compile-per-workspace-history
                                :default))
@@ -92,8 +92,8 @@
             (puthash key (list command) akirak-compile-per-workspace-history)
           (cl-pushnew command history)
           (puthash key history akirak-compile-per-workspace-history))
-        (compile command t)))
-  (user-error "No VC root"))
+        (compile command t))
+    (user-error "No workspace root")))
 
 (defun akirak-compile--guess-backend (command)
   (seq-some `(lambda (cell)
@@ -102,9 +102,21 @@
             akirak-compile-command-backend-alist))
 
 (defun akirak-compile--root ()
-  (if-let (workspace (vc-git-root default-directory))
+  (if-let (workspace (akirak-compile--workspace-root))
       (akirak-compile--find-projects (expand-file-name workspace))
-    (user-error "No VC root")))
+    (user-error "No workspace root")))
+
+(defun akirak-compile--workspace-root ()
+  (or (vc-git-root default-directory)
+      (let ((needles (mapcar #'car akirak-compile-package-file-alist)))
+        (cl-labels
+            ((go (dir)
+               (if (cl-intersection (directory-files dir) needles :test #'equal)
+                   dir
+                 (let ((parent (file-name-directory (directory-file-name dir))))
+                   (unless (equal parent dir)
+                     (go parent))))))
+          (go default-directory)))))
 
 (defun akirak-compile--parent-dir (dir)
   (thread-last
