@@ -217,7 +217,14 @@
                    (alist-get 'recipes)
                    (mapcar (pcase-lambda (`(,name . ,attrs))
                              `(,(format "just %s" name)
-                               annotation ,(alist-get 'doc attrs)))))))))
+                               annotation
+                               ,(string-join
+                                 (thread-last
+                                   (list (alist-get 'doc attrs)
+                                         (akirak-compile--just-format-body
+                                          (alist-get 'body attrs)))
+                                   (delq nil))
+                                 " — ")))))))))
       ((bun pnpm yarn npm)
        ;; We only read package.json, so memoization wouldn't be necessary.
        (let* ((command (symbol-name backend))
@@ -245,6 +252,20 @@
                      (list (cdr cell)))))))
       (otherwise
        (alist-get backend akirak-compile-backend-command-alist)))))
+
+(defun akirak-compile--just-format-body (body)
+  (when body
+    (message "%s" body)
+    (cl-flet*
+        ((format-token (token)
+           (pcase token
+             ((pred stringp)
+              token)
+             (`(("variable" ,name))
+              (concat "{{" name "}}"))))
+         (format-line (line-tokens)
+           (mapconcat #'format-token line-tokens)))
+      (string-join (mapcar #'format-line body) "; "))))
 
 (defun akirak-compile--insert-stdout (command &rest args)
   "Insert the standard output from a command into the buffer."
