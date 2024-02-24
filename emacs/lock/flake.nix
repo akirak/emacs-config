@@ -779,6 +779,12 @@
       repo = "ob-restclient.el";
       type = "github";
     };
+    ocp-indent = {
+      flake = false;
+      owner = "OCamlPro";
+      repo = "ocp-indent";
+      type = "github";
+    };
     octopus = {
       flake = false;
       owner = "akirak";

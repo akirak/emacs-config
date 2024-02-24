@@ -7881,6 +7881,19 @@ Asynchronous org-babel src block execution
 #+begin_src emacs-lisp
 (setup (:package ob-async))
 #+end_src
+*** ocp-indent
+:PROPERTIES:
+:CREATED_TIME: [2024-02-24 Sat 23:59]
+:END:
+#+begin_quote
+automatic indentation with ocp-indent
+[[http://www.typerex.org/ocp-indent.html]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package ocp-indent)
+    (add-hook 'tuareg-mode-hook #'ocp-setup-indent))
+#+end_src
 *** olivetti                                               :writing:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-22 Fri 23:59]
