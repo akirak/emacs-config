@@ -1282,6 +1282,22 @@
         "type": "github"
       }
     },
+    "graphql-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1704458194,
+        "narHash": "sha256-1qSwX2i7jmbIsHWVVF8MqtyBtzValiuVCRWJmovM0PM=",
+        "owner": "~joram",
+        "repo": "graphql-ts-mode",
+        "rev": "e933f235408ea195762700fd07c2d828e8f09aac",
+        "type": "sourcehut"
+      },
+      "original": {
+        "owner": "~joram",
+        "repo": "graphql-ts-mode",
+        "type": "sourcehut"
+      }
+    },
     "graphviz-dot-mode": {
       "flake": false,
       "locked": {
@@ -2993,6 +3009,7 @@
         "go-translate": "go-translate",
         "gptel": "gptel",
         "graphql-mode": "graphql-mode",
+        "graphql-ts-mode": "graphql-ts-mode",
         "graphviz-dot-mode": "graphviz-dot-mode",
         "guess-language": "guess-language",
         "hcl-mode": "hcl-mode",
