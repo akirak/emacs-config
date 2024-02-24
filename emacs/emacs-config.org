@@ -6242,9 +6242,9 @@ Get environment variables such as $PATH from the shell
                (not (equal akirak/os-id "nixos")))
       (require 'exec-path-from-shell)
       (unless (eq system-type 'darwin)
-        (push "XDG_CONFIG_HOME" exec-path-from-shell-variables)
-        (push "XDG_CACHE_HOME" exec-path-from-shell-variables)
-        (push "XDG_DATA_HOME" exec-path-from-shell-variables))
+        (add-to-list 'exec-path-from-shell-variables "XDG_CONFIG_HOME")
+        (add-to-list 'exec-path-from-shell-variables "XDG_CACHE_HOME")
+        (add-to-list 'exec-path-from-shell-variables "XDG_DATA_HOME"))
       (exec-path-from-shell-initialize)))
 #+end_src
 *** COMMENT fancy-dabbrev                                           :completion:ARCHIVE:
