@@ -6824,9 +6824,11 @@ Major mode for editing GraphQL schemas
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package graphql-mode)
-    (:file-match "\\.gql\\'"))
+  (setup (:package graphql-mode))
 #+end_src
+
+This is simply installed as a dependency for ob-graphql.
+However, I will use ~graphql-ts-mode~ for actually editing Org source blocks of GraphQL.
 *** graphql-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2024-02-24 Sat 10:38]
