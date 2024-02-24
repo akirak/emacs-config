@@ -2070,6 +2070,22 @@
         "type": "github"
       }
     },
+    "ocp-indent": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1701081922,
+        "narHash": "sha256-7IHfYRzVw50ry1KLbiqZnR680ZryTpxZemXr5yMlra0=",
+        "owner": "OCamlPro",
+        "repo": "ocp-indent",
+        "rev": "f38578c25d62701847b1bcb45099a9020e2032fe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "OCamlPro",
+        "repo": "ocp-indent",
+        "type": "github"
+      }
+    },
     "octopus": {
       "flake": false,
       "locked": {
@@ -3058,6 +3074,7 @@
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
+        "ocp-indent": "ocp-indent",
         "octopus": "octopus",
         "olivetti": "olivetti",
         "orderless": "orderless",
