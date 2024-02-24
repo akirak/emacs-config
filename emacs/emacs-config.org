@@ -3174,6 +3174,7 @@ A programmable workflow layer for Org mode
             ("\\.envrc\\'" . "programming/envrc")
             ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
             ("hie\\.yaml\\'" . "programming/haskell")
+            ("/graphql/" . "programming/graphql")
             ("\\.editorconfig\\'" . "programming/editorconfig"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in
           org-dog-clock-default-query-filter
