@@ -6826,6 +6826,20 @@ Major mode for editing GraphQL schemas
   (setup (:package graphql-mode)
     (:file-match "\\.gql\\'"))
 #+end_src
+*** graphql-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-02-24 Sat 10:38]
+:END:
+#+begin_quote
+Tree-sitter support for GraphQL
+[[https://sr.ht/~joram/graphql-ts-mode/]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package graphql-ts-mode)
+    (:org-src-lang "graphql")
+    (:file-match "\\.graphql\\'" "\\.gql\\'"))
+#+end_src
 *** graphviz-dot-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-03-11 Fri 22:02]

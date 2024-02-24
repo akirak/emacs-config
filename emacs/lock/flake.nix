@@ -482,6 +482,12 @@
       repo = "graphql-mode";
       type = "github";
     };
+    graphql-ts-mode = {
+      flake = false;
+      owner = "~joram";
+      repo = "graphql-ts-mode";
+      type = "sourcehut";
+    };
     graphviz-dot-mode = {
       flake = false;
       owner = "ppareit";
