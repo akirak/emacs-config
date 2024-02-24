@@ -361,8 +361,6 @@
                '(org-prompt-special-block . akirak-embark-org-prompt-map))
   (add-to-list 'embark-keymap-alist
                '(org-special-block . akirak-embark-org-block-map))
-  (add-to-list 'embark-keymap-alist
-               '(workbox-shell-command . akirak-embark-package-shell-command-map))
   (add-to-list 'embark-transformer-alist
                '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
   (add-to-list 'embark-transformer-alist
