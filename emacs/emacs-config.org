@@ -6237,6 +6237,8 @@ Get environment variables such as $PATH from the shell
 
 #+begin_src emacs-lisp
   (setup (:package exec-path-from-shell)
+    (:when-loaded
+      (add-to-list 'exec-path-from-shell-variables "HYPRLAND_INSTANCE_SIGNATURE"))
     (when (and (or window-system
                    (daemonp))
                (not (equal akirak/os-id "nixos")))
