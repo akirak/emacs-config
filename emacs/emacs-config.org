@@ -1886,20 +1886,29 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
 #+begin_src emacs-lisp
   (setup skeleton
-    (:set skeleton-end-newline nil)
+    (:set skeleton-end-newline t)
+
+    (defvar-local akirak/skeleton-local-positions nil)
 
     (add-hook 'skeleton-end-hook
               (defun akirak/skeleton-start ()
-                (setq skeleton-positions (cdr (nreverse skeleton-positions)))
-                (when skeleton-positions
+                (setq akirak/skeleton-local-positions
+                      (cl-loop for xs
+                               on skeleton-positions
+                               collect (- (car xs)
+                                          (or (cadr xs)
+                                              skeleton-point))
+                               into result
+                               finally return (reverse result)))
+                (when akirak/skeleton-local-positions
                   (local-set-key [tab] #'akirak/skeleton-pop-positions))))
 
     (defun akirak/skeleton-pop-positions ()
       (interactive)
-      (when-let (pos (pop skeleton-positions))
-        (goto-char pos)
-        (if skeleton-positions
-            (message "Remaining %d positions" (length skeleton-positions))
+      (when-let (n (pop akirak/skeleton-local-positions))
+        (forward-char n)
+        (if akirak/skeleton-local-positions
+            (message "Remaining %d positions" (length akirak/skeleton-local-positions))
           (local-unset-key [tab])))))
 #+end_src
 *** sqlite-mode
