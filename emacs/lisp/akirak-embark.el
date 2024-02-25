@@ -323,6 +323,7 @@
               (akirak-embark-new-tab-action find-library
                 (lambda () (file-name-base buffer-file-name))))
   (define-key embark-identifier-map "R" #'project-query-replace-regexp)
+  (define-key embark-identifier-map (kbd "C-c i") #'akirak-embark-install-package)
   (define-key embark-expression-map "R" #'project-query-replace-regexp)
   (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
   (define-key embark-variable-map "k" #'akirak-embark-describe-key-briefly-in-map)
@@ -360,8 +361,6 @@
                '(org-prompt-special-block . akirak-embark-org-prompt-map))
   (add-to-list 'embark-keymap-alist
                '(org-special-block . akirak-embark-org-block-map))
-  (add-to-list 'embark-keymap-alist
-               '(workbox-shell-command . akirak-embark-package-shell-command-map))
   (add-to-list 'embark-transformer-alist
                '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
   (add-to-list 'embark-transformer-alist
@@ -780,6 +779,39 @@
   (interactive (list (bookmark-completing-read "Jump to bookmark (in another tab)"
                                                bookmark-current-bookmark)))
   (bookmark-jump bookmark 'switch-to-buffer-other-tab))
+
+(defun akirak-embark-install-package (package)
+  "Install a PACKAGE as a dependency for the current package file."
+  (interactive "sPackages (optionally separated by space or comma): ")
+  (pcase-exhaustive (file-name-base (buffer-file-name))
+    ((or "dune" "dune-project")
+     (let ((default-directory (locate-dominating-file default-directory "dune-project")))
+       (akirak-embark--run-compilation-for-install
+        (concat (format "opam install %s"
+                        (mapconcat #'shell-quote-argument
+                                   (string-split package "[[:space:]]," t)
+                                   " "))
+                (when (executable-find "odig")
+                  " && odig odoc")
+                " && dune build"))))))
+
+(defun akirak-embark--run-compilation-for-install (command)
+  ;; Installatition is done only once, so there is no need to keep the values of
+  ;; `compile-command' and `compilation-directory'. Hence we will use
+  ;; `compilation-start' directly.
+  (compilation-start command t
+                     (cl-constantly
+                      (project-prefixed-buffer-name (akirak-embark--command-name command)))
+                     nil
+                     ;; Keep what the user has installed for the project
+                     'continue))
+
+(defun akirak-embark--command-name (command)
+  ;; Quoting is unsupported right now as the compilation command is expected to
+  ;; be simple
+  (if (string-match (rx bol (* blank) (group (+ word))) command)
+      (match-string 1 command)
+    (error "The command does not start with a word: %s" command)))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here

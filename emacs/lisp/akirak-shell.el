@@ -2,6 +2,15 @@
 
 (declare-function eat "ext:eat")
 
+(defun akirak-shell-buffer-p (cand)
+  (when-let (buffer (pcase cand
+                      ((pred stringp)
+                       (get-buffer cand))
+                      (`(,name . ,_)
+                       (get-buffer name))))
+    (eq (buffer-local-value 'major-mode buffer)
+        'eat-mode)))
+
 ;;;###autoload
 (defalias 'akirak-shell #'eat)
 
@@ -9,11 +18,25 @@
 (defalias 'akirak-shell-other-window #'eat-other-window)
 
 ;;;###autoload
-(defun akirak-shell-for-project-other-window ()
-  (interactive)
-  (if (project-current)
-      (call-interactively #'eat-project-other-window)
-    (eat-other-window)))
+(defun akirak-shell-for-project-other-window (&optional arg)
+  (interactive "P")
+  (if (equal arg '(16))
+      (pop-to-buffer (read-buffer "Switch to a shell buffer: "
+                                  nil t #'akirak-shell-buffer-p))
+    (let ((command (if (project-current)
+                       #'eat-project-other-window
+                     #'eat-other-window)))
+      (when arg
+        (let ((target-window (pcase-exhaustive arg
+                               ('(4)
+                                (selected-window))
+                               ((pred numberp)
+                                (require 'akirak-window)
+                                (akirak-window--other-window nil arg)))))
+          (display-buffer-override-next-command
+           `(lambda (buffer alist)
+              (cons ,target-window 'reuse)))))
+      (call-interactively command))))
 
 ;;;###autoload
 (defun akirak-shell-new-other-window ()
@@ -44,15 +67,10 @@
 
 ;;;###autoload
 (defun akirak-shell-run-command-in-some-buffer (command)
-  (if-let (bufs (seq-filter `(lambda (buf)
-                               (eq (buffer-local-value 'major-mode buf)
-                                   'eat-mode))
-                            (buffer-list)))
-      (let ((name (completing-read "Shell: " (mapcar #'buffer-name bufs) nil t)))
-        (with-current-buffer (get-buffer name)
-          (akirak-shell--send-string command)
-          (pop-to-buffer (current-buffer))))
-    (user-error "No shell buffer")))
+  (let ((name (read-buffer "Shell: " nil t #'akirak-shell-buffer-p)))
+    (with-current-buffer (get-buffer name)
+      (akirak-shell--send-string command)
+      (pop-to-buffer (current-buffer)))))
 
 (defun akirak-shell--send-string (string)
   (pcase (derived-mode-p 'eat-mode)

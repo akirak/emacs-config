@@ -209,7 +209,7 @@
     (user-error (or msg
                     (user-error "%s (value: \"%s\") is not an existing directory"
                                 symbol (symbol-value symbol)))))
-  dir)
+  (symbol-value symbol))
 
 ;;;###autoload
 (defun akirak-twist-update-config-inputs (inputs)

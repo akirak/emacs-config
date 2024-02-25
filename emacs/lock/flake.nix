@@ -32,13 +32,6 @@
       repo = "anzu";
       type = "github";
     };
-    apprentice = {
-      flake = false;
-      owner = "akirak";
-      ref = "no-elixir-mode-dep";
-      repo = "apprentice";
-      type = "github";
-    };
     auto-minor-mode = {
       flake = false;
       owner = "joewreschnig";
@@ -489,6 +482,12 @@
       repo = "graphql-mode";
       type = "github";
     };
+    graphql-ts-mode = {
+      flake = false;
+      owner = "~joram";
+      repo = "graphql-ts-mode";
+      type = "sourcehut";
+    };
     graphviz-dot-mode = {
       flake = false;
       owner = "ppareit";
@@ -565,12 +564,6 @@
       flake = false;
       owner = "ljos";
       repo = "jq-mode";
-      type = "github";
-    };
-    jtsx = {
-      flake = false;
-      owner = "llemaitre19";
-      repo = "jtsx";
       type = "github";
     };
     just-mode = {
@@ -784,6 +777,12 @@
       flake = false;
       owner = "alf";
       repo = "ob-restclient.el";
+      type = "github";
+    };
+    ocp-indent = {
+      flake = false;
+      owner = "OCamlPro";
+      repo = "ocp-indent";
       type = "github";
     };
     octopus = {
@@ -1301,12 +1300,6 @@
       flake = false;
       owner = "magit";
       repo = "with-editor";
-      type = "github";
-    };
-    ws-butler = {
-      flake = false;
-      owner = "lewang";
-      repo = "ws-butler";
       type = "github";
     };
     xterm-color = {

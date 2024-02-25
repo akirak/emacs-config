@@ -239,5 +239,35 @@ This is primarily intended for editing JSX/TSX."
          (insert (format "</%s>" (treesit-node-text identifier)))))
     (error "Cannot find")))
 
+;;;; Other utilities for tree-sitter support
+
+;;;###autoload
+(defun akirak-treesit-list-grammars ()
+  (interactive)
+  (let ((dirs (append treesit-extra-load-path
+                      ;; Where is the system default locations for dynamic
+                      ;; libraries?
+                      (list (expand-file-name "tree-sitter" user-emacs-directory))))
+        grammar-alist)
+    (dolist (dir dirs)
+      (when (file-directory-p dir)
+        (dolist (filename (directory-files dir))
+          (when (string-match (concat "^libtree-sitter-\\([^z-a]+\\)"
+                                      (regexp-opt-group dynamic-library-suffixes)
+                                      "\\'")
+                              filename)
+            (cl-pushnew (cons (match-string 1 filename)
+                              (file-truename (expand-file-name filename dir)))
+                        grammar-alist)))))
+    (cl-labels
+        ((annotator (candidate)
+           (concat " " (cdr (assoc candidate grammar-alist))))
+         (completions (string pred action)
+           (if (eq action 'metadata)
+               (cons 'metadata (list (cons 'category 'tree-sitter-grammar)
+                                     (cons 'annotation-function #'annotator)))
+             (complete-with-action action grammar-alist string pred))))
+      (completing-read "Tree-sitter grammar: " #'completions nil t))))
+
 (provide 'akirak-treesit)
 ;;; akirak-treesit.el ends here
