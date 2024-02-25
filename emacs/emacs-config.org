@@ -7892,7 +7892,10 @@ automatic indentation with ocp-indent
 
 #+begin_src emacs-lisp
   (setup (:package ocp-indent)
-    (add-hook 'tuareg-mode-hook #'ocp-setup-indent))
+    (add-hook 'tuareg-mode-hook
+              (defun akirak/ocp-indent-maybe-setup ()
+                (when (executable-find "ocp-indent")
+                  (ocp-setup-indent)))))
 #+end_src
 *** olivetti                                               :writing:
 :PROPERTIES:
