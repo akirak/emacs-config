@@ -8733,22 +8733,22 @@ OCaml mode
                      "Insert begin..end"
                      ""
                      > "begin"
-                     n _
-                     n "end"))
+                     \n _
+                     n -2 "end"))
 
       (define-abbrev tuareg-mode-abbrev-table
         "match" "" (define-skeleton akirak-ocaml-match
                      "Insert match"
                      ""
-                     > "match " - " with" n
-                     @ _))
+                     > "match " - " with"
+                     n "| " @ _))
 
       (define-abbrev tuareg-mode-abbrev-table
         "try" "" (define-skeleton akirak-ocaml-try
                    "Insert try"
                    ""
                    > "try " -
-                   n "with" @ _))))
+                   n "with " @ _))))
 #+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
