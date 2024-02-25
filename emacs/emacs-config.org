@@ -9148,9 +9148,11 @@ A major mode for the Zig programming language
                      "utop")))
         (pop-to-buffer (apply #'eat-make name
                               (if root
-                                  (list "opam" nil
-                                        "exec" "--" "dune" "utop"
-                                        (shell-quote-argument (file-relative-name root)))
+                                  (append (if (and (not (executable-find "dune"))
+                                                   (executable-find "opam"))
+                                              '("opam" nil "exec" "--" "dune" "utop")
+                                            '("dune" nil "utop"))
+                                          (list (shell-quote-argument (file-relative-name root))))
                                 (cond
                                  ((executable-find "utop")
                                   '("utop"))
