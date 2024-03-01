@@ -4094,6 +4094,7 @@ Major mode for Elixir with tree-sitter support
   (setup elixir-ts-mode
     (:file-match "\\.exs?\\'")
     (:mode-project-roots "mix.exs")
+    (:mode-repl akirak/iex-dwim)
 
     (:reformatters
      (mix-format :program "mix"
@@ -9125,7 +9126,20 @@ A major mode for the Zig programming language
           (user-error "mix.exs is not found"))
         (unless (file-readable-p file)
           (user-error "Documentation hasn't been generated. Run mix docs"))
-        (akirak-open-default file))))
+        (akirak-open-default file)))
+
+    (defun akirak/iex-dwim ()
+      (interactive)
+      (let* ((root (locate-dominating-file default-directory "mix.exs"))
+             (pr (project-current))
+             (name (if pr
+                       (format "iex-%s" (project-name pr))
+                     "iex"))
+             (default-directory root))
+        (pop-to-buffer (apply #'eat-make name
+                              (if root
+                                  '("iex" nil "-S" "mix")
+                                '("iex")))))))
 #+end_src
 **** Node.js and Bun
 :PROPERTIES:
