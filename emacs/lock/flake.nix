@@ -742,6 +742,12 @@
       repo = "nov.el";
       type = "github";
     };
+    nushell-mode = {
+      flake = false;
+      owner = "mrkkrp";
+      repo = "nushell-mode";
+      type = "github";
+    };
     oahu = {
       flake = false;
       owner = "akirak";

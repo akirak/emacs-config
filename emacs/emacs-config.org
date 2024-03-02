@@ -7880,6 +7880,15 @@ Featureful EPUB reader mode
                          #'nov-render-document
                          nil t)))))
 #+end_src
+*** nushell-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-03-02 Sat 12:40]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nushell-mode)
+    (:file-match "\\.nu\\'"))
+#+end_src
 *** ob-async
 :PROPERTIES:
 :CREATED_TIME: [2023-05-20 Sat 18:46]
