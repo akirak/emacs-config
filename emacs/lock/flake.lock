@@ -1973,6 +1973,22 @@
         "type": "github"
       }
     },
+    "nushell-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1705309687,
+        "narHash": "sha256-bUy4JYigUoYOCESJBEdkp4H5j215i+UU61Sxk2B4dK0=",
+        "owner": "mrkkrp",
+        "repo": "nushell-mode",
+        "rev": "e1a23d230b674222435046cf52ffa5e07470fed6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mrkkrp",
+        "repo": "nushell-mode",
+        "type": "github"
+      }
+    },
     "oahu": {
       "flake": false,
       "locked": {
@@ -3068,6 +3084,7 @@
         "nix-update": "nix-update",
         "nix3": "nix3",
         "nov": "nov",
+        "nushell-mode": "nushell-mode",
         "oahu": "oahu",
         "oahu-memento": "oahu-memento",
         "ob-async": "ob-async",
