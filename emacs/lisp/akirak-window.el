@@ -393,9 +393,7 @@ focus on the same buffer."
          (akirak-window-select-most-recently-displayed)))
    (t
     (when-let (window (akirak-window--other-window nil arg t))
-      (if (equal arg '(4))
-          (window-swap-states window (selected-window))
-        (select-window window))))))
+      (select-window window)))))
 
 ;;;###autoload
 (defun akirak-window-select-most-recently-displayed ()
