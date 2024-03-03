@@ -36,6 +36,7 @@
     (display-buffer buffer args)))
 
 (cl-defun akirak-window--find-other-panes ()
+  "Return the top window of each pane in the current frame."
   (when (> (frame-width) 240)
     (thread-last (akirak-window--get-panes)
                  (mapcar #'cdr)
@@ -43,7 +44,7 @@
                                  (seq-some (lambda (it) (equal (selected-window) it))
                                            ws)))
                  (seq-sort-by #'length #'<)
-                 (car))))
+                 (mapcar #'car))))
 
 (defun akirak-window--get-panes ()
   "Return an alist."
