@@ -362,7 +362,7 @@ With a single universal argument, it swaps two windows and keeps
 focus on the same buffer."
   (interactive "P")
   (if (equal arg '(16))
-      (akirak-window-select-recently-displayed)
+      (akirak-window-select-most-recently-displayed)
     (if (and (akirak-window--popup-p)
              (windowp akirak-window-last-non-popup-window))
         (select-window akirak-window-last-non-popup-window)
@@ -372,7 +372,7 @@ focus on the same buffer."
           (select-window window))))))
 
 ;;;###autoload
-(defun akirak-window-select-recently-displayed ()
+(defun akirak-window-select-most-recently-displayed ()
   (interactive)
   (when-let (w (thread-last
                  (window-list)
