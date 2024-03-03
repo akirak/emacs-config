@@ -1302,6 +1302,12 @@
       repo = "whole-line-or-region";
       type = "github";
     };
+    windswap = {
+      flake = false;
+      owner = "purcell";
+      repo = "windswap";
+      type = "github";
+    };
     with-editor = {
       flake = false;
       owner = "magit";

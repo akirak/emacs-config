@@ -2179,7 +2179,7 @@ Thus I will explicitly install this package rather than using the built-in versi
                                       :style wave
                                       :position nil))))))))
 #+end_src
-*** COMMENT windmove                                       :windows:ARCHIVE:
+*** windmove                                                   :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 20:16]
 :END:
@@ -2189,12 +2189,7 @@ Thus I will explicitly install this package rather than using the built-in versi
     (:status opinionated
       (add-hook 'after-init-hook
                 (defun akirak/setup-windmove ()
-                  (windmove-default-keybindings 'control)))
-
-      ;; extra keybindings
-      ;; See also windswap
-      (:global "C-c [" #'windmove-left
-               "C-c ]" #'windmove-right)))
+                  (windmove-default-keybindings 'control)))))
 #+end_src
 *** window                                              :navigation:
 :PROPERTIES:
@@ -9017,7 +9012,7 @@ Operate on current line if region undefined
     (define-key akirak/indent-rigidly-map (kbd "<backtab>")
                 #'akirak/indent-rigidly-left-line-or-region))
 #+end_src
-*** COMMENT windswap                                       :windows:ARCHIVE:
+*** windswap                                                           :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 13:52]
 :END:
