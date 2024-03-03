@@ -8,6 +8,15 @@
 
 (defvar akirak-window-last-non-popup-window nil)
 
+(defvar akirak-window-last-record nil
+  "Cons list of (TIME . WINDOW) before last `display-buffer' invocation.")
+
+(advice-add 'display-buffer
+            :before
+            (defun akirak-window-record-before-display (&rest _)
+              (setq akirak-window-last-record
+                    (cons (current-time) (selected-window)))))
+
 ;;;; Predicates
 
 (defun akirak-window-one-of-modes-p (modes window)
@@ -361,15 +370,32 @@ With a '- argument, the window will be `next-window'.
 With a single universal argument, it swaps two windows and keeps
 focus on the same buffer."
   (interactive "P")
-  (if (equal arg '(16))
-      (akirak-window-select-most-recently-displayed)
-    (if (and (akirak-window--popup-p)
-             (windowp akirak-window-last-non-popup-window))
-        (select-window akirak-window-last-non-popup-window)
-      (when-let (window (akirak-window--other-window nil arg t))
-        (if (equal arg '(4))
-            (window-swap-states window (selected-window))
-          (select-window window))))))
+  (cond
+   ((equal arg '(16))
+    (akirak-window-select-most-recently-displayed))
+   ((and (akirak-window--popup-p)
+         (windowp akirak-window-last-non-popup-window))
+    (select-window akirak-window-last-non-popup-window))
+   ((and (not arg)
+         akirak-window-last-record
+         (member (cdr akirak-window-last-record)
+                 (window-list))
+         (not (eq (cdr akirak-window-last-record)
+                  (selected-window)))
+         (thread-last
+           (window-list)
+           (cl-remove (selected-window))
+           (seq-every-p `(lambda (w)
+                           (time-less-p (buffer-local-value 'buffer-display-time (window-buffer w))
+                                        ',(car akirak-window-last-record))))))
+    (select-window (cdr akirak-window-last-record)))
+   ((and (not arg)
+         (akirak-window-select-most-recently-displayed)))
+   (t
+    (when-let (window (akirak-window--other-window nil arg t))
+      (if (equal arg '(4))
+          (window-swap-states window (selected-window))
+        (select-window window))))))
 
 ;;;###autoload
 (defun akirak-window-select-most-recently-displayed ()
