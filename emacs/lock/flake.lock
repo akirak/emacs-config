@@ -3682,6 +3682,22 @@
         "type": "github"
       }
     },
+    "windswap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1695710577,
+        "narHash": "sha256-zF/3IeZl3ynU2OZEBuUEOtiZXSUCXOnjxhTVC00lQao=",
+        "owner": "purcell",
+        "repo": "windswap",
+        "rev": "2941094c933eb66538b4f4e25218022d887c331f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purcell",
+        "repo": "windswap",
+        "type": "github"
+      }
+    },
     "with-editor": {
       "flake": false,
       "locked": {
