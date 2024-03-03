@@ -2200,6 +2200,10 @@ Thus I will explicitly install this package rather than using the built-in versi
   (setup window
     (:set recenter-positions '(top middle bottom))
 
+    (:when-loaded
+      (push 'akirak-window-fallback-reuse-window
+            (car display-buffer-fallback-action)))
+
     ;; Delay setting of `switch-to-buffer-obey-display-actions' so initial buffers
     ;; are displayed using `switch-to-buffer'.
     (defun akirak/after-frame-window-setup ()

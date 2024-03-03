@@ -171,6 +171,59 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
      (other-windows
       (window--display-buffer buffer (car other-windows) 'reuse)))))
 
+;;;###autoload
+(defun akirak-window-fallback-reuse-window (buffer alist)
+  (let ((not-this-window (cdr (assq 'inhibit-same-window alist)))
+        (window (get-buffer-window buffer)))
+    (if (and window
+             (not (and not-this-window
+                       (eq window (selected-window)))))
+        (window--display-buffer buffer window 'reuse alist)
+      (when-let ((panes (akirak-window--find-other-panes)))
+        (when-let (buffer-to-hide
+                   (thread-last
+                     panes
+                     (mapcar #'window-buffer)
+                     (akirak-window--similar-buffers buffer)
+                     ;; Prefer the least recently displayed buffer.
+                     (seq-sort-by (lambda (other-buffer)
+                                    (float-time (buffer-local-value 'buffer-display-time other-buffer)))
+                                  #'>)
+                     (car)))
+          (window--display-buffer buffer
+                                  (cl-find-if `(lambda (window)
+                                                 (equal ,buffer-to-hide (window-buffer window)))
+                                              panes)
+                                  'reuse alist))))))
+
+(defun akirak-window--similar-buffers (buffer other-buffers)
+  (cl-flet
+      ((apply-filters (source predicates)
+         (catch 'search-finished
+           (dolist (predicate predicates)
+             (let ((result (cl-remove-if-not predicate source)))
+               (when result
+                 (if (cdr result)
+                     (setq source result)
+                   (throw 'search-finished result))))))
+         source))
+    (cond
+     ((or (buffer-file-name (or (buffer-base-buffer buffer) buffer)))
+      ;; If the buffer to be dislayed is a file buffer, prefer a window
+      ;; that displays another file buffer.
+      (apply-filters other-buffers
+                     `(buffer-file-name
+                       (lambda (other-buffer)
+                         (eq (buffer-local-value 'major-mode other-buffer)
+                             ',(buffer-local-value 'major-mode buffer))))))
+     ((derived-mode-p 'special-mode)
+      (apply-filters other-buffers
+                     '((lambda (other-buffer)
+                         (and (not (buffer-file-name (or (buffer-base-buffer other-buffer)
+                                                         other-buffer)))
+                              (with-current-buffer other-buffer
+                                (derived-mode-p 'special-mode))))))))))
+
 ;;;; Window manipulation
 
 (defun akirak-window-split--aggressively ()
