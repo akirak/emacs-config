@@ -2094,7 +2094,8 @@ Transient commands
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup transient)
+  (setup transient
+    (autoload 'transient-define-prefix "transient" nil t))
 #+end_src
 
 Because transient is developed by the maintainer of magit, it is better to update them together.
