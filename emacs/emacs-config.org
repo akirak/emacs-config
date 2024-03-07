@@ -738,6 +738,16 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
            (funcall 'compilation-filter proc
                     (xterm-color-filter string)))))))
 #+end_src
+*** completion-preview
+:PROPERTIES:
+:CREATED_TIME: [2024-03-07 Thu 20:32]
+:END:
+
+#+begin_src emacs-lisp
+  (setup completion-preview
+    (:with-map completion-preview-active-mode-map
+      (:bind "C-j" #'completion-preview-insert)))
+#+end_src
 *** custom
 :PROPERTIES:
 :CREATED_TIME: [2022-09-12 Mon 15:13]
@@ -5475,6 +5485,7 @@ COmpletion in Region FUnction
   (setup (:package corfu)
     (:with-mode (prog-mode text-mode comint-mode)
       (:hook corfu-mode))
+    (:hook completion-preview-mode)
 
     (:with-hook minibuffer-setup-hook
       (:hook
