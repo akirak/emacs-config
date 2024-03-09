@@ -223,15 +223,12 @@ This is primarily intended for editing JSX/TSX."
                           (while (search-backward "<" nil t)
                             (let ((node (thread-last
                                           (treesit-node-at (point))
-                                          (treesit-node-parent)
                                           (treesit-node-parent))))
-                              (when (> (treesit-node-end node)
-                                       bound)
-                                (throw 'jsx-open-tag
-                                       (thread-last
-                                         (treesit-node-at (point))
-                                         (treesit-node-parent))))
-                              (goto-char (treesit-node-start node))))))))
+                              (when (and (equal (treesit-node-type node)
+                                                "jsx_opening_element")
+                                         (> (treesit-node-end (treesit-node-parent node))
+                                            bound))
+                                (throw 'jsx-open-tag node))))))))
       (pcase-exhaustive (treesit-node-children open-tag)
         ((and `(,_ ,identifier ,_ . ,_)
               (guard (equal (treesit-node-type identifier)
