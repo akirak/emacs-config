@@ -1234,6 +1234,23 @@
         "type": "github"
       }
     },
+    "gleam-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1701797178,
+        "narHash": "sha256-qokDHV6O5hq6OLdp3A6XruovcR+rRe2mkSff23C1VOw=",
+        "owner": "gleam-lang",
+        "repo": "gleam-mode",
+        "rev": "6588ea4a051d888007b999371af7b5bd807b5cff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gleam-lang",
+        "ref": "gleam-ts-mode",
+        "repo": "gleam-mode",
+        "type": "github"
+      }
+    },
     "go-translate": {
       "flake": false,
       "locked": {
@@ -3038,6 +3055,7 @@
         "git-identity": "git-identity",
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
+        "gleam-ts-mode": "gleam-ts-mode",
         "go-translate": "go-translate",
         "gptel": "gptel",
         "graphql-mode": "graphql-mode",
