@@ -2,6 +2,24 @@
 
 (declare-function eat "ext:eat")
 
+(define-minor-mode akirak-shell-compilation-minor-mode
+  "Toggle Compilation minor mode for the shell buffer."
+  :lighter " Eat-Compilation"
+  (if akirak-shell-compilation-minor-mode
+      (compilation-setup t)
+    (compilation--unsetup)))
+
+(defvar-keymap akirak-shell-compilation-minor-mode-map
+  :doc "Keymap for `akirak-shell-compilation-minor-mode'.
+
+See `compilation-minor-mode-map' for a complete list of keybindings for
+the original minor mode."
+  "C-M-m" 'compile-goto-error
+  "C-M-n" 'compilation-next-error
+  "C-M-p" 'compilation-previous-error
+  "M-{" 'compilation-previous-file
+  "M-}" 'compilation-next-file)
+
 (defun akirak-shell-buffer-p (cand)
   (when-let (buffer (pcase cand
                       ((pred stringp)
@@ -48,8 +66,8 @@
   (pcase (seq-filter `(lambda (buf)
                         (and (eq (buffer-local-value 'major-mode buf)
                                  'eat-mode)
-                             (equal (buffer-local-value 'default-directory buf)
-                                    dir)))
+                             (file-equal-p (buffer-local-value 'default-directory buf)
+                                           dir)))
                      (buffer-list))
     (`nil
      (let ((default-directory dir))
@@ -72,9 +90,12 @@
       (akirak-shell--send-string command)
       (pop-to-buffer (current-buffer)))))
 
-(defun akirak-shell--send-string (string)
+(cl-defun akirak-shell--send-string (string &key compilation-regexp)
   (pcase (derived-mode-p 'eat-mode)
     (`eat-mode
+     (when compilation-regexp
+       (akirak-shell-compilation-minor-mode t)
+       (akirak-compile-setup-regexp-for-command string))
      (eat-term-send-string (buffer-local-value 'eat-terminal (current-buffer))
                            string))
     (_
