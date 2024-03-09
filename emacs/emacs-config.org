@@ -85,18 +85,6 @@ I am interested to see if it can reduce the amount of configuration code.
         (dolist (entry (reverse ',entries))
           (add-to-list 'auto-insert-alist entry)))))
 #+end_src
-*** :compilation-error
-#+begin_src emacs-lisp
-  (eval-when-compile
-    (define-setup-macro :compilation-error (&rest alist)
-      "Add entries to the compilation error regexp alist."
-      `(with-eval-after-load 'compile
-         (dolist (entry (quote ,alist))
-           (if (stringp (car entry))
-               (add-to-list 'compilation-error-regexp-alist entry)
-             (add-to-list 'compilation-error-regexp-alist (car entry))
-             (add-to-list 'compilation-error-regexp-alist-alist entry))))))
-#+end_src
 *** :defer
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 15:19]
@@ -942,12 +930,7 @@ The built-in =electric= package provides the following modes:
                              1)
                             ("Config"
                              "^(\\(?:setup\\|use-package\\)[[:blank:]]+\\_<\\([^[:space:]]+\\)"
-                             1))))
-      (:compilation-error
-       ;; Emacs checkdoc/byte-compile, GHC, etc.
-       ;; path:line:col: error:
-       (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\):"
-                   1 2 3 (4 . 4))))
+                             1)))))
 
     (:with-mode lisp-data-mode
       (:file-match "/melpa/recipes/"))
@@ -4302,17 +4285,7 @@ Major mode for editing typescript
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
       (:org-src-lang "react")
-      (:bind "C-c C-e" #'akirak-treesit-jsx-close-tag))
-
-    (:compilation-error
-     (tsc "\\([^z-a]+\\.tsx?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\) - \\(error\\) "
-          1 2 3 (4 . 4))
-     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
-             2 3 4 (1 . 1))
-     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
-                 1 2 3 (4 . 4))
-     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
-               2 3 4 (1 . 1))))
+      (:bind "C-c C-e" #'akirak-treesit-jsx-close-tag)))
 #+end_src
 **** COMMENT akirak-typescript                                                 :ARCHIVE:
 #+begin_src emacs-lisp
@@ -6920,11 +6893,6 @@ A Haskell editing mode
     (:reformatters
      (ormolu :program "ormolu"))
 
-    ;; (:compilation-error
-    ;;  ;; path:67:23-45:
-    ;;  (hlint "^\\([/[:alnum:]][./[:alnum:]]*\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
-    ;;         1 2 3 (4 . 4)))
-
     ;; Currently unused.
     (defun akirak/haskell-module-name (&optional filename)
       (let* ((filename (or filename (buffer-file-name)))
@@ -7850,11 +7818,7 @@ Major mode for editing .nix files
   ;;   (:mode-repl nix-repl)
   ;;   (:bind [remap devdocs-lookup] #'akirak-nix-manix)
   ;;   (:reformatters
-  ;;    (alejandra :program "alejandra"))
-  ;;   (:compilation-error
-  ;;    ;; Unused argument `hsuper` at default.nix:9:24-15:6
-  ;;    (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
-  ;;                1 2 3)))
+  ;;    (alejandra :program "alejandra")))
 #+end_src
 *** nix-update
 :PROPERTIES:
