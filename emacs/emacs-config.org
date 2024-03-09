@@ -85,18 +85,6 @@ I am interested to see if it can reduce the amount of configuration code.
         (dolist (entry (reverse ',entries))
           (add-to-list 'auto-insert-alist entry)))))
 #+end_src
-*** :compilation-error
-#+begin_src emacs-lisp
-  (eval-when-compile
-    (define-setup-macro :compilation-error (&rest alist)
-      "Add entries to the compilation error regexp alist."
-      `(with-eval-after-load 'compile
-         (dolist (entry (quote ,alist))
-           (if (stringp (car entry))
-               (add-to-list 'compilation-error-regexp-alist entry)
-             (add-to-list 'compilation-error-regexp-alist (car entry))
-             (add-to-list 'compilation-error-regexp-alist-alist entry))))))
-#+end_src
 *** :defer
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 15:19]
@@ -498,8 +486,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
       (:when-loaded
         (:hook-into git-commit-mode
                     markdown-mode
-                    org-mode
-                    tuareg-mode)
+                    org-mode)
         (define-abbrev-table 'global-abbrev-table
           '(("wip" "WIP")
             ("fixme" "FIXME")
@@ -739,6 +726,16 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
            (funcall 'compilation-filter proc
                     (xterm-color-filter string)))))))
 #+end_src
+*** completion-preview
+:PROPERTIES:
+:CREATED_TIME: [2024-03-07 Thu 20:32]
+:END:
+
+#+begin_src emacs-lisp
+  (setup completion-preview
+    (:with-map completion-preview-active-mode-map
+      (:bind "C-j" #'completion-preview-insert)))
+#+end_src
 *** custom
 :PROPERTIES:
 :CREATED_TIME: [2022-09-12 Mon 15:13]
@@ -933,12 +930,7 @@ The built-in =electric= package provides the following modes:
                              1)
                             ("Config"
                              "^(\\(?:setup\\|use-package\\)[[:blank:]]+\\_<\\([^[:space:]]+\\)"
-                             1))))
-      (:compilation-error
-       ;; Emacs checkdoc/byte-compile, GHC, etc.
-       ;; path:line:col: error:
-       (emacs-lisp "\\([^:[:space:]]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\):[[:space:]]*\\(?:Error\\|error\\):"
-                   1 2 3 (4 . 4))))
+                             1)))))
 
     (:with-mode lisp-data-mode
       (:file-match "/melpa/recipes/"))
@@ -1886,20 +1878,29 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
 #+begin_src emacs-lisp
   (setup skeleton
-    (:set skeleton-end-newline nil)
+    (:set skeleton-end-newline t)
+
+    (defvar-local akirak/skeleton-local-positions nil)
 
     (add-hook 'skeleton-end-hook
               (defun akirak/skeleton-start ()
-                (setq skeleton-positions (cdr (nreverse skeleton-positions)))
-                (when skeleton-positions
+                (setq akirak/skeleton-local-positions
+                      (cl-loop for xs
+                               on skeleton-positions
+                               collect (- (car xs)
+                                          (or (cadr xs)
+                                              skeleton-point))
+                               into result
+                               finally return (reverse result)))
+                (when akirak/skeleton-local-positions
                   (local-set-key [tab] #'akirak/skeleton-pop-positions))))
 
     (defun akirak/skeleton-pop-positions ()
       (interactive)
-      (when-let (pos (pop skeleton-positions))
-        (goto-char pos)
-        (if skeleton-positions
-            (message "Remaining %d positions" (length skeleton-positions))
+      (when-let (n (pop akirak/skeleton-local-positions))
+        (forward-char n)
+        (if akirak/skeleton-local-positions
+            (message "Remaining %d positions" (length akirak/skeleton-local-positions))
           (local-unset-key [tab])))))
 #+end_src
 *** sqlite-mode
@@ -2086,7 +2087,8 @@ Transient commands
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup transient)
+  (setup transient
+    (autoload 'transient-define-prefix "transient" nil t))
 #+end_src
 
 Because transient is developed by the maintainer of magit, it is better to update them together.
@@ -2171,7 +2173,7 @@ Thus I will explicitly install this package rather than using the built-in versi
                                       :style wave
                                       :position nil))))))))
 #+end_src
-*** COMMENT windmove                                       :windows:ARCHIVE:
+*** windmove                                                   :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 20:16]
 :END:
@@ -2181,12 +2183,7 @@ Thus I will explicitly install this package rather than using the built-in versi
     (:status opinionated
       (add-hook 'after-init-hook
                 (defun akirak/setup-windmove ()
-                  (windmove-default-keybindings 'control)))
-
-      ;; extra keybindings
-      ;; See also windswap
-      (:global "C-c [" #'windmove-left
-               "C-c ]" #'windmove-right)))
+                  (windmove-default-keybindings 'control)))))
 #+end_src
 *** window                                              :navigation:
 :PROPERTIES:
@@ -2196,6 +2193,10 @@ Thus I will explicitly install this package rather than using the built-in versi
 #+begin_src emacs-lisp
   (setup window
     (:set recenter-positions '(top middle bottom))
+
+    (:when-loaded
+      (push 'akirak-window-fallback-reuse-window
+            (car display-buffer-fallback-action)))
 
     ;; Delay setting of `switch-to-buffer-obey-display-actions' so initial buffers
     ;; are displayed using `switch-to-buffer'.
@@ -4086,6 +4087,7 @@ Major mode for Elixir with tree-sitter support
   (setup elixir-ts-mode
     (:file-match "\\.exs?\\'")
     (:mode-project-roots "mix.exs")
+    (:mode-repl akirak/iex-dwim)
 
     (:reformatters
      (mix-format :program "mix"
@@ -4137,6 +4139,21 @@ Major mode for Elixir with tree-sitter support
                   > "do" n
                   > @ _ n
                   > -2 "end"))))
+#+end_src
+*** gleam-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-02-10 Sat 13:08]
+:END:
+#+begin_quote
+Major mode for Gleam
+[[https://github.com/gleam-lang/gleam-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package gleam-ts-mode)
+    (:file-match "\\.gleam\\'")
+    ;; Should be fixed in the upstream.
+    (autoload 'gleam-ts-mode "gleam-ts-mode"))
 #+end_src
 *** go-ts-mode                                                     :major__mode:
 :PROPERTIES:
@@ -4283,17 +4300,7 @@ Major mode for editing typescript
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
       (:org-src-lang "react")
-      (:bind "C-c C-e" #'akirak-treesit-jsx-close-tag))
-
-    (:compilation-error
-     (tsc "\\([^z-a]+\\.tsx?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\) - \\(error\\) "
-          1 2 3 (4 . 4))
-     (eslint "^\\(\\(?:ERROR\\|WARNING\\)\\) in \\([^z-a]*?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
-             2 3 4 (1 . 1))
-     (eslint-fix "^\\(/home/.+\\)\n[[:space:]]+\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]+\\(\\(?:WARNING\\|error\\)\\)"
-                 1 2 3 (4 . 4))
-     (prettier "^\\[\\(\\(?:WARNING\\|error\\)\\)] \\([^z-a]*?\\): [^z-a]+(\\([[:digit:]]+\\):\\([[:digit:]]+\\))"
-               2 3 4 (1 . 1))))
+      (:bind "C-c C-e" #'akirak-treesit-jsx-close-tag)))
 #+end_src
 **** COMMENT akirak-typescript                                                 :ARCHIVE:
 #+begin_src emacs-lisp
@@ -4402,7 +4409,10 @@ This is a collection of various utilities to enhance the experience.
 :END:
 #+begin_src elisp
   (setup akirak-compile
-    (:global "C-x c" #'akirak-compile))
+    (:global "C-x c" #'akirak-compile)
+
+    (with-eval-after-load 'compile
+      (akirak-compile-auto-error-mode t)))
 #+end_src
 *** akirak-consult
 #+begin_src emacs-lisp
@@ -4680,6 +4690,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src elisp
   (setup akirak-quick-thing
     (:global "M-SPC" #'akirak-quick-thing))
+#+end_src
+*** akirak-rename
+#+begin_src elisp
+  (setup akirak-rename
+    (:global "C-'" #'akirak-rename-dwim))
 #+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
@@ -5144,10 +5159,10 @@ Jump to arbitrary positions in visible text and select text quickly.
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package avy)
-    (:global "C-'" #'avy-goto-char-timer
-             "M-g z" #'avy-goto-char-in-line))
+  (setup (:package avy))
 #+end_src
+
+I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
 *** beancount                                     :@extra:beancount:
 #+begin_quote
 A major mode to edit Beancount input files.
@@ -5433,6 +5448,7 @@ Recoll queries using consult
 :END:
 #+begin_quote
 An unofficial Copilot plugin for Emacs
+[[https://github.com/copilot-emacs/copilot.el]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5465,6 +5481,7 @@ COmpletion in Region FUnction
   (setup (:package corfu)
     (:with-mode (prog-mode text-mode comint-mode)
       (:hook corfu-mode))
+    (:hook completion-preview-mode)
 
     (:with-hook minibuffer-setup-hook
       (:hook
@@ -5973,6 +5990,8 @@ Client for Language Server Protocol (LSP) servers
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
       (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
+      (add-to-list 'eglot-server-programs
+                   '(gleam-ts-mode . ("gleam" "lsp")))
       (add-to-list 'eglot-server-programs
                    `((elixir-ts-mode heex-ts-mode elixir-mode) .
                      ,(eglot-alternatives
@@ -6893,11 +6912,6 @@ A Haskell editing mode
 
     (:reformatters
      (ormolu :program "ormolu"))
-
-    ;; (:compilation-error
-    ;;  ;; path:67:23-45:
-    ;;  (hlint "^\\([/[:alnum:]][./[:alnum:]]*\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:space:]]*\\(\\(?:Suggestion\\|Warning\\|error\\|warning\\)\\):[[:space:]].+"
-    ;;         1 2 3 (4 . 4)))
 
     ;; Currently unused.
     (defun akirak/haskell-module-name (&optional filename)
@@ -7824,11 +7838,7 @@ Major mode for editing .nix files
   ;;   (:mode-repl nix-repl)
   ;;   (:bind [remap devdocs-lookup] #'akirak-nix-manix)
   ;;   (:reformatters
-  ;;    (alejandra :program "alejandra"))
-  ;;   (:compilation-error
-  ;;    ;; Unused argument `hsuper` at default.nix:9:24-15:6
-  ;;    (nix-linter " at \\([^:]+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)-[[:digit:]]+:[[:digit:]]+$"
-  ;;                1 2 3)))
+  ;;    (alejandra :program "alejandra")))
 #+end_src
 *** nix-update
 :PROPERTIES:
@@ -7870,6 +7880,18 @@ Featureful EPUB reader mode
                          #'nov-render-document
                          nil t)))))
 #+end_src
+*** nushell-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-03-02 Sat 12:40]
+:END:
+#+begin_quote
+Major mode for Nushell scripts
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package nushell-mode)
+    (:file-match "\\.nu\\'"))
+#+end_src
 *** ob-async
 :PROPERTIES:
 :CREATED_TIME: [2023-05-20 Sat 18:46]
@@ -7892,7 +7914,10 @@ automatic indentation with ocp-indent
 
 #+begin_src emacs-lisp
   (setup (:package ocp-indent)
-    (add-hook 'tuareg-mode-hook #'ocp-setup-indent))
+    (add-hook 'tuareg-mode-hook
+              (defun akirak/ocp-indent-maybe-setup ()
+                (when (executable-find "ocp-indent")
+                  (ocp-setup-indent)))))
 #+end_src
 *** olivetti                                               :writing:
 :PROPERTIES:
@@ -8068,6 +8093,7 @@ Summon and dismiss buffers as popups
                                      "^ \\*Agenda Commands\\*"
                                      "^\\*Register Preview\\*"
                                      "^\\*Shell Command Output\\*"
+                                     "^\\*Org-Babel Error Output*"
                                      "^\\*edit string\\*"
                                      "^\\*bean-query"
                                      "^\\*scratch from selection\\*"
@@ -8722,22 +8748,22 @@ OCaml mode
                      "Insert begin..end"
                      ""
                      > "begin"
-                     n _
-                     n "end"))
+                     \n _
+                     n -2 "end"))
 
       (define-abbrev tuareg-mode-abbrev-table
         "match" "" (define-skeleton akirak-ocaml-match
                      "Insert match"
                      ""
-                     > "match " - " with" n
-                     @ _))
+                     > "match " - " with"
+                     n "| " @ _))
 
       (define-abbrev tuareg-mode-abbrev-table
         "try" "" (define-skeleton akirak-ocaml-try
                    "Insert try"
                    ""
                    > "try " -
-                   n "with" @ _))))
+                   n "with " @ _))))
 #+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
@@ -8991,7 +9017,7 @@ Operate on current line if region undefined
     (define-key akirak/indent-rigidly-map (kbd "<backtab>")
                 #'akirak/indent-rigidly-left-line-or-region))
 #+end_src
-*** COMMENT windswap                                       :windows:ARCHIVE:
+*** windswap                                                           :windows:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 13:52]
 :END:
@@ -9112,7 +9138,20 @@ A major mode for the Zig programming language
           (user-error "mix.exs is not found"))
         (unless (file-readable-p file)
           (user-error "Documentation hasn't been generated. Run mix docs"))
-        (akirak-open-default file))))
+        (akirak-open-default file)))
+
+    (defun akirak/iex-dwim ()
+      (interactive)
+      (let* ((root (locate-dominating-file default-directory "mix.exs"))
+             (pr (project-current))
+             (name (if pr
+                       (format "iex-%s" (project-name pr))
+                     "iex"))
+             (default-directory root))
+        (pop-to-buffer (apply #'eat-make name
+                              (if root
+                                  '("iex" nil "-S" "mix")
+                                '("iex")))))))
 #+end_src
 **** Node.js and Bun
 :PROPERTIES:
@@ -9525,7 +9564,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 210 |
+| [[org-ql-search:tags:packages][packages]]            | 212 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  13 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
@@ -9535,6 +9574,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
+| [[org-ql-search:tags:windows][windows]]             |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   5 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
@@ -9542,7 +9582,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
-| [[org-ql-search:tags:windows][windows]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |

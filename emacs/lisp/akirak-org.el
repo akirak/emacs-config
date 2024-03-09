@@ -218,13 +218,15 @@ With ARG, pick a text from the kill ring instead of the last one."
       (cond
        ;; Insert a source block.
        ((and (looking-at (rx ">" eol))
-             (looking-back (rx bol "<" (group (+ (any alnum "-"))))
+             (looking-back (rx bol "<" (group (+ (any "-" word)))
+                               (group (optional (+ blank) (+ anything))))
                            (line-beginning-position)))
-        (let ((lang (akirak-org--find-src-lang (match-string 1))))
+        (let ((lang (akirak-org--find-src-lang (match-string 1)))
+              (params (match-string 2)))
           (delete-region (line-beginning-position)
                          (line-end-position))
           (org-insert-structure-template
-           (concat "src " lang))
+           (concat "src " lang params))
           (if arg
               (progn
                 (org-end-of-line 0)

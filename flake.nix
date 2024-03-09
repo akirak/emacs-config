@@ -47,6 +47,11 @@
     };
 
     my-overlay.url = "github:akirak/nixpkgs-overlay";
+
+    tree-sitter-gleam = {
+      url = "github:gleam-lang/tree-sitter-gleam";
+      flake = false;
+    };
   };
 
   nixConfig = {
@@ -111,6 +116,14 @@
               epubinfo
               squasher
               ;
+            # This will indirectly override tree-sitter-grammars as wells
+            tree-sitter = pkgs.tree-sitter.override {
+              extraGrammars = {
+                tree-sitter-gleam = {
+                  src = inputs.tree-sitter-gleam.outPath;
+                };
+              };
+            };
           }
           // (
             import ./emacs/overlay.nix {

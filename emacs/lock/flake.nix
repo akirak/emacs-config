@@ -464,6 +464,13 @@
       repo = "github-linguist.el";
       type = "github";
     };
+    gleam-ts-mode = {
+      flake = false;
+      owner = "gleam-lang";
+      ref = "gleam-ts-mode";
+      repo = "gleam-mode";
+      type = "github";
+    };
     go-translate = {
       flake = false;
       owner = "lorniu";
@@ -740,6 +747,12 @@
       owner = "akirak";
       ref = "abbr-file-name";
       repo = "nov.el";
+      type = "github";
+    };
+    nushell-mode = {
+      flake = false;
+      owner = "mrkkrp";
+      repo = "nushell-mode";
       type = "github";
     };
     oahu = {
@@ -1294,6 +1307,12 @@
       flake = false;
       owner = "purcell";
       repo = "whole-line-or-region";
+      type = "github";
+    };
+    windswap = {
+      flake = false;
+      owner = "purcell";
+      repo = "windswap";
       type = "github";
     };
     with-editor = {

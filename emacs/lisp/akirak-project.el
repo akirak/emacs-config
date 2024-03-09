@@ -249,12 +249,16 @@ display alternative actions."
    ((file-exists-p dir)
     (user-error "Is a file: %s" dir))
    ((file-name-absolute-p dir)
-    (make-directory dir)
-    (let ((default-directory dir))
-      (when (yes-or-no-p "Initialize a new Git repository?")
-        (call-process "git" nil nil nil "init" (expand-file-name dir))
-        (project-remember-project (project-current nil dir)))
-      (when (yes-or-no-p "Enter shell?")
+    (make-directory dir 'parents)
+    (let ((default-directory dir)
+          (want-shell-p (yes-or-no-p "Enter shell?")))
+      (if (locate-dominating-file dir ".git")
+          (message "Already inside a Git repository, so just created a directory at %s"
+                   (abbreviate-file-name dir))
+        (when (yes-or-no-p "Initialize a new Git repository?")
+          (call-process "git" nil nil nil "init" (expand-file-name dir))
+          (project-remember-project (project-current nil dir))))
+      (when want-shell-p
         (akirak-shell))))
    ((string-match-p (rx bol (+ (not (any "/"))) eol) dir)
     (let ((parent (completing-read "Parent directory: "

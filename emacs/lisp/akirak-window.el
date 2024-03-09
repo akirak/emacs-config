@@ -8,6 +8,15 @@
 
 (defvar akirak-window-last-non-popup-window nil)
 
+(defvar akirak-window-last-record nil
+  "Cons list of (TIME . WINDOW) before last `display-buffer' invocation.")
+
+(advice-add 'display-buffer
+            :before
+            (defun akirak-window-record-before-display (&rest _)
+              (setq akirak-window-last-record
+                    (cons (current-time) (selected-window)))))
+
 ;;;; Predicates
 
 (defun akirak-window-one-of-modes-p (modes window)
@@ -36,6 +45,7 @@
     (display-buffer buffer args)))
 
 (cl-defun akirak-window--find-other-panes ()
+  "Return the top window of each pane in the current frame."
   (when (> (frame-width) 240)
     (thread-last (akirak-window--get-panes)
                  (mapcar #'cdr)
@@ -43,7 +53,7 @@
                                  (seq-some (lambda (it) (equal (selected-window) it))
                                            ws)))
                  (seq-sort-by #'length #'<)
-                 (car))))
+                 (mapcar #'car))))
 
 (defun akirak-window--get-panes ()
   "Return an alist."
@@ -169,6 +179,59 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
       (window--display-buffer buffer (car non-org-windows) 'reuse))
      (other-windows
       (window--display-buffer buffer (car other-windows) 'reuse)))))
+
+;;;###autoload
+(defun akirak-window-fallback-reuse-window (buffer alist)
+  (let ((not-this-window (cdr (assq 'inhibit-same-window alist)))
+        (window (get-buffer-window buffer)))
+    (if (and window
+             (not (and not-this-window
+                       (eq window (selected-window)))))
+        (window--display-buffer buffer window 'reuse alist)
+      (when-let ((panes (akirak-window--find-other-panes)))
+        (when-let (buffer-to-hide
+                   (thread-last
+                     panes
+                     (mapcar #'window-buffer)
+                     (akirak-window--similar-buffers buffer)
+                     ;; Prefer the least recently displayed buffer.
+                     (seq-sort-by (lambda (other-buffer)
+                                    (float-time (buffer-local-value 'buffer-display-time other-buffer)))
+                                  #'>)
+                     (car)))
+          (window--display-buffer buffer
+                                  (cl-find-if `(lambda (window)
+                                                 (equal ,buffer-to-hide (window-buffer window)))
+                                              panes)
+                                  'reuse alist))))))
+
+(defun akirak-window--similar-buffers (buffer other-buffers)
+  (cl-flet
+      ((apply-filters (source predicates)
+         (catch 'search-finished
+           (dolist (predicate predicates)
+             (let ((result (cl-remove-if-not predicate source)))
+               (when result
+                 (if (cdr result)
+                     (setq source result)
+                   (throw 'search-finished result))))))
+         source))
+    (cond
+     ((or (buffer-file-name (or (buffer-base-buffer buffer) buffer)))
+      ;; If the buffer to be dislayed is a file buffer, prefer a window
+      ;; that displays another file buffer.
+      (apply-filters other-buffers
+                     `(buffer-file-name
+                       (lambda (other-buffer)
+                         (eq (buffer-local-value 'major-mode other-buffer)
+                             ',(buffer-local-value 'major-mode buffer))))))
+     ((derived-mode-p 'special-mode)
+      (apply-filters other-buffers
+                     '((lambda (other-buffer)
+                         (and (not (buffer-file-name (or (buffer-base-buffer other-buffer)
+                                                         other-buffer)))
+                              (with-current-buffer other-buffer
+                                (derived-mode-p 'special-mode))))))))))
 
 ;;;; Window manipulation
 
@@ -307,18 +370,33 @@ With a '- argument, the window will be `next-window'.
 With a single universal argument, it swaps two windows and keeps
 focus on the same buffer."
   (interactive "P")
-  (if (equal arg '(16))
-      (akirak-window-select-recently-displayed)
-    (if (and (akirak-window--popup-p)
-             (windowp akirak-window-last-non-popup-window))
-        (select-window akirak-window-last-non-popup-window)
-      (when-let (window (akirak-window--other-window nil arg t))
-        (if (equal arg '(4))
-            (window-swap-states window (selected-window))
-          (select-window window))))))
+  (cond
+   ((equal arg '(16))
+    (akirak-window-select-most-recently-displayed))
+   ((and (akirak-window--popup-p)
+         (windowp akirak-window-last-non-popup-window))
+    (select-window akirak-window-last-non-popup-window))
+   ((and (not arg)
+         akirak-window-last-record
+         (member (cdr akirak-window-last-record)
+                 (window-list))
+         (not (eq (cdr akirak-window-last-record)
+                  (selected-window)))
+         (thread-last
+           (window-list)
+           (cl-remove (selected-window))
+           (seq-every-p `(lambda (w)
+                           (time-less-p (buffer-local-value 'buffer-display-time (window-buffer w))
+                                        ',(car akirak-window-last-record))))))
+    (select-window (cdr akirak-window-last-record)))
+   ((and (not arg)
+         (akirak-window-select-most-recently-displayed)))
+   (t
+    (when-let (window (akirak-window--other-window nil arg t))
+      (select-window window)))))
 
 ;;;###autoload
-(defun akirak-window-select-recently-displayed ()
+(defun akirak-window-select-most-recently-displayed ()
   (interactive)
   (when-let (w (thread-last
                  (window-list)
