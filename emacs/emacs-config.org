@@ -4394,7 +4394,10 @@ This is a collection of various utilities to enhance the experience.
 :END:
 #+begin_src elisp
   (setup akirak-compile
-    (:global "C-x c" #'akirak-compile))
+    (:global "C-x c" #'akirak-compile)
+
+    (with-eval-after-load 'compile
+      (akirak-compile-auto-error-mode t)))
 #+end_src
 *** akirak-consult
 #+begin_src emacs-lisp

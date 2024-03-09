@@ -288,5 +288,85 @@
                      (buffer-string)))))
       (delete-file err-file))))
 
+;;;; Extra support for `compilation-minor-mode'
+
+(defvar akirak-compile-default-error-regexp-alist nil)
+
+;;;###autoload
+(define-minor-mode akirak-compile-auto-error-mode
+  "Automatically set the value of `compilation-error-regexp-alist'.
+
+This sets the value of `compilation-error-regexp-alist' to nil and has a
+suitable value detected according to the command line."
+  :global t
+  (if akirak-compile-auto-error-mode
+      (unless akirak-compile-default-error-regexp-alist
+        (setq akirak-compile-default-error-regexp-alist compilation-error-regexp-alist)
+        (setq compilation-error-regexp-alist nil)
+        (add-hook 'compilation-start-hook #'akirak-compile-setup-auto-error-regexp))
+    (when akirak-compile-default-error-regexp-alist
+      (setq compilation-error-regexp-alist akirak-compile-default-error-regexp-alist)
+      (setq akirak-compile-default-error-regexp-alist nil)
+      (remove-hook 'compilation-start-hook #'akirak-compile-setup-auto-error-regexp))))
+
+(defun akirak-compile-setup-auto-error-regexp (_)
+  (set (make-local-variable 'compilation-error-regexp-alist) nil)
+  (when-let (command (car compilation-arguments))
+    (akirak-compile-set-error-regexp-for-command command)))
+
+(defun akirak-compile-set-error-regexp-for-command (command)
+  (if-let (alist (akirak-compile--error-regexp-alist-for-command command))
+      (setq-local compilation-error-regexp-alist alist)
+    (pcase command
+      ((rx bol (* blank) "npm" (+ space))
+       (add-hook 'compilation-filter-hook #'akirak-compile--npm-detecter nil :local)))))
+
+(defun akirak-compile--error-regexp-alist-for-command (command)
+  "Return the key in `compilation-error-regexp-alist'"
+  (pcase command
+    ((rx bol "next" space)
+     (eval-when-compile
+       (let ((path-regexp (rx (+ (any "-_./[]_" alnum))))
+             (filename-regexp (rx (+ (any "-_.[]_" alnum)))))
+         (list
+          (list (rx-to-string `(and "Check your code at "
+                                    (group (regexp ,filename-regexp))
+                                    ":" (group (+ digit)) "."))
+                `(lambda ()
+                   ;; This function is called during the filtering process, so
+                   ;; it is necessary to save the match data.
+                   (save-match-data
+                     (re-search-backward ,(concat "^" "\\./" path-regexp))
+                     (list (match-string 0))))
+                2)
+          ;; e.g. at VolumePage (./src/app/repo/[volume]/edit/page.tsx:27:89)
+          (list (rx-to-string `(and "(./" (group (regexp ,path-regexp))
+                                    ":" (group (+ digit))
+                                    ":" (group (+ digit))
+                                    ")"))
+                1 2 3)
+          ;; e.g. ⨯ src/app/repo/[volume]/edit/page.tsx (14:7) @ VolumeUnitsEditor
+          (list (rx-to-string `(and "./" (group (regexp ,path-regexp))
+                                    " ("
+                                    (group (+ digit))
+                                    ":"
+                                    (group (+ digit))
+                                    ")"))
+                1 2 3)
+          ;; e.g. ⚠ ./src/components/repo/volume/index.ts
+          (list (rx-to-string `(and "⚠" (+ blank) (group "./" (regexp ,path-regexp))))
+                1 nil nil
+                1)))))))
+
+(defun akirak-compile--npm-detecter ()
+  (save-excursion
+    (goto-char compilation-filter-start)
+    (catch 'command-detected
+      (while (re-search-forward (rx bol "> " (group (+ nonl))) nil t)
+        (when-let (alist (akirak-compile--error-regexp-alist-for-command (match-string 1)))
+          (setq-local compilation-error-regexp-alist alist)
+          (remove-hook 'compilation-filter-hook #'akirak-compile--npm-detecter :local)
+          (throw 'command-detected t))))))
+
 (provide 'akirak-compile)
 ;;; akirak-compile.el ends here
