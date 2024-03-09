@@ -4700,6 +4700,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-quick-thing
     (:global "M-SPC" #'akirak-quick-thing))
 #+end_src
+*** akirak-rename
+#+begin_src elisp
+  (setup akirak-rename
+    (:global "C-'" #'akirak-rename-dwim))
+#+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
