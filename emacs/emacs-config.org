@@ -5163,10 +5163,10 @@ Jump to arbitrary positions in visible text and select text quickly.
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package avy)
-    (:global "C-'" #'avy-goto-char-timer
-             "M-g z" #'avy-goto-char-in-line))
+  (setup (:package avy))
 #+end_src
+
+I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
 *** beancount                                     :@extra:beancount:
 #+begin_quote
 A major mode to edit Beancount input files.
