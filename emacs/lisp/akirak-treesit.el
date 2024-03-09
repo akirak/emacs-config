@@ -239,6 +239,53 @@ This is primarily intended for editing JSX/TSX."
          (insert (format "</%s>" (treesit-node-text identifier)))))
     (error "Cannot find")))
 
+;;;###autoload
+(defun akirak-treesit-rename-tag (new-name)
+  "Rename the HTML tag at point."
+  (interactive "sRename tag: " tsx-ts-mode)
+  (pcase-exhaustive (treesit-language-at (point))
+    (`tsx
+     (let ((node (treesit-node-at (point))))
+       (while (and node (not (member (treesit-node-type node)
+                                     '("jsx_opening_element" "jsx_closing_element"))))
+         (setq node (treesit-node-parent node)))
+       (let* ((parent (treesit-node-parent node))
+              (children (treesit-node-children parent))
+              other-node)
+         (unless (equal (treesit-node-type parent) "jsx_element")
+           (error "Failed to reach a JSX element. Instead it was %s"
+                  (treesit-node-type parent)))
+         (pcase-exhaustive (treesit-node-type node)
+           ("jsx_opening_element"
+            (setq other-node (car (last children)))
+            (unless (equal (treesit-node-type other-node) "jsx_closing_element")
+              (error "Failed to reach a closing element")))
+           ("jsx_closing_element"
+            (setq other-node (car children))
+            (unless (equal (treesit-node-type other-node) "jsx_opening_element")
+              (error "Failed to reach an opening element"))))
+         (pcase-exhaustive (seq-sort-by #'treesit-node-start #'< (list node other-node))
+           (`(,open-node ,close-node)
+            (let ((start (treesit-node-start open-node)))
+              (cl-flet
+                  ((rename-tag (node)
+                     (catch 'renamed
+                       (dolist (child (treesit-node-children node))
+                         (when (equal (treesit-node-type child) "identifier")
+                           (goto-char (treesit-node-start child))
+                           (delete-region (treesit-node-start child)
+                                          (treesit-node-end child))
+                           (insert new-name)
+                           (throw 'renamed t))))))
+                (rename-tag close-node)
+                (goto-char start)
+                (let ((fresh-start (treesit-node-at (point))))
+                  (while (not (equal (treesit-node-type fresh-start)
+                                     "jsx_opening_element"))
+                    (setq fresh-start (treesit-node-parent fresh-start)))
+                  (rename-tag fresh-start))
+                (message "Renamed the tag to '%s'" new-name))))))))))
+
 ;;;; Other utilities for tree-sitter support
 
 ;;;###autoload
