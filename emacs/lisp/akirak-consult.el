@@ -106,15 +106,34 @@
                               filename)))))))
   "Project buffer candidate source for `consult-buffer'.")
 
+(defvar akirak-consult--project-files-cache nil)
+
 (defun akirak-consult--project-files ()
   (when-let (default-directory (akirak-consult--project-root))
-    (process-lines "rg" "--files"
-                   "--color=never"
-                   "--iglob=!.git"
-                   "--iglob=!.svn"
-                   "--hidden"
-                   "--one-file-system"
-                   "--sortr" "modified")))
+    (if-let* ((cache (and akirak-consult--project-files-cache
+                          (assoc default-directory akirak-consult--project-files-cache)))
+              (file-list (if (equal (ignore-errors
+                                      (car (process-lines "git" "rev-parse" "HEAD")))
+                                    (cadr cache))
+                             (cddr cache)
+                           (delete cache akirak-consult--project-files-cache)
+                           nil)))
+        file-list
+      (let ((result (process-lines "rg" "--files"
+                                   "--color=never"
+                                   "--iglob=!.git"
+                                   "--iglob=!.svn"
+                                   "--hidden"
+                                   "--one-file-system"
+                                   "--sortr" "modified")))
+        ;; TODO: Make the threshold customizable
+        (when (> (length result) 2000)
+          (push (cons default-directory
+                      (cons (ignore-errors
+                              (car (process-lines "git" "rev-parse" "HEAD")))
+                            result))
+                akirak-consult--project-files-cache))
+        result))))
 
 ;; Based on `consult--source-project-recent-file'.
 (cl-defun akirak-consult-build-project-file-source (name &key narrow hidden
