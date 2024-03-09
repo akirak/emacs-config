@@ -255,7 +255,6 @@
 
 (defun akirak-compile--just-format-body (body)
   (when body
-    (message "%s" body)
     (cl-flet*
         ((format-token (token)
            (pcase token
