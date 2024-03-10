@@ -29,7 +29,7 @@ jobs:
       with:
         ref: ${{ inputs.release-tag }}
 
-    - uses: cachix/install-nix-action@v25
+    - uses: cachix/install-nix-action@v26
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
