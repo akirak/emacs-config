@@ -291,6 +291,10 @@
      (let ((default-file (concat "lib/" (match-string 1 this-file) ".ex")))
        (cons default-file
              (cl-remove default-file files :test #'equal))))
+    ((rx bol "test/" (group (+ anything)) "_test.gleam" eol)
+     (let ((default-file (concat "src/" (match-string 1 this-file) ".gleam")))
+       (cons default-file
+             (cl-remove default-file files :test #'equal))))
     (_ files)))
 
 (defun akirak-consult--prepend-test-files (files this-file)
@@ -298,6 +302,10 @@
     (`nil files)
     ((rx bol "lib/" (group (+ anything)) ".ex" eol)
      (let ((default-file (concat "test/" (match-string 1 this-file) "_test.exs")))
+       (cons default-file
+             (cl-remove default-file files :test #'equal))))
+    ((rx bol "src/" (group (+ anything)) ".gleam" eol)
+     (let ((default-file (concat "test/" (match-string 1 this-file) "_test.gleam")))
        (cons default-file
              (cl-remove default-file files :test #'equal))))
     (_ files)))
