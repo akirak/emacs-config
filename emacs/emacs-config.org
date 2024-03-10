@@ -8960,7 +8960,6 @@ major mode for editing web templates
 *** which-key                                :usability:keybindings:
 #+begin_quote
 Display available keybindings in popup
-[[https://github.com/justbur/emacs-which-key]]
 #+end_quote
 
 #+begin_src emacs-lisp
