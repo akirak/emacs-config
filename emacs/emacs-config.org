@@ -4720,7 +4720,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-treesit
 #+begin_src elisp
   (setup akirak-treesit
-    (:bind "C-M-SPC" #'akirak-treesit-expand-region)
+    (:bind [remap akirak-expand-region-default] #'akirak-treesit-expand-region)
     (add-hook 'after-change-major-mode-hook
               (defun akirak/enable-treesit-mode ()
                 (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
