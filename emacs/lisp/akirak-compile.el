@@ -9,7 +9,8 @@
     ("yarn.lock" . yarn)
     ("package-lock.json" . npm)
     ("bun.lockb" . bun)
-    ("package.json" . package-json))
+    ("package.json" . package-json)
+    ("gleam.toml" . gleam))
   ""
   :type '(alist :key-type (string :tag "File name")
                 :value-type (symbol :tag "Symbol to denote the project type")))
@@ -38,6 +39,10 @@
      ("dune runtest --watch")
      ("opam exec -- odig odoc")
      ("opam install ocaml-lsp-server ocamlformat-rpc odig dream sherlodoc"))
+    (gleam
+     ("gleam run")
+     ("gleam test")
+     ("gleam add"))
     (bun
      ("bun run" annotation "Run JavaScript with bun, a package.json script, or a bin")
      ("bun build" annotation "Build TypeScript and JavaScript into a single file")
