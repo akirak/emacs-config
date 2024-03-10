@@ -1133,6 +1133,7 @@ The built-in =electric= package provides the following modes:
            (svelte-mode . (,@prettier ,@lsp ,@flymake-eslint))
            (elixir-ts-mode . (,@lsp))
            (heex-ts-mode . (,@lsp))
+           (gleam-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (rust-ts-mode . (,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
