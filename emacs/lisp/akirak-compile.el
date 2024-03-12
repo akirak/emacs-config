@@ -361,7 +361,16 @@ suitable value detected according to the command line."
           ;; e.g. ⚠ ./src/components/repo/volume/index.ts
           (list (rx-to-string `(and "⚠" (+ blank) (group "./" (regexp ,path-regexp))))
                 1 nil nil
-                1)))))))
+                1)))))
+    ((rx bol "biome" space)
+     (eval-when-compile
+       (let ((path-regexp (rx (+ (any "-_./[]_" alnum)))))
+         (list
+          ;; ./src/app/blobs/thumbnails/[...path]/route.ts:18:7
+          (list (rx-to-string `(and bol "./" (group (regexp ,path-regexp))
+                                    ":" (group (+ digit))
+                                    ":" (group (+ digit))))
+                1 2 3)))))))
 
 (defun akirak-compile--npm-detecter ()
   (save-excursion
