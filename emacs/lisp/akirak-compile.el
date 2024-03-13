@@ -97,7 +97,11 @@
             (puthash key (list command) akirak-compile-per-workspace-history)
           (cl-pushnew command history)
           (puthash key history akirak-compile-per-workspace-history))
-        (compile command t))
+        (if (akirak-compile--installation-command-p command)
+            ;; Install dependencies in a separate buffer without killing the
+            ;; current process.
+            (akirak-compile-install command)
+          (compile command t)))
     (user-error "No workspace root")))
 
 (defun akirak-compile--guess-backend (command)
@@ -257,6 +261,25 @@
                      (list (cdr cell)))))))
       (otherwise
        (alist-get backend akirak-compile-backend-command-alist)))))
+
+(defun akirak-compile--installation-command-p (command)
+  (string-match-p (rx bol (* blank)
+                      (+ (not (any space)))
+                      (+ space)
+                      (or "install" "add")
+                      space)
+                  command))
+
+(defun akirak-compile-install (command)
+  (compilation-start command t
+                     (cl-constantly
+                      (format "*%s-install*" (thread-last
+                                               default-directory
+                                               (directory-file-name)
+                                               (file-name-nondirectory ))))
+                     nil
+                     ;; Keep what the user has installed for the project
+                     'continue))
 
 (defun akirak-compile--just-format-body (body)
   (when body
