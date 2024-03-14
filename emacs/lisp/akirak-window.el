@@ -261,7 +261,9 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                                    ;; perfect-margin.el sets window margins
                                    (pcase (window-margins wnd)
                                      (`(,_) 0)
-                                     (`(,left . ,right) (+ left right))))
+                                     (`(,left . ,right)
+                                      (+ (or left 0)
+                                         (or right 0)))))
                                 80)))
                          windows)
                  (cl-reduce #'+))))
