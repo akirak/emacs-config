@@ -10,7 +10,8 @@ location, or nil."
 ;;;###autoload
 (defun akirak-paren-goto-match-or-self-insert (n &optional c)
   (interactive "p")
-  (if-let (loc (akirak-paren-matching-location))
+  (if-let (loc (and (not (ppss-comment-or-string-start (syntax-ppss)))
+                    (akirak-paren-matching-location)))
       (goto-char loc)
     (self-insert-command n c)))
 

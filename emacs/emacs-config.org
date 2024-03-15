@@ -1133,6 +1133,7 @@ The built-in =electric= package provides the following modes:
            (svelte-mode . (,@prettier ,@lsp ,@flymake-eslint))
            (elixir-ts-mode . (,@lsp))
            (heex-ts-mode . (,@lsp))
+           (gleam-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (rust-ts-mode . (,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
@@ -4719,7 +4720,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-treesit
 #+begin_src elisp
   (setup akirak-treesit
-    (:bind "C-M-SPC" #'akirak-treesit-expand-region)
+    (:bind [remap akirak-expand-region-default] #'akirak-treesit-expand-region)
     (add-hook 'after-change-major-mode-hook
               (defun akirak/enable-treesit-mode ()
                 (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
@@ -8959,7 +8960,6 @@ major mode for editing web templates
 *** which-key                                :usability:keybindings:
 #+begin_quote
 Display available keybindings in popup
-[[https://github.com/justbur/emacs-which-key]]
 #+end_quote
 
 #+begin_src emacs-lisp
