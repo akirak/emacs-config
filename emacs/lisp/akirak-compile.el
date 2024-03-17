@@ -93,14 +93,15 @@
                                     (cdr (assq (akirak-compile--guess-backend command)
                                                projects))
                                     workspace)))
-        (if (eq history :default)
-            (puthash key (list command) akirak-compile-per-workspace-history)
-          (cl-pushnew command history)
-          (puthash key history akirak-compile-per-workspace-history))
         (if (akirak-compile--installation-command-p command)
             ;; Install dependencies in a separate buffer without killing the
             ;; current process.
             (akirak-compile-install command)
+          ;; Keep the input in the history iff it's not an installation command.
+          (if (eq history :default)
+              (puthash key (list command) akirak-compile-per-workspace-history)
+            (cl-pushnew command history)
+            (puthash key history akirak-compile-per-workspace-history))
           (compile command t)))
     (user-error "No workspace root")))
 
