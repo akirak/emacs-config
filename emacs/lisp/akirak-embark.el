@@ -653,7 +653,7 @@
   (let ((root (file-name-as-directory (expand-file-name directory)))
         (count 0))
     (dolist (buf (buffer-list))
-      (when (string-prefix-p root (buffer-local-value 'default-directory buf))
+      (when (string-prefix-p root (expand-file-name (buffer-local-value 'default-directory buf)))
         (kill-buffer buf)
         (cl-incf count)))
     (when (> count 0)
