@@ -136,7 +136,7 @@ matches the host of the repository,
             (path (if (string-match-p (rx ".git" eol) match)
                       (substring match 0 -4)
                     match))
-            (local-path (f-join host path))
+            (local-path (f-join host (downcase path)))
             (origin (format "https://%s/%s.git" host path)))
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
