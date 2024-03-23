@@ -341,7 +341,15 @@ suitable value detected according to the command line."
 (defun akirak-compile-setup-auto-error-regexp (_)
   (set (make-local-variable 'compilation-error-regexp-alist) nil)
   (when-let (command (car compilation-arguments))
-    (akirak-compile-set-error-regexp-for-command command)))
+    (akirak-compile-set-error-regexp-for-command command)
+    (when-let (search-path
+               (pcase command
+                 ((rx bol "mix" space)
+                  (when (file-directory-p "deps")
+                    (cons nil
+                          (mapcar (lambda (name) (concat "deps/" name))
+                                  (directory-files "deps" nil "^[[:alpha:]]")))))))
+      (set (make-local-variable 'compilation-search-path) search-path))))
 
 (defun akirak-compile-set-error-regexp-for-command (command)
   (if-let (alist (akirak-compile--error-regexp-alist-for-command command))
