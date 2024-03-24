@@ -65,6 +65,42 @@ pair."
                  '((?\{ . ?\})))
       (error "Cannot find syntax info for %c" open-char)))
 
+(defun akirak-elec-pair--bounds-around-point (c &optional inner)
+  (when-let* ((regexp (regexp-quote (char-to-string c)))
+              (start (save-excursion
+                       (unless (looking-at regexp)
+                         (re-search-backward regexp nil t))))
+              (end (save-excursion
+                     (goto-char start)
+                     (forward-sexp)
+                     (point))))
+    (if inner
+        (cons (1+ start) (1- end))
+      (cons start end))))
+
+;;;###autoload
+(defun akirak-elec-pair-inner-kill (c)
+  "Kill the text inside a pair of parentheses/brackets."
+  (interactive "cTarget paren: ")
+  (pcase (akirak-elec-pair--bounds-around-point c 'inner)
+    (`(,start . ,end)
+     (kill-region start end)
+     (goto-char start))
+    (_
+     (user-error "Not finding a pair"))))
+
+;;;###autoload
+(defun akirak-elec-pair-inner-kill-new (c)
+  "Copy the text inside a pair of parentheses/brackets."
+  (interactive "cTarget paren: ")
+  (pcase (akirak-elec-pair--bounds-around-point c 'inner)
+    (`(,start . ,end)
+     (let ((text (buffer-substring start end)))
+       (kill-new text)
+       (message "Copied %s chars (\"%s\")" (- end start) text)))
+    (_
+     (user-error "Not finding a pair"))))
+
 ;;;###autoload
 (defun akirak-elec-pair-replace (c)
   "Replace a pair of parentheses/brackets of C around the point."
