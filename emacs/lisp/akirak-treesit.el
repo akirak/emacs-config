@@ -116,8 +116,10 @@
                (eq (treesit-node-end akirak-treesit-expand-region-node)
                    (region-end)))
     (setq akirak-treesit-expand-region-node nil))
-  (let* ((node (if akirak-treesit-expand-region-node
-                   (treesit-node-parent akirak-treesit-expand-region-node)
+  (let* ((current-bounds (region-bounds))
+         (node (if akirak-treesit-expand-region-node
+                   (or (treesit-node-parent akirak-treesit-expand-region-node)
+                       (user-error "Root node of the document"))
                  (treesit-node-at (point))))
          (start (treesit-node-start node)))
     (when (use-region-p)
@@ -129,7 +131,9 @@
     (push-mark)
     (goto-char start)
     (setq akirak-treesit-expand-region-node node)
-    (message "%s" (treesit-node-type node))))
+    (if (equal (region-bounds) current-bounds)
+        (akirak-treesit-expand-region)
+      (message "%s" (treesit-node-type node)))))
 
 (defcustom akirak-treesit-balanced-nodes
   '("jsx_opening_element"

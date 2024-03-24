@@ -93,14 +93,15 @@
                                     (cdr (assq (akirak-compile--guess-backend command)
                                                projects))
                                     workspace)))
-        (if (eq history :default)
-            (puthash key (list command) akirak-compile-per-workspace-history)
-          (cl-pushnew command history)
-          (puthash key history akirak-compile-per-workspace-history))
         (if (akirak-compile--installation-command-p command)
             ;; Install dependencies in a separate buffer without killing the
             ;; current process.
             (akirak-compile-install command)
+          ;; Keep the input in the history iff it's not an installation command.
+          (if (eq history :default)
+              (puthash key (list command) akirak-compile-per-workspace-history)
+            (cl-pushnew command history)
+            (puthash key history akirak-compile-per-workspace-history))
           (compile command t)))
     (user-error "No workspace root")))
 
@@ -340,7 +341,15 @@ suitable value detected according to the command line."
 (defun akirak-compile-setup-auto-error-regexp (_)
   (set (make-local-variable 'compilation-error-regexp-alist) nil)
   (when-let (command (car compilation-arguments))
-    (akirak-compile-set-error-regexp-for-command command)))
+    (akirak-compile-set-error-regexp-for-command command)
+    (when-let (search-path
+               (pcase command
+                 ((rx bol "mix" space)
+                  (when (file-directory-p "deps")
+                    (cons nil
+                          (mapcar (lambda (name) (concat "deps/" name))
+                                  (directory-files "deps" nil "^[[:alpha:]]")))))))
+      (set (make-local-variable 'compilation-search-path) search-path))))
 
 (defun akirak-compile-set-error-regexp-for-command (command)
   (if-let (alist (akirak-compile--error-regexp-alist-for-command command))
@@ -393,7 +402,17 @@ suitable value detected according to the command line."
           (list (rx-to-string `(and bol "./" (group (regexp ,path-regexp))
                                     ":" (group (+ digit))
                                     ":" (group (+ digit))))
-                1 2 3)))))))
+                1 2 3)))))
+    ((rx bol "mix" space)
+     (eval-when-compile
+       (let ((path-regexp (rx word-start alnum
+                              (* (any "_" alnum))
+                              "/"
+                              (+ (any "_./" alnum)))))
+         (list
+          (list (rx-to-string `(and (group (regexp ,path-regexp))
+                                    ":" (group (+ digit))))
+                1 2)))))))
 
 (defun akirak-compile--npm-detecter ()
   (save-excursion

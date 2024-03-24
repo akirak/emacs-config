@@ -1275,8 +1275,8 @@ provided as a separate command for integration, e.g. with embark."
       (while (re-search-forward (rx (+ blank) eol) nil t)
         (replace-match ""))
       ;; Remove spaces at the end of the buffer.
-      (goto-char (point-max))
-      (delete-all-space 'backward-only)
+      (when (re-search-forward (rx (+ space) eos) nil t)
+        (replace-match ""))
       (let ((org-inhibit-startup t))
         (delay-mode-hooks (org-mode)))
       (goto-char (point-min))

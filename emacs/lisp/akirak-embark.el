@@ -653,7 +653,7 @@
   (let ((root (file-name-as-directory (expand-file-name directory)))
         (count 0))
     (dolist (buf (buffer-list))
-      (when (string-prefix-p root (buffer-local-value 'default-directory buf))
+      (when (string-prefix-p root (expand-file-name (buffer-local-value 'default-directory buf)))
         (kill-buffer buf)
         (cl-incf count)))
     (when (> count 0)
@@ -783,17 +783,18 @@
 (defun akirak-embark-install-package (package)
   "Install a PACKAGE as a dependency for the current package file."
   (interactive "sPackages (optionally separated by space or comma): ")
-  (pcase-exhaustive (file-name-base (buffer-file-name))
+  (pcase-exhaustive (file-name-nondirectory (buffer-file-name))
     ((or "dune" "dune-project")
-     (let ((default-directory (locate-dominating-file default-directory "dune-project")))
-       (akirak-compile-install
-        (concat (format "opam install %s"
-                        (mapconcat #'shell-quote-argument
-                                   (string-split package "[[:space:]]," t)
-                                   " "))
-                (when (executable-find "odig")
-                  " && odig odoc")
-                " && dune build"))))))
+     (akirak-compile-install
+      (concat (format "opam install %s"
+                      (mapconcat #'shell-quote-argument
+                                 (string-split package "[[:space:]]," t)
+                                 " "))
+              (when (executable-find "odig")
+                " && odig odoc")
+              " && dune build")))
+    ("mix.exs"
+     (akirak-compile-install "mix deps.get"))))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
