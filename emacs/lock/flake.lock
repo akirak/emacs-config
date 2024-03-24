@@ -208,6 +208,22 @@
         "type": "github"
       }
     },
+    "burly": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1702896323,
+        "narHash": "sha256-F35OAzzZFwhkJb2+YP1JvER73t9JMjHS3C1WAt7674E=",
+        "owner": "alphapapa",
+        "repo": "burly.el",
+        "rev": "6626df0c2054cb0662bf113ba4cbad641b588d0f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "alphapapa",
+        "repo": "burly.el",
+        "type": "github"
+      }
+    },
     "buttercup": {
       "flake": false,
       "locked": {
@@ -2991,6 +3007,7 @@
         "blamer": "blamer",
         "bookmark-frecency": "bookmark-frecency",
         "browse-at-remote": "browse-at-remote",
+        "burly": "burly",
         "buttercup": "buttercup",
         "caml": "caml",
         "cape": "cape",
