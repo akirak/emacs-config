@@ -80,6 +80,12 @@
       repo = "browse-at-remote";
       type = "github";
     };
+    burly = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "burly.el";
+      type = "github";
+    };
     buttercup = {
       flake = false;
       owner = "jorgenschaefer";

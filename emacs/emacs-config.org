@@ -5250,7 +5250,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
-*** COMMENT burly                                                              :ARCHIVE:
+*** burly
 :PROPERTIES:
 :CREATED_TIME: [2022-09-28 Wed 23:59]
 :END:
