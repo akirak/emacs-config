@@ -264,12 +264,28 @@
        (alist-get backend akirak-compile-backend-command-alist)))))
 
 (defun akirak-compile--installation-command-p (command)
-  (string-match-p (rx bol (* blank)
-                      (+ (not (any space)))
-                      (+ space)
-                      (or "install" "add")
-                      space)
-                  command))
+  (pcase (akirak-compile--split-command command)
+    (`(,_ (or "add" "install" "remove" "uninstall") . ,_)
+     t)
+    (`("mix" "deps.get")
+     t)
+    (`(,_ "astro" "add" . ,_)
+     t)))
+
+(defun akirak-compile--split-command (command)
+  (with-temp-buffer
+    (let (args)
+      (insert command)
+      (goto-char (point-min))
+      (while (re-search-forward (rx (or (and "'" (+ (not (any "'"))) "'")
+                                        (and "\"" (+ (not (any "'"))) "\"")
+                                        (+ (not (any space)))))
+                                nil t)
+        (push (string-trim (match-string 0)
+                           "[\"']"
+                           "[\"']")
+              args))
+      (nreverse args))))
 
 (defun akirak-compile-install (command)
   (compilation-start command t
