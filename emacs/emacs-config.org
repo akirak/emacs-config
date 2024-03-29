@@ -1129,6 +1129,7 @@ The built-in =electric= package provides the following modes:
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@prettier ,@lsp))
+           (astro-ts-mode . (,@lsp))
            (css-mode . (,@prettier ,@lsp))
            (svelte-mode . (,@prettier ,@lsp ,@flymake-eslint))
            (elixir-ts-mode . (,@lsp))
@@ -4066,6 +4067,18 @@ Emacs:
 The generated remappings do have limitations, but it is possible to work around
 manually by adding extra entries in the following subsections.
 
+*** astro-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-03-29 Fri 21:02]
+:END:
+#+begin_quote
+Major mode for editing Astro templates
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package astro-ts-mode)
+    (:file-match "\\.astro\\'"))
+#+end_src
 *** dockerfile-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-09-23 Sat 11:30]
@@ -6004,10 +6017,10 @@ Client for Language Server Protocol (LSP) servers
                           (:experimental (:completions (:enable t))))
                          ("elixir-ls")))))
       (add-to-list 'eglot-server-programs
-                   `(web-mode . ,(eglot-alternatives
-                                  '(("astro-ls" "--stdio"
-                                     :initializationOptions
-                                     (:typescript (:tsdk "./node_modules/typescript/lib")))))))
+                   `(astro-ts-mode
+                     . ("astro-ls" "--stdio"
+                        :initializationOptions
+                        (:typescript (:tsdk "./node_modules/typescript/lib")))))
 
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")
@@ -8942,7 +8955,6 @@ major mode for editing web templates
     (:file-match "\\.mdx\\'"
                  "\\.html?\\'"
                  "\\.html\\.h?eex\\'"
-                 "\\.astro\\'"
                  "\\.sface\\'")
 
     (:bind "C-c /" #'akirak-web-mode-surround

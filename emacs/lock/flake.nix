@@ -32,6 +32,12 @@
       repo = "anzu";
       type = "github";
     };
+    astro-ts-mode = {
+      flake = false;
+      owner = "Sorixelle";
+      repo = "astro-ts-mode";
+      type = "github";
+    };
     auto-minor-mode = {
       flake = false;
       owner = "joewreschnig";
