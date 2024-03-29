@@ -694,12 +694,6 @@
       repo = "emacs-mini-modeline";
       type = "github";
     };
-    mlscroll = {
-      flake = false;
-      owner = "jdtsmith";
-      repo = "mlscroll";
-      type = "github";
-    };
     mmm-mode = {
       flake = false;
       owner = "dgutov";
