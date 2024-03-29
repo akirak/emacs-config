@@ -48,6 +48,10 @@
 
     my-overlay.url = "github:akirak/nixpkgs-overlay";
 
+    tree-sitter-astro = {
+      url = "github:virchau13/tree-sitter-astro";
+      flake = false;
+    };
     tree-sitter-gleam = {
       url = "github:gleam-lang/tree-sitter-gleam";
       flake = false;
@@ -119,6 +123,9 @@
             # This will indirectly override tree-sitter-grammars as wells
             tree-sitter = pkgs.tree-sitter.override {
               extraGrammars = {
+                tree-sitter-astro = {
+                  src = inputs.tree-sitter-astro.outPath;
+                };
                 tree-sitter-gleam = {
                   src = inputs.tree-sitter-gleam.outPath;
                 };

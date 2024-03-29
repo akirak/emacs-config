@@ -898,6 +898,7 @@
         "nongnu-elpa": "nongnu-elpa",
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks_2",
+        "tree-sitter-astro": "tree-sitter-astro",
         "tree-sitter-gleam": "tree-sitter-gleam",
         "twist": "twist",
         "twist-overrides": "twist-overrides",
@@ -979,6 +980,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tree-sitter-astro": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1709260661,
+        "narHash": "sha256-gToRdyLvvDaeE1b9fYRVPFt1mtdR9kSYzqFBDUYpv3k=",
+        "owner": "virchau13",
+        "repo": "tree-sitter-astro",
+        "rev": "dfa0893bdc4bdfada102043404758c66e3580568",
+        "type": "github"
+      },
+      "original": {
+        "owner": "virchau13",
+        "repo": "tree-sitter-astro",
         "type": "github"
       }
     },

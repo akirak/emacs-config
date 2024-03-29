@@ -6017,7 +6017,7 @@ Client for Language Server Protocol (LSP) servers
                           (:experimental (:completions (:enable t))))
                          ("elixir-ls")))))
       (add-to-list 'eglot-server-programs
-                   `(astro-ts-mode
+                   '(astro-ts-mode
                      . ("astro-ls" "--stdio"
                         :initializationOptions
                         (:typescript (:tsdk "./node_modules/typescript/lib")))))
