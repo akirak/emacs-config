@@ -80,6 +80,22 @@
         "type": "github"
       }
     },
+    "astro-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1694334264,
+        "narHash": "sha256-l2VIk5hZXTGxnyUCy/msWr8NyQnuYf+JxkABWusA7Zo=",
+        "owner": "Sorixelle",
+        "repo": "astro-ts-mode",
+        "rev": "69c23bb67f0693aad85086f7c5809b76d6391076",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Sorixelle",
+        "repo": "astro-ts-mode",
+        "type": "github"
+      }
+    },
     "auto-minor-mode": {
       "flake": false,
       "locked": {
@@ -1845,22 +1861,6 @@
         "type": "github"
       }
     },
-    "mlscroll": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1707952438,
-        "narHash": "sha256-YTua1EGiDIlVJ2FXW8e9ItoeT2tWhaPRUkDvPUVRIbI=",
-        "owner": "jdtsmith",
-        "repo": "mlscroll",
-        "rev": "90f4dc9ea721a347f0e19e991701b35dd8a80d8b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jdtsmith",
-        "repo": "mlscroll",
-        "type": "github"
-      }
-    },
     "mmm-mode": {
       "flake": false,
       "locked": {
@@ -2999,6 +2999,7 @@
         "aio": "aio",
         "akirak": "akirak",
         "anzu": "anzu",
+        "astro-ts-mode": "astro-ts-mode",
         "auto-minor-mode": "auto-minor-mode",
         "auto-yasnippet": "auto-yasnippet",
         "avy": "avy",
@@ -3109,7 +3110,6 @@
         "mastodon": "mastodon",
         "mermaid-mode": "mermaid-mode",
         "mini-modeline": "mini-modeline",
-        "mlscroll": "mlscroll",
         "mmm-mode": "mmm-mode",
         "modus-themes": "modus-themes",
         "move-dup": "move-dup",
