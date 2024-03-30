@@ -114,6 +114,7 @@
   (when arg
     (akirak-project-import-from-magit))
   (let ((ent (consult--multi akirak-consult-dir-sources
+                             :category 'directory
                              :require-match
                              (confirm-nonexistent-file-or-buffer)
                              :prompt "Directory: "
