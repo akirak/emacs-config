@@ -214,7 +214,7 @@ display alternative actions."
     (cl-remove-if (lambda (dir)
                     (string-prefix-p "~/archives/" dir)))
     (mapcar (lambda (dir)
-              (file-name-directory (string-remove-suffix "/" dir))))
+              (file-name-directory (directory-file-name dir))))
     (delete-dups)))
 
 ;;;###autoload

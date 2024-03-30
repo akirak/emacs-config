@@ -1129,6 +1129,7 @@ The built-in =electric= package provides the following modes:
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@prettier ,@lsp))
+           (astro-ts-mode . (,@lsp))
            (css-mode . (,@prettier ,@lsp))
            (svelte-mode . (,@prettier ,@lsp ,@flymake-eslint))
            (elixir-ts-mode . (,@lsp))
@@ -4066,6 +4067,18 @@ Emacs:
 The generated remappings do have limitations, but it is possible to work around
 manually by adding extra entries in the following subsections.
 
+*** astro-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-03-29 Fri 21:02]
+:END:
+#+begin_quote
+Major mode for editing Astro templates
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package astro-ts-mode)
+    (:file-match "\\.astro\\'"))
+#+end_src
 *** dockerfile-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-09-23 Sat 11:30]
@@ -4448,6 +4461,8 @@ This is a collection of various utilities to enhance the experience.
                "M-i c" #'akirak-elec-pair-replace
                "M-i d" #'akirak-elec-pair-delete
                "M-i y" #'akirak-elec-pair-wrap-post-yank
+               "M-i x" #'akirak-elec-pair-inner-kill
+               "M-i w" #'akirak-elec-pair-inner-kill-new
                "M-i #" #'akirak-elec-pair-self-insert
                "M-i $" #'akirak-elec-pair-self-insert
                "M-i %" #'akirak-elec-pair-self-insert
@@ -5248,7 +5263,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
     ;; Use it as a replacement for ibuffer
     (:global "C-x C-b" #'bufler))
 #+end_src
-*** COMMENT burly                                                              :ARCHIVE:
+*** burly
 :PROPERTIES:
 :CREATED_TIME: [2022-09-28 Wed 23:59]
 :END:
@@ -6002,10 +6017,10 @@ Client for Language Server Protocol (LSP) servers
                           (:experimental (:completions (:enable t))))
                          ("elixir-ls")))))
       (add-to-list 'eglot-server-programs
-                   `(web-mode . ,(eglot-alternatives
-                                  '(("astro-ls" "--stdio"
-                                     :initializationOptions
-                                     (:typescript (:tsdk "./node_modules/typescript/lib")))))))
+                   '(astro-ts-mode
+                     . ("astro-ls" "--stdio"
+                        :initializationOptions
+                        (:typescript (:tsdk "./node_modules/typescript/lib")))))
 
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")
@@ -7705,7 +7720,7 @@ Display modeline in minibuffer
                 value))
           ""))))
 #+end_src
-*** mlscroll                                         :aesthetics:UI:
+*** COMMENT mlscroll                                             :aesthetics:UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
 :END:
@@ -8940,7 +8955,6 @@ major mode for editing web templates
     (:file-match "\\.mdx\\'"
                  "\\.html?\\'"
                  "\\.html\\.h?eex\\'"
-                 "\\.astro\\'"
                  "\\.sface\\'")
 
     (:bind "C-c /" #'akirak-web-mode-surround
@@ -9566,7 +9580,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+RESULTS: tag-statistics
 | [[org-ql-search:tags:packages][packages]]            | 212 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
-| [[org-ql-search:tags:UI][UI]]                  |  13 |
+| [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:development][development]]         |   8 |
@@ -9629,7 +9643,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:social][social]]              |   1 |
 | [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
-| [[org-ql-search:tags:aesthetics][aesthetics]]          |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:Chinese][Chinese]]             |   1 |

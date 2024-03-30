@@ -131,8 +131,13 @@ with builtins; let
                 prev.linkFarm "treesit-grammars"
                 (
                   map (drv: {
-                    name = "lib${
-                      lib.removeSuffix "-grammar" (lib.getName drv)
+                    # Some grammars don't contain "tree-sitter-" as the prefix,
+                    # so add it explicitly.
+                    name = "libtree-sitter-${
+                      lib.pipe (lib.getName drv) [
+                        (lib.removeSuffix "-grammar")
+                        (lib.removePrefix "tree-sitter-")
+                      ]
                     }${
                       prev.stdenv.targetPlatform.extensions.sharedLibrary
                     }";

@@ -160,23 +160,38 @@
                    (re-search-forward (rx (* blank) eol))
                    (match-beginning 0)))
           parent)
-      (if (< (treesit-node-start node) (point))
-          (kill-region (point) (min bound (treesit-node-end node)))
-        (catch 'stop
-          (while (setq parent (treesit-node-parent node))
-            (when (and (or (< (treesit-node-start parent) start)
-                           (and (= (treesit-node-end node) bound)
-                                (looking-back (rx bol (* blank)) (line-beginning-position))))
-                       (not (member (treesit-node-type node)
-                                    akirak-treesit-balanced-nodes)))
-              (throw 'stop t))
-            (setq node parent)))
-        (if parent
-            (if-let (end-node (akirak-treesit--find-last-node node parent bound))
-                (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end end-node)))
-              ;; No node to delete, fallback to the default behavior
-              (kill-line))
-          (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end node))))))))
+      (cl-flet
+          ((node-at-point-p (t)
+             (and (<= (treesit-node-start t) (point))
+                  (< (point) (treesit-node-end t)))))
+        (if (node-at-point-p node)
+            (if (< (treesit-node-start node) (point))
+                (kill-region (point) (min bound (treesit-node-end node)))
+              (catch 'stop
+                (while (setq parent (treesit-node-parent node))
+                  (when (and (or (< (treesit-node-start parent) start)
+                                 (and (= (treesit-node-end node) bound)
+                                      (looking-back (rx bol (* blank)) (line-beginning-position))))
+                             (not (member (treesit-node-type node)
+                                          akirak-treesit-balanced-nodes)))
+                    (throw 'stop t))
+                  (setq node parent)))
+              (if parent
+                  (if-let (end-node (akirak-treesit--find-last-node node parent bound))
+                      (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end end-node)))
+                    ;; No node to delete, fallback to the default behavior
+                    (kill-line))
+                (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end node)))))
+          ;; There is no node at point, so find the next node and delete until
+          ;; the start of the node
+          (setq parent (treesit-node-parent node))
+          (while (not (node-at-point-p parent))
+            (setq parent (treesit-node-parent parent)))
+          (if-let (node (seq-find `(lambda (node)
+                                     (> (treesit-node-start node) ,(point)))
+                                  (treesit-node-children parent)))
+              (kill-region (point) (treesit-node-start node))
+            (kill-region (point) (treesit-node-end parent))))))))
 
 (defun akirak-treesit--after-last-node (pos)
   (save-excursion

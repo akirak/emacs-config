@@ -32,6 +32,12 @@
       repo = "anzu";
       type = "github";
     };
+    astro-ts-mode = {
+      flake = false;
+      owner = "Sorixelle";
+      repo = "astro-ts-mode";
+      type = "github";
+    };
     auto-minor-mode = {
       flake = false;
       owner = "joewreschnig";
@@ -78,6 +84,12 @@
       flake = false;
       owner = "rmuslimov";
       repo = "browse-at-remote";
+      type = "github";
+    };
+    burly = {
+      flake = false;
+      owner = "alphapapa";
+      repo = "burly.el";
       type = "github";
     };
     buttercup = {
@@ -686,12 +698,6 @@
       flake = false;
       owner = "kiennq";
       repo = "emacs-mini-modeline";
-      type = "github";
-    };
-    mlscroll = {
-      flake = false;
-      owner = "jdtsmith";
-      repo = "mlscroll";
       type = "github";
     };
     mmm-mode = {
