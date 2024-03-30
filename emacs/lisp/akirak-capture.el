@@ -338,9 +338,9 @@
                        #'akirak-capture--goto-some-heading
                      #'akirak-capture--goto-backlog)))
     (cl-etypecase target
-      (marker (list :function `(lambda ()
-                                 (org-goto-marker-or-bmk ,target)
-                                 (org-back-to-heading))))
+      (marker (list :file (buffer-file-name (org-base-buffer (marker-buffer target)))
+                    :olp (org-with-point-at target
+                           (org-get-outline-path t))))
       (string (list :file target
                     :function jump-func))
       (org-dog-file (list :file (oref target absolute)
