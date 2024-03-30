@@ -45,8 +45,8 @@
     (define-key map "o" #'find-file-other-window)
     (define-key map "t" #'find-file-other-tab)
     (define-key map "p" #'akirak-consult-project-file)
-    (define-key map "v" #'akirak-embark-akirak-shell)
-    (define-key map "V" #'akirak-embark-akirak-shell-other-window)
+    (define-key map "v" #'akirak-embark-shell-at-dir)
+    (define-key map "V" #'akirak-embark-shell-other-window-at-dir)
     (define-key map "lh" #'akirak-embark-magit-log-head)
     (define-key map "la" #'akirak-embark-magit-log-all)
     (define-key map "n" #'nix3-flake-show)
@@ -795,6 +795,23 @@
               " && dune build")))
     ("mix.exs"
      (akirak-compile-install "mix deps.get"))))
+
+(defun akirak-embark-shell-at-dir (dir &optional other-window)
+  (interactive "DDirectory: ")
+  (when (or (file-directory-p dir)
+            (and (not (file-exists-p dir))
+                 (when (yes-or-no-p (format "Create a directory \"%s\" and open a shell in it?"
+                                            dir))
+                   (make-directory dir 'parents)
+                   t)))
+    (let ((default-directory dir))
+      (if other-window
+          (akirak-shell-other-window)
+        (akirak-shell)))))
+
+(defun akirak-embark-shell-other-window-at-dir (dir)
+  (interactive "DDirectory: ")
+  (akirak-embark-shell-at-dir t))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
