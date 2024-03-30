@@ -10,7 +10,7 @@ jobs:
     if: |
       github.event.pull_request.merged == true &&
       github.base_ref == 'develop' &&
-      github.head_ref == 'update/flake-lock' &&
+      github.head_ref == 'bot/update/flake-lock' &&
       github.event.pull_request.head.repo.id == github.event.pull_request.base.repo.id
     strategy:
       matrix:

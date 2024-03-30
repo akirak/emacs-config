@@ -19,7 +19,7 @@ jobs:
     - run: |
         git config --add user.name 'github-actions[bot]'
         git config --add user.email '6270544+github-actions[bot]@users.noreply.github.com'
-    - run: git switch -C update/elisp-packages develop
+    - run: git switch -C bot/update/elisp-packages develop
     - run: |
         for input in melpa gnu-elpa epkgs; do
           nix flake update $input
