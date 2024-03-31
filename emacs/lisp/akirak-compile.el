@@ -6,6 +6,7 @@
     ("justfile" . just)
     ("mix.exs" . mix)
     ("pnpm-lock.yaml" . pnpm)
+    ("pnpm-workspace.yaml" . pnpm-workspace)
     ("yarn.lock" . yarn)
     ("package-lock.json" . npm)
     ("bun.lockb" . bun)
@@ -158,10 +159,19 @@
   "Return (command . dir) or command for the next action for PROJECTS."
   (let ((candidates (copy-sequence history)))
     (pcase-dolist (`(,backend . ,dir) projects)
-      (let ((command-alist (unless (and (eq backend 'package-json)
-                                        (cl-intersection '(pnpm bun yarn npm)
-                                                         (mapcar #'car projects)
-                                                         :test #'eq))
+      (let ((command-alist (if (eq backend 'package-json)
+                               (cond
+                                ((seq-find `(lambda (cell)
+                                              (and (memq (car cell) '(pnpm bun yarn npm))
+                                                   (equal (cdr cell) ,dir)))
+                                           projects)
+                                 nil)
+                                ;; Inside a pnpm workspace, treat package.json
+                                ;; as a marker for a pnpm project.
+                                ((memq 'pnpm-workspace (mapcar #'car projects))
+                                 (akirak-compile--gen-commands 'pnpm dir))
+                                (t
+                                 (akirak-compile--gen-commands backend dir)))
                              (akirak-compile--gen-commands backend dir)))
             (group (format "%s (%s)" backend (abbreviate-file-name dir))))
         (setq candidates (append candidates (mapcar #'car command-alist)))
