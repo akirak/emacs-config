@@ -275,11 +275,11 @@
     "cape": {
       "flake": false,
       "locked": {
-        "lastModified": 1710481336,
-        "narHash": "sha256-8CBaBl1ocS+5ZgH8n2z+bdP/WYbmrYp2/F1aserdPdY=",
+        "lastModified": 1711708587,
+        "narHash": "sha256-bJGM8nFB56jA9PUNcOE2d7Unoms1O3RVXtARpHx3le8=",
         "owner": "minad",
         "repo": "cape",
-        "rev": "a397a0c92de38277b7f835fa999fac400a764908",
+        "rev": "934cb157dd6ddfee657801d409c289e12af3d8ad",
         "type": "github"
       },
       "original": {
@@ -355,11 +355,11 @@
     "consult": {
       "flake": false,
       "locked": {
-        "lastModified": 1711224989,
-        "narHash": "sha256-eTA0kLrNy+wd88WiL2dECiSfeNvZl1QZ9ldP8uSQY3w=",
+        "lastModified": 1711274837,
+        "narHash": "sha256-WU8xKYrU95rMAIJ2XzLVw0BjJUW5GOIqf2onWiQ+xbk=",
         "owner": "minad",
         "repo": "consult",
-        "rev": "ec232fa60497e7a3abcf6e385181afcc0cf6017f",
+        "rev": "7533460e530a1e7abc89b4da8ad99b696fca8a30",
         "type": "github"
       },
       "original": {
@@ -452,11 +452,11 @@
     "corfu": {
       "flake": false,
       "locked": {
-        "lastModified": 1710926388,
-        "narHash": "sha256-j2r1bruOC11FROISLJ+iCvLzM2wNuUxKMatgopz8gOk=",
+        "lastModified": 1711791001,
+        "narHash": "sha256-h3k/l6lpvUk4+RUftsq9nwUfSabA7iboBFWTNRX1gO4=",
         "owner": "minad",
         "repo": "corfu",
-        "rev": "46c5ec84e096b852229b32f054462f0a63abfeb5",
+        "rev": "35cd5a0f3cba89766072e3e933d1fe2ee02f2289",
         "type": "github"
       },
       "original": {
@@ -868,11 +868,11 @@
     "embark": {
       "flake": false,
       "locked": {
-        "lastModified": 1711231519,
-        "narHash": "sha256-T7FxfykISXjT6O91ZjjDNJ1IiE7VBB0M6JfReHvIaNM=",
+        "lastModified": 1711548482,
+        "narHash": "sha256-z8czQ37GKeKROvIUtx1qrBgWhJzI4IkjIXLERmoVMtE=",
         "owner": "oantolin",
         "repo": "embark",
-        "rev": "15c95aee0ec6f42ee3b7a0bc6cf1e2c1ad91dfcd",
+        "rev": "d3c9d1b4c890cf365846cc2b418f37341999e79f",
         "type": "github"
       },
       "original": {
@@ -884,11 +884,11 @@
     "embark-consult": {
       "flake": false,
       "locked": {
-        "lastModified": 1711231519,
-        "narHash": "sha256-T7FxfykISXjT6O91ZjjDNJ1IiE7VBB0M6JfReHvIaNM=",
+        "lastModified": 1711548482,
+        "narHash": "sha256-z8czQ37GKeKROvIUtx1qrBgWhJzI4IkjIXLERmoVMtE=",
         "owner": "oantolin",
         "repo": "embark",
-        "rev": "15c95aee0ec6f42ee3b7a0bc6cf1e2c1ad91dfcd",
+        "rev": "d3c9d1b4c890cf365846cc2b418f37341999e79f",
         "type": "github"
       },
       "original": {
@@ -1880,11 +1880,11 @@
     "modus-themes": {
       "flake": false,
       "locked": {
-        "lastModified": 1708769265,
-        "narHash": "sha256-kRI2oN4+iVZggSXzmyHSMd52sgn2EBTWzeS//rXuS9k=",
+        "lastModified": 1711084753,
+        "narHash": "sha256-jZzlxFQrIKZRm3rwWd8+oS1SvQPK695J2AbM97P6nMA=",
         "owner": "protesilaos",
         "repo": "modus-themes",
-        "rev": "9252ca3d4c93883f0d96fa8b705f8bbd8883bf4f",
+        "rev": "bea2f68833e1f46ef60eba25f67a8ab162e7bccb",
         "type": "github"
       },
       "original": {
@@ -2771,11 +2771,11 @@
     "pos-tip": {
       "flake": false,
       "locked": {
-        "lastModified": 1689928463,
-        "narHash": "sha256-3t0OTZ8i/debNn2UNPfIqRHmnfrAtUM1tDP6BWUq2cw=",
+        "lastModified": 1707467855,
+        "narHash": "sha256-ezfrCOakwQkJ0sgS2XzwL/3lXoTFteQlqxfomVSC1XI=",
         "owner": "pitkali",
         "repo": "pos-tip",
-        "rev": "90a9babc829b298af36be695009894fc00a97935",
+        "rev": "4889e08cf9077c8589ea6fea4e2ce558614dfcde",
         "type": "github"
       },
       "original": {
@@ -3688,11 +3688,11 @@
     "which-key": {
       "flake": false,
       "locked": {
-        "lastModified": 1710275630,
-        "narHash": "sha256-SaAyophRKOtMcBN25j4PnhPOrv68wjtQ71Ftmweml0U=",
+        "lastModified": 1711590209,
+        "narHash": "sha256-95OozDu3BBsooyv6QK66G5UzG0b6LA+n81uySDTWnmo=",
         "owner": "justbur",
         "repo": "emacs-which-key",
-        "rev": "96911a1d3faf8426a33241f4821319e98421f380",
+        "rev": "5111e377a2ae9881545710a9331f6788a26cdcbd",
         "type": "github"
       },
       "original": {

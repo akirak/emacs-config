@@ -338,9 +338,9 @@
                        #'akirak-capture--goto-some-heading
                      #'akirak-capture--goto-backlog)))
     (cl-etypecase target
-      (marker (list :function `(lambda ()
-                                 (org-goto-marker-or-bmk ,target)
-                                 (org-back-to-heading))))
+      (marker (list :file (buffer-file-name (org-base-buffer (marker-buffer target)))
+                    :olp (org-with-point-at target
+                           (org-get-outline-path t))))
       (string (list :file target
                     :function jump-func))
       (org-dog-file (list :file (oref target absolute)
@@ -1254,7 +1254,11 @@ provided as a separate command for integration, e.g. with embark."
                                  eww-mode
                                  markdown-mode)))
          (bullet-regexp (when (memq mode '(nov-mode eww-mode))
-                          (rx-to-string `(and bol (group (*? blank)) ,shr-bullet)))))
+                          (rx-to-string `(and bol (group (*? blank)) ,shr-bullet))))
+         (remove-zws (rx-to-string `(and (group (* space))
+                                         (any ,(mapconcat #'char-to-string
+                                                          (list #x200b #x2060 #x200d #x200c #xfeff)))
+                                         (group (* space))))))
     (with-temp-buffer
       (insert string)
       (when (and (eq mode 'markdown-mode)
@@ -1270,6 +1274,10 @@ provided as a separate command for integration, e.g. with embark."
       (when bullet-regexp
         (while (re-search-forward bullet-regexp nil t)
           (replace-match "\\1- ")))
+      ;; Remove all zero-width whitespaces preceding/following normal space.
+      (goto-char (point-min))
+      (while (re-search-forward remove-zws nil t)
+        (replace-match "\\1\\2"))
       ;; Remove blanks at the end of each line.
       (goto-char (point-min))
       (while (re-search-forward (rx (+ blank) eol) nil t)

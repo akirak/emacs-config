@@ -6,6 +6,7 @@
     ("justfile" . just)
     ("mix.exs" . mix)
     ("pnpm-lock.yaml" . pnpm)
+    ("pnpm-workspace.yaml" . pnpm-workspace)
     ("yarn.lock" . yarn)
     ("package-lock.json" . npm)
     ("bun.lockb" . bun)
@@ -79,31 +80,59 @@
   (clrhash akirak-compile-command-cache))
 
 ;;;###autoload
-(defun akirak-compile ()
-  (interactive)
-  (if-let (workspace (akirak-compile--workspace-root))
-      (let* ((key (file-name-nondirectory (directory-file-name workspace)))
-             (history (gethash key akirak-compile-per-workspace-history
-                               :default))
-             (projects (akirak-compile--find-projects (expand-file-name workspace)))
-             (command (akirak-compile--complete projects
-                                                (unless (eq history :default)
-                                                  history)))
-             (default-directory (or (get-text-property 0 'command-directory command)
-                                    (cdr (assq (akirak-compile--guess-backend command)
-                                               projects))
-                                    workspace)))
-        (if (akirak-compile--installation-command-p command)
-            ;; Install dependencies in a separate buffer without killing the
-            ;; current process.
-            (akirak-compile-install command)
-          ;; Keep the input in the history iff it's not an installation command.
-          (if (eq history :default)
-              (puthash key (list command) akirak-compile-per-workspace-history)
-            (cl-pushnew command history)
-            (puthash key history akirak-compile-per-workspace-history))
-          (compile command t)))
-    (user-error "No workspace root")))
+(defun akirak-compile (&optional arg)
+  "Run a package command in the compilation buffer.
+
+If a single universal prefix argument is given, create a dedicated
+buffer for compilation of the project. This is useful for running
+commands in the background, e.g. for running a documentation locally for
+looking up references.
+
+If two universal prefix arguments are given, select a compilation buffer
+interactively and visit it using `pop-to-buffer'. The compilation buffer
+can be a buffer in `compilation-mode' but also can be a buffer with
+`compilation-shell-minor-mode'."
+  (interactive "P")
+  (if (equal arg '(16))
+      (let ((buffer (read-buffer "Visit a compilation buffer: "
+                                 nil t
+                                 (lambda (name-or-cell)
+                                   (let ((buffer (or (cdr-safe name-or-cell)
+                                                     (get-buffer name))))
+                                     (or (eq (buffer-local-value 'major-mode buffer)
+                                             'compilation-mode)
+                                         (buffer-local-value 'compilation-shell-minor-mode
+                                                             buffer)))))))
+        (pop-to-buffer buffer))
+    (if-let (workspace (akirak-compile--workspace-root))
+        (let* ((key (file-name-nondirectory (directory-file-name workspace)))
+               (history (gethash key akirak-compile-per-workspace-history
+                                 :default))
+               (projects (akirak-compile--find-projects workspace))
+               (command (akirak-compile--complete (if arg
+                                                      "Compile in a per-project buffer: "
+                                                    "Compile: ")
+                                                  projects
+                                                  (unless (eq history :default)
+                                                    history)))
+               (default-directory (or (get-text-property 0 'command-directory command)
+                                      (cdr (assq (akirak-compile--guess-backend command)
+                                                 projects))
+                                      workspace)))
+          (if (akirak-compile--installation-command-p command)
+              ;; Install dependencies in a separate buffer without killing the
+              ;; current process.
+              (akirak-compile-install command)
+            ;; Keep the input in the history iff it's not an installation command.
+            (if (eq history :default)
+                (puthash key (list command) akirak-compile-per-workspace-history)
+              (cl-pushnew command history)
+              (puthash key history akirak-compile-per-workspace-history))
+            (if (equal arg '(4))
+                (compilation-start command t
+                                   (cl-constantly (project-prefixed-buffer-name "compilation")))
+              (compile command t))))
+      (user-error "No workspace root"))))
 
 (defun akirak-compile--guess-backend (command)
   (seq-some `(lambda (cell)
@@ -113,7 +142,7 @@
 
 (defun akirak-compile--root ()
   (if-let (workspace (akirak-compile--workspace-root))
-      (akirak-compile--find-projects (expand-file-name workspace))
+      (akirak-compile--find-projects workspace)
     (user-error "No workspace root")))
 
 (defun akirak-compile--workspace-root ()
@@ -136,8 +165,9 @@
     (file-name-as-directory)))
 
 (defun akirak-compile--find-projects (workspace)
-  (let* ((start (expand-file-name default-directory))
-         result)
+  (let ((start (expand-file-name default-directory))
+        (workspace (expand-file-name workspace))
+        result)
     (unless (string-prefix-p workspace start)
       (error "Directory %s is not a prefix of %s" workspace start))
     (cl-labels
@@ -153,14 +183,23 @@
       (search start))
     result))
 
-(defun akirak-compile--complete (projects history)
+(defun akirak-compile--complete (prompt projects history)
   "Return (command . dir) or command for the next action for PROJECTS."
   (let ((candidates (copy-sequence history)))
     (pcase-dolist (`(,backend . ,dir) projects)
-      (let ((command-alist (unless (and (eq backend 'package-json)
-                                        (cl-intersection '(pnpm bun yarn npm)
-                                                         (mapcar #'car projects)
-                                                         :test #'eq))
+      (let ((command-alist (if (eq backend 'package-json)
+                               (cond
+                                ((seq-find `(lambda (cell)
+                                              (and (memq (car cell) '(pnpm bun yarn npm))
+                                                   (equal (cdr cell) ,dir)))
+                                           projects)
+                                 nil)
+                                ;; Inside a pnpm workspace, treat package.json
+                                ;; as a marker for a pnpm project.
+                                ((memq 'pnpm-workspace (mapcar #'car projects))
+                                 (akirak-compile--gen-commands 'pnpm dir))
+                                (t
+                                 (akirak-compile--gen-commands backend dir)))
                              (akirak-compile--gen-commands backend dir)))
             (group (format "%s (%s)" backend (abbreviate-file-name dir))))
         (setq candidates (append candidates (mapcar #'car command-alist)))
@@ -185,7 +224,7 @@
                            (cons 'group-function #'group)
                            (cons 'annotation-function #'annotator)))
              (complete-with-action action candidates string pred))))
-      (let ((result (completing-read "Compile: " #'completions)))
+      (let ((result (completing-read prompt #'completions)))
         (or (car (member result candidates))
             result)))))
 
@@ -265,7 +304,7 @@
 
 (defun akirak-compile--installation-command-p (command)
   (pcase (akirak-compile--split-command command)
-    (`(,_ (or "add" "install" "remove" "uninstall") . ,_)
+    (`(,_ ,(or "add" "install" "remove" "uninstall") . ,_)
      t)
     (`("mix" "deps.get")
      t)
