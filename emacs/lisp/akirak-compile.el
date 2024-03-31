@@ -80,14 +80,23 @@
   (clrhash akirak-compile-command-cache))
 
 ;;;###autoload
-(defun akirak-compile ()
-  (interactive)
+(defun akirak-compile (&optional arg)
+  "Run a package command in the compilation buffer.
+
+If ARG is a universal argument, create a dedicated buffer for
+compilation of the project. This is useful for running commands in the
+background, e.g. for running a documentation locally for looking up
+references."
+  (interactive "P")
   (if-let (workspace (akirak-compile--workspace-root))
       (let* ((key (file-name-nondirectory (directory-file-name workspace)))
              (history (gethash key akirak-compile-per-workspace-history
                                :default))
              (projects (akirak-compile--find-projects workspace))
-             (command (akirak-compile--complete projects
+             (command (akirak-compile--complete (if arg
+                                                    "Compile in a per-project buffer: "
+                                                  "Compile: ")
+                                                projects
                                                 (unless (eq history :default)
                                                   history)))
              (default-directory (or (get-text-property 0 'command-directory command)
@@ -103,7 +112,10 @@
               (puthash key (list command) akirak-compile-per-workspace-history)
             (cl-pushnew command history)
             (puthash key history akirak-compile-per-workspace-history))
-          (compile command t)))
+          (if (equal arg '(4))
+              (compilation-start command t
+                                 (cl-constantly (project-prefixed-buffer-name "compilation")))
+            (compile command t))))
     (user-error "No workspace root")))
 
 (defun akirak-compile--guess-backend (command)
@@ -155,7 +167,7 @@
       (search start))
     result))
 
-(defun akirak-compile--complete (projects history)
+(defun akirak-compile--complete (prompt projects history)
   "Return (command . dir) or command for the next action for PROJECTS."
   (let ((candidates (copy-sequence history)))
     (pcase-dolist (`(,backend . ,dir) projects)
@@ -196,7 +208,7 @@
                            (cons 'group-function #'group)
                            (cons 'annotation-function #'annotator)))
              (complete-with-action action candidates string pred))))
-      (let ((result (completing-read "Compile: " #'completions)))
+      (let ((result (completing-read prompt #'completions)))
         (or (car (member result candidates))
             result)))))
 
