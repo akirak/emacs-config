@@ -85,7 +85,7 @@
       (let* ((key (file-name-nondirectory (directory-file-name workspace)))
              (history (gethash key akirak-compile-per-workspace-history
                                :default))
-             (projects (akirak-compile--find-projects (expand-file-name workspace)))
+             (projects (akirak-compile--find-projects workspace))
              (command (akirak-compile--complete projects
                                                 (unless (eq history :default)
                                                   history)))
@@ -113,7 +113,7 @@
 
 (defun akirak-compile--root ()
   (if-let (workspace (akirak-compile--workspace-root))
-      (akirak-compile--find-projects (expand-file-name workspace))
+      (akirak-compile--find-projects workspace)
     (user-error "No workspace root")))
 
 (defun akirak-compile--workspace-root ()
@@ -136,8 +136,9 @@
     (file-name-as-directory)))
 
 (defun akirak-compile--find-projects (workspace)
-  (let* ((start (expand-file-name default-directory))
-         result)
+  (let ((start (expand-file-name default-directory))
+        (workspace (expand-file-name workspace))
+        result)
     (unless (string-prefix-p workspace start)
       (error "Directory %s is not a prefix of %s" workspace start))
     (cl-labels
