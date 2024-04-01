@@ -4610,6 +4610,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                    (getenv "DISPLAY")))
       (:hook-into emacs-startup-hook))
     (:hook akirak-log-mode)
+    (add-hook 'akirak-org-clock-pre-exit-hook
+              (defun akirak/org-clock-save-wconf ()
+                (if (and (require 'burly nil t)
+                         (fboundp 'akirak-burly-clock-push))
+                    (akirak-burly-clock-push)
+                  (message "Burly is not available, so the window configuration won't be saved"))))
 
     (advice-add 'save-buffers-kill-terminal
                 :before
