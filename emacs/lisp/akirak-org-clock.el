@@ -758,23 +758,6 @@ This function returns the current buffer."
        ;; will be tirggered when you switch to the state.
        (org-todo "REVIEW")))))
 
-;;;; Stack
-
-(defvar akirak-org-clock-stack nil)
-
-;;;###autoload
-(defun akirak-org-clock-push (marker)
-  "Push a clock marker to the stack with the current window configuration."
-  (push (cons marker (current-window-configuration))
-        akirak-org-clock-stack))
-
-(defun akirak-org-clock-pop (marker)
-  "Pop a clock marker and its associated window configuration"
-  (pcase (pop akirak-org-clock-stack)
-    (`(,marker . ,wconf)
-     (set-window-configuration wconf)
-     (org-clock-clock-in (list marker)))))
-
 ;;;; Edit
 
 ;;;###autoload
