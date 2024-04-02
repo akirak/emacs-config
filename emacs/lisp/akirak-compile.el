@@ -62,7 +62,10 @@
      ("pnpm exec" annotation "Executes a shell command in scope of a project"))
     (yarn)
     (npm
-     ("npm lock")))
+     ("npm lock")
+     ("npm install --save")
+     ("npm install --save-dev")
+     ("npm uninstall")))
   ""
   :type '(alist :key-type (symbol :tag "Backend")
                 :value-type
