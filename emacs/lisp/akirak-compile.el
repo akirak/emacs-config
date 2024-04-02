@@ -419,6 +419,15 @@ suitable value detected according to the command line."
 (defun akirak-compile--error-regexp-alist-for-command (command)
   "Return the key in `compilation-error-regexp-alist'"
   (pcase command
+    ((rx bol "cargo" space)
+     (eval-when-compile
+       (let ((path-regexp (rx alnum (* (any "_./" alnum)))))
+         (list
+          ;; e.g. --> src/utils.rs:3:6
+          (list (rx-to-string `(and "--> " (group (regexp ,path-regexp))
+                                    ":" (group (+ digit))
+                                    ":" (group (+ digit))))
+                1 2 3)))))
     ((rx bol "next" space)
      (eval-when-compile
        (let ((path-regexp (rx (+ (any "-_./[]_" alnum))))
