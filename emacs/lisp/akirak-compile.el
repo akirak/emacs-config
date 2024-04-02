@@ -94,48 +94,63 @@ looking up references.
 If two universal prefix arguments are given, select a compilation buffer
 interactively and visit it using `pop-to-buffer'. The compilation buffer
 can be a buffer in `compilation-mode' but also can be a buffer with
-`compilation-shell-minor-mode'."
+`compilation-shell-minor-mode'.
+
+If three universal prefix arguments are given, all compilation buffers
+without a running process will be killed."
   (interactive "P")
-  (if (equal arg '(16))
-      (let ((buffer (read-buffer "Visit a compilation buffer: "
-                                 nil t
-                                 (lambda (name-or-cell)
-                                   (let ((buffer (or (cdr-safe name-or-cell)
-                                                     (get-buffer name))))
-                                     (or (eq (buffer-local-value 'major-mode buffer)
-                                             'compilation-mode)
-                                         (buffer-local-value 'compilation-shell-minor-mode
-                                                             buffer)))))))
-        (pop-to-buffer buffer))
-    (if-let (workspace (akirak-compile--workspace-root))
-        (let* ((key (file-name-nondirectory (directory-file-name workspace)))
-               (history (gethash key akirak-compile-per-workspace-history
-                                 :default))
-               (projects (akirak-compile--find-projects workspace))
-               (command (akirak-compile--complete (if arg
-                                                      "Compile in a per-project buffer: "
-                                                    "Compile: ")
-                                                  projects
-                                                  (unless (eq history :default)
-                                                    history)))
-               (default-directory (or (get-text-property 0 'command-directory command)
-                                      (cdr (assq (akirak-compile--guess-backend command)
-                                                 projects))
-                                      workspace)))
-          (if (akirak-compile--installation-command-p command)
-              ;; Install dependencies in a separate buffer without killing the
-              ;; current process.
-              (akirak-compile-install command)
-            ;; Keep the input in the history iff it's not an installation command.
-            (if (eq history :default)
-                (puthash key (list command) akirak-compile-per-workspace-history)
-              (cl-pushnew command history)
-              (puthash key history akirak-compile-per-workspace-history))
-            (if (equal arg '(4))
-                (compilation-start command t
-                                   (cl-constantly (project-prefixed-buffer-name "compilation")))
-              (compile command t))))
-      (user-error "No workspace root"))))
+  (pcase arg
+    ('(24)
+     (dolist (buffer (buffer-list))
+       (when (or (eq (buffer-local-value 'major-mode buffer)
+                     'compilation-mode)
+                 (buffer-local-value 'compilation-shell-minor-mode
+                                     buffer))
+         (let ((process (get-buffer-process buffer)))
+           (unless (and process
+                        (process-live-p process))
+             (kill-buffer buffer))))))
+    ('(16)
+     (let ((buffer (read-buffer "Visit a compilation buffer: "
+                                nil t
+                                (lambda (name-or-cell)
+                                  (let ((buffer (or (cdr-safe name-or-cell)
+                                                    (get-buffer name))))
+                                    (or (eq (buffer-local-value 'major-mode buffer)
+                                            'compilation-mode)
+                                        (buffer-local-value 'compilation-shell-minor-mode
+                                                            buffer)))))))
+       (pop-to-buffer buffer)))
+    (_
+     (if-let (workspace (akirak-compile--workspace-root))
+         (let* ((key (file-name-nondirectory (directory-file-name workspace)))
+                (history (gethash key akirak-compile-per-workspace-history
+                                  :default))
+                (projects (akirak-compile--find-projects workspace))
+                (command (akirak-compile--complete (if arg
+                                                       "Compile in a per-project buffer: "
+                                                     "Compile: ")
+                                                   projects
+                                                   (unless (eq history :default)
+                                                     history)))
+                (default-directory (or (get-text-property 0 'command-directory command)
+                                       (cdr (assq (akirak-compile--guess-backend command)
+                                                  projects))
+                                       workspace)))
+           (if (akirak-compile--installation-command-p command)
+               ;; Install dependencies in a separate buffer without killing the
+               ;; current process.
+               (akirak-compile-install command)
+             ;; Keep the input in the history iff it's not an installation command.
+             (if (eq history :default)
+                 (puthash key (list command) akirak-compile-per-workspace-history)
+               (cl-pushnew command history)
+               (puthash key history akirak-compile-per-workspace-history))
+             (if (equal arg '(4))
+                 (compilation-start command t
+                                    (cl-constantly (project-prefixed-buffer-name "compilation")))
+               (compile command t))))
+       (user-error "No workspace root")))))
 
 (defun akirak-compile--guess-backend (command)
   (seq-some `(lambda (cell)
