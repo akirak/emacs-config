@@ -37,6 +37,9 @@
 (require 'akirak-url)
 (require 'octopus)
 
+(defconst akirak-capture-zero-width-characters
+  (mapconcat #'char-to-string (list 8203 8288 8205 8204 65279)))
+
 ;;;; Variables
 
 (defvar akirak-capture-bounds nil)
@@ -1256,8 +1259,7 @@ provided as a separate command for integration, e.g. with embark."
          (bullet-regexp (when (memq mode '(nov-mode eww-mode))
                           (rx-to-string `(and bol (group (*? blank)) ,shr-bullet))))
          (remove-zws (rx-to-string `(and (group (* space))
-                                         (any ,(mapconcat #'char-to-string
-                                                          (list #x200b #x2060 #x200d #x200c #xfeff)))
+                                         (any ,akirak-capture-zero-width-characters)
                                          (group (* space))))))
     (with-temp-buffer
       (insert string)
@@ -1302,15 +1304,14 @@ provided as a separate command for integration, e.g. with embark."
               (match-beginning 1)))))
     (let* ((string (thread-last
                      string
-                     (replace-regexp-in-string (rx bol (* blank)
-                                                   ;; zero-width space (8203)
-                                                   "​")
-                                               "")
-                     (replace-regexp-in-string (rx (+ (any blank
-                                                           ;; zero-width space
-                                                           "​" ))
-                                                   eol)
-                                               "")
+                     (replace-regexp-in-string
+                      (rx-to-string `(and bol (* blank)
+                                          (any ,akirak-capture-zero-width-characters)))
+                      "")
+                     (replace-regexp-in-string
+                      (rx-to-string `(and (+ (any blank ,akirak-capture-zero-width-characters))
+                                          eol))
+                      "")
                      (replace-regexp-in-string (rx (+ "\n") eos)
                                                "")
                      (replace-regexp-in-string (rx (+ "\n") eos)
