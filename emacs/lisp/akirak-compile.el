@@ -62,6 +62,7 @@
      ("pnpm exec" annotation "Executes a shell command in scope of a project"))
     (yarn)
     (npm
+     ("npm ci")
      ("npm lock")
      ("npm install --save")
      ("npm install --save-dev")
@@ -323,6 +324,8 @@ without a running process will be killed."
 (defun akirak-compile--installation-command-p (command)
   (pcase (akirak-compile--split-command command)
     (`(,_ ,(or "add" "install" "remove" "uninstall") . ,_)
+     t)
+    (`("npm" "ci")
      t)
     (`("mix" "deps.get")
      t)
