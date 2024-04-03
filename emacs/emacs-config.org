@@ -4169,7 +4169,7 @@ Major mode for Gleam
     ;; Should be fixed in the upstream.
     (autoload 'gleam-ts-mode "gleam-ts-mode"))
 #+end_src
-*** go-ts-mode                                                     :major__mode:
+*** go-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 23:59]
 :END:
@@ -4179,6 +4179,11 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup go-ts-mode
+    (:file-match "\\.go\\'")
+    (:org-src-lang "go")
+    (:with-mode go-mod-ts-mode
+      (:file-match "/go\\.mod\\'"))
+
     (:auto-insert
      ("\\.go\\'"
       . (> "package "
