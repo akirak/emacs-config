@@ -43,7 +43,10 @@
     (gleam
      ("gleam run")
      ("gleam test")
-     ("gleam add"))
+     ("gleam add")
+     ("gleam add --dev")
+     ("gleam deps download")
+     ("gleam format --check src test"))
     (bun
      ("bun run" annotation "Run JavaScript with bun, a package.json script, or a bin")
      ("bun build" annotation "Build TypeScript and JavaScript into a single file")
