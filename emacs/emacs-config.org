@@ -9137,6 +9137,14 @@ A major mode for the Zig programming language
   (setup cargo
     (:package-files "Cargo.toml"))
 #+end_src
+**** Gleam
+:PROPERTIES:
+:CREATED_TIME: [2024-04-03 Wed 23:42]
+:END:
+#+begin_src elisp
+  (setup gleam
+    (:package-files "gleam.toml"))
+#+end_src
 **** Haskell
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 13:00]
