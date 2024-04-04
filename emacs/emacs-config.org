@@ -4166,6 +4166,7 @@ Major mode for Gleam
 #+begin_src emacs-lisp
   (setup (:package gleam-ts-mode)
     (:file-match "\\.gleam\\'")
+    (:mode-repl akirak/gleam-shell)
     ;; Should be fixed in the upstream.
     (autoload 'gleam-ts-mode "gleam-ts-mode"))
 #+end_src
@@ -9148,7 +9149,36 @@ A major mode for the Zig programming language
 :END:
 #+begin_src elisp
   (setup gleam
-    (:package-files "gleam.toml"))
+    (:package-files "gleam.toml")
+    (:org-src-lang "gleam")
+
+    (defun akirak/gleam-browse-docs ()
+      (interactive)
+      (if-let (root (locate-dominating-file default-directory "gleam.toml"))
+          (let* ((dir (expand-file-name "build/dev/docs/" root))
+                 (subdirs (if (file-directory-p dir)
+                              (directory-files dir t "^[[:alpha:]]")
+                            (user-error "Documentation hasn't been generated. Run gleam docs build")))
+                 (subdir (pcase (length subdirs)
+                           (0
+                            (user-error "Please run gleam docs build to regenerate the documentation"))
+                           (1
+                            (car subdirs))
+                           (_
+                            (completing-read "Package documentation: "
+                                             subdirs nil t))))
+                 (file (expand-file-name "index.html" subdir)))
+            (akirak-open-default file))
+        (user-error "gleam.toml is not found")))
+
+    (defun akirak/gleam-shell ()
+      (interactive)
+      (if-let* ((root (locate-dominating-file default-directory "gleam.toml"))
+                (pr (project-current))
+                (name (format "gleam-%s" (project-name pr)))
+                (default-directory root))
+          (pop-to-buffer (eat-make name "gleam" nil "shell"))
+        (user-error "Not in a Gleam project"))))
 #+end_src
 **** Haskell
 :PROPERTIES:
