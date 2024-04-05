@@ -10,6 +10,12 @@
   (cond
    ((numberp arg)
     (comment-line arg))
+   ;; Use M-- prefix to comment the whole current line when the point is not on
+   ;; the beginning of the line
+   ((eq arg '-)
+    (save-excursion
+      (beginning-of-line)
+      (comment-line 1)))
    ((use-region-p)
     (comment-or-uncomment-region (region-beginning) (region-end)))
    (t
