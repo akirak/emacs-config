@@ -155,11 +155,11 @@
     "epkgs": {
       "flake": false,
       "locked": {
-        "lastModified": 1712069282,
-        "narHash": "sha256-0hWZhbvSCUhFh7W6RZ0w/UvNeiirDvv4IBJ7eu6X+0E=",
+        "lastModified": 1712589914,
+        "narHash": "sha256-Iau0iX5xZuIhGw5WJkY6EOr1rDHAyB4JPE8LqHShIYY=",
         "owner": "emacsmirror",
         "repo": "epkgs",
-        "rev": "38802dc68801c74c851d927cc6271e909c3c2791",
+        "rev": "73caa3047b0877a50cbcedf3686bb09b0992bc88",
         "type": "github"
       },
       "original": {
@@ -796,11 +796,11 @@
     "nongnu-elpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1710442513,
-        "narHash": "sha256-iJeG9lyjCTwcl/7OTBYI+RG7ztD0u2DY76RR9mzYjvM=",
+        "lastModified": 1712340689,
+        "narHash": "sha256-knhVWWy22nmOs/5NT/Zuq0AHWXRAwRXDSdvwrFIxQOQ=",
         "ref": "main",
-        "rev": "f06fc1286a20c827cbbd53a8c3ed53b2ac41c9d9",
-        "revCount": 307,
+        "rev": "5623e3864f87f49d18bc48b3656dc0c2dea42973",
+        "revCount": 308,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/emacs/nongnu.git"
       },
