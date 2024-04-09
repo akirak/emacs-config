@@ -4830,7 +4830,8 @@ This is an extra functions for window management.
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
                        ("^\\*envrc\\*"
-                        display-buffer-no-window)
+                        display-buffer-no-window
+                        (allow-no-window . t))
                        ("\\*edit-indirect"
                         akirak-window-display-buffer-split-below)
                        ("^CAPTURE-"
