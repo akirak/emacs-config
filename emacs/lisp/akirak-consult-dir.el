@@ -144,5 +144,24 @@
                 (make-directory dir t))
               (dired dir))))))))
 
+;;;###autoload
+(defun akirak-consult-dir-descendants (&optional dir)
+  "Browse a descendant directory of DIR."
+  (interactive (list (if-let (pr (project-current))
+                         (akirak-project-top-root pr)
+                       default-directory)))
+  (let* ((default-directory (if dir
+                                (expand-file-name dir)
+                              (if-let (pr (project-current))
+                                  (akirak-project-top-root pr)
+                                default-directory)))
+         (selected (consult--read (process-lines "fd" "-t" "d")
+                                  :category 'directory
+                                  :state (consult--file-state)
+                                  :require-match t
+                                  :prompt "Directory: "
+                                  :sort nil)))
+    (dired (expand-file-name selected dir))))
+
 (provide 'akirak-consult-dir)
 ;;; akirak-consult-dir.el ends here
