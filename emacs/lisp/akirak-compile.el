@@ -43,7 +43,15 @@
     (gleam
      ("gleam run")
      ("gleam test")
-     ("gleam add"))
+     ("gleam add")
+     ("gleam add --dev")
+     ("gleam deps download")
+     ("gleam format --check src test")
+     ("gleam build")
+     ("gleam docs build")
+     ("gleam check")
+     ("gleam fix")
+     ("gleam build"))
     (bun
      ("bun run" annotation "Run JavaScript with bun, a package.json script, or a bin")
      ("bun build" annotation "Build TypeScript and JavaScript into a single file")
@@ -62,7 +70,11 @@
      ("pnpm exec" annotation "Executes a shell command in scope of a project"))
     (yarn)
     (npm
-     ("npm lock")))
+     ("npm ci")
+     ("npm lock")
+     ("npm install --save")
+     ("npm install --save-dev")
+     ("npm uninstall")))
   ""
   :type '(alist :key-type (symbol :tag "Backend")
                 :value-type
@@ -91,48 +103,63 @@ looking up references.
 If two universal prefix arguments are given, select a compilation buffer
 interactively and visit it using `pop-to-buffer'. The compilation buffer
 can be a buffer in `compilation-mode' but also can be a buffer with
-`compilation-shell-minor-mode'."
+`compilation-shell-minor-mode'.
+
+If three universal prefix arguments are given, all compilation buffers
+without a running process will be killed."
   (interactive "P")
-  (if (equal arg '(16))
-      (let ((buffer (read-buffer "Visit a compilation buffer: "
-                                 nil t
-                                 (lambda (name-or-cell)
-                                   (let ((buffer (or (cdr-safe name-or-cell)
-                                                     (get-buffer name))))
-                                     (or (eq (buffer-local-value 'major-mode buffer)
-                                             'compilation-mode)
-                                         (buffer-local-value 'compilation-shell-minor-mode
-                                                             buffer)))))))
-        (pop-to-buffer buffer))
-    (if-let (workspace (akirak-compile--workspace-root))
-        (let* ((key (file-name-nondirectory (directory-file-name workspace)))
-               (history (gethash key akirak-compile-per-workspace-history
-                                 :default))
-               (projects (akirak-compile--find-projects workspace))
-               (command (akirak-compile--complete (if arg
-                                                      "Compile in a per-project buffer: "
-                                                    "Compile: ")
-                                                  projects
-                                                  (unless (eq history :default)
-                                                    history)))
-               (default-directory (or (get-text-property 0 'command-directory command)
-                                      (cdr (assq (akirak-compile--guess-backend command)
-                                                 projects))
-                                      workspace)))
-          (if (akirak-compile--installation-command-p command)
-              ;; Install dependencies in a separate buffer without killing the
-              ;; current process.
-              (akirak-compile-install command)
-            ;; Keep the input in the history iff it's not an installation command.
-            (if (eq history :default)
-                (puthash key (list command) akirak-compile-per-workspace-history)
-              (cl-pushnew command history)
-              (puthash key history akirak-compile-per-workspace-history))
-            (if (equal arg '(4))
-                (compilation-start command t
-                                   (cl-constantly (project-prefixed-buffer-name "compilation")))
-              (compile command t))))
-      (user-error "No workspace root"))))
+  (pcase arg
+    ('(24)
+     (dolist (buffer (buffer-list))
+       (when (or (eq (buffer-local-value 'major-mode buffer)
+                     'compilation-mode)
+                 (buffer-local-value 'compilation-shell-minor-mode
+                                     buffer))
+         (let ((process (get-buffer-process buffer)))
+           (unless (and process
+                        (process-live-p process))
+             (kill-buffer buffer))))))
+    ('(16)
+     (let ((buffer (read-buffer "Visit a compilation buffer: "
+                                nil t
+                                (lambda (name-or-cell)
+                                  (let ((buffer (or (cdr-safe name-or-cell)
+                                                    (get-buffer name))))
+                                    (or (eq (buffer-local-value 'major-mode buffer)
+                                            'compilation-mode)
+                                        (buffer-local-value 'compilation-shell-minor-mode
+                                                            buffer)))))))
+       (pop-to-buffer buffer)))
+    (_
+     (if-let (workspace (akirak-compile--workspace-root))
+         (let* ((key (file-name-nondirectory (directory-file-name workspace)))
+                (history (gethash key akirak-compile-per-workspace-history
+                                  :default))
+                (projects (akirak-compile--find-projects workspace))
+                (command (akirak-compile--complete (if arg
+                                                       "Compile in a per-project buffer: "
+                                                     "Compile: ")
+                                                   projects
+                                                   (unless (eq history :default)
+                                                     history)))
+                (default-directory (or (get-text-property 0 'command-directory command)
+                                       (cdr (assq (akirak-compile--guess-backend command)
+                                                  projects))
+                                       workspace)))
+           (if (akirak-compile--installation-command-p command)
+               ;; Install dependencies in a separate buffer without killing the
+               ;; current process.
+               (akirak-compile-install command)
+             ;; Keep the input in the history iff it's not an installation command.
+             (if (eq history :default)
+                 (puthash key (list command) akirak-compile-per-workspace-history)
+               (cl-pushnew command history)
+               (puthash key history akirak-compile-per-workspace-history))
+             (if (equal arg '(4))
+                 (compilation-start command t
+                                    (cl-constantly (project-prefixed-buffer-name "compilation")))
+               (compile command t))))
+       (user-error "No workspace root")))))
 
 (defun akirak-compile--guess-backend (command)
   (seq-some `(lambda (cell)
@@ -306,6 +333,8 @@ can be a buffer in `compilation-mode' but also can be a buffer with
   (pcase (akirak-compile--split-command command)
     (`(,_ ,(or "add" "install" "remove" "uninstall") . ,_)
      t)
+    (`("npm" "ci")
+     t)
     (`("mix" "deps.get")
      t)
     (`(,_ "astro" "add" . ,_)
@@ -416,6 +445,15 @@ suitable value detected according to the command line."
 (defun akirak-compile--error-regexp-alist-for-command (command)
   "Return the key in `compilation-error-regexp-alist'"
   (pcase command
+    ((rx bol "cargo" space)
+     (eval-when-compile
+       (let ((path-regexp (rx alnum (* (any "_./" alnum)))))
+         (list
+          ;; e.g. --> src/utils.rs:3:6
+          (list (rx-to-string `(and "--> " (group (regexp ,path-regexp))
+                                    ":" (group (+ digit))
+                                    ":" (group (+ digit))))
+                1 2 3)))))
     ((rx bol "next" space)
      (eval-when-compile
        (let ((path-regexp (rx (+ (any "-_./[]_" alnum))))

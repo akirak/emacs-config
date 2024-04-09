@@ -33,6 +33,10 @@ Example values are shown below:
                string
                boolean))
 
+(defcustom akirak-org-clock-pre-exit-hook nil
+  "Hook to run before `org-clock-out' triggered by the user."
+  :type 'hook)
+
 ;;;; Global mode to ensure clocking
 
 (defvar akirak-org-clock-snooze-until nil)
@@ -718,10 +722,12 @@ This function returns the current buffer."
                                           org-clock-marker
                                           (equal capture-buffer
                                                  (marker-buffer org-clock-marker)))))
+        (run-hooks 'akirak-org-clock-pre-exit-hook)
         (with-current-buffer capture-buffer
           (org-capture-finalize))
         (when need-explicit-clock-out
           (org-clock-out switch-state)))
+    (run-hooks 'akirak-org-clock-pre-exit-hook)
     (org-clock-out switch-state)))
 
 ;;;###autoload
@@ -730,13 +736,15 @@ This function returns the current buffer."
   (akirak-org-clock-require-clock
     (org-with-clock-position (list org-clock-marker)
       (akirak-org-clock--finalize-capture
-       (org-todo (if arg
-                     (or (org-fast-todo-selection)
-                         ;; If SPC is selected inside org-fast-todo-selection,
-                         ;; nil will be returned, but it should be an empty
-                         ;; string when passed to org-todo.
-                         "")
-                   'done))))))
+       (let ((kwd (if arg
+                      (or (org-fast-todo-selection)
+                          ;; If SPC is selected inside org-fast-todo-selection,
+                          ;; nil will be returned, but it should be an empty
+                          ;; string when passed to org-todo.
+                          "")
+                    'done)))
+         (run-hooks 'akirak-org-clock-pre-exit-hook)
+         (org-todo kwd))))))
 
 ;;;###autoload
 (defun akirak-org-clock-set-review ()
@@ -744,27 +752,11 @@ This function returns the current buffer."
   (akirak-org-clock-require-clock
     (org-with-clock-position (list org-clock-marker)
       (akirak-org-clock--finalize-capture
+       (run-hooks 'akirak-org-clock-pre-exit-hook)
        (org-schedule nil)
        ;; If you add the todo keyword to `org-clock-out-when-done', `org-clock-out'
        ;; will be tirggered when you switch to the state.
        (org-todo "REVIEW")))))
-
-;;;; Stack
-
-(defvar akirak-org-clock-stack nil)
-
-;;;###autoload
-(defun akirak-org-clock-push (marker)
-  "Push a clock marker to the stack with the current window configuration."
-  (push (cons marker (current-window-configuration))
-        akirak-org-clock-stack))
-
-(defun akirak-org-clock-pop (marker)
-  "Pop a clock marker and its associated window configuration"
-  (pcase (pop akirak-org-clock-stack)
-    (`(,marker . ,wconf)
-     (set-window-configuration wconf)
-     (org-clock-clock-in (list marker)))))
 
 ;;;; Edit
 

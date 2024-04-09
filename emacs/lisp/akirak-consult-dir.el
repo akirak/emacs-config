@@ -111,38 +111,59 @@
 ;;;###autoload
 (defun akirak-consult-dir (&optional arg)
   (interactive "P")
-  (when arg
-    (akirak-project-import-from-magit))
-  (let ((ent (consult--multi akirak-consult-dir-sources
-                             :require-match
-                             (confirm-nonexistent-file-or-buffer)
-                             :prompt "Directory: "
-                             :history 'akirak-consult-dir-history
-                             :sort nil)))
-    (if (plist-get (cdr ent) :match)
-        (cl-ecase (plist-get (cdr ent) :category)
-          (directory
-           (dired (car ent)))
-          (project-root
-           (let ((default-directory (car ent)))
-             (unless (member (abbreviate-file-name default-directory)
-                             (project-known-project-roots))
-               (project-remember-project (project-current)))
-             (akirak-project-switch default-directory)))
-          (bookmark
-           (bookmark-jump (car ent))))
-      ;; If the input does not match an existing directory/project, clone a
-      ;; remote repository (if the input looks like a URL) or create a new project.
-      (let ((input (car ent)))
-        (if (url-type (url-generic-parse-url input))
-            (akirak-git-clone input)
-          (if (file-name-absolute-p input)
-              (akirak-project-init input)
-            (let ((dir (read-directory-name "Create a directory: "
-                                            (expand-file-name input "~/work2/"))))
-              (unless (file-directory-p dir)
-                (make-directory dir t))
-              (dired dir))))))))
+  (if (equal arg '(4))
+      (akirak-consult-dir-descendants)
+    (when (equal arg '(16))
+      (akirak-project-import-from-magit))
+    (let ((ent (consult--multi akirak-consult-dir-sources
+                               :require-match
+                               (confirm-nonexistent-file-or-buffer)
+                               :prompt "Directory: "
+                               :history 'akirak-consult-dir-history
+                               :sort nil)))
+      (if (plist-get (cdr ent) :match)
+          (cl-ecase (plist-get (cdr ent) :category)
+            (directory
+             (dired (car ent)))
+            (project-root
+             (let ((default-directory (car ent)))
+               (unless (member (abbreviate-file-name default-directory)
+                               (project-known-project-roots))
+                 (project-remember-project (project-current)))
+               (akirak-project-switch default-directory)))
+            (bookmark
+             (bookmark-jump (car ent))))
+        ;; If the input does not match an existing directory/project, clone a
+        ;; remote repository (if the input looks like a URL) or create a new project.
+        (let ((input (car ent)))
+          (if (url-type (url-generic-parse-url input))
+              (akirak-git-clone input)
+            (if (file-name-absolute-p input)
+                (akirak-project-init input)
+              (let ((dir (read-directory-name "Create a directory: "
+                                              (expand-file-name input "~/work2/"))))
+                (unless (file-directory-p dir)
+                  (make-directory dir t))
+                (dired dir)))))))))
+
+;;;###autoload
+(defun akirak-consult-dir-descendants (&optional dir)
+  "Browse a descendant directory of DIR."
+  (interactive (list (if-let (pr (project-current))
+                         (akirak-project-top-root pr)
+                       default-directory)))
+  (let* ((default-directory (if dir
+                                (expand-file-name dir)
+                              (if-let (pr (project-current))
+                                  (akirak-project-top-root pr)
+                                default-directory)))
+         (selected (consult--read (process-lines "fd" "-t" "d")
+                                  :category 'directory
+                                  :state (consult--file-state)
+                                  :require-match t
+                                  :prompt "Directory: "
+                                  :sort nil)))
+    (dired (expand-file-name selected dir))))
 
 (provide 'akirak-consult-dir)
 ;;; akirak-consult-dir.el ends here

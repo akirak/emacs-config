@@ -4166,10 +4166,11 @@ Major mode for Gleam
 #+begin_src emacs-lisp
   (setup (:package gleam-ts-mode)
     (:file-match "\\.gleam\\'")
+    (:mode-repl akirak/gleam-shell)
     ;; Should be fixed in the upstream.
     (autoload 'gleam-ts-mode "gleam-ts-mode"))
 #+end_src
-*** go-ts-mode                                                     :major__mode:
+*** go-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-04-12 Tue 23:59]
 :END:
@@ -4179,6 +4180,11 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup go-ts-mode
+    (:file-match "\\.go\\'")
+    (:org-src-lang "go")
+    (:with-mode go-mod-ts-mode
+      (:file-match "/go\\.mod\\'"))
+
     (:auto-insert
      ("\\.go\\'"
       . (> "package "
@@ -4610,6 +4616,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                    (getenv "DISPLAY")))
       (:hook-into emacs-startup-hook))
     (:hook akirak-log-mode)
+    (add-hook 'akirak-org-clock-pre-exit-hook
+              (defun akirak/org-clock-save-wconf ()
+                (if (and (require 'burly nil t)
+                         (fboundp 'akirak-burly-clock-push))
+                    (akirak-burly-clock-push)
+                  (message "Burly is not available, so the window configuration won't be saved"))))
 
     (advice-add 'save-buffers-kill-terminal
                 :before
@@ -4817,8 +4829,9 @@ This is an extra functions for window management.
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
-                       ("^\\*envrc\\*"
-                        display-buffer-no-window)
+                       ("^\\*envrc"
+                        display-buffer-no-window
+                        (allow-no-window . t))
                        ("\\*edit-indirect"
                         akirak-window-display-buffer-split-below)
                        ("^CAPTURE-"
@@ -9131,6 +9144,43 @@ A major mode for the Zig programming language
   (setup cargo
     (:package-files "Cargo.toml"))
 #+end_src
+**** Gleam
+:PROPERTIES:
+:CREATED_TIME: [2024-04-03 Wed 23:42]
+:END:
+#+begin_src elisp
+  (setup gleam
+    (:package-files "gleam.toml")
+    (:org-src-lang "gleam")
+
+    (defun akirak/gleam-browse-docs ()
+      (interactive)
+      (if-let (root (locate-dominating-file default-directory "gleam.toml"))
+          (let* ((dir (expand-file-name "build/dev/docs/" root))
+                 (subdirs (if (file-directory-p dir)
+                              (directory-files dir t "^[[:alpha:]]")
+                            (user-error "Documentation hasn't been generated. Run gleam docs build")))
+                 (subdir (pcase (length subdirs)
+                           (0
+                            (user-error "Please run gleam docs build to regenerate the documentation"))
+                           (1
+                            (car subdirs))
+                           (_
+                            (completing-read "Package documentation: "
+                                             subdirs nil t))))
+                 (file (expand-file-name "index.html" subdir)))
+            (akirak-open-default file))
+        (user-error "gleam.toml is not found")))
+
+    (defun akirak/gleam-shell ()
+      (interactive)
+      (if-let* ((root (locate-dominating-file default-directory "gleam.toml"))
+                (pr (project-current))
+                (name (format "gleam-%s" (project-name pr)))
+                (default-directory root))
+          (pop-to-buffer (eat-make name "gleam" nil "shell"))
+        (user-error "Not in a Gleam project"))))
+#+end_src
 **** Haskell
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 13:00]
@@ -9590,9 +9640,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |   5 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
