@@ -154,6 +154,11 @@
                         (seq-filter (lambda (file) (string-match-p ,regexp file))
                                     (akirak-consult--project-files))
                         #',transform)))
+                   (transform
+                    `(lambda ()
+                       (akirak-consult--apply-transformer
+                        (akirak-consult--project-files)
+                        #',transform)))
                    (make-predicate
                     `(lambda ()
                        (akirak-consult--apply-transformer
@@ -271,6 +276,10 @@
        :hidden t
        :transform #'akirak-consult--prepend-test-files
        :regexp (rx bos "test" (? "s") "/"))
+    ,(akirak-consult-build-project-file-source "Parent"
+       :narrow ?u
+       :hidden t
+       :transform #'akirak-consult--prepend-upper-module)
     ,(akirak-consult-build-project-file-source "Nix"
        :narrow ?n
        :hidden t
@@ -309,6 +318,75 @@
        (cons default-file
              (cl-remove default-file files :test #'equal))))
     (_ files)))
+
+(defun akirak-consult--prepend-upper-module (files this-file)
+  (pcase this-file
+    (`nil files)
+    ((rx "/src/lib.rs" eol)
+     files)
+    ((rx "/src/" (+ (not (any "/"))) ".rs" eol)
+     (let ((dir (substring this-file 1 (match-beginning 0))))
+       (akirak-consult--reorder-files
+        (list (concat dir "/src/lib.rs")
+              (concat dir "/src/main.rs"))
+        files)))
+    ((rx "/" (group (+ (not (any "/"))))
+         "/" (+ (not (any "/")))
+         "/mod.rs" eol)
+     (if-let (file (akirak-consult--find-intersection-element
+                    (list (concat (substring this-file 0 (match-end 1))
+                                  "/mod.rs")
+                          (concat (substring this-file 0 (match-beginning 0))
+                                  "/" (match-string 1 this-file) ".rs")
+                          (concat (substring this-file 0 (match-end 1))
+                                  "/lib.rs")
+                          (concat (substring this-file 0 (match-end 1))
+                                  "/main.rs"))
+                    files))
+         (cons file (cl-remove file files :test #'equal))
+       (cl-flet
+           ((pred (file)
+              (string-match-p (rx-to-string `(and ,(substring this-file 0 (match-beginning 0))
+                                                  (+ (not (any "/"))) ".rs"))
+                              file)))
+         (append (cl-remove-if-not #'pred files)
+                 (cl-remove-if #'pred files)))))
+    ((rx "/" (group (+ (not (any "/"))))
+         "/" (+ (not (any "/"))) ".rs" eol)
+     (akirak-consult--reorder-files
+      (list (concat (substring this-file 0 (match-end 1))
+                    "/mod.rs")
+            (concat (substring this-file 0 (match-beginning 1))
+                    (match-string 1 this-file) ".rs"))
+      files))
+    ((rx "/" (group (+ (not (any "/"))))
+         "/" (group (+ (not (any "/")))) (group (and ".ex" (?  "s"))) eol)
+     (let ((ext (match-string 3 this-file)))
+       (akirak-consult--reorder-files
+        (list (concat (substring this-file 0 (match-beginning 1))
+                      (match-string 1 this-file)
+                      ext))
+        files)))
+    ((rx "/" (group (+ (not (any "/"))))
+         "/" (group (+ (not (any "/")))) (group (or ".rs" (and ".ex" (?  "s")))) eol)
+     (let ((ext (match-string 3 this-file)))
+       (akirak-consult--reorder-files
+        (list (concat (substring this-file 0 (match-beginning 1))
+                      (match-string 1 this-file)
+                      ext))
+        files)))
+    (_ files)))
+
+(defun akirak-consult--find-intersection-element (files1 files2)
+  (catch 'common-element
+    (dolist (file files1)
+      (when (member file files2)
+        (throw 'common-element file)))))
+
+(defun akirak-consult--reorder-files (preceding-files files)
+  (if-let (file (akirak-consult--find-intersection-element preceding-files files))
+      (cons file (cl-remove file files :test #'equal))
+    files))
 
 ;; Based on `consult-buffer'.
 ;;;###autoload
