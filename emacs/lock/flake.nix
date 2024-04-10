@@ -617,8 +617,7 @@
     };
     link-hint = {
       flake = false;
-      owner = "akirak";
-      ref = "skip-invisible";
+      owner = "noctuid";
       repo = "link-hint.el";
       type = "github";
     };
