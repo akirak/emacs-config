@@ -7251,6 +7251,39 @@ Use avy to open, copy, etc. visible links
   (setup (:package link-hint)
     (:global "M-g f" #'link-hint-open-link)
 
+    (defvar akirak/link-hint-current-window nil
+      "Window selected just before `link-hint-open-link' is run.")
+
+    (advice-add 'link-hint-open-link
+                :before
+                (defun akirak/link-hint-save-window (&rest _)
+                  (setq akirak/link-hint-current-window (selected-window))))
+
+    (:when-loaded
+      (put 'link-hint-deadgrep :open
+           (defun akirak/link-hint-deadgrep-open ()
+             (interactive)
+             (let ((dir default-directory))
+               (deadgrep--visit-result
+                `(lambda (file)
+                   (let ((file (expand-file-name file ,dir)))
+                     (cl-flet
+                         ((showing-the-file (w)
+                            (when-let (other-file (buffer-file-name (window-buffer w)))
+                              (file-equal-p file other-file))))
+                       (let* ((currentw akirak/link-hint-current-window)
+                              (window (or (and currentw
+                                               (showing-the-file currentw)
+                                               currentw)
+                                          (seq-find #'showing-the-file (window-list)))))
+                         (if window
+                             (progn
+                               (select-window window)
+                               (find-file file))
+                           (find-file-other-window file)))))))
+               (when (fboundp 'pulse-momentary-highlight-one-line)
+                 (pulse-momentary-highlight-one-line))))))
+
     ;; Extra bindings for particular modes
     (:with-feature info
       (:when-loaded
