@@ -375,6 +375,31 @@
          (list (concat (substring this-file 0 (match-beginning 1))
                        (match-string 1 this-file)
                        ext)))))
+    ((rx "/" (+ (not (any "/")))
+         "/index." (+ (not (any "./"))) eol)
+     (let ((dir (substring this-file 0 (match-beginning 0))))
+       (if-let (file (seq-find (lambda (file)
+                                 (string-match-p (rx-to-string
+                                                  `(and ,dir "/index." (+ (not (any "./"))) eol))
+                                                 file))
+                               files))
+           (cons file (cl-remove file files :test #'equal))
+         (cl-flet
+             ((pred (file)
+                (string-match-p (rx-to-string
+                                 `(and ,dir "/" (+ (not (any "/"))) eol))
+                                file)))
+           (append (cl-remove-if-not #'pred files)
+                   (cl-remove-if #'pred files))))))
+    ((rx "/" (+ (not (any "/"))) "." (or (and (or "ts" "js") (?  "x"))
+                                         (and (any "cm") "js"))
+         eol)
+     (akirak-consult--reorder-files files
+       :predicate
+       (lambda (file)
+         (string-match-p (rx-to-string `(and ,(substring this-file 0 (match-beginning 0))
+                                             "/index." (+ (not (any "./")))))
+                         file))))
     (_ files)))
 
 (defun akirak-consult--find-intersection-element (files1 files2)
