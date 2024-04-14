@@ -326,10 +326,10 @@
      files)
     ((rx "/src/" (+ (not (any "/"))) ".rs" eol)
      (let ((dir (substring this-file 1 (match-beginning 0))))
-       (akirak-consult--reorder-files
-        (list (concat dir "/src/lib.rs")
-              (concat dir "/src/main.rs"))
-        files)))
+       (akirak-consult--reorder-files files
+         :preceding-files
+         (list (concat dir "/src/lib.rs")
+               (concat dir "/src/main.rs")))))
     ((rx "/" (group (+ (not (any "/"))))
          "/" (+ (not (any "/")))
          "/mod.rs" eol)
@@ -353,28 +353,28 @@
                  (cl-remove-if #'pred files)))))
     ((rx "/" (group (+ (not (any "/"))))
          "/" (+ (not (any "/"))) ".rs" eol)
-     (akirak-consult--reorder-files
-      (list (concat (substring this-file 0 (match-end 1))
-                    "/mod.rs")
-            (concat (substring this-file 0 (match-beginning 1))
-                    (match-string 1 this-file) ".rs"))
-      files))
+     (akirak-consult--reorder-files files
+       :preceding-files
+       (list (concat (substring this-file 0 (match-end 1))
+                     "/mod.rs")
+             (concat (substring this-file 0 (match-beginning 1))
+                     (match-string 1 this-file) ".rs"))))
     ((rx "/" (group (+ (not (any "/"))))
          "/" (group (+ (not (any "/")))) (group (and ".ex" (?  "s"))) eol)
      (let ((ext (match-string 3 this-file)))
-       (akirak-consult--reorder-files
-        (list (concat (substring this-file 0 (match-beginning 1))
-                      (match-string 1 this-file)
-                      ext))
-        files)))
+       (akirak-consult--reorder-files files
+         :preceding-files
+         (list (concat (substring this-file 0 (match-beginning 1))
+                       (match-string 1 this-file)
+                       ext)))))
     ((rx "/" (group (+ (not (any "/"))))
          "/" (group (+ (not (any "/")))) (group (or ".rs" (and ".ex" (?  "s")))) eol)
      (let ((ext (match-string 3 this-file)))
-       (akirak-consult--reorder-files
-        (list (concat (substring this-file 0 (match-beginning 1))
-                      (match-string 1 this-file)
-                      ext))
-        files)))
+       (akirak-consult--reorder-files files
+         :preceding-files
+         (list (concat (substring this-file 0 (match-beginning 1))
+                       (match-string 1 this-file)
+                       ext)))))
     (_ files)))
 
 (defun akirak-consult--find-intersection-element (files1 files2)
@@ -383,8 +383,13 @@
       (when (member file files2)
         (throw 'common-element file)))))
 
-(defun akirak-consult--reorder-files (preceding-files files)
-  (if-let (file (akirak-consult--find-intersection-element preceding-files files))
+(cl-defun akirak-consult--reorder-files (files &key preceding-files predicate)
+  (declare (indent 1))
+  (if-let (file (cond
+                 (preceding-files
+                  (akirak-consult--find-intersection-element preceding-files files))
+                 (predicate
+                  (seq-find predicate files))))
       (cons file (cl-remove file files :test #'equal))
     files))
 
