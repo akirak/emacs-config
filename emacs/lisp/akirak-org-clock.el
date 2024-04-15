@@ -718,15 +718,16 @@ This function returns the current buffer."
 
 (defun akirak-org-clock--out (&optional switch-state)
   (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
-      (let ((need-explicit-clock-out (and (not org-capture-clock-was-started)
-                                          org-clock-marker
-                                          (equal capture-buffer
-                                                 (marker-buffer org-clock-marker)))))
+      (let ((need-explicit-clock-out (and (org-clocking-p)
+                                          (not (equal org-clock-marker
+                                                      (buffer-local-value
+                                                       'org-capture-clock-was-started
+                                                       capture-buffer))))))
         (run-hooks 'akirak-org-clock-pre-exit-hook)
-        (with-current-buffer capture-buffer
-          (org-capture-finalize))
         (when need-explicit-clock-out
-          (org-clock-out switch-state)))
+          (org-clock-out switch-state))
+        (with-current-buffer capture-buffer
+          (org-capture-finalize)))
     (run-hooks 'akirak-org-clock-pre-exit-hook)
     (org-clock-out switch-state)))
 
