@@ -4824,6 +4824,11 @@ This is an extra functions for window management.
                           (vterm-mode eat-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
+                       ((or ,(major-modes compilation-mode)
+                            "-install\\*")
+                        ,(reuse-mode-window
+                          (compilation-mode comint-mode)
+                          display-buffer))
                        (,(major-modes nov-mode pdf-view-mode Info-mode)
                         akirak-window-display-document-buffer)
                        ((major-mode . org-agenda-mode)
