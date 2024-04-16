@@ -4227,6 +4227,7 @@ Major mode for the Go programming language
 #+begin_src emacs-lisp
   (setup json-ts-mode
     (:file-match "\\.json\\'" "\\.lock\\'")
+    (:mode-project-roots "package.json")
     (:hook (defun akirak/json-ts-setup ()
              (add-hook 'eldoc-documentation-functions
                        (defun akirak/json-ts-path-eldoc (cb)
@@ -4314,6 +4315,7 @@ Major mode for editing typescript
                           '(?< . ?>))))
 
     (:with-mode typescript-ts-base-mode
+      (:mode-project-roots "package.json")
       (:local-set block-comment-start "/*"
                   block-comment-end "*/"))
 
