@@ -8247,6 +8247,7 @@ Parentheses Universalistic
 #+begin_src emacs-lisp
   (setup (:package puni)
     (:hook-into nix-mode
+                erlang-mode
                 tuareg-mode
                 svelte-mode
                 web-mode
@@ -9300,6 +9301,14 @@ A major mode for the Zig programming language
                                   '("opam" nil "exec" "--" "utop"))
                                  (t
                                   (user-error "Neither utop nor opam is available")))))))))
+#+end_src
+**** rebar3 (Erlang)
+:PROPERTIES:
+:CREATED_TIME: [2024-04-18 Thu 23:00]
+:END:
+#+begin_src elisp
+  (setup rebar3
+    (:package-files "rebar.config"))
 #+end_src
 *** Org mode
 Define how Org entries are displayed by certain commands.
