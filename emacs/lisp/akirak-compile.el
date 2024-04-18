@@ -11,6 +11,7 @@
     ("package-lock.json" . npm)
     ("bun.lockb" . bun)
     ("package.json" . package-json)
+    ("rebar.config" . rebar3)
     ("gleam.toml" . gleam))
   ""
   :type '(alist :key-type (string :tag "File name")
@@ -74,7 +75,12 @@
      ("npm lock")
      ("npm install --save")
      ("npm install --save-dev")
-     ("npm uninstall")))
+     ("npm uninstall"))
+    (rebar3
+     ("rebar3 compile")
+     ("rebar3 release")
+     ("rebar3 deps")
+     ("rebar3 format" annotation "Format Erlang files (requires a plugin")))
   ""
   :type '(alist :key-type (symbol :tag "Backend")
                 :value-type
