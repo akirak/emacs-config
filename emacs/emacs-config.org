@@ -6042,7 +6042,7 @@ Client for Language Server Protocol (LSP) servers
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")
 
-      (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
+      ;; (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
 
       (defun akirak/eglot-setup-buffer ()
         (if (eglot-managed-p)
