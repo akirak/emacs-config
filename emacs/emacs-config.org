@@ -1137,6 +1137,7 @@ The built-in =electric= package provides the following modes:
            (gleam-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (rust-ts-mode . (,@lsp))
+           (erlang-mode . (,@lsp))
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp ,@ocamlformat))
            (sql-mode . (,@sqlformat))
