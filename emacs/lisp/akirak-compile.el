@@ -453,12 +453,20 @@ suitable value detected according to the command line."
   (pcase command
     ((rx bol "cargo" space)
      (eval-when-compile
-       (let ((path-regexp (rx alnum (* (any "_./" alnum)))))
+       (let ((path-regexp (rx alpha (* (any "_./" alnum)))))
          (list
           ;; e.g. --> src/utils.rs:3:6
-          (list (rx-to-string `(and "--> " (group (regexp ,path-regexp))
+          (list (rx-to-string `(and word-start
+                                    (group (regexp ,path-regexp))
                                     ":" (group (+ digit))
                                     ":" (group (+ digit))))
+                1 2 3)
+          ;; e.g. [src/main.rs:121:5]
+          (list (rx-to-string `(and "["
+                                    (group (regexp ,path-regexp))
+                                    ":" (group (+ digit))
+                                    ":" (group (+ digit))
+                                    "]"))
                 1 2 3)))))
     ((rx bol "next" space)
      (eval-when-compile
