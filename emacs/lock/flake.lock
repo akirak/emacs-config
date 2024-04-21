@@ -1945,13 +1945,13 @@
       "locked": {
         "lastModified": 1699375183,
         "narHash": "sha256-MGbkSqdImoIH/TIzMy5WHiS7sEb2NzOH+dqHTUg+9Kg=",
-        "owner": "remi-gelinas",
+        "owner": "nix-community",
         "repo": "nix-ts-mode",
         "rev": "2dddc6e9ca33be211675afca3896fd661fc38a0c",
         "type": "github"
       },
       "original": {
-        "owner": "remi-gelinas",
+        "owner": "nix-community",
         "repo": "nix-ts-mode",
         "type": "github"
       }
@@ -1991,18 +1991,17 @@
     "nov": {
       "flake": false,
       "locked": {
-        "lastModified": 1684831073,
-        "narHash": "sha256-K2ySf/0iuuBMqie+wL7R2slzyWpNJqPIs1Yo62QvrSo=",
-        "owner": "akirak",
-        "repo": "nov.el",
-        "rev": "cf8761e2082c0cb0d1e33761fa07ef58ce83ef0e",
-        "type": "github"
+        "lastModified": 1712492399,
+        "narHash": "sha256-Voefw5NBDh+BSQpNTZGBKNdVW2+zHIpBo3Mh/VHwnYI=",
+        "ref": "refs/heads/master",
+        "rev": "9b7bef950d68c2518710c480729d6bb6026e9489",
+        "revCount": 138,
+        "type": "git",
+        "url": "https://depp.brause.cc/nov.el.git"
       },
       "original": {
-        "owner": "akirak",
-        "ref": "abbr-file-name",
-        "repo": "nov.el",
-        "type": "github"
+        "type": "git",
+        "url": "https://depp.brause.cc/nov.el.git"
       }
     },
     "nushell-mode": {
