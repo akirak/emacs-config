@@ -6008,6 +6008,15 @@ Client for Language Server Protocol (LSP) servers
 
     (:bind akirak/mode-prefix-key #'akirak/eglot-prefix-map)
 
+    (defun akirak/eglot-ensure-with-formatter ()
+      (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer nil t)
+      (eglot-ensure))
+
+    (defun akirak/eglot-setup-buffer ()
+      (if (eglot-managed-p)
+          (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+        (remove-hook 'before-save-hook #'eglot-format-buffer t)))
+
     (:when-loaded
       (define-prefix-command 'akirak/eglot-prefix-map)
       (:with-map akirak/eglot-prefix-map
@@ -6043,16 +6052,7 @@ Client for Language Server Protocol (LSP) servers
                         (:typescript (:tsdk "./node_modules/typescript/lib")))))
 
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
-      (put 'lean4-mode 'eglot-language-id "lean")
-
-      (defun akirak/eglot-ensure-with-formatter ()
-        (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer nil t)
-        (eglot-ensure))
-
-      (defun akirak/eglot-setup-buffer ()
-        (if (eglot-managed-p)
-            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-          (remove-hook 'before-save-hook #'eglot-format-buffer t)))))
+      (put 'lean4-mode 'eglot-language-id "lean")))
 #+end_src
 *** eldoc-eval                                               :Emacs:
 :PROPERTIES:
