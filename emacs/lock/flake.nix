@@ -731,7 +731,7 @@
     };
     nix-ts-mode = {
       flake = false;
-      owner = "remi-gelinas";
+      owner = "nix-community";
       repo = "nix-ts-mode";
       type = "github";
     };
@@ -749,10 +749,8 @@
     };
     nov = {
       flake = false;
-      owner = "akirak";
-      ref = "abbr-file-name";
-      repo = "nov.el";
-      type = "github";
+      type = "git";
+      url = "https://depp.brause.cc/nov.el.git";
     };
     nushell-mode = {
       flake = false;
