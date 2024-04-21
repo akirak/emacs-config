@@ -4,7 +4,7 @@
 
 ;; Based on `consult--source-project-buffer' from consult.el.
 (defvar akirak-consult-source-help-buffer
-  `(:name "Help Buffer"
+  `(:name "Help and Doc Buffer"
           :narrow 104
           :hidden t
           :category buffer
@@ -16,6 +16,9 @@
           ,(lambda () (consult--buffer-query :mode '(help-mode
                                                      helpful-mode
                                                      ghelp-page-mode
+                                                     Info-mode
+                                                     nov-mode
+                                                     devdocs-mode
                                                      eww-mode)
                                              :as #'buffer-name))))
 
