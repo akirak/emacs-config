@@ -151,7 +151,7 @@ matches the host of the repository,
                                      :content-path content-path)))
     ;; Quick-and-dirty pattern for Git URLs.
     ;; Maybe import more comprehensive regexp from git-identity.el
-    ((rx bol (or "https" "git" "ssh") "://"
+    ((rx bol (or "https" "git" "git+https" "ssh") "://"
          (?  (+ (any "-_." alnum)) "@")
          (group (+ (any "-_" alnum)) (+ "." (+ (any "-_" alnum))))
          (?  ":" (+ (char digit)))
