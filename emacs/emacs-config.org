@@ -5954,6 +5954,7 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 #+begin_src emacs-lisp
   (setup (:package eat)
     (:set eat-kill-buffer-on-exit t)
+    (autoload 'eat-make "eat")
 
     (:with-map eat-semi-char-mode-map
       (:unbind "M-:" "M-g" "M-s" "C-z" "M-o")))
