@@ -170,15 +170,6 @@
   #     // super.packageRequires;
   # };
 
-  nov = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "nov.el";
-      ref = "abbr-file-name";
-    };
-  };
-
   lispy = _: super: {
     origin = {
       type = "github";
