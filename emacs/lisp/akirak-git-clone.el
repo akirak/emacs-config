@@ -151,7 +151,7 @@ matches the host of the repository,
                                      :content-path content-path)))
     ;; Quick-and-dirty pattern for Git URLs.
     ;; Maybe import more comprehensive regexp from git-identity.el
-    ((rx bol (or "https" "git" "ssh") "://"
+    ((rx bol (or "https" "git" "git+https" "ssh") "://"
          (?  (+ (any "-_." alnum)) "@")
          (group (+ (any "-_" alnum)) (+ "." (+ (any "-_" alnum))))
          (?  ":" (+ (char digit)))
@@ -191,7 +191,7 @@ matches the host of the repository,
         (string-remove-suffix ".git" (match-string 1 git-url))
       (error "Failed to match on %s" git-url))))
 
-(cl-defun akirak-git-clone--clone (origin dest &key callback ref)
+(cl-defun akirak-git-clone--clone (origin dest &key callback ref content-path)
   "Clone a Git repository from ORIGIN to DEST."
   (let ((parent (f-parent dest)))
     (unless (file-directory-p parent)
@@ -204,14 +204,17 @@ matches the host of the repository,
                      "--filter=blob:none"
                      origin (expand-file-name dest)
                      (when ref
-                       (list "-b" ref)))))
+                       (list "-b" ref))))
+        (visited-path (if content-path
+                          (expand-file-name content-path dest)
+                        dest)))
     (set-process-sentinel proc
                           `(lambda (process _event)
                              (when (eq 'exit (process-status process))
                                (if (= 0 (process-exit-status process))
                                    ,(if callback
-                                        `(funcall #',callback ,dest)
-                                      `(akirak-git-clone-browse ,dest))
+                                        `(funcall #',callback ,visited-path)
+                                      `(akirak-git-clone-browse ,visited-path))
                                  (message "Returned non-zero from git-clone")))))))
 
 ;;;###autoload
@@ -253,7 +256,7 @@ DIR is an optional destination directory to clone the repository into."
       (message "Rev or ref is unsupported now"))
     (if (file-directory-p repo)
         (akirak-git-clone-browse repo content-path)
-      (akirak-git-clone--clone origin repo))))
+      (akirak-git-clone--clone origin repo :content-path content-path))))
 
 (defun akirak-git-clone--root-directory (host)
   "Determine the parent directory of the host directory."

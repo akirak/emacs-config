@@ -79,6 +79,9 @@
   "v" #'akirak-org-babel-send-block-to-shell
   "w" #'embark-copy-as-kill)
 
+(defvar-keymap akirak-embark-org-babel-result-map
+  "v" #'akirak-embark-org-babel-update-image-result)
+
 (defvar-keymap akirak-embark-org-target-map
   :parent embark-general-map
   "o" #'akirak-embark-org-occur-target-references)
@@ -358,6 +361,8 @@
   (add-to-list 'embark-keymap-alist
                '(org-src-block . akirak-embark-org-babel-block-map))
   (add-to-list 'embark-keymap-alist
+               '(org-babel-result . akirak-embark-org-babel-result-map))
+  (add-to-list 'embark-keymap-alist
                '(org-prompt-special-block . akirak-embark-org-prompt-map))
   (add-to-list 'embark-keymap-alist
                '(org-special-block . akirak-embark-org-block-map))
@@ -485,6 +490,11 @@
                (buffer-substring-no-properties cbegin cend))
             . ,(cons (org-element-property :begin element)
                      (org-element-property :end element))))))
+     ((org-match-line org-babel-result-regexp)
+      `(org-babel-result
+        ,(match-string 1)
+        . ,(cons (match-beginning 0)
+                 (match-end 0))))
      (t
       (if-let (href (cond
                      ((thing-at-point-looking-at org-link-bracket-re)
@@ -718,6 +728,14 @@
       (next-error)
       (pop-to-buffer (current-buffer))
       (recenter))))
+
+(defun akirak-embark-org-babel-update-image-result ()
+  "Execute the above source block and redisplay inline images."
+  (interactive)
+  (save-excursion
+    (when (re-search-backward org-babel-src-block-regexp nil t)
+      (org-babel-execute-safely-maybe)
+      (org-redisplay-inline-images))))
 
 (defun akirak-embark-nix-run-async (installable)
   (interactive "s")

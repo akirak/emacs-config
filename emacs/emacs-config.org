@@ -1119,7 +1119,8 @@ The built-in =electric= package provides the following modes:
       (let ((prettier '((eval . (prettier-on-save-mode t))))
             ;; (mix-format '((eval . (mix-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
-            (lsp '((eval . (eglot-ensure))))
+            (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
+            (lsp-no-formatter '((eval . (eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable))))
             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
             (alejandra '((eval . (alejandra-on-save-mode t)))))
@@ -1137,6 +1138,7 @@ The built-in =electric= package provides the following modes:
            (gleam-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@prettier ,@lsp))
            (rust-ts-mode . (,@lsp))
+           (erlang-mode . (,@lsp-no-formatter))
            (typescript-ts-mode . (,@prettier ,@lsp))
            (tuareg-mode . (,@lsp ,@ocamlformat))
            (sql-mode . (,@sqlformat))
@@ -2148,12 +2150,13 @@ Thus I will explicitly install this package rather than using the built-in versi
     ;; Some packages create a temporary buffer for building transient content. in
     ;; which a major mode is turned on. `which-function' can be slow even in such
     ;; a small content, so it should be turned off.
-     (defun akirak/which-func-enable-if-file ()
-       (when (buffer-file-name)
-         (which-function-mode t)))
-     (:with-function akirak/which-func-enable-if-file
-       (:hook-into prog-mode-hook
-                   conf-mode-hook)))
+    (defun akirak/which-func-enable-if-file ()
+      (when (buffer-file-name)
+        (which-function-mode t)))
+    (:with-function akirak/which-func-enable-if-file
+      (:hook-into erlang-mode-hook
+                  elisp-mode-hook
+                  eglot-managed-mode-hook)))
 #+end_src
 *** whitespace                                   :visual:formatting:
 :PROPERTIES:
@@ -3231,10 +3234,6 @@ A programmable workflow layer for Org mode
                 (when (bound-and-true-p org-memento-file)
                   (add-to-list 'org-agenda-files org-memento-file t))))
 
-    (add-hook 'org-dog-clock-in-hook
-              (defun akirak/org-dog-clock-in-push ()
-                (akirak-org-clock-push org-dog-clock-last-marker)))
-
     (:status personal
       (add-hook 'org-dog-clock-in-success-hook
                 #'akirak-org-clock-add-git-properties-if-none))
@@ -4227,6 +4226,7 @@ Major mode for the Go programming language
 #+begin_src emacs-lisp
   (setup json-ts-mode
     (:file-match "\\.json\\'" "\\.lock\\'")
+    (:mode-project-roots "package.json")
     (:hook (defun akirak/json-ts-setup ()
              (add-hook 'eldoc-documentation-functions
                        (defun akirak/json-ts-path-eldoc (cb)
@@ -4314,6 +4314,7 @@ Major mode for editing typescript
                           '(?< . ?>))))
 
     (:with-mode typescript-ts-base-mode
+      (:mode-project-roots "package.json")
       (:local-set block-comment-start "/*"
                   block-comment-end "*/"))
 
@@ -4824,6 +4825,11 @@ This is an extra functions for window management.
                           (vterm-mode eat-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
+                       ((or ,(major-modes compilation-mode)
+                            "-install\\*")
+                        ,(reuse-mode-window
+                          (compilation-mode comint-mode)
+                          display-buffer-use-some-window))
                        (,(major-modes nov-mode pdf-view-mode Info-mode)
                         akirak-window-display-document-buffer)
                        ((major-mode . org-agenda-mode)
@@ -5949,6 +5955,7 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 #+begin_src emacs-lisp
   (setup (:package eat)
     (:set eat-kill-buffer-on-exit t)
+    (autoload 'eat-make "eat")
 
     (:with-map eat-semi-char-mode-map
       (:unbind "M-:" "M-g" "M-s" "C-z" "M-o")))
@@ -6001,6 +6008,15 @@ Client for Language Server Protocol (LSP) servers
 
     (:bind akirak/mode-prefix-key #'akirak/eglot-prefix-map)
 
+    (defun akirak/eglot-ensure-with-formatter ()
+      (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer nil t)
+      (eglot-ensure))
+
+    (defun akirak/eglot-setup-buffer ()
+      (if (eglot-managed-p)
+          (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+        (remove-hook 'before-save-hook #'eglot-format-buffer t)))
+
     (:when-loaded
       (define-prefix-command 'akirak/eglot-prefix-map)
       (:with-map akirak/eglot-prefix-map
@@ -6036,14 +6052,7 @@ Client for Language Server Protocol (LSP) servers
                         (:typescript (:tsdk "./node_modules/typescript/lib")))))
 
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
-      (put 'lean4-mode 'eglot-language-id "lean")
-
-      (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer)
-
-      (defun akirak/eglot-setup-buffer ()
-        (if (eglot-managed-p)
-            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-          (remove-hook 'before-save-hook #'eglot-format-buffer t)))))
+      (put 'lean4-mode 'eglot-language-id "lean")))
 #+end_src
 *** eldoc-eval                                               :Emacs:
 :PROPERTIES:
@@ -7251,6 +7260,39 @@ Use avy to open, copy, etc. visible links
   (setup (:package link-hint)
     (:global "M-g f" #'link-hint-open-link)
 
+    (defvar akirak/link-hint-current-window nil
+      "Window selected just before `link-hint-open-link' is run.")
+
+    (advice-add 'link-hint-open-link
+                :before
+                (defun akirak/link-hint-save-window (&rest _)
+                  (setq akirak/link-hint-current-window (selected-window))))
+
+    (:when-loaded
+      (put 'link-hint-deadgrep :open
+           (defun akirak/link-hint-deadgrep-open ()
+             (interactive)
+             (let ((dir default-directory))
+               (deadgrep--visit-result
+                `(lambda (file)
+                   (let ((file (expand-file-name file ,dir)))
+                     (cl-flet
+                         ((showing-the-file (w)
+                            (when-let (other-file (buffer-file-name (window-buffer w)))
+                              (file-equal-p file other-file))))
+                       (let* ((currentw akirak/link-hint-current-window)
+                              (window (or (and currentw
+                                               (showing-the-file currentw)
+                                               currentw)
+                                          (seq-find #'showing-the-file (window-list)))))
+                         (if window
+                             (progn
+                               (select-window window)
+                               (find-file file))
+                           (find-file-other-window file)))))))
+               (when (fboundp 'pulse-momentary-highlight-one-line)
+                 (pulse-momentary-highlight-one-line))))))
+
     ;; Extra bindings for particular modes
     (:with-feature info
       (:when-loaded
@@ -8210,6 +8252,7 @@ Parentheses Universalistic
 #+begin_src emacs-lisp
   (setup (:package puni)
     (:hook-into nix-mode
+                erlang-mode
                 tuareg-mode
                 svelte-mode
                 web-mode
@@ -9263,6 +9306,14 @@ A major mode for the Zig programming language
                                   '("opam" nil "exec" "--" "utop"))
                                  (t
                                   (user-error "Neither utop nor opam is available")))))))))
+#+end_src
+**** rebar3 (Erlang)
+:PROPERTIES:
+:CREATED_TIME: [2024-04-18 Thu 23:00]
+:END:
+#+begin_src elisp
+  (setup rebar3
+    (:package-files "rebar.config"))
 #+end_src
 *** Org mode
 Define how Org entries are displayed by certain commands.

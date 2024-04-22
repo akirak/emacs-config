@@ -1243,9 +1243,11 @@ provided as a separate command for integration, e.g. with embark."
                 (when (use-region-p)
                   (let ((region-source (buffer-substring-no-properties
                                         (region-beginning) (region-end))))
-                    (if (equal body-type "src")
-                        (akirak-capture--sanitize-source region-source)
-                      (akirak-capture--to-org region-source))))
+                    (if (equal body-type "quote")
+                        (akirak-capture--to-org region-source)
+                      ;; Newlines are significant in most of the block types, so
+                      ;; use the source sanitizer for now.
+                      (akirak-capture--sanitize-source region-source))))
                 "")
             "\n" end-string "\n")))
 

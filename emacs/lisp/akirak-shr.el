@@ -13,15 +13,17 @@
 ;;;###autoload
 (defun akirak-shr-next-heading ()
   (interactive)
+  (end-of-line)
   (if (text-property-search-forward
        'face '(shr-h1 shr-h2 shr-h3 shr-h4 shr-h5 shr-h6) #'akirak-shr--predicate
        'not-current)
-      (end-of-line)
+      (beginning-of-line)
     (user-error "No more heading below")))
 
 ;;;###autoload
 (defun akirak-shr-previous-heading ()
   (interactive)
+  (beginning-of-line)
   (if (text-property-search-backward
        'face '(shr-h1 shr-h2 shr-h3 shr-h4 shr-h5 shr-h6) #'akirak-shr--predicate
        'not-current)

@@ -11,6 +11,7 @@
     ("package-lock.json" . npm)
     ("bun.lockb" . bun)
     ("package.json" . package-json)
+    ("rebar.config" . rebar3)
     ("gleam.toml" . gleam))
   ""
   :type '(alist :key-type (string :tag "File name")
@@ -74,7 +75,12 @@
      ("npm lock")
      ("npm install --save")
      ("npm install --save-dev")
-     ("npm uninstall")))
+     ("npm uninstall"))
+    (rebar3
+     ("rebar3 compile")
+     ("rebar3 release")
+     ("rebar3 deps")
+     ("rebar3 format" annotation "Format Erlang files (requires a plugin")))
   ""
   :type '(alist :key-type (symbol :tag "Backend")
                 :value-type
@@ -447,12 +453,20 @@ suitable value detected according to the command line."
   (pcase command
     ((rx bol "cargo" space)
      (eval-when-compile
-       (let ((path-regexp (rx alnum (* (any "_./" alnum)))))
+       (let ((path-regexp (rx alpha (* (any "_./" alnum)))))
          (list
           ;; e.g. --> src/utils.rs:3:6
-          (list (rx-to-string `(and "--> " (group (regexp ,path-regexp))
+          (list (rx-to-string `(and word-start
+                                    (group (regexp ,path-regexp))
                                     ":" (group (+ digit))
                                     ":" (group (+ digit))))
+                1 2 3)
+          ;; e.g. [src/main.rs:121:5]
+          (list (rx-to-string `(and "["
+                                    (group (regexp ,path-regexp))
+                                    ":" (group (+ digit))
+                                    ":" (group (+ digit))
+                                    "]"))
                 1 2 3)))))
     ((rx bol "next" space)
      (eval-when-compile
