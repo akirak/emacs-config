@@ -96,7 +96,7 @@ matches the host of the repository,
 
 (defun akirak-git-clone--parse (flake-ref-or-url)
   "Parse FLAKE-REF."
-  (pcase flake-ref-or-url
+  (pcase (akirak-git-clone--sanitize-url flake-ref-or-url)
     ((rx bol (group (or "github:"
                         "sourcehut:"))
          (group (+ (not (any "/")))
@@ -173,6 +173,10 @@ matches the host of the repository,
                                      :local-path local-path)))
     (_
      (error "Unsupported ref: %s" flake-ref-or-url))))
+
+(defun akirak-git-clone--sanitize-url (url)
+  ;; For now, just strip a query and a fragment reference
+  (replace-regexp-in-string (rx (any "?#") (+ anything)) "" url))
 
 (defun akirak-git-clone--git-host (git-url)
   (save-match-data
