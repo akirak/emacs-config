@@ -421,13 +421,14 @@
 
 (cl-defun akirak-consult--reorder-files (files &key preceding-files predicate)
   (declare (indent 1))
-  (if-let (file (cond
-                 (preceding-files
-                  (akirak-consult--find-intersection-element preceding-files files))
-                 (predicate
-                  (seq-find predicate files))))
-      (cons file (cl-remove file files :test #'equal))
-    files))
+  (cond
+   (preceding-files
+    (append preceding-files
+            (seq-difference files preceding-files #'equal)))
+   (predicate
+    (if-let (file (seq-find predicate files))
+        (cons file (cl-remove file files :test #'equal))
+      files))))
 
 ;; Based on `consult-buffer'.
 ;;;###autoload
