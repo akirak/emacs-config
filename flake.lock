@@ -417,11 +417,11 @@
     "gnu-elpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1713435207,
-        "narHash": "sha256-U6eV+iiJkZO1N8pxXwPTnLnjCeXbd29VfjP6DII+eUs=",
+        "lastModified": 1714270221,
+        "narHash": "sha256-Fb/PtWrMe4iVCSdzNfLIENQHXr2dIqrssniQ/bHWgTg=",
         "ref": "main",
-        "rev": "3a26eaed2095da107e900f16a767deac8588b48a",
-        "revCount": 595,
+        "rev": "2c5d88a3de1962a60881e81253639d8855b77f45",
+        "revCount": 600,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/emacs/elpa.git"
       },
@@ -796,11 +796,11 @@
     "nongnu-elpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1712340689,
-        "narHash": "sha256-knhVWWy22nmOs/5NT/Zuq0AHWXRAwRXDSdvwrFIxQOQ=",
+        "lastModified": 1713795665,
+        "narHash": "sha256-N7N6tLkCLpKxPq+RgEy68/Qs+a/cheFUR3MiJunsnMk=",
         "ref": "main",
-        "rev": "5623e3864f87f49d18bc48b3656dc0c2dea42973",
-        "revCount": 308,
+        "rev": "97eda09376cc46686d00f3585ef54b590968ba99",
+        "revCount": 309,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/emacs/nongnu.git"
       },
