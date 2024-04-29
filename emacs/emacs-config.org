@@ -1120,7 +1120,7 @@ The built-in =electric= package provides the following modes:
             ;; (mix-format '((eval . (mix-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
-            (lsp-no-formatter '((eval . (eglot-ensure))))
+            (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable))))
             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
             (alejandra '((eval . (alejandra-on-save-mode t)))))
@@ -6008,9 +6008,13 @@ Client for Language Server Protocol (LSP) servers
 
     (:bind akirak/mode-prefix-key #'akirak/eglot-prefix-map)
 
+    (defun akirak/eglot-ensure ()
+      (when (buffer-file-name)
+        (eglot-ensure)))
+
     (defun akirak/eglot-ensure-with-formatter ()
       (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer nil t)
-      (eglot-ensure))
+      (akirak/eglot-ensure))
 
     (defun akirak/eglot-setup-buffer ()
       (if (eglot-managed-p)
