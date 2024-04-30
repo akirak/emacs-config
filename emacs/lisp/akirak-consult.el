@@ -283,6 +283,10 @@
        :narrow ?u
        :hidden t
        :transform #'akirak-consult--prepend-upper-module)
+    ,(akirak-consult-build-project-file-source "Alternate"
+       :narrow ?a
+       :hidden t
+       :transform #'akirak-consult--filter-alternate-files)
     ,(akirak-consult-build-project-file-source "Nix"
        :narrow ?n
        :hidden t
@@ -295,6 +299,17 @@
     (when (string-match-p (rx bol (repeat 3 (and "/" (+ anything))) "/")
                           default-directory)
       default-directory)))
+
+(defun akirak-consult--filter-alternate-files (files this-file)
+  (when this-file
+    (let ((prefix (replace-regexp-in-string (rx "/" (+ (not (any ".")))
+                                                (group (?  "." (+ (not (any "/")))))
+                                                eol)
+                                            "" this-file t nil 1)))
+      (thread-last
+        files
+        (remove this-file)
+        (seq-filter (apply-partially #'string-prefix-p prefix))))))
 
 (defun akirak-consult--prepend-lib-files (files this-file)
   (pcase this-file
