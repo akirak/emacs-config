@@ -426,6 +426,22 @@
          (string-match-p (rx-to-string `(and ,(substring this-file 0 (match-beginning 0))
                                              "/index." (+ (not (any "./")))))
                          file))))
+    ((rx "/" (+ (not (any "/"))) "/default.nix" eol)
+     (akirak-consult--reorder-files files
+       :predicate
+       `(lambda (file)
+          (string-equal ,(concat (substring this-file 0 (match-beginning 0))
+                                 "/default.nix")
+                        file))))
+    ((and (rx "/" (group (+ (not (any "/"))) ".nix") eol)
+          (guard (not (equal (match-string 1 this-file)
+                             "default.nix"))))
+     (akirak-consult--reorder-files files
+       :predicate
+       `(lambda (file)
+          (string-equal ,(concat (substring this-file 0 (match-beginning 0))
+                                 "/default.nix")
+                        file))))
     (_ files)))
 
 (defun akirak-consult--find-intersection-element (files1 files2)
