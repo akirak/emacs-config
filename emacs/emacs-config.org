@@ -1980,6 +1980,24 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup tab-bar
+    (:set tab-bar-auto-width-max '(350 25)
+          tab-bar-tab-name-function
+          (defun akirak/tab-bar-tab-name ()
+            "An experimental function for determining the name of a tab."
+            (let* ((buffer (window-buffer (or (minibuffer-selected-window)
+                                              (and (window-minibuffer-p)
+                                                   (get-mru-window)))))
+                   (dir (buffer-local-value 'default-directory buffer))
+                   (pr (project-current nil dir)))
+              (if (or (not pr)
+                      (buffer-local-value 'org-src-mode buffer)
+                      (buffer-base-buffer buffer))
+                  (buffer-name buffer)
+                (format "%s:%s"
+                        (truncate-string-to-width (project-name pr) 12)
+                        (if (eq 'dired-mode (buffer-local-value 'major-mode buffer))
+                            (file-relative-name dir (project-root pr))
+                          (buffer-name buffer))))))))
 #+end_src
 *** tempo
 :PROPERTIES:
