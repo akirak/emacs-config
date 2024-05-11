@@ -1307,9 +1307,10 @@ provided as a separate command for integration, e.g. with embark."
     (let* ((string (thread-last
                      string
                      (replace-regexp-in-string
-                      (rx-to-string `(and bol (* blank)
-                                          (any ,akirak-capture-zero-width-characters)))
-                      "")
+                      (rx-to-string `(and bol (group (* blank))
+                                          (any ,akirak-capture-zero-width-characters)
+                                          (+ blank)))
+                      "" nil nil 1)
                      (replace-regexp-in-string
                       (rx-to-string `(and (+ (any blank ,akirak-capture-zero-width-characters))
                                           eol))
