@@ -1331,6 +1331,16 @@ provided as a separate command for integration, e.g. with embark."
           (replace-regexp-in-string regexp "" string)
         string))))
 
+;;;###autoload
+(defun akirak-capture-sanitize-region (begin end)
+  (interactive "r")
+  (let ((result (akirak-capture--sanitize-source
+                 (buffer-substring begin end))))
+    (delete-region begin end)
+    (save-excursion
+      (goto-char begin)
+      (insert result))))
+
 (defun akirak-capture--major-mode-list ()
   (let (modes)
     (cl-do-all-symbols (sym)
