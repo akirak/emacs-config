@@ -4463,7 +4463,8 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-disk
 #+begin_src elisp
   (setup akirak-disk
-    (:global "<f12> d m" #'akirak-disk-findmnt))
+    (:global "<f12> d m" #'akirak-disk-findmnt
+             "<f12> d b" #'akirak-disk-insert-blkid))
 #+end_src
 *** akirak-elec-pair                                               :parentheses:
 :PROPERTIES:
