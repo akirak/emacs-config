@@ -2,6 +2,21 @@
 
 (require 'consult)
 
+(defvar akirak-consult-source-tab-bar-tab
+  `(:name "Tab"
+          :narrow (?t . "Tab")
+          :category tab
+          ;; TOOD: Add a state function
+          :action ,#'tab-bar-switch-to-tab
+          :items
+          ,(lambda ()
+             (thread-last
+               (funcall tab-bar-tabs-function)
+               (cl-remove-if (lambda (cell)
+                               (eq 'current-tab (car cell))))
+               (mapcar (lambda (tab)
+                         (alist-get 'name tab)))))))
+
 ;; Based on `consult--source-project-buffer' from consult.el.
 (defvar akirak-consult-source-help-buffer
   `(:name "Help and Doc Buffer"
