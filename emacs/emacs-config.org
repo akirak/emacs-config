@@ -5691,7 +5691,8 @@ Highlight uncommitted changes using VC
     (add-hook 'after-init-hook #'global-diff-hl-mode)
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
-          diff-hl-show-staged-changes t)
+          diff-hl-show-staged-changes t
+          diff-hl-update-async t)
 
     ;; Prevent dispatch of repeat-mode.
     (defalias 'akirak/diff-hl-next-hunk #'diff-hl-next-hunk)
