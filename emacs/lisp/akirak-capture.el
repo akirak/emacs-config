@@ -1580,6 +1580,7 @@ return nil. This is expected in the advice for
                               ;; M-S-RET
                               (`org-insert-todo-heading
                                '(above t))))
+       (pos (point))
        (subheadingp (equal arg '(4)))
        (level (org-outline-level))
        (expected-level (if subheadingp
@@ -1623,6 +1624,7 @@ return nil. This is expected in the advice for
                  :file ,(buffer-file-name (org-base-buffer (current-buffer)))
                  :function
                  (lambda ()
+                   (goto-char ,pos)
                    (funcall ',func)
                    (when (looking-at org-heading-regexp)
                      (end-of-line 0)))))))))
