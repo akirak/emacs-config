@@ -1519,6 +1519,16 @@ Resources:
     ;;               (flyspell-mode -1))))
     )
 #+end_src
+*** multisession
+:PROPERTIES:
+:CREATED_TIME: [2024-05-13 Mon 20:20]
+:END:
+
+#+begin_src emacs-lisp
+  (setup multisession
+    ;; Prefer sqlite backend for learning purposes
+    (:set multisession-storage 'sqlite))
+#+end_src
 *** outline                                                :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
