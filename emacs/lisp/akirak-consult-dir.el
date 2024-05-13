@@ -83,8 +83,8 @@
           ;; :enabled ,(lambda () consult-dir-project-list-function)
           :items akirak-project-parents))
 
-(defvar akirak-consult-dir-bookmark-source
-  `(:name "Directory bookmarks"
+(defvar akirak-consult-dir-or-magit-bookmark-source
+  `(:name "Directory or magit bookmarks"
           :narrow ?b
           :category bookmark
           :face consult-bookmark
@@ -100,11 +100,15 @@
 
 (defvar akirak-consult-dir-sources
   '(akirak-consult-dir-current-source
+    ;; I use tab-bar.el for working with multiple projects simultaneously, so
+    ;; switching to a tab visiting a directory is often a more natural way to
+    ;; switch to the directory. See akirak-consult.el.
+    akirak-consult-source-tab-bar-tab
     akirak-consult-dir-open-project-source
     akirak-consult-dir-dired-source
+    akirak-consult-dir-or-magit-bookmark-source
     akirak-consult-dir-project-source
-    akirak-consult-dir-project-parent-source
-    akirak-consult-dir-bookmark-source))
+    akirak-consult-dir-project-parent-source))
 
 (defvar akirak-consult-dir-history nil)
 
@@ -115,6 +119,8 @@
       (akirak-consult-dir-descendants)
     (when (equal arg '(16))
       (akirak-project-import-from-magit))
+    ;; `akirak-consult-source-tab-bar-tab' is defined in another library
+    (require 'akirak-consult)
     (let ((ent (consult--multi akirak-consult-dir-sources
                                :require-match
                                (confirm-nonexistent-file-or-buffer)

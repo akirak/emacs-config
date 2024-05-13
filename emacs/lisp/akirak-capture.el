@@ -1307,9 +1307,10 @@ provided as a separate command for integration, e.g. with embark."
     (let* ((string (thread-last
                      string
                      (replace-regexp-in-string
-                      (rx-to-string `(and bol (* blank)
-                                          (any ,akirak-capture-zero-width-characters)))
-                      "")
+                      (rx-to-string `(and bol (group (* blank))
+                                          (any ,akirak-capture-zero-width-characters)
+                                          (+ blank)))
+                      "" nil nil 1)
                      (replace-regexp-in-string
                       (rx-to-string `(and (+ (any blank ,akirak-capture-zero-width-characters))
                                           eol))
@@ -1330,6 +1331,16 @@ provided as a separate command for integration, e.g. with embark."
       (if regexp
           (replace-regexp-in-string regexp "" string)
         string))))
+
+;;;###autoload
+(defun akirak-capture-sanitize-region (begin end)
+  (interactive "r")
+  (let ((result (akirak-capture--sanitize-source
+                 (buffer-substring begin end))))
+    (delete-region begin end)
+    (save-excursion
+      (goto-char begin)
+      (insert result))))
 
 (defun akirak-capture--major-mode-list ()
   (let (modes)
@@ -1569,6 +1580,7 @@ return nil. This is expected in the advice for
                               ;; M-S-RET
                               (`org-insert-todo-heading
                                '(above t))))
+       (pos (point))
        (subheadingp (equal arg '(4)))
        (level (org-outline-level))
        (expected-level (if subheadingp
@@ -1612,6 +1624,7 @@ return nil. This is expected in the advice for
                  :file ,(buffer-file-name (org-base-buffer (current-buffer)))
                  :function
                  (lambda ()
+                   (goto-char ,pos)
                    (funcall ',func)
                    (when (looking-at org-heading-regexp)
                      (end-of-line 0)))))))))

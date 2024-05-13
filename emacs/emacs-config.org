@@ -1980,16 +1980,24 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup tab-bar
-    (define-key akirak/c-z-map "=" #'tab-bar-duplicate-tab)
-    (define-key akirak/c-z-map "-" #'tab-bar-close-tab)
-
-    (define-key tab-prefix-map "R"
-                (defun akirak/tab-bar-rename-to-default ()
-                  (interactive)
-                  (if (and (featurep 'org-clock)
-                           (org-clocking-p))
-                      (tab-bar-rename-tab org-clock-heading)
-                    (user-error "Not clocking")))))
+    (:set tab-bar-auto-width-max '(350 25)
+          tab-bar-tab-name-function
+          (defun akirak/tab-bar-tab-name ()
+            "An experimental function for determining the name of a tab."
+            (let* ((buffer (window-buffer (or (minibuffer-selected-window)
+                                              (and (window-minibuffer-p)
+                                                   (get-mru-window)))))
+                   (dir (buffer-local-value 'default-directory buffer))
+                   (pr (project-current nil dir)))
+              (if (or (not pr)
+                      (buffer-local-value 'org-src-mode buffer)
+                      (buffer-base-buffer buffer))
+                  (buffer-name buffer)
+                (format "%s:%s"
+                        (truncate-string-to-width (project-name pr) 12)
+                        (if (eq 'dired-mode (buffer-local-value 'major-mode buffer))
+                            (file-relative-name dir (project-root pr))
+                          (buffer-name buffer))))))))
 #+end_src
 *** tempo
 :PROPERTIES:
@@ -4455,7 +4463,8 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-disk
 #+begin_src elisp
   (setup akirak-disk
-    (:global "<f12> d m" #'akirak-disk-findmnt))
+    (:global "<f12> d m" #'akirak-disk-findmnt
+             "<f12> d b" #'akirak-disk-insert-blkid))
 #+end_src
 *** akirak-elec-pair                                               :parentheses:
 :PROPERTIES:
@@ -5394,6 +5403,7 @@ Consulting completing-read
                                            akirak-consult-source-narrowed-buffer
                                            akirak-consult-source-org-agenda-buffer
                                            akirak-consult-source-modified-buffer))
+                                     akirak-consult-source-tab-bar-tab
                                      consult--source-buffer
                                      consult--source-recent-file)
             ;; Use only relevant bookmark groups.
@@ -5681,7 +5691,8 @@ Highlight uncommitted changes using VC
     (add-hook 'after-init-hook #'global-diff-hl-mode)
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
-          diff-hl-show-staged-changes t)
+          diff-hl-show-staged-changes t
+          diff-hl-update-async t)
 
     ;; Prevent dispatch of repeat-mode.
     (defalias 'akirak/diff-hl-next-hunk #'diff-hl-next-hunk)
@@ -6844,7 +6855,21 @@ Interact with ChatGPT or other LLMs
              "<f12> a g" #'gptel
              "<f12> a C-g" #'gptel-abort)
     (:when-loaded
-      (fset 'gptel--update-header-line #'ignore))
+      (fset 'gptel--update-header-line #'ignore)
+
+      ;; Use perplexity as the default backend.
+      (:set gptel-model "pplx-7b-chat"
+            gptel-backend
+            (gptel-make-openai "Perplexity"
+              :host "api.perplexity.ai"
+              :key (lambda ()
+                     (gptel-api-key-from-auth-source "api.perplexity.ai"))
+              :endpoint "/chat/completions"
+              :stream t
+              :models '("pplx-7b-chat"
+                        "pplx-70b-chat"
+                        "pplx-7b-online"
+                        "pplx-70b-online"))))
 
     (add-hook 'org-mode-hook
               (defun akirak/org-dog-setup-gpt-system ()
@@ -8173,6 +8198,7 @@ Summon and dismiss buffers as popups
                                      "^\\*bean-query"
                                      "^\\*scratch from selection\\*"
                                      "^\\*[[:word:]]+ errors\\*"
+                                     "^\\*Async Shell Command\\*"
                                      ;; "^\\*eldoc"
                                      "^\\*Select Link\\*"
                                      "^\\*Flymake diagnostics"
@@ -8201,6 +8227,9 @@ Summon and dismiss buffers as popups
     (:bind "M-\"" #'popper-cycle
            "M-' RET" #'popper-toggle-type
            "M-' M-'" #'popper-toggle
+           "M-' a" (defun akirak/display-async-shell-command ()
+                     (interactive)
+                     (display-buffer "*Async Shell Command*"))
            "M-' e" #'flymake-show-buffer-diagnostics
            "M-' t" #'akirak-shell-for-project-other-window
            "M-' s" #'scratch-buffer
@@ -8668,7 +8697,10 @@ Major mode for editing systemd units
                (not (akirak/wsl-p)))
           (progn
             (akirak/system-leave-hook)
-            (call-process "systemctl" nil nil nil "suspend"))
+            (run-with-timer
+             1 nil
+             (lambda ()
+               (call-process "systemctl" nil nil nil "suspend"))))
         (user-error "This system doesn’t support session control using systemd"))))
 #+end_src
 *** tagedit                                                    :web:

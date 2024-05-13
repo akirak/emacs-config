@@ -2,6 +2,21 @@
 
 (require 'consult)
 
+(defvar akirak-consult-source-tab-bar-tab
+  `(:name "Tab"
+          :narrow (?t . "Tab")
+          :category tab
+          ;; TOOD: Add a state function
+          :action ,#'tab-bar-switch-to-tab
+          :items
+          ,(lambda ()
+             (thread-last
+               (funcall tab-bar-tabs-function)
+               (cl-remove-if (lambda (cell)
+                               (eq 'current-tab (car cell))))
+               (mapcar (lambda (tab)
+                         (alist-get 'name tab)))))))
+
 ;; Based on `consult--source-project-buffer' from consult.el.
 (defvar akirak-consult-source-help-buffer
   `(:name "Help and Doc Buffer"
@@ -283,6 +298,10 @@
        :narrow ?u
        :hidden t
        :transform #'akirak-consult--prepend-upper-module)
+    ,(akirak-consult-build-project-file-source "Alternate"
+       :narrow ?a
+       :hidden t
+       :transform #'akirak-consult--filter-alternate-files)
     ,(akirak-consult-build-project-file-source "Nix"
        :narrow ?n
        :hidden t
@@ -295,6 +314,17 @@
     (when (string-match-p (rx bol (repeat 3 (and "/" (+ anything))) "/")
                           default-directory)
       default-directory)))
+
+(defun akirak-consult--filter-alternate-files (files this-file)
+  (when this-file
+    (let ((prefix (replace-regexp-in-string (rx "/" (+ (not (any ".")))
+                                                (group (?  "." (+ (not (any "/")))))
+                                                eol)
+                                            "" this-file t nil 1)))
+      (thread-last
+        files
+        (remove this-file)
+        (seq-filter (apply-partially #'string-prefix-p prefix))))))
 
 (defun akirak-consult--prepend-lib-files (files this-file)
   (pcase this-file
@@ -411,6 +441,22 @@
          (string-match-p (rx-to-string `(and ,(substring this-file 0 (match-beginning 0))
                                              "/index." (+ (not (any "./")))))
                          file))))
+    ((rx "/" (+ (not (any "/"))) "/default.nix" eol)
+     (akirak-consult--reorder-files files
+       :predicate
+       `(lambda (file)
+          (string-equal ,(concat (substring this-file 0 (match-beginning 0))
+                                 "/default.nix")
+                        file))))
+    ((and (rx "/" (group (+ (not (any "/"))) ".nix") eol)
+          (guard (not (equal (match-string 1 this-file)
+                             "default.nix"))))
+     (akirak-consult--reorder-files files
+       :predicate
+       `(lambda (file)
+          (string-equal ,(concat (substring this-file 0 (match-beginning 0))
+                                 "/default.nix")
+                        file))))
     (_ files)))
 
 (defun akirak-consult--find-intersection-element (files1 files2)
