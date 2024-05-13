@@ -8696,7 +8696,10 @@ Major mode for editing systemd units
                (not (akirak/wsl-p)))
           (progn
             (akirak/system-leave-hook)
-            (call-process "systemctl" nil nil nil "suspend"))
+            (run-with-timer
+             1 nil
+             (lambda ()
+               (call-process "systemctl" nil nil nil "suspend"))))
         (user-error "This system doesn’t support session control using systemd"))))
 #+end_src
 *** tagedit                                                    :web:
