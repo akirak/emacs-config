@@ -6867,19 +6867,16 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      ;; Use perplexity as the default backend.
-      (:set gptel-model "pplx-7b-chat"
-            gptel-backend
-            (gptel-make-openai "Perplexity"
-              :host "api.perplexity.ai"
-              :key (lambda ()
-                     (gptel-api-key-from-auth-source "api.perplexity.ai"))
-              :endpoint "/chat/completions"
-              :stream t
-              :models '("pplx-7b-chat"
-                        "pplx-70b-chat"
-                        "pplx-7b-online"
-                        "pplx-70b-online"))))
+      (gptel-make-openai "Perplexity"
+        :host "api.perplexity.ai"
+        :key (lambda ()
+               (gptel-api-key-from-auth-source "api.perplexity.ai"))
+        :endpoint "/chat/completions"
+        :stream t
+        :models '("pplx-7b-chat"
+                  "pplx-70b-chat"
+                  "pplx-7b-online"
+                  "pplx-70b-online")))
 
     (add-hook 'org-mode-hook
               (defun akirak/org-dog-setup-gpt-system ()
