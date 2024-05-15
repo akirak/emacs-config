@@ -485,6 +485,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
     (:status personal
       (:when-loaded
         (:hook-into git-commit-mode
+                    vc-git-log-edit-mode
                     markdown-mode
                     org-mode)
         (define-abbrev-table 'global-abbrev-table
@@ -7145,7 +7146,8 @@ Enchanted Spell Checker
     (:hook-into markdown-mode
                 ;; For org-mode, set up hooks in .dir-locals.el of individual
                 ;; projects
-                git-commit-mode-hook)
+                git-commit-mode-hook
+                vc-git-log-edit-mode-hook)
     (:bind "C-M-;" #'jinx-correct-nearest))
 #+end_src
 *** jq-mode
