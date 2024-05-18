@@ -4458,6 +4458,7 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup akirak-consult
     (:status opinionated
+      (:global [remap consult-imenu-multi] #'akirak-consult-imenu-multi)
       (:with-map ctl-x-map
         (:bind "p" #'akirak-consult-project-file))))
 #+end_src

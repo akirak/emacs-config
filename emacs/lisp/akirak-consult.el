@@ -126,7 +126,7 @@
 
 (defvar akirak-consult--project-files-cache nil)
 
-(defun akirak-consult--project-files ()
+(defun akirak-consult--project-files (&optional prepend-root)
   (when-let (default-directory (akirak-consult--project-root))
     (if-let* ((cache (and akirak-consult--project-files-cache
                           (assoc default-directory akirak-consult--project-files-cache)))
@@ -151,7 +151,24 @@
                               (car (process-lines "git" "rev-parse" "HEAD")))
                             result))
                 akirak-consult--project-files-cache))
-        result))))
+        (if prepend-root
+            (mapcar #'expand-file-name result)
+          result)))))
+
+(defun akirak-consult-imenu-multi (&optional arg)
+  "A modified version of `consult-imenu-multi'."
+  (interactive "P")
+  (when arg
+    (if-let* ((start-file (buffer-file-name (buffer-base-buffer)))
+              (extension (file-name-extension start-file)))
+        (progn
+          (message "Loading files with %s extension from the project" extension)
+          (dolist (other-file (akirak-consult--project-files 'prepend-root))
+            (when (and (string-suffix-p extension other-file)
+                       (not (find-buffer-visiting other-file)))
+              (find-file-noselect other-file))))
+      (user-error "Either a file or extension is missing")))
+  (consult-imenu-multi))
 
 ;; Based on `consult--source-project-recent-file'.
 (cl-defun akirak-consult-build-project-file-source (name &key narrow hidden
