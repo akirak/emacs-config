@@ -9058,7 +9058,6 @@ major mode for editing web templates
     (:org-src-lang "html")
     (:file-match "\\.mdx\\'"
                  "\\.html?\\'"
-                 "\\.html\\.h?eex\\'"
                  "\\.sface\\'")
 
     (:bind "C-c /" #'akirak-web-mode-surround
