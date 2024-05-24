@@ -1229,6 +1229,16 @@ The built-in =electric= package provides the following modes:
         (add-hook 'server-after-make-frame-hook #'window-divider-mode)
       (window-divider-mode 1))
 
+    (add-hook 'after-delete-frame-functions
+              (defun akirak/prepare-kill-emacs-after-delete-frame (_frame)
+                (when (and server-clients
+                           (= 1 (length (frame-list))))
+                  ;; Run a subset of kill-emacs-hook to persist data.
+                  (let ((sym (gensym "kill-emacs-hook")))
+                    (set sym (remove 'server-force-stop
+                                     (default-value 'kill-emacs-hook)))
+                    (run-hooks sym)))))
+
     (defconst akirak/base-frame-title-format
       '(" - GNU Emacs"
         (emacs-version
