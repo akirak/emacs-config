@@ -3290,7 +3290,7 @@ A programmable workflow layer for Org mode
         . akirak/org-dog-auto-insert))
       (with-eval-after-load "autoinsert"
         (add-to-list 'auto-insert-alist
-                     `
+                     'akirak/org-dog-auto-insert
                      t))
 
       (defun akirak/org-dog-auto-insert ()
