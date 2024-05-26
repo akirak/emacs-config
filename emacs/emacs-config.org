@@ -508,6 +508,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup autoinsert
     (:set auto-insert 'other
           auto-insert-query nil)
+    (:when-loaded
+      ;; Delete the default template for HTML.
+      (delete (assq 'html-mode auto-insert-alist) auto-insert-alist))
     (:with-mode auto-insert-mode
       (:hook-into after-init-hook)))
 #+end_src
