@@ -47,10 +47,6 @@ with builtins; let
       type = "archive";
       url = "https://elpa.nongnu.org/nongnu/";
     }
-    {
-      type = "gitmodules";
-      path = inputs.epkgs.outPath + "/.gitmodules";
-    }
   ];
 
   epkgRepository =
