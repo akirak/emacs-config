@@ -600,5 +600,18 @@ Otherwise, it calls `akirak-window-duplicate-state'."
 
 (defvar akirak-window-last-nonhelp-window nil)
 
+;;;###autoload
+(defun akirak-window-display-buffer-ends ()
+  (interactive)
+  (walk-window-tree
+   (lambda (window)
+     (let ((buffer (window-buffer window)))
+       (unless (or (buffer-file-name buffer)
+                   (buffer-base-buffer buffer))
+         (with-selected-window window
+           (with-current-buffer buffer
+             (goto-char (point-max))
+             (recenter-top-bottom -1))))))))
+
 (provide 'akirak-window)
 ;;; akirak-window.el ends here
