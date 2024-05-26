@@ -1,0 +1,26 @@
+name: Update Emacs Lisp package registries
+
+on:
+  push:
+    branches: develop
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: develop
+    - uses: cachix/install-nix-action@v26
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    - run: nix flake update gnu-elpa nongnu-elpa melpa
+    - uses: peter-evans/create-pull-request@v6
+      with:
+        base: develop
+        token: ${{ secrets.PAT_FOR_PR }}
+        title: 'deps: Update Emacs package registries'
+        branch: bot/update/elpa
+        labels: automation,update,emacs
