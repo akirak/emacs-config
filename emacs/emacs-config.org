@@ -5995,8 +5995,6 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 #+begin_src emacs-lisp
   (setup (:package eat)
     (:set eat-kill-buffer-on-exit t)
-    (autoload 'eat-make "eat")
-
     (:with-map eat-semi-char-mode-map
       (:bind "S-<prior>" #'View-scroll-page-backward
              "S-<next>" #'View-scroll-page-forward)
@@ -9280,11 +9278,10 @@ A major mode for the Zig programming language
 
     (defun akirak/gleam-shell ()
       (interactive)
-      (if-let* ((root (locate-dominating-file default-directory "gleam.toml"))
-                (pr (project-current))
-                (name (format "gleam-%s" (project-name pr)))
-                (default-directory root))
-          (pop-to-buffer (eat-make name "gleam" nil "shell"))
+      (if-let (root (locate-dominating-file default-directory "gleam.toml"))
+          (akirak-shell-exec-in-project
+           '("gleam" "shell")
+           :root root :name "gleam-shell")
         (user-error "Not in a Gleam project"))))
 #+end_src
 **** Haskell
@@ -9312,16 +9309,10 @@ A major mode for the Zig programming language
 
     (defun akirak/iex-dwim ()
       (interactive)
-      (let* ((root (locate-dominating-file default-directory "mix.exs"))
-             (pr (project-current))
-             (name (if pr
-                       (format "iex-%s" (project-name pr))
-                     "iex"))
-             (default-directory root))
-        (pop-to-buffer (apply #'eat-make name
-                              (if root
-                                  '("iex" nil "-S" "mix")
-                                '("iex")))))))
+      (if-let (root (locate-dominating-file default-directory "mix.exs"))
+          (akirak-shell-exec-in-project '("iex" "-S" "mix")
+            :root root)
+        (akirak-shell-exec-in-project "iex"))))
 #+end_src
 **** Node.js and Bun
 :PROPERTIES:
@@ -9351,24 +9342,21 @@ A major mode for the Zig programming language
     (defun akirak/utop-project ()
       (interactive)
       (let* ((root (locate-dominating-file default-directory "dune-project"))
-             (pr (project-current))
-             (name (if pr
-                       (format "utop-%s" (project-name pr))
-                     "utop")))
-        (pop-to-buffer (apply #'eat-make name
-                              (if root
-                                  (append (if (and (not (executable-find "dune"))
-                                                   (executable-find "opam"))
-                                              '("opam" nil "exec" "--" "dune" "utop")
-                                            '("dune" nil "utop"))
-                                          (list (shell-quote-argument (file-relative-name root))))
-                                (cond
-                                 ((executable-find "utop")
-                                  '("utop"))
-                                 ((executable-find "opam")
-                                  '("opam" nil "exec" "--" "utop"))
-                                 (t
-                                  (user-error "Neither utop nor opam is available")))))))))
+             (project-path (when root (file-relative-name root))))
+        (akirak-shell-exec-in-project
+            (cond
+             ((and project-path (executable-find "dune"))
+              (list "dune" "utop" project-path))
+             ((and project-path (executable-find "opam"))
+              (list "opam" "exec" "--" "dune" "utop" project-path))
+             ((executable-find "utop")
+              '("utop"))
+             ((executable-find "opam")
+              '("opam" nil "exec" "--" "utop"))
+             (t
+              (user-error "Neither dune nor opam is available")))
+          :name "utop"
+          :root default-directory))))
 #+end_src
 **** rebar3 (Erlang)
 :PROPERTIES:
