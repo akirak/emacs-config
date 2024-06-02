@@ -343,6 +343,8 @@ without a running process will be killed."
      t)
     (`("mix" "deps.get")
      t)
+    (`("gleam" "deps" . ,_)
+     t)
     (`(,_ "astro" "add" . ,_)
      t)))
 
