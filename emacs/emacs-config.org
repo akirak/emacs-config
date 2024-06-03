@@ -5998,7 +5998,7 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
     (:with-map eat-semi-char-mode-map
       (:bind "S-<prior>" #'View-scroll-page-backward
              "S-<next>" #'View-scroll-page-forward)
-      (:unbind "M-:" "M-g" "M-s" "C-z" "M-o")))
+      (:unbind "M-:" "M-g" "M-s" "C-z" "M-o" "M-'")))
 #+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
