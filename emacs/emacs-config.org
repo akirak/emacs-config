@@ -8018,7 +8018,7 @@ Major mode for Nushell scripts
   (setup (:package nushell-mode)
     (:file-match "\\.nu\\'"))
 #+end_src
-*** ob-async
+*** COMMENT ob-async                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-05-20 Sat 18:46]
 :END:

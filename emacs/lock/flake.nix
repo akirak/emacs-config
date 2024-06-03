@@ -770,12 +770,6 @@
       repo = "oahu.el";
       type = "github";
     };
-    ob-async = {
-      flake = false;
-      owner = "astahlman";
-      repo = "ob-async";
-      type = "github";
-    };
     ob-graphql = {
       flake = false;
       owner = "akirak";

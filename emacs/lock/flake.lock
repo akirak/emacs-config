@@ -2052,22 +2052,6 @@
         "type": "github"
       }
     },
-    "ob-async": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1619643157,
-        "narHash": "sha256-cIwyuwoyojc6uiNbWleh+inoRTUqMCZYQ3IydhRkEkw=",
-        "owner": "astahlman",
-        "repo": "ob-async",
-        "rev": "9aac486073f5c356ada20e716571be33a350a982",
-        "type": "github"
-      },
-      "original": {
-        "owner": "astahlman",
-        "repo": "ob-async",
-        "type": "github"
-      }
-    },
     "ob-graphql": {
       "flake": false,
       "locked": {
@@ -3120,7 +3104,6 @@
         "nushell-mode": "nushell-mode",
         "oahu": "oahu",
         "oahu-memento": "oahu-memento",
-        "ob-async": "ob-async",
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
