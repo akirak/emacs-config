@@ -512,6 +512,18 @@ suitable value detected according to the command line."
                                     ":" (group (+ digit))
                                     ":" (group (+ digit))))
                 1 2 3)))))
+    ((rx bol "dune" space)
+     ;; This pattern currently generates quite many false positives. I want to
+     ;; exclude libraries outside the source tree, but I don't know how.
+     (eval-when-compile
+       (let ((path-regexp (rx (+ (any "-_./[]_" alnum)))))
+         (list
+          (list (rx-to-string `(and (any "Ff") "ile "
+                                    "\"" (group (regexp ,path-regexp)) "\""
+                                    ", line " (group (+ digit))
+                                    ", characters " (group (+ digit))
+                                    "-" (+ digit)))
+                1 2 3)))))
     ((rx bol "mix" space)
      (eval-when-compile
        (let ((path-regexp (rx word-start alnum
