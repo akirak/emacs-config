@@ -524,6 +524,14 @@ suitable value detected according to the command line."
                                     ", characters " (group (+ digit))
                                     "-" (+ digit)))
                 1 2 3)))))
+    ((rx bol "gleam" space)
+     (eval-when-compile
+       (let ((path-regexp (rx "/" (+ (any "-_./[]_" alnum)))))
+         (list
+          (list (rx-to-string `(and (group (regexp ,path-regexp))
+                                    ":" (group (+ digit))
+                                    ":" (group (+ digit))))
+                1 2 3)))))
     ((rx bol "mix" space)
      (eval-when-compile
        (let ((path-regexp (rx word-start alnum
