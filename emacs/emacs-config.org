@@ -5855,6 +5855,10 @@ Hide dotfiles in dired
 :PROPERTIES:
 :CREATED_TIME: [2024-06-06 Thu 09:39]
 :END:
+#+begin_quote
+And "Open with" dialog for Dired
+[[https://github.com/FrostyX/dired-open-with]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package dired-open-with))
@@ -7990,6 +7994,10 @@ Update "fetch" blocks in .nix expressions
 :PROPERTIES:
 :CREATED_TIME: [2024-06-06 Thu 09:36]
 :END:
+#+begin_quote
+Read command line help without a man page
+[[https://github.com/andykuszyk/noman.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package noman))
@@ -9746,7 +9754,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 211 |
+| [[org-ql-search:tags:packages][packages]]            | 212 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
