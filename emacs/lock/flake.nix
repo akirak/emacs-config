@@ -764,12 +764,6 @@
       type = "git";
       url = "https://depp.brause.cc/nov.el.git";
     };
-    nushell-mode = {
-      flake = false;
-      owner = "mrkkrp";
-      repo = "nushell-mode";
-      type = "github";
-    };
     oahu = {
       flake = false;
       owner = "akirak";
