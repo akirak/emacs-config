@@ -230,6 +230,12 @@
       repo = "dired-hacks";
       type = "github";
     };
+    dired-open-with = {
+      flake = false;
+      owner = "FrostyX";
+      repo = "dired-open-with";
+      type = "github";
+    };
     docker = {
       flake = false;
       owner = "Silex";

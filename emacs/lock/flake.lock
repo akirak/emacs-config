@@ -609,6 +609,22 @@
         "type": "github"
       }
     },
+    "dired-open-with": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1717576376,
+        "narHash": "sha256-k4Yu2tfhe/gy3BjVgoomjq8/iTVqaGdD5DH5mL5g2Ys=",
+        "owner": "FrostyX",
+        "repo": "dired-open-with",
+        "rev": "7bc5d9dd317b7a9300b8ffc409edbc7bacb0bf08",
+        "type": "github"
+      },
+      "original": {
+        "owner": "FrostyX",
+        "repo": "dired-open-with",
+        "type": "github"
+      }
+    },
     "docker": {
       "flake": false,
       "locked": {
@@ -3030,6 +3046,7 @@
         "dired-collapse": "dired-collapse",
         "dired-filter": "dired-filter",
         "dired-hacks-utils": "dired-hacks-utils",
+        "dired-open-with": "dired-open-with",
         "docker": "docker",
         "docopt": "docopt",
         "doct": "doct",

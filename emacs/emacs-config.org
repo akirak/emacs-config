@@ -5851,6 +5851,14 @@ Hide dotfiles in dired
     ;;             #'akirak/ad-override-dired-k--highlight-by-file-attribyte)
     )
 #+end_src
+*** dired-open-with
+:PROPERTIES:
+:CREATED_TIME: [2024-06-06 Thu 09:39]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package dired-open-with))
+#+end_src
 *** dired-x
 #+begin_src elisp
   (setup dired-x
