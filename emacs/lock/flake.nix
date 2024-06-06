@@ -747,6 +747,12 @@
       repo = "nix3.el";
       type = "github";
     };
+    noman = {
+      flake = false;
+      owner = "andykuszyk";
+      repo = "noman.el";
+      type = "github";
+    };
     nov = {
       flake = false;
       type = "git";

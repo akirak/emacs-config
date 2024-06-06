@@ -7978,6 +7978,14 @@ Update "fetch" blocks in .nix expressions
 #+begin_src emacs-lisp
 (setup (:package nix-update))
 #+end_src
+*** noman
+:PROPERTIES:
+:CREATED_TIME: [2024-06-06 Thu 09:36]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package noman))
+#+end_src
 *** nov                                               :reading:EPUB:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]

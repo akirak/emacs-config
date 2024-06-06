@@ -1988,6 +1988,22 @@
         "type": "github"
       }
     },
+    "noman": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1717079979,
+        "narHash": "sha256-m4MUVW1KNN1pIGp90PtumT/HIfr5gHIrdrBOSG26AWY=",
+        "owner": "andykuszyk",
+        "repo": "noman.el",
+        "rev": "953e3761b05874dee49952fad63ce1cb3c91d707",
+        "type": "github"
+      },
+      "original": {
+        "owner": "andykuszyk",
+        "repo": "noman.el",
+        "type": "github"
+      }
+    },
     "nov": {
       "flake": false,
       "locked": {
@@ -3100,6 +3116,7 @@
         "nix-ts-mode": "nix-ts-mode",
         "nix-update": "nix-update",
         "nix3": "nix3",
+        "noman": "noman",
         "nov": "nov",
         "nushell-mode": "nushell-mode",
         "oahu": "oahu",
