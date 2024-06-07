@@ -625,6 +625,22 @@
         "type": "github"
       }
     },
+    "docco": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1717810243,
+        "narHash": "sha256-ZXc8/5fkZ+TFr8pqAT/ZGPM/qN86Pud14Mr8jeorzio=",
+        "owner": "akirak",
+        "repo": "docco.el",
+        "rev": "f3ec93b5ce744b9827ba16d8bab503d37cb4c8c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "docco.el",
+        "type": "github"
+      }
+    },
     "docker": {
       "flake": false,
       "locked": {
@@ -3031,6 +3047,7 @@
         "dired-filter": "dired-filter",
         "dired-hacks-utils": "dired-hacks-utils",
         "dired-open-with": "dired-open-with",
+        "docco": "docco",
         "docker": "docker",
         "docopt": "docopt",
         "doct": "doct",

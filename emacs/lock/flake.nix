@@ -236,6 +236,12 @@
       repo = "dired-open-with";
       type = "github";
     };
+    docco = {
+      flake = false;
+      owner = "akirak";
+      repo = "docco.el";
+      type = "github";
+    };
     docker = {
       flake = false;
       owner = "Silex";

@@ -5869,6 +5869,18 @@ And "Open with" dialog for Dired
     (:with-map dired-mode-map
       (:unbind "C-x M-o")))
 #+end_src
+*** docco
+:PROPERTIES:
+:CREATED_TIME: [2024-06-07 Fri 22:31]
+:END:
+#+begin_quote
+A framework for editing documentation comments
+[[https://github.com/akirak/docco.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package docco))
+#+end_src
 *** docker
 :PROPERTIES:
 :CREATED_TIME: [2023-05-16 Tue 11:09]
