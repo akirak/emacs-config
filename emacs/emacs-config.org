@@ -5225,7 +5225,9 @@ Jump to arbitrary positions in visible text and select text quickly.
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package avy))
+  (setup (:package avy)
+    (:global "M-[" #'avy-goto-symbol-1-above
+             "M-]" #'avy-goto-symbol-1-below))
 #+end_src
 
 I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
