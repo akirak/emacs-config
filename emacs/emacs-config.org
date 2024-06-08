@@ -964,7 +964,7 @@ The built-in =electric= package provides the following modes:
      ("/recipes/.+\\'" . (> "(" (file-name-nondirectory (buffer-file-name))
                             " :fetcher github :repo \"" _ "\")")))
 
-    (defun akirak/eval-buffer-or-load-file ()
+    (defun akirak/emacs-lisp-eval-buffer-or-load-file ()
       (interactive)
       (when (eq major-mode 'emacs-lisp-mode)
         (if buffer-file-name
