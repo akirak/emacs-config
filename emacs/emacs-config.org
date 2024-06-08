@@ -4799,13 +4799,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                   "f" #'akirak-twist-find-git-source))
     (:global "<f12> e u" #'akirak-twist-update-emacs-inputs))
 #+end_src
-*** akirak-unknown
-#+begin_src emacs-lisp
-  (setup akirak-unknown
-    (:global "C-c m" #'akirak-unknown)
-    (:when-loaded
-      (akirak-unknown-setup-embark)))
-#+end_src
 *** akirak-url                                                       :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
 
