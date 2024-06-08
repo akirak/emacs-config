@@ -4564,6 +4564,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       ("C-c i" akirak-image-import-file akirak/embark-import-image-url))
     (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
 #+end_src
+*** akirak-import
+#+begin_src elisp
+  (setup akirak-import
+    (:global "C-c i" #'akirak-import-thing-at-pt))
+#+end_src
 *** akirak-insert
 #+begin_src emacs-lisp
   (setup akirak-insert
