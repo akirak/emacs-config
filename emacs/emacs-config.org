@@ -4431,7 +4431,6 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup (:package akirak)
     (:global "C-x d" #'akirak-consult-dir
-             "C-c i" #'akirak-scratch-elisp
              "<f12> j" #'akirak-scratch-japanese)
 
     (with-eval-after-load 'embark
