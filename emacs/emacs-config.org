@@ -5242,8 +5242,17 @@ Jump to arbitrary positions in visible text and select text quickly.
 
 #+begin_src emacs-lisp
   (setup (:package avy)
+    (defmacro akirak/avy-define-char-command (name char)
+      `(defun ,name ()
+         (interactive)
+         (let ((avy-all-windows nil))
+           (avy-goto-char ,char))))
     (:global "M-[" #'avy-goto-symbol-1-above
-             "M-]" #'avy-goto-symbol-1-below))
+             "M-]" #'avy-goto-symbol-1-below
+             "M-g |" (akirak/avy-define-char-command akirak/avy-goto-pipe ?\|)
+             "M-g (" (akirak/avy-define-char-command akirak/avy-goto-paren ?\()
+             "M-g [" (akirak/avy-define-char-command akirak/avy-goto-bracket ?\[)
+             "M-g {" (akirak/avy-define-char-command akirak/avy-goto-brace ?\{)))
 #+end_src
 
 I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
