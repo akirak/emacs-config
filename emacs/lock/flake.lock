@@ -465,6 +465,22 @@
         "type": "github"
       }
     },
+    "cosmetic-transient": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1717852507,
+        "narHash": "sha256-HxcpDw9eKFliijaLhHZV4gl7pQJ/VjeJuUS4SzMVK3k=",
+        "owner": "akirak",
+        "repo": "cosmetic-transient.el",
+        "rev": "5fac37ca7bccd431d2ab23f61129bc121fd96a7c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "cosmetic-transient.el",
+        "type": "github"
+      }
+    },
     "cue-mode": {
       "flake": false,
       "locked": {
@@ -3037,6 +3053,7 @@
         "consult-recoll": "consult-recoll",
         "copilot": "copilot",
         "corfu": "corfu",
+        "cosmetic-transient": "cosmetic-transient",
         "cue-mode": "cue-mode",
         "dash": "dash",
         "dashboard": "dashboard",

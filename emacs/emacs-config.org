@@ -5569,6 +5569,15 @@ COmpletion in Region FUnction
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** cosmetic-transient
+:PROPERTIES:
+:CREATED_TIME: [2024-06-08 Sat 10:47]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package cosmetic-transient)
+    (:global "C-c m" #'cosmetic-transient))
+#+end_src
 *** cue-mode
 :PROPERTIES:
 :CREATED_TIME: [2024-01-01 Mon 15:17]

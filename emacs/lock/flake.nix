@@ -176,6 +176,12 @@
       repo = "corfu";
       type = "github";
     };
+    cosmetic-transient = {
+      flake = false;
+      owner = "akirak";
+      repo = "cosmetic-transient.el";
+      type = "github";
+    };
     cue-mode = {
       flake = false;
       owner = "russell";
