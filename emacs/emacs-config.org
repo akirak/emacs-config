@@ -4771,6 +4771,14 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-rename
     (:global "C-'" #'akirak-rename-dwim))
 #+end_src
+*** akirak-repl
+:PROPERTIES:
+:CREATED_TIME: [2024-06-08 Sat 12:05]
+:END:
+#+begin_src elisp
+  (setup akirak-repl
+    (:global "C-M-<return>" #'akirak-repl))
+#+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
