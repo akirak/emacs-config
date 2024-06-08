@@ -4202,7 +4202,16 @@ Major mode for Gleam
     (:file-match "\\.gleam\\'")
     (:mode-repl akirak/gleam-shell)
     ;; Should be fixed in the upstream.
-    (autoload 'gleam-ts-mode "gleam-ts-mode"))
+    (autoload 'gleam-ts-mode "gleam-ts-mode")
+    (:auto-insert
+     ("_test\\.gleam\\'"
+      . (> "import gleeunit/should" n
+           n
+           "/// A sample test case using gleeunit/should."
+           "pub fn hello_world_test() {" n
+           "  1" n
+           "  |> should.equal(1)" n
+           "}"))))
 #+end_src
 *** go-ts-mode
 :PROPERTIES:
