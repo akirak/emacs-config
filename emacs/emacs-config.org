@@ -5242,6 +5242,7 @@ Jump to arbitrary positions in visible text and select text quickly.
 
 #+begin_src emacs-lisp
   (setup (:package avy)
+    (:set avy-style 'pre)
     (defmacro akirak/avy-define-char-command (name char)
       `(defun ,name ()
          (interactive)
