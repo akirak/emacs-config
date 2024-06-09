@@ -152,22 +152,6 @@
         "type": "github"
       }
     },
-    "epkgs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1717360842,
-        "narHash": "sha256-lNdNi93dQymvuOBAsDmuVZBlKXr5uTyUAUV0AwZ3u2w=",
-        "owner": "emacsmirror",
-        "repo": "epkgs",
-        "rev": "0f8ecc3f83861d8134c92d9aebfd04ab5ec8ede8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacsmirror",
-        "repo": "epkgs",
-        "type": "github"
-      }
-    },
     "epubinfo": {
       "inputs": {
         "flake-utils": [
@@ -861,7 +845,6 @@
         "archiver": "archiver",
         "emacs-config-features": "emacs-config-features",
         "emacs-overlay": "emacs-overlay",
-        "epkgs": "epkgs",
         "flake-no-path": "flake-no-path",
         "flake-parts": "flake-parts",
         "flake-pins": "flake-pins",

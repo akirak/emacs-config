@@ -30,12 +30,6 @@
       url = "git+https://git.savannah.gnu.org/git/emacs/nongnu.git?ref=main";
       flake = false;
     };
-    # I use no packages from EmacsMirror. I need this only to set the
-    # epkg-origin-url variable.
-    epkgs = {
-      url = "github:emacsmirror/epkgs";
-      flake = false;
-    };
     emacs-config-features.url = "github:akirak/emacs-config/develop?dir=presets/default";
 
     archiver.url = "github:emacs-twist/twist-archiver";

@@ -49,24 +49,6 @@ with builtins; let
     }
   ];
 
-  epkgRepository =
-    prev.runCommandLocal "epkg-repository" {
-      buildInputs = [
-        prev.sqlite
-        prev.git
-      ];
-    } ''
-      mkdir $out
-      cd $out
-      cp -t . "${inputs.epkgs.outPath}/epkg.sql"
-      # A workaround to pass `git rev-parse HEAD`
-      git init
-      git add epkg.sql
-      git -c user.name=nouser -c user.email='nouser@localhost' \
-        commit -a -m 'Initial commit' --allow-empty
-      rm epkg.*
-    '';
-
   defaultTreeSitterGrammars =
     lib.pipe final.tree-sitter-grammars
     [
@@ -115,10 +97,6 @@ with builtins; let
                     && ! lib.any (tag: org.tag tag s) extraFeatures)
               ));
           })
-          (prev.writeText "init-paths.el" ''
-            (with-eval-after-load 'epkg
-              (setq epkg-origin-url "${epkgRepository}"))
-          '')
           (
             # Based on the fake package in nixpkgs at
             # https://github.com/NixOS/nixpkgs/blob/8f0515dbf74c886b61639ccad5a1ea7c2f51265d/pkgs/applications/editors/emacs/elisp-packages/manual-packages/treesit-grammars/default.nix
