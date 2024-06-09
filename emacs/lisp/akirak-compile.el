@@ -112,19 +112,19 @@ can be a buffer in `compilation-mode' but also can be a buffer with
 `compilation-shell-minor-mode'.
 
 If three universal prefix arguments are given, all compilation buffers
-without a running process will be killed."
+are displayed in the frame."
   (interactive "P")
   (pcase arg
-    ('(24)
-     (dolist (buffer (buffer-list))
-       (when (or (eq (buffer-local-value 'major-mode buffer)
-                     'compilation-mode)
-                 (buffer-local-value 'compilation-shell-minor-mode
-                                     buffer))
-         (let ((process (get-buffer-process buffer)))
-           (unless (and process
-                        (process-live-p process))
-             (kill-buffer buffer))))))
+    ('(64)
+     (if-let (buffers (seq-filter #'akirak-compile-buffer-p (buffer-list)))
+         (progn
+           (switch-to-buffer (pop buffers))
+           (delete-other-windows)
+           (dolist (buffer buffers)
+             (split-window-below)
+             (switch-to-buffer buffer))
+           (balance-windows))
+       (user-error "No matching buffer")))
     ('(16)
      (let ((buffer (read-buffer "Visit a compilation buffer: "
                                 nil t
