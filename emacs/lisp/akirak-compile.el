@@ -129,12 +129,8 @@ without a running process will be killed."
      (let ((buffer (read-buffer "Visit a compilation buffer: "
                                 nil t
                                 (lambda (name-or-cell)
-                                  (let ((buffer (or (cdr-safe name-or-cell)
-                                                    (get-buffer name))))
-                                    (or (eq (buffer-local-value 'major-mode buffer)
-                                            'compilation-mode)
-                                        (buffer-local-value 'compilation-shell-minor-mode
-                                                            buffer)))))))
+                                  (akirak-compile-buffer-p (or (cdr-safe name-or-cell)
+                                                               (get-buffer name-or-cell)))))))
        (pop-to-buffer buffer)))
     (_
      (if-let (workspace (akirak-compile--workspace-root))
@@ -166,6 +162,12 @@ without a running process will be killed."
                                     (cl-constantly (project-prefixed-buffer-name "compilation")))
                (compile command t))))
        (user-error "No workspace root")))))
+
+(defun akirak-compile-buffer-p (buffer)
+  (or (eq (buffer-local-value 'major-mode buffer)
+          'compilation-mode)
+      (buffer-local-value 'compilation-shell-minor-mode
+                          buffer)))
 
 (defun akirak-compile--guess-backend (command)
   (seq-some `(lambda (cell)
