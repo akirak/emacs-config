@@ -84,6 +84,26 @@ the original minor mode."
          (pop-to-buffer (current-buffer)))))))
 
 ;;;###autoload
+(cl-defun akirak-shell-exec-in-project (command &key name root)
+  (declare (indent 1))
+  (require 'eat)
+  (let* ((pr (project-current))
+         (default-directory (or root
+                                (when pr
+                                  (project-root pr))
+                                default-directory))
+         (command (ensure-list command))
+         (name (or name (car command)))
+         (eat-kill-buffer-on-exit nil))
+    (pop-to-buffer (apply #'eat-make
+                          (if pr
+                              (format "%s-%s" name (project-name pr))
+                            name)
+                          (pcase command
+                            (`(,cmd . ,args)
+                             (cons cmd (cons nil args))))))))
+
+;;;###autoload
 (defun akirak-shell-run-command-in-some-buffer (command)
   (let ((name (read-buffer "Shell: " nil t #'akirak-shell-buffer-p)))
     (with-current-buffer (get-buffer name)

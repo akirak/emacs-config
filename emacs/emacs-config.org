@@ -508,6 +508,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup autoinsert
     (:set auto-insert 'other
           auto-insert-query nil)
+    (:when-loaded
+      ;; Delete the default template for HTML.
+      (delete (assq 'html-mode auto-insert-alist) auto-insert-alist))
     (:with-mode auto-insert-mode
       (:hook-into after-init-hook)))
 #+end_src
@@ -961,7 +964,7 @@ The built-in =electric= package provides the following modes:
      ("/recipes/.+\\'" . (> "(" (file-name-nondirectory (buffer-file-name))
                             " :fetcher github :repo \"" _ "\")")))
 
-    (defun akirak/eval-buffer-or-load-file ()
+    (defun akirak/emacs-lisp-eval-buffer-or-load-file ()
       (interactive)
       (when (eq major-mode 'emacs-lisp-mode)
         (if buffer-file-name
@@ -2516,6 +2519,7 @@ These variables need to be set in prior to any package settings related to org:
           org-crypt
           ;; Built-in link types I need
           ol-info
+          ol-man
           ol-eww))
 #+end_src
 *** COMMENT citar                                         :bibliography:ARCHIVE:
@@ -3212,7 +3216,8 @@ A programmable workflow layer for Org mode
             ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
             ("hie\\.yaml\\'" . "programming/haskell")
             ("/graphql/" . "programming/graphql")
-            ("\\.editorconfig\\'" . "programming/editorconfig"))
+            ("\\.editorconfig\\'" . "programming/editorconfig")
+            ("renovate.json\\'" . "software/renovate-bot"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in
           org-dog-clock-default-query-filter
           (lambda (query)
@@ -3287,7 +3292,7 @@ A programmable workflow layer for Org mode
         . akirak/org-dog-auto-insert))
       (with-eval-after-load "autoinsert"
         (add-to-list 'auto-insert-alist
-                     `
+                     'akirak/org-dog-auto-insert
                      t))
 
       (defun akirak/org-dog-auto-insert ()
@@ -4198,7 +4203,16 @@ Major mode for Gleam
     (:file-match "\\.gleam\\'")
     (:mode-repl akirak/gleam-shell)
     ;; Should be fixed in the upstream.
-    (autoload 'gleam-ts-mode "gleam-ts-mode"))
+    (autoload 'gleam-ts-mode "gleam-ts-mode")
+    (:auto-insert
+     ("_test\\.gleam\\'"
+      . (> "import gleeunit/should" n
+           n
+           "/// A sample test case using gleeunit/should."
+           "pub fn hello_world_test() {" n
+           "  1" n
+           "  |> should.equal(1)" n
+           "}"))))
 #+end_src
 *** go-ts-mode
 :PROPERTIES:
@@ -4418,7 +4432,6 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup (:package akirak)
     (:global "C-x d" #'akirak-consult-dir
-             "C-c i" #'akirak-scratch-elisp
              "<f12> j" #'akirak-scratch-japanese)
 
     (with-eval-after-load 'embark
@@ -4551,6 +4564,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:embark embark-file-map nil
       ("C-c i" akirak-image-import-file akirak/embark-import-image-url))
     (add-hook 'org-ctrl-c-ctrl-c-hook #'akirak-image-org-update))
+#+end_src
+*** akirak-import
+#+begin_src elisp
+  (setup akirak-import
+    (:global "C-c i" #'akirak-import-thing-at-pt))
 #+end_src
 *** akirak-insert
 #+begin_src emacs-lisp
@@ -4758,6 +4776,14 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-rename
     (:global "C-'" #'akirak-rename-dwim))
 #+end_src
+*** akirak-repl
+:PROPERTIES:
+:CREATED_TIME: [2024-06-08 Sat 12:05]
+:END:
+#+begin_src elisp
+  (setup akirak-repl
+    (:global "C-M-<return>" #'akirak-repl))
+#+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
@@ -4794,13 +4820,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       (define-key embark-library-map
                   "f" #'akirak-twist-find-git-source))
     (:global "<f12> e u" #'akirak-twist-update-emacs-inputs))
-#+end_src
-*** akirak-unknown
-#+begin_src emacs-lisp
-  (setup akirak-unknown
-    (:global "C-c m" #'akirak-unknown)
-    (:when-loaded
-      (akirak-unknown-setup-embark)))
 #+end_src
 *** akirak-url                                                       :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
@@ -5228,7 +5247,19 @@ Jump to arbitrary positions in visible text and select text quickly.
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package avy))
+  (setup (:package avy)
+    (:set avy-style 'pre)
+    (defmacro akirak/avy-define-char-command (name char)
+      `(defun ,name ()
+         (interactive)
+         (let ((avy-all-windows nil))
+           (avy-goto-char ,char))))
+    (:global "M-[" #'avy-goto-symbol-1-above
+             "M-]" #'avy-goto-symbol-1-below
+             "M-g |" (akirak/avy-define-char-command akirak/avy-goto-pipe ?\|)
+             "M-g (" (akirak/avy-define-char-command akirak/avy-goto-paren ?\()
+             "M-g [" (akirak/avy-define-char-command akirak/avy-goto-bracket ?\[)
+             "M-g {" (akirak/avy-define-char-command akirak/avy-goto-brace ?\{)))
 #+end_src
 
 I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
@@ -5565,6 +5596,18 @@ COmpletion in Region FUnction
     (:with-feature comint
       (:bind "M-/" #'completion-at-point)))
 #+end_src
+*** cosmetic-transient
+:PROPERTIES:
+:CREATED_TIME: [2024-06-08 Sat 10:47]
+:END:
+#+begin_quote
+A transient for cosmetics on source code
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package cosmetic-transient)
+    (:global "C-c m" #'cosmetic-transient))
+#+end_src
 *** cue-mode
 :PROPERTIES:
 :CREATED_TIME: [2024-01-01 Mon 15:17]
@@ -5847,11 +5890,35 @@ Hide dotfiles in dired
     ;;             #'akirak/ad-override-dired-k--highlight-by-file-attribyte)
     )
 #+end_src
+*** dired-open-with
+:PROPERTIES:
+:CREATED_TIME: [2024-06-06 Thu 09:39]
+:END:
+#+begin_quote
+And "Open with" dialog for Dired
+[[https://github.com/FrostyX/dired-open-with]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package dired-open-with))
+#+end_src
 *** dired-x
 #+begin_src elisp
   (setup dired-x
     (:with-map dired-mode-map
       (:unbind "C-x M-o")))
+#+end_src
+*** docco
+:PROPERTIES:
+:CREATED_TIME: [2024-06-07 Fri 22:31]
+:END:
+#+begin_quote
+A framework for editing documentation comments
+[[https://github.com/akirak/docco.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package docco))
 #+end_src
 *** docker
 :PROPERTIES:
@@ -5991,10 +6058,10 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 #+begin_src emacs-lisp
   (setup (:package eat)
     (:set eat-kill-buffer-on-exit t)
-    (autoload 'eat-make "eat")
-
     (:with-map eat-semi-char-mode-map
-      (:unbind "M-:" "M-g" "M-s" "C-z" "M-o")))
+      (:bind "S-<prior>" #'View-scroll-page-backward
+             "S-<next>" #'View-scroll-page-forward)
+      (:unbind "M-:" "M-g" "M-s" "C-z" "M-o" "M-'")))
 #+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
@@ -7974,6 +8041,18 @@ Update "fetch" blocks in .nix expressions
 #+begin_src emacs-lisp
 (setup (:package nix-update))
 #+end_src
+*** noman
+:PROPERTIES:
+:CREATED_TIME: [2024-06-06 Thu 09:36]
+:END:
+#+begin_quote
+Read command line help without a man page
+[[https://github.com/andykuszyk/noman.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package noman))
+#+end_src
 *** nov                                               :reading:EPUB:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
@@ -8002,7 +8081,7 @@ Featureful EPUB reader mode
                          #'nov-render-document
                          nil t)))))
 #+end_src
-*** nushell-mode
+*** COMMENT nushell-mode                                                       :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-03-02 Sat 12:40]
 :END:
@@ -8014,7 +8093,7 @@ Major mode for Nushell scripts
   (setup (:package nushell-mode)
     (:file-match "\\.nu\\'"))
 #+end_src
-*** ob-async
+*** COMMENT ob-async                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-05-20 Sat 18:46]
 :END:
@@ -9274,11 +9353,10 @@ A major mode for the Zig programming language
 
     (defun akirak/gleam-shell ()
       (interactive)
-      (if-let* ((root (locate-dominating-file default-directory "gleam.toml"))
-                (pr (project-current))
-                (name (format "gleam-%s" (project-name pr)))
-                (default-directory root))
-          (pop-to-buffer (eat-make name "gleam" nil "shell"))
+      (if-let (root (locate-dominating-file default-directory "gleam.toml"))
+          (akirak-shell-exec-in-project
+           '("gleam" "shell")
+           :root root :name "gleam-shell")
         (user-error "Not in a Gleam project"))))
 #+end_src
 **** Haskell
@@ -9306,16 +9384,10 @@ A major mode for the Zig programming language
 
     (defun akirak/iex-dwim ()
       (interactive)
-      (let* ((root (locate-dominating-file default-directory "mix.exs"))
-             (pr (project-current))
-             (name (if pr
-                       (format "iex-%s" (project-name pr))
-                     "iex"))
-             (default-directory root))
-        (pop-to-buffer (apply #'eat-make name
-                              (if root
-                                  '("iex" nil "-S" "mix")
-                                '("iex")))))))
+      (if-let (root (locate-dominating-file default-directory "mix.exs"))
+          (akirak-shell-exec-in-project '("iex" "-S" "mix")
+            :root root)
+        (akirak-shell-exec-in-project "iex"))))
 #+end_src
 **** Node.js and Bun
 :PROPERTIES:
@@ -9345,24 +9417,21 @@ A major mode for the Zig programming language
     (defun akirak/utop-project ()
       (interactive)
       (let* ((root (locate-dominating-file default-directory "dune-project"))
-             (pr (project-current))
-             (name (if pr
-                       (format "utop-%s" (project-name pr))
-                     "utop")))
-        (pop-to-buffer (apply #'eat-make name
-                              (if root
-                                  (append (if (and (not (executable-find "dune"))
-                                                   (executable-find "opam"))
-                                              '("opam" nil "exec" "--" "dune" "utop")
-                                            '("dune" nil "utop"))
-                                          (list (shell-quote-argument (file-relative-name root))))
-                                (cond
-                                 ((executable-find "utop")
-                                  '("utop"))
-                                 ((executable-find "opam")
-                                  '("opam" nil "exec" "--" "utop"))
-                                 (t
-                                  (user-error "Neither utop nor opam is available")))))))))
+             (project-path (when root (file-relative-name root))))
+        (akirak-shell-exec-in-project
+            (cond
+             ((and project-path (executable-find "dune"))
+              (list "dune" "utop" project-path))
+             ((and project-path (executable-find "opam"))
+              (list "opam" "exec" "--" "dune" "utop" project-path))
+             ((executable-find "utop")
+              '("utop"))
+             ((executable-find "opam")
+              '("opam" nil "exec" "--" "utop"))
+             (t
+              (user-error "Neither dune nor opam is available")))
+          :name "utop"
+          :root default-directory))))
 #+end_src
 **** rebar3 (Erlang)
 :PROPERTIES:
@@ -9736,7 +9805,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 212 |
+| [[org-ql-search:tags:packages][packages]]            | 214 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |

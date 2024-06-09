@@ -112,29 +112,25 @@ can be a buffer in `compilation-mode' but also can be a buffer with
 `compilation-shell-minor-mode'.
 
 If three universal prefix arguments are given, all compilation buffers
-without a running process will be killed."
+are displayed in the frame."
   (interactive "P")
   (pcase arg
-    ('(24)
-     (dolist (buffer (buffer-list))
-       (when (or (eq (buffer-local-value 'major-mode buffer)
-                     'compilation-mode)
-                 (buffer-local-value 'compilation-shell-minor-mode
-                                     buffer))
-         (let ((process (get-buffer-process buffer)))
-           (unless (and process
-                        (process-live-p process))
-             (kill-buffer buffer))))))
+    ('(64)
+     (if-let (buffers (seq-filter #'akirak-compile-buffer-p (buffer-list)))
+         (progn
+           (switch-to-buffer (pop buffers))
+           (delete-other-windows)
+           (dolist (buffer buffers)
+             (split-window-below)
+             (switch-to-buffer buffer))
+           (balance-windows))
+       (user-error "No matching buffer")))
     ('(16)
      (let ((buffer (read-buffer "Visit a compilation buffer: "
                                 nil t
                                 (lambda (name-or-cell)
-                                  (let ((buffer (or (cdr-safe name-or-cell)
-                                                    (get-buffer name))))
-                                    (or (eq (buffer-local-value 'major-mode buffer)
-                                            'compilation-mode)
-                                        (buffer-local-value 'compilation-shell-minor-mode
-                                                            buffer)))))))
+                                  (akirak-compile-buffer-p (or (cdr-safe name-or-cell)
+                                                               (get-buffer name-or-cell)))))))
        (pop-to-buffer buffer)))
     (_
      (if-let (workspace (akirak-compile--workspace-root))
@@ -166,6 +162,12 @@ without a running process will be killed."
                                     (cl-constantly (project-prefixed-buffer-name "compilation")))
                (compile command t))))
        (user-error "No workspace root")))))
+
+(defun akirak-compile-buffer-p (buffer)
+  (or (eq (buffer-local-value 'major-mode buffer)
+          'compilation-mode)
+      (buffer-local-value 'compilation-shell-minor-mode
+                          buffer)))
 
 (defun akirak-compile--guess-backend (command)
   (seq-some `(lambda (cell)
@@ -343,6 +345,8 @@ without a running process will be killed."
      t)
     (`("mix" "deps.get")
      t)
+    (`("gleam" "deps" . ,_)
+     t)
     (`(,_ "astro" "add" . ,_)
      t)))
 
@@ -507,6 +511,26 @@ suitable value detected according to the command line."
          (list
           ;; ./src/app/blobs/thumbnails/[...path]/route.ts:18:7
           (list (rx-to-string `(and bol "./" (group (regexp ,path-regexp))
+                                    ":" (group (+ digit))
+                                    ":" (group (+ digit))))
+                1 2 3)))))
+    ((rx bol "dune" space)
+     ;; This pattern currently generates quite many false positives. I want to
+     ;; exclude libraries outside the source tree, but I don't know how.
+     (eval-when-compile
+       (let ((path-regexp (rx (+ (any "-_./[]_" alnum)))))
+         (list
+          (list (rx-to-string `(and (any "Ff") "ile "
+                                    "\"" (group (regexp ,path-regexp)) "\""
+                                    ", line " (group (+ digit))
+                                    ", characters " (group (+ digit))
+                                    "-" (+ digit)))
+                1 2 3)))))
+    ((rx bol "gleam" space)
+     (eval-when-compile
+       (let ((path-regexp (rx "/" (+ (any "-_./[]_" alnum)))))
+         (list
+          (list (rx-to-string `(and (group (regexp ,path-regexp))
                                     ":" (group (+ digit))
                                     ":" (group (+ digit))))
                 1 2 3)))))

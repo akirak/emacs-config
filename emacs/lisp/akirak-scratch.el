@@ -1,27 +1,5 @@
 ;;; akirak-scratch.el ---  -*- lexical-binding: t -*-
 
-;;;###autoload
-(defun akirak-scratch-elisp ()
-  "Create or display a scratch buffer for the current project."
-  (interactive)
-  (let* ((project (project-current))
-         (default-directory (if project
-                                (project-root project)
-                              default-directory))
-         (buffer-name (format "scratch-%s.el"
-                              (thread-last
-                                (string-remove-suffix "/" default-directory)
-                                (file-name-nondirectory)))))
-    (pop-to-buffer (or (get-buffer buffer-name)
-                       (with-current-buffer (generate-new-buffer buffer-name)
-                         (lisp-interaction-mode)
-                         (setq-local header-line-format
-                                     '("Elisp Scratch ("
-                                       default-directory
-                                       ")"))
-                         (current-buffer)))
-                   '(display-buffer-below-selected . nil))))
-
 (defvar akirak-scratch-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c C-c") #'akirak-scratch-kill-new-and-close)

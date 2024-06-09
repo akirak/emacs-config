@@ -176,6 +176,12 @@
       repo = "corfu";
       type = "github";
     };
+    cosmetic-transient = {
+      flake = false;
+      owner = "akirak";
+      repo = "cosmetic-transient.el";
+      type = "github";
+    };
     cue-mode = {
       flake = false;
       owner = "russell";
@@ -228,6 +234,18 @@
       flake = false;
       owner = "Fuco1";
       repo = "dired-hacks";
+      type = "github";
+    };
+    dired-open-with = {
+      flake = false;
+      owner = "FrostyX";
+      repo = "dired-open-with";
+      type = "github";
+    };
+    docco = {
+      flake = false;
+      owner = "akirak";
+      repo = "docco.el";
       type = "github";
     };
     docker = {
@@ -747,16 +765,16 @@
       repo = "nix3.el";
       type = "github";
     };
+    noman = {
+      flake = false;
+      owner = "andykuszyk";
+      repo = "noman.el";
+      type = "github";
+    };
     nov = {
       flake = false;
       type = "git";
       url = "https://depp.brause.cc/nov.el.git";
-    };
-    nushell-mode = {
-      flake = false;
-      owner = "mrkkrp";
-      repo = "nushell-mode";
-      type = "github";
     };
     oahu = {
       flake = false;
@@ -768,12 +786,6 @@
       flake = false;
       owner = "akirak";
       repo = "oahu.el";
-      type = "github";
-    };
-    ob-async = {
-      flake = false;
-      owner = "astahlman";
-      repo = "ob-async";
       type = "github";
     };
     ob-graphql = {

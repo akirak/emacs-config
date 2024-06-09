@@ -30,10 +30,6 @@
       url = "git+https://git.savannah.gnu.org/git/emacs/nongnu.git?ref=main";
       flake = false;
     };
-    epkgs = {
-      url = "github:emacsmirror/epkgs";
-      flake = false;
-    };
     emacs-config-features.url = "github:akirak/emacs-config/develop?dir=presets/default";
 
     archiver.url = "github:emacs-twist/twist-archiver";
