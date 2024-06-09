@@ -2519,6 +2519,7 @@ These variables need to be set in prior to any package settings related to org:
           org-crypt
           ;; Built-in link types I need
           ol-info
+          ol-man
           ol-eww))
 #+end_src
 *** COMMENT citar                                         :bibliography:ARCHIVE:
