@@ -1,6 +1,5 @@
 ;;; akirak-scratch.el ---  -*- lexical-binding: t -*-
 
-;;;###autoload
 (defvar akirak-scratch-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c C-c") #'akirak-scratch-kill-new-and-close)
