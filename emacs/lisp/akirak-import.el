@@ -118,6 +118,8 @@
             (check-alist imenu--index-alist)))))))
 
 (cl-defun akirak-import--insert-line (content &key regexp inside-tree-sitter-node)
+  ;; Save the position so the user can return the position being edited.
+  (push-mark)
   (save-excursion
     (save-restriction
       (goto-char (point-min))
