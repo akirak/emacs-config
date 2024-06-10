@@ -14,7 +14,7 @@
        (concat "import " (file-name-sans-extension filepath)
                (when identifier
                  (format ".{%s}"
-                         (if (char-uppercase-p (aget 0 identifier))
+                         (if (char-uppercase-p (aref identifier 0))
                              (concat "type " identifier)
                            identifier)))))))
   ""
