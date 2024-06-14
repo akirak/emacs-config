@@ -52,8 +52,8 @@
                                              :as #'buffer-name))))
 
 ;; Based on `consult--source-project-buffer' from consult.el.
-(defvar akirak-consult-source-indirect-buffer
-  `(:name "Indirect Buffer"
+(defvar akirak-consult-source-indirect-or-org-src-buffer
+  `(:name "Indirect or Src Buffer"
           :narrow 105
           :hidden t
           :category buffer
@@ -64,7 +64,9 @@
           :items
           ,(lambda () (consult--buffer-query
                        :predicate (lambda (bufname)
-                                    (buffer-base-buffer (get-buffer bufname)))
+                                    (let ((buffer (get-buffer bufname)))
+                                      (or (buffer-base-buffer buffer)
+                                          (buffer-local-value 'org-src-mode buffer))))
                        :as #'buffer-name))))
 
 ;; Based on `consult--source-project-buffer' from consult.el.
