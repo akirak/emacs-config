@@ -1271,6 +1271,12 @@
       repo = "tuareg";
       type = "github";
     };
+    twind = {
+      flake = false;
+      owner = "akirak";
+      repo = "twind.el";
+      type = "github";
+    };
     twist = {
       flake = false;
       owner = "emacs-twist";

@@ -8996,6 +8996,28 @@ The simple package for fast log selected region
 #+begin_src emacs-lisp
 (setup (:package turbo-log))
 #+end_src
+*** twind
+:PROPERTIES:
+:CREATED_TIME: [2024-06-14 Fri 12:13]
+:END:
+#+begin_quote
+Complete Tailwind classes using the Cheatsheet data
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package twind)
+    (:with-mode (web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode)
+      (:bind "C-c t" #'twind-insert-class-from-cheatsheet))
+    (:with-mode (css-mode css-ts-mode)
+      (:bind "C-c t" #'twind-insert-css-from-cheatsheet))
+    (with-eval-after-load 'embark
+      (defvar-keymap twind-css-rule-embark-map
+        :parent embark-general-map
+        :doc "Embark keymap for twind CSS."
+        "d" #'twind-reference-tailwind
+        "m" #'twind-reference-mdn-css)
+      (add-to-list 'embark-keymap-alist '(twind-css-rule . twind-css-rule-embark-map))))
+#+end_src
 *** COMMENT twist                                        :configuration:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 14:12]
@@ -9815,7 +9837,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 214 |
+| [[org-ql-search:tags:packages][packages]]            | 215 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |

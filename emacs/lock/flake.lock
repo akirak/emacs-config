@@ -3234,6 +3234,7 @@
         "tomelr": "tomelr",
         "ts": "ts",
         "tuareg": "tuareg",
+        "twind": "twind",
         "twist": "twist",
         "valign": "valign",
         "vertico": "vertico",
@@ -3602,6 +3603,22 @@
       "original": {
         "owner": "ocaml",
         "repo": "tuareg",
+        "type": "github"
+      }
+    },
+    "twind": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1718362478,
+        "narHash": "sha256-Sl1Di8TspFBHR0B+clDB6swEMNsdzvazDI2N2eh6E/I=",
+        "owner": "akirak",
+        "repo": "twind.el",
+        "rev": "46a488546aeed07e57e708e8611410cbd46defc6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "twind.el",
         "type": "github"
       }
     },
