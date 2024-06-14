@@ -3,7 +3,7 @@
 (defvar akirak-scratch-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c C-c") #'akirak-scratch-kill-new-and-close)
-    (define-key map (kbd "C-c C-k") #'kill-this-buffer)
+    (define-key map (kbd "C-c C-k") #'kill-buffer)
     (define-key map (kbd "C-c C-w") #'akirak-scratch-duckduckgo)
     map))
 
