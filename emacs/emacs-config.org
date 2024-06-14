@@ -5441,6 +5441,25 @@ Consulting completing-read
                                           (when-let (project (project-current))
                                             (project-root project))))
 
+    (advice-add 'consult--buffer-action
+                :filter-args
+                (defun akirak/ad-switch-to-buffer (args)
+                  (let ((buffer (car args)))
+                    (cons (or (get-buffer buffer)
+                              (cl-flet
+                                  ((pred (ent)
+                                     (when (string-match-p (car ent) buffer)
+                                       (pcase ent
+                                         (`(,_ ,func ,_)
+                                          func)
+                                         (`(,_ . ,func)
+                                          func)))))
+                                (with-current-buffer (generate-new-buffer buffer)
+                                  (when-let (mode (seq-some #'pred auto-mode-alist))
+                                    (set-auto-mode-0 mode))
+                                  (current-buffer))))
+                          (cdr args)))))
+
     (:when-loaded
       (:set consult-buffer-sources `(consult--source-project-buffer
                                      consult--source-project-recent-file
