@@ -228,19 +228,19 @@ Specify extra root files to help eglot correctly identify project roots.
 #+begin_src emacs-lisp
   (eval-when-compile
     (define-setup-macro
-     :org-src-lang (lang)
+     :org-src-lang (&rest langs)
      "Add an entry to `org-src-lang-modes' for the mode."
      `(with-eval-after-load "org-src"
-        (let* ((lang ,lang)
-               (name ',(thread-last
-                         (setup-get 'mode)
-                         (symbol-name)
-                         (string-remove-suffix "-mode"))))
-          (add-to-list 'org-src-lang-modes
-                       (cons (if (stringp lang)
-                                 lang
-                               (string-remove-suffix "-ts" name))
-                             (intern name)))))))
+        (dolist (lang ',langs)
+          (let ((name ',(thread-last
+                          (setup-get 'mode)
+                          (symbol-name)
+                          (string-remove-suffix "-mode"))))
+            (add-to-list 'org-src-lang-modes
+                         (cons (if (stringp lang)
+                                   lang
+                                 (string-remove-suffix "-ts" name))
+                               (intern name))))))))
 #+end_src
 *** :package-files
 :PROPERTIES:
