@@ -16,7 +16,20 @@
                  (format ".{%s}"
                          (if (char-uppercase-p (aref identifier 0))
                              (concat "type " identifier)
-                           identifier)))))))
+                           identifier))))))
+    (elixir-ts-mode
+     :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use") (+ nonl))
+     :extra-modes nil
+     :extensions (".ex")
+     :source-directories ("lib")
+     :transform-filename
+     (lambda (filepath identifier)
+       (let ((module (akirak-elixir-module-name-from-file filepath)))
+         (if identifier
+             (format "import %s, only: [%s: n]" module identifier)
+           (list (concat "alias " module)
+                 (concat "import " module)
+                 (concat "use " module)))))))
   ""
   :type '(alist :key-type (symbol :tag "Major mode")
                 :value-type plist))
