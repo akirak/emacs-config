@@ -95,7 +95,7 @@
                                          (akirak-import--contains-identifier
                                           identifier filename))
                                 identifier))))))
-      (delq nil))))
+      (flatten-list))))
 
 (defun akirak-import--contains-identifier (identifier file)
   (cl-labels
