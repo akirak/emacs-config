@@ -68,7 +68,7 @@
                            nil nil
                            (when (and pattern
                                       (seq-find #'contains-pattern lines))
-                             pattern))
+                             (concat pattern " ")))
           :regexp regexp))))))
 
 (cl-defun akirak-import--collect-statements (modes &key regexp)
