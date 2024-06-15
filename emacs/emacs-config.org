@@ -1545,6 +1545,17 @@ Resources:
     ;; Prefer sqlite backend for learning purposes
     (:set multisession-storage 'sqlite))
 #+end_src
+*** nxml-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-06-15 Sat 15:18]
+:END:
+
+#+begin_src emacs-lisp
+  (setup nxml-mode
+    (:file-match "\\.xml\\'"
+                 "\\.svg\\'")
+    (:org-src-lang "xml" "svg"))
+#+end_src
 *** outline                                                :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
