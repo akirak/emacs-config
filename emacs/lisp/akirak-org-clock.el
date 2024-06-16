@@ -265,7 +265,10 @@ Example values are shown below:
 (defadvice org-insert-heading (around akirak-org-clock activate)
   (if (akirak-org-clock--org-allow-p)
       ad-do-it
-    (or (akirak-capture-org-ins-heading-fallback current-prefix-arg)
+    (or (unless (and (memq this-command '(org-meta-return
+                                          org-insert-todo-heading))
+                     (looking-at (rx nonl)))
+          (akirak-capture-org-ins-heading-fallback current-prefix-arg))
         ad-do-it)))
 
 (defun akirak-org-clock--org-allow-p ()
