@@ -1132,7 +1132,7 @@ The built-in =electric= package provides the following modes:
             (alejandra '((eval . (alejandra-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
-         `((nix-ts-mode . (,@alejandra))))
+         `((nix-ts-mode . (,@lsp-no-formatter ,@alejandra))))
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@prettier ,@lsp))
@@ -6155,6 +6155,8 @@ Client for Language Server Protocol (LSP) servers
                "R" #'eglot-reconnect
                "r" #'eglot-rename))
 
+      (add-to-list 'eglot-server-programs
+                   `((nix-ts-mode nix-mode) . ("nil")))
       (add-to-list 'eglot-server-programs
                    '(lean4-mode . ("lake" "serve")))
       (add-to-list 'eglot-server-programs
