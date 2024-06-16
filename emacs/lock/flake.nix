@@ -1169,6 +1169,12 @@
       repo = "shr-tag-pre-highlight.el";
       type = "github";
     };
+    sops = {
+      flake = false;
+      owner = "djgoku";
+      repo = "sops";
+      type = "github";
+    };
     spinner = {
       flake = false;
       owner = "Malabarba";
