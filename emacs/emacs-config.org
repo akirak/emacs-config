@@ -8670,6 +8670,19 @@ Syntax highlighting code block in HTML
       (add-to-list 'shr-external-rendering-functions
                    '(pre . shr-tag-pre-highlight))))
 #+end_src
+*** sops
+:PROPERTIES:
+:CREATED_TIME: [2024-06-15 Sat 22:13]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package sops)
+    ;; `global-sops-mode` can increase loading time on large files, so I won't use
+    ;; it. Instead, I will set the `sops-mode' local variable only on specific
+    ;; files via .dir-locals.el.
+    (:bind "C-c e" #'sops-edit-file
+           "C-c C-c" #'sops-save-file))
+#+end_src
 *** sqlformat
 :PROPERTIES:
 :CREATED_TIME: [2023-02-21 Tue 17:18]
