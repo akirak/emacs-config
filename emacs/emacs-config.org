@@ -4218,12 +4218,11 @@ Major mode for Gleam
     (:auto-insert
      ("_test\\.gleam\\'"
       . (> "import gleeunit/should" n
-           n
-           "/// A sample test case using gleeunit/should."
-           "pub fn hello_world_test() {" n
-           "  1" n
-           "  |> should.equal(1)" n
-           "}"))))
+           "import "
+           (let ((filename (buffer-file-name)))
+             (when (string-match (rx "/test/" (group (+ nonl)) "_test.gleam") filename)
+               (match-string 1 filename)))
+           n n))))
 #+end_src
 *** go-ts-mode
 :PROPERTIES:
