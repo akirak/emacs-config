@@ -120,11 +120,12 @@ If CALLBACK is a function, it is called with the selected url."
 ;;;###autoload
 (defun akirak-avy-ffap ()
   (interactive)
-  (avy-with akirak-avy-ffap
-    (when (avy-jump akirak-avy-ffap-regexp)
-      (when (looking-at (rx (syntax string-quote)))
-        (goto-char (match-end 0)))
-      (ffap))))
+  (let ((avy-all-windows-alt t))
+    (avy-with akirak-avy-ffap
+      (when (avy-jump akirak-avy-ffap-regexp)
+        (when (looking-at (rx (syntax string-quote)))
+          (goto-char (match-end 0)))
+        (ffap)))))
 
 ;;;###autoload
 (defun akirak-avy-org-block ()
