@@ -112,9 +112,10 @@ If CALLBACK is a function, it is called with the selected url."
 
 (defconst akirak-avy-ffap-regexp
   (rx (or (and (syntax string-quote)
-               (+ (any alnum graph))
+               (any alnum ".~/")
+               (+? nonl)
                (syntax string-quote))
-          (and symbol-start (? "~") "/" (any "." alnum)))))
+          (and (or "~" (+ ".") symbol-start) "/"))))
 
 ;;;###autoload
 (defun akirak-avy-ffap ()
