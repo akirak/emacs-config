@@ -7970,6 +7970,17 @@ control mpv for easy note-taking
                      (type . ,(rx (or "audio" "video")
                                   "/" (+ anything)))))))
 #+end_src
+*** nael
+:PROPERTIES:
+:CREATED_TIME: [2024-06-18 Tue 19:40]
+:END:
+#+begin_quote
+A humble major-mode for Lean
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package nael))
+#+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
@@ -9865,7 +9876,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 216 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |

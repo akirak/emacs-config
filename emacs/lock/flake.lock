@@ -1972,6 +1972,22 @@
         "type": "github"
       }
     },
+    "nael": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1718374234,
+        "narHash": "sha256-FR3IEuPUWqVhAembdUEcCnt91KrI3SqA8udawyLfFB8=",
+        "ref": "refs/heads/default",
+        "rev": "eb8e8e01b7f2ef1853c860eccfbc3ea416086eef",
+        "revCount": 258,
+        "type": "git",
+        "url": "https://codeberg.org/mekeor/nael.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/mekeor/nael.git"
+      }
+    },
     "nix-mode": {
       "flake": false,
       "locked": {
@@ -3147,6 +3163,7 @@
         "modus-themes": "modus-themes",
         "move-dup": "move-dup",
         "mpv": "mpv",
+        "nael": "nael",
         "nix-mode": "nix-mode",
         "nix-ts-mode": "nix-ts-mode",
         "nix-update": "nix-update",
