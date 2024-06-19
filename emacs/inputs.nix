@@ -193,6 +193,10 @@
       };
   };
 
+  magit-section = _: super: {
+    files = builtins.removeAttrs super.files ["docs/magit-section.texi"];
+  };
+
   org-memento = _: _: {
     origin = {
       type = "github";
