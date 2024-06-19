@@ -273,4 +273,13 @@
       ref = "graphql-dep";
     };
   };
+
+  org-autolist = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-autolist";
+      ref = "patch-org-element";
+    };
+  };
 }

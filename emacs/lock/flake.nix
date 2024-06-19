@@ -839,7 +839,8 @@
     };
     org-autolist = {
       flake = false;
-      owner = "calvinwyoung";
+      owner = "akirak";
+      ref = "patch-org-element";
       repo = "org-autolist";
       type = "github";
     };

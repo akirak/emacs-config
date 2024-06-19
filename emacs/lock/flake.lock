@@ -2233,15 +2233,16 @@
     "org-autolist": {
       "flake": false,
       "locked": {
-        "lastModified": 1657443518,
-        "narHash": "sha256-x3cYt7mew+NYFscVmfpH3e5zqsW/m6MMe1lRWoOFLmo=",
-        "owner": "calvinwyoung",
+        "lastModified": 1718814917,
+        "narHash": "sha256-IbGX0sxGdHlV2LHixmFbJ6ZPheoAwoj0+YInStPy2c0=",
+        "owner": "akirak",
         "repo": "org-autolist",
-        "rev": "0f5dc4e00cb050b94289504925b36c7650552a1a",
+        "rev": "689f877bed0de26861ac58755991736581a8eecf",
         "type": "github"
       },
       "original": {
-        "owner": "calvinwyoung",
+        "owner": "akirak",
+        "ref": "patch-org-element",
         "repo": "org-autolist",
         "type": "github"
       }
