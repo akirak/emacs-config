@@ -839,7 +839,6 @@ The other variables must not be saved, and they should be put in configuration:
     (:set dired-recursive-copies 'always
           dired-recursive-deletes 'top
           dired-auto-revert-buffer t
-          dired-vc-rename-file t
           dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-shell-new-other-window))
 #+end_src
