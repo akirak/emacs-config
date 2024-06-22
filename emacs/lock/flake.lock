@@ -3251,6 +3251,7 @@
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
         "tomelr": "tomelr",
+        "treesit-fold": "treesit-fold",
         "ts": "ts",
         "tuareg": "tuareg",
         "twind": "twind",
@@ -3606,6 +3607,22 @@
       "original": {
         "owner": "kaushalmodi",
         "repo": "tomelr",
+        "type": "github"
+      }
+    },
+    "treesit-fold": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1719121864,
+        "narHash": "sha256-mtMgpQmNJOIE2mX9mwkqpLNdUAfwOj6/j5VE9RAD03o=",
+        "owner": "emacs-tree-sitter",
+        "repo": "treesit-fold",
+        "rev": "af3a57b6568429b02d76b3d4048193844f9c7e8e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-tree-sitter",
+        "repo": "treesit-fold",
         "type": "github"
       }
     },

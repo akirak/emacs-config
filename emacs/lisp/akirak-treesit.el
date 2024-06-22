@@ -302,6 +302,27 @@ This is primarily intended for editing JSX/TSX."
                   (rename-tag fresh-start))
                 (message "Renamed the tag to '%s'" new-name))))))))))
 
+;;;; Extras for treesit-fold
+
+;;;###autoload
+(defun akirak-treesit-fold-dwim (&optional arg)
+  (interactive "P")
+  (pcase arg
+    (`(16)
+     (treesit-fold-open-all))
+    (0
+     (treesit-fold-close-all))
+    (1
+     (when-let (ov (seq-find (lambda (ov)
+                               (eq 'treesit-fold (overlay-get ov 'invisible)))
+                             (overlays-in (point) (point-max))))
+       (goto-char (overlay-start ov))
+       (treesit-fold-open)))
+    (`(4)
+     (treesit-fold-open-recursively))
+    (_
+     (treesit-fold-toggle))))
+
 ;;;; Other utilities for tree-sitter support
 
 ;;;###autoload

@@ -8915,6 +8915,26 @@ Viewing/editing system trash can
 #+begin_src emacs-lisp
 (setup (:package trashed))
 #+end_src
+*** treesit-fold
+:PROPERTIES:
+:CREATED_TIME: [2024-06-22 Sat 23:59]
+:END:
+#+begin_quote
+Code folding using treesit
+[[https://github.com/emacs-tree-sitter/treesit-fold]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package treesit-fold)
+    (:hook treesit-fold-indicators-mode)
+    ;; `treesit' doesn't have a built-in keymap for its enabled modes, so I will
+    ;; use `akirak-treesit-mode'. Actually, `treesit-fold' has nothing to do with
+    ;; the mode.
+    (:hook-into akirak-treesit-mode-hook)
+    (defvar-keymap treesit-fold-mode-map
+      :doc "Keymap for `treesit-fold-mode'.")
+    (:bind "C-c TAB" #'akirak-treesit-fold-dwim))
+#+end_src
 *** COMMENT tree-sitter                                     :syntax:tree_sitter:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:36]
