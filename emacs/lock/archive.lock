@@ -63,16 +63,18 @@
   },
   "persist": {
     "archive": {
-      "narHash": "sha256-GY36Yjq+Kx+XTlySYXrLALYRSIfZ2c7BdF6rNC57GXg=",
+      "narHash": "sha256-mvxBYr8j8z7+sBmfxaZXaIWL/vZCyAN3DoWGHoF8b7o=",
       "type": "tarball",
-      "url": "https://elpa.gnu.org/packages/persist-0.6.tar"
+      "url": "https://elpa.gnu.org/packages/persist-0.6.1.tar"
     },
     "inventory": {
       "type": "archive",
       "url": "https://elpa.gnu.org/packages/"
     },
-    "packageRequires": {},
-    "version": "0.6"
+    "packageRequires": {
+      "emacs": "26.1"
+    },
+    "version": "0.6.1"
   },
   "rainbow-mode": {
     "archive": {

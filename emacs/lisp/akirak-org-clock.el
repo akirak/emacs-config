@@ -265,7 +265,10 @@ Example values are shown below:
 (defadvice org-insert-heading (around akirak-org-clock activate)
   (if (akirak-org-clock--org-allow-p)
       ad-do-it
-    (or (akirak-capture-org-ins-heading-fallback current-prefix-arg)
+    (or (unless (and (memq this-command '(org-meta-return
+                                          org-insert-todo-heading))
+                     (looking-at (rx nonl)))
+          (akirak-capture-org-ins-heading-fallback current-prefix-arg))
         ad-do-it)))
 
 (defun akirak-org-clock--org-allow-p ()
@@ -799,6 +802,28 @@ This function returns the current buffer."
       (while (re-search-forward org-clock-line-re bound t)
         (push (org-element-clock-parser (pos-eol)) clocks)))
     (nreverse clocks)))
+
+;;;; Log references
+
+(defun akirak-org-clock-log-reference-url (url)
+  "Log URL into the references drawer."
+  (unless (org-clocking-p)
+    (error "Not clocking in"))
+  (org-with-point-at (or org-clock-hd-marker
+                         (error "org-clock-hd-marker is not set"))
+    (if (re-search-forward (rx bol (* blank) ":REFERENCES:" (or blank eol))
+                           (org-entry-end-position) t)
+        (progn
+          (re-search-forward "^[ \t]*:END:[ \t]*$")
+          (beginning-of-line)
+          (org-open-line 1))
+      (org-end-of-meta-data t)
+      (re-search-backward (rx nonl eol))
+      (beginning-of-line 2)
+      (insert ":REFERENCES:\n:END:\n")
+      (beginning-of-line 0)
+      (org-open-line 1))
+    (insert url)))
 
 (provide 'akirak-org-clock)
 ;;; akirak-org-clock.el ends here

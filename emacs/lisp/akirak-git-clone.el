@@ -232,20 +232,7 @@ DIR is an optional destination directory to clone the repository into."
                      (when current-prefix-arg
                        (read-directory-name "Destination directory: "))))
   (when (org-clocking-p)
-    (with-current-buffer (akirak-org-clock-buffer)
-      (goto-char (marker-position org-clock-marker))
-      (goto-char (org-entry-end-position))
-      (cond
-       ((bolp))
-       ((eolp)
-        (newline 2))
-       (t
-        (forward-line)
-        (newline)))
-      (unless (eolp)
-        (org-open-line 1))
-      (insert url)
-      (newline)))
+    (akirak-org-clock-log-reference-url url))
   (let* ((obj (akirak-git-clone--parse url))
          (origin (akirak-git-clone-source-origin obj))
          (repo (if (and dir

@@ -193,6 +193,10 @@
       };
   };
 
+  magit-section = _: super: {
+    files = builtins.removeAttrs super.files ["docs/magit-section.texi"];
+  };
+
   org-memento = _: _: {
     origin = {
       type = "github";
@@ -267,6 +271,15 @@
       owner = "akirak";
       repo = "ob-graphql";
       ref = "graphql-dep";
+    };
+  };
+
+  org-autolist = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "org-autolist";
+      ref = "patch-org-element";
     };
   };
 }

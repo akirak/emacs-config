@@ -14,9 +14,22 @@
        (concat "import " (file-name-sans-extension filepath)
                (when identifier
                  (format ".{%s}"
-                         (if (char-uppercase-p (aget 0 identifier))
+                         (if (char-uppercase-p (aref identifier 0))
                              (concat "type " identifier)
-                           identifier)))))))
+                           identifier))))))
+    (elixir-ts-mode
+     :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use") (+ nonl))
+     :extra-modes nil
+     :extensions (".ex")
+     :source-directories ("lib")
+     :transform-filename
+     (lambda (filepath identifier)
+       (let ((module (akirak-elixir-module-name-from-file filepath)))
+         (if identifier
+             (format "import %s, only: [%s: n]" module identifier)
+           (list (concat "alias " module)
+                 (concat "import " module)
+                 (concat "use " module)))))))
   ""
   :type '(alist :key-type (symbol :tag "Major mode")
                 :value-type plist))
@@ -55,7 +68,7 @@
                            nil nil
                            (when (and pattern
                                       (seq-find #'contains-pattern lines))
-                             pattern))
+                             (concat pattern " ")))
           :regexp regexp))))))
 
 (cl-defun akirak-import--collect-statements (modes &key regexp)
@@ -95,7 +108,7 @@
                                          (akirak-import--contains-identifier
                                           identifier filename))
                                 identifier))))))
-      (delq nil))))
+      (flatten-list))))
 
 (defun akirak-import--contains-identifier (identifier file)
   (cl-labels
@@ -118,6 +131,8 @@
             (check-alist imenu--index-alist)))))))
 
 (cl-defun akirak-import--insert-line (content &key regexp inside-tree-sitter-node)
+  ;; Save the position so the user can return the position being edited.
+  (push-mark)
   (save-excursion
     (save-restriction
       (goto-char (point-min))

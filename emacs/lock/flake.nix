@@ -741,6 +741,11 @@
       repo = "mpv.el";
       type = "github";
     };
+    nael = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/mekeor/nael.git";
+    };
     nix-mode = {
       flake = false;
       owner = "NixOS";
@@ -834,7 +839,8 @@
     };
     org-autolist = {
       flake = false;
-      owner = "calvinwyoung";
+      owner = "akirak";
+      ref = "patch-org-element";
       repo = "org-autolist";
       type = "github";
     };
@@ -1169,6 +1175,12 @@
       repo = "shr-tag-pre-highlight.el";
       type = "github";
     };
+    sops = {
+      flake = false;
+      owner = "djgoku";
+      repo = "sops";
+      type = "github";
+    };
     spinner = {
       flake = false;
       owner = "Malabarba";
@@ -1259,6 +1271,12 @@
       repo = "tomelr";
       type = "github";
     };
+    treesit-fold = {
+      flake = false;
+      owner = "emacs-tree-sitter";
+      repo = "treesit-fold";
+      type = "github";
+    };
     ts = {
       flake = false;
       owner = "alphapapa";
@@ -1269,6 +1287,12 @@
       flake = false;
       owner = "ocaml";
       repo = "tuareg";
+      type = "github";
+    };
+    twind = {
+      flake = false;
+      owner = "akirak";
+      repo = "twind.el";
       type = "github";
     };
     twist = {

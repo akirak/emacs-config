@@ -3,7 +3,9 @@
 (defvar akirak-scratch-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c C-c") #'akirak-scratch-kill-new-and-close)
-    (define-key map (kbd "C-c C-k") #'kill-this-buffer)
+    (define-key map (kbd "C-c C-k") (defun akirak/scratch-kill-this-buffer ()
+                                      (interactive)
+                                      (kill-buffer (current-buffer))))
     (define-key map (kbd "C-c C-w") #'akirak-scratch-duckduckgo)
     map))
 
@@ -41,7 +43,7 @@
                             (format "Type %s. " language)
                           "")
                         (substitute-command-keys
-                         "\\[akirak-scratch-kill-new-and-close] to save to kill ring, \\[akirak-scratch-duckduckgo] to search, \\[kill-this-buffer] to cancel")))
+                         "\\[akirak-scratch-kill-new-and-close] to save to kill ring, \\[akirak-scratch-duckduckgo] to search, \\[akirak/scratch-kill-this-buffer] to cancel")))
       (pop-to-buffer (current-buffer)))))
 
 ;;;###autoload

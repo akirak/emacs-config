@@ -228,19 +228,19 @@ Specify extra root files to help eglot correctly identify project roots.
 #+begin_src emacs-lisp
   (eval-when-compile
     (define-setup-macro
-     :org-src-lang (lang)
+     :org-src-lang (&rest langs)
      "Add an entry to `org-src-lang-modes' for the mode."
      `(with-eval-after-load "org-src"
-        (let* ((lang ,lang)
-               (name ',(thread-last
-                         (setup-get 'mode)
-                         (symbol-name)
-                         (string-remove-suffix "-mode"))))
-          (add-to-list 'org-src-lang-modes
-                       (cons (if (stringp lang)
-                                 lang
-                               (string-remove-suffix "-ts" name))
-                             (intern name)))))))
+        (dolist (lang ',langs)
+          (let ((name ',(thread-last
+                          (setup-get 'mode)
+                          (symbol-name)
+                          (string-remove-suffix "-mode"))))
+            (add-to-list 'org-src-lang-modes
+                         (cons (if (stringp lang)
+                                   lang
+                                 (string-remove-suffix "-ts" name))
+                               (intern name))))))))
 #+end_src
 *** :package-files
 :PROPERTIES:
@@ -839,7 +839,6 @@ The other variables must not be saved, and they should be put in configuration:
     (:set dired-recursive-copies 'always
           dired-recursive-deletes 'top
           dired-auto-revert-buffer t
-          dired-vc-rename-file t
           dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-shell-new-other-window))
 #+end_src
@@ -1132,7 +1131,7 @@ The built-in =electric= package provides the following modes:
             (alejandra '((eval . (alejandra-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
-         `((nix-ts-mode . (,@alejandra))))
+         `((nix-ts-mode . (,@lsp-no-formatter ,@alejandra))))
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@prettier ,@lsp))
@@ -1544,6 +1543,17 @@ Resources:
   (setup multisession
     ;; Prefer sqlite backend for learning purposes
     (:set multisession-storage 'sqlite))
+#+end_src
+*** nxml-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-06-15 Sat 15:18]
+:END:
+
+#+begin_src emacs-lisp
+  (setup nxml-mode
+    (:file-match "\\.xml\\'"
+                 "\\.svg\\'")
+    (:org-src-lang "xml" "svg"))
 #+end_src
 *** outline                                                :editing:
 :PROPERTIES:
@@ -4207,12 +4217,11 @@ Major mode for Gleam
     (:auto-insert
      ("_test\\.gleam\\'"
       . (> "import gleeunit/should" n
-           n
-           "/// A sample test case using gleeunit/should."
-           "pub fn hello_world_test() {" n
-           "  1" n
-           "  |> should.equal(1)" n
-           "}"))))
+           "import "
+           (let ((filename (buffer-file-name)))
+             (when (string-match (rx "/test/" (group (+ nonl)) "_test.gleam") filename)
+               (match-string 1 filename)))
+           n n))))
 #+end_src
 *** go-ts-mode
 :PROPERTIES:
@@ -5249,17 +5258,8 @@ Jump to arbitrary positions in visible text and select text quickly.
 #+begin_src emacs-lisp
   (setup (:package avy)
     (:set avy-style 'pre)
-    (defmacro akirak/avy-define-char-command (name char)
-      `(defun ,name ()
-         (interactive)
-         (let ((avy-all-windows nil))
-           (avy-goto-char ,char))))
     (:global "M-[" #'avy-goto-symbol-1-above
-             "M-]" #'avy-goto-symbol-1-below
-             "M-g |" (akirak/avy-define-char-command akirak/avy-goto-pipe ?\|)
-             "M-g (" (akirak/avy-define-char-command akirak/avy-goto-paren ?\()
-             "M-g [" (akirak/avy-define-char-command akirak/avy-goto-bracket ?\[)
-             "M-g {" (akirak/avy-define-char-command akirak/avy-goto-brace ?\{)))
+             "M-]" #'avy-goto-symbol-1-below))
 #+end_src
 
 I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
@@ -5450,12 +5450,31 @@ Consulting completing-read
                                           (when-let (project (project-current))
                                             (project-root project))))
 
+    (advice-add 'consult--buffer-action
+                :filter-args
+                (defun akirak/ad-switch-to-buffer (args)
+                  (let ((buffer (car args)))
+                    (cons (or (get-buffer buffer)
+                              (cl-flet
+                                  ((pred (ent)
+                                     (when (string-match-p (car ent) buffer)
+                                       (pcase ent
+                                         (`(,_ ,func ,_)
+                                          func)
+                                         (`(,_ . ,func)
+                                          func)))))
+                                (with-current-buffer (generate-new-buffer buffer)
+                                  (when-let (mode (seq-some #'pred auto-mode-alist))
+                                    (set-auto-mode-0 mode))
+                                  (current-buffer))))
+                          (cdr args)))))
+
     (:when-loaded
       (:set consult-buffer-sources `(consult--source-project-buffer
                                      consult--source-project-recent-file
                                      ,@(when (require 'akirak-consult nil t)
                                          '(akirak-consult-source-help-buffer
-                                           akirak-consult-source-indirect-buffer
+                                           akirak-consult-source-indirect-or-org-src-buffer
                                            akirak-consult-source-narrowed-buffer
                                            akirak-consult-source-org-agenda-buffer
                                            akirak-consult-source-modified-buffer))
@@ -6134,6 +6153,8 @@ Client for Language Server Protocol (LSP) servers
                "R" #'eglot-reconnect
                "r" #'eglot-rename))
 
+      (add-to-list 'eglot-server-programs
+                   `((nix-ts-mode nix-mode) . ("nil")))
       (add-to-list 'eglot-server-programs
                    '(lean4-mode . ("lake" "serve")))
       (add-to-list 'eglot-server-programs
@@ -7948,6 +7969,17 @@ control mpv for easy note-taking
                      (type . ,(rx (or "audio" "video")
                                   "/" (+ anything)))))))
 #+end_src
+*** nael
+:PROPERTIES:
+:CREATED_TIME: [2024-06-18 Tue 19:40]
+:END:
+#+begin_quote
+A humble major-mode for Lean
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package nael))
+#+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
@@ -8649,6 +8681,22 @@ Syntax highlighting code block in HTML
       (add-to-list 'shr-external-rendering-functions
                    '(pre . shr-tag-pre-highlight))))
 #+end_src
+*** sops
+:PROPERTIES:
+:CREATED_TIME: [2024-06-15 Sat 22:13]
+:END:
+#+begin_quote
+SOPS encrypt and decrypt without leaving the editor
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package sops)
+    ;; `global-sops-mode` can increase loading time on large files, so I won't use
+    ;; it. Instead, I will set the `sops-mode' local variable only on specific
+    ;; files via .dir-locals.el.
+    (:bind "C-c e" #'sops-edit-file
+           "C-c C-c" #'sops-save-file))
+#+end_src
 *** sqlformat
 :PROPERTIES:
 :CREATED_TIME: [2023-02-21 Tue 17:18]
@@ -8867,6 +8915,26 @@ Viewing/editing system trash can
 #+begin_src emacs-lisp
 (setup (:package trashed))
 #+end_src
+*** treesit-fold
+:PROPERTIES:
+:CREATED_TIME: [2024-06-22 Sat 23:59]
+:END:
+#+begin_quote
+Code folding using treesit
+[[https://github.com/emacs-tree-sitter/treesit-fold]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package treesit-fold)
+    (:hook treesit-fold-indicators-mode)
+    ;; `treesit' doesn't have a built-in keymap for its enabled modes, so I will
+    ;; use `akirak-treesit-mode'. Actually, `treesit-fold' has nothing to do with
+    ;; the mode.
+    (:hook-into akirak-treesit-mode-hook)
+    (defvar-keymap treesit-fold-mode-map
+      :doc "Keymap for `treesit-fold-mode'.")
+    (:bind "C-c TAB" #'akirak-treesit-fold-dwim))
+#+end_src
 *** COMMENT tree-sitter                                     :syntax:tree_sitter:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:36]
@@ -8886,7 +8954,7 @@ Incremental parsing system
 #+end_src
 
 - =tree-sitter-hl-mode= overrides highlighting provided by =font-lock-mode=.
-**** tree-sitter-langs
+**** COMMENT tree-sitter-langs                                                 :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-06 Thu 14:37]
 :END:
@@ -8985,6 +9053,28 @@ The simple package for fast log selected region
 
 #+begin_src emacs-lisp
 (setup (:package turbo-log))
+#+end_src
+*** twind
+:PROPERTIES:
+:CREATED_TIME: [2024-06-14 Fri 12:13]
+:END:
+#+begin_quote
+Complete Tailwind classes using the Cheatsheet data
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package twind)
+    (:with-mode (web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode)
+      (:bind "C-c t" #'twind-insert-class-from-cheatsheet))
+    (:with-mode (css-mode css-ts-mode)
+      (:bind "C-c t" #'twind-insert-css-from-cheatsheet))
+    (with-eval-after-load 'embark
+      (defvar-keymap twind-css-rule-embark-map
+        :parent embark-general-map
+        :doc "Embark keymap for twind CSS."
+        "d" #'twind-reference-tailwind
+        "m" #'twind-reference-mdn-css)
+      (add-to-list 'embark-keymap-alist '(twind-css-rule . twind-css-rule-embark-map))))
 #+end_src
 *** COMMENT twist                                        :configuration:ARCHIVE:
 :PROPERTIES:
@@ -9805,7 +9895,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 214 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
