@@ -803,5 +803,27 @@ This function returns the current buffer."
         (push (org-element-clock-parser (pos-eol)) clocks)))
     (nreverse clocks)))
 
+;;;; Log references
+
+(defun akirak-org-clock-log-reference-url (url)
+  "Log URL into the references drawer."
+  (unless (org-clocking-p)
+    (error "Not clocking in"))
+  (org-with-point-at (or org-clock-hd-marker
+                         (error "org-clock-hd-marker is not set"))
+    (if (re-search-forward (rx bol (* blank) ":REFERENCES:" (or blank eol))
+                           (org-entry-end-position) t)
+        (progn
+          (re-search-forward "^[ \t]*:END:[ \t]*$")
+          (beginning-of-line)
+          (org-open-line 1))
+      (org-end-of-meta-data t)
+      (re-search-backward (rx nonl eol))
+      (beginning-of-line 2)
+      (insert ":REFERENCES:\n:END:\n")
+      (beginning-of-line 0)
+      (org-open-line 1))
+    (insert url)))
+
 (provide 'akirak-org-clock)
 ;;; akirak-org-clock.el ends here
