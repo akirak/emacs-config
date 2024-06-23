@@ -10,6 +10,9 @@
     ;; (define-key map [remap down-list] #'akirak-treesit-down-list)
     (define-key map [remap backward-up-list] #'akirak-treesit-backward-up-list)
     (define-key map [remap kill-line] #'akirak-treesit-smart-kill-line)
+    (define-key map (kbd "C-M-n") #'akirak-treesit-forward-up-list)
+    (define-key map (kbd "M-n") #'akirak-treesit-next-same-type-sibling)
+    (define-key map (kbd "M-p") #'akirak-treesit-previous-same-type-sibling)
     map))
 
 ;;;###autoload
@@ -103,6 +106,44 @@
                 (= (point) (treesit-node-start parent)))
       (setq node parent))
     (goto-char (treesit-node-start parent))))
+
+(defun akirak-treesit-forward-up-list ()
+  (interactive)
+  (let* ((node (treesit-node-at (point)))
+         (start (treesit-node-start node))
+         (end (treesit-node-end node))
+         parent)
+    (while (and (setq parent (treesit-node-parent node))
+                (or (= start (treesit-node-start parent))
+                    (= end (treesit-node-end parent))))
+      (setq node parent))
+    (goto-char (treesit-node-end parent))))
+
+(defun akirak-treesit-next-same-type-sibling (&optional opposite)
+  (interactive)
+  (let* ((node (treesit-node-at (point)))
+         (start (treesit-node-start node))
+         parent)
+    (catch 'jumped
+      (while (setq parent (treesit-node-parent node))
+        (pcase (cl-member-if `(lambda (x)
+                                (= ,start (treesit-node-start x)))
+                             (if opposite
+                                 (reverse (treesit-node-children parent))
+                               (treesit-node-children parent)))
+          ((and `(,self . ,siblings)
+                (guard siblings))
+           (when-let (dest (seq-find `(lambda (x)
+                                        (equal (treesit-node-type x)
+                                               ,(treesit-node-type self)))
+                                     siblings))
+             (goto-char (treesit-node-start dest))
+             (throw 'jumped t))))
+        (setq node parent)))))
+
+(defun akirak-treesit-previous-same-type-sibling ()
+  (interactive)
+  (akirak-treesit-next-same-type-sibling t))
 
 (defvar akirak-treesit-expand-region-node nil)
 
