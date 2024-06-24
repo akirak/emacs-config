@@ -1317,11 +1317,11 @@
     "gleam-ts-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1717038634,
-        "narHash": "sha256-tyHKaxuxiWp5d31GpNRSEO6CL5DnZJZBi9GLjm4Q33o=",
-        "owner": "gleam-lang",
+        "lastModified": 1719628642,
+        "narHash": "sha256-O3+Co7tIbokYHP+vhbYI2GPf9NLokL4eWCphIv2+mec=",
+        "owner": "akirak",
         "repo": "gleam-mode",
-        "rev": "ff470007e151d083fb79b72d19bd0dbab7bb38e7",
+        "rev": "d36d1c6eba543fd5172fc88b1b6ca22697c69051",
         "type": "github"
       },
       "original": {
@@ -1686,11 +1686,11 @@
     "link-hint": {
       "flake": false,
       "locked": {
-        "lastModified": 1712667059,
-        "narHash": "sha256-PCVA1aaf9LkjhZdtvfQ36WjawuRy2XdSpRZ+i81NtxQ=",
+        "lastModified": 1719403170,
+        "narHash": "sha256-BvY/UDbI8EUUDBS5pl9PdSoYSnfKewDDTxOOX2BbWRU=",
         "owner": "noctuid",
         "repo": "link-hint.el",
-        "rev": "9ead085e9e6798ec4ea4791d9906d6655ea2b402",
+        "rev": "391930f2010014b9b5bc16bb431db01dd21ca7bd",
         "type": "github"
       },
       "original": {
@@ -2465,11 +2465,11 @@
     "org-pivot-search": {
       "flake": false,
       "locked": {
-        "lastModified": 1719124161,
-        "narHash": "sha256-0juAPcAihUjZ6INzbqs7fSt6DM+DWH2ZWDYDvtUBh3s=",
+        "lastModified": 1719505399,
+        "narHash": "sha256-2ESIHjBpQ4j67Twa1XuKbQkUzZcqbmdOx23Z54OOLjM=",
         "owner": "akirak",
         "repo": "org-pivot-search",
-        "rev": "5bd644f21dc1be0019f1492c49e3d2b425eb03ef",
+        "rev": "b9274bc11b7d305fc73ac8d576b1d0d360887227",
         "type": "github"
       },
       "original": {
@@ -2497,11 +2497,11 @@
     "org-ql": {
       "flake": false,
       "locked": {
-        "lastModified": 1718809730,
-        "narHash": "sha256-6zQM1VaKmf45cJPWostLKHL/3DmzFbWPaOohyMGPaGI=",
-        "owner": "akirak",
+        "lastModified": 1719498754,
+        "narHash": "sha256-mUdskrcomdkwRkA+DnNeOxP+cNsTI7yzHwwnpAD+qB0=",
+        "owner": "alphapapa",
         "repo": "org-ql",
-        "rev": "50b29c312baf28faf7a9cb488d720910306dffac",
+        "rev": "b7d4856f926cb71e01427a940dc948a48b0a702d",
         "type": "github"
       },
       "original": {
@@ -3613,11 +3613,11 @@
     "treesit-fold": {
       "flake": false,
       "locked": {
-        "lastModified": 1719126113,
-        "narHash": "sha256-yUN55Icx/x9l6W/KGWHrv9xBaYpN5eRpMROQTGj/L98=",
+        "lastModified": 1719340981,
+        "narHash": "sha256-5G5v6E/fkSN1LJtGBhOuaZ0dI3DXXLG7jalXkkpN+rQ=",
         "owner": "emacs-tree-sitter",
         "repo": "treesit-fold",
-        "rev": "675e5e732cc0fe5a0866a01c1afafa1445bbde0c",
+        "rev": "14e3f13f67efe7e0522fecdf2e63733fd0247469",
         "type": "github"
       },
       "original": {
