@@ -66,7 +66,8 @@
                        :predicate (lambda (bufname)
                                     (let ((buffer (get-buffer bufname)))
                                       (or (buffer-base-buffer buffer)
-                                          (buffer-local-value 'org-src-mode buffer))))
+                                          (and (boundp 'org-src-mode)
+                                               (buffer-local-value 'org-src-mode buffer)))))
                        :as #'buffer-name))))
 
 ;; Based on `consult--source-project-buffer' from consult.el.
