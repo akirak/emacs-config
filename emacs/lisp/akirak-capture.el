@@ -149,6 +149,15 @@
           (orgabilize-document-title clean-url))
       (orgabilize-document-title clean-url))))
 
+;;;; Clock history
+
+(transient-define-suffix akirak-capture-org-clock-history-suffix ()
+  :description "Clock history"
+  (interactive)
+  (akirak-consult-org-clock-history nil
+    :prompt "Capture into: "
+    :callback (apply-partially #'octopus--dispatch (octopus-current-command))))
+
 ;;;; akirak-capture-doct: A generic prefix command
 
 (defvar akirak-capture-headline nil)
@@ -318,7 +327,8 @@
    ("@" octopus-clock-marker-suffix)
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)
-   ("$" octopus-last-captured-file-suffix)]
+   ("$" octopus-last-captured-file-suffix)
+   ("%" akirak-capture-org-clock-history-suffix)]
   (interactive)
   (transient-setup 'akirak-capture-doct))
 
