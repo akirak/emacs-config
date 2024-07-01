@@ -1317,16 +1317,15 @@
     "gleam-ts-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1719628642,
-        "narHash": "sha256-O3+Co7tIbokYHP+vhbYI2GPf9NLokL4eWCphIv2+mec=",
-        "owner": "akirak",
+        "lastModified": 1719804404,
+        "narHash": "sha256-heq2yAC+pNnyKwtOeKk/3LLJovnusvCllYI6yaV56Bg=",
+        "owner": "gleam-lang",
         "repo": "gleam-mode",
-        "rev": "d36d1c6eba543fd5172fc88b1b6ca22697c69051",
+        "rev": "22b893295c713a2fe5e272e00dc6b2cea90b6c1d",
         "type": "github"
       },
       "original": {
         "owner": "gleam-lang",
-        "ref": "gleam-ts-mode",
         "repo": "gleam-mode",
         "type": "github"
       }

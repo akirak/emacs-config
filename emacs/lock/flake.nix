@@ -497,7 +497,6 @@
     gleam-ts-mode = {
       flake = false;
       owner = "gleam-lang";
-      ref = "gleam-ts-mode";
       repo = "gleam-mode";
       type = "github";
     };
