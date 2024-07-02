@@ -40,6 +40,7 @@
 (defvar akirak-embark-directory-map
   (let ((map (make-composed-keymap nil embark-general-map)))
     (define-key map "d" #'dired)
+    (define-key map "b" #'akirak-embark-browse-remote)
     (define-key map "K" #'akirak-embark-kill-directory-buffers)
     (define-key map "f" #'akirak-find-file-in-directory)
     (define-key map "o" #'find-file-other-window)
@@ -830,6 +831,13 @@
 (defun akirak-embark-shell-other-window-at-dir (dir)
   (interactive "DDirectory: ")
   (akirak-embark-shell-at-dir t))
+
+(defun akirak-embark-browse-remote (dir)
+  "Browse the remote URL of DIR."
+  (interactive "DDirectory: ")
+  (require 'browse-at-remote)
+  (browse-url (let ((default-directory dir))
+                (browse-at-remote--file-url "."))))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
