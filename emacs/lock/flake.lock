@@ -3261,7 +3261,6 @@
         "vue-html-mode": "vue-html-mode",
         "vue-mode": "vue-mode",
         "web-mode": "web-mode",
-        "which-key": "which-key",
         "whole-line-or-region": "whole-line-or-region",
         "windswap": "windswap",
         "with-editor": "with-editor",
@@ -3782,22 +3781,6 @@
       "original": {
         "owner": "fxbois",
         "repo": "web-mode",
-        "type": "github"
-      }
-    },
-    "which-key": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1718919947,
-        "narHash": "sha256-XEuW5f0dBp8fcY1UZsXGfKE1aD8E4pObbrLgF6+jiiA=",
-        "owner": "justbur",
-        "repo": "emacs-which-key",
-        "rev": "ed389312170df955aaf10c2e120cc533ed5c509e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "justbur",
-        "repo": "emacs-which-key",
         "type": "github"
       }
     },

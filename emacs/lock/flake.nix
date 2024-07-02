@@ -1335,12 +1335,6 @@
       repo = "web-mode";
       type = "github";
     };
-    which-key = {
-      flake = false;
-      owner = "justbur";
-      repo = "emacs-which-key";
-      type = "github";
-    };
     whole-line-or-region = {
       flake = false;
       owner = "purcell";

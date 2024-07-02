@@ -869,6 +869,20 @@ The other variables must not be saved, and they should be put in configuration:
   (setup ediff-wind
     (:set ediff-window-setup-function #'ediff-setup-windows-plain))
 #+end_src
+*** editorconfig                                                    :formatting:
+:PROPERTIES:
+:CREATED_TIME: [2022-02-28 Mon 23:59]
+:END:
+#+begin_quote
+EditorConfig Emacs Plugin
+[[https://github.com/editorconfig/editorconfig-emacs#readme]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup editorconfig)
+#+end_src
+
+It is required only in specific projects, so I won't turn on the mode by default.
 *** eldoc                                         :help:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:08]
@@ -2201,6 +2215,16 @@ Thus I will explicitly install this package rather than using the built-in versi
       (:hook-into erlang-mode-hook
                   elisp-mode-hook
                   eglot-managed-mode-hook)))
+#+end_src
+*** which-key                                            :usability:keybindings:
+#+begin_quote
+Display available keybindings in popup
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup which-key
+    (:hook-into after-init-hook)
+    (:hook which-key-setup-side-window-bottom))
 #+end_src
 *** whitespace                                   :visual:formatting:
 :PROPERTIES:
@@ -6099,20 +6123,6 @@ Emacs Does Interactive Prolog
 #+end_src
 
 [[https://lib.rs/crates/scryer-prolog][scryer-prolog]] is the bleeding-edge implementation of Prolog (like GHC to Haskell), and it is installed with this package.
-*** editorconfig                                        :formatting:
-:PROPERTIES:
-:CREATED_TIME: [2022-02-28 Mon 23:59]
-:END:
-#+begin_quote
-EditorConfig Emacs Plugin
-[[https://github.com/editorconfig/editorconfig-emacs#readme]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package editorconfig))
-#+end_src
-
-It is required only in specific projects, so I won't turn on the mode by default.
 *** eglot                                                      :LSP:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
@@ -9251,16 +9261,6 @@ major mode for editing web templates
 
     (:auto-insert
      ("\\.astro\\'" . (> "---\n" _ "\n---\n"))))
-#+end_src
-*** which-key                                :usability:keybindings:
-#+begin_quote
-Display available keybindings in popup
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package which-key)
-    (:hook-into after-init-hook)
-    (:hook which-key-setup-side-window-bottom))
 #+end_src
 *** whole-line-or-region
 :PROPERTIES:
