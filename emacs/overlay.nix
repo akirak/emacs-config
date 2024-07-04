@@ -49,12 +49,26 @@ with builtins; let
     }
   ];
 
-  defaultTreeSitterGrammars =
-    lib.pipe final.tree-sitter-grammars
-    [
-      (lib.filterAttrs (name: _: name != "recurseForDerivations"))
-      builtins.attrValues
-    ];
+  # Based on the fake package in nixpkgs at
+  # https://github.com/NixOS/nixpkgs/blob/8f0515dbf74c886b61639ccad5a1ea7c2f51265d/pkgs/applications/editors/emacs/elisp-packages/manual-packages/treesit-grammars/default.nix
+  treeSitterLoadPath = lib.pipe final.tree-sitter-grammars [
+    (lib.filterAttrs (name: _: name != "recurseForDerivations"))
+    builtins.attrValues
+    (map (drv: {
+      # Some grammars don't contain "tree-sitter-" as the prefix,
+      # so add it explicitly.
+      name = "libtree-sitter-${
+        lib.pipe (lib.getName drv) [
+          (lib.removeSuffix "-grammar")
+          (lib.removePrefix "tree-sitter-")
+        ]
+      }${
+        prev.stdenv.targetPlatform.extensions.sharedLibrary
+      }";
+      path = "${drv}/parser";
+    }))
+    (prev.linkFarm "treesit-grammars")
+  ];
 
   makeEmacsProfile = {
     extraFeatures,
@@ -62,7 +76,6 @@ with builtins; let
     extraInitFiles,
     pgtk ? true,
     withXwidgets,
-    extraTreeSitterGrammars ? [],
     nativeCompileAheadDefault ? true,
   }: let
     emacsPackage =
@@ -97,40 +110,15 @@ with builtins; let
                     && ! lib.any (tag: org.tag tag s) extraFeatures)
               ));
           })
-          (
-            # Based on the fake package in nixpkgs at
-            # https://github.com/NixOS/nixpkgs/blob/8f0515dbf74c886b61639ccad5a1ea7c2f51265d/pkgs/applications/editors/emacs/elisp-packages/manual-packages/treesit-grammars/default.nix
-            prev.writeText "init-treesit.el" ''
-              (add-to-list 'treesit-extra-load-path  "${
-                prev.linkFarm "treesit-grammars"
-                (
-                  map (drv: {
-                    # Some grammars don't contain "tree-sitter-" as the prefix,
-                    # so add it explicitly.
-                    name = "libtree-sitter-${
-                      lib.pipe (lib.getName drv) [
-                        (lib.removeSuffix "-grammar")
-                        (lib.removePrefix "tree-sitter-")
-                      ]
-                    }${
-                      prev.stdenv.targetPlatform.extensions.sharedLibrary
-                    }";
-                    path = "${drv}/parser";
-                  })
-                  (
-                    defaultTreeSitterGrammars
-                    ++ extraTreeSitterGrammars
-                  )
-                )
-              }/")
-            ''
-          )
         ]
         # Allow adding private config on specific hosts
         ++ extraInitFiles;
       extraPackages = [
         "setup"
       ];
+      extraSiteStartElisp = ''
+        (add-to-list 'treesit-extra-load-path "${treeSitterLoadPath}/")
+      '';
       inherit initialLibraries;
       initParser = parseSetup {};
       inherit registries;
