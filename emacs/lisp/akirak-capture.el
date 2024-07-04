@@ -446,14 +446,14 @@
      :transient t)
     ("u" "Url" akirak-capture-url
      :if (lambda () (not akirak-capture-initial)))
-    ("n" "News url (read now)"
+    ("r" "Read url right now"
      (lambda ()
        (interactive)
        (setq akirak-capture-current-url (or (akirak-url-latest)
                                             (akirak-url-complete "Capture URL: "))
              akirak-capture-url-title nil
              akirak-capture-doct-options '(:clock-in t :clock-resume t)
-             akirak-capture-template-options '(:tags "@news"))
+             akirak-capture-template-options '(:todo "UNDERWAY" :tags "@reading"))
        (akirak-capture-url nil 'keep-options))
      :if (lambda () (not akirak-capture-initial)))
     ("v" "Vocabulary" akirak-capture-vocabulary)]
