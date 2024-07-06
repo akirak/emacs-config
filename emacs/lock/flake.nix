@@ -1133,6 +1133,12 @@
       repo = "restclient.el";
       type = "github";
     };
+    rfc-mode = {
+      flake = false;
+      owner = "galdor";
+      repo = "rfc-mode";
+      type = "github";
+    };
     riben = {
       flake = false;
       owner = "akirak";

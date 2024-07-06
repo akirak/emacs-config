@@ -3006,6 +3006,22 @@
         "type": "github"
       }
     },
+    "rfc-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1697205227,
+        "narHash": "sha256-xCXwTXmHmF+BFsJ8oiowCs9kxXpHu5+Ol0QtEuUt1Ws=",
+        "owner": "galdor",
+        "repo": "rfc-mode",
+        "rev": "ab09db78d9d1baa4da4f926930833598e1e978ce",
+        "type": "github"
+      },
+      "original": {
+        "owner": "galdor",
+        "repo": "rfc-mode",
+        "type": "github"
+      }
+    },
     "riben": {
       "flake": false,
       "locked": {
@@ -3227,6 +3243,7 @@
         "repl-toggle": "repl-toggle",
         "request": "request",
         "restclient": "restclient",
+        "rfc-mode": "rfc-mode",
         "riben": "riben",
         "rich-minority": "rich-minority",
         "s": "s",

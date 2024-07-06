@@ -8558,6 +8558,19 @@ An interactive HTTP client for Emacs
   (setup (:package restclient)
     (:file-match "\\.restclient\\'"))
 #+end_src
+*** rfc-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-07-06 Sat 10:36]
+:END:
+#+begin_quote
+RFC document browser and viewer
+[[https://github.com/galdor/rfc-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package rfc-mode)
+    (:set rfc-mode-directory (locate-user-emacs-file "rfc/")))
+#+end_src
 *** riben                                                 :Japanese:
 #+begin_quote
 A dumb Japanese input method
