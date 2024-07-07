@@ -12,24 +12,6 @@
     files = builtins.removeAttrs super.files ["company-graphviz-dot.el"];
   };
 
-  # ghelp is not a proper MELPA package yet, and it needs workarounds.
-  ghelp-helpful = _: _: {
-    packageRequires = {
-      ghelp = "0";
-      helpful = "0";
-    };
-  };
-  ghelp-eglot = _: _: {
-    packageRequires = {
-      ghelp = "0";
-      eglot = "0";
-    };
-  };
-
-  ghub = _: super: {
-    files = builtins.removeAttrs super.files [".dir-locals.el"];
-  };
-
   reformatter = _: _: {
     version = "0.6";
   };
@@ -66,12 +48,6 @@
       }
       // super.packageRequires;
   };
-  # I won't use packages that depend on direx.
-  # dired-k = _: super: {
-  #   packageRequires = {
-  #     direx = "0";
-  #   } // super.packageRequires;
-  # };
 
   lean4-mode = _: _: {
     origin = {
@@ -140,14 +116,6 @@
     };
   };
 
-  poly-astro = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "poly-astro";
-      ref = "autoload";
-    };
-  };
   fanyi = _: _: {
     origin = {
       type = "github";
@@ -161,14 +129,6 @@
       "use-package-dash-docs.el"
     ];
   };
-
-  # gleam-mode = _: super: {
-  #   packageRequires =
-  #     {
-  #       tree-sitter-indent = "0";
-  #     }
-  #     // super.packageRequires;
-  # };
 
   lispy = _: super: {
     origin = {
