@@ -237,10 +237,12 @@
 (defun akirak-treesit--after-last-node (pos)
   (save-excursion
     (goto-char pos)
-    (if (looking-at (rx-to-string `(and (or ,@akirak-treesit-sexp-end-delimiters)
-                                        (* blank))))
-        (match-end 0)
-      pos)))
+    (when (looking-at (rx-to-string `(and (or ,@akirak-treesit-sexp-end-delimiters)
+                                          (* blank))))
+      (goto-char (match-end 0)))
+    (if (looking-at (rx (* blank) eol))
+        (line-beginning-position 2)
+      (point))))
 
 (defun akirak-treesit--find-last-node (start-node parent bound)
   (when-let (nodes (thread-last
