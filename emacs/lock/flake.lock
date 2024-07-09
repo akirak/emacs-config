@@ -176,6 +176,22 @@
         "type": "github"
       }
     },
+    "benchmark-init": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641135056,
+        "narHash": "sha256-TTSmonkJuooVQeHFNpM/ZTGPTCeml6kH7Z5iS+9JXX8=",
+        "owner": "akirak",
+        "repo": "benchmark-init-el",
+        "rev": "cc16e08c3d3a6e0044046b74c3f6544e46250d4a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "benchmark-init-el",
+        "type": "github"
+      }
+    },
     "blamer": {
       "flake": false,
       "locked": {
@@ -3067,6 +3083,7 @@
         "avy": "avy",
         "avy-riben": "avy-riben",
         "beancount": "beancount",
+        "benchmark-init": "benchmark-init",
         "blamer": "blamer",
         "bookmark-frecency": "bookmark-frecency",
         "browse-at-remote": "browse-at-remote",

@@ -320,7 +320,7 @@ By default, settings inside =:status= clauses are not loaded.
 #+end_src
 ** Performance                                             :packages:
 # Note: Some of these should be loaded as early as possible.
-*** COMMENT benchmark-init                            :profiling:initialization:ARCHIVE:
+*** benchmark-init                            :profiling:initialization:
 #+begin_quote
 Benchmarks Emacs require and load calls
 #+end_quote

@@ -68,6 +68,12 @@
       repo = "beancount-mode";
       type = "github";
     };
+    benchmark-init = {
+      flake = false;
+      owner = "akirak";
+      repo = "benchmark-init-el";
+      type = "github";
+    };
     blamer = {
       flake = false;
       owner = "Artawower";
