@@ -1121,6 +1121,10 @@ The built-in =electric= package provides the following modes:
                                      "/run/"))
                          nil)))
 
+    (:set find-sibling-rules `((,(concat basename "\\.ml\\'") "\\1.mli")
+                               (,(concat basename "\\.mli\\'") "\\1.ml")
+                               (,(concat basename "\\.ex\\'") "\\1.html.heex")
+                               (,(concat basename "\\.html\\.heex\\'") "\\1.ex")))
     (define-key ctl-x-map "," #'find-sibling-file)
 
     (advice-add 'abort-if-file-too-large
