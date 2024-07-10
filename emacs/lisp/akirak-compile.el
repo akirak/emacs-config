@@ -523,8 +523,8 @@ suitable value detected according to the command line."
           (list (rx-to-string `(and (any "Ff") "ile "
                                     "\"" (group (regexp ,path-regexp)) "\""
                                     ", line " (group (+ digit))
-                                    ", characters " (group (+ digit))
-                                    "-" (+ digit)))
+                                    (?  ", characters " (group (+ digit))
+                                        "-" (+ digit))))
                 1 2 3)))))
     ((rx bol "gleam" space)
      (eval-when-compile
