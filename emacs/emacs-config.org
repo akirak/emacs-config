@@ -1155,6 +1155,7 @@ The built-in =electric= package provides the following modes:
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@lsp))
+           (nix-ts-mode . (,@lsp-no-formatter ,@alejandra))
            (astro-ts-mode . (,@lsp-no-formatter))
            (css-mode . (,@lsp-no-formatter))
            (svelte-mode . (,@lsp ,@flymake-eslint))
