@@ -9630,7 +9630,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
@@ -9659,6 +9659,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
 | [[org-ql-search:tags:Japanese][Japanese]]            |   3 |
+| [[org-ql-search:tags:profiling][profiling]]           |   2 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
@@ -9669,12 +9670,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |
+| [[org-ql-search:tags:initialization][initialization]]      |   1 |
 | [[org-ql-search:tags:performance][performance]]         |   1 |
 | [[org-ql-search:tags:help][help]]                |   1 |
 | [[org-ql-search:tags:prog_mode][prog_mode]]           |   1 |
 | [[org-ql-search:tags:text_mode][text_mode]]           |   1 |
 | [[org-ql-search:tags:text][text]]                |   1 |
-| [[org-ql-search:tags:profiling][profiling]]           |   1 |
 | [[org-ql-search:tags:usability][usability]]           |   1 |
 | [[org-ql-search:tags:capture][capture]]             |   1 |
 | [[org-ql-search:tags:documentation][documentation]]       |   1 |
