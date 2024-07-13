@@ -715,6 +715,17 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
     (:global "<f9>" #'recompile)
 
+    (:set compilation-error-regexp-alist
+          ;; This is a fallback value. The value may be replaced with a
+          ;; command-specific value if `akirak-compile-auto-error-mode ' is turned
+          ;; on.
+          `((,(rx word-start
+                  (group (+ (any "-_./[]_" alnum)))
+                  ":" (group (+ digit))
+                  ":" (group (+ digit))
+                  (or ":" word-end))
+             1 2 3)))
+
     ;; This code has been stolen from somewhere. I don't remember where, but the
     ;; same code can be found in many repositories on GitHub.
     (add-hook 'compilation-start-hook #'akirak/xterm-color-compilation-start)
