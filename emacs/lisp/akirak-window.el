@@ -545,13 +545,17 @@ Otherwise, it calls `akirak-window-duplicate-state'."
 ;;;###autoload
 (defun akirak-window-delete-window (&optional arg)
   (interactive "P")
-  (let ((target-window (pcase arg
-                         ((pred numberp)
-                          (akirak-window--other-window nil arg))
-                         ('(4)
-                          (or (window-in-direction 'below)
-                              (window-in-direction 'above))))))
+  (let* ((target-window (pcase arg
+                          ((pred numberp)
+                           (akirak-window--other-window nil arg))
+                          ('(4)
+                           (or (window-in-direction 'below)
+                               (window-in-direction 'above)))))
+         (after-window (or (window-in-direction 'above target-window)
+                           (window-in-direction 'below target-window))))
     (delete-window target-window)
+    (when after-window
+      (select-window after-window 'norecord))
     (when (and arg (numberp arg) (< arg 10))
       (balance-windows))))
 
