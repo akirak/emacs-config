@@ -5,28 +5,32 @@
 (require 'akirak-org-capture)
 
 ;;;###autoload
-(defun akirak-org-dog-datetree-indirect-clock-in ()
-  "Clock into a datetree in another file."
-  (interactive)
+(defun akirak-org-dog-datetree-indirect-clock-in (&optional arg)
+  "Clock into a datetree in another file.
+
+The file to clock into is recorded to an entry property. With a prefix
+ARG, the target file can be changed only for that item."
+  (interactive "P")
   (unless (derived-mode-p 'org-mode)
     (user-error "You must run this command in org-mode."))
   (require 'akirak-capture)
   (let* ((prop "ORG_DOG_PROJECTED_FILE")
          ;; TODO Completion
-         (relative (org-entry-get nil prop t))
-         (absolute (if relative
+         (relative-from-prop (org-entry-get nil prop t))
+         (absolute (if (and relative-from-prop
+                            (not arg))
                        (oref (or (org-dog-find-file-object
                                   `(lambda (obj)
                                      (equal (file-name-sans-extension (oref obj relative))
-                                            ,relative)))
+                                            ,relative-from-prop)))
                                  (user-error "File %s is not known. Set %s again"
-                                             relative prop))
+                                             relative-from-prop prop))
                              absolute)
                      (org-dog-complete-file (format "Set a new value of %s: " prop))))
-         (_ (unless relative
+         (_ (unless (or arg relative-from-prop)
               (org-entry-put nil prop
                              (file-name-sans-extension
-                              (oref (org-dog-file-object absolute) relative)))))
+                              (oref (org-dog-file-object absolute) relative-from-prop)))))
          (chapter (org-link-display-format
                    (if (use-region-p)
                        (buffer-substring-no-properties

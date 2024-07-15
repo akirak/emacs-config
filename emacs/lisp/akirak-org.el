@@ -332,6 +332,7 @@ character."
    ((or (cl-intersection (ensure-list (get-char-property (point) 'face))
                          '(org-code org-verbatim)
                          :test #'eq)
+        (looking-at "~")
         (org-in-src-block-p))
     (org-self-insert-command (or 1 n)))
    (t

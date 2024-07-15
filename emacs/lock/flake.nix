@@ -68,6 +68,12 @@
       repo = "beancount-mode";
       type = "github";
     };
+    benchmark-init = {
+      flake = false;
+      owner = "akirak";
+      repo = "benchmark-init-el";
+      type = "github";
+    };
     blamer = {
       flake = false;
       owner = "Artawower";
@@ -497,7 +503,6 @@
     gleam-ts-mode = {
       flake = false;
       owner = "gleam-lang";
-      ref = "gleam-ts-mode";
       repo = "gleam-mode";
       type = "github";
     };
@@ -1134,6 +1139,12 @@
       repo = "restclient.el";
       type = "github";
     };
+    rfc-mode = {
+      flake = false;
+      owner = "galdor";
+      repo = "rfc-mode";
+      type = "github";
+    };
     riben = {
       flake = false;
       owner = "akirak";
@@ -1334,12 +1345,6 @@
       flake = false;
       owner = "fxbois";
       repo = "web-mode";
-      type = "github";
-    };
-    which-key = {
-      flake = false;
-      owner = "justbur";
-      repo = "emacs-which-key";
       type = "github";
     };
     whole-line-or-region = {

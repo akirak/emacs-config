@@ -149,6 +149,15 @@
           (orgabilize-document-title clean-url))
       (orgabilize-document-title clean-url))))
 
+;;;; Clock history
+
+(transient-define-suffix akirak-capture-org-clock-history-suffix ()
+  :description "Clock history"
+  (interactive)
+  (akirak-consult-org-clock-history nil
+    :prompt "Capture into: "
+    :callback (apply-partially #'octopus--dispatch (octopus-current-command))))
+
 ;;;; akirak-capture-doct: A generic prefix command
 
 (defvar akirak-capture-headline nil)
@@ -318,7 +327,8 @@
    ("@" octopus-clock-marker-suffix)
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)
-   ("$" octopus-last-captured-file-suffix)]
+   ("$" octopus-last-captured-file-suffix)
+   ("%" akirak-capture-org-clock-history-suffix)]
   (interactive)
   (transient-setup 'akirak-capture-doct))
 
@@ -436,14 +446,14 @@
      :transient t)
     ("u" "Url" akirak-capture-url
      :if (lambda () (not akirak-capture-initial)))
-    ("n" "News url (read now)"
+    ("r" "Read url right now"
      (lambda ()
        (interactive)
        (setq akirak-capture-current-url (or (akirak-url-latest)
                                             (akirak-url-complete "Capture URL: "))
              akirak-capture-url-title nil
              akirak-capture-doct-options '(:clock-in t :clock-resume t)
-             akirak-capture-template-options '(:tags "@news"))
+             akirak-capture-template-options '(:todo "UNDERWAY" :tags "@reading"))
        (akirak-capture-url nil 'keep-options))
      :if (lambda () (not akirak-capture-initial)))
     ("v" "Vocabulary" akirak-capture-vocabulary)]
@@ -1305,12 +1315,11 @@ provided as a separate command for integration, e.g. with embark."
            (- (match-end 1)
               (match-beginning 1)))))
     (let* ((string (thread-last
-                     string
                      (replace-regexp-in-string
                       (rx-to-string `(and bol (group (* blank))
                                           (any ,akirak-capture-zero-width-characters)
                                           (+ blank)))
-                      "" nil nil 1)
+                      "" string nil nil 1)
                      (replace-regexp-in-string
                       (rx-to-string `(and (+ (any blank ,akirak-capture-zero-width-characters))
                                           eol))

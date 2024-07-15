@@ -263,7 +263,8 @@ Example values are shown below:
     (user-error "Please clock in first")))
 
 (defadvice org-insert-heading (around akirak-org-clock activate)
-  (if (akirak-org-clock--org-allow-p)
+  (if (or (akirak-org-clock--org-allow-p)
+          (not (called-interactively-p 'any)))
       ad-do-it
     (or (unless (and (memq this-command '(org-meta-return
                                           org-insert-todo-heading))

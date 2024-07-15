@@ -14,8 +14,12 @@
     ('(16) (akirak-consult-org-clock-history t))))
 
 ;;;###autoload
-(defun akirak-consult-org-clock-history (&optional rebuild)
+(cl-defun akirak-consult-org-clock-history (&optional rebuild
+                                                      &key
+                                                      (prompt "Go to heading: ")
+                                                      callback)
   "Clock in to an entry in the clock history."
+  (declare (indent 1))
   ;; This will trigger loading of a desired set of Org files through
   ;; `eval-after-load'.
   (interactive "P")
@@ -25,7 +29,7 @@
   (let ((selected (save-window-excursion
                     (consult--read
                      (consult--with-increased-gc (consult-org-clock--headings))
-                     :prompt "Go to heading: "
+                     :prompt prompt
                      :category 'akirak-consult-org-olp-with-file
                      :sort nil
                      :require-match t
@@ -33,7 +37,9 @@
                      :narrow (consult-org--narrow)
                      :state (consult--jump-state)
                      :lookup (apply-partially #'consult--lookup-prop 'org-marker)))))
-    (org-clock-clock-in (list selected))))
+    (if callback
+        (funcall callback selected)
+      (org-clock-clock-in (list selected)))))
 
 ;;;###autoload
 (defun akirak-consult-org-heading-target (_type olp)
