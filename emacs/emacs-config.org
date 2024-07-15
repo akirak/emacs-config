@@ -8820,10 +8820,12 @@ Complete Tailwind classes using the Cheatsheet data
 
 #+begin_src emacs-lisp
   (setup (:package twind)
-    (:with-mode (web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode)
-      (:bind "C-c t" #'twind-insert-class-from-cheatsheet))
-    (:with-mode (css-mode css-ts-mode)
+    (:with-mode twind-css-mode
+      (:hook-into css-mode css-ts-mode)
       (:bind "C-c t" #'twind-insert-css-from-cheatsheet))
+    (:with-mode twind-class-mode
+      (:hook-into web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode)
+      (:bind "C-c t" #'twind-insert-class-from-cheatsheet))
     (with-eval-after-load 'embark
       (defvar-keymap twind-css-rule-embark-map
         :parent embark-general-map
