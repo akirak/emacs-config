@@ -62,7 +62,6 @@
                          (unless (or (window-minibuffer-p w)
                                      (member (buffer-name (window-buffer w))
                                              akirak-window-skipped-buffers)
-                                     (window-dedicated-p w)
                                      (window-in-direction 'above w))
                            (cons (window-left-column w) w))))
                (delq nil)
