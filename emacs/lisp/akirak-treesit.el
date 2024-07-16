@@ -179,7 +179,8 @@
 (defcustom akirak-treesit-balanced-nodes
   '("jsx_opening_element"
     ;; heex
-    "start_tag")
+    "start_tag"
+    "start_component")
   "List of node types that needs balancing."
   :type '(repeat string))
 
