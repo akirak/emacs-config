@@ -1155,6 +1155,7 @@ The built-in =electric= package provides the following modes:
       (let (;; (mix-format '((eval . (mix-format-on-save-mode t))))
             ;; (prettier '((eval . (prettier-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
+            (yamlfmt '((eval . (yamlfmt-on-save-mode t))))
             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable))))
@@ -1178,6 +1179,7 @@ The built-in =electric= package provides the following modes:
            (erlang-mode . (,@lsp-no-formatter))
            (typescript-ts-mode . (,@lsp-no-formatter))
            (tuareg-mode . (,@lsp-no-formatter ,@ocamlformat))
+           (yaml-ts-mode . (,@yamlfmt))
            (sql-mode . (,@sqlformat))
            (haskell-mode . (,@lsp)))))
       (dir-locals-set-directory-class "~/config/" 'personal)
@@ -8251,6 +8253,10 @@ Define commands which run reformatters on the current buffer
      (treefmt
       :program "treefmt"
       :args (list "--stdin" (buffer-file-name)))
+
+     (yamlfmt
+      :program "yamlfmt"
+      :args (list "-"))
 
      (biome-format
       :program
