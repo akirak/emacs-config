@@ -651,6 +651,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup tab-width
     (:set tab-width 2)
+    (:with-mode (org-mode)
+      ;; `tab-width' must be set to 8 in `org-mode', and there is no choice.
+      (:local-set tab-width 8))
     (:with-mode (emacs-lisp-mode)
       (:local-set tab-width 8))
     (:with-mode (makefile-mode)
