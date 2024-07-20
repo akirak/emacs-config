@@ -722,7 +722,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           `((,(rx word-start
                   (group (+ (any "-_./[]_" alnum)))
                   ":" (group (+ digit))
-                  ":" (group (+ digit))
+                  (optional ":" (group (+ digit)))
                   (or ":" word-end))
              1 2 3)))
 
