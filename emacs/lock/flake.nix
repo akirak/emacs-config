@@ -313,12 +313,6 @@
       repo = "edit-indirect";
       type = "github";
     };
-    editorconfig = {
-      flake = false;
-      owner = "editorconfig";
-      repo = "editorconfig-emacs";
-      type = "github";
-    };
     el-patch = {
       flake = false;
       owner = "radian-software";
