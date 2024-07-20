@@ -423,14 +423,15 @@ This sets the value of `compilation-error-regexp-alist' to nil and has a
 suitable value detected according to the command line."
   :global t
   (if akirak-compile-auto-error-mode
-      (unless akirak-compile-default-error-regexp-alist
-        (setq akirak-compile-default-error-regexp-alist compilation-error-regexp-alist)
-        (setq compilation-error-regexp-alist nil)
+      (progn
+        (unless akirak-compile-default-error-regexp-alist
+          (setq akirak-compile-default-error-regexp-alist compilation-error-regexp-alist)
+          (setq compilation-error-regexp-alist nil))
         (add-hook 'compilation-start-hook #'akirak-compile-setup-auto-error-regexp))
     (when akirak-compile-default-error-regexp-alist
       (setq compilation-error-regexp-alist akirak-compile-default-error-regexp-alist)
-      (setq akirak-compile-default-error-regexp-alist nil)
-      (remove-hook 'compilation-start-hook #'akirak-compile-setup-auto-error-regexp))))
+      (setq akirak-compile-default-error-regexp-alist nil))
+    (remove-hook 'compilation-start-hook #'akirak-compile-setup-auto-error-regexp)))
 
 (defun akirak-compile-setup-auto-error-regexp (_)
   (set (make-local-variable 'compilation-error-regexp-alist) nil)
@@ -448,6 +449,7 @@ suitable value detected according to the command line."
 (defun akirak-compile-set-error-regexp-for-command (command)
   (if-let (alist (akirak-compile--error-regexp-alist-for-command command))
       (setq-local compilation-error-regexp-alist alist)
+    (setq-local compilation-error-regexp-alist akirak-compile-default-error-regexp-alist)
     (pcase command
       ((rx bol (* blank) "npm" (+ space))
        (add-hook 'compilation-filter-hook #'akirak-compile--npm-detecter nil :local)))))
