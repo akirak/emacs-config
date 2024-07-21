@@ -289,26 +289,32 @@ are displayed in the frame."
               (cons '("iex -S mix" annotation "Run iex within the context of the application")
                     (nreverse result)))))
       (just (with-memoize
-             (let ((default-directory dir))
-               (with-temp-buffer
-                 (unless (zerop (call-process "just" nil (list t nil) nil
-                                              "--dump" "--dump-format" "json"))
-                   (error "just failed"))
-                 (goto-char (point-min))
-                 (thread-last
-                   (json-parse-buffer :object-type 'alist :array-type 'list
-                                      :null-object nil)
-                   (alist-get 'recipes)
-                   (mapcar (pcase-lambda (`(,name . ,attrs))
-                             `(,(format "just %s" name)
-                               annotation
-                               ,(string-join
-                                 (thread-last
-                                   (list (alist-get 'doc attrs)
-                                         (akirak-compile--just-format-body
-                                          (alist-get 'body attrs)))
-                                   (delq nil))
-                                 " — ")))))))))
+             (let ((default-directory dir)
+                   (err-file (make-temp-file "emacs-compile-just-error")))
+               (unwind-protect
+                   (with-temp-buffer
+                     (unless (zerop (call-process "just" nil (list t err-file) nil
+                                                  "--dump" "--dump-format" "json"))
+                       (user-error "just failed: %s"
+                                   (with-temp-buffer
+                                     (insert-file-contents err-file)
+                                     (string-trim (buffer-string)))))
+                     (goto-char (point-min))
+                     (thread-last
+                       (json-parse-buffer :object-type 'alist :array-type 'list
+                                          :null-object nil)
+                       (alist-get 'recipes)
+                       (mapcar (pcase-lambda (`(,name . ,attrs))
+                                 `(,(format "just %s" name)
+                                   annotation
+                                   ,(string-join
+                                     (thread-last
+                                       (list (alist-get 'doc attrs)
+                                             (akirak-compile--just-format-body
+                                              (alist-get 'body attrs)))
+                                       (delq nil))
+                                     " — "))))))
+                 (delete-file err-file)))))
       ((bun pnpm yarn npm)
        ;; We only read package.json, so memoization wouldn't be necessary.
        (let* ((command (symbol-name backend))
