@@ -723,7 +723,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           ;; command-specific value if `akirak-compile-auto-error-mode ' is turned
           ;; on.
           `((,(rx word-start
-                  (group (+ (any "-_./[]_" alnum)))
+                  (group (any alpha "._/") (* (any "-_./[]_" alnum)))
                   ":" (group (+ digit))
                   (optional ":" (group (+ digit)))
                   (or ":" word-end))
