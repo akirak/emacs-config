@@ -344,6 +344,7 @@
   (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
   (define-key embark-region-map "V" #'akirak-gpt-translate-vocabulary)
   (define-key embark-bookmark-map "t" #'akirak-embark-bookmark-jump-other-tab)
+  (define-key embark-buffer-map (kbd "C-c C-c") #'akirak-embark-comint-interrupt)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
   (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
@@ -839,6 +840,12 @@
   (require 'browse-at-remote)
   (browse-url (let ((default-directory dir))
                 (browse-at-remote--file-url "."))))
+
+(defun akirak-embark-comint-interrupt (buffer)
+  "Run `comint-interrupt-subjob' on BUFFER."
+  (interactive "b")
+  (with-current-buffer buffer
+    (comint-interrupt-subjob)))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
