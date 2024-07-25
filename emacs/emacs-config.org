@@ -6284,10 +6284,11 @@ Conveniently act on minibuffer completions
 
 #+begin_src emacs-lisp
   (setup (:package embark)
-    ;; MAYBE: Bind "C-;" or something to embark-dwim
-    (:global "C-." #'embark-act)
+    (:global "C-." #'embark-act
+             "C->" #'embark-act-all)
 
     (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
+    (define-key minibuffer-mode-map (kbd "C-SPC") #'embark-select)
 
     (:when-loaded
       (when (require 'akirak-embark nil t)
