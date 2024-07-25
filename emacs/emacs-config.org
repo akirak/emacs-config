@@ -6287,8 +6287,9 @@ Conveniently act on minibuffer completions
     ;; MAYBE: Bind "C-;" or something to embark-dwim
     (:global "C-." #'embark-act)
 
+    (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
+
     (:when-loaded
-      (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
       (when (require 'akirak-embark nil t)
         (akirak-embark-setup))))
 #+end_src
