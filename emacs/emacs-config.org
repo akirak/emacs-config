@@ -5874,6 +5874,7 @@ Auto-display README files in Dired biffers
 :END:
 #+begin_quote
 Collapse unique nested paths in dired listing
+[[https://github.com/Fuco1/dired-hacks]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5898,6 +5899,7 @@ Dired with recursive directory sizes
 :END:
 #+begin_quote
 Ibuffer-like filtering for dired
+[[https://github.com/Fuco1/dired-hacks]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5916,6 +5918,7 @@ Ibuffer-like filtering for dired
 :END:
 #+begin_quote
 Utilities and helpers for dired-hacks collection
+[[https://github.com/Fuco1/dired-hacks]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -8830,6 +8833,7 @@ The simple package for fast log selected region
 :END:
 #+begin_quote
 Complete Tailwind classes using the Cheatsheet data
+[[https://github.com/akirak/twind.el]]
 #+end_quote
 
 #+begin_src emacs-lisp
