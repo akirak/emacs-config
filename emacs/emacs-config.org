@@ -5827,7 +5827,8 @@ Highlight uncommitted changes using VC
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
           diff-hl-show-staged-changes t
-          diff-hl-update-async t)
+          ;; https://github.com/magit/magit/discussions/5167
+          diff-hl-update-async nil)
 
     ;; Prevent dispatch of repeat-mode.
     (defalias 'akirak/diff-hl-next-hunk #'diff-hl-next-hunk)
