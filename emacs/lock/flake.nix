@@ -1030,12 +1030,6 @@
       repo = "parsec.el";
       type = "github";
     };
-    pdf-tools = {
-      flake = false;
-      owner = "vedang";
-      repo = "pdf-tools";
-      type = "github";
-    };
     pinyin = {
       flake = false;
       owner = "xuchunyang";

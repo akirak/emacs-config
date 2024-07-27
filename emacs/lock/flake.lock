@@ -2733,22 +2733,6 @@
         "type": "github"
       }
     },
-    "pdf-tools": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1714363642,
-        "narHash": "sha256-/UH3KcuZf9p7MA0ZzhqAgTv6LjKnBXHfJUOdIxV6KbI=",
-        "owner": "vedang",
-        "repo": "pdf-tools",
-        "rev": "30b50544e55b8dbf683c2d932d5c33ac73323a16",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vedang",
-        "repo": "pdf-tools",
-        "type": "github"
-      }
-    },
     "pinyin": {
       "flake": false,
       "locked": {
@@ -3242,7 +3226,6 @@
         "package-lint": "package-lint",
         "page-break-lines": "page-break-lines",
         "parsec": "parsec",
-        "pdf-tools": "pdf-tools",
         "pinyin": "pinyin",
         "pkg-info": "pkg-info",
         "plz": "plz",
