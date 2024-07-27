@@ -1,0 +1,2 @@
+(org-dog-embark :fetcher github :repo "akirak/org-dog"
+                :files ("extra/org-dog-embark.el"))

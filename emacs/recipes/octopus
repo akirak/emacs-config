@@ -1,0 +1,2 @@
+(octopus :fetcher github :repo "akirak/org-dog"
+         :files ("extra/octopus.el"))

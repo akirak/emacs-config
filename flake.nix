@@ -19,7 +19,7 @@
     twist.url = "github:emacs-twist/twist.nix";
     twist-overrides.url = "github:emacs-twist/overrides";
     melpa = {
-      url = "github:akirak/melpa/akirak";
+      url = "github:melpa/melpa";
       flake = false;
     };
     gnu-elpa = {

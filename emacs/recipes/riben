@@ -1,0 +1,2 @@
+(riben :fetcher github :repo "akirak/emacs-dumb-japanese"
+       :files (:defaults (:exclude "avy-riben.el")))
