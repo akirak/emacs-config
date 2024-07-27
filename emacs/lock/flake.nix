@@ -70,7 +70,7 @@
     };
     benchmark-init = {
       flake = false;
-      owner = "akirak";
+      owner = "dholm";
       repo = "benchmark-init-el";
       type = "github";
     };
