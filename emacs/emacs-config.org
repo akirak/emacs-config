@@ -1163,14 +1163,14 @@ The built-in =electric= package provides the following modes:
             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable))))
             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
-            (alejandra '((eval . (alejandra-on-save-mode t)))))
+            (nixfmt '((eval . (nixfmt-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
-         `((nix-ts-mode . (,@lsp-no-formatter ,@alejandra))))
+         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@lsp))
-           (nix-ts-mode . (,@lsp-no-formatter ,@alejandra))
+           (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
            (astro-ts-mode . (,@lsp-no-formatter))
            (css-mode . (,@lsp-no-formatter))
            (svelte-mode . (,@lsp ,@flymake-eslint))
@@ -4376,6 +4376,8 @@ Major mode for Nix expressions, powered by tree-sitter
     (:mode-repl nix-repl)
     (:bind [remap devdocs-lookup] #'akirak-nix-manix)
     (:reformatters
+     ;; nixfmt-rfc-style is now recommended, but keep alejandra until I finish
+     ;; migration
      (alejandra :program "alejandra")))
 #+end_src
 *** rust-ts-mode
@@ -7811,6 +7813,15 @@ Nix3.el integration for Magit
   (setup (:package magit-nix3)
     (with-eval-after-load 'magit-diff
       (magit-nix3-flake-lock-mode t)))
+#+end_src
+*** nixfmt
+:PROPERTIES:
+:CREATED_TIME: [2024-07-27 Sat 17:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nixfmt)
+    (:nixpkgs nixfmt-rfc-style))
 #+end_src
 *** nix-mode                                                               :Nix:
 :PROPERTIES:

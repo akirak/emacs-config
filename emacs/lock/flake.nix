@@ -769,6 +769,12 @@
       repo = "nix3.el";
       type = "github";
     };
+    nixfmt = {
+      flake = false;
+      owner = "purcell";
+      repo = "emacs-nixfmt";
+      type = "github";
+    };
     noman = {
       flake = false;
       owner = "andykuszyk";

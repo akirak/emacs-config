@@ -2051,6 +2051,22 @@
         "type": "github"
       }
     },
+    "nixfmt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1721835517,
+        "narHash": "sha256-AOFOq8YwLt1do3O2edPbt0A4xqq3LPvuLVJKpzL54vw=",
+        "owner": "purcell",
+        "repo": "emacs-nixfmt",
+        "rev": "946df2830d0e29b97d7c4d844b1c7789bb4aac0b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purcell",
+        "repo": "emacs-nixfmt",
+        "type": "github"
+      }
+    },
     "noman": {
       "flake": false,
       "locked": {
@@ -3184,6 +3200,7 @@
         "nix-ts-mode": "nix-ts-mode",
         "nix-update": "nix-update",
         "nix3": "nix3",
+        "nixfmt": "nixfmt",
         "noman": "noman",
         "nov": "nov",
         "oahu": "oahu",
