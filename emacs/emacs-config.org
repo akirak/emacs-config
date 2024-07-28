@@ -4515,6 +4515,17 @@ This is a collection of various utilities to enhance the experience.
              "C-\"" #'akirak-avy-symbol-overlay-put
              "M-g `" #'akirak-avy-org-block))
 #+end_src
+*** akirak-bitwarden
+#+begin_src emacs-lisp
+  (setup akirak-bitwarden
+    (:with-mode akirak-bitwarden-rbw-mode
+      (:file-match "rbw\\'"))
+    (:global "<f12> b g" #'akirak-bitwarden-show
+             "<f12> b w" #'akirak-bitwarden-copy
+             "<f12> b e" #'akirak-bitwarden-edit
+             "<f12> b a" #'akirak-bitwarden-add
+             "<f12> b D" #'akirak-bitwarden-remove))
+#+end_src
 *** akirak-capture
 #+begin_src emacs-lisp
   (setup akirak-capture
