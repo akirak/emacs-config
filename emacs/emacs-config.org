@@ -322,7 +322,8 @@ By default, settings inside =:status= clauses are not loaded.
 # Note: Some of these should be loaded as early as possible.
 *** benchmark-init                            :profiling:initialization:
 #+begin_quote
-Benchmarks Emacs require and load calls
+Benchmarks for require and load calls
+[[https://github.com/dholm/benchmark-init-el]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -7821,6 +7822,10 @@ Nix3.el integration for Magit
 :PROPERTIES:
 :CREATED_TIME: [2024-07-27 Sat 17:26]
 :END:
+#+begin_quote
+Reformat Nix using nixfmt
+[[https://github.com/purcell/emacs-nixfmt]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package nixfmt)
@@ -9724,7 +9729,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:usability][usability]]           |   1 |
 | [[org-ql-search:tags:capture][capture]]             |   1 |
 | [[org-ql-search:tags:documentation][documentation]]       |   1 |
-| [[org-ql-search:tags:secrets][secrets]]             |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
