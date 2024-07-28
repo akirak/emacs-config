@@ -322,7 +322,8 @@ By default, settings inside =:status= clauses are not loaded.
 # Note: Some of these should be loaded as early as possible.
 *** benchmark-init                            :profiling:initialization:
 #+begin_quote
-Benchmarks Emacs require and load calls
+Benchmarks for require and load calls
+[[https://github.com/dholm/benchmark-init-el]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -651,6 +652,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup tab-width
     (:set tab-width 2)
+    (:with-mode (org-mode)
+      ;; `tab-width' must be set to 8 in `org-mode', and there is no choice.
+      (:local-set tab-width 8))
     (:with-mode (emacs-lisp-mode)
       (:local-set tab-width 8))
     (:with-mode (makefile-mode)
@@ -720,9 +724,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           ;; command-specific value if `akirak-compile-auto-error-mode ' is turned
           ;; on.
           `((,(rx word-start
-                  (group (+ (any "-_./[]_" alnum)))
+                  (group (any alpha "._/") (* (any "-_./[]_" alnum)))
                   ":" (group (+ digit))
-                  ":" (group (+ digit))
+                  (optional ":" (group (+ digit)))
                   (or ":" word-end))
              1 2 3)))
 
@@ -1155,18 +1159,19 @@ The built-in =electric= package provides the following modes:
       (let (;; (mix-format '((eval . (mix-format-on-save-mode t))))
             ;; (prettier '((eval . (prettier-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
+            (yamlfmt '((eval . (yamlfmt-on-save-mode t))))
             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable))))
             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
-            (alejandra '((eval . (alejandra-on-save-mode t)))))
+            (nixfmt '((eval . (nixfmt-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
-         `((nix-ts-mode . (,@lsp-no-formatter ,@alejandra))))
+         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
         (dir-locals-set-class-variables
          'default
          `((web-mode . (,@lsp))
-           (nix-ts-mode . (,@lsp-no-formatter ,@alejandra))
+           (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
            (astro-ts-mode . (,@lsp-no-formatter))
            (css-mode . (,@lsp-no-formatter))
            (svelte-mode . (,@lsp ,@flymake-eslint))
@@ -1178,6 +1183,7 @@ The built-in =electric= package provides the following modes:
            (erlang-mode . (,@lsp-no-formatter))
            (typescript-ts-mode . (,@lsp-no-formatter))
            (tuareg-mode . (,@lsp-no-formatter ,@ocamlformat))
+           (yaml-ts-mode . (,@yamlfmt))
            (sql-mode . (,@sqlformat))
            (haskell-mode . (,@lsp)))))
       (dir-locals-set-directory-class "~/config/" 'personal)
@@ -1929,10 +1935,8 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                  (if (region-active-p)
                      (kill-region (region-beginning) (region-end))
                    (backward-kill-word arg)))
-               ;; In place of zap-to-char
-               "M-z" #'zap-up-to-char)
-      (:with-mode prog-mode
-        (:bind "C-a"
+
+               "C-a"
                (defun akirak/back-to-indentation-or-bol ()
                  (interactive)
                  (if (or (looking-at "^")
@@ -1941,7 +1945,10 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                                           (line-beginning-position)
                                           (point))))
                      (back-to-indentation)
-                   (beginning-of-line)))))))
+                   (beginning-of-line)))
+
+               ;; In place of zap-to-char
+               "M-z" #'zap-up-to-char)))
 #+end_src
 *** skeleton
 :PROPERTIES:
@@ -4370,6 +4377,8 @@ Major mode for Nix expressions, powered by tree-sitter
     (:mode-repl nix-repl)
     (:bind [remap devdocs-lookup] #'akirak-nix-manix)
     (:reformatters
+     ;; nixfmt-rfc-style is now recommended, but keep alejandra until I finish
+     ;; migration
      (alejandra :program "alejandra")))
 #+end_src
 *** rust-ts-mode
@@ -4506,6 +4515,17 @@ This is a collection of various utilities to enhance the experience.
     (:global "C-;" #'akirak-avy-insert-symbol
              "C-\"" #'akirak-avy-symbol-overlay-put
              "M-g `" #'akirak-avy-org-block))
+#+end_src
+*** akirak-bitwarden
+#+begin_src emacs-lisp
+  (setup akirak-bitwarden
+    (:with-mode akirak-bitwarden-rbw-mode
+      (:file-match "rbw\\'"))
+    (:global "<f12> b g" #'akirak-bitwarden-show
+             "<f12> b w" #'akirak-bitwarden-copy
+             "<f12> b e" #'akirak-bitwarden-edit
+             "<f12> b a" #'akirak-bitwarden-add
+             "<f12> b D" #'akirak-bitwarden-remove))
 #+end_src
 *** akirak-capture
 #+begin_src emacs-lisp
@@ -4761,14 +4781,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-org-reg
     (:global "C-c j" #'akirak-org-reg-transient))
-#+end_src
-*** akirak-org-secrets                                                 :secrets:
-#+begin_src emacs-lisp
-  (setup akirak-org-secrets
-    (:global "<f12> S i" #'akirak-org-secrets-insert
-             "<f12> S w" #'akirak-org-secrets-copy
-             "<f12> S s" #'akirak-org-secrets-show
-             "<f12> S c" #'akirak-org-secrets-capture))
 #+end_src
 *** akirak-org-special
 #+begin_src elisp
@@ -5662,6 +5674,7 @@ COmpletion in Region FUnction
 :END:
 #+begin_quote
 A transient for cosmetics on source code
+[[https://github.com/akirak/cosmetic-transient.el]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5820,7 +5833,8 @@ Highlight uncommitted changes using VC
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
           diff-hl-show-staged-changes t
-          diff-hl-update-async t)
+          ;; https://github.com/magit/magit/discussions/5167
+          diff-hl-update-async nil)
 
     ;; Prevent dispatch of repeat-mode.
     (defalias 'akirak/diff-hl-next-hunk #'diff-hl-next-hunk)
@@ -5866,6 +5880,7 @@ Auto-display README files in Dired biffers
 :END:
 #+begin_quote
 Collapse unique nested paths in dired listing
+[[https://github.com/Fuco1/dired-hacks]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5890,6 +5905,7 @@ Dired with recursive directory sizes
 :END:
 #+begin_quote
 Ibuffer-like filtering for dired
+[[https://github.com/Fuco1/dired-hacks]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5908,6 +5924,7 @@ Ibuffer-like filtering for dired
 :END:
 #+begin_quote
 Utilities and helpers for dired-hacks collection
+[[https://github.com/Fuco1/dired-hacks]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -6277,11 +6294,13 @@ Conveniently act on minibuffer completions
 
 #+begin_src emacs-lisp
   (setup (:package embark)
-    ;; MAYBE: Bind "C-;" or something to embark-dwim
-    (:global "C-." #'embark-act)
+    (:global "C-." #'embark-act
+             "C->" #'embark-act-all)
+
+    (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
+    (define-key minibuffer-mode-map (kbd "C-SPC") #'embark-select)
 
     (:when-loaded
-      (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
       (when (require 'akirak-embark nil t)
         (akirak-embark-setup))))
 #+end_src
@@ -7799,6 +7818,19 @@ Nix3.el integration for Magit
     (with-eval-after-load 'magit-diff
       (magit-nix3-flake-lock-mode t)))
 #+end_src
+*** nixfmt
+:PROPERTIES:
+:CREATED_TIME: [2024-07-27 Sat 17:26]
+:END:
+#+begin_quote
+Reformat Nix using nixfmt
+[[https://github.com/purcell/emacs-nixfmt]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package nixfmt)
+    (:nixpkgs nixfmt-rfc-style))
+#+end_src
 *** nix-mode                                                               :Nix:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-04 Tue 23:59]
@@ -7990,7 +8022,7 @@ Display ^L page breaks as tidy horizontal lines
                 compilation-mode-hook
                 haskell-mode-hook))
 #+end_src
-*** pdf-tools
+*** COMMENT pdf-tools                                                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-04-20 Thu 23:59]
 :END:
@@ -8249,6 +8281,10 @@ Define commands which run reformatters on the current buffer
      (treefmt
       :program "treefmt"
       :args (list "--stdin" (buffer-file-name)))
+
+     (yamlfmt
+      :program "yamlfmt"
+      :args (list "-"))
 
      (biome-format
       :program
@@ -8816,6 +8852,7 @@ The simple package for fast log selected region
 :END:
 #+begin_quote
 Complete Tailwind classes using the Cheatsheet data
+[[https://github.com/akirak/twind.el]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -9692,7 +9729,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:usability][usability]]           |   1 |
 | [[org-ql-search:tags:capture][capture]]             |   1 |
 | [[org-ql-search:tags:documentation][documentation]]       |   1 |
-| [[org-ql-search:tags:secrets][secrets]]             |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |

@@ -179,7 +179,8 @@
 (defcustom akirak-treesit-balanced-nodes
   '("jsx_opening_element"
     ;; heex
-    "start_tag")
+    "start_tag"
+    "start_component")
   "List of node types that needs balancing."
   :type '(repeat string))
 
@@ -220,7 +221,9 @@
                 (while (setq parent (treesit-node-parent node))
                   (when (and (or (< (treesit-node-start parent) start)
                                  (and (= (treesit-node-end node) bound)
-                                      (looking-back (rx bol (* blank)) (line-beginning-position))))
+                                      (looking-back (rx bol (* blank)) (line-beginning-position)))
+                                 (> (cdr (posn-col-row (posn-at-point (treesit-node-end node))))
+                                    (cdr (posn-col-row (posn-at-point node-start)))))
                              (not (member (treesit-node-type node)
                                           akirak-treesit-balanced-nodes)))
                     (throw 'stop t))

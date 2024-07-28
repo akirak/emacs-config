@@ -1,0 +1,2 @@
+(org-nlink :fetcher github :repo "akirak/org-nlink.el"
+           :files (:defaults (:exclude "consult-org-nlink.el")))

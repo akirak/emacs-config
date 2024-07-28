@@ -70,7 +70,7 @@
     };
     benchmark-init = {
       flake = false;
-      owner = "akirak";
+      owner = "dholm";
       repo = "benchmark-init-el";
       type = "github";
     };
@@ -311,12 +311,6 @@
       flake = false;
       owner = "Fanael";
       repo = "edit-indirect";
-      type = "github";
-    };
-    editorconfig = {
-      flake = false;
-      owner = "editorconfig";
-      repo = "editorconfig-emacs";
       type = "github";
     };
     el-patch = {
@@ -775,6 +769,12 @@
       repo = "nix3.el";
       type = "github";
     };
+    nixfmt = {
+      flake = false;
+      owner = "purcell";
+      repo = "emacs-nixfmt";
+      type = "github";
+    };
     noman = {
       flake = false;
       owner = "andykuszyk";
@@ -1028,12 +1028,6 @@
       flake = false;
       owner = "cute-jumper";
       repo = "parsec.el";
-      type = "github";
-    };
-    pdf-tools = {
-      flake = false;
-      owner = "vedang";
-      repo = "pdf-tools";
       type = "github";
     };
     pinyin = {

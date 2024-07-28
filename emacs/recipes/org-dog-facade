@@ -1,0 +1,3 @@
+(org-dog-facade :fetcher github :repo "akirak/org-dog"
+                :files ("extra/org-dog-facade.el"
+                        "extra/org-dog-datetree.el"))

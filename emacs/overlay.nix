@@ -44,6 +44,10 @@ with builtins; let
       path = inputs.nongnu-elpa.outPath + "/elpa-packages";
     }
     {
+      type = "melpa";
+      path = ./recipes;
+    }
+    {
       type = "archive";
       url = "https://elpa.nongnu.org/nongnu/";
     }

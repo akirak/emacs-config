@@ -253,7 +253,8 @@ With ARG, pick a text from the kill ring instead of the last one."
           (backward-char count)))))))
 
 (defun akirak-org--find-src-lang (needle)
-  (if (assoc needle org-src-lang-modes)
+  (if (or (assoc needle org-src-lang-modes)
+          (assq (intern needle) org-babel-load-languages))
       needle
     (let* ((mode (or (cl-some (pcase-lambda (`(,pat . ,mode))
                                 (when (string-match-p pat (concat "." needle))
