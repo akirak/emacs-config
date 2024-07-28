@@ -4781,14 +4781,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-org-reg
     (:global "C-c j" #'akirak-org-reg-transient))
 #+end_src
-*** akirak-org-secrets                                                 :secrets:
-#+begin_src emacs-lisp
-  (setup akirak-org-secrets
-    (:global "<f12> S i" #'akirak-org-secrets-insert
-             "<f12> S w" #'akirak-org-secrets-copy
-             "<f12> S s" #'akirak-org-secrets-show
-             "<f12> S c" #'akirak-org-secrets-capture))
-#+end_src
 *** akirak-org-special
 #+begin_src elisp
   (setup akirak-org-special
