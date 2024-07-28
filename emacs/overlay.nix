@@ -20,9 +20,7 @@ with builtins; let
     {
       type = "melpa";
       path = inputs.melpa.outPath + "/recipes";
-      exclude = [
-        "async"
-      ];
+      exclude = ["async"];
     }
     {
       type = "elpa";
@@ -66,9 +64,7 @@ with builtins; let
           (lib.removeSuffix "-grammar")
           (lib.removePrefix "tree-sitter-")
         ]
-      }${
-        prev.stdenv.targetPlatform.extensions.sharedLibrary
-      }";
+      }${prev.stdenv.targetPlatform.extensions.sharedLibrary}";
       path = "${drv}/parser";
     }))
     (prev.linkFarm "treesit-grammars")
@@ -88,13 +84,13 @@ with builtins; let
         then emacsPackages.emacs-pgtk
         else emacsPackages.emacs
       )
-      .override (_: (
-        if withXwidgets
-        then {
-          inherit withXwidgets;
-        }
-        else {}
-      ));
+      .override (
+        _: (
+          if withXwidgets
+          then {inherit withXwidgets;}
+          else {}
+        )
+      );
   in
     (emacsTwist {
       inherit configurationRevision;
@@ -104,20 +100,20 @@ with builtins; let
         (lib.optional (prependToInitFile != null) (prev.writeText "init.el" prependToInitFile))
         ++ [
           (tangleOrgBabelFile "init.el" ./emacs-config.org {
-            processLines = org.excludeHeadlines (s:
-              org.tag "ARCHIVE" s
-              || (
-                if extraFeatures == true
-                then false
-                else
-                  (org.tag "@extra" s
-                    && ! lib.any (tag: org.tag tag s) extraFeatures)
-              ));
+            processLines = org.excludeHeadlines (
+              s:
+                org.tag "ARCHIVE" s
+                || (
+                  if extraFeatures == true
+                  then false
+                  else (org.tag "@extra" s && !lib.any (tag: org.tag tag s) extraFeatures)
+                )
+            );
           })
         ]
         # Allow adding private config on specific hosts
         ++ extraInitFiles;
-      extraPackages = [ "setup" ];
+      extraPackages = ["setup"];
       localPackages = [
         # Don't add this package to the lock file
         "akirak"
@@ -135,23 +131,26 @@ with builtins; let
           akirak = _: _: {
             src = inputs.nix-filter.lib {
               root = inputs.self;
-              include = [
-                "emacs/lisp"
-              ];
+              include = ["emacs/lisp"];
             };
           };
         };
       exportManifest = true;
     })
-    .overrideScope (lib.composeExtensions
-      inputs.twist-overrides.overlays.twistScope
-      (self: super: {
-        elispPackages = super.elispPackages.overrideScope (import ./overrides.nix {
-          pkgs = prev;
-          inherit (prev) system;
-          emacs = emacsPackage;
-        });
-      }));
+    .overrideScope
+    (
+      lib.composeExtensions inputs.twist-overrides.overlays.twistScope (
+        self: super: {
+          elispPackages = super.elispPackages.overrideScope (
+            import ./overrides.nix {
+              pkgs = prev;
+              inherit (prev) system;
+              emacs = emacsPackage;
+            }
+          );
+        }
+      )
+    );
 
   defaultEmacsPackage = emacsPackages.emacs-pgtk;
 in {
@@ -165,15 +164,18 @@ in {
   emacs-batch = emacsTwist {
     emacsPackage = defaultEmacsPackage;
     initFiles = [];
-    extraPackages = ["org-ql" "org-make-toc"];
+    extraPackages = [
+      "org-ql"
+      "org-make-toc"
+    ];
     inherit registries;
     lockDir = ./lock;
   };
 
   emacsclient =
-    inputs.nixpkgs.legacyPackages.${system}.runCommandLocal "emacsclient" {
-      propagatedBuildInputs = [defaultEmacsPackage];
-    } ''
+    inputs.nixpkgs.legacyPackages.${system}.runCommandLocal "emacsclient"
+    {propagatedBuildInputs = [defaultEmacsPackage];}
+    ''
       mkdir -p $out/bin
       ln -t $out/bin -s ${defaultEmacsPackage}/bin/emacsclient
     '';
