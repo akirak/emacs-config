@@ -117,8 +117,10 @@ with builtins; let
         ]
         # Allow adding private config on specific hosts
         ++ extraInitFiles;
-      extraPackages = [
-        "setup"
+      extraPackages = [ "setup" ];
+      localPackages = [
+        # Don't add this package to the lock file
+        "akirak"
       ];
       extraSiteStartElisp = ''
         (add-to-list 'treesit-extra-load-path "${treeSitterLoadPath}/")

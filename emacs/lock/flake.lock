@@ -48,22 +48,6 @@
         "type": "github"
       }
     },
-    "akirak": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1721063529,
-        "narHash": "sha256-OQZNEQAF5TVY5upXX2ezKlNB+asGG3LKhh/d+8WgnQs=",
-        "owner": "akirak",
-        "repo": "emacs-config",
-        "rev": "ba41c1f6cdd8ec872593f6ca4adea065f3d1fa12",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "repo": "emacs-config",
-        "type": "github"
-      }
-    },
     "anzu": {
       "flake": false,
       "locked": {
@@ -3059,7 +3043,6 @@
         "academic-phrases": "academic-phrases",
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
-        "akirak": "akirak",
         "anzu": "anzu",
         "astro-ts-mode": "astro-ts-mode",
         "auto-minor-mode": "auto-minor-mode",

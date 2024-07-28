@@ -20,12 +20,6 @@
       repo = "emacs-aio";
       type = "github";
     };
-    akirak = {
-      flake = false;
-      owner = "akirak";
-      repo = "emacs-config";
-      type = "github";
-    };
     anzu = {
       flake = false;
       owner = "emacsorphanage";
