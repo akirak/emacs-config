@@ -6494,7 +6494,7 @@ Not only English-Chinese translator
 
 You should also load ol-fanyi library to enable fanyi link type.
 See modules.
-*** flycheck                                                   :lsp_mode:@extra:
+*** COMMENT flycheck                                           :lsp_mode:@extra:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 22:53]
 :END:
@@ -6542,7 +6542,7 @@ Access Git forges from Magit
 #+begin_src emacs-lisp
 (setup (:package forge))
 #+end_src
-*** fstar-mode                                                    :@extra:fstar:
+*** COMMENT fstar-mode                                            :@extra:fstar:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
 :END:
@@ -7340,7 +7340,7 @@ LSP bridge
              "w" #'lsp-bridge-diagnostic-copy
              "R" #'lsp-bridge-restart-process)))
 #+end_src
-*** lsp-mode                                                   :@extra:lsp_mode:
+*** COMMENT lsp-mode                                           :@extra:lsp_mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 19:03]
 :END:
@@ -9164,7 +9164,7 @@ ANSI, XTERM 256 and Truecolor support
 #+end_src
 
 This package is required by the configuration for buttercup now.
-*** z3-mode
+*** COMMENT z3-mode                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
 :END:

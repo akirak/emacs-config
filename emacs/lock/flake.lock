@@ -304,38 +304,6 @@
         "type": "github"
       }
     },
-    "company": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1678067889,
-        "narHash": "sha256-beqAKH2fcUxgn+l0Y4V9X8wSsrp1QMLCdMNXUoVwRFQ=",
-        "owner": "company-mode",
-        "repo": "company-mode",
-        "rev": "b3b9fa37ef9fd02471779130a0b53d87fa726ac1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "company-mode",
-        "repo": "company-mode",
-        "type": "github"
-      }
-    },
-    "company-quickhelp": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1670823282,
-        "narHash": "sha256-iISKb7qBQNwxoPYRz5eMAIOZe69T/JjYFWeaYcIgVZM=",
-        "owner": "company-mode",
-        "repo": "company-quickhelp",
-        "rev": "9505fb09d064581da142d75c139d48b5cf695bd5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "company-mode",
-        "repo": "company-quickhelp",
-        "type": "github"
-      }
-    },
     "compat": {
       "flake": false,
       "locked": {
@@ -977,22 +945,6 @@
         "type": "github"
       }
     },
-    "epl": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1517863795,
-        "narHash": "sha256-aCM8Cm1d6Bzxg0vT21m+NqwrxTCxROv6s1+1/1KnUU8=",
-        "owner": "cask",
-        "repo": "epl",
-        "rev": "78ab7a85c08222cd15582a298a364774e3282ce6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cask",
-        "repo": "epl",
-        "type": "github"
-      }
-    },
     "erlang": {
       "flake": false,
       "locked": {
@@ -1074,22 +1026,6 @@
         "type": "github"
       }
     },
-    "flycheck": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1677534791,
-        "narHash": "sha256-r4U9MFhFK2aZNuWeLtRA9tVyU9LF+7FdMSVfuiWfElo=",
-        "owner": "flycheck",
-        "repo": "flycheck",
-        "rev": "ec23e0411ebbfda719edd31a524e9e963be16ca5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "flycheck",
-        "repo": "flycheck",
-        "type": "github"
-      }
-    },
     "flymake-actionlint1": {
       "flake": false,
       "locked": {
@@ -1135,22 +1071,6 @@
       "original": {
         "owner": "federicotdn",
         "repo": "flymake-shellcheck",
-        "type": "github"
-      }
-    },
-    "fstar-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1671020446,
-        "narHash": "sha256-H3p8JoOa1NPouOacUOKBiW+4Ubf3rkVw9P/1QWVpngk=",
-        "owner": "FStarLang",
-        "repo": "fstar-mode.el",
-        "rev": "ab0697b9474f36942a12a4b2a75251c247c18e9e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "FStarLang",
-        "repo": "fstar-mode.el",
         "type": "github"
       }
     },
@@ -1713,22 +1633,6 @@
         "owner": "~tarsius",
         "repo": "llama",
         "type": "sourcehut"
-      }
-    },
-    "lsp-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1692766000,
-        "narHash": "sha256-HrUq4T0lqpn9+u3D+Zgp9a1KZeFzd+HWJ1ERrjYrKnc=",
-        "owner": "emacs-lsp",
-        "repo": "lsp-mode",
-        "rev": "f8ed844b6e23c7717fb69d6c645aa41f0772c557",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacs-lsp",
-        "repo": "lsp-mode",
-        "type": "github"
       }
     },
     "lv": {
@@ -2733,22 +2637,6 @@
         "type": "github"
       }
     },
-    "pkg-info": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1473693102,
-        "narHash": "sha256-uCfzXJG7G937zsyYVCdHE+gnX5ocCiaLhoyVZLaGHZQ=",
-        "owner": "emacsorphanage",
-        "repo": "pkg-info",
-        "rev": "76ba7415480687d05a4353b27fea2ae02b8d9d61",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacsorphanage",
-        "repo": "pkg-info",
-        "type": "github"
-      }
-    },
     "plz": {
       "flake": false,
       "locked": {
@@ -2795,22 +2683,6 @@
       "original": {
         "owner": "auto-complete",
         "repo": "popup-el",
-        "type": "github"
-      }
-    },
-    "pos-tip": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1707467855,
-        "narHash": "sha256-ezfrCOakwQkJ0sgS2XzwL/3lXoTFteQlqxfomVSC1XI=",
-        "owner": "pitkali",
-        "repo": "pos-tip",
-        "rev": "4889e08cf9077c8589ea6fea4e2ce558614dfcde",
-        "type": "github"
-      },
-      "original": {
-        "owner": "pitkali",
-        "repo": "pos-tip",
         "type": "github"
       }
     },
@@ -2875,22 +2747,6 @@
       "original": {
         "owner": "AmaiKinono",
         "repo": "puni",
-        "type": "github"
-      }
-    },
-    "quick-peek": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1580417963,
-        "narHash": "sha256-FKMyJDbqPa0ss2JpozBHp06cWhS5AeC22QDZxD68+s8=",
-        "owner": "cpitclaudel",
-        "repo": "quick-peek",
-        "rev": "03a276086795faad46a142454fc3e28cab058b70",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cpitclaudel",
-        "repo": "quick-peek",
         "type": "github"
       }
     },
@@ -3059,8 +2915,6 @@
         "caml": "caml",
         "cape": "cape",
         "closql": "closql",
-        "company": "company",
-        "company-quickhelp": "company-quickhelp",
         "compat": "compat",
         "consult": "consult",
         "consult-ls-git": "consult-ls-git",
@@ -3101,17 +2955,14 @@
         "envrc": "envrc",
         "epkg": "epkg",
         "epkg-marginalia": "epkg-marginalia",
-        "epl": "epl",
         "erlang": "erlang",
         "esxml": "esxml",
         "exec-path-from-shell": "exec-path-from-shell",
         "f": "f",
         "fanyi": "fanyi",
-        "flycheck": "flycheck",
         "flymake-actionlint1": "flymake-actionlint1",
         "flymake-eslint": "flymake-eslint",
         "flymake-shellcheck": "flymake-shellcheck",
-        "fstar-mode": "fstar-mode",
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",
         "gcmh": "gcmh",
@@ -3147,7 +2998,6 @@
         "link-hint": "link-hint",
         "lispy": "lispy",
         "llama": "llama",
-        "lsp-mode": "lsp-mode",
         "lv": "lv",
         "magit": "magit",
         "magit-delta": "magit-delta",
@@ -3210,16 +3060,13 @@
         "page-break-lines": "page-break-lines",
         "parsec": "parsec",
         "pinyin": "pinyin",
-        "pkg-info": "pkg-info",
         "plz": "plz",
         "popper": "popper",
         "popup": "popup",
-        "pos-tip": "pos-tip",
         "posframe": "posframe",
         "promise": "promise",
         "proof-general": "proof-general",
         "puni": "puni",
-        "quick-peek": "quick-peek",
         "rainbow-delimiters": "rainbow-delimiters",
         "reason-mode": "reason-mode",
         "reformatter": "reformatter",
@@ -3266,7 +3113,6 @@
         "with-editor": "with-editor",
         "xterm-color": "xterm-color",
         "yasnippet": "yasnippet",
-        "z3-mode": "z3-mode",
         "zig-mode": "zig-mode",
         "zoutline": "zoutline"
       }
@@ -3861,22 +3707,6 @@
       "original": {
         "owner": "joaotavora",
         "repo": "yasnippet",
-        "type": "github"
-      }
-    },
-    "z3-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1637026717,
-        "narHash": "sha256-JivP/+VkeLMsx89oGFl59MUkSqFjcBNqQeLcBH/vlko=",
-        "owner": "zv",
-        "repo": "z3-mode",
-        "rev": "0356cbe1e1e2b780ba0ddb4aaa055fa246a67931",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zv",
-        "repo": "z3-mode",
         "type": "github"
       }
     },

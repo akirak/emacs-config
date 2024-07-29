@@ -116,18 +116,6 @@
       repo = "closql";
       type = "github";
     };
-    company = {
-      flake = false;
-      owner = "company-mode";
-      repo = "company-mode";
-      type = "github";
-    };
-    company-quickhelp = {
-      flake = false;
-      owner = "company-mode";
-      repo = "company-quickhelp";
-      type = "github";
-    };
     compat = {
       flake = false;
       owner = "emacs-compat";
@@ -367,12 +355,6 @@
       repo = "epkg-marginalia";
       type = "github";
     };
-    epl = {
-      flake = false;
-      owner = "cask";
-      repo = "epl";
-      type = "github";
-    };
     erlang = {
       flake = false;
       owner = "erlang";
@@ -404,12 +386,6 @@
       repo = "fanyi.el";
       type = "github";
     };
-    flycheck = {
-      flake = false;
-      owner = "flycheck";
-      repo = "flycheck";
-      type = "github";
-    };
     flymake-actionlint1 = {
       flake = false;
       owner = "akirak";
@@ -426,12 +402,6 @@
       flake = false;
       owner = "federicotdn";
       repo = "flymake-shellcheck";
-      type = "github";
-    };
-    fstar-mode = {
-      flake = false;
-      owner = "FStarLang";
-      repo = "fstar-mode.el";
       type = "github";
     };
     fullframe = {
@@ -644,12 +614,6 @@
       owner = "~tarsius";
       repo = "llama";
       type = "sourcehut";
-    };
-    lsp-mode = {
-      flake = false;
-      owner = "emacs-lsp";
-      repo = "lsp-mode";
-      type = "github";
     };
     lv = {
       flake = false;
@@ -1030,12 +994,6 @@
       repo = "pinyin.el";
       type = "github";
     };
-    pkg-info = {
-      flake = false;
-      owner = "emacsorphanage";
-      repo = "pkg-info";
-      type = "github";
-    };
     plz = {
       flake = false;
       owner = "alphapapa";
@@ -1053,12 +1011,6 @@
       flake = false;
       owner = "auto-complete";
       repo = "popup-el";
-      type = "github";
-    };
-    pos-tip = {
-      flake = false;
-      owner = "pitkali";
-      repo = "pos-tip";
       type = "github";
     };
     posframe = {
@@ -1083,12 +1035,6 @@
       flake = false;
       owner = "AmaiKinono";
       repo = "puni";
-      type = "github";
-    };
-    quick-peek = {
-      flake = false;
-      owner = "cpitclaudel";
-      repo = "quick-peek";
       type = "github";
     };
     rainbow-delimiters = {
@@ -1363,12 +1309,6 @@
       flake = false;
       owner = "joaotavora";
       repo = "yasnippet";
-      type = "github";
-    };
-    z3-mode = {
-      flake = false;
-      owner = "zv";
-      repo = "z3-mode";
       type = "github";
     };
     zig-mode = {
