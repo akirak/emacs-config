@@ -43,7 +43,9 @@
     (gui-set-selection 'CLIPBOARD (buffer-string))
     (message "Copied the password to the clipboard (%d characters). Clearing in 15 seconds"
              (buffer-size))
-    (run-with-timer 15 nil (lambda () (gui-set-selection 'CLIPBOARD nil)))))
+    (run-with-timer 15 nil (lambda ()
+                             (gui-set-selection 'CLIPBOARD "")
+                             (message "Cleared the clipboard")))))
 
 ;;;###autoload
 (defun akirak-bitwarden-edit (entry)
