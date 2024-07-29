@@ -7754,7 +7754,10 @@ A humble major-mode for Lean
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package nael))
+  (setup (:package nael)
+    ;; Temporary workarounds.
+    (autoload 'nael-mode "nael")
+    (add-to-list 'auto-mode-alist '("\\.lean\\'" . nael-mode)))
 #+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
