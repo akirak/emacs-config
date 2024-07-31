@@ -3546,10 +3546,9 @@ Manage Hyprctl workspaces from Org mode
 
 #+begin_src emacs-lisp
   (setup (:package org-hyprctl)
-    (when (equal "Hyprland" (getenv "XDG_CURRENT_DESKTOP"))
-      (define-key akirak/c-z-map "w" #'org-hyprctl-popup)
-      (with-eval-after-load 'org
-        (add-hook 'org-ctrl-c-ctrl-c-hook #'org-hyprctl-update))))
+    (define-key akirak/c-z-map "w" #'org-hyprctl-popup)
+    (with-eval-after-load 'org
+      (add-hook 'org-ctrl-c-ctrl-c-hook #'org-hyprctl-update)))
 #+end_src
 *** org-indent
 :PROPERTIES:
@@ -6454,8 +6453,6 @@ Get environment variables such as $PATH from the shell
 
 #+begin_src emacs-lisp
   (setup (:package exec-path-from-shell)
-    (:when-loaded
-      (add-to-list 'exec-path-from-shell-variables "HYPRLAND_INSTANCE_SIGNATURE"))
     (when (and (or window-system
                    (daemonp))
                (not (equal akirak/os-id "nixos")))
