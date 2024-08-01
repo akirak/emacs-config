@@ -15,12 +15,13 @@
   "rbw")
 
 (defun akirak-bitwarden-complete-entry (prompt &optional require-match)
-  (completing-read prompt
-                   (process-lines-handling-status
-                    akirak-bitwarden-rbw-executable
-                    #'akirak-bitwarden--process-status-handler
-                    "list")
-                   nil require-match))
+  (let ((process-environment (cons "TERM" process-environment)))
+    (completing-read prompt
+                     (process-lines-handling-status
+                      akirak-bitwarden-rbw-executable
+                      #'akirak-bitwarden--process-status-handler
+                      "list")
+                     nil require-match)))
 
 (defun akirak-bitwarden--process-status-handler (status)
   (unless (zerop status)
