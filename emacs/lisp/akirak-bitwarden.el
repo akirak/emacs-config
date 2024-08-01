@@ -16,8 +16,15 @@
 
 (defun akirak-bitwarden-complete-entry (prompt &optional require-match)
   (completing-read prompt
-                   (process-lines akirak-bitwarden-rbw-executable "list")
+                   (process-lines-handling-status
+                    akirak-bitwarden-rbw-executable
+                    #'akirak-bitwarden--process-status-handler
+                    "list")
                    nil require-match))
+
+(defun akirak-bitwarden--process-status-handler (status)
+  (unless (zerop status)
+    (error "rbw exited with status %d: %s" status (buffer-string))))
 
 ;;;###autoload
 (defun akirak-bitwarden-show (entry)
