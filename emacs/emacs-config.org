@@ -5693,6 +5693,16 @@ Major mode for CUE language files
   (setup (:package cue-mode)
     (:file-match "\\.cue\\'"))
 #+end_src
+*** d2-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-08-03 Sat 12:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package d2-mode)
+    (:nixpkgs d2)
+    (:file-match "\\.d2\\'"))
+#+end_src
 *** dashboard
 :PROPERTIES:
 :CREATED_TIME: [2023-11-18 Sat 23:10]

@@ -176,6 +176,12 @@
       repo = "cue-mode";
       type = "github";
     };
+    d2-mode = {
+      flake = false;
+      owner = "andorsk";
+      repo = "d2-mode";
+      type = "github";
+    };
     dash = {
       flake = false;
       owner = "magnars";
