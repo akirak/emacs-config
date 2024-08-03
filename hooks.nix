@@ -16,11 +16,12 @@
     pass_filenames = true;
   };
 in {
-  alejandra = {
+  nixfmt = {
     enable = true;
     excludes = [
       "emacs/lock/flake\\.nix"
     ];
+    package = pkgs.nixfmt-rfc-style;
   };
   # nix-linter.enable = true;
 
