@@ -23,11 +23,15 @@
       flake = false;
     };
     gnu-elpa = {
-      url = "git+https://git.savannah.gnu.org/git/emacs/elpa.git?ref=main";
+      # Use a GitHub mirror for a higher availability
+      url = "github:elpa-mirrors/elpa";
+      # url = "git+https://git.savannah.gnu.org/git/emacs/elpa.git?ref=main";
       flake = false;
     };
     nongnu-elpa = {
-      url = "git+https://git.savannah.gnu.org/git/emacs/nongnu.git?ref=main";
+      # Use a GitHub mirror for a higher availability
+      url = "github:elpa-mirrors/nongnu";
+      # url = "git+https://git.savannah.gnu.org/git/emacs/nongnu.git?ref=main";
       flake = false;
     };
     emacs-config-features.url = "github:akirak/emacs-config/develop?dir=presets/default";
