@@ -5697,6 +5697,10 @@ Major mode for CUE language files
 :PROPERTIES:
 :CREATED_TIME: [2024-08-03 Sat 12:15]
 :END:
+#+begin_quote
+Major mode for working with d2 graphs
+[[https://github.com/andorsk/d2-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package d2-mode)
@@ -9690,7 +9694,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 214 |
+| [[org-ql-search:tags:packages][packages]]            | 215 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
