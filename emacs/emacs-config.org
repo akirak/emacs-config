@@ -4948,6 +4948,9 @@ This is an extra functions for window management.
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
+                       ("^\\*Org-Babel Error Output*"
+                        display-buffer-no-window
+                        (allow-no-window . t))
                        ("^\\*envrc"
                         display-buffer-no-window
                         (allow-no-window . t))
@@ -8115,7 +8118,6 @@ Summon and dismiss buffers as popups
                                      "^ \\*Agenda Commands\\*"
                                      "^\\*Register Preview\\*"
                                      "^\\*Shell Command Output\\*"
-                                     "^\\*Org-Babel Error Output*"
                                      "^\\*edit string\\*"
                                      "^\\*bean-query"
                                      "^\\*scratch from selection\\*"
