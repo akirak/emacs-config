@@ -2310,15 +2310,15 @@ Display available keybindings in popup
         (apply orig args)))
     (advice-add 'consult-buffer :around #'akirak/ad-no-obey-display-actions)
     (advice-add 'org-dog-find-file :around #'akirak/ad-no-obey-display-actions)
-    (advice-add 'org-src-switch-to-buffer
-                :override
-                (defun akirak/org-src-switch-to-buffer (buffer context)
-                  (unless (eq org-src-window-setup 'current-window)
-                    (message "This function should be used only when
-   `org-src-window-setup' is \='current-window, but it is %s"
-                             org-src-window-setup))
-                  (let ((switch-to-buffer-obey-display-actions nil))
-                    (switch-to-buffer buffer))))
+    ;; (advice-add 'org-src-switch-to-buffer
+    ;;             :override
+    ;;             (defun akirak/org-src-switch-to-buffer (buffer context)
+    ;;               (unless (eq org-src-window-setup 'current-window)
+    ;;                 (message "This function should be used only when
+    ;; `org-src-window-setup' is \='current-window, but it is %s"
+    ;;                          org-src-window-setup))
+    ;;               (let ((switch-to-buffer-obey-display-actions nil))
+    ;;                 (switch-to-buffer buffer))))
 
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
@@ -3151,7 +3151,20 @@ Outline-based notes management and organizer
 #+begin_src emacs-lisp
   (setup org-src
     (:set org-src-tab-acts-natively t
-          org-src-window-setup 'current-window))
+          org-src-window-setup 'split-window-below)
+
+    (advice-add 'org-src-switch-to-buffer
+                :before
+                (defun akirak/org-src-maybe-jump-to-result (buffer context)
+                  (unless (memq org-src-window-setup '(split-window-below
+                                                       split-window-right))
+                    (message "This function should be used only when \
+  `org-src-window-setup' has a certain value"))
+                  (when (alist-get :file (caddr (org-babel-get-src-block-info)))
+                    (if-let (pos (org-babel-where-is-src-block-result))
+                        (goto-char pos)
+                      (goto-char (org-element-end (org-element-at-point-no-context))))
+                    (recenter-top-bottom 0))))
 
     (defun akirak/org-src-save-hook-for-update ()
       (when (eq this-command 'org-edit-src-save)
