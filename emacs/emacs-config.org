@@ -4938,11 +4938,6 @@ This is an extra functions for window management.
                           (vterm-mode eat-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
-                       ((or ,(major-modes compilation-mode)
-                            "-install\\*")
-                        ,(reuse-mode-window
-                          (compilation-mode comint-mode)
-                          display-buffer-use-some-window))
                        (,(major-modes nov-mode pdf-view-mode Info-mode)
                         akirak-window-display-document-buffer)
                        ((major-mode . org-agenda-mode)
@@ -4965,7 +4960,12 @@ This is an extra functions for window management.
                        ("^\\*deadgrep"
                         display-buffer-use-least-recent-window)
                        ("^\\*Async Shell Command\\*"
-                        display-buffer-no-window)))
+                        display-buffer-no-window)
+                       ((or ,(major-modes compilation-mode)
+                            "-install\\*")
+                        ,(reuse-mode-window
+                          (compilation-mode comint-mode)
+                          display-buffer-use-some-window))))
         (if-let (cell (assoc (car entry) display-buffer-alist))
             (setcdr cell (cdr entry))
           (setq display-buffer-alist (append display-buffer-alist (list entry))))))
