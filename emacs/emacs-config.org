@@ -17,6 +17,7 @@
 - [[#working-with-specific-services][Working with specific services]]
 - [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#packages][Packages]]
+- [[#software-package-management][Software package management]]
 - [[#workarounds][Workarounds]]
 - [[#post-init][Post init]]
 - [[#notes][Notes]]
@@ -9232,13 +9233,12 @@ A major mode for the Zig programming language
   (setup (:package zig-mode)
     (:file-match "\\.zig\\'"))
 #+end_src
-** Workarounds
-*** Package management
+** Software package management
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:54]
 :SORTING_TYPE: a
 :END:
-**** Cargo (Rust)
+*** Cargo (Rust)
 :PROPERTIES:
 :CREATED_TIME: [2024-02-11 Sun 11:20]
 :END:
@@ -9246,7 +9246,7 @@ A major mode for the Zig programming language
   (setup cargo
     (:package-files "Cargo.toml"))
 #+end_src
-**** Gleam
+*** Gleam
 :PROPERTIES:
 :CREATED_TIME: [2024-04-03 Wed 23:42]
 :END:
@@ -9282,7 +9282,7 @@ A major mode for the Zig programming language
            :root root :name "gleam-shell")
         (user-error "Not in a Gleam project"))))
 #+end_src
-**** Haskell
+*** Haskell
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 13:00]
 :END:
@@ -9290,7 +9290,7 @@ A major mode for the Zig programming language
   (setup hpack
     (:package-files "package.yaml"))
 #+end_src
-**** Mix (Elixir)
+*** Mix (Elixir)
 #+begin_src elisp
   (setup mix
     (:package-files "mix.exs")
@@ -9312,7 +9312,7 @@ A major mode for the Zig programming language
             :root root)
         (akirak-shell-exec-in-project "iex"))))
 #+end_src
-**** Node.js and Bun
+*** Node.js and Bun
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:59]
 :END:
@@ -9320,7 +9320,7 @@ A major mode for the Zig programming language
   (setup npm
     (:package-files "package.json"))
 #+end_src
-**** OCaml (opam and dune)
+*** OCaml (opam and dune)
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:54]
 :END:
@@ -9356,7 +9356,7 @@ A major mode for the Zig programming language
           :name "utop"
           :root default-directory))))
 #+end_src
-**** rebar3 (Erlang)
+*** rebar3 (Erlang)
 :PROPERTIES:
 :CREATED_TIME: [2024-04-18 Thu 23:00]
 :END:
@@ -9364,6 +9364,7 @@ A major mode for the Zig programming language
   (setup rebar3
     (:package-files "rebar.config"))
 #+end_src
+** Workarounds
 *** Org mode
 Define how Org entries are displayed by certain commands.
 #+begin_src emacs-lisp
