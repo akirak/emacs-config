@@ -3152,6 +3152,25 @@ Outline-based notes management and organizer
   (setup org-src
     (:set org-src-tab-acts-natively t
           org-src-window-setup 'current-window))
+
+    (defun akirak/org-src-save-hook-for-update ()
+      (when (eq this-command 'org-edit-src-save)
+        (org-with-point-at org-src--beg-marker
+          (org-babel-execute-src-block)
+          (org-redisplay-inline-images))))
+
+    (:when-loaded
+      (add-hook 'org-src-mode-hook
+                (defun akirak/org-src-auto-update-setup ()
+                  "Set up auto-updating of image source blocks."
+                  ;; If the source block has :file parameter, set up an `after-save-hook'.
+                  (when (org-with-point-at org-src--beg-marker
+                          (alist-get :file (caddr (org-babel-get-src-block-info))))
+                    (add-hook 'post-command-hook
+                              #'akirak/org-src-save-hook-for-update
+                              nil
+                              t)))
+                100)))
 #+end_src
 **** Tags
 #+begin_src emacs-lisp
