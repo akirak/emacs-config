@@ -30,7 +30,7 @@ ARG, the target file can be changed only for that item."
          (_ (unless (or arg relative-from-prop)
               (org-entry-put nil prop
                              (file-name-sans-extension
-                              (oref (org-dog-file-object absolute) relative-from-prop)))))
+                              (oref (org-dog-file-object absolute) relative)))))
          (chapter (org-link-display-format
                    (if (use-region-p)
                        (buffer-substring-no-properties

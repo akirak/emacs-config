@@ -1,26 +1,29 @@
-{pkgs}: let
-  emacsConfig = {
-    name,
-    stages,
-    funcName,
-  }: {
+{ pkgs }:
+let
+  emacsConfig =
+    {
+      name,
+      stages,
+      funcName,
+    }:
+    {
+      enable = true;
+      inherit stages;
+      inherit name;
+      entry = builtins.concatStringsSep " " [
+        "${pkgs.emacs-batch}/bin/emacs"
+        "--batch -l ${./scripts/update-emacs-config.el}"
+        "-f ${funcName}"
+      ];
+      files = "emacs-config\.org$";
+      pass_filenames = true;
+    };
+in
+{
+  nixfmt = {
     enable = true;
-    inherit stages;
-    inherit name;
-    entry = builtins.concatStringsSep " " [
-      "${pkgs.emacs-batch}/bin/emacs"
-      "--batch -l ${./scripts/update-emacs-config.el}"
-      "-f ${funcName}"
-    ];
-    files = "emacs-config\.org$";
-    pass_filenames = true;
-  };
-in {
-  alejandra = {
-    enable = true;
-    excludes = [
-      "emacs/lock/flake\\.nix"
-    ];
+    package = pkgs.nixfmt-rfc-style;
+    excludes = [ "emacs/lock/flake\\.nix" ];
   };
   # nix-linter.enable = true;
 
@@ -34,13 +37,13 @@ in {
 
   emacs-config = emacsConfig {
     name = "Sort entries in the Emacs configuration";
-    stages = ["commit"];
+    stages = [ "commit" ];
     funcName = "akirak/batch-update-emacs-config";
   };
 
   emacs-config-contents = emacsConfig {
     name = "Update blocks in the Emacs configuration";
-    stages = ["push"];
+    stages = [ "push" ];
     funcName = "akirak/batch-update-emacs-config-contents";
   };
 }

@@ -17,6 +17,7 @@
 - [[#working-with-specific-services][Working with specific services]]
 - [[#user-package-akirak-el][User package (akirak-*.el)]]
 - [[#packages][Packages]]
+- [[#software-package-management][Software package management]]
 - [[#workarounds][Workarounds]]
 - [[#post-init][Post init]]
 - [[#notes][Notes]]
@@ -2310,15 +2311,15 @@ Display available keybindings in popup
         (apply orig args)))
     (advice-add 'consult-buffer :around #'akirak/ad-no-obey-display-actions)
     (advice-add 'org-dog-find-file :around #'akirak/ad-no-obey-display-actions)
-    (advice-add 'org-src-switch-to-buffer
-                :override
-                (defun akirak/org-src-switch-to-buffer (buffer context)
-                  (unless (eq org-src-window-setup 'current-window)
-                    (message "This function should be used only when
-   `org-src-window-setup' is \='current-window, but it is %s"
-                             org-src-window-setup))
-                  (let ((switch-to-buffer-obey-display-actions nil))
-                    (switch-to-buffer buffer))))
+    ;; (advice-add 'org-src-switch-to-buffer
+    ;;             :override
+    ;;             (defun akirak/org-src-switch-to-buffer (buffer context)
+    ;;               (unless (eq org-src-window-setup 'current-window)
+    ;;                 (message "This function should be used only when
+    ;; `org-src-window-setup' is \='current-window, but it is %s"
+    ;;                          org-src-window-setup))
+    ;;               (let ((switch-to-buffer-obey-display-actions nil))
+    ;;                 (switch-to-buffer buffer))))
 
     (defun akirak/scroll-half-height (&optional window)
       (/ (1- (window-height (or window (selected-window)))) 2))
@@ -3151,7 +3152,39 @@ Outline-based notes management and organizer
 #+begin_src emacs-lisp
   (setup org-src
     (:set org-src-tab-acts-natively t
-          org-src-window-setup 'current-window))
+          org-src-window-setup 'split-window-below)
+
+    (advice-add 'org-src-switch-to-buffer
+                :before
+                (defun akirak/org-src-maybe-jump-to-result (buffer context)
+                  (unless (memq org-src-window-setup '(split-window-below
+                                                       split-window-right))
+                    (message "This function should be used only when \
+  `org-src-window-setup' has a certain value"))
+                  (when (alist-get :file (caddr (org-babel-get-src-block-info)))
+                    (if-let (pos (org-babel-where-is-src-block-result))
+                        (goto-char pos)
+                      (goto-char (org-element-end (org-element-at-point-no-context))))
+                    (recenter-top-bottom 0))))
+
+    (defun akirak/org-src-save-hook-for-update ()
+      (when (eq this-command 'org-edit-src-save)
+        (org-with-point-at org-src--beg-marker
+          (org-babel-execute-src-block)
+          (org-redisplay-inline-images))))
+
+    (:when-loaded
+      (add-hook 'org-src-mode-hook
+                (defun akirak/org-src-auto-update-setup ()
+                  "Set up auto-updating of image source blocks."
+                  ;; If the source block has :file parameter, set up an `after-save-hook'.
+                  (when (org-with-point-at org-src--beg-marker
+                          (alist-get :file (caddr (org-babel-get-src-block-info))))
+                    (add-hook 'post-command-hook
+                              #'akirak/org-src-save-hook-for-update
+                              nil
+                              t)))
+                100)))
 #+end_src
 **** Tags
 #+begin_src emacs-lisp
@@ -3546,10 +3579,9 @@ Manage Hyprctl workspaces from Org mode
 
 #+begin_src emacs-lisp
   (setup (:package org-hyprctl)
-    (when (equal "Hyprland" (getenv "XDG_CURRENT_DESKTOP"))
-      (define-key akirak/c-z-map "w" #'org-hyprctl-popup)
-      (with-eval-after-load 'org
-        (add-hook 'org-ctrl-c-ctrl-c-hook #'org-hyprctl-update))))
+    (define-key akirak/c-z-map "w" #'org-hyprctl-popup)
+    (with-eval-after-load 'org
+      (add-hook 'org-ctrl-c-ctrl-c-hook #'org-hyprctl-update)))
 #+end_src
 *** org-indent
 :PROPERTIES:
@@ -4939,16 +4971,14 @@ This is an extra functions for window management.
                           (vterm-mode eat-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
-                       ((or ,(major-modes compilation-mode)
-                            "-install\\*")
-                        ,(reuse-mode-window
-                          (compilation-mode comint-mode)
-                          display-buffer-use-some-window))
                        (,(major-modes nov-mode pdf-view-mode Info-mode)
                         akirak-window-display-document-buffer)
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
+                       ("^\\*Org-Babel Error Output*"
+                        display-buffer-no-window
+                        (allow-no-window . t))
                        ("^\\*envrc"
                         display-buffer-no-window
                         (allow-no-window . t))
@@ -4963,7 +4993,12 @@ This is an extra functions for window management.
                        ("^\\*deadgrep"
                         display-buffer-use-least-recent-window)
                        ("^\\*Async Shell Command\\*"
-                        display-buffer-no-window)))
+                        display-buffer-no-window)
+                       ((or ,(major-modes compilation-mode)
+                            "-install\\*")
+                        ,(reuse-mode-window
+                          (compilation-mode comint-mode)
+                          display-buffer-use-some-window))))
         (if-let (cell (assoc (car entry) display-buffer-alist))
             (setcdr cell (cdr entry))
           (setq display-buffer-alist (append display-buffer-alist (list entry))))))
@@ -5693,6 +5728,20 @@ Major mode for CUE language files
 #+begin_src emacs-lisp
   (setup (:package cue-mode)
     (:file-match "\\.cue\\'"))
+#+end_src
+*** d2-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-08-03 Sat 12:15]
+:END:
+#+begin_quote
+Major mode for working with d2 graphs
+[[https://github.com/andorsk/d2-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package d2-mode)
+    (:nixpkgs d2)
+    (:file-match "\\.d2\\'"))
 #+end_src
 *** dashboard
 :PROPERTIES:
@@ -6454,8 +6503,6 @@ Get environment variables such as $PATH from the shell
 
 #+begin_src emacs-lisp
   (setup (:package exec-path-from-shell)
-    (:when-loaded
-      (add-to-list 'exec-path-from-shell-variables "HYPRLAND_INSTANCE_SIGNATURE"))
     (when (and (or window-system
                    (daemonp))
                (not (equal akirak/os-id "nixos")))
@@ -6494,7 +6541,7 @@ Not only English-Chinese translator
 
 You should also load ol-fanyi library to enable fanyi link type.
 See modules.
-*** flycheck                                                   :lsp_mode:@extra:
+*** COMMENT flycheck                                           :lsp_mode:@extra:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 22:53]
 :END:
@@ -6542,7 +6589,7 @@ Access Git forges from Magit
 #+begin_src emacs-lisp
 (setup (:package forge))
 #+end_src
-*** fstar-mode                                                    :@extra:fstar:
+*** COMMENT fstar-mode                                            :@extra:fstar:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
 :END:
@@ -7340,7 +7387,7 @@ LSP bridge
              "w" #'lsp-bridge-diagnostic-copy
              "R" #'lsp-bridge-restart-process)))
 #+end_src
-*** lsp-mode                                                   :@extra:lsp_mode:
+*** COMMENT lsp-mode                                           :@extra:lsp_mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 19:03]
 :END:
@@ -7754,7 +7801,10 @@ A humble major-mode for Lean
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package nael))
+  (setup (:package nael)
+    ;; Temporary workarounds.
+    (autoload 'nael-mode "nael")
+    (add-to-list 'auto-mode-alist '("\\.lean\\'" . nael-mode)))
 #+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
@@ -7946,7 +7996,7 @@ automatic indentation with ocp-indent
 :CREATED_TIME: [2022-04-22 Fri 23:59]
 :END:
 #+begin_quote
-Minor mode for a nice writing environment
+Minor mode to automatically balance window margins
 [[https://github.com/rnkn/olivetti]]
 #+end_quote
 
@@ -8101,7 +8151,6 @@ Summon and dismiss buffers as popups
                                      "^ \\*Agenda Commands\\*"
                                      "^\\*Register Preview\\*"
                                      "^\\*Shell Command Output\\*"
-                                     "^\\*Org-Babel Error Output*"
                                      "^\\*edit string\\*"
                                      "^\\*bean-query"
                                      "^\\*scratch from selection\\*"
@@ -9161,7 +9210,7 @@ ANSI, XTERM 256 and Truecolor support
 #+end_src
 
 This package is required by the configuration for buttercup now.
-*** z3-mode
+*** COMMENT z3-mode                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-09 Mon 23:59]
 :END:
@@ -9184,13 +9233,12 @@ A major mode for the Zig programming language
   (setup (:package zig-mode)
     (:file-match "\\.zig\\'"))
 #+end_src
-** Workarounds
-*** Package management
+** Software package management
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:54]
 :SORTING_TYPE: a
 :END:
-**** Cargo (Rust)
+*** Cargo (Rust)
 :PROPERTIES:
 :CREATED_TIME: [2024-02-11 Sun 11:20]
 :END:
@@ -9198,7 +9246,7 @@ A major mode for the Zig programming language
   (setup cargo
     (:package-files "Cargo.toml"))
 #+end_src
-**** Gleam
+*** Gleam
 :PROPERTIES:
 :CREATED_TIME: [2024-04-03 Wed 23:42]
 :END:
@@ -9234,7 +9282,7 @@ A major mode for the Zig programming language
            :root root :name "gleam-shell")
         (user-error "Not in a Gleam project"))))
 #+end_src
-**** Haskell
+*** Haskell
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 13:00]
 :END:
@@ -9242,7 +9290,7 @@ A major mode for the Zig programming language
   (setup hpack
     (:package-files "package.yaml"))
 #+end_src
-**** Mix (Elixir)
+*** Mix (Elixir)
 #+begin_src elisp
   (setup mix
     (:package-files "mix.exs")
@@ -9264,7 +9312,7 @@ A major mode for the Zig programming language
             :root root)
         (akirak-shell-exec-in-project "iex"))))
 #+end_src
-**** Node.js and Bun
+*** Node.js and Bun
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:59]
 :END:
@@ -9272,7 +9320,7 @@ A major mode for the Zig programming language
   (setup npm
     (:package-files "package.json"))
 #+end_src
-**** OCaml (opam and dune)
+*** OCaml (opam and dune)
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:54]
 :END:
@@ -9308,7 +9356,7 @@ A major mode for the Zig programming language
           :name "utop"
           :root default-directory))))
 #+end_src
-**** rebar3 (Erlang)
+*** rebar3 (Erlang)
 :PROPERTIES:
 :CREATED_TIME: [2024-04-18 Thu 23:00]
 :END:
@@ -9316,6 +9364,7 @@ A major mode for the Zig programming language
   (setup rebar3
     (:package-files "rebar.config"))
 #+end_src
+** Workarounds
 *** Org mode
 Define how Org entries are displayed by certain commands.
 #+begin_src emacs-lisp
@@ -9680,17 +9729,17 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 215 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
-| [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
+| [[org-ql-search:tags:@extra][@extra]]              |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
@@ -9704,7 +9753,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
-| [[org-ql-search:tags:fstar][fstar]]               |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -9716,7 +9764,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
-| [[org-ql-search:tags:lsp_mode][lsp_mode]]            |   2 |
+| [[org-ql-search:tags:fstar][fstar]]               |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |

@@ -23,11 +23,15 @@
       flake = false;
     };
     gnu-elpa = {
-      url = "git+https://git.savannah.gnu.org/git/emacs/elpa.git?ref=main";
+      # Use a GitHub mirror for a higher availability
+      url = "github:elpa-mirrors/elpa";
+      # url = "git+https://git.savannah.gnu.org/git/emacs/elpa.git?ref=main";
       flake = false;
     };
     nongnu-elpa = {
-      url = "git+https://git.savannah.gnu.org/git/emacs/nongnu.git?ref=main";
+      # Use a GitHub mirror for a higher availability
+      url = "github:elpa-mirrors/nongnu";
+      # url = "git+https://git.savannah.gnu.org/git/emacs/nongnu.git?ref=main";
       flake = false;
     };
     emacs-config-features.url = "github:akirak/emacs-config/develop?dir=presets/default";
@@ -65,19 +69,18 @@
     ];
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-parts,
-    utils,
-    ...
-  } @ inputs:
-    flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = ["x86_64-linux"];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-parts,
+      utils,
+      ...
+    }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
 
-      imports = [
-        inputs.flake-parts.flakeModules.easyOverlay
-      ];
+      imports = [ inputs.flake-parts.flakeModules.easyOverlay ];
 
       flake = {
         homeModules.twist = {
@@ -88,148 +91,125 @@
         };
       };
 
-      perSystem = {
-        config,
-        system,
-        pkgs,
-        final,
-        ...
-      }: let
-        inherit (pkgs) lib;
-        inherit (final) emacs-config;
-        inherit (builtins) substring;
-        profiles =
-          import ./emacs/profiles.nix {
+      perSystem =
+        {
+          config,
+          system,
+          pkgs,
+          final,
+          ...
+        }:
+        let
+          inherit (pkgs) lib;
+          inherit (final) emacs-config;
+          inherit (builtins) substring;
+          profiles = import ./emacs/profiles.nix {
             inherit lib;
             defaultFeatures = import inputs.emacs-config-features;
-          }
-          emacs-config;
-      in {
-        overlayAttrs =
-          {
-            coq = inputs.nixpkgs.legacyPackages.${final.system}.coq;
-            coq-lsp = inputs.nixpkgs.legacyPackages.${final.system}.coqPackages.coq-lsp;
-            flake-no-path = inputs.flake-no-path.defaultPackage.${system};
-            inherit
-              (inputs.my-overlay.packages.${final.system})
-              github-linguist
-              epubinfo
-              squasher
-              ;
-            # This will indirectly override tree-sitter-grammars as wells
-            tree-sitter = pkgs.tree-sitter.override {
-              extraGrammars = {
-                tree-sitter-astro = {
-                  src = inputs.tree-sitter-astro.outPath;
-                };
-                tree-sitter-gleam = {
-                  src = inputs.tree-sitter-gleam.outPath;
+          } emacs-config;
+        in
+        {
+          overlayAttrs =
+            {
+              coq = inputs.nixpkgs.legacyPackages.${final.system}.coq;
+              coq-lsp = inputs.nixpkgs.legacyPackages.${final.system}.coqPackages.coq-lsp;
+              flake-no-path = inputs.flake-no-path.defaultPackage.${system};
+              inherit (inputs.my-overlay.packages.${final.system}) github-linguist epubinfo squasher;
+              # This will indirectly override tree-sitter-grammars as wells
+              tree-sitter = pkgs.tree-sitter.override {
+                extraGrammars = {
+                  tree-sitter-astro = {
+                    src = inputs.tree-sitter-astro.outPath;
+                  };
+                  tree-sitter-gleam = {
+                    src = inputs.tree-sitter-gleam.outPath;
+                  };
                 };
               };
-            };
-          }
-          // (
-            import ./emacs/overlay.nix {
+            }
+            // (import ./emacs/overlay.nix {
               inherit inputs;
               configurationRevision = "${substring 0 8 self.lastModifiedDate}.${
-                if self ? rev
-                then substring 0 7 self.rev
-                else "dirty"
+                if self ? rev then substring 0 7 self.rev else "dirty"
               }";
+            } final pkgs);
+
+          packages =
+            {
+              inherit emacs-config;
+
+              # test-emacs-config = pkgs.callPackage ./emacs/tests {};
+
+              update-elisp-lock = pkgs.writeShellApplication {
+                name = "update-elisp-lock";
+                runtimeInputs = [ pkgs.deno ];
+                text = ''
+                  cd emacs/lock
+                  deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
+                '';
+              };
+
+              build-packages = pkgs.writeShellApplication {
+                name = "build-packages";
+                runtimeInputs = [
+                  pkgs.nix-eval-jobs
+                  pkgs.jq
+                ];
+                text = ''
+                  system=$(nix eval --expr builtins.currentSystem --impure --raw)
+                  flake="path:$(readlink -f "$PWD")#packages.$system.emacs-config.elispPackages"
+                  nix-eval-jobs \
+                      --gc-roots-dir gcroot \
+                      --flake "$flake" \
+                      | while read -r line; do
+                      out=$(jq -r .outputs.out <<<"$line")
+                      if [[ $(nix path-info "$out" --json --store https://akirak.cachix.org \
+                         2> /dev/null \
+                         | jq '.[0].valid') = false ]]
+                      then
+                        drv=$(jq -r .drvPath <<<"$line")
+                        echo "Building $drv"
+                        time nix build "$drv" --no-link --print-build-logs
+                      else
+                        echo "$out is already built, skipping"
+                      fi
+                  done
+                '';
+              };
             }
-            final
-            pkgs
-          );
-
-        packages =
-          {
-            inherit emacs-config;
-
-            # test-emacs-config = pkgs.callPackage ./emacs/tests {};
-
-            update-elisp-lock = pkgs.writeShellApplication {
-              name = "update-elisp-lock";
-              runtimeInputs = [
-                pkgs.deno
-              ];
-              text = ''
-                cd emacs/lock
-                deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
-              '';
-            };
-
-            build-packages = pkgs.writeShellApplication {
-              name = "build-packages";
-              runtimeInputs = [
-                pkgs.nix-eval-jobs
-                pkgs.jq
-              ];
-              text = ''
-                system=$(nix eval --expr builtins.currentSystem --impure --raw)
-                flake="path:$(readlink -f "$PWD")#packages.$system.emacs-config.elispPackages"
-                nix-eval-jobs \
-                    --gc-roots-dir gcroot \
-                    --flake "$flake" \
-                    | while read -r line; do
-                    out=$(jq -r .outputs.out <<<"$line")
-                    if [[ $(nix path-info "$out" --json --store https://akirak.cachix.org \
-                       2> /dev/null \
-                       | jq '.[0].valid') = false ]]
-                    then
-                      drv=$(jq -r .drvPath <<<"$line")
-                      echo "Building $drv"
-                      time nix build "$drv" --no-link --print-build-logs
-                    else
-                      echo "$out is already built, skipping"
-                    fi
-                done
-              '';
-            };
-          }
-          // (
-            builtins.mapAttrs (name: emacs-env:
+            // (builtins.mapAttrs (
+              name: emacs-env:
               emacs-env
               // {
                 wrappers = lib.optionalAttrs pkgs.stdenv.isLinux {
-                  tmpdir =
-                    pkgs.callPackage ./nix/tmpInitDirWrapper.nix {}
-                    "emacs-${name}"
-                    emacs-env;
+                  tmpdir = pkgs.callPackage ./nix/tmpInitDirWrapper.nix { } "emacs-${name}" emacs-env;
                 };
 
-                archive-builder =
-                  (inputs.archiver.overlays.default final pkgs).makeEmacsTwistArchive
-                  {
-                    name = "build-emacs-${name}-archive";
-                    earlyInitFile = ./emacs/early-init.el;
-                    narName = "emacs-profile-${name}.nar";
-                    outName = "emacs-profile-${name}-${
-                      builtins.substring 0 8 (inputs.self.lastModifiedDate)
-                    }-${system}.tar.zstd";
-                  }
-                  emacs-env;
-              })
-            profiles
-          );
+                archive-builder = (inputs.archiver.overlays.default final pkgs).makeEmacsTwistArchive {
+                  name = "build-emacs-${name}-archive";
+                  earlyInitFile = ./emacs/early-init.el;
+                  narName = "emacs-profile-${name}.nar";
+                  outName = "emacs-profile-${name}-${
+                    builtins.substring 0 8 (inputs.self.lastModifiedDate)
+                  }-${system}.tar.zstd";
+                } emacs-env;
+              }
+            ) profiles);
 
-        apps = emacs-config.makeApps {
-          lockDirName = "emacs/lock";
-        };
+          apps = emacs-config.makeApps { lockDirName = "emacs/lock"; };
 
-        # Set up a pre-commit hook by running `nix develop`.
-        devShells = {
-          default = pkgs.mkShell {
-            inherit
-              (inputs.pre-commit-hooks.lib.${system}.run {
-                src = ./.;
-                hooks = import ./hooks.nix {
-                  pkgs = final;
-                };
-              })
-              shellHook
-              ;
+          # Set up a pre-commit hook by running `nix develop`.
+          devShells = {
+            default = pkgs.mkShell {
+              inherit
+                (inputs.pre-commit-hooks.lib.${system}.run {
+                  src = ./.;
+                  hooks = import ./hooks.nix { pkgs = final; };
+                })
+                shellHook
+                ;
+            };
           };
         };
-      };
     };
 }
