@@ -15,13 +15,22 @@
   "rbw")
 
 (defun akirak-bitwarden-complete-entry (prompt &optional require-match)
+  (completing-read prompt
+                   (akirak-bitwarden--list)
+                   nil require-match))
+
+(defun akirak-bitwarden--directories ()
+  (thread-last
+    (akirak-bitwarden--list)
+    (mapcar #'file-name-directory)
+    (seq-uniq)))
+
+(defun akirak-bitwarden--list ()
+  "Return a list of account names."
   (let ((process-environment (cons "TERM" process-environment)))
-    (completing-read prompt
-                     (process-lines-handling-status
-                      akirak-bitwarden-rbw-executable
-                      #'akirak-bitwarden--process-status-handler
-                      "list")
-                     nil require-match)))
+    (process-lines-handling-status akirak-bitwarden-rbw-executable
+                                   #'akirak-bitwarden--process-status-handler
+                                   "list")))
 
 (defun akirak-bitwarden--process-status-handler (status)
   (unless (zerop status)
@@ -67,7 +76,8 @@
 ;;;###autoload
 (defun akirak-bitwarden-add (entry)
   "Add a new password ENTRY."
-  (interactive (list "sNew entry: "))
+  (interactive (list (completing-read "New entry: "
+                                      (akirak-bitwarden--directories))))
   (with-editor-async-shell-command
    (mapconcat #'shell-quote-argument
               (list akirak-bitwarden-rbw-executable "add" entry)
