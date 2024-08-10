@@ -22,6 +22,16 @@
      :extra-modes nil
      :extensions (".ex")
      :source-directories ("lib")
+     :make-default
+     (lambda (identifier candidates)
+       (when (char-uppercase-p (elt identifier 0))
+         (seq-find `(lambda (s)
+                      (and (string-match-p "^alias " s)
+                           (string-match-p (concat (rx (any "."))
+                                                   (regexp-quote ,identifier)
+                                                   "\\'")
+                                           s)))
+                   candidates)))
      :transform-filename
      (lambda (filepath identifier)
        (let ((module (akirak-elixir-module-name-from-file filepath)))
@@ -46,7 +56,7 @@
      (user-error "Unsupported mode"))
     (`(,mode . ,(map :regexp :extra-modes
                      :extensions :source-directories :transform-filename
-                     :inside-tree-sitter-node))
+                     :inside-tree-sitter-node :make-default))
      (let* ((existing-statements (akirak-import--collect-statements (cons mode extra-modes)
                                                                     :regexp regexp))
             (generated-statements (akirak-import--generate-statements
@@ -68,7 +78,10 @@
                            nil nil
                            (when (and pattern
                                       (seq-find #'contains-pattern lines))
-                             (concat pattern " ")))
+                             (concat pattern " "))
+                           nil
+                           (when (and make-default pattern)
+                             (funcall make-default pattern lines)))
           :regexp regexp))))))
 
 (cl-defun akirak-import--collect-statements (modes &key regexp)
