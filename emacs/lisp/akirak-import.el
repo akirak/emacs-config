@@ -73,7 +73,9 @@
                 (string-match-p (regexp-quote pattern)
                                 s))))
          (akirak-import--insert-line
-          (completing-read "Insert an import statement: "
+          (completing-read (if pattern
+                               (format-message "Insert an import statement for '%s': " pattern)
+                             "Insert an import statement: ")
                            lines
                            nil nil
                            (when (and pattern
