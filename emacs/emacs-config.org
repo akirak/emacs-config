@@ -2024,6 +2024,8 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subr
+    (:with-map ctl-x-x-map
+      (:bind "+" #'make-directory))
     (:status opinionated
       ;; (:global "C-h" 'backward-delete-char)
       ))
