@@ -4333,7 +4333,6 @@ Major mode for the Go programming language
 *** heex-ts-mode
 #+begin_src elisp
   (setup heex-ts-mode
-    (:file-match "\\.heex\\'")
     (:mode-project-roots "mix.exs")
     (:local-set electric-pair-pairs '((?% . ?%)))
     (:when-loaded
