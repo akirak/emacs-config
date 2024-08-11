@@ -16,7 +16,12 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - run: nix flake update gnu-elpa nongnu-elpa melpa
+    - name: Update the registries
+      run: nix flake update gnu-elpa nongnu-elpa melpa
+    - name: Relock
+      run: |
+        nix run .#lock --impure
+        nix run .#update --impure
     - uses: peter-evans/create-pull-request@v6
       with:
         base: develop
