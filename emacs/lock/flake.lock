@@ -865,22 +865,6 @@
         "type": "github"
       }
     },
-    "emacsql-sqlite": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1722346744,
-        "narHash": "sha256-4lv9Yjf8kJivtQFVgo192PzX6q3JXQF4rQABaN1GSsk=",
-        "owner": "magit",
-        "repo": "emacsql",
-        "rev": "32f086e6e1aca48120b71fec2437b4c8b21b29fd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "magit",
-        "repo": "emacsql",
-        "type": "github"
-      }
-    },
     "embark": {
       "flake": false,
       "locked": {
@@ -1638,17 +1622,17 @@
     "llama": {
       "flake": false,
       "locked": {
-        "lastModified": 1721691166,
-        "narHash": "sha256-Waife7zCD7zbC0rOKv0ghl6sqV4IHkJJDxh4GxA/quY=",
-        "owner": "~tarsius",
+        "lastModified": 1723335813,
+        "narHash": "sha256-09/rUWlaZsigC+QSCZrHQt982PWLRDgZO4cD2rtV9qg=",
+        "owner": "tarsius",
         "repo": "llama",
-        "rev": "ab2b4b1f4eb1abe9dbac99d0d6df45108aaef7cd",
-        "type": "sourcehut"
+        "rev": "d98debc6ca4c7cc86e9dd944b2393698802ef077",
+        "type": "github"
       },
       "original": {
-        "owner": "~tarsius",
+        "owner": "tarsius",
         "repo": "llama",
-        "type": "sourcehut"
+        "type": "github"
       }
     },
     "lv": {
@@ -2966,7 +2950,6 @@
         "eldoc-eval": "eldoc-eval",
         "elx": "elx",
         "emacsql": "emacsql",
-        "emacsql-sqlite": "emacsql-sqlite",
         "embark": "embark",
         "embark-consult": "embark-consult",
         "envrc": "envrc",

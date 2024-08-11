@@ -1,6 +1,5 @@
 {
-  description =
-    "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
+  description = "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
     academic-phrases = {
       flake = false;
@@ -325,12 +324,6 @@
       repo = "emacsql";
       type = "github";
     };
-    emacsql-sqlite = {
-      flake = false;
-      owner = "magit";
-      repo = "emacsql";
-      type = "github";
-    };
     embark = {
       flake = false;
       owner = "oantolin";
@@ -617,9 +610,9 @@
     };
     llama = {
       flake = false;
-      owner = "~tarsius";
+      owner = "tarsius";
       repo = "llama";
-      type = "sourcehut";
+      type = "github";
     };
     lv = {
       flake = false;
