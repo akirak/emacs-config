@@ -3582,6 +3582,8 @@ Manage Hyprctl workspaces from Org mode
 #+begin_src emacs-lisp
   (setup (:package org-hyprctl)
     (define-key akirak/c-z-map "w" #'org-hyprctl-popup)
+    (:bind "C-M-n" #'move-dup-move-lines-down
+           "C-M-p" #'move-dup-move-lines-up)
     (with-eval-after-load 'org
       (add-hook 'org-ctrl-c-ctrl-c-hook #'org-hyprctl-update)))
 #+end_src
