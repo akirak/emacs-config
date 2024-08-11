@@ -16,13 +16,17 @@
 (defun akirak-open-default (file-or-url &optional _)
   "Open FILE-OR-URL with the default application."
   (with-current-buffer (generate-new-buffer "*embark open*")
-    (pcase (if (and akirak-open-default-command
-                    (or (file-exists-p (car akirak-open-default-command))
-                        (executable-find (car akirak-open-default-command))))
-               akirak-open-default-command
-             (akirak-open-default-command))
-      (`(,program . ,options)
-       (apply #'call-process program nil t nil (append options (list file-or-url)))))))
+    (let ((file-or-url (if (string-match-p (rx bol (>= 2 alnum) ":") file-or-url)
+                           file-or-url
+                         (convert-standard-filename (expand-file-name file-or-url)))))
+      (insert "Opening " file-or-url "\n")
+      (pcase (if (and akirak-open-default-command
+                      (or (file-exists-p (car akirak-open-default-command))
+                          (executable-find (car akirak-open-default-command))))
+                 akirak-open-default-command
+               (akirak-open-default-command))
+        (`(,program . ,options)
+         (apply #'call-process program nil t nil (append options (list file-or-url))))))))
 
 (defun akirak-open-default-command ()
   "Return the default program with args for opening a file.
