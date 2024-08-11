@@ -5348,7 +5348,8 @@ Jump to arbitrary positions in visible text and select text quickly.
 
 #+begin_src emacs-lisp
   (setup (:package avy)
-    (:set avy-style 'pre)
+    (:set avy-style 'pre
+          avy-all-windows t)
     (:global "M-[" #'avy-goto-symbol-1-above
              "M-]" #'avy-goto-symbol-1-below))
 #+end_src
