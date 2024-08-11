@@ -1,12 +1,8 @@
-# This workflow was created to work around the issue described in
-# https://github.com/emacs-twist/twist.nix/issues/159 but has been DEPRECATED
-# since I have switched the ELPA inputs to https://github.com/elpa-mirrors to
-# prevent the error.
 name: Update Emacs Lisp package registries
 
 on:
-  push:
-    branches: develop
+  schedule:
+    - cron: '20 20 * * 5'
   workflow_dispatch:
 
 jobs:
