@@ -30,7 +30,7 @@
 This function also sets `akirak-open-default-command' variable to
 the returned value to memorize the result."
   (setq akirak-open-default-command
-        (ensure-list (pcase system-type
+        (ensure-list (pcase-exhaustive system-type
                        (`darwin "open")
                        (`gnu/linux
                         (or (when (akirak-wsl-p)
@@ -38,7 +38,8 @@ the returned value to memorize the result."
                                   (executable-find "wsl-open")))
                             (when-let (exe (executable-find "handlr"))
                               (list exe "open"))
-                            (executable-find "xdg-open")))))))
+                            (executable-find "xdg-open")
+                            (error "No program for running the default handler")))))))
 
 ;;;###autoload (autoload 'akirak-open-can-use-default-program "akirak-open")
 (defalias 'akirak-open-can-use-default-program #'akirak-open-default-command)
