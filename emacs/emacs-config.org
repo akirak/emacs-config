@@ -8771,7 +8771,13 @@ Code folding using treesit
 
 #+begin_src emacs-lisp
   (setup (:package treesit-fold)
-    (:hook treesit-fold-indicators-mode)
+    (:hook akirak/turn-on-treesit-fold-indicators-mode)
+    ;; `treesit-fold-mode' is disabled if it doesn't support the major mode, which
+    ;; triggers `treesit-fold-mode-hook'. Thus each function added to the hook
+    ;; must check the actual state of the mode.
+    (defun akirak/turn-on-treesit-fold-indicators-mode ()
+      (when treesit-fold-mode
+        (treesit-fold-indicators-mode 1)))
     ;; `treesit' doesn't have a built-in keymap for its enabled modes, so I will
     ;; use `akirak-treesit-mode'. Actually, `treesit-fold' has nothing to do with
     ;; the mode.
