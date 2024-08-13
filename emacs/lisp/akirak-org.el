@@ -714,6 +714,62 @@ The point should be at the heading."
     (org-table-create)))
 
 ;;;###autoload
+(defun akirak-org-expand-region ()
+  (cond
+   ((use-region-p)
+    (pcase-let* ((`((,region-beg . ,region-end) . ,_) (region-bounds))
+                 (el (org-element-at-point region-beg))
+                 (el-beg (org-element-begin el))
+                 (el-end (org-element-end el))
+                 (type (org-element-type el)))
+      (cond
+       ((eq type 'headline)
+        (org-up-element)
+        (org-mark-subtree))
+       ((and (eq type 'paragraph)
+             (or (< el-beg region-beg)
+                 (> el-end region-end)))
+        (akirak-org--select-element el))
+       ((and (not (org-at-item-p))
+             (let ((next (save-excursion
+                           (while (< (point) region-end)
+                             (org-forward-element))
+                           (org-element-at-point-no-context)))
+                   (parent (org-element-parent el)))
+               (and next
+                    parent
+                    (<= (org-element-begin parent) (org-element-begin next))
+                    (< (org-element-end next) (org-element-end parent))
+                    (progn
+                      (akirak-expand-region--select-bounds (cons region-beg (org-element-end next)))
+                      t)))))
+       ((let ((parent (org-element-parent el)))
+          (and parent
+               (or (< (org-element-begin parent) region-beg)
+                   (> (org-element-end parent) region-end))
+               (progn
+                 (akirak-org--select-element parent)
+                 t))))
+       (t
+        (org-back-to-heading)
+        (org-mark-subtree)))))
+   ((or (org-match-line org-block-regexp)
+        (org-at-item-p)
+        (org-match-line org-clock-line-re)
+        (org-at-drawer-p))
+    (if-let (el (org-element-at-point-no-context))
+        (akirak-org--select-element el)
+      (error "No org-element at point")))
+   (t
+    (akirak-expand-region--select-bounds
+     (bounds-of-thing-at-point 'sentence)))))
+
+(defun akirak-org--select-element (el)
+  (akirak-expand-region--select-bounds
+   (cons (org-element-begin el)
+         (org-element-end el))))
+
+;;;###autoload
 (defun akirak-org-select-region-dwim (&optional arg)
   (interactive "P")
   (cond

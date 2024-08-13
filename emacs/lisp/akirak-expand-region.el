@@ -3,9 +3,14 @@
 ;;;###autoload
 (defun akirak-expand-region-default ()
   (interactive)
-  (if (akirak-expand-region--text-p)
-      (akirak-expand-region-text)
-    (user-error "Not applicable")))
+  (pcase (derived-mode-p 'org-mode 'text-mode)
+    (`org-mode
+     (akirak-org-expand-region))
+    ((or `text-mode
+         (guard (akirak-expand-region--text-like-p)))
+     (akirak-expand-region-text))
+    (_
+     (user-error "Not applicable"))))
 
 (defun akirak-expand-region-text ()
   (if (use-region-p)
@@ -20,9 +25,8 @@
   (goto-char (car bounds))
   (activate-mark))
 
-(defun akirak-expand-region--text-p ()
-  (or (derived-mode-p 'text-mode)
-      (eq (get-text-property (point) 'face)
+(defun akirak-expand-region--text-like-p ()
+  (or (eq (get-text-property (point) 'face)
           'font-lock-comment-face)
       (when-let (node (ignore-errors
                         (treesit-node-at (point))))
