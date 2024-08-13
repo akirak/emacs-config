@@ -876,6 +876,21 @@ The other variables must not be saved, and they should be put in configuration:
   (setup edebug
     (:global "<f12> e r" #'edebug-remove-instrumentation))
 #+end_src
+*** ediff
+:PROPERTIES:
+:CREATED_TIME: [2024-08-13 Tue 12:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup ediff
+    (:set ediff-split-window-function #'split-window-horizontally
+          ediff-prepare-buffer-hook
+          (defun akirak/ediff-prepare-buffer ()
+            (when (derived-mode-p 'org-mode)
+              (if (fboundp 'org-fold-show-all)
+                  (org-fold-show-all)
+                (message "akirak/ediff-prepare-buffer: Function `org-fold-show-all' is not bound"))))))
+#+end_src
 *** ediff-wind                                                :diff:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
