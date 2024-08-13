@@ -1943,6 +1943,13 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                               (point))))
         (call-interactively #'count-words)))
 
+    (defun akirak/delete-zero-width-spaces (start end)
+      "Delete zero-width spaces in the region."
+      (interactive "r")
+      (replace-regexp-in-region
+       (format "[%s]+" (mapconcat #'char-to-string (list 8203 8288 8205 8204 65279)))
+       "" start end))
+
     (:status opinionated
       (:global "C-w"
                (defun akirak/kill-region-or-backward-kill-word (&optional arg)
