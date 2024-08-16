@@ -4545,6 +4545,31 @@ Another flymake backend for actionlint
   (setup (:package flymake-actionlint1)
     (:nixpkgs "actionlint"))
 #+end_src
+*** Syncthing
+#+begin_src elisp
+  (defconst akirak/syncthing-conflict-file-regexp
+    (rx ".sync-conflict-" (+ (any "-" alnum))))
+
+  (defun akirak/syncthing-ediff (&optional filename)
+    "Given a Syncthing conflict file, compare it with the current version."
+    (interactive)
+    (let* ((file (or filename (buffer-file-name)))
+           (another (replace-regexp-in-string akirak/syncthing-conflict-file-regexp
+                                              ""
+                                              file)))
+      (if (equal file another)
+          (user-error "The current file is not a Syncthing conflict file")
+        (ediff file another))))
+
+  (add-hook 'find-file-hook
+            (defun akirak/syncthing-maybe-ediff ()
+              (let ((filename (buffer-file-name)))
+                (when (and (string-match-p akirak/syncthing-conflict-file-regexp filename)
+                           (yes-or-no-p (format-message "Open ediff session for %s? "
+                                                        (file-name-nondirectory filename))))
+                  (akirak/syncthing-ediff filename)))))
+
+#+end_src
 ** User package (akirak-*.el)
 :PROPERTIES:
 :SORTING_TYPE: a
