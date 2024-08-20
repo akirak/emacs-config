@@ -154,26 +154,51 @@
                 runtimeInputs = [
                   pkgs.nix-eval-jobs
                   pkgs.jq
+                  pkgs.bc
                 ];
                 text = ''
                   system=$(nix eval --expr builtins.currentSystem --impure --raw)
-                  flake="path:$(readlink -f "$PWD")#packages.$system.emacs-config.elispPackages"
+                  flake="#packages.$system.emacs-config.elispPackages"
+                  ncpus="$(nproc)"
+                  if [[ -v CACHIX_NAME ]]
+                  then
+                    cachix="''${CACHIX_NAME}"
+                  fi
+
+                  start=$(cut -d' ' -f1 /proc/uptime)
+
+                  function log() {
+                    local time
+                    time=$(cut -d' ' -f1 /proc/uptime)
+                    local duration
+                    duration="$(echo "$time - $start" | bc)"
+                    printf >&2 "[%6.1f s] %s\n" "$duration" "$*"
+                  }
+
                   nix-eval-jobs \
-                      --gc-roots-dir gcroot \
-                      --flake "$flake" \
-                      | while read -r line; do
-                      out=$(jq -r .outputs.out <<<"$line")
-                      if [[ $(nix path-info "$out" --json --store https://akirak.cachix.org \
-                         2> /dev/null \
-                         | jq '.[0].valid') = false ]]
-                      then
-                        drv=$(jq -r .drvPath <<<"$line")
-                        echo "Building $drv"
-                        time nix build "$drv" --no-link --print-build-logs
-                      else
-                        echo "$out is already built, skipping"
-                      fi
-                  done
+                    --workers "$ncpus" \
+                    --gc-roots-dir gcroot \
+                    --flake "$flake" \
+                    --quiet \
+                    --check-cache-status \
+                    | while read -r line; do
+                        p=$(jq -r .drvPath <<< "$line")^out
+                        if [[ $(jq -r .cacheStatus <<< "$line") = notBuilt ]]
+                        then
+                          log "Building $p"
+                          if [[ -v cachix ]]
+                          then
+                            cachix watch-exec "$cachix" \
+                              nix -- build "$p" --no-link --print-build-logs
+                          else
+                            nix build "$p" --no-link --print-build-logs
+                          fi
+                        else
+                          log "Skipping $p"
+                        fi
+                      done
+
+                  log "Finished building Emacs Lisp packages."
                 '';
               };
             }
