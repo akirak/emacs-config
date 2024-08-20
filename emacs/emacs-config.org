@@ -4258,6 +4258,7 @@ Major mode for Elixir with tree-sitter support
     (:file-match "\\.exs?\\'")
     (:mode-project-roots "mix.exs")
     (:mode-repl akirak/iex-dwim)
+    (:bind "C-c C-e" #'akirak-elixir-heex-close-tag)
 
     (:reformatters
      (mix-format :program "mix"
@@ -4361,6 +4362,7 @@ Major mode for the Go programming language
   (setup heex-ts-mode
     (:mode-project-roots "mix.exs")
     (:local-set electric-pair-pairs '((?% . ?%)))
+    (:bind "C-c C-e" #'akirak-elixir-heex-close-tag)
     (:when-loaded
       ;; These workarounds are only necessary due to upstream inconsistencies.
       ;; Hopefully they will resolve the issues in the mean time.
