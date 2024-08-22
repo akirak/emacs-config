@@ -36,11 +36,14 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-    - uses: cachix/cachix-action@v15
-      with:
-        name: akirak
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-        pushFilter: '-source$'
-
     - name: Build packages
-      run: nix run .#build-packages
+      run: |
+        nix run .#nix-fast-build -- \
+          --flake "#packages.x86_64-linux.emacs-config.elispPackages" \
+          --no-nom \
+          --skip-cached \
+          --no-link \
+          --option accept-flake-config true \
+          --cachix-cache akirak
+      env:
+        CACHIX_AUTH_TOKEN: '${{ secrets.CACHIX_AUTH_TOKEN }}'
