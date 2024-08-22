@@ -25,6 +25,8 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
     - run: nix build .#emacs-config.depsCheck --print-build-logs
+      # Ignore the exit code until llama gets a proper version.
+      continue-on-error: true
 
   build:
     runs-on: ubuntu-latest
