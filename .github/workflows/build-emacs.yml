@@ -38,6 +38,11 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
+    # nix-fast-build may not utilize substituters configured in the flake,
+    # so run `nix build` to prefetch dependencies beforehand.
+    - name: Prefetch dependencies
+      run: nix build .#emacs-config.emacs --accept-flake-config --no-link
+
     - name: Build packages
       run: |
         nix run .#nix-fast-build -- \
