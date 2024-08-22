@@ -14,6 +14,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  deps-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: cachix/install-nix-action@V27
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+    - run: nix build .#emacs-config.depsCheck --print-build-logs
+      # Ignore the exit code until llama gets a proper version.
+      continue-on-error: true
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -24,13 +38,19 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-    - uses: cachix/cachix-action@v15
-      with:
-        name: akirak
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-        pushFilter: '-source$'
-
-    - run: nix build .#emacs-config.depsCheck --print-build-logs
+    # nix-fast-build may not utilize substituters configured in the flake,
+    # so run `nix build` to prefetch dependencies beforehand.
+    - name: Prefetch dependencies
+      run: nix build .#emacs-config.emacs --accept-flake-config --no-link
 
     - name: Build packages
-      run: nix run .#build-packages
+      run: |
+        nix run .#nix-fast-build -- \
+          --flake "#packages.x86_64-linux.emacs-config.elispPackages" \
+          --no-nom \
+          --skip-cached \
+          --no-link \
+          --option accept-flake-config true \
+          --cachix-cache akirak
+      env:
+        CACHIX_AUTH_TOKEN: '${{ secrets.CACHIX_AUTH_TOKEN }}'

@@ -1,6 +1,5 @@
 {
-  description =
-    "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
+  description = "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
     academic-phrases = {
       flake = false;
@@ -325,12 +324,6 @@
       repo = "emacsql";
       type = "github";
     };
-    emacsql-sqlite = {
-      flake = false;
-      owner = "magit";
-      repo = "emacsql";
-      type = "github";
-    };
     embark = {
       flake = false;
       owner = "oantolin";
@@ -352,6 +345,7 @@
     epkg = {
       flake = false;
       owner = "emacscollective";
+      ref = "melpa";
       repo = "epkg";
       type = "github";
     };
@@ -617,9 +611,9 @@
     };
     llama = {
       flake = false;
-      owner = "~tarsius";
+      owner = "tarsius";
       repo = "llama";
-      type = "sourcehut";
+      type = "github";
     };
     lv = {
       flake = false;
@@ -630,6 +624,7 @@
     magit = {
       flake = false;
       owner = "magit";
+      ref = "melpa";
       repo = "magit";
       type = "github";
     };
@@ -648,6 +643,7 @@
     magit-section = {
       flake = false;
       owner = "magit";
+      ref = "melpa";
       repo = "magit";
       type = "github";
     };
@@ -1302,6 +1298,7 @@
     with-editor = {
       flake = false;
       owner = "magit";
+      ref = "melpa";
       repo = "with-editor";
       type = "github";
     };

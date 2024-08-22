@@ -876,6 +876,21 @@ The other variables must not be saved, and they should be put in configuration:
   (setup edebug
     (:global "<f12> e r" #'edebug-remove-instrumentation))
 #+end_src
+*** ediff
+:PROPERTIES:
+:CREATED_TIME: [2024-08-13 Tue 12:16]
+:END:
+
+#+begin_src emacs-lisp
+  (setup ediff
+    (:set ediff-split-window-function #'split-window-horizontally
+          ediff-prepare-buffer-hook
+          (defun akirak/ediff-prepare-buffer ()
+            (when (derived-mode-p 'org-mode)
+              (if (fboundp 'org-fold-show-all)
+                  (org-fold-show-all)
+                (message "akirak/ediff-prepare-buffer: Function `org-fold-show-all' is not bound"))))))
+#+end_src
 *** ediff-wind                                                :diff:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
@@ -1928,6 +1943,13 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                               (point))))
         (call-interactively #'count-words)))
 
+    (defun akirak/delete-zero-width-spaces (start end)
+      "Delete zero-width spaces in the region."
+      (interactive "r")
+      (replace-regexp-in-region
+       (format "[%s]+" (mapconcat #'char-to-string (list 8203 8288 8205 8204 65279)))
+       "" start end))
+
     (:status opinionated
       (:global "C-w"
                (defun akirak/kill-region-or-backward-kill-word (&optional arg)
@@ -2024,6 +2046,8 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subr
+    (:with-map ctl-x-x-map
+      (:bind "+" #'make-directory))
     (:status opinionated
       ;; (:global "C-h" 'backward-delete-char)
       ))
@@ -2822,6 +2846,10 @@ Outline-based notes management and organizer
 #+begin_src emacs-lisp
   (setup org
     (:with-mode org-mode
+      ;; These bindings should be set by default, but just in case.
+      (:bind "C-a" #'org-beginning-of-line
+             "C-e" #'org-end-of-line)
+
       (:status opinionated
         (:set org-special-ctrl-a/e t
               org-M-RET-may-split-line nil)
@@ -3580,6 +3608,8 @@ Manage Hyprctl workspaces from Org mode
 #+begin_src emacs-lisp
   (setup (:package org-hyprctl)
     (define-key akirak/c-z-map "w" #'org-hyprctl-popup)
+    (:bind "C-M-n" #'move-dup-move-lines-down
+           "C-M-p" #'move-dup-move-lines-up)
     (with-eval-after-load 'org
       (add-hook 'org-ctrl-c-ctrl-c-hook #'org-hyprctl-update)))
 #+end_src
@@ -4329,7 +4359,6 @@ Major mode for the Go programming language
 *** heex-ts-mode
 #+begin_src elisp
   (setup heex-ts-mode
-    (:file-match "\\.heex\\'")
     (:mode-project-roots "mix.exs")
     (:local-set electric-pair-pairs '((?% . ?%)))
     (:when-loaded
@@ -4515,6 +4544,31 @@ Another flymake backend for actionlint
 #+begin_src emacs-lisp
   (setup (:package flymake-actionlint1)
     (:nixpkgs "actionlint"))
+#+end_src
+*** Syncthing
+#+begin_src elisp
+  (defconst akirak/syncthing-conflict-file-regexp
+    (rx ".sync-conflict-" (+ (any "-" alnum))))
+
+  (defun akirak/syncthing-ediff (&optional filename)
+    "Given a Syncthing conflict file, compare it with the current version."
+    (interactive)
+    (let* ((file (or filename (buffer-file-name)))
+           (another (replace-regexp-in-string akirak/syncthing-conflict-file-regexp
+                                              ""
+                                              file)))
+      (if (equal file another)
+          (user-error "The current file is not a Syncthing conflict file")
+        (ediff file another))))
+
+  (add-hook 'find-file-hook
+            (defun akirak/syncthing-maybe-ediff ()
+              (let ((filename (buffer-file-name)))
+                (when (and (string-match-p akirak/syncthing-conflict-file-regexp filename)
+                           (yes-or-no-p (format-message "Open ediff session for %s? "
+                                                        (file-name-nondirectory filename))))
+                  (akirak/syncthing-ediff filename)))))
+
 #+end_src
 ** User package (akirak-*.el)
 :PROPERTIES:
@@ -5345,7 +5399,8 @@ Jump to arbitrary positions in visible text and select text quickly.
 
 #+begin_src emacs-lisp
   (setup (:package avy)
-    (:set avy-style 'pre)
+    (:set avy-style 'pre
+          avy-all-windows t)
     (:global "M-[" #'avy-goto-symbol-1-above
              "M-]" #'avy-goto-symbol-1-below))
 #+end_src
@@ -8767,7 +8822,13 @@ Code folding using treesit
 
 #+begin_src emacs-lisp
   (setup (:package treesit-fold)
-    (:hook treesit-fold-indicators-mode)
+    (:hook akirak/turn-on-treesit-fold-indicators-mode)
+    ;; `treesit-fold-mode' is disabled if it doesn't support the major mode, which
+    ;; triggers `treesit-fold-mode-hook'. Thus each function added to the hook
+    ;; must check the actual state of the mode.
+    (defun akirak/turn-on-treesit-fold-indicators-mode ()
+      (when treesit-fold-mode
+        (treesit-fold-indicators-mode 1)))
     ;; `treesit' doesn't have a built-in keymap for its enabled modes, so I will
     ;; use `akirak-treesit-mode'. Actually, `treesit-fold' has nothing to do with
     ;; the mode.

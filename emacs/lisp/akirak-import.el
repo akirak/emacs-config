@@ -18,10 +18,21 @@
                              (concat "type " identifier)
                            identifier))))))
     (elixir-ts-mode
-     :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use") (+ nonl))
+     :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use") " " (+ nonl))
      :extra-modes nil
      :extensions (".ex")
      :source-directories ("lib")
+     :goto-insert-location akirak-import--elixir-insert-location
+     :make-default
+     (lambda (identifier candidates)
+       (when (char-uppercase-p (elt identifier 0))
+         (seq-find `(lambda (s)
+                      (and (string-match-p "^alias " s)
+                           (string-match-p (concat (rx (any "."))
+                                                   (regexp-quote ,identifier)
+                                                   "\\'")
+                                           s)))
+                   candidates)))
      :transform-filename
      (lambda (filepath identifier)
        (let ((module (akirak-elixir-module-name-from-file filepath)))
@@ -46,7 +57,8 @@
      (user-error "Unsupported mode"))
     (`(,mode . ,(map :regexp :extra-modes
                      :extensions :source-directories :transform-filename
-                     :inside-tree-sitter-node))
+                     :goto-insert-location
+                     :inside-tree-sitter-node :make-default))
      (let* ((existing-statements (akirak-import--collect-statements (cons mode extra-modes)
                                                                     :regexp regexp))
             (generated-statements (akirak-import--generate-statements
@@ -63,12 +75,19 @@
                 (string-match-p (regexp-quote pattern)
                                 s))))
          (akirak-import--insert-line
-          (completing-read "Insert an import statement: "
+          (completing-read (if pattern
+                               (format-message "Insert an import statement for '%s': " pattern)
+                             "Insert an import statement: ")
                            lines
                            nil nil
                            (when (and pattern
                                       (seq-find #'contains-pattern lines))
-                             (concat pattern " ")))
+                             (concat pattern " "))
+                           nil
+                           (when (and make-default pattern)
+                             (funcall make-default pattern lines)))
+          :goto-insert-location goto-insert-location
+          :inside-tree-sitter-node inside-tree-sitter-node
           :regexp regexp))))))
 
 (cl-defun akirak-import--collect-statements (modes &key regexp)
@@ -130,7 +149,8 @@
                       (funcall imenu-create-index-function))))
             (check-alist imenu--index-alist)))))))
 
-(cl-defun akirak-import--insert-line (content &key regexp inside-tree-sitter-node)
+(cl-defun akirak-import--insert-line (content &key regexp inside-tree-sitter-node
+                                              goto-insert-location)
   ;; Save the position so the user can return the position being edited.
   (push-mark)
   (save-excursion
@@ -139,13 +159,31 @@
       (cond
        ((and regexp
              (re-search-forward regexp nil t))
-        (beginning-of-line)
+        (back-to-indentation)
         (open-line 1)
+        (insert content))
+       (goto-insert-location
+        (funcall goto-insert-location)
         (insert content))
        (inside-tree-sitter-node)
        (t
         (open-line 1)
         (insert content))))))
+
+(defun akirak-import--elixir-insert-location ()
+  (re-search-forward (rx bol "defmodule" (+ space)
+                         (+ (any "." alnum))
+                         (+ space) "do" symbol-end))
+  (re-search-forward (rx (or "@moduledoc" alnum)))
+  (if (equal (match-string 0) "@moduledoc")
+      (progn
+        (looking-at (rx (+ blank)))
+        (goto-char (match-end 0))
+        (if (looking-at "\"\"\"")
+            (forward-sexp)
+          (beginning-of-line 2))
+        (newline-and-indent 2))
+    (open-line 1)))
 
 (provide 'akirak-import)
 ;;; akirak-import.el ends here
