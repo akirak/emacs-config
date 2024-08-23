@@ -1197,6 +1197,7 @@
     taxy = {
       flake = false;
       owner = "alphapapa";
+      ref = "stable";
       repo = "taxy.el";
       type = "github";
     };
