@@ -3395,15 +3395,16 @@
     "taxy": {
       "flake": false,
       "locked": {
-        "lastModified": 1663621606,
-        "narHash": "sha256-qEL9Bgg/A5h3fKS5XfcPQnzYEFh+uUFrr9AgNDQokMA=",
+        "lastModified": 1723851644,
+        "narHash": "sha256-f8oaBgiXEDyHb3uC5fBIYbKVpdATGRvLXLwv8v1uPGw=",
         "owner": "alphapapa",
         "repo": "taxy.el",
-        "rev": "b27fa67ecf3f8954ce0d5c2747d1de4dc94ff09f",
+        "rev": "3099ae5cb27a34961e06a3af67555919c62c12d7",
         "type": "github"
       },
       "original": {
         "owner": "alphapapa",
+        "ref": "stable",
         "repo": "taxy.el",
         "type": "github"
       }
