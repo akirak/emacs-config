@@ -2834,13 +2834,9 @@ Outline-based notes management and organizer
           org-hide-leading-stars nil
           org-fontify-whole-heading-line t
           org-fontify-done-headline nil
-          org-fontify-quote-and-verse-blocks t)
-
-    (:when-loaded
-      ;; This evaluation is a bit slow, so defer it to the library load time.
-      org-image-actual-width (ignore-errors
-                               (* 80 (/ (frame-text-width)
-                                        (frame-width))))))
+          org-fontify-quote-and-verse-blocks t
+          org-image-actual-width t
+          org-image-max-width 'fill-column))
 #+end_src
 **** Keybindings
 #+begin_src emacs-lisp
