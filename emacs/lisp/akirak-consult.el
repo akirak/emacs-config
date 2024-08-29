@@ -294,7 +294,8 @@
        :hidden t
        :regexp (rx (or (and (or bos "/")
                             (or (and "doc" (?  "s") "/")
-                                (and (or "CONTRIBUTING"
+                                (and (or "README"
+                                         "CONTRIBUTING"
                                          "LICENSE"
                                          "COPYING")
                                      (?  "." (+ (not (any "/")))) eol)))
