@@ -2255,16 +2255,10 @@ Thus I will explicitly install this package rather than using the built-in versi
 
 #+begin_src emacs-lisp
   (setup which-func
-    ;; Some packages create a temporary buffer for building transient content. in
-    ;; which a major mode is turned on. `which-function' can be slow even in such
-    ;; a small content, so it should be turned off.
-    (defun akirak/which-func-enable-if-file ()
-      (when (buffer-file-name)
-        (which-function-mode t)))
-    (:with-function akirak/which-func-enable-if-file
-      (:hook-into erlang-mode-hook
-                  elisp-mode-hook
-                  eglot-managed-mode-hook)))
+    (:set which-func-non-auto-modes '(minibuffer-mode
+                                      org-mode
+                                      nov-mode))
+    (add-hook 'after-init-hook #'which-function-mode))
 #+end_src
 *** which-key                                            :usability:keybindings:
 #+begin_quote
