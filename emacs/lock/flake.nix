@@ -345,7 +345,6 @@
     epkg = {
       flake = false;
       owner = "emacscollective";
-      ref = "melpa";
       repo = "epkg";
       type = "github";
     };
@@ -605,7 +604,6 @@
     magit = {
       flake = false;
       owner = "magit";
-      ref = "melpa";
       repo = "magit";
       type = "github";
     };
@@ -624,7 +622,6 @@
     magit-section = {
       flake = false;
       owner = "magit";
-      ref = "melpa";
       repo = "magit";
       type = "github";
     };
@@ -1279,7 +1276,6 @@
     with-editor = {
       flake = false;
       owner = "magit";
-      ref = "melpa";
       repo = "with-editor";
       type = "github";
     };
