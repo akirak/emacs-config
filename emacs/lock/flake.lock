@@ -1010,23 +1010,6 @@
         "type": "github"
       }
     },
-    "fanyi": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1651471009,
-        "narHash": "sha256-B1PUiIvEoVCT4ciyNZiELqwPZ+aLQ8KM+vz+2YCDAQU=",
-        "owner": "akirak",
-        "repo": "fanyi.el",
-        "rev": "d6ad1978d9ed2736fb52bad189bc9b7193dd05a3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "ref": "possibly-fix",
-        "repo": "fanyi.el",
-        "type": "github"
-      }
-    },
     "flymake-actionlint1": {
       "flake": false,
       "locked": {
@@ -1235,22 +1218,6 @@
         "type": "github"
       }
     },
-    "go-translate": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1685334185,
-        "narHash": "sha256-0hBBSW3YzY7QCCueGXUmBYsXNyCST63EAz9jeABZYF0=",
-        "owner": "lorniu",
-        "repo": "go-translate",
-        "rev": "e5680e294f0e18d945c9f18ff7f4e6610c1ed50b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lorniu",
-        "repo": "go-translate",
-        "type": "github"
-      }
-    },
     "gptel": {
       "flake": false,
       "locked": {
@@ -1297,22 +1264,6 @@
         "owner": "~joram",
         "repo": "graphql-ts-mode",
         "type": "sourcehut"
-      }
-    },
-    "graphviz-dot-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1669612747,
-        "narHash": "sha256-ZkDAHcgnqnhmQpuVolL25fU7OZ/2h9FCylr4631kAqQ=",
-        "owner": "ppareit",
-        "repo": "graphviz-dot-mode",
-        "rev": "46afe4825b4a3a5d1a1ac65ec7f585051f756b78",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ppareit",
-        "repo": "graphviz-dot-mode",
-        "type": "github"
       }
     },
     "guess-language": {
@@ -2962,7 +2913,6 @@
         "esxml": "esxml",
         "exec-path-from-shell": "exec-path-from-shell",
         "f": "f",
-        "fanyi": "fanyi",
         "flymake-actionlint1": "flymake-actionlint1",
         "flymake-eslint": "flymake-eslint",
         "flymake-shellcheck": "flymake-shellcheck",
@@ -2976,11 +2926,9 @@
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
         "gleam-ts-mode": "gleam-ts-mode",
-        "go-translate": "go-translate",
         "gptel": "gptel",
         "graphql-mode": "graphql-mode",
         "graphql-ts-mode": "graphql-ts-mode",
-        "graphviz-dot-mode": "graphviz-dot-mode",
         "guess-language": "guess-language",
         "hcl-mode": "hcl-mode",
         "highlight-indent-guides": "highlight-indent-guides",

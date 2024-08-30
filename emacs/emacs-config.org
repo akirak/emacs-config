@@ -6564,7 +6564,7 @@ Get environment variables such as $PATH from the shell
         (add-to-list 'exec-path-from-shell-variables "XDG_DATA_HOME"))
       (exec-path-from-shell-initialize)))
 #+end_src
-*** fanyi                                               :dictionary:
+*** COMMENT fanyi                                                   :dictionary:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 23:59]
 :END:
@@ -6882,7 +6882,7 @@ Major modes for editing Git configuration files
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
-*** go-translate                                                   :translation:
+*** COMMENT go-translate                                           :translation:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-02 Sat 23:59]
 :END:
@@ -6982,7 +6982,7 @@ Tree-sitter support for GraphQL
     (:org-src-lang "graphql")
     (:file-match "\\.graphql\\'" "\\.gql\\'"))
 #+end_src
-*** graphviz-dot-mode
+*** COMMENT graphviz-dot-mode                                                  :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-11 Fri 22:02]
 :END:
