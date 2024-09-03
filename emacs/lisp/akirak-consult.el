@@ -294,7 +294,8 @@
        :hidden t
        :regexp (rx (or (and (or bos "/")
                             (or (and "doc" (?  "s") "/")
-                                (and (or "CONTRIBUTING"
+                                (and (or "README"
+                                         "CONTRIBUTING"
                                          "LICENSE"
                                          "COPYING")
                                      (?  "." (+ (not (any "/")))) eol)))
@@ -421,8 +422,8 @@
            (dir (substring this-file 0 (match-beginning 0))))
        (akirak-consult--reorder-files files
          :preceding-files
-         (list (concat dir "/" prefix "_html.ex")
-               (concat dir "/" prefix "_controller.ex")))))
+         (list (concat dir "/" prefix "_controller.ex")
+               (concat dir "/" prefix "_html.ex")))))
     ((rx "/" (group (+ (not (any "/"))))
          "/" (group (+ (not (any "/")))) (group (and ".ex" (?  "s"))) eol)
      (let ((ext (match-string 3 this-file)))

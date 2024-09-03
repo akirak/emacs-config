@@ -121,7 +121,7 @@ are displayed in the frame."
            (switch-to-buffer (pop buffers))
            (delete-other-windows)
            (dolist (buffer buffers)
-             (split-window-below)
+             (split-window-right)
              (switch-to-buffer buffer))
            (balance-windows))
        (user-error "No matching buffer")))

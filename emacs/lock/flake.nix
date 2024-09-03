@@ -379,13 +379,6 @@
       repo = "f.el";
       type = "github";
     };
-    fanyi = {
-      flake = false;
-      owner = "akirak";
-      ref = "possibly-fix";
-      repo = "fanyi.el";
-      type = "github";
-    };
     flymake-actionlint1 = {
       flake = false;
       owner = "akirak";
@@ -487,12 +480,6 @@
       owner = "~joram";
       repo = "graphql-ts-mode";
       type = "sourcehut";
-    };
-    graphviz-dot-mode = {
-      flake = false;
-      owner = "ppareit";
-      repo = "graphviz-dot-mode";
-      type = "github";
     };
     guess-language = {
       flake = false;
@@ -760,8 +747,7 @@
     };
     ob-graphql = {
       flake = false;
-      owner = "akirak";
-      ref = "graphql-dep";
+      owner = "jdormit";
       repo = "ob-graphql";
       type = "github";
     };
@@ -1197,6 +1183,7 @@
     taxy = {
       flake = false;
       owner = "alphapapa";
+      ref = "stable";
       repo = "taxy.el";
       type = "github";
     };

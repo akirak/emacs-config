@@ -2255,16 +2255,10 @@ Thus I will explicitly install this package rather than using the built-in versi
 
 #+begin_src emacs-lisp
   (setup which-func
-    ;; Some packages create a temporary buffer for building transient content. in
-    ;; which a major mode is turned on. `which-function' can be slow even in such
-    ;; a small content, so it should be turned off.
-    (defun akirak/which-func-enable-if-file ()
-      (when (buffer-file-name)
-        (which-function-mode t)))
-    (:with-function akirak/which-func-enable-if-file
-      (:hook-into erlang-mode-hook
-                  elisp-mode-hook
-                  eglot-managed-mode-hook)))
+    (:set which-func-non-auto-modes '(minibuffer-mode
+                                      org-mode
+                                      nov-mode))
+    (add-hook 'after-init-hook #'which-function-mode))
 #+end_src
 *** which-key                                            :usability:keybindings:
 #+begin_quote
@@ -2834,13 +2828,9 @@ Outline-based notes management and organizer
           org-hide-leading-stars nil
           org-fontify-whole-heading-line t
           org-fontify-done-headline nil
-          org-fontify-quote-and-verse-blocks t)
-
-    (:when-loaded
-      ;; This evaluation is a bit slow, so defer it to the library load time.
-      org-image-actual-width (ignore-errors
-                               (* 80 (/ (frame-text-width)
-                                        (frame-width))))))
+          org-fontify-quote-and-verse-blocks t
+          org-image-actual-width t
+          org-image-max-width 'fill-column))
 #+end_src
 **** Keybindings
 #+begin_src emacs-lisp
@@ -4316,7 +4306,7 @@ Major mode for Elixir with tree-sitter support
 :END:
 #+begin_quote
 Major mode for Gleam
-[[https://github.com/gleam-lang/gleam-ts-mode]]
+[[https://github.com/gleam-lang/gleam-mode]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -6568,7 +6558,7 @@ Get environment variables such as $PATH from the shell
         (add-to-list 'exec-path-from-shell-variables "XDG_DATA_HOME"))
       (exec-path-from-shell-initialize)))
 #+end_src
-*** fanyi                                               :dictionary:
+*** COMMENT fanyi                                                   :dictionary:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 23:59]
 :END:
@@ -6886,19 +6876,20 @@ Major modes for editing Git configuration files
     (:with-mode gitignore-mode
       (:file-match "/\\.dockerignore\\'")))
 #+end_src
-*** go-translate                                                   :translation:
+*** go-translate                                           :translation:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-02 Sat 23:59]
 :END:
 #+begin_quote
-Translation framework supports multiple engines such as Google/Bing/DeepL
+Translation framework, configurable and scalable
 [[https://github.com/lorniu/go-translate]]
 #+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package go-translate)
-    (:set gts-translate-list '(("ja" "en")
-                               ("zh" "en"))))
+    (:set gt-langs '(en ja))
+    (:when-loaded
+      gt-default-translator (gt-translator :engines (gt-google-engine))))
 #+end_src
 *** gptel
 :PROPERTIES:
@@ -6986,7 +6977,7 @@ Tree-sitter support for GraphQL
     (:org-src-lang "graphql")
     (:file-match "\\.graphql\\'" "\\.gql\\'"))
 #+end_src
-*** graphviz-dot-mode
+*** COMMENT graphviz-dot-mode                                                  :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-11 Fri 22:02]
 :END:
@@ -9790,7 +9781,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 215 |
+| [[org-ql-search:tags:packages][packages]]            | 213 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
@@ -9848,7 +9839,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:search][search]]              |   1 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
-| [[org-ql-search:tags:dictionary][dictionary]]          |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
