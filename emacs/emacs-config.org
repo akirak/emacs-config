@@ -6817,7 +6817,7 @@ Edit Git commit messages
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package git-commit))
+  (setup git-commit)
 #+end_src
 *** github-linguist
 :PROPERTIES:

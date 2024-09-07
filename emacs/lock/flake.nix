@@ -426,13 +426,6 @@
       repo = "git-auto-commit-mode";
       type = "github";
     };
-    git-commit = {
-      flake = false;
-      owner = "magit";
-      ref = "legacy-stub";
-      repo = "magit";
-      type = "github";
-    };
     git-identity = {
       flake = false;
       owner = "akirak";

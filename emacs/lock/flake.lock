@@ -1137,23 +1137,6 @@
         "type": "github"
       }
     },
-    "git-commit": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1725147338,
-        "narHash": "sha256-UWZehIqeHp41b93jwqfAjeKZRuv99AJQu2GP2yGSKQo=",
-        "owner": "magit",
-        "repo": "magit",
-        "rev": "9be8a4ab7a7dc6f34615f1011e8da263651c8f87",
-        "type": "github"
-      },
-      "original": {
-        "owner": "magit",
-        "ref": "legacy-stub",
-        "repo": "magit",
-        "type": "github"
-      }
-    },
     "git-identity": {
       "flake": false,
       "locked": {
@@ -2934,7 +2917,6 @@
         "gcmh": "gcmh",
         "git-attr": "git-attr",
         "git-auto-commit-mode": "git-auto-commit-mode",
-        "git-commit": "git-commit",
         "git-identity": "git-identity",
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
