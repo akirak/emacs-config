@@ -1366,6 +1366,16 @@ The built-in =electric= package provides the following modes:
     (:nixpkgs "graphicsmagick")
     (:set image-use-external-converter t))
 #+end_src
+*** image-file
+:PROPERTIES:
+:CREATED_TIME: [2024-09-08 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup image-file
+    (:with-mode auto-image-file-mode
+      (:hook-into after-init-hook)))
+#+end_src
 *** indent
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:08]
