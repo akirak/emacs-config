@@ -61,9 +61,8 @@ pair."
 (defun akirak-elec-pair--close-char (open-char)
   "Return a character corresponding to OPEN-CHAR."
   (or (nth 1 (electric-pair-syntax-info open-char))
-      (alist-get open-char
-                 '((?\{ . ?\})))
-      (error "Cannot find syntax info for %c" open-char)))
+      (matching-paren open-char)
+      open-char))
 
 (defun akirak-elec-pair--bounds-around-point (c &optional inner)
   (when-let* ((regexp (regexp-quote (char-to-string c)))

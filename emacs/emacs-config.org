@@ -1366,6 +1366,16 @@ The built-in =electric= package provides the following modes:
     (:nixpkgs "graphicsmagick")
     (:set image-use-external-converter t))
 #+end_src
+*** image-file
+:PROPERTIES:
+:CREATED_TIME: [2024-09-08 Sun 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup image-file
+    (:with-mode auto-image-file-mode
+      (:hook-into after-init-hook)))
+#+end_src
 *** indent
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:08]
@@ -4815,12 +4825,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                    (getenv "DISPLAY")))
       (:hook-into emacs-startup-hook))
     (:hook akirak-log-mode)
-    (add-hook 'akirak-org-clock-pre-exit-hook
-              (defun akirak/org-clock-save-wconf ()
-                (if (and (require 'burly nil t)
-                         (fboundp 'akirak-burly-clock-push))
-                    (akirak-burly-clock-push)
-                  (message "Burly is not available, so the window configuration won't be saved"))))
+    ;; (add-hook 'akirak-org-clock-pre-exit-hook
+    ;;           (defun akirak/org-clock-save-wconf ()
+    ;;             (if (and (require 'burly nil t)
+    ;;                      (fboundp 'akirak-burly-clock-push))
+    ;;                 (akirak-burly-clock-push)
+    ;;               (message "Burly is not available, so the window configuration won't be saved"))))
 
     (advice-add 'save-buffers-kill-terminal
                 :before
@@ -6817,7 +6827,7 @@ Edit Git commit messages
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package git-commit))
+  (setup git-commit)
 #+end_src
 *** github-linguist
 :PROPERTIES:

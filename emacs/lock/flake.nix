@@ -345,7 +345,6 @@
     epkg = {
       flake = false;
       owner = "emacscollective";
-      ref = "melpa";
       repo = "epkg";
       type = "github";
     };
@@ -425,12 +424,6 @@
       flake = false;
       owner = "ryuslash";
       repo = "git-auto-commit-mode";
-      type = "github";
-    };
-    git-commit = {
-      flake = false;
-      owner = "magit";
-      repo = "magit";
       type = "github";
     };
     git-identity = {
@@ -611,7 +604,6 @@
     magit = {
       flake = false;
       owner = "magit";
-      ref = "melpa";
       repo = "magit";
       type = "github";
     };
@@ -630,7 +622,6 @@
     magit-section = {
       flake = false;
       owner = "magit";
-      ref = "melpa";
       repo = "magit";
       type = "github";
     };
@@ -1285,7 +1276,6 @@
     with-editor = {
       flake = false;
       owner = "magit";
-      ref = "melpa";
       repo = "with-editor";
       type = "github";
     };
