@@ -8578,7 +8578,7 @@ Syntax highlighting code block in HTML
       (add-to-list 'shr-external-rendering-functions
                    '(pre . shr-tag-pre-highlight))))
 #+end_src
-*** sops
+*** COMMENT sops                                                               :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-06-15 Sat 22:13]
 :END:

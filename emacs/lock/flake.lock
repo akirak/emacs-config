@@ -3028,7 +3028,6 @@
         "setup": "setup",
         "shfmt": "shfmt",
         "shr-tag-pre-highlight": "shr-tag-pre-highlight",
-        "sops": "sops",
         "spinner": "spinner",
         "sqlformat": "sqlformat",
         "ssass-mode": "ssass-mode",
@@ -3141,22 +3140,6 @@
       "original": {
         "owner": "xuchunyang",
         "repo": "shr-tag-pre-highlight.el",
-        "type": "github"
-      }
-    },
-    "sops": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1718997591,
-        "narHash": "sha256-sXYIYZ9ySjbyQaegKpTlfENwhPBSV/aDqtwUP0F56pI=",
-        "owner": "djgoku",
-        "repo": "sops",
-        "rev": "2cb8621ed588c6f3e210c9e76d713e6dacc03030",
-        "type": "github"
-      },
-      "original": {
-        "owner": "djgoku",
-        "repo": "sops",
         "type": "github"
       }
     },
