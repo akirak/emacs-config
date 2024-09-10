@@ -1,7 +1,9 @@
 ;;; akirak-elixir.el --- Extra functions for Elixir -*- lexical-binding: t -*-
 
 (defcustom akirak-elixir-module-path-rewrite-rules
-  '(("\\.Live\\." . "."))
+  '(("\\.Live\\." . ".")
+    ("\\.Controllers\\." . ".")
+    ("Html" . "HTML"))
   "Alist of patterns to rewrite module paths."
   :type '(alist :key-type regexp
                 :value-type string))
