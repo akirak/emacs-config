@@ -109,6 +109,18 @@
       repo = "cape";
       type = "github";
     };
+    casual-lib = {
+      flake = false;
+      owner = "kickingvegas";
+      repo = "casual-lib";
+      type = "github";
+    };
+    casual-symbol-overlay = {
+      flake = false;
+      owner = "kickingvegas";
+      repo = "casual-symbol-overlay";
+      type = "github";
+    };
     closql = {
       flake = false;
       owner = "magit";

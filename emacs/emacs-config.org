@@ -8725,6 +8725,19 @@ Highlight symbols with keymap-enabled overlays
 #+end_src
 
 =embark= can substitute for most of the functionalities of the package, but I am used to this package.
+**** casual-symbol-overlay                                      :transit:
+:PROPERTIES:
+:CREATED_TIME: [2024-09-11 Wed 12:05]
+:END:
+#+begin_quote
+Transient UI for Symbol Overlay
+[[https://github.com/kickingvegas/casual-symbol-overlay]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package casual-symbol-overlay)
+    (:global "C-c S" #'casual-symbol-overlay-tmenu))
+#+end_src
 *** systemd
 :PROPERTIES:
 :CREATED_TIME: [2023-07-17 Mon 22:03]
