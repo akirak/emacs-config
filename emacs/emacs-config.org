@@ -9804,13 +9804,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 212 |
+| [[org-ql-search:tags:packages][packages]]            | 213 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
+| [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
-| [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
@@ -9874,6 +9874,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Coq][Coq]]                 |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
+| [[org-ql-search:tags:transit][transit]]             |   1 |
 
 Note that the table above is invisible on GitHub.
 There is a table right before paragraph.
