@@ -200,50 +200,91 @@
             (when (looking-at (rx-to-string `(** 0 ,indentation blank)))
               (goto-char (match-end 0))))
         (kill-line arg))
-    (let* ((start (point))
-           ;; Determine the position where the killed node(s) resides.
-           (node-start (if (looking-at (rx (+ blank)))
-                           (match-end 0)
-                         (point)))
-           (node (treesit-node-at node-start))
-           (bound (save-excursion
-                    (re-search-forward (rx (* blank) eol))
-                    (match-beginning 0)))
-           parent)
-      (cl-flet
-          ((node-at-point-p (t)
-             (and (<= (treesit-node-start t) node-start)
-                  (< node-start (treesit-node-end t)))))
-        (if (node-at-point-p node)
-            (if (< (treesit-node-start node) (point))
-                (kill-region start (min bound (treesit-node-end node)))
-              (catch 'stop
-                (while (setq parent (treesit-node-parent node))
-                  (when (and (or (< (treesit-node-start parent) start)
-                                 (and (= (treesit-node-end node) bound)
-                                      (looking-back (rx bol (* blank)) (line-beginning-position)))
-                                 (> (cdr (posn-col-row (posn-at-point (treesit-node-end node))))
-                                    (cdr (posn-col-row (posn-at-point node-start)))))
-                             (not (member (treesit-node-type node)
-                                          akirak-treesit-balanced-nodes)))
-                    (throw 'stop t))
-                  (setq node parent)))
-              (if parent
-                  (if-let (end-node (akirak-treesit--find-last-node node parent bound))
-                      (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end end-node)))
-                    ;; No node to delete, fallback to the default behavior
-                    (kill-line))
-                (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end node)))))
-          ;; There is no node at point, so find the next node and delete until
-          ;; the start of the node
-          (setq parent (treesit-node-parent node))
-          (while (not (node-at-point-p parent))
-            (setq parent (treesit-node-parent parent)))
-          (if-let (node (seq-find `(lambda (node)
-                                     (> (treesit-node-start node) ,(point)))
-                                  (treesit-node-children parent)))
-              (kill-region (point) (treesit-node-start node))
-            (kill-region (point) (treesit-node-end parent))))))))
+    (if-let (string-start (ppss-comment-or-string-start (syntax-ppss)))
+        (akirak-treesit--kill-line-inside-string string-start)
+      (let* ((start (point))
+             ;; Determine the position where the killed node(s) resides.
+             (node-start (if (looking-at (rx (+ blank)))
+                             (match-end 0)
+                           (point)))
+             (node (treesit-node-at node-start))
+             (bound (save-excursion
+                      (re-search-forward (rx (* blank) eol))
+                      (match-beginning 0)))
+             parent)
+        (cl-flet
+            ((node-at-point-p (t)
+               (and (<= (treesit-node-start t) node-start)
+                    (< node-start (treesit-node-end t)))))
+          (if (node-at-point-p node)
+              (if (< (treesit-node-start node) (point))
+                  (kill-region start (min bound (treesit-node-end node)))
+                (catch 'stop
+                  (while (setq parent (treesit-node-parent node))
+                    (when (and (or (< (treesit-node-start parent) start)
+                                   (and (= (treesit-node-end node) bound)
+                                        (looking-back (rx bol (* blank)) (line-beginning-position)))
+                                   (> (cdr (posn-col-row (posn-at-point (treesit-node-end node))))
+                                      (cdr (posn-col-row (posn-at-point node-start)))))
+                               (not (member (treesit-node-type node)
+                                            akirak-treesit-balanced-nodes)))
+                      (throw 'stop t))
+                    (setq node parent)))
+                (if parent
+                    (if-let (end-node (akirak-treesit--find-last-node node parent bound))
+                        (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end end-node)))
+                      ;; No node to delete, fallback to the default behavior
+                      (kill-line))
+                  (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end node)))))
+            ;; There is no node at point, so find the next node and delete until
+            ;; the start of the node
+            (setq parent (treesit-node-parent node))
+            (while (not (node-at-point-p parent))
+              (setq parent (treesit-node-parent parent)))
+            (if-let (node (seq-find `(lambda (node)
+                                       (> (treesit-node-start node) ,(point)))
+                                    (treesit-node-children parent)))
+                (kill-region (point) (treesit-node-start node))
+              (kill-region (point) (treesit-node-end parent)))))))))
+
+(defun akirak-treesit--kill-line-inside-string (string-start)
+  (let ((pos (point))
+        (line-end-pos (line-end-position))
+        (bound (save-excursion
+                 (goto-char string-start)
+                 (pcase-exhaustive (funcall show-paren-data-function)
+                   (`(,_ ,_ ,bound . ,_)
+                    bound)
+                   (`nil
+                    (cond
+                     ((and block-comment-start
+                           (looking-at (regexp-quote block-comment-start)))
+                      (and (search-forward block-comment-end)
+                           (match-beginning 0)))
+                     ((and comment-start
+                           (if comment-start-skip
+                               (looking-at comment-start-skip)
+                             (looking-at (regexp-quote comment-start))))
+                      (goto-char (match-end 0))
+                      (cond
+                       (comment-end-skip
+                        (re-search-forward comment-end-skip)
+                        (match-beginning 0))
+                       (comment-end
+                        (search-forward comment-end)
+                        (match-beginning 0))))
+                     (t
+                      (let* ((open-char (char-after (point)))
+                             (close-char (or (and (boundp electric-pair-mode)
+                                                  (nth 2 (electric-pair-syntax-info open-char)))
+                                             (matching-paren open-char)
+                                             open-char)))
+                        (forward-char 1)
+                        (search-forward (char-to-string close-char))
+                        (match-beginning 0)))))))))
+    (kill-region pos (if bound
+                         (min line-end-pos bound)
+                       line-end-pos))))
 
 (defun akirak-treesit--after-last-node (pos)
   (save-excursion
