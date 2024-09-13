@@ -4895,7 +4895,9 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 
     (:status opinionated
       (:global "M-i c" #'akirak-paren-replace
-               "M-i d" #'akirak-paren-delete)))
+               "M-i d" #'akirak-paren-delete
+               "M-i SPC" #'akirak-paren-select-inner
+               "M-i M-SPC" #'akirak-paren-select-outer)))
 #+end_src
 *** akirak-project
 #+begin_src emacs-lisp

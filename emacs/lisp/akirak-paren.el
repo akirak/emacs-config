@@ -120,5 +120,35 @@ Also see `akirak-elec-pair--close-char'."
   (or (nth 1 (electric-pair-syntax-info open-char))
       (matching-paren open-char)
       open-char))
+
+;;;###autoload
+(defun akirak-paren-select-inner (c)
+  "Select the inner text inside a pair of parentheses/brackets."
+  (interactive "cSelect text inside a bracket pair opening with: ")
+  (deactivate-mark)
+  (let* ((regexp (regexp-quote (char-to-string c)))
+         (start (if (looking-at regexp)
+                    (point)
+                  (re-search-backward regexp)))
+         (end (akirak-paren-matching-location)))
+    (goto-char (1+ start))
+    (push-mark)
+    (goto-char (1- end))
+    (activate-mark)))
+
+;;;###autoload
+(defun akirak-paren-select-outer (c)
+  "Select the outer text inside a pair of parentheses/brackets."
+  (interactive "cSelect text outside a bracket pair opening with: ")
+  (deactivate-mark)
+  (let ((regexp (regexp-quote (char-to-string c)))
+        )
+    (if (looking-at regexp)
+        (point)
+      (re-search-backward regexp))
+    (push-mark)
+    (goto-char (akirak-paren-matching-location))
+    (activate-mark)))
+
 (provide 'akirak-paren)
 ;;; akirak-paren.el ends here
