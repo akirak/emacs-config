@@ -4669,8 +4669,6 @@ This is a collection of various utilities to enhance the experience.
     (:status opinionated
       (:global "M-i" nil
                "M-i y" #'akirak-elec-pair-wrap-post-yank
-               "M-i x" #'akirak-elec-pair-inner-kill
-               "M-i w" #'akirak-elec-pair-inner-kill-new
                "M-i #" #'akirak-elec-pair-self-insert
                "M-i $" #'akirak-elec-pair-self-insert
                "M-i %" #'akirak-elec-pair-self-insert

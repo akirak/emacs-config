@@ -78,52 +78,6 @@ pair."
       (cons start end))))
 
 ;;;###autoload
-(defun akirak-elec-pair-inner-kill (c)
-  "Kill the text inside a pair of parentheses/brackets."
-  (interactive "cTarget paren: ")
-  (pcase (akirak-elec-pair--bounds-around-point c 'inner)
-    (`(,start . ,end)
-     (kill-region start end)
-     (goto-char start))
-    (_
-     (user-error "Not finding a pair"))))
-
-;;;###autoload
-(defun akirak-elec-pair-inner-kill-new (c)
-  "Copy the text inside a pair of parentheses/brackets."
-  (interactive "cTarget paren: ")
-  (pcase (akirak-elec-pair--bounds-around-point c 'inner)
-    (`(,start . ,end)
-     (let ((text (buffer-substring start end)))
-       (kill-new text)
-       (message "Copied %s chars (\"%s\")" (- end start) text)))
-    (_
-     (user-error "Not finding a pair"))))
-
-;;;###autoload
-(defun akirak-elec-pair-wrap ()
-  "Wrap the current sexp or region with a pair."
-  (interactive)
-  (pcase-let* ((`(,start . ,end) (if (region-active-p)
-                                     (cons (region-beginning) (region-end))
-                                   (bounds-of-thing-at-point 'sexp)))
-               (overlay (make-overlay start end))
-               (`(,open-char ,close-char ,prefix)
-                (progn
-                  (overlay-put overlay 'face 'highlight)
-                  (akirak-elec-pair--new-bracket-pair))))
-    (save-excursion
-      (delete-overlay overlay)
-      (goto-char start)
-      (when prefix
-        (insert prefix))
-      (insert-char open-char)
-      (goto-char (if prefix
-                     (+ (length prefix) end 1)
-                   (1+ end)))
-      (insert-char close-char))))
-
-;;;###autoload
 (defun akirak-elec-pair-self-insert ()
   "Wrap the current sexp or region with a pair."
   (interactive)
@@ -156,28 +110,6 @@ pair."
     (goto-char (+ (cdr akirak-elec-pair-bounds) inc))
     (insert-char close-char)
     (setq akirak-elec-pair-increment inc)))
-
-;;;###autoload
-(defun akirak-elec-pair-wrap-post-yank ()
-  "Wrap the latest yank command output with a pair."
-  (interactive)
-  (pcase-let* ((start (mark))
-               (end (point))
-               (overlay (make-overlay start end))
-               (`(,open-char ,close-char ,prefix)
-                (progn
-                  (overlay-put overlay 'face 'highlight)
-                  (akirak-elec-pair--new-bracket-pair))))
-    (save-excursion
-      (delete-overlay overlay)
-      (goto-char start)
-      (when prefix
-        (insert prefix))
-      (insert-char open-char)
-      (goto-char (if prefix
-                     (+ (length prefix) end 1)
-                   (1+ end)))
-      (insert-char close-char))))
 
 (provide 'akirak-elec-pair)
 ;;; akirak-elec-pair.el ends here
