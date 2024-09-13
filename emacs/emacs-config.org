@@ -4266,6 +4266,8 @@ Major mode for Elixir with tree-sitter support
     (:huan
       ("def" "defp"))
 
+    (:bind "C-c C-e" #'akirak-sgml-close-tag)
+
     (:auto-insert
      ("/config/config\\.exs\\'"
       . (> "use Mix.Config\n\n"
@@ -8987,7 +8989,7 @@ Complete Tailwind classes using the Cheatsheet data
       (:hook-into css-mode css-ts-mode)
       (:bind "C-c t" #'twind-insert-css-from-cheatsheet))
     (:with-mode twind-class-mode
-      (:hook-into web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode)
+      (:hook-into web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode elixir-ts-mode)
       (:bind "C-c t" #'twind-insert-class-from-cheatsheet))
     (with-eval-after-load 'embark
       (defvar-keymap twind-css-rule-embark-map
