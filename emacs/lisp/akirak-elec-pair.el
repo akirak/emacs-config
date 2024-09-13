@@ -101,50 +101,6 @@ pair."
      (user-error "Not finding a pair"))))
 
 ;;;###autoload
-(defun akirak-elec-pair-replace (c)
-  "Replace a pair of parentheses/brackets of C around the point."
-  (interactive "cTarget paren: ")
-  (let ((regexp (regexp-quote (char-to-string c))))
-    (let* ((start (save-excursion
-                    (unless (looking-at regexp)
-                      (re-search-backward regexp))))
-           (end (save-excursion
-                  (goto-char start)
-                  (forward-sexp)
-                  (point)))
-           (overlay (make-overlay start end))
-           (replacement-char (progn
-                               (overlay-put overlay 'face 'highlight)
-                               (read-char "New paren: ")))
-           (replacement-close-char (akirak-elec-pair--close-char replacement-char)))
-      (save-excursion
-        (delete-overlay overlay)
-        (goto-char start)
-        (delete-char 1)
-        (insert-char replacement-char)
-        (goto-char end)
-        (backward-delete-char 1)
-        (insert-char replacement-close-char)))))
-
-;;;###autoload
-(defun akirak-elec-pair-delete (c)
-  "Delete a pair of parentheses/brackets of C around the point."
-  (interactive "cTarget paren: ")
-  (let ((regexp (regexp-quote (char-to-string c))))
-    (let* ((start (save-excursion
-                    (unless (looking-at regexp)
-                      (re-search-backward regexp))))
-           (end (save-excursion
-                  (goto-char start)
-                  (forward-sexp)
-                  (point))))
-      (save-excursion
-        (goto-char start)
-        (delete-char 1)
-        (goto-char (1- end))
-        (backward-delete-char 1)))))
-
-;;;###autoload
 (defun akirak-elec-pair-wrap ()
   "Wrap the current sexp or region with a pair."
   (interactive)

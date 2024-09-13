@@ -4668,8 +4668,6 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-elec-pair
     (:status opinionated
       (:global "M-i" nil
-               "M-i c" #'akirak-elec-pair-replace
-               "M-i d" #'akirak-elec-pair-delete
                "M-i y" #'akirak-elec-pair-wrap-post-yank
                "M-i x" #'akirak-elec-pair-inner-kill
                "M-i w" #'akirak-elec-pair-inner-kill-new
@@ -4893,7 +4891,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (add-hook 'org-mode-hook
               (defun akirak/setup-org-pair-match ()
                 (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
-                          nil t))))
+                          nil t)))
+
+    (:status opinionated
+      (:global "M-i c" #'akirak-paren-replace
+               "M-i d" #'akirak-paren-delete)))
 #+end_src
 *** akirak-project
 #+begin_src emacs-lisp
