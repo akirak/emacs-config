@@ -1373,8 +1373,10 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup image-file
-    (:with-mode auto-image-file-mode
-      (:hook-into after-init-hook)))
+    ;; `file-name-handler-alist' is emptied in early-init.el and restored in
+    ;; `after-init-hook'. `auto-image-file-mode' should be loaded after the alist
+    ;; has been restored.
+    (add-hook 'after-init-hook #'auto-image-file-mode 70))
 #+end_src
 *** indent
 :PROPERTIES:
