@@ -68,7 +68,8 @@
                                    :transform-filename transform-filename))
             (lines (thread-last
                      (append generated-statements existing-statements)
-                     (seq-sort #'string<))))
+                     (seq-sort #'string<)
+                     (seq-uniq))))
        (cl-flet
            ((contains-pattern (s)
               (let ((case-fold-search nil))
@@ -106,7 +107,7 @@
             (save-restriction
               (goto-char (point-min))
               (while (re-search-forward regexp nil t)
-                (push (match-string 0) lines)))))))
+                (push (string-trim (match-string 0)) lines)))))))
     lines))
 
 (cl-defun akirak-import--generate-statements (&key identifier
