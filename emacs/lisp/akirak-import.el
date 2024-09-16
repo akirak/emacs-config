@@ -18,7 +18,8 @@
                              (concat "type " identifier)
                            identifier))))))
     (elixir-ts-mode
-     :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use") " " (+ nonl))
+     :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use") blank)
+     :treesit-node-types ("call")
      :extra-modes nil
      :extensions (".ex")
      :source-directories ("lib")
@@ -55,12 +56,14 @@
                akirak-import-settings-alist)
     (`nil
      (user-error "Unsupported mode"))
-    (`(,mode . ,(map :regexp :extra-modes
+    (`(,mode . ,(map :regexp :treesit-node-types :extra-modes
                      :extensions :source-directories :transform-filename
                      :goto-insert-location
                      :inside-tree-sitter-node :make-default))
      (let* ((existing-statements (akirak-import--collect-statements (cons mode extra-modes)
-                                                                    :regexp regexp))
+                                                                    :regexp regexp
+                                                                    :treesit-node-types
+                                                                    treesit-node-types))
             (generated-statements (akirak-import--generate-statements
                                    :identifier pattern
                                    :extensions extensions
@@ -91,7 +94,7 @@
           :inside-tree-sitter-node inside-tree-sitter-node
           :regexp regexp))))))
 
-(cl-defun akirak-import--collect-statements (modes &key regexp)
+(cl-defun akirak-import--collect-statements (modes &key regexp treesit-node-types)
   "Collect import statements matching one of MODES."
   (let (lines)
     (cl-flet
@@ -107,7 +110,16 @@
             (save-restriction
               (goto-char (point-min))
               (while (re-search-forward regexp nil t)
-                (push (string-trim (match-string 0)) lines)))))))
+                (if treesit-node-types
+                    (let* ((start (match-beginning 0))
+                           (node (treesit-node-at start)))
+                      (while (not (member (treesit-node-type node)
+                                          treesit-node-types))
+                        (setq node (treesit-node-parent node))
+                        (unless node
+                          (error "No matching treesit node at %d" start)))
+                      (push (treesit-node-text node) lines))
+                  (push (string-trim (match-string 0)) lines))))))))
     lines))
 
 (cl-defun akirak-import--generate-statements (&key identifier
