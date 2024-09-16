@@ -78,96 +78,6 @@ pair."
       (cons start end))))
 
 ;;;###autoload
-(defun akirak-elec-pair-inner-kill (c)
-  "Kill the text inside a pair of parentheses/brackets."
-  (interactive "cTarget paren: ")
-  (pcase (akirak-elec-pair--bounds-around-point c 'inner)
-    (`(,start . ,end)
-     (kill-region start end)
-     (goto-char start))
-    (_
-     (user-error "Not finding a pair"))))
-
-;;;###autoload
-(defun akirak-elec-pair-inner-kill-new (c)
-  "Copy the text inside a pair of parentheses/brackets."
-  (interactive "cTarget paren: ")
-  (pcase (akirak-elec-pair--bounds-around-point c 'inner)
-    (`(,start . ,end)
-     (let ((text (buffer-substring start end)))
-       (kill-new text)
-       (message "Copied %s chars (\"%s\")" (- end start) text)))
-    (_
-     (user-error "Not finding a pair"))))
-
-;;;###autoload
-(defun akirak-elec-pair-replace (c)
-  "Replace a pair of parentheses/brackets of C around the point."
-  (interactive "cTarget paren: ")
-  (let ((regexp (regexp-quote (char-to-string c))))
-    (let* ((start (save-excursion
-                    (unless (looking-at regexp)
-                      (re-search-backward regexp))))
-           (end (save-excursion
-                  (goto-char start)
-                  (forward-sexp)
-                  (point)))
-           (overlay (make-overlay start end))
-           (replacement-char (progn
-                               (overlay-put overlay 'face 'highlight)
-                               (read-char "New paren: ")))
-           (replacement-close-char (akirak-elec-pair--close-char replacement-char)))
-      (save-excursion
-        (delete-overlay overlay)
-        (goto-char start)
-        (delete-char 1)
-        (insert-char replacement-char)
-        (goto-char end)
-        (backward-delete-char 1)
-        (insert-char replacement-close-char)))))
-
-;;;###autoload
-(defun akirak-elec-pair-delete (c)
-  "Delete a pair of parentheses/brackets of C around the point."
-  (interactive "cTarget paren: ")
-  (let ((regexp (regexp-quote (char-to-string c))))
-    (let* ((start (save-excursion
-                    (unless (looking-at regexp)
-                      (re-search-backward regexp))))
-           (end (save-excursion
-                  (goto-char start)
-                  (forward-sexp)
-                  (point))))
-      (save-excursion
-        (goto-char start)
-        (delete-char 1)
-        (goto-char (1- end))
-        (backward-delete-char 1)))))
-
-;;;###autoload
-(defun akirak-elec-pair-wrap ()
-  "Wrap the current sexp or region with a pair."
-  (interactive)
-  (pcase-let* ((`(,start . ,end) (if (region-active-p)
-                                     (cons (region-beginning) (region-end))
-                                   (bounds-of-thing-at-point 'sexp)))
-               (overlay (make-overlay start end))
-               (`(,open-char ,close-char ,prefix)
-                (progn
-                  (overlay-put overlay 'face 'highlight)
-                  (akirak-elec-pair--new-bracket-pair))))
-    (save-excursion
-      (delete-overlay overlay)
-      (goto-char start)
-      (when prefix
-        (insert prefix))
-      (insert-char open-char)
-      (goto-char (if prefix
-                     (+ (length prefix) end 1)
-                   (1+ end)))
-      (insert-char close-char))))
-
-;;;###autoload
 (defun akirak-elec-pair-self-insert ()
   "Wrap the current sexp or region with a pair."
   (interactive)
@@ -200,28 +110,6 @@ pair."
     (goto-char (+ (cdr akirak-elec-pair-bounds) inc))
     (insert-char close-char)
     (setq akirak-elec-pair-increment inc)))
-
-;;;###autoload
-(defun akirak-elec-pair-wrap-post-yank ()
-  "Wrap the latest yank command output with a pair."
-  (interactive)
-  (pcase-let* ((start (mark))
-               (end (point))
-               (overlay (make-overlay start end))
-               (`(,open-char ,close-char ,prefix)
-                (progn
-                  (overlay-put overlay 'face 'highlight)
-                  (akirak-elec-pair--new-bracket-pair))))
-    (save-excursion
-      (delete-overlay overlay)
-      (goto-char start)
-      (when prefix
-        (insert prefix))
-      (insert-char open-char)
-      (goto-char (if prefix
-                     (+ (length prefix) end 1)
-                   (1+ end)))
-      (insert-char close-char))))
 
 (provide 'akirak-elec-pair)
 ;;; akirak-elec-pair.el ends here

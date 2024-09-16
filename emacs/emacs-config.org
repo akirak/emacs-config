@@ -1373,8 +1373,10 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup image-file
-    (:with-mode auto-image-file-mode
-      (:hook-into after-init-hook)))
+    ;; `file-name-handler-alist' is emptied in early-init.el and restored in
+    ;; `after-init-hook'. `auto-image-file-mode' should be loaded after the alist
+    ;; has been restored.
+    (add-hook 'after-init-hook #'auto-image-file-mode 70))
 #+end_src
 *** indent
 :PROPERTIES:
@@ -4266,6 +4268,8 @@ Major mode for Elixir with tree-sitter support
     (:huan
       ("def" "defp"))
 
+    (:bind "C-c C-e" #'akirak-sgml-close-tag)
+
     (:auto-insert
      ("/config/config\\.exs\\'"
       . (> "use Mix.Config\n\n"
@@ -4668,11 +4672,7 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-elec-pair
     (:status opinionated
       (:global "M-i" nil
-               "M-i c" #'akirak-elec-pair-replace
-               "M-i d" #'akirak-elec-pair-delete
                "M-i y" #'akirak-elec-pair-wrap-post-yank
-               "M-i x" #'akirak-elec-pair-inner-kill
-               "M-i w" #'akirak-elec-pair-inner-kill-new
                "M-i #" #'akirak-elec-pair-self-insert
                "M-i $" #'akirak-elec-pair-self-insert
                "M-i %" #'akirak-elec-pair-self-insert
@@ -4893,7 +4893,13 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (add-hook 'org-mode-hook
               (defun akirak/setup-org-pair-match ()
                 (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
-                          nil t))))
+                          nil t)))
+
+    (:status opinionated
+      (:global "M-i c" #'akirak-paren-replace
+               "M-i d" #'akirak-paren-delete
+               "M-i SPC" #'akirak-paren-select-inner
+               "M-i M-SPC" #'akirak-paren-select-outer)))
 #+end_src
 *** akirak-project
 #+begin_src emacs-lisp
@@ -8578,7 +8584,7 @@ Syntax highlighting code block in HTML
       (add-to-list 'shr-external-rendering-functions
                    '(pre . shr-tag-pre-highlight))))
 #+end_src
-*** sops
+*** COMMENT sops                                                               :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-06-15 Sat 22:13]
 :END:
@@ -8725,6 +8731,19 @@ Highlight symbols with keymap-enabled overlays
 #+end_src
 
 =embark= can substitute for most of the functionalities of the package, but I am used to this package.
+**** casual-symbol-overlay                                      :transit:
+:PROPERTIES:
+:CREATED_TIME: [2024-09-11 Wed 12:05]
+:END:
+#+begin_quote
+Transient UI for Symbol Overlay
+[[https://github.com/kickingvegas/casual-symbol-overlay]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package casual-symbol-overlay)
+    (:global "C-c S" #'casual-symbol-overlay-tmenu))
+#+end_src
 *** systemd
 :PROPERTIES:
 :CREATED_TIME: [2023-07-17 Mon 22:03]
@@ -8972,7 +8991,7 @@ Complete Tailwind classes using the Cheatsheet data
       (:hook-into css-mode css-ts-mode)
       (:bind "C-c t" #'twind-insert-css-from-cheatsheet))
     (:with-mode twind-class-mode
-      (:hook-into web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode)
+      (:hook-into web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode elixir-ts-mode)
       (:bind "C-c t" #'twind-insert-class-from-cheatsheet))
     (with-eval-after-load 'embark
       (defvar-keymap twind-css-rule-embark-map
@@ -9796,8 +9815,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
+| [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
-| [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
@@ -9861,6 +9880,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Coq][Coq]]                 |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
+| [[org-ql-search:tags:transit][transit]]             |   1 |
 
 Note that the table above is invisible on GitHub.
 There is a table right before paragraph.
