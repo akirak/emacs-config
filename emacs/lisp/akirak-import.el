@@ -18,7 +18,7 @@
                              (concat "type " identifier)
                            identifier))))))
     (elixir-ts-mode
-     :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use") blank)
+     :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use"))
      :treesit-node-types ("call")
      :extra-modes nil
      :extensions (".ex")
