@@ -1,9 +1,10 @@
 {
   inputs,
   configurationRevision,
-}: final: prev:
-with builtins; let
-  inherit (inputs.twist.lib {inherit (inputs.nixpkgs) lib;}) parseSetup;
+}:
+final: prev:
+with builtins;
+let
   inherit (inputs.twist.overlays.default final prev) emacsTwist;
   inherit (inputs.org-babel.overlays.default final prev) tangleOrgBabelFile;
   inherit (prev) system;
@@ -122,7 +123,7 @@ with builtins; let
         (add-to-list 'treesit-extra-load-path "${treeSitterLoadPath}/")
       '';
       inherit initialLibraries;
-      initParser = parseSetup {};
+      initParser = inputs.twist.lib.parseSetup { inherit (inputs.nixpkgs) lib; } { };
       inherit registries;
       lockDir = ./lock;
       inputOverrides =
