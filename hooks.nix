@@ -20,9 +20,8 @@ let
     };
 in
 {
-  nixfmt = {
+  nixfmt-rfc-style = {
     enable = true;
-    package = pkgs.nixfmt-rfc-style;
     excludes = [ "emacs/lock/flake\\.nix" ];
   };
   # nix-linter.enable = true;
