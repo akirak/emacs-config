@@ -1,9 +1,7 @@
-{
-  inputs,
-  configurationRevision,
-}: final: prev:
-with builtins; let
-  inherit (inputs.twist.lib {inherit (inputs.nixpkgs) lib;}) parseSetup;
+{ inputs, configurationRevision, }:
+final: prev:
+with builtins;
+let
   inherit (inputs.twist.overlays.default final prev) emacsTwist;
   inherit (inputs.org-babel.overlays.default final prev) tangleOrgBabelFile;
   inherit (prev) system;
@@ -20,7 +18,7 @@ with builtins; let
     {
       type = "melpa";
       path = inputs.melpa.outPath + "/recipes";
-      exclude = ["async"];
+      exclude = [ "async" ];
     }
     {
       type = "elpa";
@@ -60,60 +58,42 @@ with builtins; let
       # Some grammars don't contain "tree-sitter-" as the prefix,
       # so add it explicitly.
       name = "libtree-sitter-${
-        lib.pipe (lib.getName drv) [
-          (lib.removeSuffix "-grammar")
-          (lib.removePrefix "tree-sitter-")
-        ]
-      }${prev.stdenv.targetPlatform.extensions.sharedLibrary}";
+          lib.pipe (lib.getName drv) [
+            (lib.removeSuffix "-grammar")
+            (lib.removePrefix "tree-sitter-")
+          ]
+        }${prev.stdenv.targetPlatform.extensions.sharedLibrary}";
       path = "${drv}/parser";
     }))
     (prev.linkFarm "treesit-grammars")
   ];
 
-  makeEmacsProfile = {
-    extraFeatures,
-    prependToInitFile ? null,
-    extraInitFiles,
-    pgtk ? true,
-    withXwidgets,
-    nativeCompileAheadDefault ? true,
-  }: let
-    emacsPackage =
-      (
-        if pgtk
-        then emacsPackages.emacs-pgtk
-        else emacsPackages.emacs
-      )
-      .override (
-        _: (
-          if withXwidgets
-          then {inherit withXwidgets;}
-          else {}
-        )
-      );
-  in
-    (emacsTwist {
+  makeEmacsProfile = { extraFeatures, prependToInitFile ? null, extraInitFiles
+    , pgtk ? true, withXwidgets, nativeCompileAheadDefault ? true, }:
+    let
+      emacsPackage = (if pgtk then
+        emacsPackages.emacs-pgtk
+      else
+        emacsPackages.emacs).override
+        (_: (if withXwidgets then { inherit withXwidgets; } else { }));
+    in (emacsTwist {
       inherit configurationRevision;
       inherit emacsPackage;
       inherit nativeCompileAheadDefault;
-      initFiles =
-        (lib.optional (prependToInitFile != null) (prev.writeText "init.el" prependToInitFile))
-        ++ [
+      initFiles = (lib.optional (prependToInitFile != null)
+        (prev.writeText "init.el" prependToInitFile)) ++ [
           (tangleOrgBabelFile "init.el" ./emacs-config.org {
-            processLines = org.excludeHeadlines (
-              s:
-                org.tag "ARCHIVE" s
-                || (
-                  if extraFeatures == true
-                  then false
-                  else (org.tag "@extra" s && !lib.any (tag: org.tag tag s) extraFeatures)
-                )
-            );
+            processLines = org.excludeHeadlines (s:
+              org.tag "ARCHIVE" s || (if extraFeatures == true then
+                false
+              else
+                (org.tag "@extra" s
+                  && !lib.any (tag: org.tag tag s) extraFeatures)));
           })
         ]
         # Allow adding private config on specific hosts
         ++ extraInitFiles;
-      extraPackages = ["setup"];
+      extraPackages = [ "setup" ];
       localPackages = [
         # Don't add this package to the lock file
         "akirak"
@@ -122,60 +102,51 @@ with builtins; let
         (add-to-list 'treesit-extra-load-path "${treeSitterLoadPath}/")
       '';
       inherit initialLibraries;
-      initParser = parseSetup {};
+      initParser =
+        inputs.twist.lib.parseSetup { inherit (inputs.nixpkgs) lib; } { };
       inherit registries;
       lockDir = ./lock;
-      inputOverrides =
-        (import ./inputs.nix)
-        // {
-          akirak = _: _: {
-            src = inputs.nix-filter.lib {
-              root = inputs.self;
-              include = ["emacs/lisp"];
-            };
+      inputOverrides = (import ./inputs.nix) // {
+        akirak = _: _: {
+          src = inputs.nix-filter.lib {
+            root = inputs.self;
+            include = [ "emacs/lisp" ];
           };
         };
+      };
       exportManifest = true;
-    })
-    .overrideScope
-    (
-      lib.composeExtensions inputs.twist-overrides.overlays.twistScope (
-        self: super: {
-          elispPackages = super.elispPackages.overrideScope (
-            import ./overrides.nix {
-              pkgs = prev;
-              inherit (prev) system;
-              emacs = emacsPackage;
-            }
-          );
-        }
-      )
-    );
+    }).overrideScope
+    (lib.composeExtensions inputs.twist-overrides.overlays.twistScope
+      (self: super: {
+        elispPackages = super.elispPackages.overrideScope
+          (import ./overrides.nix {
+            pkgs = prev;
+            inherit (prev) system;
+            emacs = emacsPackage;
+          });
+      }));
 
   defaultEmacsPackage = emacsPackages.emacs-pgtk;
 in {
   emacs-config = lib.makeOverridable makeEmacsProfile {
     extraFeatures = true;
-    extraInitFiles = [];
+    extraInitFiles = [ ];
     withXwidgets = false;
   };
 
   # A configuration with the packages for the Git hooks.
   emacs-batch = emacsTwist {
     emacsPackage = defaultEmacsPackage;
-    initFiles = [];
-    extraPackages = [
-      "org-ql"
-      "org-make-toc"
-    ];
+    initFiles = [ ];
+    extraPackages = [ "org-ql" "org-make-toc" ];
     inherit registries;
     lockDir = ./lock;
   };
 
   emacsclient =
-    inputs.nixpkgs.legacyPackages.${system}.runCommandLocal "emacsclient"
-    {propagatedBuildInputs = [defaultEmacsPackage];}
-    ''
+    inputs.nixpkgs.legacyPackages.${system}.runCommandLocal "emacsclient" {
+      propagatedBuildInputs = [ defaultEmacsPackage ];
+    } ''
       mkdir -p $out/bin
       ln -t $out/bin -s ${defaultEmacsPackage}/bin/emacsclient
     '';

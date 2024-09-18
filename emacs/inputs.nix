@@ -23,9 +23,7 @@
     } // super.packageRequires;
   };
   dired-open = _: super: {
-    packageRequires = {
-      dired-hacks-utils = "0";
-    } // super.packageRequires;
+    packageRequires = { dired-hacks-utils = "0"; } // super.packageRequires;
   };
 
   org-bookmark-heading = _: _: {
@@ -100,10 +98,7 @@
       "lispy-occur.el"
     ];
     packageRequires =
-      (builtins.removeAttrs super.packageRequires [
-        "swiper"
-        "ace-window"
-      ])
+      (builtins.removeAttrs super.packageRequires [ "swiper" "ace-window" ])
       // {
         avy = "0";
       };
@@ -127,7 +122,9 @@
     };
   };
 
-  persist = _: super: { files = builtins.removeAttrs super.files [ "persist.texi" ]; };
+  persist = _: super: {
+    files = builtins.removeAttrs super.files [ "persist.texi" ];
+  };
 
   org-autolist = _: _: {
     origin = {
@@ -137,4 +134,14 @@
       ref = "patch-org-element";
     };
   };
+
+  taxy = _: super: {
+    files = builtins.removeAttrs super.files [ "NOTES.org" ];
+  };
+
+  taxy-magit-section = _: super: {
+    files = builtins.removeAttrs super.files [ "NOTES.org" ];
+  };
+
+  plz = _: super: { files = builtins.removeAttrs super.files [ "NOTES.org" ]; };
 }

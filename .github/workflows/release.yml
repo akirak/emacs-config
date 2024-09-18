@@ -21,8 +21,13 @@ jobs:
 
     strategy:
       matrix:
-        package:
-        - default-x11-personalized
+        include:
+          - package: default-x11-personalized.archive-builder
+            command: run
+          - package: default-x11.elpa-archive-builder
+            command: run
+          - package: default-x11.init-file
+            command: build -o init.el
 
     steps:
     - uses: actions/checkout@v4
@@ -35,11 +40,13 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
 
-    - name: Build an offline archive
-      run: nix run .#${{ matrix.package }}.archive-builder
+    - name: Build the artifact
+      run: nix ${{ matrix.command }} .#${{ matrix.package }}
 
     - uses: akirak/action-gh-release@master
       with:
         tag_name: ${{ inputs.release-tag || github.ref_name }}
         files: |
           *.zstd
+          *.tar.gz
+          *.el
