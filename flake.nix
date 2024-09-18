@@ -167,6 +167,19 @@
                     builtins.substring 0 8 (inputs.self.lastModifiedDate)
                   }-${system}.tar.zstd";
                 } emacs-env;
+
+                elpa-archive-builder = pkgs.callPackage ./nix/makeCrossPlatformArchive.nix {
+                  inherit (inputs) twist;
+                  inherit pkgs;
+                  archiveName = "elpa-archive-${name}-${builtins.substring 0 8 (inputs.self.lastModifiedDate)}";
+                } emacs-env.packageInputs;
+
+                init-file = pkgs.runCommandLocal "init.el" { } ''
+                  for file in ${builtins.concatStringsSep " " emacs-env.initFiles}
+                  do
+                    cat "$file" >> "$out"
+                  done
+                '';
               }
             ) profiles);
 
