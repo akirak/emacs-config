@@ -137,4 +137,14 @@
       ref = "patch-org-element";
     };
   };
+
+  taxy = _: super: {
+    files = builtins.removeAttrs super.files [ "NOTES.org" ];
+  };
+
+  taxy-magit-section = _: super: {
+    files = builtins.removeAttrs super.files [ "NOTES.org" ];
+  };
+
+  plz = _: super: { files = builtins.removeAttrs super.files [ "NOTES.org" ]; };
 }
