@@ -24,10 +24,13 @@ jobs:
         include:
           - package: default-x11-personalized.archive-builder
             command: run
-          - package: default-x11.elpa-archive-builder
-            command: run
+            result-tar: false
+          - package: default-x11.elpa-archive
+            command: build
+            result-tar: true
           - package: default-x11.init-file
             command: build -o init.el
+            result-tar: false
 
     steps:
     - uses: actions/checkout@v4
@@ -42,6 +45,12 @@ jobs:
 
     - name: Build the artifact
       run: nix ${{ matrix.command }} .#${{ matrix.package }}
+
+    - name: Compress the archive if any
+      run: |
+        cp -v --no-preserve=mode result/*.tar .
+        gzip ./*.tar
+      if: ${{ matrix.result-tar }}
 
     - uses: akirak/action-gh-release@master
       with:
