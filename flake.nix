@@ -36,6 +36,10 @@
     };
     emacs-config-features.url = "github:akirak/emacs-config/develop?dir=presets/default";
 
+    twist2elpa = {
+      url = "github:emacs-twist/twist2elpa";
+      inputs.twist.follows = "twist";
+    };
     archiver.url = "github:emacs-twist/twist-archiver";
 
     # pre-commit
@@ -132,7 +136,9 @@
               configurationRevision = "${substring 0 8 self.lastModifiedDate}.${
                 if self ? rev then substring 0 7 self.rev else "dirty"
               }";
-            } final pkgs);
+            } final pkgs)
+
+          ;
 
           packages =
             {
@@ -168,11 +174,7 @@
                   }-${system}.tar.zstd";
                 } emacs-env;
 
-                elpa-archive-builder = pkgs.callPackage ./nix/makeCrossPlatformArchive.nix {
-                  inherit (inputs) twist;
-                  inherit pkgs;
-                  archiveName = "elpa-archive-${name}-${builtins.substring 0 8 (inputs.self.lastModifiedDate)}";
-                } emacs-env.packageInputs;
+                elpa-archive = (inputs.twist2elpa.overlays.default final pkgs).emacsTwist2Elpa.buildElpaArchiveAsTar "elpa-archive-${builtins.substring 0 8 (inputs.self.lastModifiedDate)}" emacs-env.packageInputs;
 
                 init-file = pkgs.runCommandLocal "init.el" { } ''
                   for file in ${builtins.concatStringsSep " " emacs-env.initFiles}
