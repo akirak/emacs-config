@@ -172,7 +172,11 @@
                   }-${system}.tar.zstd";
                 } emacs-env;
 
-                elpa-archive = (inputs.twist2elpa.overlays.default final pkgs).emacsTwist2Elpa.buildElpaArchiveAsTar "elpa-archive-${builtins.substring 0 8 (inputs.self.lastModifiedDate)}" emacs-env.packageInputs;
+                elpa-archive =
+                  (inputs.twist2elpa.overlays.default final pkgs).emacsTwist2Elpa.buildElpaArchiveAsTar
+                    { withInstaller = true; }
+                    "elpa-archive-${builtins.substring 0 8 (inputs.self.lastModifiedDate)}"
+                    emacs-env.packageInputs;
 
                 init-file = pkgs.runCommandLocal "init.el" { } ''
                   for file in ${builtins.concatStringsSep " " emacs-env.initFiles}
