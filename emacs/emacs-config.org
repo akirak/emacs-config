@@ -671,7 +671,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup calc
     (:set calc-kill-line-numbering nil)
-    (:global "C-c q c" #'calc))
+    (:global "<f12> c c" #'calc))
 #+end_src
 *** calendar
 :PROPERTIES:
