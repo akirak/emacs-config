@@ -8,6 +8,13 @@
     };
   };
 
+  magit-delta = _: super: {
+    packageRequires = super.packageRequires // {
+      # Override the snapshot version dependency.
+      magit = "3";
+    };
+  };
+
   # Quite a few dired extension packages have missing dependencies.
   dired-collapse = _: super: {
     packageRequires = {

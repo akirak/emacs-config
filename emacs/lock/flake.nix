@@ -1202,6 +1202,12 @@
       repo = "tomelr";
       type = "github";
     };
+    transient = {
+      flake = false;
+      owner = "magit";
+      repo = "transient";
+      type = "github";
+    };
     treesit-fold = {
       flake = false;
       owner = "emacs-tree-sitter";
