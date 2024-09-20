@@ -3077,6 +3077,7 @@
         "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
         "tomelr": "tomelr",
+        "transient": "transient",
         "treesit-fold": "treesit-fold",
         "ts": "ts",
         "tuareg": "tuareg",
@@ -3416,6 +3417,22 @@
       "original": {
         "owner": "kaushalmodi",
         "repo": "tomelr",
+        "type": "github"
+      }
+    },
+    "transient": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1726743134,
+        "narHash": "sha256-pWvSglMbA54gPaRbJDfDMzlAYQjSe0TCClLnlKdvDt4=",
+        "owner": "magit",
+        "repo": "transient",
+        "rev": "880b21adfafb4677bed711559bd49786c8d60dcc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "magit",
+        "repo": "transient",
         "type": "github"
       }
     },

@@ -2211,7 +2211,7 @@ Transient commands
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup transient
+  (setup (:package transient)
     (autoload 'transient-define-prefix "transient" nil t))
 #+end_src
 
