@@ -6371,7 +6371,7 @@ Automatically add spaces around operators
                 java-mode
                 rust-mode))
 #+end_src
-*** elx                            :Emacs__Lisp:development:library:
+*** elx                                 :Emacs__Lisp:development:library:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
 :END:
@@ -6493,7 +6493,7 @@ Support for `direnv' that operates buffer-locally
     (:with-mode envrc-global-mode
       (:hook-into after-init-hook)))
 #+end_src
-*** epkg                                                     :Emacs:
+*** epkg                                                          :Emacs:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 14:36]
 :END:
