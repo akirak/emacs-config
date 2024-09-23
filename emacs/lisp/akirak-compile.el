@@ -47,6 +47,7 @@
      ("gleam add")
      ("gleam add --dev")
      ("gleam deps download")
+     ("gleam deps update")
      ("gleam format --check src test")
      ("gleam build")
      ("gleam docs build")
