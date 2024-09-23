@@ -95,6 +95,7 @@
   (make-hash-table :test #'equal :size 50))
 
 (defun akirak-compile-clear-cache ()
+  "Clear the cache for completion."
   (interactive)
   (clrhash akirak-compile-command-cache))
 
