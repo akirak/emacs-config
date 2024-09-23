@@ -313,6 +313,7 @@ are displayed in the frame."
                                        (list (alist-get 'doc attrs)
                                              (akirak-compile--just-format-body
                                               (alist-get 'body attrs)))
+                                       (flatten-list)
                                        (delq nil))
                                      " — "))))))
                  (delete-file err-file)))))
