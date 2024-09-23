@@ -47,6 +47,7 @@
      ("gleam add")
      ("gleam add --dev")
      ("gleam deps download")
+     ("gleam deps update")
      ("gleam format --check src test")
      ("gleam build")
      ("gleam docs build")
@@ -94,6 +95,7 @@
   (make-hash-table :test #'equal :size 50))
 
 (defun akirak-compile-clear-cache ()
+  "Clear the cache for completion."
   (interactive)
   (clrhash akirak-compile-command-cache))
 
@@ -312,6 +314,7 @@ are displayed in the frame."
                                        (list (alist-get 'doc attrs)
                                              (akirak-compile--just-format-body
                                               (alist-get 'body attrs)))
+                                       (flatten-list)
                                        (delq nil))
                                      " — "))))))
                  (delete-file err-file)))))

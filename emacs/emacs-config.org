@@ -671,7 +671,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup calc
     (:set calc-kill-line-numbering nil)
-    (:global "C-c q c" #'calc))
+    (:global "<f12> c c" #'calc))
 #+end_src
 *** calendar
 :PROPERTIES:
@@ -1194,6 +1194,7 @@ The built-in =electric= package provides the following modes:
            (elixir-ts-mode . (,@lsp))
            (heex-ts-mode . (,@lsp))
            (gleam-ts-mode . (,@lsp))
+           (go-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@lsp-no-formatter))
            (rust-ts-mode . (,@lsp))
            (erlang-mode . (,@lsp-no-formatter))
@@ -4352,6 +4353,7 @@ Major mode for the Go programming language
     (:org-src-lang "go")
     (:with-mode go-mod-ts-mode
       (:file-match "/go\\.mod\\'"))
+    (:set go-ts-mode-indent-offset 2)
 
     (:auto-insert
      ("\\.go\\'"
@@ -6369,7 +6371,7 @@ Automatically add spaces around operators
                 java-mode
                 rust-mode))
 #+end_src
-*** elx                            :Emacs__Lisp:development:library:
+*** elx                                 :Emacs__Lisp:development:library:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
 :END:
@@ -6491,7 +6493,7 @@ Support for `direnv' that operates buffer-locally
     (:with-mode envrc-global-mode
       (:hook-into after-init-hook)))
 #+end_src
-*** epkg                                                     :Emacs:
+*** epkg                                                          :Emacs:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 14:36]
 :END:
@@ -9814,13 +9816,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
+| [[org-ql-search:tags:@extra][@extra]]              |   9 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
-| [[org-ql-search:tags:@extra][@extra]]              |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
@@ -9932,19 +9934,22 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 To use these features, they need to be turned on at build time.
 
 #+BEGIN: org-ql :query "tags:@extra" :columns (heading todo)
-| Heading      | Todo |
-|--------------+------|
-| [[beancount][beancount]]    |      |
-| [[copilot][copilot]]      |      |
-| [[dune][dune]]         |      |
-| [[flycheck][flycheck]]     |      |
-| [[fstar-mode][fstar-mode]]   |      |
-| [[lean4-mode][lean4-mode]]   |      |
-| [[lsp-mode][lsp-mode]]     |      |
-| [[mermaid-mode][mermaid-mode]] |      |
-| [[Coq][Coq]]          |      |
-| [[tuareg][tuareg]]       |      |
-| [[utop][utop]]         |      |
+| Heading         | Todo |
+|-----------------+------|
+| [[beancount][beancount]]       |      |
+| [[copilot][copilot]]         |      |
+| [[dune][dune]]            |      |
+| [[elx][elx]]             |      |
+| [[epkg][epkg]]            |      |
+| [[epkg-marginalia][epkg-marginalia]] |      |
+| [[flycheck][flycheck]]        |      |
+| [[fstar-mode][fstar-mode]]      |      |
+| [[lean4-mode][lean4-mode]]      |      |
+| [[lsp-mode][lsp-mode]]        |      |
+| [[mermaid-mode][mermaid-mode]]    |      |
+| [[Coq][Coq]]             |      |
+| [[tuareg][tuareg]]          |      |
+| [[utop][utop]]            |      |
 #+END:
 *** Links
 :PROPERTIES:
