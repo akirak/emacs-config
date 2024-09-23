@@ -1194,6 +1194,7 @@ The built-in =electric= package provides the following modes:
            (elixir-ts-mode . (,@lsp))
            (heex-ts-mode . (,@lsp))
            (gleam-ts-mode . (,@lsp))
+           (go-ts-mode . (,@lsp))
            (tsx-ts-mode . (,@lsp-no-formatter))
            (rust-ts-mode . (,@lsp))
            (erlang-mode . (,@lsp-no-formatter))
@@ -4352,6 +4353,7 @@ Major mode for the Go programming language
     (:org-src-lang "go")
     (:with-mode go-mod-ts-mode
       (:file-match "/go\\.mod\\'"))
+    (:set go-ts-mode-indent-offset 2)
 
     (:auto-insert
      ("\\.go\\'"
