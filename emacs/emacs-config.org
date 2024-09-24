@@ -8311,6 +8311,7 @@ Parentheses Universalistic
                 svelte-mode
                 web-mode
                 sql-mode
+                d2-mode
                 nxml-mode)
 
     (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
