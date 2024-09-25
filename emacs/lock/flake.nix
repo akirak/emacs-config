@@ -791,6 +791,12 @@
       repo = "orderless";
       type = "github";
     };
+    org = {
+      flake = false;
+      ref = "bugfix";
+      type = "git";
+      url = "https://git.savannah.gnu.org/git/emacs/org-mode.git";
+    };
     org-autolist = {
       flake = false;
       owner = "akirak";
@@ -1271,6 +1277,12 @@
       flake = false;
       owner = "fxbois";
       repo = "web-mode";
+      type = "github";
+    };
+    which-key = {
+      flake = false;
+      owner = "justbur";
+      repo = "emacs-which-key";
       type = "github";
     };
     whole-line-or-region = {

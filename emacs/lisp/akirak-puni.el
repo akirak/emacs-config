@@ -12,7 +12,9 @@
     ((elixir-mode)
      akirak-puni-elixir-setup)
     ((web-mode)
-     akirak-puni-web-mode-setup))
+     akirak-puni-web-mode-setup)
+    ((d2-mode)
+     akirak-puni-d2-mode-setup))
   ""
   :type '(alist :key-type (repeat symbol)
                 :value-type (cons function (cons nil))))
@@ -147,6 +149,33 @@
       (end-of-line)))
    (t
     (end-of-line))))
+
+;;;;; d2
+
+(defun akirak-puni-d2-mode-setup ()
+  "Setup puni bindings for jsx."
+  (interactive)
+  (local-set-key [remap puni-kill-line] #'akirak-puni-d2-kill-line))
+
+(defun akirak-puni-d2-kill-line ()
+  (interactive)
+  (puni-soft-delete-by-move #'akirak-puni-d2-end-of-soft-kill
+                            nil
+                            'beyond
+                            ;; 'within
+                            'kill
+                            'delete-one))
+
+(defun akirak-puni-d2-end-of-soft-kill ()
+  (let ((eol (line-end-position)))
+    (when (re-search-forward "{" eol t)
+      (goto-char (match-beginning 0))
+      (pcase-exhaustive (funcall show-paren-data-function)
+        (`(,_ ,_ ,_ ,end . ,_)
+         (if (> end eol)
+             (goto-char end)
+           (goto-char eol)))))
+    (beginning-of-line 2)))
 
 (provide 'akirak-puni)
 ;;; akirak-puni.el ends here

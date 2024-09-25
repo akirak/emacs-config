@@ -2115,6 +2115,23 @@
         "type": "github"
       }
     },
+    "org": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1727021182,
+        "narHash": "sha256-+3YwIKd8BVkb+vCNgK8WwpCPN2+94UTnWDp5XzzS7hM=",
+        "ref": "bugfix",
+        "rev": "fac0787e1659b93810bff320a87d81eda98d03a9",
+        "revCount": 27764,
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/emacs/org-mode.git"
+      },
+      "original": {
+        "ref": "bugfix",
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/emacs/org-mode.git"
+      }
+    },
     "org-autolist": {
       "flake": false,
       "locked": {
@@ -3010,6 +3027,7 @@
         "octopus": "octopus",
         "olivetti": "olivetti",
         "orderless": "orderless",
+        "org": "org",
         "org-autolist": "org-autolist",
         "org-bb": "org-bb",
         "org-bookmark-heading": "org-bookmark-heading",
@@ -3089,6 +3107,7 @@
         "vue-html-mode": "vue-html-mode",
         "vue-mode": "vue-mode",
         "web-mode": "web-mode",
+        "which-key": "which-key",
         "whole-line-or-region": "whole-line-or-region",
         "windswap": "windswap",
         "with-editor": "with-editor",
@@ -3609,6 +3628,22 @@
       "original": {
         "owner": "fxbois",
         "repo": "web-mode",
+        "type": "github"
+      }
+    },
+    "which-key": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1719328933,
+        "narHash": "sha256-fE445u1OSi8M4eucShxZL89BaXqsVZhlWqS+lSGjrSI=",
+        "owner": "justbur",
+        "repo": "emacs-which-key",
+        "rev": "38d4308d1143b61e4004b6e7a940686784e51500",
+        "type": "github"
+      },
+      "original": {
+        "owner": "justbur",
+        "repo": "emacs-which-key",
         "type": "github"
       }
     },
