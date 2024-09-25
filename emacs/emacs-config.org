@@ -2291,7 +2291,7 @@ Display available keybindings in popup
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup which-key
+  (setup (:package which-key)
     (:hook-into after-init-hook)
     (:hook which-key-setup-side-window-bottom))
 #+end_src
@@ -2754,7 +2754,7 @@ Outline-based notes management and organizer
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup org
+  (setup (:package org)
     (:with-mode org-mode
       (:set org-log-done 'time
             org-log-into-drawer t
