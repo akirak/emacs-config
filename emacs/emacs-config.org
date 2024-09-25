@@ -3287,7 +3287,7 @@ Improved list management in org-mode
                         (org-insert-item)
                       (apply orig args))))))
 #+end_src
-*** org-bb
+*** org-bb                                                          :@extra:Org:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-13 Wed 23:59]
 :END:
@@ -3683,7 +3683,7 @@ Automatic tables of contents for Org files
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
 #+end_src
-*** org-memento
+*** org-memento                                                     :@extra:Org:
 :PROPERTIES:
 :CREATED_TIME: [2022-10-06 Thu 18:50]
 :END:
@@ -4015,7 +4015,7 @@ Org Query Language, search command, and agenda-like view
         'org-ql-view--transient-super-groups
         '("g" "Groups" akirak-org-ql-view-set-super-groups))))
 #+end_src
-*** org-recur
+*** org-recur                                                       :@extra:Org:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 14:17]
 :END:
