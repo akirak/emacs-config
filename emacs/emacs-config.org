@@ -1379,6 +1379,18 @@ The built-in =electric= package provides the following modes:
     ;; has been restored.
     (add-hook 'after-init-hook #'auto-image-file-mode 70))
 #+end_src
+*** imenu
+
+#+begin_src emacs-lisp
+  (setup imenu
+    (defun akirak/set-imenu-max-item-width ()
+      (setq imenu-max-item-length (min (or (frame-text-width) 80)
+                                       120)))
+
+    (if (daemonp)
+        (add-hook 'server-after-make-frame-hook #'akirak/set-imenu-max-item-width)
+      (akirak/set-imenu-max-item-width)))
+#+end_src
 *** indent
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 21:08]
