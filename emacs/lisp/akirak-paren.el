@@ -9,6 +9,9 @@ location, or nil."
 
 ;;;###autoload
 (defun akirak-paren-goto-match-or-self-insert (n &optional c)
+  "Jump to a matching paren or self-insert the character.
+
+Inside a string or comment, this command always inserts the character."
   (interactive "p")
   (if-let (loc (and (not (ppss-comment-or-string-start (syntax-ppss)))
                     (akirak-paren-matching-location)))
