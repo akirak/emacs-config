@@ -4439,7 +4439,7 @@ Major mode for the Go programming language
 #+begin_src emacs-lisp
   (setup js-ts-mode
     (:org-src-lang "javascript")
-    (:file-match "\\.[cm]?js$")
+    (:file-match "\\.[cm]?js$" "\\.json5\\'")
     (:mode-project-roots "package.json"))
 #+end_src
 *** nix-ts-mode
