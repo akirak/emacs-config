@@ -125,9 +125,6 @@
                   tree-sitter-astro = {
                     src = inputs.tree-sitter-astro.outPath;
                   };
-                  tree-sitter-gleam = {
-                    src = inputs.tree-sitter-gleam.outPath;
-                  };
                 };
               };
             }
