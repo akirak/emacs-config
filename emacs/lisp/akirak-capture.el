@@ -624,7 +624,8 @@
     :if org-clocking-p)]
 
   (interactive)
-  (unless (use-region-p)
+  (if (use-region-p)
+      (setq akirak-capture-bounds (car (region-bounds)))
     (user-error "No active region"))
   (transient-setup 'akirak-capture-active-region))
 
@@ -1250,14 +1251,12 @@ provided as a separate command for integration, e.g. with embark."
          (end-string (concat "#+end_" body-type)))
     (concat start-string "\n"
             (or content
-                (when (use-region-p)
-                  (let ((region-source (buffer-substring-no-properties
-                                        (region-beginning) (region-end))))
-                    (if (equal body-type "quote")
-                        (akirak-capture--to-org region-source)
-                      ;; Newlines are significant in most of the block types, so
-                      ;; use the source sanitizer for now.
-                      (akirak-capture--sanitize-source region-source))))
+                (when-let (region-source (akirak-capture--region-text))
+                  (if (equal body-type "quote")
+                      (akirak-capture--to-org region-source)
+                    ;; Newlines are significant in most of the block types, so
+                    ;; use the source sanitizer for now.
+                    (akirak-capture--sanitize-source region-source)))
                 "")
             "\n" end-string "\n")))
 
@@ -1463,6 +1462,16 @@ interpreter who are good at %s. Please respond concisely." dest-language))
     (gptel-request prompt :in-place t :system system-prompt)))
 
 ;;;; Helper functions
+
+(defun akirak-capture--region-text ()
+  (cond
+   ((use-region-p)
+    (buffer-substring-no-properties
+     (region-beginning) (region-end)))
+   (akirak-capture-bounds
+    (buffer-substring-no-properties
+     (car akirak-capture-bounds)
+     (cdr akirak-capture-bounds)))))
 
 (defun akirak-capture--goto-backlog ()
   (widen)
