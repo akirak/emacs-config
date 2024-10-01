@@ -754,6 +754,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup completion-preview
+    (:hook-into corfu-mode-hook)
     (:with-map completion-preview-active-mode-map
       (:bind "C-j" #'completion-preview-insert)))
 #+end_src
@@ -5766,7 +5767,6 @@ COmpletion in Region FUnction
   (setup (:package corfu)
     (:with-mode (prog-mode text-mode comint-mode)
       (:hook corfu-mode))
-    (:hook completion-preview-mode)
 
     (:with-hook minibuffer-setup-hook
       (:hook
