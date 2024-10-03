@@ -12,6 +12,10 @@
       url = "github:akirak/flake-pins";
       flake = false;
     };
+    flake-pins-pkgs = {
+      url = "github:akirak/flake-pins?dir=pkgs/cli-tools";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Emacs
     emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -49,8 +53,6 @@
       inputs.flake-utils.follows = "utils";
       inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     };
-
-    my-overlay.url = "github:akirak/nixpkgs-overlay";
 
     tree-sitter-astro = {
       url = "github:virchau13/tree-sitter-astro";
@@ -118,7 +120,7 @@
               coq = inputs.nixpkgs.legacyPackages.${final.system}.coq;
               coq-lsp = inputs.nixpkgs.legacyPackages.${final.system}.coqPackages.coq-lsp;
               flake-no-path = inputs.flake-no-path.defaultPackage.${system};
-              inherit (inputs.my-overlay.packages.${final.system}) github-linguist epubinfo squasher;
+              inherit ((inputs.flake-pins-pkgs).packages.${final.system}) github-linguist epubinfo squasher;
               # This will indirectly override tree-sitter-grammars as wells
               tree-sitter = pkgs.tree-sitter.override {
                 extraGrammars = {
