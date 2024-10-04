@@ -530,7 +530,6 @@
         "org-babel": "org-babel",
         "pre-commit-hooks": "pre-commit-hooks",
         "tree-sitter-astro": "tree-sitter-astro",
-        "tree-sitter-gleam": "tree-sitter-gleam",
         "twist": "twist",
         "twist-overrides": "twist-overrides",
         "twist2elpa": "twist2elpa",
@@ -644,22 +643,6 @@
       "original": {
         "owner": "virchau13",
         "repo": "tree-sitter-astro",
-        "type": "github"
-      }
-    },
-    "tree-sitter-gleam": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1727357351,
-        "narHash": "sha256-ieOvtZvOUwiJwJN6AtHVK91GTh+RKge9FMo+mYCtisk=",
-        "owner": "gleam-lang",
-        "repo": "tree-sitter-gleam",
-        "rev": "57c9951b290c8084d7c60b0aee7a2b30986ea031",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gleam-lang",
-        "repo": "tree-sitter-gleam",
         "type": "github"
       }
     },
