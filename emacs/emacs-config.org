@@ -8317,7 +8317,7 @@ A generic Emacs interface for proof assistants
 **** Coq                                                            :@extra:Coq:
 #+begin_src elisp
   (setup coq
-    (:nixpkgs "coq" "coq-lsp"))
+    (:nixpkgs "coq" "coqPackages.coq-lsp"))
 #+end_src
 *** puni                                       :structured__editing:
 :PROPERTIES:

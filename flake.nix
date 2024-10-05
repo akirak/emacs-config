@@ -82,8 +82,6 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
-      imports = [ inputs.flake-parts.flakeModules.easyOverlay ];
-
       flake = {
         homeModules.twist = {
           imports = [
@@ -111,27 +109,34 @@
           } emacs-config;
         in
         {
-          overlayAttrs =
-            {
-              coq = inputs.nixpkgs.legacyPackages.${final.system}.coq;
-              coq-lsp = inputs.nixpkgs.legacyPackages.${final.system}.coqPackages.coq-lsp;
-              flake-no-path = inputs.flake-no-path.defaultPackage.${system};
-              inherit ((inputs.flake-pins-pkgs).packages.${final.system}) github-linguist epubinfo squasher;
-              # This will indirectly override tree-sitter-grammars as wells
-              tree-sitter = pkgs.tree-sitter.override {
-                extraGrammars = {
-                  tree-sitter-astro = {
-                    src = inputs.tree-sitter-astro.outPath;
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              # Add `emacs-config` to the package.
+              (import ./emacs/overlay.nix {
+                inherit inputs;
+                configurationRevision = "${substring 0 8 self.lastModifiedDate}.${
+                  if self ? rev then substring 0 7 self.rev else "dirty"
+                }";
+              })
+              # Bring custom packages into the scope for native dependencies.
+              (_: _: {
+                flake-no-path = inputs.flake-no-path.defaultPackage.${system};
+                inherit ((inputs.flake-pins-pkgs).packages.${system}) github-linguist epubinfo squasher;
+              })
+              # Add extra tree-sitter grammars that are not included in nixpkgs
+              # yet.
+              (_: prev: {
+                tree-sitter = prev.tree-sitter.override {
+                  extraGrammars = {
+                    tree-sitter-astro = {
+                      src = inputs.tree-sitter-astro.outPath;
+                    };
                   };
                 };
-              };
-            }
-            // (import ./emacs/overlay.nix {
-              inherit inputs;
-              configurationRevision = "${substring 0 8 self.lastModifiedDate}.${
-                if self ? rev then substring 0 7 self.rev else "dirty"
-              }";
-            } final pkgs);
+              })
+            ];
+          };
 
           packages =
             {
