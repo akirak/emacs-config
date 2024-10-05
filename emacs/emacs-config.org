@@ -1481,8 +1481,7 @@ The built-in =electric= package provides the following modes:
   (setup keymap.c
     (:status opinionated
       (:with-map minibuffer-local-map
-        (:bind "C-u" #'backward-kill-sentence
-               "C-w" #'backward-kill-word))))
+        (:bind "C-u" #'backward-kill-sentence))))
 #+end_src
 *** mailcap
 :PROPERTIES:
@@ -1958,6 +1957,23 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     ;; just disable the keybinding.
     (:global "C-x C-n" nil)
 
+    (:set kill-region-dwim 'emacs-word)
+    ;; unix-word is too aggressive for editing file names. zsh has the better
+    ;; default for this operation, so wait until Emacs implements it.
+    ;;
+    ;; (add-hook 'minibuffer-setup-hook
+    ;;           (defun akirak/minibuffer-custom-setup ()
+    ;;             (when minibuffer-completing-file-name
+    ;;               (setq-local kill-region-dwim 'unix-word))))
+    ;; Alternative to kill-region-dwim option
+    (when (version< emacs-version "31")
+      (:global "C-w" (defun akirak/kill-region-or-backward-kill-word (&optional arg)
+                       "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
+                       (interactive "p")
+                       (if (region-active-p)
+                           (kill-region (region-beginning) (region-end))
+                         (backward-kill-word arg)))))
+
     (defun akirak/count-words-dwim ()
       (interactive)
       (save-restriction
@@ -1981,15 +1997,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
        "" start end))
 
     (:status opinionated
-      (:global "C-w"
-               (defun akirak/kill-region-or-backward-kill-word (&optional arg)
-                 "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
-                 (interactive "p")
-                 (if (region-active-p)
-                     (kill-region (region-beginning) (region-end))
-                   (backward-kill-word arg)))
-
-               "C-a"
+      (:global "C-a"
                (defun akirak/back-to-indentation-or-bol ()
                  (interactive)
                  (if (or (looking-at "^")
