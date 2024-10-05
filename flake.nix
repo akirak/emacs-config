@@ -1,7 +1,6 @@
 {
   inputs = {
     # Should be updated from flake-pins: <https://github.com/akirak/flake-pins>
-    utils.url = "github:numtide/flake-utils";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
@@ -50,7 +49,6 @@
     flake-no-path = {
       url = "github:akirak/flake-no-path";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
       inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     };
 
@@ -76,7 +74,6 @@
       self,
       nixpkgs,
       flake-parts,
-      utils,
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
