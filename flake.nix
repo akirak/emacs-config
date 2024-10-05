@@ -96,12 +96,10 @@
           config,
           system,
           pkgs,
-          final,
           ...
         }:
         let
-          inherit (pkgs) lib;
-          inherit (final) emacs-config;
+          inherit (pkgs) lib emacs-config;
           inherit (builtins) substring;
           profiles = import ./emacs/profiles.nix {
             inherit lib;
@@ -119,6 +117,10 @@
                   if self ? rev then substring 0 7 self.rev else "dirty"
                 }";
               })
+              # makeEmacsTwistArchive
+              inputs.archiver.overlays.default
+              # emacsTwist2Elpa
+              inputs.twist2elpa.overlays.default
               # Bring custom packages into the scope for native dependencies.
               (_: _: {
                 flake-no-path = inputs.flake-no-path.defaultPackage.${system};
@@ -163,7 +165,7 @@
                   tmpdir = pkgs.callPackage ./nix/tmpInitDirWrapper.nix { } "emacs-${name}" emacs-env;
                 };
 
-                archive-builder = (inputs.archiver.overlays.default final pkgs).makeEmacsTwistArchive {
+                archive-builder = pkgs.makeEmacsTwistArchive {
                   name = "build-emacs-${name}-archive";
                   earlyInitFile = ./emacs/early-init.el;
                   narName = "emacs-profile-${name}.nar";
@@ -172,11 +174,9 @@
                   }-${system}.tar.zstd";
                 } emacs-env;
 
-                elpa-archive =
-                  (inputs.twist2elpa.overlays.default final pkgs).emacsTwist2Elpa.buildElpaArchiveAsTar
-                    { withInstaller = true; }
-                    "elpa-archive-${builtins.substring 0 8 (inputs.self.lastModifiedDate)}"
-                    emacs-env.packageInputs;
+                elpa-archive = pkgs.emacsTwist2Elpa.buildElpaArchiveAsTar { withInstaller = true; } "elpa-archive-${
+                  builtins.substring 0 8 (inputs.self.lastModifiedDate)
+                }" emacs-env.packageInputs;
 
                 init-file = pkgs.runCommandLocal "init.el" { } ''
                   for file in ${builtins.concatStringsSep " " emacs-env.initFiles}
@@ -195,7 +195,7 @@
               inherit
                 (inputs.pre-commit-hooks.lib.${system}.run {
                   src = ./.;
-                  hooks = import ./hooks.nix { pkgs = final; };
+                  hooks = import ./hooks.nix { inherit pkgs; };
                 })
                 shellHook
                 ;
