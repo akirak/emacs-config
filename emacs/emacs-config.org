@@ -5820,7 +5820,11 @@ Major mode for working with d2 graphs
 #+begin_src emacs-lisp
   (setup (:package d2-mode)
     (:nixpkgs d2)
-    (:file-match "\\.d2\\'"))
+    (:file-match "\\.d2\\'")
+    (:hook d2-format-on-save-mode)
+    (:reformatters
+     (d2-format :program "d2"
+                :args (list "fmt" "-"))))
 #+end_src
 *** dashboard
 :PROPERTIES:
