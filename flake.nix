@@ -1,7 +1,6 @@
 {
   inputs = {
     # Should be updated from flake-pins: <https://github.com/akirak/flake-pins>
-    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     systems.url = "github:nix-systems/default";
 
@@ -46,13 +45,6 @@
     };
     archiver.url = "github:emacs-twist/twist-archiver";
 
-    # pre-commit
-    flake-no-path = {
-      url = "github:akirak/flake-no-path";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.pre-commit-hooks.follows = "pre-commit-hooks";
-    };
-
     tree-sitter-astro = {
       url = "github:virchau13/tree-sitter-astro";
       flake = false;
@@ -78,7 +70,23 @@
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ flake-parts.flakeModules.partitions ];
+
       systems = import inputs.systems;
+
+      partitions = {
+        dev = {
+          extraInputsFlake = ./dev;
+          module = {
+            imports = [ ./dev/flake-module.nix ];
+          };
+        };
+      };
+
+      partitionedAttrs = {
+        checks = "dev";
+        devShells = "dev";
+      };
 
       flake = {
         homeModules.twist = {
@@ -120,10 +128,7 @@
               # emacsTwist2Elpa
               inputs.twist2elpa.overlays.default
               # Bring custom packages into the scope for native dependencies.
-              (_: _: {
-                flake-no-path = inputs.flake-no-path.defaultPackage.${system};
-                inherit ((inputs.flake-pins-pkgs).packages.${system}) github-linguist epubinfo squasher;
-              })
+              (_: _: { inherit ((inputs.flake-pins-pkgs).packages.${system}) github-linguist epubinfo squasher; })
               # Add extra tree-sitter grammars that are not included in nixpkgs
               # yet.
               (_: prev: {
@@ -186,19 +191,6 @@
             ) profiles);
 
           apps = emacs-config.makeApps { lockDirName = "emacs/lock"; };
-
-          # Set up a pre-commit hook by running `nix develop`.
-          devShells = {
-            default = pkgs.mkShell {
-              inherit
-                (inputs.pre-commit-hooks.lib.${system}.run {
-                  src = ./.;
-                  hooks = import ./hooks.nix { inherit pkgs; };
-                })
-                shellHook
-                ;
-            };
-          };
         };
     };
 }
