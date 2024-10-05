@@ -140,11 +140,11 @@
             ];
           };
 
+          legacyPackages = pkgs;
+
           packages =
             {
               inherit emacs-config;
-
-              inherit (pkgs) nix-fast-build;
 
               # test-emacs-config = pkgs.callPackage ./emacs/tests {};
 
