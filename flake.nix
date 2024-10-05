@@ -3,6 +3,7 @@
     # Should be updated from flake-pins: <https://github.com/akirak/flake-pins>
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    systems.url = "github:nix-systems/default";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-filter.url = "github:numtide/nix-filter";
@@ -77,7 +78,7 @@
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
+      systems = import inputs.systems;
 
       flake = {
         homeModules.twist = {
