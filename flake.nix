@@ -1,9 +1,8 @@
 {
   inputs = {
     # Should be updated from flake-pins: <https://github.com/akirak/flake-pins>
-    utils.url = "github:numtide/flake-utils";
-    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    systems.url = "github:nix-systems/default";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-filter.url = "github:numtide/nix-filter";
@@ -11,6 +10,10 @@
     flake-pins = {
       url = "github:akirak/flake-pins";
       flake = false;
+    };
+    flake-pins-pkgs = {
+      url = "github:akirak/flake-pins?dir=pkgs/cli-tools";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Emacs
@@ -42,22 +45,8 @@
     };
     archiver.url = "github:emacs-twist/twist-archiver";
 
-    # pre-commit
-    flake-no-path = {
-      url = "github:akirak/flake-no-path";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-      inputs.pre-commit-hooks.follows = "pre-commit-hooks";
-    };
-
-    my-overlay.url = "github:akirak/nixpkgs-overlay";
-
     tree-sitter-astro = {
       url = "github:virchau13/tree-sitter-astro";
-      flake = false;
-    };
-    tree-sitter-gleam = {
-      url = "github:gleam-lang/tree-sitter-gleam";
       flake = false;
     };
   };
@@ -78,13 +67,26 @@
       self,
       nixpkgs,
       flake-parts,
-      utils,
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
+      imports = [ flake-parts.flakeModules.partitions ];
 
-      imports = [ inputs.flake-parts.flakeModules.easyOverlay ];
+      systems = import inputs.systems;
+
+      partitions = {
+        dev = {
+          extraInputsFlake = ./dev;
+          module = {
+            imports = [ ./dev/flake-module.nix ];
+          };
+        };
+      };
+
+      partitionedAttrs = {
+        checks = "dev";
+        devShells = "dev";
+      };
 
       flake = {
         homeModules.twist = {
@@ -100,12 +102,10 @@
           config,
           system,
           pkgs,
-          final,
           ...
         }:
         let
-          inherit (pkgs) lib;
-          inherit (final) emacs-config;
+          inherit (pkgs) lib emacs-config;
           inherit (builtins) substring;
           profiles = import ./emacs/profiles.nix {
             inherit lib;
@@ -113,36 +113,41 @@
           } emacs-config;
         in
         {
-          overlayAttrs =
-            {
-              coq = inputs.nixpkgs.legacyPackages.${final.system}.coq;
-              coq-lsp = inputs.nixpkgs.legacyPackages.${final.system}.coqPackages.coq-lsp;
-              flake-no-path = inputs.flake-no-path.defaultPackage.${system};
-              inherit (inputs.my-overlay.packages.${final.system}) github-linguist epubinfo squasher;
-              # This will indirectly override tree-sitter-grammars as wells
-              tree-sitter = pkgs.tree-sitter.override {
-                extraGrammars = {
-                  tree-sitter-astro = {
-                    src = inputs.tree-sitter-astro.outPath;
-                  };
-                  tree-sitter-gleam = {
-                    src = inputs.tree-sitter-gleam.outPath;
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              # Add `emacs-config` to the package.
+              (import ./emacs/overlay.nix {
+                inherit inputs;
+                configurationRevision = "${substring 0 8 self.lastModifiedDate}.${
+                  if self ? rev then substring 0 7 self.rev else "dirty"
+                }";
+              })
+              # makeEmacsTwistArchive
+              inputs.archiver.overlays.default
+              # emacsTwist2Elpa
+              inputs.twist2elpa.overlays.default
+              # Bring custom packages into the scope for native dependencies.
+              (_: _: { inherit ((inputs.flake-pins-pkgs).packages.${system}) github-linguist epubinfo squasher; })
+              # Add extra tree-sitter grammars that are not included in nixpkgs
+              # yet.
+              (_: prev: {
+                tree-sitter = prev.tree-sitter.override {
+                  extraGrammars = {
+                    tree-sitter-astro = {
+                      src = inputs.tree-sitter-astro.outPath;
+                    };
                   };
                 };
-              };
-            }
-            // (import ./emacs/overlay.nix {
-              inherit inputs;
-              configurationRevision = "${substring 0 8 self.lastModifiedDate}.${
-                if self ? rev then substring 0 7 self.rev else "dirty"
-              }";
-            } final pkgs);
+              })
+            ];
+          };
+
+          legacyPackages = pkgs;
 
           packages =
             {
               inherit emacs-config;
-
-              inherit (pkgs) nix-fast-build;
 
               # test-emacs-config = pkgs.callPackage ./emacs/tests {};
 
@@ -163,7 +168,7 @@
                   tmpdir = pkgs.callPackage ./nix/tmpInitDirWrapper.nix { } "emacs-${name}" emacs-env;
                 };
 
-                archive-builder = (inputs.archiver.overlays.default final pkgs).makeEmacsTwistArchive {
+                archive-builder = pkgs.makeEmacsTwistArchive {
                   name = "build-emacs-${name}-archive";
                   earlyInitFile = ./emacs/early-init.el;
                   narName = "emacs-profile-${name}.nar";
@@ -172,11 +177,9 @@
                   }-${system}.tar.zstd";
                 } emacs-env;
 
-                elpa-archive =
-                  (inputs.twist2elpa.overlays.default final pkgs).emacsTwist2Elpa.buildElpaArchiveAsTar
-                    { withInstaller = true; }
-                    "elpa-archive-${builtins.substring 0 8 (inputs.self.lastModifiedDate)}"
-                    emacs-env.packageInputs;
+                elpa-archive = pkgs.emacsTwist2Elpa.buildElpaArchiveAsTar { withInstaller = true; } "elpa-archive-${
+                  builtins.substring 0 8 (inputs.self.lastModifiedDate)
+                }" emacs-env.packageInputs;
 
                 init-file = pkgs.runCommandLocal "init.el" { } ''
                   for file in ${builtins.concatStringsSep " " emacs-env.initFiles}
@@ -188,19 +191,6 @@
             ) profiles);
 
           apps = emacs-config.makeApps { lockDirName = "emacs/lock"; };
-
-          # Set up a pre-commit hook by running `nix develop`.
-          devShells = {
-            default = pkgs.mkShell {
-              inherit
-                (inputs.pre-commit-hooks.lib.${system}.run {
-                  src = ./.;
-                  hooks = import ./hooks.nix { pkgs = final; };
-                })
-                shellHook
-                ;
-            };
-          };
         };
     };
 }

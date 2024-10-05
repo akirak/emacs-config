@@ -1,6 +1,6 @@
 { pkgs }:
 let
-  emacsConfig =
+  make-emacs-hook =
     {
       name,
       stages,
@@ -11,8 +11,8 @@ let
       inherit stages;
       inherit name;
       entry = builtins.concatStringsSep " " [
-        "${pkgs.emacs-batch}/bin/emacs"
-        "--batch -l ${./scripts/update-emacs-config.el}"
+        "${pkgs.emacs-with-pkgs}/bin/emacs"
+        "--batch -l ${./utils.el}"
         "-f ${funcName}"
       ];
       files = "emacs-config\.org$";
@@ -24,7 +24,6 @@ in
     enable = true;
     excludes = [ "emacs/lock/flake\\.nix" ];
   };
-  # nix-linter.enable = true;
 
   flake-no-path = {
     enable = true;
@@ -34,13 +33,13 @@ in
     pass_filenames = true;
   };
 
-  emacs-config = emacsConfig {
+  emacs-config = make-emacs-hook {
     name = "Sort entries in the Emacs configuration";
     stages = [ "commit" ];
     funcName = "akirak/batch-update-emacs-config";
   };
 
-  emacs-config-contents = emacsConfig {
+  emacs-config-contents = make-emacs-hook {
     name = "Update blocks in the Emacs configuration";
     stages = [ "push" ];
     funcName = "akirak/batch-update-emacs-config-contents";

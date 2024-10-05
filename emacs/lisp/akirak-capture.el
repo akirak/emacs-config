@@ -46,6 +46,8 @@
 
 (defvar akirak-capture-initial nil)
 
+(defvar akirak-capture-clocked-buffer-info nil)
+
 ;;;; Clock
 
 (defun akirak-capture--clock-description ()
@@ -619,12 +621,15 @@
     :transient t)
    ("l" "Language study (input)" akirak-capture-language-study)
    ("v" "Vocabulary" akirak-capture-vocabulary)]
-  ["Others"
+  ["Others" :class transient-row
    ("a" "Append to clock" akirak-capture-append-block-to-clock
+    :if org-clocking-p)
+   ("+" "Heading" akirak-capture-append-heading-to-clock
     :if org-clocking-p)]
 
   (interactive)
-  (unless (use-region-p)
+  (if (use-region-p)
+      (setq akirak-capture-bounds (car (region-bounds)))
     (user-error "No active region"))
   (transient-setup 'akirak-capture-active-region))
 
@@ -783,6 +788,67 @@
         (with-selected-window window
           (unless (looking-at org-heading-regexp)
             (goto-char (org-entry-end-position))))))))
+
+(transient-define-prefix akirak-capture-append-heading-to-clock (text)
+  [:description
+   (lambda ()
+     (format "New heading \"%s\"" akirak-capture-initial))
+   :class transient-row
+   ("-g" akirak-capture-tags-infix)]
+  [:description
+   (lambda ()
+     (format "After heading at level %d: %s"
+             (plist-get akirak-capture-clocked-buffer-info :level)
+             (plist-get akirak-capture-clocked-buffer-info :title)))
+   ("=" "Heading at the same level"
+    (lambda ()
+      (interactive)
+      (akirak-capture--append-heading-to-clock
+       (plist-get akirak-capture-clocked-buffer-info :level)
+       akirak-capture-initial)))
+   ("+" "Subheading"
+    (lambda ()
+      (interactive)
+      (akirak-capture--append-heading-to-clock
+       (1+ (plist-get akirak-capture-clocked-buffer-info :level))
+       akirak-capture-initial)))]
+  (interactive (list (cond
+                      ((use-region-p)
+                       (buffer-substring-no-properties begin end))
+                      (akirak-capture-bounds
+                       (buffer-substring-no-properties
+                        (car akirak-capture-bounds)
+                        (cdr akirak-capture-bounds)))
+                      (t
+                       (read-from-minibuffer "Heading: ")))))
+  (setq akirak-capture-initial text)
+  (setq akirak-capture-clocked-buffer-info (akirak-capture--clocked-buffer-info))
+  (transient-setup 'akirak-capture-append-heading-to-clock))
+
+(defun akirak-capture--clocked-buffer-info ()
+  (akirak-org-clock-require-clock
+    (with-current-buffer (akirak-org-clock-open)
+      (let ((node (org-element-context)))
+        (when-let (h (catch 'headline
+                       (while node
+                         (when (eq (org-element-type node) 'headline)
+                           (throw 'headline node))
+                         (setq node (org-element-parent node)))))
+          (list :level (org-element-property :level h)
+                :title (org-element-property :title h)))))))
+
+(defun akirak-capture--append-heading-to-clock (level heading)
+  (akirak-org-clock-require-clock
+    (let* ((buffer (akirak-org-clock-open))
+           (pos (with-current-buffer buffer
+                  (goto-char (org-entry-end-position))
+                  (unless (bolp)
+                    (newline))
+                  (insert (make-string level ?\*) " " heading)
+                  (point))))
+      (when-let (window (get-buffer-window buffer))
+        (with-selected-window window
+          (goto-char pos))))))
 
 (transient-define-suffix akirak-capture-url-to-clock ()
   :description 'octopus-clocked-entry-description
@@ -1250,14 +1316,12 @@ provided as a separate command for integration, e.g. with embark."
          (end-string (concat "#+end_" body-type)))
     (concat start-string "\n"
             (or content
-                (when (use-region-p)
-                  (let ((region-source (buffer-substring-no-properties
-                                        (region-beginning) (region-end))))
-                    (if (equal body-type "quote")
-                        (akirak-capture--to-org region-source)
-                      ;; Newlines are significant in most of the block types, so
-                      ;; use the source sanitizer for now.
-                      (akirak-capture--sanitize-source region-source))))
+                (when-let (region-source (akirak-capture--region-text))
+                  (if (equal body-type "quote")
+                      (akirak-capture--to-org region-source)
+                    ;; Newlines are significant in most of the block types, so
+                    ;; use the source sanitizer for now.
+                    (akirak-capture--sanitize-source region-source)))
                 "")
             "\n" end-string "\n")))
 
@@ -1463,6 +1527,16 @@ interpreter who are good at %s. Please respond concisely." dest-language))
     (gptel-request prompt :in-place t :system system-prompt)))
 
 ;;;; Helper functions
+
+(defun akirak-capture--region-text ()
+  (cond
+   ((use-region-p)
+    (buffer-substring-no-properties
+     (region-beginning) (region-end)))
+   (akirak-capture-bounds
+    (buffer-substring-no-properties
+     (car akirak-capture-bounds)
+     (cdr akirak-capture-bounds)))))
 
 (defun akirak-capture--goto-backlog ()
   (widen)

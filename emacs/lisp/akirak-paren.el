@@ -9,6 +9,9 @@ location, or nil."
 
 ;;;###autoload
 (defun akirak-paren-goto-match-or-self-insert (n &optional c)
+  "Jump to a matching paren or self-insert the character.
+
+Inside a string or comment, this command always inserts the character."
   (interactive "p")
   (if-let (loc (and (not (ppss-comment-or-string-start (syntax-ppss)))
                     (akirak-paren-matching-location)))
@@ -60,6 +63,25 @@ location, or nil."
               (backward-sexp)
               (point)))))))))
 
+(defun akirak-paren--ts-matching-nodes ()
+  (let* ((node (treesit-node-at (point)))
+         (parent node))
+    (while (= (treesit-node-end node)
+              (treesit-node-end parent))
+      (setq parent (treesit-node-parent node)))
+    (when (/= (treesit-node-end node)
+              (treesit-node-end parent))
+      (cl-labels
+          ((go (f node)
+             (if (> (treesit-node-child-count node) 0)
+                 (go f (funcall f (treesit-node-children node)))
+               node))
+           (last1 (xs)
+             (car (last xs))))
+        (when (treesit-node-eq (go #'car parent)
+                               node)
+          (cons node (go #'last1 parent)))))))
+
 (defvar akirak-paren-jump-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "%" #'akirak-paren-goto-match-or-self-insert)
@@ -83,11 +105,21 @@ location, or nil."
                       (point)
                     (re-search-backward regexp)))
            (end (akirak-paren-matching-location)))
-      (save-excursion
-        (goto-char start)
-        (delete-char 1)
-        (goto-char (1- end))
-        (backward-delete-char 1)))))
+      (if end
+          (progn
+            (delete-char 1)
+            (goto-char (1- end))
+            (backward-delete-char 1))
+        (or (when (bound-and-true-p treesit-primary-parser)
+              (pcase-let* ((`(,start-node . ,end-node)
+                            (akirak-paren--ts-matching-nodes))
+                           (open-start (treesit-node-start start-node))
+                           (open-end (treesit-node-end start-node))
+                           (close-start (treesit-node-start end-node))
+                           (close-end (treesit-node-end end-node)))
+                (delete-region close-start close-end)
+                (delete-region open-start open-end)))
+            (user-error "No matching paren"))))))
 
 ;;;###autoload
 (defun akirak-paren-replace (c)
@@ -99,19 +131,28 @@ location, or nil."
                       (point)
                     (re-search-backward regexp)))
            (end (akirak-paren-matching-location))
+           (ts-nodes (when (bound-and-true-p treesit-primary-parser)
+                       (akirak-paren--ts-matching-nodes)))
+           (end (or end
+                    (and ts-nodes
+                         (treesit-node-end (cdr ts-nodes)))
+                    (user-error "Not applicable")))
            (overlay (make-overlay start end))
            (replacement-char (progn
                                (overlay-put overlay 'face 'highlight)
                                (read-char "New paren: ")))
            (replacement-close-char (akirak-paren--close-char replacement-char)))
-      (save-excursion
-        (delete-overlay overlay)
-        (goto-char start)
-        (delete-char 1)
-        (insert-char replacement-char)
-        (goto-char end)
-        (backward-delete-char 1)
-        (insert-char replacement-close-char)))))
+      (delete-overlay overlay)
+      (goto-char end)
+      (if ts-nodes
+          (delete-region (treesit-node-start (cdr ts-nodes)) (point))
+        (backward-delete-char 1))
+      (insert-char replacement-close-char)
+      (goto-char start)
+      (if ts-nodes
+          (delete-region (point) (treesit-node-end (car ts-nodes)))
+        (delete-char 1))
+      (insert-char replacement-char))))
 
 (defun akirak-paren--close-char (open-char)
   "Return a character corresponding to OPEN-CHAR.
@@ -131,23 +172,40 @@ Also see `akirak-elec-pair--close-char'."
                     (point)
                   (re-search-backward regexp)))
          (end (akirak-paren-matching-location)))
-    (goto-char (1+ start))
-    (push-mark)
-    (goto-char (1- end))
-    (activate-mark)))
+    (if end
+        (progn
+          (goto-char (1+ start))
+          (push-mark)
+          (goto-char (1- end))
+          (activate-mark))
+      (if (bound-and-true-p treesit-primary-parser)
+          (pcase-let* ((`(,start-node . ,end-node)
+                        (akirak-paren--ts-matching-nodes))
+                       (open-end (treesit-node-end start-node))
+                       (close-start (treesit-node-start end-node)))
+            (goto-char open-end)
+            (push-mark)
+            (goto-char close-start)
+            (activate-mark))
+        (user-error "No matching paren")))))
 
 ;;;###autoload
 (defun akirak-paren-select-outer (c)
   "Select the outer text inside a pair of parentheses/brackets."
   (interactive "cSelect text outside a bracket pair opening with: ")
   (deactivate-mark)
-  (let ((regexp (regexp-quote (char-to-string c)))
-        )
+  (let ((regexp (regexp-quote (char-to-string c))))
     (if (looking-at regexp)
         (point)
       (re-search-backward regexp))
     (push-mark)
-    (goto-char (akirak-paren-matching-location))
+    (if-let (end (akirak-paren-matching-location))
+        (goto-char end)
+      (if (bound-and-true-p treesit-primary-parser)
+          (pcase (akirak-paren--ts-matching-nodes)
+            (`(,_ . ,end-node)
+             (goto-char treesit-node-end end-node)))
+        (user-error "No matching paren")))
     (activate-mark)))
 
 (provide 'akirak-paren)

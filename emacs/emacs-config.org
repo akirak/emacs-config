@@ -754,6 +754,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup completion-preview
+    (:hook-into corfu-mode-hook)
     (:with-map completion-preview-active-mode-map
       (:bind "C-j" #'completion-preview-insert)))
 #+end_src
@@ -1157,7 +1158,9 @@ The built-in =electric= package provides the following modes:
             `((,(concat basename "\\.ml\\'") "\\1.mli")
               (,(concat basename "\\.mli\\'") "\\1.ml")
               (,(concat basename "\\.ex\\'") "\\1.html.heex")
-              (,(concat basename "\\.html\\.heex\\'") "\\1.ex"))))
+              (,(concat basename "\\.html\\.heex\\'") "\\1.ex")
+              (,(concat basename "_test\\.go\\'") "\\1.go")
+              (,(concat basename "\\.go\\'") "\\1_test.go"))))
     (define-key ctl-x-map "," #'find-sibling-file)
 
     (advice-add 'abort-if-file-too-large
@@ -1175,7 +1178,6 @@ The built-in =electric= package provides the following modes:
       (let (;; (mix-format '((eval . (mix-format-on-save-mode t))))
             ;; (prettier '((eval . (prettier-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
-            (yamlfmt '((eval . (yamlfmt-on-save-mode t))))
             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable))))
@@ -1186,23 +1188,24 @@ The built-in =electric= package provides the following modes:
          `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
         (dir-locals-set-class-variables
          'default
-         `((web-mode . (,@lsp))
-           (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
-           (astro-ts-mode . (,@lsp-no-formatter))
+         `((astro-ts-mode . (,@lsp-no-formatter))
            (css-mode . (,@lsp-no-formatter))
-           (svelte-mode . (,@lsp ,@flymake-eslint))
            (elixir-ts-mode . (,@lsp))
-           (heex-ts-mode . (,@lsp))
+           (erlang-mode . (,@lsp-no-formatter))
            (gleam-ts-mode . (,@lsp))
            (go-ts-mode . (,@lsp))
-           (tsx-ts-mode . (,@lsp-no-formatter))
+           (haskell-mode . (,@lsp))
+           (heex-ts-mode . (,@lsp))
+           (js-ts-mode . (,@lsp-no-formatter))
+           (json-ts-mode . (,@lsp-no-formatter))
+           (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
            (rust-ts-mode . (,@lsp))
-           (erlang-mode . (,@lsp-no-formatter))
-           (typescript-ts-mode . (,@lsp-no-formatter))
-           (tuareg-mode . (,@lsp-no-formatter ,@ocamlformat))
-           (yaml-ts-mode . (,@yamlfmt))
            (sql-mode . (,@sqlformat))
-           (haskell-mode . (,@lsp)))))
+           (svelte-mode . (,@lsp ,@flymake-eslint))
+           (tsx-ts-mode . (,@lsp-no-formatter))
+           (tuareg-mode . (,@lsp-no-formatter ,@ocamlformat))
+           (typescript-ts-mode . (,@lsp-no-formatter))
+           (web-mode . (,@lsp)))))
       (dir-locals-set-directory-class "~/config/" 'personal)
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
@@ -1476,8 +1479,7 @@ The built-in =electric= package provides the following modes:
   (setup keymap.c
     (:status opinionated
       (:with-map minibuffer-local-map
-        (:bind "C-u" #'backward-kill-sentence
-               "C-w" #'backward-kill-word))))
+        (:bind "C-u" #'backward-kill-sentence))))
 #+end_src
 *** mailcap
 :PROPERTIES:
@@ -1953,6 +1955,23 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     ;; just disable the keybinding.
     (:global "C-x C-n" nil)
 
+    (:set kill-region-dwim 'emacs-word)
+    ;; unix-word is too aggressive for editing file names. zsh has the better
+    ;; default for this operation, so wait until Emacs implements it.
+    ;;
+    ;; (add-hook 'minibuffer-setup-hook
+    ;;           (defun akirak/minibuffer-custom-setup ()
+    ;;             (when minibuffer-completing-file-name
+    ;;               (setq-local kill-region-dwim 'unix-word))))
+    ;; Alternative to kill-region-dwim option
+    (when (version< emacs-version "31")
+      (:global "C-w" (defun akirak/kill-region-or-backward-kill-word (&optional arg)
+                       "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
+                       (interactive "p")
+                       (if (region-active-p)
+                           (kill-region (region-beginning) (region-end))
+                         (backward-kill-word arg)))))
+
     (defun akirak/count-words-dwim ()
       (interactive)
       (save-restriction
@@ -1976,15 +1995,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
        "" start end))
 
     (:status opinionated
-      (:global "C-w"
-               (defun akirak/kill-region-or-backward-kill-word (&optional arg)
-                 "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
-                 (interactive "p")
-                 (if (region-active-p)
-                     (kill-region (region-beginning) (region-end))
-                   (backward-kill-word arg)))
-
-               "C-a"
+      (:global "C-a"
                (defun akirak/back-to-indentation-or-bol ()
                  (interactive)
                  (if (or (looking-at "^")
@@ -4439,7 +4450,7 @@ Major mode for the Go programming language
 #+begin_src emacs-lisp
   (setup js-ts-mode
     (:org-src-lang "javascript")
-    (:file-match "\\.[cm]?js$")
+    (:file-match "\\.[cm]?js$" "\\.json5\\'")
     (:mode-project-roots "package.json"))
 #+end_src
 *** nix-ts-mode
@@ -5764,7 +5775,6 @@ COmpletion in Region FUnction
   (setup (:package corfu)
     (:with-mode (prog-mode text-mode comint-mode)
       (:hook corfu-mode))
-    (:hook completion-preview-mode)
 
     (:with-hook minibuffer-setup-hook
       (:hook
@@ -5816,7 +5826,11 @@ Major mode for working with d2 graphs
 #+begin_src emacs-lisp
   (setup (:package d2-mode)
     (:nixpkgs d2)
-    (:file-match "\\.d2\\'"))
+    (:file-match "\\.d2\\'")
+    (:hook d2-format-on-save-mode)
+    (:reformatters
+     (d2-format :program "d2"
+                :args (list "fmt" "-"))))
 #+end_src
 *** dashboard
 :PROPERTIES:
@@ -8303,7 +8317,7 @@ A generic Emacs interface for proof assistants
 **** Coq                                                            :@extra:Coq:
 #+begin_src elisp
   (setup coq
-    (:nixpkgs "coq" "coq-lsp"))
+    (:nixpkgs "coq" "coqPackages.coq-lsp"))
 #+end_src
 *** puni                                       :structured__editing:
 :PROPERTIES:
@@ -9323,6 +9337,7 @@ A z3/SMTLIBv2 interactive development environment
 :END:
 #+begin_quote
 A major mode for the Zig programming language
+[[https://github.com/zig-lang/zig-mode]]
 #+end_quote
 
 #+begin_src emacs-lisp

@@ -4,6 +4,7 @@
   '(("dune-project" . dune)
     ("Cargo.toml" . cargo)
     ("justfile" . just)
+    ("go.mod" . go-module)
     ("mix.exs" . mix)
     ("pnpm-lock.yaml" . pnpm)
     ("pnpm-workspace.yaml" . pnpm-workspace)
@@ -54,6 +55,11 @@
      ("gleam check")
      ("gleam fix")
      ("gleam build"))
+    (go-module
+     ("go build")
+     ("go get -u")
+     ("go mod tidy")
+     ("go mod vendor"))
     (bun
      ("bun run" annotation "Run JavaScript with bun, a package.json script, or a bin")
      ("bun build" annotation "Build TypeScript and JavaScript into a single file")
@@ -351,6 +357,8 @@ are displayed in the frame."
     (`(,_ ,(or "add" "install" "remove" "uninstall") . ,_)
      t)
     (`("npm" "ci")
+     t)
+    (`("go" "get" . ,_)
      t)
     (`("mix" "deps.get")
      t)

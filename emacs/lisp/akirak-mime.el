@@ -5,11 +5,13 @@
     (format "/etc/profiles/per-user/%s/share/mime/globs"
             (user-login-name)))
   ""
-  :type 'file)
+  :type '(choice file
+                 (const nil)))
 
 ;;;###autoload
 (defun akirak-mime-set-mime-extensions ()
-  (when (file-readable-p akirak-mime-globs-file)
+  (when (and akirak-mime-globs-file
+             (file-readable-p akirak-mime-globs-file))
     (with-temp-buffer
       (insert-file-contents akirak-mime-globs-file)
       (goto-char (point-min))
