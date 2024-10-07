@@ -2,5 +2,18 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "labels": [
+    "automation",
+    "actions"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["github-actions"],
+      "automerge": true
+    }
+  ],
+  "enabledManagers": [
+    "github-actions"
   ]
 }
