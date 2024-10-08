@@ -4409,7 +4409,8 @@ Major mode for the Go programming language
 :END:
 
 #+begin_src emacs-lisp
-  (setup java-ts-mode)
+  (setup java-ts-mode
+    (:mode-project-roots "pom.xml"))
 #+end_src
 *** json-ts-mode
 :PROPERTIES:
