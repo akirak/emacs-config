@@ -2316,7 +2316,7 @@ Display available keybindings in popup
     (:set whitespace-style
           '(face trailing missing-newline-at-eof tab-mark))
     (:hook-into prog-mode
-                text-mode
+                markdown-mode
                 conf-mode
                 sgml-mode)
 
