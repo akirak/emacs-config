@@ -5321,7 +5321,6 @@ Minor mode to aggressively keep your code always indented
 :END:
 #+begin_quote
 Show number of matches in mode-line while searching
-[[https://github.com/emacsorphanage/anzu]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5571,6 +5570,7 @@ Behavior-Driven Emacs Lisp Testing
 :END:
 #+begin_quote
 Completion At Point Extensions
+[[https://github.com/minad/cape]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5611,6 +5611,7 @@ Perform code review from Github, Gitlab, and Bitbucket Cloud
 :END:
 #+begin_quote
 Consulting completing-read
+[[https://github.com/minad/consult]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -5770,6 +5771,7 @@ An unofficial Copilot plugin for Emacs
 :END:
 #+begin_quote
 COmpletion in Region FUnction
+[[https://github.com/minad/corfu]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -7215,6 +7217,7 @@ Highlight indentation with bars
 :END:
 #+begin_quote
 Enchanted Spell Checker
+[[https://github.com/minad/jinx]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -7698,6 +7701,7 @@ Sections for read-only buffers
 :END:
 #+begin_quote
 Enrich existing commands with completion annotations
+[[https://github.com/minad/marginalia]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -8111,6 +8115,7 @@ Minor mode to automatically balance window margins
 :END:
 #+begin_quote
 Completion style for matching regexps in any order
+[[https://github.com/oantolin/orderless]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -9112,6 +9117,7 @@ This package provides visual alignment for Org Mode, Markdown and table.el table
 :END:
 #+begin_quote
 VERTical Interactive COmpletion
+[[https://github.com/minad/vertico]]
 #+end_quote
 
 #+begin_src emacs-lisp
