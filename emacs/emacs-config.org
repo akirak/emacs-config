@@ -4566,6 +4566,10 @@ Major mode for editing YAML files
 :PROPERTIES:
 :CREATED_TIME: [2024-10-12 Sat 20:53]
 :END:
+#+begin_quote
+Tree Sitter support for Zig
+[[https://codeberg.org/meow_king/zig-ts-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package zig-ts-mode)
@@ -9862,7 +9866,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 213 |
+| [[org-ql-search:tags:packages][packages]]            | 212 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  12 |
