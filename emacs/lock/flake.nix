@@ -1315,12 +1315,6 @@
       repo = "yasnippet";
       type = "github";
     };
-    zig-mode = {
-      flake = false;
-      owner = "ziglang";
-      repo = "zig-mode";
-      type = "github";
-    };
     zig-ts-mode = {
       flake = false;
       type = "git";

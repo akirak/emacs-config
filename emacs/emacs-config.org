@@ -9353,7 +9353,7 @@ A z3/SMTLIBv2 interactive development environment
 #+begin_src emacs-lisp
 (setup (:package z3-mode))
 #+end_src
-*** zig-mode
+*** COMMENT zig-mode                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 14:14]
 :END:
