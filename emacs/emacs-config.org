@@ -658,7 +658,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
       (:local-set tab-width 8))
     (:with-mode (emacs-lisp-mode)
       (:local-set tab-width 8))
-    (:with-mode (makefile-mode)
+    (:with-mode (makefile-mode zig-mode zig-ts-mode)
       (:local-set tab-width 4))
     (:with-mode (js-mode typescript-mode sh-mode python-mode)
       (:local-set tab-width 2)))
@@ -1205,7 +1205,9 @@ The built-in =electric= package provides the following modes:
            (tsx-ts-mode . (,@lsp-no-formatter))
            (tuareg-mode . (,@lsp-no-formatter ,@ocamlformat))
            (typescript-ts-mode . (,@lsp-no-formatter))
-           (web-mode . (,@lsp)))))
+           (web-mode . (,@lsp))
+           (zig-mode . (,@lsp-no-formatter))
+           (zig-ts-mode . (,@lsp-no-formatter)))))
       (dir-locals-set-directory-class "~/config/" 'personal)
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
@@ -4560,6 +4562,15 @@ Major mode for editing YAML files
                 (when (fboundp 'flymake-actionlint1-enable)
                   (flymake-actionlint1-enable)))))))
 #+end_src
+*** zig-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-10-12 Sat 20:53]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package zig-ts-mode)
+    (:file-match "\\.zig\\'"))
+#+end_src
 ** Working with specific services
 *** GitHub
 **** flymake-actionlint1
@@ -6350,6 +6361,8 @@ Client for Language Server Protocol (LSP) servers
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
                    '(gleam-ts-mode . ("gleam" "lsp")))
+      (add-to-list 'eglot-server-programs
+                   '(zig-ts-mode . ("zls")))
       (add-to-list 'eglot-server-programs
                    `((elixir-ts-mode heex-ts-mode elixir-mode) .
                      ,(eglot-alternatives
