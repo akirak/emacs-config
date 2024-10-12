@@ -3113,7 +3113,7 @@
         "with-editor": "with-editor",
         "xterm-color": "xterm-color",
         "yasnippet": "yasnippet",
-        "zig-mode": "zig-mode",
+        "zig-ts-mode": "zig-ts-mode",
         "zoutline": "zoutline"
       }
     },
@@ -3727,20 +3727,20 @@
         "type": "github"
       }
     },
-    "zig-mode": {
+    "zig-ts-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1715150384,
-        "narHash": "sha256-doaBMwpHHOvRG8bf/7hG4pmuLZfK3yo4/O2LJ2MzF+g=",
-        "owner": "ziglang",
-        "repo": "zig-mode",
-        "rev": "f55e42536a3f34b81198b856595dc3a61867aa3e",
-        "type": "github"
+        "lastModified": 1728714426,
+        "narHash": "sha256-mOZEZ87IhOjoEWPeChd+uHWAWCpUbPrjxdqXaam0wzE=",
+        "ref": "refs/heads/main",
+        "rev": "a1426d9f9d4d804aad452f6d902192505b061ee4",
+        "revCount": 28,
+        "type": "git",
+        "url": "https://codeberg.org/meow_king/zig-ts-mode.git"
       },
       "original": {
-        "owner": "ziglang",
-        "repo": "zig-mode",
-        "type": "github"
+        "type": "git",
+        "url": "https://codeberg.org/meow_king/zig-ts-mode.git"
       }
     },
     "zoutline": {
