@@ -8207,7 +8207,9 @@ HTTP library
 
 #+begin_src emacs-lisp
   (setup (:package plz)
-    (:nixpkgs "curl"))
+    (:nixpkgs "curl")
+    (:when-loaded
+      (add-to-list 'plz-curl-default-args "--http1.1")))
 #+end_src
 *** COMMENT pocket-reader                                              :reading:ARCHIVE:
 :PROPERTIES:
