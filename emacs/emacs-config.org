@@ -1182,7 +1182,8 @@ The built-in =electric= package provides the following modes:
             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
             (flymake-eslint '((eval . (flymake-eslint-enable))))
             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
-            (nixfmt '((eval . (nixfmt-on-save-mode t)))))
+            (nixfmt '((eval . (nixfmt-on-save-mode t))))
+            (zig-fmt '((eval . (zig-format-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
          `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
@@ -1206,8 +1207,8 @@ The built-in =electric= package provides the following modes:
            (tuareg-mode . (,@lsp-no-formatter ,@ocamlformat))
            (typescript-ts-mode . (,@lsp-no-formatter))
            (web-mode . (,@lsp))
-           (zig-mode . (,@lsp-no-formatter))
-           (zig-ts-mode . (,@lsp-no-formatter)))))
+           (zig-mode . (,@lsp-no-formatter ,@zig-fmt))
+           (zig-ts-mode . (,@lsp-no-formatter ,@zig-fmt)))))
       (dir-locals-set-directory-class "~/config/" 'personal)
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
@@ -4574,7 +4575,15 @@ Tree Sitter support for Zig
 
 #+begin_src emacs-lisp
   (setup (:package zig-ts-mode)
-    (:file-match "\\.zig\\'"))
+    (:file-match "\\.zig\\'")
+    (:org-src-lang "zig")
+    (:when-loaded
+      (when (require 'zig-mode nil t)
+        (setq auto-mode-alist (cl-remove 'zig-mode auto-mode-alist :key #'cdr :test #'eq))
+        (:bind "C-c C-r" #'zig-run
+               "C-c C-b" #'zig-compile
+               "C-c C-f" #'zig-format-buffer
+               "C-c C-t" #'zig-test-buffer))))
 #+end_src
 ** Working with specific services
 *** GitHub
