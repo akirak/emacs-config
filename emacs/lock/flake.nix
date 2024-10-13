@@ -1321,6 +1321,11 @@
       repo = "zig-mode";
       type = "github";
     };
+    zig-ts-mode = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/meow_king/zig-ts-mode.git";
+    };
     zoutline = {
       flake = false;
       owner = "abo-abo";

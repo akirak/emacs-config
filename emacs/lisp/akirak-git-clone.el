@@ -126,7 +126,8 @@ matches the host of the repository,
                                      :params params)))
     ((rx bol "https://"
          (group (or "github.com"
-                    "gitlab.com"))
+                    "gitlab.com"
+                    "codeberg.org"))
          "/"
          (group (+ (not (any "/")))
                 "/"
