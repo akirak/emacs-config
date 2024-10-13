@@ -4565,6 +4565,7 @@ Major mode for editing YAML files
 *** zig-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2024-10-12 Sat 20:53]
+:CUSTOM_ID: zig-ts-mode
 :END:
 #+begin_quote
 Tree Sitter support for Zig
@@ -9357,7 +9358,7 @@ A z3/SMTLIBv2 interactive development environment
 #+begin_src emacs-lisp
 (setup (:package z3-mode))
 #+end_src
-*** COMMENT zig-mode                                                           :ARCHIVE:
+*** zig-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 14:14]
 :END:
@@ -9367,9 +9368,10 @@ A major mode for the Zig programming language
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package zig-mode)
-    (:file-match "\\.zig\\'"))
+  (setup (:package zig-mode))
 #+end_src
+
+I prefer [[#zig-ts-mode][zig-ts-mode]], but I install ~zig-mode~ for build commands.
 ** Software package management
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:54]
