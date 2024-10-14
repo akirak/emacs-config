@@ -91,7 +91,8 @@
      ("npm uninstall"))
     (zig
      ("zig build")
-     ("zig test"))
+     ("zig test")
+     ("zig std"))
     (rebar3
      ("rebar3 compile")
      ("rebar3 release")
