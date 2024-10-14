@@ -4575,7 +4575,8 @@ Tree Sitter support for Zig
 
 #+begin_src emacs-lisp
   (setup (:package zig-ts-mode)
-    (:file-match "\\.zig\\'")
+    ;; .zig and .zon
+    (:file-match "\\(?:\\.z\\(?:ig\\|on\\)\\)\\'")
     (:org-src-lang "zig")
     (:when-loaded
       (when (require 'zig-mode nil t)
