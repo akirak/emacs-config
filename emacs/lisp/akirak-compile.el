@@ -2,6 +2,7 @@
 
 (defcustom akirak-compile-package-file-alist
   '(("dune-project" . dune)
+    ("flake.nix" . nix-flake)
     ("Cargo.toml" . cargo)
     ("justfile" . just)
     ("go.mod" . go-module)
@@ -34,6 +35,10 @@
      ("cargo build")
      ("cargo run")
      ("cargo test"))
+    (nix-flake
+     ("nix fmt")
+     ("nix flake check")
+     ("nix flake lock"))
     (dune
      ("dune build")
      ("dune build --watch")
