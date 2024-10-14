@@ -368,6 +368,8 @@ are displayed in the frame."
      t)
     (`("npm" "ci")
      t)
+    (`("zig" "fetch" . ,_)
+     t)
     (`("go" "get" . ,_)
      t)
     (`("mix" "deps.get")
