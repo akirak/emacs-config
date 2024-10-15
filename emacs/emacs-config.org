@@ -1177,6 +1177,7 @@ The built-in =electric= package provides the following modes:
     (:status personal
       (let (;; (mix-format '((eval . (mix-format-on-save-mode t))))
             ;; (prettier '((eval . (prettier-on-save-mode t))))
+            (jq-format '((eval . (jq-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
@@ -1208,7 +1209,8 @@ The built-in =electric= package provides the following modes:
            (typescript-ts-mode . (,@lsp-no-formatter))
            (web-mode . (,@lsp))
            (zig-mode . (,@lsp-no-formatter ,@zig-fmt))
-           (zig-ts-mode . (,@lsp-no-formatter ,@zig-fmt)))))
+           (zig-ts-mode . (,@lsp-no-formatter ,@zig-fmt))
+           ("renovate.json" . (,@jq-format)))))
       (dir-locals-set-directory-class "~/config/" 'personal)
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
@@ -8461,6 +8463,10 @@ Define commands which run reformatters on the current buffer
      (yamlfmt
       :program "yamlfmt"
       :args (list "-"))
+
+     (jq-format
+      :program "jq"
+      :args (list "."))
 
      (biome-format
       :program
