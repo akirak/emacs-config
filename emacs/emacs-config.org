@@ -6909,7 +6909,8 @@ Run GitHub Linguist on projects to collect information
 #+begin_src emacs-lisp
   (setup (:package github-linguist)
     (:nixpkgs "github-linguist")
-    (:set github-linguist-executable "github-linguist"))
+    (:set github-linguist-executable "github-linguist")
+    (:global "<f12> g l" #'github-linguist-switch-project-by-language))
 #+end_src
 *** git-identity                                                    :VC:
 :PROPERTIES:
