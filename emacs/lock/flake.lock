@@ -500,15 +500,16 @@
     "d2-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1726735722,
-        "narHash": "sha256-xk/yQxba2i79nM3CjPZRhmcwUUpjtmU73a1SIhBG24A=",
+        "lastModified": 1729279746,
+        "narHash": "sha256-BiHNQQATbZ1xvqhUZ+9s6k8xztYZ5yXbwCFuxQexPcM=",
         "owner": "akirak",
         "repo": "d2-mode",
-        "rev": "b8e63b24078ec8cfe9ef0c0b2a3486ca42a4c00c",
+        "rev": "9c37b479ee1d6d6906253a1bcd53c8de37af2e9b",
         "type": "github"
       },
       "original": {
-        "owner": "andorsk",
+        "owner": "akirak",
+        "ref": "develop",
         "repo": "d2-mode",
         "type": "github"
       }
