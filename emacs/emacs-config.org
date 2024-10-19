@@ -3513,7 +3513,7 @@ Transient commands for Org Dog
     (define-key akirak/c-z-map "C-i" #'octopus-clock-in)
 
     (:set octopus-find-node-verbs
-          '((?f "Display a node" nil org-pivot-search-from-files)
+          '((?f "Display a node" nil akirak/org-pivot-search-from-files)
             (?v "Display a search view" nil akirak-org-ql-search-files)
             (?o "Open a heading link" nil akirak-org-ql-open-link)
             (?i "Insert a target" nil org-nlink-insert-plain))
@@ -3962,7 +3962,10 @@ Experimental search command for Org files
 
 #+begin_src emacs-lisp
   (setup (:package org-pivot-search)
-    (:set org-pivot-search-annotation-function #'akirak-org-entry-annotation))
+    (:set org-pivot-search-annotation-function #'akirak-org-entry-annotation)
+
+    (defun akirak/org-pivot-search-from-files (files)
+      (org-pivot-search-from-files files :interactive t)))
 #+end_src
 *** org-placeholder
 :PROPERTIES:
