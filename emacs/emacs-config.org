@@ -1177,6 +1177,7 @@ The built-in =electric= package provides the following modes:
     (:status personal
       (let (;; (mix-format '((eval . (mix-format-on-save-mode t))))
             ;; (prettier '((eval . (prettier-on-save-mode t))))
+            (jq-format '((eval . (jq-format-on-save-mode t))))
             (sqlformat '((eval . (sqlformat-on-save-mode t))))
             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
@@ -1208,7 +1209,8 @@ The built-in =electric= package provides the following modes:
            (typescript-ts-mode . (,@lsp-no-formatter))
            (web-mode . (,@lsp))
            (zig-mode . (,@lsp-no-formatter ,@zig-fmt))
-           (zig-ts-mode . (,@lsp-no-formatter ,@zig-fmt)))))
+           (zig-ts-mode . (,@lsp-no-formatter ,@zig-fmt))
+           ("renovate.json" . (,@jq-format)))))
       (dir-locals-set-directory-class "~/config/" 'personal)
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
@@ -3366,6 +3368,7 @@ A programmable workflow layer for Org mode
             ("hie\\.yaml\\'" . "programming/haskell")
             ("/graphql/" . "programming/graphql")
             ("\\.editorconfig\\'" . "programming/editorconfig")
+            ("astro\.config\.[cm]?js\\'" . "software/astro.build")
             ("renovate.json\\'" . "software/renovate-bot"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in
           org-dog-clock-default-query-filter
@@ -3510,7 +3513,7 @@ Transient commands for Org Dog
     (define-key akirak/c-z-map "C-i" #'octopus-clock-in)
 
     (:set octopus-find-node-verbs
-          '((?f "Display a node" nil org-pivot-search-from-files)
+          '((?f "Display a node" nil akirak/org-pivot-search-from-files)
             (?v "Display a search view" nil akirak-org-ql-search-files)
             (?o "Open a heading link" nil akirak-org-ql-open-link)
             (?i "Insert a target" nil org-nlink-insert-plain))
@@ -3959,7 +3962,10 @@ Experimental search command for Org files
 
 #+begin_src emacs-lisp
   (setup (:package org-pivot-search)
-    (:set org-pivot-search-annotation-function #'akirak-org-entry-annotation))
+    (:set org-pivot-search-annotation-function #'akirak-org-entry-annotation)
+
+    (defun akirak/org-pivot-search-from-files (files)
+      (org-pivot-search-from-files files :interactive t)))
 #+end_src
 *** org-placeholder
 :PROPERTIES:
@@ -4575,7 +4581,8 @@ Tree Sitter support for Zig
 
 #+begin_src emacs-lisp
   (setup (:package zig-ts-mode)
-    (:file-match "\\.zig\\'")
+    ;; .zig and .zon
+    (:file-match "\\(?:\\.z\\(?:ig\\|on\\)\\)\\'")
     (:org-src-lang "zig")
     (:when-loaded
       (when (require 'zig-mode nil t)
@@ -6905,7 +6912,8 @@ Run GitHub Linguist on projects to collect information
 #+begin_src emacs-lisp
   (setup (:package github-linguist)
     (:nixpkgs "github-linguist")
-    (:set github-linguist-executable "github-linguist"))
+    (:set github-linguist-executable "github-linguist")
+    (:global "<f12> g l" #'github-linguist-switch-project-by-language))
 #+end_src
 *** git-identity                                                    :VC:
 :PROPERTIES:
@@ -8460,6 +8468,10 @@ Define commands which run reformatters on the current buffer
      (yamlfmt
       :program "yamlfmt"
       :args (list "-"))
+
+     (jq-format
+      :program "jq"
+      :args (list "."))
 
      (biome-format
       :program

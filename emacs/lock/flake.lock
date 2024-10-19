@@ -275,11 +275,11 @@
     "cape": {
       "flake": false,
       "locked": {
-        "lastModified": 1728022477,
-        "narHash": "sha256-1edGsqRS5df6Dn8u+F33caYjIVInt3fcM9JvA5/VSA8=",
+        "lastModified": 1728277263,
+        "narHash": "sha256-rl4lhj09Wg15NpqwyBJ2PRktOU2XjJw6zoMPWMZ/MWU=",
         "owner": "minad",
         "repo": "cape",
-        "rev": "63ab1490a14f5a6cbfec29eb5af5ffd12ee49180",
+        "rev": "485d8d4ad5aeb17a0f5d3337e600070276448c54",
         "type": "github"
       },
       "original": {
@@ -500,15 +500,16 @@
     "d2-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1726735722,
-        "narHash": "sha256-xk/yQxba2i79nM3CjPZRhmcwUUpjtmU73a1SIhBG24A=",
+        "lastModified": 1729279746,
+        "narHash": "sha256-BiHNQQATbZ1xvqhUZ+9s6k8xztYZ5yXbwCFuxQexPcM=",
         "owner": "akirak",
         "repo": "d2-mode",
-        "rev": "b8e63b24078ec8cfe9ef0c0b2a3486ca42a4c00c",
+        "rev": "9c37b479ee1d6d6906253a1bcd53c8de37af2e9b",
         "type": "github"
       },
       "original": {
-        "owner": "andorsk",
+        "owner": "akirak",
+        "ref": "develop",
         "repo": "d2-mode",
         "type": "github"
       }
@@ -548,11 +549,11 @@
     "deadgrep": {
       "flake": false,
       "locked": {
-        "lastModified": 1719792265,
-        "narHash": "sha256-Bf7zHZ7xIQ4rFJBj4Ua5EqIQ7z4KHuY1S4J8ms6Y0Ew=",
+        "lastModified": 1728745864,
+        "narHash": "sha256-o/mUfOr4tS+OfJcPe5/t/3ME2hLNMCCpjlc79P8N8aA=",
         "owner": "Wilfred",
         "repo": "deadgrep",
-        "rev": "0bf2601ce1d52187b0c589657f7179de5a98dd75",
+        "rev": "8d9213990a50e55b8fd1ab6bed99e5c6a4ae229b",
         "type": "github"
       },
       "original": {
@@ -932,11 +933,11 @@
     "envrc": {
       "flake": false,
       "locked": {
-        "lastModified": 1727431826,
-        "narHash": "sha256-CCdk+Zb1pCbN5VRH2R78d9Jx/0NSLfU8aSNUqSgVkv8=",
+        "lastModified": 1728307098,
+        "narHash": "sha256-uBF3ebUYqpsbas1wImNLSfe2UCpCSy3CXL1Y++3JHVM=",
         "owner": "purcell",
         "repo": "envrc",
-        "rev": "3e3d2ad0f6381bf519ff82418eab2282e113380f",
+        "rev": "3c5a60dd917bf9db71d7b8fb822f7d5da7505a39",
         "type": "github"
       },
       "original": {
@@ -1204,11 +1205,11 @@
     "github-linguist": {
       "flake": false,
       "locked": {
-        "lastModified": 1699169771,
-        "narHash": "sha256-RoJZR7FQfaocgoQ7vSxTnfYYCsb6JjvGucK+P8IJkKM=",
+        "lastModified": 1728885679,
+        "narHash": "sha256-O2+QolHgx9Ez8vVN09jhK29nCCnsHp04vrQRbkIWUnM=",
         "owner": "akirak",
         "repo": "github-linguist.el",
-        "rev": "7e24d62266ff0c56b63dc8ca4bf6d39a88aa1d5b",
+        "rev": "442bc84dcdd3fe756f228b52fd027842f419e52b",
         "type": "github"
       },
       "original": {
@@ -2575,11 +2576,11 @@
     "package-lint": {
       "flake": false,
       "locked": {
-        "lastModified": 1727429036,
-        "narHash": "sha256-WEX3hFn2uXQneieBCWJR63w5rFNOEco8IKKw+DC8Fus=",
+        "lastModified": 1728307190,
+        "narHash": "sha256-8CA6R7Hfmt6tTL6KfSts07tXMKSfcDjv1FUJlsTey/s=",
         "owner": "purcell",
         "repo": "package-lint",
-        "rev": "2125d340299e026a93fbd8330adfdf074e9e30fe",
+        "rev": "d2846f0c57931195946d771a900906e1a16d394e",
         "type": "github"
       },
       "original": {
@@ -2736,11 +2737,11 @@
     "puni": {
       "flake": false,
       "locked": {
-        "lastModified": 1727924179,
-        "narHash": "sha256-V5JjIyrVnpFQAd0aPpEliKDLJ4oLynui5bHxoIG13eE=",
+        "lastModified": 1728317348,
+        "narHash": "sha256-GBd8TXUYo7isdOm3GIPaa4rL7I/tRUZAL5CS7gWlfU8=",
         "owner": "AmaiKinono",
         "repo": "puni",
-        "rev": "85e3c36141e6a94885cc798d34b745c18ab31828",
+        "rev": "f430f5b0a14c608176e3376058eb380ab0824621",
         "type": "github"
       },
       "original": {
@@ -2784,11 +2785,11 @@
     "reformatter": {
       "flake": false,
       "locked": {
-        "lastModified": 1727428974,
-        "narHash": "sha256-V9ZGCff1yZ+FzAl8gqjL4f1MwevZDXrM4Q4CqiHEmfo=",
+        "lastModified": 1728296825,
+        "narHash": "sha256-bFObZIXTrjDHpabC70+dniaoTPoFbmcWKZ/ArQK/N1w=",
         "owner": "purcell",
         "repo": "emacs-reformatter",
-        "rev": "0ff502cf9d3894816f2ab23ee6d43b73af38509a",
+        "rev": "f13f5b4ce51db95ea317d57a83be0358bbf3ec30",
         "type": "github"
       },
       "original": {
@@ -3571,11 +3572,11 @@
     "visual-fill-column": {
       "flake": false,
       "locked": {
-        "lastModified": 1699004619,
-        "narHash": "sha256-Yt5uey+noTPkGrzRo0TzCRVTXqxCDt08JxI3qWO3cVs=",
+        "lastModified": 1712818586,
+        "narHash": "sha256-FqzhrzL17py4NFfNWrzmss/D5rg95hYlxZncfT+vXq8=",
         "ref": "refs/heads/main",
-        "rev": "db7c7c236555c9c684e1294a277efefdc25fa5c4",
-        "revCount": 144,
+        "rev": "e04d3521b6dc2435de4c4a4b9cac5feb194f0d5b",
+        "revCount": 157,
         "type": "git",
         "url": "https://codeberg.org/joostkremers/visual-fill-column.git"
       },

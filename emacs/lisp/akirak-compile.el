@@ -2,6 +2,7 @@
 
 (defcustom akirak-compile-package-file-alist
   '(("dune-project" . dune)
+    ("flake.nix" . nix-flake)
     ("Cargo.toml" . cargo)
     ("justfile" . just)
     ("go.mod" . go-module)
@@ -34,6 +35,10 @@
      ("cargo build")
      ("cargo run")
      ("cargo test"))
+    (nix-flake
+     ("nix fmt")
+     ("nix flake check")
+     ("nix flake lock"))
     (dune
      ("dune build")
      ("dune build --watch")
@@ -86,7 +91,8 @@
      ("npm uninstall"))
     (zig
      ("zig build")
-     ("zig test"))
+     ("zig test")
+     ("zig std"))
     (rebar3
      ("rebar3 compile")
      ("rebar3 release")
@@ -328,6 +334,25 @@ are displayed in the frame."
                                        (delq nil))
                                      " — "))))))
                  (delete-file err-file)))))
+      (zig (with-memoize
+            (with-temp-buffer
+              (akirak-compile--insert-stdout "zig" "build" "--help")
+              (goto-char (point-min))
+              (re-search-forward (rx bol "Steps:"))
+              (delete-region (point-min) (point))
+              (re-search-forward (rx bol "General Options:"))
+              (delete-region (match-beginning 0) (point-max))
+              (let (result)
+                (goto-char (point-min))
+                (while (re-search-forward (rx bol (* blank)
+                                              (group (+ (any "-_" alnum)))
+                                              (?  " (default)")
+                                              (optional (+ blank) (group (+ nonl))))
+                                          nil t)
+                  (push (list (format "zig build %s" (shell-quote-argument (match-string 1)))
+                              'annotation (match-string 2))
+                        result))
+                result))))
       ((bun pnpm yarn npm)
        ;; We only read package.json, so memoization wouldn't be necessary.
        (let* ((command (symbol-name backend))
@@ -361,6 +386,9 @@ are displayed in the frame."
     (`(,_ ,(or "add" "install" "remove" "uninstall") . ,_)
      t)
     (`("npm" "ci")
+     t)
+    ((or `("zig" "fetch" . ,_)
+         `("zig" "build" (or "install" "uninstall") . ,_))
      t)
     (`("go" "get" . ,_)
      t)

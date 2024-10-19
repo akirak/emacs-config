@@ -811,6 +811,14 @@
       (interactive)
       (akirak-capture--append-heading-to-clock
        (1+ (plist-get akirak-capture-clocked-buffer-info :level))
+       akirak-capture-initial)))
+   ("n" "Prompt the heading level"
+    (lambda ()
+      (interactive)
+      (akirak-capture--append-heading-to-clock
+       (let ((default-level (plist-get akirak-capture-clocked-buffer-info :level)))
+         (read-number (format-prompt "Outline level of the new heading" default-level)
+                      default-level))
        akirak-capture-initial)))]
   (interactive (list (cond
                       ((use-region-p)

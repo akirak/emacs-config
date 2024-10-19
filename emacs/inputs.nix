@@ -142,6 +142,15 @@
     };
   };
 
+  d2-mode = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "d2-mode";
+      ref = "develop";
+    };
+  };
+
   taxy = _: super: {
     files = builtins.removeAttrs super.files [ "NOTES.org" ];
   };
