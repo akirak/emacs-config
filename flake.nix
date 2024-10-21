@@ -128,7 +128,14 @@
               # emacsTwist2Elpa
               inputs.twist2elpa.overlays.default
               # Bring custom packages into the scope for native dependencies.
-              (_: _: { inherit ((inputs.flake-pins-pkgs).packages.${system}) github-linguist epubinfo squasher; })
+              (_: _: {
+                inherit ((inputs.flake-pins-pkgs).packages.${system})
+                  github-linguist
+                  epubinfo
+                  squasher
+                  d2-format
+                  ;
+              })
               # Add extra tree-sitter grammars that are not included in nixpkgs
               # yet.
               (_: prev: {
