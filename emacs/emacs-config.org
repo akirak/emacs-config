@@ -5866,7 +5866,12 @@ Major mode for working with d2 graphs
     (:file-match "\\.d2\\'")
     (:hook d2-format-on-save-mode)
     (:reformatters
-     (d2-format :program "d2-format")))
+     (d2-format :program "d2-format"))
+    (defun akirak/d2-watch-file ()
+      "Watch the current file."
+      (interactive nil d2-mode)
+      (compile (format "d2 -w %s" (shell-quote-argument (or (buffer-file-name)
+                                                            (user-error "Not visiting a file")))))))
 #+end_src
 *** dashboard
 :PROPERTIES:
