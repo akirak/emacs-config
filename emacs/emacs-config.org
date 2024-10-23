@@ -6997,16 +6997,19 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (gptel-make-openai "Perplexity"
-        :host "api.perplexity.ai"
-        :key (lambda ()
-               (gptel-api-key-from-auth-source "api.perplexity.ai"))
-        :endpoint "/chat/completions"
+      (setq gptel-model 'mistral
+            gptel-backend (gptel-make-ollama "Ollama"
+                            :host "localhost:11434"
+                            :stream t
+                            :models '(mistral
+                                      incept5/llama3.1-claude)))
+
+      (gptel-make-anthropic "Claude"
         :stream t
-        :models '("pplx-7b-chat"
-                  "pplx-70b-chat"
-                  "pplx-7b-online"
-                  "pplx-70b-online")))
+        :header (lambda ()
+                  (when-let (key (gptel-api-key-from-auth-source "api.anthropic.com"))
+                    `(("x-api-key" . ,key)
+                      ("anthropic-version" . "2023-06-01"))))))
 
     (add-hook 'org-mode-hook
               (defun akirak/org-dog-setup-gpt-system ()
