@@ -6452,6 +6452,18 @@ Extract information from Emacs Lisp libraries
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
+*** elysium
+:PROPERTIES:
+:CREATED_TIME: [2024-10-23 Wed 23:54]
+:END:
+#+begin_quote
+Automatically apply LLM-created code-suggestions
+[[https://github.com/lanceberge/elysium/]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package elysium))
+#+end_src
 *** COMMENT emacsql-sqlite                                             :library:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:46]

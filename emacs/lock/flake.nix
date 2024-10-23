@@ -331,6 +331,12 @@
       repo = "elx";
       type = "github";
     };
+    elysium = {
+      flake = false;
+      owner = "lanceberge";
+      repo = "elysium";
+      type = "github";
+    };
     emacsql = {
       flake = false;
       owner = "magit";
