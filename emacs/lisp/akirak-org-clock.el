@@ -211,7 +211,9 @@ Example values are shown below:
            nil)
           (_
            (require 'akirak-org-dog)
-           (list (akirak-org-dog-project-files)
+           (list (append (akirak-org-dog-project-files)
+                         (akirak-org-dog-path-files)
+                         (akirak-org-dog-major-mode-files))
                  "todo: "
                  nil
                  t))))))
