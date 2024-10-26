@@ -218,8 +218,7 @@
 (defun akirak-org-dog-project-context (project)
   (require 'project)
   (pcase (thread-last
-           project
-           project-root
+           (vc-root-dir)
            abbreviate-file-name
            file-name-split)
     ((or `("~" "work2" "learning" ,group ,name "")
