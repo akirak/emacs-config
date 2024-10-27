@@ -34,7 +34,13 @@
   '((cargo
      ("cargo build")
      ("cargo run")
-     ("cargo test"))
+     ("cargo clean")
+     ("cargo test")
+     ("cargo test -- --show-output" annotation "Show the successful outputs")
+     ("cargo test -- --ignored" annotation "Run ignored tests")
+     ("cargo test --no-fail-fast" annotation "Run all tests even if some fail")
+     ("cargo test --lib" annotation "Run tests in src directory")
+     ("cargo test --test '*'" annotation "Run tests in tests directory"))
     (nix-flake
      ("nix fmt")
      ("nix flake check")
