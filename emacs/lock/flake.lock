@@ -1314,22 +1314,6 @@
         "type": "sourcehut"
       }
     },
-    "guess-language": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1673612187,
-        "narHash": "sha256-pOxiuo9IsURivKTeWTEJrb1UeJ4In7LxzbLLzaW2A0M=",
-        "owner": "tmalsburg",
-        "repo": "guess-language.el",
-        "rev": "bccca49bbb27a3dff02c660d7cda8cdf83333d6e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tmalsburg",
-        "repo": "guess-language.el",
-        "type": "github"
-      }
-    },
     "hcl-mode": {
       "flake": false,
       "locked": {
@@ -1487,22 +1471,6 @@
       "original": {
         "owner": "minad",
         "repo": "jinx",
-        "type": "github"
-      }
-    },
-    "jq-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1705331568,
-        "narHash": "sha256-lzjlXcgsivFcNycqs2ZaPVsZZCm7l9HbBwM9xGRjGbY=",
-        "owner": "ljos",
-        "repo": "jq-mode",
-        "rev": "37028e120041a489eff352b79202361cb232377e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ljos",
-        "repo": "jq-mode",
         "type": "github"
       }
     },
@@ -2994,7 +2962,6 @@
         "gptel": "gptel",
         "graphql-mode": "graphql-mode",
         "graphql-ts-mode": "graphql-ts-mode",
-        "guess-language": "guess-language",
         "hcl-mode": "hcl-mode",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
@@ -3005,7 +2972,6 @@
         "indent-bars": "indent-bars",
         "inheritenv": "inheritenv",
         "jinx": "jinx",
-        "jq-mode": "jq-mode",
         "just-mode": "just-mode",
         "kind-icon": "kind-icon",
         "kv": "kv",

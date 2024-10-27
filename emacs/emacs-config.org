@@ -7055,7 +7055,7 @@ Mode for the dot-language used by graphviz (att).
     (:nixpkgs "graphviz")
     (:file-match "\\.dot\\'"))
 #+end_src
-*** guess-language
+*** COMMENT guess-language                                                     :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-06-04 Sat 15:05]
 :END:
@@ -7247,7 +7247,7 @@ Enchanted Spell Checker
                 vc-git-log-edit-mode-hook)
     (:bind "C-M-;" #'jinx-correct-nearest))
 #+end_src
-*** jq-mode
+*** COMMENT jq-mode                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-05-30 Mon 14:03]
 :END:

@@ -493,12 +493,6 @@
       repo = "graphql-ts-mode";
       type = "sourcehut";
     };
-    guess-language = {
-      flake = false;
-      owner = "tmalsburg";
-      repo = "guess-language.el";
-      type = "github";
-    };
     hcl-mode = {
       flake = false;
       owner = "hcl-emacs";
@@ -557,12 +551,6 @@
       flake = false;
       owner = "minad";
       repo = "jinx";
-      type = "github";
-    };
-    jq-mode = {
-      flake = false;
-      owner = "ljos";
-      repo = "jq-mode";
       type = "github";
     };
     just-mode = {
