@@ -279,5 +279,70 @@ display alternative actions."
                           (format "*:%s")))
     (magit-status)))
 
+;;;; Project roots
+
+(cl-defgeneric akirak-project-vc-root (pr)
+  nil)
+
+(cl-defmethod akirak-project-vc-root ((project (head vc)))
+  (project-root project))
+
+;;;;; Package directories inside vc-root
+
+;; Detect package roots for eglot support.
+;; See <https://github.com/joaotavora/eglot/discussions/687>
+
+;;;###autoload
+(defun akirak-project-find-subdir-root (dir)
+  (when-let* ((matching-mode (apply #'derived-mode-p
+                                    (mapcar #'car akirak-project-per-mode-root-files)))
+              (files (alist-get matching-mode akirak-project-per-mode-root-files))
+              (vc-pr (project-try-vc dir))
+              (vc-root (abbreviate-file-name
+                        (file-name-as-directory
+                         (project-root vc-pr)))))
+    (catch 'package-root
+      (let ((cwd (abbreviate-file-name
+                  (file-name-as-directory dir))))
+        (while (not (equal cwd vc-root))
+          (when-let (s (cl-intersection files (directory-files cwd)
+                                        :test #'equal))
+            (throw 'package-root `(subdir ,cwd
+                                          :package-file ,(car s)
+                                          :vc-root ,vc-root)))
+          (setq cwd (file-name-directory (directory-file-name cwd))))))))
+
+(cl-defmethod akirak-project-vc-root ((project (head subdir)))
+  (plist-get (cddr project) :vc-root))
+
+(cl-defmethod project-root ((project (head subdir)))
+  (cadr project))
+
+(cl-defmethod project-roots ((project (head subdir)))
+  (list (cadr project)
+        (plist-get (cddr project) :vc-root)))
+
+(cl-defmethod project-external-roots ((project (head subdir)))
+  (list (plist-get (cddr project) :vc-root)))
+
+;;;;; Worktree groups
+
+;;;###autoload
+(defun akirak-project-worktree-group-finder (dir)
+  (when (string-match-p (rx bol "~/work2/"
+                            (+ (not (any "/")))
+                            "/"
+                            (+ (not (any "/")))
+                            "/"
+                            eol)
+                        dir)
+    `(worktree-group ,dir)))
+
+(cl-defmethod akirak-project-vc-root ((project (head subdir)))
+  nil)
+
+(cl-defmethod project-root ((project (head worktree-group)))
+  (cadr project))
+
 (provide 'akirak-project)
 ;;; akirak-project.el ends here
