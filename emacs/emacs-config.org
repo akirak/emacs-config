@@ -3328,6 +3328,7 @@ A programmable workflow layer for Org mode
             ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
             ("hie\\.yaml\\'" . "programming/haskell")
             ("/graphql/" . "programming/graphql")
+            ("Cargo\\.toml\\'" . "programming/rust")
             ("\\.editorconfig\\'" . "programming/editorconfig")
             ("astro\.config\.[cm]?js\\'" . "software/astro.build")
             ("renovate.json\\'" . "software/renovate-bot"))
