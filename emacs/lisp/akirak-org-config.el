@@ -217,10 +217,10 @@
 
 (defun akirak-org-dog-project-context (project)
   (require 'project)
-  (pcase (thread-last
-           (vc-root-dir)
-           abbreviate-file-name
-           file-name-split)
+  (pcase (when-let (dir (akirak-project-vc-root project))
+           (thread-last
+             (abbreviate-file-name dir)
+             file-name-split))
     ((or `("~" "work2" "learning" ,group ,name "")
          `("~" "work2" "learning" ,group ""))
      (make-org-dog-context-in-directory
