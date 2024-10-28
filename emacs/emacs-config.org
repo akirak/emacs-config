@@ -6424,7 +6424,12 @@ Automatically apply LLM-created code-suggestions
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package elysium))
+  (setup (:package elysium)
+    (with-eval-after-load 'embark
+      (define-key embark-region-map "q" #'elysium-query))
+    (with-eval-after-load 'gptel-rewrite
+      (transient-append-suffix 'gptel-rewrite-menu 'gptel--suffix-rewrite
+        '("q" "Elysium" elysium-query))))
 #+end_src
 *** COMMENT emacsql-sqlite                                             :library:ARCHIVE:
 :PROPERTIES:
@@ -6968,6 +6973,10 @@ Interact with ChatGPT or other LLMs
     (:global "C-c p" #'gptel-send
              "<f12> a g" #'gptel
              "<f12> a C-g" #'gptel-abort)
+
+    (with-eval-after-load 'embark
+      (define-key embark-region-map "!" #'gptel-rewrite-menu))
+
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
