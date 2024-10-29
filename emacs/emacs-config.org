@@ -6370,6 +6370,18 @@ Client for Language Server Protocol (LSP) servers
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")))
 #+end_src
+*** eglot-booster
+:PROPERTIES:
+:CREATED_TIME: [2024-10-29 Tue 21:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package eglot-booster)
+    (:nixpkgs emacs-lsp-booster)
+    (:set eglot-booster-no-remote-boost t)
+    (with-eval-after-load 'eglot
+      (eglot-booster-mode)))
+#+end_src
 *** eldoc-eval                                               :Emacs:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 12:31]
