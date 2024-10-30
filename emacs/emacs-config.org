@@ -6985,6 +6985,9 @@ Interact with ChatGPT or other LLMs
 
 #+begin_src emacs-lisp
   (setup (:package gptel)
+    (:set gptel-crowdsourced-prompts-file
+          (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
+
     (:global "C-c p" #'gptel-send
              "<f12> a g" #'gptel
              "<f12> a C-g" #'gptel-abort)
