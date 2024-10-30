@@ -140,7 +140,7 @@ are displayed in the frame."
   (interactive "P")
   (pcase arg
     ('(64)
-     (if-let (buffers (seq-filter #'akirak-compile-buffer-p (buffer-list)))
+     (if-let* ((buffers (seq-filter #'akirak-compile-buffer-p (buffer-list))))
          (progn
            (switch-to-buffer (pop buffers))
            (delete-other-windows)
@@ -157,7 +157,7 @@ are displayed in the frame."
                                                                (get-buffer name-or-cell)))))))
        (pop-to-buffer buffer)))
     (_
-     (if-let (workspace (akirak-compile--workspace-root))
+     (if-let* ((workspace (akirak-compile--workspace-root)))
          (let* ((key (file-name-nondirectory (directory-file-name workspace)))
                 (history (gethash key akirak-compile-per-workspace-history
                                   :default))
@@ -200,7 +200,7 @@ are displayed in the frame."
             akirak-compile-command-backend-alist))
 
 (defun akirak-compile--root ()
-  (if-let (workspace (akirak-compile--workspace-root))
+  (if-let* ((workspace (akirak-compile--workspace-root)))
       (akirak-compile--find-projects workspace)
     (user-error "No workspace root")))
 
@@ -232,7 +232,7 @@ are displayed in the frame."
     (cl-labels
         ((search (dir)
            (dolist (file (directory-files dir))
-             (when-let (cell (assoc file akirak-compile-package-file-alist))
+             (when-let* ((cell (assoc file akirak-compile-package-file-alist)))
                (push (cons (cdr cell)
                            dir)
                      result)))
@@ -490,19 +490,19 @@ suitable value detected according to the command line."
 
 (defun akirak-compile-setup-auto-error-regexp (_)
   (set (make-local-variable 'compilation-error-regexp-alist) nil)
-  (when-let (command (car compilation-arguments))
+  (when-let* ((command (car compilation-arguments)))
     (akirak-compile-set-error-regexp-for-command command)
-    (when-let (search-path
-               (pcase command
-                 ((rx bol "mix" space)
-                  (when (file-directory-p "deps")
-                    (cons nil
-                          (mapcar (lambda (name) (concat "deps/" name))
-                                  (directory-files "deps" nil "^[[:alpha:]]")))))))
+    (when-let* ((search-path
+                 (pcase command
+                   ((rx bol "mix" space)
+                    (when (file-directory-p "deps")
+                      (cons nil
+                            (mapcar (lambda (name) (concat "deps/" name))
+                                    (directory-files "deps" nil "^[[:alpha:]]"))))))))
       (set (make-local-variable 'compilation-search-path) search-path))))
 
 (defun akirak-compile-set-error-regexp-for-command (command)
-  (if-let (alist (akirak-compile--error-regexp-alist-for-command command))
+  (if-let* ((alist (akirak-compile--error-regexp-alist-for-command command)))
       (setq-local compilation-error-regexp-alist alist)
     (setq-local compilation-error-regexp-alist akirak-compile-default-error-regexp-alist)
     (pcase command
@@ -607,7 +607,7 @@ suitable value detected according to the command line."
     (goto-char compilation-filter-start)
     (catch 'command-detected
       (while (re-search-forward (rx bol "> " (group (+ nonl))) nil t)
-        (when-let (alist (akirak-compile--error-regexp-alist-for-command (match-string 1)))
+        (when-let* ((alist (akirak-compile--error-regexp-alist-for-command (match-string 1))))
           (setq-local compilation-error-regexp-alist alist)
           (remove-hook 'compilation-filter-hook #'akirak-compile--npm-detecter :local)
           (throw 'command-detected t))))))

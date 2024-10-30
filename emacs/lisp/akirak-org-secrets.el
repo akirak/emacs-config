@@ -35,8 +35,8 @@
     (pop-to-buffer buffer)
     (run-with-timer expire nil
                     `(lambda ()
-                       (when-let (buffer (get-buffer ,(buffer-name buffer)))
-                         (if-let (window (get-buffer-window buffer))
+                       (when-let* ((buffer (get-buffer ,(buffer-name buffer))))
+                         (if-let* ((window (get-buffer-window buffer)))
                              (quit-window 'kill window)
                            (kill-buffer buffer)))))
     (message "Kill the buffer in %d sec." expire)))

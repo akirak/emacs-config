@@ -37,7 +37,7 @@ persistence, so a succeeding step should call
 (2) Remove duplicates from the projects."
   (dolist (dir (project-known-project-roots))
     (unless (file-exists-p dir)
-      (when-let (ent (assoc dir project--list))
+      (when-let* ((ent (assoc dir project--list)))
         (delq ent project--list))))
   (setq project--list (cl-remove-duplicates project--list :key #'car :test #'equal)))
 
@@ -93,7 +93,7 @@ display alternative actions."
                          (akirak-project-import-from-magit))
                        (akirak-prompt-project-root
                         "Switch to a project: "))))
-  (if-let (buffer (akirak-project--recent-file-buffer dir))
+  (if-let* ((buffer (akirak-project--recent-file-buffer dir)))
       (switch-to-buffer buffer)
     ;; If the visited directory is a non-primary Git working tree, its .git is a
     ;; symbolic link and not a directory. Thus you have to use `file-exists-p'
@@ -125,7 +125,7 @@ display alternative actions."
 ;;;###autoload
 (defun akirak-project-remember-this ()
   (interactive)
-  (when-let (pr (project-current))
+  (when-let* ((pr (project-current)))
     (project-remember-project pr)))
 
 (defun akirak-prompt-project-root (prompt)
@@ -146,7 +146,7 @@ display alternative actions."
 
 ;;;###autoload
 (defun akirak-project-root-annotator (root)
-  (when-let (language-alist (github-linguist-lookup root))
+  (when-let* ((language-alist (github-linguist-lookup root)))
     (cl-labels
         ((dim (str) (propertize str 'face 'font-lock-comment-face))
          (propertize-name (str) (propertize str 'face 'marginalia-string)) )
@@ -163,20 +163,20 @@ display alternative actions."
 (defun akirak-project-find-most-recent-file (dir)
   "Visit the most recent file in the project."
   (interactive "sProject: ")
-  (if-let (file (seq-find (lambda (file)
-                            (and (string-prefix-p dir file)
-                                 (not (equal file (buffer-file-name)))))
-                          recentf-list))
+  (if-let* ((file (seq-find (lambda (file)
+                              (and (string-prefix-p dir file)
+                                   (not (equal file (buffer-file-name)))))
+                            recentf-list)))
       (find-file file)
     (akirak-consult-project-file dir)))
 
 ;;;###autoload
 (defun akirak-project-switch-to-recent-buffer (dir)
   "Visit the most recent buffer in the project."
-  (interactive (list (if-let (pr (project-current))
+  (interactive (list (if-let* ((pr (project-current)))
                          (project-root pr)
                        (read-directory-name "Project: "))))
-  (if-let (buffer (akirak-project--recent-file-buffer dir :exclude-current-buffer t))
+  (if-let* ((buffer (akirak-project--recent-file-buffer dir :exclude-current-buffer t)))
       (pop-to-buffer-same-window buffer)
     (akirak-consult-project-file dir)))
 
@@ -186,7 +186,7 @@ display alternative actions."
     (thread-last
       (buffer-list)
       (seq-filter `(lambda (buffer)
-                     (when-let (file (buffer-file-name buffer))
+                     (when-let* ((file (buffer-file-name buffer)))
                        (and (string-prefix-p ,dir file)
                             ;; Exclude the current buffer to allow using the
                             ;; command for switching between recent two buffers
@@ -305,8 +305,8 @@ display alternative actions."
       (let ((cwd (abbreviate-file-name
                   (file-name-as-directory dir))))
         (while (not (equal cwd vc-root))
-          (when-let (s (cl-intersection files (directory-files cwd)
-                                        :test #'equal))
+          (when-let* ((s (cl-intersection files (directory-files cwd)
+                                          :test #'equal)))
             (throw 'package-root `(subdir ,cwd
                                           :package-file ,(car s)
                                           :vc-root ,vc-root)))

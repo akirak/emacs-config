@@ -20,8 +20,8 @@
   :type 'hook)
 
 (defmacro akirak-org-recur--with-agenda-entry (&rest progn)
-  `(when-let ((marker (or (org-get-at-bol 'org-marker)
-                          (org-get-at-bol 'org-hd-marker))))
+  `(when-let* (((marker (or (org-get-at-bol 'org-marker)
+                            (org-get-at-bol 'org-hd-marker)))))
      (with-current-buffer (marker-buffer marker)
        (goto-char marker)
        ,@progn)))

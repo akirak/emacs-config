@@ -33,7 +33,7 @@
          (names (mapcar #'akirak-snippet-entry-name entries)))
     (cl-labels
         ((annotator (name)
-           (when-let (entry (gethash name akirak-snippet-table))
+           (when-let* ((entry (gethash name akirak-snippet-table)))
              (let ((description (akirak-snippet-entry-description entry))
                    (olp (akirak-snippet--filter-olp (akirak-snippet-entry-olp entry))))
                (propertize (concat (when description
@@ -49,7 +49,7 @@
          (group-function (completion transform)
            (if transform
                completion
-             (when-let (entry (gethash completion akirak-snippet-table))
+             (when-let* ((entry (gethash completion akirak-snippet-table)))
                (file-name-nondirectory
                 (akirak-snippet-entry-filename entry)))))
          (completions (string pred action)
@@ -158,7 +158,7 @@
          (id (or (org-element-property :id element)
                  (when require-id
                    (org-id-get nil 'create))))
-         (name (or (when-let (name (plist-get args :name))
+         (name (or (when-let* ((name (plist-get args :name)))
                      (pcase name
                        ;; When 'literal is given as the :name property,
                        ;; the literal content will be used as the name.
@@ -198,7 +198,7 @@
 (defun akirak-snippet-try ()
   "Try out the snippet block at point."
   (interactive)
-  (when-let (entry (akirak-snippet--next-block))
+  (when-let* ((entry (akirak-snippet--next-block)))
     (with-current-buffer (get-buffer-create "*try snippet*")
       (erase-buffer)
       (pop-to-buffer (current-buffer))
@@ -300,9 +300,9 @@ template."
                                   :language original-language
                                   :value original-src)
                                  (org-ml-to-trimmed-string))))
-                        ,@(when-let
-                              (url (ignore-errors
-                                     (magit-git-string "config" "--local" "remote.origin.url")))
+                        ,@(when-let*
+                              ((url (ignore-errors
+                                      (magit-git-string "config" "--local" "remote.origin.url"))))
                             (list "Origin: " url)))))))))
     (add-hook 'org-capture-after-finalize-hook
               #'akirak-snippet--after-capture-finalize)
@@ -313,8 +313,8 @@ template."
                #'akirak-snippet--after-capture-finalize))
 
 (defun akirak-snippet-goto-section ()
-  (if-let (marker (ignore-errors
-                    (org-find-olp '("Snippets") t)))
+  (if-let* ((marker (ignore-errors
+                      (org-find-olp '("Snippets") t))))
       (org-goto-marker-or-bmk marker)
     (cond
      ((re-search-forward (rx bol "*" (+ blank) "Resources") nil t)

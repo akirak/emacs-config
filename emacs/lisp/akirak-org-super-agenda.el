@@ -20,14 +20,14 @@
   :keyword :auto-clock
   :key-form (org-super-agenda--when-with-marker-buffer (org-super-agenda--get-marker item)
               (ignore args)
-              (when-let (clock (when (save-excursion
-                                       (and (re-search-forward org-clock-line-re
-                                                               (org-entry-end-position)
-                                                               t)
-                                            (re-search-forward org-ts-regexp-inactive
-                                                               (pos-eol)
-                                                               t)))
-                                 (encode-time (parse-time-string (match-string 1)))))
+              (when-let* ((clock (when (save-excursion
+                                         (and (re-search-forward org-clock-line-re
+                                                                 (org-entry-end-position)
+                                                                 t)
+                                              (re-search-forward org-ts-regexp-inactive
+                                                                 (pos-eol)
+                                                                 t)))
+                                   (encode-time (parse-time-string (match-string 1))))))
                 (propertize (format-time-string org-super-agenda-date-format clock)
                             'org-super-agenda-clock clock)))
   :key-sort-fn (lambda (a b)

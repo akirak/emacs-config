@@ -150,7 +150,7 @@ I am interested to see if it can reduce the amount of configuration code.
      `(with-eval-after-load 'huan
         (let ((mode ',(setup-get 'mode))
               (entries ',entries))
-          (if-let (cell (assq mode huan-mode-symbols-alist))
+          (if-let* ((cell (assq mode huan-mode-symbols-alist)))
               (let ((sym (make-symbol "entries")))
                 (set sym (cdr cell))
                 (dolist (ent (reverse entries))
@@ -566,9 +566,9 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
                               (symbol-name (car record)))
                             #'string<))))
         (let ((this (bookmark-make-record)))
-          (when-let (record (seq-find (lambda (record)
+          (when-let* ((record (seq-find (lambda (record)
                                         (equal (remk record) (remk this)))
-                                      bookmark-alist))
+                                      bookmark-alist)))
             ;; TODO This seem to be ineffective on bookmarks created using org-bookmark-heading.
             (bookmark--remove-fringe-mark
              (bookmark-get-bookmark (car record) 'noerror))
@@ -1084,19 +1084,19 @@ The built-in =electric= package provides the following modes:
       (not (and (buffer-file-name)
                 ;; If not visiting a file in the same project, prefer other
                 ;; window.
-                (equal (when-let (pr (project-current nil
-                                                      default-directory))
+                (equal (when-let* ((pr (project-current nil
+                                                      default-directory)))
                          (project-root pr))
-                       (when-let (pr (project-current nil
+                       (when-let* ((pr (project-current nil
                                                       (if dirp
                                                           file
-                                                        (file-name-directory file))))
+                                                        (file-name-directory file)))))
                          (project-root pr))))))
 
     (:global "C-c f" (defun akirak/ffap (&optional arg)
                        (interactive "P")
-                       (if-let (window (and (numberp arg)
-                                            (akirak-window--other-window nil arg)))
+                       (if-let* ((window (and (numberp arg)
+                                              (akirak-window--other-window nil arg))))
                            (progn
                              (display-buffer-override-next-command
                               `(lambda (buffer _)
@@ -1823,8 +1823,8 @@ Operations on the current project
     (advice-add 'repeat-post-hook :after
                 (defun repeat-help--which-key-popup ()
                   (when (require 'which-key nil t)
-                    (if-let (keymap (or repeat-map
-                                        (repeat--command-property 'repeat-map)))
+                    (if-let* ((keymap (or repeat-map
+                                          (repeat--command-property 'repeat-map))))
                         (when (eq keymap 'diff-hl-command-map)
                           (run-at-time
                            which-key-idle-delay nil
@@ -2001,7 +2001,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
     (defun akirak/skeleton-pop-positions ()
       (interactive)
-      (when-let (n (pop akirak/skeleton-local-positions))
+      (when-let* ((n (pop akirak/skeleton-local-positions)))
         (forward-char n)
         (if akirak/skeleton-local-positions
             (message "Remaining %d positions" (length akirak/skeleton-local-positions))
@@ -2468,7 +2468,7 @@ You need to install the fonts separately.
       (pcase-dolist (`(,face ,family . ,plist) value)
         (if (or (member family families)
                 skip-check)
-            (if-let (fontset (plist-get plist :fontset))
+            (if-let* ((fontset (plist-get plist :fontset)))
                 (set-fontset-font fontset face family nil
                                   (plist-get plist :add))
               (set-face-attribute face nil :family family))
@@ -2507,7 +2507,7 @@ You need to install the fonts separately.
 
   (eval-after-load 'outline
     (defun akirak/set-outline-families ()
-      (when-let (family (cadr (assq 'variable-pitch akirak/font-family-alist)))
+      (when-let* ((family (cadr (assq 'variable-pitch akirak/font-family-alist))))
         (dolist (x '(outline-1
                      outline-2
                      outline-3
@@ -2670,7 +2670,7 @@ Org-Memento integration for oahu
     (:status personal
       (:set org-memento-agenda-files (lambda ()
                                        (require 'oahu-memento)
-                                       (when-let (context (oahu-memento-context))
+                                       (when-let* ((context (oahu-memento-context)))
                                          (apply #'oahu-org-files context))))
 
       (add-hook 'org-memento-block-before-exit-hook #'oahu-memento-save)
@@ -3182,7 +3182,7 @@ Outline-based notes management and organizer
                     (message "This function should be used only when \
   `org-src-window-setup' has a certain value"))
                   (when (alist-get :file (caddr (org-babel-get-src-block-info)))
-                    (if-let (pos (org-babel-where-is-src-block-result))
+                    (if-let* ((pos (org-babel-where-is-src-block-result)))
                         (goto-char pos)
                       (goto-char (org-element-end (org-element-at-point-no-context))))
                     (recenter-top-bottom 0))))
@@ -3410,7 +3410,7 @@ A programmable workflow layer for Org mode
                      t))
 
       (defun akirak/org-dog-auto-insert ()
-        (when-let (obj (org-dog-buffer-object))
+        (when-let* ((obj (org-dog-buffer-object)))
           (cl-typecase obj
             (org-dog-facade-datetree-file
              (skeleton-insert
@@ -3693,10 +3693,10 @@ Time blocking with Org
                   (or (buffer-base-buffer buffer)
                       (derived-mode-p 'special-mode
                                       'org-agenda-mode)))))
-        (if-let (buffers (thread-last
-                           (buffer-list)
-                           (seq-filter #'pred)
-                           (mapc #'akirak/kill-buffer-in-directory)))
+        (if-let* ((buffers (thread-last
+                             (buffer-list)
+                             (seq-filter #'pred)
+                             (mapc #'akirak/kill-buffer-in-directory))))
             (message "Killed %d indirect buffers" (length buffers))
           (message "No buffer to kill"))))
 
@@ -3865,7 +3865,7 @@ Utilities for in-file links
                        (org-dog-context-org-tags-1 (org-get-tags)))
                       (mapcar (lambda (obj)
                                 (oref obj absolute))))
-                    (when-let (filename (buffer-file-name (org-base-buffer (current-buffer))))
+                    (when-let* ((filename (buffer-file-name (org-base-buffer (current-buffer)))))
                       (thread-last
                         (org-dog-overview-scan (list (abbreviate-file-name filename))
                                                :clear t)
@@ -4395,7 +4395,7 @@ Major mode for the Go programming language
     (:hook (defun akirak/json-ts-setup ()
              (add-hook 'eldoc-documentation-functions
                        (defun akirak/json-ts-path-eldoc (cb)
-                         (when-let (points (cdr (ppss-open-parens (syntax-ppss))))
+                         (when-let* ((points (cdr (ppss-open-parens (syntax-ppss)))))
                            (funcall cb (mapconcat
                                         (lambda (pos)
                                           (let* ((node (treesit-node-parent
@@ -4787,7 +4787,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                          (string-remove-suffix "/")
                          (file-name-nondirectory)))
                       (`(Org ,x . ,_)
-                       (when-let (file (seq-find #'stringp x))
+                       (when-let* ((file (seq-find #'stringp x)))
                          (thread-last
                            (file-name-base file)
                            (string-remove-suffix "-dev"))))
@@ -5079,7 +5079,7 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (compilation-mode comint-mode)
                           display-buffer-use-some-window))))
-        (if-let (cell (assoc (car entry) display-buffer-alist))
+        (if-let* ((cell (assoc (car entry) display-buffer-alist)))
             (setcdr cell (cdr entry))
           (setq display-buffer-alist (append display-buffer-alist (list entry))))))
 
@@ -5617,7 +5617,7 @@ Consulting completing-read
 
     (:set consult-narrow-key "<"
           consult-project-root-function (defun akirak/consult-project-root ()
-                                          (when-let (project (project-current))
+                                          (when-let* ((project (project-current)))
                                             (project-root project))))
 
     (advice-add 'consult--buffer-action
@@ -5634,7 +5634,7 @@ Consulting completing-read
                                          (`(,_ . ,func)
                                           func)))))
                                 (with-current-buffer (generate-new-buffer buffer)
-                                  (when-let (mode (seq-some #'pred auto-mode-alist))
+                                  (when-let* ((mode (seq-some #'pred auto-mode-alist)))
                                     (set-auto-mode-0 mode))
                                   (current-buffer))))
                           (cdr args)))))
@@ -6807,7 +6807,7 @@ Emacs Minor mode to automatically commit and push
     (defun akirak/git-auto-commit-enable-for-project ()
       "Enable `git-auto-commit-mode' in the directory."
       (interactive)
-      (if-let (dir (abbreviate-file-name (project-root (project-current))))
+      (if-let* ((dir (abbreviate-file-name (project-root (project-current)))))
           (progn
             (customize-push-and-save 'akirak/git-auto-commit-directory-list
                                      (list dir))
@@ -6815,7 +6815,7 @@ Emacs Minor mode to automatically commit and push
                                             (current-time))
             (let ((expanded-dir (expand-file-name (file-name-as-directory dir))))
               (dolist (buffer (buffer-list))
-                (when-let (file (buffer-file-name buffer))
+                (when-let* ((file (buffer-file-name buffer)))
                   (when (string-prefix-p expanded-dir file)
                     (git-auto-commit-mode t))))))
         (user-error "No project")))
@@ -7005,7 +7005,7 @@ Interact with ChatGPT or other LLMs
       (gptel-make-anthropic "Claude"
         :stream t
         :header (lambda ()
-                  (when-let (key (gptel-api-key-from-auth-source "api.anthropic.com"))
+                  (when-let* ((key (gptel-api-key-from-auth-source "api.anthropic.com")))
                     `(("x-api-key" . ,key)
                       ("anthropic-version" . "2023-06-01"))))))
 
@@ -7393,7 +7393,7 @@ Use avy to open, copy, etc. visible links
                    (let ((file (expand-file-name file ,dir)))
                      (cl-flet
                          ((showing-the-file (w)
-                            (when-let (other-file (buffer-file-name (window-buffer w)))
+                            (when-let* ((other-file (buffer-file-name (window-buffer w))))
                               (file-equal-p file other-file))))
                        (let* ((currentw akirak/link-hint-current-window)
                               (window (or (and currentw
@@ -7685,8 +7685,8 @@ A Git porcelain inside Emacs
 
     (defun akirak/squasher-from-revision-at-point ()
       (interactive)
-      (if-let (commit (magit-rev-parse
-                       (magit-thing-at-point 'git-revision t)))
+      (if-let* ((commit (magit-rev-parse
+                         (magit-thing-at-point 'git-revision t))))
           (when (zerop (with-temp-buffer
                          (prog1 (call-process "squasher"
                                               nil t nil
@@ -7850,14 +7850,14 @@ Display modeline in minibuffer
 
     (defun akirak-mode-line-directory ()
       (let ((base (buffer-base-buffer)))
-        (if-let (filename (buffer-file-name base))
+        (if-let* ((filename (buffer-file-name base)))
             (if (and akirak/mode-line-directory-memo
                      (< (- (float-time) (car akirak/mode-line-directory-memo))
                         3))
                 (cdr akirak/mode-line-directory-memo)
               (let* ((dir (abbreviate-file-name (file-name-directory filename)))
-                     (value (concat (if-let (pr (when (require 'akirak-header-line nil t)
-                                                  (akirak-header-line--project)))
+                     (value (concat (if-let* ((pr (when (require 'akirak-header-line nil t)
+                                                    (akirak-header-line--project))))
                                         (let ((root (thread-last
                                                       (project-root pr)
                                                       (string-remove-suffix "/"))))
@@ -8336,8 +8336,8 @@ Summon and dismiss buffers as popups
                      (pop-to-buffer "*eww*"))
            "M-' c" (defun akirak/compilation-buffer (&optional arg)
                      (interactive "P")
-                     (if-let (buffer (and (not arg)
-                                          (get-buffer "*compilation*")))
+                     (if-let* ((buffer (and (not arg)
+                                            (get-buffer "*compilation*"))))
                          (pop-to-buffer buffer)
                        (project-compile)))))
 #+end_src
@@ -9255,8 +9255,8 @@ major mode for editing web templates
            [remap backward-up-list] #'web-mode-element-parent
            [remap forward-sexp] (defun akirak/web-mode-forward-tag-or-sexp ()
                                   (interactive)
-                                  (if-let (tag-end (and (looking-at "<")
-                                                        (web-mode-tag-end-position)))
+                                  (if-let* ((tag-end (and (looking-at "<")
+                                                          (web-mode-tag-end-position))))
                                       (goto-char (1+ tag-end))
                                     (forward-sexp))))
 
@@ -9425,7 +9425,7 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I install ~zig-mode~ for build comma
 
     (defun akirak/gleam-browse-docs ()
       (interactive)
-      (if-let (root (locate-dominating-file default-directory "gleam.toml"))
+      (if-let* ((root (locate-dominating-file default-directory "gleam.toml")))
           (let* ((dir (expand-file-name "build/dev/docs/" root))
                  (subdirs (if (file-directory-p dir)
                               (directory-files dir t "^[[:alpha:]]")
@@ -9444,10 +9444,10 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I install ~zig-mode~ for build comma
 
     (defun akirak/gleam-shell ()
       (interactive)
-      (if-let (root (locate-dominating-file default-directory "gleam.toml"))
+      (if-let* ((root (locate-dominating-file default-directory "gleam.toml")))
           (akirak-shell-exec-in-project
-           '("gleam" "shell")
-           :root root :name "gleam-shell")
+              '("gleam" "shell")
+            :root root :name "gleam-shell")
         (user-error "Not in a Gleam project"))))
 #+end_src
 *** Haskell
@@ -9475,7 +9475,7 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I install ~zig-mode~ for build comma
 
     (defun akirak/iex-dwim ()
       (interactive)
-      (if-let (root (locate-dominating-file default-directory "mix.exs"))
+      (if-let* ((root (locate-dominating-file default-directory "mix.exs")))
           (akirak-shell-exec-in-project '("iex" "-S" "mix")
             :root root)
         (akirak-shell-exec-in-project "iex"))))
@@ -9541,7 +9541,7 @@ Define how Org entries are displayed by certain commands.
               (when-let* ((buffer (window-buffer (selected-window)))
                           (marker (and (eq 'org-mode (buffer-local-value 'major-mode buffer))
                                        (or (looking-at org-heading-regexp)
-                                           (when-let (uri (cadr (get-char-property (point) 'htmlize-link)))
+                                           (when-let* ((uri (cadr (get-char-property (point) 'htmlize-link))))
                                              (string-match-p "^id:" uri)))
                                        (not (and (thing-at-point-looking-at org-link-any-re)
                                                  (match-string 1)))

@@ -40,7 +40,7 @@ the returned value to memorize the result."
                         (or (when (akirak-wsl-p)
                               (or (executable-find "wslview")
                                   (executable-find "wsl-open")))
-                            (when-let (exe (executable-find "handlr"))
+                            (when-let* ((exe (executable-find "handlr")))
                               (list exe "open"))
                             (executable-find "xdg-open")
                             (error "No program for running the default handler")))))))

@@ -18,7 +18,7 @@
          (start (ppss-innermost-start ppss))
          (end (save-excursion
                 (goto-char start)
-                (if-let (close (matching-paren (char-after)))
+                (if-let* ((close (matching-paren (char-after))))
                     ;; This can produce a wrong result, but it seems to work
                     ;; in most cases
                     (search-forward (char-to-string close) nil t)
@@ -55,7 +55,7 @@
                   ;; forward-sexp may fail due to unmatching tags in JSX, so
                   ;; work around it
                   (error
-                   (if-let (close (matching-paren (char-after)))
+                   (if-let* ((close (matching-paren (char-after))))
                        ;; This can produce a wrong result, but it seems to work
                        ;; in most cases
                        (search-forward (char-to-string close) nil t)

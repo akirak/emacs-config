@@ -108,7 +108,7 @@
                      " "
                      (or (cdr (assq 'TYPE props))
                          (cdr (assq 'PARTLABEL props)))
-                     (when-let (label (cdr (assq 'LABEL props)))
+                     (when-let* ((label (cdr (assq 'LABEL props))))
                        (format " \"%s\"" label)))))
          (describe-disk (device)
            (let* ((info (cdr (assoc device fdisk-disks)))
@@ -123,14 +123,14 @@
          (group (candidate transform)
            (if transform
                candidate
-             (when-let (group (save-match-data
-                                (pcase candidate
-                                  ((rx bol "/dev/mapper/")
-                                   "dm")
-                                  ((rx bol (group "/dev/nvme" (+ anything)) "p" (+ digit) eol)
-                                   (match-string 1 candidate))
-                                  ((rx bol (group "/dev/" (+ anything)) (+ digit) eol)
-                                   (match-string 1 candidate)))))
+             (when-let* ((group (save-match-data
+                                  (pcase candidate
+                                    ((rx bol "/dev/mapper/")
+                                     "dm")
+                                    ((rx bol (group "/dev/nvme" (+ anything)) "p" (+ digit) eol)
+                                     (match-string 1 candidate))
+                                    ((rx bol (group "/dev/" (+ anything)) (+ digit) eol)
+                                     (match-string 1 candidate))))))
                (concat group (describe-disk group)))))
          (completions (string pred action)
            (if (eq action 'metadata)

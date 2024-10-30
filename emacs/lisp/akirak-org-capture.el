@@ -138,10 +138,10 @@ Finally, you can specify LEVEL, but you have to set the type of the to plain."
                               (when deadline
                                 (concat "DEADLINE: " (format-ts deadline nil)))))
               (make-planning))
-            (if-let (properties (if log-time
-                                    (cons '("CREATED_TIME" . "%U")
-                                          properties)
-                                  properties))
+            (if-let* ((properties (if log-time
+                                      (cons '("CREATED_TIME" . "%U")
+                                            properties)
+                                    properties)))
 
                 (concat ":PROPERTIES:\n"
                         (mapconcat (pcase-lambda (`(,key . ,value))
@@ -215,7 +215,7 @@ Finally, you can specify LEVEL, but you have to set the type of the to plain."
   (declare (indent 1))
   (prog1 org-capture-templates
     (pcase-dolist (`(,key . ,args) templates)
-      (if-let (cell (assoc key org-capture-templates))
+      (if-let* ((cell (assoc key org-capture-templates)))
           (setcdr cell args)
         (add-to-list 'org-capture-templates
                      (cons key args)

@@ -44,7 +44,7 @@
 ;;;###autoload
 (defun akirak-consult-org-heading-target (_type olp)
   (require 'akirak-embark)
-  (when-let (marker (get-char-property 0 'org-marker olp))
+  (when-let* ((marker (get-char-property 0 'org-marker olp)))
     (akirak-embark-make-org-heading-target marker)))
 
 (defun consult-org-clock--headings ()

@@ -9,7 +9,7 @@
   (lambda (start-date end-date)
     (concat (format "[[org-memento:timeline?span=week&date=%s,%s]]\n\n"
                     start-date end-date)
-            (format (if-let (marker (akirak-org-log--find-latest-week-entry))
+            (format (if-let* ((marker (akirak-org-log--find-latest-week-entry)))
                         (org-with-point-at marker
                           (concat (org-link-make-string (concat "id:" (org-id-get-create))
                                                         "Last week")
@@ -48,7 +48,7 @@
   (interactive "P")
   (if arg
       (call-interactively #'akirak-org-log-insert-new-week-entry)
-    (when-let (marker (akirak-org-log--find-latest-week-entry))
+    (when-let* ((marker (akirak-org-log--find-latest-week-entry)))
       (org-goto-marker-or-bmk marker)
       ;; TODO: Don't depend on org-ql-find
       (run-hooks 'org-ql-find-goto-hook))))

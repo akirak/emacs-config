@@ -87,10 +87,10 @@
 (defun akirak-url--clean (url)
   "Remove undesired parameters from URL, if any."
   (save-match-data
-    (if-let (start (string-match (rx (group (any "?&"))
-                                     (group "utm_source=" (+ (not (any "&"))))
-                                     (group (? "&")))
-                                 url))
+    (if-let* ((start (string-match (rx (group (any "?&"))
+                                       (group "utm_source=" (+ (not (any "&"))))
+                                       (group (? "&")))
+                                   url)))
         (concat (substring url 0 start)
                 (if (equal (match-string 3 url) "&")
                     (concat (match-string 1 url)
@@ -128,8 +128,8 @@
     (catch 'finish
       (while (and (< i len)
                   (< n (or max akirak-url-max-recent-items)))
-        (if-let (k (current-kill i t))
-            (when-let (url (akirak-url--match-html-string k))
+        (if-let* ((k (current-kill i t)))
+            (when-let* ((url (akirak-url--match-html-string k)))
               (unless (member url result)
                 (push (akirak-url--clean (substring-no-properties url))
                       result)
@@ -220,8 +220,8 @@ This is only supported in `org-mode' at present."
 
 (defun akirak-url-latest (&optional do-not-move)
   "Pick the latest URL from the clipboard."
-  (or (when-let (str (akirak-url--match-html-string
-                      (current-kill 0 do-not-move)))
+  (or (when-let* ((str (akirak-url--match-html-string
+                        (current-kill 0 do-not-move))))
         (akirak-url--clean str))
       (car (akirak-url--recent-kills 1))))
 

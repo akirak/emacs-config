@@ -40,7 +40,7 @@
 ;;;###autoload
 (defun akirak-window-display-buffer-prefer-other-pane (buffer &rest args)
   "Display BUFFER in another pane in the current frame, if possible."
-  (if-let (windows (akirak-window--find-other-panes))
+  (if-let* ((windows (akirak-window--find-other-panes)))
       (set-window-buffer (car windows) buffer)
     (display-buffer buffer args)))
 
@@ -88,8 +88,8 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 
 ;;;###autoload
 (defun akirak-window-display-buffer-split-1 (buffer &optional alist)
-  (if-let (window (or (window-in-direction 'below)
-                      (window-in-direction 'above)))
+  (if-let* ((window (or (window-in-direction 'below)
+                      (window-in-direction 'above))))
       (window--display-buffer buffer window 'reuse alist)
     (when (> (window-height) (* 2 20))
       (window--display-buffer buffer (split-window-below) 'window alist))))
@@ -101,11 +101,11 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
         (windows (thread-last
                    (window-list-1 nil 'never)
                    (seq-sort-by #'window-height #'>))))
-    (if-let (mode-window (seq-find (apply-partially #'akirak-window-one-of-modes-p
-                                                    (cdr alist-mode-entry))
-                                   windows))
+    (if-let* ((mode-window (seq-find (apply-partially #'akirak-window-one-of-modes-p
+                                                      (cdr alist-mode-entry))
+                                     windows)))
         (window--display-buffer buffer mode-window 'reuse)
-      (if-let (other-window (car (delete (selected-window) windows)))
+      (if-let* ((other-window (car (delete (selected-window) windows))))
           (window--display-buffer buffer other-window 'reuse)
         (display-buffer buffer alist)))))
 
@@ -117,8 +117,8 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
   (let ((other-windows (thread-last
                          (window-list-1 nil 'never)
                          (delete (selected-window)))))
-    (if-let (w1 (car (cl-remove-if #'akirak-window--org-capture-window-p
-                                   other-windows)))
+    (if-let* ((w1 (car (cl-remove-if #'akirak-window--org-capture-window-p
+                                     other-windows))))
         (window--display-buffer buffer w1 'reuse)
       (when other-windows
         (window--display-buffer buffer (car other-windows) 'reuse)))))
@@ -155,14 +155,14 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
   (when (string-match-p akirak-window-org-occur-buffer-regexp (buffer-name buffer))
     (if (string-match-p akirak-window-org-occur-buffer-regexp (buffer-name (window-buffer)))
         (window--display-buffer buffer (selected-window) 'reuse)
-      (if-let (existing-window (thread-last
-                                 (window-list-1 nil 'never)
-                                 (seq-filter (lambda (w)
-                                               (string-match-p akirak-window-org-occur-buffer-regexp
-                                                               (buffer-name (window-buffer w)))))
-                                 (car)))
+      (if-let* ((existing-window (thread-last
+                                   (window-list-1 nil 'never)
+                                   (seq-filter (lambda (w)
+                                                 (string-match-p akirak-window-org-occur-buffer-regexp
+                                                                 (buffer-name (window-buffer w)))))
+                                   (car))))
           (window--display-buffer buffer existing-window 'reuse)
-        (when-let (below-window (window-in-direction 'below))
+        (when-let* ((below-window (window-in-direction 'below)))
           (window--display-buffer buffer below-window 'reuse))))))
 
 ;;;###autoload
@@ -187,17 +187,17 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
              (not (and not-this-window
                        (eq window (selected-window)))))
         (window--display-buffer buffer window 'reuse alist)
-      (when-let ((panes (akirak-window--find-other-panes)))
-        (when-let (buffer-to-hide
-                   (thread-last
-                     panes
-                     (mapcar #'window-buffer)
-                     (akirak-window--similar-buffers buffer)
-                     ;; Prefer the least recently displayed buffer.
-                     (seq-sort-by (lambda (other-buffer)
-                                    (float-time (buffer-local-value 'buffer-display-time other-buffer)))
-                                  #'>)
-                     (car)))
+      (when-let* ((panes (akirak-window--find-other-panes)))
+        (when-let* ((buffer-to-hide
+                     (thread-last
+                       panes
+                       (mapcar #'window-buffer)
+                       (akirak-window--similar-buffers buffer)
+                       ;; Prefer the least recently displayed buffer.
+                       (seq-sort-by (lambda (other-buffer)
+                                      (float-time (buffer-local-value 'buffer-display-time other-buffer)))
+                                    #'>)
+                       (car))))
           (window--display-buffer buffer
                                   (cl-find-if `(lambda (window)
                                                  (equal ,buffer-to-hide (window-buffer window)))
@@ -276,7 +276,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
        (delete-window)
        (balance-windows)))
     (_
-     (if-let (window (akirak-window-split--aggressively))
+     (if-let* ((window (akirak-window-split--aggressively)))
          (progn
            (select-window window)
            (balance-windows))
@@ -393,20 +393,20 @@ focus on the same buffer."
    ((and (not arg)
          (akirak-window-select-most-recently-displayed)))
    (t
-    (when-let (window (akirak-window--other-window nil arg t))
+    (when-let* ((window (akirak-window--other-window nil arg t)))
       (select-window window)))))
 
 ;;;###autoload
 (defun akirak-window-select-most-recently-displayed ()
   (interactive)
-  (when-let (w (thread-last
-                 (window-list)
-                 (cl-remove-if-not #'window-live-p)
-                 (cl-remove (selected-window))
-                 (seq-sort-by #'akirak-window--display-time
-                              (lambda (a b)
-                                (not (time-less-p a b))))
-                 (car)))
+  (when-let* ((w (thread-last
+                   (window-list)
+                   (cl-remove-if-not #'window-live-p)
+                   (cl-remove (selected-window))
+                   (seq-sort-by #'akirak-window--display-time
+                                (lambda (a b)
+                                  (not (time-less-p a b))))
+                   (car))))
     (select-window w)))
 
 (defun akirak-window--display-time (window)
@@ -437,7 +437,7 @@ The target window is determined according to the same logic as
 `akirak-window-cycle-two-windows'."
   (interactive "P")
   (let ((initial-window (selected-window)))
-    (when-let (window (akirak-window--other-window nil arg))
+    (when-let* ((window (akirak-window--other-window nil arg)))
       (window-swap-states window (selected-window))
       (select-window initial-window))))
 
@@ -481,7 +481,7 @@ The target window is determined according to the same logic as
    (t
     (cl-macrolet
         ((try-window (exp)
-           `(when-let (target ,exp)
+           `(when-let* ((target ,exp))
               (unless (akirak-window--popup-p target)
                 target))))
       (or (try-window (window-in-direction 'above window))

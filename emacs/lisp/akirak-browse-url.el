@@ -13,12 +13,12 @@
 (defun akirak-browse-url--xwidget (url &optional arg)
   ;; This is basically what `xwidget-webkit-goto-url' does, but reuse the
   ;; existing window if it is inside the same frame..
-  (if-let (session (unless arg
-                     (xwidget-webkit-current-session)))
+  (if-let* ((session (unless arg
+                       (xwidget-webkit-current-session))))
       (progn
         (xwidget-webkit-goto-uri session url)
         (let ((buffer (xwidget-buffer (xwidget-webkit-current-session))))
-          (if-let (window (get-buffer-window buffer))
+          (if-let* ((window (get-buffer-window buffer)))
               (select-window window)
             ;; If you have any preference over window management, you
             (pop-to-buffer buffer))))

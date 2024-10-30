@@ -17,7 +17,7 @@
 (defun akirak-burly-clock-pop ()
   "Restore the latest window configuration for the clock and delete it."
   (interactive)
-  (if-let (entry (assoc (akirak-burly--clock-id) akirak-burly-clock-data))
+  (if-let* ((entry (assoc (akirak-burly--clock-id) akirak-burly-clock-data)))
       (pcase-exhaustive entry
         (`(,_ ,_ ,url)
          (delete entry akirak-burly-clock-data)

@@ -87,13 +87,13 @@
   (let ((start (point)))
     (cl-labels
         ((pred (x)
-           (when-let (child (cadr (treesit-node-children x)))
+           (when-let* ((child (cadr (treesit-node-children x))))
              (when (> (treesit-node-start child)
                       start)
                child)))
          (go (node)
            (let ((nodes (treesit-node-children (treesit-node-parent node))))
-             (if-let (child (seq-some #'pred nodes))
+             (if-let* ((child (seq-some #'pred nodes)))
                  (goto-char (treesit-node-start child))
                (go (treesit-node-parent node))))))
       (go (treesit-node-at (point))))))
@@ -133,10 +133,10 @@
                                (treesit-node-children parent)))
           ((and `(,self . ,siblings)
                 (guard siblings))
-           (when-let (dest (seq-find `(lambda (x)
-                                        (equal (treesit-node-type x)
-                                               ,(treesit-node-type self)))
-                                     siblings))
+           (when-let* ((dest (seq-find `(lambda (x)
+                                          (equal (treesit-node-type x)
+                                                 ,(treesit-node-type self)))
+                                       siblings)))
              (goto-char (treesit-node-start dest))
              (throw 'jumped t))))
         (setq node parent)))))
@@ -231,7 +231,7 @@
                         (throw 'stop t))
                       (setq node parent)))
                   (if parent
-                      (if-let (end-node (akirak-treesit--find-last-node node parent bound))
+                      (if-let* ((end-node (akirak-treesit--find-last-node node parent bound)))
                           (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end end-node)))
                         ;; No node to delete, fallback to the default behavior
                         (kill-line))
@@ -241,9 +241,9 @@
               (setq parent (treesit-node-parent node))
               (while (not (node-at-point-p parent))
                 (setq parent (treesit-node-parent parent)))
-              (if-let (node (seq-find `(lambda (node)
-                                         (> (treesit-node-start node) ,(point)))
-                                      (treesit-node-children parent)))
+              (if-let* ((node (seq-find `(lambda (node)
+                                           (> (treesit-node-start node) ,(point)))
+                                        (treesit-node-children parent))))
                   (kill-region (point) (treesit-node-start node))
                 (kill-region (point) (treesit-node-end parent)))))))))
 
@@ -255,7 +255,7 @@
          (delete-region (point) (min (1- (treesit-node-end node))
                                      (line-end-position))))))
     (_
-     (when-let (string-start (ppss-comment-or-string-start (syntax-ppss)))
+     (when-let* ((string-start (ppss-comment-or-string-start (syntax-ppss))))
        (akirak-treesit--kill-line-inside-string string-start)
        t))))
 
@@ -309,11 +309,11 @@
       (point))))
 
 (defun akirak-treesit--find-last-node (start-node parent bound)
-  (when-let (nodes (thread-last
-                     (cl-member start-node (treesit-node-children parent)
-                                :test #'treesit-node-eq)
-                     (seq-take-while `(lambda (x)
-                                        (< (treesit-node-start x) ,bound)))))
+  (when-let* ((nodes (thread-last
+                       (cl-member start-node (treesit-node-children parent)
+                                  :test #'treesit-node-eq)
+                       (seq-take-while `(lambda (x)
+                                          (< (treesit-node-start x) ,bound))))))
     (car (last nodes (when (or (memq (char-after (1- (treesit-node-end parent)))
                                      (string-to-list "\"'>"))
                                (save-excursion
@@ -343,18 +343,18 @@ This is primarily intended for editing JSX/TSX."
 ;;;###autoload
 (defun akirak-treesit-jsx-close-tag ()
   (interactive)
-  (if-let (open-tag (save-excursion
-                      (catch 'jsx-open-tag
-                        (let ((bound (point)))
-                          (while (search-backward "<" nil t)
-                            (let ((node (thread-last
-                                          (treesit-node-at (point))
-                                          (treesit-node-parent))))
-                              (when (and (equal (treesit-node-type node)
-                                                "jsx_opening_element")
-                                         (> (treesit-node-end (treesit-node-parent node))
-                                            bound))
-                                (throw 'jsx-open-tag node))))))))
+  (if-let* ((open-tag (save-excursion
+                        (catch 'jsx-open-tag
+                          (let ((bound (point)))
+                            (while (search-backward "<" nil t)
+                              (let ((node (thread-last
+                                            (treesit-node-at (point))
+                                            (treesit-node-parent))))
+                                (when (and (equal (treesit-node-type node)
+                                                  "jsx_opening_element")
+                                           (> (treesit-node-end (treesit-node-parent node))
+                                              bound))
+                                  (throw 'jsx-open-tag node)))))))))
       (pcase-exhaustive (treesit-node-children open-tag)
         ((and `(,_ ,identifier ,_ . ,_)
               (guard (equal (treesit-node-type identifier)
@@ -420,9 +420,9 @@ This is primarily intended for editing JSX/TSX."
     (0
      (treesit-fold-close-all))
     (1
-     (when-let (ov (seq-find (lambda (ov)
-                               (eq 'treesit-fold (overlay-get ov 'invisible)))
-                             (overlays-in (point) (point-max))))
+     (when-let* ((ov (seq-find (lambda (ov)
+                                 (eq 'treesit-fold (overlay-get ov 'invisible)))
+                               (overlays-in (point) (point-max)))))
        (goto-char (overlay-start ov))
        (treesit-fold-open)))
     (`(4)

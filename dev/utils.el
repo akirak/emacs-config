@@ -100,7 +100,7 @@ entries are visible."
            (message description)
            (insert "#+begin_quote\n"
                    description)
-           (when-let (homepage (cdr (assq 'homepage meta)))
+           (when-let* ((homepage (cdr (assq 'homepage meta))))
              (insert "\n" (org-link-make-string homepage)))
            (insert "\n#+end_quote\n")
            (when (looking-at (rx (+ space)))

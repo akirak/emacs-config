@@ -38,7 +38,7 @@
       value)))
 
 (cl-defmethod transient-format-value ((obj akirak-transient-number-variable))
-  (if-let (value (oref obj value))
+  (if-let* ((value (oref obj value)))
       (concat
        (propertize "(" 'face 'transient-inactive-value)
        (propertize (format "%d" value) 'face 'transient-value)
@@ -109,7 +109,7 @@ the initial value in minibuffer input."
       value)))
 
 (cl-defmethod transient-format-value ((obj akirak-transient-string-variable))
-  (if-let (value (oref obj value))
+  (if-let* ((value (oref obj value)))
       (concat
        (propertize "(" 'face 'transient-inactive-value)
        (propertize value 'face 'transient-value)

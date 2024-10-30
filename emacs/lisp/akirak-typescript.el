@@ -16,7 +16,7 @@ This function actually jumps to the beginning of a toplevel.
 If ARG is non-nil and the function is called inside a function in
 a class, it jumps to the beginning of the function."
   (let* ((ppss (syntax-ppss))
-         (outermost (when-let (toplevel (syntax-ppss-toplevel-pos ppss))
+         (outermost (when-let* ((toplevel (syntax-ppss-toplevel-pos ppss)))
                       (save-excursion
                         (goto-char toplevel)
                         (beginning-of-line 1)

@@ -151,7 +151,7 @@
                 (equal (car item) identifier))))
        (check-alist (alist)
          (seq-some #'predicate alist)))
-    (when-let (buffer (find-buffer-visiting file))
+    (when-let* ((buffer (find-buffer-visiting file)))
       (let ((index (buffer-local-value 'imenu--index-alist buffer)))
         (if index
             (check-alist index)

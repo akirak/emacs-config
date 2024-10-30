@@ -146,7 +146,7 @@
   (let* ((url akirak-capture-current-url)
          (clean-url (orgabilize--url-for-link url)))
     (if akirak-capture-include-url-fragment
-        (if-let (fragment (orgabilize-document-fragment url))
+        (if-let* ((fragment (orgabilize-document-fragment url)))
             (orgabilize-document-fragment-title clean-url fragment)
           (orgabilize-document-title clean-url))
       (orgabilize-document-title clean-url))))
@@ -784,7 +784,7 @@
             (delete-blank-lines)))
         (newline)
         (insert block-text))
-      (when-let (window (get-buffer-window buffer))
+      (when-let* ((window (get-buffer-window buffer)))
         (with-selected-window window
           (unless (looking-at org-heading-regexp)
             (goto-char (org-entry-end-position))))))))
@@ -837,11 +837,11 @@
   (akirak-org-clock-require-clock
     (with-current-buffer (akirak-org-clock-open)
       (let ((node (org-element-context)))
-        (when-let (h (catch 'headline
-                       (while node
-                         (when (eq (org-element-type node) 'headline)
-                           (throw 'headline node))
-                         (setq node (org-element-parent node)))))
+        (when-let* ((h (catch 'headline
+                         (while node
+                           (when (eq (org-element-type node) 'headline)
+                             (throw 'headline node))
+                           (setq node (org-element-parent node))))))
           (list :level (org-element-property :level h)
                 :title (org-element-property :title h)))))))
 
@@ -854,7 +854,7 @@
                     (newline))
                   (insert (make-string level ?\*) " " heading)
                   (point))))
-      (when-let (window (get-buffer-window buffer))
+      (when-let* ((window (get-buffer-window buffer)))
         (with-selected-window window
           (goto-char pos))))))
 
@@ -1118,7 +1118,7 @@
                                       text))))
         (if (string-match-p org-link-bracket-re input)
             (org-link-open-from-string input)
-          (if-let (marker (akirak-capture--find-heading file input))
+          (if-let* ((marker (akirak-capture--find-heading file input)))
               (org-goto-marker-or-bmk marker)
             ;; Depends on an experimental feature of org-super-links.
             (let* ((org-super-links-backlink-into-drawer "VOCABULARY")
@@ -1324,7 +1324,7 @@ provided as a separate command for integration, e.g. with embark."
          (end-string (concat "#+end_" body-type)))
     (concat start-string "\n"
             (or content
-                (when-let (region-source (akirak-capture--region-text))
+                (when-let* ((region-source (akirak-capture--region-text)))
                   (if (equal body-type "quote")
                       (akirak-capture--to-org region-source)
                     ;; Newlines are significant in most of the block types, so
@@ -1602,7 +1602,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
     (org-dog-file-tags obj)))
 
 (cl-defun akirak-capture-git-properties (obj &key tags)
-  (when-let (root (vc-git-root default-directory))
+  (when-let* ((root (vc-git-root default-directory)))
     (when (or (member "@contribution" tags)
               (string-prefix-p "projects/" (oref obj relative))
               ;; Prevent mistakenly logging private projects
@@ -1643,7 +1643,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                   (point-marker)))
                           nil 'tree))))
          (input (completing-read "Parent: " candidates)))
-    (if-let (marker (cdr (assoc input candidates)))
+    (if-let* ((marker (cdr (assoc input candidates))))
         (org-goto-marker-or-bmk marker)
       (find-file file)
       (widen)

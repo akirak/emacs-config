@@ -116,7 +116,7 @@
           :enabled ,(lambda () consult-project-function)
           :items
           ,(lambda ()
-             (when-let (root (akirak-consult--project-root))
+             (when-let* ((root (akirak-consult--project-root)))
                (let ((len (length root)))
                  (thread-last
                    (consult--buffer-query :sort 'visibility
@@ -130,7 +130,7 @@
 (defvar akirak-consult--project-files-cache nil)
 
 (defun akirak-consult--project-files (&optional prepend-root)
-  (when-let (default-directory (akirak-consult--project-root))
+  (when-let* ((default-directory (akirak-consult--project-root)))
     (if-let* ((cache (and akirak-consult--project-files-cache
                           (assoc default-directory akirak-consult--project-files-cache)))
               (file-list (if (equal (ignore-errors
@@ -213,10 +213,10 @@
   (if transformer
       (funcall transformer
                orig-result
-               (when-let (file (thread-last
-                                 (minibuffer-selected-window)
-                                 (window-buffer)
-                                 (buffer-file-name)))
+               (when-let* ((file (thread-last
+                                   (minibuffer-selected-window)
+                                   (window-buffer)
+                                   (buffer-file-name))))
                  (file-relative-name file (akirak-consult--project-root))))
     orig-result))
 
@@ -267,7 +267,7 @@
                (thread-last
                  bookmark-alist
                  (seq-filter `(lambda (bmk)
-                                (when-let (filename (bookmark-get-filename bmk))
+                                (when-let* ((filename (bookmark-get-filename bmk)))
                                   (string-prefix-p ,abbr-root filename))))
                  (mapcar 'bookmark-name-from-full-record))))))
 
@@ -332,7 +332,7 @@
        :regexp (rx ".nix" eol))))
 
 (defun akirak-consult--project-root ()
-  (if-let (pr (project-current))
+  (if-let* ((pr (project-current)))
       (expand-file-name (akirak-project-top-root pr))
     ;; TODO: Better heuristics
     (when (string-match-p (rx bol (repeat 3 (and "/" (+ anything))) "/")
@@ -390,16 +390,16 @@
     ((rx "/" (group (+ (not (any "/"))))
          "/" (+ (not (any "/")))
          "/mod.rs" eol)
-     (if-let (file (akirak-consult--find-intersection-element
-                    (list (concat (substring this-file 0 (match-end 1))
-                                  "/mod.rs")
-                          (concat (substring this-file 0 (match-beginning 0))
-                                  "/" (match-string 1 this-file) ".rs")
-                          (concat (substring this-file 0 (match-end 1))
-                                  "/lib.rs")
-                          (concat (substring this-file 0 (match-end 1))
-                                  "/main.rs"))
-                    files))
+     (if-let* ((file (akirak-consult--find-intersection-element
+                      (list (concat (substring this-file 0 (match-end 1))
+                                    "/mod.rs")
+                            (concat (substring this-file 0 (match-beginning 0))
+                                    "/" (match-string 1 this-file) ".rs")
+                            (concat (substring this-file 0 (match-end 1))
+                                    "/lib.rs")
+                            (concat (substring this-file 0 (match-end 1))
+                                    "/main.rs"))
+                      files)))
          (cons file (cl-remove file files :test #'equal))
        (cl-flet
            ((pred (file)
@@ -443,11 +443,11 @@
     ((rx "/" (+ (not (any "/")))
          "/index." (+ (not (any "./"))) eol)
      (let ((dir (substring this-file 0 (match-beginning 0))))
-       (if-let (file (seq-find (lambda (file)
-                                 (string-match-p (rx-to-string
-                                                  `(and ,dir "/index." (+ (not (any "./"))) eol))
-                                                 file))
-                               files))
+       (if-let* ((file (seq-find (lambda (file)
+                                   (string-match-p (rx-to-string
+                                                    `(and ,dir "/index." (+ (not (any "./"))) eol))
+                                                   file))
+                                 files)))
            (cons file (cl-remove file files :test #'equal))
          (cl-flet
              ((pred (file)
@@ -496,14 +496,14 @@
     (append preceding-files
             (seq-difference files preceding-files #'equal)))
    (predicate
-    (if-let (file (seq-find predicate files))
+    (if-let* ((file (seq-find predicate files)))
         (cons file (cl-remove file files :test #'equal))
       files))))
 
 ;; Based on `consult-buffer'.
 ;;;###autoload
 (defun akirak-consult-project-file (dir)
-  (interactive (list (if-let (pr (project-current))
+  (interactive (list (if-let* ((pr (project-current)))
                          (akirak-project-top-root pr)
                        default-directory)))
   ;; `default-directory' can be abbreviated (e.g. in dired-mode), so it is safer
@@ -556,7 +556,7 @@ FILE should be a relative path from the repository root."
   (require 'magit)
   (magit-with-toplevel
     (magit-run-git "checkout" "HEAD" "--" file)
-    (when-let (buffer (find-buffer-visiting file))
+    (when-let* ((buffer (find-buffer-visiting file)))
       (with-current-buffer buffer
         (revert-buffer-quick)))))
 

@@ -87,7 +87,7 @@
      ((and val (not (numberp val)))
       val)
      (t
-      (if-let (pr (project-current))
+      (if-let* ((pr (project-current)))
           (setq akirak-header-line--project pr)
         (setq akirak-header-line--project (float-time))
         nil)))))

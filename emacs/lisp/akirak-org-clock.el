@@ -79,9 +79,9 @@ Example values are shown below:
 
 (defadvice save-buffer (around akirak-org-clock activate)
   (require 'akirak-emacs-org)
-  (when-let (filename (if-let (base (buffer-base-buffer))
-                          (buffer-file-name base)
-                        buffer-file-name))
+  (when-let* ((filename (if-let* ((base (buffer-base-buffer)))
+                            (buffer-file-name base)
+                          buffer-file-name)))
     (when (or (not (memq this-command '(save-buffer
                                         compile
                                         project-compile
@@ -99,7 +99,7 @@ Example values are shown below:
               ;; (memq this-command '(magit-show-commit
               ;;                      magit-status
               ;;                      bookmark-set))
-              (when-let (mode (derived-mode-p 'org-mode 'org-memento-policy-mode))
+              (when-let* ((mode (derived-mode-p 'org-mode 'org-memento-policy-mode)))
                 (cl-case mode
                   (org-memento-policy-mode t)
                   (org-mode (or (bound-and-true-p org-capture-mode)
@@ -164,22 +164,22 @@ Example values are shown below:
 
 (defun akirak-org-clock--target ()
   (or akirak-org-clock-target
-      (when-let (pr (or (project-current)
-                        (cond
-                         ((not (string-prefix-p "~/" (abbreviate-file-name default-directory)))
-                          nil)
-                         ((yes-or-no-p "Not in a project. Run git init?")
-                          (when (buffer-file-name)
-                            (let ((dir (file-name-directory (buffer-file-name))))
-                              (unless (file-directory-p dir)
-                                (make-directory dir 'parents))))
-                          (let ((default-directory (read-directory-name
-                                                    "Run git init at: ")))
-                            (call-process "git" nil nil nil "init"))
-                          (or (project-current)
-                              (user-error "The directory is not inside a project")))
-                         (t
-                          (user-error "Must be in a project")))))
+      (when-let* ((pr (or (project-current)
+                          (cond
+                           ((not (string-prefix-p "~/" (abbreviate-file-name default-directory)))
+                            nil)
+                           ((yes-or-no-p "Not in a project. Run git init?")
+                            (when (buffer-file-name)
+                              (let ((dir (file-name-directory (buffer-file-name))))
+                                (unless (file-directory-p dir)
+                                  (make-directory dir 'parents))))
+                            (let ((default-directory (read-directory-name
+                                                      "Run git init at: ")))
+                              (call-process "git" nil nil nil "init"))
+                            (or (project-current)
+                                (user-error "The directory is not inside a project")))
+                           (t
+                            (user-error "Must be in a project"))))))
         (pcase (akirak-project-top-root pr)
           ((rx "/foss/contributions/")
            (list (delq nil (list (car (akirak-org-dog-path-files))
@@ -228,12 +228,12 @@ Example values are shown below:
      (user-error "You are not in a project or the project is not suitable for\
  clocking in" ))
     (`(,files ,query-prefix ,tags ,further)
-     (if-let (files (if further
-                        (thread-last
-                          (org-dog-overview-scan files
-                                                 :fast t)
-                          (mapcar #'car))
-                      files))
+     (if-let* ((files (if further
+                          (thread-last
+                            (org-dog-overview-scan files
+                                                   :fast t)
+                            (mapcar #'car))
+                        files)))
          (org-dog-clock-in files
                            :query-prefix query-prefix
                            :tags tags
@@ -440,7 +440,7 @@ DAYS default to `akirak-org-clock-history-threshold'."
          (re-search-forward (format "\\[\\(%s\\)\\]"
                                     (akirak-org-clock--date-regxps days))
                             nil t)))
-    (if-let (buffer (find-buffer-visiting file))
+    (if-let* ((buffer (find-buffer-visiting file)))
         (with-current-buffer buffer
           (org-with-wide-buffer
            (goto-char (point-min))
@@ -474,7 +474,7 @@ This function returns the current buffer."
   (interactive "P")
   (akirak-org-clock-require-clock
     (let ((action '(nil . ((inhibit-same-window . t)))))
-      (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
+      (if-let* ((capture-buffer (akirak-org-clock--capture-buffer org-clock-marker)))
           (with-current-buffer capture-buffer
             (unless (get-buffer-window capture-buffer)
               (pop-to-buffer capture-buffer action))
@@ -723,7 +723,7 @@ This function returns the current buffer."
        (akirak-org-clock--out)))))
 
 (defun akirak-org-clock--out (&optional switch-state)
-  (if-let (capture-buffer (akirak-org-clock--capture-buffer org-clock-marker))
+  (if-let* ((capture-buffer (akirak-org-clock--capture-buffer org-clock-marker)))
       (let ((need-explicit-clock-out (and (org-clocking-p)
                                           (not (equal org-clock-marker
                                                       (buffer-local-value
