@@ -313,6 +313,12 @@
       repo = "edit-indirect";
       type = "github";
     };
+    eglot-booster = {
+      flake = false;
+      owner = "jdtsmith";
+      repo = "eglot-booster";
+      type = "github";
+    };
     el-patch = {
       flake = false;
       owner = "radian-software";
@@ -329,6 +335,12 @@
       flake = false;
       owner = "emacscollective";
       repo = "elx";
+      type = "github";
+    };
+    elysium = {
+      flake = false;
+      owner = "lanceberge";
+      repo = "elysium";
       type = "github";
     };
     emacsql = {
@@ -487,12 +499,6 @@
       repo = "graphql-ts-mode";
       type = "sourcehut";
     };
-    guess-language = {
-      flake = false;
-      owner = "tmalsburg";
-      repo = "guess-language.el";
-      type = "github";
-    };
     hcl-mode = {
       flake = false;
       owner = "hcl-emacs";
@@ -551,12 +557,6 @@
       flake = false;
       owner = "minad";
       repo = "jinx";
-      type = "github";
-    };
-    jq-mode = {
-      flake = false;
-      owner = "ljos";
-      repo = "jq-mode";
       type = "github";
     };
     just-mode = {

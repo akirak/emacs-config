@@ -3,7 +3,7 @@
 (defun akirak-register-dwim (reg &optional arg)
   (interactive (list (register-read-with-preview "Dwim: ")
                      current-prefix-arg))
-  (if-let (val (get-register reg))
+  (if-let* ((val (get-register reg)))
       (pcase val
         ((cl-type marker)
          (register-val-jump-to val arg))

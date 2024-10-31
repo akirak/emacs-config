@@ -7,14 +7,14 @@
 
 (org-ql-defpred dogm ()
   "Filter entries that are meaningful per org-dog scheme."
-  :body (if-let (obj (org-dog-buffer-object))
+  :body (if-let* ((obj (org-dog-buffer-object)))
             (org-dog-meaningful-in-file-p obj)
           t))
 
 (org-ql-defpred (proj my-project) ()
   "Filter entries that are related to the current project."
   :normalizers ((`(,predicate-names)
-                 (when-let (pr (project-current))
+                 (when-let* ((pr (project-current)))
                    (let ((root (abbreviate-file-name (project-root pr)))
                          (origin (ignore-errors
                                    ;; TODO: Break the host and path
@@ -99,7 +99,7 @@
                                                             (regexp ,org-link-bracket-re)))))
            :interactive nil)
     (`(,_ . ,input)
-     (if-let (marker (get-text-property 0 'org-marker input))
+     (if-let* ((marker (get-text-property 0 'org-marker input)))
          (org-with-point-at marker
            (org-back-to-heading)
            (org-match-line org-complex-heading-regexp)

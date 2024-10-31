@@ -60,7 +60,7 @@
                                       filename))
                (all-completions (match-string 1 filename)
                                 table))
-             (when-let (pr (project-current))
+             (when-let* ((pr (project-current)))
                (all-completions (thread-last
                                   (project-root pr)
                                   (string-remove-suffix "/")
@@ -101,28 +101,28 @@
                                          'akirak-twist-lock-directory)
                                         (akirak-twist-flake-nodes)
                                         (mapcar #'car)))))
-  (if-let (url (or (when-let (file (find-library-name (format "%s" package-or-library)))
-                     (with-temp-buffer
-                       (require 'lisp-mnt)
-                       (insert-file-contents file)
-                       (goto-char (point-min))
-                       (or (lm-header "Homepage")
-                           (lm-header "URL"))))
+  (if-let* ((url (or (when-let* ((file (find-library-name (format "%s" package-or-library))))
+                       (with-temp-buffer
+                         (require 'lisp-mnt)
+                         (insert-file-contents file)
+                         (goto-char (point-min))
+                         (or (lm-header "Homepage")
+                             (lm-header "URL"))))
 
-                   (progn
-                     (message "Reading metadata for the package...")
-                     (let ((data (akirak-twist--package-data (format "%s" package-or-library))))
-                       (or (thread-last
-                             data
-                             (alist-get 'meta)
-                             (alist-get 'homepage))
-                           (let ((origin (alist-get 'origin data)))
-                             (pcase (alist-get 'type origin)
-                               ("github" (format "https://github.com/%s/%s"
-                                                 (alist-get 'owner origin)
-                                                 (alist-get 'repo origin)))
-                               ("git" (alist-get 'url origin))
-                               (type (error "Unsupported type" type)))))))))
+                     (progn
+                       (message "Reading metadata for the package...")
+                       (let ((data (akirak-twist--package-data (format "%s" package-or-library))))
+                         (or (thread-last
+                               data
+                               (alist-get 'meta)
+                               (alist-get 'homepage))
+                             (let ((origin (alist-get 'origin data)))
+                               (pcase (alist-get 'type origin)
+                                 ("github" (format "https://github.com/%s/%s"
+                                                   (alist-get 'owner origin)
+                                                   (alist-get 'repo origin)))
+                                 ("git" (alist-get 'url origin))
+                                 (type (error "Unsupported type" type))))))))))
       (browse-url url)
     (user-error "Not found homepage")))
 
@@ -257,7 +257,7 @@
 
 (defun akirak-twist--build-packages ()
   "Build remaining packages."
-  (when-let (package (pop akirak-twist-packages-to-build))
+  (when-let* ((package (pop akirak-twist-packages-to-build)))
     (message "Package %s is being built..." package)
     (let ((err-file (make-temp-file "twist-build")))
       (cl-flet
@@ -307,7 +307,7 @@
     (when old
       (dolist (feature-name (directory-files (file-name-directory old)
                                              nil "\\.el\\'"))
-        (when-let (feature (intern-soft feature-name))
+        (when-let* ((feature (intern-soft feature-name)))
           (when (featurep feature)
             (unload-feature feature)))))
     (load (concat package "-autoloads") 'noerror)))

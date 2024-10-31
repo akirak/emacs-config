@@ -3,7 +3,7 @@
 ;;;###autoload
 (defun akirak-org-special-prompt-send ()
   (interactive)
-  (when-let (element (org-element-context))
+  (when-let* ((element (org-element-context)))
     (when (and (eq 'special-block (org-element-type element))
                (equal "prompt" (org-element-property :type element)))
       (if-let* ((contents-begin (org-element-property :contents-begin element))
@@ -13,10 +13,10 @@
           (progn
             (require 'gptel)
             (gptel-request content
-                           :stream t
-                           :position (save-excursion
-                                       (goto-char end)
-                                       (line-end-position 0)))
+              :stream t
+              :position (save-excursion
+                          (goto-char end)
+                          (line-end-position 0)))
             t)
         ;; If the block content is empty, fill the block with the heading.
         (save-excursion

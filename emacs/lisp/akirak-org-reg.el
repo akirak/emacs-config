@@ -225,7 +225,7 @@
   (cl-etypecase target
     (symbol (akirak-org-reg-dispatch (symbol-value target)))
     (marker
-     (if-let (fn (cdr (assoc akirak-org-reg-target-type akirak-org-reg-action-fn-alist)))
+     (if-let* ((fn (cdr (assoc akirak-org-reg-target-type akirak-org-reg-action-fn-alist))))
          (funcall fn target)
        (funcall akirak-org-reg-action-fn target)))))
 

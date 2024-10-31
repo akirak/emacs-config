@@ -21,11 +21,11 @@ the original minor mode."
   "M-}" 'compilation-next-file)
 
 (defun akirak-shell-buffer-p (cand)
-  (when-let (buffer (pcase cand
-                      ((pred stringp)
-                       (get-buffer cand))
-                      (`(,name . ,_)
-                       (get-buffer name))))
+  (when-let* ((buffer (pcase cand
+                        ((pred stringp)
+                         (get-buffer cand))
+                        (`(,name . ,_)
+                         (get-buffer name)))))
     (eq (buffer-local-value 'major-mode buffer)
         'eat-mode)))
 

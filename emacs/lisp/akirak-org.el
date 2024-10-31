@@ -60,7 +60,7 @@
   (interactive)
   (org-sort-entries nil ?f
                     (lambda ()
-                      (if-let (todo (org-get-todo-state))
+                      (if-let* ((todo (org-get-todo-state)))
                           (or (cl-position todo '("STARTED"
                                                   "REVIEW"
                                                   "NEXT"
@@ -237,7 +237,7 @@ With ARG, pick a text from the kill ring instead of the last one."
        ((and (looking-at (rx eol))
              (looking-back (rx bol (any alpha))
                            (line-beginning-position)))
-        (if-let (type (cdr (assoc (match-string 0) org-structure-template-alist)))
+        (if-let* ((type (cdr (assoc (match-string 0) org-structure-template-alist))))
             (progn
               (backward-delete-char 1)
               (org-insert-structure-template type)
@@ -360,7 +360,7 @@ character."
     (org-agenda))
    ((org-clocking-p)
     (let ((buffer (org-dog-indirect-buffer org-clock-marker)))
-      (if-let (window (get-buffer-window buffer))
+      (if-let* ((window (get-buffer-window buffer)))
           (quit-window nil window)
         (org-switch-to-buffer-other-window buffer))))
    (t
@@ -566,7 +566,7 @@ The point should be at the heading."
             suffix)))
 
 (defun akirak-org--default-scale (text)
-  (if-let (face (get-text-property 0 'face text))
+  (if-let* ((face (get-text-property 0 'face text)))
       (propertize (org-no-properties text)
                   'face (akirak-org--default-scale-face face))
     text))
@@ -757,7 +757,7 @@ The point should be at the heading."
         (org-at-item-p)
         (org-match-line org-clock-line-re)
         (org-at-drawer-p))
-    (if-let (el (org-element-at-point-no-context))
+    (if-let* ((el (org-element-at-point-no-context)))
         (akirak-org--select-element el)
       (error "No org-element at point")))
    (t
@@ -898,16 +898,16 @@ At this point, the function works with the following pattern:
 (defun akirak-org-edit-active-ts ()
   "Edit the first active timestamp in the entry body."
   (interactive)
-  (when-let (mode (derived-mode-p 'org-mode
-                                  'org-agenda-mode
-                                  'org-memento-timeline-mode))
+  (when-let* ((mode (derived-mode-p 'org-mode
+                                    'org-agenda-mode
+                                    'org-memento-timeline-mode)))
     (save-window-excursion
       (save-current-buffer
         (org-with-point-at (cl-case mode
                              (org-mode
                               (point-marker))
                              (org-memento-timeline-mode
-                              (if-let (value (oref (magit-current-section) value))
+                              (if-let* ((value (oref (magit-current-section) value)))
                                   (nth 3 value)
                                 (error "No section value")))
                              (otherwise

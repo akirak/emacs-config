@@ -113,7 +113,7 @@ You need curl or one of its supported alternatives"))
                       "-o" new-file outfile)
         (setq outfile new-file)))
      (t
-      (when-let (new-file (akirak-image--scale-default outfile))
+      (when-let* ((new-file (akirak-image--scale-default outfile)))
         (setq outfile new-file))))
     (unless (looking-at (rx bol))
       (insert "\n"))
@@ -149,8 +149,8 @@ version."
           (setq desc nil))
         (cond
          ((string-prefix-p "file:" href)
-          (when-let (new-file (akirak-image--scale-default
-                               (string-remove-prefix "file:" href)))
+          (when-let* ((new-file (akirak-image--scale-default
+                                 (string-remove-prefix "file:" href))))
             (delete-region (car bounds) (cadr bounds))
             (insert (org-link-make-string (concat "file:" new-file)
                                           desc))))

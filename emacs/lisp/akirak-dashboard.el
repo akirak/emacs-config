@@ -24,7 +24,7 @@
                                   '("CASUAL"
                                     "STOPPED"))
                           (org-element-property :archivedp el)
-                          (when-let (ts (org-element-property :scheduled el))
+                          (when-let* ((ts (org-element-property :scheduled el)))
                             (time-less-p (current-time) (org-timestamp-to-time ts))))
                   (throw 'dashboard-org-clock-skip t))
                 (push (thread-first
@@ -35,14 +35,14 @@
     (nreverse els)))
 
 (defun akirak-dashboard-org-clock-format-item (el)
-  (concat (if-let (kwd (org-element-property :todo-keyword el))
+  (concat (if-let* ((kwd (org-element-property :todo-keyword el)))
               (concat (org-no-properties kwd) " ")
             "")
           (format "[%s] "
                   (or (org-element-property :CATEGORY el)
                       "?"))
           (org-link-display-format (org-element-property :raw-value el))
-          (if-let (ts (org-element-property :deadline el))
+          (if-let* ((ts (org-element-property :deadline el)))
               (concat " D" (org-element-property :raw-value ts))
             "")))
 

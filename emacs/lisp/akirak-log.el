@@ -106,8 +106,8 @@
            (when (looking-at org-ts-regexp-inactive)
              (let ((time (thread-last
                            (save-match-data
-                             (if-let (string (save-match-data
-                                               (org-entry-get nil "exact_time")))
+                             (if-let* ((string (save-match-data
+                                                 (org-entry-get nil "exact_time"))))
                                  (parse-iso8601-time-string string)
                                (encode-time (parse-time-string (match-string 1)))))
                            (float-time))))

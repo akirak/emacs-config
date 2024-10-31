@@ -168,7 +168,7 @@
     (dolist (file (org-dog-select 'absolute))
       (setq tags
             (thread-last
-              (if-let (buffer (find-buffer-visiting file))
+              (if-let* ((buffer (find-buffer-visiting file)))
                   (with-current-buffer buffer
                     (org-with-wide-buffer
                      (goto-char (point-min))
@@ -217,11 +217,10 @@
 
 (defun akirak-org-dog-project-context (project)
   (require 'project)
-  (pcase (thread-last
-           project
-           project-root
-           abbreviate-file-name
-           file-name-split)
+  (pcase (when-let* ((dir (akirak-project-vc-root project)))
+           (thread-last
+             (abbreviate-file-name dir)
+             file-name-split))
     ((or `("~" "work2" "learning" ,group ,name "")
          `("~" "work2" "learning" ,group ""))
      (make-org-dog-context-in-directory
@@ -508,14 +507,14 @@
 
 (defun akirak-oahu-current-org-file ()
   (and (eq major-mode 'org-mode)
-       (when-let (obj (org-dog-buffer-object))
+       (when-let* ((obj (org-dog-buffer-object)))
          (list (oref obj relative)))))
 
 (defun akirak-oahu-dog-project-files (pr)
   (require 'org-dog-context)
-  (or (when-let (ctx (funcall (plist-get (cdr (assq 'project org-dog-context-alist))
-                                         :callback)
-                              pr))
+  (or (when-let* ((ctx (funcall (plist-get (cdr (assq 'project org-dog-context-alist))
+                                           :callback)
+                                pr)))
         (thread-last
           (org-dog-context-file-objects ctx)
           (mapcar (lambda (obj)

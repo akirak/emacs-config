@@ -12,7 +12,7 @@
           :category directory
           :face consult-file
           :items ,(lambda ()
-                    (if-let (project (project-current))
+                    (if-let* ((project (project-current)))
                         (let ((root (akirak-project-top-root project))
                               (dir (abbreviate-file-name default-directory))
                               items)
@@ -65,12 +65,12 @@
                       (delq nil)
                       (seq-uniq)
                       (mapcar (lambda (dir)
-                                (when-let (pr (and dir
-                                                   (file-directory-p dir)
-                                                   (project-current nil dir)))
+                                (when-let* ((pr (and dir
+                                                     (file-directory-p dir)
+                                                     (project-current nil dir))))
                                   (project-root pr))))
                       (delq nil)
-                      (delq (when-let (pr (project-current))
+                      (delq (when-let* ((pr (project-current)))
                               (project-root pr)))
                       (seq-uniq)))))
 
@@ -155,12 +155,12 @@
 ;;;###autoload
 (defun akirak-consult-dir-descendants (&optional dir)
   "Browse a descendant directory of DIR."
-  (interactive (list (if-let (pr (project-current))
+  (interactive (list (if-let* ((pr (project-current)))
                          (akirak-project-top-root pr)
                        default-directory)))
   (let* ((default-directory (if dir
                                 (expand-file-name dir)
-                              (if-let (pr (project-current))
+                              (if-let* ((pr (project-current)))
                                   (akirak-project-top-root pr)
                                 default-directory)))
          (selected (consult--read (process-lines "fd" "-t" "d")

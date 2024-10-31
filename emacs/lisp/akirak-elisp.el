@@ -8,11 +8,7 @@
     ("when-let*"
      ("(when-let* ((" (p "Name: ") " " r "))" n> p ")"))
     ("if-let*"
-     ("(if-let* ((" (p "Name: ") " " r "))" n> p ")"))
-    ("when-let"
-     ("(when-let (" (p "Name: ") " " r ")" n> p ")"))
-    ("if-let"
-     ("(if-let (" (p "Name: ") " " r ")" n> p ")")))
+     ("(if-let* ((" (p "Name: ") " " r "))" n> p ")")))
   ""
   :type '(repeat (list (string :tag "Macro/function")
                        (sexp :tag "Tempo elements"))))
@@ -43,7 +39,7 @@
   (interactive (list (completing-read "Wrap the expression with a form: "
                                       (akirak-elisp--callables)
                                       nil t)))
-  (if-let (template (cadr (assoc type akirak-elisp-wrap-templates)))
+  (if-let* ((template (cadr (assoc type akirak-elisp-wrap-templates))))
       (akirak-elisp--run-tempo template t)
     (let ((arity (func-arity (symbol-function (intern type)))))
       (akirak-elisp--run-tempo

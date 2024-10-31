@@ -11,7 +11,7 @@
     (let ((name (concat "akirak-embark-" (or name-suffix (symbol-name func)))))
       `(defun ,(intern name) (dir)
          ,(documentation func)
-         (interactive (list (if-let (project (project-current))
+         (interactive (list (if-let* ((project (project-current)))
                                 (project-root project)
                               default-directory)))
          ,(when require
@@ -501,11 +501,11 @@
         . ,(cons (match-beginning 0)
                  (match-end 0))))
      (t
-      (if-let (href (cond
-                     ((thing-at-point-looking-at org-link-bracket-re)
-                      (match-string 1))
-                     ((thing-at-point-looking-at org-link-plain-re)
-                      (match-string 0))))
+      (if-let* ((href (cond
+                       ((thing-at-point-looking-at org-link-bracket-re)
+                        (match-string 1))
+                       ((thing-at-point-looking-at org-link-plain-re)
+                        (match-string 0)))))
           (let* ((bounds (cons (marker-position (nth 0 (match-data)))
                                (marker-position (nth 1 (match-data)))))
                  (href (substring-no-properties href)))

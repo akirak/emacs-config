@@ -8,7 +8,7 @@
 ;;;###autoload
 (defun akirak-vterm-run-in-project (string)
   (interactive "sCommand: ")
-  (if-let (pr (project-current))
+  (if-let* ((pr (project-current)))
       (akirak-vterm--run-in-dir (project-root pr) string)
     (user-error "Not in a project")))
 
@@ -133,7 +133,7 @@
                            (cons 'group-function #'group)))
              (complete-with-action action buffers string pred))))
       (let ((input (completing-read "Vterm buffer: " #'completions)))
-        (if-let (bufname (car (member input buffers)))
+        (if-let* ((bufname (car (member input buffers))))
             (get-buffer bufname)
           (unless (string-empty-p input)
             input))))))
@@ -144,7 +144,7 @@
   (interactive)
   (let* ((dir (or dir default-directory))
          (name "*vterm:%s*" (abbreviate-file-name dir)))
-    (if-let (buffer (get-buffer name))
+    (if-let* ((buffer (get-buffer name)))
         (pop-to-buffer buffer)
       (akirak-vterm dir name))))
 

@@ -28,8 +28,8 @@
 (defun akirak-expand-region--text-like-p ()
   (or (eq (get-text-property (point) 'face)
           'font-lock-comment-face)
-      (when-let (node (ignore-errors
-                        (treesit-node-at (point))))
+      (when-let* ((node (ignore-errors
+                          (treesit-node-at (point)))))
         (equal (treesit-node-type node)
                "comment"))
       (ppss-comment-or-string-start (syntax-ppss))))

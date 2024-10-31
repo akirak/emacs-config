@@ -13,8 +13,8 @@ location, or nil."
 
 Inside a string or comment, this command always inserts the character."
   (interactive "p")
-  (if-let (loc (and (not (ppss-comment-or-string-start (syntax-ppss)))
-                    (akirak-paren-matching-location)))
+  (if-let* ((loc (and (not (ppss-comment-or-string-start (syntax-ppss)))
+                      (akirak-paren-matching-location))))
       (goto-char loc)
     (self-insert-command n c)))
 
@@ -199,7 +199,7 @@ Also see `akirak-elec-pair--close-char'."
         (point)
       (re-search-backward regexp))
     (push-mark)
-    (if-let (end (akirak-paren-matching-location))
+    (if-let* ((end (akirak-paren-matching-location)))
         (goto-char end)
       (if (bound-and-true-p treesit-primary-parser)
           (pcase (akirak-paren--ts-matching-nodes)

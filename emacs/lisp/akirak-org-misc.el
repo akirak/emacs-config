@@ -13,7 +13,7 @@
                 x
               (string-join (org-element-contents x)))))
          (has-id-link (id context)
-           (when-let (link (slot-value context 'link))
+           (when-let* ((link (slot-value context 'link)))
              (equal (concat "id:" id)
                     (if (string-match org-link-bracket-re link)
                         (match-string 1 link)

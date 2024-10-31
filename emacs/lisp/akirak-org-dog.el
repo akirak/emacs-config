@@ -232,7 +232,7 @@ ARG, the target file can be changed only for that item."
              (let ((bound (save-excursion (re-search-forward org-heading-regexp nil t))))
                (when bound
                  (narrow-to-region (point-min) bound)
-                 (when-let (pos (org-babel-find-named-block "auto-update"))
+                 (when-let* ((pos (org-babel-find-named-block "auto-update")))
                    (goto-char pos)
                    (message "Executing a babel block at %d in %s" pos file)
                    (org-babel-execute-src-block)

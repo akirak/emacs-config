@@ -8,7 +8,7 @@
   (let ((symbol (cl-typecase variable
                   (symbol variable)
                   (string (intern variable)))))
-    (when-let (standard-value (get symbol 'standard-value))
+    (when-let* ((standard-value (get symbol 'standard-value)))
       (set symbol (eval (car standard-value))))
     (put symbol 'saved-value nil)
     (put symbol 'saved-variable-comment nil)

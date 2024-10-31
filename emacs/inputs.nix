@@ -33,6 +33,15 @@
     packageRequires = { dired-hacks-utils = "0"; } // super.packageRequires;
   };
 
+  ob-graphql = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "ob-graphql";
+      ref = "graphql-dep";
+    };
+  };
+
   org-bookmark-heading = _: _: {
     origin = {
       type = "github";

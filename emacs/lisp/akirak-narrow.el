@@ -34,9 +34,9 @@ is an indirect buffer, this command doesn't do anything."
    ((region-active-p)
     (narrow-to-region (region-beginning) (region-end)))
    (t
-    (if-let (mode (apply #'derived-mode-p (thread-last
-                                            akirak-narrow-narrow-command-alist
-                                            (mapcar #'car))))
+    (if-let* ((mode (apply #'derived-mode-p (thread-last
+                                              akirak-narrow-narrow-command-alist
+                                              (mapcar #'car)))))
         (funcall (alist-get mode akirak-narrow-narrow-command-alist))
       (if (and (bound-and-true-p outline-regexp)
                (save-excursion
@@ -50,9 +50,9 @@ is an indirect buffer, this command doesn't do anything."
 (defun akirak-narrow--indirect ()
   ;; If the buffer is already an indirect buffer, do nothing.
   (unless (buffer-base-buffer)
-    (if-let (mode (apply #'derived-mode-p (thread-last
-                                            akirak-narrow-indirect-command-alist
-                                            (mapcar #'car))))
+    (if-let* ((mode (apply #'derived-mode-p (thread-last
+                                              akirak-narrow-indirect-command-alist
+                                              (mapcar #'car)))))
         (funcall (alist-get mode akirak-narrow-indirect-command-alist))
       (let ((name (or (when (require 'which-func nil t)
                         (which-function))

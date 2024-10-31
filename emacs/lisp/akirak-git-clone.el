@@ -400,7 +400,7 @@ DIR is an optional destination directory to clone the repository into."
      (when filename
        `(lambda (dest)
           (let ((default-directory dest))
-            (if-let (file (akirak-git-clone--file-path-in-repo ,filename))
+            (if-let* ((file (akirak-git-clone--file-path-in-repo ,filename)))
                 (progn
                   (find-file file)
                   ,@(when char
