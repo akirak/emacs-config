@@ -109,10 +109,10 @@
       repo = "cape";
       type = "github";
     };
-    casual-lib = {
+    casual = {
       flake = false;
       owner = "kickingvegas";
-      repo = "casual-lib";
+      repo = "casual";
       type = "github";
     };
     casual-symbol-overlay = {

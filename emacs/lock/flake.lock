@@ -288,30 +288,30 @@
         "type": "github"
       }
     },
-    "casual-lib": {
+    "casual": {
       "flake": false,
       "locked": {
-        "lastModified": 1727766278,
-        "narHash": "sha256-oPhNOXVLe6I2Vjn/kp8GMHTVKLTNtDtkGfmTFnTqPmk=",
+        "lastModified": 1729794466,
+        "narHash": "sha256-TeSoSHEzasSLsONuM6hTEdNlE/6Ohgb3mQb5Y7jVdfI=",
         "owner": "kickingvegas",
-        "repo": "casual-lib",
-        "rev": "212313b1cd80e2757224d34ab34a098ff1cb37ee",
+        "repo": "casual",
+        "rev": "1f55785341b2c79ef7a932f59747b57b0168849d",
         "type": "github"
       },
       "original": {
         "owner": "kickingvegas",
-        "repo": "casual-lib",
+        "repo": "casual",
         "type": "github"
       }
     },
     "casual-symbol-overlay": {
       "flake": false,
       "locked": {
-        "lastModified": 1728429467,
-        "narHash": "sha256-mfBDlQal2WPiTnPslkI10k19FmQuUBXyUK4pYnRzK9Q=",
+        "lastModified": 1729555091,
+        "narHash": "sha256-W29ntKpsrCj5nHhRXz2+pXJyFXhsmKN1ZbI3GUearF0=",
         "owner": "kickingvegas",
         "repo": "casual-symbol-overlay",
-        "rev": "9481daf1b9b027dbd12cfed8219b89e73ec3728a",
+        "rev": "1453e7486dd0921f0319f21dd8c8b603e4eb7300",
         "type": "github"
       },
       "original": {
@@ -2914,7 +2914,7 @@
         "buttercup": "buttercup",
         "caml": "caml",
         "cape": "cape",
-        "casual-lib": "casual-lib",
+        "casual": "casual",
         "casual-symbol-overlay": "casual-symbol-overlay",
         "closql": "closql",
         "compat": "compat",
