@@ -751,7 +751,8 @@
     };
     ob-graphql = {
       flake = false;
-      owner = "jdormit";
+      owner = "akirak";
+      ref = "graphql-dep";
       repo = "ob-graphql";
       type = "github";
     };
