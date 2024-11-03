@@ -2007,6 +2007,16 @@ This is a recommended setting for use with vertico. See https://github.com/minad
             (message "Remaining %d positions" (length akirak/skeleton-local-positions))
           (local-unset-key [tab])))))
 #+end_src
+*** smerge
+:PROPERTIES:
+:CREATED_TIME: [2024-11-03 Sun 12:00]
+:END:
+
+#+begin_src emacs-lisp
+  (setup smerge
+    (:global "C-c g u" #'smerge-keep-upper
+             "C-c g l" #'smerge-keep-lower))
+#+end_src
 *** sqlite-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-07-22 Sat 11:17]
