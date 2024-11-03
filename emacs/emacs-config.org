@@ -6440,6 +6440,8 @@ Automatically apply LLM-created code-suggestions
 
 #+begin_src emacs-lisp
   (setup (:package elysium)
+    (:when-loaded
+      (add-hook 'elysium-apply-changes-hook #'smerge-start-session))
     (with-eval-after-load 'embark
       (define-key embark-region-map "q" #'elysium-query))
     (with-eval-after-load 'gptel-rewrite
