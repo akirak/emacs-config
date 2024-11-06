@@ -9415,7 +9415,7 @@ A major mode for the Zig programming language
   (setup (:package zig-mode))
 #+end_src
 
-I prefer [[#zig-ts-mode][zig-ts-mode]], but I install ~zig-mode~ for build commands.
+I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra commands supporting development workflows.
 ** Software package management
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:54]
