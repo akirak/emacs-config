@@ -189,8 +189,7 @@
     };
     d2-mode = {
       flake = false;
-      owner = "akirak";
-      ref = "develop";
+      owner = "andorsk";
       repo = "d2-mode";
       type = "github";
     };
