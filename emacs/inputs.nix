@@ -30,7 +30,9 @@
     } // super.packageRequires;
   };
   dired-open = _: super: {
-    packageRequires = { dired-hacks-utils = "0"; } // super.packageRequires;
+    packageRequires = {
+      dired-hacks-utils = "0";
+    } // super.packageRequires;
   };
 
   ob-graphql = _: _: {
@@ -114,7 +116,10 @@
       "lispy-occur.el"
     ];
     packageRequires =
-      (builtins.removeAttrs super.packageRequires [ "swiper" "ace-window" ])
+      (builtins.removeAttrs super.packageRequires [
+        "swiper"
+        "ace-window"
+      ])
       // {
         avy = "0";
       };
