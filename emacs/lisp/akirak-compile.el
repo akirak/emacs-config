@@ -5,6 +5,7 @@
     ("flake.nix" . nix-flake)
     ("Cargo.toml" . cargo)
     ("justfile" . just)
+    ("Justfile" . just)
     ("go.mod" . go-module)
     ("mix.exs" . mix)
     ("pnpm-lock.yaml" . pnpm)
