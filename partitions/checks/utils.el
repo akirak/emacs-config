@@ -80,7 +80,7 @@ entries are visible."
                    (error "nix eval exited with non-zero"))
                  (goto-char (point-min))
                  (json-parse-buffer :object-type 'alist :array-type 'list))))
-    (with-current-buffer (find-file-noselect "emacs/emacs-config.org")
+    (with-current-buffer (find-file-noselect "emacs-config.org")
       (org-mode)
       (org-with-wide-buffer
        (goto-char (point-min))
