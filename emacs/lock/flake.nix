@@ -109,10 +109,10 @@
       repo = "cape";
       type = "github";
     };
-    casual-lib = {
+    casual = {
       flake = false;
       owner = "kickingvegas";
-      repo = "casual-lib";
+      repo = "casual";
       type = "github";
     };
     casual-symbol-overlay = {
@@ -189,8 +189,7 @@
     };
     d2-mode = {
       flake = false;
-      owner = "akirak";
-      ref = "develop";
+      owner = "andorsk";
       repo = "d2-mode";
       type = "github";
     };
@@ -751,7 +750,8 @@
     };
     ob-graphql = {
       flake = false;
-      owner = "jdormit";
+      owner = "akirak";
+      ref = "graphql-dep";
       repo = "ob-graphql";
       type = "github";
     };

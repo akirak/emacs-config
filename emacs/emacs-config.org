@@ -2007,6 +2007,16 @@ This is a recommended setting for use with vertico. See https://github.com/minad
             (message "Remaining %d positions" (length akirak/skeleton-local-positions))
           (local-unset-key [tab])))))
 #+end_src
+*** smerge
+:PROPERTIES:
+:CREATED_TIME: [2024-11-03 Sun 12:00]
+:END:
+
+#+begin_src emacs-lisp
+  (setup smerge
+    (:global "C-c g u" #'smerge-keep-upper
+             "C-c g l" #'smerge-keep-lower))
+#+end_src
 *** sqlite-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-07-22 Sat 11:17]
@@ -6440,6 +6450,8 @@ Automatically apply LLM-created code-suggestions
 
 #+begin_src emacs-lisp
   (setup (:package elysium)
+    (:when-loaded
+      (add-hook 'elysium-apply-changes-hook #'smerge-start-session))
     (with-eval-after-load 'embark
       (define-key embark-region-map "q" #'elysium-query))
     (with-eval-after-load 'gptel-rewrite
@@ -9403,7 +9415,7 @@ A major mode for the Zig programming language
   (setup (:package zig-mode))
 #+end_src
 
-I prefer [[#zig-ts-mode][zig-ts-mode]], but I install ~zig-mode~ for build commands.
+I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra commands supporting development workflows.
 ** Software package management
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:54]
