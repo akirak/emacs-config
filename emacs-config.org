@@ -54,13 +54,13 @@ There are two variants of the configuration.
 One is built with the pgtk version of Emacs, which runs on Wayland:
 
 #+begin_src bash
-   nix run github:akirak/emacs-config#default-pgtk.wrappers.tmpdir
+   nix run github:akirak/emacs-config#emacs-pgtk-on-tmpdir
 #+end_src
 
 There is another version, an X11 variant, which is now discouraged:
 
 #+begin_src bash
-   nix run github:akirak/emacs-config#default-x11.wrappers.tmpdir
+   nix run github:akirak/emacs-config#emacs-on-tmpdir
 #+end_src
 
 Both commands create a temporary directory which will be used as ~user-emacs-directory~ containing an init file.
