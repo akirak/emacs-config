@@ -1,19 +1,26 @@
-packages: {
+makeConfig:
+# Provide nixpkgs overlay from this config repository
+{ overlays }:
+{
   config,
-  pkgs,
   lib,
+  pkgs,
   ...
-}: let
+}:
+let
   inherit (lib) types;
 
   cfg = config.programs.emacs-twist;
-in {
+
+  pkgs' = pkgs.extend (lib.composeManyExtensions overlays);
+in
+{
   options = {
     programs.emacs-twist.settings = {
       extraFeatures = lib.mkOption {
         type = types.listOf types.str;
         description = "List of options";
-        default = [];
+        default = [ ];
       };
     };
   };
@@ -22,10 +29,11 @@ in {
     programs.emacs-twist = {
       emacsclient.enable = true;
       directory = ".local/share/emacs";
-      earlyInitFile = ./early-init.el;
+      earlyInitFile = ../early-init.el;
       createInitFile = true;
-      config = packages.${pkgs.system}.emacs-config.override {
-        inherit (cfg.settings) extraFeatures;
+      config = makeConfig {
+        pkgs = pkgs';
+        features = cfg.settings.extraFeatures;
         prependToInitFile = ''
           ;; -*- lexical-binding: t; no-byte-compile: t; -*-
           (setq custom-file (locate-user-emacs-file "custom.el"))
@@ -36,7 +44,7 @@ in {
       createManifestFile = true;
     };
 
-    home.packages = with pkgs; [
+    home.packages = with pkgs'; [
       # Font families used in my Emacs config
       cascadia-code
       inter

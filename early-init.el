@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t; no-byte-compile: t; -*-
 (setq gc-cons-threshold most-positive-fixnum)
 
+;; Disable package.el entirely since I am using twist.
 (setq package-enable-at-startup nil)
 (setq package-quickstart nil)
 

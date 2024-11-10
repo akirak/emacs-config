@@ -22,7 +22,7 @@ in
 {
   nixfmt-rfc-style = {
     enable = true;
-    excludes = [ "emacs/lock/flake\\.nix" ];
+    excludes = [ "lock/flake\\.nix" ];
   };
 
   flake-no-path = {
