@@ -562,6 +562,7 @@
     (mapcar #'car org-tag-persistent-alist)
     (cl-remove-if-not #'stringp)))
 
+;;;###autoload (autoload 'akirak-capture-active-region "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture-active-region ()
   ["Snippet"
    :class transient-row
