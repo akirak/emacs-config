@@ -145,7 +145,7 @@ in
           name = "update-elisp-lock";
           runtimeInputs = [ pkgs.deno ];
           text = ''
-            cd emacs/lock
+            cd lock
             deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
           '';
         };
