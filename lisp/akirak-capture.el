@@ -624,7 +624,7 @@
   ["Others" :class transient-row
    ("a" "Append to clock" akirak-capture-append-block-to-clock
     :if org-clocking-p)
-   ("+" "Heading" akirak-capture-append-heading-to-clock
+   ("h" "Heading" akirak-capture-append-heading-to-clock
     :if org-clocking-p)]
 
   (interactive)
