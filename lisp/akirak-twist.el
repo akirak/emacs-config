@@ -8,7 +8,7 @@
   :type 'directory)
 
 (defcustom akirak-twist-lock-directory
-  (expand-file-name "emacs/lock/" akirak-twist-root-directory)
+  (expand-file-name "lock/" akirak-twist-root-directory)
   ""
   :type 'directory)
 

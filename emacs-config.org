@@ -1037,7 +1037,7 @@ The built-in =electric= package provides the following modes:
                       ";;; "
                       (file-name-nondirectory (or buffer-file-name (buffer-name)))
                       " ends here"))
-     ("/recipes/.+\\'" . (> "(" (file-name-nondirectory (buffer-file-name))
+     ("/recipes/[-a-z0-9]+\\'" . (> "(" (file-name-nondirectory (buffer-file-name))
                             " :fetcher github :repo \"" _ "\")")))
 
     (defun akirak/emacs-lisp-eval-buffer-or-load-file ()

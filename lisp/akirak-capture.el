@@ -562,6 +562,7 @@
     (mapcar #'car org-tag-persistent-alist)
     (cl-remove-if-not #'stringp)))
 
+;;;###autoload (autoload 'akirak-capture-active-region "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture-active-region ()
   ["Snippet"
    :class transient-row
@@ -624,7 +625,7 @@
   ["Others" :class transient-row
    ("a" "Append to clock" akirak-capture-append-block-to-clock
     :if org-clocking-p)
-   ("+" "Heading" akirak-capture-append-heading-to-clock
+   ("h" "Heading" akirak-capture-append-heading-to-clock
     :if org-clocking-p)]
 
   (interactive)
@@ -789,6 +790,45 @@
           (unless (looking-at org-heading-regexp)
             (goto-char (org-entry-end-position))))))))
 
+(defun akirak-capture--same-level-heading ()
+  (interactive)
+  (akirak-capture--append-heading-to-clock
+   (plist-get akirak-capture-clocked-buffer-info :level)
+   akirak-capture-initial))
+
+(defun akirak-capture--subheading ()
+  (interactive)
+  (akirak-capture--append-heading-to-clock
+   (1+ (plist-get akirak-capture-clocked-buffer-info :level))
+   akirak-capture-initial))
+
+(defconst akirak-capture-heading-commands
+  (let (result)
+    (dolist (level (number-sequence 1 9))
+      (let ((symbol (intern (format "akirak-capture--heading-level-%d" level))))
+        (fset symbol `(lambda ()
+                        (interactive)
+                        (akirak-capture--append-heading-to-clock
+                         ,level akirak-capture-initial)))
+        (put symbol 'interactive-only t)
+        (push (cons level symbol) result)))
+    result))
+
+(defun akirak-capture--heading-capture-children (children)
+  (let (result
+        (min-level (org-element-property
+                    :level (org-element-at-point-no-context org-clock-hd-marker))))
+    (dolist (n (number-sequence min-level 9))
+      (push (list transient--default-child-level
+                  'transient-suffix
+                  (list :key (int-to-string n)
+                        :description (format "Level %d" n)
+                        :command (cdr (assq n akirak-capture-heading-commands))
+                        :transient nil))
+            result))
+    (append children
+            (nreverse result))))
+
 (transient-define-prefix akirak-capture-append-heading-to-clock (text)
   [:description
    (lambda ()
@@ -800,26 +840,10 @@
      (format "After heading at level %d: %s"
              (plist-get akirak-capture-clocked-buffer-info :level)
              (plist-get akirak-capture-clocked-buffer-info :title)))
-   ("=" "Heading at the same level"
-    (lambda ()
-      (interactive)
-      (akirak-capture--append-heading-to-clock
-       (plist-get akirak-capture-clocked-buffer-info :level)
-       akirak-capture-initial)))
-   ("+" "Subheading"
-    (lambda ()
-      (interactive)
-      (akirak-capture--append-heading-to-clock
-       (1+ (plist-get akirak-capture-clocked-buffer-info :level))
-       akirak-capture-initial)))
-   ("n" "Prompt the heading level"
-    (lambda ()
-      (interactive)
-      (akirak-capture--append-heading-to-clock
-       (let ((default-level (plist-get akirak-capture-clocked-buffer-info :level)))
-         (read-number (format-prompt "Outline level of the new heading" default-level)
-                      default-level))
-       akirak-capture-initial)))]
+   :class transient-row
+   :setup-children akirak-capture--heading-capture-children
+   ("=" "Same level" akirak-capture--same-level-heading)
+   ("+" "Subheading" akirak-capture--subheading)]
   (interactive (list (cond
                       ((use-region-p)
                        (buffer-substring-no-properties begin end))
