@@ -279,7 +279,7 @@ display alternative actions."
                           (format "*:%s")))
     (magit-status)))
 
-;;;; Project roots
+;;;; Project root types
 
 (cl-defgeneric akirak-project-vc-root (pr)
   nil)
