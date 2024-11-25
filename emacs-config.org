@@ -2303,7 +2303,7 @@ Thus I will explicitly install this package rather than using the built-in versi
                                       nov-mode))
     (add-hook 'after-init-hook #'which-function-mode))
 #+end_src
-*** which-key                                            :usability:keybindings:
+*** COMMENT which-key                                    :usability:keybindings:ARCHIVE:
 #+begin_quote
 Display available keybindings in popup
 #+end_quote
