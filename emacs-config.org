@@ -7976,20 +7976,6 @@ control mpv for easy note-taking
                      (type . ,(rx (or "audio" "video")
                                   "/" (+ anything)))))))
 #+end_src
-*** nael
-:PROPERTIES:
-:CREATED_TIME: [2024-06-18 Tue 19:40]
-:END:
-#+begin_quote
-A humble major-mode for Lean
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package nael)
-    ;; Temporary workarounds.
-    (autoload 'nael-mode "nael")
-    (add-to-list 'auto-mode-alist '("\\.lean\\'" . nael-mode)))
-#+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
