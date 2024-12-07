@@ -2814,7 +2814,7 @@ Outline-based notes management and organizer
         (when (require 'akirak-org nil t)
           (:hook #'akirak-org-protected-mode)))
 
-      (:global "C-c o" #'org-open-at-point-global)
+      (:global "M-g o" #'org-open-at-point-global)
 
       (defvar akirak/org-file-apps-set-from-mime nil)
       (advice-add 'org-open-file
