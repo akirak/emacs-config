@@ -146,7 +146,7 @@ in
           runtimeInputs = [ pkgs.deno ];
           text = ''
             cd lock
-            deno run --allow-read --allow-run ${scripts/update-elisp-lock.ts}
+            deno run --allow-read --allow-run ${./nix/scripts/update-elisp-lock.ts}
           '';
         };
 
