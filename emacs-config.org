@@ -6089,7 +6089,8 @@ Dired with recursive directory sizes
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package dired-du))
+  (setup (:package dired-du)
+    (:set dired-du-size-format t))
 #+end_src
 *** dired-filter                                             :dired:
 :PROPERTIES:
