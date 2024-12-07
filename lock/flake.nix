@@ -690,11 +690,6 @@
       repo = "mpv.el";
       type = "github";
     };
-    nael = {
-      flake = false;
-      type = "git";
-      url = "https://codeberg.org/mekeor/nael.git";
-    };
     nix-mode = {
       flake = false;
       owner = "NixOS";
@@ -1278,12 +1273,6 @@
       flake = false;
       owner = "fxbois";
       repo = "web-mode";
-      type = "github";
-    };
-    which-key = {
-      flake = false;
-      owner = "justbur";
-      repo = "emacs-which-key";
       type = "github";
     };
     whole-line-or-region = {

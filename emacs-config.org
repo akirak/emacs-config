@@ -2303,7 +2303,7 @@ Thus I will explicitly install this package rather than using the built-in versi
                                       nov-mode))
     (add-hook 'after-init-hook #'which-function-mode))
 #+end_src
-*** which-key                                            :usability:keybindings:
+*** COMMENT which-key                                    :usability:keybindings:ARCHIVE:
 #+begin_quote
 Display available keybindings in popup
 #+end_quote
@@ -7818,6 +7818,7 @@ Major mode for Markdown-formatted text
 #+begin_src emacs-lisp
   (setup (:package markdown-mode)
     (:file-match "\\.md\\'" "\\.markdown\\'"
+                 "\\.mdoc\\'" "\\.mdx\\'"
                  "\\.livemd\\'")
     (:with-mode gfm-mode
       (:file-match "README.md\\'"))
@@ -7975,20 +7976,6 @@ control mpv for easy note-taking
                                  (getenv "WAYLAND_DISPLAY")))
                      (type . ,(rx (or "audio" "video")
                                   "/" (+ anything)))))))
-#+end_src
-*** nael
-:PROPERTIES:
-:CREATED_TIME: [2024-06-18 Tue 19:40]
-:END:
-#+begin_quote
-A humble major-mode for Lean
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package nael)
-    ;; Temporary workarounds.
-    (autoload 'nael-mode "nael")
-    (add-to-list 'auto-mode-alist '("\\.lean\\'" . nael-mode)))
 #+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
@@ -9943,7 +9930,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 213 |
+| [[org-ql-search:tags:packages][packages]]            | 212 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  12 |
@@ -9964,7 +9951,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
-| [[org-ql-search:tags:keybindings][keybindings]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:Org][Org]]                 |   3 |
@@ -9975,6 +9961,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:profiling][profiling]]           |   2 |
 | [[org-ql-search:tags:expansion][expansion]]           |   2 |
 | [[org-ql-search:tags:diff][diff]]                |   2 |
+| [[org-ql-search:tags:keybindings][keybindings]]         |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
@@ -9989,7 +9976,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:prog_mode][prog_mode]]           |   1 |
 | [[org-ql-search:tags:text_mode][text_mode]]           |   1 |
 | [[org-ql-search:tags:text][text]]                |   1 |
-| [[org-ql-search:tags:usability][usability]]           |   1 |
 | [[org-ql-search:tags:capture][capture]]             |   1 |
 | [[org-ql-search:tags:documentation][documentation]]       |   1 |
 | [[org-ql-search:tags:clipboard][clipboard]]           |   1 |
