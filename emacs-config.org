@@ -1864,6 +1864,15 @@ Operations on the current project
                                nil (symbol-value ',keymap)))))
                       (which-key--hide-popup))))))
 #+end_src
+*** replace
+:PROPERTIES:
+:CREATED_TIME: [2024-12-07 Sat 10:04]
+:END:
+
+#+begin_src emacs-lisp
+  (setup replace
+    (:global "C-c o" #'occur))
+#+end_src
 *** savehist                                               :history:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-05 Wed 17:08]
