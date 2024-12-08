@@ -7677,7 +7677,7 @@ A Git porcelain inside Emacs
                                        default-directory
                                        (string-remove-suffix "/")
                                        (file-name-directory))))
-                     (if-let (root (magit-toplevel parent-dir))
+                     (if-let* ((root (magit-toplevel parent-dir)))
                          (magit-status root)
                        (dired parent-dir))))))
 
