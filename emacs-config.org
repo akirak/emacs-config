@@ -7638,14 +7638,17 @@ A Git porcelain inside Emacs
     ;; there is no point in making this IO-intensive function run.
     (advice-add 'magit-version :override #'ignore)
 
-    (:with-map magit-status-mode-map
-      (:bind "^" (defun akirak/magit-dired-up ()
-                   "Show the parent directory using dired."
+    (:with-map (magit-status-mode-map magit-log-mode-map)
+      (:bind "^" (defun akirak/magit-up-directory ()
+                   "Visit the parent repository using magit, or visit the parent directory using dired."
                    (interactive)
-                   (dired (thread-last
-                            default-directory
-                            (string-remove-suffix "/")
-                            (file-name-directory))))))
+                   (let ((parent-dir (thread-last
+                                       default-directory
+                                       (string-remove-suffix "/")
+                                       (file-name-directory))))
+                     (if-let (root (magit-toplevel parent-dir))
+                         (magit-status root)
+                       (dired parent-dir))))))
 
     ;; Replace the binding to compose-message
     (define-key ctl-x-map "m" #'magit-dispatch)
