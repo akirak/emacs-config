@@ -12,9 +12,8 @@
           :category directory
           :face consult-file
           :items ,(lambda ()
-                    (if-let* ((project (project-current)))
-                        (let ((root (akirak-project-top-root project))
-                              (dir (abbreviate-file-name default-directory))
+                    (if-let* ((root (vc-git-root default-directory)))
+                        (let ((dir (abbreviate-file-name default-directory))
                               items)
                           (if (string-prefix-p root dir)
                               (progn
@@ -155,14 +154,12 @@
 ;;;###autoload
 (defun akirak-consult-dir-descendants (&optional dir)
   "Browse a descendant directory of DIR."
-  (interactive (list (if-let* ((pr (project-current)))
-                         (akirak-project-top-root pr)
-                       default-directory)))
+  (interactive (list (or (vc-git-root default-directory)
+                         default-directory)))
   (let* ((default-directory (if dir
                                 (expand-file-name dir)
-                              (if-let* ((pr (project-current)))
-                                  (akirak-project-top-root pr)
-                                default-directory)))
+                              (or (vc-git-root default-directory)
+                                  default-directory)))
          (selected (consult--read (process-lines "fd" "-t" "d")
                                   :category 'directory
                                   :state (consult--file-state)

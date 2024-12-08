@@ -122,8 +122,8 @@
                                    (substring name pos)
                                    (file-relative-name filename (expand-file-name
                                                                  (project-root pr))))))
-                        (_
-                         (let ((root (akirak-project-top-root pr)))
+                        (`(vc . ,_)
+                         (let ((root (vc-git-root (project-root pr))))
                            (format "[%s] %s"
                                    (file-name-nondirectory (string-remove-suffix "/" root))
                                    (file-relative-name filename (expand-file-name root))))))

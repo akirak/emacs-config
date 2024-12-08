@@ -281,15 +281,27 @@ Specify extra root files to help eglot correctly identify project roots.
 
 #+begin_src emacs-lisp
   (defvar akirak-consult-package-files nil)
+  (defvar project-vc-extra-root-markers nil)
 
   (eval-when-compile
     (define-setup-macro
      :package-files (&rest filenames)
      "Define file names of package files."
-     `(progn
-        (mapcar (lambda (filename)
-                  (add-to-list 'akirak-consult-package-files filename))
-                ',filenames))))
+     `(dolist (filename ',filenames)
+        (add-to-list 'akirak-consult-package-files filename)
+        (add-to-list 'project-vc-extra-root-markers filename))))
+#+end_src
+*** :project-roots
+:PROPERTIES:
+:CREATED_TIME: [2024-12-08 Sun 23:37]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :project-roots (&rest globs)
+     (dolist (glob globs)
+       (add-to-list 'project-vc-extra-root-markers glob))))
 #+end_src
 *** :reformatters
 :PROPERTIES:
@@ -1763,7 +1775,8 @@ Operations on the current project
                   (save-match-data
                     (when (string-match (rx bol "/nix/store/" (+ (not (any "/"))) "/")
                                         dir)
-                      `(nix-store ,(match-string 0 dir))))))
+                      `(nix-store ,(match-string 0 dir)))))
+                t)
       (cl-defmethod project-root ((project (head nix-store)))
         (cadr project)))
 
@@ -1776,7 +1789,6 @@ Operations on the current project
           (:bind "p" #'akirak-consult-project-file))
         (global-set-key (kbd "C-x M") project-prefix-map)
 
-        (add-hook 'project-find-functions #'akirak-project-find-subdir-root)
         (add-hook 'project-find-functions #'akirak-project-worktree-group-finder))))
 #+end_src
 *** prolog                                      :major__mode:Prolog:
@@ -6783,7 +6795,10 @@ Support for the F# programming language
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package fsharp-mode))
+  (setup (:package fsharp-mode)
+    (:project-roots "*.fsproj" "*.sln")
+    (:when-loaded
+      (fset 'fsharp-mode-project-root #'ignore)))
 #+end_src
 *** COMMENT fstar-mode                                            :@extra:fstar:ARCHIVE:
 :PROPERTIES:

@@ -333,7 +333,9 @@
 
 (defun akirak-consult--project-root ()
   (if-let* ((pr (project-current)))
-      (expand-file-name (akirak-project-top-root pr))
+      (expand-file-name (if (eq (car pr) 'vc)
+                            (vc-git-root (project-root pr))
+                          (project-root pr)))
     ;; TODO: Better heuristics
     (when (string-match-p (rx bol (repeat 3 (and "/" (+ anything))) "/")
                           default-directory)
@@ -503,9 +505,8 @@
 ;; Based on `consult-buffer'.
 ;;;###autoload
 (defun akirak-consult-project-file (dir)
-  (interactive (list (if-let* ((pr (project-current)))
-                         (akirak-project-top-root pr)
-                       default-directory)))
+  (interactive (list (or (akirak-consult--project-root)
+                         default-directory)))
   ;; `default-directory' can be abbreviated (e.g. in dired-mode), so it is safer
   ;; to apply `expand-file-name'.
   (let* ((akirak-consult-initial-directory (expand-file-name default-directory))
