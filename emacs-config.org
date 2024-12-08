@@ -6404,6 +6404,11 @@ Client for Language Server Protocol (LSP) servers
                    '(gleam-ts-mode . ("gleam" "lsp")))
       (add-to-list 'eglot-server-programs
                    '(zig-ts-mode . ("zls")))
+      ;; I won't use the eglot-fsharp package which seems involved too much. Just
+      ;; install fsautocomplete (e.g. via Nix) and don't rely on automatic
+      ;; installation.
+      (add-to-list 'eglot-server-programs
+                   '(fsharp-mode . ("fsautocomplete" "--adaptive-lsp-server-enabled")))
       (add-to-list 'eglot-server-programs
                    `((elixir-ts-mode heex-ts-mode elixir-mode) .
                      ,(eglot-alternatives
@@ -6768,6 +6773,17 @@ Access Git forges from Magit
 
 #+begin_src emacs-lisp
 (setup (:package forge))
+#+end_src
+*** fsharp-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-12-07 Sat 23:59]
+:END:
+#+begin_quote
+Support for the F# programming language
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package fsharp-mode))
 #+end_src
 *** COMMENT fstar-mode                                            :@extra:fstar:ARCHIVE:
 :PROPERTIES:

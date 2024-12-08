@@ -1121,6 +1121,22 @@
         "type": "github"
       }
     },
+    "fsharp-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1733635048,
+        "narHash": "sha256-W+92uVAUUchb0hevHpOeNrrQ6B/29nczRdUpljci2BY=",
+        "owner": "akirak",
+        "repo": "emacs-fsharp-mode",
+        "rev": "c1161a12cb2673fa92613ad52f425d2559d3a802",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fsharp",
+        "repo": "emacs-fsharp-mode",
+        "type": "github"
+      }
+    },
     "fullframe": {
       "flake": false,
       "locked": {
@@ -2950,6 +2966,7 @@
         "flymake-actionlint1": "flymake-actionlint1",
         "flymake-eslint": "flymake-eslint",
         "flymake-shellcheck": "flymake-shellcheck",
+        "fsharp-mode": "fsharp-mode",
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",
         "gcmh": "gcmh",

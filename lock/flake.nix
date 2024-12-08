@@ -420,6 +420,12 @@
       repo = "flymake-shellcheck";
       type = "github";
     };
+    fsharp-mode = {
+      flake = false;
+      owner = "fsharp";
+      repo = "emacs-fsharp-mode";
+      type = "github";
+    };
     fullframe = {
       flake = false;
       owner = "~tomterl";
