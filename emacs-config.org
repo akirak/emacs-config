@@ -443,6 +443,7 @@ the Garbage Collector Magic Hack
 I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
 
 #+begin_src emacs-lisp
+  ;; NOTE: I am currently not using which-key, so this should not be loaded.
   (with-eval-after-load 'which-key
     (pcase-dolist (`(,key . ,description)
                    '(("a" . "ai")
@@ -1863,18 +1864,18 @@ Operations on the current project
 
     ;; Based on a snippet from
     ;; https://karthinks.com/software/it-bears-repeating/#adding-a-hydra-like-prompt-to-repeat-mode
-    (advice-add 'repeat-post-hook :after
-                (defun repeat-help--which-key-popup ()
-                  (when (require 'which-key nil t)
-                    (if-let* ((keymap (or repeat-map
-                                          (repeat--command-property 'repeat-map))))
-                        (when (eq keymap 'diff-hl-command-map)
-                          (run-at-time
-                           which-key-idle-delay nil
-                           `(lambda ()
-                              (which-key--create-buffer-and-show
-                               nil (symbol-value ',keymap)))))
-                      (which-key--hide-popup))))))
+    ;; (advice-add 'repeat-post-hook :after #'repeat-help--which-key-popup)
+    (defun repeat-help--which-key-popup ()
+      (when (require 'which-key nil t)
+        (if-let* ((keymap (or repeat-map
+                              (repeat--command-property 'repeat-map))))
+            (when (eq keymap 'diff-hl-command-map)
+              (run-at-time
+               which-key-idle-delay nil
+               `(lambda ()
+                  (which-key--create-buffer-and-show
+                   nil (symbol-value ',keymap)))))
+          (which-key--hide-popup)))))
 #+end_src
 *** replace
 :PROPERTIES:
