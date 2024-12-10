@@ -1,7 +1,5 @@
 ;;; akirak-header-line.el --- Custom header line -*- lexical-binding: t -*-
 
-(require 'thunk)
-
 (defcustom akirak-header-line-mode-blacklist
   '(git-commit-mode
     lisp-interaction-mode
