@@ -1,7 +1,6 @@
 ;;; akirak-header-line.el --- Custom header line -*- lexical-binding: t -*-
 
 (require 'thunk)
-(require 'akirak-nix)
 
 (defcustom akirak-header-line-mode-blacklist
   '(git-commit-mode
@@ -18,6 +17,26 @@
 (defvar akirak-header-line--left-format nil)
 (defvar akirak-header-line--right-format nil)
 (defvar akirak-header-line--orig-format nil)
+
+(defvar akirak-header-line-nix-drv-name-cache
+  (make-hash-table :test #'equal))
+
+(defun akirak-header-line--parse-nix-drv-name (name)
+  (or (gethash name akirak-header-line-nix-drv-name-cache)
+      (condition-case _
+          (with-temp-buffer
+            (unless (zerop (call-process "nix"
+                                         nil (list t nil) nil
+                                         "eval" "--expr"
+                                         (format "\"%s\"" name)
+                                         "--json"
+                                         "--apply" "builtins.parseDrvName"))
+              (error "Failed to parse the derivation name %s" name))
+            (goto-char (point-min))
+            (puthash name (json-parse-buffer :object-type 'alist)
+                     akirak-header-line-nix-drv-name-cache))
+        (error (puthash name '((name . ""))
+                        akirak-header-line-nix-drv-name-cache)))))
 
 ;;;###autoload
 (define-minor-mode akirak-header-line-mode
@@ -113,7 +132,7 @@
                          (file-name-nondirectory filename))
                         (`(nix-store ,_)
                          (let* ((name (thread-last
-                                        (akirak-nix-parse-drv-name (project-name pr))
+                                        (akirak-header-line--parse-nix-drv-name (project-name pr))
                                         (alist-get 'name)))
                                 (pos (save-match-data
                                        (string-match (rx bol (+ (any alnum)) "-") name)
