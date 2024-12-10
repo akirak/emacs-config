@@ -1228,10 +1228,16 @@ The built-in =electric= package provides the following modes:
             (flymake-eslint '((eval . (flymake-eslint-enable))))
             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
             (nixfmt '((eval . (nixfmt-on-save-mode t))))
-            (zig-fmt '((eval . (zig-format-on-save-mode t)))))
+            (zig-fmt '((eval . (zig-format-on-save-mode t))))
+            (envrc '((eval . (akirak/turn-on-envrc-mode))))
+            (diff-hl '((eval . (turn-on-diff-hl-mode)))))
+        (dir-locals-set-class-variables
+         'edit
+         `((nil . (,@envrc ,@diff-hl))))
         (dir-locals-set-class-variables
          'personal
-         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
+         `((nil . (,@envrc ,@diff-hl))
+           (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
         (dir-locals-set-class-variables
          'default
          `((astro-ts-mode . (,@lsp-no-formatter))
@@ -1259,6 +1265,9 @@ The built-in =electric= package provides the following modes:
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)
+      (dir-locals-set-directory-class "~/work2/" 'edit)
+      (dir-locals-set-directory-class "~/org/" 'edit)
+      (dir-locals-set-directory-class "~/resources/" 'edit)
 
       (:set ignored-local-variable-values
             ;; github:melpa/melpa
@@ -6042,7 +6051,10 @@ Highlight uncommitted changes using VC
 
 #+begin_src emacs-lisp
   (setup (:package diff-hl)
-    (add-hook 'after-init-hook #'global-diff-hl-mode)
+    ;; Only enable diff-hl-mode in certain directories.
+    ;; See edit dir-locals class in the files section.
+    ;; (add-hook 'after-init-hook #'global-diff-hl-mode)
+
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
           diff-hl-show-staged-changes t
@@ -6633,8 +6645,9 @@ Support for `direnv' that operates buffer-locally
 
 #+begin_src emacs-lisp
   (setup (:package envrc)
-    (:with-mode envrc-global-mode
-      (:hook-into after-init-hook)))
+    (defun akirak/turn-on-envrc-mode ()
+      (unless (minibufferp)
+        (envrc-mode 1))))
 #+end_src
 *** epkg                                                          :Emacs:@extra:
 :PROPERTIES:
