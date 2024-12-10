@@ -2302,16 +2302,15 @@
     "org-make-toc": {
       "flake": false,
       "locked": {
-        "lastModified": 1725017176,
-        "narHash": "sha256-MOs1YBHS+jw63hJ5J9dcq3r6NVCYoSOS8H1VPQ7PyZ8=",
-        "owner": "akirak",
+        "lastModified": 1725050787,
+        "narHash": "sha256-9Bw2aLBrL/T6LLqO69yZfx9bAL2GChhwaDFdzBDscSw=",
+        "owner": "alphapapa",
         "repo": "org-make-toc",
-        "rev": "c2743ae700ab703ef2f72732d35a56dda749e27d",
+        "rev": "5f0f39b11c091a5abf49ddf78a6f740252920f78",
         "type": "github"
       },
       "original": {
-        "owner": "akirak",
-        "ref": "fix-global-hook",
+        "owner": "alphapapa",
         "repo": "org-make-toc",
         "type": "github"
       }

@@ -867,8 +867,7 @@
     };
     org-make-toc = {
       flake = false;
-      owner = "akirak";
-      ref = "fix-global-hook";
+      owner = "alphapapa";
       repo = "org-make-toc";
       type = "github";
     };
