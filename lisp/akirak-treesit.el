@@ -259,8 +259,7 @@
                                      (line-end-position))))))
     (_
      (when-let* ((string-start (ppss-comment-or-string-start (syntax-ppss))))
-       (akirak-treesit--kill-line-inside-string string-start)
-       t))))
+       (akirak-treesit--kill-line-inside-string string-start)))))
 
 (defun akirak-treesit--kill-line-inside-string (string-start)
   (let ((pos (point))
@@ -297,9 +296,13 @@
                         (forward-char 1)
                         (search-forward (char-to-string close-char))
                         (match-beginning 0)))))))))
-    (kill-region pos (if bound
-                         (min line-end-pos bound)
-                       line-end-pos))))
+    ;; To handle string interpolation, don't exceed the close bound of the
+    ;; current tree-sitter node.
+    (unless (< (treesit-node-end (treesit-node-at pos)) bound)
+      (kill-region pos (if bound
+                           (min line-end-pos bound)
+                         line-end-pos))
+      t)))
 
 (defun akirak-treesit--after-last-node (pos)
   (save-excursion
