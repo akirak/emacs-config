@@ -179,6 +179,8 @@
 (defcustom akirak-treesit-balanced-nodes
   '("jsx_opening_element"
     "{"
+    "("
+    "["
     ;; heex
     "start_tag"
     "start_component")
