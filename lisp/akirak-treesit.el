@@ -10,6 +10,7 @@
     ;; (define-key map [remap down-list] #'akirak-treesit-down-list)
     (define-key map [remap backward-up-list] #'akirak-treesit-backward-up-list)
     (define-key map [remap kill-line] #'akirak-treesit-smart-kill-line)
+    (define-key map [remap open-line] #'akirak-treesit-open-line)
     (define-key map (kbd "C-M-n") #'akirak-treesit-forward-up-list)
     (define-key map (kbd "M-n") #'akirak-treesit-next-same-type-sibling)
     (define-key map (kbd "M-p") #'akirak-treesit-previous-same-type-sibling)
@@ -322,6 +323,29 @@
                                  (goto-char (treesit-node-end parent))
                                  (funcall show-paren-data-function)))
                        2)))))
+
+;;;###autoload
+(defun akirak-treesit-open-line (&optional n)
+  (interactive "p")
+  (if (akirak-treesit--at-bol-or-indent)
+      ;; treesit-node-at can fail, so it is necessary to add a fallback.
+      (if-let* ((next-node (ignore-errors
+                             (treesit-node-at (if (looking-at (rx (* blank)))
+                                                  (match-end 0)
+
+                                                (point))))))
+          (let ((indentation (current-indentation))
+                (on-end (and (null (treesit-node-next-sibling next-node))
+                             (equal (treesit-node-type next-node)
+                                    (treesit-node-text next-node)))))
+            (beginning-of-line)
+            (open-line n)
+            (indent-to-column (if on-end
+                                  (+ indentation tab-width)
+                                indentation)))
+        (message "Fallback after a treesit failure")
+        (open-line n))
+    (open-line n)))
 
 ;;;###autoload
 (defun akirak-treesit-raise-node ()
