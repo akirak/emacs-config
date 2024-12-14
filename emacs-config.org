@@ -4999,6 +4999,15 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                "M-i SPC" #'akirak-paren-select-inner
                "M-i M-SPC" #'akirak-paren-select-outer)))
 #+end_src
+*** akirak-passage
+:PROPERTIES:
+:CREATED_TIME: [2024-12-14 Sat 16:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup akirak-passage
+    (:global "<f12> S" #'akirak-passage))
+#+end_src
 *** akirak-project
 #+begin_src emacs-lisp
   (setup akirak-project
