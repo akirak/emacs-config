@@ -1846,6 +1846,7 @@ Operations on the current project
           ;; Default value. Some packages add extra entries after the package is
           ;; loaded.
           recentf-exclude (list (concat "^" (regexp-opt (list "/nix/store/"
+                                                              "/dev/shm/"
                                                               (abbreviate-file-name
                                                                user-emacs-directory))
                                                         :group)))))
