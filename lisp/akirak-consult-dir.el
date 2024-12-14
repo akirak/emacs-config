@@ -49,8 +49,8 @@
           ;; :enabled ,(lambda () consult-dir-project-list-function)
           :items project-known-project-roots))
 
-(defvar akirak-consult-dir-open-project-source
-  `(:name "Open projects"
+(defvar akirak-consult-dir-open-vc-git-source
+  `(:name "Open Git roots of current buffers"
           :narrow ?o
           :category project-root
           :face consult-file
@@ -64,13 +64,10 @@
                       (delq nil)
                       (seq-uniq)
                       (mapcar (lambda (dir)
-                                (when-let* ((pr (and dir
-                                                     (file-directory-p dir)
-                                                     (project-current nil dir))))
-                                  (project-root pr))))
+                                (when (and dir
+                                           (file-directory-p dir))
+                                  (vc-git-root dir))))
                       (delq nil)
-                      (delq (when-let* ((pr (project-current)))
-                              (project-root pr)))
                       (seq-uniq)))))
 
 (defvar akirak-consult-dir-project-parent-source
@@ -103,7 +100,7 @@
     ;; switching to a tab visiting a directory is often a more natural way to
     ;; switch to the directory. See akirak-consult.el.
     akirak-consult-source-tab-bar-tab
-    akirak-consult-dir-open-project-source
+    akirak-consult-dir-open-vc-git-source
     akirak-consult-dir-dired-source
     akirak-consult-dir-or-magit-bookmark-source
     akirak-consult-dir-project-source
