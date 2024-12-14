@@ -8819,6 +8819,10 @@ Reformat SQL using sqlformat or pgformatter
 :PROPERTIES:
 :CREATED_TIME: [2024-12-14 Sat 09:44]
 :END:
+#+begin_quote
+Mode for fontification of ~/.ssh/config
+[[https://github.com/peterhoeg/ssh-config-mode-el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package ssh-config-mode)
