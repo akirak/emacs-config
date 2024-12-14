@@ -1136,6 +1136,12 @@
       repo = "ssass-mode";
       type = "github";
     };
+    ssh-config-mode = {
+      flake = false;
+      owner = "peterhoeg";
+      repo = "ssh-config-mode-el";
+      type = "github";
+    };
     string-inflection = {
       flake = false;
       owner = "akicho8";

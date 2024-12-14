@@ -8800,6 +8800,15 @@ Reformat SQL using sqlformat or pgformatter
       (:with-mode sql-mode
         (:bind "C-c C-f" #'sqlformat-buffer))))
 #+end_src
+*** ssh-config-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-12-14 Sat 09:44]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package ssh-config-mode)
+    (:file-match "/\\.ssh/config\\'" "/sshd?_config\\'"))
+#+end_src
 *** string-inflection                                      :editing:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-27 Sun 14:07]
@@ -9994,7 +10003,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 212 |
+| [[org-ql-search:tags:packages][packages]]            | 213 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  12 |

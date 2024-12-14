@@ -3083,6 +3083,7 @@
         "spinner": "spinner",
         "sqlformat": "sqlformat",
         "ssass-mode": "ssass-mode",
+        "ssh-config-mode": "ssh-config-mode",
         "string-inflection": "string-inflection",
         "super-save": "super-save",
         "svelte-mode": "svelte-mode",
@@ -3242,6 +3243,22 @@
       "original": {
         "owner": "AdamNiederer",
         "repo": "ssass-mode",
+        "type": "github"
+      }
+    },
+    "ssh-config-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1725221920,
+        "narHash": "sha256-bI4W88cAIDHek1isgcU4pWCsrDAlmIQLO14RzMg7s1A=",
+        "owner": "peterhoeg",
+        "repo": "ssh-config-mode-el",
+        "rev": "2d8e321c34a7535ae6dd0f6a1b0fd54e47aba612",
+        "type": "github"
+      },
+      "original": {
+        "owner": "peterhoeg",
+        "repo": "ssh-config-mode-el",
         "type": "github"
       }
     },
