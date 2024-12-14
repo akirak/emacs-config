@@ -14,22 +14,6 @@
     },
     "version": "1.9.9"
   },
-  "dired-du": {
-    "archive": {
-      "narHash": "sha256-TJMJEtOk52CRgMRh3DlqszS+I7m/jjpnW9rgJ7jvVhA=",
-      "type": "tarball",
-      "url": "https://elpa.gnu.org/packages/dired-du-0.5.2.tar"
-    },
-    "inventory": {
-      "type": "archive",
-      "url": "https://elpa.gnu.org/packages/"
-    },
-    "packageRequires": {
-      "cl-lib": "0.5",
-      "emacs": "24.4"
-    },
-    "version": "0.5.2"
-  },
   "org-transclusion": {
     "archive": {
       "narHash": "sha256-B8f0Mj9jdOXW8GxKvAAn+qyVSWojJywiXoO047l5624=",

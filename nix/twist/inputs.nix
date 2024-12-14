@@ -134,15 +134,6 @@
     };
   };
 
-  org-make-toc = _: _: {
-    origin = {
-      type = "github";
-      owner = "akirak";
-      repo = "org-make-toc";
-      ref = "fix-global-hook";
-    };
-  };
-
   persist = _: super: {
     files = builtins.removeAttrs super.files [ "persist.texi" ];
   };

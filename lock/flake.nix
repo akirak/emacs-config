@@ -420,6 +420,12 @@
       repo = "flymake-shellcheck";
       type = "github";
     };
+    fsharp-mode = {
+      flake = false;
+      owner = "fsharp";
+      repo = "emacs-fsharp-mode";
+      type = "github";
+    };
     fullframe = {
       flake = false;
       owner = "~tomterl";
@@ -861,8 +867,7 @@
     };
     org-make-toc = {
       flake = false;
-      owner = "akirak";
-      ref = "fix-global-hook";
+      owner = "alphapapa";
       repo = "org-make-toc";
       type = "github";
     };
@@ -1129,6 +1134,12 @@
       flake = false;
       owner = "AdamNiederer";
       repo = "ssass-mode";
+      type = "github";
+    };
+    ssh-config-mode = {
+      flake = false;
+      owner = "peterhoeg";
+      repo = "ssh-config-mode-el";
       type = "github";
     };
     string-inflection = {

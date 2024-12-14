@@ -217,7 +217,8 @@
 
 (defun akirak-org-dog-project-context (project)
   (require 'project)
-  (pcase (when-let* ((dir (akirak-project-vc-root project)))
+  (pcase (when-let* ((pr-root (project-root project))
+                     (dir (vc-git-root pr-root)))
            (thread-last
              (abbreviate-file-name dir)
              file-name-split))

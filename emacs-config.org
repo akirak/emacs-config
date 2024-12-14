@@ -6,8 +6,6 @@
 
 [[https://akirak.cachix.org][file:https://img.shields.io/badge/cachix-akirak-blue.svg]]
 
-[[https://flakehub.com/flake/akirak/emacs-config][file:https://img.shields.io/endpoint?url=https://flakehub.com/f/akirak/emacs-config/badge]]
-
 This repository contains my Emacs configuration which is built using [[https://github.com/akirak/emacs-twist][emacs-twist]].
 I use home-manager to install the configuration.
 
@@ -281,15 +279,27 @@ Specify extra root files to help eglot correctly identify project roots.
 
 #+begin_src emacs-lisp
   (defvar akirak-consult-package-files nil)
+  (defvar project-vc-extra-root-markers nil)
 
   (eval-when-compile
     (define-setup-macro
      :package-files (&rest filenames)
      "Define file names of package files."
-     `(progn
-        (mapcar (lambda (filename)
-                  (add-to-list 'akirak-consult-package-files filename))
-                ',filenames))))
+     `(dolist (filename ',filenames)
+        (add-to-list 'akirak-consult-package-files filename)
+        (add-to-list 'project-vc-extra-root-markers filename))))
+#+end_src
+*** :project-roots
+:PROPERTIES:
+:CREATED_TIME: [2024-12-08 Sun 23:37]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :project-roots (&rest globs)
+     (dolist (glob globs)
+       (add-to-list 'project-vc-extra-root-markers glob))))
 #+end_src
 *** :reformatters
 :PROPERTIES:
@@ -431,6 +441,7 @@ the Garbage Collector Magic Hack
 I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
 
 #+begin_src emacs-lisp
+  ;; NOTE: I am currently not using which-key, so this should not be loaded.
   (with-eval-after-load 'which-key
     (pcase-dolist (`(,key . ,description)
                    '(("a" . "ai")
@@ -1215,10 +1226,16 @@ The built-in =electric= package provides the following modes:
             (flymake-eslint '((eval . (flymake-eslint-enable))))
             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
             (nixfmt '((eval . (nixfmt-on-save-mode t))))
-            (zig-fmt '((eval . (zig-format-on-save-mode t)))))
+            (zig-fmt '((eval . (zig-format-on-save-mode t))))
+            (envrc '((eval . (akirak/turn-on-envrc-mode))))
+            (diff-hl '((eval . (turn-on-diff-hl-mode)))))
+        (dir-locals-set-class-variables
+         'edit
+         `((nil . (,@envrc ,@diff-hl))))
         (dir-locals-set-class-variables
          'personal
-         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
+         `((nil . (,@envrc ,@diff-hl))
+           (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
         (dir-locals-set-class-variables
          'default
          `((astro-ts-mode . (,@lsp-no-formatter))
@@ -1246,6 +1263,9 @@ The built-in =electric= package provides the following modes:
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)
+      (dir-locals-set-directory-class "~/work2/" 'edit)
+      (dir-locals-set-directory-class "~/org/" 'edit)
+      (dir-locals-set-directory-class "~/resources/" 'edit)
 
       (:set ignored-local-variable-values
             ;; github:melpa/melpa
@@ -1763,7 +1783,8 @@ Operations on the current project
                   (save-match-data
                     (when (string-match (rx bol "/nix/store/" (+ (not (any "/"))) "/")
                                         dir)
-                      `(nix-store ,(match-string 0 dir))))))
+                      `(nix-store ,(match-string 0 dir)))))
+                t)
       (cl-defmethod project-root ((project (head nix-store)))
         (cadr project)))
 
@@ -1776,7 +1797,6 @@ Operations on the current project
           (:bind "p" #'akirak-consult-project-file))
         (global-set-key (kbd "C-x M") project-prefix-map)
 
-        (add-hook 'project-find-functions #'akirak-project-find-subdir-root)
         (add-hook 'project-find-functions #'akirak-project-worktree-group-finder))))
 #+end_src
 *** prolog                                      :major__mode:Prolog:
@@ -1851,18 +1871,27 @@ Operations on the current project
 
     ;; Based on a snippet from
     ;; https://karthinks.com/software/it-bears-repeating/#adding-a-hydra-like-prompt-to-repeat-mode
-    (advice-add 'repeat-post-hook :after
-                (defun repeat-help--which-key-popup ()
-                  (when (require 'which-key nil t)
-                    (if-let* ((keymap (or repeat-map
-                                          (repeat--command-property 'repeat-map))))
-                        (when (eq keymap 'diff-hl-command-map)
-                          (run-at-time
-                           which-key-idle-delay nil
-                           `(lambda ()
-                              (which-key--create-buffer-and-show
-                               nil (symbol-value ',keymap)))))
-                      (which-key--hide-popup))))))
+    ;; (advice-add 'repeat-post-hook :after #'repeat-help--which-key-popup)
+    (defun repeat-help--which-key-popup ()
+      (when (require 'which-key nil t)
+        (if-let* ((keymap (or repeat-map
+                              (repeat--command-property 'repeat-map))))
+            (when (eq keymap 'diff-hl-command-map)
+              (run-at-time
+               which-key-idle-delay nil
+               `(lambda ()
+                  (which-key--create-buffer-and-show
+                   nil (symbol-value ',keymap)))))
+          (which-key--hide-popup)))))
+#+end_src
+*** replace
+:PROPERTIES:
+:CREATED_TIME: [2024-12-07 Sat 10:04]
+:END:
+
+#+begin_src emacs-lisp
+  (setup replace
+    (:global "C-c o" #'occur))
 #+end_src
 *** savehist                                               :history:
 :PROPERTIES:
@@ -2123,24 +2152,32 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup tab-bar
-    (:set tab-bar-auto-width-max '(350 25)
-          tab-bar-tab-name-function
-          (defun akirak/tab-bar-tab-name ()
-            "An experimental function for determining the name of a tab."
-            (let* ((buffer (window-buffer (or (minibuffer-selected-window)
-                                              (and (window-minibuffer-p)
-                                                   (get-mru-window)))))
-                   (dir (buffer-local-value 'default-directory buffer))
-                   (pr (project-current nil dir)))
-              (if (or (not pr)
-                      (buffer-local-value 'org-src-mode buffer)
-                      (buffer-base-buffer buffer))
-                  (buffer-name buffer)
-                (format "%s:%s"
-                        (truncate-string-to-width (project-name pr) 12)
-                        (if (eq 'dired-mode (buffer-local-value 'major-mode buffer))
-                            (file-relative-name dir (project-root pr))
-                          (buffer-name buffer))))))))
+    (:set tab-bar-auto-width-max '(350 25))
+    ;; Not currently used.
+    ;; (:set tab-bar-tab-name-function #'akirak/tab-bar-tab-name)
+    ;; (:when-loaded
+    ;;   (:also-load vc-git))
+    (defun akirak/tab-bar-tab-name ()
+      "An experimental function for determining the name of a tab."
+      (let* ((buffer (window-buffer (or (minibuffer-selected-window)
+                                        (and (window-minibuffer-p)
+                                             (get-mru-window)))))
+             (dir (buffer-local-value 'default-directory buffer))
+             ;; project-current is slow, so use vc instead. For now, only
+             ;; Git is supported
+             (vc-root (vc-git-root dir)))
+        (if (or (not vc-root)
+                (buffer-local-value 'org-src-mode buffer)
+                (buffer-base-buffer buffer))
+            (buffer-name buffer)
+          (format "%s:%s"
+                  (thread-first
+                    (directory-file-name vc-root)
+                    (file-name-nondirectory)
+                    (truncate-string-to-width 12))
+                  (if (eq 'dired-mode (buffer-local-value 'major-mode buffer))
+                      (file-relative-name dir vc-root)
+                    (buffer-name buffer)))))))
 #+end_src
 *** tempo
 :PROPERTIES:
@@ -2805,7 +2842,7 @@ Outline-based notes management and organizer
         (when (require 'akirak-org nil t)
           (:hook #'akirak-org-protected-mode)))
 
-      (:global "C-c o" #'org-open-at-point-global)
+      (:global "M-g o" #'org-open-at-point-global)
 
       (defvar akirak/org-file-apps-set-from-mime nil)
       (advice-add 'org-open-file
@@ -6012,7 +6049,10 @@ Highlight uncommitted changes using VC
 
 #+begin_src emacs-lisp
   (setup (:package diff-hl)
-    (add-hook 'after-init-hook #'global-diff-hl-mode)
+    ;; Only enable diff-hl-mode in certain directories.
+    ;; See edit dir-locals class in the files section.
+    ;; (add-hook 'after-init-hook #'global-diff-hl-mode)
+
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
           diff-hl-show-staged-changes t
@@ -6071,7 +6111,7 @@ Collapse unique nested paths in dired listing
 #+end_src
 
 I will manually turn on =dired-collapse-mode= when necessary.
-*** dired-du
+*** COMMENT dired-du                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-23 Tue 17:21]
 :END:
@@ -6080,7 +6120,8 @@ Dired with recursive directory sizes
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package dired-du))
+  (setup (:package dired-du)
+    (:set dired-du-size-format t))
 #+end_src
 *** dired-filter                                             :dired:
 :PROPERTIES:
@@ -6394,6 +6435,11 @@ Client for Language Server Protocol (LSP) servers
                    '(gleam-ts-mode . ("gleam" "lsp")))
       (add-to-list 'eglot-server-programs
                    '(zig-ts-mode . ("zls")))
+      ;; I won't use the eglot-fsharp package which seems involved too much. Just
+      ;; install fsautocomplete (e.g. via Nix) and don't rely on automatic
+      ;; installation.
+      (add-to-list 'eglot-server-programs
+                   '(fsharp-mode . ("fsautocomplete" "--adaptive-lsp-server-enabled")))
       (add-to-list 'eglot-server-programs
                    `((elixir-ts-mode heex-ts-mode elixir-mode) .
                      ,(eglot-alternatives
@@ -6597,8 +6643,9 @@ Support for `direnv' that operates buffer-locally
 
 #+begin_src emacs-lisp
   (setup (:package envrc)
-    (:with-mode envrc-global-mode
-      (:hook-into after-init-hook)))
+    (defun akirak/turn-on-envrc-mode ()
+      (unless (minibufferp)
+        (envrc-mode 1))))
 #+end_src
 *** epkg                                                          :Emacs:@extra:
 :PROPERTIES:
@@ -6758,6 +6805,20 @@ Access Git forges from Magit
 
 #+begin_src emacs-lisp
 (setup (:package forge))
+#+end_src
+*** fsharp-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-12-07 Sat 23:59]
+:END:
+#+begin_quote
+Support for the F# programming language
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package fsharp-mode)
+    (:project-roots "*.fsproj" "*.sln")
+    (:when-loaded
+      (fset 'fsharp-mode-project-root #'ignore)))
 #+end_src
 *** COMMENT fstar-mode                                            :@extra:fstar:ARCHIVE:
 :PROPERTIES:
@@ -7628,14 +7689,17 @@ A Git porcelain inside Emacs
     ;; there is no point in making this IO-intensive function run.
     (advice-add 'magit-version :override #'ignore)
 
-    (:with-map magit-status-mode-map
-      (:bind "^" (defun akirak/magit-dired-up ()
-                   "Show the parent directory using dired."
+    (:with-map (magit-status-mode-map magit-log-mode-map)
+      (:bind "^" (defun akirak/magit-up-directory ()
+                   "Visit the parent repository using magit, or visit the parent directory using dired."
                    (interactive)
-                   (dired (thread-last
-                            default-directory
-                            (string-remove-suffix "/")
-                            (file-name-directory))))))
+                   (let ((parent-dir (thread-last
+                                       default-directory
+                                       (string-remove-suffix "/")
+                                       (file-name-directory))))
+                     (if-let* ((root (magit-toplevel parent-dir)))
+                         (magit-status root)
+                       (dired parent-dir))))))
 
     ;; Replace the binding to compose-message
     (define-key ctl-x-map "m" #'magit-dispatch)
@@ -8735,6 +8799,15 @@ Reformat SQL using sqlformat or pgformatter
     (:with-feature sql
       (:with-mode sql-mode
         (:bind "C-c C-f" #'sqlformat-buffer))))
+#+end_src
+*** ssh-config-mode
+:PROPERTIES:
+:CREATED_TIME: [2024-12-14 Sat 09:44]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package ssh-config-mode)
+    (:file-match "/\\.ssh/config\\'" "/sshd?_config\\'"))
 #+end_src
 *** string-inflection                                      :editing:
 :PROPERTIES:
@@ -9930,7 +10003,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 212 |
+| [[org-ql-search:tags:packages][packages]]            | 213 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  12 |

@@ -10,6 +10,7 @@
     ;; (define-key map [remap down-list] #'akirak-treesit-down-list)
     (define-key map [remap backward-up-list] #'akirak-treesit-backward-up-list)
     (define-key map [remap kill-line] #'akirak-treesit-smart-kill-line)
+    (define-key map [remap open-line] #'akirak-treesit-open-line)
     (define-key map (kbd "C-M-n") #'akirak-treesit-forward-up-list)
     (define-key map (kbd "M-n") #'akirak-treesit-next-same-type-sibling)
     (define-key map (kbd "M-p") #'akirak-treesit-previous-same-type-sibling)
@@ -179,6 +180,8 @@
 (defcustom akirak-treesit-balanced-nodes
   '("jsx_opening_element"
     "{"
+    "("
+    "["
     ;; heex
     "start_tag"
     "start_component")
@@ -218,7 +221,8 @@
                       (< node-start (treesit-node-end t)))))
             (if (node-at-point-p node)
                 (if (< (treesit-node-start node) (point))
-                    (kill-region start (min bound (treesit-node-end node)))
+                    (akirak-treesit--kill-line-region start (min bound (treesit-node-end node))
+                                                      arg)
                   (catch 'stop
                     (while (setq parent (treesit-node-parent node))
                       (when (and (or (< (treesit-node-start parent) start)
@@ -232,10 +236,14 @@
                       (setq node parent)))
                   (if parent
                       (if-let* ((end-node (akirak-treesit--find-last-node node parent bound)))
-                          (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end end-node)))
+                          (akirak-treesit--kill-line-region
+                           (point) (akirak-treesit--after-last-node (treesit-node-end end-node))
+                           arg)
                         ;; No node to delete, fallback to the default behavior
                         (kill-line))
-                    (kill-region (point) (akirak-treesit--after-last-node (treesit-node-end node)))))
+                    (akirak-treesit--kill-line-region
+                     (point) (akirak-treesit--after-last-node (treesit-node-end node))
+                     arg)))
               ;; There is no node at point, so find the next node and delete until
               ;; the start of the node
               (setq parent (treesit-node-parent node))
@@ -244,8 +252,39 @@
               (if-let* ((node (seq-find `(lambda (node)
                                            (> (treesit-node-start node) ,(point)))
                                         (treesit-node-children parent))))
-                  (kill-region (point) (treesit-node-start node))
-                (kill-region (point) (treesit-node-end parent)))))))))
+                  (akirak-treesit--kill-line-region (point) (treesit-node-start node)
+                                                    arg)
+                (akirak-treesit--kill-line-region (point) (treesit-node-end parent)
+                                                  arg))))))))
+
+(defun akirak-treesit--kill-line-region (start end &optional arg)
+  (pcase-let*
+      ((`(,start-at-bol-or-indent . ,end-at-bol)
+        (save-excursion
+          (goto-char start)
+          (cons (akirak-treesit--at-bol-or-indent)
+                (save-excursion
+                  (goto-char end)
+                  (bolp))))))
+    (cond
+     ((and start-at-bol-or-indent end-at-bol)
+      (if arg
+          (progn
+            (kill-region (save-excursion
+                           (goto-char start)
+                           (line-beginning-position))
+                         end)
+            (back-to-indentation))
+        (let ((indentation (current-indentation)))
+          (kill-region (save-excursion
+                         (goto-char start)
+                         (line-beginning-position))
+                       (1- end))
+          (indent-to indentation))))
+     (end-at-bol
+      (kill-region start (1- end)))
+     (t
+      (kill-region start end)))))
 
 (defun akirak-treesit--maybe-kill-inside-string ()
   (pcase (treesit-language-at (point))
@@ -256,8 +295,7 @@
                                      (line-end-position))))))
     (_
      (when-let* ((string-start (ppss-comment-or-string-start (syntax-ppss))))
-       (akirak-treesit--kill-line-inside-string string-start)
-       t))))
+       (akirak-treesit--kill-line-inside-string string-start)))))
 
 (defun akirak-treesit--kill-line-inside-string (string-start)
   (let ((pos (point))
@@ -294,9 +332,16 @@
                         (forward-char 1)
                         (search-forward (char-to-string close-char))
                         (match-beginning 0)))))))))
-    (kill-region pos (if bound
-                         (min line-end-pos bound)
-                       line-end-pos))))
+    ;; To handle string interpolation, don't exceed the close bound of the
+    ;; current tree-sitter node.
+    (unless (< (treesit-node-end (treesit-node-at pos)) bound)
+      (kill-region pos (if bound
+                           (min line-end-pos bound)
+                         line-end-pos))
+      t)))
+
+(defun akirak-treesit--at-bol-or-indent ()
+  (looking-back (rx bol (* blank)) (line-beginning-position)))
 
 (defun akirak-treesit--after-last-node (pos)
   (save-excursion
@@ -320,6 +365,29 @@
                                  (goto-char (treesit-node-end parent))
                                  (funcall show-paren-data-function)))
                        2)))))
+
+;;;###autoload
+(defun akirak-treesit-open-line (&optional n)
+  (interactive "p")
+  (if (akirak-treesit--at-bol-or-indent)
+      ;; treesit-node-at can fail, so it is necessary to add a fallback.
+      (if-let* ((next-node (ignore-errors
+                             (treesit-node-at (if (looking-at (rx (* blank)))
+                                                  (match-end 0)
+
+                                                (point))))))
+          (let ((indentation (current-indentation))
+                (on-end (and (null (treesit-node-next-sibling next-node))
+                             (equal (treesit-node-type next-node)
+                                    (treesit-node-text next-node)))))
+            (beginning-of-line)
+            (open-line n)
+            (indent-to-column (if on-end
+                                  (+ indentation tab-width)
+                                indentation)))
+        (message "Fallback after a treesit failure")
+        (open-line n))
+    (open-line n)))
 
 ;;;###autoload
 (defun akirak-treesit-raise-node ()
