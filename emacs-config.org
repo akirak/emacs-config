@@ -4705,7 +4705,7 @@ This is a collection of various utilities to enhance the experience.
              "C-\"" #'akirak-avy-symbol-overlay-put
              "M-g `" #'akirak-avy-org-block))
 #+end_src
-*** akirak-bitwarden
+*** COMMENT akirak-bitwarden                                                   :ARCHIVE:
 #+begin_src emacs-lisp
   (setup akirak-bitwarden
     (:with-mode akirak-bitwarden-rbw-mode
