@@ -1277,7 +1277,11 @@ The built-in =electric= package provides the following modes:
                            (package-recipe-mode)))))))
 #+end_src
 
+Notes:
+
 - Use =akirak-files-ensure-abbrev-list= to update =directory-abbrev-alist=. (see [[*akirak][akirak]]).
+- For now, I won't use ~derived-mode-add-parents~ to turn on [[https://archive.casouri.cc/note/2024/emacs-30-tree-sitter/#Derived%20mode%20check][the extra derived mode check]].
+
 
 *** find-func
 :PROPERTIES:
