@@ -230,7 +230,7 @@ With ARG, pick a text from the kill ring instead of the last one."
                            (line-beginning-position)))
         (let* ((lang (akirak-org--find-src-lang (match-string 1)))
                ;; With ! suffix, auto-generate a file name for org-babel.
-               (auto-filename (match-string 2))
+               (auto-filename (not (string-empty-p (match-string 2))))
                (params (concat (match-string 3)
                                (when auto-filename
                                  (format " :file \"%s\""
