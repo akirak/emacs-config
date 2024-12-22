@@ -623,9 +623,10 @@
    ("l" "Language study (input)" akirak-capture-language-study)
    ("v" "Vocabulary" akirak-capture-vocabulary)]
   ["Others" :class transient-row
-   ("a" "Append to clock" akirak-capture-append-block-to-clock
+   ("b" "Convert to a link to a new entry" akirak-org-dog-new-entry-from-region)
+   ("a" "Append block to clock" akirak-capture-append-block-to-clock
     :if org-clocking-p)
-   ("h" "Heading" akirak-capture-append-heading-to-clock
+   ("h" "Append heading to clock" akirak-capture-append-heading-to-clock
     :if org-clocking-p)]
 
   (interactive)

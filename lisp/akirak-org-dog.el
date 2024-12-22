@@ -5,6 +5,27 @@
 (require 'akirak-org-capture)
 
 ;;;###autoload
+(defun akirak-org-dog-new-entry-from-region (beg end)
+  (interactive "r" nil org-mode)
+  (let* ((link-text (buffer-substring beg end))
+         (title (read-string "Title: " link-text))
+         (parent-id (pcase-exhaustive (org-dog-buffer-object)
+                      ;; TODO: Add support for other classes
+                      ((cl-type org-dog-facade-datetree-file)
+                       (delete-region beg end)
+                       (goto-char beg)
+                       (push-mark)
+                       (org-with-wide-buffer
+                        (goto-char (point-min))
+                        (re-search-forward (format org-complex-heading-regexp-format "Backlog"))
+                        (org-end-of-subtree)
+                        (insert "\n** " title)
+                        (unless (looking-at (rx bol))
+                          (org-open-line 1))
+                        (org-id-get-create))))))
+    (insert (org-link-make-string (concat "id:" parent-id) link-text))))
+
+;;;###autoload
 (defun akirak-org-dog-datetree-indirect-clock-in (&optional arg)
   "Clock into a datetree in another file.
 
