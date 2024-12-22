@@ -31,6 +31,12 @@
 
 (require 'org)
 
+(defcustom akirak-org-babel-output-directories
+  '(("~/org/" . "~/resources/diagrams/"))
+  "Directory mappings for auto-generated file names."
+  :type '(alist :key-type directory
+                :value-type directory))
+
 ;;;###autoload
 (defun akirak-org-sort-buffer ()
   "Sort entries in the buffer according to sorting_type property values."
@@ -219,10 +225,18 @@ With ARG, pick a text from the kill ring instead of the last one."
        ;; Insert a source block.
        ((and (looking-at (rx ">" eol))
              (looking-back (rx bol "<" (group (+ (any "-" word)))
+                               (group (optional "!"))
                                (group (optional (+ blank) (+ anything))))
                            (line-beginning-position)))
-        (let ((lang (akirak-org--find-src-lang (match-string 1)))
-              (params (match-string 2)))
+        (let* ((lang (akirak-org--find-src-lang (match-string 1)))
+               ;; With ! suffix, auto-generate a file name for org-babel.
+               (auto-filename (match-string 2))
+               (params (concat (match-string 3)
+                               (when auto-filename
+                                 (format " :file \"%s\""
+                                         (akirak-org--generate-babel-output-filename
+                                          ;; TODO: Determine the suffix based on the language
+                                          ".svg"))))))
           (delete-region (line-beginning-position)
                          (line-end-position))
           (org-insert-structure-template
@@ -251,6 +265,41 @@ With ARG, pick a text from the kill ring instead of the last one."
           (insert (make-string count ?<)
                   (make-string count ?>))
           (backward-char count)))))))
+
+(defun akirak-org--generate-babel-output-filename (suffix)
+  (let* ((dir (or (akirak-org--find-babel-output-directory)
+                  (read-directory-name "Enter the output directory: ")))
+         (basename (concat (akirak-org--escape-filename
+                            (org-link-display-format (org-entry-get nil "ITEM")))
+                           "-" (car (s-match (rx (+ alnum))
+                                             (org-id-get-create)))))
+         (filename (expand-file-name (concat basename suffix) dir))
+         (idx 0))
+    (while (file-exists-p filename)
+      (cl-incf idx)
+      (setq filename (expand-file-name (concat (format "%s-%d" basename idx) suffix)
+                                       dir)))
+    (abbreviate-file-name filename)))
+
+(defun akirak-org--escape-filename (str)
+  (with-temp-buffer
+    (insert str)
+    (goto-char (point-min))
+    (let (result)
+      (while (re-search-forward (rx (+ (any alnum))) nil t)
+        (push (match-string 0) result))
+      (mapconcat #'downcase (seq-take (nreverse result) 4) "-"))))
+
+(defun akirak-org--find-babel-output-directory ()
+  (let ((file (thread-last
+                (org-base-buffer (current-buffer))
+                (buffer-file-name)
+                (abbreviate-file-name))))
+    (pcase (cl-find-if `(lambda (ent)
+                          (string-prefix-p (car ent) ,file))
+                       akirak-org-babel-output-directories)
+      (`(,_ . ,output-dir)
+       output-dir))))
 
 (defun akirak-org--find-src-lang (needle)
   (if (or (assoc needle org-src-lang-modes)

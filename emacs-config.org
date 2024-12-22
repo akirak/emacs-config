@@ -1277,7 +1277,11 @@ The built-in =electric= package provides the following modes:
                            (package-recipe-mode)))))))
 #+end_src
 
+Notes:
+
 - Use =akirak-files-ensure-abbrev-list= to update =directory-abbrev-alist=. (see [[*akirak][akirak]]).
+- For now, I won't use ~derived-mode-add-parents~ to turn on [[https://archive.casouri.cc/note/2024/emacs-30-tree-sitter/#Derived%20mode%20check][the extra derived mode check]].
+
 
 *** find-func
 :PROPERTIES:
@@ -1846,6 +1850,7 @@ Operations on the current project
           ;; Default value. Some packages add extra entries after the package is
           ;; loaded.
           recentf-exclude (list (concat "^" (regexp-opt (list "/nix/store/"
+                                                              "/dev/shm/"
                                                               (abbreviate-file-name
                                                                user-emacs-directory))
                                                         :group)))))
@@ -1968,6 +1973,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 #+begin_src emacs-lisp
   (setup simple
     (:set suggest-key-bindings nil
+          what-cursor-show-names t
           ;; Don't auto-save remote files.
           remote-file-name-inhibit-auto-save t)
 
@@ -4704,7 +4710,7 @@ This is a collection of various utilities to enhance the experience.
              "C-\"" #'akirak-avy-symbol-overlay-put
              "M-g `" #'akirak-avy-org-block))
 #+end_src
-*** akirak-bitwarden
+*** COMMENT akirak-bitwarden                                                   :ARCHIVE:
 #+begin_src emacs-lisp
   (setup akirak-bitwarden
     (:with-mode akirak-bitwarden-rbw-mode
@@ -4998,6 +5004,20 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                "M-i d" #'akirak-paren-delete
                "M-i SPC" #'akirak-paren-select-inner
                "M-i M-SPC" #'akirak-paren-select-outer)))
+#+end_src
+*** akirak-passage
+:PROPERTIES:
+:CREATED_TIME: [2024-12-14 Sat 16:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup akirak-passage
+    (:global "<f12> S" #'akirak-passage)
+    (:when-loaded
+      (when (require 'exec-path-from-shell nil t)
+        ;; Prevent from evaluating a remote shell
+        (let ((default-directory "~/"))
+          (setq akirak-passage-dir (exec-path-from-shell-getenv "PASSAGE_DIR"))))))
 #+end_src
 *** akirak-project
 #+begin_src emacs-lisp
@@ -6720,15 +6740,18 @@ Get environment variables such as $PATH from the shell
 
 #+begin_src emacs-lisp
   (setup (:package exec-path-from-shell)
-    (when (and (or window-system
-                   (daemonp))
-               (not (equal akirak/os-id "nixos")))
+    (when (or window-system
+              (daemonp))
       (require 'exec-path-from-shell)
-      (unless (eq system-type 'darwin)
+      (when (equal akirak/os-id "nixos")
+        (setq exec-path-from-shell-variables nil))
+      (unless (or (eq system-type 'darwin)
+                  (equal akirak/os-id "nixos"))
         (add-to-list 'exec-path-from-shell-variables "XDG_CONFIG_HOME")
         (add-to-list 'exec-path-from-shell-variables "XDG_CACHE_HOME")
         (add-to-list 'exec-path-from-shell-variables "XDG_DATA_HOME"))
-      (exec-path-from-shell-initialize)))
+      (when exec-path-from-shell-variables
+        (exec-path-from-shell-initialize))))
 #+end_src
 *** COMMENT fanyi                                                   :dictionary:ARCHIVE:
 :PROPERTIES:
@@ -8804,6 +8827,10 @@ Reformat SQL using sqlformat or pgformatter
 :PROPERTIES:
 :CREATED_TIME: [2024-12-14 Sat 09:44]
 :END:
+#+begin_quote
+Mode for fontification of ~/.ssh/config
+[[https://github.com/peterhoeg/ssh-config-mode-el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package ssh-config-mode)

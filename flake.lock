@@ -60,11 +60,11 @@
         "nixpkgs-lib": "nixpkgs-lib"
       },
       "locked": {
-        "lastModified": 1730504689,
-        "narHash": "sha256-hgmguH29K2fvs9szpq2r3pz2/8cJd2LPS+b4tfNFCwE=",
+        "lastModified": 1733312601,
+        "narHash": "sha256-4pDvzqnegAfRkPwO3wmwBhVi/Sye1mzps0zHWYnP88c=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "506278e768c2a08bec68eb62932193e341f55c90",
+        "rev": "205b12d8b7cd4802fbcb8e8ef6a0f1408781a4f9",
         "type": "github"
       },
       "original": {
@@ -94,11 +94,11 @@
     "flake-pins": {
       "flake": false,
       "locked": {
-        "lastModified": 1733216103,
-        "narHash": "sha256-ih8hqdtGmK6XnRnoYqW4dMB+RF4nTIxrFaGj0v3R63k=",
+        "lastModified": 1734404796,
+        "narHash": "sha256-ChRbZq5LG88NhOhkvhHizPZI5SgSg1jqxqqJAhZcNDI=",
         "owner": "akirak",
         "repo": "flake-pins",
-        "rev": "3e51e1bbbaf29f017404407b60198aec3de1a2b6",
+        "rev": "a6d5ed13dec4e46116c572b469632dfc21ff4b4e",
         "type": "github"
       },
       "original": {
@@ -118,11 +118,11 @@
       },
       "locked": {
         "dir": "pkgs/cli-tools",
-        "lastModified": 1733216103,
-        "narHash": "sha256-ih8hqdtGmK6XnRnoYqW4dMB+RF4nTIxrFaGj0v3R63k=",
+        "lastModified": 1734404796,
+        "narHash": "sha256-ChRbZq5LG88NhOhkvhHizPZI5SgSg1jqxqqJAhZcNDI=",
         "owner": "akirak",
         "repo": "flake-pins",
-        "rev": "3e51e1bbbaf29f017404407b60198aec3de1a2b6",
+        "rev": "a6d5ed13dec4e46116c572b469632dfc21ff4b4e",
         "type": "github"
       },
       "original": {
@@ -182,11 +182,11 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1734112268,
-        "narHash": "sha256-NHVi/hxV5z/gCZxvp5v6KpJfdrMo9yasmbjgVqM27Ws=",
+        "lastModified": 1734289830,
+        "narHash": "sha256-oWVMNGJWE0rR+ZqwRCzTnk21yyfqEuKOYoqQMJkDP+A=",
         "owner": "melpa",
         "repo": "melpa",
-        "rev": "9b90415a9d145aee22f9b1268a5b432369c7f7ec",
+        "rev": "ed2c4cc0ce0a0da9863f27cca3abf18f1c198e33",
         "type": "github"
       },
       "original": {
@@ -228,14 +228,14 @@
     },
     "nixpkgs-lib": {
       "locked": {
-        "lastModified": 1730504152,
-        "narHash": "sha256-lXvH/vOfb4aGYyvFmZK/HlsNsr/0CVWlwYvo2rxJk3s=",
+        "lastModified": 1733096140,
+        "narHash": "sha256-1qRH7uAUsyQI7R1Uwl4T+XvdNv778H0Nb5njNrqvylY=",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/cc2f28000298e1269cea6612cd06ec9979dd5d7f.tar.gz"
+        "url": "https://github.com/NixOS/nixpkgs/archive/5487e69da40cbd611ab2cadee0b4637225f7cfae.tar.gz"
       },
       "original": {
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/cc2f28000298e1269cea6612cd06ec9979dd5d7f.tar.gz"
+        "url": "https://github.com/NixOS/nixpkgs/archive/5487e69da40cbd611ab2cadee0b4637225f7cfae.tar.gz"
       }
     },
     "nixpkgs-lib_2": {
@@ -282,11 +282,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1733097829,
-        "narHash": "sha256-9hbb1rqGelllb4kVUCZ307G2k3/UhmA8PPGBoyuWaSw=",
+        "lastModified": 1734126203,
+        "narHash": "sha256-0XovF7BYP50rTD2v4r55tR5MuBLet7q4xIz6Rgh3BBU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "2c15aa59df0017ca140d9ba302412298ab4bf22a",
+        "rev": "71a6392e367b08525ee710a93af2e80083b5b3e2",
         "type": "github"
       },
       "original": {
@@ -299,11 +299,11 @@
     "nongnu-elpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1733484972,
-        "narHash": "sha256-5OmDLgf9FVST95/ups/oWV8RB61SpZWyQi5h8p3HllI=",
+        "lastModified": 1734120928,
+        "narHash": "sha256-ZABgfkH7s6oSoJKdGqLB8db0njdAchhQSis/iLD5GBQ=",
         "owner": "elpa-mirrors",
         "repo": "nongnu",
-        "rev": "51a73f8ec72f7a3d46d0f9e406ab808664ec97be",
+        "rev": "672ea5bec28aad89f8197f2f30fe13bf43f84e08",
         "type": "github"
       },
       "original": {
@@ -428,11 +428,11 @@
     "tree-sitter-astro": {
       "flake": false,
       "locked": {
-        "lastModified": 1713870123,
-        "narHash": "sha256-qc9InFEQgeFfFReJuQd8WjTNK4fFMEaWcqQUcGxxuBI=",
+        "lastModified": 1733680234,
+        "narHash": "sha256-ZsItSpYeSPnHn4avpHS54P4J069X9cW8VCRTM9Gfefg=",
         "owner": "virchau13",
         "repo": "tree-sitter-astro",
-        "rev": "4be180759ec13651f72bacee65fa477c64222a1a",
+        "rev": "6e3bad36a8c12d579e73ed4f05676141a4ccf68d",
         "type": "github"
       },
       "original": {
