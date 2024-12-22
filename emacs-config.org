@@ -3415,6 +3415,7 @@ A programmable workflow layer for Org mode
             ("Cargo\\.toml\\'" . "programming/rust")
             ("\\.editorconfig\\'" . "programming/editorconfig")
             ("astro\.config\.[cm]?js\\'" . "software/astro.build")
+            ("machines/\\([-a-z0-9]+\\)/" . "hosts/\\1")
             ("renovate.json\\'" . "software/renovate-bot"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in
           org-dog-clock-default-query-filter
