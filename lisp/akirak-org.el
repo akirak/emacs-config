@@ -708,6 +708,35 @@ The point should be at the heading."
 ;;;; Other useful commands
 
 ;;;###autoload
+(defun akirak-org-convert-to-entry-link (beg end)
+  "Convert the region to a link to a new Org entry."
+  (interactive "r" nil org-mode)
+  (let* ((link-text (buffer-substring beg end))
+         (title (read-string "Title: " link-text))
+         parent-id)
+    (delete-region beg end)
+    (goto-char beg)
+    (save-excursion
+      (pcase-exhaustive (org-dog-buffer-object)
+        ;; TODO: Add support for other classes
+        ((and (cl-type org-dog-facade-datetree-file)
+              (guard (member "Backlog" (org-get-outline-path nil 'use-cache))))
+         (save-restriction
+           (widen)
+           (goto-char (point-min))
+           (re-search-forward (format org-complex-heading-regexp-format "Backlog"))
+           (org-end-of-subtree)
+           (insert "\n** " title)))
+        (`nil
+         (let ((level (org-outline-level)))
+           (org-end-of-subtree)
+           (insert "\n" (make-string level ?\*) " " title))))
+      (unless (looking-at (rx eol))
+        (org-open-line 1))
+      (setq parent-id (org-id-get-create)))
+    (insert (org-link-make-string (concat "id:" parent-id) link-text))))
+
+;;;###autoload
 (defun akirak-org-select-body ()
   (interactive)
   (org-back-to-heading)
