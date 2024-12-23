@@ -3256,6 +3256,7 @@ Outline-based notes management and organizer
 #+begin_src emacs-lisp
   (setup org-src
     (:set org-src-tab-acts-natively t
+          ;; It would be nice if there were split-window-above option.
           org-src-window-setup 'split-window-below)
 
     (advice-add 'org-src-switch-to-buffer
