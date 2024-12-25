@@ -8041,11 +8041,16 @@ Eclipse-like moving and duplicating lines or rectangles
     (:bind "M-P" #'move-dup-move-lines-up
            "M-N" #'move-dup-move-lines-down)
 
-    (add-hook 'prog-mode-hook #'move-dup-mode)
-    (add-hook 'text-mode-hook
-              (defun akirak/turn-on-move-dup-mode ()
-                (unless (derived-mode-p 'org-mode 'markdown-mode)
-                  (move-dup-mode 1)))))
+    (defun akirak/turn-on-move-dup-mode ()
+      (unless (or (minibufferp)
+                  (derived-mode-p 'org-mode 'markdown-mode 'special-mode))
+        (move-dup-mode 1)))
+
+    ;; Based on `global-move-dup-mode', but add some extra exclusion rules.
+    (define-globalized-minor-mode akirak/global-move-dup-mode
+      move-dup-mode akirak/turn-on-move-dup-mode)
+
+    (add-hook 'after-init-hook #'akirak/global-move-dup-mode))
 #+end_src
 *** mpv
 :PROPERTIES:
