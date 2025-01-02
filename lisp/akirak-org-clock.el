@@ -431,25 +431,25 @@ DAYS default to `akirak-org-clock-history-threshold'."
                       (optional " " (*? nonl)))))
 
 (defun akirak-org-clock--recently-active-p (file &optional days)
-  "Return non-nil is there is a recent activity in FILE."
-  (cl-flet
-      ((find-ts ()
-         ;; A regular expression based on `org-ts-regexp-inactive' from org.el.
-         (re-search-forward (format "\\[\\(%s\\)\\]"
-                                    (akirak-org-clock--date-regxps days))
-                            nil t)))
-    (if-let* ((buffer (find-buffer-visiting file)))
-        (with-current-buffer buffer
-          (org-with-wide-buffer
-           (goto-char (point-min))
-           (find-ts)))
-      (with-temp-buffer
-        (insert-file-contents file)
-        (goto-char (point-min))
-        (let ((org-inhibit-startup t)
-              (org-modules-loaded t))
-          (delay-mode-hooks (org-mode)))
-        (find-ts)))))
+  "Return non-nil is there is any recent activity in FILE."
+  (let ((regexp (format "\\[\\(%s\\)\\]"
+                        (akirak-org-clock--date-regxps days))))
+    (cl-flet
+        ((find-ts ()
+           ;; A regular expression based on `org-ts-regexp-inactive' from org.el.
+           (re-search-forward regexp nil t)))
+      (if-let* ((buffer (find-buffer-visiting file)))
+          (with-current-buffer buffer
+            (org-with-wide-buffer
+             (goto-char (point-min))
+             (find-ts)))
+        (with-temp-buffer
+          (insert-file-contents file)
+          (goto-char (point-min))
+          (let ((org-inhibit-startup t)
+                (org-modules-loaded t))
+            (delay-mode-hooks (org-mode)))
+          (find-ts))))))
 
 ;;;; Open clocked entries
 
