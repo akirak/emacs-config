@@ -1026,7 +1026,7 @@ The built-in =electric= package provides the following modes:
                              1)))))
 
     (:with-mode lisp-data-mode
-      (:file-match "/melpa/recipes/"))
+      (:file-match "/recipes/[-a-z0-9]+\\'"))
 
     (:auto-insert
      ("-tests?\\.el\\'" . (> ";;; -*- lexical-binding: t -*-\n\n"
