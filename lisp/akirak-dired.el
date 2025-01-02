@@ -60,7 +60,7 @@
 
             ("Databases"
              (file . t)
-             (extension "db" "sqlite" "sqlite3"))
+             (extension "db" "sqlite" "sqlite3" "duckdb" "parquet"))
 
             ;; Binary files
             ("Books and papers"
