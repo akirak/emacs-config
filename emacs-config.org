@@ -6940,34 +6940,6 @@ Emacs Minor mode to automatically commit and push
     (:set gac-silent-message-p t
           gac-default-message #'akirak/git-auto-commit-message)
 
-    (defcustom akirak/git-auto-commit-directory-list nil
-      "List of directories in which `git-auto-commit-mode' is turned on."
-      :type '(repeat directory))
-
-    (with-eval-after-load 'files
-      (dir-locals-set-class-variables
-       'git-auto-commit
-       '((nil . ((eval . (git-auto-commit-mode t))
-                 (gac-debounce-interval . 300)))))
-      (dolist (dir akirak/git-auto-commit-directory-list)
-        (dir-locals-set-directory-class dir 'git-auto-commit)))
-
-    (defun akirak/git-auto-commit-enable-for-project ()
-      "Enable `git-auto-commit-mode' in the directory."
-      (interactive)
-      (if-let* ((dir (abbreviate-file-name (project-root (project-current)))))
-          (progn
-            (customize-push-and-save 'akirak/git-auto-commit-directory-list
-                                     (list dir))
-            (dir-locals-set-directory-class dir 'git-auto-commit
-                                            (current-time))
-            (let ((expanded-dir (expand-file-name (file-name-as-directory dir))))
-              (dolist (buffer (buffer-list))
-                (when-let* ((file (buffer-file-name buffer)))
-                  (when (string-prefix-p expanded-dir file)
-                    (git-auto-commit-mode t))))))
-        (user-error "No project")))
-
     (defun akirak/git-auto-commit-message (filename)
       (when-let* ((pr (project-current nil (file-name-directory filename)))
                   (root (project-root pr)))
