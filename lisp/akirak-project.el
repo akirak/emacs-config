@@ -9,6 +9,11 @@
 (declare-function github-linguist-update-projects "ext:github-linguist")
 (declare-function nix3-flake-show "ext:nix3")
 
+(defmacro akirak-project-with-extra-vc-root-markers (&rest body)
+  (declare (indent 0))
+  `(let ((project-vc-extra-root-markers akirak-project-vc-extra-root-markers))
+     ,@body))
+
 ;;;###autoload
 (defun akirak-project-rescan ()
   (interactive)

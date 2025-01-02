@@ -279,7 +279,13 @@ Specify extra root files to help eglot correctly identify project roots.
 
 #+begin_src emacs-lisp
   (defvar akirak-consult-package-files nil)
-  (defvar project-vc-extra-root-markers nil)
+  (defvar akirak-project-vc-extra-root-markers nil
+    "Swap for `project-vc-extra-root-markers'.
+
+  `project-vc-extra-root-markers' slows down Emacs in many ways, so I
+  prefer keeping it empty throughout most of the time. Use
+  `akirak-project-with-extra-vc-root-markers' macro to explicitly declare
+  when you need the extra root markers.")
 
   (eval-when-compile
     (define-setup-macro
@@ -287,7 +293,7 @@ Specify extra root files to help eglot correctly identify project roots.
      "Define file names of package files."
      `(dolist (filename ',filenames)
         (add-to-list 'akirak-consult-package-files filename)
-        (add-to-list 'project-vc-extra-root-markers filename))))
+        (add-to-list 'akirak-project-vc-extra-root-markers filename))))
 #+end_src
 *** :project-roots
 :PROPERTIES:
@@ -299,7 +305,7 @@ Specify extra root files to help eglot correctly identify project roots.
     (define-setup-macro
      :project-roots (&rest globs)
      (dolist (glob globs)
-       (add-to-list 'project-vc-extra-root-markers glob))))
+       (add-to-list 'akirak-project-vc-extra-root-markers glob))))
 #+end_src
 *** :reformatters
 :PROPERTIES:
