@@ -25,7 +25,7 @@ in
     trap cleanup ERR EXIT
 
     ln -s ${initFile}/init.el "$initdir/init.el"
-    ln -s ${../emacs/early-init.el} "$initdir/early-init.el"
+    ln -s ${../../early-init.el} "$initdir/early-init.el"
 
     ${emacs-env}/bin/emacs --init-directory="$initdir" "$@"
   ''
