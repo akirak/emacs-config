@@ -346,6 +346,8 @@ Specify extra root files to help eglot correctly identify project roots.
      "Set the default values of variables."
      `(setq-default ,@args)))
 #+end_src
+
+Generally speaking, ~setopt~ is preferred over ~setq~, but it slows down the startup performance.
 *** :status
 By default, settings inside =:status= clauses are not loaded.
 
