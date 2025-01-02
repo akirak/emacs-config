@@ -5910,6 +5910,9 @@ A transient for cosmetics on source code
 :PROPERTIES:
 :CREATED_TIME: [2025-01-02 Thu 23:59]
 :END:
+#+begin_quote
+Major mode for editing comma/char separated values
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package csv-mode)
@@ -8562,6 +8565,10 @@ This contains workarounds for puni-mode, like mode-specific soft deletion.
 :PROPERTIES:
 :CREATED_TIME: [2025-01-02 Thu 23:59]
 :END:
+#+begin_quote
+Highlight CSV and TSV files in different rainbow colors
+[[https://github.com/emacs-vs/rainbow-csv]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package rainbow-csv)
@@ -10064,7 +10071,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 213 |
+| [[org-ql-search:tags:packages][packages]]            | 215 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  12 |
