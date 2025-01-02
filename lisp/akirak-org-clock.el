@@ -164,60 +164,55 @@ Example values are shown below:
 
 (defun akirak-org-clock--target ()
   (or akirak-org-clock-target
-      (when-let* ((pr (or (project-current)
-                          (cond
-                           ((not (string-prefix-p "~/" (abbreviate-file-name default-directory)))
-                            nil)
-                           ((yes-or-no-p "Not in a project. Run git init?")
-                            (when (buffer-file-name)
-                              (let ((dir (file-name-directory (buffer-file-name))))
-                                (unless (file-directory-p dir)
-                                  (make-directory dir 'parents))))
-                            (let ((default-directory (read-directory-name
-                                                      "Run git init at: ")))
-                              (call-process "git" nil nil nil "init"))
-                            (or (project-current)
-                                (user-error "The directory is not inside a project")))
-                           (t
-                            (user-error "Must be in a project"))))))
-        (pcase (when (eq (car pr) 'vc)
-                 (vc-git-root (project-root pr)))
-          ((rx "/foss/contributions/")
-           (list (delq nil (list (car (akirak-org-dog-path-files))
-                                 (car (akirak-org-dog-major-mode-files))))
-                 "tag:@contribution "
-                 "@contribution"
-                 nil))
-          ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
-                (app (match-string 1) category))
-           (list (org-dog-select 'absolute
-                   `(relative :regexp ,(rx-to-string `(and "/" ,category
-                                                           (?  "." (+ (not (any "/"))))
-                                                           ".org"))))
-                 ""
-                 nil
-                 nil))
-          ("~/org/"
-           (if (eq major-mode 'org-memento-policy-mode)
-               (list (list "~/org/focus.org" "~/org/meta.org")
-                     ""
-                     nil
-                     nil)
-             (list (list "~/org/meta.org")
-                   "todo: "
+      (pcase (or (vc-git-root default-directory)
+                 (cond
+                  ((not (string-prefix-p "~/" (abbreviate-file-name default-directory)))
+                   nil)
+                  ((yes-or-no-p "Not in a project. Run git init?")
+                   (when (buffer-file-name)
+                     (let ((dir (file-name-directory (buffer-file-name))))
+                       (unless (file-directory-p dir)
+                         (make-directory dir 'parents))))
+                   (let ((default-directory (read-directory-name
+                                             "Run git init at: ")))
+                     (call-process "git" nil nil nil "init")
+                     default-directory))
+                  (t
+                   (user-error "Must be in a project"))))
+        (`nil)
+        ((rx "/foss/contributions/")
+         (list (delq nil (list (car (akirak-org-dog-path-files))
+                               (car (akirak-org-dog-major-mode-files))))
+               "tag:@contribution "
+               "@contribution"
+               nil))
+        ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
+              (app (match-string 1) category))
+         (list (org-dog-select 'absolute
+                 `(relative :regexp ,(rx-to-string `(and "/" ,category
+                                                         (?  "." (+ (not (any "/"))))
+                                                         ".org"))))
+               ""
+               nil
+               nil))
+        ("~/org/"
+         (if (eq major-mode 'org-memento-policy-mode)
+             (list (list "~/org/focus.org" "~/org/meta.org")
+                   ""
                    nil
-                   nil)))
-          ((rx bol "/nix/store/")
-           ;; You cannot store in Nix
-           nil)
-          (_
-           (require 'akirak-org-dog)
-           (list (append (akirak-org-dog-project-files)
-                         (akirak-org-dog-path-files)
-                         (akirak-org-dog-major-mode-files))
+                   nil)
+           (list (list "~/org/meta.org")
                  "todo: "
                  nil
-                 t))))))
+                 nil)))
+        (_
+         (require 'akirak-org-dog)
+         (list (append (akirak-org-dog-project-files)
+                       (akirak-org-dog-path-files)
+                       (akirak-org-dog-major-mode-files))
+               "todo: "
+               nil
+               t)))))
 
 ;;;###autoload
 (defun akirak-org-clock-in-to-project ()
