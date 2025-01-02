@@ -12,8 +12,8 @@
 (setq frame-inhibit-implied-resize t)
 (setq inhibit-x-resources t)
 
-(add-hook 'after-init-hook
+(add-hook 'emacs-startup-hook
           `(lambda ()
              (setq file-name-handler-alist ',file-name-handler-alist))
-          0)
+          99)
 (setq file-name-handler-alist nil)

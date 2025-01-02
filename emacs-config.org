@@ -279,7 +279,13 @@ Specify extra root files to help eglot correctly identify project roots.
 
 #+begin_src emacs-lisp
   (defvar akirak-consult-package-files nil)
-  (defvar project-vc-extra-root-markers nil)
+  (defvar akirak-project-vc-extra-root-markers nil
+    "Swap for `project-vc-extra-root-markers'.
+
+  `project-vc-extra-root-markers' slows down Emacs in many ways, so I
+  prefer keeping it empty throughout most of the time. Use
+  `akirak-project-with-extra-vc-root-markers' macro to explicitly declare
+  when you need the extra root markers.")
 
   (eval-when-compile
     (define-setup-macro
@@ -287,7 +293,7 @@ Specify extra root files to help eglot correctly identify project roots.
      "Define file names of package files."
      `(dolist (filename ',filenames)
         (add-to-list 'akirak-consult-package-files filename)
-        (add-to-list 'project-vc-extra-root-markers filename))))
+        (add-to-list 'akirak-project-vc-extra-root-markers filename))))
 #+end_src
 *** :project-roots
 :PROPERTIES:
@@ -299,7 +305,7 @@ Specify extra root files to help eglot correctly identify project roots.
     (define-setup-macro
      :project-roots (&rest globs)
      (dolist (glob globs)
-       (add-to-list 'project-vc-extra-root-markers glob))))
+       (add-to-list 'akirak-project-vc-extra-root-markers glob))))
 #+end_src
 *** :reformatters
 :PROPERTIES:
@@ -346,6 +352,8 @@ Specify extra root files to help eglot correctly identify project roots.
      "Set the default values of variables."
      `(setq-default ,@args)))
 #+end_src
+
+Generally speaking, ~setopt~ is preferred over ~setq~, but it slows down the startup performance.
 *** :status
 By default, settings inside =:status= clauses are not loaded.
 
@@ -1026,7 +1034,7 @@ The built-in =electric= package provides the following modes:
                              1)))))
 
     (:with-mode lisp-data-mode
-      (:file-match "/melpa/recipes/"))
+      (:file-match "/recipes/[-a-z0-9]+\\'"))
 
     (:auto-insert
      ("-tests?\\.el\\'" . (> ";;; -*- lexical-binding: t -*-\n\n"
@@ -1049,7 +1057,7 @@ The built-in =electric= package provides the following modes:
                       (file-name-nondirectory (or buffer-file-name (buffer-name)))
                       " ends here"))
      ("/recipes/[-a-z0-9]+\\'" . (> "(" (file-name-nondirectory (buffer-file-name))
-                            " :fetcher github :repo \"" _ "\")")))
+                                    " :fetcher github :repo \"" _ "\")")))
 
     (defun akirak/emacs-lisp-eval-buffer-or-load-file ()
       (interactive)
@@ -3256,6 +3264,7 @@ Outline-based notes management and organizer
 #+begin_src emacs-lisp
   (setup org-src
     (:set org-src-tab-acts-natively t
+          ;; It would be nice if there were split-window-above option.
           org-src-window-setup 'split-window-below)
 
     (advice-add 'org-src-switch-to-buffer
@@ -3415,6 +3424,7 @@ A programmable workflow layer for Org mode
             ("Cargo\\.toml\\'" . "programming/rust")
             ("\\.editorconfig\\'" . "programming/editorconfig")
             ("astro\.config\.[cm]?js\\'" . "software/astro.build")
+            ("machines/\\([-a-z0-9]+\\)/" . "hosts/\\1")
             ("renovate.json\\'" . "software/renovate-bot"))
           org-dog-clock-in-fallback-fn #'akirak-capture-clock-in
           org-dog-clock-default-query-filter
@@ -5835,7 +5845,7 @@ Recoll queries using consult
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
 #+begin_quote
-An unofficial Copilot plugin for Emacs
+An unofficial Copilot plugin
 [[https://github.com/copilot-emacs/copilot.el]]
 #+end_quote
 
@@ -5895,6 +5905,18 @@ A transient for cosmetics on source code
 #+begin_src emacs-lisp
   (setup (:package cosmetic-transient)
     (:global "C-c m" #'cosmetic-transient))
+#+end_src
+*** csv-mode
+:PROPERTIES:
+:CREATED_TIME: [2025-01-02 Thu 23:59]
+:END:
+#+begin_quote
+Major mode for editing comma/char separated values
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package csv-mode)
+    (:file-match "\\.csv\\'"))
 #+end_src
 *** cue-mode
 :PROPERTIES:
@@ -8039,11 +8061,16 @@ Eclipse-like moving and duplicating lines or rectangles
     (:bind "M-P" #'move-dup-move-lines-up
            "M-N" #'move-dup-move-lines-down)
 
-    (add-hook 'prog-mode-hook #'move-dup-mode)
-    (add-hook 'text-mode-hook
-              (defun akirak/turn-on-move-dup-mode ()
-                (unless (derived-mode-p 'org-mode 'markdown-mode)
-                  (move-dup-mode 1)))))
+    (defun akirak/turn-on-move-dup-mode ()
+      (unless (or (minibufferp)
+                  (derived-mode-p 'org-mode 'markdown-mode 'special-mode))
+        (move-dup-mode 1)))
+
+    ;; Based on `global-move-dup-mode', but add some extra exclusion rules.
+    (define-globalized-minor-mode akirak/global-move-dup-mode
+      move-dup-mode akirak/turn-on-move-dup-mode)
+
+    (add-hook 'after-init-hook #'akirak/global-move-dup-mode))
 #+end_src
 *** mpv
 :PROPERTIES:
@@ -8534,6 +8561,19 @@ For auto-pairing, you can use =electric-pair-mode= along with puni.
 #+end_src
 
 This contains workarounds for puni-mode, like mode-specific soft deletion.
+*** rainbow-csv
+:PROPERTIES:
+:CREATED_TIME: [2025-01-02 Thu 23:59]
+:END:
+#+begin_quote
+Highlight CSV and TSV files in different rainbow colors
+[[https://github.com/emacs-vs/rainbow-csv]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package rainbow-csv)
+    (:hook-into csv-mode-hook tsv-mode-hook))
+#+end_src
 *** rainbow-delimiters                                      :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]
@@ -9241,8 +9281,9 @@ Hot-reload packages with twist
 
 #+begin_src emacs-lisp
   (setup (:package twist)
-    (add-hook 'emacs-startup-hook #'twist-watch-mode)
-    (:global "<f12> e R" #'twist-update))
+    (:status personal
+      (add-hook 'emacs-startup-hook #'twist-watch-mode)
+      (:global "<f12> e R" #'twist-update)))
 #+end_src
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
@@ -10030,7 +10071,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 213 |
+| [[org-ql-search:tags:packages][packages]]            | 215 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  12 |

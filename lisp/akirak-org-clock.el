@@ -164,60 +164,55 @@ Example values are shown below:
 
 (defun akirak-org-clock--target ()
   (or akirak-org-clock-target
-      (when-let* ((pr (or (project-current)
-                          (cond
-                           ((not (string-prefix-p "~/" (abbreviate-file-name default-directory)))
-                            nil)
-                           ((yes-or-no-p "Not in a project. Run git init?")
-                            (when (buffer-file-name)
-                              (let ((dir (file-name-directory (buffer-file-name))))
-                                (unless (file-directory-p dir)
-                                  (make-directory dir 'parents))))
-                            (let ((default-directory (read-directory-name
-                                                      "Run git init at: ")))
-                              (call-process "git" nil nil nil "init"))
-                            (or (project-current)
-                                (user-error "The directory is not inside a project")))
-                           (t
-                            (user-error "Must be in a project"))))))
-        (pcase (when (eq (car pr) 'vc)
-                 (vc-git-root (project-root pr)))
-          ((rx "/foss/contributions/")
-           (list (delq nil (list (car (akirak-org-dog-path-files))
-                                 (car (akirak-org-dog-major-mode-files))))
-                 "tag:@contribution "
-                 "@contribution"
-                 nil))
-          ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
-                (app (match-string 1) category))
-           (list (org-dog-select 'absolute
-                   `(relative :regexp ,(rx-to-string `(and "/" ,category
-                                                           (?  "." (+ (not (any "/"))))
-                                                           ".org"))))
-                 ""
-                 nil
-                 nil))
-          ("~/org/"
-           (if (eq major-mode 'org-memento-policy-mode)
-               (list (list "~/org/focus.org" "~/org/meta.org")
-                     ""
-                     nil
-                     nil)
-             (list (list "~/org/meta.org")
-                   "todo: "
+      (pcase (or (vc-git-root default-directory)
+                 (cond
+                  ((not (string-prefix-p "~/" (abbreviate-file-name default-directory)))
+                   nil)
+                  ((yes-or-no-p "Not in a project. Run git init?")
+                   (when (buffer-file-name)
+                     (let ((dir (file-name-directory (buffer-file-name))))
+                       (unless (file-directory-p dir)
+                         (make-directory dir 'parents))))
+                   (let ((default-directory (read-directory-name
+                                             "Run git init at: ")))
+                     (call-process "git" nil nil nil "init")
+                     default-directory))
+                  (t
+                   (user-error "Must be in a project"))))
+        (`nil)
+        ((rx "/foss/contributions/")
+         (list (delq nil (list (car (akirak-org-dog-path-files))
+                               (car (akirak-org-dog-major-mode-files))))
+               "tag:@contribution "
+               "@contribution"
+               nil))
+        ((and (rx "/learning/" (group (+ (not (any "/")))) "/")
+              (app (match-string 1) category))
+         (list (org-dog-select 'absolute
+                 `(relative :regexp ,(rx-to-string `(and "/" ,category
+                                                         (?  "." (+ (not (any "/"))))
+                                                         ".org"))))
+               ""
+               nil
+               nil))
+        ("~/org/"
+         (if (eq major-mode 'org-memento-policy-mode)
+             (list (list "~/org/focus.org" "~/org/meta.org")
+                   ""
                    nil
-                   nil)))
-          ((rx bol "/nix/store/")
-           ;; You cannot store in Nix
-           nil)
-          (_
-           (require 'akirak-org-dog)
-           (list (append (akirak-org-dog-project-files)
-                         (akirak-org-dog-path-files)
-                         (akirak-org-dog-major-mode-files))
+                   nil)
+           (list (list "~/org/meta.org")
                  "todo: "
                  nil
-                 t))))))
+                 nil)))
+        (_
+         (require 'akirak-org-dog)
+         (list (append (akirak-org-dog-project-files)
+                       (akirak-org-dog-path-files)
+                       (akirak-org-dog-major-mode-files))
+               "todo: "
+               nil
+               t)))))
 
 ;;;###autoload
 (defun akirak-org-clock-in-to-project ()
@@ -436,25 +431,25 @@ DAYS default to `akirak-org-clock-history-threshold'."
                       (optional " " (*? nonl)))))
 
 (defun akirak-org-clock--recently-active-p (file &optional days)
-  "Return non-nil is there is a recent activity in FILE."
-  (cl-flet
-      ((find-ts ()
-         ;; A regular expression based on `org-ts-regexp-inactive' from org.el.
-         (re-search-forward (format "\\[\\(%s\\)\\]"
-                                    (akirak-org-clock--date-regxps days))
-                            nil t)))
-    (if-let* ((buffer (find-buffer-visiting file)))
-        (with-current-buffer buffer
-          (org-with-wide-buffer
-           (goto-char (point-min))
-           (find-ts)))
-      (with-temp-buffer
-        (insert-file-contents file)
-        (goto-char (point-min))
-        (let ((org-inhibit-startup t)
-              (org-modules-loaded t))
-          (delay-mode-hooks (org-mode)))
-        (find-ts)))))
+  "Return non-nil is there is any recent activity in FILE."
+  (let ((regexp (format "\\[\\(%s\\)\\]"
+                        (akirak-org-clock--date-regxps days))))
+    (cl-flet
+        ((find-ts ()
+           ;; A regular expression based on `org-ts-regexp-inactive' from org.el.
+           (re-search-forward regexp nil t)))
+      (if-let* ((buffer (find-buffer-visiting file)))
+          (with-current-buffer buffer
+            (org-with-wide-buffer
+             (goto-char (point-min))
+             (find-ts)))
+        (with-temp-buffer
+          (insert-file-contents file)
+          (goto-char (point-min))
+          (let ((org-inhibit-startup t)
+                (org-modules-loaded t))
+            (delay-mode-hooks (org-mode)))
+          (find-ts))))))
 
 ;;;; Open clocked entries
 

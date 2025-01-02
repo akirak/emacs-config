@@ -87,7 +87,7 @@ in
         )
 
         "--ro-bind"
-        ../../../emacs/early-init.el
+        ../../early-init.el
         (userEmacsDirectoryMountPoint + "/early-init.el")
 
         "--ro-bind"

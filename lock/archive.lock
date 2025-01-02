@@ -14,6 +14,22 @@
     },
     "version": "1.9.9"
   },
+  "csv-mode": {
+    "archive": {
+      "narHash": "sha256-ErzKM6usjp2FrrbYwadJCfiivenMCDD9uojwJbzV3co=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/packages/csv-mode-1.27.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/packages/"
+    },
+    "packageRequires": {
+      "cl-lib": "0.5",
+      "emacs": "27.1"
+    },
+    "version": "1.27"
+  },
   "org-transclusion": {
     "archive": {
       "narHash": "sha256-B8f0Mj9jdOXW8GxKvAAn+qyVSWojJywiXoO047l5624=",

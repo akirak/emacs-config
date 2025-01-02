@@ -1,6 +1,7 @@
 ;;; akirak-consult.el ---  -*- lexical-binding: t -*-
 
 (require 'consult)
+(require 'akirak-project)
 
 (defvar akirak-consult-source-tab-bar-tab
   `(:name "Tab"
@@ -332,14 +333,15 @@
        :regexp (rx ".nix" eol))))
 
 (defun akirak-consult--project-root ()
-  (if-let* ((pr (project-current)))
-      (expand-file-name (if (eq (car pr) 'vc)
-                            (vc-git-root (project-root pr))
-                          (project-root pr)))
-    ;; TODO: Better heuristics
-    (when (string-match-p (rx bol (repeat 3 (and "/" (+ anything))) "/")
-                          default-directory)
-      default-directory)))
+  (akirak-project-with-extra-vc-root-markers
+    (if-let* ((pr (project-current)))
+        (expand-file-name (if (eq (car pr) 'vc)
+                              (vc-git-root (project-root pr))
+                            (project-root pr)))
+      ;; TODO: Better heuristics
+      (when (string-match-p (rx bol (repeat 3 (and "/" (+ anything))) "/")
+                            default-directory)
+        default-directory))))
 
 (defun akirak-consult--filter-alternate-files (files this-file)
   (when this-file
