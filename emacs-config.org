@@ -1049,7 +1049,7 @@ The built-in =electric= package provides the following modes:
                       (file-name-nondirectory (or buffer-file-name (buffer-name)))
                       " ends here"))
      ("/recipes/[-a-z0-9]+\\'" . (> "(" (file-name-nondirectory (buffer-file-name))
-                            " :fetcher github :repo \"" _ "\")")))
+                                    " :fetcher github :repo \"" _ "\")")))
 
     (defun akirak/emacs-lisp-eval-buffer-or-load-file ()
       (interactive)
@@ -5898,6 +5898,15 @@ A transient for cosmetics on source code
   (setup (:package cosmetic-transient)
     (:global "C-c m" #'cosmetic-transient))
 #+end_src
+*** csv-mode
+:PROPERTIES:
+:CREATED_TIME: [2025-01-02 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package csv-mode)
+    (:file-match "\\.csv\\'"))
+#+end_src
 *** cue-mode
 :PROPERTIES:
 :CREATED_TIME: [2024-01-01 Mon 15:17]
@@ -8541,6 +8550,15 @@ For auto-pairing, you can use =electric-pair-mode= along with puni.
 #+end_src
 
 This contains workarounds for puni-mode, like mode-specific soft deletion.
+*** rainbow-csv
+:PROPERTIES:
+:CREATED_TIME: [2025-01-02 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package rainbow-csv)
+    (:hook-into csv-mode-hook tsv-mode-hook))
+#+end_src
 *** rainbow-delimiters                                      :visual:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-03 Thu 18:07]

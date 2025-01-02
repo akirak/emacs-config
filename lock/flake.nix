@@ -1035,6 +1035,12 @@
       repo = "puni";
       type = "github";
     };
+    rainbow-csv = {
+      flake = false;
+      owner = "emacs-vs";
+      repo = "rainbow-csv";
+      type = "github";
+    };
     rainbow-delimiters = {
       flake = false;
       owner = "Fanael";
