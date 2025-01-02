@@ -19,7 +19,7 @@
                  (name . "dist")
                  (name . "^result.*")))
             ("Hidden or setting files"
-             (file . t)
+             (not (directory . t))
              (or (name . "^\\.")
                  (name . "rc\\'")
                  (extension "yml" "yaml")))
