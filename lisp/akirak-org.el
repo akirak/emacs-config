@@ -712,8 +712,41 @@ The point should be at the heading."
   "Convert the region to a link to a new Org entry."
   (interactive "r" org-mode)
   (let* ((link-text (buffer-substring beg end))
-         (title (read-string "Title: " link-text))
-         parent-id)
+         (title (read-string "Title: " link-text)))
+    (akirak-org--replace-region-with-entry-link begin end
+      :link-text link :heading title)))
+
+;;;###autoload
+(defun akirak-org-convert-link-to-entry ()
+  "Create a new entry from the link at point."
+  (interactive nil org-mode)
+  (if (thing-at-point-looking-at org-link-any-re)
+      (pcase-let* ((`(,beg ,end . ,_) (match-data))
+                   (link-text (match-string-no-properties 3))
+                   (heading (buffer-substring-no-properties beg end))
+                   (uri (or (match-string-no-properties 2)
+                            heading)))
+        (pcase uri
+          (`nil
+           (error "Failed to match link"))
+          ((rx bol (or (and "http" (?  "s"))
+                       "file")
+               ":")
+           ;; Whitelist URI schemes to prevent creation of a recursive link.
+           (akirak-org--replace-region-with-entry-link beg end
+             :link-text (or link-text uri)
+             :heading heading))
+          (_
+           (error "Unsupported URI scheme"))))
+    (user-error "No link at point")))
+
+(cl-defun akirak-org--replace-region-with-entry-link (beg end &key link-text heading)
+  (declare (indent 2))
+  (let (parent-id
+        (link-text (or link-text heading
+                       (error "Require at least one of link-text or heading")))
+        (heading (or heading link-text
+                     (error "Require at least one of link-text or heading"))))
     (delete-region beg end)
     (goto-char beg)
     (save-excursion
@@ -726,11 +759,11 @@ The point should be at the heading."
            (goto-char (point-min))
            (re-search-forward (format org-complex-heading-regexp-format "Backlog"))
            (org-end-of-subtree)
-           (insert "\n** " title)))
+           (insert "\n** " heading)))
         (`nil
          (let ((level (org-outline-level)))
            (org-end-of-subtree)
-           (insert "\n" (make-string level ?\*) " " title))))
+           (insert "\n" (make-string level ?\*) " " heading))))
       (unless (looking-at (rx eol))
         (org-open-line 1))
       (setq parent-id (org-id-get-create)))
