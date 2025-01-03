@@ -837,6 +837,7 @@ The following variable defines variables that can be saved to =custom-file=:
       nix3-flake-clone-root
       akirak-log-private-file
       akirak-org-clock-history-threshold
+      akirak-worktree-directories
       akirak-org-log-file
       akirak/font-height
       akirak/org-memento-export-directory
@@ -1234,16 +1235,10 @@ The built-in =electric= package provides the following modes:
             (flymake-eslint '((eval . (flymake-eslint-enable))))
             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
             (nixfmt '((eval . (nixfmt-on-save-mode t))))
-            (zig-fmt '((eval . (zig-format-on-save-mode t))))
-            (envrc '((eval . (akirak/turn-on-envrc-mode))))
-            (diff-hl '((eval . (turn-on-diff-hl-mode)))))
-        (dir-locals-set-class-variables
-         'edit
-         `((nil . (,@envrc ,@diff-hl))))
+            (zig-fmt '((eval . (zig-format-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
-         `((nil . (,@envrc ,@diff-hl))
-           (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
+         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
         (dir-locals-set-class-variables
          'default
          `((astro-ts-mode . (,@lsp-no-formatter))
@@ -1271,8 +1266,6 @@ The built-in =electric= package provides the following modes:
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)
-      (dir-locals-set-directory-class "~/work2/" 'edit)
-      (dir-locals-set-directory-class "~/resources/" 'edit)
 
       (:set ignored-local-variable-values
             ;; github:melpa/melpa
@@ -5214,6 +5207,15 @@ This is an extra functions for window management.
   (setup akirak-wordnet
     (:nixpkgs "sqlite"))
 #+end_src
+*** akirak-worktree
+:PROPERTIES:
+:CREATED_TIME: [2025-01-03 Fri 20:00]
+:END:
+
+#+begin_src emacs-lisp
+  (setup akirak-worktree
+    (add-hook 'after-init-hook #'akirak-worktree-global-mode))
+#+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -6097,6 +6099,8 @@ Highlight uncommitted changes using VC
     ;; See edit dir-locals class in the files section.
     ;; (add-hook 'after-init-hook #'global-diff-hl-mode)
 
+    (add-hook 'akirak-worktree-file-mode-hook #'akirak/turn-on-envrc-mode)
+
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
           diff-hl-show-staged-changes t
@@ -6689,7 +6693,8 @@ Support for `direnv' that operates buffer-locally
   (setup (:package envrc)
     (defun akirak/turn-on-envrc-mode ()
       (unless (minibufferp)
-        (envrc-mode 1))))
+        (envrc-mode 1)))
+    (add-hook 'akirak-worktree-mode-hook #'akirak/turn-on-envrc-mode))
 #+end_src
 *** epkg                                                          :Emacs:@extra:
 :PROPERTIES:
