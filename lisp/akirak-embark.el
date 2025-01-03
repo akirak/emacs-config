@@ -402,6 +402,7 @@
   (require 'embark-org)
 
   (define-key embark-org-link-map "S" #'org-super-links-convert-link-to-super)
+  (define-key embark-org-link-map "+" #'akirak-org-convert-link-to-entry)
 
   ;; If the point is at the very beginning of the heading, I want this finder to
   ;; match.
