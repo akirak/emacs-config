@@ -4033,7 +4033,10 @@ Placeholders for Org
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
-    (:set org-placeholder-show-archived-entries-in-view t)
+    (:set org-placeholder-show-archived-entries-in-view t
+          org-placeholder-ignored-group-heading-regexp (rx bol (or "Backlog"
+                                                                   "Authors"
+                                                                   (repeat 4 digit))))
     (:when-loaded
       (require 'akirak-org-capture)
       (:set org-placeholder-default-capture-template
