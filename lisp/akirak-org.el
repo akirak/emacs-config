@@ -710,7 +710,7 @@ The point should be at the heading."
 ;;;###autoload
 (defun akirak-org-convert-to-entry-link (beg end)
   "Convert the region to a link to a new Org entry."
-  (interactive "r" nil org-mode)
+  (interactive "r" org-mode)
   (let* ((link-text (buffer-substring beg end))
          (title (read-string "Title: " link-text))
          parent-id)
