@@ -1038,6 +1038,11 @@ The built-in =electric= package provides the following modes:
       (:file-match "/recipes/[-a-z0-9]+\\'"))
 
     (:auto-insert
+     ("\\.dir-locals\\(?:-2\\)?\\.el\\'"
+      . (> ";;; Directory Local Variables\n"
+           ";;; For more information see (info \"(emacs) Directory Variables\")\n\n"
+           "((org-mode . ((gac-debounce-interval . 180)\n"
+           "              (eval . (git-auto-commit-mode t)))))'"))
      ("-tests?\\.el\\'" . (> ";;; -*- lexical-binding: t -*-\n\n"
                              "(require 'buttercup)\n"
                              "(require '" (replace-regexp-in-string
