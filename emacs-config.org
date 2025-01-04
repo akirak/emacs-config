@@ -5051,7 +5051,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-rename
 #+begin_src elisp
   (setup akirak-rename
-    (:global "C-'" #'akirak-rename-dwim))
+    (:global "C-c r" #'akirak/rename-dwim)
+    (defun akirak/rename-dwim (&optional arg)
+      (interactive "P")
+      (if (and arg (listp arg))
+          (akirak-rename-dwim)
+        (akirak/anzu-query-replace-on-line arg))))
 #+end_src
 *** akirak-repl
 :PROPERTIES:
@@ -9426,16 +9431,15 @@ Operate on current line if region undefined
 
 #+begin_src emacs-lisp
   (setup (:package whole-line-or-region)
-    (:global "C-c r"
-             (defun akirak/anzu-query-replace-on-line (arg)
-               (interactive "P")
-               (require 'anzu)
-               (require 'whole-line-or-region)
-               (whole-line-or-region-wrap-modified-region #'anzu-query-replace-regexp
-                                                          (if (numberp arg)
-                                                              arg
-                                                            1)
-                                                          arg)))
+    (defun akirak/anzu-query-replace-on-line (arg)
+      (interactive "P")
+      (require 'anzu)
+      (require 'whole-line-or-region)
+      (whole-line-or-region-wrap-modified-region #'anzu-query-replace-regexp
+                                                 (if (numberp arg)
+                                                     arg
+                                                   1)
+                                                 arg))
 
     ;; whole-line-or-region version of indent-rigidly. Useful for editing YAML.
     (defun akirak/indent-rigidly-line-or-region (&optional arg)
