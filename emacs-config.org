@@ -837,6 +837,7 @@ The following variable defines variables that can be saved to =custom-file=:
       nix3-flake-clone-root
       akirak-log-private-file
       akirak-org-clock-history-threshold
+      akirak-worktree-directories
       akirak-org-log-file
       akirak/font-height
       akirak/org-memento-export-directory
@@ -1037,6 +1038,11 @@ The built-in =electric= package provides the following modes:
       (:file-match "/recipes/[-a-z0-9]+\\'"))
 
     (:auto-insert
+     ("\\.dir-locals\\(?:-2\\)?\\.el\\'"
+      . (> ";;; Directory Local Variables\n"
+           ";;; For more information see (info \"(emacs) Directory Variables\")\n\n"
+           "((org-mode . ((gac-debounce-interval . 180)\n"
+           "              (eval . (git-auto-commit-mode t)))))'"))
      ("-tests?\\.el\\'" . (> ";;; -*- lexical-binding: t -*-\n\n"
                              "(require 'buttercup)\n"
                              "(require '" (replace-regexp-in-string
@@ -1234,16 +1240,10 @@ The built-in =electric= package provides the following modes:
             (flymake-eslint '((eval . (flymake-eslint-enable))))
             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
             (nixfmt '((eval . (nixfmt-on-save-mode t))))
-            (zig-fmt '((eval . (zig-format-on-save-mode t))))
-            (envrc '((eval . (akirak/turn-on-envrc-mode))))
-            (diff-hl '((eval . (turn-on-diff-hl-mode)))))
-        (dir-locals-set-class-variables
-         'edit
-         `((nil . (,@envrc ,@diff-hl))))
+            (zig-fmt '((eval . (zig-format-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
-         `((nil . (,@envrc ,@diff-hl))
-           (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
+         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
         (dir-locals-set-class-variables
          'default
          `((astro-ts-mode . (,@lsp-no-formatter))
@@ -1271,8 +1271,6 @@ The built-in =electric= package provides the following modes:
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)
-      (dir-locals-set-directory-class "~/work2/" 'edit)
-      (dir-locals-set-directory-class "~/resources/" 'edit)
 
       (:set ignored-local-variable-values
             ;; github:melpa/melpa
@@ -4033,7 +4031,10 @@ Placeholders for Org
 
 #+begin_src emacs-lisp
   (setup (:package org-placeholder)
-    (:set org-placeholder-show-archived-entries-in-view t)
+    (:set org-placeholder-show-archived-entries-in-view t
+          org-placeholder-ignored-group-heading-regexp (rx bol (or "Backlog"
+                                                                   "Authors"
+                                                                   (repeat 4 digit))))
     (:when-loaded
       (require 'akirak-org-capture)
       (:set org-placeholder-default-capture-template
@@ -5055,7 +5056,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-rename
 #+begin_src elisp
   (setup akirak-rename
-    (:global "C-'" #'akirak-rename-dwim))
+    (:global "C-c r" #'akirak/rename-dwim)
+    (defun akirak/rename-dwim (&optional arg)
+      (interactive "P")
+      (if (and arg (listp arg))
+          (akirak-rename-dwim)
+        (akirak/anzu-query-replace-on-line arg))))
 #+end_src
 *** akirak-repl
 :PROPERTIES:
@@ -5210,6 +5216,15 @@ This is an extra functions for window management.
 #+begin_src elisp
   (setup akirak-wordnet
     (:nixpkgs "sqlite"))
+#+end_src
+*** akirak-worktree
+:PROPERTIES:
+:CREATED_TIME: [2025-01-03 Fri 20:00]
+:END:
+
+#+begin_src emacs-lisp
+  (setup akirak-worktree
+    (add-hook 'after-init-hook #'akirak-worktree-global-mode))
 #+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
@@ -5533,8 +5548,7 @@ Jump to arbitrary positions in visible text and select text quickly.
   (setup (:package avy)
     (:set avy-style 'pre
           avy-all-windows t)
-    (:global "M-[" #'avy-goto-symbol-1-above
-             "M-]" #'avy-goto-symbol-1-below))
+    (:global "C-'" #'avy-goto-char-timer))
 #+end_src
 
 I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
@@ -6093,6 +6107,8 @@ Highlight uncommitted changes using VC
     ;; Only enable diff-hl-mode in certain directories.
     ;; See edit dir-locals class in the files section.
     ;; (add-hook 'after-init-hook #'global-diff-hl-mode)
+
+    (add-hook 'akirak-worktree-file-mode-hook #'akirak/turn-on-envrc-mode)
 
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
@@ -6686,7 +6702,8 @@ Support for `direnv' that operates buffer-locally
   (setup (:package envrc)
     (defun akirak/turn-on-envrc-mode ()
       (unless (minibufferp)
-        (envrc-mode 1))))
+        (envrc-mode 1)))
+    (add-hook 'akirak-worktree-mode-hook #'akirak/turn-on-envrc-mode))
 #+end_src
 *** epkg                                                          :Emacs:@extra:
 :PROPERTIES:
@@ -9418,16 +9435,15 @@ Operate on current line if region undefined
 
 #+begin_src emacs-lisp
   (setup (:package whole-line-or-region)
-    (:global "C-c r"
-             (defun akirak/anzu-query-replace-on-line (arg)
-               (interactive "P")
-               (require 'anzu)
-               (require 'whole-line-or-region)
-               (whole-line-or-region-wrap-modified-region #'anzu-query-replace-regexp
-                                                          (if (numberp arg)
-                                                              arg
-                                                            1)
-                                                          arg)))
+    (defun akirak/anzu-query-replace-on-line (arg)
+      (interactive "P")
+      (require 'anzu)
+      (require 'whole-line-or-region)
+      (whole-line-or-region-wrap-modified-region #'anzu-query-replace-regexp
+                                                 (if (numberp arg)
+                                                     arg
+                                                   1)
+                                                 arg))
 
     ;; whole-line-or-region version of indent-rigidly. Useful for editing YAML.
     (defun akirak/indent-rigidly-line-or-region (&optional arg)

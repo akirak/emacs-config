@@ -6,6 +6,7 @@
 
 (require 'consult)
 (require 'akirak-project)
+(require 'vc-git)
 
 (defvar akirak-consult-dir-current-source
   `(:name "Current project directories"
