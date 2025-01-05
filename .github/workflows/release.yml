@@ -22,9 +22,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - package: default-x11-personalized.archive-builder
-            command: run
-            result-tar: false
+          # Broken but not needed for now.
+          # - package: default-x11-personalized.archive-builder
+          #   command: run
+          #   result-tar: false
           - package: default-x11.elpa-archive
             command: build
             result-tar: true
