@@ -171,9 +171,14 @@ in
         #   }-${system}.tar.zstd";
         # } emacs-env;
 
-        # elpa-archive = pkgs.emacsTwist2Elpa.buildElpaArchiveAsTar { withInstaller = true; } "elpa-archive-${
-        #   builtins.substring 0 8 (inputs.self.lastModifiedDate)
-        # }" emacs-env.packageInputs;
+        elpa-archive =
+          inputs.twist2elpa.lib.buildElpaArchiveAsTar
+            {
+              inherit pkgs;
+              withInstaller = true;
+            }
+            "elpa-archive-${builtins.substring 0 8 (inputs.self.lastModifiedDate)}"
+            emacs-config.packageInputs;
 
         # init-file = pkgs.runCommandLocal "init.el" { } ''
         #   for file in ${builtins.concatStringsSep " " emacs-env.initFiles}
