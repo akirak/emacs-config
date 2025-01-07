@@ -180,12 +180,12 @@ in
             "elpa-archive-${builtins.substring 0 8 (inputs.self.lastModifiedDate)}"
             emacs-config.packageInputs;
 
-        # init-file = pkgs.runCommandLocal "init.el" { } ''
-        #   for file in ${builtins.concatStringsSep " " emacs-env.initFiles}
-        #   do
-        #     cat "$file" >> "$out"
-        #   done
-        # '';
+        init-file = pkgs.runCommandLocal "init.el" { } ''
+          for file in ${builtins.concatStringsSep " " emacs-config.initFiles}
+          do
+            cat "$file" >> "$out"
+          done
+        '';
 
       };
 
