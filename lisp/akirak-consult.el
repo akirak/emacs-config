@@ -279,8 +279,8 @@
 
 (defvar akirak-consult-project-sources
   `(akirak-consult-source-project-file-buffer ;; Require consult-ls-git
-    (when akirak-consult-source-git-status
-      '(akirak-consult-source-git-status))
+    ,@(when akirak-consult-source-git-status
+        '(akirak-consult-source-git-status))
     akirak-consult-source-project-bookmark
     akirak-consult-source-project-file
     ;; Extra sources for quickly navigating to specific files
