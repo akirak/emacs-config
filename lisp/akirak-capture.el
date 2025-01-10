@@ -1351,7 +1351,13 @@ provided as a separate command for integration, e.g. with embark."
             (or content
                 (when-let* ((region-source (akirak-capture--region-text)))
                   (if (equal body-type "quote")
-                      (akirak-capture--to-org region-source)
+                      (akirak-capture--to-org
+                       (progn
+                         (require 'akirak-pandoc)
+                         (if-let* ((format (akirak-pandoc-input-format)))
+                             (akirak-pandoc-convert-string region-source
+                               :from format :to "org")
+                           region-source)))
                     ;; Newlines are significant in most of the block types, so
                     ;; use the source sanitizer for now.
                     (akirak-capture--sanitize-source region-source)))
