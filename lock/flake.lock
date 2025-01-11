@@ -1300,11 +1300,11 @@
     "gptel": {
       "flake": false,
       "locked": {
-        "lastModified": 1734395702,
-        "narHash": "sha256-z2o3nsMRoUcEYWXOKd6BSauK0QaggLO+oRI3St65A+s=",
+        "lastModified": 1735929461,
+        "narHash": "sha256-tSDq97u0AaRbT5DxVN/Q25KK216Dk70PoxwqYCuZPh0=",
         "owner": "karthink",
         "repo": "gptel",
-        "rev": "0ce162841b041d4913b88e35d7c18accee4f433a",
+        "rev": "7ac9201b84f3d132dce0094d135a525ebcfafa12",
         "type": "github"
       },
       "original": {
@@ -2119,11 +2119,11 @@
     "org": {
       "flake": false,
       "locked": {
-        "lastModified": 1729617820,
-        "narHash": "sha256-GVa2orBLfvRrh0ls6P1gLy3KsN1pwYU6WzltZroC1aE=",
+        "lastModified": 1736445417,
+        "narHash": "sha256-38c5rsAAm1+izaaDu1xWPytK7Ynh8ybRVYYBxN4H+QA=",
         "ref": "bugfix",
-        "rev": "3a6b14806e839c3d59e110ec8a228a834fee4d32",
-        "revCount": 27775,
+        "rev": "d2f3b5b72f343544d177a1f1d0d889989bee5667",
+        "revCount": 27805,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/emacs/org-mode.git"
       },
@@ -2383,11 +2383,11 @@
     "org-placeholder": {
       "flake": false,
       "locked": {
-        "lastModified": 1735963523,
-        "narHash": "sha256-Y8pZ41mtMPETbn+7MaMW823sFEkXnh8OSiar06lDSv4=",
+        "lastModified": 1736250252,
+        "narHash": "sha256-HhBhCWjdTDlqTuy82N5nUgPtMRHQc6uUTSg8xc9qV1k=",
         "owner": "akirak",
         "repo": "org-placeholder",
-        "rev": "64684ff3362eaf2ad1c5582a5e05b8c63c846a8b",
+        "rev": "bc6ea58f0807cfdc65c2775699ab479facd56bf0",
         "type": "github"
       },
       "original": {
