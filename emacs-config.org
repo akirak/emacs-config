@@ -7135,19 +7135,18 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (setq gptel-model 'mistral
-            gptel-backend (gptel-make-ollama "Ollama"
-                            :host "localhost:11434"
-                            :stream t
-                            :models '(mistral
-                                      incept5/llama3.1-claude)))
-
       (gptel-make-anthropic "Claude"
         :stream t
+        :models '(claude-3-sonnet-20241022)
         :header (lambda ()
                   (when-let* ((key (gptel-api-key-from-auth-source "api.anthropic.com")))
                     `(("x-api-key" . ,key)
-                      ("anthropic-version" . "2023-06-01"))))))
+                      ("anthropic-version" . "2023-06-01")))))
+
+      (gptel-make-ollama "Ollama"
+        :host "localhost:11434"
+        :stream t
+        :models '(mistral incept5/llama3.1-claude)))
 
     (add-hook 'org-mode-hook
               (defun akirak/org-dog-setup-gpt-system ()
