@@ -795,9 +795,10 @@
     };
     org = {
       flake = false;
+      owner = "elpa-mirrors";
       ref = "bugfix";
-      type = "git";
-      url = "https://git.savannah.gnu.org/git/emacs/org-mode.git";
+      repo = "org-mode";
+      type = "github";
     };
     org-autolist = {
       flake = false;
