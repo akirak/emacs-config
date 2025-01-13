@@ -48,5 +48,19 @@
   (unless akirak-files-home-symlink-alist
     (akirak-files-update-abbrev-alist)))
 
+;;;###autoload
+(defun akirak-files-set-dir-locals-class ()
+  "Set the dir-locals class for a directory."
+  (interactive)
+  (let ((dir (read-file-name "Directory: " (vc-git-root default-directory)))
+        (class (intern (completing-read "Class: "
+                                        (thread-last
+                                          (mapcar #'car dir-locals-class-alist)
+                                          (seq-filter
+                                           (lambda (sym)
+                                             (not (string-prefix-p "/" (symbol-name sym))))))
+                                        nil t))))
+    (dir-locals-set-directory-class dir class)))
+
 (provide 'akirak-files)
 ;;; akirak-files.el ends here
