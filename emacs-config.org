@@ -5043,10 +5043,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
       ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
       ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
-      )
-
-    (with-eval-after-load 'embark
-      (define-key embark-file-map (kbd "+") #'akirak-project-init)))
+      ))
 #+end_src
 *** akirak-quick-thing
 #+begin_src elisp
