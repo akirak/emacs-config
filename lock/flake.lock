@@ -3170,17 +3170,17 @@
     "setup": {
       "flake": false,
       "locked": {
-        "lastModified": 1678615651,
-        "narHash": "sha256-BAdL/DVzoXmQD7rd3frBqdC2jzX5YQ1Ccy0vyehUybE=",
+        "lastModified": 1735044405,
+        "narHash": "sha256-cIIPrzQvQjBekM5YJcWUYDIp1xV/YBEKm5txdASl4qY=",
         "ref": "refs/heads/master",
-        "rev": "383f184addc303d054f7954922a37b07415729c1",
-        "revCount": 209,
+        "rev": "992e7b49f0dbbd6979598902e67079fa9607febf",
+        "revCount": 219,
         "type": "git",
-        "url": "https://git.sr.ht/~pkal/setup"
+        "url": "https://codeberg.org/pkal/setup.el"
       },
       "original": {
         "type": "git",
-        "url": "https://git.sr.ht/~pkal/setup"
+        "url": "https://codeberg.org/pkal/setup.el"
       }
     },
     "shfmt": {
