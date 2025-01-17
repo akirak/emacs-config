@@ -1111,7 +1111,7 @@
     setup = {
       flake = false;
       type = "git";
-      url = "https://git.sr.ht/~pkal/setup";
+      url = "https://codeberg.org/pkal/setup.el";
     };
     shfmt = {
       flake = false;
