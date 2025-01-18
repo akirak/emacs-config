@@ -5444,6 +5444,50 @@ Show number of matches in mode-line while searching
     (:global [remap query-replace] #'anzu-query-replace
              [remap query-replace-regexp] #'anzu-query-replace-regexp))
 #+end_src
+*** apheleia
+:PROPERTIES:
+:CREATED_TIME: [2025-01-18 Sat 22:17]
+:END:
+#+begin_quote
+Reformat buffer stably
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package apheleia)
+    (:when-loaded
+      ;; This is loaded by default, but just in case
+      (require 'apheleia-formatters)
+      ;; Make apheleia-npx available.
+      (add-to-list 'exec-path
+                   (expand-file-name "scripts/formatters"
+                                     (file-name-directory (find-library-name "apheleia"))))
+      (add-to-list 'apheleia-formatters '(eslint . akirak/apheleia-eslint-fix-buffer))
+      (cl-defun akirak/apheleia-eslint-fix-buffer (&key buffer scratch callback &allow-other-keys)
+        "Format a buffer using eslint --fix."
+        (with-current-buffer scratch
+          (let ((default-directory (expand-file-name
+                                    (locate-dominating-file default-directory "package.json"))))
+            (call-process-region (point-min) (point-max)
+                                 "apheleia-npx"
+                                 t t nil
+                                 "eslint" "--fix-dry-run" "-f" "json"
+                                 "--stdin"
+                                 "--stdin-filename"
+                                 (file-relative-name (buffer-local-value 'buffer-file-name buffer)))
+            (goto-char (point-min))
+            (let ((output (thread-last
+                            (json-parse-buffer :object-type 'alist :array-type 'list)
+                            (car)
+                            (alist-get 'output))))
+              (unless output
+                (error "Null output from eslint"))
+              (delete-region (point-min) (point-max))
+              (insert output)
+              (funcall callback)))))))
+#+end_src
+
+My preferred way to use apheleia is to set the ~apheleia-formatter~ local variable and enable ~apheleia-mode~ in individual buffers.
+For simpler use cases, I prefer reformatter, so I don't turn on ~apheleia-global-mode~.
 *** COMMENT apprentice                                                  :Elixir:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-18 Sat 15:40]

@@ -64,6 +64,22 @@
         "type": "github"
       }
     },
+    "apheleia": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1736751010,
+        "narHash": "sha256-zjnfl24BzhmX5TbFJeKPQWPCn9/P7cLoUwfjtdOMrYA=",
+        "owner": "radian-software",
+        "repo": "apheleia",
+        "rev": "30b19fa7b3841bb9b811e2ecdcd3782248052ae8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "radian-software",
+        "repo": "apheleia",
+        "type": "github"
+      }
+    },
     "astro-ts-mode": {
       "flake": false,
       "locked": {
@@ -2915,6 +2931,7 @@
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
         "anzu": "anzu",
+        "apheleia": "apheleia",
         "astro-ts-mode": "astro-ts-mode",
         "auto-minor-mode": "auto-minor-mode",
         "auto-yasnippet": "auto-yasnippet",

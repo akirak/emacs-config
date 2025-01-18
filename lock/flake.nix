@@ -25,6 +25,12 @@
       repo = "anzu";
       type = "github";
     };
+    apheleia = {
+      flake = false;
+      owner = "radian-software";
+      repo = "apheleia";
+      type = "github";
+    };
     astro-ts-mode = {
       flake = false;
       owner = "Sorixelle";
