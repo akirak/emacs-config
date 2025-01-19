@@ -1,4 +1,14 @@
 {
+  org = _: _: {
+    origin = {
+      # git.savannah.org is unstable
+      type = "github";
+      owner = "elpa-mirrors";
+      repo = "org-mode";
+      ref = "bugfix";
+    };
+  };
+
   bufler = _: _: {
     origin = {
       type = "github";

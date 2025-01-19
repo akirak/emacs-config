@@ -5043,10 +5043,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
       ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
       ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
-      )
-
-    (with-eval-after-load 'embark
-      (define-key embark-file-map (kbd "+") #'akirak-project-init)))
+      ))
 #+end_src
 *** akirak-quick-thing
 #+begin_src elisp
@@ -5447,6 +5444,50 @@ Show number of matches in mode-line while searching
     (:global [remap query-replace] #'anzu-query-replace
              [remap query-replace-regexp] #'anzu-query-replace-regexp))
 #+end_src
+*** apheleia
+:PROPERTIES:
+:CREATED_TIME: [2025-01-18 Sat 22:17]
+:END:
+#+begin_quote
+Reformat buffer stably
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package apheleia)
+    (:when-loaded
+      ;; This is loaded by default, but just in case
+      (require 'apheleia-formatters)
+      ;; Make apheleia-npx available.
+      (add-to-list 'exec-path
+                   (expand-file-name "scripts/formatters"
+                                     (file-name-directory (find-library-name "apheleia"))))
+      (add-to-list 'apheleia-formatters '(eslint . akirak/apheleia-eslint-fix-buffer))
+      (cl-defun akirak/apheleia-eslint-fix-buffer (&key buffer scratch callback &allow-other-keys)
+        "Format a buffer using eslint --fix."
+        (with-current-buffer scratch
+          (let ((default-directory (expand-file-name
+                                    (locate-dominating-file default-directory "package.json"))))
+            (call-process-region (point-min) (point-max)
+                                 "apheleia-npx"
+                                 t t nil
+                                 "eslint" "--fix-dry-run" "-f" "json"
+                                 "--stdin"
+                                 "--stdin-filename"
+                                 (file-relative-name (buffer-local-value 'buffer-file-name buffer)))
+            (goto-char (point-min))
+            (let ((output (thread-last
+                            (json-parse-buffer :object-type 'alist :array-type 'list)
+                            (car)
+                            (alist-get 'output))))
+              (unless output
+                (error "Null output from eslint"))
+              (delete-region (point-min) (point-max))
+              (insert output)
+              (funcall callback)))))))
+#+end_src
+
+My preferred way to use apheleia is to set the ~apheleia-formatter~ local variable and enable ~apheleia-mode~ in individual buffers.
+For simpler use cases, I prefer reformatter, so I don't turn on ~apheleia-global-mode~.
 *** COMMENT apprentice                                                  :Elixir:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-18 Sat 15:40]
@@ -6586,11 +6627,10 @@ Automatically apply LLM-created code-suggestions
   (setup (:package elysium)
     (:when-loaded
       (add-hook 'elysium-apply-changes-hook #'smerge-start-session))
-    (with-eval-after-load 'embark
-      (define-key embark-region-map "q" #'elysium-query))
-    (with-eval-after-load 'gptel-rewrite
-      (transient-append-suffix 'gptel-rewrite-menu 'gptel--suffix-rewrite
-        '("q" "Elysium" elysium-query))))
+    (with-eval-after-load 'gptel-transient
+      (transient-append-suffix 'gptel-menu '(-1 1)
+        ["Elysium"
+         ("q" "Type a query" elysium-query)])))
 #+end_src
 *** COMMENT emacsql-sqlite                                             :library:ARCHIVE:
 :PROPERTIES:
@@ -7125,9 +7165,7 @@ Interact with ChatGPT or other LLMs
     (:set gptel-crowdsourced-prompts-file
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
-    (:global "C-c p" #'gptel-send
-             "<f12> a g" #'gptel
-             "<f12> a C-g" #'gptel-abort)
+    (:global "C-c p" #'gptel-menu)
 
     (with-eval-after-load 'embark
       (define-key embark-region-map "!" #'gptel-rewrite-menu))
@@ -7135,19 +7173,17 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (setq gptel-model 'mistral
-            gptel-backend (gptel-make-ollama "Ollama"
-                            :host "localhost:11434"
-                            :stream t
-                            :models '(mistral
-                                      incept5/llama3.1-claude)))
-
       (gptel-make-anthropic "Claude"
         :stream t
         :header (lambda ()
                   (when-let* ((key (gptel-api-key-from-auth-source "api.anthropic.com")))
                     `(("x-api-key" . ,key)
-                      ("anthropic-version" . "2023-06-01"))))))
+                      ("anthropic-version" . "2023-06-01")))))
+
+      (gptel-make-ollama "Ollama"
+        :host "localhost:11434"
+        :stream t
+        :models '(mistral incept5/llama3.1-claude)))
 
     (add-hook 'org-mode-hook
               (defun akirak/org-dog-setup-gpt-system ()
@@ -10058,7 +10094,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 215 |
+| [[org-ql-search:tags:packages][packages]]            | 216 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  12 |

@@ -25,6 +25,12 @@
       repo = "anzu";
       type = "github";
     };
+    apheleia = {
+      flake = false;
+      owner = "radian-software";
+      repo = "apheleia";
+      type = "github";
+    };
     astro-ts-mode = {
       flake = false;
       owner = "Sorixelle";
@@ -795,9 +801,10 @@
     };
     org = {
       flake = false;
+      owner = "elpa-mirrors";
       ref = "bugfix";
-      type = "git";
-      url = "https://git.savannah.gnu.org/git/emacs/org-mode.git";
+      repo = "org-mode";
+      type = "github";
     };
     org-autolist = {
       flake = false;
@@ -1110,7 +1117,7 @@
     setup = {
       flake = false;
       type = "git";
-      url = "https://git.sr.ht/~pkal/setup";
+      url = "https://codeberg.org/pkal/setup.el";
     };
     shfmt = {
       flake = false;

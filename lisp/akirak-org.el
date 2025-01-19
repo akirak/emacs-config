@@ -713,8 +713,8 @@ The point should be at the heading."
   (interactive "r" org-mode)
   (let* ((link-text (buffer-substring beg end))
          (title (read-string "Title: " link-text)))
-    (akirak-org--replace-region-with-entry-link begin end
-      :link-text link :heading title)))
+    (akirak-org--replace-region-with-entry-link beg end
+      :link-text link-text :heading title)))
 
 ;;;###autoload
 (defun akirak-org-convert-link-to-entry ()
