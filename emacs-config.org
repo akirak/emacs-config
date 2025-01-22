@@ -7182,8 +7182,7 @@ Interact with ChatGPT or other LLMs
 
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
-        :stream t
-        :models '(mistral incept5/llama3.1-claude)))
+        :stream t))
 
     (add-hook 'org-mode-hook
               (defun akirak/org-dog-setup-gpt-system ()
