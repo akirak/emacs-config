@@ -138,7 +138,7 @@
   (cons 'nix-installable (concat "nixpkgs#" package)))
 
 (defun akirak-embark-transform-recoll-result (_type candidate)
-  (when-let (url (consult-recoll--candidate-url candidate))
+  (when-let* ((url (consult-recoll--candidate-url candidate)))
     (cons 'file (abbreviate-file-name (string-remove-prefix "file://" url)))))
 
 (defun akirak-embark-transform-mountpoint (_type path)
@@ -618,8 +618,8 @@
      `(image-file . ,file))))
 
 (defun akirak-embark-target-magit-section ()
-  (when-let (section (and (featurep 'magit-section)
-                          (magit-current-section)))
+  (when-let* ((section (and (featurep 'magit-section)
+                            (magit-current-section))))
     (cons 'magit-section section)))
 
 (defun akirak-embark-target-beancount ()
