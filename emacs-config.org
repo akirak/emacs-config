@@ -3022,6 +3022,7 @@ Outline-based notes management and organizer
     (:status personal
       (:set org-agenda-start-on-weekday 1))
     (:local-set truncate-lines t)
+    (:unbind "TAB" "<tab>")
     (:bind "C-c ." #'akirak-org-edit-active-ts
            ;; Use "o" instead of "<tab>".
            "o" #'org-agenda-goto)
@@ -4035,6 +4036,9 @@ Placeholders for Org
           org-placeholder-ignored-group-heading-regexp (rx bol (or "Backlog"
                                                                    "Authors"
                                                                    (repeat 4 digit))))
+    (:with-mode org-placeholder-view-mode
+      (:hook org-placeholder-view-fold-mode))
+
     (:when-loaded
       (require 'akirak-org-capture)
       (:set org-placeholder-default-capture-template
