@@ -768,6 +768,12 @@
       repo = "ob-restclient.el";
       type = "github";
     };
+    ocaml-eglot = {
+      flake = false;
+      owner = "tarides";
+      repo = "ocaml-eglot";
+      type = "github";
+    };
     ocp-indent = {
       flake = false;
       owner = "OCamlPro";

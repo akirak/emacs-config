@@ -1261,7 +1261,8 @@ The built-in =electric= package provides the following modes:
            (sql-mode . (,@sqlformat))
            (svelte-mode . (,@lsp ,@flymake-eslint))
            (tsx-ts-mode . (,@lsp-no-formatter))
-           (tuareg-mode . (,@lsp-no-formatter ,@ocamlformat))
+           (tuareg-mode . ((eval . (ocaml-eglot))
+                           ,@ocamlformat))
            (typescript-ts-mode . (,@lsp-no-formatter))
            (web-mode . (,@lsp))
            (zig-mode . (,@lsp-no-formatter ,@zig-fmt))
@@ -6558,6 +6559,15 @@ Client for Language Server Protocol (LSP) servers
 
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")))
+#+end_src
+**** ocaml-eglot
+:PROPERTIES:
+:CREATED_TIME: [2025-01-23 Thu 22:04]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package ocaml-eglot)
+    (add-hook 'ocaml-eglot-hook #'eglot-ensure))
 #+end_src
 *** eglot-booster
 :PROPERTIES:

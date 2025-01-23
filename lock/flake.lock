@@ -2051,6 +2051,22 @@
         "type": "github"
       }
     },
+    "ocaml-eglot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1737629208,
+        "narHash": "sha256-7jflZ95uET16jMfXrbQGBQ4k9ZHbiYJXiioalKcDTTk=",
+        "owner": "tarides",
+        "repo": "ocaml-eglot",
+        "rev": "ec11ff9a0c566313d9ffe702ac2e7b88c1dafed9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tarides",
+        "repo": "ocaml-eglot",
+        "type": "github"
+      }
+    },
     "ocp-indent": {
       "flake": false,
       "locked": {
@@ -3039,6 +3055,7 @@
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
+        "ocaml-eglot": "ocaml-eglot",
         "ocp-indent": "ocp-indent",
         "octopus": "octopus",
         "olivetti": "olivetti",
