@@ -672,6 +672,12 @@
       repo = "emacs-mini-modeline";
       type = "github";
     };
+    minuet = {
+      flake = false;
+      owner = "milanglacier";
+      repo = "minuet-ai.el";
+      type = "github";
+    };
     mmm-mode = {
       flake = false;
       owner = "dgutov";

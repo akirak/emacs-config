@@ -1794,6 +1794,22 @@
         "type": "github"
       }
     },
+    "minuet": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1737767039,
+        "narHash": "sha256-zNq9P0bwLAUDDpMXjdp1d025VLBMP4hePhp2Uuk10VI=",
+        "owner": "milanglacier",
+        "repo": "minuet-ai.el",
+        "rev": "4211e33361328334c89b9afdbe05b4de7d7b863f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "milanglacier",
+        "repo": "minuet-ai.el",
+        "type": "github"
+      }
+    },
     "mmm-mode": {
       "flake": false,
       "locked": {
@@ -3039,6 +3055,7 @@
         "mastodon": "mastodon",
         "mermaid-mode": "mermaid-mode",
         "mini-modeline": "mini-modeline",
+        "minuet": "minuet",
         "mmm-mode": "mmm-mode",
         "modus-themes": "modus-themes",
         "move-dup": "move-dup",

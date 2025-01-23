@@ -8084,6 +8084,34 @@ Display modeline in minibuffer
                 value))
           ""))))
 #+end_src
+*** minuet
+:PROPERTIES:
+:CREATED_TIME: [2025-01-23 Thu 22:26]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package minuet)
+    (:global "C-c y" #'minuet-complete-with-minibuffer)
+    (:with-map minuet-active-mode-map
+      (:bind "<M-return>" #'minuet-accept-suggestion))
+    ;; (:set minuet-provider 'openai-fim-compatible
+    ;;       ;; recommended for Local LLM for resource saving
+    ;;       minuet-n-completions 1
+    ;;       ;; I recommend you start with a small context window firstly,
+    ;;       ;; and gradually increase it based on your local computing power.
+    ;;       minuet-context-window 512)
+    (:when-loaded
+      (plist-put minuet-claude-options
+                 :api-key
+                 (defun akirak/minuet-anthropic-api-key ()
+                   (require 'gptel)
+                   (gptel-api-key-from-auth-source "api.anthropic.com")))
+      (plist-put minuet-openai-fim-compatible-options
+                 :api-key
+                 (defun akirak/minuet-deepseek-api-key ()
+                   (require 'gptel)
+                   (gptel-api-key-from-auth-source "api.deepseek.com")))))
+#+end_src
 *** COMMENT mlscroll                                             :aesthetics:UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
