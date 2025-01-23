@@ -1105,35 +1105,19 @@
         "type": "github"
       }
     },
-    "flymake-eslint": {
+    "flymake-collection": {
       "flake": false,
       "locked": {
-        "lastModified": 1727267054,
-        "narHash": "sha256-y/uiFJ6/kWq/e52/Y47CqbwX5kZMJC5/IU1UKOxZ+vk=",
-        "owner": "orzechowskid",
-        "repo": "flymake-eslint",
-        "rev": "66a4f7d619ecf9a8e9ce958482c8e814044f607f",
+        "lastModified": 1735768284,
+        "narHash": "sha256-+HFesw0CL/aRx7LgulEA78usAt2vt7EtGmK/TsTxoss=",
+        "owner": "mohkale",
+        "repo": "flymake-collection",
+        "rev": "5de95adb4c4981cee2f6152ef934230d7b2934eb",
         "type": "github"
       },
       "original": {
-        "owner": "orzechowskid",
-        "repo": "flymake-eslint",
-        "type": "github"
-      }
-    },
-    "flymake-shellcheck": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1719436962,
-        "narHash": "sha256-ipmIvJgBL8uvVF8v8INu1Go2DaIeiVoIOxbiUv3Dz+U=",
-        "owner": "federicotdn",
-        "repo": "flymake-shellcheck",
-        "rev": "d55666f55e126f0e861f7e886202c17c6a1cf8f3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "federicotdn",
-        "repo": "flymake-shellcheck",
+        "owner": "mohkale",
+        "repo": "flymake-collection",
         "type": "github"
       }
     },
@@ -2996,8 +2980,7 @@
         "exec-path-from-shell": "exec-path-from-shell",
         "f": "f",
         "flymake-actionlint1": "flymake-actionlint1",
-        "flymake-eslint": "flymake-eslint",
-        "flymake-shellcheck": "flymake-shellcheck",
+        "flymake-collection": "flymake-collection",
         "fsharp-mode": "fsharp-mode",
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",

@@ -414,16 +414,10 @@
       repo = "flymake-actionlint1";
       type = "github";
     };
-    flymake-eslint = {
+    flymake-collection = {
       flake = false;
-      owner = "orzechowskid";
-      repo = "flymake-eslint";
-      type = "github";
-    };
-    flymake-shellcheck = {
-      flake = false;
-      owner = "federicotdn";
-      repo = "flymake-shellcheck";
+      owner = "mohkale";
+      repo = "flymake-collection";
       type = "github";
     };
     fsharp-mode = {
