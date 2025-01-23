@@ -3022,9 +3022,9 @@ Outline-based notes management and organizer
     (:status personal
       (:set org-agenda-start-on-weekday 1))
     (:local-set truncate-lines t)
-    ;; It is confusing to have `delete-other-windows' bound to o.
-    (:unbind "o")
-    (:bind "C-c ." #'akirak-org-edit-active-ts)
+    (:bind "C-c ." #'akirak-org-edit-active-ts
+           ;; Use "o" instead of "<tab>".
+           "o" #'org-agenda-goto)
 
     ;; Keybinding compatibility with org-mode.
     (defvar akirak/org-agenda-prefix-map (make-sparse-keymap))
