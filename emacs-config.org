@@ -6564,6 +6564,10 @@ Client for Language Server Protocol (LSP) servers
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:04]
 :END:
+#+begin_quote
+An OCaml companion for Eglot
+[[https://github.com/tarides/ocaml-eglot]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package ocaml-eglot)
@@ -6889,6 +6893,9 @@ On-the-fly syntax checking
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:02]
 :END:
+#+begin_quote
+Collection of checkers for flymake, bringing flymake to the level of flycheck
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package flymake-collection)
@@ -10153,6 +10160,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:fstar][fstar]]               |   2 |
+| [[org-ql-search:tags:LSP][LSP]]                 |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |
@@ -10172,7 +10180,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
-| [[org-ql-search:tags:LSP][LSP]]                 |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
