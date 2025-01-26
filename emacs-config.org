@@ -8088,6 +8088,10 @@ Display modeline in minibuffer
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:26]
 :END:
+#+begin_quote
+Code completion using LLM
+[[https://github.com/milanglacier/minuet-ai.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package minuet)
@@ -10154,7 +10158,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:packages][packages]]            | 216 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
-| [[org-ql-search:tags:@extra][@extra]]              |  12 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
@@ -10204,7 +10208,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
-| [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
