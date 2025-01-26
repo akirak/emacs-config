@@ -449,22 +449,6 @@
         "url": "https://codeberg.org/jao/consult-recoll.git"
       }
     },
-    "copilot": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1735360573,
-        "narHash": "sha256-FzI08AW7a7AleEM7kSQ8LsWsDYID8SW1SmSN6/mIB/A=",
-        "owner": "zerolfx",
-        "repo": "copilot.el",
-        "rev": "c5dfa99f05878db5e6a6a378dc7ed09f11e803d4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zerolfx",
-        "repo": "copilot.el",
-        "type": "github"
-      }
-    },
     "corfu": {
       "flake": false,
       "locked": {
@@ -2971,7 +2955,6 @@
         "consult-org-dog": "consult-org-dog",
         "consult-org-nlink": "consult-org-nlink",
         "consult-recoll": "consult-recoll",
-        "copilot": "copilot",
         "corfu": "corfu",
         "cosmetic-transient": "cosmetic-transient",
         "cue-mode": "cue-mode",
