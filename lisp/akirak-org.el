@@ -871,6 +871,11 @@ The point should be at the heading."
     (if-let* ((el (org-element-at-point-no-context)))
         (akirak-org--select-element el)
       (error "No org-element at point")))
+   ((and (require 'org-nlink nil t)
+         (pcase (org-nlink-thing)
+           (`((,begin . ,end) . ,_)
+            (akirak-expand-region--select-bounds (cons (1+ begin) (1- end)))
+            t))))
    (t
     (akirak-expand-region--select-bounds
      (bounds-of-thing-at-point 'sentence)))))
