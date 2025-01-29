@@ -8095,26 +8095,14 @@ Code completion using LLM
 
 #+begin_src emacs-lisp
   (setup (:package minuet)
+    ;; Run `akirak-minuet-switch-backend' to set the provider.
+    (:set minuet-provider nil)
+    (:when-loaded
+      ;; Set the default backend.
+      (setq akirak-minuet-switch-backend (caar akirak-minuet-backend-alist)))
     (:global "C-c y" #'minuet-complete-with-minibuffer)
     (:with-map minuet-active-mode-map
-      (:bind "<M-return>" #'minuet-accept-suggestion))
-    ;; (:set minuet-provider 'openai-fim-compatible
-    ;;       ;; recommended for Local LLM for resource saving
-    ;;       minuet-n-completions 1
-    ;;       ;; I recommend you start with a small context window firstly,
-    ;;       ;; and gradually increase it based on your local computing power.
-    ;;       minuet-context-window 512)
-    (:when-loaded
-      (plist-put minuet-claude-options
-                 :api-key
-                 (defun akirak/minuet-anthropic-api-key ()
-                   (require 'gptel)
-                   (gptel-api-key-from-auth-source "api.anthropic.com")))
-      (plist-put minuet-openai-fim-compatible-options
-                 :api-key
-                 (defun akirak/minuet-deepseek-api-key ()
-                   (require 'gptel)
-                   (gptel-api-key-from-auth-source "api.deepseek.com")))))
+      (:bind "<M-return>" #'minuet-accept-suggestion)))
 #+end_src
 *** COMMENT mlscroll                                             :aesthetics:UI:ARCHIVE:
 :PROPERTIES:
