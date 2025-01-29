@@ -1083,6 +1083,27 @@ At this point, the function works with the following pattern:
            (akirak-shell-run-command-at-dir dir command)
          (akirak-shell-run-command-in-some-buffer command))))))
 
+;;;###autoload
+(defun akirak-org-expand-template ()
+  "Insert a template according to the entry property."
+  (interactive nil org-mode)
+  (unless (buffer-base-buffer)
+    (user-error "Available only in an indirect Org buffer"))
+  (let* ((name (or (org-entry-get nil "template_src_name" t)
+                   (user-error "No template_src_name property is found")))
+         (source (org-with-wide-buffer
+                  (goto-char (point-min))
+                  (if-let* ((pos (org-babel-find-named-block name)))
+                      (org-with-point-at pos
+                        (nth 1 (org-babel-get-src-block-info)))
+                    (user-error "No block named %s is found" name))))
+         (initial-level (org-with-point-at (point-min)
+                          (org-outline-level))))
+    (save-excursion
+      (insert (replace-regexp-in-string (rx bol "*")
+                                        (make-string (1+ initial-level) ?\*)
+                                        source)))))
+
 ;;;; Specific applications
 
 ;;;###autoload
