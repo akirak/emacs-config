@@ -5462,26 +5462,33 @@ Reformat buffer stably
     (:when-loaded
       ;; This is loaded by default, but just in case
       (require 'apheleia-formatters)
-      ;; Make apheleia-npx available.
-      (add-to-list 'exec-path
-                   (expand-file-name "scripts/formatters"
-                                     (file-name-directory (find-library-name "apheleia"))))
       (add-to-list 'apheleia-formatters '(eslint . akirak/apheleia-eslint-fix-buffer))
       (cl-defun akirak/apheleia-eslint-fix-buffer (&key buffer scratch callback &allow-other-keys)
         "Format a buffer using eslint --fix."
         (with-current-buffer scratch
-          (let ((default-directory (expand-file-name
-                                    (locate-dominating-file default-directory "package.json"))))
-            (call-process-region (point-min) (point-max)
-                                 "apheleia-npx"
-                                 t t nil
-                                 "eslint" "--fix-dry-run" "-f" "json"
+          ;; direnv requires true names to inherit the permission
+          (let* ((default-directory (file-truename (locate-dominating-file default-directory "package.json")))
+                 (target-file (file-truename (buffer-local-value 'buffer-file-name buffer)))
+                 (eslint (expand-file-name "node_modules/.bin/eslint" default-directory)))
+            (apply #'call-process-region (point-min) (point-max)
+                   (append (if (locate-dominating-file default-directory ".envrc")
+                               (list "direnv"
+                                     ;; FIXME: Error messages are discarded.
+                                     t (list t nil) nil
+                                     "exec"
+                                     eslint)
+                             (list eslint
+                                   t (list t nil) nil))
+                           (list "--fix-dry-run" "-f" "json"
                                  "--stdin"
                                  "--stdin-filename"
-                                 (file-relative-name (buffer-local-value 'buffer-file-name buffer)))
+                                 (file-relative-name target-file))))
             (goto-char (point-min))
             (let ((output (thread-last
-                            (json-parse-buffer :object-type 'alist :array-type 'list)
+                            (condition-case err
+                                (json-parse-buffer :object-type 'alist :array-type 'list)
+                              (error (message "Parsing JSON failed: %s\n%s"
+                                              err (buffer-string))))
                             (car)
                             (alist-get 'output))))
               (unless output
