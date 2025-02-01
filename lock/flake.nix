@@ -169,12 +169,6 @@
       type = "git";
       url = "https://codeberg.org/jao/consult-recoll.git";
     };
-    copilot = {
-      flake = false;
-      owner = "zerolfx";
-      repo = "copilot.el";
-      type = "github";
-    };
     corfu = {
       flake = false;
       owner = "minad";
@@ -414,16 +408,10 @@
       repo = "flymake-actionlint1";
       type = "github";
     };
-    flymake-eslint = {
+    flymake-collection = {
       flake = false;
-      owner = "orzechowskid";
-      repo = "flymake-eslint";
-      type = "github";
-    };
-    flymake-shellcheck = {
-      flake = false;
-      owner = "federicotdn";
-      repo = "flymake-shellcheck";
+      owner = "mohkale";
+      repo = "flymake-collection";
       type = "github";
     };
     fsharp-mode = {
@@ -678,6 +666,12 @@
       repo = "emacs-mini-modeline";
       type = "github";
     };
+    minuet = {
+      flake = false;
+      owner = "milanglacier";
+      repo = "minuet-ai.el";
+      type = "github";
+    };
     mmm-mode = {
       flake = false;
       owner = "dgutov";
@@ -772,6 +766,12 @@
       flake = false;
       owner = "alf";
       repo = "ob-restclient.el";
+      type = "github";
+    };
+    ocaml-eglot = {
+      flake = false;
+      owner = "tarides";
+      repo = "ocaml-eglot";
       type = "github";
     };
     ocp-indent = {

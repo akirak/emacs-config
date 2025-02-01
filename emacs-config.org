@@ -1261,7 +1261,8 @@ The built-in =electric= package provides the following modes:
            (sql-mode . (,@sqlformat))
            (svelte-mode . (,@lsp ,@flymake-eslint))
            (tsx-ts-mode . (,@lsp-no-formatter))
-           (tuareg-mode . (,@lsp-no-formatter ,@ocamlformat))
+           (tuareg-mode . ((eval . (ocaml-eglot))
+                           ,@ocamlformat))
            (typescript-ts-mode . (,@lsp-no-formatter))
            (web-mode . (,@lsp))
            (zig-mode . (,@lsp-no-formatter ,@zig-fmt))
@@ -3022,9 +3023,10 @@ Outline-based notes management and organizer
     (:status personal
       (:set org-agenda-start-on-weekday 1))
     (:local-set truncate-lines t)
-    ;; It is confusing to have `delete-other-windows' bound to o.
-    (:unbind "o")
-    (:bind "C-c ." #'akirak-org-edit-active-ts)
+    (:unbind "TAB" "<tab>")
+    (:bind "C-c ." #'akirak-org-edit-active-ts
+           ;; Use "o" instead of "<tab>".
+           "o" #'org-agenda-goto)
 
     ;; Keybinding compatibility with org-mode.
     (defvar akirak/org-agenda-prefix-map (make-sparse-keymap))
@@ -4035,6 +4037,9 @@ Placeholders for Org
           org-placeholder-ignored-group-heading-regexp (rx bol (or "Backlog"
                                                                    "Authors"
                                                                    (repeat 4 digit))))
+    (:with-mode org-placeholder-view-mode
+      (:hook org-placeholder-view-fold-mode))
+
     (:when-loaded
       (require 'akirak-org-capture)
       (:set org-placeholder-default-capture-template
@@ -5457,26 +5462,33 @@ Reformat buffer stably
     (:when-loaded
       ;; This is loaded by default, but just in case
       (require 'apheleia-formatters)
-      ;; Make apheleia-npx available.
-      (add-to-list 'exec-path
-                   (expand-file-name "scripts/formatters"
-                                     (file-name-directory (find-library-name "apheleia"))))
       (add-to-list 'apheleia-formatters '(eslint . akirak/apheleia-eslint-fix-buffer))
       (cl-defun akirak/apheleia-eslint-fix-buffer (&key buffer scratch callback &allow-other-keys)
         "Format a buffer using eslint --fix."
         (with-current-buffer scratch
-          (let ((default-directory (expand-file-name
-                                    (locate-dominating-file default-directory "package.json"))))
-            (call-process-region (point-min) (point-max)
-                                 "apheleia-npx"
-                                 t t nil
-                                 "eslint" "--fix-dry-run" "-f" "json"
+          ;; direnv requires true names to inherit the permission
+          (let* ((default-directory (file-truename (locate-dominating-file default-directory "package.json")))
+                 (target-file (file-truename (buffer-local-value 'buffer-file-name buffer)))
+                 (eslint (expand-file-name "node_modules/.bin/eslint" default-directory)))
+            (apply #'call-process-region (point-min) (point-max)
+                   (append (if (locate-dominating-file default-directory ".envrc")
+                               (list "direnv"
+                                     ;; FIXME: Error messages are discarded.
+                                     t (list t nil) nil
+                                     "exec"
+                                     eslint)
+                             (list eslint
+                                   t (list t nil) nil))
+                           (list "--fix-dry-run" "-f" "json"
                                  "--stdin"
                                  "--stdin-filename"
-                                 (file-relative-name (buffer-local-value 'buffer-file-name buffer)))
+                                 (file-relative-name target-file))))
             (goto-char (point-min))
             (let ((output (thread-last
-                            (json-parse-buffer :object-type 'alist :array-type 'list)
+                            (condition-case err
+                                (json-parse-buffer :object-type 'alist :array-type 'list)
+                              (error (message "Parsing JSON failed: %s\n%s"
+                                              err (buffer-string))))
                             (car)
                             (alist-get 'output))))
               (unless output
@@ -5894,7 +5906,7 @@ Recoll queries using consult
                                           (abbreviate-file-name)))
                                 'face 'font-lock-doc-face)))))
 #+end_src
-*** copilot                                                     :@extra:copilot:
+*** COMMENT copilot                                             :@extra:copilot:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
@@ -6032,7 +6044,7 @@ A startup screen extracted from Spacemacs
                                      (bookmarks . "m")
                                      ;; Don't use p
                                      (projects . "j")
-                                     (org-clock . "o")
+                                     (org-clock . "c")
                                      ;; Unused
                                      (agenda . "a")
                                      (registers . "e"))
@@ -6555,6 +6567,19 @@ Client for Language Server Protocol (LSP) servers
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")))
 #+end_src
+**** ocaml-eglot
+:PROPERTIES:
+:CREATED_TIME: [2025-01-23 Thu 22:04]
+:END:
+#+begin_quote
+An OCaml companion for Eglot
+[[https://github.com/tarides/ocaml-eglot]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package ocaml-eglot)
+    (add-hook 'ocaml-eglot-hook #'eglot-ensure))
+#+end_src
 *** eglot-booster
 :PROPERTIES:
 :CREATED_TIME: [2024-10-29 Tue 21:45]
@@ -6871,7 +6896,19 @@ On-the-fly syntax checking
 #+begin_src emacs-lisp
 (setup (:package flycheck))
 #+end_src
-*** flymake-eslint
+*** flymake-collection
+:PROPERTIES:
+:CREATED_TIME: [2025-01-23 Thu 22:02]
+:END:
+#+begin_quote
+Collection of checkers for flymake, bringing flymake to the level of flycheck
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-collection)
+    (:nixpkgs shellcheck))
+#+end_src
+*** COMMENT flymake-eslint                                                     :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-01 Fri 23:59]
 :END:
@@ -6884,7 +6921,7 @@ A Flymake backend for Javascript using eslint
   (setup (:package flymake-eslint)
     (:set flymake-eslint-defer-binary-check t))
 #+end_src
-*** flymake-shellcheck
+*** COMMENT flymake-shellcheck                                                 :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-11-05 Sun 19:02]
 :END:
@@ -7182,8 +7219,7 @@ Interact with ChatGPT or other LLMs
 
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
-        :stream t
-        :models '(mistral incept5/llama3.1-claude)))
+        :stream t))
 
     (add-hook 'org-mode-hook
               (defun akirak/org-dog-setup-gpt-system ()
@@ -8054,6 +8090,27 @@ Display modeline in minibuffer
                 (setq akirak/mode-line-directory-memo (cons (float-time) value))
                 value))
           ""))))
+#+end_src
+*** minuet
+:PROPERTIES:
+:CREATED_TIME: [2025-01-23 Thu 22:26]
+:END:
+#+begin_quote
+Code completion using LLM
+[[https://github.com/milanglacier/minuet-ai.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package minuet)
+    ;; Run `akirak-minuet-switch-backend' to set the provider.
+    (:set minuet-provider nil)
+    (:when-loaded
+      ;; Set the default backend.
+      (require 'akirak-minuet)
+      (akirak-minuet-switch-backend (caar akirak-minuet-backend-alist)))
+    (:global "C-c y" #'minuet-complete-with-minibuffer)
+    (:with-map minuet-active-mode-map
+      (:bind "<M-return>" #'minuet-accept-suggestion)))
 #+end_src
 *** COMMENT mlscroll                                             :aesthetics:UI:ARCHIVE:
 :PROPERTIES:
@@ -10097,7 +10154,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:packages][packages]]            | 216 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
-| [[org-ql-search:tags:@extra][@extra]]              |  12 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
@@ -10131,6 +10188,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:fstar][fstar]]               |   2 |
+| [[org-ql-search:tags:LSP][LSP]]                 |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |
@@ -10146,11 +10204,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
-| [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
-| [[org-ql-search:tags:LSP][LSP]]                 |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
