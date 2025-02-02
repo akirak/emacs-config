@@ -5757,6 +5757,10 @@ Completion At Point Extensions
 :PROPERTIES:
 :CREATED_TIME: [2025-02-02 Sun 12:14]
 :END:
+#+begin_quote
+Transient user interfaces for various modes
+[[https://github.com/kickingvegas/casual]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package casual)
@@ -8908,6 +8912,10 @@ Reformat shell scripts using shfmt
 :PROPERTIES:
 :CREATED_TIME: [2025-02-02 Sun 21:31]
 :END:
+#+begin_quote
+Show font features in a buffer
+[[https://github.com/protesilaos/show-font]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package show-font))
@@ -10173,7 +10181,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 216 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
