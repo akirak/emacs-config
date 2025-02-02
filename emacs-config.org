@@ -5753,6 +5753,20 @@ Completion At Point Extensions
              "C-x r M-l" #'cape-line
              "C-M-/" #'cape-dabbrev))
 #+end_src
+*** casual
+:PROPERTIES:
+:CREATED_TIME: [2025-02-02 Sun 12:14]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package casual)
+    (:nixpkgs graphicsmagick-imagemagick-compat
+              ;; Implicitly required for some commands of casual-image
+              file)
+    (:with-feature image-mode
+      (:also-load casual-image)
+      (:bind "C-," casual-image-tmenu)))
+#+end_src
 *** COMMENT codeium                                                 :completion:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-02-22 Wed 22:41]
