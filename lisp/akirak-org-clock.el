@@ -59,7 +59,7 @@ Example values are shown below:
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
                                   ,(expand-file-name "~/resources/articles/")
-
+                                  (and ,(expand-file-name "~/") (any upper))
                                   "/tmp"))
                      (and (or "emacs-config.org"
                               "-log.org"
@@ -82,32 +82,33 @@ Example values are shown below:
   (when-let* ((filename (if-let* ((base (buffer-base-buffer)))
                             (buffer-file-name base)
                           buffer-file-name)))
-    (when (or (not (memq this-command '(save-buffer
-                                        compile
-                                        project-compile
-                                        recompile
-                                        magit-status)))
-              (string-match-p akirak-org-clock-buffer-name-whitelist
-                              (buffer-name))
-              (string-match-p akirak-org-clock-file-name-whitelist
-                              filename)
-              (not (string-prefix-p "~/" (abbreviate-file-name filename)))
-              (and (bound-and-true-p akirak-emacs-org-config-file)
-                   (string-equal (expand-file-name akirak-emacs-org-config-file)
-                                 filename))
-              (bound-and-true-p url-http-content-type)
-              ;; (memq this-command '(magit-show-commit
-              ;;                      magit-status
-              ;;                      bookmark-set))
-              (when-let* ((mode (derived-mode-p 'org-mode 'org-memento-policy-mode)))
-                (cl-case mode
-                  (org-memento-policy-mode t)
-                  (org-mode (or (bound-and-true-p org-capture-mode)
-                                (and (featurep 'org-dog)
-                                     (org-dog-buffer-object))))))
-              (akirak-org-clock--snoozed-p)
-              (file-remote-p filename)
-              (akirak-org-clock--check-before-save))
+    (when (let ((case-fold-search nil))
+            (or (not (memq this-command '(save-buffer
+                                          compile
+                                          project-compile
+                                          recompile
+                                          magit-status)))
+                (string-match-p akirak-org-clock-buffer-name-whitelist
+                                (buffer-name))
+                (string-match-p akirak-org-clock-file-name-whitelist
+                                filename)
+                (not (string-prefix-p "~/" (abbreviate-file-name filename)))
+                (and (bound-and-true-p akirak-emacs-org-config-file)
+                     (string-equal (expand-file-name akirak-emacs-org-config-file)
+                                   filename))
+                (bound-and-true-p url-http-content-type)
+                ;; (memq this-command '(magit-show-commit
+                ;;                      magit-status
+                ;;                      bookmark-set))
+                (when-let* ((mode (derived-mode-p 'org-mode 'org-memento-policy-mode)))
+                  (cl-case mode
+                    (org-memento-policy-mode t)
+                    (org-mode (or (bound-and-true-p org-capture-mode)
+                                  (and (featurep 'org-dog)
+                                       (org-dog-buffer-object))))))
+                (akirak-org-clock--snoozed-p)
+                (file-remote-p filename)
+                (akirak-org-clock--check-before-save)))
       ad-do-it)))
 
 (defun akirak-org-clock--check-before-save ()
