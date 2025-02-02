@@ -3113,6 +3113,7 @@
         "separedit": "separedit",
         "setup": "setup",
         "shfmt": "shfmt",
+        "show-font": "show-font",
         "shr-tag-pre-highlight": "shr-tag-pre-highlight",
         "spinner": "spinner",
         "sqlformat": "sqlformat",
@@ -3213,6 +3214,22 @@
       "original": {
         "owner": "purcell",
         "repo": "emacs-shfmt",
+        "type": "github"
+      }
+    },
+    "show-font": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1737792259,
+        "narHash": "sha256-4c+IVYWwtzFz7Rmk3ahfTGIuOb4WOhQXKBeXGgEERuA=",
+        "owner": "protesilaos",
+        "repo": "show-font",
+        "rev": "af941f3eafc1ee03e0d807c147ba07b878656222",
+        "type": "github"
+      },
+      "original": {
+        "owner": "protesilaos",
+        "repo": "show-font",
         "type": "github"
       }
     },
@@ -3557,11 +3574,11 @@
     "twind": {
       "flake": false,
       "locked": {
-        "lastModified": 1730203714,
-        "narHash": "sha256-OsqEyGhPYlG9nZMutLPNZgiEbPGF7bYk590N4Ay6upM=",
+        "lastModified": 1738475307,
+        "narHash": "sha256-Fpv/C7WWOLxiLGtowpJqIFg82cRutEauqyT+yuSui3g=",
         "owner": "akirak",
         "repo": "twind.el",
-        "rev": "b5c8a8ff856aa9383f6090bbc963fb6a8fbc24dd",
+        "rev": "a586099d9a2125d79431c73ff5c432ce68034f83",
         "type": "github"
       },
       "original": {

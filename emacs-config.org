@@ -8904,6 +8904,14 @@ Reformat shell scripts using shfmt
                             "--case-indent"
                             "--binary-next-line")))
 #+end_src
+*** show-font
+:PROPERTIES:
+:CREATED_TIME: [2025-02-02 Sun 21:31]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package show-font))
+#+end_src
 *** shr-tag-pre-highlight
 :PROPERTIES:
 :CREATED_TIME: [2022-09-10 Sat 19:48]

@@ -1125,6 +1125,12 @@
       repo = "emacs-shfmt";
       type = "github";
     };
+    show-font = {
+      flake = false;
+      owner = "protesilaos";
+      repo = "show-font";
+      type = "github";
+    };
     shr-tag-pre-highlight = {
       flake = false;
       owner = "xuchunyang";
