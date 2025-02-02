@@ -342,6 +342,7 @@
   (define-key embark-file-map "t" #'find-file-other-tab)
   (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
   (define-key embark-file-map "+" #'gptel-add-file)
+  (define-key embark-file-map (kbd "C-c o") #'akirak-image-compress-file)
   (define-key embark-file-map (kbd "C-c C-T") #'akirak-tailscale-copy-file)
   (define-key embark-file-map (kbd "C-o") #'akirak-embark-org-open-file)
   (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
