@@ -1297,6 +1297,22 @@
         "type": "github"
       }
     },
+    "gptel-aibo": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1738650894,
+        "narHash": "sha256-DVLV0m241MiHjoYvhOKl3t5EO6WnpPxMJB5LvMHZcDQ=",
+        "owner": "dolmens",
+        "repo": "gptel-aibo",
+        "rev": "9d0f790d8ae630097dcb0b0e7f49919f8e5749c3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dolmens",
+        "repo": "gptel-aibo",
+        "type": "github"
+      }
+    },
     "graphql-mode": {
       "flake": false,
       "locked": {
@@ -3008,6 +3024,7 @@
         "gleam-ts-mode": "gleam-ts-mode",
         "go-translate": "go-translate",
         "gptel": "gptel",
+        "gptel-aibo": "gptel-aibo",
         "graphql-mode": "graphql-mode",
         "graphql-ts-mode": "graphql-ts-mode",
         "hcl-mode": "hcl-mode",

@@ -486,6 +486,12 @@
       repo = "gptel";
       type = "github";
     };
+    gptel-aibo = {
+      flake = false;
+      owner = "dolmens";
+      repo = "gptel-aibo";
+      type = "github";
+    };
     graphql-mode = {
       flake = false;
       owner = "davazp";

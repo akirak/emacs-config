@@ -7269,6 +7269,14 @@ Interact with ChatGPT or other LLMs
                   ;; `setq-local' to ensure it is set as a local variable.
                   (setq-local gptel--system-message msg)))))
 #+end_src
+*** gptel-aibo
+:PROPERTIES:
+:CREATED_TIME: [2025-02-05 Wed 22:17]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package gptel-aibo))
+#+end_src
 *** graphql-mode                                               :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
