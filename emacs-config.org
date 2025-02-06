@@ -7273,6 +7273,9 @@ Interact with ChatGPT or other LLMs
 :PROPERTIES:
 :CREATED_TIME: [2025-02-05 Wed 22:17]
 :END:
+#+begin_quote
+An AI Writing Assistant
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package gptel-aibo))
@@ -10189,7 +10192,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 219 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
