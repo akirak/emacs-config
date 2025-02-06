@@ -6179,7 +6179,7 @@ Highlight uncommitted changes using VC
     ;; See edit dir-locals class in the files section.
     ;; (add-hook 'after-init-hook #'global-diff-hl-mode)
 
-    (add-hook 'akirak-worktree-file-mode-hook #'akirak/turn-on-envrc-mode)
+    (add-hook 'akirak-worktree-file-mode-hook #'diff-hl-mode)
 
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
