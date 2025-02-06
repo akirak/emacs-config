@@ -4537,6 +4537,9 @@ Major mode for Nix expressions, powered by tree-sitter
     (:file-match "\\.nix\\'")
     (:mode-repl nix-repl)
     (:bind [remap devdocs-lookup] #'akirak-nix-manix)
+
+    ;; Install alejandra for reformatting.
+    (:nixpkgs alejandra)
     (:reformatters
      ;; nixfmt-rfc-style is now recommended, but keep alejandra until I finish
      ;; migration
