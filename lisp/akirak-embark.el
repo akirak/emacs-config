@@ -337,6 +337,8 @@
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
   (define-key embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
+  ;; d is bound to `delete-file' by default, which is dangerous.
+  (unbind-key "d" embark-file-map)
   (define-key embark-file-map [remap embark-open-externally] #'akirak-open-file-externally)
   (define-key embark-file-map "a" #'find-alternate-file)
   (define-key embark-file-map "t" #'find-file-other-tab)
