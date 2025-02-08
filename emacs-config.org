@@ -4592,7 +4592,7 @@ Major mode for editing typescript
       (:org-src-lang "react")
       (:bind "C-c C-e" #'akirak-treesit-jsx-close-tag)))
 #+end_src
-**** COMMENT akirak-typescript                                                 :ARCHIVE:
+**** COMMENT akirak-typescript                                  :ARCHIVE:akirak:
 #+begin_src emacs-lisp
   (setup akirak-typescript
     (:with-mode typescript-mode
@@ -4696,7 +4696,7 @@ Another flymake backend for actionlint
                   (akirak/syncthing-ediff filename)))))
 
 #+end_src
-** User package (akirak-*.el)
+** User package (akirak-*.el)                                           :akirak:
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
@@ -8667,7 +8667,10 @@ The following types of commands don't have pre-defined keybindings in =puni-mode
 
 For auto-pairing, you can use =electric-pair-mode= along with puni.
 
-**** akirak-puni
+**** akirak-puni                                                        :akirak:
+:PROPERTIES:
+:ID:       cdeafab1-305f-4814-aaa4-972b3407e2ed
+:END:
 #+begin_src emacs-lisp
   (setup akirak-puni
     (add-hook 'puni-mode-hook #'akirak-puni-mode-setup))
@@ -10185,6 +10188,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
          :action '(org-get-tags))
        (--filter (not (member "@note" it)))
        (-flatten-n 1)
+       (delete "akirak")
        (-group-by #'identity)
        (-map (pcase-lambda (`(,tag . ,items))
                (cons tag (length items))))
@@ -10293,12 +10297,11 @@ The following packages (tagged =web=) are related to web development:
 
 There are some packages for structured editing:
 
-#+BEGIN: org-ql :query "tags:structured__editing" :columns (heading todo)
-| Heading     | Todo |
-|-------------+------|
-| [[lispy][lispy]]       |      |
-| [[puni][puni]]        |      |
-| [[akirak-puni][akirak-puni]] |      |
+#+BEGIN: org-ql :query "tags:structured__editing !tags:ARCHIVE !tags:akirak" :columns (heading todo)
+| Heading | Todo |
+|---------+------|
+| [[lispy][lispy]]   |      |
+| [[puni][puni]]    |      |
 #+END:
 
 I like the idea of [[https://github.com/mickeynp/combobulate][combobulate]], but it looks immature at present.
