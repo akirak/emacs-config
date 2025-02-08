@@ -34,6 +34,7 @@ Note: This configuration is currently built and tested only on Linux.
   - [[#web-development][Web development]]
   - [[#syntax-support][Syntax support]]
   - [[#readability][Readability]]
+  - [[#artificial-intelligence--llm][Artificial intelligence / LLM]]
   - [[#extra-dependencies][Extra dependencies]]
   - [[#links][Links]]
   - [[#window-management][Window management]]
@@ -5927,7 +5928,7 @@ Recoll queries using consult
                                           (abbreviate-file-name)))
                                 'face 'font-lock-doc-face)))))
 #+end_src
-*** COMMENT copilot                                             :@extra:copilot:ARCHIVE:
+*** COMMENT copilot                                  :@extra:copilot:ARCHIVE:AI:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
@@ -6660,7 +6661,7 @@ Extract information from Emacs Lisp libraries
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
-*** elysium
+*** elysium                                                                 :AI:
 :PROPERTIES:
 :CREATED_TIME: [2024-10-23 Wed 23:54]
 :END:
@@ -7209,7 +7210,7 @@ Translation framework, configurable and scalable
     (:when-loaded
       gt-default-translator (gt-translator :engines (gt-google-engine))))
 #+end_src
-*** gptel
+*** gptel                                                                   :AI:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-20 Mon 23:59]
 :END:
@@ -7272,7 +7273,7 @@ Interact with ChatGPT or other LLMs
                   ;; `setq-local' to ensure it is set as a local variable.
                   (setq-local gptel--system-message msg)))))
 #+end_src
-*** gptel-aibo
+*** gptel-aibo                                                              :AI:
 :PROPERTIES:
 :CREATED_TIME: [2025-02-05 Wed 22:17]
 :END:
@@ -8123,7 +8124,7 @@ Display modeline in minibuffer
                 value))
           ""))))
 #+end_src
-*** minuet
+*** minuet                                                                  :AI:
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:26]
 :END:
@@ -10314,6 +10315,20 @@ I want to care about readability in the following modes:
 - [ ] helpful
 
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
+*** Artificial intelligence / LLM
+#+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
+| Heading    | Todo |
+|------------+------|
+| [[elysium][elysium]]    |      |
+| [[gptel][gptel]]      |      |
+| [[gptel-aibo][gptel-aibo]] |      |
+| [[minuet][minuet]]     |      |
+#+END:
+
+For LLM integration, gptel is the generic frontend and backend.
+
+There are packages for streaming workflows.
+Most of them uses gptel as the backend.
 *** Extra dependencies
 =@extra= tag is used to denote packages that requires large dependencies.
 To use these features, they need to be turned on at build time.
