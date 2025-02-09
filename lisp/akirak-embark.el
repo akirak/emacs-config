@@ -336,6 +336,7 @@
   (define-key embark-buffer-map "l" #'akirak-embark-org-store-link-to-buffer)
   (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
   (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
+  (define-key embark-identifier-map (kbd "M-p") #'akirak-llm-browse-package-info)
   (define-key embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
   ;; d is bound to `delete-file' by default, which is dangerous.
   (unbind-key "d" embark-file-map)
