@@ -7231,6 +7231,9 @@ Interact with ChatGPT or other LLMs
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
     (:global "C-c p" #'gptel-menu)
+    (autoload #'gptel-org-set-topic "gptel-org" nil '(org-mode))
+    (:with-feature org
+      (:bind "C-c C-x =" #'gptel-org-set-topic))
 
     (with-eval-after-load 'embark
       (define-key embark-region-map "!" #'gptel-rewrite-menu))
