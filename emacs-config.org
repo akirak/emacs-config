@@ -5773,7 +5773,11 @@ Transient user interfaces for various modes
               file)
     (:with-feature image-mode
       (:also-load casual-image)
-      (:bind "C-," casual-image-tmenu)))
+      (:bind "C-," casual-image-tmenu))
+    (:with-feature dired
+      (:bind "C-," casual-dired-tmenu))
+    (:with-feature calc
+      (:bind "C-," casual-calc-tmenu)))
 #+end_src
 *** COMMENT codeium                                                 :completion:ARCHIVE:
 :PROPERTIES:
