@@ -8623,7 +8623,7 @@ Pop a posframe (just a frame) at point
 #+begin_src emacs-lisp
 (setup (:package posframe))
 #+end_src
-*** proof-general   
+*** proof-general
 :PROPERTIES:
 :CREATED_TIME: [2023-03-08 Wed 14:53]
 :END:
