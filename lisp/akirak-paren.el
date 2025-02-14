@@ -82,10 +82,9 @@ Inside a string or comment, this command always inserts the character."
                                node)
           (cons node (go #'last1 parent)))))))
 
-(defvar akirak-paren-jump-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "%" #'akirak-paren-goto-match-or-self-insert)
-    map))
+(defvar-keymap akirak-paren-jump-mode-map
+  :doc "Keymap for `akirak-paren-jump-mode'."
+  "%" #'akirak-paren-goto-match-or-self-insert)
 
 ;;;###autoload
 (define-minor-mode akirak-paren-jump-mode

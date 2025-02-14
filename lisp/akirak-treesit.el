@@ -2,19 +2,19 @@
 
 (require 'treesit)
 
-(defvar akirak-treesit-mode-map
-  (let ((map (make-sparse-keymap)))
-    ;; (define-key map [remap forward-word] #'akirak-treesit-forward-word)
-    ;; (define-key map [remap backward-word] #'akirak-treesit-backward-word)
-    ;; (define-key map [remap kill-word] #'akirak-treesit-kill-word)
-    ;; (define-key map [remap down-list] #'akirak-treesit-down-list)
-    (define-key map [remap backward-up-list] #'akirak-treesit-backward-up-list)
-    (define-key map [remap kill-line] #'akirak-treesit-smart-kill-line)
-    (define-key map [remap open-line] #'akirak-treesit-open-line)
-    (define-key map (kbd "C-M-n") #'akirak-treesit-forward-up-list)
-    (define-key map (kbd "M-n") #'akirak-treesit-next-same-type-sibling)
-    (define-key map (kbd "M-p") #'akirak-treesit-previous-same-type-sibling)
-    map))
+(defvar-keymap akirak-treesit-mode-map
+  ;; :doc "Keymap for akirak-treesit-mode"
+  ;; Commented out original bindings for reference
+  ;; [remap forward-word] #'akirak-treesit-forward-word
+  ;; [remap backward-word] #'akirak-treesit-backward-word
+  ;; [remap kill-word] #'akirak-treesit-kill-word
+  ;; [remap down-list] #'akirak-treesit-down-list
+  [remap backward-up-list] #'akirak-treesit-backward-up-list
+  [remap kill-line] #'akirak-treesit-smart-kill-line
+  [remap open-line] #'akirak-treesit-open-line
+  "C-M-n" #'akirak-treesit-forward-up-list
+  "M-n" #'akirak-treesit-next-same-type-sibling
+  "M-p" #'akirak-treesit-previous-same-type-sibling)
 
 ;;;###autoload
 (define-minor-mode akirak-treesit-mode

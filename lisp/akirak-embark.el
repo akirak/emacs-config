@@ -37,39 +37,34 @@
   (interactive "s")
   (find-file (read-file-name "File: " dir)))
 
-(defvar akirak-embark-directory-map
-  (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "d" #'dired)
-    (define-key map "b" #'akirak-embark-browse-remote)
-    (define-key map "K" #'akirak-embark-kill-directory-buffers)
-    (define-key map "f" #'akirak-find-file-in-directory)
-    (define-key map "o" #'find-file-other-window)
-    (define-key map "t" #'find-file-other-tab)
-    (define-key map "p" #'akirak-consult-project-file)
-    (define-key map "v" #'akirak-embark-shell-at-dir)
-    (define-key map "V" #'akirak-embark-shell-other-window-at-dir)
-    (define-key map "lh" #'akirak-embark-magit-log-head)
-    (define-key map "la" #'akirak-embark-magit-log-all)
-    (define-key map "n" #'nix3-flake-show)
-    map))
+(defvar-keymap akirak-embark-directory-map
+  :parent embark-general-map
+  "d" #'dired
+  "b" #'akirak-embark-browse-remote
+  "K" #'akirak-embark-kill-directory-buffers
+  "f" #'akirak-find-file-in-directory
+  "o" #'find-file-other-window
+  "t" #'find-file-other-tab
+  "p" #'akirak-consult-project-file
+  "v" #'akirak-embark-shell-at-dir
+  "V" #'akirak-embark-shell-other-window-at-dir
+  "lh" #'akirak-embark-magit-log-head
+  "la" #'akirak-embark-magit-log-all
+  "n" #'nix3-flake-show)
 
-(defvar akirak-embark-project-root-map
-  (let ((map (make-composed-keymap nil akirak-embark-directory-map)))
-    (define-key map "r" #'akirak-project-find-most-recent-file)
-    (define-key map (kbd "C-o") #'org-dog-context-find-project-file)
-    (define-key map "m" #'magit-status)
-    (define-key map "t" #'akirak-project-new-tab)
-    map))
+(defvar-keymap akirak-embark-project-root-map
+  :parent akirak-embark-directory-map
+  "r" #'akirak-project-find-most-recent-file
+  "C-o" #'org-dog-context-find-project-file
+  "m" #'magit-status
+  "t" #'akirak-project-new-tab)
 
-(defvar akirak-embark-org-dog-link-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "v" #'akirak/oahu-view-org-file)
-    map))
+(defvar-keymap akirak-embark-org-dog-link-map
+  "v" #'akirak/oahu-view-org-file)
 
-(defvar akirak-embark-package-shell-command-map
-  (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "t" #'akirak-vterm-run-in-package-root)
-    map))
+(defvar-keymap akirak-embark-package-shell-command-map
+  :parent embark-general-map
+  "t" #'akirak-vterm-run-in-package-root)
 
 (defvar-keymap akirak-embark-org-block-map
   :doc "Keymap for Org blocks."
@@ -104,35 +99,30 @@
   "b" #'akirak-beancount-balance
   "r" #'akirak-beancount-rename-account)
 
-(defvar akirak-embark-git-file-map
-  (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "k" #'akirak-consult-git-revert-file)
-    (define-key map "s" #'akirak-consult-magit-stage-file)
-    (define-key map "c" #'akirak-consult-magit-stage-file-and-commit)
-    map))
+(defvar-keymap akirak-embark-git-file-map
+  :parent embark-general-map
+  "k" #'akirak-consult-git-revert-file
+  "s" #'akirak-consult-magit-stage-file
+  "c" #'akirak-consult-magit-stage-file-and-commit)
 
-(defvar akirak-embark-package-map
-  (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "f" #'akirak-twist-find-git-source)
-    (define-key map "b" #'akirak-twist-build-packages)
-    (define-key map "h" #'akirak-twist-browse-homepage)
-    (define-key map "o" #'akirak-emacs-org-goto-headline)
-    (define-key map "d" #'epkg-describe-package)
-    (define-key map "gc" #'akirak-git-clone-elisp-package)
-    map))
+(defvar-keymap akirak-embark-package-map
+  :parent embark-general-map
+  "f" #'akirak-twist-find-git-source
+  "b" #'akirak-twist-build-packages
+  "h" #'akirak-twist-browse-homepage
+  "o" #'akirak-emacs-org-goto-headline
+  "d" #'epkg-describe-package
+  "gc" #'akirak-git-clone-elisp-package)
 
-(defvar akirak-embark-nix-installable-map
-  (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "b" #'akirak-nix-browse-output)
-    (define-key map "&" #'akirak-embark-nix-run-async)
-    (define-key map "s" #'akirak-embark-nix-shell)
-    map))
+(defvar-keymap akirak-embark-nix-installable-map
+  :parent embark-general-map
+  "b" #'akirak-nix-browse-output
+  "&" #'akirak-embark-nix-run-async
+  "s" #'akirak-embark-nix-shell)
 
-(defvar akirak-embark-magit-section-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "h" #'magit-section-hide-children)
-    (define-key map "s" #'magit-section-show-children)
-    map))
+(defvar-keymap akirak-embark-magit-section-map
+  "h" #'magit-section-hide-children
+  "s" #'magit-section-show-children)
 
 (defun akirak-embark-prefix-nixpkgs-installable (_type package)
   (cons 'nix-installable (concat "nixpkgs#" package)))
@@ -291,67 +281,64 @@
       (goto-char (point-min))
       (embark-act))))
 
-(defvar akirak-embark-org-heading-map
-  (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "\\" #'akirak-embark-find-org-buffer-file)
-    (define-key map "g" #'akirak-embark-org-indirect-buffer-same-window)
-    (define-key map "G" #'akirak-embark-org-clock-in-and-show)
-    (define-key map "T" #'akirak-embark-org-clock-in-and-show-other-tab)
-    (define-key map "o" #'akirak-embark-org-indirect-buffer)
-    (define-key map "I" (akirak-embark-run-at-marker org-clock-in))
-    (define-key map "l" (akirak-embark-run-at-marker org-store-link))
-    (define-key map (kbd "C-c C-t") (akirak-embark-run-at-marker org-todo))
-    (define-key map (kbd "C-c C-l") #'akirak-embark-insert-link-to-org)
-    (define-key map "W" #'akirak-embark-org-copy-first-block)
-    (define-key map (kbd "C-o") #'akirak-embark-org-open-link-in-entry)
-    (define-key map (kbd "C-c C-s") #'akirak-embark-org-schedule)
-    (define-key map (kbd "C-c C-d") #'akirak-embark-org-deadline)
-    (define-key map "?" #'akirak-embark-org-point-to-register)
-    map))
+(defvar-keymap akirak-embark-org-heading-map
+  :parent embark-general-map
+  "\\"       #'akirak-embark-find-org-buffer-file
+  "g"        #'akirak-embark-org-indirect-buffer-same-window
+  "G"        #'akirak-embark-org-clock-in-and-show
+  "T"        #'akirak-embark-org-clock-in-and-show-other-tab
+  "o"        #'akirak-embark-org-indirect-buffer
+  "I"        (akirak-embark-run-at-marker org-clock-in)
+  "l"        (akirak-embark-run-at-marker org-store-link)
+  "C-c C-t"  (akirak-embark-run-at-marker org-todo)
+  "C-c C-l"  #'akirak-embark-insert-link-to-org
+  "W"        #'akirak-embark-org-copy-first-block
+  "C-o"      #'akirak-embark-org-open-link-in-entry
+  "C-c C-s"  #'akirak-embark-org-schedule
+  "C-c C-d"  #'akirak-embark-org-deadline
+  "?"        #'akirak-embark-org-point-to-register)
 
-(defvar akirak-embark-grep-map
-  (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "d" #'deadgrep)
-    (define-key map "R" #'project-query-replace-regexp)
-    map))
+(defvar-keymap akirak-embark-grep-map
+  :parent embark-general-map
+  "d"        #'deadgrep
+  "R"        #'project-query-replace-regexp)
 
-(defvar akirak-embark-image-file-map
-  (let ((map (make-composed-keymap nil embark-general-map)))
-    (define-key map "I" #'akirak-image-import-file)
-    map))
+(defvar-keymap akirak-embark-image-file-map
+  :parent embark-general-map
+  "I"        #'akirak-image-import-file)
 
 ;;;###autoload
 (defun akirak-embark-setup ()
-  (define-key embark-bookmark-map "p" #'akirak-bookmark-alter-property)
-  (define-key embark-library-map "t"
+  (keymap-set embark-bookmark-map "p" #'akirak-bookmark-alter-property)
+  (keymap-set embark-library-map "t"
               (akirak-embark-new-tab-action find-library
                 (lambda () (file-name-base buffer-file-name))))
-  (define-key embark-general-map (kbd "C-c c") #'akirak-capture-active-region)
+  (keymap-set embark-general-map "C-c c" #'akirak-capture-active-region)
   (add-to-list 'embark-around-action-hooks '(akirak-capture-active-region embark--mark-target))
-  (define-key embark-identifier-map "R" #'project-query-replace-regexp)
-  (define-key embark-identifier-map (kbd "C-c i") #'akirak-embark-install-package)
-  (define-key embark-expression-map "R" #'project-query-replace-regexp)
-  (define-key embark-variable-map "f" #'akirak-embark-find-file-variable)
-  (define-key embark-variable-map "k" #'akirak-embark-describe-key-briefly-in-map)
-  (define-key embark-buffer-map "l" #'akirak-embark-org-store-link-to-buffer)
-  (define-key embark-expression-map "T" #'akirak-snippet-save-as-tempo)
-  (define-key embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
-  (define-key embark-identifier-map (kbd "M-p") #'akirak-llm-browse-package-info)
-  (define-key embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
+  (keymap-set embark-identifier-map "R" #'project-query-replace-regexp)
+  (keymap-set embark-identifier-map "C-c i" #'akirak-embark-install-package)
+  (keymap-set embark-expression-map "R" #'project-query-replace-regexp)
+  (keymap-set embark-variable-map "f" #'akirak-embark-find-file-variable)
+  (keymap-set embark-variable-map "k" #'akirak-embark-describe-key-briefly-in-map)
+  (keymap-set embark-buffer-map "l" #'akirak-embark-org-store-link-to-buffer)
+  (keymap-set embark-expression-map "T" #'akirak-snippet-save-as-tempo)
+  (keymap-set embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
+  (keymap-set embark-identifier-map "M-p" #'akirak-llm-browse-package-info)
+  (keymap-set embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
   ;; d is bound to `delete-file' by default, which is dangerous.
-  (unbind-key "d" embark-file-map)
-  (define-key embark-file-map [remap embark-open-externally] #'akirak-open-file-externally)
-  (define-key embark-file-map "a" #'find-alternate-file)
-  (define-key embark-file-map "t" #'find-file-other-tab)
-  (define-key embark-file-map "l" #'akirak-embark-load-or-import-file)
-  (define-key embark-file-map "+" #'gptel-add-file)
-  (define-key embark-file-map (kbd "C-c o") #'akirak-image-compress-file)
-  (define-key embark-file-map (kbd "C-c C-T") #'akirak-tailscale-copy-file)
-  (define-key embark-file-map (kbd "C-o") #'akirak-embark-org-open-file)
-  (define-key embark-region-map (kbd "C-e") #'akirak-embark-goto-region-end)
-  (define-key embark-region-map "V" #'akirak-gpt-translate-vocabulary)
-  (define-key embark-bookmark-map "t" #'akirak-embark-bookmark-jump-other-tab)
-  (define-key embark-buffer-map (kbd "C-c C-c") #'akirak-embark-comint-interrupt)
+  (keymap-unset embark-file-map "d")
+  (keymap-set embark-file-map "<remap> <embark-open-externally>" #'akirak-open-file-externally)
+  (keymap-set embark-file-map "a" #'find-alternate-file)
+  (keymap-set embark-file-map "t" #'find-file-other-tab)
+  (keymap-set embark-file-map "l" #'akirak-embark-load-or-import-file)
+  (keymap-set embark-file-map "+" #'gptel-add-file)
+  (keymap-set embark-file-map "C-c o" #'akirak-image-compress-file)
+  (keymap-set embark-file-map "C-c C-T" #'akirak-tailscale-copy-file)
+  (keymap-set embark-file-map "C-o" #'akirak-embark-org-open-file)
+  (keymap-set embark-region-map "C-e" #'akirak-embark-goto-region-end)
+  (keymap-set embark-region-map "V" #'akirak-gpt-translate-vocabulary)
+  (keymap-set embark-bookmark-map "t" #'akirak-embark-bookmark-jump-other-tab)
+  (keymap-set embark-buffer-map "C-c C-c" #'akirak-embark-comint-interrupt)
 
   (add-to-list 'embark-target-finders #'akirak-embark-target-grep-input)
   (add-to-list 'embark-target-finders #'akirak-embark-target-displayed-image)
@@ -406,8 +393,8 @@
   "Apply extra settings for embark-org."
   (require 'embark-org)
 
-  (define-key embark-org-link-map "S" #'org-super-links-convert-link-to-super)
-  (define-key embark-org-link-map "+" #'akirak-org-convert-link-to-entry)
+  (keymap-set embark-org-link-map "S" #'org-super-links-convert-link-to-super)
+  (keymap-set embark-org-link-map "+" #'akirak-org-convert-link-to-entry)
 
   ;; If the point is at the very beginning of the heading, I want this finder to
   ;; match.
@@ -456,9 +443,9 @@
 
   (add-to-list 'embark-target-injection-hooks
                '(akirak-consult-org-clock-history
-                 embark--ignore-target))
+                    embark--ignore-target))
 
-  (define-key embark-org-link-map "o" #'akirak-embark-org-occur-target-references))
+  (keymap-set embark-org-link-map "o" #'akirak-embark-org-occur-target-references))
 
 (defun akirak-embark-target-pocket-reader ()
   (when (eq major-mode 'pocket-reader-mode)

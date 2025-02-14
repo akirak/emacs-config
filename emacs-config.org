@@ -159,7 +159,7 @@ I am interested to see if it can reduce the amount of configuration code.
      :indent 2
      `(with-eval-after-load 'embark
         ,@(cl-loop for (key cmd name) in bindings
-                   collect `(define-key ,map (kbd ,key)
+                   collect `(keymap-set ,map ,kbd
                                         ,(if interactive
                                              `(defun ,name (arg)
                                                 (interactive ,interactive)
@@ -471,22 +471,22 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
 #+begin_src emacs-lisp
   (define-prefix-command 'akirak/c-z-map)
   ;; C-z is bound to suspend-frame by default, but I won't use it anyway
-  (global-set-key (kbd "C-z") 'akirak/c-z-map)
+  (keymap-global-set "C-z" 'akirak/c-z-map)
 #+end_src
 *** Key translation map
 #+begin_src emacs-lisp
   (setup key-translation-map
     (:status opinionated
-      (global-set-key (kbd "M-r") nil)
-      (define-key key-translation-map (kbd "M-r") (kbd "C-x r"))
+      (keymap-global-unset "M-r")
+      (keymap-set key-translation-map "M-r" "C-x r")
 
-      (define-key key-translation-map (kbd "C-9") (kbd "C-x x"))
+      (keymap-set key-translation-map "C-9" "C-x x")
 
       ;; Chromebook don't have physical function keys. They substitute
       ;; Search + num for function keys, but Search + 1 is hard to press,
       ;; especially when Search and Ctrl are swapped.
       ;; This is quite annoying, so I will use M-` as <f1>.
-      (define-key key-translation-map (kbd "M-`") (kbd "<f1>"))))
+      (keymap-set key-translation-map "M-`" "<f1>")))
 #+end_src
 *** Window management
 #+begin_src emacs-lisp
@@ -1218,7 +1218,7 @@ The built-in =electric= package provides the following modes:
               (,(concat basename "\\.html\\.heex\\'") "\\1.ex")
               (,(concat basename "_test\\.go\\'") "\\1.go")
               (,(concat basename "\\.go\\'") "\\1_test.go"))))
-    (define-key ctl-x-map "," #'find-sibling-file)
+    (keymap-set ctl-x-map "," #'find-sibling-file)
 
     (advice-add 'abort-if-file-too-large
                 :before-while
@@ -1399,7 +1399,7 @@ Notes:
 #+begin_src emacs-lisp
   (setup help
     (:set help-window-keep-selected t)
-    (define-key help-map (kbd "C-h") nil))
+    (keymap-set help-map "C-h" nil))
 #+end_src
 *** hippie-exp
 :PROPERTIES:
@@ -1621,33 +1621,32 @@ Resources:
           '((file (styles partial-completion))
             (url (styles substring))))
 
-    (define-key minibuffer-mode-map
-                "~"
-                (defun akirak/minibuffer-tilde ()
-                  "During `find-file', replace the minibuffer input with the home directory."
-                  (interactive)
-                  (if minibuffer-completing-file-name
-                      (progn
-                        (delete-region (minibuffer-prompt-end) (point-max))
-                        (goto-char (point-max))
-                        (insert "~/"))
-                    (insert "~"))))
-    (define-key minibuffer-mode-map
-                "/"
-                (defun akirak/minibuffer-slash ()
-                  "During `find-file', replace the minibuffer input with the root directory."
-                  (interactive)
-                  (if (and minibuffer-completing-file-name
-                           (eq ?/ (char-after (1- (point)))))
-                      (let ((ident (file-remote-p (buffer-substring-no-properties
-                                                   (minibuffer-prompt-end) (point-max))
-                                                  'ident)))
-                        (delete-region (minibuffer-prompt-end) (point-max))
-                        (goto-char (point-max))
-                        (when ident
-                          (insert ident))
-                        (insert "/"))
-                    (insert "/")))))
+    (defun akirak/minibuffer-tilde ()
+      "During `find-file', replace the minibuffer input with the home directory."
+      (interactive)
+      (if minibuffer-completing-file-name
+          (progn
+            (delete-region (minibuffer-prompt-end) (point-max))
+            (goto-char (point-max))
+            (insert "~/"))
+        (insert "~")))
+    (keymap-set minibuffer-mode-map "~" #'akirak/minibuffer-tilde)
+
+    (defun akirak/minibuffer-slash ()
+      "During `find-file', replace the minibuffer input with the root directory."
+      (interactive)
+      (if (and minibuffer-completing-file-name
+               (eq ?/ (char-after (1- (point)))))
+          (let ((ident (file-remote-p (buffer-substring-no-properties
+                                       (minibuffer-prompt-end) (point-max))
+                                      'ident)))
+            (delete-region (minibuffer-prompt-end) (point-max))
+            (goto-char (point-max))
+            (when ident
+              (insert ident))
+            (insert "/"))
+        (insert "/")))
+    (keymap-set minibuffer-mode-map "/" #'akirak/minibuffer-slash))
 #+end_src
 *** misc
 :PROPERTIES:
@@ -1806,7 +1805,7 @@ Operations on the current project
           (:unbind "p")
           ;; Rebind the key
           (:bind "p" #'akirak-consult-project-file))
-        (global-set-key (kbd "C-x M") project-prefix-map)
+        (keymap-global-set "C-x M" project-prefix-map)
 
         (add-hook 'project-find-functions #'akirak-project-worktree-group-finder))))
 #+end_src
@@ -2226,7 +2225,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup thingatpt
     (define-prefix-command 'akirak/thingatpt-map)
-    (global-set-key (kbd "M-m") akirak/thingatpt-map)
+    (keymap-global-set "M-m" akirak/thingatpt-map)
 
     (defmacro akirak/thingatpt-def-region (thing)
       `(defun ,(intern (format "akirak/select-%s" thing)) ()
@@ -2239,9 +2238,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
             (activate-mark)))))
 
     (akirak/thingatpt-def-region sentence)
-    (define-key akirak/thingatpt-map "s" #'akirak/select-sentence)
+    (keymap-set akirak/thingatpt-map "s" #'akirak/select-sentence)
     (akirak/thingatpt-def-region paragraph)
-    (define-key akirak/thingatpt-map "p" #'akirak/select-paragraph))
+    (keymap-set akirak/thingatpt-map "p" #'akirak/select-paragraph))
 #+end_src
 *** timer
 :PROPERTIES:
@@ -2436,7 +2435,7 @@ Display available keybindings in popup
       (/ (1- (window-height (or window (selected-window)))) 2))
 
     ;; I use a normal keyboard, so it is hard to access cursor keys.
-    (define-key ctl-x-map "9" #'previous-buffer)
+    (keymap-global-set "C-x 9" #'previous-buffer)
     (:repeat ctl-x-map previous-buffer)
 
     (:global
@@ -2728,23 +2727,22 @@ Manage Org searches
 #+begin_src emacs-lisp
   (setup (:package oahu)
     (:status personal
-      (define-key akirak/c-z-map (kbd "SPC") #'oahu-view)
-      (define-key ctl-x-map "g"
-                  (defun akirak-oahu-goto-context (&optional view)
-                    (interactive)
-                    (require 'oahu)
-                    (pcase (or view oahu-last-view)
-                      (`(Project ,pr . ,_)
-                       (akirak-project-switch (project-root pr)))
-                      (`(Org ,x . ,_)
-                       (when-let* ((file (seq-find #'stringp x))
-                                   (file (org-dog-resolve-relative-file file)))
-                         (find-file file)))
-                      (`(OrgBookmark . ,bookmark)
-                       (org-placeholder-view bookmark)))))
+      (keymap-set akirak/c-z-map "SPC" #'oahu-view)
       (:global "<menu>" #'oahu-view
                "<S-menu>" #'oahu-alternative-view
-               "<C-menu>" #'oahu-view-global)))
+               "<C-menu>" #'oahu-view-global
+               "C-x g" (defun akirak-oahu-goto-context (&optional view)
+                         (interactive)
+                         (require 'oahu)
+                         (pcase (or view oahu-last-view)
+                           (`(Project ,pr . ,_)
+                            (akirak-project-switch (project-root pr)))
+                           (`(Org ,x . ,_)
+                            (when-let* ((file (seq-find #'stringp x))
+                                        (file (org-dog-resolve-relative-file file)))
+                              (find-file file)))
+                           (`(OrgBookmark . ,bookmark)
+                            (org-placeholder-view bookmark)))))))
 #+end_src
 **** oahu-memento
 :PROPERTIES:
@@ -3032,7 +3030,7 @@ Outline-based notes management and organizer
     ;; Keybinding compatibility with org-mode.
     (defvar akirak/org-agenda-prefix-map (make-sparse-keymap))
     (with-eval-after-load 'org-agenda
-      (define-key org-agenda-mode-map (kbd akirak/mode-prefix-key)
+      (keymap-set org-agenda-mode-map akirak/mode-prefix-key
                   akirak/org-agenda-prefix-map))
 
     (defmacro akirak/org-agenda-wrap-orig-command (org-command)
@@ -3059,7 +3057,7 @@ Outline-based notes management and organizer
                                           "\n"))
                      (message "Stored a check list to the kill ring")))))
 
-    (define-key help-map (kbd "M-a")
+    (keymap-set help-map "M-a"
                 (defun akirak/org-default-agenda ()
                   (interactive)
                   (unless (bound-and-true-p org-clock-history)
@@ -3234,13 +3232,13 @@ Outline-based notes management and organizer
     (:status opinionated
       (:global "C-c l" #'org-store-link)
       (with-eval-after-load 'org-agenda
-        (define-key org-agenda-mode-map
-                    (kbd "C-c l")
-                    (defun akirak/org-agenda-store-link-to-entry ()
-                      (interactive)
-                      (org-agenda-with-point-at-orig-entry
-                          (thing-at-point 'line)
-                        (org-store-link nil 'interactive)))))))
+        (keymap-set org-agenda-mode-map
+                    "C-c l"
+                    #'(lambda ()
+                        (interactive)
+                        (org-agenda-with-point-at-orig-entry
+                            (thing-at-point 'line)
+                          (org-store-link nil 'interactive)))))))
 #+end_src
 **** org-refile
 :PROPERTIES:
@@ -3491,8 +3489,8 @@ A programmable workflow layer for Org mode
                    (display-buffer-in-tab)))
 
     (with-eval-after-load 'org-dog-overview
-      (define-key org-dog-overview-mode-map
-                  (kbd "+") #'org-dog-add-header-link))
+      (keymap-set org-dog-overview-mode-map
+                  "+" #'org-dog-add-header-link))
 
     (:status personal
       (:auto-insert
@@ -3510,15 +3508,9 @@ A programmable workflow layer for Org mode
              (skeleton-insert
               `(> "#+title: " _
                   n "#+REVERSE_DATETREE_USE_WEEK_TREE: nil"
-                  n "#+REVERSE_DATETREE_DATE_FORMAT: %Y-%m-%d %A"
-                  n "#+REVERSE_DATETREE_MONTH_FORMAT: %Y-%m"
-                  n "#+REVERSE_DATETREE_YEAR_FORMAT: %Y"
-                  n
-                  n "* Backlog"
-                  n "* " (format-time-string "%Y")
-                  n "* Activities"
-                  ,@(when (string-prefix-p "programming/" (oref obj relative))
-                      '(n "* Libraries"))
+                  n "#+REVERSE_DATETREE_DATE_FORMAT: %Y-%m-%d %A" n "#+REVERSE_DATETREE_MONTH_FORMAT: %Y-%m" n "#+REVERSE_DATETREE_YEAR_FORMAT: %Y" n n "* Backlog" n "* " (format-time-string "%Y") n "* Activities"
+                  (when (string-prefix-p "programming/" (oref obj relative))
+                    '(n "* Libraries"))
                   n "* Index"
                   n "* Resources"))))))
 
@@ -3565,8 +3557,8 @@ Transient commands for Org Dog
     (:global "M-g M-o" #'octopus-find-file
              "M-s M-o" #'octopus-find-node)
 
-    (define-key akirak/c-z-map "I" #'octopus-clock-in)
-    (define-key akirak/c-z-map "C-i" #'octopus-clock-in)
+    (keymap-set akirak/c-z-map "I" #'octopus-clock-in)
+    (keymap-set akirak/c-z-map "C-i" #'octopus-clock-in)
 
     (:set octopus-find-node-verbs
           '((?f "Display a node" nil akirak/org-pivot-search-from-files)
@@ -3695,7 +3687,7 @@ Manage Hyprctl workspaces from Org mode
 
 #+begin_src emacs-lisp
   (setup (:package org-hyprctl)
-    (define-key akirak/c-z-map "w" #'org-hyprctl-popup)
+    (keymap-set akirak/c-z-map "w" #'org-hyprctl-popup)
     (:bind "C-M-n" #'move-dup-move-lines-down
            "C-M-p" #'move-dup-move-lines-up)
     (with-eval-after-load 'org
@@ -3811,18 +3803,18 @@ Time blocking with Org
                        (interactive)
                        (akirak-oahu-goto-context (oahu-memento-group-view-at-point))))))
 
-      (define-key help-map (kbd "<tab>") #'org-memento-next-action)
-      (define-key akirak/c-z-map (kbd "<tab>") #'org-memento-next-action)
-      (define-key akirak/c-z-map "!" #'org-memento-quick-start-event)
-      (define-key akirak/c-z-map "a" #'org-memento-agenda)
-      (define-key akirak/c-z-map "i" #'org-memento-policy-find-in-source)
-      (define-key akirak/c-z-map "j" #'org-memento-open-journal)
-      (define-key akirak/c-z-map "k" #'akirak/org-memento-cleanup-buffers)
-      (define-key akirak/c-z-map "n" #'org-memento-pick-next-action)
-      (define-key akirak/c-z-map "t" #'org-memento-timeline)
-      (define-key akirak/c-z-map (kbd "C-z") #'org-memento-status)
-      (define-key akirak/c-z-map (kbd "C-o") #'org-memento-finish-block)
-      (define-key akirak/c-z-map "5"
+      (keymap-set help-map "<tab>" #'org-memento-next-action)
+      (keymap-set akirak/c-z-map "<tab>" #'org-memento-next-action)
+      (keymap-set akirak/c-z-map "!" #'org-memento-quick-start-event)
+      (keymap-set akirak/c-z-map "a" #'org-memento-agenda)
+      (keymap-set akirak/c-z-map "i" #'org-memento-policy-find-in-source)
+      (keymap-set akirak/c-z-map "j" #'org-memento-open-journal)
+      (keymap-set akirak/c-z-map "k" #'akirak/org-memento-cleanup-buffers)
+      (keymap-set akirak/c-z-map "n" #'org-memento-pick-next-action)
+      (keymap-set akirak/c-z-map "t" #'org-memento-timeline)
+      (keymap-set akirak/c-z-map "C-z" #'org-memento-status)
+      (keymap-set akirak/c-z-map "C-o" #'org-memento-finish-block)
+      (keymap-set akirak/c-z-map "5"
                   (defun akirak/org-memento-switch-to-tab (&optional arg)
                     (interactive "P")
                     (if (bound-and-true-p org-memento-current-block)
@@ -4127,12 +4119,12 @@ Create reverse date trees in org-mode
     (:set org-reverse-datetree-month-format "%Y-%m")
 
     (with-eval-after-load 'org
-      (define-key org-mode-map (kbd "C-c C-x M-j") #'org-reverse-datetree-calendar))
+      (keymap-set org-mode-map "C-c C-x M-j" #'org-reverse-datetree-calendar))
 
     (with-eval-after-load 'calendar
-      (define-key calendar-mode-map "]" #'org-reverse-datetree-calendar-next)
-      (define-key calendar-mode-map "[" #'org-reverse-datetree-calendar-previous)
-      (define-key calendar-mode-map (kbd "RET") #'org-reverse-datetree-display-entry)))
+      (keymap-set calendar-mode-map "]" #'org-reverse-datetree-calendar-next)
+      (keymap-set calendar-mode-map "[" #'org-reverse-datetree-calendar-previous)
+      (keymap-set calendar-mode-map "RET" #'org-reverse-datetree-display-entry)))
 #+end_src
 *** COMMENT org-starter                                    :ARCHIVE:
 :PROPERTIES:
@@ -4610,7 +4602,7 @@ Major mode for editing typescript
       "tsx")
 
     (with-eval-after-load 'typescript-mode
-      (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
+      (keymap-set tsx-mode-map "C-c C-e" #'akirak-jsx-close-tag)))
 #+end_src
 *** yaml-ts-mode
 :PROPERTIES:
@@ -4824,7 +4816,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+end_src
 *** akirak-github
 #+begin_src elisp
-  (define-key help-map (kbd "C-g") #'akirak-github-search-code)
+  (keymap-set help-map "C-g" #'akirak-github-search-code)
 #+end_src
 *** akirak-header-line                                                      :UI:
 :PROPERTIES:
@@ -4911,7 +4903,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
               (not (equal (kbd "C-x n")
                           (seq-take key 2)))))
     (with-eval-after-load 'org
-      (define-key org-mode-map (kbd "C-x n") #'akirak-narrow-or-widen-dwim)))
+      (keymap-set org-mode-map "C-x n" #'akirak-narrow-or-widen-dwim)))
 #+end_src
 *** akirak-nix
 #+begin_src emacs-lisp
@@ -4964,27 +4956,27 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:global "M-g M-j" #'akirak-org-clock-goto)
 
     (with-eval-after-load 'org-keys
-      (define-key org-mode-map [remap org-clock-in] #'akirak-org-clock-in))
+      (keymap-set org-mode-map "C-c C-x C-i" #'akirak-org-clock-in))
 
-    (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
-    (define-key akirak/c-z-map "p" #'akirak-org-clock-in-to-project)
-    (define-key akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
-    (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
-    ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
-    ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
-    (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
-    (define-key akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
+    (keymap-set akirak/c-z-map "o" #'akirak-org-clock-open)
+    (keymap-set akirak/c-z-map "p" #'akirak-org-clock-in-to-project)
+    (keymap-set akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
+    (keymap-set akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
+    ;; (keymap-set akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
+    ;; (keymap-set akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
+    (keymap-set akirak/c-z-map "S" #'akirak-org-clock-snooze)
+    (keymap-set akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
 
-    (define-key akirak/c-z-map "O" #'akirak-org-clock-out)
-    (define-key akirak/c-z-map "C-o" #'akirak-org-clock-out)
-    (define-key akirak/c-z-map "d" #'akirak-org-clock-done)
-    (define-key akirak/c-z-map "r" #'akirak-org-clock-set-review))
+    (keymap-set akirak/c-z-map "O" #'akirak-org-clock-out)
+    (keymap-set akirak/c-z-map "C-o" #'akirak-org-clock-out)
+    (keymap-set akirak/c-z-map "d" #'akirak-org-clock-done)
+    (keymap-set akirak/c-z-map "r" #'akirak-org-clock-set-review))
 #+end_src
 *** akirak-org-log
 #+begin_src emacs-lisp
   (setup akirak-org-log
     (:status personal
-      (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
+      (keymap-set help-map "w" #'akirak-org-log-goto-week-entry)))
 #+end_src
 *** akirak-org-reg
 #+begin_src emacs-lisp
@@ -5047,11 +5039,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit))
 
     (with-eval-after-load "bindings"
-      ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
-      ;; (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
-      ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
-      ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
-      ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
+      ;; (keymap-set ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
+      ;; (keymap-set ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
+      ;; (keymap-set ctl-x-x-map "C" #'akirak-project-find-css)
+      ;; (keymap-set ctl-x-x-map "T" #'akirak-project-find-test)
+      ;; (keymap-set ctl-x-x-map "S" #'akirak-project-find-stories)
       ))
 #+end_src
 *** akirak-quick-thing
@@ -5079,7 +5071,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
+  (keymap-global-set "C-c x" #'akirak-scratch-from-selection)
 #+end_src
 *** akirak-shr
 #+begin_src elisp
@@ -5089,7 +5081,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-snippet
 #+begin_src emacs-lisp
   (setup akirak-snippet
-    (define-key ctl-x-r-map "/" #'akirak-snippet-search))
+    (keymap-set ctl-x-r-map "/" #'akirak-snippet-search))
 #+end_src
 *** akirak-systemctl
 #+begin_src elisp
@@ -5135,12 +5127,12 @@ Complete a URL from the clipboard and the kill ring and insert as a link
 *** akirak-wayshot                                                  :screenshot:
 #+begin_src emacs-lisp
   (when (getenv "WAYLAND_DISPLAY")
-    (global-set-key (kbd "<f12> c s w") #'akirak-wayshot))
+    (keymap-global-set "<f12> c s w" #'akirak-wayshot))
 #+end_src
 *** akirak-wf-recorder
 #+begin_src emacs-lisp
   (when (getenv "WAYLAND_DISPLAY")
-    (global-set-key (kbd "<f12> c r w") #'akirak-wf-recorder))
+    (keymap-global-set "<f12> c r w" #'akirak-wf-recorder))
 #+end_src
 *** akirak-window                                                      :windows:
 :PROPERTIES:
@@ -5653,8 +5645,8 @@ Show git blame info about current line
     (:set blamer-max-lines 50
           blamer-max-commit-message-length 50)
 
-    (define-key ctl-x-x-map (kbd "b") #'blamer-mode)
-    (define-key help-map (kbd "M-g") #'blamer-show-commit-info))
+    (keymap-set ctl-x-x-map "b" #'blamer-mode)
+    (keymap-set help-map "M-g" #'blamer-show-commit-info))
 #+end_src
 *** bookmark-frecency
 :PROPERTIES:
@@ -6170,7 +6162,7 @@ Emacs viewer for DevDocs
 
 #+begin_src emacs-lisp
   (setup (:package devdocs)
-    (define-key help-map (kbd "d") #'devdocs-lookup))
+    (keymap-set help-map "d" #'devdocs-lookup))
 #+end_src
 *** diff-hl
 :PROPERTIES:
@@ -6203,7 +6195,7 @@ Highlight uncommitted changes using VC
              "M-g k" #'akirak/diff-hl-previous-hunk)
 
     (:when-loaded
-      (define-key diff-hl-command-map "c" #'magit-commit)
+      (keymap-set diff-hl-command-map "c" #'magit-commit)
       (defun akirak/diff-hl-after-navigation (orig &rest args)
         ;; (when (buffer-narrowed-p)
         ;;   (widen))
@@ -6397,13 +6389,11 @@ Never lose your place again
   (setup (:package dogears)
     (:hook-into after-init-hook)
 
-    (defvar dogears-mode-map
-      (let ((map (make-sparse-keymap)))
-        (define-key map (kbd "C-z") #'dogears-remember)
-        (define-key map (kbd "M-g M-z") #'dogears-go)
-        (define-key map (kbd "<C-left>") #'dogears-back)
-        (define-key map (kbd "<C-right>") #'dogears-forward)
-        map))
+    (defvar-keymap dogears-mode-map
+      "C-z"        #'dogears-remember
+      "M-g M-z"    #'dogears-go
+      "<C-left>"   #'dogears-back
+      "<C-right>"  #'dogears-forward)
 
     (add-hook 'dogears-ignore-places-functions
               (defun akirak/dogears-org-capture-p ()
@@ -6711,8 +6701,8 @@ Conveniently act on minibuffer completions
     (:global "C-." #'embark-act
              "C->" #'embark-act-all)
 
-    (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
-    (define-key minibuffer-mode-map (kbd "C-SPC") #'embark-select)
+    (keymap-set minibuffer-mode-map "C-," #'embark-become)
+    (keymap-set minibuffer-mode-map "C-SPC" #'embark-select)
 
     (:when-loaded
       (when (require 'akirak-embark nil t)
@@ -6902,7 +6892,7 @@ Not only English-Chinese translator
     (:when-loaded
       (require 'fanyi-longman)
       (require 'fanyi-etymon))
-    (define-key help-map (kbd "M-d") #'fanyi-dwim)
+    (keymap-set help-map "M-d" #'fanyi-dwim)
 
     (add-hook 'akirak-unknown-default-text-hook
               (defun akirak-unknown-fanyi-current-word ()
@@ -7236,7 +7226,7 @@ Interact with ChatGPT or other LLMs
       (:bind "C-c C-x =" #'gptel-org-set-topic))
 
     (with-eval-after-load 'embark
-      (define-key embark-region-map "!" #'gptel-rewrite-menu))
+      (keymap-set embark-region-map "!" #'gptel-rewrite-menu))
 
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
@@ -7476,8 +7466,8 @@ Replace things with predefined alternatives
     (:global "C-=" #'huan-symbol
              "C-+" #'huan-defun)
     (with-eval-after-load 'embark
-      (define-key embark-defun-map "`" #'huan-defun)
-      (define-key embark-identifier-map "`" #'huan-symbol)))
+      (keymap-set embark-defun-map "`" #'huan-defun)
+      (keymap-set embark-identifier-map "`" #'huan-symbol)))
 #+end_src
 *** COMMENT idris-mode                                                         :ARCHIVE:
 :PROPERTIES:
@@ -7855,9 +7845,9 @@ A Git porcelain inside Emacs
                        (dired parent-dir))))))
 
     ;; Replace the binding to compose-message
-    (define-key ctl-x-map "m" #'magit-dispatch)
-    (define-key ctl-x-map "j" #'magit-status)
-    (define-key ctl-x-x-map "e"
+    (keymap-set ctl-x-map "m" #'magit-dispatch)
+    (keymap-set ctl-x-map "j" #'magit-status)
+    (keymap-set ctl-x-x-map "e"
                 (defun akirak/edit-source-file ()
                   "Visit a corresponding file in a Git repository."
                   (interactive)
@@ -7872,8 +7862,8 @@ A Git porcelain inside Emacs
                     (org-transclusion-open-source t))
                    (t
                     (magit-blob-visit-file)))))
-    (define-key ctl-x-x-map "m" #'magit-file-dispatch)
-    (define-key ctl-x-x-map "s"
+    (keymap-set ctl-x-x-map "m" #'magit-file-dispatch)
+    (keymap-set ctl-x-x-map "s"
                 (defun akirak-magit-stage-file-and-commit ()
                   (interactive)
                   (unless (buffer-file-name)
@@ -9623,11 +9613,11 @@ Operate on current line if region undefined
       (make-sparse-keymap))
     (put 'akirak/indent-rigidly-line-or-region 'repeat-map 'akirak/indent-rigidly-map)
     (put 'akirak/indent-rigidly-left-line-or-region 'repeat-map 'akirak/indent-rigidly-map)
-    (global-set-key (kbd "C-x TAB") #'akirak/indent-rigidly-line-or-region)
-    (global-set-key (kbd "C-x <backtab>") #'akirak/indent-rigidly-left-line-or-region)
-    (define-key akirak/indent-rigidly-map (kbd "TAB")
+    (keymap-global-set "C-x TAB" #'akirak/indent-rigidly-line-or-region)
+    (keymap-global-set "C-x <backtab>" #'akirak/indent-rigidly-left-line-or-region)
+    (keymap-set akirak/indent-rigidly-map "TAB"
                 #'akirak/indent-rigidly-line-or-region)
-    (define-key akirak/indent-rigidly-map (kbd "<backtab>")
+    (keymap-set akirak/indent-rigidly-map "<backtab>"
                 #'akirak/indent-rigidly-left-line-or-region))
 #+end_src
 *** windswap                                                           :windows:

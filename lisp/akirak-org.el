@@ -664,12 +664,11 @@ The point should be at the heading."
 
 ;;;; akirak-org-protected-mode
 
-(defvar akirak-org-protected-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map [remap kill-word] #'akirak-org-kill-word)
-    (define-key map (kbd "C-w") #'akirak-org-backward-kill-word)
-    (define-key map [remap transpose-chars] #'akirak-org-transpose-chars)
-    map))
+(defvar-keymap akirak-org-protected-mode-map
+  :doc "Keymap for protected org mode operations."
+  "C-w" #'akirak-org-backward-kill-word
+  [remap kill-word] #'akirak-org-kill-word
+  [remap transpose-chars] #'akirak-org-transpose-chars)
 
 ;;;###autoload
 (define-minor-mode akirak-org-protected-mode

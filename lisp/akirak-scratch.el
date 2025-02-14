@@ -1,13 +1,10 @@
 ;;; akirak-scratch.el ---  -*- lexical-binding: t -*-
 
-(defvar akirak-scratch-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c C-c") #'akirak-scratch-kill-new-and-close)
-    (define-key map (kbd "C-c C-k") (defun akirak/scratch-kill-this-buffer ()
-                                      (interactive)
-                                      (kill-buffer (current-buffer))))
-    (define-key map (kbd "C-c C-w") #'akirak-scratch-duckduckgo)
-    map))
+(defvar-keymap akirak-scratch-mode-map
+  :doc "Keymap for akirak-scratch-mode"
+  "C-c C-c" #'akirak-scratch-kill-new-and-close
+  "C-c C-k" #'akirak/scratch-kill-this-buffer
+  "C-c C-w" #'akirak-scratch-duckduckgo)
 
 (define-minor-mode akirak-scratch-mode
   "Minor mode for language scratch buffers.")
