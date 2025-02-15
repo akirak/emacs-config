@@ -74,7 +74,8 @@
                   (type
                    "CASUAL(c)"
                    "EPIC(E)"
-                   "IDEATE(i)")))
+                   "IDEATE(i)"
+                   "|")))
 
   (setq-default org-clock-out-when-done
                 '("DONE"
