@@ -5,6 +5,33 @@
 (require 'akirak-org-capture)
 
 ;;;###autoload
+(defun akirak-org-dog-make-gpt-prompt (&optional obj)
+  (when-let* ((obj (or obj (org-dog-buffer-object)))
+              (title (or (org-dog-file-title obj)
+                         (thread-first
+                           (file-name-base (oref obj absolute))
+                           (split-string "-")
+                           (string-join " ")))))
+    ;; TODO: Keep up-to-date
+    (pcase (oref obj relative)
+      ;; System messages are based on examples in `gptel-directives'.
+      ((rx bos "programming/")
+       (format "You are a large language model and\
+ a programmer experienced in %s. Respond concisely."
+               (or title
+                   (file-name-base (oref obj relative)))))
+      ((and (rx bos "technology/")
+            (guard title))
+       (format "You are a large language model and\
+ an engineer experienced in %s. Respond concisely." title))
+      ((and (rx bos "languages/"
+                (group (+ (not (any "/"))))
+                (any "/.")))
+       (format "You are a large language model and\
+ an interpreter who are good at %s. Respond concisely."
+               (match-string 1 (oref obj relative)))))))
+
+;;;###autoload
 (defun akirak-org-dog-datetree-indirect-clock-in (&optional arg)
   "Clock into a datetree in another file.
 
