@@ -366,15 +366,6 @@
 ;;;###autoload (autoload 'akirak-capture "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture (&optional initial)
   "Main entry point to capture commands."
-  [:description
-   (lambda ()
-     (format "Into the clocked entry \"%s\""
-             (octopus--marker-heading org-clock-hd-marker)))
-   :class transient-row
-   :if org-clocking-p
-   ("c" "Check item" akirak-capture-check-item-to-clock)
-   ("b" "Link to the current location" akirak-capture-link-item-to-clock)]
-
   ["Actions (generic / specific type)"
    :class transient-row
    ("T" "Start todo" (lambda ()
@@ -457,48 +448,48 @@
              akirak-capture-doct-options '(:clock-in t :clock-resume t)
              akirak-capture-template-options '(:todo "UNDERWAY" :tags "@reading"))
        (akirak-capture-url nil 'keep-options))
-     :if (lambda () (not akirak-capture-initial)))
-    ("v" "Vocabulary" akirak-capture-vocabulary)]
+     :if (lambda () (not akirak-capture-initial)))]
 
-   ["Schedule an event / org-memento"
-    :class transient-row
-    ("an" "Note"
-     (lambda ()
-       (interactive)
-       (akirak-capture-short-note
-        (akirak-capture--maybe-read-heading "Add an event or note: "))))
-    ("aa" "Schedule block"
-     (lambda ()
-       (interactive)
-       (org-memento-add-quick-event
-        (akirak-capture--maybe-read-heading "Describe an event: "))))
-    ("a!" "Quick start"
-     (lambda ()
-       (interactive)
-       (org-memento-start-quick-event
-        (akirak-capture--maybe-read-heading "Describe the current event: "))))
+   ;; ["Schedule an event / org-memento"
+   ;;  :class transient-row
+   ;;  ("an" "Note"
+   ;;   (lambda ()
+   ;;     (interactive)
+   ;;     (akirak-capture-short-note
+   ;;      (akirak-capture--maybe-read-heading "Add an event or note: "))))
+   ;;  ("aa" "Schedule block"
+   ;;   (lambda ()
+   ;;     (interactive)
+   ;;     (org-memento-add-quick-event
+   ;;      (akirak-capture--maybe-read-heading "Describe an event: "))))
+   ;;  ("a!" "Quick start"
+   ;;   (lambda ()
+   ;;     (interactive)
+   ;;     (org-memento-start-quick-event
+   ;;      (akirak-capture--maybe-read-heading "Describe the current event: "))))
 
-    ;; ("am" "Meeting w/ someone"
-    ;;  (lambda ()
-    ;;    (interactive)
-    ;;    (setq akirak-capture-template-options
-    ;;          '(:tags "@meeting"
-    ;;                  :body ("- Participants :: %^{Participants}"
-    ;;                         ""
-    ;;                         "%?")))
-    ;;    (akirak-capture-appointment))
-    ;;  :transient t)
-    ;; ("as" "Session"
-    ;;  (lambda ()
-    ;;    (interactive)
-    ;;    (setq akirak-capture-template-options
-    ;;          '(:tags "@session"
-    ;;                  :body ("%?")))
-    ;;    (akirak-capture-appointment))
-    ;;  :transient t)
-    ;; ("ae" "Errand" akirak-capture-errand
-    ;;  :transient t)
-    ]]
+   ;;  ;; ("am" "Meeting w/ someone"
+   ;;  ;;  (lambda ()
+   ;;  ;;    (interactive)
+   ;;  ;;    (setq akirak-capture-template-options
+   ;;  ;;          '(:tags "@meeting"
+   ;;  ;;                  :body ("- Participants :: %^{Participants}"
+   ;;  ;;                         ""
+   ;;  ;;                         "%?")))
+   ;;  ;;    (akirak-capture-appointment))
+   ;;  ;;  :transient t)
+   ;;  ;; ("as" "Session"
+   ;;  ;;  (lambda ()
+   ;;  ;;    (interactive)
+   ;;  ;;    (setq akirak-capture-template-options
+   ;;  ;;          '(:tags "@session"
+   ;;  ;;                  :body ("%?")))
+   ;;  ;;    (akirak-capture-appointment))
+   ;;  ;;  :transient t)
+   ;;  ;; ("ae" "Errand" akirak-capture-errand
+   ;;  ;;  :transient t)
+   ;;  ]
+   ]
 
   ["Convenience and specific projects"
    :class transient-row
@@ -610,16 +601,16 @@
                               :immediate-finish t))
     :transient t)
 
-   ("t" "Troubleshooting"
-    (lambda ()
-      (interactive)
-      (akirak-capture--region :headline (akirak-capture--read-summary-for-region
-                                         "Headline: ")
-                              :todo "UNDERWAY"
-                              :tags '("@troubleshooting")
-                              :type "example"
-                              :clock-in t :clock-resume t))
-    :transient t)
+   ;; ("t" "Troubleshooting"
+   ;;  (lambda ()
+   ;;    (interactive)
+   ;;    (akirak-capture--region :headline (akirak-capture--read-summary-for-region
+   ;;                                       "Headline: ")
+   ;;                            :todo "UNDERWAY"
+   ;;                            :tags '("@troubleshooting")
+   ;;                            :type "example"
+   ;;                            :clock-in t :clock-resume t))
+   ;;  :transient t)
    ("l" "Language study (input)" akirak-capture-language-study)
    ("v" "Vocabulary" akirak-capture-vocabulary)]
   ["Others" :class transient-row
@@ -1076,6 +1067,7 @@
                              :immediate-finish t)))
     (org-capture)))
 
+;; Currently not used.
 (defun akirak-capture-check-item-to-clock ()
   (interactive)
   ;; Don't use %A. I want to keep the window configuration while typing the
@@ -1083,6 +1075,7 @@
   (let ((org-capture-entry `("" "" checkitem (clock))))
     (org-capture)))
 
+;; Currently not used.
 (defun akirak-capture-link-item-to-clock ()
   (interactive)
   ;; Don't use %A. I want to keep the window configuration while typing the
@@ -1102,6 +1095,7 @@
                               ,(concat link-string "%?"))))
     (org-capture)))
 
+;; Currently not used.
 (defun akirak-capture-vocabulary ()
   (interactive)
   (let* ((file (akirak-capture--vocabulary-file))
