@@ -1,10 +1,9 @@
 ;;; akirak-shr.el ---  -*- lexical-binding: t -*-
 
-(defvar akirak-shr-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c C-p") #'akirak-shr-previous-heading)
-    (define-key map (kbd "C-c C-n") #'akirak-shr-next-heading)
-    map))
+(defvar-keymap akirak-shr-mode-map
+  :doc "Keymap for akirak-shr mode."
+  "C-c C-p" #'akirak-shr-previous-heading
+  "C-c C-n" #'akirak-shr-next-heading)
 
 ;;;###autoload
 (define-minor-mode akirak-shr-mode

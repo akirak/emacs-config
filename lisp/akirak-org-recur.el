@@ -99,14 +99,14 @@
       (progn
         (advice-add 'org-recur-finish :after #'akirak-org-recur-run-finish-hook)
         (add-hook 'org-after-todo-state-change-hook #'akirak-org-recur-maybe-setup)
-        (define-key org-recur-mode-map [remap org-todo] #'akirak-org-recur-todo)
-        (define-key org-agenda-mode-map
-                    [remap org-agenda-todo] #'akirak-org-recur-agenda-todo))
+        (keymap-set org-recur-mode-map "<remap> <org-todo>" #'akirak-org-recur-todo)
+        (keymap-set org-agenda-mode-map
+                    "<remap> <org-agenda-todo>" #'akirak-org-recur-agenda-todo))
     (progn
       (advice-remove 'org-recur-finish #'akirak-org-recur-run-finish-hook)
       (remove-hook 'org-after-todo-state-change-hook #'akirak-org-recur-maybe-setup)
-      (define-key org-recur-mode-map [remap org-todo] nil)
-      (define-key org-agenda-mode-map [remap org-agenda-todo] nil))))
+      (keymap-unset org-recur-mode-map "<remap> <org-todo>")
+      (keymap-unset org-agenda-mode-map "<remap> <org-agenda-todo>"))))
 
 (provide 'akirak-org-recur)
 ;;; akirak-org-recur.el ends here
