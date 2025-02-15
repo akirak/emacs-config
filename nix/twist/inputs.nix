@@ -20,6 +20,7 @@
 
   magit-delta = _: super: {
     packageRequires = super.packageRequires // {
+      dash = "0";
       # Override the snapshot version dependency.
       magit = "3";
     };

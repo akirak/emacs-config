@@ -65,7 +65,9 @@ is loaded."
 ;;;###autoload
 (defun akirak-minuet-switch-to-ollama (model)
   (interactive (list (completing-read "Model: "
-                                      (akirak-ollama-list)
+                                      (progn
+                                        (require 'akirak-ollama)
+                                        (akirak-ollama-list))
                                       nil t)))
   "Use a MODEL for code completion."
   (let* ((provider 'openai-fim-compatible)

@@ -34,6 +34,7 @@ Note: This configuration is currently built and tested only on Linux.
   - [[#web-development][Web development]]
   - [[#syntax-support][Syntax support]]
   - [[#readability][Readability]]
+  - [[#artificial-intelligence--llm][Artificial intelligence / LLM]]
   - [[#extra-dependencies][Extra dependencies]]
   - [[#links][Links]]
   - [[#window-management][Window management]]
@@ -158,12 +159,24 @@ I am interested to see if it can reduce the amount of configuration code.
      :indent 2
      `(with-eval-after-load 'embark
         ,@(cl-loop for (key cmd name) in bindings
-                   collect `(define-key ,map (kbd ,key)
+                   collect `(keymap-set ,map ,key
                                         ,(if interactive
                                              `(defun ,name (arg)
                                                 (interactive ,interactive)
                                                 (,cmd arg))
                                            `(quote ,cmd)))))))
+#+end_src
+*** :global-keymap
+:PROPERTIES:
+:CREATED_TIME: [2025-02-15 Sat 14:44]
+:END:
+#+begin_src elisp
+  (eval-when-compile
+    (define-setup-macro
+     :global-keymap (key command)
+     "Use `keymap-global-set' to define global keybindings."
+     :repeatable t
+     `(keymap-global-set ,key ,command)))
 #+end_src
 *** :huan
 :PROPERTIES:
@@ -187,6 +200,34 @@ I am interested to see if it can reduce the amount of configuration code.
                 (setcdr cell (symbol-value sym)))
             (push (cons mode entries)
                   huan-mode-symbols-alist))))))
+#+end_src
+*** :keymap
+:PROPERTIES:
+:CREATED_TIME: [2025-02-15 Sat 14:32]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :keymap (key command)
+     "Use `keymap-set' to define keybindings."
+     :after-loaded t
+     :repeatable t
+     `(keymap-set ,(setup-get 'map) ,key ,command)))
+#+end_src
+*** keymap-unset
+:PROPERTIES:
+:CREATED_TIME: [2025-02-15 Sat 14:39]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :keymap-unset (key)
+     "Use `keymap-unset' to define keybindings."
+     :after-loaded t
+     :repeatable t
+     `(keymap-unset ,(setup-get 'map) ,key)))
 #+end_src
 *** :mode-project-roots
 :PROPERTIES:
@@ -470,22 +511,22 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
 #+begin_src emacs-lisp
   (define-prefix-command 'akirak/c-z-map)
   ;; C-z is bound to suspend-frame by default, but I won't use it anyway
-  (global-set-key (kbd "C-z") 'akirak/c-z-map)
+  (keymap-global-set "C-z" 'akirak/c-z-map)
 #+end_src
 *** Key translation map
 #+begin_src emacs-lisp
   (setup key-translation-map
     (:status opinionated
-      (global-set-key (kbd "M-r") nil)
-      (define-key key-translation-map (kbd "M-r") (kbd "C-x r"))
+      (keymap-global-unset "M-r")
+      (keymap-set key-translation-map "M-r" "C-x r")
 
-      (define-key key-translation-map (kbd "C-9") (kbd "C-x x"))
+      (keymap-set key-translation-map "C-9" "C-x x")
 
       ;; Chromebook don't have physical function keys. They substitute
       ;; Search + num for function keys, but Search + 1 is hard to press,
       ;; especially when Search and Ctrl are swapped.
       ;; This is quite annoying, so I will use M-` as <f1>.
-      (define-key key-translation-map (kbd "M-`") (kbd "<f1>"))))
+      (keymap-set key-translation-map "M-`" "<f1>")))
 #+end_src
 *** Window management
 #+begin_src emacs-lisp
@@ -721,7 +762,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   (setup calc
     (:set calc-kill-line-numbering nil)
-    (:global "<f12> c c" #'calc))
+    (:global-keymap "<f12> c c" #'calc))
 #+end_src
 *** calendar
 :PROPERTIES:
@@ -734,7 +775,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
                  '((major-mode . calendar-mode)
                    (display-buffer-in-side-window)))
 
-    (:global "C-z m"
+    (:global-keymap "C-z m"
              (defun akirak/calendar (&optional arg)
                (interactive "P")
                (if (and (derived-mode-p 'org-mode)
@@ -768,7 +809,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
           compilation-scroll-output t
           compilation-environment '("TERM=xterm-256color"))
 
-    (:global "<f9>" #'recompile)
+    (:global-keymap "<f9>" #'recompile)
 
     (:set compilation-error-regexp-alist
           ;; This is a fallback value. The value may be replaced with a
@@ -806,7 +847,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
   (setup completion-preview
     (:hook-into corfu-mode-hook)
     (:with-map completion-preview-active-mode-map
-      (:bind "C-j" #'completion-preview-insert)))
+      (:keymap "C-j" #'completion-preview-insert)))
 #+end_src
 *** custom
 :PROPERTIES:
@@ -866,9 +907,9 @@ The other variables must not be saved, and they should be put in configuration:
 
 #+begin_src emacs-lisp
   (setup custom
-    (:global "<f12> e v" #'customize-variable)
-    (:global "<f12> e o" #'customize-variable-other-window)
-    (:global "<f12> e g" #'customize-group)
+    (:global-keymap "<f12> e v" #'customize-variable)
+    (:global-keymap "<f12> e o" #'customize-variable-other-window)
+    (:global-keymap "<f12> e g" #'customize-group)
     (:status personal
       ;; Don't allow saving a variable that is not included in the whitelist
       (advice-add 'custom-variable-mark-to-save
@@ -926,7 +967,7 @@ The other variables must not be saved, and they should be put in configuration:
 
 #+begin_src emacs-lisp
   (setup edebug
-    (:global "<f12> e r" #'edebug-remove-instrumentation))
+    (:global-keymap "<f12> e r" #'edebug-remove-instrumentation))
 #+end_src
 *** ediff
 :PROPERTIES:
@@ -977,7 +1018,7 @@ It is required only in specific projects, so I won't turn on the mode by default
       (:hook-into emacs-lisp-mode))
 
     (:set eldoc-documentation-strategy 'eldoc-documentation-compose)
-    (:global "C-c e" #'eldoc-doc-buffer))
+    (:global-keymap "C-c e" #'eldoc-doc-buffer))
 #+end_src
 *** elec-pair                      :prog_mode:text_mode:parentheses:
 :PROPERTIES:
@@ -1079,7 +1120,7 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup eww
-    (:bind "^"
+    (:keymap "^"
            (defun akirak/eww-directory-up ()
              (interactive nil eww-mode)
              (let* ((url (eww-current-url))
@@ -1149,7 +1190,7 @@ The built-in =electric= package provides the following modes:
                                                         (file-name-directory file)))))
                          (project-root pr))))))
 
-    (:global "C-c f" (defun akirak/ffap (&optional arg)
+    (:global-keymap "C-c f" (defun akirak/ffap (&optional arg)
                        (interactive "P")
                        (if-let* ((window (and (numberp arg)
                                               (akirak-window--other-window nil arg))))
@@ -1217,7 +1258,7 @@ The built-in =electric= package provides the following modes:
               (,(concat basename "\\.html\\.heex\\'") "\\1.ex")
               (,(concat basename "_test\\.go\\'") "\\1.go")
               (,(concat basename "\\.go\\'") "\\1_test.go"))))
-    (define-key ctl-x-map "," #'find-sibling-file)
+    (keymap-set ctl-x-map "," #'find-sibling-file)
 
     (advice-add 'abort-if-file-too-large
                 :before-while
@@ -1296,7 +1337,7 @@ Notes:
 
 #+begin_src emacs-lisp
   (setup find-func
-    (:global "C-x M-l" #'find-library)
+    (:global-keymap "C-x M-l" #'find-library)
     (add-hook 'find-function-after-hook
               (defun akirak/find-function-focus ()
                 (recenter-top-bottom 0))))
@@ -1309,7 +1350,7 @@ Notes:
 #+begin_src emacs-lisp
   (setup flymake
     (:set flymake-show-diagnostics-at-end-of-line nil)
-    (:bind "M-g M-n" #'flymake-goto-next-error
+    (:keymap "M-g M-n" #'flymake-goto-next-error
            "M-g M-p" #'flymake-goto-prev-error))
 #+end_src
 *** COMMENT flyspell                                                           :ARCHIVE:
@@ -1324,7 +1365,7 @@ Notes:
                 ;; For org-mode, set up hooks in .dir-locals.el of individual
                 ;; projects
                 git-commit-mode-hook)
-    (:unbind "C-," "C-." "C-;" "C-M-i" "C-c $"))
+    (:keymap-unset "C-," "C-." "C-;" "C-M-i" "C-c $"))
 #+end_src
 *** fns.c and xfns.c                                            :UI:
 :PROPERTIES:
@@ -1398,7 +1439,7 @@ Notes:
 #+begin_src emacs-lisp
   (setup help
     (:set help-window-keep-selected t)
-    (define-key help-map (kbd "C-h") nil))
+    (keymap-set help-map "C-h" nil))
 #+end_src
 *** hippie-exp
 :PROPERTIES:
@@ -1407,7 +1448,7 @@ Notes:
 
 #+begin_src emacs-lisp
   (setup hippie-exp
-    (:global "C-M-/" #'hippie-expand)
+    (:global-keymap "C-M-/" #'hippie-expand)
     (:set hippie-expand-try-functions-list
           '(try-complete-file-name-partially
             try-complete-file-name
@@ -1470,7 +1511,7 @@ Notes:
     (:set tab-always-indent 'complete)
 
     ;; Unbind `tab-to-tab-stop'
-    (:global "M-i" nil))
+    (keymap-global-unset "M-i"))
 #+end_src
 *** indent.c                                            :formatting:
 :PROPERTIES:
@@ -1495,7 +1536,7 @@ Notes:
 
 #+begin_src emacs-lisp
   (setup isearch
-    (:bind "M-q" #'isearch-query-replace
+    (:keymap "M-q" #'isearch-query-replace
            "M-RET" (defun akirak/isearch-quit-with-region ()
                      (interactive)
                      (pcase-exhaustive isearch-match-data
@@ -1524,7 +1565,7 @@ Notes:
              (require 'sgml-mode)))
 
     (:with-feature js
-      (:bind "C-c C-e" #'akirak-sgml-close-tag)))
+      (:keymap "C-c C-e" #'akirak-sgml-close-tag)))
 #+end_src
 *** js-mode
 :PROPERTIES:
@@ -1545,7 +1586,7 @@ Notes:
   (setup keymap.c
     (:status opinionated
       (:with-map minibuffer-local-map
-        (:bind "C-u" #'backward-kill-sentence))))
+        (:keymap "C-u" #'backward-kill-sentence))))
 #+end_src
 *** mailcap
 :PROPERTIES:
@@ -1582,7 +1623,7 @@ Notes:
 #+begin_src emacs-lisp
   (setup menu-bar
     (:status opinionated
-      (:global "<f12> <f12>" #'toggle-debug-on-error)))
+      (:global-keymap "<f12> <f12>" #'toggle-debug-on-error)))
 #+end_src
 *** minibuf.c                                           :minibuffer:
 :PROPERTIES:
@@ -1620,33 +1661,32 @@ Resources:
           '((file (styles partial-completion))
             (url (styles substring))))
 
-    (define-key minibuffer-mode-map
-                "~"
-                (defun akirak/minibuffer-tilde ()
-                  "During `find-file', replace the minibuffer input with the home directory."
-                  (interactive)
-                  (if minibuffer-completing-file-name
-                      (progn
-                        (delete-region (minibuffer-prompt-end) (point-max))
-                        (goto-char (point-max))
-                        (insert "~/"))
-                    (insert "~"))))
-    (define-key minibuffer-mode-map
-                "/"
-                (defun akirak/minibuffer-slash ()
-                  "During `find-file', replace the minibuffer input with the root directory."
-                  (interactive)
-                  (if (and minibuffer-completing-file-name
-                           (eq ?/ (char-after (1- (point)))))
-                      (let ((ident (file-remote-p (buffer-substring-no-properties
-                                                   (minibuffer-prompt-end) (point-max))
-                                                  'ident)))
-                        (delete-region (minibuffer-prompt-end) (point-max))
-                        (goto-char (point-max))
-                        (when ident
-                          (insert ident))
-                        (insert "/"))
-                    (insert "/")))))
+    (defun akirak/minibuffer-tilde ()
+      "During `find-file', replace the minibuffer input with the home directory."
+      (interactive)
+      (if minibuffer-completing-file-name
+          (progn
+            (delete-region (minibuffer-prompt-end) (point-max))
+            (goto-char (point-max))
+            (insert "~/"))
+        (insert "~")))
+    (keymap-set minibuffer-mode-map "~" #'akirak/minibuffer-tilde)
+
+    (defun akirak/minibuffer-slash ()
+      "During `find-file', replace the minibuffer input with the root directory."
+      (interactive)
+      (if (and minibuffer-completing-file-name
+               (eq ?/ (char-after (1- (point)))))
+          (let ((ident (file-remote-p (buffer-substring-no-properties
+                                       (minibuffer-prompt-end) (point-max))
+                                      'ident)))
+            (delete-region (minibuffer-prompt-end) (point-max))
+            (goto-char (point-max))
+            (when ident
+              (insert ident))
+            (insert "/"))
+        (insert "/")))
+    (keymap-set minibuffer-mode-map "/" #'akirak/minibuffer-slash))
 #+end_src
 *** misc
 :PROPERTIES:
@@ -1655,7 +1695,7 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup misc
-    (:global "C-c d" #'duplicate-dwim))
+    (:global-keymap "C-c d" #'duplicate-dwim))
 #+end_src
 *** mule
 :PROPERTIES:
@@ -1711,7 +1751,7 @@ Resources:
   (setup outline
     (:with-mode outline-minor-mode
       (:status opinionated
-        (:bind "M-RET" #'outline-insert-heading))))
+        (:keymap "M-RET" #'outline-insert-heading))))
 #+end_src
 *** paragraphs                                                :text:
 :PROPERTIES:
@@ -1774,7 +1814,7 @@ Resources:
         (call-interactively #'profiler-start)))
 
     (:status opinionated
-      (:global "<f12> e p" akirak/profiler-toggle)))
+      (:global-keymap "<f12> e p" #'akirak/profiler-toggle)))
 #+end_src
 *** project
 :PROPERTIES:
@@ -1802,10 +1842,10 @@ Operations on the current project
       (:when-loaded
         (:with-map ctl-x-map
           ;; Don't use c-x p for the prefix map.
-          (:unbind "p")
+          (:keymap-unset "p")
           ;; Rebind the key
-          (:bind "p" #'akirak-consult-project-file))
-        (global-set-key (kbd "C-x M") project-prefix-map)
+          (:keymap "p" #'akirak-consult-project-file))
+        (keymap-global-set "C-x M" project-prefix-map)
 
         (add-hook 'project-find-functions #'akirak-project-worktree-group-finder))))
 #+end_src
@@ -1902,7 +1942,7 @@ Operations on the current project
 
 #+begin_src emacs-lisp
   (setup replace
-    (:global "C-c o" #'occur))
+    (:global-keymap "C-c o" #'occur))
 #+end_src
 *** savehist                                               :history:
 :PROPERTIES:
@@ -1934,11 +1974,11 @@ This is a recommended setting for use with vertico. See https://github.com/minad
   (setup sgml-mode
     (:with-map html-mode-map
       ;; I don't use facemenu commands, so save M-o
-      (:unbind "M-o"))
+      (:keymap-unset "M-o"))
 
     (:with-map sgml-mode-map
-      (:bind "C-j" #'newline-and-indent
-             [remap sgml-close-tag] #'akirak-sgml-close-tag))
+      (:keymap "C-j" #'newline-and-indent
+               "<remap> <sgml-close-tag>" #'akirak-sgml-close-tag))
 
     (defun akirak-sgml-close-tag ()
       (interactive)
@@ -1983,15 +2023,15 @@ This is a recommended setting for use with vertico. See https://github.com/minad
           ;; Don't auto-save remote files.
           remote-file-name-inhibit-auto-save t)
 
-    (:global [remap count-words-region] #'akirak/count-words-dwim
-             [remap delete-horizontal-space] #'cycle-spacing
-             [remap upcase-word] #'upcase-dwim
-             [remap downcase-word] #'downcase-dwim
-             [remap capitalize-word] #'capitalize-dwim)
+    (:global-keymap "<remap> <count-words-region>" #'akirak/count-words-dwim
+             "<remap> <delete-horizontal-space>" #'cycle-spacing
+             "<remap> <upcase-word>" #'upcase-dwim
+             "<remap> <downcase-word>" #'downcase-dwim
+             "<remap> <capitalize-word>" #'capitalize-dwim)
 
     ;; I often type this sequence unintensionally. I never use this command, so
     ;; just disable the keybinding.
-    (:global "C-x C-n" nil)
+    (:global-keymap "C-x C-n" nil)
 
     (:set kill-region-dwim 'emacs-word)
     ;; unix-word is too aggressive for editing file names. zsh has the better
@@ -2003,7 +2043,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     ;;               (setq-local kill-region-dwim 'unix-word))))
     ;; Alternative to kill-region-dwim option
     (when (version< emacs-version "31")
-      (:global "C-w" (defun akirak/kill-region-or-backward-kill-word (&optional arg)
+      (:global-keymap "C-w" (defun akirak/kill-region-or-backward-kill-word (&optional arg)
                        "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
                        (interactive "p")
                        (if (region-active-p)
@@ -2033,7 +2073,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
        "" start end))
 
     (:status opinionated
-      (:global "C-a"
+      (:global-keymap "C-a"
                (defun akirak/back-to-indentation-or-bol ()
                  (interactive)
                  (if (or (looking-at "^")
@@ -2086,7 +2126,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
 #+begin_src emacs-lisp
   (setup smerge
-    (:global "C-c g u" #'smerge-keep-upper
+    (:global-keymap "C-c g u" #'smerge-keep-upper
              "C-c g l" #'smerge-keep-lower))
 #+end_src
 *** sqlite-mode
@@ -2131,9 +2171,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup subr
     (:with-map ctl-x-x-map
-      (:bind "+" #'make-directory))
+      (:keymap "+" #'make-directory))
     (:status opinionated
-      ;; (:global "C-h" 'backward-delete-char)
+      ;; (:global-keymap "C-h" 'backward-delete-char)
       ))
 #+end_src
 
@@ -2145,7 +2185,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subword
-    ;; (:global "M-SPC" #'akirak/run-with-superword-inversed)
+    ;; (:global-keymap "M-SPC" #'akirak/run-with-superword-inversed)
 
     ;; Deprecated.
     (defun akirak/run-with-superword-inversed (key)
@@ -2225,7 +2265,7 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup thingatpt
     (define-prefix-command 'akirak/thingatpt-map)
-    (global-set-key (kbd "M-m") akirak/thingatpt-map)
+    (keymap-global-set "M-m" akirak/thingatpt-map)
 
     (defmacro akirak/thingatpt-def-region (thing)
       `(defun ,(intern (format "akirak/select-%s" thing)) ()
@@ -2238,9 +2278,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
             (activate-mark)))))
 
     (akirak/thingatpt-def-region sentence)
-    (define-key akirak/thingatpt-map "s" #'akirak/select-sentence)
+    (keymap-set akirak/thingatpt-map "s" #'akirak/select-sentence)
     (akirak/thingatpt-def-region paragraph)
-    (define-key akirak/thingatpt-map "p" #'akirak/select-paragraph))
+    (keymap-set akirak/thingatpt-map "p" #'akirak/select-paragraph))
 #+end_src
 *** timer
 :PROPERTIES:
@@ -2326,10 +2366,10 @@ Thus I will explicitly install this package rather than using the built-in versi
 
     (:with-map view-mode-map
       ;; conflict with a binding in lispy-mode
-      (:unbind "d")
-      (:bind
-       [remap scroll-up-command] #'View-scroll-half-page-forward
-       [remap scroll-down-command] #'View-scroll-half-page-backward)))
+      (:keymap-unset "d")
+      (:keymap
+       "<remap> <scroll-up-command>" #'View-scroll-half-page-forward
+       "<remap> <scroll-down-command>" #'View-scroll-half-page-backward)))
 #+end_src
 *** warnings
 :PROPERTIES:
@@ -2435,18 +2475,18 @@ Display available keybindings in popup
       (/ (1- (window-height (or window (selected-window)))) 2))
 
     ;; I use a normal keyboard, so it is hard to access cursor keys.
-    (define-key ctl-x-map "9" #'previous-buffer)
+    (keymap-global-set "C-x 9" #'previous-buffer)
     (:repeat ctl-x-map previous-buffer)
 
-    (:global
+    (:global-keymap
      ;; TODO: scroll-other-window and scroll-other-window-down
-     [remap scroll-up-command]
+     "<remap> <scroll-up-command>"
      (defun akirak/scroll-half-page-forward (&optional arg)
        (interactive "P")
        (if (numberp arg)
            (scroll-up arg)
          (scroll-up (akirak/scroll-half-height))))
-     [remap scroll-down-command]
+     "<remap> <scroll-down-command>"
      (defun akirak/scroll-half-page-backward (&optional arg)
        (interactive "P")
        (if (numberp arg)
@@ -2470,8 +2510,8 @@ Display available keybindings in popup
       (cl-pushnew "*Calendar*" winner-boring-buffers))
 
     (:status opinionated
-      (:global "<f7>" #'winner-undo
-               "<S-f7>" #'winner-redo)))
+      (:global-keymap "<f7>" #'winner-undo
+               "S-<f7>" #'winner-redo)))
 #+end_src
 *** woman
 :PROPERTIES:
@@ -2480,7 +2520,7 @@ Display available keybindings in popup
 
 #+begin_src emacs-lisp
   (setup woman
-    (:global "<f1> M-m" #'woman))
+    (:global-keymap "<f1> M-m" #'woman))
 #+end_src
 *** word-wrap-mode
 :PROPERTIES:
@@ -2727,23 +2767,22 @@ Manage Org searches
 #+begin_src emacs-lisp
   (setup (:package oahu)
     (:status personal
-      (define-key akirak/c-z-map (kbd "SPC") #'oahu-view)
-      (define-key ctl-x-map "g"
-                  (defun akirak-oahu-goto-context (&optional view)
-                    (interactive)
-                    (require 'oahu)
-                    (pcase (or view oahu-last-view)
-                      (`(Project ,pr . ,_)
-                       (akirak-project-switch (project-root pr)))
-                      (`(Org ,x . ,_)
-                       (when-let* ((file (seq-find #'stringp x))
-                                   (file (org-dog-resolve-relative-file file)))
-                         (find-file file)))
-                      (`(OrgBookmark . ,bookmark)
-                       (org-placeholder-view bookmark)))))
-      (:global "<menu>" #'oahu-view
-               "<S-menu>" #'oahu-alternative-view
-               "<C-menu>" #'oahu-view-global)))
+      (keymap-set akirak/c-z-map "SPC" #'oahu-view)
+      (:global-keymap "<menu>" #'oahu-view
+               "S-<menu>" #'oahu-alternative-view
+               "C-<menu>" #'oahu-view-global
+               "C-x g" (defun akirak-oahu-goto-context (&optional view)
+                         (interactive)
+                         (require 'oahu)
+                         (pcase (or view oahu-last-view)
+                           (`(Project ,pr . ,_)
+                            (akirak-project-switch (project-root pr)))
+                           (`(Org ,x . ,_)
+                            (when-let* ((file (seq-find #'stringp x))
+                                        (file (org-dog-resolve-relative-file file)))
+                              (find-file file)))
+                           (`(OrgBookmark . ,bookmark)
+                            (org-placeholder-view bookmark)))))))
 #+end_src
 **** oahu-memento
 :PROPERTIES:
@@ -2770,10 +2809,10 @@ Org-Memento integration for oahu
 
       (:with-feature org-memento-timeline
         (:with-map org-memento-timeline-mode-map
-          (:bind "v" #'oahu-memento-group-view)))
+          (:keymap "v" #'oahu-memento-group-view)))
       (:with-feature org-memento-zone
         (:with-map org-memento-zone-mode-map
-          (:bind "v" #'oahu-memento-group-view)))))
+          (:keymap "v" #'oahu-memento-group-view)))))
 #+end_src
 *** ob-graphql
 :PROPERTIES:
@@ -2854,7 +2893,7 @@ Outline-based notes management and organizer
         (when (require 'akirak-org nil t)
           (:hook #'akirak-org-protected-mode)))
 
-      (:global "M-g o" #'org-open-at-point-global)
+      (:global-keymap "M-g o" #'org-open-at-point-global)
 
       (defvar akirak/org-file-apps-set-from-mime nil)
       (advice-add 'org-open-file
@@ -2929,7 +2968,7 @@ Outline-based notes management and organizer
   (setup org
     (:with-mode org-mode
       ;; These bindings should be set by default, but just in case.
-      (:bind "C-a" #'org-beginning-of-line
+      (:keymap "C-a" #'org-beginning-of-line
              "C-e" #'org-end-of-line)
 
       (:status opinionated
@@ -2940,16 +2979,16 @@ Outline-based notes management and organizer
           (when (require 'akirak-org nil t)
             (:hook #'akirak-org-eldoc-setup)))
 
-        (:global "M-g h" #'akirak-org-avy-heading)
+        (:global-keymap "M-g h" #'akirak-org-avy-heading)
 
-        (:unbind "C-'"
+        (:keymap-unset "C-'"
                  ;; I don't use any of these bindings and want to use them for other purposes
                  "C-c ["
                  "C-c ]"
                  ;; C-c C-x u is bound to org-metaup, but I use another binding
                  ;; (currently M-P) for the command.
                  "C-c C-x u")
-        (:bind akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
+        (:keymap akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
                "<" #'akirak-org-angle-open
                "[" #'akirak-org-square-open
                "*" #'akirak-org-bold
@@ -2994,7 +3033,7 @@ Outline-based notes management and organizer
                              (org-show-context)))))
 
         (:with-map org-read-date-minibuffer-local-map
-          (:bind "C-p" (defun akirak/org-calendar-previous-week ()
+          (:keymap "C-p" (defun akirak/org-calendar-previous-week ()
                          (interactive)
                          (org-eval-in-calendar '(calendar-forward-week -1)))
                  "C-n" (defun akirak/org-calendar-next-week ()
@@ -3003,7 +3042,7 @@ Outline-based notes management and organizer
                  "<tab>" (defun akirak/org-calendar-next-day ()
                            (interactive)
                            (org-eval-in-calendar '(calendar-forward-day 1)))
-                 "<S-iso-lefttab>" (defun akirak/org-calendar-previous-day ()
+                 "S-<iso-lefttab>" (defun akirak/org-calendar-previous-day ()
                                      (interactive)
                                      (org-eval-in-calendar '(calendar-forward-day -1))))))))
 #+end_src
@@ -3023,15 +3062,15 @@ Outline-based notes management and organizer
     (:status personal
       (:set org-agenda-start-on-weekday 1))
     (:local-set truncate-lines t)
-    (:unbind "TAB" "<tab>")
-    (:bind "C-c ." #'akirak-org-edit-active-ts
+    (:keymap-unset "TAB" "<tab>")
+    (:keymap "C-c ." #'akirak-org-edit-active-ts
            ;; Use "o" instead of "<tab>".
            "o" #'org-agenda-goto)
 
     ;; Keybinding compatibility with org-mode.
     (defvar akirak/org-agenda-prefix-map (make-sparse-keymap))
     (with-eval-after-load 'org-agenda
-      (define-key org-agenda-mode-map (kbd akirak/mode-prefix-key)
+      (keymap-set org-agenda-mode-map akirak/mode-prefix-key
                   akirak/org-agenda-prefix-map))
 
     (defmacro akirak/org-agenda-wrap-orig-command (org-command)
@@ -3041,7 +3080,7 @@ Outline-based notes management and organizer
            (call-interactively ',org-command))))
 
     (:with-map akirak/org-agenda-prefix-map
-      (:bind "r" #'octopus-refile
+      (:keymap "r" #'octopus-refile
              "S" (akirak/org-agenda-wrap-orig-command
                   org-super-links-store-link)
              "C" (defun akirak/org-agenda-make-check-list ()
@@ -3058,7 +3097,7 @@ Outline-based notes management and organizer
                                           "\n"))
                      (message "Stored a check list to the kill ring")))))
 
-    (define-key help-map (kbd "M-a")
+    (keymap-set help-map "M-a"
                 (defun akirak/org-default-agenda ()
                   (interactive)
                   (unless (bound-and-true-p org-clock-history)
@@ -3231,15 +3270,15 @@ Outline-based notes management and organizer
     (autoload 'org-bibtex-store-link "ol-bibtex")
 
     (:status opinionated
-      (:global "C-c l" #'org-store-link)
+      (:global-keymap "C-c l" #'org-store-link)
       (with-eval-after-load 'org-agenda
-        (define-key org-agenda-mode-map
-                    (kbd "C-c l")
-                    (defun akirak/org-agenda-store-link-to-entry ()
-                      (interactive)
-                      (org-agenda-with-point-at-orig-entry
-                          (thing-at-point 'line)
-                        (org-store-link nil 'interactive)))))))
+        (keymap-set org-agenda-mode-map
+                    "C-c l"
+                    #'(lambda ()
+                        (interactive)
+                        (org-agenda-with-point-at-orig-entry
+                            (thing-at-point 'line)
+                          (org-store-link nil 'interactive)))))))
 #+end_src
 **** org-refile
 :PROPERTIES:
@@ -3318,7 +3357,7 @@ Converts web pages into Org
     (:nixpkgs "readability-cli")
     (add-hook 'org-ctrl-c-ctrl-c-hook #'orgabilize-update-link-title)
     ;; (with-eval-after-load 'embark
-    ;;   (define-key embark-url-map (kbd "r")
+    ;;   (keymap-set embark-url-map "r"
     ;;               (defun akirak/embark-archive-url-to-org (url)
     ;;                 (interactive "s")
     ;;                 (orgabilize-org-archive url))))
@@ -3490,8 +3529,8 @@ A programmable workflow layer for Org mode
                    (display-buffer-in-tab)))
 
     (with-eval-after-load 'org-dog-overview
-      (define-key org-dog-overview-mode-map
-                  (kbd "+") #'org-dog-add-header-link))
+      (keymap-set org-dog-overview-mode-map
+                  "+" #'org-dog-add-header-link))
 
     (:status personal
       (:auto-insert
@@ -3543,7 +3582,7 @@ A programmable workflow layer for Org mode
 
 #+begin_src emacs-lisp
   (setup (:package consult-org-dog)
-    (:global "M-g M-/" #'consult-org-dog)
+    (:global-keymap "M-g M-/" #'consult-org-dog)
     (:set consult-org-dog-tag-super-groups
           '(("@epic"
              (:todo "DONE")
@@ -3561,11 +3600,11 @@ Transient commands for Org Dog
 
 #+begin_src emacs-lisp
   (setup (:package octopus)
-    (:global "M-g M-o" #'octopus-find-file
+    (:global-keymap "M-g M-o" #'octopus-find-file
              "M-s M-o" #'octopus-find-node)
 
-    (define-key akirak/c-z-map "I" #'octopus-clock-in)
-    (define-key akirak/c-z-map "C-i" #'octopus-clock-in)
+    (keymap-set akirak/c-z-map "I" #'octopus-clock-in)
+    (keymap-set akirak/c-z-map "C-i" #'octopus-clock-in)
 
     (:set octopus-find-node-verbs
           '((?f "Display a node" nil akirak/org-pivot-search-from-files)
@@ -3578,13 +3617,13 @@ Transient commands for Org Dog
     (:with-feature org
       (:when-loaded
         (:with-map org-mode-map
-          (:bind "C-c C-x l" #'octopus-insert-link)
-          (:bind "C-c C-x r" #'octopus-refile))))
+          (:keymap "C-c C-x l" #'octopus-insert-link)
+          (:keymap "C-c C-x r" #'octopus-refile))))
 
     (:with-feature org-agenda
       (:when-loaded
         (:with-map org-agenda-mode-map
-          (:bind [remap org-agenda-refile] #'octopus-refile))))
+          (:keymap "<remap> <org-agenda-refile>" #'octopus-refile))))
 
     (:when-loaded
       (transient-append-suffix #'octopus-find-node
@@ -3615,7 +3654,7 @@ An example embark configuration for org-dog
 #+begin_src emacs-lisp
   (setup (:package org-dog-embark)
     (:with-map org-dog-embark-file-map
-      (:bind "v" (defun akirak/oahu-view-org-file (file)
+      (:keymap "v" (defun akirak/oahu-view-org-file (file)
                    (interactive "sFile: ")
                    (oahu-view 'Org (list file))))))
 #+end_src
@@ -3694,8 +3733,8 @@ Manage Hyprctl workspaces from Org mode
 
 #+begin_src emacs-lisp
   (setup (:package org-hyprctl)
-    (define-key akirak/c-z-map "w" #'org-hyprctl-popup)
-    (:bind "C-M-n" #'move-dup-move-lines-down
+    (keymap-set akirak/c-z-map "w" #'org-hyprctl-popup)
+    (:keymap "C-M-n" #'move-dup-move-lines-down
            "C-M-p" #'move-dup-move-lines-up)
     (with-eval-after-load 'org
       (add-hook 'org-ctrl-c-ctrl-c-hook #'org-hyprctl-update)))
@@ -3776,7 +3815,7 @@ Time blocking with Org
             (not (equal (car group) "organising"))))
     (:with-feature org-memento-timeline
       (:with-map org-memento-timeline-mode-map
-        (:bind "C-c ." #'akirak-org-edit-active-ts)))
+        (:keymap "C-c ." #'akirak-org-edit-active-ts)))
 
     (defun akirak/org-memento-cleanup-buffers ()
       (interactive)
@@ -3806,22 +3845,22 @@ Time blocking with Org
 
       (:with-feature org-memento-timeline
         (:with-map org-memento-timeline-mode-map
-          (:bind "j" (defun akirak-oahu-goto-context-from-timeline ()
+          (:keymap "j" (defun akirak-oahu-goto-context-from-timeline ()
                        (interactive)
                        (akirak-oahu-goto-context (oahu-memento-group-view-at-point))))))
 
-      (define-key help-map (kbd "<tab>") #'org-memento-next-action)
-      (define-key akirak/c-z-map (kbd "<tab>") #'org-memento-next-action)
-      (define-key akirak/c-z-map "!" #'org-memento-quick-start-event)
-      (define-key akirak/c-z-map "a" #'org-memento-agenda)
-      (define-key akirak/c-z-map "i" #'org-memento-policy-find-in-source)
-      (define-key akirak/c-z-map "j" #'org-memento-open-journal)
-      (define-key akirak/c-z-map "k" #'akirak/org-memento-cleanup-buffers)
-      (define-key akirak/c-z-map "n" #'org-memento-pick-next-action)
-      (define-key akirak/c-z-map "t" #'org-memento-timeline)
-      (define-key akirak/c-z-map (kbd "C-z") #'org-memento-status)
-      (define-key akirak/c-z-map (kbd "C-o") #'org-memento-finish-block)
-      (define-key akirak/c-z-map "5"
+      (keymap-set help-map "<tab>" #'org-memento-next-action)
+      (keymap-set akirak/c-z-map "<tab>" #'org-memento-next-action)
+      (keymap-set akirak/c-z-map "!" #'org-memento-quick-start-event)
+      (keymap-set akirak/c-z-map "a" #'org-memento-agenda)
+      (keymap-set akirak/c-z-map "i" #'org-memento-policy-find-in-source)
+      (keymap-set akirak/c-z-map "j" #'org-memento-open-journal)
+      (keymap-set akirak/c-z-map "k" #'akirak/org-memento-cleanup-buffers)
+      (keymap-set akirak/c-z-map "n" #'org-memento-pick-next-action)
+      (keymap-set akirak/c-z-map "t" #'org-memento-timeline)
+      (keymap-set akirak/c-z-map "C-z" #'org-memento-status)
+      (keymap-set akirak/c-z-map "C-o" #'org-memento-finish-block)
+      (keymap-set akirak/c-z-map "5"
                   (defun akirak/org-memento-switch-to-tab (&optional arg)
                     (interactive "P")
                     (if (bound-and-true-p org-memento-current-block)
@@ -3947,7 +3986,7 @@ Utilities for in-file links
   (setup (:package org-nlink)
     (:with-feature org
       (:with-map org-mode-map
-        (:bind "M-s l" #'org-nlink-occur)))
+        (:keymap "M-s l" #'org-nlink-occur)))
 
     (:set org-nlink-extra-files
           (defun akirak/org-nlink-extra-org-files ()
@@ -3990,10 +4029,10 @@ Consult interface for org-nlink
     (:set consult-org-nlink-insert-super-link 'ask)
     (:with-feature org
       (:with-map org-mode-map
-        (:bind "C-x i" #'consult-org-nlink-insert)))
+        (:keymap "C-x i" #'consult-org-nlink-insert)))
     (:with-feature isearch
       (:with-map isearch-mode-map
-        (:bind "C-x i" #'consult-org-nlink-isearch))))
+        (:keymap "C-x i" #'consult-org-nlink-isearch))))
 #+end_src
 *** COMMENT org-noter                                                          :ARCHIVE:
 :PROPERTIES:
@@ -4046,7 +4085,7 @@ Placeholders for Org
             (concat "* %i\n"
                     akirak-org-capture-default-drawer
                     "%?")))
-    (:global "M-s M-p" #'org-placeholder-find-or-create))
+    (:global-keymap "M-s M-p" #'org-placeholder-find-or-create))
 #+end_src
 *** COMMENT org-pretty-table                                                   :ARCHIVE:
 :PROPERTIES:
@@ -4077,7 +4116,7 @@ Org Query Language, search command, and agenda-like view
     (:set org-ql-completing-read-reverse-paths nil)
 
     (:with-feature org
-      (:bind "C-c C-x /" #'org-ql-sparse-tree)))
+      (:keymap "C-c C-x /" #'org-ql-sparse-tree)))
 #+end_src
 **** org-ql-view
 #+begin_src emacs-lisp
@@ -4126,12 +4165,12 @@ Create reverse date trees in org-mode
     (:set org-reverse-datetree-month-format "%Y-%m")
 
     (with-eval-after-load 'org
-      (define-key org-mode-map (kbd "C-c C-x M-j") #'org-reverse-datetree-calendar))
+      (keymap-set org-mode-map "C-c C-x M-j" #'org-reverse-datetree-calendar))
 
     (with-eval-after-load 'calendar
-      (define-key calendar-mode-map "]" #'org-reverse-datetree-calendar-next)
-      (define-key calendar-mode-map "[" #'org-reverse-datetree-calendar-previous)
-      (define-key calendar-mode-map (kbd "RET") #'org-reverse-datetree-display-entry)))
+      (keymap-set calendar-mode-map "]" #'org-reverse-datetree-calendar-next)
+      (keymap-set calendar-mode-map "[" #'org-reverse-datetree-calendar-previous)
+      (keymap-set calendar-mode-map "RET" #'org-reverse-datetree-display-entry)))
 #+end_src
 *** COMMENT org-starter                                    :ARCHIVE:
 :PROPERTIES:
@@ -4183,7 +4222,7 @@ Make super links
   (setup (:package org-super-links)
     (:with-feature org
       (:with-map org-mode-map
-        (:bind "C-c C-x L" #'org-super-links-insert-link
+        (:keymap "C-c C-x L" #'org-super-links-insert-link
                "C-c C-x S" #'org-super-links-store-link))))
 #+end_src
 *** org-transclusion
@@ -4362,7 +4401,7 @@ Major mode for Elixir with tree-sitter support
     (:huan
       ("def" "defp"))
 
-    (:bind "C-c C-e" #'akirak-sgml-close-tag)
+    (:keymap "C-c C-e" #'akirak-sgml-close-tag)
 
     (:auto-insert
      ("/config/config\\.exs\\'"
@@ -4536,7 +4575,10 @@ Major mode for Nix expressions, powered by tree-sitter
   (setup (:package nix-ts-mode)
     (:file-match "\\.nix\\'")
     (:mode-repl nix-repl)
-    (:bind [remap devdocs-lookup] #'akirak-nix-manix)
+    (:keymap "<remap> <devdocs-lookup>" #'akirak-nix-manix)
+
+    ;; Install alejandra for reformatting.
+    (:nixpkgs alejandra)
     (:reformatters
      ;; nixfmt-rfc-style is now recommended, but keep alejandra until I finish
      ;; migration
@@ -4587,9 +4629,9 @@ Major mode for editing typescript
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
       (:org-src-lang "react")
-      (:bind "C-c C-e" #'akirak-treesit-jsx-close-tag)))
+      (:keymap "C-c C-e" #'akirak-treesit-jsx-close-tag)))
 #+end_src
-**** COMMENT akirak-typescript                                                 :ARCHIVE:
+**** COMMENT akirak-typescript                                  :ARCHIVE:akirak:
 #+begin_src emacs-lisp
   (setup akirak-typescript
     (:with-mode typescript-mode
@@ -4606,7 +4648,7 @@ Major mode for editing typescript
       "tsx")
 
     (with-eval-after-load 'typescript-mode
-      (define-key tsx-mode-map (kbd "C-c C-e") #'akirak-jsx-close-tag)))
+      (keymap-set tsx-mode-map "C-c C-e" #'akirak-jsx-close-tag)))
 #+end_src
 *** yaml-ts-mode
 :PROPERTIES:
@@ -4648,7 +4690,7 @@ Tree Sitter support for Zig
     (:when-loaded
       (when (require 'zig-mode nil t)
         (setq auto-mode-alist (cl-remove 'zig-mode auto-mode-alist :key #'cdr :test #'eq))
-        (:bind "C-c C-r" #'zig-run
+        (:keymap "C-c C-r" #'zig-run
                "C-c C-b" #'zig-compile
                "C-c C-f" #'zig-format-buffer
                "C-c C-t" #'zig-test-buffer))))
@@ -4693,14 +4735,14 @@ Another flymake backend for actionlint
                   (akirak/syncthing-ediff filename)))))
 
 #+end_src
-** User package (akirak-*.el)
+** User package (akirak-*.el)                                           :akirak:
 :PROPERTIES:
 :SORTING_TYPE: a
 :END:
 This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup (:package akirak)
-    (:global "C-x d" #'akirak-consult-dir
+    (:global-keymap "C-x d" #'akirak-consult-dir
              "<f12> j" #'akirak-scratch-japanese)
 
     (with-eval-after-load 'embark
@@ -4721,7 +4763,7 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-avy
 #+begin_src emacs-lisp
   (setup akirak-avy
-    (:global "C-;" #'akirak-avy-insert-symbol
+    (:global-keymap "C-;" #'akirak-avy-insert-symbol
              "C-\"" #'akirak-avy-symbol-overlay-put
              "M-g `" #'akirak-avy-org-block))
 #+end_src
@@ -4730,7 +4772,7 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-bitwarden
     (:with-mode akirak-bitwarden-rbw-mode
       (:file-match "rbw\\'"))
-    (:global "<f12> b g" #'akirak-bitwarden-show
+    (:global-keymap "<f12> b g" #'akirak-bitwarden-show
              "<f12> b w" #'akirak-bitwarden-copy
              "<f12> b e" #'akirak-bitwarden-edit
              "<f12> b a" #'akirak-bitwarden-add
@@ -4739,14 +4781,14 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-capture
 #+begin_src emacs-lisp
   (setup akirak-capture
-    (:global "C-c c" #'akirak-capture))
+    (:global-keymap "C-c c" #'akirak-capture))
 #+end_src
 *** akirak-comment
 #+begin_src emacs-lisp
   (setup akirak-comment
     (:set comment-region-function #'akirak-comment-region-1
           uncomment-region-function #'akirak-uncomment-region-1)
-    (:global "M-;" #'akirak-comment-toggle))
+    (:global-keymap "M-;" #'akirak-comment-toggle))
 #+end_src
 *** akirak-compile
 :PROPERTIES:
@@ -4754,7 +4796,7 @@ This is a collection of various utilities to enhance the experience.
 :END:
 #+begin_src elisp
   (setup akirak-compile
-    (:global "C-x c" #'akirak-compile)
+    (:global-keymap "C-x c" #'akirak-compile)
 
     (with-eval-after-load 'compile
       (akirak-compile-auto-error-mode t)))
@@ -4763,24 +4805,24 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup akirak-consult
     (:status opinionated
-      (:global [remap consult-imenu-multi] #'akirak-consult-imenu-multi)
+      (:global-keymap "<remap> <consult-imenu-multi>" #'akirak-consult-imenu-multi)
       (:with-map ctl-x-map
-        (:bind "p" #'akirak-consult-project-file))))
+        (:keymap "p" #'akirak-consult-project-file))))
 #+end_src
 *** akirak-consult-elisp
 #+begin_src emacs-lisp
   (setup akirak-consult-elisp
-    (:global [remap finder-by-keyword] #'akirak-consult-elisp-package))
+    (:global-keymap "<remap> <finder-by-keyword>" #'akirak-consult-elisp-package))
 #+end_src
 *** akirak-consult-org
 #+begin_src emacs-lisp
   (setup akirak-consult-org
-    (:global "M-s M-j" #'akirak-consult-org-clock-history))
+    (:global-keymap "M-s M-j" #'akirak-consult-org-clock-history))
 #+end_src
 *** akirak-disk
 #+begin_src elisp
   (setup akirak-disk
-    (:global "<f12> d m" #'akirak-disk-findmnt
+    (:global-keymap "<f12> d m" #'akirak-disk-findmnt
              "<f12> d b" #'akirak-disk-insert-blkid))
 #+end_src
 *** akirak-elec-pair                                               :parentheses:
@@ -4790,7 +4832,7 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup akirak-elec-pair
     (:status opinionated
-      (:global "M-i" nil
+      (:global-keymap "M-i" nil
                "M-i y" #'akirak-elec-pair-wrap-post-yank
                "M-i #" #'akirak-elec-pair-self-insert
                "M-i $" #'akirak-elec-pair-self-insert
@@ -4805,13 +4847,13 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-elisp
     (:with-map emacs-lisp-mode-map
-      (:bind "C-c t l" #'akirak-elisp-let-exp)
-      (:bind "C-c t (" #'akirak-elisp-wrap-exp)))
+      (:keymap "C-c t l" #'akirak-elisp-let-exp)
+      (:keymap "C-c t (" #'akirak-elisp-wrap-exp)))
 #+end_src
 *** akirak-expand-region
 #+begin_src elisp
   (setup akirak-expand-region
-    (:global "C-M-SPC" #'akirak-expand-region-default))
+    (:global-keymap "C-M-SPC" #'akirak-expand-region-default))
 #+end_src
 *** akirak-git-commit
 #+begin_src emacs-lisp
@@ -4820,7 +4862,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+end_src
 *** akirak-github
 #+begin_src elisp
-  (define-key help-map (kbd "C-g") #'akirak-github-search-code)
+  (keymap-set help-map "C-g" #'akirak-github-search-code)
 #+end_src
 *** akirak-header-line                                                      :UI:
 :PROPERTIES:
@@ -4844,12 +4886,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-import
 #+begin_src elisp
   (setup akirak-import
-    (:global "C-c i" #'akirak-import-thing-at-pt))
+    (:global-keymap "C-c i" #'akirak-import-thing-at-pt))
 #+end_src
 *** akirak-insert
 #+begin_src emacs-lisp
   (setup akirak-insert
-    (:global "C-c a" #'akirak-insert
+    (:global-keymap "C-c a" #'akirak-insert
              "C-x a f" #'akirak-insert-which-function
              "C-x a w" #'akirak-insert-window-title))
 #+end_src
@@ -4857,7 +4899,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-japanese
     ;; Local search
-    (:global "M-s M-l" #'akirak-japanese-search))
+    (:global-keymap "M-s M-l" #'akirak-japanese-search))
 #+end_src
 *** akirak-log
 #+begin_src elisp
@@ -4900,26 +4942,26 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-narrow
 #+begin_src emacs-lisp
   (setup akirak-narrow
-    (:global "C-x n" #'akirak-narrow-or-widen-dwim)
+    (:global-keymap "C-x n" #'akirak-narrow-or-widen-dwim)
     (advice-add 'org-defkey
             :before-while
             (defun akirak/ad-org-defkey-skip (_keymap key _def)
               (not (equal (kbd "C-x n")
                           (seq-take key 2)))))
     (with-eval-after-load 'org
-      (define-key org-mode-map (kbd "C-x n") #'akirak-narrow-or-widen-dwim)))
+      (keymap-set org-mode-map "C-x n" #'akirak-narrow-or-widen-dwim)))
 #+end_src
 *** akirak-nix
 #+begin_src emacs-lisp
   (setup akirak-nix
-    (:global "<f12> n p" #'akirak-nix-search-nixpkgs))
+    (:global-keymap "<f12> n p" #'akirak-nix-search-nixpkgs))
 #+end_src
 *** akirak-org
 #+begin_src emacs-lisp
   (setup akirak-org
     (:with-feature org
       (:with-map org-mode-map
-        (:bind [remap point-to-register] #'akirak-org-point-to-register)))
+        (:keymap "<remap> <point-to-register>" #'akirak-org-point-to-register)))
 
     (advice-add #'org-insert-heading-respect-content
                 :around #'akirak-org-ad-around-insert-heading)
@@ -4933,7 +4975,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-org-capture
 #+begin_src elisp
   (setup akirak-org-capture
-    (:global "M-s M-h" #'akirak-org-capture-history))
+    (:global-keymap "M-s M-h" #'akirak-org-capture-history))
 #+end_src
 *** akirak-org-clock
 #+begin_src emacs-lisp
@@ -4957,35 +4999,35 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                   (when (bound-and-true-p akirak-org-clock-mode)
                     (akirak-org-clock-snooze 20))))
 
-    (:global "M-g M-j" #'akirak-org-clock-goto)
+    (:global-keymap "M-g M-j" #'akirak-org-clock-goto)
 
     (with-eval-after-load 'org-keys
-      (define-key org-mode-map [remap org-clock-in] #'akirak-org-clock-in))
+      (keymap-set org-mode-map "<remap> <org-clock-in>" #'akirak-org-clock-in))
 
-    (define-key akirak/c-z-map "o" #'akirak-org-clock-open)
-    (define-key akirak/c-z-map "p" #'akirak-org-clock-in-to-project)
-    (define-key akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
-    (define-key akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
-    ;; (define-key akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
-    ;; (define-key akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
-    (define-key akirak/c-z-map "S" #'akirak-org-clock-snooze)
-    (define-key akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
+    (keymap-set akirak/c-z-map "o" #'akirak-org-clock-open)
+    (keymap-set akirak/c-z-map "p" #'akirak-org-clock-in-to-project)
+    (keymap-set akirak/c-z-map "c" #'akirak-org-clock-reclock-commit-entry)
+    (keymap-set akirak/c-z-map "g" #'akirak-org-clock-display-commit-entry)
+    ;; (keymap-set akirak/c-z-map "I" #'akirak-org-clock-in-dwim)
+    ;; (keymap-set akirak/c-z-map "C-i" #'akirak-org-clock-in-dwim)
+    (keymap-set akirak/c-z-map "S" #'akirak-org-clock-snooze)
+    (keymap-set akirak/c-z-map "C-s" #'akirak-org-clock-snooze)
 
-    (define-key akirak/c-z-map "O" #'akirak-org-clock-out)
-    (define-key akirak/c-z-map "C-o" #'akirak-org-clock-out)
-    (define-key akirak/c-z-map "d" #'akirak-org-clock-done)
-    (define-key akirak/c-z-map "r" #'akirak-org-clock-set-review))
+    (keymap-set akirak/c-z-map "O" #'akirak-org-clock-out)
+    (keymap-set akirak/c-z-map "C-o" #'akirak-org-clock-out)
+    (keymap-set akirak/c-z-map "d" #'akirak-org-clock-done)
+    (keymap-set akirak/c-z-map "r" #'akirak-org-clock-set-review))
 #+end_src
 *** akirak-org-log
 #+begin_src emacs-lisp
   (setup akirak-org-log
     (:status personal
-      (define-key help-map (kbd "w") #'akirak-org-log-goto-week-entry)))
+      (keymap-set help-map "w" #'akirak-org-log-goto-week-entry)))
 #+end_src
 *** akirak-org-reg
 #+begin_src emacs-lisp
   (setup akirak-org-reg
-    (:global "C-c j" #'akirak-org-reg-transient))
+    (:global-keymap "C-c j" #'akirak-org-reg-transient))
 #+end_src
 *** akirak-org-special
 #+begin_src elisp
@@ -5015,7 +5057,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                           nil t)))
 
     (:status opinionated
-      (:global "M-i c" #'akirak-paren-replace
+      (:global-keymap "M-i c" #'akirak-paren-replace
                "M-i d" #'akirak-paren-delete
                "M-i SPC" #'akirak-paren-select-inner
                "M-i M-SPC" #'akirak-paren-select-outer)))
@@ -5027,7 +5069,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 
 #+begin_src emacs-lisp
   (setup akirak-passage
-    (:global "<f12> S" #'akirak-passage)
+    (:global-keymap "<f12> S" #'akirak-passage)
     (:when-loaded
       (when (require 'exec-path-from-shell nil t)
         ;; Prevent from evaluating a remote shell
@@ -5043,22 +5085,22 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       (add-hook 'kill-emacs-hook #'akirak-project-import-from-magit))
 
     (with-eval-after-load "bindings"
-      ;; (define-key ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
-      ;; (define-key ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
-      ;; (define-key ctl-x-x-map "C" #'akirak-project-find-css)
-      ;; (define-key ctl-x-x-map "T" #'akirak-project-find-test)
-      ;; (define-key ctl-x-x-map "S" #'akirak-project-find-stories)
+      ;; (keymap-set ctl-x-x-map "p" #'akirak-project-switch-to-recent-buffer)
+      ;; (keymap-set ctl-x-x-map "o" #'akirak-project-switch-between-impl-and-test)
+      ;; (keymap-set ctl-x-x-map "C" #'akirak-project-find-css)
+      ;; (keymap-set ctl-x-x-map "T" #'akirak-project-find-test)
+      ;; (keymap-set ctl-x-x-map "S" #'akirak-project-find-stories)
       ))
 #+end_src
 *** akirak-quick-thing
 #+begin_src elisp
   (setup akirak-quick-thing
-    (:global "M-SPC" #'akirak-quick-thing))
+    (:global-keymap "M-SPC" #'akirak-quick-thing))
 #+end_src
 *** akirak-rename
 #+begin_src elisp
   (setup akirak-rename
-    (:global "C-c r" #'akirak/rename-dwim)
+    (:global-keymap "C-c r" #'akirak/rename-dwim)
     (defun akirak/rename-dwim (&optional arg)
       (interactive "P")
       (if (and arg (listp arg))
@@ -5071,11 +5113,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 :END:
 #+begin_src elisp
   (setup akirak-repl
-    (:global "C-M-<return>" #'akirak-repl))
+    (:global-keymap "C-M-<return>" #'akirak-repl))
 #+end_src
 *** akirak-scratch
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-c x") #'akirak-scratch-from-selection)
+  (keymap-global-set "C-c x" #'akirak-scratch-from-selection)
 #+end_src
 *** akirak-shr
 #+begin_src elisp
@@ -5085,18 +5127,18 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-snippet
 #+begin_src emacs-lisp
   (setup akirak-snippet
-    (define-key ctl-x-r-map "/" #'akirak-snippet-search))
+    (keymap-set ctl-x-r-map "/" #'akirak-snippet-search))
 #+end_src
 *** akirak-systemctl
 #+begin_src elisp
   (setup akirak-systemctl
-    (:global "<f12> s s" #'akirak-systemctl-toggle-unit
+    (:global-keymap "<f12> s s" #'akirak-systemctl-toggle-unit
              "<f12> s d" #'akirak-systemctl-daemon-reload))
 #+end_src
 *** akirak-treesit
 #+begin_src elisp
   (setup akirak-treesit
-    (:bind [remap akirak-expand-region-default] #'akirak-treesit-expand-region)
+    (:keymap "<remap> <akirak-expand-region-default>" #'akirak-treesit-expand-region)
     (add-hook 'after-change-major-mode-hook
               (defun akirak/enable-treesit-mode ()
                 (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
@@ -5106,16 +5148,15 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-twist
     (with-eval-after-load 'embark
-      (define-key embark-library-map
-                  "f" #'akirak-twist-find-git-source))
-    (:global "<f12> e u" #'akirak-twist-update-emacs-inputs))
+      (keymap-set embark-library-map "f" #'akirak-twist-find-git-source))
+    (:global-keymap "<f12> e u" #'akirak-twist-update-emacs-inputs))
 #+end_src
 *** akirak-url                                                       :clipboard:
 Complete a URL from the clipboard and the kill ring and insert as a link
 
 #+begin_src emacs-lisp
   (setup akirak-url
-    (:global "C-c w" #'akirak-url-insert-dwim)
+    (:global-keymap "C-c w" #'akirak-url-insert-dwim)
     (:embark embark-url-map "s"
       ("m" akirak-url-insert-as-markdown akirak/embark-markdown-insert-link)
       ("c" akirak-capture-url akirak/embark-capture-url)
@@ -5131,12 +5172,12 @@ Complete a URL from the clipboard and the kill ring and insert as a link
 *** akirak-wayshot                                                  :screenshot:
 #+begin_src emacs-lisp
   (when (getenv "WAYLAND_DISPLAY")
-    (global-set-key (kbd "<f12> c s w") #'akirak-wayshot))
+    (keymap-global-set "<f12> c s w" #'akirak-wayshot))
 #+end_src
 *** akirak-wf-recorder
 #+begin_src emacs-lisp
   (when (getenv "WAYLAND_DISPLAY")
-    (global-set-key (kbd "<f12> c r w") #'akirak-wf-recorder))
+    (keymap-global-set "<f12> c r w" #'akirak-wf-recorder))
 #+end_src
 *** akirak-window                                                      :windows:
 :PROPERTIES:
@@ -5201,8 +5242,8 @@ This is an extra functions for window management.
     (:status opinionated
       (:with-map ctl-x-map
         ;; I don't need kill-buffer when I have consult-buffer
-        (:bind "k" #'akirak-window-kill-this-buffer))
-      (:global "C-2" #'akirak-window-split-vertically
+        (:keymap "k" #'akirak-window-kill-this-buffer))
+      (:global-keymap "C-2" #'akirak-window-split-vertically
                "C-3" #'akirak-window-split-and-select
                "C-4" #'akirak-window-setup-columns
                "C-x o" #'akirak-window-cycle-two-windows
@@ -5211,8 +5252,8 @@ This is an extra functions for window management.
                "C-c v" #'akirak-window-open-in-new-tab
                "M-o" #'akirak-window-moderate-1
                "S-<end>" #'akirak-window-display-buffer-ends
-               [remap delete-window] #'akirak-window-delete-window
-               [remap abort-recursive-edit] #'akirak-window-cleanup)))
+               "<remap> <delete-window>" #'akirak-window-delete-window
+               "<remap> <abort-recursive-edit>" #'akirak-window-cleanup)))
 #+end_src
 *** akirak-wordnet
 #+begin_src elisp
@@ -5265,11 +5306,11 @@ Quickly switch windows.
           aw-dispatch-always t)
 
     (:status opinionated
-      (:global "M-o" #'ace-window)
+      (:global-keymap "M-o" #'ace-window)
       (:with-feature lispy
         (:when-loaded
           (:with-map (lispy-mode-map)
-            (:unbind "M-o"))))
+            (:keymap-unset "M-o"))))
       (:set aw-dispatch-alist
             `((?o aw-swap-window "Swap Windows")
               (?c aw-copy-window "Duplicate the current window")
@@ -5446,8 +5487,8 @@ Show number of matches in mode-line while searching
     (:with-mode global-anzu-mode
       (:hook-into after-init-hook))
 
-    (:global [remap query-replace] #'anzu-query-replace
-             [remap query-replace-regexp] #'anzu-query-replace-regexp))
+    (:global-keymap "<remap> <query-replace>" #'anzu-query-replace
+             "<remap> <query-replace-regexp>" #'anzu-query-replace-regexp))
 #+end_src
 *** apheleia
 :PROPERTIES:
@@ -5529,7 +5570,7 @@ Elixir tooling integration
     (:with-mode elixir-ts-mode
       (:mode-repl apprentice-iex-project-run))
 
-    (:bind "C-c C-l" #'apprentice-iex-reload-module
+    (:keymap "C-c C-l" #'apprentice-iex-reload-module
            "C-c C-c" #'apprentice-iex-compile-this-buffer
            "C-c C-r" (defun akirak/apprentice-send-line-or-region (&optional arg)
                        (interactive "P")
@@ -5584,7 +5625,7 @@ Quickly create disposable yasnippets
 
 #+begin_src emacs-lisp
   (setup (:package auto-yasnippet)
-    (:global "C-x r e" #'aya-expand
+    (:global-keymap "C-x r e" #'aya-expand
              "C-x r M-e" #'aya-expand-from-history
              "C-x r a" #'aya-create))
 #+end_src
@@ -5601,7 +5642,7 @@ Jump to arbitrary positions in visible text and select text quickly.
   (setup (:package avy)
     (:set avy-style 'pre
           avy-all-windows t)
-    (:global "C-'" #'avy-goto-char-timer))
+    (:global-keymap "C-'" #'avy-goto-char-timer))
 #+end_src
 
 I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
@@ -5626,9 +5667,9 @@ A major mode to edit Beancount input files.
              flymake-bean-check-enable)
 
       (:when-loaded
-        (:bind "C-c C-o" #'akirak-beancount-locate-account-transactions)
-        (define-key beancount-mode-map
-                    (vconcat beancount-mode-map-prefix [?d])
+        (:keymap "C-c C-o" #'akirak-beancount-locate-account-transactions)
+        (keymap-set beancount-mode-map
+                    (format "%s d" beancount-mode-map-prefix)
                     #'akirak-beancount-insert-date)
 
         (:hook
@@ -5649,8 +5690,8 @@ Show git blame info about current line
     (:set blamer-max-lines 50
           blamer-max-commit-message-length 50)
 
-    (define-key ctl-x-x-map (kbd "b") #'blamer-mode)
-    (define-key help-map (kbd "M-g") #'blamer-show-commit-info))
+    (keymap-set ctl-x-x-map "b" #'blamer-mode)
+    (keymap-set help-map "M-g" #'blamer-show-commit-info))
 #+end_src
 *** bookmark-frecency
 :PROPERTIES:
@@ -5675,7 +5716,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
 
 #+begin_src emacs-lisp
   (setup (:package browse-at-remote)
-    (:global "<f12> g g" #'browse-at-remote
+    (:global-keymap "<f12> g g" #'browse-at-remote
              "<f12> g w" #'browse-at-remote-kill))
 #+end_src
 *** COMMENT bufler                                         :ARCHIVE:
@@ -5687,7 +5728,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut page from Emacs
   (setup (:package bufler)
     (bufler-mode t)
     ;; Use it as a replacement for ibuffer
-    (:global "C-x C-b" #'bufler))
+    (:global-keymap "C-x C-b" #'bufler))
 #+end_src
 *** burly
 :PROPERTIES:
@@ -5749,9 +5790,31 @@ Completion At Point Extensions
       (require 'xdg)
       (:set cape-dict-file (expand-file-name "dict/words" (xdg-data-home))))
 
-    (:global "C-x r M-f" #'cape-file
+    (:global-keymap "C-x r M-f" #'cape-file
              "C-x r M-l" #'cape-line
              "C-M-/" #'cape-dabbrev))
+#+end_src
+*** casual
+:PROPERTIES:
+:CREATED_TIME: [2025-02-02 Sun 12:14]
+:END:
+#+begin_quote
+Transient user interfaces for various modes
+[[https://github.com/kickingvegas/casual]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package casual)
+    (:nixpkgs graphicsmagick-imagemagick-compat
+              ;; Implicitly required for some commands of casual-image
+              file)
+    (:with-feature image-mode
+      (:also-load casual-image)
+      (:keymap "C-," #'casual-image-tmenu))
+    (:with-feature dired
+      (:keymap "C-," #'casual-dired-tmenu))
+    (:with-feature calc
+      (:keymap "C-," #'casual-calc-tmenu)))
 #+end_src
 *** COMMENT codeium                                                 :completion:ARCHIVE:
 :PROPERTIES:
@@ -5845,21 +5908,21 @@ Consulting completing-read
                                          ;; Show files in .github directory, for example.
                                          " --hidden --ignore-file=.gitignore --iglob=!.git")))
 
-    (:global [remap switch-to-buffer] #'consult-buffer
-             [remap bookmark-jump] #'consult-bookmark
-             [remap yank-pop] #'consult-yank-pop
-             "M-s o" #'consult-outline
-             "C-S-s" #'consult-line
-             "M-s l" #'consult-focus-lines
-             "C-x /" #'consult-ripgrep)
+    (:global-keymap "<remap> <switch-to-buffer>" #'consult-buffer
+                    "<remap> <bookmark-jump>" #'consult-bookmark
+                    "<remap> <yank-pop>" #'consult-yank-pop
+                    "M-s o" #'consult-outline
+                    "C-S-s" #'consult-line
+                    "M-s l" #'consult-focus-lines
+                    "C-x /" #'consult-ripgrep)
 
     (:with-feature consult-imenu
-      (:global "M-s i" #'consult-imenu
-               [remap imenu] #'consult-imenu
-               "M-s M-i" #'consult-imenu-multi))
+      (:global-keymap "M-s i" #'consult-imenu
+                      "<remap> <imenu>" #'consult-imenu
+                      "M-s M-i" #'consult-imenu-multi))
 
     ;; (:with-feature consult-flymake
-    ;;   (:global "M-s f" #'consult-flymake))
+    ;;   (:global-keymap "M-s f" #'consult-flymake))
 
     (:with-feature consult-xref
       (:set xref-show-xrefs-function #'consult-xref
@@ -5890,7 +5953,7 @@ Recoll queries using consult
 
 #+begin_src emacs-lisp
   (setup (:package consult-recoll)
-    (:global "M-s M-c" #'consult-recoll)
+    (:global-keymap "M-s M-c" #'consult-recoll)
     (:set consult-recoll-open-fn
           (defun akirak/consult-recoll-open-file (file &optional _page)
             (org-open-file file))
@@ -5906,7 +5969,7 @@ Recoll queries using consult
                                           (abbreviate-file-name)))
                                 'face 'font-lock-doc-face)))))
 #+end_src
-*** COMMENT copilot                                             :@extra:copilot:ARCHIVE:
+*** COMMENT copilot                                  :@extra:copilot:ARCHIVE:AI:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
@@ -5918,7 +5981,7 @@ An unofficial Copilot plugin
 #+begin_src emacs-lisp
   (setup (:package copilot)
     (:nixpkgs "nodejs")
-    (:bind [remap expand-abbrev] #'akirak-copilot-abbrev-or-complete
+    (:keymap "<remap> <expand-abbrev>" #'akirak-copilot-abbrev-or-complete
            ;; Remap repl-toggle in the minor mode map.
            "M-RET" #'akirak-copilot-accept-dwim
            "C-M-n" #'copilot-next-completion
@@ -5955,9 +6018,9 @@ COmpletion in Region FUnction
            (corfu-mode 1)))))
 
     (:with-mode (prog-mode text-mode)
-      (:bind "M-/" #'completion-at-point))
+      (:keymap "M-/" #'completion-at-point))
     (:with-feature comint
-      (:bind "M-/" #'completion-at-point)))
+      (:keymap "M-/" #'completion-at-point)))
 #+end_src
 *** cosmetic-transient
 :PROPERTIES:
@@ -5970,7 +6033,7 @@ A transient for cosmetics on source code
 
 #+begin_src emacs-lisp
   (setup (:package cosmetic-transient)
-    (:global "C-c m" #'cosmetic-transient))
+    (:global-keymap "C-c m" #'cosmetic-transient))
 #+end_src
 *** csv-mode
 :PROPERTIES:
@@ -6015,7 +6078,7 @@ Major mode for working with d2 graphs
     (:hook d2-format-on-save-mode)
     (:reformatters
      (d2-format :program "d2-format"))
-    (:bind "C-c C-w" #'akirak/d2-watch-file)
+    (:keymap "C-c C-w" #'akirak/d2-watch-file)
     (defun akirak/d2-watch-file ()
       "Watch the current file."
       (interactive nil d2-mode)
@@ -6073,11 +6136,11 @@ A startup screen extracted from Spacemacs
                             (akirak-dashboard-org-clock-format-item el))))))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
-    (:bind "n" 'dashboard-next-line
-           "p" #'dashboard-previous-line)
-    (:unbind "j" "k")
+    (:keymap "n" #'dashboard-next-line
+             "p" #'dashboard-previous-line)
+    (:keymap-unset "j" "k")
 
-    (:global "C-z b" #'dashboard-open)
+    (:global-keymap "C-z b" #'dashboard-open)
 
     (defun akirak/dashboard-init-on-startup ()
       (require 'dashboard)
@@ -6144,7 +6207,7 @@ Emacs viewer for DevDocs
 
 #+begin_src emacs-lisp
   (setup (:package devdocs)
-    (define-key help-map (kbd "d") #'devdocs-lookup))
+    (keymap-set help-map "d" #'devdocs-lookup))
 #+end_src
 *** diff-hl
 :PROPERTIES:
@@ -6161,7 +6224,7 @@ Highlight uncommitted changes using VC
     ;; See edit dir-locals class in the files section.
     ;; (add-hook 'after-init-hook #'global-diff-hl-mode)
 
-    (add-hook 'akirak-worktree-file-mode-hook #'akirak/turn-on-envrc-mode)
+    (add-hook 'akirak-worktree-file-mode-hook #'diff-hl-mode)
 
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     (:set diff-hl-command-prefix (kbd "C-c g")
@@ -6173,11 +6236,11 @@ Highlight uncommitted changes using VC
     (defalias 'akirak/diff-hl-next-hunk #'diff-hl-next-hunk)
     (defalias 'akirak/diff-hl-previous-hunk #'diff-hl-previous-hunk)
 
-    (:global "M-g j" #'akirak/diff-hl-next-hunk
+    (:global-keymap "M-g j" #'akirak/diff-hl-next-hunk
              "M-g k" #'akirak/diff-hl-previous-hunk)
 
     (:when-loaded
-      (define-key diff-hl-command-map "c" #'magit-commit)
+      (keymap-set diff-hl-command-map "c" #'magit-commit)
       (defun akirak/diff-hl-after-navigation (orig &rest args)
         ;; (when (buffer-narrowed-p)
         ;;   (widen))
@@ -6317,7 +6380,7 @@ And "Open with" dialog for Dired
 #+begin_src elisp
   (setup dired-x
     (:with-map dired-mode-map
-      (:unbind "C-x M-o")))
+      (:keymap-unset "C-x M-o")))
 #+end_src
 *** docco
 :PROPERTIES:
@@ -6342,7 +6405,7 @@ Interface to Docker
 
 #+begin_src emacs-lisp
   (setup (:package docker)
-    (:global "<f12> k k" #'docker-containers
+    (:global-keymap "<f12> k k" #'docker-containers
              "<f12> k i" #'docker-images
              "<f12> k v" #'docker-volumes
              "<f12> k n" #'docker-networks))
@@ -6371,13 +6434,11 @@ Never lose your place again
   (setup (:package dogears)
     (:hook-into after-init-hook)
 
-    (defvar dogears-mode-map
-      (let ((map (make-sparse-keymap)))
-        (define-key map (kbd "C-z") #'dogears-remember)
-        (define-key map (kbd "M-g M-z") #'dogears-go)
-        (define-key map (kbd "<C-left>") #'dogears-back)
-        (define-key map (kbd "<C-right>") #'dogears-forward)
-        map))
+    (defvar-keymap dogears-mode-map
+      "C-z"        #'dogears-remember
+      "M-g M-z"    #'dogears-go
+      "C-<left>"   #'dogears-back
+      "C-<right>"  #'dogears-forward)
 
     (add-hook 'dogears-ignore-places-functions
               (defun akirak/dogears-org-capture-p ()
@@ -6418,7 +6479,7 @@ Run DuckDuckGo search
 #+begin_src emacs-lisp
   (setup (:package duckduckgo)
     ;; Replace `eww-search-words'
-    (:global "M-s M-w" #'duckduckgo))
+    (:global-keymap "M-s M-w" #'duckduckgo))
 #+end_src
 *** dumb-jump                                           :navigation:
 :PROPERTIES:
@@ -6470,9 +6531,9 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
   (setup (:package eat)
     (:set eat-kill-buffer-on-exit t)
     (:with-map eat-semi-char-mode-map
-      (:bind "S-<prior>" #'View-scroll-page-backward
+      (:keymap "S-<prior>" #'View-scroll-page-backward
              "S-<next>" #'View-scroll-page-forward)
-      (:unbind "M-:" "M-g" "M-s" "C-z" "M-o" "M-'")))
+      (:keymap-unset "M-:" "M-g" "M-s" "C-z" "M-o" "M-'")))
 #+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
@@ -6488,7 +6549,7 @@ Emacs Does Interactive Prolog
 
     (:with-feature prolog
       ;; In other modes, this key is bound to repl.
-      (:bind "<C-return>" #'ediprolog-dwim)))
+      (:keymap "C-<return>" #'ediprolog-dwim)))
 #+end_src
 
 [[https://lib.rs/crates/scryer-prolog][scryer-prolog]] is the bleeding-edge implementation of Prolog (like GHC to Haskell), and it is installed with this package.
@@ -6506,7 +6567,7 @@ Client for Language Server Protocol (LSP) servers
 
     (:set eglot-confirm-server-initiated-edits nil)
 
-    (:bind akirak/mode-prefix-key #'akirak/eglot-prefix-map)
+    (:keymap akirak/mode-prefix-key #'akirak/eglot-prefix-map)
 
     (defun akirak/eglot-ensure ()
       (when (buffer-file-name)
@@ -6524,7 +6585,7 @@ Client for Language Server Protocol (LSP) servers
     (:when-loaded
       (define-prefix-command 'akirak/eglot-prefix-map)
       (:with-map akirak/eglot-prefix-map
-        (:bind "a" #'eglot-code-actions
+        (:keymap "a" #'eglot-code-actions
                "i" #'eglot-code-action-inline
                "q" #'eglot-code-action-quickfix
                "o" #'eglot-code-action-organize-imports
@@ -6639,7 +6700,7 @@ Extract information from Emacs Lisp libraries
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
-*** elysium
+*** elysium                                                                 :AI:
 :PROPERTIES:
 :CREATED_TIME: [2024-10-23 Wed 23:54]
 :END:
@@ -6677,15 +6738,16 @@ EmacSQL back-end for SQLite
 :END:
 #+begin_quote
 Conveniently act on minibuffer completions
+[[https://github.com/oantolin/embark]]
 #+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package embark)
-    (:global "C-." #'embark-act
+    (:global-keymap "C-." #'embark-act
              "C->" #'embark-act-all)
 
-    (define-key minibuffer-mode-map (kbd "C-,") #'embark-become)
-    (define-key minibuffer-mode-map (kbd "C-SPC") #'embark-select)
+    (keymap-set minibuffer-mode-map "C-," #'embark-become)
+    (keymap-set minibuffer-mode-map "C-SPC" #'embark-select)
 
     (:when-loaded
       (when (require 'akirak-embark nil t)
@@ -6707,6 +6769,7 @@ The following resources are useful:
 :END:
 #+begin_quote
 Consult integration for Embark
+[[https://github.com/oantolin/embark]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -6874,7 +6937,7 @@ Not only English-Chinese translator
     (:when-loaded
       (require 'fanyi-longman)
       (require 'fanyi-etymon))
-    (define-key help-map (kbd "M-d") #'fanyi-dwim)
+    (keymap-set help-map "M-d" #'fanyi-dwim)
 
     (add-hook 'akirak-unknown-default-text-hook
               (defun akirak-unknown-fanyi-current-word ()
@@ -7128,7 +7191,7 @@ Run GitHub Linguist on projects to collect information
   (setup (:package github-linguist)
     (:nixpkgs "github-linguist")
     (:set github-linguist-executable "github-linguist")
-    (:global "<f12> g l" #'github-linguist-switch-project-by-language))
+    (:global-keymap "<f12> g l" #'github-linguist-switch-project-by-language))
 #+end_src
 *** git-identity                                                    :VC:
 :PROPERTIES:
@@ -7145,7 +7208,7 @@ Identity management for (ma)git
       (:when-loaded
         ;; (git-identity-magit-mode 1)
         (:with-map magit-status-mode-map
-          (:bind "I" #'git-identity-info))))
+          (:keymap "I" #'git-identity-info))))
 
     (cl-defmacro akirak/git-identity-add (address &rest args)
       "Add a new entry to the identity list, avoiding duplicates.
@@ -7188,7 +7251,7 @@ Translation framework, configurable and scalable
     (:when-loaded
       gt-default-translator (gt-translator :engines (gt-google-engine))))
 #+end_src
-*** gptel
+*** gptel                                                                   :AI:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-20 Mon 23:59]
 :END:
@@ -7202,10 +7265,13 @@ Interact with ChatGPT or other LLMs
     (:set gptel-crowdsourced-prompts-file
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
-    (:global "C-c p" #'gptel-menu)
+    (:global-keymap "C-c p" #'gptel-menu)
+    (autoload #'gptel-org-set-topic "gptel-org" nil '(org-mode))
+    (:with-feature org
+      (:keymap "C-c C-x =" #'gptel-org-set-topic))
 
     (with-eval-after-load 'embark
-      (define-key embark-region-map "!" #'gptel-rewrite-menu))
+      (keymap-set embark-region-map "!" #'gptel-rewrite-menu))
 
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
@@ -7217,39 +7283,33 @@ Interact with ChatGPT or other LLMs
                     `(("x-api-key" . ,key)
                       ("anthropic-version" . "2023-06-01")))))
 
+      (gptel-make-gemini "Gemini"
+        :stream t
+        :key (lambda ()
+               (gptel-api-key-from-auth-source
+                "generativelanguage.googleapis.com")))
+
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
         :stream t))
 
     (add-hook 'org-mode-hook
               (defun akirak/org-dog-setup-gpt-system ()
-                (when-let* ((obj (org-dog-buffer-object))
-                            (title (or (org-dog-file-title obj)
-                                       (thread-first
-                                         (file-name-base (oref obj absolute))
-                                         (split-string "-")
-                                         (string-join " "))))
-                            (msg (pcase (oref obj relative)
-                                   ;; System messages are based on examples in
-                                   ;; `gptel-directives'.
-                                   ((rx bos "programming/")
-                                    (format "You are a large language model and\
-   a programmer experienced in %s. Respond concisely."
-                                            (or title
-                                                (file-name-base (oref obj relative)))))
-                                   ((and (rx bos "technology/")
-                                         (guard title))
-                                    (format "You are a large language model and\
-   an engineer experienced in %s. Respond concisely." title))
-                                   ((and (rx bos "languages/"
-                                             (group (+ (not (any "/"))))
-                                             (any "/.")))
-                                    (format "You are a large language model and\
-   an interpreter who are good at %s. Respond concisely."
-                                            (match-string 1 (oref obj relative)))))))
+                (when-let* ((msg (akirak-org-dog-make-gpt-prompt)))
                   ;; In case gptel.el has not been loaded yet, use
                   ;; `setq-local' to ensure it is set as a local variable.
                   (setq-local gptel--system-message msg)))))
+#+end_src
+*** gptel-aibo                                                              :AI:
+:PROPERTIES:
+:CREATED_TIME: [2025-02-05 Wed 22:17]
+:END:
+#+begin_quote
+An AI Writing Assistant
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package gptel-aibo))
 #+end_src
 *** graphql-mode                                               :web:
 :PROPERTIES:
@@ -7320,7 +7380,7 @@ A Haskell editing mode
       (:file-match "\\.cabal\\'"))
 
     (:mode-repl haskell-interactive-bring)
-    (:bind "C-c C-p" #'haskell-process-cabal
+    (:keymap "C-c C-p" #'haskell-process-cabal
            "C-c C-m" #'haskell-compile
            "C-c C-g" #'haskell-session-change-target
            "C-c C-h" #'haskell-hoogle)
@@ -7380,11 +7440,11 @@ A better *help* buffer
   (setup (:package helpful)
     ;; Also: helpful-at-point, helpful-callable, helpful-macro, and
     ;; helpful-visit-reference.
-    (:global [remap describe-function] #'helpful-callable
-             [remap describe-variable] #'helpful-variable
-             [remap describe-command] #'helpful-command
-             [remap describe-key] #'helpful-key
-             [remap describe-symbol] #'helpful-symbol))
+    (:global-keymap "<remap> <describe-function>" #'helpful-callable
+             "<remap> <describe-variable>" #'helpful-variable
+             "<remap> <describe-command>" #'helpful-command
+             "<remap> <describe-key>" #'helpful-key
+             "<remap> <describe-symbol>" #'helpful-symbol))
 #+end_src
 *** highlight-indent-guides                                     :UI:
 :PROPERTIES:
@@ -7413,7 +7473,7 @@ Highlight TODO and similar keywords
 #+begin_src emacs-lisp
   (setup (:package hl-todo)
     (:status opinionated
-      (:global "M-i t" #'hl-todo-insert)))
+      (:global-keymap "M-i t" #'hl-todo-insert)))
 #+end_src
 *** huan                                                   :editing:
 :PROPERTIES:
@@ -7425,11 +7485,11 @@ Replace things with predefined alternatives
 
 #+begin_src emacs-lisp
   (setup (:package huan)
-    (:global "C-=" #'huan-symbol
+    (:global-keymap "C-=" #'huan-symbol
              "C-+" #'huan-defun)
     (with-eval-after-load 'embark
-      (define-key embark-defun-map "`" #'huan-defun)
-      (define-key embark-identifier-map "`" #'huan-symbol)))
+      (keymap-set embark-defun-map "`" #'huan-defun)
+      (keymap-set embark-identifier-map "`" #'huan-symbol)))
 #+end_src
 *** COMMENT idris-mode                                                         :ARCHIVE:
 :PROPERTIES:
@@ -7482,7 +7542,7 @@ Enchanted Spell Checker
                 ;; projects
                 git-commit-mode-hook
                 vc-git-log-edit-mode-hook)
-    (:bind "C-M-;" #'jinx-correct-nearest))
+    (:keymap "C-M-;" #'jinx-correct-nearest))
 #+end_src
 *** COMMENT jq-mode                                                            :ARCHIVE:
 :PROPERTIES:
@@ -7585,7 +7645,7 @@ Use avy to open, copy, etc. visible links
 
 #+begin_src emacs-lisp
   (setup (:package link-hint)
-    (:global "M-g f" #'link-hint-open-link)
+    (:global-keymap "M-g f" #'link-hint-open-link)
 
     (defvar akirak/link-hint-current-window nil
       "Window selected just before `link-hint-open-link' is run.")
@@ -7624,7 +7684,7 @@ Use avy to open, copy, etc. visible links
     (:with-feature info
       (:when-loaded
         (:with-map Info-mode-map
-          (:bind "f" #'link-hint-open-link)))))
+          (:keymap "f" #'link-hint-open-link)))))
 #+end_src
 *** lispy                          :Emacs__Lisp:structured__editing:
 :PROPERTIES:
@@ -7658,7 +7718,7 @@ For Emacs Lisp, I use lispy.
 
     ;; Don't override the default command with lispy-goto-symbol.
     ;; This is especially important to enable the dumb-jump integration.
-    (:unbind "M-.")
+    (:keymap-unset "M-.")
 
     ;; Adoption of lispy is opinionated.
     (:status opinionated
@@ -7672,23 +7732,23 @@ For Emacs Lisp, I use lispy.
                   ielm-mode
                   eval-expression-minibuffer-setup)
 
-      (:unbind "M-i")
+      (:keymap-unset "M-i")
 
       (:with-map lispy-mode-map-special
-        (:unbind "p"                      ; lispy-eval-other-window
+        (:keymap-unset "p"                      ; lispy-eval-other-window
                  "y"                      ;lispy-occur
                  "O"))
 
       (:with-map lispy-mode-map-lispy
         ;; Prevent conflicts with other custom keybindings
-        (:unbind "C-,"
+        (:keymap-unset "C-,"
                  "M-<left>"
                  "M-<right>"
                  "M-m"
                  "M-o"
-                 "<C-return>"
-                 "<M-return>"
-                 "<M-RET>"))))
+                 "C-<return>"
+                 "M-<return>"
+                 "M-<RET>"))))
 #+end_src
 
 Lispy is not turned on by default.
@@ -7712,22 +7772,22 @@ LSP bridge
           lsp-bridge-symbols-enable-which-func t)
 
     (define-prefix-command 'akirak/lsp-bridge-prefix-map)
-    (:bind akirak/mode-prefix-key akirak/lsp-bridge-prefix-map
-           [remap xref-find-definitions] #'lsp-bridge-find-def
-           [remap xref-find-definitions-other-window] #'lsp-bridge-find-def-other-window
+    (:keymap akirak/mode-prefix-key akirak/lsp-bridge-prefix-map
+           "<remap> <xref-find-definitions>" #'lsp-bridge-find-def
+           "<remap> <xref-find-definitions-other-window>" #'lsp-bridge-find-def-other-window
            "C-x 4 g t" #'lsp-bridge-find-type-def-other-window
            "C-x 4 g i" #'lsp-bridge-find-impl-other-window
-           [remap xref-go-back] #'lsp-bridge-find-def-return
-           [remap previous-error] #'lsp-bridge-diagnostic-jump-prev
-           [remap next-error] #'lsp-bridge-diagnostic-jump-next
+           "<remap> <xref-go-back>" #'lsp-bridge-find-def-return
+           "<remap> <previous-error>" #'lsp-bridge-diagnostic-jump-prev
+           "<remap> <next-error>" #'lsp-bridge-diagnostic-jump-next
            "M-' e" #'lsp-bridge-diagnostic-list
            ;; #'lsp-bridge-diagnostic-ignore
            "M-s M-i" #'lsp-bridge-workspace-list-symbols
-           [remap consult-imenu-multi] #'lsp-bridge-workspace-list-symbols
-           [remap completion-at-point] #'lsp-bridge-popup-complete-menu)
+           "<remap> <consult-imenu-multi>" #'lsp-bridge-workspace-list-symbols
+           "<remap> <completion-at-point>" #'lsp-bridge-popup-complete-menu)
 
     (:with-map akirak/lsp-bridge-prefix-map
-      (:bind "g t" #'lsp-bridge-find-type-def
+      (:keymap "g t" #'lsp-bridge-find-type-def
              "g i" #'lsp-bridge-find-impl
              "g r" #'lsp-bridge-find-references
              "h" #'lsp-bridge-popup-documentation
@@ -7795,7 +7855,7 @@ A Git porcelain inside Emacs
     (advice-add 'magit-version :override #'ignore)
 
     (:with-map (magit-status-mode-map magit-log-mode-map)
-      (:bind "^" (defun akirak/magit-up-directory ()
+      (:keymap "^" (defun akirak/magit-up-directory ()
                    "Visit the parent repository using magit, or visit the parent directory using dired."
                    (interactive)
                    (let ((parent-dir (thread-last
@@ -7807,9 +7867,9 @@ A Git porcelain inside Emacs
                        (dired parent-dir))))))
 
     ;; Replace the binding to compose-message
-    (define-key ctl-x-map "m" #'magit-dispatch)
-    (define-key ctl-x-map "j" #'magit-status)
-    (define-key ctl-x-x-map "e"
+    (keymap-set ctl-x-map "m" #'magit-dispatch)
+    (keymap-set ctl-x-map "j" #'magit-status)
+    (keymap-set ctl-x-x-map "e"
                 (defun akirak/edit-source-file ()
                   "Visit a corresponding file in a Git repository."
                   (interactive)
@@ -7824,8 +7884,8 @@ A Git porcelain inside Emacs
                     (org-transclusion-open-source t))
                    (t
                     (magit-blob-visit-file)))))
-    (define-key ctl-x-x-map "m" #'magit-file-dispatch)
-    (define-key ctl-x-x-map "s"
+    (keymap-set ctl-x-x-map "m" #'magit-file-dispatch)
+    (keymap-set ctl-x-x-map "s"
                 (defun akirak-magit-stage-file-and-commit ()
                   (interactive)
                   (unless (buffer-file-name)
@@ -7943,15 +8003,15 @@ Sections for read-only buffers
 #+begin_src emacs-lisp
   (setup (:package magit-section)
     (:with-map magit-section-mode-map
-      (:bind "C-c =" (defun akirak/magit-show-section-at-point ()
-                       (interactive)
-                       (let ((section (magit-current-section)))
-                         (message "(%s) %s"
-                                  (oref section type)
-                                  (prin1-to-string (oref section value))))))
+      (:keymap "C-c =" (defun akirak/magit-show-section-at-point ()
+                         (interactive)
+                         (let ((section (magit-current-section)))
+                           (message "(%s) %s"
+                                    (oref section type)
+                                    (prin1-to-string (oref section value))))))
       ;; I don't want to override global bindings on these keys.
-      (:unbind "M-1" "M-2" "M-3" "M-4"
-               [C-tab] [M-tab])))
+      (:keymap-unset "M-1" "M-2" "M-3" "M-4"
+                     "C-<tab>" "M-<tab>")))
 #+end_src
 *** marginalia
 :PROPERTIES:
@@ -7967,7 +8027,7 @@ Enrich existing commands with completion annotations
     (:hook-into after-init-hook)
 
     (:with-map minibuffer-local-map
-      (:bind "M-a" #'marginalia-cycle))
+      (:keymap "M-a" #'marginalia-cycle))
 
     (:when-loaded
       (add-to-list 'marginalia-annotator-registry
@@ -7992,7 +8052,7 @@ Major mode for Markdown-formatted text
     (:with-mode gfm-mode
       (:file-match "README.md\\'"))
 
-    (:bind "C-c '" #'markdown-edit-code-block))
+    (:keymap "C-c '" #'markdown-edit-code-block))
 #+end_src
 *** mastodon                                                            :social:
 :PROPERTIES:
@@ -8091,7 +8151,7 @@ Display modeline in minibuffer
                 value))
           ""))))
 #+end_src
-*** minuet
+*** minuet                                                                  :AI:
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:26]
 :END:
@@ -8108,9 +8168,9 @@ Code completion using LLM
       ;; Set the default backend.
       (require 'akirak-minuet)
       (akirak-minuet-switch-backend (caar akirak-minuet-backend-alist)))
-    (:global "C-c y" #'minuet-complete-with-minibuffer)
+    (:global-keymap "C-c y" #'minuet-complete-with-minibuffer)
     (:with-map minuet-active-mode-map
-      (:bind "<M-return>" #'minuet-accept-suggestion)))
+      (:keymap "M-<return>" #'minuet-accept-suggestion)))
 #+end_src
 *** COMMENT mlscroll                                             :aesthetics:UI:ARCHIVE:
 :PROPERTIES:
@@ -8139,7 +8199,7 @@ Eclipse-like moving and duplicating lines or rectangles
 
 #+begin_src emacs-lisp
   (setup (:package move-dup)
-    (:bind "M-P" #'move-dup-move-lines-up
+    (:keymap "M-P" #'move-dup-move-lines-up
            "M-N" #'move-dup-move-lines-down)
 
     (defun akirak/turn-on-move-dup-mode ()
@@ -8218,7 +8278,7 @@ Frontend to experimental commands of Nix
       (add-hook 'nix3-flake-init-hook #'akirak/nix3-flake-maybe-update-from-pins
                 90))
 
-    (:global "C-c n" #'nix3-transient
+    (:global-keymap "C-c n" #'nix3-transient
              "M-g M-f" #'nix3-flake-edit
              "<f12> n l" #'nix3-registry-list
              "<f12> n n" #'nix3-flake-show-url))
@@ -8262,7 +8322,7 @@ Major mode for editing .nix files
   ;; (setup (:package nix-mode)
   ;;   (:file-match "\\.nix\\'")
   ;;   (:mode-repl nix-repl)
-  ;;   (:bind [remap devdocs-lookup] #'akirak-nix-manix)
+  ;;   (:keymap "<remap> <devdocs-lookup>" #'akirak-nix-manix)
   ;;   (:reformatters
   ;;    (alejandra :program "alejandra")))
 #+end_src
@@ -8305,9 +8365,9 @@ Featureful EPUB reader mode
     (:nixpkgs unzip)
     (:file-match "\\.epub\\'")
     (:set nov-text-width akirak/default-body-width)
-    (:bind "i" #'imenu
+    (:keymap "i" #'imenu
            ;; consult-imenu doesn't work, so remap it to imenu
-           [remap consult-imenu] imenu)
+           "<remap> <consult-imenu>" imenu)
 
     (:hook (defun akirak/nov-setup ()
              (when (require 'olivetti nil t)
@@ -8550,7 +8610,7 @@ Summon and dismiss buffers as popups
                 (goto-char (point-max))
                 (recenter -1 t)))
 
-    (:bind "M-\"" #'popper-cycle
+    (:keymap "M-\"" #'popper-cycle
            "M-' RET" #'popper-toggle-type
            "M-' M-'" #'popper-toggle
            "M-' a" (defun akirak/display-async-shell-command ()
@@ -8581,7 +8641,7 @@ Pop a posframe (just a frame) at point
 #+begin_src emacs-lisp
 (setup (:package posframe))
 #+end_src
-*** proof-general   
+*** proof-general
 :PROPERTIES:
 :CREATED_TIME: [2023-03-08 Wed 14:53]
 :END:
@@ -8619,13 +8679,13 @@ Parentheses Universalistic
                 d2-mode
                 nxml-mode)
 
-    (:unbind "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f")
 
     ;; TODO: Bind commands
     ;;
     ;; Marking commands
     ;; Sexp manipulating commands
-    (:bind))
+
+    (:keymap-unset "C-M-a" "C-M-e" "C-w" "M-d" "C-M-f"))
 #+end_src
 
 The following types of commands don't have pre-defined keybindings in =puni-mode=, so I have to manually bind them:
@@ -8635,7 +8695,10 @@ The following types of commands don't have pre-defined keybindings in =puni-mode
 
 For auto-pairing, you can use =electric-pair-mode= along with puni.
 
-**** akirak-puni
+**** akirak-puni                                                        :akirak:
+:PROPERTIES:
+:ID:       cdeafab1-305f-4814-aaa4-972b3407e2ed
+:END:
 #+begin_src emacs-lisp
   (setup akirak-puni
     (add-hook 'puni-mode-hook #'akirak-puni-mode-setup))
@@ -8747,8 +8810,8 @@ Switch to/from repl buffer for current major-mode
           rtog/goto-buffer-fun akirak/display-popup-window-function)
 
     ;; Unbind the default key
-    (:unbind "C-c C-z")
-    (:global "<C-return>" #'rtog/toggle-repl))
+    (:keymap-unset "C-c C-z")
+    (:global-keymap "C-<return>" #'rtog/toggle-repl))
 #+end_src
 
 For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-toggle - sourcehut git]].
@@ -8786,21 +8849,21 @@ A dumb Japanese input method
 #+begin_src emacs-lisp
   (setup (:package riben)
     (:set riben-google-timeout 5)
-    (:bind "C-j" #'riben-dispatch
-           "C-S-j" #'riben-inc-counter
-           "q" #'riben-mode-disable
-           "@" #'riben-switch-to-english-mode
-           "_" (defun akirak/insert-zero-width-space ()
-                 (interactive)
-                 ;; zero-width space
-                 (insert "​")))
+    (:keymap "C-j" #'riben-dispatch
+             "C-S-j" #'riben-inc-counter
+             "q" #'riben-mode-disable
+             "@" #'riben-switch-to-english-mode
+             "_" (defun akirak/insert-zero-width-space ()
+                   (interactive)
+                   ;; zero-width space
+                   (insert "​")))
 
     (set-language-info "Japanese" 'input-method 'japanese-riben)
 
     ;; Workaround for commands in `org-mode-map' and other maps.
     (:when-loaded
       (dolist (key (mapcar #'car riben-decode-punctuation-alist))
-        (define-key riben-mode-map (vector key) #'riben-self-insert-command))))
+        (keymap-set riben-mode-map key #'riben-self-insert-command))))
 #+end_src
 **** avy-riben
 #+begin_quote
@@ -8814,7 +8877,7 @@ Jump to Japanese text using avy
 **** riben-english
 #+begin_src emacs-lisp
   (setup riben-english
-    (:bind "C-j" #'riben-english-to-japanese
+    (:keymap "C-j" #'riben-english-to-japanese
            "C-S-j" #'riben-english-confirm))
 #+end_src
 *** rich-minority                                               :UI:
@@ -8872,7 +8935,7 @@ Edit comment/string/docstring/code block in separate buffer
 #+begin_src emacs-lisp
   (setup (:package separedit)
     (:set separedit-default-mode 'markdown-mode)
-    (:global "C-c '" #'separedit))
+    (:global-keymap "C-c '" #'separedit))
 #+end_src
 *** shfmt
 #+begin_quote
@@ -8889,6 +8952,18 @@ Reformat shell scripts using shfmt
     (:set shfmt-arguments '("-i" "2"
                             "--case-indent"
                             "--binary-next-line")))
+#+end_src
+*** show-font
+:PROPERTIES:
+:CREATED_TIME: [2025-02-02 Sun 21:31]
+:END:
+#+begin_quote
+Show font features in a buffer
+[[https://github.com/protesilaos/show-font]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package show-font))
 #+end_src
 *** shr-tag-pre-highlight
 :PROPERTIES:
@@ -8922,7 +8997,7 @@ SOPS encrypt and decrypt without leaving the editor
     ;; `global-sops-mode` can increase loading time on large files, so I won't use
     ;; it. Instead, I will set the `sops-mode' local variable only on specific
     ;; files via .dir-locals.el.
-    (:bind "C-c e" #'sops-edit-file
+    (:keymap "C-c e" #'sops-edit-file
            "C-c C-c" #'sops-save-file))
 #+end_src
 *** sqlformat
@@ -8942,7 +9017,7 @@ Reformat SQL using sqlformat or pgformatter
           sqlformat-args '("-s2" "-g"))
     (:with-feature sql
       (:with-mode sql-mode
-        (:bind "C-c C-f" #'sqlformat-buffer))))
+        (:keymap "C-c C-f" #'sqlformat-buffer))))
 #+end_src
 *** ssh-config-mode
 :PROPERTIES:
@@ -9059,7 +9134,7 @@ Highlight symbols with keymap-enabled overlays
 
 #+begin_src emacs-lisp
   (setup (:package symbol-overlay)
-    (:global "C-c s" #'symbol-overlay-put
+    (:global-keymap "C-c s" #'symbol-overlay-put
              "M-g s" #'akirak-symbol-overlay-goto)
 
     (add-hook 'symbol-overlay-jump-hook
@@ -9080,7 +9155,7 @@ Transient UI for Symbol Overlay
 
 #+begin_src emacs-lisp
   (setup (:package casual-symbol-overlay)
-    (:global "C-c S" #'casual-symbol-overlay-tmenu))
+    (:global-keymap "C-c S" #'casual-symbol-overlay-tmenu))
 #+end_src
 *** systemd
 :PROPERTIES:
@@ -9193,7 +9268,7 @@ Code folding using treesit
     (:hook-into akirak-treesit-mode-hook)
     (defvar-keymap treesit-fold-mode-map
       :doc "Keymap for `treesit-fold-mode'.")
-    (:bind "C-c TAB" #'akirak-treesit-fold-dwim))
+    (:keymap "C-c TAB" #'akirak-treesit-fold-dwim))
 #+end_src
 *** COMMENT tree-sitter                                     :syntax:tree_sitter:ARCHIVE:
 :PROPERTIES:
@@ -9258,7 +9333,7 @@ OCaml mode
      (ocamlformat :program "ocamlformat"
                   :args (list "--name" (buffer-file-name) "-")))
 
-    (:bind [remap devdocs-lookup]
+    (:keymap "<remap> <devdocs-lookup>"
            (defun akirak/ocaml-doc-index ()
              (interactive)
              (pcase-exhaustive (process-lines (or (executable-find "odig")
@@ -9269,7 +9344,7 @@ OCaml mode
                (`(,file . ,_)
                 (eww (concat "file://" file)))))
 
-           [remap apropos-command]
+           "<remap> <apropos-command>"
            (defun akirak/ocaml-sherlodoc ()
              (interactive)
              (pop-to-buffer
@@ -9327,10 +9402,10 @@ Complete Tailwind classes using the Cheatsheet data
   (setup (:package twind)
     (:with-mode twind-css-mode
       (:hook-into css-mode css-ts-mode)
-      (:bind "C-c t" #'twind-insert-css-from-cheatsheet))
+      (:keymap "C-c t" #'twind-insert-css-from-cheatsheet))
     (:with-mode twind-class-mode
       (:hook-into web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode elixir-ts-mode)
-      (:bind "C-c t" #'twind-insert-class-from-cheatsheet))
+      (:keymap "C-c t" #'twind-insert-class-from-cheatsheet))
     (with-eval-after-load 'embark
       (defvar-keymap twind-css-rule-embark-map
         :parent embark-general-map
@@ -9364,7 +9439,7 @@ Hot-reload packages with twist
   (setup (:package twist)
     (:status personal
       (add-hook 'emacs-startup-hook #'twist-watch-mode)
-      (:global "<f12> e R" #'twist-update)))
+      (:global-keymap "<f12> e R" #'twist-update)))
 #+end_src
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
@@ -9429,7 +9504,7 @@ VERTical Interactive COmpletion
     (:hook-into after-init-hook)
     (:set vertico-resize t)
     (:with-map vertico-map
-      (:bind "C-r" #'previous-matching-history-element
+      (:keymap "C-r" #'previous-matching-history-element
              "C-s" #'next-matching-history-element
              "C-o" #'vertico-next-group
              "C-S-o" #'vertico-previous-group)))
@@ -9468,11 +9543,11 @@ Fully-featured terminal emulator
 
 #+begin_src emacs-lisp
   (setup (:package vterm)
-    (:unbind "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9" "M-0"
+    (:keymap-unset "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9" "M-0"
              "M-:" "M-g" "M-s" "C-z"
              "<f1>" "<f2>" "<f3>" "<f4>" "<f5>" "<f6>"
              "<f7>" "<f8>" "<f9>" "<f10>" "<f11>" "<f12>")
-    (:bind "<f8>" #'vterm-send-next-key))
+    (:keymap "<f8>" #'vterm-send-next-key))
 #+end_src
 *** vue-mode
 :PROPERTIES:
@@ -9504,16 +9579,17 @@ major mode for editing web templates
                  "\\.html?\\'"
                  "\\.sface\\'")
 
-    (:bind "C-c /" #'akirak-web-mode-surround
-           [remap end-of-defun] #'web-mode-forward-sexp
-           [remap down-list] #'web-mode-element-child
-           [remap backward-up-list] #'web-mode-element-parent
-           [remap forward-sexp] (defun akirak/web-mode-forward-tag-or-sexp ()
-                                  (interactive)
-                                  (if-let* ((tag-end (and (looking-at "<")
-                                                          (web-mode-tag-end-position))))
-                                      (goto-char (1+ tag-end))
-                                    (forward-sexp))))
+    (:keymap "C-c /" #'akirak-web-mode-surround
+             "<remap> <end-of-defun>" #'web-mode-forward-sexp
+             "<remap> <down-list>" #'web-mode-element-child
+             "<remap> <backward-up-list>" #'web-mode-element-parent
+             "<remap> <forward-sexp>"
+             (defun akirak/web-mode-forward-tag-or-sexp ()
+               (interactive)
+               (if-let* ((tag-end (and (looking-at "<")
+                                       (web-mode-tag-end-position))))
+                   (goto-char (1+ tag-end))
+                 (forward-sexp))))
 
     (:auto-insert
      ("\\.astro\\'" . (> "---\n" _ "\n---\n"))))
@@ -9560,11 +9636,11 @@ Operate on current line if region undefined
       (make-sparse-keymap))
     (put 'akirak/indent-rigidly-line-or-region 'repeat-map 'akirak/indent-rigidly-map)
     (put 'akirak/indent-rigidly-left-line-or-region 'repeat-map 'akirak/indent-rigidly-map)
-    (global-set-key (kbd "C-x TAB") #'akirak/indent-rigidly-line-or-region)
-    (global-set-key (kbd "C-x <backtab>") #'akirak/indent-rigidly-left-line-or-region)
-    (define-key akirak/indent-rigidly-map (kbd "TAB")
+    (keymap-global-set "C-x TAB" #'akirak/indent-rigidly-line-or-region)
+    (keymap-global-set "C-x <backtab>" #'akirak/indent-rigidly-left-line-or-region)
+    (keymap-set akirak/indent-rigidly-map "TAB"
                 #'akirak/indent-rigidly-line-or-region)
-    (define-key akirak/indent-rigidly-map (kbd "<backtab>")
+    (keymap-set akirak/indent-rigidly-map "<backtab>"
                 #'akirak/indent-rigidly-left-line-or-region))
 #+end_src
 *** windswap                                                           :windows:
@@ -9578,30 +9654,28 @@ Like windmove, but swaps buffers while moving point
 #+begin_src emacs-lisp
   (setup (:package windswap)
     (:status opinionated
-      (:global "<C-S-left>" #'windswap-left
-               "<C-S-right>" #'windswap-right
-               "<C-S-up>" #'windswap-up
-               "<C-S-down>" #'windswap-down
+      (:global-keymap "C-S-<left>" #'windswap-left
+                      "C-S-<right>" #'windswap-right
+                      "C-S-<up>" #'windswap-up
+                      "C-S-<down>" #'windswap-down
 
-               ;; There are corresponding keybindings for windmove.
-               "C-c {" #'windswap-left
-               "C-c }" #'windswap-right)
+                      ;; There are corresponding keybindings for windmove.
+                      "C-c {" #'windswap-left
+                      "C-c }" #'windswap-right)
 
       ;; These keys are bound by default in org-mode, so unbind them.
       (:with-feature org
-        (:when-loaded
-          (:unbind
-           "<C-S-left>"
-           "<C-S-right>"
-           "<C-S-up>"
-           "<C-S-down>")))
+        (:keymap-unset
+         "C-S-<left>"
+         "C-S-<right>"
+         "C-S-<up>"
+         "C-S-<down>"))
       (:with-feature org-agenda
-        (:when-loaded
-          (:unbind
-           "<C-S-left>"
-           "<C-S-right>"
-           "<C-S-up>"
-           "<C-S-down>")))))
+        (:keymap-unset
+         "C-S-<left>"
+         "C-S-<right>"
+         "C-S-<up>"
+         "C-S-<down>"))))
 #+end_src
 *** COMMENT ws-butler                                               :formatting:ARCHIVE:
 :PROPERTIES:
@@ -10141,6 +10215,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
          :action '(org-get-tags))
        (--filter (not (member "@note" it)))
        (-flatten-n 1)
+       (delete "akirak")
        (-group-by #'identity)
        (-map (pcase-lambda (`(,tag . ,items))
                (cons tag (length items))))
@@ -10151,7 +10226,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 216 |
+| [[org-ql-search:tags:packages][packages]]            | 219 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
@@ -10169,6 +10244,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
+| [[org-ql-search:tags:AI][AI]]                  |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
@@ -10249,12 +10325,11 @@ The following packages (tagged =web=) are related to web development:
 
 There are some packages for structured editing:
 
-#+BEGIN: org-ql :query "tags:structured__editing" :columns (heading todo)
-| Heading     | Todo |
-|-------------+------|
-| [[lispy][lispy]]       |      |
-| [[puni][puni]]        |      |
-| [[akirak-puni][akirak-puni]] |      |
+#+BEGIN: org-ql :query "tags:structured__editing !tags:ARCHIVE !tags:akirak" :columns (heading todo)
+| Heading | Todo |
+|---------+------|
+| [[lispy][lispy]]   |      |
+| [[puni][puni]]    |      |
 #+END:
 
 I like the idea of [[https://github.com/mickeynp/combobulate][combobulate]], but it looks immature at present.
@@ -10267,6 +10342,20 @@ I want to care about readability in the following modes:
 - [ ] helpful
 
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
+*** Artificial intelligence / LLM
+#+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
+| Heading    | Todo |
+|------------+------|
+| [[elysium][elysium]]    |      |
+| [[gptel][gptel]]      |      |
+| [[gptel-aibo][gptel-aibo]] |      |
+| [[minuet][minuet]]     |      |
+#+END:
+
+For LLM integration, gptel is the generic frontend and backend.
+
+There are packages for streaming workflows.
+Most of them uses gptel as the backend.
 *** Extra dependencies
 =@extra= tag is used to denote packages that requires large dependencies.
 To use these features, they need to be turned on at build time.

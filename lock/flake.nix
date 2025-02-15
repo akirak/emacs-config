@@ -486,6 +486,12 @@
       repo = "gptel";
       type = "github";
     };
+    gptel-aibo = {
+      flake = false;
+      owner = "dolmens";
+      repo = "gptel-aibo";
+      type = "github";
+    };
     graphql-mode = {
       flake = false;
       owner = "davazp";
@@ -1123,6 +1129,12 @@
       flake = false;
       owner = "purcell";
       repo = "emacs-shfmt";
+      type = "github";
+    };
+    show-font = {
+      flake = false;
+      owner = "protesilaos";
+      repo = "show-font";
       type = "github";
     };
     shr-tag-pre-highlight = {

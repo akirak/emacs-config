@@ -1,12 +1,9 @@
 ;;; akirak-visual-scroll.el ---  -*- lexical-binding: t -*-
 
-(defvar akirak-visual-scroll-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map [remap scroll-up-command]
-                #'akirak-visual-scroll-page-forward)
-    (define-key map [remap scroll-down-command]
-                #'akirak-visual-scroll-page-backward)
-    map))
+(defvar-keymap akirak-visual-scroll-mode-map
+  :doc "Keymap for visual scroll mode."
+  "C-v"     #'akirak-visual-scroll-page-forward
+  "M-v"     #'akirak-visual-scroll-page-backward)
 
 ;;;###autoload
 (define-minor-mode akirak-visual-scroll-mode

@@ -43,7 +43,7 @@
   "Setup puni bindings for jsx."
   (interactive)
   (if (require 'tagedit nil t)
-      (local-set-key [remap puni-kill-line] #'akirak-puni-jsx-kill-line)
+      (local-set-key "<remap> <puni-kill-line>" #'akirak-puni-jsx-kill-line)
     (message "Warning[akirak-puni]: JSX is detected, but tagedit is unavailable.")))
 
 ;;;###autoload
@@ -90,7 +90,7 @@
   "Setup puni bindings for jsx."
   (interactive)
   (if (require 'tagedit nil t)
-      (local-set-key [remap puni-kill-line] #'akirak-puni-svelte-kill-line)
+      (local-set-key "<remap> <puni-kill-line>" #'akirak-puni-svelte-kill-line)
     (message "Warning[akirak-puni]: Svelte is detected, but tagedit is unavailable.")))
 
 (defalias 'akirak-puni-svelte-kill-line #'akirak-puni-jsx-kill-line)
@@ -101,7 +101,7 @@
 
 (defun akirak-puni-elixir-setup ()
   (require 'elixir-smie)
-  (local-set-key [remap puni-kill-line] #'akirak-puni-elixir-kill-line))
+  (local-set-key "<remap> <puni-kill-line>" #'akirak-puni-elixir-kill-line))
 
 ;;;###autoload
 (defun akirak-puni-elixir-kill-line ()
@@ -155,7 +155,7 @@
 (defun akirak-puni-d2-mode-setup ()
   "Setup puni bindings for jsx."
   (interactive)
-  (local-set-key [remap puni-kill-line] #'akirak-puni-d2-kill-line))
+  (local-set-key "<remap> <puni-kill-line>" #'akirak-puni-d2-kill-line))
 
 (defun akirak-puni-d2-kill-line ()
   (interactive)

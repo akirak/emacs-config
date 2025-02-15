@@ -37,7 +37,7 @@
              (file . t)
              (extension "nix" "el" "ex" "exs"
                         "hs" "ml" "pl" "kk"
-                        "py" "go" "rust" "java" "c" ""))
+                        "py" "go" "rust" "java" "c" "ts"))
             ("UI"
              (file . t)
              (extension "vue" "svelte" "jsx" "tsx" "astro"
@@ -79,6 +79,8 @@
              (extension "torrent" "acsm")))
           (thread-last
             mailcap-mime-extensions
+            (cl-remove-if (lambda (x)
+                            (string= ".ts" (car x))))
             (seq-group-by (lambda (x)
                             (let ((mime (cdr x)))
                               (pcase mime

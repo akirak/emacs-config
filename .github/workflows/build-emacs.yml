@@ -42,7 +42,7 @@ jobs:
       run: nix build .#emacs-config.emacs --accept-flake-config --no-link
 
     - name: Build packages
-      run: nix build .#emacs-config
+      run: nix build .#emacs-config -L
     #   run: |
     #     nix run .#nix-fast-build -- \
     #       --flake "#packages.x86_64-linux.emacs-config.elispPackages" \

@@ -284,5 +284,27 @@ This should be added to `org-ctrl-c-ctrl-c-hook'."
                  (cl-incf count))))))
       (message "Replaced %d links in the file" count))))
 
+;;;; Compression
+
+;;;###autoload
+(defun akirak-image-compress-file (file)
+  (interactive "fFile: ")
+  (pcase (file-name-extension file)
+    ("png"
+     (with-temp-buffer
+       (unless (zerop (call-process "nix"
+                                    nil t nil
+                                    "run" "nixpkgs#oxipng"
+                                    "--"
+                                    "-o" "max"
+                                    "--out"
+                                    (convert-standard-filename
+                                     (expand-file-name
+                                      (concat (file-name-sans-extension file) ".omax.png")))
+                                    (convert-standard-filename
+                                     (expand-file-name file))))
+         (error "oxipng failed with non-zero exit code: %s" (buffer-string)))))
+    (_ (user-error "Unsupported extension"))))
+
 (provide 'akirak-image)
 ;;; akirak-image.el ends here

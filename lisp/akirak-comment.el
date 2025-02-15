@@ -52,7 +52,7 @@
                                          (or eol
                                              ,@(when comment-start-skip
                                                  `((regexp ,comment-start-skip)))
-                                             ,@(when c-line-comment-start-regexp
+                                             ,@(when (bound-and-true-p c-line-comment-start-regexp)
                                                  `((regexp ,c-line-comment-start-regexp))))))))
                       (while (looking-at regexp)
                         (beginning-of-line 2))
