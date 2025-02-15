@@ -8862,8 +8862,8 @@ A dumb Japanese input method
 
     ;; Workaround for commands in `org-mode-map' and other maps.
     (:when-loaded
-      (dolist (key (mapcar #'car riben-decode-punctuation-alist))
-        (keymap-set riben-mode-map key #'riben-self-insert-command))))
+      (dolist (char (mapcar #'car riben-decode-punctuation-alist))
+        (keymap-set riben-mode-map (char-to-string char) #'riben-self-insert-command))))
 #+end_src
 **** avy-riben
 #+begin_quote
