@@ -4764,8 +4764,7 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup akirak-avy
     (:global-keymap "C-;" #'akirak-avy-insert-symbol
-             "C-\"" #'akirak-avy-symbol-overlay-put
-             "M-g `" #'akirak-avy-org-block))
+                    "M-g `" #'akirak-avy-org-block))
 #+end_src
 *** COMMENT akirak-bitwarden                                                   :ARCHIVE:
 #+begin_src emacs-lisp
@@ -5648,7 +5647,8 @@ Jump to arbitrary positions in visible text and select text quickly.
   (setup (:package avy)
     (:set avy-style 'pre
           avy-all-windows t)
-    (:global-keymap "C-'" #'avy-goto-char-timer))
+    (:global-keymap "C-'" #'avy-goto-char-timer
+                    "M-g v" #'avy-goto-char-in-line))
 #+end_src
 
 I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
