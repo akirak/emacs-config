@@ -4781,7 +4781,13 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-capture
 #+begin_src emacs-lisp
   (setup akirak-capture
-    (:global-keymap "C-c c" #'akirak-capture))
+    (:global-keymap "C-c c" #'akirak-capture)
+
+    ;; Integrate with gptel-menu
+    (with-eval-after-load 'gptel-transient
+      (transient-append-suffix 'gptel-menu '(-1 1)
+        ["Org"
+         ("o" "org-capture" akirak-capture-gptel)])))
 #+end_src
 *** akirak-comment
 #+begin_src emacs-lisp
