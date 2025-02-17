@@ -1093,14 +1093,45 @@
 ;;;###autoload
 (defun akirak-capture-gptel (llm-prompt)
   (interactive "sPrompt: ")
-  (let ((headline (read-string "Headline: " llm-prompt nil nil t)))
-    (setq akirak-capture-gptel-topic t
-          akirak-capture-headline headline
-          akirak-capture-template-options (list :body
-                                                (if (equal llm-prompt headline)
-                                                    ""
-                                                  (concat "⸺" llm-prompt "%?"))))
-    (akirak-capture-doct)))
+  (cl-flet
+      ((file-link (filename)
+         (thread-last
+           (concat "file:" (abbreviate-file-name filename))
+           (org-link-make-string))))
+    (let ((headline (read-string "Headline: " llm-prompt nil nil t))
+          ;; NOTE: This depends on the private API.
+          (preamble (pcase gptel-context--alist
+                      (`nil)
+                      (`((,buffer . ,ovs))
+                       (concat (when ovs
+                                 (with-current-buffer buffer
+                                   (mapconcat (lambda (ov)
+                                                ;; TODO: Add the language for the mode
+                                                (concat "#+begin_src\n"
+                                                        (string-trim-right
+                                                         (buffer-substring (overlay-start ov)
+                                                                           (overlay-end ov)))
+                                                        "\n#+end_src\n\n"))
+                                              ovs
+                                              "")))
+                               (when-let* ((filename (buffer-file-name
+                                                      (or (buffer-base-buffer buffer)
+                                                          buffer))))
+                                 (concat (file-link filename) "\n\n"))))
+                      (files
+                       (concat (mapconcat (lambda (filename)
+                                            (concat "- " (file-link filename)))
+                                          files
+                                          "\n")
+                               "\n\n")))))
+      (setq akirak-capture-gptel-topic t
+            akirak-capture-headline headline
+            akirak-capture-template-options (list :body
+                                                  (if (and (null preamble)
+                                                           (equal llm-prompt headline))
+                                                      "%?"
+                                                    (concat preamble "⸺" llm-prompt "%?"))))
+      (akirak-capture-doct))))
 
 (defun akirak-capture-short-note (string)
   "Add a short note to the journal quickly."
