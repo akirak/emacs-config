@@ -214,6 +214,13 @@
   :description "Headline"
   :variable 'akirak-capture-headline)
 
+(defvar akirak-capture-gptel-topic nil)
+
+(transient-define-infix akirak-capture-gptel-infix ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-capture-gptel-topic
+  :description "Gptel topic")
+
 (transient-define-infix akirak-capture-todo-infix ()
   :class 'akirak-capture-plist-option
   :description "Todo"
@@ -309,6 +316,7 @@
    ("=" akirak-capture-select-heading)]
   ["Entry options"
    :class transient-row
+   ("-e" akirak-capture-gptel-infix)
    ("-t" akirak-capture-todo-infix)
    ("-g" akirak-capture-tags-infix)
    ("-s" akirak-capture-scheduled-infix)
@@ -336,16 +344,39 @@
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-doct))
                                  target)
-  (let ((org-capture-entry
-         (car (doct
-               `((""
-                  :keys ""
-                  :template ,(apply #'akirak-org-capture-make-entry-body
-                                    akirak-capture-headline
-                                    akirak-capture-template-options)
-                  ,@akirak-capture-doct-options
-                  ,@(akirak-capture--target-plist target)))))))
-    (org-capture)))
+  (let* ((template-options (if akirak-capture-gptel-topic
+                               (thread-last
+                                 (plist-get akirak-capture-template-options :properties)
+                                 (cons `("GPTEL_TOPIC" . ,(akirak-capture--escape-gptel-topic
+                                                           akirak-capture-headline)))
+                                 (plist-put akirak-capture-template-options :properties))
+                             akirak-capture-template-options))
+         (doct-options (if akirak-capture-gptel-topic
+                           (plist-put akirak-capture-doct-options
+                                      :hook
+                                      (lambda ()
+                                        ;; Set some delay for Emacs to initialize the buffer.
+                                        (run-with-timer
+                                         0.1
+                                         nil
+                                         (lambda ()
+                                           (gptel-org-set-properties (point)) (gptel-send)))))
+                         akirak-capture-doct-options))
+         (org-capture-entry
+          (car (doct
+                `((""
+                   :keys ""
+                   :template ,(apply #'akirak-org-capture-make-entry-body
+                                     akirak-capture-headline
+                                     template-options)
+                   ,@doct-options
+                   ,@(akirak-capture--target-plist target)))))))
+    ;; I am not sure if it is necessary, but just in case return the value from
+    ;; `org-capture'.
+    (prog1 (org-capture)
+      (setq akirak-capture-gptel-topic nil))))
+
+(defun akirak-capture--add-property ())
 
 (defun akirak-capture--target-plist (target)
   "Build a doct plist from the transient state."
@@ -391,6 +422,8 @@
                            akirak-capture-template-options nil
                            akirak-capture-doct-options '(:clock-in t :clock-resume t))
                      (akirak-capture-doct))
+    :transient t)
+   ("g" "Gptel" akirak-capture-gptel
     :transient t)
    ("i" "Ideate" (lambda ()
                    (interactive)
@@ -1057,6 +1090,49 @@
 
 ;;;; Other commands
 
+;;;###autoload
+(defun akirak-capture-gptel (llm-prompt)
+  (interactive "sPrompt: ")
+  (cl-flet
+      ((file-link (filename)
+         (thread-last
+           (concat "file:" (abbreviate-file-name filename))
+           (org-link-make-string))))
+    (let ((headline (read-string "Headline: " llm-prompt nil nil t))
+          ;; NOTE: This depends on the private API.
+          (preamble (pcase gptel-context--alist
+                      (`nil)
+                      (`((,buffer . ,ovs))
+                       (concat (when ovs
+                                 (with-current-buffer buffer
+                                   (mapconcat (lambda (ov)
+                                                ;; TODO: Add the language for the mode
+                                                (concat "#+begin_src\n"
+                                                        (string-trim-right
+                                                         (buffer-substring (overlay-start ov)
+                                                                           (overlay-end ov)))
+                                                        "\n#+end_src\n\n"))
+                                              ovs
+                                              "")))
+                               (when-let* ((filename (buffer-file-name
+                                                      (or (buffer-base-buffer buffer)
+                                                          buffer))))
+                                 (concat (file-link filename) "\n\n"))))
+                      (files
+                       (concat (mapconcat (lambda (filename)
+                                            (concat "- " (file-link filename)))
+                                          files
+                                          "\n")
+                               "\n\n")))))
+      (setq akirak-capture-gptel-topic t
+            akirak-capture-headline headline
+            akirak-capture-template-options (list :body
+                                                  (if (and (null preamble)
+                                                           (equal llm-prompt headline))
+                                                      "%?"
+                                                    (concat preamble "⸺" llm-prompt "%?"))))
+      (akirak-capture-doct))))
+
 (defun akirak-capture-short-note (string)
   "Add a short note to the journal quickly."
   (interactive "s")
@@ -1674,6 +1750,13 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
       (widen)
       (goto-char (point-min))
       (akirak-org-goto-or-create-olp (split-string input "/")))))
+
+(defun akirak-capture--escape-gptel-topic (headline)
+  "Just convert a HEADLINE to an Org-property-safe string."
+  (thread-last
+    (truncate-string-to-width headline 50)
+    (replace-regexp-in-string (rx (+ space)) "-")
+    (downcase)))
 
 ;;;###autoload
 (defun akirak-capture-org-ins-heading-fallback (&optional arg)
