@@ -6549,8 +6549,32 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
     (:set eat-kill-buffer-on-exit t)
     (:with-map eat-semi-char-mode-map
       (:keymap "S-<prior>" #'View-scroll-page-backward
-      (:keymap-unset "M-:" "M-g" "M-s" "C-z" "M-o" "M-'")))
                "S-<next>" #'View-scroll-page-forward)
+      (:keymap-unset "M-:" "M-g" "M-s" "C-z" "M-o" "M-'"))
+
+    ;; Switch to line-mode automatically.
+    (:hook (defun akirak/eat-setup ()
+             (add-hook 'post-command-hook #'akirak/eat-auto-line-mode 90 'local)))
+    (defvar-local akirak/eat-previous-mode nil)
+    (defun akirak/eat-record-mode ()
+      (setq akirak/eat-previous-mode
+            (cl-case (seq-find #'symbol-value '(eat--semi-char-mode
+                                                eat--char-mode
+                                                eat--line-mode))
+              (eat--semi-char-mode 'eat-semi-char-mode)
+              (eat--char-mode 'eat-char-mode)
+              (eat--line-mode 'eat-line-mode))))
+    (defun akirak/eat-restore-mode ()
+      (when akirak/eat-previous-mode
+        (funcall akirak/eat-previous-mode)
+        (setq akirak/eat-previous-mode nil)))
+    (defun akirak/eat-auto-line-mode ()
+      (cl-case this-command
+        (avy-goto-char-timer
+         (akirak/eat-record-mode)
+         (eat-line-mode))
+        (kill-ring-save
+         (akirak/eat-restore-mode)))))
 #+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
