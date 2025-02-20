@@ -1017,8 +1017,10 @@ It is required only in specific projects, so I won't turn on the mode by default
     (:with-hook turn-on-eldoc-mode
       (:hook-into emacs-lisp-mode))
 
-    (:set eldoc-documentation-strategy 'eldoc-documentation-compose)
-    (:global-keymap "C-c e" #'eldoc-doc-buffer))
+    ;; Bind akirak-eldoc-show-buffer instead
+    ;; (:global-keymap "C-c e" #'eldoc-doc-buffer)
+
+    (:set eldoc-documentation-strategy 'eldoc-documentation-compose))
 #+end_src
 *** elec-pair                      :prog_mode:text_mode:parentheses:
 :PROPERTIES:
@@ -4829,6 +4831,15 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-disk
     (:global-keymap "<f12> d m" #'akirak-disk-findmnt
              "<f12> d b" #'akirak-disk-insert-blkid))
+#+end_src
+*** akirak-eldoc
+:PROPERTIES:
+:CREATED_TIME: [2025-02-20 Thu 21:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup akirak-eldoc
+    (:global-keymap "C-c e" #'akirak-eldoc-show-buffer))
 #+end_src
 *** akirak-elec-pair                                               :parentheses:
 :PROPERTIES:
