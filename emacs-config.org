@@ -6549,8 +6549,8 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
     (:set eat-kill-buffer-on-exit t)
     (:with-map eat-semi-char-mode-map
       (:keymap "S-<prior>" #'View-scroll-page-backward
-             "S-<next>" #'View-scroll-page-forward)
       (:keymap-unset "M-:" "M-g" "M-s" "C-z" "M-o" "M-'")))
+               "S-<next>" #'View-scroll-page-forward)
 #+end_src
 *** ediprolog                                                           :Prolog:
 :PROPERTIES:
