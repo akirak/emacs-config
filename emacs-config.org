@@ -3456,6 +3456,7 @@ A programmable workflow layer for Org mode
           `(("^\\.github/" . "services/github.com")
             ("\\.h?eex\\'" . "programming/elixir")
             ("package\\.yaml\\'" . "programming/haskell")
+            ("packages\\.json\\'" . "programming/javascript")
             ("tsconfig\\." . "programming/typescript")
             ("\\.envrc\\'" . "programming/envrc")
             ("dune\\(?:-[^/]+\\)?\\'" . "programming/ocaml")
