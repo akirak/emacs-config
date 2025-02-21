@@ -1297,22 +1297,6 @@
         "type": "github"
       }
     },
-    "gptel-aibo": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1739113729,
-        "narHash": "sha256-iEli337QT4G5WOn7o8hJI++1kt3edH/m5yAqzLE9Y6M=",
-        "owner": "dolmens",
-        "repo": "gptel-aibo",
-        "rev": "cb872b9306f80ad6ecd55b8625384f9c9d217e3b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dolmens",
-        "repo": "gptel-aibo",
-        "type": "github"
-      }
-    },
     "graphql-mode": {
       "flake": false,
       "locked": {
@@ -1791,22 +1775,6 @@
       "original": {
         "owner": "kiennq",
         "repo": "emacs-mini-modeline",
-        "type": "github"
-      }
-    },
-    "minuet": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1739850900,
-        "narHash": "sha256-5uKe96HlpG6gvYldlmyNSCdFtk43AV7A0CSlBoPeakE=",
-        "owner": "milanglacier",
-        "repo": "minuet-ai.el",
-        "rev": "a61185f119713b413e6a716aa0f4a92da392305b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "milanglacier",
-        "repo": "minuet-ai.el",
         "type": "github"
       }
     },
@@ -3024,7 +2992,6 @@
         "gleam-ts-mode": "gleam-ts-mode",
         "go-translate": "go-translate",
         "gptel": "gptel",
-        "gptel-aibo": "gptel-aibo",
         "graphql-mode": "graphql-mode",
         "graphql-ts-mode": "graphql-ts-mode",
         "hcl-mode": "hcl-mode",
@@ -3055,7 +3022,6 @@
         "mastodon": "mastodon",
         "mermaid-mode": "mermaid-mode",
         "mini-modeline": "mini-modeline",
-        "minuet": "minuet",
         "mmm-mode": "mmm-mode",
         "modus-themes": "modus-themes",
         "move-dup": "move-dup",

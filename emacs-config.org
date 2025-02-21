@@ -7340,7 +7340,7 @@ Interact with ChatGPT or other LLMs
                   ;; `setq-local' to ensure it is set as a local variable.
                   (setq-local gptel--system-message msg)))))
 #+end_src
-*** gptel-aibo                                                              :AI:
+*** COMMENT gptel-aibo                                                      :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-02-05 Wed 22:17]
 :END:
@@ -8191,7 +8191,7 @@ Display modeline in minibuffer
                 value))
           ""))))
 #+end_src
-*** minuet                                                                  :AI:
+*** COMMENT minuet                                                          :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:26]
 :END:
