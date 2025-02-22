@@ -486,12 +486,6 @@
       repo = "gptel";
       type = "github";
     };
-    gptel-aibo = {
-      flake = false;
-      owner = "dolmens";
-      repo = "gptel-aibo";
-      type = "github";
-    };
     graphql-mode = {
       flake = false;
       owner = "davazp";
@@ -670,12 +664,6 @@
       flake = false;
       owner = "kiennq";
       repo = "emacs-mini-modeline";
-      type = "github";
-    };
-    minuet = {
-      flake = false;
-      owner = "milanglacier";
-      repo = "minuet-ai.el";
       type = "github";
     };
     mmm-mode = {

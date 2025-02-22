@@ -336,7 +336,6 @@
   (keymap-set embark-file-map "C-c C-T" #'akirak-tailscale-copy-file)
   (keymap-set embark-file-map "C-o" #'akirak-embark-org-open-file)
   (keymap-set embark-region-map "C-e" #'akirak-embark-goto-region-end)
-  (keymap-set embark-region-map "V" #'akirak-gpt-translate-vocabulary)
   (keymap-set embark-bookmark-map "t" #'akirak-embark-bookmark-jump-other-tab)
   (keymap-set embark-buffer-map "C-c C-c" #'akirak-embark-comint-interrupt)
 

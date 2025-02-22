@@ -6,6 +6,20 @@
 
 ;;;###autoload
 (defun akirak-org-dog-make-gpt-prompt (&optional obj)
+  "Return a system prompt for a file OBJ (deprecated).
+
+Nowadays these types of system prompts no longer considered helpful.
+Just describe the problem accurately in your prompt and don't use this
+function to set the system prompt.
+
+Below was an example integration:
+
+  (add-hook 'org-mode-hook
+            (defun akirak/org-dog-setup-gpt-system ()
+              (when-let* ((msg (akirak-org-dog-make-gpt-prompt)))
+                ;; In case gptel.el has not been loaded yet, use
+                ;; `setq-local' to ensure it is set as a local variable.
+                (setq-local gptel--system-message msg))))"
   (when-let* ((obj (or obj (org-dog-buffer-object)))
               (title (or (org-dog-file-title obj)
                          (thread-first
