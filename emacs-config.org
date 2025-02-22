@@ -5260,16 +5260,16 @@ This is an extra functions for window management.
         ;; I don't need kill-buffer when I have consult-buffer
         (:keymap "k" #'akirak-window-kill-this-buffer))
       (:global-keymap "C-2" #'akirak-window-split-vertically
-               "C-3" #'akirak-window-split-and-select
-               "C-4" #'akirak-window-setup-columns
-               "C-x o" #'akirak-window-cycle-two-windows
-               "C-x M-o" #'akirak-window-swap-two-windows
-               "C-x `" #'akirak-window-column-prefix
-               "C-c v" #'akirak-window-open-in-new-tab
-               "M-o" #'akirak-window-moderate-1
-               "S-<end>" #'akirak-window-display-buffer-ends
-               "<remap> <delete-window>" #'akirak-window-delete-window
-               "<remap> <abort-recursive-edit>" #'akirak-window-cleanup)))
+                      "C-3" #'akirak-window-split-and-select
+                      "C-4" #'akirak-window-setup-columns
+                      "C-x o" #'akirak-window-cycle-two-windows
+                      "C-x M-o" #'akirak-window-swap-two-windows
+                      "C-x `" #'akirak-window-column-prefix
+                      "C-c v" #'akirak-window-open-in-new-tab
+                      "M-o" #'akirak-window-moderate-1
+                      "S-<end>" #'akirak-window-display-buffer-ends
+                      "<remap> <delete-window>" #'akirak-window-delete-window
+                      "<remap> <abort-recursive-edit>" #'akirak-window-cleanup)))
 #+end_src
 *** akirak-wordnet
 #+begin_src elisp
