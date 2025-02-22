@@ -2,6 +2,7 @@
 
 ;;;###autoload
 (defun akirak-gpt-translate-vocabulary (begin end)
+  "Deprecated. Don't use this command"
   (interactive "r")
   (let* ((word (buffer-substring-no-properties begin end))
          (target-lang "English")
