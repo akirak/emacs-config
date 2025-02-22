@@ -507,7 +507,12 @@ suitable value detected according to the command line."
       (setq-local compilation-error-regexp-alist alist)
     (setq-local compilation-error-regexp-alist akirak-compile-default-error-regexp-alist)
     (pcase command
-      ((rx bol (* blank) "npm" (+ space))
+      ((rx bol (* blank)
+           (or "npm"
+               "pnpm"
+               "yarn"
+               "bun")
+           (+ space))
        (add-hook 'compilation-filter-hook #'akirak-compile--npm-detecter nil :local)))))
 
 (defun akirak-compile--error-regexp-alist-for-command (command)
