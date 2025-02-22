@@ -7331,14 +7331,7 @@ Interact with ChatGPT or other LLMs
 
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
-        :stream t))
-
-    (add-hook 'org-mode-hook
-              (defun akirak/org-dog-setup-gpt-system ()
-                (when-let* ((msg (akirak-org-dog-make-gpt-prompt)))
-                  ;; In case gptel.el has not been loaded yet, use
-                  ;; `setq-local' to ensure it is set as a local variable.
-                  (setq-local gptel--system-message msg)))))
+        :stream t)))
 #+end_src
 *** COMMENT gptel-aibo                                                      :AI:ARCHIVE:
 :PROPERTIES:
