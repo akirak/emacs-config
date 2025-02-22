@@ -5213,9 +5213,9 @@ This is an extra functions for window management.
            `(lambda (buffer alist)
               (or (display-buffer-reuse-mode-window buffer '((mode . ,modes)))
                   (,function buffer ',alist)))))
-      (dolist (entry `((,(major-modes help-mode devdocs-mode)
+      (dolist (entry `((,(major-modes help-mode devdocs-mode eldoc-mode)
                         ,(reuse-mode-window
-                          (help-mode devdocs-mode)
+                          (help-mode devdocs-mode eldoc-mode)
                           akirak-window-display-document-buffer))
                        ((or ,(major-modes vterm-mode eat-mode)
                             "^\\*Nix-REPL\\*")
