@@ -1697,6 +1697,7 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup misc
+    (:set duplicate-region-final-position -1)
     (:global-keymap "C-c d" #'duplicate-dwim))
 #+end_src
 *** mule
