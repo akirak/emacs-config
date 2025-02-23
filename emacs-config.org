@@ -48,6 +48,7 @@ Note: This configuration is currently built and tested only on Linux.
 :ID:       3cc635d1-7bad-4d28-946e-e204b04aafaa
 :END:
 If you have Nix 2.9+ installed, you can try out the Emacs configuration without installing it.
+Note: Binary cache is only available for Linux x86-64 from Cachix. If you are using other platforms such as Mac, it may take several minutes to build the packages on your machine.
 
 There are two variants of the configuration.
 One is built with the pgtk version of Emacs, which runs on Wayland:
