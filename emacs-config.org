@@ -2028,10 +2028,10 @@ This is a recommended setting for use with vertico. See https://github.com/minad
           remote-file-name-inhibit-auto-save t)
 
     (:global-keymap "<remap> <count-words-region>" #'akirak/count-words-dwim
-             "<remap> <delete-horizontal-space>" #'cycle-spacing
-             "<remap> <upcase-word>" #'upcase-dwim
-             "<remap> <downcase-word>" #'downcase-dwim
-             "<remap> <capitalize-word>" #'capitalize-dwim)
+                    "<remap> <delete-horizontal-space>" #'cycle-spacing
+                    "<remap> <upcase-word>" #'upcase-dwim
+                    "<remap> <downcase-word>" #'downcase-dwim
+                    "<remap> <capitalize-word>" #'capitalize-dwim)
 
     ;; I often type this sequence unintensionally. I never use this command, so
     ;; just disable the keybinding.
@@ -2048,11 +2048,11 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     ;; Alternative to kill-region-dwim option
     (when (version< emacs-version "31")
       (:global-keymap "C-w" (defun akirak/kill-region-or-backward-kill-word (&optional arg)
-                       "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
-                       (interactive "p")
-                       (if (region-active-p)
-                           (kill-region (region-beginning) (region-end))
-                         (backward-kill-word arg)))))
+                              "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
+                              (interactive "p")
+                              (if (region-active-p)
+                                  (kill-region (region-beginning) (region-end))
+                                (backward-kill-word arg)))))
 
     (defun akirak/count-words-dwim ()
       (interactive)
@@ -2078,18 +2078,17 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
     (:status opinionated
       (:global-keymap "C-a"
-               (defun akirak/back-to-indentation-or-bol ()
-                 (interactive)
-                 (if (or (looking-at "^")
-                         (string-match-p (rx (not (any space)))
-                                         (buffer-substring-no-properties
-                                          (line-beginning-position)
-                                          (point))))
-                     (back-to-indentation)
-                   (beginning-of-line)))
-
                ;; In place of zap-to-char
                "M-z" #'zap-up-to-char)))
+                      (defun akirak/back-to-indentation-or-bol ()
+                        (interactive)
+                        (if (or (looking-at "^")
+                                (string-match-p (rx (not (any space)))
+                                                (buffer-substring-no-properties
+                                                 (line-beginning-position)
+                                                 (point))))
+                            (back-to-indentation)
+                          (beginning-of-line)))
 #+end_src
 *** skeleton
 :PROPERTIES:
