@@ -10389,8 +10389,9 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 
 For LLM integration, gptel is the generic frontend and backend.
 
-There are packages for streaming workflows.
-Most of them uses gptel as the backend.
+There are several packages for streaming coding workflows.
+For now, I am only using elysium.
+I am also trying out other editors for coding, which is not documented here.
 *** Extra dependencies
 =@extra= tag is used to denote packages that requires large dependencies.
 To use these features, they need to be turned on at build time.
