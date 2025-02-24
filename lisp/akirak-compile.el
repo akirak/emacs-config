@@ -651,10 +651,15 @@ suitable value detected according to the command line."
                     (alist (akirak-compile--error-regexp-alist-for-command command)))
           (setq-local compilation-error-regexp-alist alist)
           (when (string-prefix-p "eslint" command)
-            (setq-local compilation-parse-errors-filename-function
-                        #'akirak-compile--set-error-filename))
+            (akirak-compile--enable-eslint))
           (remove-hook 'compilation-filter-hook #'akirak-compile--npm-detecter :local)
+          ;; Reparse with the new error regexp alist.
+          (compilation-parse-errors (point) (point-max))
           (throw 'command-detected t))))))
+
+(defun akirak-compile--enable-eslint ()
+  (setq-local compilation-parse-errors-filename-function
+              #'akirak-compile--set-error-filename))
 
 (provide 'akirak-compile)
 ;;; akirak-compile.el ends here
