@@ -2078,8 +2078,6 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
     (:status opinionated
       (:global-keymap "C-a"
-               ;; In place of zap-to-char
-               "M-z" #'zap-up-to-char)))
                       (defun akirak/back-to-indentation-or-bol ()
                         (interactive)
                         (if (or (looking-at "^")
@@ -2089,6 +2087,9 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                                                  (point))))
                             (back-to-indentation)
                           (beginning-of-line)))
+
+                      "M-z" #'zap-up-to-char
+                      "M-Z" #'zap-to-char)))
 #+end_src
 *** skeleton
 :PROPERTIES:
