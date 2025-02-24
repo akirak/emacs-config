@@ -488,14 +488,10 @@ suitable value detected according to the command line."
   :global t
   (if akirak-compile-auto-error-mode
       (progn
-        ;; This variable may be overridden for some programs, e.g. eslint, so
-        ;; set the default value on every compilation session.
-        (setq-local compilation-parse-errors-filename-function #'identity)
         (unless akirak-compile-default-error-regexp-alist
           (setq akirak-compile-default-error-regexp-alist compilation-error-regexp-alist)
           (setq compilation-error-regexp-alist nil))
         (add-hook 'compilation-start-hook #'akirak-compile-setup-auto-error-regexp))
-    (setq-local compilation-parse-errors-filename-function #'identity)
     (when akirak-compile-default-error-regexp-alist
       (setq compilation-error-regexp-alist akirak-compile-default-error-regexp-alist)
       (setq akirak-compile-default-error-regexp-alist nil))
@@ -586,11 +582,11 @@ suitable value detected according to the command line."
          (list
           ;; Only the file path
           (list (rx-to-string `(and bol (group (regexp ,path-regexp))))
-                1)
+                #'akirak-compile--eslint-filename)
           (list (rx word-start (group (+ digit)) ":" (group (+ digit))
                     (+ blank)
                     (or "error" (group "warning")))
-                #'akirak-compile--current-error-filename
+                #'akirak-compile--eslint-filename
                 1 2 '(3 . nil))))))
     ((rx bol "tsc" space)
      (eval-when-compile
@@ -642,6 +638,20 @@ suitable value detected according to the command line."
                                     ":" (group (+ digit))))
                 1 2)))))))
 
+(defvar-local akirak-compile--eslint-filename-alist nil)
+
+(defun akirak-compile--eslint-filename ()
+  (if (eolp)
+      (let ((filename (match-string-no-properties 1)))
+        (push (cons (match-beginning 1)
+                    filename)
+              akirak-compile--eslint-filename-alist)
+        filename)
+    (seq-some `(lambda (cell)
+                 (when (< (car cell) ,(match-beginning 1))
+                   (cdr cell)))
+              akirak-compile--eslint-filename-alist)))
+
 (defun akirak-compile--npm-detecter ()
   (save-excursion
     (goto-char compilation-filter-start)
@@ -651,15 +661,11 @@ suitable value detected according to the command line."
                     (alist (akirak-compile--error-regexp-alist-for-command command)))
           (setq-local compilation-error-regexp-alist alist)
           (when (string-prefix-p "eslint" command)
-            (akirak-compile--enable-eslint))
+            (setq akirak-compile--eslint-filename-alist nil))
           (remove-hook 'compilation-filter-hook #'akirak-compile--npm-detecter :local)
           ;; Reparse with the new error regexp alist.
           (compilation-parse-errors (point) (point-max))
           (throw 'command-detected t))))))
-
-(defun akirak-compile--enable-eslint ()
-  (setq-local compilation-parse-errors-filename-function
-              #'akirak-compile--set-error-filename))
 
 (provide 'akirak-compile)
 ;;; akirak-compile.el ends here
