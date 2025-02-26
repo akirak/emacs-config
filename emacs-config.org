@@ -6031,6 +6031,9 @@ COmpletion in Region FUnction
     (:with-mode (prog-mode text-mode comint-mode)
       (:hook corfu-mode))
 
+    (:hook corfu-popupinfo-mode)
+    (:set corfu-popupinfo-delay '(1.5 . 1.0))
+
     (:with-hook minibuffer-setup-hook
       (:hook
        (defun corfu-enable-in-minibuffer ()
