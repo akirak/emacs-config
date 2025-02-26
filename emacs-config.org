@@ -7330,6 +7330,15 @@ Interact with ChatGPT or other LLMs
                     `(("x-api-key" . ,key)
                       ("anthropic-version" . "2023-06-01")))))
 
+      (gptel-make-openai "xAI"
+        :host "api.x.ai"
+        :key (lambda ()
+               (gptel-api-key-from-auth-source
+                "api.x.ai"))
+        :endpoint "/v1/chat/completions"
+        :stream t
+        :models '(grok-beta))
+
       (gptel-make-gemini "Gemini"
         :stream t
         :key (lambda ()
