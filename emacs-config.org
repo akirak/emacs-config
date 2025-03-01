@@ -8949,6 +8949,7 @@ Clean-up and Beautify the list of minor-modes.
                                "Copilot"
                                "ga"
                                "LSPB"
+                               "Jinx"
                                "Treefmt")
                            symbol-end))
     (:hook-into after-init-hook))
