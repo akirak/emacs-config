@@ -999,7 +999,16 @@ The other variables must not be saved, and they should be put in configuration:
       `(defun ,(intern (format "akirak/insert-%s" name)) (n)
          (interactive "P")
          (self-insert-command (or n 1) ,char)))
-    (:global "C-x 8 2" (akirak/def-char-insert-command 11834 two-em-dash)))
+    (:global "C-x 8 2" (akirak/def-char-insert-command 11834 two-em-dash))
+
+    ;; Useful for working with code in a tree-sitter mode
+    (defun akirak/append-char-to-previous-thing (char)
+      (interactive "c")
+      (save-excursion
+        (if (re-search-backward (rx (not (any space))) nil t)
+            (insert-char char)
+          (user-error "No target location"))))
+    (:global "C-c h" #'akirak/append-char-to-previous-thing))
 #+end_src
 *** editorconfig                                                    :formatting:
 :PROPERTIES:
