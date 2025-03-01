@@ -521,13 +521,7 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
       (keymap-global-unset "M-r")
       (keymap-set key-translation-map "M-r" "C-x r")
 
-      (keymap-set key-translation-map "C-9" "C-x x")
-
-      ;; Chromebook don't have physical function keys. They substitute
-      ;; Search + num for function keys, but Search + 1 is hard to press,
-      ;; especially when Search and Ctrl are swapped.
-      ;; This is quite annoying, so I will use M-` as <f1>.
-      (keymap-set key-translation-map "M-`" "<f1>")))
+      (keymap-set key-translation-map "C-9" "C-x x")))
 #+end_src
 *** Window management
 #+begin_src emacs-lisp
