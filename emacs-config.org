@@ -2941,7 +2941,8 @@ Outline-based notes management and organizer
                                       ("p" . "prompt")
                                       ;; Override CENTER block
                                       ("c" . "toc")
-                                      ("t" . "takeaway"))
+                                      ("t" . "takeaway")
+                                      ("i" . "aside"))
                                     org-structure-template-alist)
                             :key #'car
                             ;; Needed to override existing bindings
@@ -10131,6 +10132,60 @@ They are built into big functions in the library, so I use =el-patch= to remove 
             (when org-log-note-extra (insert org-log-note-extra))
             (setq-local org-finish-function 'org-store-log-note)
             (run-hooks 'org-log-buffer-setup-hook)))
+
+        (el-patch-defun org-insert-structure-template (type)
+          "Insert a block structure of the type #+begin_foo/#+end_foo.
+  Select a block from `org-structure-template-alist' then type
+  either RET, TAB or SPC to write the block type.  With an active
+  region, wrap the region in the block.  Otherwise, insert an empty
+  block.
+
+  When foo is written as FOO, upcase the #+BEGIN/END as well."
+          (interactive
+           (list (pcase (org--insert-structure-template-mks)
+  	         (`("\t" . ,_)
+                    (let ((type (read-string "Structure type: ")))
+                      (when (string-empty-p type) (user-error "Empty structure type"))
+                      type))
+  	         (`(,_ ,choice . ,_) choice))))
+          (when (or (not (stringp type)) (string-empty-p type))
+            (error "Invalid structure type: %S" type))
+          (let* ((case-fold-search t) ; Make sure that matches are case-insensitive.
+                 (region? (use-region-p))
+  	       (region-start (and region? (region-beginning)))
+  	       (region-end (and region? (copy-marker (region-end))))
+  	       (extended? (string-match-p (el-patch-swap "\\`\\(src\\|export\\)\\'"
+                                                           "\\`\\(src\\|export\\|aside\\)\\'")
+                                            type))
+  	       (verbatim? (string-match-p
+  		           (concat "\\`" (regexp-opt '("example" "export"
+                                                         "src" "comment")))
+  		           type))
+                 (upcase? (string= (car (split-string type))
+                                   (upcase (car (split-string type))))))
+            (when region? (goto-char region-start))
+            (let ((column (current-indentation)))
+              (if (save-excursion (skip-chars-backward " \t") (bolp))
+  	        (forward-line 0)
+  	      (insert "\n"))
+              (save-excursion
+  	      (indent-to column)
+  	      (insert (format "#+%s_%s%s\n" (if upcase? "BEGIN" "begin") type (if extended? " " "")))
+  	      (when region?
+  	        (when verbatim? (org-escape-code-in-region (point) region-end))
+  	        (goto-char region-end)
+  	        ;; Ignore empty lines at the end of the region.
+  	        (skip-chars-backward " \r\t\n")
+  	        (end-of-line))
+  	      (unless (bolp) (insert "\n"))
+  	      (indent-to column)
+  	      (insert (format "#+%s_%s" (if upcase? "END" "end") (car (split-string type))))
+  	      (if (looking-at "[ \t]*$") (replace-match "")
+  	        (insert "\n"))
+  	      (when (and (eobp) (not (bolp))) (insert "\n")))
+              (if extended? (end-of-line)
+  	      (forward-line)
+  	      (skip-chars-forward " \t")))))
 
         (el-patch-defun org-offer-links-in-entry (buffer marker &optional nth zero)
           "Offer links in the current entry and return the selected link.
