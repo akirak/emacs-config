@@ -2938,7 +2938,6 @@ Outline-based notes management and organizer
               (seq-sort-by #'car #'string-collate-lessp
                            (cl-remove-duplicates
                             (append '(("d" . "definition")
-                                      ("p" . "prompt")
                                       ;; Override CENTER block
                                       ("c" . "toc")
                                       ("t" . "takeaway")
