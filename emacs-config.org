@@ -994,6 +994,19 @@ The other variables must not be saved, and they should be put in configuration:
   (setup ediff-wind
     (:set ediff-window-setup-function #'ediff-setup-windows-plain))
 #+end_src
+*** editfns.c
+:PROPERTIES:
+:CREATED_TIME: [2025-03-01 Sat 14:21]
+:END:
+
+#+begin_src emacs-lisp
+  (setup editfns.c
+    (defmacro akirak/def-char-insert-command (char name)
+      `(defun ,(intern (format "akirak/insert-%s" name)) (n)
+         (interactive "P")
+         (self-insert-command (or n 1) ,char)))
+    (:global "C-x 8 2" (akirak/def-char-insert-command 11834 two-em-dash)))
+#+end_src
 *** editorconfig                                                    :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
