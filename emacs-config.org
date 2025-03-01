@@ -7326,7 +7326,8 @@ Interact with ChatGPT or other LLMs
     (:set gptel-crowdsourced-prompts-file
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
-    (:global-keymap "C-c p" #'gptel-menu)
+    (:global-keymap "C-c p" #'gptel-menu
+                    "C-c P" #'gptel-rewrite)
     (autoload #'gptel-org-set-topic "gptel-org" nil '(org-mode))
     (:with-feature org
       (:keymap "C-c C-x =" #'gptel-org-set-topic))
