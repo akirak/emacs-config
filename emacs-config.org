@@ -4585,6 +4585,15 @@ Major mode for the Go programming language
     (:file-match "\\.[cm]?js$" "\\.json5\\'")
     (:mode-project-roots "package.json"))
 #+end_src
+*** lua-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2025-03-02 Sun 12:52]
+:END:
+
+#+begin_src emacs-lisp
+  (setup lua-ts-mode
+    (:file-match "\\.lua\\'"))
+#+end_src
 *** nix-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-08-26 Sat 11:56]
