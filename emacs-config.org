@@ -4791,6 +4791,11 @@ This is a collection of various utilities to enhance the experience.
     (:status personal
       (:defer 1 #'akirak-files-ensure-abbrev-list)))
 #+end_src
+*** akirak-aider
+#+begin_src emacs-lisp
+  (setup akirak-aider
+    (:nixpkgs aider-chat))
+#+end_src
 *** akirak-avy
 #+begin_src emacs-lisp
   (setup akirak-avy
