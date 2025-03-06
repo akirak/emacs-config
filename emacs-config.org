@@ -4904,6 +4904,15 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-expand-region
     (:global-keymap "C-M-SPC" #'akirak-expand-region-default))
 #+end_src
+*** akirak-git
+:PROPERTIES:
+:CREATED_TIME: [2025-03-06 Thu 22:10]
+:END:
+
+#+begin_src emacs-lisp
+  (setup akirak-git
+    (:global "<f12> g r" #'akirak-git-list-remote-pages))
+#+end_src
 *** akirak-git-commit
 #+begin_src emacs-lisp
   (setup akirak-git-commit
