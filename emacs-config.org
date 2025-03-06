@@ -7380,6 +7380,18 @@ Interact with ChatGPT or other LLMs
         :stream t
         :models '(grok-beta))
 
+      (gptel-make-openai "OpenRouter"
+        :host "openrouter.ai"
+        :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
+        :endpoint "/api/v1/chat/completions"
+        :stream t
+        :models '(openai/gpt-3.5-turbo
+                  mistralai/mixtral-8x7b-instruct
+                  meta-llama/codellama-34b-instruct
+                  codellama/codellama-70b-instruct
+                  google/palm-2-codechat-bison-32k
+                  google/gemini-pro))
+
       (gptel-make-gemini "Gemini"
         :stream t
         :key (lambda ()
