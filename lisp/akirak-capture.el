@@ -1093,6 +1093,7 @@
 ;;;###autoload
 (defun akirak-capture-gptel (llm-prompt)
   (interactive "sPrompt: ")
+  (require 'gptel)
   (cl-flet
       ((file-link (filename)
          (thread-last
