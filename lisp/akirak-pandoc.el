@@ -53,11 +53,11 @@
 
 (defun akirak-pandoc-input-format (&optional mode filename)
   "Return a pandoc input format for the buffer, if any."
-  (let ((mode (or mode major-mode))
-        (filename (file-name-nondirectory
-                   (or filename (buffer-file-name (buffer-base-buffer))))))
+  (let* ((mode (or mode major-mode))
+         (filename (or filename (buffer-file-name (buffer-base-buffer)))))
     (if (and (eq mode 'markdown-mode)
-             (string-match-p "^README\\." filename))
+             (and filename
+                  (string-match-p "/README\\." filename)))
         "gfm"
       (car (member (string-remove-suffix "-mode" (symbol-name mode))
                    (akirak-pandoc-input-formats))))))

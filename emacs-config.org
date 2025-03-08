@@ -48,6 +48,7 @@ Note: This configuration is currently built and tested only on Linux.
 :ID:       3cc635d1-7bad-4d28-946e-e204b04aafaa
 :END:
 If you have Nix 2.9+ installed, you can try out the Emacs configuration without installing it.
+Note: Binary cache is only available for Linux x86-64 from Cachix. If you are using other platforms such as Mac, it may take several minutes to build the packages on your machine.
 
 There are two variants of the configuration.
 One is built with the pgtk version of Emacs, which runs on Wayland:
@@ -520,13 +521,7 @@ I use =<f12>= as a prefix for miscellaneous keybindings on the global map.
       (keymap-global-unset "M-r")
       (keymap-set key-translation-map "M-r" "C-x r")
 
-      (keymap-set key-translation-map "C-9" "C-x x")
-
-      ;; Chromebook don't have physical function keys. They substitute
-      ;; Search + num for function keys, but Search + 1 is hard to press,
-      ;; especially when Search and Ctrl are swapped.
-      ;; This is quite annoying, so I will use M-` as <f1>.
-      (keymap-set key-translation-map "M-`" "<f1>")))
+      (keymap-set key-translation-map "C-9" "C-x x")))
 #+end_src
 *** Window management
 #+begin_src emacs-lisp
@@ -993,6 +988,28 @@ The other variables must not be saved, and they should be put in configuration:
   (setup ediff-wind
     (:set ediff-window-setup-function #'ediff-setup-windows-plain))
 #+end_src
+*** editfns.c
+:PROPERTIES:
+:CREATED_TIME: [2025-03-01 Sat 14:21]
+:END:
+
+#+begin_src emacs-lisp
+  (setup editfns.c
+    (defmacro akirak/def-char-insert-command (char name)
+      `(defun ,(intern (format "akirak/insert-%s" name)) (n)
+         (interactive "P")
+         (self-insert-command (or n 1) ,char)))
+    (:global "C-x 8 2" (akirak/def-char-insert-command 11834 two-em-dash))
+
+    ;; Useful for working with code in a tree-sitter mode
+    (defun akirak/append-char-to-previous-thing (char)
+      (interactive "c")
+      (save-excursion
+        (if (re-search-backward (rx (not (any space))) nil t)
+            (insert-char char)
+          (user-error "No target location"))))
+    (:global "C-c h" #'akirak/append-char-to-previous-thing))
+#+end_src
 *** editorconfig                                                    :formatting:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 23:59]
@@ -1286,7 +1303,8 @@ The built-in =electric= package provides the following modes:
             (zig-fmt '((eval . (zig-format-on-save-mode t)))))
         (dir-locals-set-class-variables
          'personal
-         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))))
+         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
+           (org-mode . (eval . (jinx-mode 1)))))
         (dir-locals-set-class-variables
          'default
          `((astro-ts-mode . (,@lsp-no-formatter))
@@ -1697,6 +1715,7 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup misc
+    (:set duplicate-region-final-position -1)
     (:global-keymap "C-c d" #'duplicate-dwim))
 #+end_src
 *** mule
@@ -2026,10 +2045,10 @@ This is a recommended setting for use with vertico. See https://github.com/minad
           remote-file-name-inhibit-auto-save t)
 
     (:global-keymap "<remap> <count-words-region>" #'akirak/count-words-dwim
-             "<remap> <delete-horizontal-space>" #'cycle-spacing
-             "<remap> <upcase-word>" #'upcase-dwim
-             "<remap> <downcase-word>" #'downcase-dwim
-             "<remap> <capitalize-word>" #'capitalize-dwim)
+                    "<remap> <delete-horizontal-space>" #'cycle-spacing
+                    "<remap> <upcase-word>" #'upcase-dwim
+                    "<remap> <downcase-word>" #'downcase-dwim
+                    "<remap> <capitalize-word>" #'capitalize-dwim)
 
     ;; I often type this sequence unintensionally. I never use this command, so
     ;; just disable the keybinding.
@@ -2046,11 +2065,11 @@ This is a recommended setting for use with vertico. See https://github.com/minad
     ;; Alternative to kill-region-dwim option
     (when (version< emacs-version "31")
       (:global-keymap "C-w" (defun akirak/kill-region-or-backward-kill-word (&optional arg)
-                       "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
-                       (interactive "p")
-                       (if (region-active-p)
-                           (kill-region (region-beginning) (region-end))
-                         (backward-kill-word arg)))))
+                              "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
+                              (interactive "p")
+                              (if (region-active-p)
+                                  (kill-region (region-beginning) (region-end))
+                                (backward-kill-word arg)))))
 
     (defun akirak/count-words-dwim ()
       (interactive)
@@ -2076,18 +2095,18 @@ This is a recommended setting for use with vertico. See https://github.com/minad
 
     (:status opinionated
       (:global-keymap "C-a"
-               (defun akirak/back-to-indentation-or-bol ()
-                 (interactive)
-                 (if (or (looking-at "^")
-                         (string-match-p (rx (not (any space)))
-                                         (buffer-substring-no-properties
-                                          (line-beginning-position)
-                                          (point))))
-                     (back-to-indentation)
-                   (beginning-of-line)))
+                      (defun akirak/back-to-indentation-or-bol ()
+                        (interactive)
+                        (if (or (looking-at "^")
+                                (string-match-p (rx (not (any space)))
+                                                (buffer-substring-no-properties
+                                                 (line-beginning-position)
+                                                 (point))))
+                            (back-to-indentation)
+                          (beginning-of-line)))
 
-               ;; In place of zap-to-char
-               "M-z" #'zap-up-to-char)))
+                      "M-z" #'zap-up-to-char
+                      "M-Z" #'zap-to-char)))
 #+end_src
 *** skeleton
 :PROPERTIES:
@@ -2922,10 +2941,10 @@ Outline-based notes management and organizer
               (seq-sort-by #'car #'string-collate-lessp
                            (cl-remove-duplicates
                             (append '(("d" . "definition")
-                                      ("p" . "prompt")
                                       ;; Override CENTER block
                                       ("c" . "toc")
-                                      ("t" . "takeaway"))
+                                      ("t" . "takeaway")
+                                      ("i" . "aside"))
                                     org-structure-template-alist)
                             :key #'car
                             ;; Needed to override existing bindings
@@ -3280,7 +3299,22 @@ Outline-based notes management and organizer
                         (interactive)
                         (org-agenda-with-point-at-orig-entry
                             (thing-at-point 'line)
-                          (org-store-link nil 'interactive)))))))
+                          (org-store-link nil 'interactive))))))
+
+    (:with-feature isearch
+      (:with-map isearch-mode-map
+        (:keymap "<remap> <org-insert-link>"
+                 (defun akirak/org-insert-link-isearch ()
+                   "Create a link on the isearch-highlighted region."
+                   (interactive)
+                   (pcase-exhaustive isearch-match-data
+                     (`(,begin ,end . ,_)
+                      (isearch-done)
+                      (goto-char begin)
+                      (push-mark)
+                      (goto-char end)
+                      (activate-mark)
+                      (call-interactively #'org-insert-link))))))))
 #+end_src
 **** org-refile
 :PROPERTIES:
@@ -4566,6 +4600,15 @@ Major mode for the Go programming language
     (:file-match "\\.[cm]?js$" "\\.json5\\'")
     (:mode-project-roots "package.json"))
 #+end_src
+*** lua-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2025-03-02 Sun 12:52]
+:END:
+
+#+begin_src emacs-lisp
+  (setup lua-ts-mode
+    (:file-match "\\.lua\\'"))
+#+end_src
 *** nix-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-08-26 Sat 11:56]
@@ -4870,6 +4913,15 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src elisp
   (setup akirak-expand-region
     (:global-keymap "C-M-SPC" #'akirak-expand-region-default))
+#+end_src
+*** akirak-git
+:PROPERTIES:
+:CREATED_TIME: [2025-03-06 Thu 22:10]
+:END:
+
+#+begin_src emacs-lisp
+  (setup akirak-git
+    (:global "<f12> g r" #'akirak-git-list-remote-pages))
 #+end_src
 *** akirak-git-commit
 #+begin_src emacs-lisp
@@ -6028,6 +6080,9 @@ COmpletion in Region FUnction
   (setup (:package corfu)
     (:with-mode (prog-mode text-mode comint-mode)
       (:hook corfu-mode))
+
+    (:hook corfu-popupinfo-mode)
+    (:set corfu-popupinfo-delay '(1.5 . 1.0))
 
     (:with-hook minibuffer-setup-hook
       (:hook
@@ -7307,7 +7362,8 @@ Interact with ChatGPT or other LLMs
     (:set gptel-crowdsourced-prompts-file
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
-    (:global-keymap "C-c p" #'gptel-menu)
+    (:global-keymap "C-c p" #'gptel-menu
+                    "C-c P" #'gptel-rewrite)
     (autoload #'gptel-org-set-topic "gptel-org" nil '(org-mode))
     (:with-feature org
       (:keymap "C-c C-x =" #'gptel-org-set-topic))
@@ -7324,6 +7380,27 @@ Interact with ChatGPT or other LLMs
                   (when-let* ((key (gptel-api-key-from-auth-source "api.anthropic.com")))
                     `(("x-api-key" . ,key)
                       ("anthropic-version" . "2023-06-01")))))
+
+      (gptel-make-openai "xAI"
+        :host "api.x.ai"
+        :key (lambda ()
+               (gptel-api-key-from-auth-source
+                "api.x.ai"))
+        :endpoint "/v1/chat/completions"
+        :stream t
+        :models '(grok-beta))
+
+      (gptel-make-openai "OpenRouter"
+        :host "openrouter.ai"
+        :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
+        :endpoint "/api/v1/chat/completions"
+        :stream t
+        :models '(openai/gpt-3.5-turbo
+                  mistralai/mixtral-8x7b-instruct
+                  meta-llama/codellama-34b-instruct
+                  codellama/codellama-70b-instruct
+                  google/palm-2-codechat-bison-32k
+                  google/gemini-pro))
 
       (gptel-make-gemini "Gemini"
         :stream t
@@ -8935,6 +9012,7 @@ Clean-up and Beautify the list of minor-modes.
                                "Copilot"
                                "ga"
                                "LSPB"
+                               "Jinx"
                                "Treefmt")
                            symbol-end))
     (:hook-into after-init-hook))
@@ -10103,6 +10181,60 @@ They are built into big functions in the library, so I use =el-patch= to remove 
             (setq-local org-finish-function 'org-store-log-note)
             (run-hooks 'org-log-buffer-setup-hook)))
 
+        (el-patch-defun org-insert-structure-template (type)
+          "Insert a block structure of the type #+begin_foo/#+end_foo.
+  Select a block from `org-structure-template-alist' then type
+  either RET, TAB or SPC to write the block type.  With an active
+  region, wrap the region in the block.  Otherwise, insert an empty
+  block.
+
+  When foo is written as FOO, upcase the #+BEGIN/END as well."
+          (interactive
+           (list (pcase (org--insert-structure-template-mks)
+  	         (`("\t" . ,_)
+                    (let ((type (read-string "Structure type: ")))
+                      (when (string-empty-p type) (user-error "Empty structure type"))
+                      type))
+  	         (`(,_ ,choice . ,_) choice))))
+          (when (or (not (stringp type)) (string-empty-p type))
+            (error "Invalid structure type: %S" type))
+          (let* ((case-fold-search t) ; Make sure that matches are case-insensitive.
+                 (region? (use-region-p))
+  	       (region-start (and region? (region-beginning)))
+  	       (region-end (and region? (copy-marker (region-end))))
+  	       (extended? (string-match-p (el-patch-swap "\\`\\(src\\|export\\)\\'"
+                                                           "\\`\\(src\\|export\\|aside\\)\\'")
+                                            type))
+  	       (verbatim? (string-match-p
+  		           (concat "\\`" (regexp-opt '("example" "export"
+                                                         "src" "comment")))
+  		           type))
+                 (upcase? (string= (car (split-string type))
+                                   (upcase (car (split-string type))))))
+            (when region? (goto-char region-start))
+            (let ((column (current-indentation)))
+              (if (save-excursion (skip-chars-backward " \t") (bolp))
+  	        (forward-line 0)
+  	      (insert "\n"))
+              (save-excursion
+  	      (indent-to column)
+  	      (insert (format "#+%s_%s%s\n" (if upcase? "BEGIN" "begin") type (if extended? " " "")))
+  	      (when region?
+  	        (when verbatim? (org-escape-code-in-region (point) region-end))
+  	        (goto-char region-end)
+  	        ;; Ignore empty lines at the end of the region.
+  	        (skip-chars-backward " \r\t\n")
+  	        (end-of-line))
+  	      (unless (bolp) (insert "\n"))
+  	      (indent-to column)
+  	      (insert (format "#+%s_%s" (if upcase? "END" "end") (car (split-string type))))
+  	      (if (looking-at "[ \t]*$") (replace-match "")
+  	        (insert "\n"))
+  	      (when (and (eobp) (not (bolp))) (insert "\n")))
+              (if extended? (end-of-line)
+  	      (forward-line)
+  	      (skip-chars-forward " \t")))))
+
         (el-patch-defun org-offer-links-in-entry (buffer marker &optional nth zero)
           "Offer links in the current entry and return the selected link.
   If there is only one link, return it.
@@ -10387,8 +10519,9 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 
 For LLM integration, gptel is the generic frontend and backend.
 
-There are packages for streaming workflows.
-Most of them uses gptel as the backend.
+There are several packages for streaming coding workflows.
+For now, I am only using elysium.
+I am also trying out other editors for coding, which is not documented here.
 *** Extra dependencies
 =@extra= tag is used to denote packages that requires large dependencies.
 To use these features, they need to be turned on at build time.

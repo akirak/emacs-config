@@ -1,16 +1,18 @@
 ;;; akirak-expand-region.el ---  -*- lexical-binding: t -*-
 
 ;;;###autoload
-(defun akirak-expand-region-default ()
-  (interactive)
-  (pcase (derived-mode-p 'org-mode 'text-mode)
-    (`org-mode
-     (akirak-org-expand-region))
-    ((or `text-mode
-         (guard (akirak-expand-region--text-like-p)))
-     (akirak-expand-region-text))
-    (_
-     (user-error "Not applicable"))))
+(defun akirak-expand-region-default (&optional arg)
+  (interactive "P")
+  (if (equal arg '(4))
+      (akirak-mark-thing-at-point)
+    (pcase (derived-mode-p 'org-mode 'text-mode)
+      (`org-mode
+       (akirak-org-expand-region))
+      ((or `text-mode
+           (guard (akirak-expand-region--text-like-p)))
+       (akirak-expand-region-text))
+      (_
+       (user-error "Not applicable")))))
 
 (defun akirak-expand-region-text ()
   (if (use-region-p)
