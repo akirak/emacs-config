@@ -3299,7 +3299,22 @@ Outline-based notes management and organizer
                         (interactive)
                         (org-agenda-with-point-at-orig-entry
                             (thing-at-point 'line)
-                          (org-store-link nil 'interactive)))))))
+                          (org-store-link nil 'interactive))))))
+
+    (:with-feature isearch
+      (:with-map isearch-mode-map
+        (:keymap "<remap> <org-insert-link>"
+                 (defun akirak/org-insert-link-isearch ()
+                   "Create a link on the isearch-highlighted region."
+                   (interactive)
+                   (pcase-exhaustive isearch-match-data
+                     (`(,begin ,end . ,_)
+                      (isearch-done)
+                      (goto-char begin)
+                      (push-mark)
+                      (goto-char end)
+                      (activate-mark)
+                      (call-interactively #'org-insert-link))))))))
 #+end_src
 **** org-refile
 :PROPERTIES:
