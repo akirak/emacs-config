@@ -195,15 +195,20 @@
 
 (defun akirak-treesit-smart-kill-line (&optional arg)
   (interactive "P")
-  (if (or (numberp arg)
-          (looking-at (rx (* blank) eol)))
-      (if (looking-back (rx bol (+ blank)) (line-beginning-position))
-          (let ((indentation (current-indentation)))
-            (beginning-of-line 1)
-            (kill-line arg)
-            (when (looking-at (rx-to-string `(** 0 ,indentation blank)))
-              (goto-char (match-end 0))))
-        (kill-line arg))
+  (cond
+   ((equal arg '(16))
+    ;; Fallback
+    (kill-line))
+   ((or (numberp arg)
+        (looking-at (rx (* blank) eol)))
+    (if (looking-back (rx bol (+ blank)) (line-beginning-position))
+        (let ((indentation (current-indentation)))
+          (beginning-of-line 1)
+          (kill-line arg)
+          (when (looking-at (rx-to-string `(** 0 ,indentation blank)))
+            (goto-char (match-end 0))))
+      (kill-line arg)))
+   (t
     (or (akirak-treesit--maybe-kill-inside-string (line-end-position))
         (let* ((start (point))
                ;; Determine the position where the killed node(s) resides.
@@ -255,7 +260,7 @@
                   (akirak-treesit--kill-line-region (point) (treesit-node-start node)
                                                     arg)
                 (akirak-treesit--kill-line-region (point) (treesit-node-end parent)
-                                                  arg))))))))
+                                                  arg)))))))))
 
 (defun akirak-treesit--kill-line-region (start end &optional arg)
   (pcase-let*
