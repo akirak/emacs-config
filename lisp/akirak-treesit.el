@@ -11,6 +11,7 @@
   ;; "<remap> <down-list>" #'akirak-treesit-down-list
   "<remap> <backward-up-list>" #'akirak-treesit-backward-up-list
   "<remap> <kill-line>" #'akirak-treesit-smart-kill-line
+  "<remap> <kill-sentence>" #'akirak-treesit-smart-kill-nodes
   "<remap> <open-line>" #'akirak-treesit-open-line
   "C-M-n" #'akirak-treesit-forward-up-list
   "M-n" #'akirak-treesit-next-same-type-sibling
@@ -261,6 +262,33 @@
                                                     arg)
                 (akirak-treesit--kill-line-region (point) (treesit-node-end parent)
                                                   arg)))))))))
+
+(defun akirak-treesit-smart-kill-nodes (&optional arg)
+  (interactive "P")
+  (or (akirak-treesit--maybe-kill-inside-string)
+      (let* ((node (treesit-node-at (point)))
+             (start (treesit-node-start node))
+             (lower-bound (line-end-position))
+             parent)
+        (while (and (setq parent (treesit-node-parent node))
+                    (or (= (treesit-node-start parent)
+                           start)
+                        (< (treesit-node-end parent)
+                           lower-bound)))
+          (setq node parent))
+        (when-let* ((end (or (thread-last
+                               (treesit-node-children parent)
+                               (mapcar #'treesit-node-end)
+                               (seq-find `(lambda (pos)
+                                            (>= pos ,lower-bound))))
+                             (treesit-node-end parent))))
+          (if arg
+              (progn
+                (goto-char start)
+                (push-mark)
+                (goto-char end)
+                (activate-mark))
+            (kill-region start end))))))
 
 (defun akirak-treesit--kill-line-region (start end &optional arg)
   (pcase-let*
