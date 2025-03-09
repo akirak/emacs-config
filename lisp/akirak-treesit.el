@@ -204,7 +204,7 @@
             (when (looking-at (rx-to-string `(** 0 ,indentation blank)))
               (goto-char (match-end 0))))
         (kill-line arg))
-    (or (akirak-treesit--maybe-kill-inside-string)
+    (or (akirak-treesit--maybe-kill-inside-string (line-end-position))
         (let* ((start (point))
                ;; Determine the position where the killed node(s) resides.
                (node-start (if (looking-at (rx (+ blank)))
@@ -286,60 +286,59 @@
      (t
       (kill-region start end)))))
 
-(defun akirak-treesit--maybe-kill-inside-string ()
+(defun akirak-treesit--maybe-kill-inside-string (&optional limit)
   (pcase (treesit-language-at (point))
     (`tsx
      (let ((node (treesit-node-at (point))))
        (when (member (treesit-node-type node) '("string_fragment"
                                                 "template_string"))
-         (delete-region (point) (min (1- (treesit-node-end node))
-                                     (line-end-position))))))
+         (delete-region (point) (if limit
+                                    (min (1- (treesit-node-end node))
+                                         limit)
+                                  (1- (treesit-node-end node)))))))
     (_
      (when-let* ((string-start (ppss-comment-or-string-start (syntax-ppss))))
-       (akirak-treesit--kill-line-inside-string string-start)))))
-
-(defun akirak-treesit--kill-line-inside-string (string-start)
-  (let ((pos (point))
-        (line-end-pos (line-end-position))
-        (bound (save-excursion
-                 (goto-char string-start)
-                 (pcase-exhaustive (funcall show-paren-data-function)
-                   (`(,_ ,_ ,bound . ,_)
-                    bound)
-                   (`nil
-                    (cond
-                     ((and block-comment-start
-                           (looking-at (regexp-quote block-comment-start)))
-                      (and (search-forward block-comment-end)
-                           (match-beginning 0)))
-                     ((and comment-start
-                           (if comment-start-skip
-                               (looking-at comment-start-skip)
-                             (looking-at (regexp-quote comment-start))))
-                      (goto-char (match-end 0))
-                      (cond
-                       (comment-end-skip
-                        (re-search-forward comment-end-skip)
-                        (match-beginning 0))
-                       (comment-end
-                        (search-forward comment-end)
-                        (match-beginning 0))))
-                     (t
-                      (let* ((open-char (char-after (point)))
-                             (close-char (or (and (boundp electric-pair-mode)
-                                                  (nth 2 (electric-pair-syntax-info open-char)))
-                                             (matching-paren open-char)
-                                             open-char)))
-                        (forward-char 1)
-                        (search-forward (char-to-string close-char))
-                        (match-beginning 0)))))))))
-    ;; To handle string interpolation, don't exceed the close bound of the
-    ;; current tree-sitter node.
-    (unless (< (treesit-node-end (treesit-node-at pos)) bound)
-      (kill-region pos (if bound
-                           (min line-end-pos bound)
-                         line-end-pos))
-      t)))
+       (let ((pos (point))
+             (bound (save-excursion
+                      (goto-char string-start)
+                      (pcase-exhaustive (funcall show-paren-data-function)
+                        (`(,_ ,_ ,bound . ,_)
+                         bound)
+                        (`nil
+                         (cond
+                          ((and block-comment-start
+                                (looking-at (regexp-quote block-comment-start)))
+                           (and (search-forward block-comment-end)
+                                (match-beginning 0)))
+                          ((and comment-start
+                                (if comment-start-skip
+                                    (looking-at comment-start-skip)
+                                  (looking-at (regexp-quote comment-start))))
+                           (goto-char (match-end 0))
+                           (cond
+                            (comment-end-skip
+                             (re-search-forward comment-end-skip)
+                             (match-beginning 0))
+                            (comment-end
+                             (search-forward comment-end)
+                             (match-beginning 0))))
+                          (t
+                           (let* ((open-char (char-after (point)))
+                                  (close-char (or (and (boundp electric-pair-mode)
+                                                       (nth 2 (electric-pair-syntax-info open-char)))
+                                                  (matching-paren open-char)
+                                                  open-char)))
+                             (forward-char 1)
+                             (search-forward (char-to-string close-char))
+                             (match-beginning 0)))))))))
+         ;; To handle string interpolation, don't exceed the close bound of the
+         ;; current tree-sitter node.
+         (unless (< (treesit-node-end (treesit-node-at pos)) bound)
+           (kill-region pos (if (and limit bound)
+                                (min limit bound)
+                              (or limit
+                                  bound)))
+           t))))))
 
 (defun akirak-treesit--at-bol-or-indent ()
   (looking-back (rx bol (* blank)) (line-beginning-position)))
@@ -355,6 +354,7 @@
       (point))))
 
 (defun akirak-treesit--find-last-node (start-node parent bound)
+  "Return the last child of a parent node after a given bound."
   (when-let* ((nodes (thread-last
                        (cl-member start-node (treesit-node-children parent)
                                   :test #'treesit-node-eq)
