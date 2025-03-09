@@ -290,7 +290,8 @@
   (pcase (treesit-language-at (point))
     (`tsx
      (let ((node (treesit-node-at (point))))
-       (when (equal (treesit-node-type node) "string_fragment")
+       (when (member (treesit-node-type node) '("string_fragment"
+                                                "template_string"))
          (delete-region (point) (min (1- (treesit-node-end node))
                                      (line-end-position))))))
     (_
