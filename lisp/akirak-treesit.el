@@ -283,10 +283,16 @@
                                             (>= pos ,lower-bound))))
                              (treesit-node-end parent))))
           (if arg
-              (progn
+              (let (whole-lines)
                 (goto-char start)
+                (when (looking-back (rx bol (* blank)) (line-beginning-position))
+                  (goto-char (match-beginning 0))
+                  (setq whole-lines t))
                 (push-mark)
                 (goto-char end)
+                (when (and whole-lines
+                           (looking-at (rx (* blank) eol)))
+                  (beginning-of-line 2))
                 (activate-mark))
             (kill-region start end))))))
 
