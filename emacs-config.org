@@ -7427,6 +7427,10 @@ An AI Writing Assistant
 :PROPERTIES:
 :CREATED_TIME: [2025-03-12 Wed 17:54]
 :END:
+#+begin_quote
+Complete the function at point using gptel
+[[https://github.com/mwolson/gptel-fn-complete]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package gptel-fn-complete)
@@ -10402,7 +10406,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
@@ -10426,6 +10430,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:Org][Org]]                 |   3 |
+| [[org-ql-search:tags:AI][AI]]                  |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -10440,7 +10445,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:fstar][fstar]]               |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
-| [[org-ql-search:tags:AI][AI]]                  |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |
@@ -10520,10 +10524,11 @@ I want to care about readability in the following modes:
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Artificial intelligence / LLM
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
-| Heading | Todo |
-|---------+------|
-| [[elysium][elysium]] |      |
-| [[gptel][gptel]]   |      |
+| Heading           | Todo |
+|-------------------+------|
+| [[elysium][elysium]]           |      |
+| [[gptel][gptel]]             |      |
+| [[gptel-fn-complete][gptel-fn-complete]] |      |
 #+END:
 
 For LLM integration, gptel is the generic frontend and backend.
