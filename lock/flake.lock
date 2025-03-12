@@ -1297,6 +1297,22 @@
         "type": "github"
       }
     },
+    "gptel-fn-complete": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1740359231,
+        "narHash": "sha256-X+tlAwJWPnVEjreaNyCvjYJ6/smaxlk0Rd/2NW3VGjI=",
+        "owner": "mwolson",
+        "repo": "gptel-fn-complete",
+        "rev": "f69362c0a915db3c56bfc27525b89ac185924bf1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mwolson",
+        "repo": "gptel-fn-complete",
+        "type": "github"
+      }
+    },
     "graphql-mode": {
       "flake": false,
       "locked": {
@@ -2992,6 +3008,7 @@
         "gleam-ts-mode": "gleam-ts-mode",
         "go-translate": "go-translate",
         "gptel": "gptel",
+        "gptel-fn-complete": "gptel-fn-complete",
         "graphql-mode": "graphql-mode",
         "graphql-ts-mode": "graphql-ts-mode",
         "hcl-mode": "hcl-mode",

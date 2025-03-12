@@ -7423,6 +7423,15 @@ An AI Writing Assistant
 #+begin_src emacs-lisp
 (setup (:package gptel-aibo))
 #+end_src
+*** gptel-fn-complete                                                       :AI:
+:PROPERTIES:
+:CREATED_TIME: [2025-03-12 Wed 17:54]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package gptel-fn-complete)
+    (:global-keymap "C-c y" #'gptel-fn-complete))
+#+end_src
 *** graphql-mode                                               :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
