@@ -467,7 +467,8 @@
        :predicate
        (lambda (file)
          (string-match-p (rx-to-string `(and ,(substring this-file 0 (match-beginning 0))
-                                             "/index." (+ (not (any "./")))))
+                                             (and (? "/index")
+                                                  "." (+ (not (any "./"))))))
                          file))))
     ((rx "/" (+ (not (any "/"))) "/default.nix" eol)
      (akirak-consult--reorder-files files
