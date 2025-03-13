@@ -351,16 +351,30 @@
                                                            akirak-capture-headline)))
                                  (plist-put akirak-capture-template-options :properties))
                              akirak-capture-template-options))
+         ;; When this variable is non-nil, start the capture session in a new
+         ;; tab.
+         (new-tab-name (when akirak-capture-gptel-topic
+                         akirak-capture-headline))
          (doct-options (if akirak-capture-gptel-topic
-                           (plist-put akirak-capture-doct-options
-                                      :hook
-                                      (lambda ()
-                                        ;; Set some delay for Emacs to initialize the buffer.
-                                        (run-with-timer
-                                         0.1
-                                         nil
-                                         (lambda ()
-                                           (gptel-org-set-properties (point)) (gptel-send)))))
+                           (thread-first
+                             akirak-capture-doct-options
+                             (plist-put :hook
+                                        (lambda ()
+                                          ;; Set some delay for Emacs to initialize the buffer.
+                                          (run-with-timer
+                                           0.1
+                                           nil
+                                           (lambda ()
+                                             (when new-tab-name
+                                               (tab-bar-rename-tab new-tab-name)
+                                               (when (fboundp 'fwb-toggle-window-split)
+                                                 (fwb-toggle-window-split)))
+                                             (gptel-org-set-properties (point))
+                                             (gptel-send)))))
+                             (plist-put :after-finalize
+                                        (when new-tab-name
+                                          (lambda ()
+                                            (tab-bar-close-tab-by-name new-tab-name)))))
                          akirak-capture-doct-options))
          (org-capture-entry
           (car (doct
@@ -371,6 +385,11 @@
                                      template-options)
                    ,@doct-options
                    ,@(akirak-capture--target-plist target)))))))
+    ;; This is not an ideal solution. After finishing the capture session, it
+    ;; restores the window configuration instead of closing the new tab.
+    (when new-tab-name
+      (tab-bar-new-tab)
+      (delete-other-windows))
     ;; I am not sure if it is necessary, but just in case return the value from
     ;; `org-capture'.
     (prog1 (org-capture)
