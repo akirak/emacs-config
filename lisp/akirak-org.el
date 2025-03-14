@@ -1103,6 +1103,40 @@ At this point, the function works with the following pattern:
                                         (make-string (1+ initial-level) ?\*)
                                         source)))))
 
+;;;###autoload
+(defun akirak-org-demote-headings (&optional arg)
+  "Demote the headings so their levels are higher than ARG."
+  (interactive "P")
+  (let* ((bounds (cond
+                  ((use-region-p)
+                   (cons (region-beginning) (region-end)))
+                  ;; Inside indirect buffer
+                  ((buffer-base-buffer)
+                   (save-excursion
+                     (goto-char (point-min))
+                     (org-end-of-meta-data t)
+                     (cons (point) (point-max))))
+                  (t
+                   (user-error "In a non-direct buffer, please select a region"))))
+         (base-level (if (numberp arg)
+                         arg
+                       (org-with-point-at (1- (car bounds))
+                         (org-outline-level))))
+         current-min-level)
+    (save-excursion
+      (goto-char (car bounds))
+      (while (re-search-forward org-heading-regexp (cdr bounds) t)
+        (let ((level (- (match-end 1)
+                        (match-beginning 1))))
+          (setq current-min-level (if current-min-level
+                                      (min current-min-level level)
+                                    level))))
+      (let ((level-inc (- (1+ base-level) current-min-level)))
+        (when (> level-inc 0)
+          (replace-regexp-in-region (rx bol "*")
+                                    (make-string (1+ level-inc) ?\*)
+                                    (car bounds) (cdr bounds)))))))
+
 ;;;; Specific applications
 
 ;;;###autoload
