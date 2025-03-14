@@ -6053,12 +6053,12 @@ An unofficial Copilot plugin
   (setup (:package copilot)
     (:nixpkgs "nodejs")
     (:keymap "<remap> <expand-abbrev>" #'akirak-copilot-abbrev-or-complete
-           ;; Remap repl-toggle in the minor mode map.
-           "M-RET" #'akirak-copilot-accept-dwim
-           "C-M-n" #'copilot-next-completion
-           "C-M-p" #'copilot-previous-completion
-           "M-F" #'copilot-accept-completion-by-word
-           "M-E" #'copilot-accept-completion-by-line)
+             ;; Remap repl-toggle in the minor mode map.
+             "M-RET" #'akirak-copilot-accept-dwim
+             "C-M-n" #'copilot-next-completion
+             "C-M-p" #'copilot-previous-completion
+             "M-F" #'copilot-accept-completion-by-word
+             "M-E" #'copilot-accept-completion-by-line)
     (:when-loaded
       ;; Look up the command bound in global-map and use it as the fallback
       ;; command.
