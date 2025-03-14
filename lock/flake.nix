@@ -486,12 +486,6 @@
       repo = "gptel";
       type = "github";
     };
-    gptel-fn-complete = {
-      flake = false;
-      owner = "mwolson";
-      repo = "gptel-fn-complete";
-      type = "github";
-    };
     graphql-mode = {
       flake = false;
       owner = "davazp";

@@ -7423,7 +7423,7 @@ An AI Writing Assistant
 #+begin_src emacs-lisp
 (setup (:package gptel-aibo))
 #+end_src
-*** gptel-fn-complete                                                       :AI:
+*** COMMENT gptel-fn-complete                                               :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-03-12 Wed 17:54]
 :END:
