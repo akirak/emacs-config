@@ -7382,37 +7382,31 @@ Interact with ChatGPT or other LLMs
 
       (gptel-make-anthropic "Claude"
         :stream t
-        :header (lambda ()
-                  (when-let* ((key (gptel-api-key-from-auth-source "api.anthropic.com")))
-                    `(("x-api-key" . ,key)
-                      ("anthropic-version" . "2023-06-01")))))
+        :key (lambda ()
+               (gptel-api-key-from-auth-source "api.anthropic.com")))
 
-      (gptel-make-openai "xAI"
-        :host "api.x.ai"
+      (gptel-make-perplexity "Perplexity"
         :key (lambda ()
                (gptel-api-key-from-auth-source
-                "api.x.ai"))
-        :endpoint "/v1/chat/completions"
-        :stream t
-        :models '(grok-beta))
+                "api.perplexity.ai"))
+        :stream t)
 
       (gptel-make-openai "OpenRouter"
         :host "openrouter.ai"
         :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
         :endpoint "/api/v1/chat/completions"
         :stream t
-        :models '(openai/gpt-3.5-turbo
-                  mistralai/mixtral-8x7b-instruct
-                  meta-llama/codellama-34b-instruct
-                  codellama/codellama-70b-instruct
-                  google/palm-2-codechat-bison-32k
-                  google/gemini-pro))
-
-      (gptel-make-gemini "Gemini"
-        :stream t
-        :key (lambda ()
-               (gptel-api-key-from-auth-source
-                "generativelanguage.googleapis.com")))
+        :models '(openai/gpt-4.5-preview
+                  openai/gpt-3.5-turbo
+                  openai/o3-mini-high
+                  google/gemini-2.0-flash-001
+                  google/gemini-2.0-flash-thinking-exp:free
+                  google/gemini-2.0-pro-exp-02-05:free
+                  ;; Use the native Perplexity provider for citations
+                  ;; perplexity/sonar-pro
+                  ;; perplexity/sonar-deep-research
+                  x-ai/grok-beta
+                  deepseek/deepseek-r1))
 
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
