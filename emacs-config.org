@@ -10460,6 +10460,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
+| [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
@@ -10524,11 +10525,11 @@ I want to care about readability in the following modes:
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Artificial intelligence / LLM
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
-| Heading           | Todo |
-|-------------------+------|
-| [[elysium][elysium]]           |      |
-| [[gptel][gptel]]             |      |
-| [[gptel-fn-complete][gptel-fn-complete]] |      |
+| Heading | Todo |
+|---------+------|
+| [[copilot][copilot]] |      |
+| [[elysium][elysium]] |      |
+| [[gptel][gptel]]   |      |
 #+END:
 
 For LLM integration, gptel is the generic frontend and backend.
@@ -10547,7 +10548,6 @@ To use these features, they need to be turned on at build time.
 | [[org-memento][org-memento]]     |      |
 | [[org-recur][org-recur]]       |      |
 | [[beancount][beancount]]       |      |
-| [[copilot][copilot]]         |      |
 | [[dune][dune]]            |      |
 | [[elx][elx]]             |      |
 | [[epkg][epkg]]            |      |
