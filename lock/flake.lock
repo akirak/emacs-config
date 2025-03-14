@@ -449,6 +449,22 @@
         "url": "https://codeberg.org/jao/consult-recoll.git"
       }
     },
+    "copilot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1740274761,
+        "narHash": "sha256-ATIyNAnd1pU82xdGH7+z9zkOcDVJhYhh65QDQ73NiL0=",
+        "owner": "copilot-emacs",
+        "repo": "copilot.el",
+        "rev": "7d105d708a23d16cdfd5240500be8bb02f95a46e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "copilot-emacs",
+        "repo": "copilot.el",
+        "type": "github"
+      }
+    },
     "corfu": {
       "flake": false,
       "locked": {

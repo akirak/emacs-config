@@ -169,6 +169,12 @@
       type = "git";
       url = "https://codeberg.org/jao/consult-recoll.git";
     };
+    copilot = {
+      flake = false;
+      owner = "copilot-emacs";
+      repo = "copilot.el";
+      type = "github";
+    };
     corfu = {
       flake = false;
       owner = "minad";
