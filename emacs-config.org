@@ -4836,7 +4836,7 @@ This is a collection of various utilities to enhance the experience.
 
     ;; Integrate with gptel-menu
     (with-eval-after-load 'gptel-transient
-      (transient-append-suffix 'gptel-menu '(-1 1)
+      (transient-append-suffix 'gptel-menu '(-1 0)
         '("o" "org-capture" akirak-capture-gptel))))
 #+end_src
 *** akirak-comment
