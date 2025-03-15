@@ -7621,8 +7621,8 @@ Replace things with predefined alternatives
 
 #+begin_src emacs-lisp
   (setup (:package huan)
-    (:global-keymap "C-=" #'huan-symbol
-             "C-+" #'huan-defun)
+    ;; (:global-keymap "C-=" #'huan-symbol
+    ;;                 "C-+" #'huan-defun)
     (with-eval-after-load 'embark
       (keymap-set embark-defun-map "`" #'huan-defun)
       (keymap-set embark-identifier-map "`" #'huan-symbol)))
