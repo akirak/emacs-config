@@ -5893,6 +5893,15 @@ Transient user interfaces for various modes
     (:with-feature calc
       (:keymap "C-," #'casual-calc-tmenu)))
 #+end_src
+*** claude-code
+:PROPERTIES:
+:CREATED_TIME: [2025-03-15 Sat 14:23]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package claude-code)
+    (:global "C-=" #'claude-code-transient))
+#+end_src
 *** COMMENT codeium                                                 :completion:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-02-22 Wed 22:41]

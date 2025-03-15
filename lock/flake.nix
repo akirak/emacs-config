@@ -127,6 +127,12 @@
       repo = "casual-symbol-overlay";
       type = "github";
     };
+    claude-code = {
+      flake = false;
+      owner = "stevemolitor";
+      repo = "claude-code.el";
+      type = "github";
+    };
     closql = {
       flake = false;
       owner = "magit";
