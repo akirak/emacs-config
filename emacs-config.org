@@ -6057,7 +6057,9 @@ An unofficial Copilot plugin
 
 #+begin_src emacs-lisp
   (setup (:package copilot)
-    (:nixpkgs copilot-language-server)
+    ;; Unfree package which fails to build on CI. Add it to home.packages instead
+    ;; (:nixpkgs copilot-language-server)
+
     (:keymap "<remap> <expand-abbrev>" #'akirak-copilot-abbrev-or-complete
              ;; Remap repl-toggle in the minor mode map.
              "M-RET" #'akirak-copilot-accept-dwim
