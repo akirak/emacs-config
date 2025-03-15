@@ -5897,6 +5897,10 @@ Transient user interfaces for various modes
 :PROPERTIES:
 :CREATED_TIME: [2025-03-15 Sat 14:23]
 :END:
+#+begin_quote
+Claude Code Emacs integration
+[[https://github.com/stevemolitor/claude-code.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package claude-code)
@@ -10417,7 +10421,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 219 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
