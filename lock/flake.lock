@@ -1778,6 +1778,22 @@
         "url": "https://codeberg.org/martianh/mastodon.el.git"
       }
     },
+    "mcp": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1742126826,
+        "narHash": "sha256-yq01jmu7MzqubPowHbEX50vwJ+bu+NiTUtiBcDY9fZk=",
+        "owner": "lizqwerscott",
+        "repo": "mcp.el",
+        "rev": "7243626de4b135976f09e79111b5a5b66edc5f43",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lizqwerscott",
+        "repo": "mcp.el",
+        "type": "github"
+      }
+    },
     "mermaid-mode": {
       "flake": false,
       "locked": {
@@ -3054,6 +3070,7 @@
         "marginalia": "marginalia",
         "markdown-mode": "markdown-mode",
         "mastodon": "mastodon",
+        "mcp": "mcp",
         "mermaid-mode": "mermaid-mode",
         "mini-modeline": "mini-modeline",
         "mmm-mode": "mmm-mode",

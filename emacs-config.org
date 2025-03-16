@@ -8205,6 +8205,15 @@ Client for Mastodon, a federated social network
 #+begin_src emacs-lisp
 (setup (:package mastodon))
 #+end_src
+*** mcp
+:PROPERTIES:
+:CREATED_TIME: [2025-03-16 Sun 23:04]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package mcp)
+    (:global "<f12> a m" #'mcp-hub))
+#+end_src
 *** mermaid-mode                                        :@extra:mermaid:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]

@@ -666,6 +666,12 @@
       type = "git";
       url = "https://codeberg.org/martianh/mastodon.el.git";
     };
+    mcp = {
+      flake = false;
+      owner = "lizqwerscott";
+      repo = "mcp.el";
+      type = "github";
+    };
     mermaid-mode = {
       flake = false;
       owner = "abrochard";
