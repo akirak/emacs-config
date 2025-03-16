@@ -357,6 +357,8 @@
   (add-to-list 'embark-keymap-alist
                '(org-src-block . akirak-embark-org-babel-block-map))
   (add-to-list 'embark-keymap-alist
+               '(org-dblock . akirak-embark-org-block-map))
+  (add-to-list 'embark-keymap-alist
                '(org-babel-result . akirak-embark-org-babel-result-map))
   (add-to-list 'embark-keymap-alist
                '(org-prompt-special-block . akirak-embark-org-prompt-map))
@@ -487,6 +489,13 @@
                (buffer-substring-no-properties cbegin cend))
             . ,(cons (org-element-property :begin element)
                      (org-element-property :end element))))))
+     ((org-match-line org-dblock-start-re)
+      `(org-dblock
+        ,(match-string 0)
+        . ,(cons (match-beginning 0)
+                 (save-excursion
+                   (re-search-forward org-dblock-end-re)
+                   (match-end 0)))))
      ((org-match-line org-babel-result-regexp)
       `(org-babel-result
         ,(match-string 1)
