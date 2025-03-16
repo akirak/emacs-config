@@ -127,6 +127,12 @@
       repo = "casual-symbol-overlay";
       type = "github";
     };
+    claude-code = {
+      flake = false;
+      owner = "stevemolitor";
+      repo = "claude-code.el";
+      type = "github";
+    };
     closql = {
       flake = false;
       owner = "magit";
@@ -168,6 +174,12 @@
       flake = false;
       type = "git";
       url = "https://codeberg.org/jao/consult-recoll.git";
+    };
+    copilot = {
+      flake = false;
+      owner = "copilot-emacs";
+      repo = "copilot.el";
+      type = "github";
     };
     corfu = {
       flake = false;

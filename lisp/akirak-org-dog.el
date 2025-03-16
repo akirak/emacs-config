@@ -55,7 +55,7 @@ ARG, the target file can be changed only for that item."
   (unless (derived-mode-p 'org-mode)
     (user-error "You must run this command in org-mode."))
   (require 'akirak-capture)
-  (let* ((prop "ORG_DOG_PROJECTED_FILE")
+  (let* ((prop "DOG_DETAILS_FILE_PATH")
          ;; TODO Completion
          (relative-from-prop (org-entry-get nil prop t))
          (absolute (if (and relative-from-prop

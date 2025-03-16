@@ -196,6 +196,21 @@ are displayed in the frame."
                (compile command t))))
        (user-error "No workspace root")))))
 
+;;;###autoload
+(defun akirak-compile-cleanup-buffers ()
+  "Kill compilation buffers that have no running process."
+  (interactive)
+  (let (killed-buffers)
+    (dolist (buffer (buffer-list))
+      (when (and (akirak-compile-buffer-p buffer)
+                 (not (get-buffer-process buffer)))
+        (message "Buffer %s has no running buffer, so killing" buffer)
+        (push (buffer-name buffer) killed-buffers)
+        (kill-buffer buffer)))
+    (if killed-buffers
+        (message "Killed %d buffers: %s" (length killed-buffers) killed-buffers)
+      (message "No buffer has been killed"))))
+
 (defun akirak-compile-buffer-p (buffer)
   (or (eq (buffer-local-value 'major-mode buffer)
           'compilation-mode)
@@ -240,11 +255,19 @@ are displayed in the frame."
       (error "Directory %s is not a prefix of %s" workspace start))
     (cl-labels
         ((search (dir)
-           (dolist (file (directory-files dir))
-             (when-let* ((cell (assoc file akirak-compile-package-file-alist)))
-               (push (cons (cdr cell)
-                           dir)
-                     result)))
+           (let ((files (directory-files dir)))
+             (dolist (file files)
+               (when-let* ((cell (assoc file akirak-compile-package-file-alist)))
+                 ;; Work around pnpm workspaces.
+                 (unless (and (equal (car cell) "pnpm-lock.yaml")
+                              (member "pnpm-workspace.yaml" files))
+                   ;; Detect pnpm projects inside pnpm workspaces.
+                   (push (cons (if (and (equal (car cell) "package.json")
+                                        (locate-dominating-file dir "pnpm-workspace.yaml"))
+                                   (cdr (assoc "pnpm-lock.yaml" akirak-compile-package-file-alist))
+                                 (cdr cell))
+                               dir)
+                         result)))))
            (unless (equal (file-name-as-directory workspace)
                           (file-name-as-directory dir))
              (search (akirak-compile--parent-dir dir)))))

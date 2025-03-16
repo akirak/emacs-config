@@ -45,6 +45,8 @@ in
     };
 
     home.packages = with pkgs'; [
+      copilot-language-server
+
       # Font families used in my Emacs config
       cascadia-code
       inter

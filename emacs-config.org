@@ -1291,48 +1291,54 @@ The built-in =electric= package provides the following modes:
                                        filename))))
 
     (:status personal
-      (let (;; (mix-format '((eval . (mix-format-on-save-mode t))))
-            ;; (prettier '((eval . (prettier-on-save-mode t))))
-            (jq-format '((eval . (jq-format-on-save-mode t))))
-            (sqlformat '((eval . (sqlformat-on-save-mode t))))
-            (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
-            (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
-            (flymake-eslint '((eval . (flymake-eslint-enable))))
-            (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
-            (nixfmt '((eval . (nixfmt-on-save-mode t))))
-            (zig-fmt '((eval . (zig-format-on-save-mode t)))))
+      (let* (;; (mix-format '((eval . (mix-format-on-save-mode t))))
+             ;; (prettier '((eval . (prettier-on-save-mode t))))
+             (jq-format '((eval . (jq-format-on-save-mode t))))
+             (sqlformat '((eval . (sqlformat-on-save-mode t))))
+             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
+             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
+             (flymake-eslint '((eval . (flymake-eslint-enable))))
+             (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
+             (nixfmt '((eval . (nixfmt-on-save-mode t))))
+             (zig-fmt '((eval . (zig-format-on-save-mode t))))
+             (copilot '((eval . (copilot-mode t))))
+             (default  `((astro-ts-mode . (,@lsp-no-formatter))
+                         (css-mode . (,@lsp-no-formatter))
+                         (elixir-ts-mode . (,@lsp))
+                         (erlang-mode . (,@lsp-no-formatter))
+                         (gleam-ts-mode . (,@lsp))
+                         (go-ts-mode . (,@lsp))
+                         (haskell-mode . (,@lsp))
+                         (heex-ts-mode . (,@lsp))
+                         (js-ts-mode . (,@lsp-no-formatter))
+                         (json-ts-mode . (,@lsp-no-formatter))
+                         (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
+                         (rust-ts-mode . (,@lsp))
+                         (sql-mode . (,@sqlformat))
+                         (svelte-mode . (,@lsp ,@flymake-eslint))
+                         (tsx-ts-mode . (,@lsp-no-formatter))
+                         (tuareg-mode . ((eval . (ocaml-eglot))
+                                         ,@ocamlformat))
+                         (typescript-ts-mode . (,@lsp-no-formatter))
+                         (web-mode . (,@lsp))
+                         (zig-mode . (,@lsp-no-formatter ,@zig-fmt))
+                         (zig-ts-mode . (,@lsp-no-formatter ,@zig-fmt))
+                         ("renovate.json" . (,@jq-format)))))
         (dir-locals-set-class-variables
          'personal
          `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
            (org-mode . (eval . (jinx-mode 1)))))
         (dir-locals-set-class-variables
          'default
-         `((astro-ts-mode . (,@lsp-no-formatter))
-           (css-mode . (,@lsp-no-formatter))
-           (elixir-ts-mode . (,@lsp))
-           (erlang-mode . (,@lsp-no-formatter))
-           (gleam-ts-mode . (,@lsp))
-           (go-ts-mode . (,@lsp))
-           (haskell-mode . (,@lsp))
-           (heex-ts-mode . (,@lsp))
-           (js-ts-mode . (,@lsp-no-formatter))
-           (json-ts-mode . (,@lsp-no-formatter))
-           (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
-           (rust-ts-mode . (,@lsp))
-           (sql-mode . (,@sqlformat))
-           (svelte-mode . (,@lsp ,@flymake-eslint))
-           (tsx-ts-mode . (,@lsp-no-formatter))
-           (tuareg-mode . ((eval . (ocaml-eglot))
-                           ,@ocamlformat))
-           (typescript-ts-mode . (,@lsp-no-formatter))
-           (web-mode . (,@lsp))
-           (zig-mode . (,@lsp-no-formatter ,@zig-fmt))
-           (zig-ts-mode . (,@lsp-no-formatter ,@zig-fmt))
-           ("renovate.json" . (,@jq-format)))))
+         default)
+        (dir-locals-set-class-variables
+         'foss
+         (cons `(prog-mode . (,@copilot))
+               default)))
       (dir-locals-set-directory-class "~/config/" 'personal)
       (dir-locals-set-directory-class "~/emacs-config/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
-      (dir-locals-set-directory-class "~/work2/foss/" 'default)
+      (dir-locals-set-directory-class "~/work2/foss/" 'foss)
 
       (:set ignored-local-variable-values
             ;; github:melpa/melpa
@@ -4830,7 +4836,7 @@ This is a collection of various utilities to enhance the experience.
 
     ;; Integrate with gptel-menu
     (with-eval-after-load 'gptel-transient
-      (transient-append-suffix 'gptel-menu '(-1 1)
+      (transient-append-suffix 'gptel-menu '(-1 0)
         '("o" "org-capture" akirak-capture-gptel))))
 #+end_src
 *** akirak-comment
@@ -5887,6 +5893,19 @@ Transient user interfaces for various modes
     (:with-feature calc
       (:keymap "C-," #'casual-calc-tmenu)))
 #+end_src
+*** claude-code
+:PROPERTIES:
+:CREATED_TIME: [2025-03-15 Sat 14:23]
+:END:
+#+begin_quote
+Claude Code Emacs integration
+[[https://github.com/stevemolitor/claude-code.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package claude-code)
+    (:global "C-=" #'claude-code-transient))
+#+end_src
 *** COMMENT codeium                                                 :completion:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-02-22 Wed 22:41]
@@ -6040,7 +6059,7 @@ Recoll queries using consult
                                           (abbreviate-file-name)))
                                 'face 'font-lock-doc-face)))))
 #+end_src
-*** COMMENT copilot                                  :@extra:copilot:ARCHIVE:AI:
+*** copilot                                                 :copilot:AI:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
@@ -6051,14 +6070,16 @@ An unofficial Copilot plugin
 
 #+begin_src emacs-lisp
   (setup (:package copilot)
-    (:nixpkgs "nodejs")
+    ;; Unfree package which fails to build on CI. Add it to home.packages instead
+    ;; (:nixpkgs copilot-language-server)
+
     (:keymap "<remap> <expand-abbrev>" #'akirak-copilot-abbrev-or-complete
-           ;; Remap repl-toggle in the minor mode map.
-           "M-RET" #'akirak-copilot-accept-dwim
-           "C-M-n" #'copilot-next-completion
-           "C-M-p" #'copilot-previous-completion
-           "M-F" #'copilot-accept-completion-by-word
-           "M-E" #'copilot-accept-completion-by-line)
+             ;; Remap repl-toggle in the minor mode map.
+             "M-RET" #'akirak-copilot-accept-dwim
+             "C-M-n" #'copilot-next-completion
+             "C-M-p" #'copilot-previous-completion
+             "M-F" #'copilot-accept-completion-by-word
+             "M-E" #'copilot-accept-completion-by-line)
     (:when-loaded
       ;; Look up the command bound in global-map and use it as the fallback
       ;; command.
@@ -7376,37 +7397,31 @@ Interact with ChatGPT or other LLMs
 
       (gptel-make-anthropic "Claude"
         :stream t
-        :header (lambda ()
-                  (when-let* ((key (gptel-api-key-from-auth-source "api.anthropic.com")))
-                    `(("x-api-key" . ,key)
-                      ("anthropic-version" . "2023-06-01")))))
+        :key (lambda ()
+               (gptel-api-key-from-auth-source "api.anthropic.com")))
 
-      (gptel-make-openai "xAI"
-        :host "api.x.ai"
+      (gptel-make-perplexity "Perplexity"
         :key (lambda ()
                (gptel-api-key-from-auth-source
-                "api.x.ai"))
-        :endpoint "/v1/chat/completions"
-        :stream t
-        :models '(grok-beta))
+                "api.perplexity.ai"))
+        :stream t)
 
       (gptel-make-openai "OpenRouter"
         :host "openrouter.ai"
         :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
         :endpoint "/api/v1/chat/completions"
         :stream t
-        :models '(openai/gpt-3.5-turbo
-                  mistralai/mixtral-8x7b-instruct
-                  meta-llama/codellama-34b-instruct
-                  codellama/codellama-70b-instruct
-                  google/palm-2-codechat-bison-32k
-                  google/gemini-pro))
-
-      (gptel-make-gemini "Gemini"
-        :stream t
-        :key (lambda ()
-               (gptel-api-key-from-auth-source
-                "generativelanguage.googleapis.com")))
+        :models '(openai/gpt-4.5-preview
+                  openai/gpt-3.5-turbo
+                  openai/o3-mini-high
+                  google/gemini-2.0-flash-001
+                  google/gemini-2.0-flash-thinking-exp:free
+                  google/gemini-2.0-pro-exp-02-05:free
+                  ;; Use the native Perplexity provider for citations
+                  ;; perplexity/sonar-pro
+                  ;; perplexity/sonar-deep-research
+                  x-ai/grok-beta
+                  deepseek/deepseek-r1))
 
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
@@ -7422,6 +7437,19 @@ An AI Writing Assistant
 
 #+begin_src emacs-lisp
 (setup (:package gptel-aibo))
+#+end_src
+*** COMMENT gptel-fn-complete                                               :AI:ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2025-03-12 Wed 17:54]
+:END:
+#+begin_quote
+Complete the function at point using gptel
+[[https://github.com/mwolson/gptel-fn-complete]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package gptel-fn-complete)
+    (:global-keymap "C-c y" #'gptel-fn-complete))
 #+end_src
 *** graphql-mode                                               :web:
 :PROPERTIES:
@@ -7597,8 +7625,8 @@ Replace things with predefined alternatives
 
 #+begin_src emacs-lisp
   (setup (:package huan)
-    (:global-keymap "C-=" #'huan-symbol
-             "C-+" #'huan-defun)
+    ;; (:global-keymap "C-=" #'huan-symbol
+    ;;                 "C-+" #'huan-defun)
     (with-eval-after-load 'embark
       (keymap-set embark-defun-map "`" #'huan-defun)
       (keymap-set embark-identifier-map "`" #'huan-symbol)))
@@ -8370,7 +8398,7 @@ Frontend to experimental commands of Nix
           (make-process :buffer "*nix flake update*"
                         :name "nix-flake-update"
                         :command
-                        (list "nix" "flake" "update" "."
+                        (list "nix" "flake" "update" "--flake" "."
                               "--commit-lock-file"
                               "--inputs-from" "github:akirak/flake-pins")
                         :sentinel
@@ -8391,9 +8419,9 @@ Frontend to experimental commands of Nix
                 90))
 
     (:global-keymap "C-c n" #'nix3-transient
-             "M-g M-f" #'nix3-flake-edit
-             "<f12> n l" #'nix3-registry-list
-             "<f12> n n" #'nix3-flake-show-url))
+                    "M-g M-f" #'nix3-flake-edit
+                    "<f12> n l" #'nix3-registry-list
+                    "<f12> n n" #'nix3-flake-show-url))
 #+end_src
 **** magit-nix3
 #+begin_quote
@@ -10393,7 +10421,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 219 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
@@ -10417,6 +10445,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:Org][Org]]                 |   3 |
+| [[org-ql-search:tags:AI][AI]]                  |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -10431,7 +10460,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:fstar][fstar]]               |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
-| [[org-ql-search:tags:AI][AI]]                  |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |
@@ -10447,6 +10475,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
+| [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
@@ -10513,6 +10542,7 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
 | Heading | Todo |
 |---------+------|
+| [[copilot][copilot]] |      |
 | [[elysium][elysium]] |      |
 | [[gptel][gptel]]   |      |
 #+END:
@@ -10533,7 +10563,6 @@ To use these features, they need to be turned on at build time.
 | [[org-memento][org-memento]]     |      |
 | [[org-recur][org-recur]]       |      |
 | [[beancount][beancount]]       |      |
-| [[copilot][copilot]]         |      |
 | [[dune][dune]]            |      |
 | [[elx][elx]]             |      |
 | [[epkg][epkg]]            |      |

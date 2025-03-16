@@ -17,6 +17,18 @@
                          (if (char-uppercase-p (aref identifier 0))
                              (concat "type " identifier)
                            identifier))))))
+    (typescript-ts-mode
+     :regexp ,(rx bol "import " (+ nonl))
+     :extra-modes (tsx-ts-mode)
+     :extensions (".ts" ".tsx")
+     :source-directories ("src" "app")
+     :transform-filename
+     (lambda (filepath identifier)
+       (concat "import "
+               (when identifier
+                 (format "{ %s } from " identifier))
+               ;; TODO. Actually I use LSP in most cases, so it doesn't matter
+               (file-name-sans-extension filepath))))
     (elixir-ts-mode
      :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use"))
      :treesit-node-types ("call")

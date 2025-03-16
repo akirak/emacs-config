@@ -323,6 +323,10 @@
        :narrow ?u
        :hidden t
        :transform #'akirak-consult--prepend-upper-module)
+    ,(akirak-consult-build-project-file-source "Children"
+       :narrow ?c
+       :hidden t
+       :transform #'akirak-consult--filter-child-files)
     ,(akirak-consult-build-project-file-source "Alternate"
        :narrow ?a
        :hidden t
@@ -378,6 +382,35 @@
      (let ((default-file (concat "test/" (match-string 1 this-file) "_test.gleam")))
        (cons default-file
              (cl-remove default-file files :test #'equal))))
+    (_ files)))
+
+(defun akirak-consult--filter-child-files (files this-file)
+  (pcase this-file
+    (`nil files)
+    ((rx "/src/lib.rs" eol)
+     files)
+    ((rx (group (and "/" (+ (not (any "/")))))
+         (or (and "/" (or "index" "main")
+                  "." (+ (not (any "./"))))
+             "mod.rs"
+             "lib.rs"
+             "default.nix")
+         eol)
+     (let* ((prefix (concat (substring this-file 0 (match-beginning 0))
+                            (match-string 1 this-file)
+                            "/"))
+            (regexp (rx-to-string `(and bol ,prefix (+ (not (any "/"))) eol))))
+       (seq-filter (apply-partially #'string-match-p regexp)
+                   files)))
+    ((rx (group (and "/" (+ (not (any "/")))))
+         "." (+ (not (any "./")))
+         eol)
+     (let* ((prefix (concat (substring this-file 0 (match-beginning 0))
+                            (match-string 1 this-file)
+                            "/"))
+            (regexp (rx-to-string `(and bol ,prefix (+ (not (any "/"))) eol))))
+       (seq-filter (apply-partially #'string-match-p regexp)
+                   files)))
     (_ files)))
 
 (defun akirak-consult--prepend-upper-module (files this-file)
@@ -467,7 +500,8 @@
        :predicate
        (lambda (file)
          (string-match-p (rx-to-string `(and ,(substring this-file 0 (match-beginning 0))
-                                             "/index." (+ (not (any "./")))))
+                                             (and (? "/index")
+                                                  "." (+ (not (any "./"))))))
                          file))))
     ((rx "/" (+ (not (any "/"))) "/default.nix" eol)
      (akirak-consult--reorder-files files
