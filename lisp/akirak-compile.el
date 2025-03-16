@@ -196,6 +196,21 @@ are displayed in the frame."
                (compile command t))))
        (user-error "No workspace root")))))
 
+;;;###autoload
+(defun akirak-compile-cleanup-buffers ()
+  "Kill compilation buffers that have no running process."
+  (interactive)
+  (let (killed-buffers)
+    (dolist (buffer (buffer-list))
+      (when (and (akirak-compile-buffer-p buffer)
+                 (not (get-buffer-process buffer)))
+        (message "Buffer %s has no running buffer, so killing" buffer)
+        (push (buffer-name buffer) killed-buffers)
+        (kill-buffer buffer)))
+    (if killed-buffers
+        (message "Killed %d buffers: %s" (length killed-buffers) killed-buffers)
+      (message "No buffer has been killed"))))
+
 (defun akirak-compile-buffer-p (buffer)
   (or (eq (buffer-local-value 'major-mode buffer)
           'compilation-mode)
