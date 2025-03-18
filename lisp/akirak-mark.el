@@ -10,7 +10,6 @@
         (goto-char end)
         (activate-mark)))))
 
-;;;###autoload
 (defalias 'akirak-mark-thing-at-point #'akirak-mark-thing-transient)
 
 (akirak-mark-def-thing-at-point symbol)
