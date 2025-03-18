@@ -32,6 +32,7 @@
       (memq (syntax-ppss-context (syntax-ppss))
             '(string comment))))
 
+;;;###autoload (autoload 'akirak-mark-thing-transient "akirak-mark" nil 'interactive)
 (transient-define-prefix akirak-mark-thing-transient ()
   ["Natural language"
    :class transient-row
