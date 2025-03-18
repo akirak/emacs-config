@@ -48,12 +48,15 @@
    :class transient-row
    :if akirak-mark--in-text-p
    ("w" "word" akirak-mark-word-at-point)
-   ("s" "sentence" akirak-mark-sentence-at-point)]
+   ("s" "sentence" akirak-mark-sentence-at-point)
+   ("n" "number" akirak-mark-number-at-point)]
   ["Code"
    :class transient-row
    ("d" "defun" akirak-mark-defun-at-point)
    ("e" "sexp" akirak-mark-sexp-at-point)
-   ("l" "line" akirak-mark-line-at-point)]
+   ("l" "line" akirak-mark-line-at-point)
+   ("m" "symbol" akirak-mark-symbol-at-point)
+   ("u" "url" akirak-mark-url-at-point)]
   ["Properties"
    ("b" "button" akirak-mark-button-at-point
     :if akirak-mark--at-button-p)]
