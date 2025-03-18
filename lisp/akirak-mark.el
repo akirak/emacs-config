@@ -26,10 +26,21 @@
 (akirak-mark-def-thing-at-point line)
 (akirak-mark-def-thing-at-point number)
 
+(defun akirak-mark-button-at-point ()
+  (interactive)
+  (let ((end (next-single-property-change (point) 'button)))
+    (goto-char (previous-single-property-change (point) 'button))
+    (push-mark)
+    (goto-char end)
+    (activate-mark)))
+
 (defun akirak-mark--in-text-p ()
   (or (derived-mode-p 'text-mode)
       (memq (syntax-ppss-context (syntax-ppss))
             '(string comment))))
+
+(defun akirak-mark--at-button-p ()
+  (get-char-property (point) 'button))
 
 ;;;###autoload (autoload 'akirak-mark-thing-transient "akirak-mark" nil 'interactive)
 (transient-define-prefix akirak-mark-thing-transient ()
@@ -43,6 +54,9 @@
    ("d" "defun" akirak-mark-defun-at-point)
    ("e" "sexp" akirak-mark-sexp-at-point)
    ("l" "line" akirak-mark-line-at-point)]
+  ["Properties"
+   ("b" "button" akirak-mark-button-at-point
+    :if akirak-mark--at-button-p)]
   (interactive)
   (transient-setup 'akirak-mark-thing-transient))
 
