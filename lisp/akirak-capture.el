@@ -889,15 +889,18 @@
    :setup-children akirak-capture--heading-capture-children
    ("=" "Same level" akirak-capture--same-level-heading)
    ("+" "Subheading" akirak-capture--subheading)]
-  (interactive (list (cond
-                      ((use-region-p)
-                       (buffer-substring-no-properties begin end))
-                      (akirak-capture-bounds
-                       (buffer-substring-no-properties
-                        (car akirak-capture-bounds)
-                        (cdr akirak-capture-bounds)))
-                      (t
-                       (read-from-minibuffer "Heading: ")))))
+  (interactive (list (thread-last
+                       (cond
+                        ((use-region-p)
+                         (buffer-substring-no-properties begin end))
+                        (akirak-capture-bounds
+                         (buffer-substring-no-properties
+                          (car akirak-capture-bounds)
+                          (cdr akirak-capture-bounds)))
+                        (t
+                         (read-from-minibuffer "Heading: ")))
+                       (replace-regexp-in-string (rx (+ space)) " ")
+                       (string-trim))))
   (setq akirak-capture-initial text)
   (setq akirak-capture-clocked-buffer-info (akirak-capture--clocked-buffer-info))
   (transient-setup 'akirak-capture-append-heading-to-clock))
