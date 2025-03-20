@@ -1565,15 +1565,15 @@ Notes:
     (:set isearch-allow-scroll t
           isearch-lazy-count t)
     (:keymap "M-q" #'isearch-query-replace
-           "M-RET" (defun akirak/isearch-quit-with-region ()
-                     (interactive)
-                     (pcase-exhaustive isearch-match-data
-                       (`(,begin ,end ,_)
-                        (isearch-exit)
-                        (goto-char begin)
-                        (push-mark)
-                        (goto-char end)
-                        (activate-mark))))))
+             "M-RET" (defun akirak/isearch-quit-with-region ()
+                       (interactive)
+                       (pcase-exhaustive isearch-match-data
+                         (`(,begin ,end ,_)
+                          (isearch-exit)
+                          (goto-char begin)
+                          (push-mark)
+                          (goto-char end)
+                          (activate-mark))))))
 #+end_src
 *** jit-lock
 #+begin_src emacs-lisp
