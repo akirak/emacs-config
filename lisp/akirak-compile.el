@@ -613,7 +613,8 @@ suitable value detected according to the command line."
                 1 2 '(3 . nil))))))
     ((rx bol "tsc" space)
      (eval-when-compile
-       (let ((path-regexp (rx (+ (any "-_./[]_" alnum)))))
+       ;; $ is used in project using TanStack Router
+       (let ((path-regexp (rx (+ (any "-_./$[]_" alnum)))))
          (list
           ;; src/Annex/Repo/Commands/InfoRepo.ts:43:20
           (list (rx-to-string `(and bol (group (regexp ,path-regexp))
