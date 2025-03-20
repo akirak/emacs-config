@@ -1562,6 +1562,8 @@ Notes:
 
 #+begin_src emacs-lisp
   (setup isearch
+    (:set isearch-allow-scroll t
+          isearch-lazy-count t)
     (:keymap "M-q" #'isearch-query-replace
            "M-RET" (defun akirak/isearch-quit-with-region ()
                      (interactive)
