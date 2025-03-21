@@ -1,10 +1,10 @@
 ;;; akirak-avy.el --- Extra Avy functions -*- lexical-binding: t -*-
 
-;; Copyright (C) 2021 Akira Komamura
+;; Copyright (C) 2022-2024 Akira Komamura
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
-;; URL: https://github.com/akirak/trivial-elisps
+;; URL: https://github.com/akirak/emacs-config
 
 ;; This file is not part of GNU Emacs.
 
@@ -22,8 +22,6 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-;;; Code:
 
 ;;; Commentary:
 

@@ -1,10 +1,10 @@
 ;;; akirak-org.el --- A collection of helpers for Org -*- lexical-binding: t -*-
 
-;; Copyright (C) 2022 Akira Komamura
+;; Copyright (C) 2022-2025 Akira Komamura
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
-;; URL: https://github.com/akirak/trivial-elisps
+;; URL: https://github.com/akirak/emacs-config
 
 ;; This file is not part of GNU Emacs.
 
