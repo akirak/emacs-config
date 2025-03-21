@@ -7,6 +7,7 @@
 ;; Package-Requires: ((emacs "28.1"))
 ;; Keywords: convenience
 ;; URL: https://git.sr.ht/~akirak/akirak-mode
+;; SPDX-License-Identifier: GPL-3.0-or-later
 
 ;; This file is not part of GNU Emacs.
 
