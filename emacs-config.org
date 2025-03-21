@@ -42,6 +42,7 @@ Note: This configuration is currently built and tested only on Linux.
   - [[#natural-languages][Natural languages]]
   - [[#grep][Grep]]
   - [[#sh-emulation-keybindings][Sh-emulation keybindings]]
+- [[#license][License]]
 :END:
 ** Trying out
 :PROPERTIES:
@@ -10636,3 +10637,7 @@ To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF fi
 *** Sh-emulation keybindings
 I rebind the following keys in some keymaps to emulate a typical UNIX shell:
 C-a, C-e, C-u, C-w, C-h.
+** License
+This repository is licensed under multiple licenses.
+It follows the conventions of [[https://reuse.software/][REUSE]], and the license files are stored under [[file:LICENSES/][LICENSES]] directory.
+For the license of a specific file, check an SPDX license identifier in the file.
