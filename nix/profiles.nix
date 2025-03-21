@@ -1,3 +1,6 @@
+# Copyright (C) 2023-2024 Akira Komamura
+# SPDX-License-Identifier: MIT
+
 {
   defaultFeatures,
   lib,

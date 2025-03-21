@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (C) 2023-2024 Akira Komamura
+# SPDX-License-Identifier: MIT
 
 set -euo pipefail
 

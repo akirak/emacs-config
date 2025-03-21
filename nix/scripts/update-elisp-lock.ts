@@ -1,3 +1,5 @@
+// Copyright (C) 2023-2024 Akira Komamura
+// SPDX-License-Identifier: MIT
 // This script should be run by deno
 type Lock = {
   nodes: NodeMap

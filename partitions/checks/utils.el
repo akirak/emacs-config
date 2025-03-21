@@ -1,4 +1,6 @@
 ;;; ---  -*- lexical-binding: t -*-
+;; Copyright (C) 2022-2024 Akira Komamura
+;; SPDX-License-Identifier: MIT
 
 (require 'org)
 (require 'org-make-toc)
