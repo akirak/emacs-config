@@ -1,5 +1,34 @@
 ;;; akirak-embark.el ---  -*- lexical-binding: t -*-
 
+;; Copyright (C) 2022-2025 Akira Komamura
+
+;; Author: Akira Komamura <akira.komamura@gmail.com>
+;; Version: 0.1
+;; URL: https://github.com/akirak/emacs-config
+;; SPDX-License-Identifier: GPL-3.0-or-later
+
+;; This file is not part of GNU Emacs.
+
+;;; License:
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;;; Code:
+
+
 (require 'embark)
 
 (defvar akirak-embark-target-org-marker nil)
@@ -357,6 +386,8 @@
   (add-to-list 'embark-keymap-alist
                '(org-src-block . akirak-embark-org-babel-block-map))
   (add-to-list 'embark-keymap-alist
+               '(org-dblock . akirak-embark-org-block-map))
+  (add-to-list 'embark-keymap-alist
                '(org-babel-result . akirak-embark-org-babel-result-map))
   (add-to-list 'embark-keymap-alist
                '(org-prompt-special-block . akirak-embark-org-prompt-map))
@@ -487,6 +518,13 @@
                (buffer-substring-no-properties cbegin cend))
             . ,(cons (org-element-property :begin element)
                      (org-element-property :end element))))))
+     ((org-match-line org-dblock-start-re)
+      `(org-dblock
+        ,(match-string 0)
+        . ,(cons (match-beginning 0)
+                 (save-excursion
+                   (re-search-forward org-dblock-end-re)
+                   (match-end 0)))))
      ((org-match-line org-babel-result-regexp)
       `(org-babel-result
         ,(match-string 1)

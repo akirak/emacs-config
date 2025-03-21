@@ -1,10 +1,11 @@
 ;;; akirak-capture.el --- My capture workflow -*- lexical-binding: t -*-
 
-;; Copyright (C) 2021 Akira Komamura
+;; Copyright (C) 2022-2025 Akira Komamura
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
-;; URL: https://github.com/akirak/trivial-elisps
+;; URL: https://github.com/akirak/emacs-config
+;; SPDX-License-Identifier: GPL-3.0-or-later
 
 ;; This file is not part of GNU Emacs.
 
@@ -369,6 +370,7 @@
                                                (tab-bar-rename-tab new-tab-name)
                                                (when (fboundp 'fwb-toggle-window-split)
                                                  (fwb-toggle-window-split)))
+                                             (require 'gptel-org)
                                              (gptel-org-set-properties (point))
                                              (gptel-send)))))
                              (plist-put :after-finalize
@@ -888,15 +890,18 @@
    :setup-children akirak-capture--heading-capture-children
    ("=" "Same level" akirak-capture--same-level-heading)
    ("+" "Subheading" akirak-capture--subheading)]
-  (interactive (list (cond
-                      ((use-region-p)
-                       (buffer-substring-no-properties begin end))
-                      (akirak-capture-bounds
-                       (buffer-substring-no-properties
-                        (car akirak-capture-bounds)
-                        (cdr akirak-capture-bounds)))
-                      (t
-                       (read-from-minibuffer "Heading: ")))))
+  (interactive (list (thread-last
+                       (cond
+                        ((use-region-p)
+                         (buffer-substring-no-properties begin end))
+                        (akirak-capture-bounds
+                         (buffer-substring-no-properties
+                          (car akirak-capture-bounds)
+                          (cdr akirak-capture-bounds)))
+                        (t
+                         (read-from-minibuffer "Heading: ")))
+                       (replace-regexp-in-string (rx (+ space)) " ")
+                       (string-trim))))
   (setq akirak-capture-initial text)
   (setq akirak-capture-clocked-buffer-info (akirak-capture--clocked-buffer-info))
   (transient-setup 'akirak-capture-append-heading-to-clock))

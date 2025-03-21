@@ -1,3 +1,6 @@
+# Copyright (C) 2022-2024 Akira Komamura
+# SPDX-License-Identifier: MIT
+
 { pkgs }:
 let
   make-emacs-hook =

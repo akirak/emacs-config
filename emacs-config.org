@@ -42,6 +42,7 @@ Note: This configuration is currently built and tested only on Linux.
   - [[#natural-languages][Natural languages]]
   - [[#grep][Grep]]
   - [[#sh-emulation-keybindings][Sh-emulation keybindings]]
+- [[#license][License]]
 :END:
 ** Trying out
 :PROPERTIES:
@@ -1562,16 +1563,18 @@ Notes:
 
 #+begin_src emacs-lisp
   (setup isearch
+    (:set isearch-allow-scroll t
+          isearch-lazy-count t)
     (:keymap "M-q" #'isearch-query-replace
-           "M-RET" (defun akirak/isearch-quit-with-region ()
-                     (interactive)
-                     (pcase-exhaustive isearch-match-data
-                       (`(,begin ,end ,_)
-                        (isearch-exit)
-                        (goto-char begin)
-                        (push-mark)
-                        (goto-char end)
-                        (activate-mark))))))
+             "M-RET" (defun akirak/isearch-quit-with-region ()
+                       (interactive)
+                       (pcase-exhaustive isearch-match-data
+                         (`(,begin ,end ,_)
+                          (isearch-exit)
+                          (goto-char begin)
+                          (push-mark)
+                          (goto-char end)
+                          (activate-mark))))))
 #+end_src
 *** jit-lock
 #+begin_src emacs-lisp
@@ -8205,6 +8208,18 @@ Client for Mastodon, a federated social network
 #+begin_src emacs-lisp
 (setup (:package mastodon))
 #+end_src
+*** mcp
+:PROPERTIES:
+:CREATED_TIME: [2025-03-16 Sun 23:04]
+:END:
+#+begin_quote
+Model Context Protocol
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package mcp)
+    (:global "<f12> a m" #'mcp-hub))
+#+end_src
 *** mermaid-mode                                        :@extra:mermaid:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
@@ -8796,7 +8811,9 @@ A generic Emacs interface for proof assistants
 **** Coq                                                            :@extra:Coq:
 #+begin_src elisp
   (setup coq
-    (:nixpkgs "coq" "coqPackages.coq-lsp"))
+    ;; Disable until the situations on renaming to rocq become clear
+    ;; (:nixpkgs "coq" "coqPackages.coq-lsp")
+    )
 #+end_src
 *** puni                                       :structured__editing:
 :PROPERTIES:
@@ -10421,7 +10438,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 219 |
+| [[org-ql-search:tags:packages][packages]]            | 220 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
@@ -10620,3 +10637,7 @@ To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF fi
 *** Sh-emulation keybindings
 I rebind the following keys in some keymaps to emulate a typical UNIX shell:
 C-a, C-e, C-u, C-w, C-h.
+** License
+This repository is licensed under multiple licenses.
+It follows the conventions of [[https://reuse.software/][REUSE]], and the license files are stored under [[file:LICENSES/][LICENSES]] directory.
+For the license of a specific file, check an SPDX license identifier in the file.

@@ -1,5 +1,34 @@
 ;;; akirak-compile.el ---  -*- lexical-binding: t -*-
 
+;; Copyright (C) 2024-2025 Akira Komamura
+
+;; Author: Akira Komamura <akira.komamura@gmail.com>
+;; Version: 0.1
+;; URL: https://github.com/akirak/emacs-config
+;; SPDX-License-Identifier: GPL-3.0-or-later
+
+;; This file is not part of GNU Emacs.
+
+;;; License:
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;;; Code:
+
+
 (defcustom akirak-compile-package-file-alist
   '(("dune-project" . dune)
     ("flake.nix" . nix-flake)
@@ -613,7 +642,8 @@ suitable value detected according to the command line."
                 1 2 '(3 . nil))))))
     ((rx bol "tsc" space)
      (eval-when-compile
-       (let ((path-regexp (rx (+ (any "-_./[]_" alnum)))))
+       ;; $ is used in project using TanStack Router
+       (let ((path-regexp (rx (+ (any "-_./$[]_" alnum)))))
          (list
           ;; src/Annex/Repo/Commands/InfoRepo.ts:43:20
           (list (rx-to-string `(and bol (group (regexp ,path-regexp))

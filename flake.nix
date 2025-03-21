@@ -1,3 +1,6 @@
+# Copyright (C) 2021-2024 Akira Komamura
+# SPDX-License-Identifier: MIT
+
 {
   inputs = {
     # Should be updated from flake-pins: <https://github.com/akirak/flake-pins>

@@ -1,3 +1,6 @@
+# Copyright (C) 2024 Akira Komamura
+# SPDX-License-Identifier: MIT
+
 { inputs }:
 [
   # Bring custom packages into the scope for native dependencies.

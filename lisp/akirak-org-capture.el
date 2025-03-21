@@ -1,10 +1,11 @@
 ;;; akirak-org-capture.el --- Basic definitions for org-capture -*- lexical-binding: t -*-
 
-;; Copyright (C) 2021 Akira Komamura
+;; Copyright (C) 2022-2024 Akira Komamura
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
-;; URL: https://github.com/akirak/trivial-elisps
+;; URL: https://github.com/akirak/emacs-config
+;; SPDX-License-Identifier: GPL-3.0-or-later
 
 ;; This file is not part of GNU Emacs.
 
