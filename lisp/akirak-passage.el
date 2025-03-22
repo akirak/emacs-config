@@ -33,12 +33,6 @@
 
 (defconst akirak-passage-buffer "*Passage*")
 
-(defcustom akirak-passage-dir
-  (or (getenv "PASSAGE_DIR")
-      "~/.passage/store")
-  "Pass to the passage password store."
-  :type 'directory)
-
 (defcustom akirak-passage-executable "passage"
   "Executable name of passage."
   :type 'file)
@@ -46,6 +40,9 @@
 (defcustom akirak-passage-selection 'CLIPBOARD
   "Selection to which strings are copied."
   :type 'symbol)
+
+(defvar akirak-passage-dir nil)
+(defvar akirak-passage-process-environment nil)
 
 ;;;; Utilities
 
@@ -57,22 +54,38 @@
                            (gui-set-selection akirak-passage-selection "")
                            (message "Cleared the clipboard"))))
 
+(defun akirak-passage-configure-from-shell ()
+  (require 'exec-path-from-shell)
+  (let* ((default-directory "~/")
+         (alist (exec-path-from-shell-getenvs '("PASSAGE_DIR"
+                                                "PASSAGE_AGE"
+                                                "PASSAGE_IDENTITIES_FILE"
+                                                "PASSAGE_RECIPIENTS_FILE"))))
+    (setq akirak-passage-process-environment
+          (thread-last
+            alist
+            (seq-filter #'cdr)
+            (mapcar (pcase-lambda (`(,key . ,value))
+                      (concat key "=" value)))))
+    (setq akirak-passage-dir (cdr (assoc "PASSAGE_DIR" alist)))))
+
 ;;;; Internal API
 
 (defun akirak-passage--account-list (&optional dir)
-  (when (file-directory-p akirak-passage-dir)
-    (let* ((root (expand-file-name akirak-passage-dir))
-           (dir (if dir
-                    (expand-file-name dir root)
-                  root)))
-      (cl-flet
-          ((to-ent (file)
-             (file-name-sans-extension
-              (file-relative-name file root))))
-        (thread-last
-          (directory-files-recursively dir "\\.age\\'")
-          (mapcar #'to-ent)
-          (seq-uniq))))))
+  (if (file-directory-p akirak-passage-dir)
+      (let* ((root (expand-file-name akirak-passage-dir))
+             (dir (if dir
+                      (expand-file-name dir root)
+                    root)))
+        (cl-flet
+            ((to-ent (file)
+               (file-name-sans-extension
+                (file-relative-name file root))))
+          (thread-last
+            (directory-files-recursively dir "\\.age\\'")
+            (mapcar #'to-ent)
+            (seq-uniq))))
+    (user-error "akirak-passage-dir is not set")))
 
 (defun akirak-passage--run-process (type &rest args)
   (declare (indent 1))
@@ -107,13 +120,15 @@
            (_
             (with-current-buffer (process-buffer process)
               (insert string))))))
-    (let ((process (make-process :name "passage"
-                                 :buffer (get-buffer-create akirak-passage-buffer)
-                                 :command (cons akirak-passage-executable args)
-                                 :connection-type 'pty
-                                 :noquery t
-                                 :sentinel #'sentinel
-                                 :filter #'filter-fn)))
+    (let* ((process-environment (append akirak-passage-process-environment
+                                        process-environment))
+           (process (make-process :name "passage"
+                                  :buffer (get-buffer-create akirak-passage-buffer)
+                                  :command (cons akirak-passage-executable args)
+                                  :connection-type 'pty
+                                  :noquery t
+                                  :sentinel #'sentinel
+                                  :filter #'filter-fn)))
       (pcase-exhaustive type
         (`read
          (while (process-live-p process)
