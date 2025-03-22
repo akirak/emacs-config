@@ -98,7 +98,7 @@
             (seq-uniq))))
     (user-error "akirak-passage-dir is not set")))
 
-(defun akirak-passage--run-process (type &rest args)
+(defun akirak-passage--run-process (edit-hook &rest args)
   (declare (indent 1))
   (when (and (get-buffer-process akirak-passage-buffer)
              (process-live-p (get-buffer-process akirak-passage-buffer)))
@@ -109,10 +109,12 @@
   (cl-flet
       ((sentinel (process event)
          (cond
-          ((string= event "finished\n"))
+          ((string= event "finished\n")
+           (when (functionp edit-hook)
+             (funcall edit-hook)))
           ((string= event "open\n"))
           ((and (string= event "exited abnormally with code 1\n")
-                (eq type 'edit)))
+                edit-hook))
           (t
            (error "passage %s aborted: %s" args event))))
        ;; Touch is not supported at present. If you are using
@@ -140,21 +142,19 @@
                                   :noquery t
                                   :sentinel #'sentinel
                                   :filter #'filter-fn)))
-      (pcase-exhaustive type
-        (`default
-         (while (process-live-p process)
-           (accept-process-output process)
-           (sit-for 0.2))
-         (if (zerop (process-exit-status process))
-             (prog1 (with-current-buffer akirak-passage-buffer
-                      (goto-char (point-min))
-                      (while (and (looking-at (rx eol))
-                                  (< (point) (point-max)))
-                        (forward-line))
-                      (buffer-substring (point) (point-max)))
-               (kill-buffer akirak-passage-buffer))
-           (error "Non-zero exit code from passage. See %s" akirak-passage-buffer)))
-        (`edit)))))
+      (unless edit-hook
+        (while (process-live-p process)
+          (accept-process-output process)
+          (sit-for 0.2))
+        (if (zerop (process-exit-status process))
+            (prog1 (with-current-buffer akirak-passage-buffer
+                     (goto-char (point-min))
+                     (while (and (looking-at (rx eol))
+                                 (< (point) (point-max)))
+                       (forward-line))
+                     (buffer-substring (point) (point-max)))
+              (kill-buffer akirak-passage-buffer))
+          (error "Non-zero exit code from passage. See %s" akirak-passage-buffer))))))
 
 ;;;; Infixes
 
@@ -216,7 +216,7 @@
 (defun akirak-passage-copy-password ()
   "Copy the first line of the current password entry."
   (interactive)
-  (let ((output (akirak-passage--run-process 'default
+  (let ((output (akirak-passage--run-process nil
                   "show" akirak-passage-current-account)))
     (akirak-passage--copy-string (car (split-string output "\n")))))
 
@@ -224,15 +224,16 @@
   "Edit the current password entry."
   (interactive)
   (with-editor
-    (akirak-passage--run-process 'edit
-      "edit" akirak-passage-current-account))
-  (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
+    (akirak-passage--run-process
+        (lambda ()
+          (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
+      "edit" akirak-passage-current-account)))
 
 (defun akirak-passage-rename-entry ()
   "Rename or move the current entry."
   (interactive)
   (let ((new-account (read-string "Rename the entry: " akirak-passage-current-account)))
-    (akirak-passage--run-process 'default
+    (akirak-passage--run-process nil
       "mv" "--force" akirak-passage-current-account new-account)
     (akirak-passage--git-commit (format "Renamed %s to %s"
                                         akirak-passage-current-account
@@ -245,7 +246,7 @@
   (interactive)
   (when (yes-or-no-p (format "Delete the password entry \"%s\"? "
                              akirak-passage-current-account))
-    (akirak-passage--run-process 'default
+    (akirak-passage--run-process nil
       "rm" "--force" akirak-passage-current-account)
     (akirak-passage--git-commit (format "Deleted %s" akirak-passage-current-account))
     (message "Deleted the password entry")
