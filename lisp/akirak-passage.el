@@ -141,7 +141,7 @@
                                   :sentinel #'sentinel
                                   :filter #'filter-fn)))
       (pcase-exhaustive type
-        (`read
+        (`default
          (while (process-live-p process)
            (accept-process-output process)
            (sit-for 0.2))
@@ -202,7 +202,10 @@
   ["Read the entry"
    ("w" "Copy password" akirak-passage-copy-password)]
   ["Update the entry"
-   ("e" "Edit" akirak-passage-edit-entry)]
+   :class transient-row
+   ("e" "Edit" akirak-passage-edit-entry)
+   ("m" "Rename" akirak-passage-rename-entry)
+   ("D" "Delete" akirak-passage-delete-entry)]
   (interactive)
   (unless akirak-passage-current-account
     (setq akirak-passage-current-account (akirak-passage--read-account nil)))
@@ -213,7 +216,7 @@
 (defun akirak-passage-copy-password ()
   "Copy the first line of the current password entry."
   (interactive)
-  (let ((output (akirak-passage--run-process 'read
+  (let ((output (akirak-passage--run-process 'default
                   "show" akirak-passage-current-account)))
     (akirak-passage--copy-string (car (split-string output "\n")))))
 
@@ -224,6 +227,29 @@
     (akirak-passage--run-process 'edit
       "edit" akirak-passage-current-account))
   (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
+
+(defun akirak-passage-rename-entry ()
+  "Rename or move the current entry."
+  (interactive)
+  (let ((new-account (read-string "Rename the entry: " akirak-passage-current-account)))
+    (akirak-passage--run-process 'default
+      "mv" "--force" akirak-passage-current-account new-account)
+    (akirak-passage--git-commit (format "Renamed %s to %s"
+                                        akirak-passage-current-account
+                                        new-account))
+    (message "Renamed the password entry")
+    (setq akirak-passage-current-account new-account)))
+
+(defun akirak-passage-delete-entry ()
+  "Delete the current entry."
+  (interactive)
+  (when (yes-or-no-p (format "Delete the password entry \"%s\"? "
+                             akirak-passage-current-account))
+    (akirak-passage--run-process 'default
+      "rm" "--force" akirak-passage-current-account)
+    (akirak-passage--git-commit (format "Deleted %s" akirak-passage-current-account))
+    (message "Deleted the password entry")
+    (setq akirak-passage-current-account nil)))
 
 (provide 'akirak-passage)
 ;;; akirak-passage.el ends here
