@@ -5150,8 +5150,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:when-loaded
       (when (require 'exec-path-from-shell nil t)
         ;; Prevent from evaluating a remote shell
-        (let ((default-directory "~/"))
-          (setq akirak-passage-dir (exec-path-from-shell-getenv "PASSAGE_DIR"))))))
+        (akirak-passage-configure-from-shell))))
 #+end_src
 *** akirak-project
 #+begin_src emacs-lisp

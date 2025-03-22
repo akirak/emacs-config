@@ -30,17 +30,29 @@
 
 
 (require 'transient)
+(require 'exec-path-from-shell)
 
 (defconst akirak-passage-buffer "*Passage*")
 
 (defcustom akirak-passage-dir
-  (or (getenv "PASSAGE_DIR")
-      "~/.passage/store")
+  "~/.passage/store"
   "Pass to the passage password store."
   :type 'directory)
 
 (defcustom akirak-passage-executable "passage"
   "Executable name of passage."
+  :type 'file)
+
+(defcustom akirak-passage-age-executable "age"
+  "Executable name of age."
+  :type 'file)
+
+(defcustom akirak-passage-identities-file "~/.passage/identities"
+  ""
+  :type 'file)
+
+(defcustom akirak-passage-recipients-file "~/.passage/store/.age-recipients"
+  ""
   :type 'file)
 
 (defcustom akirak-passage-selection 'CLIPBOARD
@@ -56,6 +68,24 @@
   (run-with-timer 15 nil (lambda ()
                            (gui-set-selection akirak-passage-selection "")
                            (message "Cleared the clipboard"))))
+
+(defun akirak-passage-configure-from-shell ()
+  (let ((default-directory "~/"))
+    (pcase-dolist (`(,env . ,value) (exec-path-from-shell-getenvs
+                                     '("PASSAGE_DIR"
+                                       "PASSAGE_AGE"
+                                       "PASSAGE_IDENTITIES_FILE"
+                                       "PASSAGE_RECIPIENTS_FILE")))
+      (when value
+        (pcase env
+          ("PASSAGE_DIR"
+           (setq akirak-passage-dir value))
+          ("PASSAGE_AGE"
+           (setq akirak-passage-age-executable value))
+          ("PASSAGE_IDENTITIES_FILE"
+           (setq akirak-passage-identities-file value))
+          ("PASSAGE_RECIPIENTS_FILE"
+           (setq akirak-passage-recipients-file value)))))))
 
 ;;;; Internal API
 
@@ -107,13 +137,27 @@
            (_
             (with-current-buffer (process-buffer process)
               (insert string))))))
-    (let ((process (make-process :name "passage"
-                                 :buffer (get-buffer-create akirak-passage-buffer)
-                                 :command (cons akirak-passage-executable args)
-                                 :connection-type 'pty
-                                 :noquery t
-                                 :sentinel #'sentinel
-                                 :filter #'filter-fn)))
+    (let ((process (with-environment-variables
+                       (list
+                        ("PASSAGE_DIR"
+                         (convert-standard-filename
+                          (expand-file-name akirak-passage-dir)))
+                        ("PASSAGE_AGE"
+                         (convert-standard-filename
+                          (expand-file-name akirak-passage-age-executable)))
+                        ("PASSAGE_IDENTITIES_FILE"
+                         (convert-standard-filename
+                          (expand-file-name akirak-passage-identities-file)))
+                        ("PASSAGE_RECIPIENTS_FILE"
+                         (convert-standard-filename
+                          (expand-file-name akirak-passage-recipients-file))))
+                     (make-process :name "passage"
+                                   :buffer (get-buffer-create akirak-passage-buffer)
+                                   :command (cons akirak-passage-executable args)
+                                   :connection-type 'pty
+                                   :noquery t
+                                   :sentinel #'sentinel
+                                   :filter #'filter-fn))))
       (pcase-exhaustive type
         (`read
          (while (process-live-p process)
