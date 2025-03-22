@@ -156,11 +156,13 @@
   (oset obj value (eval (oref obj variable))))
 
 (cl-defmethod transient-infix-read ((obj akirak-passage-account-variable))
-  (let ((default (oref obj value)))
-    (completing-read (format-prompt "Account" default)
-                     (akirak-passage--account-list)
-                     nil nil nil nil
-                     default)))
+  (akirak-passage--read-account (oref obj value)))
+
+(defun akirak-passage--read-account (default)
+  (completing-read (format-prompt "Account" default)
+                   (akirak-passage--account-list)
+                   nil nil nil nil
+                   default))
 
 (cl-defmethod transient-infix-set ((obj akirak-passage-account-variable) value)
   (oset obj value value)
@@ -192,7 +194,7 @@
    ("e" "Edit" akirak-passage-edit-entry)]
   (interactive)
   (unless akirak-passage-current-account
-    (setq akirak-passage-current-account (transient-infix-read 'akirak-passage-set-account)))
+    (setq akirak-passage-current-account (akirak-passage--read-account nil)))
   (transient-setup 'akirak-passage))
 
 ;;;; Suffixes
