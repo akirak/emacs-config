@@ -30,6 +30,7 @@
 
 
 (require 'transient)
+(require 'with-editor)
 
 (defconst akirak-passage-buffer "*Passage*")
 
