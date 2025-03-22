@@ -69,6 +69,17 @@
                       (concat key "=" value)))))
     (setq akirak-passage-dir (cdr (assoc "PASSAGE_DIR" alist)))))
 
+(defun akirak-passage--git-commit (message)
+  (with-current-buffer (get-buffer-create akirak-passage-buffer)
+    (let ((process-environment (append akirak-passage-process-environment
+                                       process-environment)))
+      (unless (zerop (call-process "git" nil t nil
+                                   "add" "."))
+        (error "git-add failed"))
+      (unless (zerop (call-process "git" nil t nil
+                                   "commit" "-a" "-m" message))
+        (error "git-commit failed")))))
+
 ;;;; Internal API
 
 (defun akirak-passage--account-list (&optional dir)
@@ -211,7 +222,8 @@
   (interactive)
   (with-editor
     (akirak-passage--run-process 'edit
-      "edit" akirak-passage-current-account)))
+      "edit" akirak-passage-current-account))
+  (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
 
 (provide 'akirak-passage)
 ;;; akirak-passage.el ends here
