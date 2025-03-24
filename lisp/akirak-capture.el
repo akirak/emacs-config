@@ -1151,7 +1151,8 @@
                                "\n\n")))))
       (setq akirak-capture-gptel-topic t
             akirak-capture-headline headline
-            akirak-capture-template-options (list :body
+            akirak-capture-template-options (list :tags "@AI"
+                                                  :body
                                                   (if (and (null preamble)
                                                            (equal llm-prompt headline))
                                                       "%?"
