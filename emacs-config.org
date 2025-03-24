@@ -3671,6 +3671,11 @@ Transient commands for Org Dog
         (:with-map org-agenda-mode-map
           (:keymap "<remap> <org-agenda-refile>" #'octopus-refile))))
 
+    (:with-feature org-capture
+      (:when-loaded
+        (:with-map org-capture-mode-map
+          (:keymap "<remap> <org-capture-refile>" #'octopus-capture-refile))))
+
     (:when-loaded
       (transient-append-suffix #'octopus-find-node
         'octopus-clocked-file-suffix
