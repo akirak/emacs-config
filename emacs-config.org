@@ -3647,7 +3647,7 @@ Transient commands for Org Dog
 #+begin_src emacs-lisp
   (setup (:package octopus)
     (:global-keymap "M-g M-o" #'octopus-find-file
-             "M-s M-o" #'octopus-find-node)
+                    "M-s M-o" #'octopus-find-node)
 
     (keymap-set akirak/c-z-map "I" #'octopus-clock-in)
     (keymap-set akirak/c-z-map "C-i" #'octopus-clock-in)
