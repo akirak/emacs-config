@@ -4612,6 +4612,7 @@ Major mode for the Go programming language
   (setup js-ts-mode
     (:org-src-lang "javascript")
     (:file-match "\\.[cm]?js$" "\\.json5\\'")
+    (:mode-repl akirak/node-or-bun-repl)
     (:mode-project-roots "package.json"))
 #+end_src
 *** lua-ts-mode
@@ -4675,6 +4676,7 @@ Major mode for editing typescript
 #+begin_src emacs-lisp
   (setup typescript-ts-mode
     (:file-match "\\.ts\\'")
+    (:mode-repl akirak/node-or-bun-repl)
 
     ;; (:also-load akirak-typescript)
     (:hook (defun akirak/typescript-setup ()
@@ -4688,6 +4690,7 @@ Major mode for editing typescript
 
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
+      (:mode-repl akirak/node-or-bun-repl)
       (:org-src-lang "react")
       (:keymap "C-c C-e" #'akirak-treesit-jsx-close-tag)))
 #+end_src
@@ -9976,7 +9979,20 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
 :END:
 #+begin_src elisp
   (setup npm
-    (:package-files "package.json"))
+    (:package-files "package.json")
+
+    (defun akirak/node-or-bun-repl ()
+      (interactive)
+      (akirak-shell-exec-in-project
+          (cond
+           ((executable-find "node")
+            (list "node"))
+           ((executable-find "bun")
+            (list "bun" "repl"))
+           (t
+            (user-error "Neither node or bun is found in the exec-path")))
+        :name "javascript-repl"
+        :root default-directory)))
 #+end_src
 *** OCaml (opam and dune)
 :PROPERTIES:
