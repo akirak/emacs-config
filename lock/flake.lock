@@ -545,6 +545,22 @@
         "type": "github"
       }
     },
+    "daemons": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1734965285,
+        "narHash": "sha256-uoVaBvl/VZ5ci7qJxLAFQPBZIsrjL2+uW4ywQr/JIek=",
+        "owner": "cbowdon",
+        "repo": "daemons.el",
+        "rev": "e1c0f5bb940b8149e0db414cc77c1ce504f5e3eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cbowdon",
+        "repo": "daemons.el",
+        "type": "github"
+      }
+    },
     "dash": {
       "flake": false,
       "locked": {
@@ -1781,11 +1797,11 @@
     "mcp": {
       "flake": false,
       "locked": {
-        "lastModified": 1742476716,
-        "narHash": "sha256-GYX7Y2lrU08P66gWIfaF6UEhf8vaLhJPCqQ/ni5F4uI=",
+        "lastModified": 1742998016,
+        "narHash": "sha256-2R0yTSyyPfxBzmlk3Xo98WWroENGY5ZK41UFUFeQQeI=",
         "owner": "lizqwerscott",
         "repo": "mcp.el",
-        "rev": "b4bf5b833f28b410e4a79cb877746427b5e7d094",
+        "rev": "223b9fb69554406b7eb49abcba5fb30acdc595c5",
         "type": "github"
       },
       "original": {
@@ -2749,6 +2765,22 @@
         "type": "github"
       }
     },
+    "prodigy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1738226734,
+        "narHash": "sha256-HFLGOf3HU1V28tc3k3WnasDVX43d+pDd26bFsX+jn5w=",
+        "owner": "rejeep",
+        "repo": "prodigy.el",
+        "rev": "99908d13beeb86cea6c7675af5885133192bf6dd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rejeep",
+        "repo": "prodigy.el",
+        "type": "github"
+      }
+    },
     "promise": {
       "flake": false,
       "locked": {
@@ -2993,6 +3025,7 @@
         "cosmetic-transient": "cosmetic-transient",
         "cue-mode": "cue-mode",
         "d2-mode": "d2-mode",
+        "daemons": "daemons",
         "dash": "dash",
         "dashboard": "dashboard",
         "deadgrep": "deadgrep",
@@ -3130,6 +3163,7 @@
         "popper": "popper",
         "popup": "popup",
         "posframe": "posframe",
+        "prodigy": "prodigy",
         "promise": "promise",
         "proof-general": "proof-general",
         "puni": "puni",

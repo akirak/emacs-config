@@ -170,4 +170,10 @@
   };
 
   plz = _: super: { files = builtins.removeAttrs super.files [ "NOTES.org" ]; };
+
+  daemons = _: super: {
+    packageRequires = {
+      s = "0";
+    } // super.packageRequires;
+  };
 }

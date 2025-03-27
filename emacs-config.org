@@ -6190,6 +6190,15 @@ Major mode for working with d2 graphs
       (compile (format "d2 -w %s" (shell-quote-argument (or (buffer-file-name)
                                                             (user-error "Not visiting a file")))))))
 #+end_src
+*** daemons                                                          :processes:
+:PROPERTIES:
+:CREATED_TIME: [2025-03-27 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package daemons)
+    (:global-keymap "<f12> x d" #'daemons))
+#+end_src
 *** dashboard
 :PROPERTIES:
 :CREATED_TIME: [2023-11-18 Sat 23:10]
@@ -8802,6 +8811,15 @@ Pop a posframe (just a frame) at point
 
 #+begin_src emacs-lisp
 (setup (:package posframe))
+#+end_src
+*** prodigy                                                          :processes:
+:PROPERTIES:
+:CREATED_TIME: [2025-03-27 Thu 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package prodigy)
+    (:global-keymap "<f12> x p" #'prodigy))
 #+end_src
 *** proof-general
 :PROPERTIES:
