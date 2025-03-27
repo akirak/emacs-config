@@ -6194,6 +6194,10 @@ Major mode for working with d2 graphs
 :PROPERTIES:
 :CREATED_TIME: [2025-03-27 Thu 23:59]
 :END:
+#+begin_quote
+UI for managing init system daemons (services)
+[[https://github.com/cbowdon/daemons.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package daemons)
@@ -8230,6 +8234,7 @@ Client for Mastodon, a federated social network
 :END:
 #+begin_quote
 Model Context Protocol
+[[https://github.com/lizqwerscott/mcp.el]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -8816,6 +8821,10 @@ Pop a posframe (just a frame) at point
 :PROPERTIES:
 :CREATED_TIME: [2025-03-27 Thu 23:59]
 :END:
+#+begin_quote
+Manage external services
+[[http://github.com/rejeep/prodigy.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package prodigy)
@@ -10476,7 +10485,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 220 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
@@ -10512,6 +10521,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:fstar][fstar]]               |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
