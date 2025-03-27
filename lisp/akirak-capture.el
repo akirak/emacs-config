@@ -326,6 +326,10 @@
    ("-r" akirak-capture-doct-clock-resume)
    ("-I" akirak-capture-doct-immediate-finish)
    ("-a" akirak-capture-doct-add-annotation)]
+  ["Gptel"
+   :class transient-row
+   :if-non-nil akirak-capture-gptel-topic
+   (gptel--infix-provider)]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
@@ -666,7 +670,8 @@
    ;;                            :clock-in t :clock-resume t))
    ;;  :transient t)
    ("l" "Language study (input)" akirak-capture-language-study)
-   ("v" "Vocabulary" akirak-capture-vocabulary)]
+   ("v" "Vocabulary" akirak-capture-vocabulary)
+   ("g" "Gptel" akirak-capture-gptel :transient t)]
   ["Others" :class transient-row
    ("b" "Convert to a link to a new entry" akirak-org-convert-to-entry-link)
    ("a" "Append block to clock" akirak-capture-append-block-to-clock
@@ -1116,14 +1121,19 @@
 
 ;;;###autoload
 (defun akirak-capture-gptel (llm-prompt)
-  (interactive "sPrompt: ")
+  (interactive (list (read-string "Prompt: "
+                                  (when (use-region-p)
+                                    (buffer-substring (region-beginning)
+                                                      (region-end))))))
   (require 'gptel)
   (cl-flet
       ((file-link (filename)
          (thread-last
            (concat "file:" (abbreviate-file-name filename))
            (org-link-make-string))))
-    (let ((headline (read-string "Headline: " llm-prompt nil nil t))
+    (let ((headline (read-string "Headline: "
+                                 (akirak-capture--first-sentence llm-prompt)
+                                 nil nil t))
           ;; NOTE: This depends on the private API.
           (preamble (pcase gptel-context--alist
                       (`nil)
@@ -1672,6 +1682,18 @@ interpreter who are good at %s. Please respond concisely." dest-language))
     (buffer-substring-no-properties
      (car akirak-capture-bounds)
      (cdr akirak-capture-bounds)))))
+
+(defun akirak-capture--first-sentence (text)
+  (with-temp-buffer
+    (insert text)
+    (goto-char (point-min))
+    (goto-char (cdr (bounds-of-thing-at-point 'sentence)))
+    (delete-region (point) (point-max))
+    (goto-char (point-min))
+    (while (re-search-forward (rx (* blank) "\n" (* blank))
+                              nil t)
+      (replace-match " "))
+    (string-trim (buffer-string))))
 
 (defun akirak-capture--goto-backlog ()
   (widen)
