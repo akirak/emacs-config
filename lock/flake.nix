@@ -205,6 +205,12 @@
       repo = "d2-mode";
       type = "github";
     };
+    daemons = {
+      flake = false;
+      owner = "cbowdon";
+      repo = "daemons.el";
+      type = "github";
+    };
     dash = {
       flake = false;
       owner = "magnars";
@@ -1034,6 +1040,12 @@
       flake = false;
       owner = "tumashu";
       repo = "posframe";
+      type = "github";
+    };
+    prodigy = {
+      flake = false;
+      owner = "rejeep";
+      repo = "prodigy.el";
       type = "github";
     };
     promise = {

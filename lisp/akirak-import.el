@@ -51,6 +51,7 @@
      :extra-modes (tsx-ts-mode)
      :extensions (".ts" ".tsx")
      :source-directories ("src" "app")
+     :fixup-function akirak-import--typescript-fixup
      :transform-filename
      (lambda (filepath identifier)
        (concat "import "
@@ -99,7 +100,7 @@
      (user-error "Unsupported mode"))
     (`(,mode . ,(map :regexp :treesit-node-types :extra-modes
                      :extensions :source-directories :transform-filename
-                     :goto-insert-location
+                     :goto-insert-location :fixup-function
                      :inside-tree-sitter-node :make-default))
      (let* ((existing-statements (akirak-import--collect-statements (cons mode extra-modes)
                                                                     :regexp regexp
@@ -133,6 +134,7 @@
                              (funcall make-default pattern lines)))
           :goto-insert-location goto-insert-location
           :inside-tree-sitter-node inside-tree-sitter-node
+          :fixup-function fixup-function
           :regexp regexp))))))
 
 (cl-defun akirak-import--collect-statements (modes &key regexp treesit-node-types)
@@ -204,25 +206,33 @@
             (check-alist imenu--index-alist)))))))
 
 (cl-defun akirak-import--insert-line (content &key regexp inside-tree-sitter-node
-                                              goto-insert-location)
+                                              goto-insert-location fixup-function)
   ;; Save the position so the user can return the position being edited.
   (push-mark)
   (save-excursion
     (save-restriction
       (goto-char (point-min))
-      (cond
-       ((and regexp
-             (re-search-forward regexp nil t))
-        (back-to-indentation)
-        (open-line 1)
-        (insert content))
-       (goto-insert-location
-        (funcall goto-insert-location)
-        (insert content))
-       (inside-tree-sitter-node)
-       (t
-        (open-line 1)
-        (insert content))))))
+      (let (pos)
+        (cond
+         ((and regexp
+               (re-search-forward regexp nil t))
+          (back-to-indentation)
+          (open-line 1)
+          (setq pos (point))
+          (insert content))
+         (goto-insert-location
+          (funcall goto-insert-location)
+          (setq pos (point))
+          (insert content))
+         (inside-tree-sitter-node)
+         (t
+          (open-line 1)
+          (setq pos (point))
+          (insert content)))
+        (when pos
+          (goto-char pos)
+          (when (functionp fixup-function)
+            (funcall fixup-function content)))))))
 
 (defun akirak-import--elixir-insert-location ()
   (re-search-forward (rx bol "defmodule" (+ space)
@@ -238,6 +248,80 @@
           (beginning-of-line 2))
         (newline-and-indent 2))
     (open-line 1)))
+
+(defun akirak-import--typescript-fixup (&optional _content)
+  (akirak-import--typescript-merge-statement))
+
+(defun akirak-import--typescript-merge-statement ()
+  "Merge the import statements of named imports from the same module."
+  (cl-flet*
+      ((get-nodes ()
+         (thread-last
+           (treesit-node-at (point))
+           (treesit-node-parent)
+           (treesit-node-children)))
+       (node-types (nodes)
+         (mapcar #'treesit-node-type nodes))
+       (string-content (node)
+         (pcase (treesit-node-children node)
+           ((and `(,_open ,fragment ,_close)
+                 (guard (equal (treesit-node-type fragment)
+                               "string_fragment")))
+            (treesit-node-text fragment))))
+       (import-spec-p (node)
+         (equal (treesit-node-type node)
+                "import_specifier"))
+       (named-imports-from-clause (node)
+         (pcase (car (treesit-node-children node))
+           ((and child
+                 (guard (equal (treesit-node-type child) "named_imports")))
+            (thread-last
+              (treesit-node-children child)
+              (cdr)
+              (butlast)
+              (seq-filter #'import-spec-p)
+              (mapcar #'treesit-node-text)))))
+       (get-named-imports (&optional nodes)
+         (let ((nodes (or nodes (get-nodes))))
+           (pcase (node-types nodes)
+             ((and `("import" "import_clause" "from" "string")
+                   (let imports (named-imports-from-clause (nth 1 nodes)))
+                   (guard imports))
+              (list (string-content (car (last nodes)))
+                    imports))
+             ((and `("import" "type" "import_clause" "from" "string")
+                   (let imports (named-imports-from-clause (nth 2 nodes)))
+                   (guard imports))
+              (list (string-content (car (last nodes)))
+                    imports))))))
+    (pcase-let* ((new-nodes (get-nodes))
+                 (`(,source-module ,new-imports) (get-named-imports new-nodes))
+                 (bounds (cons (treesit-node-start (car new-nodes))
+                               (treesit-node-end (car (last new-nodes))))))
+      (goto-char (cdr bounds))
+      (catch 'import-found
+        (while (re-search-forward (rx bol "import") nil t)
+          (let ((end (point)))
+            (goto-char (match-beginning 0))
+            (pcase (get-nodes)
+              ((and nodes
+                    (let `(,this-module ,imports) (get-named-imports nodes))
+                    (guard (equal this-module source-module))
+                    (let merged-imports (thread-last
+                                          (append imports new-imports)
+                                          (seq-uniq)))
+                    (let quoted-source (treesit-node-text (car (last nodes)))))
+               (delete-region (treesit-node-start (car nodes))
+                              (treesit-node-end (car (last nodes))))
+               (delete-region (car bounds) (cdr bounds))
+               (insert (format "import { %s } from %s"
+                               (string-join merged-imports ", ")
+                               quoted-source))
+               (goto-char (car bounds))
+               (when (eolp)
+                 (delete-char 1))
+               (throw 'import-found t)))
+            (goto-char end)))))))
 
 (provide 'akirak-import)
 ;;; akirak-import.el ends here

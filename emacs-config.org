@@ -3647,7 +3647,7 @@ Transient commands for Org Dog
 #+begin_src emacs-lisp
   (setup (:package octopus)
     (:global-keymap "M-g M-o" #'octopus-find-file
-             "M-s M-o" #'octopus-find-node)
+                    "M-s M-o" #'octopus-find-node)
 
     (keymap-set akirak/c-z-map "I" #'octopus-clock-in)
     (keymap-set akirak/c-z-map "C-i" #'octopus-clock-in)
@@ -3670,6 +3670,11 @@ Transient commands for Org Dog
       (:when-loaded
         (:with-map org-agenda-mode-map
           (:keymap "<remap> <org-agenda-refile>" #'octopus-refile))))
+
+    (:with-feature org-capture
+      (:when-loaded
+        (:with-map org-capture-mode-map
+          (:keymap "<remap> <org-capture-refile>" #'octopus-capture-refile))))
 
     (:when-loaded
       (transient-append-suffix #'octopus-find-node
@@ -4607,6 +4612,7 @@ Major mode for the Go programming language
   (setup js-ts-mode
     (:org-src-lang "javascript")
     (:file-match "\\.[cm]?js$" "\\.json5\\'")
+    (:mode-repl akirak/node-or-bun-repl)
     (:mode-project-roots "package.json"))
 #+end_src
 *** lua-ts-mode
@@ -4670,6 +4676,7 @@ Major mode for editing typescript
 #+begin_src emacs-lisp
   (setup typescript-ts-mode
     (:file-match "\\.ts\\'")
+    (:mode-repl akirak/node-or-bun-repl)
 
     ;; (:also-load akirak-typescript)
     (:hook (defun akirak/typescript-setup ()
@@ -4683,6 +4690,7 @@ Major mode for editing typescript
 
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
+      (:mode-repl akirak/node-or-bun-repl)
       (:org-src-lang "react")
       (:keymap "C-c C-e" #'akirak-treesit-jsx-close-tag)))
 #+end_src
@@ -5150,8 +5158,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:when-loaded
       (when (require 'exec-path-from-shell nil t)
         ;; Prevent from evaluating a remote shell
-        (let ((default-directory "~/"))
-          (setq akirak-passage-dir (exec-path-from-shell-getenv "PASSAGE_DIR"))))))
+        (akirak-passage-configure-from-shell))))
 #+end_src
 *** akirak-project
 #+begin_src emacs-lisp
@@ -6182,6 +6189,19 @@ Major mode for working with d2 graphs
       (interactive nil d2-mode)
       (compile (format "d2 -w %s" (shell-quote-argument (or (buffer-file-name)
                                                             (user-error "Not visiting a file")))))))
+#+end_src
+*** daemons                                                          :processes:
+:PROPERTIES:
+:CREATED_TIME: [2025-03-27 Thu 23:59]
+:END:
+#+begin_quote
+UI for managing init system daemons (services)
+[[https://github.com/cbowdon/daemons.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package daemons)
+    (:global-keymap "<f12> x d" #'daemons))
 #+end_src
 *** dashboard
 :PROPERTIES:
@@ -7419,12 +7439,14 @@ Interact with ChatGPT or other LLMs
                   openai/o3-mini-high
                   google/gemini-2.0-flash-001
                   google/gemini-2.0-flash-thinking-exp:free
-                  google/gemini-2.0-pro-exp-02-05:free
+                  google/gemini-2.5-pro-exp-03-25:free
                   ;; Use the native Perplexity provider for citations
                   ;; perplexity/sonar-pro
                   ;; perplexity/sonar-deep-research
-                  x-ai/grok-beta
-                  deepseek/deepseek-r1))
+                  x-ai/grok-2-1212
+                  deepseek/deepseek-chat-v3-0324:free
+                  deepseek/deepseek-chat-v3-0324
+                  deepseek/deepseek-r1-zero:free))
 
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
@@ -8214,6 +8236,7 @@ Client for Mastodon, a federated social network
 :END:
 #+begin_quote
 Model Context Protocol
+[[https://github.com/lizqwerscott/mcp.el]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -8795,6 +8818,19 @@ Pop a posframe (just a frame) at point
 
 #+begin_src emacs-lisp
 (setup (:package posframe))
+#+end_src
+*** prodigy                                                          :processes:
+:PROPERTIES:
+:CREATED_TIME: [2025-03-27 Thu 23:59]
+:END:
+#+begin_quote
+Manage external services
+[[http://github.com/rejeep/prodigy.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package prodigy)
+    (:global-keymap "<f12> x p" #'prodigy))
 #+end_src
 *** proof-general
 :PROPERTIES:
@@ -9972,7 +10008,20 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
 :END:
 #+begin_src elisp
   (setup npm
-    (:package-files "package.json"))
+    (:package-files "package.json")
+
+    (defun akirak/node-or-bun-repl ()
+      (interactive)
+      (akirak-shell-exec-in-project
+          (cond
+           ((executable-find "node")
+            (list "node"))
+           ((executable-find "bun")
+            (list "bun" "repl"))
+           (t
+            (user-error "Neither node or bun is found in the exec-path")))
+        :name "javascript-repl"
+        :root default-directory)))
 #+end_src
 *** OCaml (opam and dune)
 :PROPERTIES:
@@ -10438,7 +10487,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 220 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
@@ -10474,6 +10523,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
 | [[org-ql-search:tags:fstar][fstar]]               |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
