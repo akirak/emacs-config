@@ -7439,12 +7439,14 @@ Interact with ChatGPT or other LLMs
                   openai/o3-mini-high
                   google/gemini-2.0-flash-001
                   google/gemini-2.0-flash-thinking-exp:free
-                  google/gemini-2.0-pro-exp-02-05:free
+                  google/gemini-2.5-pro-exp-03-25:free
                   ;; Use the native Perplexity provider for citations
                   ;; perplexity/sonar-pro
                   ;; perplexity/sonar-deep-research
-                  x-ai/grok-beta
-                  deepseek/deepseek-r1))
+                  x-ai/grok-2-1212
+                  deepseek/deepseek-chat-v3-0324:free
+                  deepseek/deepseek-chat-v3-0324
+                  deepseek/deepseek-r1-zero:free))
 
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
