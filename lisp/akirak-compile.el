@@ -220,14 +220,17 @@ are displayed in the frame."
                (cl-pushnew command history)
                (puthash key history akirak-compile-per-workspace-history))
              (if (equal arg '(4))
-                 (compilation-start command t (akirak-compile--buffer-name))
+                 (compilation-start command t
+                                    (cl-constantly (akirak-compile--buffer-name)))
                (compile command t))))
        (user-error "No workspace root")))))
 
 (defun akirak-compile--buffer-name ()
-  (generate-new-buffer-name (concat (file-name-nondirectory
+  (generate-new-buffer-name (concat "*"
+                                    (file-name-nondirectory
                                      (directory-file-name default-directory))
-                                    "-compilation")
+                                    "-compilation"
+                                    "*")
                             t))
 
 ;;;###autoload
