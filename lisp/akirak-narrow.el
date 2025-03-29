@@ -54,14 +54,16 @@ When a universal prefix argument is given, create an indirect buffer
 to the corresponding area instead of narrowing to it. If the current buffer
 is an indirect buffer, this command doesn't do anything."
   (interactive "P")
-  (declare (interactive-only))
   (cond
    (arg
     (akirak-narrow--indirect))
    ((buffer-narrowed-p)
     (widen))
    ((region-active-p)
-    (narrow-to-region (region-beginning) (region-end)))
+    (let ((begin (region-beginning))
+          (end (region-end)))
+      (deactivate-mark)
+      (narrow-to-region begin end)))
    (t
     (if-let* ((mode (apply #'derived-mode-p (thread-last
                                               akirak-narrow-narrow-command-alist
@@ -85,12 +87,22 @@ is an indirect buffer, this command doesn't do anything."
         (funcall (alist-get mode akirak-narrow-indirect-command-alist))
       (let ((name (or (when (require 'which-func nil t)
                         (which-function))
-                      (read-string "Name of the indirect buffer to create: "))))
+                      (read-string "Name of the indirect buffer to create: ")))
+            (region (when (region-active-p)
+                      (cons (region-beginning)
+                            (region-end)))))
+        (when region
+          (deactivate-mark))
         (with-current-buffer (make-indirect-buffer (current-buffer)
                                                    (generate-new-buffer-name name)
                                                    t)
-          (akirak-narrow-or-widen-dwim nil)
-          (set-mark nil)
+          (save-excursion
+            (when region
+              (goto-char (car region))
+              (push-mark)
+              (goto-char (cdr region))
+              (activate-mark))
+            (akirak-narrow-or-widen-dwim nil))
           (pop-to-buffer-same-window (current-buffer)))))))
 
 ;;;###autoload
