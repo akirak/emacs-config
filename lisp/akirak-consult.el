@@ -159,8 +159,8 @@
 
 (defvar akirak-consult--project-files-cache nil)
 
-(defun akirak-consult--project-files (&optional prepend-root)
-  (when-let* ((default-directory (akirak-consult--project-root)))
+(defun akirak-consult--project-files (&optional prepend-root root)
+  (when-let* ((default-directory (or root (akirak-consult--project-root))))
     (if-let* ((cache (and akirak-consult--project-files-cache
                           (assoc default-directory akirak-consult--project-files-cache)))
               (file-list (if (equal (ignore-errors
