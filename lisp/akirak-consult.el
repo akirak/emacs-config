@@ -418,6 +418,18 @@
     (`nil files)
     ((rx "/src/lib.rs" eol)
      files)
+    ((rx "/routes/"
+         (+ anything)
+         (group (or ".tsx" ".jsx"))
+         eol)
+     (let* ((prefix (substring this-file 0 (match-beginning 1)))
+            (ext (match-string 1 this-file))
+            (regexp (rx-to-string `(and bol ,prefix "."
+                                        (+ (not (any "./")))
+                                        ,ext
+                                        eol))))
+       (seq-filter (apply-partially #'string-match-p regexp)
+                   files)))
     ((rx (group (and "/" (+ (not (any "/")))))
          (or (and "/" (or "index" "main")
                   "." (+ (not (any "./"))))
@@ -506,6 +518,21 @@
          (list (concat (substring this-file 0 (match-beginning 1))
                        (match-string 1 this-file)
                        ext)))))
+    ;; TanStack Router.
+    ((rx "/routes/"
+         (+ anything)
+         (group "." (+ (not (any "./"))))
+         (group (or ".tsx" ".jsx"))
+         eol)
+     (let* ((path (substring this-file 0 (match-beginning 1)))
+            (ext (match-string 2 this-file))
+            (groups (seq-group-by `(lambda (file)
+                                     (and (string-suffix-p ,ext file)
+                                          (string-prefix-p (file-name-sans-extension file)
+                                                           ,path)))
+                                  files)))
+       (append (seq-sort-by #'length #'> (cdr (assq t groups)))
+               (cdr (assq nil groups)))))
     ((rx "/" (+ (not (any "/")))
          "/index." (+ (not (any "./"))) eol)
      (let ((dir (substring this-file 0 (match-beginning 0))))
@@ -557,6 +584,7 @@
         (throw 'common-element file)))))
 
 (cl-defun akirak-consult--reorder-files (files &key preceding-files predicate)
+  "Return a reordered list of files according to a certain condition."
   (declare (indent 1))
   (cond
    (preceding-files
