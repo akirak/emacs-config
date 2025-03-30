@@ -178,6 +178,14 @@ in
           emacsPackage = (import inputs.flake-pins).packages.${pkgs.system}.emacs;
         });
 
+        # Using Emacs stable for reproducing configuration issues.
+        emacs-stable-on-tmpdir =
+          pkgs.callPackage ./nix/lib/tmpInitDirWrapper.nix { } "emacs-tmpdir"
+            (makeConfig {
+              inherit pkgs;
+              emacsPackage = pkgs.emacs;
+            });
+
         # archive-builder = pkgs.makeEmacsTwistArchive {
         #   name = "build-emacs-${name}-archive";
         #   earlyInitFile = ./emacs/early-init.el;
