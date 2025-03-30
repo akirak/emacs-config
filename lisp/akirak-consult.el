@@ -606,7 +606,8 @@
          (default-directory (expand-file-name dir))
          (selected (consult--multi akirak-consult-project-sources
                                    :require-match (confirm-nonexistent-file-or-buffer)
-                                   :prompt "Switch to: "
+                                   :prompt (format "Switch in project from \"%s\": "
+                                                   (buffer-name))
                                    :history 'consult--buffer-history
                                    :sort nil)))
     (cl-case (plist-get (cdr selected) :category)
