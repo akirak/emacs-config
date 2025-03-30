@@ -4549,6 +4549,7 @@ Major mode for the Go programming language
 #+begin_src elisp
   (setup heex-ts-mode
     (:mode-project-roots "mix.exs")
+    (:mode-repl akirak/iex-dwim)
     (:local-set electric-pair-pairs '((?% . ?%)))
     (:when-loaded
       ;; These workarounds are only necessary due to upstream inconsistencies.
