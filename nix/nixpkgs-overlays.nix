@@ -13,18 +13,6 @@
       ;
   })
 
-  # Add extra tree-sitter grammars that are not included in nixpkgs
-  # yet.
-  (_: prev: {
-    tree-sitter = prev.tree-sitter.override {
-      extraGrammars = {
-        tree-sitter-astro = {
-          src = inputs.tree-sitter-astro.outPath;
-        };
-      };
-    };
-  })
-
   #   # makeEmacsTwistArchive
   #   inputs.archiver.overlays.default
 
