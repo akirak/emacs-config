@@ -432,6 +432,12 @@
       repo = "flymake-collection";
       type = "github";
     };
+    flymake-sqlfluff = {
+      flake = false;
+      owner = "erickgnavar";
+      repo = "flymake-sqlfluff";
+      type = "github";
+    };
     fsharp-mode = {
       flake = false;
       owner = "fsharp";

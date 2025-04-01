@@ -7138,6 +7138,26 @@ A bash/sh Flymake backend powered by ShellCheck
   (setup (:package flymake-shellcheck)
     (:nixpkgs "shellcheck"))
 #+end_src
+*** flymake-sqlfluff
+:PROPERTIES:
+:CREATED_TIME: [2025-04-01 Tue 16:15]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-sqlfluff)
+    (:nixpkgs sqlfluff)
+    (add-hook 'sql-mode-hook
+              (defun akirak/flymake-sqlfluff-setup ()
+                (flymake-sqlfluff-load)
+                (flymake-mode)))
+
+    ;; Also define the formatter
+    (:reformatters
+     (sqlfluff-format
+      :program "sqlfluff"
+      ;; Use the same dialect as flymake-sqlfluff
+      :args (list "format" "--dialect" flymake-sqlfluff-dialect "-"))))
+#+end_src
 *** COMMENT forge                                                   :VC:project:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
