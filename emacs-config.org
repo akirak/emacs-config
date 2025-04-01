@@ -7142,6 +7142,10 @@ A bash/sh Flymake backend powered by ShellCheck
 :PROPERTIES:
 :CREATED_TIME: [2025-04-01 Tue 16:15]
 :END:
+#+begin_quote
+A flymake plugin for SQL files using sqlfluff
+[[https://github.com/erickgnavar/flymake-sqlfluff]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package flymake-sqlfluff)
@@ -10508,7 +10512,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 222 |
+| [[org-ql-search:tags:packages][packages]]            | 223 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
