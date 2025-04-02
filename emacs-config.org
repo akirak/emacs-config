@@ -8266,7 +8266,12 @@ Model Context Protocol
 
 #+begin_src emacs-lisp
   (setup (:package mcp)
-    (:global "<f12> a m" #'mcp-hub))
+    (:global "<f12> a m" #'mcp-hub)
+    (:set mcp-hub-servers
+          `(("playwright-headless"
+             :command "nix"
+             :args ("run" "github:akirak/nix-playwright-mcp"
+                    "--" "--headless")))))
 #+end_src
 *** mermaid-mode                                        :@extra:mermaid:
 :PROPERTIES:
