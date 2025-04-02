@@ -3417,6 +3417,16 @@ Converts web pages into Org
                       ("|" . "│")
                       ("[【】]" . ""))))))
 #+end_src
+**** orgabilize-playwright
+:PROPERTIES:
+:CREATED_TIME: [2025-04-02 Wed 20:28]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package orgabilize-playwright)
+    (:set orgabilize-use-playwright t
+          orgabilize-playwright-mcp-name "playwright-headless"))
+#+end_src
 *** org-autolist
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 19:26]

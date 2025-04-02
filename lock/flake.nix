@@ -975,6 +975,12 @@
       repo = "orgabilize.el";
       type = "github";
     };
+    orgabilize-playwright = {
+      flake = false;
+      owner = "akirak";
+      repo = "orgabilize.el";
+      type = "github";
+    };
     orgit = {
       flake = false;
       owner = "magit";

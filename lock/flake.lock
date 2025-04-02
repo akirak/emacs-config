@@ -2575,11 +2575,27 @@
     "orgabilize": {
       "flake": false,
       "locked": {
-        "lastModified": 1702777471,
-        "narHash": "sha256-tosfZHyP7Zn+iWANuVk1Gnh3BwWrYMlN+61rLZHJ4Po=",
+        "lastModified": 1743592593,
+        "narHash": "sha256-xRBegzTHo4PlveTJfcwbeH22hMjDqn/2iISjTB4C0Nc=",
         "owner": "akirak",
         "repo": "orgabilize.el",
-        "rev": "a8b4f2f846f5f0668b5f49867c8fdeb10b7b0bcf",
+        "rev": "b605c5ca8c9ea01730ee67e63ea48aea3a70830f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "orgabilize.el",
+        "type": "github"
+      }
+    },
+    "orgabilize-playwright": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1743592593,
+        "narHash": "sha256-xRBegzTHo4PlveTJfcwbeH22hMjDqn/2iISjTB4C0Nc=",
+        "owner": "akirak",
+        "repo": "orgabilize.el",
+        "rev": "b605c5ca8c9ea01730ee67e63ea48aea3a70830f",
         "type": "github"
       },
       "original": {
@@ -3168,6 +3184,7 @@
         "org-super-links": "org-super-links",
         "org-volume": "org-volume",
         "orgabilize": "orgabilize",
+        "orgabilize-playwright": "orgabilize-playwright",
         "orgit": "orgit",
         "ov": "ov",
         "ox-gfm": "ox-gfm",
