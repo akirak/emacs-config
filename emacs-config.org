@@ -3421,6 +3421,10 @@ Converts web pages into Org
 :PROPERTIES:
 :CREATED_TIME: [2025-04-02 Wed 20:28]
 :END:
+#+begin_quote
+Playwright backend for scraping web pages
+[[https://github.com/akirak/orgabilize.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package orgabilize-playwright)
@@ -10527,7 +10531,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 223 |
+| [[org-ql-search:tags:packages][packages]]            | 224 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
