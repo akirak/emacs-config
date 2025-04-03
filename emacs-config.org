@@ -10536,8 +10536,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+RESULTS: tag-statistics
 | [[org-ql-search:tags:packages][packages]]            | 224 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
+| [[org-ql-search:tags:@extra][@extra]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
-| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
@@ -10569,6 +10569,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:keybindings][keybindings]]         |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
+| [[org-ql-search:tags:MCP][MCP]]                 |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
@@ -10671,24 +10672,26 @@ I am also trying out other editors for coding, which is not documented here.
 To use these features, they need to be turned on at build time.
 
 #+BEGIN: org-ql :query "tags:@extra" :columns (heading todo)
-| Heading         | Todo |
-|-----------------+------|
-| [[org-bb][org-bb]]          |      |
-| [[org-memento][org-memento]]     |      |
-| [[org-recur][org-recur]]       |      |
-| [[beancount][beancount]]       |      |
-| [[dune][dune]]            |      |
-| [[elx][elx]]             |      |
-| [[epkg][epkg]]            |      |
-| [[epkg-marginalia][epkg-marginalia]] |      |
-| [[flycheck][flycheck]]        |      |
-| [[fstar-mode][fstar-mode]]      |      |
-| [[lean4-mode][lean4-mode]]      |      |
-| [[lsp-mode][lsp-mode]]        |      |
-| [[mermaid-mode][mermaid-mode]]    |      |
-| [[Coq][Coq]]             |      |
-| [[tuareg][tuareg]]          |      |
-| [[utop][utop]]            |      |
+| Heading               | Todo |
+|-----------------------+------|
+| [[orgabilize-playwright][orgabilize-playwright]] |      |
+| [[org-bb][org-bb]]                |      |
+| [[org-memento][org-memento]]           |      |
+| [[org-recur][org-recur]]             |      |
+| [[beancount][beancount]]             |      |
+| [[dune][dune]]                  |      |
+| [[elx][elx]]                   |      |
+| [[epkg][epkg]]                  |      |
+| [[epkg-marginalia][epkg-marginalia]]       |      |
+| [[flycheck][flycheck]]              |      |
+| [[fstar-mode][fstar-mode]]            |      |
+| [[lean4-mode][lean4-mode]]            |      |
+| [[lsp-mode][lsp-mode]]              |      |
+| [[mcp][mcp]]                   |      |
+| [[mermaid-mode][mermaid-mode]]          |      |
+| [[Coq][Coq]]                   |      |
+| [[tuareg][tuareg]]                |      |
+| [[utop][utop]]                  |      |
 #+END:
 *** Links
 :PROPERTIES:
