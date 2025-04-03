@@ -3417,7 +3417,7 @@ Converts web pages into Org
                       ("|" . "│")
                       ("[【】]" . ""))))))
 #+end_src
-**** orgabilize-playwright
+**** orgabilize-playwright                                   :@extra:MCP:
 :PROPERTIES:
 :CREATED_TIME: [2025-04-02 Wed 20:28]
 :END:
@@ -8271,7 +8271,7 @@ Client for Mastodon, a federated social network
 #+begin_src emacs-lisp
 (setup (:package mastodon))
 #+end_src
-*** mcp
+*** mcp                                                             :MCP:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2025-03-16 Sun 23:04]
 :END:
