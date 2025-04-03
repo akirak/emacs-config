@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2024 Akira Komamura
+# Copyright (C) 2021-2025 Akira Komamura
 # SPDX-License-Identifier: MIT
 
 {
