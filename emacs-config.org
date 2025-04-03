@@ -3428,6 +3428,8 @@ Playwright backend for scraping web pages
 
 #+begin_src emacs-lisp
   (setup (:package orgabilize-playwright)
+    ;; A custom package from github:akirak/nix-playwright-mcp
+    (:nixpkgs playwright-mcp)
     (:set orgabilize-use-playwright t
           orgabilize-playwright-mcp-name "playwright-headless"))
 #+end_src
@@ -8283,9 +8285,10 @@ Model Context Protocol
     (:global "<f12> a m" #'mcp-hub)
     (:set mcp-hub-servers
           `(("playwright-headless"
-             :command "nix"
-             :args ("run" "github:akirak/nix-playwright-mcp"
-                    "--" "--headless")))))
+             ;; Use the pre-downloaded Nix package. An alternative is
+             ;; `nix run github:akirak/nix-playwright-mcp --`.
+             :command "mcp-server-playwright"
+             :args ("--headless")))))
 #+end_src
 *** mermaid-mode                                        :@extra:mermaid:
 :PROPERTIES:

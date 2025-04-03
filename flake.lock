@@ -299,6 +299,20 @@
         "type": "github"
       }
     },
+    "nixpkgs_5": {
+      "locked": {
+        "lastModified": 1742395137,
+        "narHash": "sha256-WWNNjCSzQCtATpCFEijm81NNG1xqlLMVbIzXAiZysbs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "2a725d40de138714db4872dc7405d86457aa17ad",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
     "nongnu-elpa": {
       "flake": false,
       "locked": {
@@ -330,6 +344,24 @@
         "type": "github"
       }
     },
+    "playwright-mcp": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_5"
+      },
+      "locked": {
+        "lastModified": 1743565138,
+        "narHash": "sha256-nksJI7qrwjySvV+28fX2QkNVanfYjCxID+7oWHHjeXU=",
+        "owner": "akirak",
+        "repo": "nix-playwright-mcp",
+        "rev": "33a7f01c01fdb7cedecded97f409e18099dd6455",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "nix-playwright-mcp",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "archiver": "archiver",
@@ -342,6 +374,7 @@
         "nixpkgs": "nixpkgs_4",
         "nongnu-elpa": "nongnu-elpa",
         "org-babel": "org-babel",
+        "playwright-mcp": "playwright-mcp",
         "systems": "systems_4",
         "tree-sitter-astro": "tree-sitter-astro",
         "twist": "twist",

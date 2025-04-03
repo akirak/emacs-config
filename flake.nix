@@ -60,6 +60,8 @@
       url = "github:virchau13/tree-sitter-astro";
       flake = false;
     };
+
+    playwright-mcp.url = "github:akirak/nix-playwright-mcp";
   };
 
   nixConfig = {
