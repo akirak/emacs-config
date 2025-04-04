@@ -226,12 +226,11 @@ are displayed in the frame."
        (user-error "No workspace root")))))
 
 (defun akirak-compile--buffer-name ()
-  (generate-new-buffer-name (concat "*"
-                                    (file-name-nondirectory
-                                     (directory-file-name default-directory))
-                                    "-compilation"
-                                    "*")
-                            t))
+  (concat "*"
+          (file-name-nondirectory
+           (directory-file-name default-directory))
+          "-compilation"
+          "*"))
 
 ;;;###autoload
 (defun akirak-compile-cleanup-buffers ()
