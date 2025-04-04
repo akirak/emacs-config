@@ -10562,7 +10562,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 224 |
+| [[org-ql-search:tags:packages][packages]]            | 225 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
@@ -10574,6 +10574,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
+| [[org-ql-search:tags:AI][AI]]                  |   5 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
@@ -10586,7 +10587,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:Org][Org]]                 |   3 |
-| [[org-ql-search:tags:AI][AI]]                  |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -10683,11 +10683,13 @@ I want to care about readability in the following modes:
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Artificial intelligence / LLM
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
-| Heading | Todo |
-|---------+------|
-| [[copilot][copilot]] |      |
-| [[elysium][elysium]] |      |
-| [[gptel][gptel]]   |      |
+| Heading   | Todo |
+|-----------+------|
+| [[ob-aider][ob-aider]]  |      |
+| [[aidermacs][aidermacs]] |      |
+| [[copilot][copilot]]   |      |
+| [[elysium][elysium]]   |      |
+| [[gptel][gptel]]     |      |
 #+END:
 
 For LLM integration, gptel is the generic frontend and backend.
