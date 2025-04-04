@@ -457,7 +457,7 @@ are displayed in the frame."
 
 (defun akirak-compile--installation-command-p (command)
   (pcase (akirak-compile--split-command command)
-    (`(,_ ,(or "add" "install" "remove" "uninstall") . ,_)
+    (`(,_ ,(or "add" "install" "remove" "uninstall" "update") . ,_)
      t)
     (`("npm" "ci")
      t)
