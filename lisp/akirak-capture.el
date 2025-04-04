@@ -375,7 +375,6 @@
                                                (when (fboundp 'fwb-toggle-window-split)
                                                  (fwb-toggle-window-split)))
                                              (require 'gptel-org)
-                                             (gptel-org-set-properties (point))
                                              (gptel-send)))))
                              (plist-put :after-finalize
                                         (when new-tab-name
