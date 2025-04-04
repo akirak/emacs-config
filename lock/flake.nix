@@ -13,6 +13,12 @@
       repo = "aggressive-indent-mode";
       type = "github";
     };
+    aidermacs = {
+      flake = false;
+      owner = "MatthewZMD";
+      repo = "aidermacs";
+      type = "github";
+    };
     aio = {
       flake = false;
       owner = "skeeto";
@@ -765,6 +771,12 @@
       flake = false;
       owner = "akirak";
       repo = "oahu.el";
+      type = "github";
+    };
+    ob-aider = {
+      flake = false;
+      owner = "localredhead";
+      repo = "ob-aider.el";
       type = "github";
     };
     ob-graphql = {

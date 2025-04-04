@@ -2844,6 +2844,20 @@ Org-Memento integration for oahu
         (:with-map org-memento-zone-mode-map
           (:keymap "v" #'oahu-memento-group-view)))))
 #+end_src
+*** ob-aider                                                                :AI:
+:PROPERTIES:
+:CREATED_TIME: [2025-04-04 Fri 23:59]
+:END:
+#+begin_quote
+Org Babel functions for Aider.el & Aidermacs integration
+[[https://github.com/localredhead/ob-aider.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package ob-aider)
+    (with-eval-after-load 'org
+      (add-to-list 'org-babel-load-languages '(aider . t))))
+#+end_src
 *** ob-graphql
 :PROPERTIES:
 :CREATED_TIME: [2023-05-06 Sat 13:57]
@@ -5545,6 +5559,20 @@ Minor mode to aggressively keep your code always indented
   (setup (:package aggressive-indent)
     (:hook-into emacs-lisp-mode-hook
                 dune-mode-hook))
+#+end_src
+*** aidermacs                                                               :AI:
+:PROPERTIES:
+:CREATED_TIME: [2025-04-04 Fri 23:59]
+:END:
+#+begin_quote
+AI pair programming with Aider
+[[https://github.com/MatthewZMD/aidermacs]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package aidermacs)
+    (:nixpkgs aider-chat)
+    (:global-keymap "C-=" #'aidermacs-transient-menu))
 #+end_src
 *** COMMENT all-the-icons                               :UI:ARCHIVE:
 :PROPERTIES:

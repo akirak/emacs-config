@@ -32,6 +32,22 @@
         "type": "github"
       }
     },
+    "aidermacs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1743541029,
+        "narHash": "sha256-0Z4LjBidnXo6orE3p9rImqAsuK/+44VZ78FOlUhAgpY=",
+        "owner": "MatthewZMD",
+        "repo": "aidermacs",
+        "rev": "38aa5bfa5c5a66664abb5bb9cd7f191d1ac3d915",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MatthewZMD",
+        "repo": "aidermacs",
+        "type": "github"
+      }
+    },
     "aio": {
       "flake": false,
       "locked": {
@@ -2050,6 +2066,22 @@
         "type": "github"
       }
     },
+    "ob-aider": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1742930335,
+        "narHash": "sha256-sNvDytTABqxJzb2iEP7aYS8AgB+HtymMnvUuxphxvys=",
+        "owner": "localredhead",
+        "repo": "ob-aider.el",
+        "rev": "f611b0e733323c04bbbcab710a78a87f47e5fc74",
+        "type": "github"
+      },
+      "original": {
+        "owner": "localredhead",
+        "repo": "ob-aider.el",
+        "type": "github"
+      }
+    },
     "ob-graphql": {
       "flake": false,
       "locked": {
@@ -3009,6 +3041,7 @@
       "inputs": {
         "academic-phrases": "academic-phrases",
         "aggressive-indent": "aggressive-indent",
+        "aidermacs": "aidermacs",
         "aio": "aio",
         "anzu": "anzu",
         "apheleia": "apheleia",
@@ -3135,6 +3168,7 @@
         "nov": "nov",
         "oahu": "oahu",
         "oahu-memento": "oahu-memento",
+        "ob-aider": "ob-aider",
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",

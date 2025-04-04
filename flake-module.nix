@@ -105,6 +105,8 @@ let
               }).allGrammars
             )
           }/lib/")
+
+          (setq aidermacs--cached-version "${pkgs.aider-chat.version}")
         '';
       }
     )).overrideScope
