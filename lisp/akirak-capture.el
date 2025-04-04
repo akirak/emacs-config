@@ -222,6 +222,11 @@
   :variable 'akirak-capture-gptel-topic
   :description "Gptel topic")
 
+(transient-define-infix akirak-capture-dispatch-later ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-capture-dispatch-later
+  :description "Dispatch later")
+
 (transient-define-infix akirak-capture-todo-infix ()
   :class 'akirak-capture-plist-option
   :description "Todo"
@@ -329,6 +334,7 @@
   ["Gptel"
    :class transient-row
    :if-non-nil akirak-capture-gptel-topic
+   ("-c" akirak-capture-dispatch-later)
    (gptel--infix-provider)]
   ["Context"
    :class transient-columns
@@ -364,18 +370,19 @@
                            (thread-first
                              akirak-capture-doct-options
                              (plist-put :hook
-                                        (lambda ()
-                                          ;; Set some delay for Emacs to initialize the buffer.
-                                          (run-with-timer
-                                           0.1
-                                           nil
-                                           (lambda ()
-                                             (when new-tab-name
-                                               (tab-bar-rename-tab new-tab-name)
-                                               (when (fboundp 'fwb-toggle-window-split)
-                                                 (fwb-toggle-window-split)))
-                                             (require 'gptel-org)
-                                             (gptel-send)))))
+                                        `(lambda ()
+                                           ;; Set some delay for Emacs to initialize the buffer.
+                                           (run-with-timer
+                                            0.1
+                                            nil
+                                            (lambda ()
+                                              (when new-tab-name
+                                                (tab-bar-rename-tab new-tab-name)
+                                                (when (fboundp 'fwb-toggle-window-split)
+                                                  (fwb-toggle-window-split)))
+                                              (unless ,akirak-capture-dispatch-later
+                                                (require 'gptel-org)
+                                                (gptel-send))))))
                              (plist-put :after-finalize
                                         (when new-tab-name
                                           (lambda ()
@@ -1119,22 +1126,26 @@
 ;;;; Other commands
 
 ;;;###autoload
-(defun akirak-capture-gptel (llm-prompt)
-  (interactive (list (read-string "Prompt: "
-                                  (when (use-region-p)
-                                    (buffer-substring (region-beginning)
-                                                      (region-end))))))
+(defun akirak-capture-gptel (headline llm-prompt)
+  (interactive
+   (let* ((headline (read-string "Headline: "
+                                 nil
+                                 nil nil 'inherit))
+          (llm-prompt (read-string "Prompt: "
+                                   (if (use-region-p)
+                                       (buffer-substring (region-beginning)
+                                                         (region-end))
+                                     headline)
+                                   nil nil 'inherit)))
+     (list headline llm-prompt)))
   (require 'gptel)
   (cl-flet
       ((file-link (filename)
          (thread-last
            (concat "file:" (abbreviate-file-name filename))
            (org-link-make-string))))
-    (let ((headline (read-string "Headline: "
-                                 (akirak-capture--first-sentence llm-prompt)
-                                 nil nil t))
-          ;; NOTE: This depends on the private API.
-          (preamble (pcase gptel-context--alist
+    ;; NOTE: This depends on the private API of gptel.
+    (let ((preamble (pcase gptel-context--alist
                       (`nil)
                       (`((,buffer . ,ovs))
                        (concat (when ovs
@@ -1159,11 +1170,13 @@
                                           "\n")
                                "\n\n")))))
       (setq akirak-capture-gptel-topic t
+            akirak-capture-dispatch-later (string-empty-p llm-prompt)
             akirak-capture-headline headline
             akirak-capture-template-options (list :tags "@AI"
                                                   :body
-                                                  (if (and (null preamble)
-                                                           (equal llm-prompt headline))
+                                                  (if (or (and (null preamble)
+                                                               (equal llm-prompt headline))
+                                                          (string-empty-p llm-prompt))
                                                       "%?"
                                                     (concat preamble "⸺" llm-prompt "%?"))))
       (akirak-capture-doct))))
