@@ -336,22 +336,6 @@
         "type": "github"
       }
     },
-    "claude-code": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1742514279,
-        "narHash": "sha256-I9oGQ3lFRhm1GjbeMdqb81EeYIuACgj1RcpB210BT/M=",
-        "owner": "stevemolitor",
-        "repo": "claude-code.el",
-        "rev": "b7f29aa2f3904cd9a4aeee998e31b441ff7e98a9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "stevemolitor",
-        "repo": "claude-code.el",
-        "type": "github"
-      }
-    },
     "closql": {
       "flake": false,
       "locked": {
@@ -3044,7 +3028,6 @@
         "cape": "cape",
         "casual": "casual",
         "casual-symbol-overlay": "casual-symbol-overlay",
-        "claude-code": "claude-code",
         "closql": "closql",
         "compat": "compat",
         "consult": "consult",

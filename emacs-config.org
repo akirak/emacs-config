@@ -5920,7 +5920,7 @@ Transient user interfaces for various modes
     (:with-feature calc
       (:keymap "C-," #'casual-calc-tmenu)))
 #+end_src
-*** claude-code
+*** COMMENT claude-code                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-03-15 Sat 14:23]
 :END:
