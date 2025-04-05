@@ -28,6 +28,8 @@
 
 ;;; Code:
 
+(require 'akirak-transient)
+(require 'eat)
 
 (declare-function eat "ext:eat")
 
@@ -59,7 +61,62 @@ the original minor mode."
         'eat-mode)))
 
 ;;;###autoload
-(defalias 'akirak-shell #'eat)
+(cl-defun akirak-shell (&optional arg)
+  (interactive "P")
+  (if arg
+      (akirak-shell-transient)
+    (akirak-shell--eat)))
+
+;;;; Transient
+
+;;;;; Transient infixes
+
+(defvar akirak-shell-split-window nil)
+
+(transient-define-infix akirak-shell-split-window-infix ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-shell-split-window
+  :description "Split window")
+
+;;;;; Transient prefix
+
+(transient-define-prefix akirak-shell-transient ()
+  ["Options"
+   ("-s" akirak-shell-split-window-infix)]
+  ["Commands"
+   :class transient-row
+   ("RET" "Terminal" akirak-shell--terminal)
+   ("p" "Terminal at project root" akirak-shell--project-terminal)]
+  (interactive)
+  (setq akirak-shell-split-window nil
+        akirak-shell-directory default-directory)
+  (transient-setup 'akirak-shell-transient))
+
+;;;;; Transient suffix
+
+(defun akirak-shell--terminal ()
+  (interactive)
+  (akirak-shell--eat :dir akirak-shell-directory
+                     :window akirak-shell-split-window))
+
+(defun akirak-shell--project-terminal ()
+  (interactive)
+  (akirak-shell--eat :dir (project-root (project-current))
+                     :window akirak-shell-split-window))
+
+(cl-defun akirak-shell--eat (&key dir window)
+  (let ((default-directory (or dir default-directory))
+        (command (funcall eat-default-shell-function)))
+    (pop-to-buffer-same-window
+     (apply #'eat-make
+            (if window
+                "popup-eat"
+              "eat")
+            (pcase (ensure-list command)
+              (`(,cmd . ,args)
+               (cons cmd (cons nil args))))))))
+
+;;;; Other commands that are possibly deprecated
 
 ;;;###autoload
 (defalias 'akirak-shell-other-window #'eat-other-window)
