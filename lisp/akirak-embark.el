@@ -414,6 +414,9 @@
                '(project-query-replace-regexp
                  embark--beginning-of-target embark--unmark-target))
 
+  (add-to-list 'embark-exporters-alist
+               '(directory . embark-export-dired))
+
   (add-to-list 'embark-target-injection-hooks
                '(akirak-org-babel-send-block-to-shell
                  embark--ignore-target)))

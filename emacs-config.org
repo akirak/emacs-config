@@ -6943,6 +6943,11 @@ Conveniently act on minibuffer completions
     (keymap-set minibuffer-mode-map "C-," #'embark-become)
     (keymap-set minibuffer-mode-map "C-SPC" #'embark-select)
 
+    (add-hook 'embark-after-export-hook
+              (defun akirak/embark-after-export ()
+                (when (derived-mode-p 'dired-mode)
+                  (dired-hide-details-mode 1))))
+
     (:when-loaded
       (when (require 'akirak-embark nil t)
         (akirak-embark-setup))))
