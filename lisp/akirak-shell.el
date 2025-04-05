@@ -125,9 +125,10 @@ the original minor mode."
          (name (or name (car command)))
          (eat-kill-buffer-on-exit nil))
     (pop-to-buffer (apply #'eat-make
-                          (if pr
-                              (format "%s-%s" name (project-name pr))
-                            name)
+                          (concat "popup-"
+                                  (if pr
+                                      (format "%s-%s" name (project-name pr))
+                                    name))
                           (pcase command
                             (`(,cmd . ,args)
                              (cons cmd (cons nil args))))))))

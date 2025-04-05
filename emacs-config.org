@@ -5316,10 +5316,13 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode eldoc-mode)
                           akirak-window-display-document-buffer))
-                       ((or ,(major-modes vterm-mode eat-mode)
-                            "^\\*Nix-REPL\\*")
+                       ((or ,(major-modes vterm-mode)
+                            "^\\*Nix-REPL\\*"
+                            ;; Pop up eat windows if and only if it follows a
+                            ;; certain buffer naming convention.
+                            "^\\*popup-")
                         ,(reuse-mode-window
-                          (vterm-mode eat-mode nix-repl-mode)
+                          (vterm-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
                        (,(major-modes nov-mode pdf-view-mode Info-mode)
