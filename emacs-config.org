@@ -6938,7 +6938,7 @@ Conveniently act on minibuffer completions
 #+begin_src emacs-lisp
   (setup (:package embark)
     (:global-keymap "C-." #'embark-act
-             "C->" #'embark-act-all)
+                    "C->" #'embark-act-all)
 
     (keymap-set minibuffer-mode-map "C-," #'embark-become)
     (keymap-set minibuffer-mode-map "C-SPC" #'embark-select)
