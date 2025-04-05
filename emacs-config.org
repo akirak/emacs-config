@@ -5234,6 +5234,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (keymap-global-set "C-c x" #'akirak-scratch-from-selection)
 #+end_src
+*** akirak-shell
+#+begin_src elisp
+  (setup akirak-shell
+    (:global-keymap "C-c t" #'akirak-shell))
+#+end_src
 *** akirak-shr
 #+begin_src elisp
   (setup akirak-shr
@@ -8867,23 +8872,22 @@ Summon and dismiss buffers as popups
                 (recenter -1 t)))
 
     (:keymap "M-\"" #'popper-cycle
-           "M-' RET" #'popper-toggle-type
-           "M-' M-'" #'popper-toggle
-           "M-' a" (defun akirak/display-async-shell-command ()
-                     (interactive)
-                     (display-buffer "*Async Shell Command*"))
-           "M-' e" #'flymake-show-buffer-diagnostics
-           "M-' t" #'akirak-shell-for-project-other-window
-           "M-' s" #'scratch-buffer
-           "M-' w" (defun akirak/revisit-eww-buffer ()
-                     (interactive)
-                     (pop-to-buffer "*eww*"))
-           "M-' c" (defun akirak/compilation-buffer (&optional arg)
-                     (interactive "P")
-                     (if-let* ((buffer (and (not arg)
-                                            (get-buffer "*compilation*"))))
-                         (pop-to-buffer buffer)
-                       (project-compile)))))
+             "M-' RET" #'popper-toggle-type
+             "M-' M-'" #'popper-toggle
+             "M-' a" (defun akirak/display-async-shell-command ()
+                       (interactive)
+                       (display-buffer "*Async Shell Command*"))
+             "M-' e" #'flymake-show-buffer-diagnostics
+             "M-' s" #'scratch-buffer
+             "M-' w" (defun akirak/revisit-eww-buffer ()
+                       (interactive)
+                       (pop-to-buffer "*eww*"))
+             "M-' c" (defun akirak/compilation-buffer (&optional arg)
+                       (interactive "P")
+                       (if-let* ((buffer (and (not arg)
+                                              (get-buffer "*compilation*"))))
+                           (pop-to-buffer buffer)
+                         (project-compile)))))
 #+end_src
 *** posframe                                            :UI:library:
 :PROPERTIES:
