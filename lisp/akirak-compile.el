@@ -200,12 +200,19 @@ are displayed in the frame."
                 (history (gethash key akirak-compile-per-workspace-history
                                   :default))
                 (projects (akirak-compile--find-projects workspace))
-                (command (akirak-compile--complete (if arg
-                                                       "Compile in a per-project buffer: "
-                                                     "Compile: ")
-                                                   projects
-                                                   (unless (eq history :default)
-                                                     history)))
+                (command (akirak-compile--complete
+                          (if arg
+                              "Compile in a per-project buffer: "
+                            "Compile: ")
+                          projects
+                          (unless (eq history :default)
+                            ;; In a mono-repo, the history can contain entries
+                            ;; for other projects under the same workspace.
+                            (thread-last
+                              (copy-sequence history)
+                              (seq-filter `(lambda (ent)
+                                             (member (get-char-property 0 'command-directory ent)
+                                                     (mapcar #'cdr ',projects))))))))
                 (default-directory (or (get-text-property 0 'command-directory command)
                                        (cdr (assq (akirak-compile--guess-backend command)
                                                   projects))
