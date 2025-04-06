@@ -242,7 +242,7 @@ Example values are shown below:
                        (akirak-org-dog-major-mode-files))
                "todo: "
                nil
-               t)))))
+               nil)))))
 
 ;;;###autoload
 (defun akirak-org-clock-in-to-project ()
