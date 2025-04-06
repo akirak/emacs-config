@@ -182,10 +182,13 @@
 (defun akirak-consult-dir-descendants (&optional dir)
   "Browse a descendant directory of DIR."
   (interactive (list (akirak-consult-dir--default-root)))
-  (let* ((default-directory (if dir
+  (let* ((current default-directory)
+         (default-directory (if dir
                                 (expand-file-name dir)
                               (akirak-consult-dir--default-root)))
-         (selected (consult--read (process-lines "fd" "-t" "d")
+         (selected (consult--read (akirak-consult--sort-entries-1
+                                   (process-lines "fd" "-t" "d")
+                                   (file-relative-name current default-directory))
                                   :category 'directory
                                   :state (consult--file-state)
                                   :require-match t

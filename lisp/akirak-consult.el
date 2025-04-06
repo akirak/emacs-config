@@ -32,6 +32,10 @@
 (require 'consult)
 (require 'akirak-project)
 
+(defcustom akirak-consult-sort-threshold 1000
+  "Number of directories above which directories cannot be sorted."
+  :type 'number)
+
 (defvar akirak-consult-source-tab-bar-tab
   `(:name "Tab"
           :narrow (?t . "Tab")
@@ -178,12 +182,17 @@
                                    "--one-file-system"
                                    "--sortr" "modified")))
         ;; TODO: Make the threshold customizable
-        (when (> (length result) 2000)
-          (push (cons default-directory
-                      (cons (ignore-errors
-                              (car (process-lines "git" "rev-parse" "HEAD")))
-                            result))
-                akirak-consult--project-files-cache))
+        (if (> (length result) 2000)
+            (push (cons default-directory
+                        (cons (ignore-errors
+                                (car (process-lines "git" "rev-parse" "HEAD")))
+                              result))
+                  akirak-consult--project-files-cache))
+        (when-let* ((filename (buffer-file-name))
+                    (dir (file-name-directory filename)))
+          (setq result (akirak-consult--sort-entries-1
+                        result
+                        (file-relative-name dir default-directory))))
         (if prepend-root
             (mapcar #'expand-file-name result)
           result)))))
@@ -654,6 +663,48 @@ FILE should be a relative path from the repository root."
     (when-let* ((buffer (find-buffer-visiting file)))
       (with-current-buffer buffer
         (revert-buffer-quick)))))
+
+(defun akirak-consult--sort-entries-1 (dirs current)
+  "Sort DIRS relatively from the CURRENT."
+  (if (> (length dirs) akirak-consult-sort-threshold)
+      dirs
+    (cl-flet*
+        ((descendant-p (dir)
+           (string-prefix-p current dir))
+         (compare-by-name (a b)
+           (string< a b))
+         (sort-by-name (entries)
+           (cl-sort entries #'compare-by-name)))
+      (let* ((ancestors (thread-last
+                          (cl-remove-if #'string-empty-p (file-name-split current))
+                          (akirak-consult--inits)
+                          (cl-remove nil)
+                          (nreverse)
+                          (mapcar (apply-partially #'apply #'file-name-concat))
+                          (mapcar #'file-name-as-directory)))
+             (descendants (thread-first
+                            (cl-remove-if-not #'descendant-p dirs)
+                            (sort-by-name)))
+             (others (cl-remove-if #'descendant-p dirs))
+             groups
+             result)
+        (dolist (ancestor ancestors)
+          (let ((predicate (apply-partially #'string-prefix-p ancestor)))
+            (push (cl-remove-if-not predicate others)
+                  groups)
+            (cl-delete-if predicate others)))
+        (dolist (group (cons others groups))
+          (setq result (append (sort-by-name group) result)))
+        (append descendants result)))))
+
+(defun akirak-consult--inits (lst)
+  (let ((result nil)
+        (current nil))
+    (push nil result)
+    (dolist (elem lst)
+      (setq current (cons elem current))
+      (push (reverse current) result))
+    (reverse result)))
 
 (provide 'akirak-consult)
 ;;; akirak-consult.el ends here
