@@ -376,8 +376,8 @@
                                             0.1
                                             nil
                                             (lambda ()
-                                              (when new-tab-name
-                                                (tab-bar-rename-tab new-tab-name)
+                                              (when ,new-tab-name
+                                                (tab-bar-rename-tab ,new-tab-name)
                                                 (when (fboundp 'fwb-toggle-window-split)
                                                   (fwb-toggle-window-split)))
                                               (unless ,akirak-capture-dispatch-later
@@ -385,8 +385,8 @@
                                                 (gptel-send))))))
                              (plist-put :after-finalize
                                         (when new-tab-name
-                                          (lambda ()
-                                            (tab-bar-close-tab-by-name new-tab-name)))))
+                                          `(lambda ()
+                                             (tab-bar-close-tab-by-name ,new-tab-name)))))
                          akirak-capture-doct-options))
          (org-capture-entry
           (car (doct
