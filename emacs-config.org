@@ -5237,7 +5237,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-shell
 #+begin_src elisp
   (setup akirak-shell
-    (:global-keymap "C-c t" #'akirak-shell))
+    (:global-keymap "C-c t" #'akirak-shell-transient))
 #+end_src
 *** akirak-shr
 #+begin_src elisp

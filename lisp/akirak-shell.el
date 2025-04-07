@@ -80,6 +80,7 @@ the original minor mode."
 
 ;;;;; Transient prefix
 
+;;;###autoload (autoload 'akirak-shell-transient "akirak-shell" nil 'interactive)
 (transient-define-prefix akirak-shell-transient ()
   ["Options"
    ("-s" akirak-shell-split-window-infix)]
