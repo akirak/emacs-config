@@ -116,6 +116,39 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                             'window alist)))
 
 ;;;###autoload
+(defun akirak-window-as-left-sidebar (buffer &optional alist)
+  (let* ((live-window (seq-find (lambda (w)
+                                  (and (not (window-in-direction 'left w))
+                                       (not (window-in-direction 'above w))))
+                                (window-list)))
+         ;; For most major modes, the first line of a buffer is likely to be a
+         ;; header.
+         (max-cols (akirak-window--max-column buffer :skip-first-line t))
+         (width (max 20 (min (1+ max-cols) 60)))
+         (window (display-buffer-in-side-window buffer `((side . left)
+                                                         (dedicated . t)
+                                                         (window-width . ,width)))))
+    (when window
+      (with-current-buffer buffer
+        (setq-local window-size-fixed 'width))
+      (balance-windows)
+      window)))
+
+(cl-defun akirak-window--max-column (buffer &key skip-first-line)
+  (with-current-buffer buffer
+    (save-excursion
+      (goto-char (point-min))
+      (when skip-first-line
+        (forward-line))
+      (let ((result 0))
+        (catch 'max-column
+          (while (< (point) (point-max))
+            (setq result (max result (- (line-end-position) (point))))
+            (unless (zerop (forward-line))
+              (throw 'max-column t))))
+        result))))
+
+;;;###autoload
 (defun akirak-window-display-buffer-split-1 (buffer &optional alist)
   (if-let* ((window (or (window-in-direction 'below)
                       (window-in-direction 'above))))
