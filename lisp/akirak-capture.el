@@ -1128,15 +1128,16 @@
 ;;;###autoload
 (defun akirak-capture-gptel (headline llm-prompt)
   (interactive
-   (let* ((headline (read-string "Headline: "
-                                 nil
-                                 nil nil 'inherit))
-          (llm-prompt (read-string "Prompt: "
-                                   (if (use-region-p)
+   (let* ((llm-prompt (unless current-prefix-arg
+                        (read-string "Prompt: "
+                                     (when (use-region-p)
                                        (buffer-substring (region-beginning)
-                                                         (region-end))
-                                     headline)
-                                   nil nil 'inherit)))
+                                                         (region-end)))
+                                     nil nil 'inherit)))
+          (headline (read-string "Headline: "
+                                 (when llm-prompt
+                                   (akirak-capture--first-sentence llm-prompt))
+                                 nil nil 'inherit)))
      (list headline llm-prompt)))
   (require 'gptel)
   (cl-flet
@@ -1174,11 +1175,7 @@
             akirak-capture-headline headline
             akirak-capture-template-options (list :tags "@AI"
                                                   :body
-                                                  (if (or (and (null preamble)
-                                                               (equal llm-prompt headline))
-                                                          (string-empty-p llm-prompt))
-                                                      "%?"
-                                                    (concat preamble "⸺" llm-prompt "%?"))))
+                                                  (concat preamble llm-prompt "%?")))
       (akirak-capture-doct))))
 
 (defun akirak-capture-short-note (string)
