@@ -1310,6 +1310,7 @@ The built-in =electric= package provides the following modes:
                          (heex-ts-mode . (,@lsp))
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
+                         (python-mode . (,@lsp))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
                          (sql-mode . (,@sqlformat))
