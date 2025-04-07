@@ -363,10 +363,7 @@ Specify extra root files to help eglot correctly identify project roots.
      (let ((feature (setup-get 'feature)))
        (macroexp-progn
         (mapcar (pcase-lambda (`(,name . ,args))
-                  `(eval-after-load ',feature
-                     (defun ,(intern (concat "akirak/reformatter-define-"
-                                             (symbol-name name))) ()
-                       (reformatter-define ,name ,@args))))
+                  `(reformatter-define ,name ,@args))
                 entries)))))
 #+end_src
 *** :repeat
