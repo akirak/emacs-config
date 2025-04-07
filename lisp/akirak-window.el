@@ -91,7 +91,8 @@
                          (unless (or (window-minibuffer-p w)
                                      (member (buffer-name (window-buffer w))
                                              akirak-window-skipped-buffers)
-                                     (window-in-direction 'above w))
+                                     (window-in-direction 'above w)
+                                     (window-parameter w 'window-side))
                            (cons (window-left-column w) w))))
                (delq nil)
                (seq-group-by #'car)
@@ -117,13 +118,9 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 
 ;;;###autoload
 (defun akirak-window-as-left-sidebar (buffer &optional alist)
-  (let* ((live-window (seq-find (lambda (w)
-                                  (and (not (window-in-direction 'left w))
-                                       (not (window-in-direction 'above w))))
-                                (window-list)))
-         ;; For most major modes, the first line of a buffer is likely to be a
-         ;; header.
-         (max-cols (akirak-window--max-column buffer :skip-first-line t))
+  ;; For most major modes, the first line of a buffer is likely to be a
+  ;; header.
+  (let* ((max-cols (akirak-window--max-column buffer :skip-first-line t))
          (width (max 20 (min (1+ max-cols) 60)))
          (window (display-buffer-in-side-window buffer `((side . left)
                                                          (dedicated . t)
@@ -530,16 +527,17 @@ The target window is determined according to the same logic as
    ((eq arg '-)
     (window-in-direction 'left window))
    ((eq arg 0)
-    (catch 'window
-      (let ((window (or window (selected-window)))
-            (w window))
-        (while (setq w (next-window w))
-          (when (akirak-window--popup-p w)
-            (setq akirak-window-last-non-popup-window window)
-            (throw 'window w))
-          ;; Prevent infinite loop
-          (when (equal window w)
-            (throw 'window nil))))))
+    ;; (catch 'window
+    ;;   (let ((window (or window (selected-window)))
+    ;;         (w window))
+    ;;     (while (setq w (next-window w))
+    ;;       (when (akirak-window--popup-p w)
+    ;;         (setq akirak-window-last-non-popup-window window)
+    ;;         (throw 'window w))
+    ;;       ;; Prevent infinite loop
+    ;;       (when (equal window w)
+    ;;         (throw 'window nil)))))
+    (akirak-window--find-column 0))
    (t
     (cl-macrolet
         ((try-window (exp)
@@ -566,8 +564,14 @@ The target window is determined according to the same logic as
 
 (defun akirak-window--find-column (n)
   "Return a window in N-th column of the frame."
-  (when n
-    (cadr (nth (1- n) (akirak-window--get-panes)))))
+  (pcase n
+    (`nil)
+    (0
+     (seq-find (lambda (w)
+                 (window-at-side-p w 'left))
+               (window-list)))
+    ((pred numberp)
+     (cadr (nth (1- n) (akirak-window--get-panes))))))
 
 ;;;###autoload
 (defun akirak-window-single-column-p ()
