@@ -8109,15 +8109,15 @@ A Git porcelain inside Emacs
 
     (:with-map (magit-status-mode-map magit-log-mode-map)
       (:keymap "^" (defun akirak/magit-up-directory ()
-                   "Visit the parent repository using magit, or visit the parent directory using dired."
-                   (interactive)
-                   (let ((parent-dir (thread-last
-                                       default-directory
-                                       (string-remove-suffix "/")
-                                       (file-name-directory))))
-                     (if-let* ((root (magit-toplevel parent-dir)))
-                         (magit-status root)
-                       (dired parent-dir))))))
+                     "Visit the parent repository using magit, or visit the parent directory using dired."
+                     (interactive)
+                     (let ((parent-dir (thread-last
+                                         default-directory
+                                         (string-remove-suffix "/")
+                                         (file-name-directory))))
+                       (if-let* ((root (magit-toplevel parent-dir)))
+                           (magit-status root)
+                         (dired parent-dir))))))
 
     ;; Replace the binding to compose-message
     (keymap-set ctl-x-map "m" #'magit-dispatch)
