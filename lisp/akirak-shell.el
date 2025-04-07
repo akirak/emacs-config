@@ -63,85 +63,107 @@ the original minor mode."
 ;;;###autoload
 (cl-defun akirak-shell (&optional arg)
   (interactive "P")
-  (if arg
-      (akirak-shell-transient)
-    (akirak-shell--eat)))
+  (pcase arg
+    ('(16)
+     (akirak-shell-select))
+    (_
+     (akirak-shell-transient))))
+
+(defun akirak-shell-select ()
+  (interactive)
+  (let ((buffer (read-buffer "Switch to a shell buffer: "
+                             nil t #'akirak-shell-buffer-p)))
+    (if (and buffer (not (string-empty-p buffer)))
+        (pop-to-buffer-same-window buffer)
+      (akirak-shell-transient))))
 
 ;;;; Transient
 
 ;;;;; Transient infixes
 
-(defvar akirak-shell-split-window nil)
+(defvar akirak-shell-split-window t)
 
 (transient-define-infix akirak-shell-split-window-infix ()
   :class 'akirak-transient-flag-variable
   :variable 'akirak-shell-split-window
   :description "Split window")
 
+(defvar akirak-shell-buffer-name nil)
+
+(transient-define-infix akirak-shell-buffer-name-infix ()
+  :class 'akirak-transient-string-variable
+  :variable 'akirak-shell-buffer-name
+  :initial-contents-fn (cl-constantly "eat")
+  :prompt "Buffer name: "
+  :description "Buffer name")
+
 ;;;;; Transient prefix
 
-;;;###autoload (autoload 'akirak-shell-transient "akirak-shell" nil 'interactive)
 (transient-define-prefix akirak-shell-transient ()
   ["Options"
-   ("-s" akirak-shell-split-window-infix)]
-  ["Commands"
    :class transient-row
-   ("RET" "Terminal" akirak-shell--terminal)
-   ("p" "Terminal at project root" akirak-shell--project-terminal)]
+   ("-s" akirak-shell-split-window-infix)
+   ("-r" akirak-shell-buffer-name-infix)]
+  ["Start terminal in a directory"
+   :class transient-row
+   ("RET" "Current directory" akirak-shell--terminal-cwd)
+   ("p" "Project root" akirak-shell--terminal-project-root)
+   ("d" "Select directory" akirak-shell-at-directory)]
   (interactive)
-  (setq akirak-shell-split-window nil
-        akirak-shell-directory default-directory)
+  (setq akirak-shell-split-window t)
   (transient-setup 'akirak-shell-transient))
 
 ;;;;; Transient suffix
 
-(defun akirak-shell--terminal ()
+(defun akirak-shell--terminal-cwd ()
   (interactive)
-  (akirak-shell--eat :dir akirak-shell-directory
-                     :window akirak-shell-split-window))
+  (akirak-shell--eat-new :dir default-directory
+                         :name akirak-shell-buffer-name
+                         :window akirak-shell-split-window))
 
-(defun akirak-shell--project-terminal ()
+(defun akirak-shell--terminal-project-root ()
   (interactive)
-  (akirak-shell--eat :dir (project-root (project-current))
-                     :window akirak-shell-split-window))
+  (akirak-shell--eat-new :dir (project-root (project-current))
+                         :name akirak-shell-buffer-name
+                         :window akirak-shell-split-window))
 
-(cl-defun akirak-shell--eat (&key dir window)
-  (let ((default-directory (or dir default-directory))
-        (command (funcall eat-default-shell-function)))
-    (pop-to-buffer-same-window
-     (apply #'eat-make
-            (if window
-                "popup-eat"
-              "eat")
-            (pcase (ensure-list command)
-              (`(,cmd . ,args)
-               (cons cmd (cons nil args))))))))
+(defvar akirak-shell-directory nil)
+
+;;;###autoload
+(defun akirak-shell-at-directory (dir)
+  (interactive (list (read-directory-name "Run terminal at: "
+                                          akirak-shell-directory
+                                          nil t)))
+  (cond
+   ((file-directory-p dir))
+   ((yes-or-no-p (format "Create a new directory \"%s\"? " dir))
+    (make-directory dir 'parents))
+   (t
+    (user-error "Aborted")))
+  (setq akirak-shell-directory dir)
+  (akirak-shell--eat-new :dir dir
+                         :name akirak-shell-buffer-name
+                         :window akirak-shell-split-window))
+
+(cl-defun akirak-shell--eat-new (&key dir window name)
+  (let* ((default-directory (or dir default-directory))
+         (command (ensure-list (funcall eat-default-shell-function)))
+         (buffer (generate-new-buffer (format "*%s*"
+                                              (concat (when window
+                                                        "popup-")
+                                                      name)))))
+    (with-current-buffer buffer
+      (eat-mode)
+      (apply #'eat-exec buffer name
+             (pcase command
+               (`(,cmd . ,args)
+                (list cmd nil args))))
+      (pop-to-buffer-same-window buffer))))
 
 ;;;; Other commands that are possibly deprecated
 
 ;;;###autoload
 (defalias 'akirak-shell-other-window #'eat-other-window)
-
-;;;###autoload
-(defun akirak-shell-for-project-other-window (&optional arg)
-  (interactive "P")
-  (if (equal arg '(16))
-      (pop-to-buffer (read-buffer "Switch to a shell buffer: "
-                                  nil t #'akirak-shell-buffer-p))
-    (let ((command (if (project-current)
-                       #'eat-project-other-window
-                     #'eat-other-window)))
-      (when arg
-        (let ((target-window (pcase-exhaustive arg
-                               ('(4)
-                                (selected-window))
-                               ((pred numberp)
-                                (require 'akirak-window)
-                                (akirak-window--other-window nil arg)))))
-          (display-buffer-override-next-command
-           `(lambda (buffer alist)
-              (cons ,target-window 'reuse)))))
-      (call-interactively command))))
 
 ;;;###autoload
 (defun akirak-shell-new-other-window ()
