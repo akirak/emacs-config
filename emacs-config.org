@@ -6191,7 +6191,14 @@ A transient for cosmetics on source code
 
 #+begin_src emacs-lisp
   (setup (:package cosmetic-transient)
-    (:global-keymap "C-c m" #'cosmetic-transient))
+    (:global-keymap "C-c m" #'cosmetic-transient)
+
+    (:when-loaded
+      (add-to-list 'cosmetic-transient-language-formatters
+                   '(sql
+                     :minor-mode sqlglot-format-on-save-mode
+                     :buffer-formatter sqlglot-format-buffer
+                     :region-formatter sqlglot-format-region))))
 #+end_src
 *** csv-mode
 :PROPERTIES:
@@ -9075,6 +9082,26 @@ Define commands which run reformatters on the current buffer
                       nil))
                     (list "@biomejs/biome" "format" (buffer-file-name)
                           (concat "--stdin-file-path=" (buffer-file-name)))))))
+#+end_src
+**** sqlglot
+:PROPERTIES:
+:CREATED_TIME: [2025-04-07 Mon 11:47]
+:END:
+
+#+begin_src emacs-lisp
+  (setup sqlglot
+    (:nixpkgs sqlglot-formatter)
+
+    (defcustom sqlglot-formatter-dialect "postgres"
+      "SQL dialect used in the buffer."
+      :type '(choice (const nil)
+                     (const "Name of a dialect supported by sqlglot" string)))
+
+    ;; sqlglot-formatter is a tiny custom package that wraps sqlglot.
+    (:reformatters
+     (sqlglot-format
+      :program "sqlglot-formatter"
+      :args (list "--dialect" "postgres"))))
 #+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:

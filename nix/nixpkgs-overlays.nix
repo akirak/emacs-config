@@ -13,6 +13,10 @@
       ;
   })
 
+  (_: prev: {
+    sqlglot-formatter = prev.callPackage ./pkgs/sqlglot-formatter.nix { };
+  })
+
   #   # makeEmacsTwistArchive
   #   inputs.archiver.overlays.default
 
