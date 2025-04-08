@@ -78,14 +78,35 @@ let
       twist-args
       // {
         inherit
-          pkgs
           emacsPackage
           nativeCompileAheadDefault
           initFiles
           ;
+
+        pkgs = pkgs.extend (
+          _: _: {
+            playwright-mcp = inputs.playwright-mcp.packages.${pkgs.system}.default;
+          }
+        );
+
         # Based on https://github.com/jordanisaacs/emacs-config/commit/b3311f31150e7bf015563f35b25cf769d847bfa1#diff-206b9ce276ab5971a2489d75eb1b12999d4bf3843b7988cbe8d687cfde61dea0R63
         extraSiteStartElisp = ''
-          (add-to-list 'treesit-extra-load-path "${pkgs.emacs.pkgs.treesit-grammars.with-all-grammars}/lib/")
+          (add-to-list 'treesit-extra-load-path "${
+            pkgs.emacs.pkgs.treesit-grammars.with-grammars (
+              _:
+              (pkgs.tree-sitter.override {
+                # Add extra tree-sitter grammars that are not included in
+                # nixpkgs.
+                extraGrammars = {
+                  tree-sitter-astro = {
+                    src = inputs.tree-sitter-astro.outPath;
+                  };
+                };
+              }).allGrammars
+            )
+          }/lib/")
+
+          (setq aidermacs--cached-version "${pkgs.aider-chat.version}")
         '';
       }
     )).overrideScope
@@ -164,6 +185,14 @@ in
           inherit pkgs;
           emacsPackage = (import inputs.flake-pins).packages.${pkgs.system}.emacs;
         });
+
+        # Using Emacs stable for reproducing configuration issues.
+        emacs-stable-on-tmpdir =
+          pkgs.callPackage ./nix/lib/tmpInitDirWrapper.nix { } "emacs-tmpdir"
+            (makeConfig {
+              inherit pkgs;
+              emacsPackage = pkgs.emacs;
+            });
 
         # archive-builder = pkgs.makeEmacsTwistArchive {
         #   name = "build-emacs-${name}-archive";

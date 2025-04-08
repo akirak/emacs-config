@@ -35,7 +35,6 @@
 (defcustom akirak-import-settings-alist
   `((gleam-ts-mode
      :regexp ,(rx bol "import " (+ nonl))
-     :extra-modes nil
      :extensions (".gleam")
      :source-directories ("src")
      :transform-filename
@@ -46,23 +45,24 @@
                          (if (char-uppercase-p (aref identifier 0))
                              (concat "type " identifier)
                            identifier))))))
-    (typescript-ts-mode
+    ((typescript-ts-mode tsx-ts-mode)
      :regexp ,(rx bol "import " (+ nonl))
-     :extra-modes (tsx-ts-mode)
      :extensions (".ts" ".tsx")
      :source-directories ("src" "app")
+     :package-file "package.json"
      :fixup-function akirak-import--typescript-fixup
      :transform-filename
      (lambda (filepath identifier)
-       (concat "import "
-               (when identifier
-                 (format "{ %s } from " identifier))
-               ;; TODO. Actually I use LSP in most cases, so it doesn't matter
-               (file-name-sans-extension filepath))))
+       (let ((source (concat "\""
+                             (akirak-import-typescript-encode-path filepath)
+                             "\"")))
+         (when (and identifier
+                    (not (string-empty-p identifier)))
+           (list (format "import { %s } from %s" identifier source)
+                 (format "import %s from %s" identifier source))))))
     (elixir-ts-mode
      :regexp ,(rx bol (* blank) (or "alias" "import " "require" "use"))
      :treesit-node-types ("call")
-     :extra-modes nil
      :extensions (".ex")
      :source-directories ("lib")
      :goto-insert-location akirak-import--elixir-insert-location
@@ -94,48 +94,53 @@
   (akirak-import-thing (thing-at-point 'symbol)))
 
 (defun akirak-import-thing (&optional pattern)
-  (pcase (assq (apply #'derived-mode-p (mapcar #'car akirak-import-settings-alist))
-               akirak-import-settings-alist)
-    (`nil
-     (user-error "Unsupported mode"))
-    (`(,mode . ,(map :regexp :treesit-node-types :extra-modes
-                     :extensions :source-directories :transform-filename
-                     :goto-insert-location :fixup-function
-                     :inside-tree-sitter-node :make-default))
-     (let* ((existing-statements (akirak-import--collect-statements (cons mode extra-modes)
-                                                                    :regexp regexp
-                                                                    :treesit-node-types
-                                                                    treesit-node-types))
-            (generated-statements (akirak-import--generate-statements
-                                   :identifier pattern
-                                   :extensions extensions
-                                   :source-directories source-directories
-                                   :transform-filename transform-filename))
-            (lines (thread-last
-                     (append generated-statements existing-statements)
-                     (seq-sort #'string<)
-                     (seq-uniq))))
-       (cl-flet
-           ((contains-pattern (s)
-              (let ((case-fold-search nil))
-                (string-match-p (regexp-quote pattern)
-                                s))))
-         (akirak-import--insert-line
-          (completing-read (if pattern
-                               (format-message "Insert an import statement for '%s': " pattern)
-                             "Insert an import statement: ")
-                           lines
-                           nil nil
-                           (when (and pattern
-                                      (seq-find #'contains-pattern lines))
-                             (concat pattern " "))
-                           nil
-                           (when (and make-default pattern)
-                             (funcall make-default pattern lines)))
-          :goto-insert-location goto-insert-location
-          :inside-tree-sitter-node inside-tree-sitter-node
-          :fixup-function fixup-function
-          :regexp regexp))))))
+  (if-let* ((mode (apply #'derived-mode-p (cl-mapcan (lambda (cell)
+                                                       (ensure-list (car cell)))
+                                                     akirak-import-settings-alist)))
+            (entry (seq-find `(lambda (cell)
+                                (memq ',mode (ensure-list (car cell))))
+                             akirak-import-settings-alist)))
+      (pcase-exhaustive entry
+        (`(,mode . ,(map :regexp :treesit-node-types :extra-modes
+                         :extensions :source-directories :transform-filename
+                         :goto-insert-location :fixup-function :package-file
+                         :inside-tree-sitter-node :make-default))
+         (let* ((existing-statements (akirak-import--collect-statements (ensure-list mode)
+                                                                        :regexp regexp
+                                                                        :treesit-node-types
+                                                                        treesit-node-types))
+                (generated-statements (akirak-import--generate-statements
+                                       :identifier pattern
+                                       :extensions extensions
+                                       :package-file package-file
+                                       :source-directories source-directories
+                                       :transform-filename transform-filename))
+                (lines (thread-last
+                         (append generated-statements existing-statements)
+                         (seq-sort #'string<)
+                         (seq-uniq))))
+           (cl-flet
+               ((contains-pattern (s)
+                  (let ((case-fold-search nil))
+                    (string-match-p (regexp-quote pattern)
+                                    s))))
+             (akirak-import--insert-line
+              (completing-read (if pattern
+                                   (format-message "Insert an import statement for '%s': " pattern)
+                                 "Insert an import statement: ")
+                               lines
+                               nil nil
+                               (when (and pattern
+                                          (seq-find #'contains-pattern lines))
+                                 (concat pattern " "))
+                               nil
+                               (when (and make-default pattern)
+                                 (funcall make-default pattern lines)))
+              :goto-insert-location goto-insert-location
+              :inside-tree-sitter-node inside-tree-sitter-node
+              :fixup-function fixup-function
+              :regexp regexp)))))
+    (user-error "Unsupported mode")))
 
 (cl-defun akirak-import--collect-statements (modes &key regexp treesit-node-types)
   "Collect import statements matching one of MODES."
@@ -168,10 +173,13 @@
 (cl-defun akirak-import--generate-statements (&key identifier
                                                    extensions
                                                    source-directories
+                                                   package-file
                                                    transform-filename)
   (let ((regexp (concat "/" (regexp-opt source-directories) "/")))
     (thread-last
-      (akirak-consult--project-files 'absolute)
+      (akirak-consult--project-files 'absolute
+                                     (when package-file
+                                       (locate-dominating-file default-directory package-file)))
       (delete (buffer-file-name (buffer-base-buffer)))
       (mapcar `(lambda (filename)
                  (when (string-match ,regexp filename)
@@ -189,7 +197,8 @@
   (cl-labels
       ((predicate (item)
          (if (imenu--subalist-p item)
-             (check-alist (cdr item))
+             (or (equal (car item) identifier)
+                 (check-alist (cdr item)))
            (and (consp item)
                 (equal (car item) identifier))))
        (check-alist (alist)
@@ -322,6 +331,39 @@
                  (delete-char 1))
                (throw 'import-found t)))
             (goto-char end)))))))
+
+(defcustom akirak-import-typescript-alias-config
+  '("package.json"
+    ("#*.js" . "./src/*.[tj]s"))
+  ""
+  :type '(cons (string :tag "Marker file name")
+               (alist :key-type (string :tag "alias")
+                      :value-type (string :tag "path"))))
+
+(defun akirak-import-typescript-encode-path (path)
+  (pcase akirak-import-typescript-alias-config
+    (`(,marker . ,entries)
+     (let* ((base-dir (locate-dominating-file default-directory marker))
+            (relative-path (file-relative-name path base-dir)))
+       (catch 'path-alias
+         (pcase-dolist (`(,alias . ,path-pattern) entries)
+           (when (string-match (akirak-import--glob-to-regexp path-pattern)
+                               relative-path)
+             (let ((param (match-string 1 relative-path)))
+               (throw 'path-alias (if param
+                                      (replace-regexp-in-string (rx "*") param alias)
+                                    alias))))))))))
+
+(defun akirak-import--glob-to-regexp (pattern)
+  (with-temp-buffer
+    (insert pattern)
+    (goto-char (point-min))
+    (when (looking-at (rx "./"))
+      (replace-match "^")
+      (goto-char (point-min)))
+    (when (re-search-forward (rx "*") nil t)
+      (replace-match "\\\\([^z-a]+\\\\)"))
+    (buffer-string)))
 
 (provide 'akirak-import)
 ;;; akirak-import.el ends here

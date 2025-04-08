@@ -1,1 +1,2 @@
-(orgabilize :fetcher github :repo "akirak/orgabilize.el")
+(orgabilize :fetcher github :repo "akirak/orgabilize.el"
+            :files (:defaults (:exclude "orgabilize-playwright.el")))

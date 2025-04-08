@@ -57,8 +57,6 @@
          (call-interactively (symbol-function ',command))
          (tab-bar-rename-tab (funcall ',tabname-fn))))))
 
-(akirak-embark-wrap-project-command akirak-shell)
-(akirak-embark-wrap-project-command akirak-shell-other-window)
 (akirak-embark-wrap-project-command magit-log-head :require 'magit-log)
 (akirak-embark-wrap-project-command magit-log-all :require 'magit-log)
 
@@ -75,8 +73,7 @@
   "o" #'find-file-other-window
   "t" #'find-file-other-tab
   "p" #'akirak-consult-project-file
-  "v" #'akirak-embark-shell-at-dir
-  "V" #'akirak-embark-shell-other-window-at-dir
+  "v" #'akirak-shell-at-directory
   "l h" #'akirak-embark-magit-log-head
   "l a" #'akirak-embark-magit-log-all
   "n" #'nix3-flake-show)
@@ -413,6 +410,9 @@
   (add-to-list 'embark-pre-action-hooks
                '(project-query-replace-regexp
                  embark--beginning-of-target embark--unmark-target))
+
+  (add-to-list 'embark-exporters-alist
+               '(directory . embark-export-dired))
 
   (add-to-list 'embark-target-injection-hooks
                '(akirak-org-babel-send-block-to-shell
@@ -848,23 +848,6 @@
               " && dune build")))
     ("mix.exs"
      (akirak-compile-install "mix deps.get"))))
-
-(defun akirak-embark-shell-at-dir (dir &optional other-window)
-  (interactive "DDirectory: ")
-  (when (or (file-directory-p dir)
-            (and (not (file-exists-p dir))
-                 (when (yes-or-no-p (format "Create a directory \"%s\" and open a shell in it?"
-                                            dir))
-                   (make-directory dir 'parents)
-                   t)))
-    (let ((default-directory dir))
-      (if other-window
-          (akirak-shell-other-window)
-        (akirak-shell)))))
-
-(defun akirak-embark-shell-other-window-at-dir (dir)
-  (interactive "DDirectory: ")
-  (akirak-embark-shell-at-dir t))
 
 (defun akirak-embark-browse-remote (dir)
   "Browse the remote URL of DIR."

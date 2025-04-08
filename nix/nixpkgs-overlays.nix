@@ -13,16 +13,8 @@
       ;
   })
 
-  # Add extra tree-sitter grammars that are not included in nixpkgs
-  # yet.
   (_: prev: {
-    tree-sitter = prev.tree-sitter.override {
-      extraGrammars = {
-        tree-sitter-astro = {
-          src = inputs.tree-sitter-astro.outPath;
-        };
-      };
-    };
+    sqlglot-formatter = prev.callPackage ./pkgs/sqlglot-formatter.nix { };
   })
 
   #   # makeEmacsTwistArchive

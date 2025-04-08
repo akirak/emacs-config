@@ -13,6 +13,12 @@
       repo = "aggressive-indent-mode";
       type = "github";
     };
+    aidermacs = {
+      flake = false;
+      owner = "MatthewZMD";
+      repo = "aidermacs";
+      type = "github";
+    };
     aio = {
       flake = false;
       owner = "skeeto";
@@ -125,12 +131,6 @@
       flake = false;
       owner = "kickingvegas";
       repo = "casual-symbol-overlay";
-      type = "github";
-    };
-    claude-code = {
-      flake = false;
-      owner = "stevemolitor";
-      repo = "claude-code.el";
       type = "github";
     };
     closql = {
@@ -430,6 +430,12 @@
       flake = false;
       owner = "mohkale";
       repo = "flymake-collection";
+      type = "github";
+    };
+    flymake-sqlfluff = {
+      flake = false;
+      owner = "erickgnavar";
+      repo = "flymake-sqlfluff";
       type = "github";
     };
     fsharp-mode = {
@@ -767,6 +773,12 @@
       repo = "oahu.el";
       type = "github";
     };
+    ob-aider = {
+      flake = false;
+      owner = "localredhead";
+      repo = "ob-aider.el";
+      type = "github";
+    };
     ob-graphql = {
       flake = false;
       owner = "akirak";
@@ -964,6 +976,12 @@
       type = "github";
     };
     orgabilize = {
+      flake = false;
+      owner = "akirak";
+      repo = "orgabilize.el";
+      type = "github";
+    };
+    orgabilize-playwright = {
       flake = false;
       owner = "akirak";
       repo = "orgabilize.el";

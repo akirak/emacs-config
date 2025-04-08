@@ -181,19 +181,26 @@
 ;;;###autoload
 (defun akirak-consult-dir-descendants (&optional dir)
   "Browse a descendant directory of DIR."
-  (interactive (list (or (vc-git-root default-directory)
-                         default-directory)))
-  (let* ((default-directory (if dir
+  (interactive (list (akirak-consult-dir--default-root)))
+  (let* ((current default-directory)
+         (default-directory (if dir
                                 (expand-file-name dir)
-                              (or (vc-git-root default-directory)
-                                  default-directory)))
-         (selected (consult--read (process-lines "fd" "-t" "d")
+                              (akirak-consult-dir--default-root)))
+         (selected (consult--read (akirak-consult--sort-entries-1
+                                   (process-lines "fd" "-t" "d")
+                                   (file-relative-name current default-directory))
                                   :category 'directory
                                   :state (consult--file-state)
                                   :require-match t
                                   :prompt "Directory: "
                                   :sort nil)))
     (dired (expand-file-name selected dir))))
+
+(defun akirak-consult-dir--default-root ()
+  (or (vc-git-root default-directory)
+      (when-let* ((pr (project-current)))
+        (project-root pr))
+      default-directory))
 
 (provide 'akirak-consult-dir)
 ;;; akirak-consult-dir.el ends here

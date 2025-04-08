@@ -363,10 +363,7 @@ Specify extra root files to help eglot correctly identify project roots.
      (let ((feature (setup-get 'feature)))
        (macroexp-progn
         (mapcar (pcase-lambda (`(,name . ,args))
-                  `(eval-after-load ',feature
-                     (defun ,(intern (concat "akirak/reformatter-define-"
-                                             (symbol-name name))) ()
-                       (reformatter-define ,name ,@args))))
+                  `(reformatter-define ,name ,@args))
                 entries)))))
 #+end_src
 *** :repeat
@@ -1313,6 +1310,7 @@ The built-in =electric= package provides the following modes:
                          (heex-ts-mode . (,@lsp))
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
+                         (python-mode . (,@lsp))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
                          (sql-mode . (,@sqlformat))
@@ -2844,6 +2842,20 @@ Org-Memento integration for oahu
         (:with-map org-memento-zone-mode-map
           (:keymap "v" #'oahu-memento-group-view)))))
 #+end_src
+*** ob-aider                                                                :AI:
+:PROPERTIES:
+:CREATED_TIME: [2025-04-04 Fri 23:59]
+:END:
+#+begin_quote
+Org Babel functions for Aider.el & Aidermacs integration
+[[https://github.com/localredhead/ob-aider.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package ob-aider)
+    (with-eval-after-load 'org
+      (add-to-list 'org-babel-load-languages '(aider . t))))
+#+end_src
 *** ob-graphql
 :PROPERTIES:
 :CREATED_TIME: [2023-05-06 Sat 13:57]
@@ -3416,6 +3428,22 @@ Converts web pages into Org
                       ("^[^。]+。" . "")
                       ("|" . "│")
                       ("[【】]" . ""))))))
+#+end_src
+**** orgabilize-playwright                                   :@extra:MCP:
+:PROPERTIES:
+:CREATED_TIME: [2025-04-02 Wed 20:28]
+:END:
+#+begin_quote
+Playwright backend for scraping web pages
+[[https://github.com/akirak/orgabilize.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package orgabilize-playwright)
+    ;; A custom package from github:akirak/nix-playwright-mcp
+    (:nixpkgs playwright-mcp)
+    (:set orgabilize-use-playwright t
+          orgabilize-playwright-mcp-name "playwright-headless"))
 #+end_src
 *** org-autolist
 :PROPERTIES:
@@ -4549,6 +4577,7 @@ Major mode for the Go programming language
 #+begin_src elisp
   (setup heex-ts-mode
     (:mode-project-roots "mix.exs")
+    (:mode-repl akirak/iex-dwim)
     (:local-set electric-pair-pairs '((?% . ?%)))
     (:when-loaded
       ;; These workarounds are only necessary due to upstream inconsistencies.
@@ -4662,6 +4691,7 @@ Major mode for Nix expressions, powered by tree-sitter
 
 #+begin_src emacs-lisp
   (setup toml-ts-mode
+    (:org-src-lang "toml")
     (:file-match "\\.toml\\'"))
 #+end_src
 *** typescript-ts-mode                                              :major_mode:
@@ -5203,6 +5233,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (keymap-global-set "C-c x" #'akirak-scratch-from-selection)
 #+end_src
+*** akirak-shell
+#+begin_src elisp
+  (setup akirak-shell
+    (:global-keymap "C-c t" #'akirak-shell))
+#+end_src
 *** akirak-shr
 #+begin_src elisp
   (setup akirak-shr
@@ -5285,10 +5320,13 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode eldoc-mode)
                           akirak-window-display-document-buffer))
-                       ((or ,(major-modes vterm-mode eat-mode)
-                            "^\\*Nix-REPL\\*")
+                       ((or ,(major-modes vterm-mode)
+                            "^\\*Nix-REPL\\*"
+                            ;; Pop up eat windows if and only if it follows a
+                            ;; certain buffer naming convention.
+                            "^\\*popup-")
                         ,(reuse-mode-window
-                          (vterm-mode eat-mode nix-repl-mode)
+                          (vterm-mode nix-repl-mode)
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
                        (,(major-modes nov-mode pdf-view-mode Info-mode)
@@ -5296,6 +5334,8 @@ This is an extra functions for window management.
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
+                       ("^\\*Embark Export"
+                        akirak-window-as-left-sidebar)
                        ("^\\*Org-Babel Error Output*"
                         display-buffer-no-window
                         (allow-no-window . t))
@@ -5528,6 +5568,20 @@ Minor mode to aggressively keep your code always indented
   (setup (:package aggressive-indent)
     (:hook-into emacs-lisp-mode-hook
                 dune-mode-hook))
+#+end_src
+*** aidermacs                                                               :AI:
+:PROPERTIES:
+:CREATED_TIME: [2025-04-04 Fri 23:59]
+:END:
+#+begin_quote
+AI pair programming with Aider
+[[https://github.com/MatthewZMD/aidermacs]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package aidermacs)
+    (:nixpkgs aider-chat)
+    (:global-keymap "C-=" #'aidermacs-transient-menu))
 #+end_src
 *** COMMENT all-the-icons                               :UI:ARCHIVE:
 :PROPERTIES:
@@ -5903,7 +5957,7 @@ Transient user interfaces for various modes
     (:with-feature calc
       (:keymap "C-," #'casual-calc-tmenu)))
 #+end_src
-*** claude-code
+*** COMMENT claude-code                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-03-15 Sat 14:23]
 :END:
@@ -6138,7 +6192,14 @@ A transient for cosmetics on source code
 
 #+begin_src emacs-lisp
   (setup (:package cosmetic-transient)
-    (:global-keymap "C-c m" #'cosmetic-transient))
+    (:global-keymap "C-c m" #'cosmetic-transient)
+
+    (:when-loaded
+      (add-to-list 'cosmetic-transient-language-formatters
+                   '(sql
+                     :minor-mode sqlglot-format-on-save-mode
+                     :buffer-formatter sqlglot-format-buffer
+                     :region-formatter sqlglot-format-region))))
 #+end_src
 *** csv-mode
 :PROPERTIES:
@@ -6885,10 +6946,15 @@ Conveniently act on minibuffer completions
 #+begin_src emacs-lisp
   (setup (:package embark)
     (:global-keymap "C-." #'embark-act
-             "C->" #'embark-act-all)
+                    "C->" #'embark-act-all)
 
     (keymap-set minibuffer-mode-map "C-," #'embark-become)
     (keymap-set minibuffer-mode-map "C-SPC" #'embark-select)
+
+    (add-hook 'embark-after-export-hook
+              (defun akirak/embark-after-export ()
+                (when (derived-mode-p 'dired-mode)
+                  (dired-hide-details-mode 1))))
 
     (:when-loaded
       (when (require 'akirak-embark nil t)
@@ -7136,6 +7202,30 @@ A bash/sh Flymake backend powered by ShellCheck
 #+begin_src emacs-lisp
   (setup (:package flymake-shellcheck)
     (:nixpkgs "shellcheck"))
+#+end_src
+*** flymake-sqlfluff
+:PROPERTIES:
+:CREATED_TIME: [2025-04-01 Tue 16:15]
+:END:
+#+begin_quote
+A flymake plugin for SQL files using sqlfluff
+[[https://github.com/erickgnavar/flymake-sqlfluff]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-sqlfluff)
+    (:nixpkgs sqlfluff)
+    (add-hook 'sql-mode-hook
+              (defun akirak/flymake-sqlfluff-setup ()
+                (flymake-sqlfluff-load)
+                (flymake-mode)))
+
+    ;; Also define the formatter
+    (:reformatters
+     (sqlfluff-format
+      :program "sqlfluff"
+      ;; Use the same dialect as flymake-sqlfluff
+      :args (list "format" "--dialect" flymake-sqlfluff-dialect "-"))))
 #+end_src
 *** COMMENT forge                                                   :VC:project:ARCHIVE:
 :PROPERTIES:
@@ -8021,15 +8111,15 @@ A Git porcelain inside Emacs
 
     (:with-map (magit-status-mode-map magit-log-mode-map)
       (:keymap "^" (defun akirak/magit-up-directory ()
-                   "Visit the parent repository using magit, or visit the parent directory using dired."
-                   (interactive)
-                   (let ((parent-dir (thread-last
-                                       default-directory
-                                       (string-remove-suffix "/")
-                                       (file-name-directory))))
-                     (if-let* ((root (magit-toplevel parent-dir)))
-                         (magit-status root)
-                       (dired parent-dir))))))
+                     "Visit the parent repository using magit, or visit the parent directory using dired."
+                     (interactive)
+                     (let ((parent-dir (thread-last
+                                         default-directory
+                                         (string-remove-suffix "/")
+                                         (file-name-directory))))
+                       (if-let* ((root (magit-toplevel parent-dir)))
+                           (magit-status root)
+                         (dired parent-dir))))))
 
     ;; Replace the binding to compose-message
     (keymap-set ctl-x-map "m" #'magit-dispatch)
@@ -8230,7 +8320,7 @@ Client for Mastodon, a federated social network
 #+begin_src emacs-lisp
 (setup (:package mastodon))
 #+end_src
-*** mcp
+*** mcp                                                             :MCP:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2025-03-16 Sun 23:04]
 :END:
@@ -8241,7 +8331,13 @@ Model Context Protocol
 
 #+begin_src emacs-lisp
   (setup (:package mcp)
-    (:global "<f12> a m" #'mcp-hub))
+    (:global "<f12> a m" #'mcp-hub)
+    (:set mcp-hub-servers
+          `(("playwright-headless"
+             ;; Use the pre-downloaded Nix package. An alternative is
+             ;; `nix run github:akirak/nix-playwright-mcp --`.
+             :command "mcp-server-playwright"
+             :args ("--headless")))))
 #+end_src
 *** mermaid-mode                                        :@extra:mermaid:
 :PROPERTIES:
@@ -8789,23 +8885,22 @@ Summon and dismiss buffers as popups
                 (recenter -1 t)))
 
     (:keymap "M-\"" #'popper-cycle
-           "M-' RET" #'popper-toggle-type
-           "M-' M-'" #'popper-toggle
-           "M-' a" (defun akirak/display-async-shell-command ()
-                     (interactive)
-                     (display-buffer "*Async Shell Command*"))
-           "M-' e" #'flymake-show-buffer-diagnostics
-           "M-' t" #'akirak-shell-for-project-other-window
-           "M-' s" #'scratch-buffer
-           "M-' w" (defun akirak/revisit-eww-buffer ()
-                     (interactive)
-                     (pop-to-buffer "*eww*"))
-           "M-' c" (defun akirak/compilation-buffer (&optional arg)
-                     (interactive "P")
-                     (if-let* ((buffer (and (not arg)
-                                            (get-buffer "*compilation*"))))
-                         (pop-to-buffer buffer)
-                       (project-compile)))))
+             "M-' RET" #'popper-toggle-type
+             "M-' M-'" #'popper-toggle
+             "M-' a" (defun akirak/display-async-shell-command ()
+                       (interactive)
+                       (display-buffer "*Async Shell Command*"))
+             "M-' e" #'flymake-show-buffer-diagnostics
+             "M-' s" #'scratch-buffer
+             "M-' w" (defun akirak/revisit-eww-buffer ()
+                       (interactive)
+                       (pop-to-buffer "*eww*"))
+             "M-' c" (defun akirak/compilation-buffer (&optional arg)
+                       (interactive "P")
+                       (if-let* ((buffer (and (not arg)
+                                              (get-buffer "*compilation*"))))
+                           (pop-to-buffer buffer)
+                         (project-compile)))))
 #+end_src
 *** posframe                                            :UI:library:
 :PROPERTIES:
@@ -8988,6 +9083,26 @@ Define commands which run reformatters on the current buffer
                       nil))
                     (list "@biomejs/biome" "format" (buffer-file-name)
                           (concat "--stdin-file-path=" (buffer-file-name)))))))
+#+end_src
+**** sqlglot
+:PROPERTIES:
+:CREATED_TIME: [2025-04-07 Mon 11:47]
+:END:
+
+#+begin_src emacs-lisp
+  (setup sqlglot
+    (:nixpkgs sqlglot-formatter)
+
+    (defcustom sqlglot-formatter-dialect "postgres"
+      "SQL dialect used in the buffer."
+      :type '(choice (const nil)
+                     (const "Name of a dialect supported by sqlglot" string)))
+
+    ;; sqlglot-formatter is a tiny custom package that wraps sqlglot.
+    (:reformatters
+     (sqlglot-format
+      :program "sqlglot-formatter"
+      :args (list "--dialect" "postgres"))))
 #+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
@@ -10487,11 +10602,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 222 |
+| [[org-ql-search:tags:packages][packages]]            | 226 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
+| [[org-ql-search:tags:@extra][@extra]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
-| [[org-ql-search:tags:@extra][@extra]]              |  11 |
-| [[org-ql-search:tags:formatting][formatting]]          |  10 |
+| [[org-ql-search:tags:formatting][formatting]]          |  11 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
@@ -10499,6 +10614,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
+| [[org-ql-search:tags:AI][AI]]                  |   5 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
@@ -10511,7 +10627,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
 | [[org-ql-search:tags:Org][Org]]                 |   3 |
-| [[org-ql-search:tags:AI][AI]]                  |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -10522,6 +10637,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:keybindings][keybindings]]         |   2 |
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
+| [[org-ql-search:tags:MCP][MCP]]                 |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
@@ -10607,11 +10723,13 @@ I want to care about readability in the following modes:
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Artificial intelligence / LLM
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
-| Heading | Todo |
-|---------+------|
-| [[copilot][copilot]] |      |
-| [[elysium][elysium]] |      |
-| [[gptel][gptel]]   |      |
+| Heading   | Todo |
+|-----------+------|
+| [[ob-aider][ob-aider]]  |      |
+| [[aidermacs][aidermacs]] |      |
+| [[copilot][copilot]]   |      |
+| [[elysium][elysium]]   |      |
+| [[gptel][gptel]]     |      |
 #+END:
 
 For LLM integration, gptel is the generic frontend and backend.
@@ -10624,24 +10742,26 @@ I am also trying out other editors for coding, which is not documented here.
 To use these features, they need to be turned on at build time.
 
 #+BEGIN: org-ql :query "tags:@extra" :columns (heading todo)
-| Heading         | Todo |
-|-----------------+------|
-| [[org-bb][org-bb]]          |      |
-| [[org-memento][org-memento]]     |      |
-| [[org-recur][org-recur]]       |      |
-| [[beancount][beancount]]       |      |
-| [[dune][dune]]            |      |
-| [[elx][elx]]             |      |
-| [[epkg][epkg]]            |      |
-| [[epkg-marginalia][epkg-marginalia]] |      |
-| [[flycheck][flycheck]]        |      |
-| [[fstar-mode][fstar-mode]]      |      |
-| [[lean4-mode][lean4-mode]]      |      |
-| [[lsp-mode][lsp-mode]]        |      |
-| [[mermaid-mode][mermaid-mode]]    |      |
-| [[Coq][Coq]]             |      |
-| [[tuareg][tuareg]]          |      |
-| [[utop][utop]]            |      |
+| Heading               | Todo |
+|-----------------------+------|
+| [[orgabilize-playwright][orgabilize-playwright]] |      |
+| [[org-bb][org-bb]]                |      |
+| [[org-memento][org-memento]]           |      |
+| [[org-recur][org-recur]]             |      |
+| [[beancount][beancount]]             |      |
+| [[dune][dune]]                  |      |
+| [[elx][elx]]                   |      |
+| [[epkg][epkg]]                  |      |
+| [[epkg-marginalia][epkg-marginalia]]       |      |
+| [[flycheck][flycheck]]              |      |
+| [[fstar-mode][fstar-mode]]            |      |
+| [[lean4-mode][lean4-mode]]            |      |
+| [[lsp-mode][lsp-mode]]              |      |
+| [[mcp][mcp]]                   |      |
+| [[mermaid-mode][mermaid-mode]]          |      |
+| [[Coq][Coq]]                   |      |
+| [[tuareg][tuareg]]                |      |
+| [[utop][utop]]                  |      |
 #+END:
 *** Links
 :PROPERTIES:

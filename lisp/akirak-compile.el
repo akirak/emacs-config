@@ -200,12 +200,19 @@ are displayed in the frame."
                 (history (gethash key akirak-compile-per-workspace-history
                                   :default))
                 (projects (akirak-compile--find-projects workspace))
-                (command (akirak-compile--complete (if arg
-                                                       "Compile in a per-project buffer: "
-                                                     "Compile: ")
-                                                   projects
-                                                   (unless (eq history :default)
-                                                     history)))
+                (command (akirak-compile--complete
+                          (if arg
+                              "Compile in a per-project buffer: "
+                            "Compile: ")
+                          projects
+                          (unless (eq history :default)
+                            ;; In a mono-repo, the history can contain entries
+                            ;; for other projects under the same workspace.
+                            (thread-last
+                              (copy-sequence history)
+                              (seq-filter `(lambda (ent)
+                                             (member (get-char-property 0 'command-directory ent)
+                                                     (mapcar #'cdr ',projects))))))))
                 (default-directory (or (get-text-property 0 'command-directory command)
                                        (cdr (assq (akirak-compile--guess-backend command)
                                                   projects))
@@ -220,15 +227,17 @@ are displayed in the frame."
                (cl-pushnew command history)
                (puthash key history akirak-compile-per-workspace-history))
              (if (equal arg '(4))
-                 (compilation-start command t (akirak-compile--buffer-name))
+                 (compilation-start command t
+                                    (cl-constantly (akirak-compile--buffer-name)))
                (compile command t))))
        (user-error "No workspace root")))))
 
 (defun akirak-compile--buffer-name ()
-  (generate-new-buffer-name (concat (file-name-nondirectory
-                                     (directory-file-name default-directory))
-                                    "-compilation")
-                            t))
+  (concat "*"
+          (file-name-nondirectory
+           (directory-file-name default-directory))
+          "-compilation"
+          "*"))
 
 ;;;###autoload
 (defun akirak-compile-cleanup-buffers ()
@@ -455,7 +464,7 @@ are displayed in the frame."
 
 (defun akirak-compile--installation-command-p (command)
   (pcase (akirak-compile--split-command command)
-    (`(,_ ,(or "add" "install" "remove" "uninstall") . ,_)
+    (`(,_ ,(or "add" "install" "remove" "uninstall" "update") . ,_)
      t)
     (`("npm" "ci")
      t)

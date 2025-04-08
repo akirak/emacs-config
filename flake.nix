@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2024 Akira Komamura
+# Copyright (C) 2021-2025 Akira Komamura
 # SPDX-License-Identifier: MIT
 
 {
@@ -60,6 +60,8 @@
       url = "github:virchau13/tree-sitter-astro";
       flake = false;
     };
+
+    playwright-mcp.url = "github:akirak/nix-playwright-mcp";
   };
 
   nixConfig = {
