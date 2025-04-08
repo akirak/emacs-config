@@ -714,7 +714,8 @@ The point should be at the heading."
   (let* ((link-text (buffer-substring beg end))
          (title (read-string "Title: " link-text)))
     (akirak-org--replace-region-with-entry-link beg end
-      :link-text link-text :heading title)))
+      :link-text link-text :heading title
+      :todo (org-at-item-checkbox-p))))
 
 ;;;###autoload
 (defun akirak-org-convert-link-to-entry ()
@@ -740,7 +741,11 @@ The point should be at the heading."
            (error "Unsupported URI scheme"))))
     (user-error "No link at point")))
 
-(cl-defun akirak-org--replace-region-with-entry-link (beg end &key link-text heading)
+(cl-defun akirak-org--replace-region-with-entry-link (beg end
+                                                          &key
+                                                          link-text
+                                                          heading
+                                                          todo)
   (declare (indent 2))
   (let (parent-id
         (link-text (or link-text heading
@@ -759,13 +764,16 @@ The point should be at the heading."
            (goto-char (point-min))
            (re-search-forward (format org-complex-heading-regexp-format "Backlog"))
            (org-end-of-subtree)
-           (insert "\n** " heading)))
+           (insert "\n** "
+                   (when todo
+                     "TODO ")
+                   heading)))
         (`nil
          (let ((level (org-outline-level)))
            (org-end-of-subtree)
            (insert "\n" (make-string level ?\*) " " heading))))
       (unless (looking-at (rx eol))
-        (org-open-line 1))
+        (newline))
       (setq parent-id (org-id-get-create)))
     (insert (org-link-make-string (concat "id:" parent-id) link-text))))
 
