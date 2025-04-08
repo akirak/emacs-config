@@ -1292,7 +1292,7 @@ The built-in =electric= package provides the following modes:
       (let* (;; (mix-format '((eval . (mix-format-on-save-mode t))))
              ;; (prettier '((eval . (prettier-on-save-mode t))))
              (jq-format '((eval . (jq-format-on-save-mode t))))
-             (sqlformat '((eval . (sqlformat-on-save-mode t))))
+             ;; (sqlformat '((eval . (sqlformat-on-save-mode t))))
              (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
              (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
              (flymake-eslint '((eval . (flymake-eslint-enable))))
@@ -1313,7 +1313,6 @@ The built-in =electric= package provides the following modes:
                          (python-mode . (,@lsp))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
-                         (sql-mode . (,@sqlformat))
                          (svelte-mode . (,@lsp ,@flymake-eslint))
                          (tsx-ts-mode . (,@lsp-no-formatter))
                          (tuareg-mode . ((eval . (ocaml-eglot))
@@ -5569,7 +5568,7 @@ Minor mode to aggressively keep your code always indented
     (:hook-into emacs-lisp-mode-hook
                 dune-mode-hook))
 #+end_src
-*** aidermacs                                                               :AI:
+*** COMMENT aidermacs                                                       :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-04-04 Fri 23:59]
 :END:
@@ -9309,7 +9308,7 @@ SOPS encrypt and decrypt without leaving the editor
     (:keymap "C-c e" #'sops-edit-file
            "C-c C-c" #'sops-save-file))
 #+end_src
-*** sqlformat
+*** COMMENT sqlformat                                                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-02-21 Tue 17:18]
 :END:

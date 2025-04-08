@@ -13,12 +13,6 @@
       repo = "aggressive-indent-mode";
       type = "github";
     };
-    aidermacs = {
-      flake = false;
-      owner = "MatthewZMD";
-      repo = "aidermacs";
-      type = "github";
-    };
     aio = {
       flake = false;
       owner = "skeeto";
@@ -1183,12 +1177,6 @@
       flake = false;
       owner = "Malabarba";
       repo = "spinner.el";
-      type = "github";
-    };
-    sqlformat = {
-      flake = false;
-      owner = "purcell";
-      repo = "sqlformat";
       type = "github";
     };
     ssass-mode = {
