@@ -9083,26 +9083,6 @@ Define commands which run reformatters on the current buffer
                     (list "@biomejs/biome" "format" (buffer-file-name)
                           (concat "--stdin-file-path=" (buffer-file-name)))))))
 #+end_src
-**** sqlglot
-:PROPERTIES:
-:CREATED_TIME: [2025-04-07 Mon 11:47]
-:END:
-
-#+begin_src emacs-lisp
-  (setup sqlglot
-    (:nixpkgs sqlglot-formatter)
-
-    (defcustom sqlglot-formatter-dialect "postgres"
-      "SQL dialect used in the buffer."
-      :type '(choice (const nil)
-                     (const "Name of a dialect supported by sqlglot" string)))
-
-    ;; sqlglot-formatter is a tiny custom package that wraps sqlglot.
-    (:reformatters
-     (sqlglot-format
-      :program "sqlglot-formatter"
-      :args (list "--dialect" "postgres"))))
-#+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:05]
