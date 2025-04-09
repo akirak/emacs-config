@@ -138,15 +138,15 @@ the original minor mode."
 
 (defun akirak-shell--terminal-cwd ()
   (interactive)
-  (akirak-shell--eat-new :dir default-directory
+  (akirak-shell-eat-new :dir default-directory
                          :name akirak-shell-buffer-name
                          :window akirak-shell-split-window))
 
 (defun akirak-shell--terminal-project-root ()
   (interactive)
-  (akirak-shell--eat-new :dir (project-root (project-current))
-                         :name akirak-shell-buffer-name
-                         :window akirak-shell-split-window))
+  (akirak-shell-eat-new :dir (project-root (project-current))
+                        :name akirak-shell-buffer-name
+                        :window akirak-shell-split-window))
 
 (defvar akirak-shell-directory nil)
 
@@ -162,11 +162,11 @@ the original minor mode."
    (t
     (user-error "Aborted")))
   (setq akirak-shell-directory dir)
-  (akirak-shell--eat-new :dir dir
-                         :name akirak-shell-buffer-name
-                         :window akirak-shell-split-window))
+  (akirak-shell-eat-new :dir dir
+                        :name akirak-shell-buffer-name
+                        :window akirak-shell-split-window))
 
-(cl-defun akirak-shell--eat-new (&key dir window name)
+(cl-defun akirak-shell-eat-new (&key dir window name noselect)
   (let* ((default-directory (or dir default-directory))
          (command (ensure-list (funcall eat-default-shell-function)))
          (name (or name (concat "eat-"
@@ -182,8 +182,10 @@ the original minor mode."
              (pcase command
                (`(,cmd . ,args)
                 (list cmd nil args))))
-      (pop-to-buffer-same-window buffer))))
-
+      (unless noselect
+        (pop-to-buffer-same-window buffer)))
+    ;; Explicitly return the buffer
+    buffer))
 
 (defun akirak-shell--setup-reopen (children)
   (let (result
