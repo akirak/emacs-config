@@ -7507,10 +7507,11 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (gptel-make-anthropic "Claude"
-        :stream t
-        :key (lambda ()
-               (gptel-api-key-from-auth-source "api.anthropic.com")))
+      (:set gptel-backend (gptel-make-anthropic "Claude"
+                            :stream t
+                            :key (lambda ()
+                                   (gptel-api-key-from-auth-source "api.anthropic.com")))
+            gptel-model 'claude-3-7-sonnet-20250219)
 
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
