@@ -53,12 +53,17 @@ the original minor mode."
 
 (defun akirak-shell-buffer-p (cand)
   (when-let* ((buffer (pcase cand
+                        ((pred bufferp)
+                         cand)
                         ((pred stringp)
                          (get-buffer cand))
                         (`(,name . ,_)
                          (get-buffer name)))))
     (eq (buffer-local-value 'major-mode buffer)
         'eat-mode)))
+
+(defun akirak-shell-buffer-list ()
+  (seq-filter #'akirak-shell-buffer-p (buffer-list)))
 
 ;;;###autoload
 (cl-defun akirak-shell (&optional arg)
@@ -99,7 +104,17 @@ the original minor mode."
 
 ;;;;; Transient prefix
 
+(defvar akirak-shell--buffers nil
+  "List of existing shell/terminal buffers.")
+
 (transient-define-prefix akirak-shell-transient ()
+  ["Live buffers"
+   :if-non-nil akirak-shell--buffers
+   :class transient-column
+   :setup-children akirak-shell--setup-reopen
+   ("k" "Kill finished buffers" akirak-shell--cleanup-buffers
+    :if (lambda ()
+          (seq-some #'akirak-shell--buffer-exited-p (akirak-shell-buffer-list))))]
   ["Options"
    :class transient-row
    ("-s" akirak-shell-split-window-infix)
@@ -111,6 +126,12 @@ the original minor mode."
    ("d" "Select directory" akirak-shell-at-directory)]
   (interactive)
   (setq akirak-shell-split-window t)
+  (setq akirak-shell--buffers (seq-sort-by (lambda (buffer)
+                                             (buffer-local-value 'buffer-display-time
+                                                                 buffer))
+                                           (lambda (a b)
+                                             (not (time-less-p a b)))
+                                           (akirak-shell-buffer-list)))
   (transient-setup 'akirak-shell-transient))
 
 ;;;;; Transient suffix
@@ -162,6 +183,49 @@ the original minor mode."
                (`(,cmd . ,args)
                 (list cmd nil args))))
       (pop-to-buffer-same-window buffer))))
+
+
+(defun akirak-shell--setup-reopen (children)
+  (let (result
+        (n 1))
+    (dolist (buffer akirak-shell--buffers)
+      (let ((symbol (intern (format "akirak-shell--revisit-buffer-%d" n))))
+        (fset symbol `(lambda ()
+                        (interactive)
+                        (akirak-shell--revisit-buffer ,(buffer-name buffer))))
+        (push (list transient--default-child-level
+                    'transient-suffix
+                    (list :key (number-to-string n)
+                          :description
+                          (concat
+                           (buffer-name buffer)
+                           (unless (and (get-buffer-process buffer)
+                                        (process-live-p (get-buffer-process buffer)))
+                             (propertize " (killed)" 'face 'transient-inactive-value))
+                           (propertize " (" 'face 'transient-inactive-value)
+                           (abbreviate-file-name (buffer-local-value 'default-directory buffer))
+                           (propertize ")" 'face 'transient-inactive-value))
+                          :command symbol))
+              result))
+      (cl-incf n))
+    (append children (nreverse result))))
+
+(defun akirak-shell--revisit-buffer (buffer)
+  (if-let* ((tab (tab-bar-get-buffer-tab buffer 'all-frames)))
+      (progn
+        (tab-bar-select-tab tab)
+        (select-window (get-buffer-window buffer)))
+    (pop-to-buffer buffer)))
+
+(defun akirak-shell--cleanup-buffers ()
+  (interactive)
+  (dolist (buffer (akirak-shell-buffer-list))
+    (when (akirak-shell--buffer-exited-p buffer)
+      (kill-buffer buffer))))
+
+(defun akirak-shell--buffer-exited-p (buffer)
+  (not (and (get-buffer-process buffer)
+            (process-live-p (get-buffer-process buffer)))))
 
 ;;;; Other commands that are possibly deprecated
 
