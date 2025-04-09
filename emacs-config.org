@@ -5156,6 +5156,17 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-org-reg
     (:global-keymap "C-c j" #'akirak-org-reg-transient))
 #+end_src
+*** akirak-org-shell
+:PROPERTIES:
+:CREATED_TIME: [2025-04-10 Thu 21:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup akirak-org-shell
+    (:with-feature org
+      (:with-map org-mode-map
+        (:bind "C-c C-x $" #'akirak-org-shell-transient))))
+#+end_src
 *** akirak-org-special
 #+begin_src elisp
   (setup akirak-org-special
