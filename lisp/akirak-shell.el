@@ -148,7 +148,9 @@ the original minor mode."
 (cl-defun akirak-shell--eat-new (&key dir window name)
   (let* ((default-directory (or dir default-directory))
          (command (ensure-list (funcall eat-default-shell-function)))
-         (name (or name "eat"))
+         (name (or name (concat "eat-"
+                                (file-name-nondirectory
+                                 (directory-file-name default-directory)))))
          (buffer (generate-new-buffer (format "*%s*"
                                               (concat (when window
                                                         "popup-")
