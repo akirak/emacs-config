@@ -2232,6 +2232,19 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup tab-bar
     (:set tab-bar-auto-width-max '(350 25))
+
+    (:with-map tab-prefix-map
+      (:keymap "R" #'akirak/tab-bar-set-tab-name-from-org-clock))
+
+    (defun akirak/tab-bar-set-tab-name-from-org-clock ()
+      (interactive)
+      (if-let* ((heading (when (org-clocking-p)
+                           (org-entry-get (or org-clock-hd-marker
+                                              org-clock-marker)
+                                          "ITEM"))))
+          (tab-bar-rename-tab heading)
+        (user-error "Not clocking in")))
+
     ;; Not currently used.
     ;; (:set tab-bar-tab-name-function #'akirak/tab-bar-tab-name)
     ;; (:when-loaded
