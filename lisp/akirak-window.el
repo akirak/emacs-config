@@ -52,18 +52,6 @@
   (memq (buffer-local-value 'major-mode (window-buffer window))
         modes))
 
-(defun akirak-window-left-side-window-p (&optional window)
-  (and (window-dedicated-p window)
-       (not (window-in-direction 'left window))))
-
-(defun akirak-window-right-side-window-p (&optional window)
-  (and (window-dedicated-p window)
-       (not (window-in-direction 'right window))))
-
-(defun akirak-window-bottom-side-window-p (&optional window)
-  (and (window-dedicated-p window)
-       (not (window-in-direction 'below window))))
-
 ;;;; Alternative display-buffer functions
 
 ;;;###autoload
