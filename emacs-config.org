@@ -6738,7 +6738,8 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
     (:with-map eat-semi-char-mode-map
       (:keymap "S-<prior>" #'View-scroll-page-backward
                "S-<next>" #'View-scroll-page-forward)
-      (:keymap-unset "M-:" "M-g" "M-s" "C-z" "M-o" "M-'"))
+      (:keymap-unset "M-:" "M-g" "M-s" "C-z" "M-o" "M-'"
+                     "M-0" "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9"))
 
     ;; Switch to line-mode automatically.
     (:hook (defun akirak/eat-setup ()
