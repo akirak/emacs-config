@@ -117,7 +117,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                             'window alist)))
 
 ;;;###autoload
-(defun akirak-window-as-left-sidebar (buffer &optional alist)
+(defun akirak-window-display-as-left-sidebar (buffer &optional alist)
   ;; For most major modes, the first line of a buffer is likely to be a
   ;; header.
   (let* ((max-cols (akirak-window--max-column buffer :skip-first-line t))

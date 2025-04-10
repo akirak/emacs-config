@@ -5361,7 +5361,7 @@ This is an extra functions for window management.
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
                        ("^\\*Embark Export"
-                        akirak-window-as-left-sidebar)
+                        akirak-window-display-as-left-sidebar)
                        ("^\\*Org-Babel Error Output*"
                         display-buffer-no-window
                         (allow-no-window . t))
