@@ -230,7 +230,7 @@ the original minor mode."
   (not (and (get-buffer-process buffer)
             (process-live-p (get-buffer-process buffer)))))
 
-;;;; Other commands that are possibly deprecated
+;;;; Commands that I plan on deprecating
 
 ;;;###autoload
 (defalias 'akirak-shell-other-window #'eat-other-window)
