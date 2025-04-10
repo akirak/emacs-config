@@ -131,6 +131,18 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
       (balance-windows)
       window)))
 
+;;;###autoload
+(defun akirak-window-display-as-right-sidebar (buffer &optional alist)
+  (let* ((window (display-buffer-in-side-window buffer
+                                                (append '((side . right)
+                                                          (dedicated . t))
+                                                        alist))))
+    (when window
+      (with-current-buffer buffer
+        (setq-local window-size-fixed 'width))
+      ;; (balance-windows)
+      window)))
+
 (cl-defun akirak-window--max-column (buffer &key skip-first-line)
   (with-current-buffer buffer
     (save-excursion

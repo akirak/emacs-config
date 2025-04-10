@@ -123,7 +123,8 @@ the original minor mode."
    :class transient-row
    ("RET" "Current directory" akirak-shell--terminal-cwd)
    ("p" "Project root" akirak-shell--terminal-project-root)
-   ("d" "Select directory" akirak-shell-at-directory)]
+   ("d" "Select directory" akirak-shell-at-directory)
+   ("a" "Aider" akirak-shell-for-aider)]
   (interactive)
   (setq akirak-shell-split-window t)
   (setq akirak-shell--buffers (seq-sort-by (lambda (buffer)
@@ -166,9 +167,10 @@ the original minor mode."
                         :name akirak-shell-buffer-name
                         :window akirak-shell-split-window))
 
-(cl-defun akirak-shell-eat-new (&key dir window name noselect)
+(cl-defun akirak-shell-eat-new (&key dir window name noselect command)
   (let* ((default-directory (or dir default-directory))
-         (command (ensure-list (funcall eat-default-shell-function)))
+         (command (ensure-list (or command
+                                   (funcall eat-default-shell-function))))
          (name (or name (concat "eat-"
                                 (file-name-nondirectory
                                  (directory-file-name default-directory)))))
@@ -229,6 +231,16 @@ the original minor mode."
 (defun akirak-shell--buffer-exited-p (buffer)
   (not (and (get-buffer-process buffer)
             (process-live-p (get-buffer-process buffer)))))
+
+;;;###autoload
+(defun akirak-shell-for-aider ()
+  (interactive)
+  (let ((root (abbreviate-file-name (project-root (project-current)))))
+    (akirak-shell-eat-new :dir root
+                          :command '("aider" "--light-mode")
+                          :name (concat "aider-"
+                                        (file-name-nondirectory
+                                         (directory-file-name root))))))
 
 ;;;; Commands that I plan on deprecating
 
@@ -299,11 +311,31 @@ the original minor mode."
        (when compilation-regexp
          (akirak-shell-compilation-minor-mode t)
          (akirak-compile-setup-regexp-for-command string))
-       (eat-term-send-string-as-yank eat-terminal string)
-       (when confirm
-         (eat-term-send-string eat-terminal "\n"))))
+       (let ((term-command (cdr (member ".." (thread-last
+                                               (get-buffer-process (current-buffer))
+                                               (process-command))))))
+         (eat-term-send-string-as-yank eat-terminal
+                                       (pcase term-command
+                                         (`("aider" . ,_)
+                                          (akirak-shell--preprocess-aider-input string))
+                                         (_
+                                          string)))
+         (when confirm
+           (eat-term-send-string eat-terminal "\n")
+           (sit-for 0.5))
+         (when-let* ((window (get-buffer-window buffer)))
+           (with-selected-window window
+             (set-window-point nil (eat-term-display-cursor eat-terminal))
+             (recenter (- (1+ (how-many "\n" (eat-term-display-cursor eat-terminal)
+                                        (eat-term-end eat-terminal))))))))))
     (_
      (user-error "Not in any of the terminal modes"))))
+
+(defun akirak-shell--preprocess-aider-input (string)
+  (let ((string (string-trim string)))
+    (if (string-match-p "\n" string)
+        (concat "{input\n" string "\ninput}")
+      string)))
 
 (provide 'akirak-shell)
 ;;; akirak-shell.el ends here
