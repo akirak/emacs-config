@@ -194,7 +194,7 @@ the original minor mode."
       (let ((symbol (intern (format "akirak-shell--revisit-buffer-%d" n))))
         (fset symbol `(lambda ()
                         (interactive)
-                        (akirak-shell--revisit-buffer ,(buffer-name buffer))))
+                        (akirak-shell-select-buffer-window ,(buffer-name buffer))))
         (push (list transient--default-child-level
                     'transient-suffix
                     (list :key (number-to-string n)
@@ -212,12 +212,13 @@ the original minor mode."
       (cl-incf n))
     (append children (nreverse result))))
 
-(defun akirak-shell--revisit-buffer (buffer)
-  (if-let* ((tab (tab-bar-get-buffer-tab buffer 'all-frames)))
+(defun akirak-shell-select-buffer-window (buffer-or-name)
+  "Select the window displaying a buffer."
+  (if-let* ((tab (tab-bar-get-buffer-tab buffer-or-name 'all-frames)))
       (progn
         (tab-bar-select-tab tab)
-        (select-window (get-buffer-window buffer)))
-    (pop-to-buffer buffer)))
+        (select-window (get-buffer-window buffer-or-name)))
+    (pop-to-buffer buffer-or-name)))
 
 (defun akirak-shell--cleanup-buffers ()
   (interactive)
@@ -248,18 +249,16 @@ the original minor mode."
                                            dir)))
                      (buffer-list))
     (`nil
-     (let ((default-directory dir))
-       (akirak-shell)
-       (akirak-shell--send-string command)))
+     (let ((buffer (akirak-shell-eat-new :dir dir :window t)))
+       (akirak-shell-send-string-to-buffer buffer command)))
     (`(,buf)
-     (with-current-buffer buf
-       (akirak-shell--send-string command)
-       (pop-to-buffer (current-buffer))))
+     (akirak-shell-send-string-to-buffer buf command)
+     (pop-to-buffer buf))
     (bufs
-     (let ((name (completing-read "Shell: " (mapcar #'buffer-name bufs) nil t)))
-       (with-current-buffer (get-buffer name)
-         (akirak-shell--send-string command)
-         (pop-to-buffer (current-buffer)))))))
+     (let* ((name (completing-read "Shell: " (mapcar #'buffer-name bufs) nil t))
+            (buffer (get-buffer name)))
+       (akirak-shell-send-string-to-buffer buffer command)
+       (pop-to-buffer buffer)))))
 
 ;;;###autoload
 (cl-defun akirak-shell-exec-in-project (command &key name root)
@@ -284,19 +283,25 @@ the original minor mode."
 
 ;;;###autoload
 (defun akirak-shell-run-command-in-some-buffer (command)
-  (let ((name (read-buffer "Shell: " nil t #'akirak-shell-buffer-p)))
-    (with-current-buffer (get-buffer name)
-      (akirak-shell--send-string command)
-      (pop-to-buffer (current-buffer)))))
+  (let* ((name (read-buffer "Shell: " nil t #'akirak-shell-buffer-p))
+         (buffer (get-buffer name)))
+    (akirak-shell-send-string-to-buffer buffer command)
+    (pop-to-buffer buffer)))
 
-(cl-defun akirak-shell--send-string (string &key compilation-regexp)
-  (pcase (derived-mode-p 'eat-mode)
+(cl-defun akirak-shell-send-string-to-buffer (buffer string
+                                                     &key compilation-regexp
+                                                     confirm)
+  (declare (indent 1))
+  (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
+                                  '(eat-mode))
     (`eat-mode
-     (when compilation-regexp
-       (akirak-shell-compilation-minor-mode t)
-       (akirak-compile-setup-regexp-for-command string))
-     (eat-term-send-string (buffer-local-value 'eat-terminal (current-buffer))
-                           string))
+     (with-current-buffer buffer
+       (when compilation-regexp
+         (akirak-shell-compilation-minor-mode t)
+         (akirak-compile-setup-regexp-for-command string))
+       (eat-term-send-string-as-yank eat-terminal string)
+       (when confirm
+         (eat-term-send-string eat-terminal "\n"))))
     (_
      (user-error "Not in any of the terminal modes"))))
 
