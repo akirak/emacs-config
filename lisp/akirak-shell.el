@@ -190,29 +190,25 @@ the original minor mode."
     buffer))
 
 (defun akirak-shell--setup-reopen (children)
-  (let (result
-        (n 1))
-    (dolist (buffer akirak-shell--buffers)
-      (let ((symbol (intern (format "akirak-shell--revisit-buffer-%d" n))))
-        (fset symbol `(lambda ()
-                        (interactive)
-                        (akirak-shell-select-buffer-window ,(buffer-name buffer))))
-        (push (list transient--default-child-level
-                    'transient-suffix
-                    (list :key (number-to-string n)
-                          :description
-                          (concat
-                           (buffer-name buffer)
-                           (unless (and (get-buffer-process buffer)
-                                        (process-live-p (get-buffer-process buffer)))
-                             (propertize " (killed)" 'face 'transient-inactive-value))
-                           (propertize " (" 'face 'transient-inactive-value)
-                           (abbreviate-file-name (buffer-local-value 'default-directory buffer))
-                           (propertize ")" 'face 'transient-inactive-value))
-                          :command symbol))
-              result))
-      (cl-incf n))
-    (append children (nreverse result))))
+  (thread-last
+    akirak-shell--buffers
+    (seq-map-indexed
+     (lambda (buffer i)
+       (let ((name (buffer-name buffer)))
+         (list (number-to-string (1+ i))
+               (concat name
+                       (unless (and (get-buffer-process buffer)
+                                    (process-live-p (get-buffer-process buffer)))
+                         (propertize " (killed)" 'face 'transient-inactive-value))
+                       (propertize " (" 'face 'transient-inactive-value)
+                       (abbreviate-file-name (buffer-local-value 'default-directory buffer))
+                       (propertize ")" 'face 'transient-inactive-value))
+               `(lambda ()
+                  (interactive)
+                  (akirak-shell-select-buffer-window ,name))
+               :transient t))))
+    (transient-parse-suffixes 'akirak-shell-transient)
+    (append children)))
 
 (defun akirak-shell-select-buffer-window (buffer-or-name)
   "Select the window displaying a buffer."
