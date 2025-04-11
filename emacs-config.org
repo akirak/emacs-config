@@ -7192,19 +7192,7 @@ On-the-fly syntax checking
 #+begin_src emacs-lisp
 (setup (:package flycheck))
 #+end_src
-*** flymake-collection
-:PROPERTIES:
-:CREATED_TIME: [2025-01-23 Thu 22:02]
-:END:
-#+begin_quote
-Collection of checkers for flymake, bringing flymake to the level of flycheck
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package flymake-collection)
-    (:nixpkgs shellcheck))
-#+end_src
-*** COMMENT flymake-eslint                                                     :ARCHIVE:
+*** flymake-eslint
 :PROPERTIES:
 :CREATED_TIME: [2022-07-01 Fri 23:59]
 :END:
@@ -7217,7 +7205,7 @@ A Flymake backend for Javascript using eslint
   (setup (:package flymake-eslint)
     (:set flymake-eslint-defer-binary-check t))
 #+end_src
-*** COMMENT flymake-shellcheck                                                 :ARCHIVE:
+*** flymake-shellcheck
 :PROPERTIES:
 :CREATED_TIME: [2023-11-05 Sun 19:02]
 :END:
