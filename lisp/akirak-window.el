@@ -111,8 +111,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 (defun akirak-window-display-as-left-sidebar (buffer &optional alist)
   ;; For most major modes, the first line of a buffer is likely to be a
   ;; header.
-  (let* ((max-cols (akirak-window--max-column buffer :skip-first-line t))
-         (width (max 20 (min (1+ max-cols) 60)))
+  (let* ((width (akirak-window--left-sidebar-width buffer))
          (window (display-buffer-in-side-window buffer `((side . left)
                                                          (dedicated . t)
                                                          (window-width . ,width)))))
@@ -121,6 +120,26 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
         (setq-local window-size-fixed 'width))
       (balance-windows)
       window)))
+
+(defun akirak-window-force-adjust-width (&optional window)
+  (interactive)
+  (let ((window (or window (selected-window))))
+    (cond
+     ((eq (window-parameter window 'window-side)
+          'left)
+      (let* ((buffer (window-buffer window))
+             (width (akirak-window--left-sidebar-width buffer)))
+        (with-current-buffer buffer
+          (let ((window-size-fixed nil))
+            (shrink-window-horizontally (- (window-width window) width))))
+        (balance-windows)))
+     (t
+      (user-error "Don't know how to adjust the window")))))
+
+(defun akirak-window--left-sidebar-width (buffer)
+  "Determine the width of a new left side bar to display BUFFER."
+  (let ((max-cols (akirak-window--max-column buffer :skip-first-line t)))
+    (max 20 (min (1+ max-cols) 60))))
 
 ;;;###autoload
 (defun akirak-window-display-as-right-sidebar (buffer &optional alist)
