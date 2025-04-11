@@ -161,7 +161,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
   "Reuse the mode window. If none, prefer a pane."
   (let ((alist-mode-entry (assq 'mode alist))
         (windows (thread-last
-                   (window-list-1 nil 'never)
+                   (akirak-window--normal-window-list)
                    (seq-sort-by #'window-height #'>))))
     (if-let* ((mode-window (seq-find (apply-partially #'akirak-window-one-of-modes-p
                                                       (cdr alist-mode-entry))
@@ -177,7 +177,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 ;;;###autoload
 (defun akirak-window-display-org-capture-buffer (buffer _)
   (let ((other-windows (thread-last
-                         (window-list-1 nil 'never)
+                         (akirak-window--normal-window-list)
                          (delete (selected-window)))))
     (if-let* ((w1 (car (cl-remove-if #'akirak-window--org-capture-window-p
                                      other-windows))))
@@ -192,7 +192,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                      '(inhibit-same-window . nil)))
     (or (akirak-window--display-org-occur buffer)
         (when-let* ((other-windows (thread-last
-                                     (window-list-1 nil 'never)
+                                     (akirak-window--normal-window-list)
                                      (delete (selected-window))))
                     (windows (or (cl-remove-if #'akirak-window--org-capture-window-p
                                                other-windows)
@@ -218,7 +218,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
     (if (string-match-p akirak-window-org-occur-buffer-regexp (buffer-name (window-buffer)))
         (window--display-buffer buffer (selected-window) 'reuse)
       (if-let* ((existing-window (thread-last
-                                   (window-list-1 nil 'never)
+                                   (akirak-window--normal-window-list)
                                    (seq-filter (lambda (w)
                                                  (string-match-p akirak-window-org-occur-buffer-regexp
                                                                  (buffer-name (window-buffer w)))))
@@ -230,7 +230,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 ;;;###autoload
 (defun akirak-window-display-document-buffer (buffer _)
   (let* ((other-windows (thread-last
-                          (window-list-1 nil 'never)
+                          (akirak-window--normal-window-list)
                           (delete (selected-window))))
          (non-org-windows (cl-remove-if (apply-partially #'akirak-window-one-of-modes-p
                                                          '(org-mode))
@@ -293,6 +293,14 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                                                          other-buffer)))
                               (with-current-buffer other-buffer
                                 (derived-mode-p 'special-mode))))))))))
+
+(defun akirak-window--normal-window-list ()
+  (thread-last
+    (window-list-1 nil 'never)
+    (seq-filter #'akirak-window--normal-window-p)))
+
+(defun akirak-window--normal-window-p (w)
+  (not (window-dedicated-p w)))
 
 ;;;; Window manipulation
 
