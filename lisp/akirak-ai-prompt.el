@@ -4,7 +4,7 @@
 
 ;;;###autoload
 (defun akirak-ai-prompt-fix-flymake-error-at-pos ()
-  "Fix the error at point in a shell."
+  "Within an AI shell, fix the error at the current point."
   (interactive)
   (let* ((diag (pcase (flymake-diagnostics)
                  (`nil (user-error "No error at point"))
