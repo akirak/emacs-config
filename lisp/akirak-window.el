@@ -162,9 +162,10 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
       (let ((result 0))
         (catch 'max-column
           (while (< (point) (point-max))
-            (setq result (max result (- (line-end-position) (point))))
-            (unless (zerop (forward-line))
-              (throw 'max-column t))))
+            (end-of-line)
+            (setq result (max result
+                              (car (posn-col-row (posn-at-point (line-end-position))))))
+            (end-of-line 2)))
         result))))
 
 ;;;###autoload
