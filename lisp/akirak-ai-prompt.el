@@ -33,7 +33,8 @@
   (declare (indent 1))
   (if interactive
       (akirak-shell-send-string-to-buffer
-          (read-buffer prompt nil t #'akirak-shell-buffer-p)
+          (read-buffer "Select a buffer to send the prompt to: "
+                       nil t #'akirak-shell-buffer-p)
         string :confirm t)
     string))
 
