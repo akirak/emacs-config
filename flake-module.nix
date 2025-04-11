@@ -145,6 +145,11 @@ in
     {
       _module.args.pkgs = import inputs.nixpkgs {
         inherit system overlays;
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (lib.getName pkg) [
+            "copilot-language-server"
+          ];
       };
 
       _module.args.emacs-config = makeConfig {
