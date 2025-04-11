@@ -52,18 +52,6 @@
   (memq (buffer-local-value 'major-mode (window-buffer window))
         modes))
 
-(defun akirak-window-left-side-window-p (&optional window)
-  (and (window-dedicated-p window)
-       (not (window-in-direction 'left window))))
-
-(defun akirak-window-right-side-window-p (&optional window)
-  (and (window-dedicated-p window)
-       (not (window-in-direction 'right window))))
-
-(defun akirak-window-bottom-side-window-p (&optional window)
-  (and (window-dedicated-p window)
-       (not (window-in-direction 'below window))))
-
 ;;;; Alternative display-buffer functions
 
 ;;;###autoload
@@ -91,15 +79,18 @@
                          (unless (or (window-minibuffer-p w)
                                      (member (buffer-name (window-buffer w))
                                              akirak-window-skipped-buffers)
-                                     (window-in-direction 'above w)
-                                     (window-parameter w 'window-side))
+                                     (window-in-direction 'above w))
                            (cons (window-left-column w) w))))
                (delq nil)
                (seq-group-by #'car)
                (seq-sort-by #'car #'<)
                (mapcar (lambda (cell)
                          (cons (car cell)
-                               (mapcar #'cdr (cdr cell)))))))
+                               (mapcar #'cdr (cdr cell)))))
+               (seq-drop-while (lambda (cell)
+                                 (seq-every-p (lambda (w)
+                                                (window-parameter w 'window-side))
+                                              (cdr cell))))))
 
 ;;;###autoload
 (defun akirak-window-display-buffer-split-below (buf &optional alist)
@@ -117,18 +108,49 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                             'window alist)))
 
 ;;;###autoload
-(defun akirak-window-as-left-sidebar (buffer &optional alist)
+(defun akirak-window-display-as-left-sidebar (buffer &optional alist)
   ;; For most major modes, the first line of a buffer is likely to be a
   ;; header.
-  (let* ((max-cols (akirak-window--max-column buffer :skip-first-line t))
-         (width (max 20 (min (1+ max-cols) 60)))
+  (let* ((width (akirak-window--left-sidebar-width buffer))
          (window (display-buffer-in-side-window buffer `((side . left)
-                                                         (dedicated . t)
+                                                         (dedicated . side)
                                                          (window-width . ,width)))))
     (when window
       (with-current-buffer buffer
         (setq-local window-size-fixed 'width))
       (balance-windows)
+      window)))
+
+(defun akirak-window-force-adjust-width (&optional window)
+  (interactive)
+  (let ((window (or window (selected-window))))
+    (cond
+     ((eq (window-parameter window 'window-side)
+          'left)
+      (let* ((buffer (window-buffer window))
+             (width (akirak-window--left-sidebar-width buffer)))
+        (with-current-buffer buffer
+          (let ((window-size-fixed nil))
+            (shrink-window-horizontally (- (window-width window) width))))
+        (balance-windows)))
+     (t
+      (user-error "Don't know how to adjust the window")))))
+
+(defun akirak-window--left-sidebar-width (buffer)
+  "Determine the width of a new left side bar to display BUFFER."
+  (let ((max-cols (akirak-window--max-column buffer :skip-first-line t)))
+    (max 20 (min (1+ max-cols) 60))))
+
+;;;###autoload
+(defun akirak-window-display-as-right-sidebar (buffer &optional alist)
+  (let* ((window (display-buffer-in-side-window buffer
+                                                (append '((side . right)
+                                                          (dedicated . side))
+                                                        alist))))
+    (when window
+      (with-current-buffer buffer
+        (setq-local window-size-fixed 'width))
+      ;; (balance-windows)
       window)))
 
 (cl-defun akirak-window--max-column (buffer &key skip-first-line)
@@ -140,9 +162,10 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
       (let ((result 0))
         (catch 'max-column
           (while (< (point) (point-max))
-            (setq result (max result (- (line-end-position) (point))))
-            (unless (zerop (forward-line))
-              (throw 'max-column t))))
+            (end-of-line)
+            (setq result (max result
+                              (car (posn-col-row (posn-at-point (line-end-position))))))
+            (end-of-line 2)))
         result))))
 
 ;;;###autoload
@@ -158,7 +181,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
   "Reuse the mode window. If none, prefer a pane."
   (let ((alist-mode-entry (assq 'mode alist))
         (windows (thread-last
-                   (window-list-1 nil 'never)
+                   (akirak-window--normal-window-list)
                    (seq-sort-by #'window-height #'>))))
     (if-let* ((mode-window (seq-find (apply-partially #'akirak-window-one-of-modes-p
                                                       (cdr alist-mode-entry))
@@ -174,7 +197,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 ;;;###autoload
 (defun akirak-window-display-org-capture-buffer (buffer _)
   (let ((other-windows (thread-last
-                         (window-list-1 nil 'never)
+                         (akirak-window--normal-window-list)
                          (delete (selected-window)))))
     (if-let* ((w1 (car (cl-remove-if #'akirak-window--org-capture-window-p
                                      other-windows))))
@@ -189,7 +212,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                      '(inhibit-same-window . nil)))
     (or (akirak-window--display-org-occur buffer)
         (when-let* ((other-windows (thread-last
-                                     (window-list-1 nil 'never)
+                                     (akirak-window--normal-window-list)
                                      (delete (selected-window))))
                     (windows (or (cl-remove-if #'akirak-window--org-capture-window-p
                                                other-windows)
@@ -215,7 +238,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
     (if (string-match-p akirak-window-org-occur-buffer-regexp (buffer-name (window-buffer)))
         (window--display-buffer buffer (selected-window) 'reuse)
       (if-let* ((existing-window (thread-last
-                                   (window-list-1 nil 'never)
+                                   (akirak-window--normal-window-list)
                                    (seq-filter (lambda (w)
                                                  (string-match-p akirak-window-org-occur-buffer-regexp
                                                                  (buffer-name (window-buffer w)))))
@@ -227,7 +250,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 ;;;###autoload
 (defun akirak-window-display-document-buffer (buffer _)
   (let* ((other-windows (thread-last
-                          (window-list-1 nil 'never)
+                          (akirak-window--normal-window-list)
                           (delete (selected-window))))
          (non-org-windows (cl-remove-if (apply-partially #'akirak-window-one-of-modes-p
                                                          '(org-mode))
@@ -290,6 +313,14 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                                                          other-buffer)))
                               (with-current-buffer other-buffer
                                 (derived-mode-p 'special-mode))))))))))
+
+(defun akirak-window--normal-window-list ()
+  (thread-last
+    (window-list-1 nil 'never)
+    (seq-filter #'akirak-window--normal-window-p)))
+
+(defun akirak-window--normal-window-p (w)
+  (not (window-dedicated-p w)))
 
 ;;;; Window manipulation
 
@@ -438,6 +469,7 @@ focus on the same buffer."
     (select-window akirak-window-last-non-popup-window))
    ((and (not arg)
          akirak-window-last-record
+         (window-live-p (cdr akirak-window-last-record))
          (member (cdr akirak-window-last-record)
                  (window-list))
          (not (eq (cdr akirak-window-last-record)
@@ -560,7 +592,8 @@ The target window is determined according to the same logic as
                         (akirak-window--popup-p window)))))))))
 
 (defun akirak-window--popup-p (&optional window)
-  (window-parameter window 'window-side))
+  (eq (window-parameter window 'window-side)
+      'below))
 
 (defun akirak-window--find-column (n)
   "Return a window in N-th column of the frame."

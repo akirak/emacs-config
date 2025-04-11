@@ -28,11 +28,10 @@
 
 ;;; Code:
 
-
 ;; Based on sample code in a comment by SataMaxx on Reddit at
 ;; <https://www.reddit.com/r/emacs/comments/mx6xs2/comment/gvoldon/>
 
-;;;; akirak-transient-variable
+(require 'transient)
 
 (defclass akirak-transient-variable (transient-variable)
   ((variable :initarg :variable)))

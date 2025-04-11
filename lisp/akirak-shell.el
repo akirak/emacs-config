@@ -53,12 +53,17 @@ the original minor mode."
 
 (defun akirak-shell-buffer-p (cand)
   (when-let* ((buffer (pcase cand
+                        ((pred bufferp)
+                         cand)
                         ((pred stringp)
                          (get-buffer cand))
                         (`(,name . ,_)
                          (get-buffer name)))))
     (eq (buffer-local-value 'major-mode buffer)
         'eat-mode)))
+
+(defun akirak-shell-buffer-list ()
+  (seq-filter #'akirak-shell-buffer-p (buffer-list)))
 
 ;;;###autoload
 (cl-defun akirak-shell (&optional arg)
@@ -99,7 +104,17 @@ the original minor mode."
 
 ;;;;; Transient prefix
 
+(defvar akirak-shell--buffers nil
+  "List of existing shell/terminal buffers.")
+
 (transient-define-prefix akirak-shell-transient ()
+  ["Live buffers"
+   :if-non-nil akirak-shell--buffers
+   :class transient-column
+   :setup-children akirak-shell--setup-reopen
+   ("k" "Kill finished buffers" akirak-shell--cleanup-buffers
+    :if (lambda ()
+          (seq-some #'akirak-shell--buffer-exited-p (akirak-shell-buffer-list))))]
   ["Options"
    :class transient-row
    ("-s" akirak-shell-split-window-infix)
@@ -108,24 +123,31 @@ the original minor mode."
    :class transient-row
    ("RET" "Current directory" akirak-shell--terminal-cwd)
    ("p" "Project root" akirak-shell--terminal-project-root)
-   ("d" "Select directory" akirak-shell-at-directory)]
+   ("d" "Select directory" akirak-shell-at-directory)
+   ("a" "Aider" akirak-shell-for-aider)]
   (interactive)
   (setq akirak-shell-split-window t)
+  (setq akirak-shell--buffers (seq-sort-by (lambda (buffer)
+                                             (buffer-local-value 'buffer-display-time
+                                                                 buffer))
+                                           (lambda (a b)
+                                             (not (time-less-p a b)))
+                                           (akirak-shell-buffer-list)))
   (transient-setup 'akirak-shell-transient))
 
 ;;;;; Transient suffix
 
 (defun akirak-shell--terminal-cwd ()
   (interactive)
-  (akirak-shell--eat-new :dir default-directory
+  (akirak-shell-eat-new :dir default-directory
                          :name akirak-shell-buffer-name
                          :window akirak-shell-split-window))
 
 (defun akirak-shell--terminal-project-root ()
   (interactive)
-  (akirak-shell--eat-new :dir (project-root (project-current))
-                         :name akirak-shell-buffer-name
-                         :window akirak-shell-split-window))
+  (akirak-shell-eat-new :dir (project-root (project-current))
+                        :name akirak-shell-buffer-name
+                        :window akirak-shell-split-window))
 
 (defvar akirak-shell-directory nil)
 
@@ -141,13 +163,17 @@ the original minor mode."
    (t
     (user-error "Aborted")))
   (setq akirak-shell-directory dir)
-  (akirak-shell--eat-new :dir dir
-                         :name akirak-shell-buffer-name
-                         :window akirak-shell-split-window))
+  (akirak-shell-eat-new :dir dir
+                        :name akirak-shell-buffer-name
+                        :window akirak-shell-split-window))
 
-(cl-defun akirak-shell--eat-new (&key dir window name)
+(cl-defun akirak-shell-eat-new (&key dir window name noselect command)
   (let* ((default-directory (or dir default-directory))
-         (command (ensure-list (funcall eat-default-shell-function)))
+         (command (ensure-list (or command
+                                   (funcall eat-default-shell-function))))
+         (name (or name (concat "eat-"
+                                (file-name-nondirectory
+                                 (directory-file-name default-directory)))))
          (buffer (generate-new-buffer (format "*%s*"
                                               (concat (when window
                                                         "popup-")
@@ -158,9 +184,61 @@ the original minor mode."
              (pcase command
                (`(,cmd . ,args)
                 (list cmd nil args))))
-      (pop-to-buffer-same-window buffer))))
+      (unless noselect
+        (pop-to-buffer-same-window buffer)))
+    ;; Explicitly return the buffer
+    buffer))
 
-;;;; Other commands that are possibly deprecated
+(defun akirak-shell--setup-reopen (children)
+  (thread-last
+    akirak-shell--buffers
+    (seq-map-indexed
+     (lambda (buffer i)
+       (let ((name (buffer-name buffer)))
+         (list (number-to-string (1+ i))
+               (concat name
+                       (unless (and (get-buffer-process buffer)
+                                    (process-live-p (get-buffer-process buffer)))
+                         (propertize " (killed)" 'face 'transient-inactive-value))
+                       (propertize " (" 'face 'transient-inactive-value)
+                       (abbreviate-file-name (buffer-local-value 'default-directory buffer))
+                       (propertize ")" 'face 'transient-inactive-value))
+               `(lambda ()
+                  (interactive)
+                  (akirak-shell-select-buffer-window ,name))
+               :transient t))))
+    (transient-parse-suffixes 'akirak-shell-transient)
+    (append children)))
+
+(defun akirak-shell-select-buffer-window (buffer-or-name)
+  "Select the window displaying a buffer."
+  (if-let* ((tab (tab-bar-get-buffer-tab buffer-or-name 'all-frames)))
+      (progn
+        (tab-bar-select-tab tab)
+        (select-window (get-buffer-window buffer-or-name)))
+    (pop-to-buffer buffer-or-name)))
+
+(defun akirak-shell--cleanup-buffers ()
+  (interactive)
+  (dolist (buffer (akirak-shell-buffer-list))
+    (when (akirak-shell--buffer-exited-p buffer)
+      (kill-buffer buffer))))
+
+(defun akirak-shell--buffer-exited-p (buffer)
+  (not (and (get-buffer-process buffer)
+            (process-live-p (get-buffer-process buffer)))))
+
+;;;###autoload
+(defun akirak-shell-for-aider ()
+  (interactive)
+  (let ((root (abbreviate-file-name (project-root (project-current)))))
+    (akirak-shell-eat-new :dir root
+                          :command '("aider" "--light-mode")
+                          :name (concat "aider-"
+                                        (file-name-nondirectory
+                                         (directory-file-name root))))))
+
+;;;; Commands that I plan on deprecating
 
 ;;;###autoload
 (defalias 'akirak-shell-other-window #'eat-other-window)
@@ -179,18 +257,16 @@ the original minor mode."
                                            dir)))
                      (buffer-list))
     (`nil
-     (let ((default-directory dir))
-       (akirak-shell)
-       (akirak-shell--send-string command)))
+     (let ((buffer (akirak-shell-eat-new :dir dir :window t)))
+       (akirak-shell-send-string-to-buffer buffer command)))
     (`(,buf)
-     (with-current-buffer buf
-       (akirak-shell--send-string command)
-       (pop-to-buffer (current-buffer))))
+     (akirak-shell-send-string-to-buffer buf command)
+     (pop-to-buffer buf))
     (bufs
-     (let ((name (completing-read "Shell: " (mapcar #'buffer-name bufs) nil t)))
-       (with-current-buffer (get-buffer name)
-         (akirak-shell--send-string command)
-         (pop-to-buffer (current-buffer)))))))
+     (let* ((name (completing-read "Shell: " (mapcar #'buffer-name bufs) nil t))
+            (buffer (get-buffer name)))
+       (akirak-shell-send-string-to-buffer buffer command)
+       (pop-to-buffer buffer)))))
 
 ;;;###autoload
 (cl-defun akirak-shell-exec-in-project (command &key name root)
@@ -215,21 +291,47 @@ the original minor mode."
 
 ;;;###autoload
 (defun akirak-shell-run-command-in-some-buffer (command)
-  (let ((name (read-buffer "Shell: " nil t #'akirak-shell-buffer-p)))
-    (with-current-buffer (get-buffer name)
-      (akirak-shell--send-string command)
-      (pop-to-buffer (current-buffer)))))
+  (let* ((name (read-buffer "Shell: " nil t #'akirak-shell-buffer-p))
+         (buffer (get-buffer name)))
+    (akirak-shell-send-string-to-buffer buffer command)
+    (pop-to-buffer buffer)))
 
-(cl-defun akirak-shell--send-string (string &key compilation-regexp)
-  (pcase (derived-mode-p 'eat-mode)
+(cl-defun akirak-shell-send-string-to-buffer (buffer string
+                                                     &key compilation-regexp
+                                                     confirm)
+  (declare (indent 1))
+  (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
+                                  '(eat-mode))
     (`eat-mode
-     (when compilation-regexp
-       (akirak-shell-compilation-minor-mode t)
-       (akirak-compile-setup-regexp-for-command string))
-     (eat-term-send-string (buffer-local-value 'eat-terminal (current-buffer))
-                           string))
+     (with-current-buffer buffer
+       (when compilation-regexp
+         (akirak-shell-compilation-minor-mode t)
+         (akirak-compile-setup-regexp-for-command string))
+       (let ((term-command (cdr (member ".." (thread-last
+                                               (get-buffer-process (current-buffer))
+                                               (process-command))))))
+         (eat-term-send-string-as-yank eat-terminal
+                                       (pcase term-command
+                                         (`("aider" . ,_)
+                                          (akirak-shell--preprocess-aider-input string))
+                                         (_
+                                          string)))
+         (when confirm
+           (eat-term-send-string eat-terminal "\n")
+           (sit-for 0.5))
+         (when-let* ((window (get-buffer-window buffer)))
+           (with-selected-window window
+             (set-window-point nil (eat-term-display-cursor eat-terminal))
+             (recenter (- (1+ (how-many "\n" (eat-term-display-cursor eat-terminal)
+                                        (eat-term-end eat-terminal))))))))))
     (_
      (user-error "Not in any of the terminal modes"))))
+
+(defun akirak-shell--preprocess-aider-input (string)
+  (let ((string (string-trim string)))
+    (if (string-match-p "\n" string)
+        (concat "{input\n" string "\ninput}")
+      string)))
 
 (provide 'akirak-shell)
 ;;; akirak-shell.el ends here

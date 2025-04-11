@@ -1146,7 +1146,8 @@
            (concat "file:" (abbreviate-file-name filename))
            (org-link-make-string))))
     ;; NOTE: This depends on the private API of gptel.
-    (let ((preamble (pcase gptel-context--alist
+    (let ((dispatch-later (string-match-p (rx "%?") llm-prompt))
+          (preamble (pcase gptel-context--alist
                       (`nil)
                       (`((,buffer . ,ovs))
                        (concat (when ovs
@@ -1171,11 +1172,13 @@
                                           "\n")
                                "\n\n")))))
       (setq akirak-capture-gptel-topic t
-            akirak-capture-dispatch-later (string-empty-p llm-prompt)
+            akirak-capture-dispatch-later dispatch-later
             akirak-capture-headline headline
             akirak-capture-template-options (list :tags "@AI"
                                                   :body
-                                                  (concat preamble llm-prompt "%?")))
+                                                  (concat preamble llm-prompt
+                                                          (unless dispatch-later
+                                                            "%?"))))
       (akirak-capture-doct))))
 
 (defun akirak-capture-short-note (string)

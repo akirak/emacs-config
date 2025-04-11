@@ -2,15 +2,13 @@ name: Build Emacs packages
 
 on:
   push:
-    paths:
-    - 'emacs/**'
-    - 'flake.*'
     branches-ignore:
     - master
+  pull_request:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.ref }}
+  group: '${{ github.workflow }}-${{ github.ref }}'
   cancel-in-progress: true
 
 jobs:

@@ -94,9 +94,10 @@
   (akirak-import-thing (thing-at-point 'symbol)))
 
 (defun akirak-import-thing (&optional pattern)
-  (if-let* ((mode (apply #'derived-mode-p (cl-mapcan (lambda (cell)
-                                                       (ensure-list (car cell)))
-                                                     akirak-import-settings-alist)))
+  (if-let* ((mode (apply #'derived-mode-p
+                         (flatten-list (mapcar (lambda (cell)
+                                                 (ensure-list (car cell)))
+                                               akirak-import-settings-alist))))
             (entry (seq-find `(lambda (cell)
                                 (memq ',mode (ensure-list (car cell))))
                              akirak-import-settings-alist)))

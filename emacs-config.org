@@ -1292,7 +1292,7 @@ The built-in =electric= package provides the following modes:
       (let* (;; (mix-format '((eval . (mix-format-on-save-mode t))))
              ;; (prettier '((eval . (prettier-on-save-mode t))))
              (jq-format '((eval . (jq-format-on-save-mode t))))
-             (sqlformat '((eval . (sqlformat-on-save-mode t))))
+             ;; (sqlformat '((eval . (sqlformat-on-save-mode t))))
              (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
              (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
              (flymake-eslint '((eval . (flymake-eslint-enable))))
@@ -1313,7 +1313,6 @@ The built-in =electric= package provides the following modes:
                          (python-mode . (,@lsp))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
-                         (sql-mode . (,@sqlformat))
                          (svelte-mode . (,@lsp ,@flymake-eslint))
                          (tsx-ts-mode . (,@lsp-no-formatter))
                          (tuareg-mode . ((eval . (ocaml-eglot))
@@ -2233,6 +2232,19 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 #+begin_src emacs-lisp
   (setup tab-bar
     (:set tab-bar-auto-width-max '(350 25))
+
+    (:with-map tab-prefix-map
+      (:keymap "R" #'akirak/tab-bar-set-tab-name-from-org-clock))
+
+    (defun akirak/tab-bar-set-tab-name-from-org-clock ()
+      (interactive)
+      (if-let* ((heading (when (org-clocking-p)
+                           (org-entry-get (or org-clock-hd-marker
+                                              org-clock-marker)
+                                          "ITEM"))))
+          (tab-bar-rename-tab heading)
+        (user-error "Not clocking in")))
+
     ;; Not currently used.
     ;; (:set tab-bar-tab-name-function #'akirak/tab-bar-tab-name)
     ;; (:when-loaded
@@ -5144,6 +5156,17 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-org-reg
     (:global-keymap "C-c j" #'akirak-org-reg-transient))
 #+end_src
+*** akirak-org-shell
+:PROPERTIES:
+:CREATED_TIME: [2025-04-10 Thu 21:45]
+:END:
+
+#+begin_src emacs-lisp
+  (setup akirak-org-shell
+    (:with-feature org
+      (:with-map org-mode-map
+        (:bind "C-c C-x $" #'akirak-org-shell-transient))))
+#+end_src
 *** akirak-org-special
 #+begin_src elisp
   (setup akirak-org-special
@@ -5320,6 +5343,9 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode eldoc-mode)
                           akirak-window-display-document-buffer))
+                       ("^\\*aider-"
+                        akirak-window-display-as-right-sidebar
+                        (window-width . 80))
                        ((or ,(major-modes vterm-mode)
                             "^\\*Nix-REPL\\*"
                             ;; Pop up eat windows if and only if it follows a
@@ -5335,7 +5361,7 @@ This is an extra functions for window management.
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
                        ("^\\*Embark Export"
-                        akirak-window-as-left-sidebar)
+                        akirak-window-display-as-left-sidebar)
                        ("^\\*Org-Babel Error Output*"
                         display-buffer-no-window
                         (allow-no-window . t))
@@ -5569,7 +5595,7 @@ Minor mode to aggressively keep your code always indented
     (:hook-into emacs-lisp-mode-hook
                 dune-mode-hook))
 #+end_src
-*** aidermacs                                                               :AI:
+*** COMMENT aidermacs                                                       :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-04-04 Fri 23:59]
 :END:
@@ -6134,8 +6160,7 @@ An unofficial Copilot plugin
 
 #+begin_src emacs-lisp
   (setup (:package copilot)
-    ;; Unfree package which fails to build on CI. Add it to home.packages instead
-    ;; (:nixpkgs copilot-language-server)
+    (:nixpkgs copilot-language-server)
 
     (:keymap "<remap> <expand-abbrev>" #'akirak-copilot-abbrev-or-complete
              ;; Remap repl-toggle in the minor mode map.
@@ -6712,7 +6737,8 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
     (:with-map eat-semi-char-mode-map
       (:keymap "S-<prior>" #'View-scroll-page-backward
                "S-<next>" #'View-scroll-page-forward)
-      (:keymap-unset "M-:" "M-g" "M-s" "C-z" "M-o" "M-'"))
+      (:keymap-unset "M-:" "M-g" "M-s" "C-z" "M-o" "M-'"
+                     "M-0" "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9"))
 
     ;; Switch to line-mode automatically.
     (:hook (defun akirak/eat-setup ()
@@ -7508,10 +7534,11 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (gptel-make-anthropic "Claude"
-        :stream t
-        :key (lambda ()
-               (gptel-api-key-from-auth-source "api.anthropic.com")))
+      (:set gptel-backend (gptel-make-anthropic "Claude"
+                            :stream t
+                            :key (lambda ()
+                                   (gptel-api-key-from-auth-source "api.anthropic.com")))
+            gptel-model 'claude-3-7-sonnet-20250219)
 
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
@@ -9084,26 +9111,6 @@ Define commands which run reformatters on the current buffer
                     (list "@biomejs/biome" "format" (buffer-file-name)
                           (concat "--stdin-file-path=" (buffer-file-name)))))))
 #+end_src
-**** sqlglot
-:PROPERTIES:
-:CREATED_TIME: [2025-04-07 Mon 11:47]
-:END:
-
-#+begin_src emacs-lisp
-  (setup sqlglot
-    (:nixpkgs sqlglot-formatter)
-
-    (defcustom sqlglot-formatter-dialect "postgres"
-      "SQL dialect used in the buffer."
-      :type '(choice (const nil)
-                     (const "Name of a dialect supported by sqlglot" string)))
-
-    ;; sqlglot-formatter is a tiny custom package that wraps sqlglot.
-    (:reformatters
-     (sqlglot-format
-      :program "sqlglot-formatter"
-      :args (list "--dialect" "postgres"))))
-#+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:05]
@@ -9309,7 +9316,7 @@ SOPS encrypt and decrypt without leaving the editor
     (:keymap "C-c e" #'sops-edit-file
            "C-c C-c" #'sops-save-file))
 #+end_src
-*** sqlformat
+*** COMMENT sqlformat                                                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-02-21 Tue 17:18]
 :END:
@@ -9711,10 +9718,10 @@ Complete Tailwind classes using the Cheatsheet data
   (setup (:package twind)
     (:with-mode twind-css-mode
       (:hook-into css-mode css-ts-mode)
-      (:keymap "C-c t" #'twind-insert-css-from-cheatsheet))
+      (:keymap "C-, t" #'twind-insert-css-from-cheatsheet))
     (:with-mode twind-class-mode
       (:hook-into web-mode tsx-ts-mode heex-ts-mode gleam-ts-mode elixir-ts-mode)
-      (:keymap "C-c t" #'twind-insert-class-from-cheatsheet))
+      (:keymap "C-, t" #'twind-insert-class-from-cheatsheet))
     (with-eval-after-load 'embark
       (defvar-keymap twind-css-rule-embark-map
         :parent embark-general-map
@@ -10602,11 +10609,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 226 |
+| [[org-ql-search:tags:packages][packages]]            | 223 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
-| [[org-ql-search:tags:formatting][formatting]]          |  11 |
+| [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
@@ -10614,13 +10621,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:windows][windows]]             |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
-| [[org-ql-search:tags:AI][AI]]                  |   5 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
+| [[org-ql-search:tags:AI][AI]]                  |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
@@ -10723,13 +10730,12 @@ I want to care about readability in the following modes:
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Artificial intelligence / LLM
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
-| Heading   | Todo |
-|-----------+------|
-| [[ob-aider][ob-aider]]  |      |
-| [[aidermacs][aidermacs]] |      |
-| [[copilot][copilot]]   |      |
-| [[elysium][elysium]]   |      |
-| [[gptel][gptel]]     |      |
+| Heading  | Todo |
+|----------+------|
+| [[ob-aider][ob-aider]] |      |
+| [[copilot][copilot]]  |      |
+| [[elysium][elysium]]  |      |
+| [[gptel][gptel]]    |      |
 #+END:
 
 For LLM integration, gptel is the generic frontend and backend.

@@ -69,7 +69,7 @@
           (unless (zerop (call-process-region
                           (point-min) (point-max)
                           akirak-pandoc-executable
-                          'delete (list t errfile)
+                          'delete (list t errfile) nil
                           (concat "--from=" from)
                           (concat "--to=" to)
                           "-"))

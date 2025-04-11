@@ -54,7 +54,11 @@
 (defun akirak-image-file-name-from-url (url-string &optional mime-type)
   (let* ((url (url-generic-parse-url url-string))
          (host (string-remove-prefix "www." (url-host url)))
-         (path (cdr (split-string (url-filename url) "/")))
+         (path-string (url-filename url))
+         (path-string (if (string-match (rx (any "#?")) path-string)
+                          (substring path-string 1 (match-beginning 0))
+                        path-string))
+         (path (cdr (split-string path-string "/")))
          (filename (car (last path)))
          (prefix (if (> (length path) 2)
                      (thread-first path
