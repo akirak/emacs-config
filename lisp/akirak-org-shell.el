@@ -78,6 +78,19 @@
                                   new-header-args " "))))
     dir))
 
+;;;###autoload
+(defun akirak-org-shell-set-directory ()
+  "Set :dir property of the current Org entry."
+  (interactive)
+  (akirak-org-shell--read-directory))
+
+(defun akirak-org-shell-directory ()
+  "Return :dir property in the current header args."
+  (let ((header-args (thread-first
+                       (org-entry-get nil "header-args" t)
+                       (org-babel-parse-header-arguments 'no-eval))))
+    (alist-get :dir header-args)))
+
 (defun akirak-org-shell--send-string (string)
   (akirak-shell-send-string-to-buffer (or akirak-org-shell-buffer
                                           (error "Not set the buffer akirak-org-shell-buffer"))
