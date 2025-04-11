@@ -132,5 +132,16 @@
   (require 'akirak-pandoc)
   (akirak-pandoc-convert-string string :from "org" :to "gfm"))
 
+(defun akirak-org-shell-convert-to-relative-paths (beg end)
+  "Convert paths in the region to relative path from the directory."
+  (interactive "r")
+  (let ((base-dir (akirak-org-shell-directory)))
+    (save-excursion
+      (goto-char beg)
+      (while (re-search-forward (rx symbol-start (any "~/") (+ nonl) word-end) end t)
+        (let ((path (match-string 0)))
+          (when (string-prefix-p base-dir (abbreviate-file-name path))
+            (replace-match (file-relative-name path base-dir))))))))
+
 (provide 'akirak-org-shell)
 ;;; akirak-org-shell.el ends here
