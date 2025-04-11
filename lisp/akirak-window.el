@@ -469,6 +469,7 @@ focus on the same buffer."
     (select-window akirak-window-last-non-popup-window))
    ((and (not arg)
          akirak-window-last-record
+         (window-live-p (cdr akirak-window-last-record))
          (member (cdr akirak-window-last-record)
                  (window-list))
          (not (eq (cdr akirak-window-last-record)
@@ -591,7 +592,8 @@ The target window is determined according to the same logic as
                         (akirak-window--popup-p window)))))))))
 
 (defun akirak-window--popup-p (&optional window)
-  (window-parameter window 'window-side))
+  (eq (window-parameter window 'window-side)
+      'below))
 
 (defun akirak-window--find-column (n)
   "Return a window in N-th column of the frame."
