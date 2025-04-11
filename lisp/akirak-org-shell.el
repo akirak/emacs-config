@@ -44,6 +44,8 @@
    :if akirak-org-shell--buffer-live-p
    ("r" "Send region as Markdown" akirak-org-shell-send-region-as-markdown
     :if use-region-p)
+   ("<C-return>" "Send the current Org entry"
+    akirak-org-shell-send-org-entry-as-markdown)
    ("RET" "Send any command" akirak-org-shell-send-command)]
   (interactive nil org-mode)
   (unless akirak-org-shell-buffer
@@ -84,13 +86,22 @@
 
 (defun akirak-org-shell-send-region-as-markdown ()
   (interactive nil org-mode)
-  (require 'akirak-pandoc)
   (if (use-region-p)
       (thread-first
         (buffer-substring (region-beginning) (region-end))
-        (akirak-pandoc-convert-string :from "org" :to "markdown")
+        (akirak-org-shell--convert-to-gfm)
         (akirak-org-shell--send-string))
     (user-error "Not selecting a region")))
+
+(defun akirak-org-shell-send-org-entry-as-markdown ()
+  (interactive nil org-mode)
+  (thread-first
+    (save-excursion
+      (goto-char (org-entry-beginning-position))
+      (org-end-of-meta-data t)
+      (buffer-substring (point) (org-entry-end-position)))
+    (akirak-org-shell--convert-to-gfm)
+    (akirak-org-shell--send-string)))
 
 (defun akirak-org-shell-send-block ()
   (interactive nil org-mode)
@@ -103,6 +114,10 @@
 (defun akirak-org-shell-send-command (input)
   (interactive "sInput: " org-mode)
   (akirak-org-shell--send-string input))
+
+(defun akirak-org-shell--convert-to-gfm (string)
+  (require 'akirak-pandoc)
+  (akirak-pandoc-convert-string string :from "org" :to "gfm"))
 
 (provide 'akirak-org-shell)
 ;;; akirak-org-shell.el ends here
