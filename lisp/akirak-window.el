@@ -113,7 +113,6 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
   ;; header.
   (let* ((width (akirak-window--left-sidebar-width buffer))
          (window (display-buffer-in-side-window buffer `((side . left)
-                                                         (dedicated . side)
                                                          (window-width . ,width)))))
     (when window
       (with-current-buffer buffer
@@ -144,8 +143,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 ;;;###autoload
 (defun akirak-window-display-as-right-sidebar (buffer &optional alist)
   (let* ((window (display-buffer-in-side-window buffer
-                                                (append '((side . right)
-                                                          (dedicated . side))
+                                                (append '((side . right))
                                                         alist))))
     (when window
       (with-current-buffer buffer
