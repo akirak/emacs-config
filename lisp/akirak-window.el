@@ -700,18 +700,29 @@ Otherwise, it calls `akirak-window-duplicate-state'."
 
 (defvar akirak-window-last-nonhelp-window nil)
 
+(defmacro akirak-window--with-each-non-file-buffer-window (&rest body)
+  `(walk-window-tree
+    (lambda (window)
+      (let ((buffer (window-buffer window)))
+        (unless (or (buffer-file-name buffer)
+                    (buffer-base-buffer buffer))
+          (with-selected-window window
+            (with-current-buffer buffer
+              ,@body)))))))
+
 ;;;###autoload
 (defun akirak-window-display-buffer-ends ()
   (interactive)
-  (walk-window-tree
-   (lambda (window)
-     (let ((buffer (window-buffer window)))
-       (unless (or (buffer-file-name buffer)
-                   (buffer-base-buffer buffer))
-         (with-selected-window window
-           (with-current-buffer buffer
-             (goto-char (point-max))
-             (recenter-top-bottom -1))))))))
+  (akirak-window--with-each-non-file-buffer-window
+   (goto-char (point-max))
+   (recenter-top-bottom -1)))
+
+;;;###autoload
+(defun akirak-window-display-buffer-starts ()
+  (interactive)
+  (akirak-window--with-each-non-file-buffer-window
+   (goto-char (point-min))
+   (recenter-top-bottom 1)))
 
 (provide 'akirak-window)
 ;;; akirak-window.el ends here
