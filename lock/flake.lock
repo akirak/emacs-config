@@ -2050,22 +2050,6 @@
         "type": "github"
       }
     },
-    "oahu-memento": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1698216021,
-        "narHash": "sha256-gqqThQ2bew73MXdS1WjVeih8+lpoYx3F7taELV4yw/s=",
-        "owner": "akirak",
-        "repo": "oahu.el",
-        "rev": "67ee0fe194429a85c30c5e56ac3bab52ab4ec41e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "repo": "oahu.el",
-        "type": "github"
-      }
-    },
     "ob-aider": {
       "flake": false,
       "locked": {
@@ -2408,23 +2392,6 @@
       "original": {
         "owner": "alphapapa",
         "repo": "org-make-toc",
-        "type": "github"
-      }
-    },
-    "org-memento": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1739473242,
-        "narHash": "sha256-3EfaIexW8BcU5yLJtbg2qZiYRKJQCJ+cIkjpkwYgcQ8=",
-        "owner": "akirak",
-        "repo": "org-memento",
-        "rev": "e1f767e046e53bedbf652642d6011ab0dda1fd79",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "ref": "develop",
-        "repo": "org-memento",
         "type": "github"
       }
     },
@@ -3167,7 +3134,6 @@
         "noman": "noman",
         "nov": "nov",
         "oahu": "oahu",
-        "oahu-memento": "oahu-memento",
         "ob-aider": "ob-aider",
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
@@ -3189,7 +3155,6 @@
         "org-hyprctl": "org-hyprctl",
         "org-lang-env": "org-lang-env",
         "org-make-toc": "org-make-toc",
-        "org-memento": "org-memento",
         "org-ml": "org-ml",
         "org-nlink": "org-nlink",
         "org-pivot-search": "org-pivot-search",

@@ -2824,7 +2824,7 @@ Manage Org searches
                            (`(OrgBookmark . ,bookmark)
                             (org-placeholder-view bookmark)))))))
 #+end_src
-**** oahu-memento
+**** COMMENT oahu-memento                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-10-20 Thu 12:06]
 :ID:       d270ae25-077a-400f-a7a9-fee07ade34fd
@@ -3885,7 +3885,7 @@ Automatic tables of contents for Org files
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
 #+end_src
-*** org-memento                                                     :@extra:Org:
+*** COMMENT org-memento                                             :@extra:Org:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-10-06 Thu 18:50]
 :END:

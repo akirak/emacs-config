@@ -767,12 +767,6 @@
       repo = "oahu.el";
       type = "github";
     };
-    oahu-memento = {
-      flake = false;
-      owner = "akirak";
-      repo = "oahu.el";
-      type = "github";
-    };
     ob-aider = {
       flake = false;
       owner = "localredhead";
@@ -906,13 +900,6 @@
       flake = false;
       owner = "alphapapa";
       repo = "org-make-toc";
-      type = "github";
-    };
-    org-memento = {
-      flake = false;
-      owner = "akirak";
-      ref = "develop";
-      repo = "org-memento";
       type = "github";
     };
     org-ml = {
