@@ -206,7 +206,7 @@ the original minor mode."
                `(lambda ()
                   (interactive)
                   (akirak-shell-select-buffer-window ,name))
-               :transient t))))
+               :transient transient--exit))))
     (transient-parse-suffixes 'akirak-shell-transient)
     (append children)))
 
