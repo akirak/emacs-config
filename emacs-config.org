@@ -1256,6 +1256,7 @@ The built-in =electric= package provides the following modes:
           view-read-only t
           auto-mode-case-fold nil
           require-final-newline t
+          remote-file-name-inhibit-delete-by-moving-to-trash t
           ;; pkgs/top-level/all-packages.nix in nixpkgs: 1.5 MB
           large-file-warning-threshold (* 1024 1024 2))
 
