@@ -881,9 +881,13 @@ The point should be at the heading."
       (error "No org-element at point")))
    ((and (require 'org-nlink nil t)
          (pcase (org-nlink-thing)
-           (`((,begin . ,end) . ,_)
-            (akirak-expand-region--select-bounds (cons (1+ begin) (1- end)))
-            t))))
+           (`((,begin . ,end) . (,link . ,text))
+            ;; Select the inner text
+            (goto-char begin)
+            (when (search-forward (or text link) end t)
+              (akirak-expand-region--select-bounds (cons (match-beginning 0)
+                                                         (match-end 0)))
+              t)))))
    (t
     (akirak-expand-region--select-bounds
      (bounds-of-thing-at-point 'sentence)))))
