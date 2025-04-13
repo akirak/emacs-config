@@ -72,7 +72,8 @@
 
 (defun akirak-passage--git-commit (message)
   (with-current-buffer (get-buffer-create akirak-passage-buffer)
-    (let ((process-environment (append akirak-passage-process-environment
+    (let ((default-directory akirak-passage-dir)
+          (process-environment (append akirak-passage-process-environment
                                        process-environment)))
       (unless (zerop (call-process "git" nil t nil
                                    "add" "."))
