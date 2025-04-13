@@ -231,9 +231,10 @@ the original minor mode."
 ;;;###autoload
 (defun akirak-shell-for-aider ()
   (interactive)
+  (require 'akirak-aider)
   (let ((root (abbreviate-file-name (project-root (project-current)))))
     (akirak-shell-eat-new :dir root
-                          :command '("aider" "--light-mode")
+                          :command (akirak-aider-command)
                           :name (concat "aider-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
