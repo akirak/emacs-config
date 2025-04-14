@@ -8910,13 +8910,7 @@ Summon and dismiss buffers as popups
              "M-' s" #'scratch-buffer
              "M-' w" (defun akirak/revisit-eww-buffer ()
                        (interactive)
-                       (pop-to-buffer "*eww*"))
-             "M-' c" (defun akirak/compilation-buffer (&optional arg)
-                       (interactive "P")
-                       (if-let* ((buffer (and (not arg)
-                                              (get-buffer "*compilation*"))))
-                           (pop-to-buffer buffer)
-                         (project-compile)))))
+                       (pop-to-buffer "*eww*"))))
 #+end_src
 *** posframe                                            :UI:library:
 :PROPERTIES:
