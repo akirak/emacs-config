@@ -60,6 +60,28 @@
       (delete-file errfile)
       (kill-buffer outbuf))))
 
+;;;###autoload
+(defun akirak-pandoc-replace-with-org (begin end)
+  "Replace the region with an Org version of the content."
+  (interactive "r" org-mode)
+  (let ((format (if current-prefix-arg
+                    (completing-read "Input format: "
+                                     (akirak-pandoc-input-formats)
+                                     nil t)
+                  "gfm"))
+        (errfile (make-temp-file "pandoc-errors-")))
+    (unwind-protect
+        (atomic-change-group
+          (unless (zerop (call-process-region begin end akirak-pandoc-executable
+                                              'delete (list t errfile) nil
+                                              (concat "--from=" format)
+                                              "--to=org" "-"))
+            (error "pandoc failed: %s"
+                   (with-temp-buffer
+                     (insert-file-contents errfile)
+                     (buffer-string)))))
+      (delete-file errfile))))
+
 (cl-defun akirak-pandoc-convert-string (string &key from to)
   (declare (indent 1))
   (let ((errfile (make-temp-file "pandoc-errors-")))

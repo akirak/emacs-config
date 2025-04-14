@@ -113,7 +113,6 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
   ;; header.
   (let* ((width (akirak-window--left-sidebar-width buffer))
          (window (display-buffer-in-side-window buffer `((side . left)
-                                                         (dedicated . side)
                                                          (window-width . ,width)))))
     (when window
       (with-current-buffer buffer
@@ -144,8 +143,7 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 ;;;###autoload
 (defun akirak-window-display-as-right-sidebar (buffer &optional alist)
   (let* ((window (display-buffer-in-side-window buffer
-                                                (append '((side . right)
-                                                          (dedicated . side))
+                                                (append '((side . right))
                                                         alist))))
     (when window
       (with-current-buffer buffer
@@ -702,18 +700,29 @@ Otherwise, it calls `akirak-window-duplicate-state'."
 
 (defvar akirak-window-last-nonhelp-window nil)
 
+(defmacro akirak-window--with-each-non-file-buffer-window (&rest body)
+  `(walk-window-tree
+    (lambda (window)
+      (let ((buffer (window-buffer window)))
+        (unless (or (buffer-file-name buffer)
+                    (buffer-base-buffer buffer))
+          (with-selected-window window
+            (with-current-buffer buffer
+              ,@body)))))))
+
 ;;;###autoload
 (defun akirak-window-display-buffer-ends ()
   (interactive)
-  (walk-window-tree
-   (lambda (window)
-     (let ((buffer (window-buffer window)))
-       (unless (or (buffer-file-name buffer)
-                   (buffer-base-buffer buffer))
-         (with-selected-window window
-           (with-current-buffer buffer
-             (goto-char (point-max))
-             (recenter-top-bottom -1))))))))
+  (akirak-window--with-each-non-file-buffer-window
+   (goto-char (point-max))
+   (recenter-top-bottom -1)))
+
+;;;###autoload
+(defun akirak-window-display-buffer-starts ()
+  (interactive)
+  (akirak-window--with-each-non-file-buffer-window
+   (goto-char (point-min))
+   (recenter-top-bottom 1)))
 
 (provide 'akirak-window)
 ;;; akirak-window.el ends here

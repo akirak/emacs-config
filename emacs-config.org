@@ -1256,6 +1256,7 @@ The built-in =electric= package provides the following modes:
           view-read-only t
           auto-mode-case-fold nil
           require-final-newline t
+          remote-file-name-inhibit-delete-by-moving-to-trash t
           ;; pkgs/top-level/all-packages.nix in nixpkgs: 1.5 MB
           large-file-warning-threshold (* 1024 1024 2))
 
@@ -2824,7 +2825,7 @@ Manage Org searches
                            (`(OrgBookmark . ,bookmark)
                             (org-placeholder-view bookmark)))))))
 #+end_src
-**** oahu-memento
+**** COMMENT oahu-memento                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-10-20 Thu 12:06]
 :ID:       d270ae25-077a-400f-a7a9-fee07ade34fd
@@ -3885,7 +3886,7 @@ Automatic tables of contents for Org files
 #+begin_src emacs-lisp
 (setup (:package org-make-toc))
 #+end_src
-*** org-memento                                                     :@extra:Org:
+*** COMMENT org-memento                                             :@extra:Org:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-10-06 Thu 18:50]
 :END:
@@ -5402,6 +5403,7 @@ This is an extra functions for window management.
                       "C-c v" #'akirak-window-open-in-new-tab
                       "M-o" #'akirak-window-moderate-1
                       "S-<end>" #'akirak-window-display-buffer-ends
+                      "S-<home>" #'akirak-window-display-buffer-starts
                       "<remap> <delete-window>" #'akirak-window-delete-window
                       "<remap> <abort-recursive-edit>" #'akirak-window-cleanup)))
 #+end_src
@@ -7192,19 +7194,7 @@ On-the-fly syntax checking
 #+begin_src emacs-lisp
 (setup (:package flycheck))
 #+end_src
-*** flymake-collection
-:PROPERTIES:
-:CREATED_TIME: [2025-01-23 Thu 22:02]
-:END:
-#+begin_quote
-Collection of checkers for flymake, bringing flymake to the level of flycheck
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package flymake-collection)
-    (:nixpkgs shellcheck))
-#+end_src
-*** COMMENT flymake-eslint                                                     :ARCHIVE:
+*** flymake-eslint
 :PROPERTIES:
 :CREATED_TIME: [2022-07-01 Fri 23:59]
 :END:
@@ -7217,7 +7207,7 @@ A Flymake backend for Javascript using eslint
   (setup (:package flymake-eslint)
     (:set flymake-eslint-defer-binary-check t))
 #+end_src
-*** COMMENT flymake-shellcheck                                                 :ARCHIVE:
+*** flymake-shellcheck
 :PROPERTIES:
 :CREATED_TIME: [2023-11-05 Sun 19:02]
 :END:
@@ -7534,36 +7524,35 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (:set gptel-backend (gptel-make-anthropic "Claude"
+      (:set gptel-backend (gptel-make-openai "OpenRouter"
+                            :host "openrouter.ai"
+                            :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
+                            :endpoint "/api/v1/chat/completions"
                             :stream t
-                            :key (lambda ()
-                                   (gptel-api-key-from-auth-source "api.anthropic.com")))
-            gptel-model 'claude-3-7-sonnet-20250219)
+                            :models '(openai/gpt-4.5-preview
+                                      openai/gpt-3.5-turbo
+                                      openai/o3-mini-high
+                                      google/gemini-2.0-flash-001
+                                      google/gemini-2.0-flash-thinking-exp:free
+                                      google/gemini-2.5-pro-exp-03-25:free
+                                      ;; Use the native Perplexity provider for citations
+                                      ;; perplexity/sonar-pro
+                                      ;; perplexity/sonar-deep-research
+                                      x-ai/grok-2-1212
+                                      deepseek/deepseek-chat-v3-0324:free
+                                      deepseek/deepseek-chat-v3-0324
+                                      deepseek/deepseek-r1-zero:free))
+            gptel-model 'google/gemini-2.5-pro-exp-03-25:free)
+
+      (gptel-make-anthropic "Claude"
+        :stream t
+        :key (lambda ()
+               (gptel-api-key-from-auth-source "api.anthropic.com")))
 
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
-               (gptel-api-key-from-auth-source
-                "api.perplexity.ai"))
+               (gptel-api-key-from-auth-source "api.perplexity.ai"))
         :stream t)
-
-      (gptel-make-openai "OpenRouter"
-        :host "openrouter.ai"
-        :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
-        :endpoint "/api/v1/chat/completions"
-        :stream t
-        :models '(openai/gpt-4.5-preview
-                  openai/gpt-3.5-turbo
-                  openai/o3-mini-high
-                  google/gemini-2.0-flash-001
-                  google/gemini-2.0-flash-thinking-exp:free
-                  google/gemini-2.5-pro-exp-03-25:free
-                  ;; Use the native Perplexity provider for citations
-                  ;; perplexity/sonar-pro
-                  ;; perplexity/sonar-deep-research
-                  x-ai/grok-2-1212
-                  deepseek/deepseek-chat-v3-0324:free
-                  deepseek/deepseek-chat-v3-0324
-                  deepseek/deepseek-r1-zero:free))
 
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
@@ -10609,10 +10598,10 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 223 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
-| [[org-ql-search:tags:@extra][@extra]]              |  13 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
+| [[org-ql-search:tags:@extra][@extra]]              |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
@@ -10633,7 +10622,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
-| [[org-ql-search:tags:Org][Org]]                 |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -10645,6 +10633,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Prolog][Prolog]]              |   2 |
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:MCP][MCP]]                 |   2 |
+| [[org-ql-search:tags:Org][Org]]                 |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:OCaml][OCaml]]               |   2 |

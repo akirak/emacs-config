@@ -420,10 +420,16 @@
       repo = "flymake-actionlint1";
       type = "github";
     };
-    flymake-collection = {
+    flymake-eslint = {
       flake = false;
-      owner = "mohkale";
-      repo = "flymake-collection";
+      owner = "orzechowskid";
+      repo = "flymake-eslint";
+      type = "github";
+    };
+    flymake-shellcheck = {
+      flake = false;
+      owner = "federicotdn";
+      repo = "flymake-shellcheck";
       type = "github";
     };
     flymake-sqlfluff = {
@@ -761,12 +767,6 @@
       repo = "oahu.el";
       type = "github";
     };
-    oahu-memento = {
-      flake = false;
-      owner = "akirak";
-      repo = "oahu.el";
-      type = "github";
-    };
     ob-aider = {
       flake = false;
       owner = "localredhead";
@@ -900,13 +900,6 @@
       flake = false;
       owner = "alphapapa";
       repo = "org-make-toc";
-      type = "github";
-    };
-    org-memento = {
-      flake = false;
-      owner = "akirak";
-      ref = "develop";
-      repo = "org-memento";
       type = "github";
     };
     org-ml = {

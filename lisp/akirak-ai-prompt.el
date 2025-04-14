@@ -4,7 +4,7 @@
 
 ;;;###autoload
 (defun akirak-ai-prompt-fix-flymake-error-at-pos ()
-  "Fix the error at point in a shell."
+  "Within an AI shell, fix the error at the current point."
   (interactive)
   (let* ((diag (pcase (flymake-diagnostics)
                  (`nil (user-error "No error at point"))
@@ -33,7 +33,9 @@
   (declare (indent 1))
   (if interactive
       (akirak-shell-send-string-to-buffer
-          (read-buffer prompt nil t #'akirak-shell-buffer-p)
+          (or (get-buffer (read-buffer "Select a buffer to send the prompt to: "
+                                       nil t #'akirak-shell-buffer-p))
+              (error "Not an existing buffer"))
         string :confirm t)
     string))
 

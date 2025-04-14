@@ -380,7 +380,8 @@
                                                 (tab-bar-rename-tab ,new-tab-name)
                                                 (when (fboundp 'fwb-toggle-window-split)
                                                   (fwb-toggle-window-split)))
-                                              (unless ,akirak-capture-dispatch-later
+                                              (when (and akirak-capture-gptel-topic
+                                                         (not akirak-capture-dispatch-later))
                                                 (require 'gptel-org)
                                                 (gptel-send))))))
                              (plist-put :after-finalize
