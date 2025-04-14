@@ -8855,7 +8855,7 @@ Summon and dismiss buffers as popups
 
 #+begin_src emacs-lisp
   (setup (:package popper)
-    (:set popper-window-height 0.2
+    (:set popper-window-height 0.33
           popper-display-function #'popper-select-popup-at-bottom
           akirak/display-popup-window-function popper-display-function
           ;; You may have to re-enable popper-mode after updating this variable
