@@ -7524,36 +7524,35 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (:set gptel-backend (gptel-make-anthropic "Claude"
+      (:set gptel-backend (gptel-make-openai "OpenRouter"
+                            :host "openrouter.ai"
+                            :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
+                            :endpoint "/api/v1/chat/completions"
                             :stream t
-                            :key (lambda ()
-                                   (gptel-api-key-from-auth-source "api.anthropic.com")))
-            gptel-model 'claude-3-7-sonnet-20250219)
+                            :models '(openai/gpt-4.5-preview
+                                      openai/gpt-3.5-turbo
+                                      openai/o3-mini-high
+                                      google/gemini-2.0-flash-001
+                                      google/gemini-2.0-flash-thinking-exp:free
+                                      google/gemini-2.5-pro-exp-03-25:free
+                                      ;; Use the native Perplexity provider for citations
+                                      ;; perplexity/sonar-pro
+                                      ;; perplexity/sonar-deep-research
+                                      x-ai/grok-2-1212
+                                      deepseek/deepseek-chat-v3-0324:free
+                                      deepseek/deepseek-chat-v3-0324
+                                      deepseek/deepseek-r1-zero:free))
+            gptel-model 'google/gemini-2.5-pro-exp-03-25:free)
+
+      (gptel-make-anthropic "Claude"
+        :stream t
+        :key (lambda ()
+               (gptel-api-key-from-auth-source "api.anthropic.com")))
 
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
-               (gptel-api-key-from-auth-source
-                "api.perplexity.ai"))
+               (gptel-api-key-from-auth-source "api.perplexity.ai"))
         :stream t)
-
-      (gptel-make-openai "OpenRouter"
-        :host "openrouter.ai"
-        :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
-        :endpoint "/api/v1/chat/completions"
-        :stream t
-        :models '(openai/gpt-4.5-preview
-                  openai/gpt-3.5-turbo
-                  openai/o3-mini-high
-                  google/gemini-2.0-flash-001
-                  google/gemini-2.0-flash-thinking-exp:free
-                  google/gemini-2.5-pro-exp-03-25:free
-                  ;; Use the native Perplexity provider for citations
-                  ;; perplexity/sonar-pro
-                  ;; perplexity/sonar-deep-research
-                  x-ai/grok-2-1212
-                  deepseek/deepseek-chat-v3-0324:free
-                  deepseek/deepseek-chat-v3-0324
-                  deepseek/deepseek-r1-zero:free))
 
       (gptel-make-ollama "Ollama"
         :host "localhost:11434"
