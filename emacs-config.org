@@ -8526,6 +8526,10 @@ control mpv for easy note-taking
                                   "/" (+ anything)))))))
 #+end_src
 *** neocaml
+#+begin_quote
+Major mode for OCaml code
+[[http://github.com/bbatsov/neocaml]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package neocaml)
@@ -10665,7 +10669,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
-| [[org-ql-search:tags:@extra][@extra]]              |  12 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
@@ -10700,8 +10704,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Org][Org]]                 |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
-| [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
-| [[org-ql-search:tags:fstar][fstar]]               |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
@@ -10722,6 +10724,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
+| [[org-ql-search:tags:OCaml][OCaml]]               |   1 |
+| [[org-ql-search:tags:fstar][fstar]]               |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
