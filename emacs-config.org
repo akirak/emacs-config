@@ -8533,7 +8533,47 @@ control mpv for easy note-taking
     (:mode-repl akirak/utop-project)
     (:mode-project-roots "dune-project")
     (:local-set treesit-font-lock-level 4)
-    (:set neocaml-use-prettify-symbols nil))
+    (:set neocaml-use-prettify-symbols nil)
+
+    ;; Migrated from settings for tuareg-mode.
+    (:when-loaded
+      (define-abbrev neocaml-mode-abbrev-table
+        "begin" "" (define-skeleton akirak-ocaml-begin-end
+                     "Insert begin..end"
+                     ""
+                     > "begin"
+                     \n _
+                     n -2 "end"))
+
+      (define-abbrev neocaml-mode-abbrev-table
+        "match" "" (define-skeleton akirak-ocaml-match
+                     "Insert match"
+                     ""
+                     > "match " - " with"
+                     n "| " @ _))
+
+      (define-abbrev neocaml-mode-abbrev-table
+        "try" "" (define-skeleton akirak-ocaml-try
+                   "Insert try"
+                   ""
+                   > "try " -
+                   n "with " @ _))
+
+      (define-abbrev neocaml-mode-abbrev-table
+        "struct" "" (define-skeleton akirak-ocaml-struct
+                      "Insert struct"
+                      ""
+                      > "struct" n
+                      > @ - n
+                      > -2 "end"))
+
+      (define-abbrev neocaml-mode-abbrev-table
+        "sig" "" (define-skeleton akirak-ocaml-sig
+                   "Insert sig"
+                   ""
+                   > "sig" n
+                   > @ - n
+                   > -2 "end"))))
 #+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
