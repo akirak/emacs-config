@@ -9689,7 +9689,23 @@ OCaml mode
                    "Insert try"
                    ""
                    > "try " -
-                   n "with " @ _))))
+                   n "with " @ _))
+
+      (define-abbrev tuareg-mode-abbrev-table
+        "struct" "" (define-skeleton akirak-ocaml-struct
+                      "Insert struct"
+                      ""
+                      > "struct" n
+                      > @ - n
+                      > -2 "end"))
+
+      (define-abbrev tuareg-mode-abbrev-table
+        "sig" "" (define-skeleton akirak-ocaml-sig
+                   "Insert sig"
+                   ""
+                   > "sig" n
+                   > @ - n
+                   > -2 "end"))))
 #+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
