@@ -1752,7 +1752,8 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 :body body)
                    :file ,file
                    :function ,jump-func
-                   :clock-in t :clock-resume t))))))
+                   :clock-in t :clock-resume t)))))
+         (org-clock-auto-clock-resolution nil))
     (save-window-excursion
       (org-capture))))
 
