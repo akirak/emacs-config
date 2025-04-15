@@ -491,6 +491,8 @@ character."
       (goto-char pos)
       (when (looking-at (rx (+ space)))
         (delete-region (point) (match-end 0)))
+      (when (eolp)
+        (newline))
       (insert "#+end_" keyword "\n\n" line "\n")
       (org-element-cache-reset)
       (forward-line -2))))
