@@ -2101,6 +2101,28 @@ This is a recommended setting for use with vertico. See https://github.com/minad
        (format "[%s]+" (mapconcat #'char-to-string (list 8203 8288 8205 8204 65279)))
        "" start end))
 
+    (defun akirak/kill-word-dwim (&optional arg)
+      (interactive "P")
+      (require 'thingatpt)
+      (cond
+       ((looking-at (rx (syntax open-parenthesis)))
+        (pcase-exhaustive (funcall show-paren-data-function)
+          (`(,open-start ,_ ,_ ,close-end . ,_)
+           (kill-region open-start close-end))))
+       ((looking-at (rx (syntax string-quote)))
+        (pcase-exhaustive (thing-at-point-bounds-of-string-at-point)
+          (`(,begin . ,end)
+           (kill-region begin end))))
+       ((equal arg '(4))
+        (when (looking-at (rx (+ blank)))
+          (goto-char (match-end 0)))
+        (zap-to-char 1 ?\s))
+       (t
+        (kill-word arg))))
+
+    (:with-map prog-mode-map
+      (:keymap "<remap> <kill-word>" #'akirak/kill-word-dwim))
+
     (:status opinionated
       (:global-keymap "C-a"
                       (defun akirak/back-to-indentation-or-bol ()
