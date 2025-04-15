@@ -2214,17 +2214,8 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subword
-    ;; (:global-keymap "M-SPC" #'akirak/run-with-superword-inversed)
-
-    ;; Deprecated.
-    (defun akirak/run-with-superword-inversed (key)
-      "Run a command with `superword-mode' inversed."
-      (interactive "K")
-      (let ((cmd (lookup-key (current-active-maps) key)))
-        (superword-mode)
-        (unwind-protect
-            (call-interactively cmd)
-          (superword-mode)))))
+    (add-hook 'prog-mode-hook (defun akirak/enable-superword-mode ()
+                                (superword-mode 1))))
 #+end_src
 *** tab-bar
 :PROPERTIES:
