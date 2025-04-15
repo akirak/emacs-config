@@ -492,6 +492,7 @@ character."
       (when (looking-at (rx (+ space)))
         (delete-region (point) (match-end 0)))
       (insert "#+end_" keyword "\n\n" line "\n")
+      (org-element-cache-reset)
       (forward-line -2))))
 
 ;;;; eldoc
