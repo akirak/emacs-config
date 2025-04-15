@@ -1311,6 +1311,7 @@ The built-in =electric= package provides the following modes:
                          (heex-ts-mode . (,@lsp))
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
+                         (neocaml-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
@@ -5284,7 +5285,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:keymap "<remap> <akirak-expand-region-default>" #'akirak-treesit-expand-region)
     (add-hook 'after-change-major-mode-hook
               (defun akirak/enable-treesit-mode ()
-                (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
+                (when (or (string-suffix-p "-ts-mode" (symbol-name major-mode))
+                          (memq major-mode '(neocaml-mode)))
                   (akirak-treesit-mode t)))))
 #+end_src
 *** akirak-twist
@@ -6831,6 +6833,8 @@ Client for Language Server Protocol (LSP) servers
                    '(svelte-mode . ("svelteserver" "--stdio")))
       (add-to-list 'eglot-server-programs
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
+      (add-to-list 'eglot-server-programs
+                   '((neocaml-mode :language-id "ocaml") . ("ocamllsp")))
       (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
@@ -8522,6 +8526,16 @@ control mpv for easy note-taking
                      (type . ,(rx (or "audio" "video")
                                   "/" (+ anything)))))))
 #+end_src
+*** neocaml
+
+#+begin_src emacs-lisp
+  (setup (:package neocaml)
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:mode-repl akirak/utop-project)
+    (:mode-project-roots "dune-project")
+    (:local-set treesit-font-lock-level 4)
+    (:set neocaml-use-prettify-symbols nil))
+#+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
@@ -8702,10 +8716,11 @@ automatic indentation with ocp-indent
 
 #+begin_src emacs-lisp
   (setup (:package ocp-indent)
-    (add-hook 'tuareg-mode-hook
-              (defun akirak/ocp-indent-maybe-setup ()
-                (when (executable-find "ocp-indent")
-                  (ocp-setup-indent)))))
+    (defun akirak/ocp-indent-maybe-setup ()
+      (when (executable-find "ocp-indent")
+        (ocp-setup-indent)))
+    (add-hook 'tuareg-mode-hook #'akirak/ocp-indent-maybe-setup)
+    (add-hook 'neocaml-mode-hook #'akirak/ocp-indent-maybe-setup))
 #+end_src
 *** olivetti                                               :writing:
 :PROPERTIES:
@@ -9613,7 +9628,7 @@ A flexible triple-based database for use in apps
 #+begin_src emacs-lisp
 (setup (:package triples))
 #+end_src
-*** tuareg                                                  :OCaml:@extra:fstar:
+*** COMMENT tuareg                                          :OCaml:@extra:fstar:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-10 Tue 16:51]
 :END:

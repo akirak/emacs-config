@@ -272,22 +272,6 @@
         "type": "github"
       }
     },
-    "caml": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1740677679,
-        "narHash": "sha256-+chpQ0geVkC6JIJiEHnlwMQCkn/Dw3WjxNBB7R9o59U=",
-        "owner": "ocaml",
-        "repo": "caml-mode",
-        "rev": "744333dc4c4bd8b93e037efa8f7362b0903b96a2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ocaml",
-        "repo": "caml-mode",
-        "type": "github"
-      }
-    },
     "cape": {
       "flake": false,
       "locked": {
@@ -1922,6 +1906,22 @@
         "type": "github"
       }
     },
+    "neocaml": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1743412340,
+        "narHash": "sha256-ueoyZcjKq+g05HJxgvZkFWisSv7rSfULpVfxYIOt2Og=",
+        "owner": "bbatsov",
+        "repo": "neocaml",
+        "rev": "225715ba309289d2f476366985931bd50dc05c2d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bbatsov",
+        "repo": "neocaml",
+        "type": "github"
+      }
+    },
     "nix-mode": {
       "flake": false,
       "locked": {
@@ -3023,7 +3023,6 @@
         "browse-at-remote": "browse-at-remote",
         "burly": "burly",
         "buttercup": "buttercup",
-        "caml": "caml",
         "cape": "cape",
         "casual": "casual",
         "casual-symbol-overlay": "casual-symbol-overlay",
@@ -3126,6 +3125,7 @@
         "modus-themes": "modus-themes",
         "move-dup": "move-dup",
         "mpv": "mpv",
+        "neocaml": "neocaml",
         "nix-mode": "nix-mode",
         "nix-ts-mode": "nix-ts-mode",
         "nix-update": "nix-update",
@@ -3217,7 +3217,6 @@
         "transient": "transient",
         "treesit-fold": "treesit-fold",
         "ts": "ts",
-        "tuareg": "tuareg",
         "twind": "twind",
         "twist": "twist",
         "valign": "valign",
@@ -3619,22 +3618,6 @@
       "original": {
         "owner": "alphapapa",
         "repo": "ts.el",
-        "type": "github"
-      }
-    },
-    "tuareg": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1740711454,
-        "narHash": "sha256-EUyWgzPzqURtnlXOUIu4IZ+J0/58bF34Q4KmiS9gtmg=",
-        "owner": "ocaml",
-        "repo": "tuareg",
-        "rev": "1600fdad28bdd2c55e52a87e7987713c6d5d1718",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ocaml",
-        "repo": "tuareg",
         "type": "github"
       }
     },

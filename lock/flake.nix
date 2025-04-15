@@ -103,12 +103,6 @@
       repo = "emacs-buttercup";
       type = "github";
     };
-    caml = {
-      flake = false;
-      owner = "ocaml";
-      repo = "caml-mode";
-      type = "github";
-    };
     cape = {
       flake = false;
       owner = "minad";
@@ -720,6 +714,12 @@
       repo = "mpv.el";
       type = "github";
     };
+    neocaml = {
+      flake = false;
+      owner = "bbatsov";
+      repo = "neocaml";
+      type = "github";
+    };
     nix-mode = {
       flake = false;
       owner = "NixOS";
@@ -1273,12 +1273,6 @@
       flake = false;
       owner = "alphapapa";
       repo = "ts.el";
-      type = "github";
-    };
-    tuareg = {
-      flake = false;
-      owner = "ocaml";
-      repo = "tuareg";
       type = "github";
     };
     twind = {
