@@ -304,6 +304,12 @@
        ("|"
         (akirak-treesit--kill-to-next-node-of node "match_case" arg)
         t)
+       ((and ";"
+             (guard (member (treesit-node-type (treesit-node-parent node))
+                            '("list_expression"
+                              "record_expression"))))
+        (akirak-treesit--kill-to-next node arg)
+        t)
        ("value_definition"
         (akirak-treesit--kill-to-next-node-of node "in" arg)
         t)
@@ -329,6 +335,13 @@
                                           (treesit-node-end in)
                                           arg)
         t)))))
+
+(defun akirak-treesit--kill-to-next (node arg)
+  (let ((next (treesit-node-next-sibling node)))
+    (when next
+      (akirak-treesit--kill-line-region (treesit-node-start node)
+                                        (treesit-node-end next)
+                                        arg))))
 
 (defun akirak-treesit--kill-to-next-node-of (node types arg)
   (let ((next (treesit-node-next-sibling node)))
