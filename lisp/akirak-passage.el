@@ -100,6 +100,13 @@
             (seq-uniq))))
     (user-error "akirak-passage-dir is not set")))
 
+(defun akirak-passage--get-password (account)
+  "Return the first line of the password entry of ACCOUNT."
+  (thread-first
+    (akirak-passage--run-process nil "show" account)
+    (split-string "\n")
+    (car)))
+
 (defun akirak-passage--run-process (edit-hook &rest args)
   (declare (indent 1))
   (when (and (get-buffer-process akirak-passage-buffer)
@@ -218,9 +225,7 @@
 (defun akirak-passage-copy-password ()
   "Copy the first line of the current password entry."
   (interactive)
-  (let ((output (akirak-passage--run-process nil
-                  "show" akirak-passage-current-account)))
-    (akirak-passage--copy-string (car (split-string output "\n")))))
+  (akirak-passage--copy-string (akirak-passage--get-password akirak-passage-current-account)))
 
 (defun akirak-passage-edit-entry ()
   "Edit the current password entry."
