@@ -5229,7 +5229,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:when-loaded
       (when (require 'exec-path-from-shell nil t)
         ;; Prevent from evaluating a remote shell
-        (akirak-passage-configure-from-shell))))
+        (akirak-passage-configure-from-shell)))
+    (with-eval-after-load 'auth-source
+      (add-hook 'auth-source-backend-parser-functions #'akirak-passage-auth-source-parse)
+      (add-hook 'auth-sources 'passage)))
 #+end_src
 *** akirak-project
 #+begin_src emacs-lisp

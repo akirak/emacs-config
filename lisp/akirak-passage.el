@@ -276,18 +276,8 @@
 ;;     (add-hook 'auth-source-backend-parser-functions #'akirak-passage-auth-source-parse)
 ;;   (advice-add 'auth-source-backend-parse :before-until #'akirak-passage-auth-source-parse))
 
-(defvar akirak-passage-auth-source-backend
-  (auth-source-backend
-   "passage"
-   :source "." ;; not used
-   :type 'passage
-   :search-function #'akirak-passage-auth-source-search))
-
-;;;###autoload
-(defun akirak-passage-auth-source-parse (entry)
-  (when (eq entry 'passage)
-    (auth-source-backend-parse-parameters entry akirak-passage-auth-source-backend)))
-
+;; This needs to be defined before `akirak-passage-auth-source-backend' variable
+;; because eieio checks the type of its arguments.
 (cl-defun akirak-passage-auth-source-search (&rest spec
                                                    &key backend type host
                                                    user port
@@ -309,6 +299,17 @@
                            user)))
       (when (akirak-passage--account-exists-p account)
         (list (list :secret (akirak-passage--get-password account))))))))
+
+(defvar akirak-passage-auth-source-backend
+  (make-instance 'auth-source-backend
+                 :source "."
+                 :type 'passage
+                 :search-function #'akirak-passage-auth-source-search))
+
+;;;###autoload
+(defun akirak-passage-auth-source-parse (entry)
+  (when (eq entry 'passage)
+    (auth-source-backend-parse-parameters entry akirak-passage-auth-source-backend)))
 
 (provide 'akirak-passage)
 ;;; akirak-passage.el ends here
