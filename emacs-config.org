@@ -8555,6 +8555,10 @@ Major mode for OCaml code
     (:local-set treesit-font-lock-level 4)
     (:set neocaml-use-prettify-symbols nil)
 
+    (:reformatters
+     (ocamlformat :program "ocamlformat"
+                  :args (list "--name" (buffer-file-name) "-")))
+
     ;; Migrated from settings for tuareg-mode.
     (:when-loaded
       (define-abbrev neocaml-mode-abbrev-table
