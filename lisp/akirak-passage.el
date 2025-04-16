@@ -227,9 +227,9 @@
   (interactive)
   (with-editor
     (akirak-passage--run-process
-        (lambda ()
-          (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
-      "edit" akirak-passage-current-account)))
+     (lambda ()
+       (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
+     "edit" akirak-passage-current-account)))
 
 (defun akirak-passage-rename-entry ()
   "Rename or move the current entry."
