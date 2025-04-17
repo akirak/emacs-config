@@ -298,8 +298,8 @@
                                                   arg)))))))))
 
 (defun akirak-treesit--kill-line-exception (node arg)
-  (pcase (treesit-node-language node)
-    (`ocaml
+  (cl-case (treesit-node-language node)
+    ((ocaml ocaml-interface)
      (pcase (treesit-node-type node)
        ("|"
         (akirak-treesit--kill-to-next-node-of node "match_case" arg)

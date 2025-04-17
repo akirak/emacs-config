@@ -5305,7 +5305,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (add-hook 'after-change-major-mode-hook
               (defun akirak/enable-treesit-mode ()
                 (when (or (string-suffix-p "-ts-mode" (symbol-name major-mode))
-                          (memq major-mode '(neocaml-mode)))
+                          (memq major-mode '(neocaml-mode
+                                             neocamli-mode)))
                   (akirak-treesit-mode t)))))
 #+end_src
 *** akirak-twist
@@ -6854,6 +6855,8 @@ Client for Language Server Protocol (LSP) servers
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
       (add-to-list 'eglot-server-programs
                    '((neocaml-mode :language-id "ocaml") . ("ocamllsp")))
+      (add-to-list 'eglot-server-programs
+                   '((neocamli-mode :language-id "ocamli") . ("ocamllsp")))
       (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
@@ -8553,10 +8556,11 @@ Major mode for OCaml code
 #+begin_src emacs-lisp
   (setup (:package neocaml)
     (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
-    (:mode-repl akirak/utop-project)
-    (:mode-project-roots "dune-project")
-    (:local-set treesit-font-lock-level 4)
-    (:set neocaml-use-prettify-symbols nil)
+    (:with-mode (neocaml-mode neocamli-mode)
+      (:mode-repl akirak/utop-project)
+      (:mode-project-roots "dune-project")
+      (:local-set treesit-font-lock-level 4)
+      (:set neocaml-use-prettify-symbols nil))
 
     (:reformatters
      (ocamlformat :program "ocamlformat"
