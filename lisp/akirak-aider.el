@@ -37,7 +37,7 @@
 (defcustom akirak-aider-args
   '("--light-mode"
     "--no-auto-commits"
-    "--model" "openrouter/google/gemini-2.5-pro-exp-03-25:free")
+    "--model" "openrouter/google/gemini-2.5-pro-preview-03-25")
   ""
   :type '(repeat string))
 
