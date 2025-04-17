@@ -715,7 +715,7 @@ Otherwise, it calls `akirak-window-duplicate-state'."
   (interactive)
   (akirak-window--with-each-non-file-buffer-window
    (goto-char (point-max))
-   (recenter-top-bottom -1)))
+   (recenter-top-bottom -2)))
 
 ;;;###autoload
 (defun akirak-window-display-buffer-starts ()
