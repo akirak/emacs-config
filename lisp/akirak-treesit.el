@@ -302,28 +302,34 @@
     (`ocaml
      (pcase (treesit-node-type node)
        ("|"
-        (akirak-treesit--kill-to-next-node-of node "match_case" arg)
-        t)
+        (akirak-treesit--kill-to-next-node-of node "match_case" arg))
        ((and ";"
              (guard (member (treesit-node-type (treesit-node-parent node))
                             '("list_expression"
-                              "record_expression"))))
-        (akirak-treesit--kill-to-next node arg)
-        t)
-       ("value_definition"
-        (akirak-treesit--kill-to-next-node-of node "in" arg)
-        t)
-       ("application_expression"
-        (let ((next (treesit-node-next-sibling node)))
-          (if (and next
-                   (equal (treesit-node-type next) ";"))
-              (akirak-treesit--kill-line-region (treesit-node-start node)
-                                                (treesit-node-end next)
-                                                arg)
+                              "record_expression"
+                              "record_declaration"))))
+        (let* ((next (treesit-node-next-sibling node)))
+          (when (and next
+                     (not (member (treesit-node-type next)
+                                  '(";" "}" "]"))))
+            (while (and (treesit-node-next-sibling next)
+                        (equal (treesit-node-type (treesit-node-next-sibling next))
+                               "attribute"))
+              (setq next (treesit-node-next-sibling next)))
             (akirak-treesit--kill-line-region (treesit-node-start node)
-                                              (treesit-node-end node)
-                                              arg))
-          t))
+                                              (treesit-node-end next)
+                                              arg))))
+       ("value_definition"
+        (akirak-treesit--kill-to-next-node-of node "in" arg))
+       ("application_expression"
+        (akirak-treesit--kill-line-region (treesit-node-start node)
+                                          (let ((next (treesit-node-next-sibling node)))
+                                            (if (and next
+                                                     (equal (treesit-node-type next) ";"))
+                                                (treesit-node-end next)
+                                              (treesit-node-end node)))
+                                          arg)
+        t)
        ((and "let"
              (let in (ignore-errors
                        (thread-last
@@ -336,20 +342,14 @@
                                           arg)
         t)))))
 
-(defun akirak-treesit--kill-to-next (node arg)
-  (let ((next (treesit-node-next-sibling node)))
-    (when next
-      (akirak-treesit--kill-line-region (treesit-node-start node)
-                                        (treesit-node-end next)
-                                        arg))))
-
 (defun akirak-treesit--kill-to-next-node-of (node types arg)
   (let ((next (treesit-node-next-sibling node)))
     (when (and next
                (member (treesit-node-type next) (ensure-list types)))
       (akirak-treesit--kill-line-region (treesit-node-start node)
                                         (treesit-node-end next)
-                                        arg))))
+                                        arg)
+      t)))
 
 (defun akirak-treesit--kill-line-guard (node)
   (not (and (equal (treesit-node-language node)
