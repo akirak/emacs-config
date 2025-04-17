@@ -6855,6 +6855,8 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '((neocaml-mode :language-id "ocaml") . ("ocamllsp")))
       (add-to-list 'eglot-server-programs
+                   '((neocamli-mode :language-id "ocamli") . ("ocamllsp")))
+      (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
                    '(gleam-ts-mode . ("gleam" "lsp")))
