@@ -1140,7 +1140,9 @@ The built-in =electric= package provides the following modes:
     (:also-load shr-tag-pre-highlight)
     (:hook visual-line-mode)
     (add-hook 'eww-after-render-hook #'eww-readable)
-    (:keymap "^"
+    (:keymap "C-c C-n" #'outline-next-heading
+             "C-c C-p" #'outline-previous-heading
+             "^"
              (defun akirak/eww-directory-up ()
                (interactive nil eww-mode)
                (let* ((url (eww-current-url))
