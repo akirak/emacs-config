@@ -7556,19 +7556,13 @@ Interact with ChatGPT or other LLMs
                             :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
                             :endpoint "/api/v1/chat/completions"
                             :stream t
+                            ;; For perplexity, use the native provider.
                             :models '(openai/gpt-4.1
                                       openai/gpt-4.1-mini
-                                      google/gemini-2.0-flash-001
-                                      google/gemini-2.0-flash-thinking-exp:free
-                                      google/gemini-2.5-pro-exp-03-25:free
-                                      ;; Use the native Perplexity provider for citations
-                                      ;; perplexity/sonar-pro
-                                      ;; perplexity/sonar-deep-research
-                                      x-ai/grok-2-1212
-                                      deepseek/deepseek-chat-v3-0324:free
-                                      deepseek/deepseek-chat-v3-0324
-                                      deepseek/deepseek-r1-zero:free))
-            gptel-model 'google/gemini-2.5-pro-exp-03-25:free)
+                                      openai/o4-mini
+                                      google/gemini-2.5-flash-preview
+                                      google/gemini-2.5-pro-preview-03-25))
+            gptel-model 'google/gemini-2.5-flash-preview)
 
       (gptel-make-anthropic "Claude"
         :stream t
