@@ -728,9 +728,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
       (:local-set line-spacing 0.5))
     (:with-mode (Help-mode helpful-mode Info-mode)
       (:local-set line-spacing 0.3))
-    (:with-mode (eww-mode)
-      (:local-set line-spacing 0.35))
-    (:with-mode (nov-mode)
+    (:with-mode (nov-mode eww-mode)
       (:local-set line-spacing 0.4)))
 #+end_src
 **** Tab width
@@ -1137,36 +1135,42 @@ The built-in =electric= package provides the following modes:
 
 #+begin_src emacs-lisp
   (setup eww
-    (:keymap "^"
-           (defun akirak/eww-directory-up ()
-             (interactive nil eww-mode)
-             (let* ((url (eww-current-url))
-                    (urlobj (url-generic-parse-url url))
-                    (filename (url-filename urlobj)))
-               (when (string-match-p "?" (car (url-path-and-query urlobj)))
-                 (user-error "URL contains a query, so this command won't work"))
-               (unless filename
-                 (error "url-filename is nil"))
-               (when (pcase (file-name-base filename)
-                       (""
-                        (setf (url-filename urlobj)
-                              (file-name-directory (directory-file-name filename))))
-                       ((rx bol "index" (or "." eol))
-                        (let ((dir (file-name-directory (directory-file-name
-                                                         (file-name-directory filename)))))
-                          (if (equal (url-type urlobj) "file")
-                              (let ((basename (file-name-base filename)))
-                                (setf (url-filename urlobj)
-                                      (concat (or (locate-dominating-file dir basename)
-                                                  (user-error "No file named %s in ancestors"
-                                                              basename))
-                                              (file-name-base filename))))
-                            (setf (url-filename urlobj)
-                                  dir))))
-                       (_
-                        (setf (url-filename urlobj)
-                              (file-name-directory filename))))
-                 (eww (url-recreate-url urlobj)))))))
+    (:also-load shr-tag-pre-highlight)
+    (:with-hook eww-after-render-hook
+      (:hook eww-readable
+             visual-line-mode))
+    (:keymap "C-c C-n" #'outline-next-heading
+             "C-c C-p" #'outline-previous-heading
+             "^"
+             (defun akirak/eww-directory-up ()
+               (interactive nil eww-mode)
+               (let* ((url (eww-current-url))
+                      (urlobj (url-generic-parse-url url))
+                      (filename (url-filename urlobj)))
+                 (when (string-match-p "?" (car (url-path-and-query urlobj)))
+                   (user-error "URL contains a query, so this command won't work"))
+                 (unless filename
+                   (error "url-filename is nil"))
+                 (when (pcase (file-name-base filename)
+                         (""
+                          (setf (url-filename urlobj)
+                                (file-name-directory (directory-file-name filename))))
+                         ((rx bol "index" (or "." eol))
+                          (let ((dir (file-name-directory (directory-file-name
+                                                           (file-name-directory filename)))))
+                            (if (equal (url-type urlobj) "file")
+                                (let ((basename (file-name-base filename)))
+                                  (setf (url-filename urlobj)
+                                        (concat (or (locate-dominating-file dir basename)
+                                                    (user-error "No file named %s in ancestors"
+                                                                basename))
+                                                (file-name-base filename))))
+                              (setf (url-filename urlobj)
+                                    dir))))
+                         (_
+                          (setf (url-filename urlobj)
+                                (file-name-directory filename))))
+                   (eww (url-recreate-url urlobj)))))))
 #+end_src
 *** executable
 :PROPERTIES:
@@ -1311,6 +1315,7 @@ The built-in =electric= package provides the following modes:
                          (heex-ts-mode . (,@lsp))
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
+                         (neocaml-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
@@ -2100,6 +2105,28 @@ This is a recommended setting for use with vertico. See https://github.com/minad
        (format "[%s]+" (mapconcat #'char-to-string (list 8203 8288 8205 8204 65279)))
        "" start end))
 
+    (defun akirak/kill-word-dwim (&optional arg)
+      (interactive "P")
+      (require 'thingatpt)
+      (cond
+       ((looking-at (rx (syntax open-parenthesis)))
+        (pcase-exhaustive (funcall show-paren-data-function)
+          (`(,open-start ,_ ,_ ,close-end . ,_)
+           (kill-region open-start close-end))))
+       ((looking-at (rx (syntax string-quote)))
+        (pcase-exhaustive (thing-at-point-bounds-of-string-at-point)
+          (`(,begin . ,end)
+           (kill-region begin end))))
+       ((equal arg '(4))
+        (when (looking-at (rx (+ blank)))
+          (goto-char (match-end 0)))
+        (zap-to-char 1 ?\s))
+       (t
+        (kill-word arg))))
+
+    (:with-map prog-mode-map
+      (:keymap "<remap> <kill-word>" #'akirak/kill-word-dwim))
+
     (:status opinionated
       (:global-keymap "C-a"
                       (defun akirak/back-to-indentation-or-bol ()
@@ -2213,17 +2240,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subword
-    ;; (:global-keymap "M-SPC" #'akirak/run-with-superword-inversed)
-
-    ;; Deprecated.
-    (defun akirak/run-with-superword-inversed (key)
-      "Run a command with `superword-mode' inversed."
-      (interactive "K")
-      (let ((cmd (lookup-key (current-active-maps) key)))
-        (superword-mode)
-        (unwind-protect
-            (call-interactively cmd)
-          (superword-mode)))))
+    ;; (add-hook 'prog-mode-hook (defun akirak/enable-superword-mode ()
+    ;;                             (superword-mode 1)))
+    )
 #+end_src
 *** tab-bar
 :PROPERTIES:
@@ -5212,7 +5231,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:when-loaded
       (when (require 'exec-path-from-shell nil t)
         ;; Prevent from evaluating a remote shell
-        (akirak-passage-configure-from-shell))))
+        (akirak-passage-configure-from-shell)))
+    (with-eval-after-load 'auth-source
+      (add-hook 'auth-source-backend-parser-functions #'akirak-passage-auth-source-parse)
+      (add-hook 'auth-sources 'passage)))
 #+end_src
 *** akirak-project
 #+begin_src emacs-lisp
@@ -5284,7 +5306,9 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:keymap "<remap> <akirak-expand-region-default>" #'akirak-treesit-expand-region)
     (add-hook 'after-change-major-mode-hook
               (defun akirak/enable-treesit-mode ()
-                (when (string-suffix-p "-ts-mode" (symbol-name major-mode))
+                (when (or (string-suffix-p "-ts-mode" (symbol-name major-mode))
+                          (memq major-mode '(neocaml-mode
+                                             neocamli-mode)))
                   (akirak-treesit-mode t)))))
 #+end_src
 *** akirak-twist
@@ -6817,11 +6841,11 @@ Client for Language Server Protocol (LSP) servers
       (define-prefix-command 'akirak/eglot-prefix-map)
       (:with-map akirak/eglot-prefix-map
         (:keymap "a" #'eglot-code-actions
-               "i" #'eglot-code-action-inline
-               "q" #'eglot-code-action-quickfix
-               "o" #'eglot-code-action-organize-imports
-               "R" #'eglot-reconnect
-               "r" #'eglot-rename))
+                 "i" #'eglot-code-action-inline
+                 "q" #'eglot-code-action-quickfix
+                 "o" #'eglot-code-action-organize-imports
+                 "R" #'eglot-reconnect
+                 "r" #'eglot-rename))
 
       (add-to-list 'eglot-server-programs
                    `((nix-ts-mode nix-mode) . ("nil")))
@@ -6831,6 +6855,10 @@ Client for Language Server Protocol (LSP) servers
                    '(svelte-mode . ("svelteserver" "--stdio")))
       (add-to-list 'eglot-server-programs
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
+      (add-to-list 'eglot-server-programs
+                   '((neocaml-mode :language-id "ocaml") . ("ocamllsp")))
+      (add-to-list 'eglot-server-programs
+                   '((neocamli-mode :language-id "ocamli") . ("ocamllsp")))
       (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
@@ -7529,20 +7557,13 @@ Interact with ChatGPT or other LLMs
                             :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
                             :endpoint "/api/v1/chat/completions"
                             :stream t
-                            :models '(openai/gpt-4.5-preview
-                                      openai/gpt-3.5-turbo
-                                      openai/o3-mini-high
-                                      google/gemini-2.0-flash-001
-                                      google/gemini-2.0-flash-thinking-exp:free
-                                      google/gemini-2.5-pro-exp-03-25:free
-                                      ;; Use the native Perplexity provider for citations
-                                      ;; perplexity/sonar-pro
-                                      ;; perplexity/sonar-deep-research
-                                      x-ai/grok-2-1212
-                                      deepseek/deepseek-chat-v3-0324:free
-                                      deepseek/deepseek-chat-v3-0324
-                                      deepseek/deepseek-r1-zero:free))
-            gptel-model 'google/gemini-2.5-pro-exp-03-25:free)
+                            ;; For perplexity, use the native provider.
+                            :models '(openai/gpt-4.1
+                                      openai/gpt-4.1-mini
+                                      openai/o4-mini
+                                      google/gemini-2.5-flash-preview
+                                      google/gemini-2.5-pro-preview-03-25))
+            gptel-model 'google/gemini-2.5-flash-preview)
 
       (gptel-make-anthropic "Claude"
         :stream t
@@ -8522,6 +8543,29 @@ control mpv for easy note-taking
                      (type . ,(rx (or "audio" "video")
                                   "/" (+ anything)))))))
 #+end_src
+*** neocaml
+#+begin_quote
+Major mode for OCaml code
+[[http://github.com/bbatsov/neocaml]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package neocaml)
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:with-mode (neocaml-mode neocamli-mode)
+      (:mode-repl akirak/utop-project)
+      (:mode-project-roots "dune-project")
+      (:local-set treesit-font-lock-level 4)
+      (:set neocaml-use-prettify-symbols nil)
+
+      ;; Load abbreviations
+      (:also-load akirak-ocaml)
+      (:local-set abbrev-table akirak-ocaml-abbrev-table))
+
+    (:reformatters
+     (ocamlformat :program "ocamlformat"
+                  :args (list "--name" (buffer-file-name) "-"))))
+#+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
@@ -8702,10 +8746,11 @@ automatic indentation with ocp-indent
 
 #+begin_src emacs-lisp
   (setup (:package ocp-indent)
-    (add-hook 'tuareg-mode-hook
-              (defun akirak/ocp-indent-maybe-setup ()
-                (when (executable-find "ocp-indent")
-                  (ocp-setup-indent)))))
+    (defun akirak/ocp-indent-maybe-setup ()
+      (when (executable-find "ocp-indent")
+        (ocp-setup-indent)))
+    (add-hook 'tuareg-mode-hook #'akirak/ocp-indent-maybe-setup)
+    (add-hook 'neocaml-mode-hook #'akirak/ocp-indent-maybe-setup))
 #+end_src
 *** olivetti                                               :writing:
 :PROPERTIES:
@@ -8855,7 +8900,7 @@ Summon and dismiss buffers as popups
 
 #+begin_src emacs-lisp
   (setup (:package popper)
-    (:set popper-window-height 0.2
+    (:set popper-window-height 0.33
           popper-display-function #'popper-select-popup-at-bottom
           akirak/display-popup-window-function popper-display-function
           ;; You may have to re-enable popper-mode after updating this variable
@@ -8910,13 +8955,7 @@ Summon and dismiss buffers as popups
              "M-' s" #'scratch-buffer
              "M-' w" (defun akirak/revisit-eww-buffer ()
                        (interactive)
-                       (pop-to-buffer "*eww*"))
-             "M-' c" (defun akirak/compilation-buffer (&optional arg)
-                       (interactive "P")
-                       (if-let* ((buffer (and (not arg)
-                                              (get-buffer "*compilation*"))))
-                           (pop-to-buffer buffer)
-                         (project-compile)))))
+                       (pop-to-buffer "*eww*"))))
 #+end_src
 *** posframe                                            :UI:library:
 :PROPERTIES:
@@ -9619,7 +9658,7 @@ A flexible triple-based database for use in apps
 #+begin_src emacs-lisp
 (setup (:package triples))
 #+end_src
-*** tuareg                                                  :OCaml:@extra:fstar:
+*** COMMENT tuareg                                          :OCaml:@extra:fstar:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-10 Tue 16:51]
 :END:
@@ -9639,25 +9678,25 @@ OCaml mode
                   :args (list "--name" (buffer-file-name) "-")))
 
     (:keymap "<remap> <devdocs-lookup>"
-           (defun akirak/ocaml-doc-index ()
-             (interactive)
-             (pcase-exhaustive (process-lines (or (executable-find "odig")
-                                                  (user-error "odig is not found"))
-                                              "doc" "-f")
-               (`nil
-                (error "No response returned"))
-               (`(,file . ,_)
-                (eww (concat "file://" file)))))
+             (defun akirak/ocaml-doc-index ()
+               (interactive)
+               (pcase-exhaustive (process-lines (or (executable-find "odig")
+                                                    (user-error "odig is not found"))
+                                                "doc" "-f")
+                 (`nil
+                  (error "No response returned"))
+                 (`(,file . ,_)
+                  (eww (concat "file://" file)))))
 
-           "<remap> <apropos-command>"
-           (defun akirak/ocaml-sherlodoc ()
-             (interactive)
-             (pop-to-buffer
-              (eat-make (format "sherlodoc-%s"
-                                (project-name (or (project-current)
-                                                  (user-error "Not in a project"))))
-                        "opam" nil
-                        "exec" "--" "sherlodoc" "search"))))
+             "<remap> <apropos-command>"
+             (defun akirak/ocaml-sherlodoc ()
+               (interactive)
+               (pop-to-buffer
+                (eat-make (format "sherlodoc-%s"
+                                  (project-name (or (project-current)
+                                                    (user-error "Not in a project"))))
+                          "opam" nil
+                          "exec" "--" "sherlodoc" "search"))))
 
     (:when-loaded
       (define-abbrev tuareg-mode-abbrev-table
@@ -9680,7 +9719,23 @@ OCaml mode
                    "Insert try"
                    ""
                    > "try " -
-                   n "with " @ _))))
+                   n "with " @ _))
+
+      (define-abbrev tuareg-mode-abbrev-table
+        "struct" "" (define-skeleton akirak-ocaml-struct
+                      "Insert struct"
+                      ""
+                      > "struct" n
+                      > @ - n
+                      > -2 "end"))
+
+      (define-abbrev tuareg-mode-abbrev-table
+        "sig" "" (define-skeleton akirak-ocaml-sig
+                   "Insert sig"
+                   ""
+                   > "sig" n
+                   > @ - n
+                   > -2 "end"))))
 #+end_src
 *** COMMENT turbo-log                                    :development:debugging:ARCHIVE:
 :PROPERTIES:
@@ -10601,7 +10656,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  12 |
-| [[org-ql-search:tags:@extra][@extra]]              |  12 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
@@ -10636,8 +10691,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:Org][Org]]                 |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
-| [[org-ql-search:tags:OCaml][OCaml]]               |   2 |
-| [[org-ql-search:tags:fstar][fstar]]               |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
@@ -10658,6 +10711,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
+| [[org-ql-search:tags:OCaml][OCaml]]               |   1 |
+| [[org-ql-search:tags:fstar][fstar]]               |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |

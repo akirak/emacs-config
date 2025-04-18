@@ -36,7 +36,8 @@
 
 (defcustom akirak-aider-args
   '("--light-mode"
-    "--no-auto-commits")
+    "--no-auto-commits"
+    "--model" "openrouter/openai/gpt-4")
   ""
   :type '(repeat string))
 

@@ -143,5 +143,15 @@
           (when (string-prefix-p base-dir (abbreviate-file-name path))
             (replace-match (file-relative-name path base-dir))))))))
 
+(defun akirak-org-shell-aider-copy ()
+  "Insert the last message in Aider into the current point."
+  (interactive)
+  (akirak-org-shell--send-string "/copy")
+  (sit-for 0.1)
+  (let ((pos (point)))
+    (yank)
+    (akirak-pandoc-replace-with-org pos (point))
+    (pulse-momentary-highlight-region pos (point))))
+
 (provide 'akirak-org-shell)
 ;;; akirak-org-shell.el ends here

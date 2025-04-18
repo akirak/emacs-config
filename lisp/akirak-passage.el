@@ -31,6 +31,7 @@
 
 (require 'transient)
 (require 'with-editor)
+(require 'auth-source)
 
 (defconst akirak-passage-buffer "*Passage*")
 
@@ -99,6 +100,18 @@
             (mapcar #'to-ent)
             (seq-uniq))))
     (user-error "akirak-passage-dir is not set")))
+
+(defun akirak-passage--account-exists-p (account)
+  (if (file-directory-p akirak-passage-dir)
+      (file-readable-p (expand-file-name (concat account ".age") akirak-passage-dir))
+    (error "akirak-passage-dir is not set")))
+
+(defun akirak-passage--get-password (account)
+  "Return the first line of the password entry of ACCOUNT."
+  (thread-first
+    (akirak-passage--run-process nil "show" account)
+    (split-string "\n")
+    (car)))
 
 (defun akirak-passage--run-process (edit-hook &rest args)
   (declare (indent 1))
@@ -218,18 +231,16 @@
 (defun akirak-passage-copy-password ()
   "Copy the first line of the current password entry."
   (interactive)
-  (let ((output (akirak-passage--run-process nil
-                  "show" akirak-passage-current-account)))
-    (akirak-passage--copy-string (car (split-string output "\n")))))
+  (akirak-passage--copy-string (akirak-passage--get-password akirak-passage-current-account)))
 
 (defun akirak-passage-edit-entry ()
   "Edit the current password entry."
   (interactive)
   (with-editor
     (akirak-passage--run-process
-        (lambda ()
-          (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
-      "edit" akirak-passage-current-account)))
+     (lambda ()
+       (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
+     "edit" akirak-passage-current-account)))
 
 (defun akirak-passage-rename-entry ()
   "Rename or move the current entry."
@@ -253,6 +264,52 @@
     (akirak-passage--git-commit (format "Deleted %s" akirak-passage-current-account))
     (message "Deleted the password entry")
     (setq akirak-passage-current-account nil)))
+
+;;;; Auth-source support
+
+;; Based on the implementation of auth-source-pass.el by Damien Cassou et al.
+
+;; To enable this feature, add @='passage to @='auth-sources and run the
+;; following code:
+
+;; (if (boundp 'auth-source-backend-parser-functions)
+;;     (add-hook 'auth-source-backend-parser-functions #'akirak-passage-auth-source-parse)
+;;   (advice-add 'auth-source-backend-parse :before-until #'akirak-passage-auth-source-parse))
+
+;; This needs to be defined before `akirak-passage-auth-source-backend' variable
+;; because eieio checks the type of its arguments.
+(cl-defun akirak-passage-auth-source-search (&rest spec
+                                                   &key backend type host
+                                                   user port
+                                                   require max
+                                                   &allow-other-keys)
+  (cl-assert (or (null type) (eq type (oref backend type))) t
+             "Invalid passage %s %s")
+  (cond
+   ((eq host t)
+    (warn "Not supporting host wildcards")
+    nil)
+   ((null host)
+    nil)
+   (t
+    (let ((account (format "%s/%s"
+                           (if port
+                               (format "%d:%d" host port)
+                             host)
+                           user)))
+      (when (akirak-passage--account-exists-p account)
+        (list (list :secret (akirak-passage--get-password account))))))))
+
+(defvar akirak-passage-auth-source-backend
+  (make-instance 'auth-source-backend
+                 :source "."
+                 :type 'passage
+                 :search-function #'akirak-passage-auth-source-search))
+
+;;;###autoload
+(defun akirak-passage-auth-source-parse (entry)
+  (when (eq entry 'passage)
+    (auth-source-backend-parse-parameters entry akirak-passage-auth-source-backend)))
 
 (provide 'akirak-passage)
 ;;; akirak-passage.el ends here

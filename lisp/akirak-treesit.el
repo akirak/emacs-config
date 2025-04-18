@@ -258,39 +258,104 @@
                 (if (< (treesit-node-start node) (point))
                     (akirak-treesit--kill-line-region start (min bound (treesit-node-end node))
                                                       arg)
-                  (catch 'stop
-                    (while (setq parent (treesit-node-parent node))
-                      (when (and (or (< (treesit-node-start parent) start)
-                                     (and (= (treesit-node-end node) bound)
-                                          (looking-back (rx bol (* blank)) (line-beginning-position)))
-                                     (> (cdr (posn-col-row (posn-at-point (treesit-node-end node))))
-                                        (cdr (posn-col-row (posn-at-point node-start)))))
-                                 (not (member (treesit-node-type node)
-                                              akirak-treesit-balanced-nodes)))
-                        (throw 'stop t))
-                      (setq node parent)))
-                  (if parent
-                      (if-let* ((end-node (akirak-treesit--find-last-node node parent bound)))
-                          (akirak-treesit--kill-line-region
-                           (point) (akirak-treesit--after-last-node (treesit-node-end end-node))
-                           arg)
-                        ;; No node to delete, fallback to the default behavior
-                        (kill-line))
-                    (akirak-treesit--kill-line-region
-                     (point) (akirak-treesit--after-last-node (treesit-node-end node))
-                     arg)))
+                  (catch 'finish
+                    (catch 'found
+                      (while (setq parent (treesit-node-parent node))
+                        (when (akirak-treesit--kill-line-exception node arg)
+                          (throw 'finish t))
+                        (when (and (or (< (treesit-node-start parent) start)
+                                       (and (= (treesit-node-end node) bound)
+                                            (looking-back (rx bol (* blank))
+                                                          (line-beginning-position)))
+                                       (> (cdr (posn-col-row (posn-at-point (treesit-node-end node))))
+                                          (cdr (posn-col-row (posn-at-point node-start)))))
+                                   (not (member (treesit-node-type node)
+                                                akirak-treesit-balanced-nodes)))
+                          (throw 'found t))
+                        (setq node parent)))
+                    (if parent
+                        (if-let* ((end-node (akirak-treesit--find-last-node node parent bound)))
+                            (akirak-treesit--kill-line-region
+                             (point) (akirak-treesit--after-last-node (treesit-node-end end-node))
+                             arg)
+                          ;; No node to delete, fallback to the default behavior
+                          (kill-line))
+                      (akirak-treesit--kill-line-region
+                       (point) (akirak-treesit--after-last-node (treesit-node-end node))
+                       arg))))
               ;; There is no node at point, so find the next node and delete until
               ;; the start of the node
               (setq parent (treesit-node-parent node))
               (while (not (node-at-point-p parent))
                 (setq parent (treesit-node-parent parent)))
               (if-let* ((node (seq-find `(lambda (node)
-                                           (> (treesit-node-start node) ,(point)))
+                                           (and (> (treesit-node-start node) ,(point))
+                                                (akirak-treesit--kill-line-guard node)))
                                         (treesit-node-children parent))))
                   (akirak-treesit--kill-line-region (point) (treesit-node-start node)
                                                     arg)
                 (akirak-treesit--kill-line-region (point) (treesit-node-end parent)
                                                   arg)))))))))
+
+(defun akirak-treesit--kill-line-exception (node arg)
+  (cl-case (treesit-node-language node)
+    ((ocaml ocaml-interface)
+     (pcase (treesit-node-type node)
+       ("|"
+        (akirak-treesit--kill-to-next-node-of node "match_case" arg))
+       ((and ";"
+             (guard (member (treesit-node-type (treesit-node-parent node))
+                            '("list_expression"
+                              "record_expression"
+                              "record_declaration"))))
+        (let* ((next (treesit-node-next-sibling node)))
+          (when (and next
+                     (not (member (treesit-node-type next)
+                                  '(";" "}" "]"))))
+            (while (and (treesit-node-next-sibling next)
+                        (equal (treesit-node-type (treesit-node-next-sibling next))
+                               "attribute"))
+              (setq next (treesit-node-next-sibling next)))
+            (akirak-treesit--kill-line-region (treesit-node-start node)
+                                              (treesit-node-end next)
+                                              arg)
+            t)))
+       ("value_definition"
+        (akirak-treesit--kill-to-next-node-of node "in" arg))
+       ("application_expression"
+        (akirak-treesit--kill-line-region (treesit-node-start node)
+                                          (let ((next (treesit-node-next-sibling node)))
+                                            (if (and next
+                                                     (equal (treesit-node-type next) ";"))
+                                                (treesit-node-end next)
+                                              (treesit-node-end node)))
+                                          arg)
+        t)
+       ((and "let"
+             (let in (ignore-errors
+                       (thread-last
+                         (treesit-node-next-sibling node)
+                         (treesit-node-next-sibling))))
+             (guard in)
+             (guard (equal (treesit-node-type in) "in")))
+        (akirak-treesit--kill-line-region (treesit-node-start node)
+                                          (treesit-node-end in)
+                                          arg)
+        t)))))
+
+(defun akirak-treesit--kill-to-next-node-of (node types arg)
+  (let ((next (treesit-node-next-sibling node)))
+    (when (and next
+               (member (treesit-node-type next) (ensure-list types)))
+      (akirak-treesit--kill-line-region (treesit-node-start node)
+                                        (treesit-node-end next)
+                                        arg)
+      t)))
+
+(defun akirak-treesit--kill-line-guard (node)
+  (not (and (equal (treesit-node-language node)
+                   'ocaml)
+            (equal (treesit-node-type node) ";"))))
 
 (defun akirak-treesit-smart-kill-nodes (&optional arg)
   (interactive "P")

@@ -272,22 +272,6 @@
         "type": "github"
       }
     },
-    "caml": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1740677679,
-        "narHash": "sha256-+chpQ0geVkC6JIJiEHnlwMQCkn/Dw3WjxNBB7R9o59U=",
-        "owner": "ocaml",
-        "repo": "caml-mode",
-        "rev": "744333dc4c4bd8b93e037efa8f7362b0903b96a2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ocaml",
-        "repo": "caml-mode",
-        "type": "github"
-      }
-    },
     "cape": {
       "flake": false,
       "locked": {
@@ -452,11 +436,11 @@
     "copilot": {
       "flake": false,
       "locked": {
-        "lastModified": 1744278626,
-        "narHash": "sha256-bMLQZH30TrHs0LppxEsANwMUbZhOmpByu2/xCqkKIDI=",
+        "lastModified": 1744465861,
+        "narHash": "sha256-1Wr/1x5LNQrNsWaOsHrMdG+UK8kleQW6t+6gdtohkuQ=",
         "owner": "copilot-emacs",
         "repo": "copilot.el",
-        "rev": "3e36a9825616e756f16c7c6a33f4edd5fb466260",
+        "rev": "f0e4ce61ba7565f9eb9393e88bd88868872a7d4f",
         "type": "github"
       },
       "original": {
@@ -484,11 +468,11 @@
     "cosmetic-transient": {
       "flake": false,
       "locked": {
-        "lastModified": 1744526103,
-        "narHash": "sha256-KuhmyVGQBAOaR2DYH8g97PdBq4KZY+VrMpzAK8f/7s0=",
+        "lastModified": 1744814038,
+        "narHash": "sha256-KwCCa2r+If3BEwxOv4SXwKROz7SMDRko1NUswTPk1tY=",
         "owner": "akirak",
         "repo": "cosmetic-transient.el",
-        "rev": "d9a13a877c64579d90b722bb6bca6e7e2e349d35",
+        "rev": "a7a66a874c0814b34967314ea3542d6864181a14",
         "type": "github"
       },
       "original": {
@@ -612,11 +596,11 @@
     "diff-hl": {
       "flake": false,
       "locked": {
-        "lastModified": 1743045250,
-        "narHash": "sha256-bq3wWdVN6jFLRUyFRVKyLHC5i7AE16pUgL1XWOI2Vi0=",
+        "lastModified": 1743986070,
+        "narHash": "sha256-oLeKU+9Erc2F8f67DndMn4nC0KM/ncfin+Do61bGBSo=",
         "owner": "dgutov",
         "repo": "diff-hl",
-        "rev": "7da881a957b8c15ddcc754dd73543c95b128d716",
+        "rev": "7440baa9b16b1661e41dac8d7be0ffb426524e21",
         "type": "github"
       },
       "original": {
@@ -692,11 +676,11 @@
     "docco": {
       "flake": false,
       "locked": {
-        "lastModified": 1742713443,
-        "narHash": "sha256-1Kk/3CX7f5RcFcGsNS0pHmjNF39cHOXjViFQPQ9t0Ck=",
+        "lastModified": 1744995671,
+        "narHash": "sha256-RodYAk8TQjB6ghgPNyg/OOzTc2LgSBNwSFDqIOQkUlQ=",
         "owner": "akirak",
         "repo": "docco.el",
-        "rev": "e2ed89230e2799a1cdc99e573a460c4449845c25",
+        "rev": "5c39522ca8cdf858b4156e326edaa104da3ab759",
         "type": "github"
       },
       "original": {
@@ -708,11 +692,11 @@
     "docker": {
       "flake": false,
       "locked": {
-        "lastModified": 1741896568,
-        "narHash": "sha256-zKnxlpWlInmruGagmr+HlaoHJE//vn7tllYoO1nO64A=",
+        "lastModified": 1744355436,
+        "narHash": "sha256-Y9KK6bB4MmM3fH0o2iUI2xnnE9wQxDzGkuiVeec4A10=",
         "owner": "Silex",
         "repo": "docker.el",
-        "rev": "3bea08f1d221ef9aefd9c05954423175a42d8a7e",
+        "rev": "464105ed8b193d8133a7d9e2b400876514cc4c95",
         "type": "github"
       },
       "original": {
@@ -1813,11 +1797,11 @@
     "mcp": {
       "flake": false,
       "locked": {
-        "lastModified": 1744116575,
-        "narHash": "sha256-yWMjIao2ohzsprBkqbbAmTeKNnbFPbebUCKNfGnkxDc=",
+        "lastModified": 1744450440,
+        "narHash": "sha256-Lub72Dlzf5SoI6XPK9CM4kxzeTdJKJHdEZ5MGNMduGQ=",
         "owner": "lizqwerscott",
         "repo": "mcp.el",
-        "rev": "50f83fc4bac7cc01436bce5cd0f379aff435e083",
+        "rev": "df40ff2c268eeda77a8221a19c4e1a9580cd2e07",
         "type": "github"
       },
       "original": {
@@ -1877,11 +1861,11 @@
     "modus-themes": {
       "flake": false,
       "locked": {
-        "lastModified": 1743064981,
-        "narHash": "sha256-io8MbxC+9lk+Tm8+3WvStiXZVqaMgplwvGBFCv14g5M=",
+        "lastModified": 1744470904,
+        "narHash": "sha256-+pGaJUyW6X7xCQ3eMUWq8ZiOyHJQO1XvTX3YPmNkfgU=",
         "owner": "protesilaos",
         "repo": "modus-themes",
-        "rev": "55609222f9817f7f76f5832d87e95ac11bba9a86",
+        "rev": "cfe8702f56f9c06254d9a8f8996766ffa2c6f609",
         "type": "github"
       },
       "original": {
@@ -1919,6 +1903,22 @@
       "original": {
         "owner": "kljohann",
         "repo": "mpv.el",
+        "type": "github"
+      }
+    },
+    "neocaml": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1743412340,
+        "narHash": "sha256-ueoyZcjKq+g05HJxgvZkFWisSv7rSfULpVfxYIOt2Og=",
+        "owner": "bbatsov",
+        "repo": "neocaml",
+        "rev": "225715ba309289d2f476366985931bd50dc05c2d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bbatsov",
+        "repo": "neocaml",
         "type": "github"
       }
     },
@@ -2118,11 +2118,11 @@
     "ocaml-eglot": {
       "flake": false,
       "locked": {
-        "lastModified": 1743845804,
-        "narHash": "sha256-Q26E11eDQmmVVvLZRYN035miFzHTbrYW5RsIfLkzT7g=",
+        "lastModified": 1744395094,
+        "narHash": "sha256-Qel5jBUx+2FWyfNB34+chapKJIy6opyGjzA4IrK67Vs=",
         "owner": "tarides",
         "repo": "ocaml-eglot",
-        "rev": "24afeb30e3ca063bfdf982a346154dd433f43d18",
+        "rev": "0049decacdcd1b22dd97559cfaec6ae50821f918",
         "type": "github"
       },
       "original": {
@@ -3023,7 +3023,6 @@
         "browse-at-remote": "browse-at-remote",
         "burly": "burly",
         "buttercup": "buttercup",
-        "caml": "caml",
         "cape": "cape",
         "casual": "casual",
         "casual-symbol-overlay": "casual-symbol-overlay",
@@ -3126,6 +3125,7 @@
         "modus-themes": "modus-themes",
         "move-dup": "move-dup",
         "mpv": "mpv",
+        "neocaml": "neocaml",
         "nix-mode": "nix-mode",
         "nix-ts-mode": "nix-ts-mode",
         "nix-update": "nix-update",
@@ -3217,7 +3217,6 @@
         "transient": "transient",
         "treesit-fold": "treesit-fold",
         "ts": "ts",
-        "tuareg": "tuareg",
         "twind": "twind",
         "twist": "twist",
         "valign": "valign",
@@ -3619,22 +3618,6 @@
       "original": {
         "owner": "alphapapa",
         "repo": "ts.el",
-        "type": "github"
-      }
-    },
-    "tuareg": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1740711454,
-        "narHash": "sha256-EUyWgzPzqURtnlXOUIu4IZ+J0/58bF34Q4KmiS9gtmg=",
-        "owner": "ocaml",
-        "repo": "tuareg",
-        "rev": "1600fdad28bdd2c55e52a87e7987713c6d5d1718",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ocaml",
-        "repo": "tuareg",
         "type": "github"
       }
     },

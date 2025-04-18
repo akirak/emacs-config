@@ -351,6 +351,8 @@
    ("$" octopus-last-captured-file-suffix)
    ("%" akirak-capture-org-clock-history-suffix)]
   (interactive)
+  ;; Load gptel--infix-provider
+  (require 'gptel-transient)
   (transient-setup 'akirak-capture-doct))
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-doct))
@@ -376,14 +378,14 @@
                                             0.1
                                             nil
                                             (lambda ()
-                                              (when ,new-tab-name
-                                                (tab-bar-rename-tab ,new-tab-name)
-                                                (when (fboundp 'fwb-toggle-window-split)
-                                                  (fwb-toggle-window-split)))
-                                              (when (and akirak-capture-gptel-topic
-                                                         (not akirak-capture-dispatch-later))
-                                                (require 'gptel-org)
-                                                (gptel-send))))))
+                                              ,@(when new-tab-name
+                                                  `((tab-bar-rename-tab ,new-tab-name)
+                                                    (when (fboundp 'fwb-toggle-window-split)
+                                                      (fwb-toggle-window-split))))
+                                              ,@(when (and akirak-capture-gptel-topic
+                                                           (not akirak-capture-dispatch-later))
+                                                  '((require 'gptel-org)
+                                                    (gptel-send)))))))
                              (plist-put :after-finalize
                                         (when new-tab-name
                                           `(lambda ()
@@ -905,7 +907,9 @@
   (interactive (list (thread-last
                        (cond
                         ((use-region-p)
-                         (buffer-substring-no-properties begin end))
+                         (buffer-substring-no-properties
+                          (region-beginning)
+                          (region-end)))
                         (akirak-capture-bounds
                          (buffer-substring-no-properties
                           (car akirak-capture-bounds)
@@ -1175,6 +1179,7 @@
       (setq akirak-capture-gptel-topic t
             akirak-capture-dispatch-later dispatch-later
             akirak-capture-headline headline
+            akirak-capture-doct-options nil
             akirak-capture-template-options (list :tags "@AI"
                                                   :body
                                                   (concat preamble llm-prompt
@@ -1752,7 +1757,8 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 :body body)
                    :file ,file
                    :function ,jump-func
-                   :clock-in t :clock-resume t))))))
+                   :clock-in t :clock-resume t)))))
+         (org-clock-auto-clock-resolution nil))
     (save-window-excursion
       (org-capture))))
 
