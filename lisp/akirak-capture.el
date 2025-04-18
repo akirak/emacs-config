@@ -351,6 +351,8 @@
    ("$" octopus-last-captured-file-suffix)
    ("%" akirak-capture-org-clock-history-suffix)]
   (interactive)
+  ;; Load gptel--infix-provider
+  (require 'gptel-transient)
   (transient-setup 'akirak-capture-doct))
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-doct))
