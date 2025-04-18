@@ -907,7 +907,9 @@
   (interactive (list (thread-last
                        (cond
                         ((use-region-p)
-                         (buffer-substring-no-properties begin end))
+                         (buffer-substring-no-properties
+                          (region-beginning)
+                          (region-end)))
                         (akirak-capture-bounds
                          (buffer-substring-no-properties
                           (car akirak-capture-bounds)
