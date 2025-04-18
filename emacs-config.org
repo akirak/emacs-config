@@ -1136,8 +1136,9 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup eww
     (:also-load shr-tag-pre-highlight)
-    (:hook visual-line-mode)
-    (add-hook 'eww-after-render-hook #'eww-readable)
+    (:with-hook eww-after-render-hook
+      (:hook eww-readable
+             visual-line-mode))
     (:keymap "C-c C-n" #'outline-next-heading
              "C-c C-p" #'outline-previous-heading
              "^"
