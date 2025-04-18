@@ -7565,6 +7565,8 @@ Interact with ChatGPT or other LLMs
                                       google/gemini-2.5-pro-preview-03-25))
             gptel-model 'google/gemini-2.5-flash-preview)
 
+      (gptel-make-gh-copilot "Copilot")
+
       (gptel-make-anthropic "Claude"
         :stream t
         :key (lambda ()
