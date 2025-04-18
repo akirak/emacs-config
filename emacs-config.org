@@ -1138,8 +1138,8 @@ The built-in =electric= package provides the following modes:
 #+begin_src emacs-lisp
   (setup eww
     (:also-load shr-tag-pre-highlight)
-    (:hook visual-line-mode
-           eww-readable)
+    (:hook visual-line-mode)
+    (add-hook 'eww-after-render-hook #'eww-readable)
     (:keymap "^"
              (defun akirak/eww-directory-up ()
                (interactive nil eww-mode)
