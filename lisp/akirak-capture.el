@@ -1175,6 +1175,7 @@
       (setq akirak-capture-gptel-topic t
             akirak-capture-dispatch-later dispatch-later
             akirak-capture-headline headline
+            akirak-capture-doct-options nil
             akirak-capture-template-options (list :tags "@AI"
                                                   :body
                                                   (concat preamble llm-prompt
