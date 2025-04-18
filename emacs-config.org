@@ -728,9 +728,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
       (:local-set line-spacing 0.5))
     (:with-mode (Help-mode helpful-mode Info-mode)
       (:local-set line-spacing 0.3))
-    (:with-mode (eww-mode)
-      (:local-set line-spacing 0.35))
-    (:with-mode (nov-mode)
+    (:with-mode (nov-mode eww-mode)
       (:local-set line-spacing 0.4)))
 #+end_src
 **** Tab width
