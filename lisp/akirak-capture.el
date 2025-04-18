@@ -378,14 +378,14 @@
                                             0.1
                                             nil
                                             (lambda ()
-                                              (when ,new-tab-name
-                                                (tab-bar-rename-tab ,new-tab-name)
-                                                (when (fboundp 'fwb-toggle-window-split)
-                                                  (fwb-toggle-window-split)))
-                                              (when (and akirak-capture-gptel-topic
-                                                         (not akirak-capture-dispatch-later))
-                                                (require 'gptel-org)
-                                                (gptel-send))))))
+                                              ,@(when new-tab-name
+                                                  `((tab-bar-rename-tab ,new-tab-name)
+                                                    (when (fboundp 'fwb-toggle-window-split)
+                                                      (fwb-toggle-window-split))))
+                                              ,@(when (and akirak-capture-gptel-topic
+                                                           (not akirak-capture-dispatch-later))
+                                                  '((require 'gptel-org)
+                                                    (gptel-send)))))))
                              (plist-put :after-finalize
                                         (when new-tab-name
                                           `(lambda ()
