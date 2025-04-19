@@ -87,6 +87,7 @@ Example values are shown below:
   (rx-to-string `(or (and bol (or ,(expand-file-name user-emacs-directory)
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
+                                  ,(expand-file-name "~/archives/")
                                   ,(expand-file-name "~/resources/articles/")
                                   (and ,(expand-file-name "~/") (any upper))
                                   "/tmp"))
