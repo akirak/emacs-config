@@ -6246,14 +6246,7 @@ A transient for cosmetics on source code
 
 #+begin_src emacs-lisp
   (setup (:package cosmetic-transient)
-    (:global-keymap "C-c m" #'cosmetic-transient)
-
-    (:when-loaded
-      (add-to-list 'cosmetic-transient-language-formatters
-                   '(sql
-                     :minor-mode sqlglot-format-on-save-mode
-                     :buffer-formatter sqlglot-format-buffer
-                     :region-formatter sqlglot-format-region))))
+    (:global-keymap "C-c m" #'cosmetic-transient))
 #+end_src
 *** csv-mode
 :PROPERTIES:
