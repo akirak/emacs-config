@@ -297,26 +297,20 @@ the original minor mode."
     (akirak-shell-send-string-to-buffer buffer command)
     (pop-to-buffer buffer)))
 
-(cl-defun akirak-shell-send-string-to-buffer (buffer string
+(cl-defun akirak-shell-send-string-to-buffer (buffer input
                                                      &key compilation-regexp
                                                      confirm)
   (declare (indent 1))
-  (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
-                                  '(eat-mode))
-    (`eat-mode
-     (with-current-buffer buffer
-       (when compilation-regexp
-         (akirak-shell-compilation-minor-mode t)
-         (akirak-compile-setup-regexp-for-command string))
-       (let ((term-command (cdr (member ".." (thread-last
-                                               (get-buffer-process (current-buffer))
-                                               (process-command))))))
-         (eat-term-send-string-as-yank eat-terminal
-                                       (pcase term-command
-                                         (`("aider" . ,_)
-                                          (akirak-shell--preprocess-aider-input string))
-                                         (_
-                                          string)))
+  (let ((input (pcase (akirak-shell-detect-buffer-program buffer)
+                 (`aider
+                  (akirak-shell--preprocess-aider-input input))
+                 (_
+                  input))))
+    (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
+                                    '(eat-mode))
+      (`eat-mode
+       (with-current-buffer buffer
+         (eat-term-send-string-as-yank eat-terminal input)
          (when confirm
            (eat-term-send-string eat-terminal "\n")
            (sit-for 0.5))
@@ -324,9 +318,27 @@ the original minor mode."
            (with-selected-window window
              (set-window-point nil (eat-term-display-cursor eat-terminal))
              (recenter (- (1+ (how-many "\n" (eat-term-display-cursor eat-terminal)
-                                        (eat-term-end eat-terminal))))))))))
-    (_
-     (user-error "Not in any of the terminal modes"))))
+                                        (eat-term-end eat-terminal)))))))))
+      (_
+       (user-error "Not in any of the terminal modes")))))
+
+(cl-defun akirak-shell-detect-buffer-program (buffer)
+  (declare (indent 1))
+  (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
+                                  '(eat-mode))
+    (`eat-mode
+     (pcase (akirak-shell--get-command buffer)
+       (`("aider" . ,_)
+        'aider)))))
+
+(cl-defun akirak-shell--get-command (buffer)
+  (declare (indent 1))
+  (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
+                                  '(eat-mode))
+    (`eat-mode
+     (cdr (member ".." (thread-last
+                         (get-buffer-process buffer)
+                         (process-command)))))))
 
 (defun akirak-shell--preprocess-aider-input (string)
   (let ((string (string-trim string)))
