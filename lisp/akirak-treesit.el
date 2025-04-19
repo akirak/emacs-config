@@ -322,7 +322,8 @@
             t)))
        ("value_definition"
         (akirak-treesit--kill-to-next-node-of node "in" arg))
-       ("application_expression"
+       ((or "application_expression"
+            "infix_expression")
         (akirak-treesit--kill-line-region (treesit-node-start node)
                                           (let ((next (treesit-node-next-sibling node)))
                                             (if (and next
