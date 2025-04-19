@@ -33,6 +33,31 @@
                      (?f . ,(file-relative-name file default-directory))
                      (?e . ,diag-text))))))
 
+;;;###autoload
+(defun akirak-ai-prompt-send-with-region (begin end &optional prompt)
+  "Send a prompt to an AI shell with the current region as the context."
+  (interactive "r")
+  (require 'akirak-org)
+  (let ((content (buffer-substring-no-properties begin end))
+        (line (cdr (posn-col-row (posn-at-point begin))))
+        (file (buffer-file-name (or (buffer-base-buffer)
+                                    (current-buffer))))
+        (language (akirak-org--find-src-lang
+                   (thread-last
+                     (symbol-name major-mode)
+                     (string-remove-suffix "-mode")
+                     (string-remove-suffix "-ts")))))
+    (akirak-ai-prompt--send-with-builder nil
+      (let ((location (format-spec " (at line %l in %f):"
+                                   `((?l . ,line)
+                                     (?f . ,(file-relative-name file default-directory))))))
+        (concat (if prompt
+                    (concat prompt location)
+                  (read-string "Prompt: " location))
+                (format-spec "\n\n```%m\n%b\n```"
+                             `((?m . ,language)
+                               (?b . ,content))))))))
+
 (defun akirak-ai-prompt--select-flymake-diagnostic (diags)
   (let* ((alist (mapcar (lambda (diag)
                           (cons (flymake-diagnostic-text diag)
