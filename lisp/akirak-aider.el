@@ -41,9 +41,16 @@
   ""
   :type '(repeat string))
 
+(defconst akirak-aider-slash-commands
+  '("/reset"
+    "/clear"))
+
 (defun akirak-aider-command ()
   (cons akirak-aider-executable
         akirak-aider-args))
+
+(defun akirak-aider-complete-slash-command ()
+  (completing-read "Aider command: " akirak-aider-slash-commands))
 
 (provide 'akirak-aider)
 ;;; akirak-aider.el ends here
