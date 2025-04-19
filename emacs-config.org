@@ -8559,6 +8559,7 @@ Major mode for OCaml code
     (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
     (:with-mode (neocaml-mode neocamli-mode)
       (:mode-repl akirak/utop-project)
+      (:org-src-lang "ocaml")
       (:mode-project-roots "dune-project")
       (:local-set treesit-font-lock-level 4)
       (:set neocaml-use-prettify-symbols nil)
