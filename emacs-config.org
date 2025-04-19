@@ -2502,6 +2502,7 @@ Display available keybindings in popup
 #+begin_src emacs-lisp
   (setup window
     (:set recenter-positions '(top middle bottom))
+    (:global-keymap "<f8>" #'window-toggle-side-windows)
 
     (:when-loaded
       (push 'akirak-window-fallback-reuse-window
