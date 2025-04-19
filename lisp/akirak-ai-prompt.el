@@ -1,6 +1,19 @@
 ;;; akirak-ai-prompt.el --- AI integration -*- lexical-binding: t -*-
 
 (require 'akirak-shell)
+(require 'format-spec)
+
+(defmacro akirak-ai-prompt--send-with-builder (arg &rest body)
+  "Send a prompt to a shell with BODY as the builder for the prompt"
+  (declare (indent 1))
+  `(let* ((buffer (or (get-buffer (read-buffer "Select a buffer to send the prompt to: "
+                                               nil t #'akirak-shell-buffer-p))
+                      (error "Not an existing buffer")))
+          (string (with-current-buffer buffer
+                    ,@body)))
+     (cl-check-type string string)
+     (akirak-shell-send-string-to-buffer buffer
+       string :confirm t)))
 
 ;;;###autoload
 (defun akirak-ai-prompt-fix-flymake-error-at-pos ()
@@ -13,12 +26,11 @@
          (diag-text (flymake-diagnostic-text diag))
          (line (cdr (posn-col-row (posn-at-point (flymake-diagnostic-beg diag)))))
          (file (buffer-file-name (or (buffer-base-buffer)
-                                     (current-buffer))))
-         (file-relative (file-relative-name file (vc-git-root file))))
-    (akirak-ai-prompt--return-or-send (called-interactively-p 'any)
+                                     (current-buffer)))))
+    (akirak-ai-prompt--send-with-builder nil
       (format-spec "Investigate the following error at line %l in %f:\n\n%e"
                    `((?l . ,line)
-                     (?f . ,file-relative)
+                     (?f . ,(file-relative-name file default-directory))
                      (?e . ,diag-text))))))
 
 (defun akirak-ai-prompt--select-flymake-diagnostic (diags)
@@ -28,16 +40,6 @@
                         diags))
          (text (completing-read "Select error: " alist nil t)))
     (cdr (assoc text alist))))
-
-(defun akirak-ai-prompt--return-or-send (interactive string)
-  (declare (indent 1))
-  (if interactive
-      (akirak-shell-send-string-to-buffer
-          (or (get-buffer (read-buffer "Select a buffer to send the prompt to: "
-                                       nil t #'akirak-shell-buffer-p))
-              (error "Not an existing buffer"))
-        string :confirm t)
-    string))
 
 (provide 'akirak-ai-prompt)
 ;;; akirak-ai-prompt.el ends here
