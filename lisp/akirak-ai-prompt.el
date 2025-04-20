@@ -40,6 +40,15 @@
     :if use-region-p)]
   ["Aider"
    :if akirak-ai-prompt-shell-aider-p
+   :class transient-row
+   ("/A" "Add this file"
+    (lambda ()
+      (interactive)
+      (let ((dir (buffer-local-value 'default-directory akirak-ai-prompt-shell-buffer)))
+        (akirak-shell-send-string-to-buffer akirak-ai-prompt-shell-buffer
+          (concat "/add " (file-relative-name (akirak-ai-prompt--buffer-file) dir))
+          :confirm t)))
+    :if akirak-ai-prompt--buffer-file)
    ("//" "Send a command"
     (lambda ()
       (interactive)
@@ -115,6 +124,9 @@
 (defun akirak-ai-prompt-at-error-p ()
   (and (featurep 'flymake)
        (bound-and-true-p flymake-mode)))
+
+(defun akirak-ai-prompt--buffer-file ()
+  (buffer-file-name (buffer-base-buffer)))
 
 (provide 'akirak-ai-prompt)
 ;;; akirak-ai-prompt.el ends here
