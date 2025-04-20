@@ -6,13 +6,18 @@
   (interactive nil org-mode)
   (let* ((properties (org-entry-properties pom))
          (worktree-link (cdr (assoc "GIT_WORKTREE" properties)))
-         (worktree (cond
-                    ((not worktree-link)
-                     (user-error "No worktree property"))
-                    ((string-match org-link-bracket-re worktree-link)
-                     (match-string 1 worktree-link))
-                    (t
-                     (error "%s isn't a bracket link" worktree-link))))
+         (worktree-url (cond
+                        ((not worktree-link)
+                         (user-error "No worktree property"))
+                        ((string-match org-link-bracket-re worktree-link)
+                         (match-string 1 worktree-link))
+                        (t
+                         (error "%s isn't a bracket link" worktree-link))))
+         (worktree (pcase worktree-url
+                     ((rx bol "file:" (group (+ anything)))
+                      (match-string 1 worktree-url))
+                     (_
+                      (error "Unsupported worktree URL: %s" worktree-url))))
          (origin (cdr (assoc "GIT_ORIGIN" properties)))
          (file (cdr (assoc "FILE_PATH_FROM_GIT_ROOT" properties))))
     (if (file-directory-p worktree)
