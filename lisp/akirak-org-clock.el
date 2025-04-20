@@ -376,7 +376,7 @@ Example values are shown below:
 
 ;;;###autoload
 (defun akirak-org-clock-locate-git-file ()
-  (interactive)
+  (interactive nil)
   (let* ((properties (org-entry-properties org-clock-marker))
          (worktree-link (cdr (assoc "GIT_WORKTREE" properties)))
          (worktree (cond
@@ -386,9 +386,12 @@ Example values are shown below:
                      (match-string 1 worktree-link))
                     (t
                      (error "%s isn't a bracket link" worktree-link))))
-         (origin (cdr (assoc "GIT_ORIGIN" properties))))
+         (origin (cdr (assoc "GIT_ORIGIN" properties)))
+         (file (cdr (assoc "FILE_PATH_FROM_GIT_ROOT" properties))))
     (if (file-directory-p worktree)
-        (akirak-project-switch worktree)
+        (if file
+            (find-file-other-window (expand-file-name file worktree))
+          (dired-other-window worktree))
       (when (yes-or-no-p (format-message "Clone a repository from %s? into %s"
                                          origin worktree))
         (akirak-git-clone origin worktree)))))
