@@ -1,10 +1,15 @@
 ;;; akirak-org-git.el ---  -*- lexical-binding: t -*-
 
 ;;;###autoload
-(defun akirak-org-git-locate-source (&optional pom)
+(defun akirak-org-git-locate-source (&optional pom inherit)
   "Visit the Git working tree recorded to the entry properties."
-  (interactive nil org-mode)
-  (let* ((properties (org-entry-properties pom))
+  (interactive (list nil t)
+               org-mode)
+  (let* ((properties (org-entry-properties (if inherit
+                                               (if (org-entry-get-with-inheritance "GIT_WORKTREE" nil pom)
+                                                   org-entry-property-inherited-from
+                                                 (user-error "No worktree property"))
+                                             pom)))
          (worktree-link (cdr (assoc "GIT_WORKTREE" properties)))
          (worktree-url (cond
                         ((not worktree-link)
