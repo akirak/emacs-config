@@ -9348,7 +9348,7 @@ SOPS encrypt and decrypt without leaving the editor
     (:keymap "C-c e" #'sops-edit-file
            "C-c C-c" #'sops-save-file))
 #+end_src
-*** COMMENT sqlformat                                                          :ARCHIVE:
+*** sqlformat
 :PROPERTIES:
 :CREATED_TIME: [2023-02-21 Tue 17:18]
 :END:
@@ -9362,10 +9362,7 @@ Reformat SQL using sqlformat or pgformatter
     (:nixpkgs "pgformatter")
     ;; Override the formatter settings when necessary
     (:set sqlformat-command 'pgformatter
-          sqlformat-args '("-s2" "-g"))
-    (:with-feature sql
-      (:with-mode sql-mode
-        (:keymap "C-c C-f" #'sqlformat-buffer))))
+          sqlformat-args '("-s2" "-g")))
 #+end_src
 *** ssh-config-mode
 :PROPERTIES:

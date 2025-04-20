@@ -3183,6 +3183,7 @@
         "show-font": "show-font",
         "shr-tag-pre-highlight": "shr-tag-pre-highlight",
         "spinner": "spinner",
+        "sqlformat": "sqlformat",
         "ssass-mode": "ssass-mode",
         "ssh-config-mode": "ssh-config-mode",
         "string-inflection": "string-inflection",
@@ -3327,6 +3328,22 @@
       "original": {
         "owner": "Malabarba",
         "repo": "spinner.el",
+        "type": "github"
+      }
+    },
+    "sqlformat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1730924828,
+        "narHash": "sha256-h5UQ9DximAcd0h17e834bnsVOLFzBHEd1B17GH//Wxw=",
+        "owner": "purcell",
+        "repo": "sqlformat",
+        "rev": "69ef8bec3ac8c9ce4a60f20a9721e4d7a592a84d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purcell",
+        "repo": "sqlformat",
         "type": "github"
       }
     },

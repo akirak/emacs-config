@@ -1166,6 +1166,12 @@
       repo = "spinner.el";
       type = "github";
     };
+    sqlformat = {
+      flake = false;
+      owner = "purcell";
+      repo = "sqlformat";
+      type = "github";
+    };
     ssass-mode = {
       flake = false;
       owner = "AdamNiederer";
