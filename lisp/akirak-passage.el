@@ -147,7 +147,11 @@
             (message (string-trim-right string "\n")))
            (_
             (with-current-buffer (process-buffer process)
-              (insert string))))))
+              (unless (string-empty-p (string-trim-right string))
+                ;; Clear the previous responses as it can contain "y".
+                (replace-region-contents (point-min)
+                                         (point)
+                                         string)))))))
     (let* ((process-environment (append akirak-passage-process-environment
                                         process-environment))
            (process (make-process :name "passage"
