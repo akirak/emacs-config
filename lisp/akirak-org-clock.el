@@ -87,6 +87,7 @@ Example values are shown below:
   (rx-to-string `(or (and bol (or ,(expand-file-name user-emacs-directory)
                                   ,(expand-file-name "~/fleeting/")
                                   ,(expand-file-name "~/resources/images/")
+                                  ,(expand-file-name "~/archives/")
                                   ,(expand-file-name "~/resources/articles/")
                                   (and ,(expand-file-name "~/") (any upper))
                                   "/tmp"))
@@ -342,55 +343,25 @@ Example values are shown below:
 ;;;; Persist the context to the clocked entry
 
 ;;;###autoload
-(defun akirak-org-clock-add-git-properties-if-none (pom &optional force)
+(defun akirak-org-clock-add-git-properties (&optional arg)
   "Add Git properties to the entry at POM if it has none."
-  ;; TODO: Which is faster, org-element or regular expressions?
-  ;;
-  ;; TODO: Check inherited properties?
-  (let ((element (org-with-point-at pom
-                   (org-back-to-heading)
-                   (org-element-at-point-no-context))))
-    (when (or force
-              (not (org-element-property :GIT_ORIGIN element)))
-      (require 'akirak-capture)
-      (let* ((file (buffer-file-name (marker-buffer pom)))
-             (obj (org-dog-file-object file))
-             (prop-alist (akirak-capture-git-properties
-                          obj :tags (org-element-property :tags element))))
-        (when prop-alist
-          (org-with-point-at pom
-            (pcase-dolist (`(,prop . ,value) prop-alist)
-              (org-entry-put nil prop value)))
-          (message "Added Git properties to the clocked org-mode entry"))))))
-
-;;;###autoload
-(defun akirak-org-clock-add-git-properties ()
-  "Add Git properties to the entry at POM if it has none."
-  (interactive)
+  (interactive "P")
   (if (org-clocking-p)
-      (if (equal current-prefix-arg '(16))
-          (akirak-org-clock-locate-git-file)
-        (akirak-org-clock-add-git-properties-if-none org-clock-marker 'force))
+      (pcase arg
+        ('(16)
+         (akirak-org-clock-locate-git-file))
+        ('(4)
+         (akirak-org-git-add-properties-if-none (with-current-buffer (akirak-org-clock-open)
+                                                  (point-marker))
+                                                'force))
+        (_
+         (akirak-org-git-add-properties-if-none org-clock-marker 'force)))
     (user-error "You have to be running a clock")))
 
 ;;;###autoload
 (defun akirak-org-clock-locate-git-file ()
-  (interactive)
-  (let* ((properties (org-entry-properties org-clock-marker))
-         (worktree-link (cdr (assoc "GIT_WORKTREE" properties)))
-         (worktree (cond
-                    ((not worktree-link)
-                     (user-error "No worktree property"))
-                    ((string-match org-link-bracket-re worktree-link)
-                     (match-string 1 worktree-link))
-                    (t
-                     (error "%s isn't a bracket link" worktree-link))))
-         (origin (cdr (assoc "GIT_ORIGIN" properties))))
-    (if (file-directory-p worktree)
-        (akirak-project-switch worktree)
-      (when (yes-or-no-p (format-message "Clone a repository from %s? into %s"
-                                         origin worktree))
-        (akirak-git-clone origin worktree)))))
+  (interactive nil)
+  (akirak-org-git-locate-source org-clock-marker))
 
 ;;;; Rebuild the history
 

@@ -2109,6 +2109,13 @@ This is a recommended setting for use with vertico. See https://github.com/minad
       (interactive "P")
       (require 'thingatpt)
       (cond
+       ((equal arg '(4))
+        (when (looking-at (rx (+ blank)))
+          (goto-char (match-end 0)))
+        (let ((eol (line-end-position)))
+          (kill-region (point)
+                       (or (re-search-forward (rx (+ blank)) eol t)
+                           eol))))
        ((looking-at (rx (syntax open-parenthesis)))
         (pcase-exhaustive (funcall show-paren-data-function)
           (`(,open-start ,_ ,_ ,close-end . ,_)
@@ -2117,10 +2124,6 @@ This is a recommended setting for use with vertico. See https://github.com/minad
         (pcase-exhaustive (thing-at-point-bounds-of-string-at-point)
           (`(,begin . ,end)
            (kill-region begin end))))
-       ((equal arg '(4))
-        (when (looking-at (rx (+ blank)))
-          (goto-char (match-end 0)))
-        (zap-to-char 1 ?\s))
        (t
         (kill-word arg))))
 
@@ -2502,6 +2505,7 @@ Display available keybindings in popup
 #+begin_src emacs-lisp
   (setup window
     (:set recenter-positions '(top middle bottom))
+    (:global-keymap "<f8>" #'window-toggle-side-windows)
 
     (:when-loaded
       (push 'akirak-window-fallback-reuse-window
@@ -3043,7 +3047,7 @@ Outline-based notes management and organizer
     (:with-mode org-mode
       ;; These bindings should be set by default, but just in case.
       (:keymap "C-a" #'org-beginning-of-line
-             "C-e" #'org-end-of-line)
+               "C-e" #'org-end-of-line)
 
       (:status opinionated
         (:set org-special-ctrl-a/e t
@@ -3056,69 +3060,71 @@ Outline-based notes management and organizer
         (:global-keymap "M-g h" #'akirak-org-avy-heading)
 
         (:keymap-unset "C-'"
-                 ;; I don't use any of these bindings and want to use them for other purposes
-                 "C-c ["
-                 "C-c ]"
-                 ;; C-c C-x u is bound to org-metaup, but I use another binding
-                 ;; (currently M-P) for the command.
-                 "C-c C-x u")
+                       ;; I don't use any of these bindings and want to use them for other purposes
+                       "C-c ["
+                       "C-c ]"
+                       ;; C-c C-x u is bound to org-metaup, but I use another binding
+                       ;; (currently M-P) for the command.
+                       "C-c C-x u")
         (:keymap akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
-               "<" #'akirak-org-angle-open
-               "[" #'akirak-org-square-open
-               "*" #'akirak-org-bold
-               "/" #'akirak-org-italic
-               "_" #'akirak-org-underlined
-               "=" #'akirak-org-verbatim
-               "`" #'akirak-org-inline-code
-               "~" #'akirak-org-inline-code
-               "+" #'akirak-org-strike-through
-               "C-c b" #'akirak-org-select-region-dwim
-               "C-c C-x h" #'org-edit-headline
-               "C-c C-x t" #'akirak-org-table-create-or-edit
-               "C-c C-x y" #'akirak-org-yank-into-new-block
-               "C-c C-x ' c" #'akirak-org-avy-clone-subtree
-               "C-c C-x ' r" #'avy-org-refile-as-child
-               "C-c C-x C-w" #'org-cut-subtree
-               ;; Overrides the default binding to org-next-link, but I will drop
-               ;; it in favor of link-hint
-               "C-c C-x C-p" #'akirak-org-copy-property-value
-               "C-c C-x u r" #'org-update-radio-target-regexp
-               "C-c C-x u _" #'akirak-org-auto-decorate-words
-               "M-s o" #'org-pivot-search-from-files
-               ;; M-up/down/left/right is unavailable on Chromebooks, so I need
-               ;; alternative bindings for commands bound on those keys.
-               "M-N" #'org-metadown
-               "M-P" #'org-metaup
-               "M-H" #'org-shiftmetaleft
-               "M-L" #'org-shiftmetaright
-               "M-g a" #'akirak-org-goto-beginnning-of-content
-               "M-g e" #'akirak-org-goto-before-next-heading
-               "C-M-u" (defun akirak/org-up-element ()
-                         (interactive)
-                         (if (org-match-line org-heading-regexp)
-                             (progn
-                               (org-up-element)
-                               (org-fold-show-entry))
-                           (require 'org-element)
-                           (let ((context (org-element-context)))
-                             (while (= (point) (org-element-property :begin context))
-                               (setq context (org-element-property :parent context)))
-                             (goto-char (org-element-property :begin context))
-                             (org-show-context)))))
+                 "<" #'akirak-org-angle-open
+                 "[" #'akirak-org-square-open
+                 "*" #'akirak-org-bold
+                 "/" #'akirak-org-italic
+                 "_" #'akirak-org-underlined
+                 "=" #'akirak-org-verbatim
+                 "`" #'akirak-org-inline-code
+                 "~" #'akirak-org-inline-code
+                 "+" #'akirak-org-strike-through
+                 "C-c b" #'akirak-org-select-region-dwim
+                 ;; Override the default binding to `org-feed-update-all'.
+                 "C-c C-x g" #'akirak-org-git-locate-source
+                 "C-c C-x h" #'org-edit-headline
+                 "C-c C-x t" #'akirak-org-table-create-or-edit
+                 "C-c C-x y" #'akirak-org-yank-into-new-block
+                 "C-c C-x ' c" #'akirak-org-avy-clone-subtree
+                 "C-c C-x ' r" #'avy-org-refile-as-child
+                 "C-c C-x C-w" #'org-cut-subtree
+                 ;; Overrides the default binding to org-next-link, but I will drop
+                 ;; it in favor of link-hint
+                 "C-c C-x C-p" #'akirak-org-copy-property-value
+                 "C-c C-x u r" #'org-update-radio-target-regexp
+                 "C-c C-x u _" #'akirak-org-auto-decorate-words
+                 "M-s o" #'org-pivot-search-from-files
+                 ;; M-up/down/left/right is unavailable on Chromebooks, so I need
+                 ;; alternative bindings for commands bound on those keys.
+                 "M-N" #'org-metadown
+                 "M-P" #'org-metaup
+                 "M-H" #'org-shiftmetaleft
+                 "M-L" #'org-shiftmetaright
+                 "M-g a" #'akirak-org-goto-beginnning-of-content
+                 "M-g e" #'akirak-org-goto-before-next-heading
+                 "C-M-u" (defun akirak/org-up-element ()
+                           (interactive)
+                           (if (org-match-line org-heading-regexp)
+                               (progn
+                                 (org-up-element)
+                                 (org-fold-show-entry))
+                             (require 'org-element)
+                             (let ((context (org-element-context)))
+                               (while (= (point) (org-element-property :begin context))
+                                 (setq context (org-element-property :parent context)))
+                               (goto-char (org-element-property :begin context))
+                               (org-show-context)))))
 
         (:with-map org-read-date-minibuffer-local-map
           (:keymap "C-p" (defun akirak/org-calendar-previous-week ()
-                         (interactive)
-                         (org-eval-in-calendar '(calendar-forward-week -1)))
-                 "C-n" (defun akirak/org-calendar-next-week ()
-                         (interactive)
-                         (org-eval-in-calendar '(calendar-forward-week 1)))
-                 "<tab>" (defun akirak/org-calendar-next-day ()
                            (interactive)
-                           (org-eval-in-calendar '(calendar-forward-day 1)))
-                 "S-<iso-lefttab>" (defun akirak/org-calendar-previous-day ()
-                                     (interactive)
-                                     (org-eval-in-calendar '(calendar-forward-day -1))))))))
+                           (org-eval-in-calendar '(calendar-forward-week -1)))
+                   "C-n" (defun akirak/org-calendar-next-week ()
+                           (interactive)
+                           (org-eval-in-calendar '(calendar-forward-week 1)))
+                   "<tab>" (defun akirak/org-calendar-next-day ()
+                             (interactive)
+                             (org-eval-in-calendar '(calendar-forward-day 1)))
+                   "S-<iso-lefttab>" (defun akirak/org-calendar-previous-day ()
+                                       (interactive)
+                                       (org-eval-in-calendar '(calendar-forward-day -1))))))))
 #+end_src
 **** org-agenda
 :PROPERTIES:
@@ -3624,7 +3630,7 @@ A programmable workflow layer for Org mode
 
     (:status personal
       (add-hook 'org-dog-clock-in-success-hook
-                #'akirak-org-clock-add-git-properties-if-none))
+                #'akirak-org-git-add-properties-if-none))
 
     (:when-loaded
       (:also-load org-dog-embark
@@ -4891,6 +4897,11 @@ This is a collection of various utilities to enhance the experience.
     (:global-keymap "C-;" #'akirak-avy-insert-symbol
                     "M-g `" #'akirak-avy-org-block))
 #+end_src
+*** akirak-ai-prompt
+#+begin_src elisp
+  (setup akirak-ai-prompt
+    (:global-keymap "C-c a" #'akirak-ai-prompt-transient))
+#+end_src
 *** COMMENT akirak-bitwarden                                                   :ARCHIVE:
 #+begin_src emacs-lisp
   (setup akirak-bitwarden
@@ -5037,10 +5048,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+end_src
 *** akirak-insert
 #+begin_src emacs-lisp
-  (setup akirak-insert
-    (:global-keymap "C-c a" #'akirak-insert
-             "C-x a f" #'akirak-insert-which-function
-             "C-x a w" #'akirak-insert-window-title))
+  (setup akirak-insert)
 #+end_src
 *** COMMENT akirak-japanese                                            :ARCHIVE:
 #+begin_src emacs-lisp
@@ -6243,14 +6251,7 @@ A transient for cosmetics on source code
 
 #+begin_src emacs-lisp
   (setup (:package cosmetic-transient)
-    (:global-keymap "C-c m" #'cosmetic-transient)
-
-    (:when-loaded
-      (add-to-list 'cosmetic-transient-language-formatters
-                   '(sql
-                     :minor-mode sqlglot-format-on-save-mode
-                     :buffer-formatter sqlglot-format-buffer
-                     :region-formatter sqlglot-format-region))))
+    (:global-keymap "C-c m" #'cosmetic-transient))
 #+end_src
 *** csv-mode
 :PROPERTIES:
@@ -7565,6 +7566,8 @@ Interact with ChatGPT or other LLMs
                                       google/gemini-2.5-pro-preview-03-25))
             gptel-model 'google/gemini-2.5-flash-preview)
 
+      (gptel-make-gh-copilot "Copilot")
+
       (gptel-make-anthropic "Claude"
         :stream t
         :key (lambda ()
@@ -8554,6 +8557,7 @@ Major mode for OCaml code
     (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
     (:with-mode (neocaml-mode neocamli-mode)
       (:mode-repl akirak/utop-project)
+      (:org-src-lang "ocaml")
       (:mode-project-roots "dune-project")
       (:local-set treesit-font-lock-level 4)
       (:set neocaml-use-prettify-symbols nil)
@@ -9223,7 +9227,7 @@ Jump to Japanese text using avy
     (:keymap "C-j" #'riben-english-to-japanese
            "C-S-j" #'riben-english-confirm))
 #+end_src
-*** rich-minority                                               :UI:
+*** rich-minority                                                   :UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:27]
 :END:
@@ -9344,7 +9348,7 @@ SOPS encrypt and decrypt without leaving the editor
     (:keymap "C-c e" #'sops-edit-file
            "C-c C-c" #'sops-save-file))
 #+end_src
-*** COMMENT sqlformat                                                          :ARCHIVE:
+*** sqlformat
 :PROPERTIES:
 :CREATED_TIME: [2023-02-21 Tue 17:18]
 :END:
@@ -9358,10 +9362,7 @@ Reformat SQL using sqlformat or pgformatter
     (:nixpkgs "pgformatter")
     ;; Override the formatter settings when necessary
     (:set sqlformat-command 'pgformatter
-          sqlformat-args '("-s2" "-g"))
-    (:with-feature sql
-      (:with-mode sql-mode
-        (:keymap "C-c C-f" #'sqlformat-buffer))))
+          sqlformat-args '("-s2" "-g")))
 #+end_src
 *** ssh-config-mode
 :PROPERTIES:

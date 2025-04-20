@@ -1125,12 +1125,6 @@
       repo = "emacs-dumb-japanese";
       type = "github";
     };
-    rich-minority = {
-      flake = false;
-      owner = "Malabarba";
-      repo = "rich-minority";
-      type = "github";
-    };
     "s" = {
       flake = false;
       owner = "magnars";
@@ -1170,6 +1164,12 @@
       flake = false;
       owner = "Malabarba";
       repo = "spinner.el";
+      type = "github";
+    };
+    sqlformat = {
+      flake = false;
+      owner = "purcell";
+      repo = "sqlformat";
       type = "github";
     };
     ssass-mode = {
