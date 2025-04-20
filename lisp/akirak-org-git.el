@@ -72,8 +72,7 @@
                   ("GIT_BRANCH" . ,(ignore-errors
                                      (magit-get-current-branch))))
                 (when-let* ((file (buffer-file-name (buffer-base-buffer))))
-                  (cons "FILE_PATH_FROM_GIT_ROOT"
-                        (file-relative-name file root))))
+                  `(("FILE_PATH_FROM_GIT_ROOT" . ,(file-relative-name file root)))))
         (seq-filter #'cdr)))))
 
 (provide 'akirak-org-git)
