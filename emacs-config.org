@@ -3047,7 +3047,7 @@ Outline-based notes management and organizer
     (:with-mode org-mode
       ;; These bindings should be set by default, but just in case.
       (:keymap "C-a" #'org-beginning-of-line
-             "C-e" #'org-end-of-line)
+               "C-e" #'org-end-of-line)
 
       (:status opinionated
         (:set org-special-ctrl-a/e t
@@ -3060,69 +3060,69 @@ Outline-based notes management and organizer
         (:global-keymap "M-g h" #'akirak-org-avy-heading)
 
         (:keymap-unset "C-'"
-                 ;; I don't use any of these bindings and want to use them for other purposes
-                 "C-c ["
-                 "C-c ]"
-                 ;; C-c C-x u is bound to org-metaup, but I use another binding
-                 ;; (currently M-P) for the command.
-                 "C-c C-x u")
+                       ;; I don't use any of these bindings and want to use them for other purposes
+                       "C-c ["
+                       "C-c ]"
+                       ;; C-c C-x u is bound to org-metaup, but I use another binding
+                       ;; (currently M-P) for the command.
+                       "C-c C-x u")
         (:keymap akirak/mode-prefix-key (lookup-key org-mode-map (kbd "C-c C-x"))
-               "<" #'akirak-org-angle-open
-               "[" #'akirak-org-square-open
-               "*" #'akirak-org-bold
-               "/" #'akirak-org-italic
-               "_" #'akirak-org-underlined
-               "=" #'akirak-org-verbatim
-               "`" #'akirak-org-inline-code
-               "~" #'akirak-org-inline-code
-               "+" #'akirak-org-strike-through
-               "C-c b" #'akirak-org-select-region-dwim
-               "C-c C-x h" #'org-edit-headline
-               "C-c C-x t" #'akirak-org-table-create-or-edit
-               "C-c C-x y" #'akirak-org-yank-into-new-block
-               "C-c C-x ' c" #'akirak-org-avy-clone-subtree
-               "C-c C-x ' r" #'avy-org-refile-as-child
-               "C-c C-x C-w" #'org-cut-subtree
-               ;; Overrides the default binding to org-next-link, but I will drop
-               ;; it in favor of link-hint
-               "C-c C-x C-p" #'akirak-org-copy-property-value
-               "C-c C-x u r" #'org-update-radio-target-regexp
-               "C-c C-x u _" #'akirak-org-auto-decorate-words
-               "M-s o" #'org-pivot-search-from-files
-               ;; M-up/down/left/right is unavailable on Chromebooks, so I need
-               ;; alternative bindings for commands bound on those keys.
-               "M-N" #'org-metadown
-               "M-P" #'org-metaup
-               "M-H" #'org-shiftmetaleft
-               "M-L" #'org-shiftmetaright
-               "M-g a" #'akirak-org-goto-beginnning-of-content
-               "M-g e" #'akirak-org-goto-before-next-heading
-               "C-M-u" (defun akirak/org-up-element ()
-                         (interactive)
-                         (if (org-match-line org-heading-regexp)
-                             (progn
-                               (org-up-element)
-                               (org-fold-show-entry))
-                           (require 'org-element)
-                           (let ((context (org-element-context)))
-                             (while (= (point) (org-element-property :begin context))
-                               (setq context (org-element-property :parent context)))
-                             (goto-char (org-element-property :begin context))
-                             (org-show-context)))))
+                 "<" #'akirak-org-angle-open
+                 "[" #'akirak-org-square-open
+                 "*" #'akirak-org-bold
+                 "/" #'akirak-org-italic
+                 "_" #'akirak-org-underlined
+                 "=" #'akirak-org-verbatim
+                 "`" #'akirak-org-inline-code
+                 "~" #'akirak-org-inline-code
+                 "+" #'akirak-org-strike-through
+                 "C-c b" #'akirak-org-select-region-dwim
+                 "C-c C-x h" #'org-edit-headline
+                 "C-c C-x t" #'akirak-org-table-create-or-edit
+                 "C-c C-x y" #'akirak-org-yank-into-new-block
+                 "C-c C-x ' c" #'akirak-org-avy-clone-subtree
+                 "C-c C-x ' r" #'avy-org-refile-as-child
+                 "C-c C-x C-w" #'org-cut-subtree
+                 ;; Overrides the default binding to org-next-link, but I will drop
+                 ;; it in favor of link-hint
+                 "C-c C-x C-p" #'akirak-org-copy-property-value
+                 "C-c C-x u r" #'org-update-radio-target-regexp
+                 "C-c C-x u _" #'akirak-org-auto-decorate-words
+                 "M-s o" #'org-pivot-search-from-files
+                 ;; M-up/down/left/right is unavailable on Chromebooks, so I need
+                 ;; alternative bindings for commands bound on those keys.
+                 "M-N" #'org-metadown
+                 "M-P" #'org-metaup
+                 "M-H" #'org-shiftmetaleft
+                 "M-L" #'org-shiftmetaright
+                 "M-g a" #'akirak-org-goto-beginnning-of-content
+                 "M-g e" #'akirak-org-goto-before-next-heading
+                 "C-M-u" (defun akirak/org-up-element ()
+                           (interactive)
+                           (if (org-match-line org-heading-regexp)
+                               (progn
+                                 (org-up-element)
+                                 (org-fold-show-entry))
+                             (require 'org-element)
+                             (let ((context (org-element-context)))
+                               (while (= (point) (org-element-property :begin context))
+                                 (setq context (org-element-property :parent context)))
+                               (goto-char (org-element-property :begin context))
+                               (org-show-context)))))
 
         (:with-map org-read-date-minibuffer-local-map
           (:keymap "C-p" (defun akirak/org-calendar-previous-week ()
-                         (interactive)
-                         (org-eval-in-calendar '(calendar-forward-week -1)))
-                 "C-n" (defun akirak/org-calendar-next-week ()
-                         (interactive)
-                         (org-eval-in-calendar '(calendar-forward-week 1)))
-                 "<tab>" (defun akirak/org-calendar-next-day ()
                            (interactive)
-                           (org-eval-in-calendar '(calendar-forward-day 1)))
-                 "S-<iso-lefttab>" (defun akirak/org-calendar-previous-day ()
-                                     (interactive)
-                                     (org-eval-in-calendar '(calendar-forward-day -1))))))))
+                           (org-eval-in-calendar '(calendar-forward-week -1)))
+                   "C-n" (defun akirak/org-calendar-next-week ()
+                           (interactive)
+                           (org-eval-in-calendar '(calendar-forward-week 1)))
+                   "<tab>" (defun akirak/org-calendar-next-day ()
+                             (interactive)
+                             (org-eval-in-calendar '(calendar-forward-day 1)))
+                   "S-<iso-lefttab>" (defun akirak/org-calendar-previous-day ()
+                                       (interactive)
+                                       (org-eval-in-calendar '(calendar-forward-day -1))))))))
 #+end_src
 **** org-agenda
 :PROPERTIES:
