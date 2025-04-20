@@ -2109,6 +2109,13 @@ This is a recommended setting for use with vertico. See https://github.com/minad
       (interactive "P")
       (require 'thingatpt)
       (cond
+       ((equal arg '(4))
+        (when (looking-at (rx (+ blank)))
+          (goto-char (match-end 0)))
+        (let ((eol (line-end-position)))
+          (kill-region (point)
+                       (or (re-search-forward (rx (+ blank)) eol t)
+                           eol))))
        ((looking-at (rx (syntax open-parenthesis)))
         (pcase-exhaustive (funcall show-paren-data-function)
           (`(,open-start ,_ ,_ ,close-end . ,_)
@@ -2117,13 +2124,6 @@ This is a recommended setting for use with vertico. See https://github.com/minad
         (pcase-exhaustive (thing-at-point-bounds-of-string-at-point)
           (`(,begin . ,end)
            (kill-region begin end))))
-       ((equal arg '(4))
-        (when (looking-at (rx (+ blank)))
-          (goto-char (match-end 0)))
-        (let ((eol (line-end-position)))
-          (kill-region (point)
-                       (or (re-search-forward (rx (+ blank)) eol t)
-                           eol))))
        (t
         (kill-word arg))))
 
