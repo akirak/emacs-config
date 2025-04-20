@@ -1125,12 +1125,6 @@
       repo = "emacs-dumb-japanese";
       type = "github";
     };
-    rich-minority = {
-      flake = false;
-      owner = "Malabarba";
-      repo = "rich-minority";
-      type = "github";
-    };
     "s" = {
       flake = false;
       owner = "magnars";

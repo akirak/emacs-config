@@ -9222,7 +9222,7 @@ Jump to Japanese text using avy
     (:keymap "C-j" #'riben-english-to-japanese
            "C-S-j" #'riben-english-confirm))
 #+end_src
-*** rich-minority                                               :UI:
+*** rich-minority                                                   :UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:27]
 :END:

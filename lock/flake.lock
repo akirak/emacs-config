@@ -2988,22 +2988,6 @@
         "type": "github"
       }
     },
-    "rich-minority": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1727219868,
-        "narHash": "sha256-l66t0CXQWsk+53QckbYKAC+BVbNWo0xift0rucLSugA=",
-        "owner": "Malabarba",
-        "repo": "rich-minority",
-        "rev": "77cf5ec620aaef18385d2e1d2dad05b4f63dad95",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Malabarba",
-        "repo": "rich-minority",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "academic-phrases": "academic-phrases",
@@ -3192,7 +3176,6 @@
         "restclient": "restclient",
         "rfc-mode": "rfc-mode",
         "riben": "riben",
-        "rich-minority": "rich-minority",
         "s": "s",
         "separedit": "separedit",
         "setup": "setup",
