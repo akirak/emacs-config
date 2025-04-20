@@ -45,7 +45,7 @@
     (when (or force
               (not (org-element-property :GIT_ORIGIN element)))
       (require 'akirak-capture)
-      (let* ((file (buffer-file-name (marker-buffer pom)))
+      (let* ((file (buffer-file-name (org-base-buffer (marker-buffer pom))))
              (obj (org-dog-file-object file))
              (prop-alist (akirak-org-git-properties
                           obj :tags (org-element-property :tags element))))
