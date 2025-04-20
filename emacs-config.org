@@ -3077,6 +3077,8 @@ Outline-based notes management and organizer
                  "~" #'akirak-org-inline-code
                  "+" #'akirak-org-strike-through
                  "C-c b" #'akirak-org-select-region-dwim
+                 ;; Override the default binding to `org-feed-update-all'.
+                 "C-c C-x g" #'akirak-org-git-locate-source
                  "C-c C-x h" #'org-edit-headline
                  "C-c C-x t" #'akirak-org-table-create-or-edit
                  "C-c C-x y" #'akirak-org-yank-into-new-block
@@ -3628,7 +3630,7 @@ A programmable workflow layer for Org mode
 
     (:status personal
       (add-hook 'org-dog-clock-in-success-hook
-                #'akirak-org-clock-add-git-properties-if-none))
+                #'akirak-org-git-add-properties-if-none))
 
     (:when-loaded
       (:also-load org-dog-embark

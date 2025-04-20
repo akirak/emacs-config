@@ -1734,6 +1734,7 @@ interpreter who are good at %s. Please respond concisely." dest-language))
   "Create a new heading with a title and clock into it.
 
 This is intended as the value of `org-dog-clock-in-fallback-fn'."
+  (require 'akirak-org-git)
   (let* ((obj (org-dog-file-object file))
          (jump-func (cond
                      ((object-of-class-p obj 'org-dog-facade-datetree-file)
@@ -1753,7 +1754,7 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
                                 :tags (append tags
                                               (akirak-capture--mode-tags file))
                                 :properties
-                                (akirak-capture-git-properties obj :tags tags)
+                                (akirak-org-git-properties obj :tags tags)
                                 :body body)
                    :file ,file
                    :function ,jump-func
@@ -1768,26 +1769,6 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
               (obj (unless (equal target-file file)
                      (org-dog-file-object file))))
     (org-dog-file-tags obj)))
-
-(cl-defun akirak-capture-git-properties (obj &key tags)
-  (when-let* ((root (vc-git-root default-directory)))
-    (when (or (member "@contribution" tags)
-              (string-prefix-p "projects/" (oref obj relative))
-              ;; Prevent mistakenly logging private projects
-              (string-prefix-p "~/work2/learning/" root))
-      (require 'magit-git)
-      (thread-last
-        (append `(("GIT_WORKTREE" . ,(org-link-make-string
-                                      (concat "file:" (abbreviate-file-name root))))
-                  ("GIT_ORIGIN" . ,(ignore-errors
-                                     (car (magit-config-get-from-cached-list
-                                           "remote.origin.url"))))
-                  ("GIT_BRANCH" . ,(ignore-errors
-                                     (magit-get-current-branch))))
-                (when-let* ((file (buffer-file-name (buffer-base-buffer))))
-                  (cons "FILE_PATH_FROM_GIT_ROOT"
-                        (file-relative-name file root))))
-        (seq-filter #'cdr)))))
 
 (defun akirak-capture-read-string (prompt &optional initial-contents)
   (minibuffer-with-setup-hook
