@@ -343,13 +343,19 @@ Example values are shown below:
 ;;;; Persist the context to the clocked entry
 
 ;;;###autoload
-(defun akirak-org-clock-add-git-properties ()
+(defun akirak-org-clock-add-git-properties (&optional arg)
   "Add Git properties to the entry at POM if it has none."
-  (interactive)
+  (interactive "P")
   (if (org-clocking-p)
-      (if (equal current-prefix-arg '(16))
-          (akirak-org-clock-locate-git-file)
-        (akirak-org-git-add-properties-if-none org-clock-marker 'force))
+      (pcase arg
+        ('(16)
+         (akirak-org-clock-locate-git-file))
+        ('(4)
+         (akirak-org-git-add-properties-if-none (with-current-buffer (akirak-org-clock-open)
+                                                  (point-marker))
+                                                'force))
+        (_
+         (akirak-org-git-add-properties-if-none org-clock-marker 'force)))
     (user-error "You have to be running a clock")))
 
 ;;;###autoload
