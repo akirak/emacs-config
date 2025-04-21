@@ -2812,22 +2812,6 @@
         "type": "github"
       }
     },
-    "proof-general": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1732581165,
-        "narHash": "sha256-ndSV54nD4OjQeCaDn2mXLbWVO+LAaSJxCdAWmwP5IrQ=",
-        "owner": "ProofGeneral",
-        "repo": "PG",
-        "rev": "d6689469298b4140dc1f0f8b0ff7e8f937041ffe",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ProofGeneral",
-        "repo": "PG",
-        "type": "github"
-      }
-    },
     "puni": {
       "flake": false,
       "locked": {
@@ -3165,7 +3149,6 @@
         "posframe": "posframe",
         "prodigy": "prodigy",
         "promise": "promise",
-        "proof-general": "proof-general",
         "puni": "puni",
         "rainbow-csv": "rainbow-csv",
         "rainbow-delimiters": "rainbow-delimiters",

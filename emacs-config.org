@@ -8986,7 +8986,7 @@ Manage external services
   (setup (:package prodigy)
     (:global-keymap "<f12> x p" #'prodigy))
 #+end_src
-*** proof-general
+*** proof-general                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-08 Wed 14:53]
 :END:
