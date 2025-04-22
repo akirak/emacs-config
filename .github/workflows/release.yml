@@ -40,7 +40,7 @@ jobs:
       with:
         ref: ${{ inputs.release-tag }}
 
-    - uses: cachix/install-nix-action@v31.1.0
+    - uses: cachix/install-nix-action@v31.2.0
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
