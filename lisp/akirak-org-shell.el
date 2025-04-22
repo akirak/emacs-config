@@ -23,8 +23,7 @@
        (propertize "not set" 'face 'transient-inactive-value))
      (propertize ")" 'face 'transient-inactive-value))))
 
-(defvar-local akirak-org-shell-buffer nil
-  "Target shell for the current Org indirect buffer.")
+(defvar akirak-org-shell-buffer nil)
 
 (transient-define-infix akirak-org-shell-buffer-infix ()
   :class 'akirak-org-shell-buffer-variable
