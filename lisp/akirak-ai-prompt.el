@@ -10,7 +10,7 @@
 
 ;;;;; Infixes
 
-(defvar-local akirak-ai-prompt-shell-buffer nil
+(defvar akirak-ai-prompt-shell-buffer nil
   "Target shell for the current buffer.")
 
 (transient-define-infix akirak-ai-prompt-shell-buffer-infix ()
