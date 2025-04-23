@@ -10226,6 +10226,11 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
           :name "utop"
           :root default-directory))))
 #+end_src
+*** pyproject
+#+begin_src elisp
+  (setup pyproject
+    (:package-files "pyproject.toml"))
+#+end_src
 *** rebar3 (Erlang)
 :PROPERTIES:
 :CREATED_TIME: [2024-04-18 Thu 23:00]
