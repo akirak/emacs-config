@@ -45,7 +45,8 @@
     ("package.json" . package-json)
     ("build.zig" . zig)
     ("rebar.config" . rebar3)
-    ("gleam.toml" . gleam))
+    ("gleam.toml" . gleam)
+    ("uv.lock" . uv))
   ""
   :type '(alist :key-type (string :tag "File name")
                 :value-type (symbol :tag "Symbol to denote the project type")))
@@ -118,6 +119,8 @@
      ("pnpm audit" annotation "Checks for known security issues with the installed packages")
      ("pnpm outdated" annotation "Check for outdated packages")
      ("pnpm exec" annotation "Executes a shell command in scope of a project"))
+    (uv
+     ("uv add"))
     (yarn)
     (npm
      ("npm ci")
