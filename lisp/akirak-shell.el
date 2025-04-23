@@ -250,24 +250,25 @@ the original minor mode."
   (eat-other-window nil t))
 
 ;;;###autoload
-(defun akirak-shell-run-command-at-dir (dir command)
-  (pcase (seq-filter `(lambda (buf)
-                        (and (eq (buffer-local-value 'major-mode buf)
-                                 'eat-mode)
-                             (file-equal-p (buffer-local-value 'default-directory buf)
-                                           dir)))
-                     (buffer-list))
-    (`nil
-     (let ((buffer (akirak-shell-eat-new :dir dir :window t)))
-       (akirak-shell-send-string-to-buffer buffer command)))
-    (`(,buf)
-     (akirak-shell-send-string-to-buffer buf command)
-     (pop-to-buffer buf))
-    (bufs
-     (let* ((name (completing-read "Shell: " (mapcar #'buffer-name bufs) nil t))
-            (buffer (get-buffer name)))
-       (akirak-shell-send-string-to-buffer buffer command)
-       (pop-to-buffer buffer)))))
+(cl-defun akirak-shell-run-command-at-dir (dir command)
+  (let ((buffer-name (thread-last
+                       (buffer-list)
+                       (seq-filter `(lambda (buf)
+                                      (and (eq (buffer-local-value 'major-mode buf)
+                                               'eat-mode)
+                                           (or (null ,dir)
+                                               (file-equal-p (buffer-local-value 'default-directory buf)
+                                                             ,dir)))))
+                       (mapcar #'buffer-name)
+                       (completing-read "Shell: "))))
+    (if (string-empty-p buffer-name)
+        (let ((buffer (akirak-shell-eat-new :dir dir :window t)))
+          (akirak-shell-send-string-to-buffer buffer command))
+      (let ((buffer (get-buffer buffer-name)))
+        (if-let* ((window (get-buffer-window buffer)))
+            (select-window window)
+          (pop-to-buffer buffer))
+        (akirak-shell-send-string-to-buffer buffer command)))))
 
 ;;;###autoload
 (cl-defun akirak-shell-exec-in-project (command &key name root)
