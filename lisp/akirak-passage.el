@@ -137,10 +137,18 @@
        (filter-fn (process string)
          (pcase string
            ((rx (and bol "Please insert "))
-            (let ((inp (read-string string)))
+            (let ((inp (condition-case nil
+                           (read-string string)
+                         (quit
+                          (interrupt-process process)
+                          (user-error "Aborted by the user")))))
               (process-send-string process (concat inp "\n"))))
            ((rx "Enter PIN for ")
-            (let ((inp (password-read string string)))
+            (let ((inp (condition-case nil
+                           (password-read string string)
+                         (quit
+                          (interrupt-process process)
+                          (user-error "Aborted by the user")))))
               (process-send-string process (concat inp "\n"))))
            ("Waiting for age-plugin-yubikey...\n")
            ("Password unchanged.\n"
@@ -161,19 +169,24 @@
                                   :noquery t
                                   :sentinel #'sentinel
                                   :filter #'filter-fn)))
-      (unless edit-hook
-        (while (process-live-p process)
-          (accept-process-output process)
-          (sit-for 0.2))
-        (if (zerop (process-exit-status process))
-            (prog1 (with-current-buffer akirak-passage-buffer
-                     (goto-char (point-min))
-                     (while (and (looking-at (rx eol))
-                                 (< (point) (point-max)))
-                       (forward-line))
-                     (buffer-substring (point) (point-max)))
-              (kill-buffer akirak-passage-buffer))
-          (user-error "Non-zero exit code from passage. See %s" akirak-passage-buffer))))))
+      (condition-case nil
+          (unless edit-hook
+            (while (process-live-p process)
+              (accept-process-output process)
+              (sit-for 0.2))
+            (if (zerop (process-exit-status process))
+                (prog1 (with-current-buffer akirak-passage-buffer
+                         (goto-char (point-min))
+                         (while (and (looking-at (rx eol))
+                                     (< (point) (point-max)))
+                           (forward-line))
+                         (buffer-substring (point) (point-max)))
+                  (kill-buffer akirak-passage-buffer))
+              (user-error "Non-zero exit code from passage. See %s" akirak-passage-buffer)))
+        (quit
+         ;; Clean up
+         (kill-process process)
+         (user-error "Abnormally exited"))))))
 
 ;;;; Infixes
 
