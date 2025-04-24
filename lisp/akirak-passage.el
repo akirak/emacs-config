@@ -78,10 +78,10 @@
                                        process-environment)))
       (unless (zerop (call-process "git" nil t nil
                                    "add" "."))
-        (error "git-add failed"))
+        (user-error "git-add failed"))
       (unless (zerop (call-process "git" nil t nil
                                    "commit" "-a" "-m" message))
-        (error "git-commit failed")))))
+        (user-error "git-commit failed")))))
 
 ;;;; Internal API
 
@@ -104,7 +104,7 @@
 (defun akirak-passage--account-exists-p (account)
   (if (file-directory-p akirak-passage-dir)
       (file-readable-p (expand-file-name (concat account ".age") akirak-passage-dir))
-    (error "akirak-passage-dir is not set")))
+    (user-error "akirak-passage-dir is not set")))
 
 (defun akirak-passage--get-password (account)
   "Return the first line of the password entry of ACCOUNT."
@@ -131,7 +131,7 @@
           ((and (string= event "exited abnormally with code 1\n")
                 edit-hook))
           (t
-           (error "passage %s aborted: %s" args event))))
+           (user-error "passage %s aborted: %s" args event))))
        ;; Touch is not supported at present. If you are using
        ;; age-plugin-yubikey, you must set the touch policy to never.
        (filter-fn (process string)
@@ -173,7 +173,7 @@
                        (forward-line))
                      (buffer-substring (point) (point-max)))
               (kill-buffer akirak-passage-buffer))
-          (error "Non-zero exit code from passage. See %s" akirak-passage-buffer))))))
+          (user-error "Non-zero exit code from passage. See %s" akirak-passage-buffer))))))
 
 ;;;; Infixes
 
