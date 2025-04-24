@@ -7550,6 +7550,25 @@ Interact with ChatGPT or other LLMs
     (with-eval-after-load 'embark
       (keymap-set embark-region-map "!" #'gptel-rewrite-menu))
 
+    (defun akirak/gptel-insert-model-id (&optional arg)
+      (interactive "P")
+      (let* ((provider (if arg
+                           (completing-read "Provider: " gptel--known-backends
+                                            nil t)
+                         "OpenRouter"))
+             (models (gptel-backend-models (gptel-get-backend provider)))
+             (result (completing-read-multiple "Model: " models
+                                               nil nil nil nil
+                                               (symbol-name gptel-model)))
+             (text (if (listp result)
+                       (string-join result "\n")
+                     result)))
+        (cl-case (derived-mode-p 'eat-mode)
+          (eat-mode
+           (eat-term-send-string-as-yank eat-terminal text))
+          (otherwise
+           (insert text)))))
+
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
