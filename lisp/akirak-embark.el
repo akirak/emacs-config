@@ -549,7 +549,7 @@
                    (eq (get-text-property (point) 'face)
                        'org-link))
           ;; radio target
-          (when-let (element (org-element-context))
+          (when-let* ((element (org-element-context)))
             (when (and (eq 'link (org-element-type element))
                        (equal "radio" (org-element-property :type element)))
               `(identifier ,(org-element-property :path element)
