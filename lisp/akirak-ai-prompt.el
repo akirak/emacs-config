@@ -31,6 +31,7 @@
 
 ;;;###autoload (autoload 'akirak-ai-prompt-transient "akirak-ai-prompt" nil 'interactive)
 (transient-define-prefix akirak-ai-prompt-transient ()
+  :refresh-suffixes t
   ["Options"
    ("-b" akirak-ai-prompt-shell-buffer-infix)]
   ["Send a prompt to the buffer"
