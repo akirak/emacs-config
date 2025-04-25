@@ -1059,12 +1059,6 @@
       repo = "emacs-promise";
       type = "github";
     };
-    proof-general = {
-      flake = false;
-      owner = "ProofGeneral";
-      repo = "PG";
-      type = "github";
-    };
     puni = {
       flake = false;
       owner = "AmaiKinono";

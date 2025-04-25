@@ -10,7 +10,7 @@
 
 ;;;;; Infixes
 
-(defvar-local akirak-ai-prompt-shell-buffer nil
+(defvar akirak-ai-prompt-shell-buffer nil
   "Target shell for the current buffer.")
 
 (transient-define-infix akirak-ai-prompt-shell-buffer-infix ()
@@ -88,27 +88,31 @@
   "Send a prompt to an AI shell with the current region as the context."
   (interactive "r")
   (require 'akirak-org)
-  (let ((content (buffer-substring-no-properties begin end))
-        (line (cdr (posn-col-row (posn-at-point begin))))
-        (file (buffer-file-name (or (buffer-base-buffer)
-                                    (current-buffer))))
-        (language (akirak-org--find-src-lang
-                   (thread-last
-                     (symbol-name major-mode)
-                     (string-remove-suffix "-mode")
-                     (string-remove-suffix "-ts"))))
-        (buffer akirak-ai-prompt-shell-buffer))
+  (let* ((content (buffer-substring-no-properties begin end))
+         (file (buffer-file-name (or (buffer-base-buffer)
+                                     (current-buffer))))
+         (line (when file (cdr (posn-col-row (posn-at-point begin)))))
+         (language (when file
+                     (akirak-org--find-src-lang
+                      (thread-last
+                        (symbol-name major-mode)
+                        (string-remove-suffix "-mode")
+                        (string-remove-suffix "-ts")))))
+         (buffer akirak-ai-prompt-shell-buffer))
     (akirak-shell-send-string-to-buffer buffer
       (with-current-buffer buffer
-        (let ((location (format-spec " (at line %l in %f):"
-                                     `((?l . ,line)
-                                       (?f . ,(file-relative-name file default-directory))))))
+        (let ((location (when (and line file)
+                          (format-spec " (at line %l in %f):"
+                                       `((?l . ,line)
+                                         (?f . ,(file-relative-name file default-directory)))))))
           (concat (if prompt
                       (concat prompt location)
                     (read-string "Prompt: " location))
-                  (format-spec "\n\n```%m\n%b\n```"
-                               `((?m . ,language)
-                                 (?b . ,content))))))
+                  (if language
+                      (format-spec "\n\n```%m\n%b\n```"
+                                   `((?m . ,language)
+                                     (?b . ,content)))
+                    (replace-regexp-in-string (rx bol) "> " content)))))
       :confirm t)))
 
 (defun akirak-ai-prompt--select-flymake-diagnostic (diags)

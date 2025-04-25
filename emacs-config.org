@@ -7550,6 +7550,25 @@ Interact with ChatGPT or other LLMs
     (with-eval-after-load 'embark
       (keymap-set embark-region-map "!" #'gptel-rewrite-menu))
 
+    (defun akirak/gptel-insert-model-id (&optional arg)
+      (interactive "P")
+      (let* ((provider (if arg
+                           (completing-read "Provider: " gptel--known-backends
+                                            nil t)
+                         "OpenRouter"))
+             (models (gptel-backend-models (gptel-get-backend provider)))
+             (result (completing-read-multiple "Model: " models
+                                               nil nil nil nil
+                                               (symbol-name gptel-model)))
+             (text (if (listp result)
+                       (string-join result "\n")
+                     result)))
+        (cl-case (derived-mode-p 'eat-mode)
+          (eat-mode
+           (eat-term-send-string-as-yank eat-terminal text))
+          (otherwise
+           (insert text)))))
+
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
@@ -8986,7 +9005,7 @@ Manage external services
   (setup (:package prodigy)
     (:global-keymap "<f12> x p" #'prodigy))
 #+end_src
-*** proof-general
+*** proof-general                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-08 Wed 14:53]
 :END:
@@ -10225,6 +10244,11 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
               (user-error "Neither dune nor opam is available")))
           :name "utop"
           :root default-directory))))
+#+end_src
+*** pyproject
+#+begin_src elisp
+  (setup pyproject
+    (:package-files "pyproject.toml"))
 #+end_src
 *** rebar3 (Erlang)
 :PROPERTIES:
