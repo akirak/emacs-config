@@ -2609,6 +2609,12 @@ Display available keybindings in popup
           bidi-display-reordering 'left-to-right
           bidi-paragraph-direction 'left-to-right))
 #+end_src
+*** python
+#+begin_src emacs-lisp
+  (setup python
+    (:with-mode python-ts-mode
+      (:mode-repl akirak/euporie-project)))
+#+end_src
 ** Typography settings                                       :visual:
 *** Theme packages                                        :packages:
 # Note: Theme packages don't depend on other packages, so they can be loaded earlier than others.
@@ -10245,10 +10251,17 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
           :name "utop"
           :root default-directory))))
 #+end_src
-*** pyproject
+*** Python (uv)
 #+begin_src elisp
-  (setup pyproject
-    (:package-files "pyproject.toml"))
+  (setup uv
+    (:package-files "pyproject.toml")
+
+    (defun akirak/euporie-project ()
+      (interactive)
+      (let* ((root (locate-dominating-file default-directory "pyproject.toml")))
+        (akirak-shell-exec-in-project (list "uv" "run" "euporie-console")
+          :name "euporie-console"
+          :root root))))
 #+end_src
 *** rebar3 (Erlang)
 :PROPERTIES:
