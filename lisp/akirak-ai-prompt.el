@@ -128,8 +128,8 @@
 ;;;; Utilities
 
 (defun akirak-ai-prompt-at-error-p ()
-  (and (featurep 'flymake)
-       (bound-and-true-p flymake-mode)))
+  (and (get-char-property-and-overlay (point) 'flymake-diagnostic)
+       t))
 
 (defun akirak-ai-prompt--buffer-file ()
   (buffer-file-name (buffer-base-buffer)))
