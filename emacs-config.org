@@ -1316,6 +1316,7 @@ The built-in =electric= package provides the following modes:
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
+                         (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
