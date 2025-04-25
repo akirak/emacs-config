@@ -36,9 +36,15 @@
    ("-b" akirak-ai-prompt-shell-buffer-infix)]
   ["Send a prompt to the buffer"
    :class transient-row
+   :if akirak-ai-prompt-supported-p
    ("f" "Flymake error" akirak-ai-prompt-fix-flymake-error-at-pos
     :if akirak-ai-prompt-at-error-p)
    ("r" "Region" akirak-ai-prompt-send-with-region
+    :if use-region-p)]
+  ["Send without prompt"
+   :class transient-row
+   :if-not akirak-ai-prompt-supported-p
+   ("R" "Region" akirak-ai-prompt-send-region
     :if use-region-p)]
   ["Aider"
    :if akirak-ai-prompt-shell-aider-p
@@ -117,6 +123,13 @@
                     (replace-regexp-in-string (rx bol) "> " content)))))
       :confirm t)))
 
+(defun akirak-ai-prompt-send-region (begin end)
+  (interactive "r")
+  (let ((content (buffer-substring-no-properties begin end)))
+    (akirak-shell-send-string-to-buffer akirak-ai-prompt-shell-buffer
+      content
+      :confirm t)))
+
 (defun akirak-ai-prompt--select-flymake-diagnostic (diags)
   (let* ((alist (mapcar (lambda (diag)
                           (cons (flymake-diagnostic-text diag)
@@ -126,6 +139,10 @@
     (cdr (assoc text alist))))
 
 ;;;; Utilities
+
+(defun akirak-ai-prompt-supported-p ()
+  (and (akirak-shell-detect-buffer-program akirak-ai-prompt-shell-buffer)
+       t))
 
 (defun akirak-ai-prompt-at-error-p ()
   (and (get-char-property-and-overlay (point) 'flymake-diagnostic)
