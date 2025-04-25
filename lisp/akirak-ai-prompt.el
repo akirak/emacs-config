@@ -35,6 +35,7 @@
   ["Options"
    ("-b" akirak-ai-prompt-shell-buffer-infix)]
   ["Send a prompt to the buffer"
+   :class transient-row
    ("f" "Flymake error" akirak-ai-prompt-fix-flymake-error-at-pos
     :if akirak-ai-prompt-at-error-p)
    ("r" "Region" akirak-ai-prompt-send-with-region
