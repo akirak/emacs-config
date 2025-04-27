@@ -42,6 +42,7 @@
     ("yarn.lock" . yarn)
     ("package-lock.json" . npm)
     ("bun.lockb" . bun)
+    ("deno.lock" . deno)
     ("package.json" . package-json)
     ("build.zig" . zig)
     ("rebar.config" . rebar3)
@@ -56,7 +57,7 @@
             ("^opam " . dune))
           (mapcar (lambda (symbol)
                     (cons (format "^%s[[:space:]]" symbol) symbol))
-                  '(cargo just mix pnpm yarn npm bun dune)))
+                  '(cargo just mix pnpm yarn npm bun deno dune)))
   ""
   :type '(alist :key-type (regexp :tag "Pattern matching a command line")
                 :value-type (symbol :tag "Symbol to denote the project type")))
@@ -110,6 +111,19 @@
      ("bun add" annotation "Add a dependency")
      ("bun remove" annotation "Remove a dpeendency")
      ("bun pm" annotation "More commands for managing packages"))
+    (deno
+     ("deno run")
+     ("deno build")
+     ("deno install")
+     ("deno add")
+     ("deno remove")
+     ("deno check")
+     ("deno clean")
+     ("deno coverage")
+     ("deno doc")
+     ("deno fmt")
+     ("deno lint")
+     ("deno test"))
     (pnpm
      ("pnpm install" annotation "Install all dependencies for a project")
      ("pnpm add" annotation "Installs a package and any packages that it depends on")
@@ -327,7 +341,7 @@ are displayed in the frame."
       (let ((command-alist (if (eq backend 'package-json)
                                (cond
                                 ((seq-find `(lambda (cell)
-                                              (and (memq (car cell) '(pnpm bun yarn npm))
+                                              (and (memq (car cell) '(pnpm bun deno yarn npm))
                                                    (equal (cdr cell) ,dir)))
                                            projects)
                                  nil)
@@ -437,12 +451,15 @@ are displayed in the frame."
                               'annotation (match-string 2))
                         result))
                 result))))
-      ((bun pnpm yarn npm)
+      ((bun pnpm yarn npm deno)
        ;; We only read package.json, so memoization wouldn't be necessary.
        (let* ((command (symbol-name backend))
               (script-prefix (concat command
-                                     (when (memq backend '(npm pnpm bun))
+                                     (cond
+                                      ((memq backend '(npm pnpm bun))
                                        " run")
+                                      ((eq backend 'deno)
+                                       " task"))
                                      " ")))
          (append (map-apply `(lambda (subcommand body)
                                (list (concat ,script-prefix subcommand)
@@ -456,6 +473,7 @@ are displayed in the frame."
          (thread-last
            '(("pnpm" . "pnpm install")
              ("bun" . "bun install")
+             ("deno" . "deno install")
              ("yarn" . "yarn")
              ("npm" . "npm install"))
            (seq-filter (lambda (cell)
@@ -588,6 +606,7 @@ suitable value detected according to the command line."
            (or "npm"
                "pnpm"
                "yarn"
+               "deno"
                "bun")
            (+ space))
        (add-hook 'compilation-filter-hook #'akirak-compile--npm-detecter nil :local)))))
