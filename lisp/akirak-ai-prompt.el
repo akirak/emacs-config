@@ -115,7 +115,8 @@
                                          (?f . ,(file-relative-name file default-directory)))))))
           (concat (if prompt
                       (concat prompt location)
-                    (read-string "Prompt: " location))
+                    (concat (read-string "Prompt: " location)
+                            "\n\n"))
                   (if language
                       (format-spec "\n\n```%m\n%b\n```"
                                    `((?m . ,language)
