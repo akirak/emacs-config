@@ -37,7 +37,10 @@
   ["Send a prompt to the buffer"
    :class transient-row
    :if akirak-ai-prompt-supported-p
-   ("f" "Flymake error" akirak-ai-prompt-fix-flymake-error-at-pos
+   ("f" "Flymake error" akirak-ai-prompt-fix-flymake-error
+    :if akirak-ai-prompt-at-error-p)
+   ("F" "Flymake error (with custom prompt)"
+    akirak-ai-prompt-fix-flymake-error-with-prompt
     :if akirak-ai-prompt-at-error-p)
    ("r" "Region" akirak-ai-prompt-send-with-region
     :if use-region-p)]
@@ -80,9 +83,9 @@
 
 ;;;;; Suffixes
 
-(defun akirak-ai-prompt-fix-flymake-error-at-pos ()
+(defun akirak-ai-prompt-fix-flymake-error (&optional arg)
   "Within an AI shell, fix the error at the current point."
-  (interactive)
+  (interactive "P")
   (cl-assert (akirak-org-shell--buffer-live-p))
   (let* ((diag (pcase (flymake-diagnostics)
                  (`nil (user-error "No error at point"))
@@ -95,11 +98,22 @@
          (buffer akirak-ai-prompt-shell-buffer))
     (akirak-shell-send-string-to-buffer buffer
       (with-current-buffer buffer
-        (format-spec "Investigate the following error at line %l in %f:\n\n%e"
-                     `((?l . ,line)
-                       (?f . ,(file-relative-name file default-directory))
-                       (?e . ,diag-text))))
+        (if arg
+            (concat (read-string "Prompt: ")
+                    (format-spec "\n\nAt line %l in %f:\n\n%e"
+                                 `((?l . ,line)
+                                   (?f . ,(file-relative-name file default-directory))
+                                   (?e . ,diag-text))))
+          (format-spec "Investigate the following error at line %l in %f:\n\n%e"
+                       `((?l . ,line)
+                         (?f . ,(file-relative-name file default-directory))
+                         (?e . ,diag-text)))))
       :confirm t)))
+
+(defun akirak-ai-prompt-fix-flymake-error-with-prompt ()
+  "Within an AI shell, fix the error at the current point."
+  (interactive)
+  (akirak-ai-prompt-fix-flymake-error t))
 
 (defun akirak-ai-prompt-send-with-region (begin end &optional prompt)
   "Send a prompt to an AI shell with the current region as the context."
