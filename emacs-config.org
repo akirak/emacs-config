@@ -5029,7 +5029,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src elisp
   (setup akirak-github
     (:global-keymap "<f12> g i" #'akirak-github-browse-issues-web
-                    "<f12> g p" #'akirak-github-browse-prs-web))
+                    "<f12> g p" #'akirak-github-browse-prs-web
+                    "<f12> g l" #'akirak-github-workflow-run-transient))
 #+end_src
 *** akirak-header-line                                                      :UI:
 :PROPERTIES:
@@ -7484,8 +7485,7 @@ Run GitHub Linguist on projects to collect information
 #+begin_src emacs-lisp
   (setup (:package github-linguist)
     (:nixpkgs "github-linguist")
-    (:set github-linguist-executable "github-linguist")
-    (:global-keymap "<f12> g l" #'github-linguist-switch-project-by-language))
+    (:set github-linguist-executable "github-linguist"))
 #+end_src
 *** git-identity                                                    :VC:
 :PROPERTIES:
