@@ -94,13 +94,7 @@
   (akirak-import-thing (thing-at-point 'symbol)))
 
 (defun akirak-import-thing (&optional pattern)
-  (if-let* ((mode (apply #'derived-mode-p
-                         (flatten-list (mapcar (lambda (cell)
-                                                 (ensure-list (car cell)))
-                                               akirak-import-settings-alist))))
-            (entry (seq-find `(lambda (cell)
-                                (memq ',mode (ensure-list (car cell))))
-                             akirak-import-settings-alist)))
+  (if-let* ((entry (akirak-import--get-settings)))
       (pcase-exhaustive entry
         (`(,mode . ,(map :regexp :treesit-node-types :extra-modes
                          :extensions :source-directories :transform-filename
@@ -142,6 +136,15 @@
               :fixup-function fixup-function
               :regexp regexp)))))
     (user-error "Unsupported mode")))
+
+(defun akirak-import--get-settings ()
+  (when-let* ((mode (apply #'derived-mode-p
+                           (flatten-list (mapcar (lambda (cell)
+                                                   (ensure-list (car cell)))
+                                                 akirak-import-settings-alist)))))
+    (seq-find `(lambda (cell)
+                 (memq ',mode (ensure-list (car cell))))
+              akirak-import-settings-alist)))
 
 (cl-defun akirak-import--collect-statements (modes &key regexp treesit-node-types)
   "Collect import statements matching one of MODES."
@@ -365,6 +368,46 @@
     (when (re-search-forward (rx "*") nil t)
       (replace-match "\\\\([^z-a]+\\\\)"))
     (buffer-string)))
+
+;;;###autoload
+(defun akirak-import-cleanup ()
+  "Remove unnecessary imports in the current buffer."
+  (interactive)
+  (unless (bound-and-true-p eglot--managed-mode)
+    (user-error "Only supported inside eglot-managed buffers"))
+  (unless (bound-and-true-p flymake-mode)
+    (user-error "Does not work without flymake-mode"))
+  (pcase (or (akirak-import--get-settings)
+             (user-error "Unsupported mode"))
+    (`(,mode . ,(map :regexp))
+     (save-restriction
+       (widen)
+       (save-excursion
+         (goto-char (point-min))
+         (let (bound
+               (count 0))
+           (while (re-search-forward regexp nil t)
+             (setq bound (match-end 0)))
+           (when bound
+             (goto-char (point-min))
+             (while-let ((pos (and (< (point) bound)
+                                   (next-overlay-change (point)))))
+               (goto-char pos)
+               (pcase (catch 'unnecessary
+                        (dolist (ov (overlays-at pos))
+                          (when (and (overlay-get ov 'flymake-overlay)
+                                     (memq 'eglot-diagnostic-tag-unnecessary-face
+                                           (ensure-list (overlay-get ov 'face))))
+                            (throw 'unnecessary (cons (overlay-start ov)
+                                                      (overlay-end ov))))))
+                 (`(,begin . ,end)
+                  (delete-region begin end)
+                  (when (looking-at (rx (* (any punctuation))
+                                        (* (any blank))))
+                    (delete-region (point) (match-end 0)))
+                  (cl-incf count)
+                  (goto-char (1- begin)))))
+             (message "Removed %d imports" count))))))))
 
 (provide 'akirak-import)
 ;;; akirak-import.el ends here
