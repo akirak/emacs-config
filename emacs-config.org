@@ -1316,6 +1316,7 @@ The built-in =electric= package provides the following modes:
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
+                         (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
@@ -2608,6 +2609,12 @@ Display available keybindings in popup
     (:set bidi-inhibit-bpa t
           bidi-display-reordering 'left-to-right
           bidi-paragraph-direction 'left-to-right))
+#+end_src
+*** python
+#+begin_src emacs-lisp
+  (setup python
+    (:with-mode python-ts-mode
+      (:mode-repl akirak/euporie-project)))
 #+end_src
 ** Typography settings                                       :visual:
 *** Theme packages                                        :packages:
@@ -5020,7 +5027,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+end_src
 *** akirak-github
 #+begin_src elisp
-  (keymap-set help-map "C-g" #'akirak-github-search-code)
+  (setup akirak-github
+    (:global-keymap "<f12> g i" #'akirak-github-browse-issues-web
+                    "<f12> g p" #'akirak-github-browse-prs-web
+                    "<f12> g l" #'akirak-github-workflow-run-transient))
 #+end_src
 *** akirak-header-line                                                      :UI:
 :PROPERTIES:
@@ -6848,6 +6858,15 @@ Client for Language Server Protocol (LSP) servers
                  "R" #'eglot-reconnect
                  "r" #'eglot-rename))
 
+      ;; (add-to-list 'eglot-server-programs
+      ;;              `(((js-mode :language-id "javascript")
+      ;;                 (js-ts-mode :language-id "javascript")
+      ;;                 (tsx-ts-mode :language-id "typescriptreact")
+      ;;                 (typescript-ts-mode :language-id "typescript")
+      ;;                 (typescript-mode :language-id "typescript"))
+      ;;                . ,(eglot-alternatives
+      ;;                    '(("typescript-language-server" "--stdio")
+      ;;                      ("deno" "lsp")))))
       (add-to-list 'eglot-server-programs
                    `((nix-ts-mode nix-mode) . ("nil")))
       (add-to-list 'eglot-server-programs
@@ -7466,8 +7485,7 @@ Run GitHub Linguist on projects to collect information
 #+begin_src emacs-lisp
   (setup (:package github-linguist)
     (:nixpkgs "github-linguist")
-    (:set github-linguist-executable "github-linguist")
-    (:global-keymap "<f12> g l" #'github-linguist-switch-project-by-language))
+    (:set github-linguist-executable "github-linguist"))
 #+end_src
 *** git-identity                                                    :VC:
 :PROPERTIES:
@@ -7581,6 +7599,8 @@ Interact with ChatGPT or other LLMs
                             :models '(openai/gpt-4.1
                                       openai/gpt-4.1-mini
                                       openai/o4-mini
+                                      anthropic/claude-3.5-sonnet
+                                      anthropic/claude-3.7-sonnet:thinking
                                       google/gemini-2.5-flash-preview
                                       google/gemini-2.5-pro-preview-03-25))
             gptel-model 'google/gemini-2.5-flash-preview)
@@ -10245,10 +10265,17 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
           :name "utop"
           :root default-directory))))
 #+end_src
-*** pyproject
+*** Python (uv)
 #+begin_src elisp
-  (setup pyproject
-    (:package-files "pyproject.toml"))
+  (setup uv
+    (:package-files "pyproject.toml")
+
+    (defun akirak/euporie-project ()
+      (interactive)
+      (let* ((root (locate-dominating-file default-directory "pyproject.toml")))
+        (akirak-shell-exec-in-project (list "uv" "run" "euporie-console")
+          :name "euporie-console"
+          :root root))))
 #+end_src
 *** rebar3 (Erlang)
 :PROPERTIES:

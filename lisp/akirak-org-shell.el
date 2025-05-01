@@ -37,6 +37,7 @@
 
 ;;;###autoload (autoload 'akirak-org-shell-transient "akirak-org-shell" nil 'interactive)
 (transient-define-prefix akirak-org-shell-transient ()
+  :refresh-suffixes t
   ["Options"
    ("-b" akirak-org-shell-buffer-infix)]
   ["Send"

@@ -31,12 +31,23 @@
 
 ;;;###autoload (autoload 'akirak-ai-prompt-transient "akirak-ai-prompt" nil 'interactive)
 (transient-define-prefix akirak-ai-prompt-transient ()
+  :refresh-suffixes t
   ["Options"
    ("-b" akirak-ai-prompt-shell-buffer-infix)]
   ["Send a prompt to the buffer"
-   ("f" "Flymake error" akirak-ai-prompt-fix-flymake-error-at-pos
+   :class transient-row
+   :if akirak-ai-prompt-supported-p
+   ("f" "Flymake error" akirak-ai-prompt-fix-flymake-error
+    :if akirak-ai-prompt-at-error-p)
+   ("F" "Flymake error (with custom prompt)"
+    akirak-ai-prompt-fix-flymake-error-with-prompt
     :if akirak-ai-prompt-at-error-p)
    ("r" "Region" akirak-ai-prompt-send-with-region
+    :if use-region-p)]
+  ["Send without prompt"
+   :class transient-row
+   :if-not akirak-ai-prompt-supported-p
+   ("R" "Region" akirak-ai-prompt-send-region
     :if use-region-p)]
   ["Aider"
    :if akirak-ai-prompt-shell-aider-p
@@ -56,6 +67,15 @@
         (akirak-aider-complete-slash-command)
         :confirm t)))]
   (interactive nil)
+  ;; For safety of not sending prompts to a wrong buffer, ensure the shell
+  ;; buffer is opened in an ancestor directory of the current working directory.
+  (when (and akirak-ai-prompt-shell-buffer
+             (not (string-prefix-p (abbreviate-file-name
+                                    (buffer-local-value 'default-directory
+                                                        akirak-ai-prompt-shell-buffer))
+                                   (abbreviate-file-name default-directory))))
+    (setq akirak-ai-prompt-shell-buffer nil)
+    (message "Unset the shell buffer for a different project"))
   (unless akirak-ai-prompt-shell-buffer
     (setq akirak-ai-prompt-shell-buffer
           (akirak-org-shell--read-buffer "Terminal buffer: " akirak-ai-prompt-shell-buffer)))
@@ -63,9 +83,9 @@
 
 ;;;;; Suffixes
 
-(defun akirak-ai-prompt-fix-flymake-error-at-pos ()
+(defun akirak-ai-prompt-fix-flymake-error (&optional arg)
   "Within an AI shell, fix the error at the current point."
-  (interactive)
+  (interactive "P")
   (cl-assert (akirak-org-shell--buffer-live-p))
   (let* ((diag (pcase (flymake-diagnostics)
                  (`nil (user-error "No error at point"))
@@ -78,11 +98,22 @@
          (buffer akirak-ai-prompt-shell-buffer))
     (akirak-shell-send-string-to-buffer buffer
       (with-current-buffer buffer
-        (format-spec "Investigate the following error at line %l in %f:\n\n%e"
-                     `((?l . ,line)
-                       (?f . ,(file-relative-name file default-directory))
-                       (?e . ,diag-text))))
+        (if arg
+            (concat (read-string "Prompt: ")
+                    (format-spec "\n\nAt line %l in %f:\n\n%e"
+                                 `((?l . ,line)
+                                   (?f . ,(file-relative-name file default-directory))
+                                   (?e . ,diag-text))))
+          (format-spec "Investigate the following error at line %l in %f:\n\n%e"
+                       `((?l . ,line)
+                         (?f . ,(file-relative-name file default-directory))
+                         (?e . ,diag-text)))))
       :confirm t)))
+
+(defun akirak-ai-prompt-fix-flymake-error-with-prompt ()
+  "Within an AI shell, fix the error at the current point."
+  (interactive)
+  (akirak-ai-prompt-fix-flymake-error t))
 
 (defun akirak-ai-prompt-send-with-region (begin end &optional prompt)
   "Send a prompt to an AI shell with the current region as the context."
@@ -107,12 +138,20 @@
                                          (?f . ,(file-relative-name file default-directory)))))))
           (concat (if prompt
                       (concat prompt location)
-                    (read-string "Prompt: " location))
+                    (concat (read-string "Prompt: " location)
+                            "\n\n"))
                   (if language
                       (format-spec "\n\n```%m\n%b\n```"
                                    `((?m . ,language)
                                      (?b . ,content)))
                     (replace-regexp-in-string (rx bol) "> " content)))))
+      :confirm t)))
+
+(defun akirak-ai-prompt-send-region (begin end)
+  (interactive "r")
+  (let ((content (buffer-substring-no-properties begin end)))
+    (akirak-shell-send-string-to-buffer akirak-ai-prompt-shell-buffer
+      content
       :confirm t)))
 
 (defun akirak-ai-prompt--select-flymake-diagnostic (diags)
@@ -125,9 +164,13 @@
 
 ;;;; Utilities
 
+(defun akirak-ai-prompt-supported-p ()
+  (and (akirak-shell-detect-buffer-program akirak-ai-prompt-shell-buffer)
+       t))
+
 (defun akirak-ai-prompt-at-error-p ()
-  (and (featurep 'flymake)
-       (bound-and-true-p flymake-mode)))
+  (and (get-char-property-and-overlay (point) 'flymake-diagnostic)
+       t))
 
 (defun akirak-ai-prompt--buffer-file ()
   (buffer-file-name (buffer-base-buffer)))
