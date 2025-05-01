@@ -73,7 +73,8 @@
   ["View workflow"
    :class transient-row
    ("b" "Select a branch" akirak-github-view-workflow-on-branch)
-   ("B" "This branch" akirak-github-view-workflow-on-this-branch)]
+   ("B" "On this branch" akirak-github-view-workflow-on-this-branch)
+   ("a" "On any branch" akirak-github-view-workflow-default)]
   (interactive)
   (transient-setup 'akirak-github-workflow-run-transient))
 
@@ -117,6 +118,11 @@
 (defun akirak-github-view-workflow-from-list (&rest gh-args)
   (apply #'akirak-github-view-workflow
          (apply #'akirak-github--select-workflow-run gh-args)))
+
+(defun akirak-github-view-workflow-default ()
+  "View a workflow."
+  (interactive)
+  (akirak-github-view-workflow-from-list))
 
 (defun akirak-github-view-workflow-on-branch (branch)
   "Select a branch and view a workflow run on it."
