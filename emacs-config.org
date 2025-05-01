@@ -6857,15 +6857,15 @@ Client for Language Server Protocol (LSP) servers
                  "R" #'eglot-reconnect
                  "r" #'eglot-rename))
 
-      (add-to-list 'eglot-server-programs
-                   `(((js-mode :language-id "javascript")
-                      (js-ts-mode :language-id "javascript")
-                      (tsx-ts-mode :language-id "typescriptreact")
-                      (typescript-ts-mode :language-id "typescript")
-                      (typescript-mode :language-id "typescript"))
-                     . ,(eglot-alternatives
-                         '(("typescript-language-server" "--stdio")
-                           ("deno" "lsp")))))
+      ;; (add-to-list 'eglot-server-programs
+      ;;              `(((js-mode :language-id "javascript")
+      ;;                 (js-ts-mode :language-id "javascript")
+      ;;                 (tsx-ts-mode :language-id "typescriptreact")
+      ;;                 (typescript-ts-mode :language-id "typescript")
+      ;;                 (typescript-mode :language-id "typescript"))
+      ;;                . ,(eglot-alternatives
+      ;;                    '(("typescript-language-server" "--stdio")
+      ;;                      ("deno" "lsp")))))
       (add-to-list 'eglot-server-programs
                    `((nix-ts-mode nix-mode) . ("nil")))
       (add-to-list 'eglot-server-programs
