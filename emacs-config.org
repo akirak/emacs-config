@@ -1765,6 +1765,15 @@ Resources:
     ;; Prefer sqlite backend for learning purposes
     (:set multisession-storage 'sqlite))
 #+end_src
+*** mwheel
+:PROPERTIES:
+:CREATED_TIME: [2025-05-02 Fri 13:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup mwheel
+    (:set mouse-wheel-tilt-scroll t))
+#+end_src
 *** nxml-mode
 :PROPERTIES:
 :CREATED_TIME: [2024-06-15 Sat 15:18]
@@ -2567,7 +2576,8 @@ Display available keybindings in popup
 *** window.c
 #+begin_src emacs-lisp
   (setup window
-    (:set fast-but-imprecise-scrolling t))
+    (:set fast-but-imprecise-scrolling t
+          scroll-preserve-screen-position t))
 #+end_src
 *** winner                                         :history:windows:
 :PROPERTIES:
@@ -2614,7 +2624,8 @@ Display available keybindings in popup
     ;; direction so far
     (:set bidi-inhibit-bpa t
           bidi-display-reordering 'left-to-right
-          bidi-paragraph-direction 'left-to-right))
+          bidi-paragraph-direction 'left-to-right
+          scroll-conservatively 1))
 #+end_src
 ** Typography settings                                       :visual:
 *** Theme packages                                        :packages:
