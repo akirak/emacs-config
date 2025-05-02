@@ -105,7 +105,11 @@
       (xterm-color-colorize-buffer))
     (goto-char (point-max))
     (when url
-      (insert "\n\nTo browse the output on the web, visit " url))
+      (insert "\n\nTo browse the output on the web, visit ")
+      (insert-text-button url
+                          'action (lambda (_button) (browse-url url))
+                          'follow-link t
+                          'help-echo (format "Visit %s" url)))
     ;; Open the buffer in a tab. If there is an existing tab visiting the
     ;; buffer, switch to the tab.
     (unless (get-buffer-window (current-buffer))
