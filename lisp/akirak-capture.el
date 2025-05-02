@@ -1564,9 +1564,12 @@ provided as a separate command for integration, e.g. with embark."
            (regexp (when indents
                      (concat "^" (make-string (apply #'min indents)
                                               ?\s)))))
-      (if regexp
-          (replace-regexp-in-string regexp "" string)
-        string))))
+      (replace-regexp-in-string
+       (rx bol "*")
+       ",*"
+       (if regexp
+           (replace-regexp-in-string regexp "" string)
+         string)))))
 
 ;;;###autoload
 (defun akirak-capture-sanitize-region (begin end)
