@@ -1902,6 +1902,12 @@ Operations on the current project
     (:set pulse-momentary-iterations 10
           pulse-delay .2))
 #+end_src
+*** python
+#+begin_src emacs-lisp
+  (setup python
+    (:with-mode python-ts-mode
+      (:mode-repl akirak/euporie-project)))
+#+end_src
 *** re-builder                                              :regexp:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-06 Sun 21:01]
@@ -2609,12 +2615,6 @@ Display available keybindings in popup
     (:set bidi-inhibit-bpa t
           bidi-display-reordering 'left-to-right
           bidi-paragraph-direction 'left-to-right))
-#+end_src
-*** python
-#+begin_src emacs-lisp
-  (setup python
-    (:with-mode python-ts-mode
-      (:mode-repl akirak/euporie-project)))
 #+end_src
 ** Typography settings                                       :visual:
 *** Theme packages                                        :packages:
@@ -4898,16 +4898,16 @@ This is a collection of various utilities to enhance the experience.
     (:status personal
       (:defer 1 #'akirak-files-ensure-abbrev-list)))
 #+end_src
+*** akirak-ai-prompt
+#+begin_src elisp
+  (setup akirak-ai-prompt
+    (:global-keymap "C-c a" #'akirak-ai-prompt-transient))
+#+end_src
 *** akirak-avy
 #+begin_src emacs-lisp
   (setup akirak-avy
     (:global-keymap "C-;" #'akirak-avy-insert-symbol
                     "M-g `" #'akirak-avy-org-block))
-#+end_src
-*** akirak-ai-prompt
-#+begin_src elisp
-  (setup akirak-ai-prompt
-    (:global-keymap "C-c a" #'akirak-ai-prompt-transient))
 #+end_src
 *** COMMENT akirak-bitwarden                                                   :ARCHIVE:
 #+begin_src emacs-lisp
@@ -9025,7 +9025,7 @@ Manage external services
   (setup (:package prodigy)
     (:global-keymap "<f12> x p" #'prodigy))
 #+end_src
-*** proof-general                                                      :ARCHIVE:
+*** COMMENT proof-general                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-08 Wed 14:53]
 :END:
@@ -9266,7 +9266,7 @@ Jump to Japanese text using avy
     (:keymap "C-j" #'riben-english-to-japanese
            "C-S-j" #'riben-english-confirm))
 #+end_src
-*** rich-minority                                                   :UI:ARCHIVE:
+*** COMMENT rich-minority                                                   :UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:27]
 :END:
