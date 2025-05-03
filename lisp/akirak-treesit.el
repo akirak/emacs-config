@@ -179,7 +179,19 @@
 (defvar akirak-treesit-expand-region-node nil)
 
 ;;;###autoload
-(defun akirak-treesit-expand-region ()
+(defun akirak-treesit-expand-region (&optional arg)
+  (interactive "P")
+  (pcase arg
+    ;; With a universal prefix argument, select the siblings instead of the
+    ;; parent.
+    ('(4) (and (or (require 'puni nil t)
+                   (user-error "Puni is not installed"))
+               (or (fboundp 'puni-expand-region)
+                   (user-error "puni-expand-region is not defined"))
+               (puni-expand-region)))
+    (_ (akirak-treesit-expand-region-1))))
+
+(defun akirak-treesit-expand-region-1 ()
   (interactive)
   (unless (and akirak-treesit-expand-region-node
                (use-region-p)
@@ -204,7 +216,7 @@
     (goto-char start)
     (setq akirak-treesit-expand-region-node node)
     (if (equal (region-bounds) current-bounds)
-        (akirak-treesit-expand-region)
+        (akirak-treesit-expand-region-1)
       (message "%s" (treesit-node-type node)))))
 
 (defcustom akirak-treesit-balanced-nodes

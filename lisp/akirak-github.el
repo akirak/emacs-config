@@ -42,6 +42,14 @@
 
 ;;; Code:
 
+(require 'ts)
+(require 'format-spec)
+(require 'json)
+(require 'project)
+(require 'magit-git)
+(require 'transient)
+(require 'tab-bar)
+
 (defcustom akirak-github-gh-executable "gh"
   ""
   :type 'file)
@@ -73,7 +81,8 @@
   ["View workflow"
    :class transient-row
    ("b" "Select a branch" akirak-github-view-workflow-on-branch)
-   ("B" "This branch" akirak-github-view-workflow-on-this-branch)]
+   ("B" "On this branch" akirak-github-view-workflow-on-this-branch)
+   ("a" "On any branch" akirak-github-view-workflow-default)]
   (interactive)
   (transient-setup 'akirak-github-workflow-run-transient))
 
@@ -96,7 +105,11 @@
       (xterm-color-colorize-buffer))
     (goto-char (point-max))
     (when url
-      (insert "\To browse the output on the web, visit " url))
+      (insert "\n\nTo browse the output on the web, visit ")
+      (insert-text-button url
+                          'action (lambda (_button) (browse-url url))
+                          'follow-link t
+                          'help-echo (format "Visit %s" url)))
     ;; Open the buffer in a tab. If there is an existing tab visiting the
     ;; buffer, switch to the tab.
     (unless (get-buffer-window (current-buffer))
@@ -118,6 +131,11 @@
   (apply #'akirak-github-view-workflow
          (apply #'akirak-github--select-workflow-run gh-args)))
 
+(defun akirak-github-view-workflow-default ()
+  "View a workflow."
+  (interactive)
+  (akirak-github-view-workflow-from-list))
+
 (defun akirak-github-view-workflow-on-branch (branch)
   "Select a branch and view a workflow run on it."
   (interactive
@@ -133,6 +151,31 @@
         (akirak-github-view-workflow-on-branch (substring upstream (match-end 0)))
       (user-error "No upstream is set"))))
 
+(defun akirak-github--status-tag (status conclusion)
+  "Return a symbol indicating STATUS and CONCLUSION."
+  (pcase conclusion
+    ("success"
+     'success)
+    ("failure"
+     'failure)
+    ("cancelled"
+     'cancelled)
+    ("skipped"
+     'skipped)
+    ((guard (member status '("in_progress"
+                             "queued"
+                             "requested"
+                             "waiting")))
+     'waiting)
+    ((guard (member conclusion '("neutral"
+                                 "action_required"
+                                 "stale"
+                                 "startup_failure"
+                                 "timed_out")))
+     'question)
+    (_
+     'default)))
+
 (defun akirak-github--select-workflow-run (&rest gh-args)
   (let* ((result
           (with-temp-buffer
@@ -145,37 +188,64 @@
             (goto-char (point-min))
             (thread-last
               (json-parse-buffer :object-type 'alist :array-type 'list))))
-         (alists (mapcar (lambda (alist)
-                           (cons (alist-get 'databaseId alist)
-                                 alist))
-                         result))
-         (candidates (mapcar (lambda (alist)
-                               ;; TODO: Improve the style
-                               (format-spec "%4i: %s %c (updated %u ago) %t / %w [%e,%b]"
-                                            `((?i . ,(int-to-string (alist-get 'databaseId alist)))
-                                              (?u . ,(ts-human-format-duration
-                                                      (thread-last
-                                                        (alist-get 'updatedAt alist)
-                                                        ts-parse
-                                                        (ts-diff (ts-now)))
-                                                      'abbr))
-                                              (?c . ,(alist-get 'conclusion alist))
-                                              (?s . ,(alist-get 'status alist))
-                                              (?b . ,(alist-get 'headBranch alist))
-                                              (?e . ,(alist-get 'event alist))
-                                              (?w . ,(alist-get 'workflowName alist))
-                                              (?t . ,(alist-get 'displayTitle alist)))))
-                             result)))
+         (alists-with-id (mapcar (lambda (alist)
+                                   (cons (alist-get 'databaseId alist)
+                                         alist))
+                                 result))
+         (candidates (mapcar
+                      (lambda (alist)
+                        (let* ((status (alist-get 'status alist))
+                               (conclusion (alist-get 'conclusion alist))
+                               (tag (akirak-github--status-tag status conclusion))
+                               (status-icon (cl-ecase tag
+                                              (success "✅")
+                                              (failure "❌")
+                                              (cancelled "🚫")
+                                              (skipped "⏭️")
+                                              (waiting "⏳")
+                                              (question "❓")
+                                              (default status)))
+                               (time-str (format "(updated %s ago)"
+                                                 (ts-human-format-duration
+                                                  (thread-last
+                                                    (alist-get 'updatedAt alist)
+                                                    ts-parse
+                                                    (ts-diff (ts-now)))
+                                                  'abbr)))
+                               (conclusion-face (cl-ecase tag
+                                                  (success 'success)
+                                                  (failure 'error)
+                                                  (cancelled 'warning)
+                                                  (skipped 'font-lock-comment-face)
+                                                  (waiting 'font-lock-keyword-face)
+                                                  (question 'font-lock-warning-face)
+                                                  (default 'default))))
+                          ;; Format the string with propertized segments
+                          (format-spec "%4i: %s %c %u %t / %w [%e,%b]"
+                                       `((?i . ,(int-to-string (alist-get 'databaseId alist)))
+                                         (?s . ,status-icon)
+                                         (?c . ,(propertize conclusion 'face conclusion-face))
+                                         (?u . ,(propertize time-str 'face 'font-lock-comment-face))
+                                         (?t . ,(alist-get 'displayTitle alist))
+                                         (?w . ,(propertize (alist-get 'workflowName alist)
+                                                            'face 'font-lock-function-name-face))
+                                         (?e . ,(propertize (alist-get 'event alist)
+                                                            'face 'font-lock-type-face))
+                                         (?b . ,(propertize (alist-get 'headBranch alist)
+                                                            'face 'font-lock-variable-name-face))))))
+                      result)))
     (cl-labels
         ((completions (string pred action)
            (if (eq action 'metadata)
                (cons 'metadata
-                     (list (cons 'display-sort-function #'identity)))
+                     (list (cons 'display-sort-function #'identity)
+                           ;; Use `face` property for display.
+                           (cons 'face-property 'face)))
              (complete-with-action action candidates string pred))))
       (let ((input (completing-read "Select a workflow run: " #'completions nil t)))
-        (when (string-match (rx (+ digit)) input)
-          (let* ((database-id (string-to-number (match-string 0 input)))
-                 (alist (alist-get database-id alists)))
+        (when (string-match (rx bol (group (+ digit))) input)
+          (let* ((database-id (string-to-number (match-string 1 input)))
+                 (alist (alist-get database-id alists-with-id)))
             (list database-id
                   :url (alist-get 'url alist))))))))
 

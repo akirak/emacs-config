@@ -1765,6 +1765,15 @@ Resources:
     ;; Prefer sqlite backend for learning purposes
     (:set multisession-storage 'sqlite))
 #+end_src
+*** mwheel
+:PROPERTIES:
+:CREATED_TIME: [2025-05-02 Fri 13:30]
+:END:
+
+#+begin_src emacs-lisp
+  (setup mwheel
+    (:set mouse-wheel-tilt-scroll t))
+#+end_src
 *** nxml-mode
 :PROPERTIES:
 :CREATED_TIME: [2024-06-15 Sat 15:18]
@@ -1901,6 +1910,12 @@ Operations on the current project
   (setup pulse
     (:set pulse-momentary-iterations 10
           pulse-delay .2))
+#+end_src
+*** python
+#+begin_src emacs-lisp
+  (setup python
+    (:with-mode python-ts-mode
+      (:mode-repl akirak/euporie-project)))
 #+end_src
 *** re-builder                                              :regexp:
 :PROPERTIES:
@@ -2561,7 +2576,8 @@ Display available keybindings in popup
 *** window.c
 #+begin_src emacs-lisp
   (setup window
-    (:set fast-but-imprecise-scrolling t))
+    (:set fast-but-imprecise-scrolling t
+          scroll-preserve-screen-position t))
 #+end_src
 *** winner                                         :history:windows:
 :PROPERTIES:
@@ -2608,13 +2624,8 @@ Display available keybindings in popup
     ;; direction so far
     (:set bidi-inhibit-bpa t
           bidi-display-reordering 'left-to-right
-          bidi-paragraph-direction 'left-to-right))
-#+end_src
-*** python
-#+begin_src emacs-lisp
-  (setup python
-    (:with-mode python-ts-mode
-      (:mode-repl akirak/euporie-project)))
+          bidi-paragraph-direction 'left-to-right
+          scroll-conservatively 1))
 #+end_src
 ** Typography settings                                       :visual:
 *** Theme packages                                        :packages:
@@ -4898,16 +4909,16 @@ This is a collection of various utilities to enhance the experience.
     (:status personal
       (:defer 1 #'akirak-files-ensure-abbrev-list)))
 #+end_src
+*** akirak-ai-prompt
+#+begin_src elisp
+  (setup akirak-ai-prompt
+    (:global-keymap "C-c a" #'akirak-ai-prompt-transient))
+#+end_src
 *** akirak-avy
 #+begin_src emacs-lisp
   (setup akirak-avy
     (:global-keymap "C-;" #'akirak-avy-insert-symbol
                     "M-g `" #'akirak-avy-org-block))
-#+end_src
-*** akirak-ai-prompt
-#+begin_src elisp
-  (setup akirak-ai-prompt
-    (:global-keymap "C-c a" #'akirak-ai-prompt-transient))
 #+end_src
 *** COMMENT akirak-bitwarden                                                   :ARCHIVE:
 #+begin_src emacs-lisp
@@ -9025,7 +9036,7 @@ Manage external services
   (setup (:package prodigy)
     (:global-keymap "<f12> x p" #'prodigy))
 #+end_src
-*** proof-general                                                      :ARCHIVE:
+*** COMMENT proof-general                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-08 Wed 14:53]
 :END:
@@ -9266,7 +9277,7 @@ Jump to Japanese text using avy
     (:keymap "C-j" #'riben-english-to-japanese
            "C-S-j" #'riben-english-confirm))
 #+end_src
-*** rich-minority                                                   :UI:ARCHIVE:
+*** COMMENT rich-minority                                                   :UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-21 Mon 23:27]
 :END:
@@ -10705,11 +10716,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 222 |
+| [[org-ql-search:tags:packages][packages]]            | 220 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
-| [[org-ql-search:tags:UI][UI]]                  |  12 |
-| [[org-ql-search:tags:@extra][@extra]]              |  11 |
+| [[org-ql-search:tags:UI][UI]]                  |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
+| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
@@ -10775,7 +10786,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:Chinese][Chinese]]             |   1 |
-| [[org-ql-search:tags:Coq][Coq]]                 |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
 | [[org-ql-search:tags:transit][transit]]             |   1 |
