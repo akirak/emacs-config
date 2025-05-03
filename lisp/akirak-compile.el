@@ -230,6 +230,7 @@ are displayed in the frame."
                               (seq-filter `(lambda (ent)
                                              (member (get-char-property 0 'command-directory ent)
                                                      (mapcar #'cdr ',projects))))))))
+                (prefer-terminal (get-text-property 0 'terminal command))
                 (default-directory (or (get-text-property 0 'command-directory command)
                                        (cdr (assq (akirak-compile--guess-backend command)
                                                   projects))
@@ -243,10 +244,23 @@ are displayed in the frame."
                  (puthash key (list command) akirak-compile-per-workspace-history)
                (cl-pushnew command history)
                (puthash key history akirak-compile-per-workspace-history))
-             (if (equal arg '(4))
-                 (compilation-start command t
-                                    (cl-constantly (akirak-compile--buffer-name)))
-               (compile command t))))
+             (cond
+              (prefer-terminal
+               (let* ((name (format "%s<%s>" command (project-name (project-current))))
+                      (buffer-name (format "*%s*" name)))
+                 (when (get-buffer buffer-name)
+                   (kill-buffer buffer-name))
+                 (require 'eat)
+                 (with-current-buffer (generate-new-buffer buffer-name)
+                   (eat-mode)
+                   ;; This must be set after eat-mode
+                   (setq-local eat-kill-buffer-on-exit nil)
+                   (eat-exec (current-buffer) name "sh" nil (list "-c" command))
+                   (pop-to-buffer (current-buffer)))))
+              ((equal arg '(4))
+               (compilation-start command t (cl-constantly (akirak-compile--buffer-name))))
+              (t
+               (compile command t)))))
        (user-error "No workspace root")))))
 
 (defun akirak-compile--buffer-name ()
@@ -463,7 +477,9 @@ are displayed in the frame."
                                      " ")))
          (append (map-apply `(lambda (subcommand body)
                                (list (concat ,script-prefix subcommand)
-                                     'annotation body))
+                                     'annotation body
+                                     'terminal (string-match-p (rx word-start "vitest" blank)
+                                                               body)))
                             (with-temp-buffer
                               (insert-file-contents (expand-file-name "package.json" dir))
                               (map-elt (json-parse-buffer :array-type 'list) "scripts")))
