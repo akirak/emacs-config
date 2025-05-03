@@ -1315,6 +1315,7 @@ The built-in =electric= package provides the following modes:
                          (heex-ts-mode . (,@lsp))
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
+                         (just-mode . (,@lsp-no-formatter))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp))
@@ -6880,6 +6881,8 @@ Client for Language Server Protocol (LSP) servers
       ;;                      ("deno" "lsp")))))
       (add-to-list 'eglot-server-programs
                    `((nix-ts-mode nix-mode) . ("nil")))
+      (add-to-list 'eglot-server-programs
+                   '(just-mode . ("just-lsp")))
       (add-to-list 'eglot-server-programs
                    '(lean4-mode . ("lake" "serve")))
       (add-to-list 'eglot-server-programs
