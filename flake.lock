@@ -94,11 +94,11 @@
     "flake-pins": {
       "flake": false,
       "locked": {
-        "lastModified": 1744903484,
-        "narHash": "sha256-a1i9TECZdnBbOzQMDfM0rTIa+5yJfKfK1406CxLc/BM=",
+        "lastModified": 1746247385,
+        "narHash": "sha256-SI0yfKYDhmB6hBBUWfnKKIIQdnrqi0j/vZK5RXAKRwA=",
         "owner": "akirak",
         "repo": "flake-pins",
-        "rev": "82385d5e5b83a042ede1d05c755ac7337be5808d",
+        "rev": "6a4fc9e8b069eb5a9e18ab8ffe82d884da3b5171",
         "type": "github"
       },
       "original": {
@@ -118,11 +118,11 @@
       },
       "locked": {
         "dir": "pkgs/cli-tools",
-        "lastModified": 1744903484,
-        "narHash": "sha256-a1i9TECZdnBbOzQMDfM0rTIa+5yJfKfK1406CxLc/BM=",
+        "lastModified": 1746247385,
+        "narHash": "sha256-SI0yfKYDhmB6hBBUWfnKKIIQdnrqi0j/vZK5RXAKRwA=",
         "owner": "akirak",
         "repo": "flake-pins",
-        "rev": "82385d5e5b83a042ede1d05c755ac7337be5808d",
+        "rev": "6a4fc9e8b069eb5a9e18ab8ffe82d884da3b5171",
         "type": "github"
       },
       "original": {
@@ -151,11 +151,11 @@
     "gnu-elpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1745287945,
-        "narHash": "sha256-6NnwmO8RucD0dRTi3gMW7q5yNrM4DD3tw6ombL6BG/g=",
+        "lastModified": 1746206401,
+        "narHash": "sha256-FHoFIiZp/LsDbv+2eecapwLLXHI2tYR+Bb1YpY2TtaM=",
         "owner": "elpa-mirrors",
         "repo": "elpa",
-        "rev": "46004e1f737ebb73e7446489bc22d14be55b7cc3",
+        "rev": "48cf3730e6d910e1a365339888cce50ca4f3222a",
         "type": "github"
       },
       "original": {
@@ -182,11 +182,11 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1745566596,
-        "narHash": "sha256-/IxD8jaR919/VTcrpSUN3F5d7XeWo4CuhB7I01oPs8E=",
+        "lastModified": 1745777614,
+        "narHash": "sha256-s1x1XBD+8F7H/mxDaZ4GdDRlzMtav0Qz0/biP9PohVk=",
         "owner": "melpa",
         "repo": "melpa",
-        "rev": "0ddcfbc20264759a22712130c8ccf0825d3d198b",
+        "rev": "a4eb76fa0ca7755430450c4987c4f8b5d980d957",
         "type": "github"
       },
       "original": {
@@ -285,11 +285,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1744536153,
-        "narHash": "sha256-awS2zRgF4uTwrOKwwiJcByDzDOdo3Q1rPZbiHQg/N38=",
+        "lastModified": 1746152631,
+        "narHash": "sha256-zBuvmL6+CUsk2J8GINpyy8Hs1Zp4PP6iBWSmZ4SCQ/s=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "18dd725c29603f582cf1900e0d25f9f1063dbf11",
+        "rev": "032bc6539bd5f14e9d0c51bd79cfe9a055b094c3",
         "type": "github"
       },
       "original": {
@@ -301,11 +301,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1744536153,
-        "narHash": "sha256-awS2zRgF4uTwrOKwwiJcByDzDOdo3Q1rPZbiHQg/N38=",
+        "lastModified": 1744868846,
+        "narHash": "sha256-5RJTdUHDmj12Qsv7XOhuospjAjATNiTMElplWnJE9Hs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "18dd725c29603f582cf1900e0d25f9f1063dbf11",
+        "rev": "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c",
         "type": "github"
       },
       "original": {
@@ -351,11 +351,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1744860784,
-        "narHash": "sha256-DSsBSa+yFy/X/pcK3+T+AP7U+A268khMEJKnBN0Fulo=",
+        "lastModified": 1745444835,
+        "narHash": "sha256-o+HrMPCsInl9uI4GCTzwFA2YVbnzWNYGlIWgtAbXLYY=",
         "owner": "akirak",
         "repo": "nix-playwright-mcp",
-        "rev": "78f85e717f2d89bec331f7e1043e9b84d5e84916",
+        "rev": "8c3034e978c2680035d7a8b1ccc63440cb31c092",
         "type": "github"
       },
       "original": {
@@ -466,11 +466,11 @@
     "tree-sitter-astro": {
       "flake": false,
       "locked": {
-        "lastModified": 1735172405,
-        "narHash": "sha256-LhehKOhCDPExEgEiOj3TiuFk8/DohzYhy/9GmUSxaIg=",
+        "lastModified": 1745424178,
+        "narHash": "sha256-TpXs3jbYn39EHxTdtSfR7wLA1L8v9uyK/ATPp5v4WqE=",
         "owner": "virchau13",
         "repo": "tree-sitter-astro",
-        "rev": "0ad33e32ae9726e151d16ca20ba3e507ff65e01f",
+        "rev": "213f6e6973d9b456c6e50e86f19f66877e7ef0ee",
         "type": "github"
       },
       "original": {
