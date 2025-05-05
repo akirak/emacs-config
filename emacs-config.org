@@ -2931,6 +2931,10 @@ Org Babel functions for Aider.el & Aidermacs integration
 :PROPERTIES:
 :CREATED_TIME: [2025-05-05 Mon 11:48]
 :END:
+#+begin_quote
+Org Babel functions for DuckDB SQL
+[[https://github.com/gggion/ob-duckdb.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package ob-duckdb)
@@ -9613,6 +9617,9 @@ Major mode for editing systemd units
 :PROPERTIES:
 :CREATED_TIME: [2025-05-05 Mon 12:24]
 :END:
+#+begin_quote
+Tab bookmarks
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package tab-bookmark))
@@ -10757,7 +10764,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 220 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
