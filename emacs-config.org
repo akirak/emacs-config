@@ -272,6 +272,22 @@ Specify extra root files to help eglot correctly identify project roots.
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
+*** :org-babel-language
+#+begin_src elisp
+  (eval-when-compile
+    (define-setup-macro
+     :org-babel-language (t-or-language)
+     "Define file names indicating the project root."
+     (let ((language (if (eq t-or-language t)
+                         (thread-last
+                           (setup-get 'feature)
+                           (symbol-name)
+                           (string-remove-prefix "ob-")
+                           (intern))
+                       t-or-language)))
+       `(with-eval-after-load 'ob
+          (cl-pushnew '(,language . t) org-babel-load-languages)))))
+#+end_src
 *** :org-open
 :PROPERTIES:
 :CREATED_TIME: [2023-07-22 Sat 10:28]
@@ -2918,8 +2934,7 @@ Org Babel functions for Aider.el & Aidermacs integration
 
 #+begin_src emacs-lisp
   (setup (:package ob-duckdb)
-    (with-eval-after-load 'org
-      (add-to-list 'org-babel-load-languages '(duckdb . t))))
+    (:org-babel-language t))
 #+end_src
 
 *** ob-graphql
@@ -2933,8 +2948,7 @@ Org-Babel execution backend for GraphQL source blocks
 
 #+begin_src emacs-lisp
   (setup (:package ob-graphql)
-    (with-eval-after-load 'org
-      (add-to-list 'org-babel-load-languages '(graphql . t))))
+    (:org-babel-language t))
 #+end_src
 *** ob-mermaid
 :PROPERTIES:
@@ -2958,8 +2972,7 @@ org-babel functions for restclient-mode
 
 #+begin_src emacs-lisp
   (setup (:package ob-restclient)
-    (with-eval-after-load 'org
-      (add-to-list 'org-babel-load-languages '(restclient . t))))
+    (:org-babel-language t))
 #+end_src
 *** org
 #+begin_quote
