@@ -217,7 +217,7 @@ I am interested to see if it can reduce the amount of configuration code.
      :repeatable t
      `(keymap-set ,(setup-get 'map) ,key ,command)))
 #+end_src
-*** keymap-unset
+*** :keymap-unset
 :PROPERTIES:
 :CREATED_TIME: [2025-02-15 Sat 14:39]
 :END:
