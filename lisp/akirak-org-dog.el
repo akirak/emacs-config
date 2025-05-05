@@ -277,6 +277,31 @@ ARG, the target file can be changed only for that item."
    (t
     (bounds-of-thing-at-point 'symbol))))
 
+;;;###autoload
+(defun akirak-org-dog-use-templates (path)
+  (interactive)
+  (pcase (org-dog-select 'absolute `(relative ,path))
+    (`(,file)
+     (akirak-org-tempo-use-file file))))
+
+;;;###autoload
+(defun akirak-org-dog-use-major-mode-templates ()
+  "Enable templates for the current major mode."
+  (interactive)
+  (let ((modes (derived-mode-all-parents major-mode)))
+    (unless (memq 'special-mode modes)
+      (thread-last
+        modes
+        (mapcar (lambda (mode)
+                  (thread-last
+                    (symbol-name mode)
+                    (string-remove-suffix "-ts-mode")
+                    (string-remove-suffix "-mode"))))
+        (seq-uniq)
+        (mapcar (lambda (language)
+                  (format "programming/%s.org" language)))
+        (mapc #'akirak-org-dog-use-templates)))))
+
 ;;;; Updating
 
 (defcustom akirak-org-dog-auto-update-hook

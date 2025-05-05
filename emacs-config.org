@@ -331,6 +331,18 @@ Specify extra root files to help eglot correctly identify project roots.
                                  (string-remove-suffix "-ts" name))
                                (intern name))))))))
 #+end_src
+*** :org-template
+#+begin_src elisp
+  (eval-when-compile
+    (define-setup-macro
+     :org-template (file)
+     "Load templates from the Org file."
+     `(when (or (eq t akirak/enabled-status-tags)
+                (memq 'personal akirak/enabled-status-tags))
+        (add-hook ',(setup-get 'hook)
+                  (lambda () (akirak-org-dog-use-templates ,file))))))
+
+#+end_src
 *** :package-files
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 12:56]
@@ -1107,7 +1119,8 @@ The built-in =electric= package provides the following modes:
                              1)))))
 
     (:with-mode lisp-data-mode
-      (:file-match "/recipes/[-a-z0-9]+\\'"))
+      (:file-match "/recipes/[-a-z0-9]+\\'")
+      (:org-src-lang "tempo"))
 
     (:auto-insert
      ("\\.dir-locals\\(?:-2\\)?\\.el\\'"
@@ -3728,6 +3741,9 @@ A programmable workflow layer for Org mode
                   (let ((inhibit-message t))
                     (require 'org-dog)
                     (org-dog-reload-files t)
+                    ;; Enable only after the Org files have been loaded.
+                    (add-hook 'after-change-major-mode-hook
+                              #'akirak-org-dog-use-major-mode-templates)
                     (akirak-org-clock-rebuild-history)
                     (when (fboundp 'akirak/dashboard-init-on-startup)
                       (akirak/dashboard-init-on-startup))))))))
