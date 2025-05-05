@@ -8675,7 +8675,7 @@ Major mode for OCaml code
 
       ;; Load abbreviations
       (:also-load akirak-ocaml)
-      (:local-set abbrev-table akirak-ocaml-abbrev-table))
+      (:local-set local-abbrev-table akirak-ocaml-abbrev-table))
 
     (:reformatters
      (ocamlformat :program "ocamlformat"
