@@ -813,19 +813,26 @@ This function returns the current buffer."
     (error "Not clocking in"))
   (org-with-point-at (or org-clock-hd-marker
                          (error "org-clock-hd-marker is not set"))
-    (if (re-search-forward (rx bol (* blank) ":REFERENCES:" (or blank eol))
-                           (org-entry-end-position) t)
-        (progn
-          (re-search-forward "^[ \t]*:END:[ \t]*$")
-          (beginning-of-line)
-          (org-open-line 1))
-      (org-end-of-meta-data t)
-      (re-search-backward (rx nonl eol))
-      (beginning-of-line 2)
-      (insert ":REFERENCES:\n:END:\n")
-      (beginning-of-line 0)
-      (org-open-line 1))
-    (insert url)))
+    (catch 'already-exists
+      (if (re-search-forward (rx bol (* blank) ":REFERENCES:" (or blank eol))
+                             (org-entry-end-position) t)
+          (if (re-search-forward (rx-to-string `(and bol ,url eol))
+                                 ;; The bound is set to the end of the entry
+                                 ;; instead of the metadata block. Practically,
+                                 ;; this would be fine.
+                                 (org-entry-end-position)
+                                 t)
+              (throw 'already-exists t)
+            (re-search-forward "^[ \t]*:END:[ \t]*$")
+            (beginning-of-line)
+            (org-open-line 1))
+        (org-end-of-meta-data t)
+        (re-search-backward (rx nonl eol))
+        (beginning-of-line 2)
+        (insert ":REFERENCES:\n:END:\n")
+        (beginning-of-line 0)
+        (org-open-line 1))
+      (insert url))))
 
 (provide 'akirak-org-clock)
 ;;; akirak-org-clock.el ends here
