@@ -166,12 +166,12 @@
               (current-indentation))))))
 
 (defun akirak-comment--block-start-syntax ()
-  (or block-comment-start
+  (or (bound-and-true-p block-comment-start)
       (bound-and-true-p c-block-comment-starter)
       comment-start))
 
 (defun akirak-comment--block-end-syntax ()
-  (or block-comment-end
+  (or (bound-and-true-p block-comment-end)
       (bound-and-true-p c-block-comment-ender)
       (unless (string-empty-p comment-end)
         comment-end)))
