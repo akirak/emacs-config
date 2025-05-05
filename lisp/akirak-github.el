@@ -145,11 +145,7 @@
 
 (defun akirak-github-view-workflow-on-this-branch ()
   (interactive)
-  (let ((upstream (magit-rev-parse "--abbrev-ref" "@{upstream}")))
-    ;; Is there a better solution to remove the remote?
-    (if (string-match (rx bol (+ alnum) "/") upstream)
-        (akirak-github-view-workflow-on-branch (substring upstream (match-end 0)))
-      (user-error "No upstream is set"))))
+  (akirak-github-view-workflow-on-branch (magit-rev-parse "--abbrev-ref" "HEAD")))
 
 (defun akirak-github--status-tag (status conclusion)
   "Return a symbol indicating STATUS and CONCLUSION."

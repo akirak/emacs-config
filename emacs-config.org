@@ -11,6 +11,8 @@ I use home-manager to install the configuration.
 
 Note: This configuration is currently built and tested only on Linux.
 
+For technical details, check out [[https://deepwiki.com/akirak/emacs-config][DeepWiki]].
+
 :CONTENTS:
 - [[#trying-out][Trying out]]
 - [[#setupel][Setup.el]]
@@ -217,7 +219,7 @@ I am interested to see if it can reduce the amount of configuration code.
      :repeatable t
      `(keymap-set ,(setup-get 'map) ,key ,command)))
 #+end_src
-*** keymap-unset
+*** :keymap-unset
 :PROPERTIES:
 :CREATED_TIME: [2025-02-15 Sat 14:39]
 :END:
@@ -272,6 +274,22 @@ Specify extra root files to help eglot correctly identify project roots.
     (define-setup-macro :nixpkgs (&rest nixpkgs)
       "Fake installation of packages from NIXPKGS for executables."))
 #+end_src
+*** :org-babel-language
+#+begin_src elisp
+  (eval-when-compile
+    (define-setup-macro
+     :org-babel-language (t-or-language)
+     "Define file names indicating the project root."
+     (let ((language (if (eq t-or-language t)
+                         (thread-last
+                           (setup-get 'feature)
+                           (symbol-name)
+                           (string-remove-prefix "ob-")
+                           (intern))
+                       t-or-language)))
+       `(with-eval-after-load 'ob
+          (cl-pushnew '(,language . t) org-babel-load-languages)))))
+#+end_src
 *** :org-open
 :PROPERTIES:
 :CREATED_TIME: [2023-07-22 Sat 10:28]
@@ -314,6 +332,18 @@ Specify extra root files to help eglot correctly identify project roots.
                                    lang
                                  (string-remove-suffix "-ts" name))
                                (intern name))))))))
+#+end_src
+*** :org-template
+#+begin_src elisp
+  (eval-when-compile
+    (define-setup-macro
+     :org-template (file)
+     "Load templates from the Org file."
+     `(when (or (eq t akirak/enabled-status-tags)
+                (memq 'personal akirak/enabled-status-tags))
+        (add-hook ',(setup-get 'hook)
+                  (lambda () (akirak-org-dog-use-templates ,file))))))
+
 #+end_src
 *** :package-files
 :PROPERTIES:
@@ -1091,7 +1121,8 @@ The built-in =electric= package provides the following modes:
                              1)))))
 
     (:with-mode lisp-data-mode
-      (:file-match "/recipes/[-a-z0-9]+\\'"))
+      (:file-match "/recipes/[-a-z0-9]+\\'")
+      (:org-src-lang "tempo"))
 
     (:auto-insert
      ("\\.dir-locals\\(?:-2\\)?\\.el\\'"
@@ -1315,6 +1346,7 @@ The built-in =electric= package provides the following modes:
                          (heex-ts-mode . (,@lsp))
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
+                         (just-mode . (,@lsp-no-formatter))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp))
@@ -2317,6 +2349,8 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup tempo
+    (:set tempo-interactive t)
+
     (advice-add 'tempo-insert-prompt-compat
                 :before
                 (defun akirak/tempo-bind-tab (&rest _args)
@@ -2910,6 +2944,20 @@ Org Babel functions for Aider.el & Aidermacs integration
     (with-eval-after-load 'org
       (add-to-list 'org-babel-load-languages '(aider . t))))
 #+end_src
+*** ob-duckdb
+:PROPERTIES:
+:CREATED_TIME: [2025-05-05 Mon 11:48]
+:END:
+#+begin_quote
+Org Babel functions for DuckDB SQL
+[[https://github.com/gggion/ob-duckdb.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package ob-duckdb)
+    (:org-babel-language t))
+#+end_src
+
 *** ob-graphql
 :PROPERTIES:
 :CREATED_TIME: [2023-05-06 Sat 13:57]
@@ -2921,8 +2969,7 @@ Org-Babel execution backend for GraphQL source blocks
 
 #+begin_src emacs-lisp
   (setup (:package ob-graphql)
-    (with-eval-after-load 'org
-      (add-to-list 'org-babel-load-languages '(graphql . t))))
+    (:org-babel-language t))
 #+end_src
 *** ob-mermaid
 :PROPERTIES:
@@ -2946,8 +2993,7 @@ org-babel functions for restclient-mode
 
 #+begin_src emacs-lisp
   (setup (:package ob-restclient)
-    (with-eval-after-load 'org
-      (add-to-list 'org-babel-load-languages '(restclient . t))))
+    (:org-babel-language t))
 #+end_src
 *** org
 #+begin_quote
@@ -3697,6 +3743,9 @@ A programmable workflow layer for Org mode
                   (let ((inhibit-message t))
                     (require 'org-dog)
                     (org-dog-reload-files t)
+                    ;; Enable only after the Org files have been loaded.
+                    (add-hook 'after-change-major-mode-hook
+                              #'akirak-org-dog-use-major-mode-templates)
                     (akirak-org-clock-rebuild-history)
                     (when (fboundp 'akirak/dashboard-init-on-startup)
                       (akirak/dashboard-init-on-startup))))))))
@@ -4967,6 +5016,11 @@ This is a collection of various utilities to enhance the experience.
       (:with-map ctl-x-map
         (:keymap "p" #'akirak-consult-project-file))))
 #+end_src
+*** akirak-consult-edit
+#+begin_src elisp
+  (setup akirak-consult-edit
+    (keymap-set ctl-x-r-map "/" #'akirak-consult-edit))
+#+end_src
 *** akirak-consult-elisp
 #+begin_src emacs-lisp
   (setup akirak-consult-elisp
@@ -4982,6 +5036,13 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-disk
     (:global-keymap "<f12> d m" #'akirak-disk-findmnt
              "<f12> d b" #'akirak-disk-insert-blkid))
+#+end_src
+*** akirak-effect-ts
+#+begin_src elisp
+  (setup akirak-effect-ts
+    (:keymap "C-, y" #'akirak-effect-ts-insert-yield
+             "C-, g" #'akirak-effect-ts-insert-gen)
+    (:org-template "software/npm/effect.org"))
 #+end_src
 *** akirak-eldoc
 :PROPERTIES:
@@ -5318,7 +5379,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-shr
     (:hook-into nov-mode-hook))
 #+end_src
-*** akirak-snippet
+*** COMMENT akirak-snippet                                                     :ARCHIVE:
 #+begin_src emacs-lisp
   (setup akirak-snippet
     (keymap-set ctl-x-r-map "/" #'akirak-snippet-search))
@@ -6880,6 +6941,8 @@ Client for Language Server Protocol (LSP) servers
       ;;                      ("deno" "lsp")))))
       (add-to-list 'eglot-server-programs
                    `((nix-ts-mode nix-mode) . ("nil")))
+      (add-to-list 'eglot-server-programs
+                   '(just-mode . ("just-lsp")))
       (add-to-list 'eglot-server-programs
                    '(lean4-mode . ("lake" "serve")))
       (add-to-list 'eglot-server-programs
@@ -8614,7 +8677,7 @@ Major mode for OCaml code
 
       ;; Load abbreviations
       (:also-load akirak-ocaml)
-      (:local-set abbrev-table akirak-ocaml-abbrev-table))
+      (:local-set local-abbrev-table akirak-ocaml-abbrev-table))
 
     (:reformatters
      (ocamlformat :program "ocamlformat"
@@ -9575,6 +9638,17 @@ Major mode for editing systemd units
              (lambda ()
                (call-process "systemctl" nil nil nil "suspend"))))
         (user-error "This system doesn’t support session control using systemd"))))
+#+end_src
+*** tab-bookmark
+:PROPERTIES:
+:CREATED_TIME: [2025-05-05 Mon 12:24]
+:END:
+#+begin_quote
+Tab bookmarks
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package tab-bookmark))
 #+end_src
 *** tagedit                                                    :web:
 :PROPERTIES:
@@ -10716,7 +10790,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 220 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |

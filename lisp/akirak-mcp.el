@@ -1,5 +1,9 @@
 ;;; akirak-mcp.el ---  -*- lexical-binding: t -*-
 
+(defcustom akirak-mcp-playwright-name "playwright-headless"
+  ""
+  :type 'string)
+
 (defun akirak-mcp-playwright--response-text (response)
   (pcase-exhaustive response
     ((and `(:content ,vec)
@@ -20,7 +24,14 @@
 (defun akirak-mcp-playwright-snapshot (url)
   "Display the snapshot of URL."
   (interactive "sUrl: ")
-  (let ((connection (gethash "playwright-headless" mcp-server-connections)))
+  (unless (and (featurep 'mcp-hub)
+               (seq-some (lambda (plist)
+                           (equal (plist-get plist :name)
+                                  akirak-mcp-playwright-name))
+                         (mcp-hub-get-servers)))
+    (user-error "mcp-hub is not loaded or %s is not started"
+                akirak-mcp-playwright-name))
+  (let ((connection (gethash akirak-mcp-playwright-name mcp-server-connections)))
     (unwind-protect
         (progn
           (mcp-call-tool connection "browser_navigate" (list :url url))

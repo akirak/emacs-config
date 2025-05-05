@@ -452,20 +452,21 @@
                          bound)
                         (`nil
                          (cond
-                          ((and block-comment-start
+                          ((and (bound-and-true-p block-comment-start)
                                 (looking-at (regexp-quote block-comment-start)))
-                           (and (search-forward block-comment-end)
+                           (and (bound-and-true-p block-comment-end)
+                                (search-forward block-comment-end)
                                 (match-beginning 0)))
-                          ((and comment-start
-                                (if comment-start-skip
+                          ((and (bound-and-true-p comment-start)
+                                (if (bound-and-true-p comment-start-skip)
                                     (looking-at comment-start-skip)
                                   (looking-at (regexp-quote comment-start))))
                            (goto-char (match-end 0))
                            (cond
-                            (comment-end-skip
+                            ((bound-and-true-p comment-end-skip)
                              (re-search-forward comment-end-skip)
                              (match-beginning 0))
-                            (comment-end
+                            ((bound-and-true-p comment-end)
                              (search-forward comment-end)
                              (match-beginning 0))))
                           (t
