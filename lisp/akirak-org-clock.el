@@ -89,7 +89,14 @@ Example values are shown below:
                                   ,(expand-file-name "~/resources/images/")
                                   ,(expand-file-name "~/archives/")
                                   ,(expand-file-name "~/resources/articles/")
-                                  (and ,(expand-file-name "~/") (any upper))
+                                  (and ,(expand-file-name "~/")
+                                       ;; Setting case-fold-search to
+                                       ;; nil doesn't always work, so
+                                       ;; specify these standard
+                                       ;; directories respectively.
+                                       (or "Desktop"
+                                           "Downloads"
+                                           "Documents"))
                                   "/tmp"))
                      (and (or "emacs-config.org"
                               "-log.org"
