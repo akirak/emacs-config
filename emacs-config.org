@@ -5034,7 +5034,8 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src elisp
   (setup akirak-effect-ts
     (:keymap "C-, y" #'akirak-effect-ts-insert-yield
-             "C-, g" #'akirak-effect-ts-insert-gen))
+             "C-, g" #'akirak-effect-ts-insert-gen)
+    (:org-template "software/npm/effect.org"))
 #+end_src
 *** akirak-eldoc
 :PROPERTIES:
