@@ -773,6 +773,12 @@
       repo = "ob-aider.el";
       type = "github";
     };
+    ob-duckdb = {
+      flake = false;
+      owner = "gggion";
+      repo = "ob-duckdb";
+      type = "github";
+    };
     ob-graphql = {
       flake = false;
       owner = "akirak";
@@ -1212,6 +1218,12 @@
       flake = false;
       owner = "holomorph";
       repo = "systemd-mode";
+      type = "github";
+    };
+    tab-bookmark = {
+      flake = false;
+      owner = "minad";
+      repo = "tab-bookmark";
       type = "github";
     };
     tablist = {

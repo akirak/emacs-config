@@ -2066,6 +2066,22 @@
         "type": "github"
       }
     },
+    "ob-duckdb": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1745513228,
+        "narHash": "sha256-Ntp7SOfukJSYKzVKrqvtQ+Ax81scwhCWLzWIQqA4dqc=",
+        "owner": "gggion",
+        "repo": "ob-duckdb",
+        "rev": "47a9935e70922140628a15ee0df6063f9fa57212",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gggion",
+        "repo": "ob-duckdb",
+        "type": "github"
+      }
+    },
     "ob-graphql": {
       "flake": false,
       "locked": {
@@ -3103,6 +3119,7 @@
         "nov": "nov",
         "oahu": "oahu",
         "ob-aider": "ob-aider",
+        "ob-duckdb": "ob-duckdb",
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
@@ -3175,6 +3192,7 @@
         "svg-lib": "svg-lib",
         "symbol-overlay": "symbol-overlay",
         "systemd": "systemd",
+        "tab-bookmark": "tab-bookmark",
         "tablist": "tablist",
         "tagedit": "tagedit",
         "taxy": "taxy",
@@ -3455,6 +3473,22 @@
       "original": {
         "owner": "holomorph",
         "repo": "systemd-mode",
+        "type": "github"
+      }
+    },
+    "tab-bookmark": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1735723636,
+        "narHash": "sha256-h7ccIITtOhJpRiBl9LoWRXx5PZBxQm72H+iRfZMJpf4=",
+        "owner": "minad",
+        "repo": "tab-bookmark",
+        "rev": "aaaeb028a7271104a5b6d2c0b4d14eb11925bdf0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "minad",
+        "repo": "tab-bookmark",
         "type": "github"
       }
     },
