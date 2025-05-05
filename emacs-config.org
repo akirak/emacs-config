@@ -9609,6 +9609,14 @@ Major mode for editing systemd units
                (call-process "systemctl" nil nil nil "suspend"))))
         (user-error "This system doesn’t support session control using systemd"))))
 #+end_src
+*** tab-bookmark
+:PROPERTIES:
+:CREATED_TIME: [2025-05-05 Mon 12:24]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package tab-bookmark))
+#+end_src
 *** tagedit                                                    :web:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-08 Fri 21:12]
