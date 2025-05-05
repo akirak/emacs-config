@@ -2911,6 +2911,17 @@ Org Babel functions for Aider.el & Aidermacs integration
     (with-eval-after-load 'org
       (add-to-list 'org-babel-load-languages '(aider . t))))
 #+end_src
+*** ob-duckdb
+:PROPERTIES:
+:CREATED_TIME: [2025-05-05 Mon 11:48]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package ob-duckdb)
+    (with-eval-after-load 'org
+      (add-to-list 'org-babel-load-languages '(duckdb . t))))
+#+end_src
+
 *** ob-graphql
 :PROPERTIES:
 :CREATED_TIME: [2023-05-06 Sat 13:57]
