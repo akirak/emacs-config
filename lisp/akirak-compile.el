@@ -53,11 +53,15 @@
                 :value-type (symbol :tag "Symbol to denote the project type")))
 
 (defcustom akirak-compile-command-backend-alist
-  (append '(("^iex " . mix)
-            ("^opam " . dune))
-          (mapcar (lambda (symbol)
-                    (cons (format "^%s[[:space:]]" symbol) symbol))
-                  '(cargo just mix pnpm yarn npm bun deno dune)))
+  (thread-last
+    (append '(("iex " . mix)
+              ("opam " . dune))
+            (mapcar (lambda (symbol)
+                      (cons (format "%s[[:space:]]" symbol) symbol))
+                    '(cargo just mix pnpm yarn npm bun deno dune)))
+    (mapcar (lambda (cell)
+              (cons (concat "^[[:space:]]*" (car cell))
+                    (cdr cell)))))
   ""
   :type '(alist :key-type (regexp :tag "Pattern matching a command line")
                 :value-type (symbol :tag "Symbol to denote the project type")))
