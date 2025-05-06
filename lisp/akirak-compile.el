@@ -232,8 +232,8 @@ are displayed in the frame."
                                                      (mapcar #'cdr ',projects))))))))
                 (prefer-terminal (get-text-property 0 'terminal command))
                 (default-directory (or (get-text-property 0 'command-directory command)
-                                       (cdr (assq (akirak-compile--guess-backend command)
-                                                  projects))
+                                       (akirak-compile--select-directory-for-command
+                                        command projects)
                                        workspace)))
            (if (akirak-compile--installation-command-p command)
                ;; Install dependencies in a separate buffer without killing the
@@ -291,11 +291,29 @@ are displayed in the frame."
       (buffer-local-value 'compilation-shell-minor-mode
                           buffer)))
 
-(defun akirak-compile--guess-backend (command)
-  (seq-some `(lambda (cell)
-               (when (string-match-p (car cell) ,command)
-                 (cdr cell)))
-            akirak-compile-command-backend-alist))
+(defun akirak-compile--select-directory-for-command (command projects)
+  (let* ((matching-backends (thread-last
+                              akirak-compile-command-backend-alist
+                              (seq-filter `(lambda (cell)
+                                             (string-match-p (car cell) ,command)))
+                              (mapcar #'cdr)))
+         (matching-projects (seq-filter (apply-partially (lambda (backends backend)
+                                                           (memq (car backend) backends))
+                                                         matching-backends)
+                                        projects))
+         (directories (thread-last
+                        (mapcar #'cdr matching-projects)
+                        (seq-uniq))))
+    (pcase directories
+      (`nil
+       nil)
+      (`(,directory)
+       directory)
+      (_
+       (completing-read (format "Select the directory for running \"%s\": " command)
+                        directories
+                        nil
+                        t)))))
 
 (defun akirak-compile--root ()
   (if-let* ((workspace (akirak-compile--workspace-root)))
