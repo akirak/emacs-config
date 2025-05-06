@@ -390,23 +390,30 @@
              (setq bound (match-end 0)))
            (when bound
              (goto-char (point-min))
-             (while-let ((pos (and (< (point) bound)
-                                   (next-overlay-change (point)))))
-               (goto-char pos)
-               (pcase (catch 'unnecessary
-                        (dolist (ov (overlays-at pos))
-                          (when (and (overlay-get ov 'flymake-overlay)
-                                     (memq 'eglot-diagnostic-tag-unnecessary-face
-                                           (ensure-list (overlay-get ov 'face))))
-                            (throw 'unnecessary (cons (overlay-start ov)
-                                                      (overlay-end ov))))))
-                 (`(,begin . ,end)
-                  (delete-region begin end)
-                  (when (looking-at (rx (* (any punctuation))
-                                        (* (any blank))))
-                    (delete-region (point) (match-end 0)))
-                  (cl-incf count)
-                  (goto-char (1- begin)))))
+             (catch 'no-remaining-overlay
+               (while t
+                 (pcase (catch 'unnecessary
+                          (dolist (ov (overlays-at (point)))
+                            (when (and (overlay-get ov 'flymake-overlay)
+                                       (memq 'eglot-diagnostic-tag-unnecessary-face
+                                             (ensure-list (overlay-get ov 'face))))
+                              (throw 'unnecessary (cons (overlay-start ov)
+                                                        (overlay-end ov))))))
+                   (`(,begin . ,end)
+                    (delete-region begin end)
+                    (when (looking-at (rx (* (any punctuation))
+                                          (* (any blank))))
+                      (delete-region (point) (match-end 0)))
+                    (when (and (bolp) (eolp))
+                      (delete-char 1))
+                    (cl-incf count)
+                    (goto-char (1- begin)))
+                   (_
+                    (let ((pos (and (< (point) bound)
+                                    (next-overlay-change (point)))))
+                      (if pos
+                          (goto-char pos)
+                        (throw 'no-remaining-overlay t)))))))
              (message "Removed %d imports" count))))))))
 
 (provide 'akirak-import)

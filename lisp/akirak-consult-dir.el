@@ -183,18 +183,19 @@
   "Browse a descendant directory of DIR."
   (interactive (list (akirak-consult-dir--default-root)))
   (let* ((current default-directory)
-         (default-directory (if dir
-                                (expand-file-name dir)
-                              (akirak-consult-dir--default-root)))
+         (root (if dir
+                   (expand-file-name dir)
+                 (akirak-consult-dir--default-root)))
+         (default-directory root)
          (selected (consult--read (akirak-consult--sort-entries-1
                                    (process-lines "fd" "-t" "d")
-                                   (file-relative-name current default-directory))
+                                   (file-relative-name current root))
                                   :category 'directory
                                   :state (consult--file-state)
                                   :require-match t
                                   :prompt "Directory: "
                                   :sort nil)))
-    (dired (expand-file-name selected dir))))
+    (dired (expand-file-name selected root))))
 
 (defun akirak-consult-dir--default-root ()
   (or (vc-git-root default-directory)
