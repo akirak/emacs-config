@@ -14,9 +14,9 @@
           ;; other than @='function.
           :category template-as-function
           :annotate ,(lambda (candidate)
-                       (let ((doc (documentation (intern candidate))))
-                         (when doc
-                           (concat " " (car (split-string doc "\n"))))))
+                       (when-let* ((func (intern-soft candidate))
+                                   (doc (documentation func)))
+                         (concat " " (car (split-string doc "\n")))))
           :items ,(lambda ()
                     (when (featurep 'akirak-org-tempo)
                       (akirak-org-tempo-ensure-loaded)
