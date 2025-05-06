@@ -6903,7 +6903,10 @@ Client for Language Server Protocol (LSP) servers
 #+begin_src emacs-lisp
   (setup eglot
 
-    (:set eglot-confirm-server-initiated-edits nil)
+    (:set eglot-confirm-server-initiated-edits nil
+          eglot-autoshutdown t
+          eglot-code-action-indications nil
+          eglot-extend-to-xref t)
 
     (:keymap akirak/mode-prefix-key #'akirak/eglot-prefix-map)
 
