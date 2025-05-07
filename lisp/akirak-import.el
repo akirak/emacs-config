@@ -391,7 +391,7 @@
            (when bound
              (goto-char (point-min))
              (catch 'no-remaining-overlay
-               (while t
+               (while (< (point) bound)
                  (pcase (catch 'unnecessary
                           (dolist (ov (overlays-at (point)))
                             (when (and (overlay-get ov 'flymake-overlay)
@@ -409,11 +409,9 @@
                     (cl-incf count)
                     (goto-char (1- begin)))
                    (_
-                    (let ((pos (and (< (point) bound)
-                                    (next-overlay-change (point)))))
-                      (if pos
-                          (goto-char pos)
-                        (throw 'no-remaining-overlay t)))))))
+                    (if-let* ((pos (next-overlay-change (point))))
+                        (goto-char pos)
+                      (throw 'no-remaining-overlay t))))))
              (message "Removed %d imports" count))))))))
 
 (provide 'akirak-import)
