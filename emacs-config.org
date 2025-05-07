@@ -1296,6 +1296,12 @@ The built-in =electric= package provides the following modes:
           large-file-warning-threshold (* 1024 1024 2))
 
     (:when-loaded
+      (:set locate-dominating-stop-dir-regexp
+            (rx-to-string `(or (regexp ,locate-dominating-stop-dir-regexp)
+                               ;; Prevent scanning of directories with extensive
+                               ;; entries.
+                               (and bol "/nix/store/" (+ (any "-._" alnum)) "/" eol))))
+
       ;; Based on https://lonely.town/@jvillasante@hachyderm.io/110232974766557148
       (add-to-list 'backup-directory-alist
                    (cons (rx bos (or "/tmp/"
