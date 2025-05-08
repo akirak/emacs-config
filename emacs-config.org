@@ -6929,6 +6929,15 @@ Client for Language Server Protocol (LSP) servers
           (add-hook 'before-save-hook #'eglot-format-buffer nil t)
         (remove-hook 'before-save-hook #'eglot-format-buffer t)))
 
+    (defun akirak/eglot-rename-dwim ()
+      (interactive)
+      (or (akirak-treesit-maybe-rename-tag)
+          (call-interactively #'eglot-rename)))
+
+    (:with-feature typescript-ts-mode
+      (:with-map tsx-ts-mode-map
+        (:keymap "<remap> <eglot-rename>" #'akirak/eglot-rename-dwim)))
+
     (:when-loaded
       (define-prefix-command 'akirak/eglot-prefix-map)
       (:with-map akirak/eglot-prefix-map
