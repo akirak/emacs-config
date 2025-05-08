@@ -25,7 +25,7 @@ runs:
       with:
         primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.nix', 'flake.lock') }}
         restore-prefixes-first-match: nix-${{ runner.os }}-
-        gc-max-store-size-linux: 1G
+        gc-max-store-size-linux: 2G
 
     - uses: cachix/cachix-action@v16
       with:
