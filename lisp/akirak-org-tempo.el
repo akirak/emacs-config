@@ -68,13 +68,14 @@
        (goto-char (point-min))
        (while (re-search-forward re-property nil t)
          (let ((tag (match-string 3)))
-           (condition-case-unless-debug nil
-               (when (akirak-org-tempo-add-entry :tag tag
-                                                 :tag-list tag-list
-                                                 :prefix prefix
-                                                 :no-back-to-beginning t)
-                 (cl-incf count))
-             (error (message "Error while loading tempo buffer")))))
+           (unless (org-in-archived-heading-p)
+             (condition-case-unless-debug nil
+                 (when (akirak-org-tempo-add-entry :tag tag
+                                                   :tag-list tag-list
+                                                   :prefix prefix
+                                                   :no-back-to-beginning t)
+                   (cl-incf count))
+               (error (message "Error while loading tempo buffer"))))))
        (message "Loaded %d templates from %s" count (file-name-nondirectory file))))))
 
 (cl-defun akirak-org-tempo-add-entry (&key tag tag-list prefix
