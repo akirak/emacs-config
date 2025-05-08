@@ -5353,16 +5353,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-quick-thing
     (:global-keymap "M-SPC" #'akirak-quick-thing))
 #+end_src
-*** akirak-rename
-#+begin_src elisp
-  (setup akirak-rename
-    (:global-keymap "C-c r" #'akirak/rename-dwim)
-    (defun akirak/rename-dwim (&optional arg)
-      (interactive "P")
-      (if (and arg (listp arg))
-          (akirak-rename-dwim)
-        (akirak/anzu-query-replace-on-line arg))))
-#+end_src
 *** akirak-repl
 :PROPERTIES:
 :CREATED_TIME: [2024-06-08 Sat 12:05]
@@ -10116,6 +10106,8 @@ Operate on current line if region undefined
                                                      arg
                                                    1)
                                                  arg))
+
+    (:global-keymap "C-c r" #'akirak/anzu-query-replace-on-line)
 
     ;; whole-line-or-region version of indent-rigidly. Useful for editing YAML.
     (defun akirak/indent-rigidly-line-or-region (&optional arg)
