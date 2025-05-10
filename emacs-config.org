@@ -5375,11 +5375,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-shr
     (:hook-into nov-mode-hook))
 #+end_src
-*** COMMENT akirak-snippet                                                     :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup akirak-snippet
-    (keymap-set ctl-x-r-map "/" #'akirak-snippet-search))
-#+end_src
 *** akirak-systemctl
 #+begin_src elisp
   (setup akirak-systemctl
