@@ -2936,7 +2936,7 @@ Org-Memento integration for oahu
         (:with-map org-memento-zone-mode-map
           (:keymap "v" #'oahu-memento-group-view)))))
 #+end_src
-*** ob-aider                                                                :AI:
+*** COMMENT ob-aider                                                        :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-04-04 Fri 23:59]
 :END:

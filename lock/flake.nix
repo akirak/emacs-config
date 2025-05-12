@@ -767,12 +767,6 @@
       repo = "oahu.el";
       type = "github";
     };
-    ob-aider = {
-      flake = false;
-      owner = "localredhead";
-      repo = "ob-aider.el";
-      type = "github";
-    };
     ob-duckdb = {
       flake = false;
       owner = "gggion";

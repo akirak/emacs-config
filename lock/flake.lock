@@ -2050,22 +2050,6 @@
         "type": "github"
       }
     },
-    "ob-aider": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1742930335,
-        "narHash": "sha256-sNvDytTABqxJzb2iEP7aYS8AgB+HtymMnvUuxphxvys=",
-        "owner": "localredhead",
-        "repo": "ob-aider.el",
-        "rev": "f611b0e733323c04bbbcab710a78a87f47e5fc74",
-        "type": "github"
-      },
-      "original": {
-        "owner": "localredhead",
-        "repo": "ob-aider.el",
-        "type": "github"
-      }
-    },
     "ob-duckdb": {
       "flake": false,
       "locked": {
@@ -3118,7 +3102,6 @@
         "noman": "noman",
         "nov": "nov",
         "oahu": "oahu",
-        "ob-aider": "ob-aider",
         "ob-duckdb": "ob-duckdb",
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
