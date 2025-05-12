@@ -4825,6 +4825,13 @@ Major mode for editing typescript
                           '(?< . ?>))))
 
     (:with-mode typescript-ts-base-mode
+      (:huan
+        ("import" "export")
+        ("enable" "disable")
+        ("const" "let")
+        ("true" "false")
+        ;; For eslint rules
+        ("off" "warn" "error"))
       (:mode-project-roots "package.json")
       (:local-set block-comment-start "/*"
                   block-comment-end "*/"))
@@ -7896,8 +7903,7 @@ Replace things with predefined alternatives
 
 #+begin_src emacs-lisp
   (setup (:package huan)
-    ;; (:global-keymap "C-=" #'huan-symbol
-    ;;                 "C-+" #'huan-defun)
+    (:global-keymap "C-=" #'huan-symbol)
     (with-eval-after-load 'embark
       (keymap-set embark-defun-map "`" #'huan-defun)
       (keymap-set embark-identifier-map "`" #'huan-symbol)))
