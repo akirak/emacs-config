@@ -386,12 +386,11 @@
          (goto-char (point-min))
          (let (bound
                (count 0))
-           (while (re-search-forward regexp nil t)
-             (setq bound (match-end 0)))
-           (when bound
-             (goto-char (point-min))
+           (while-let ((bound (when (re-search-forward regexp nil t)
+                                (prog1 (point)
+                                  (goto-char (match-beginning 0))))))
              (catch 'no-remaining-overlay
-               (while t
+               (while (< (point) bound)
                  (pcase (catch 'unnecessary
                           (dolist (ov (overlays-at (point)))
                             (when (and (overlay-get ov 'flymake-overlay)
@@ -404,17 +403,20 @@
                     (when (looking-at (rx (* (any punctuation))
                                           (* (any blank))))
                       (delete-region (point) (match-end 0)))
-                    (when (and (bolp) (eolp))
-                      (delete-char 1))
                     (cl-incf count)
-                    (goto-char (1- begin)))
+                    (if (and (bolp) (eolp))
+                        (progn
+                          (delete-char 1)
+                          (goto-char begin))
+                      (goto-char (1+ begin))))
                    (_
-                    (let ((pos (and (< (point) bound)
-                                    (next-overlay-change (point)))))
-                      (if pos
+                    (let ((pos (next-overlay-change (point))))
+                      (if (and pos
+                               (< pos bound))
                           (goto-char pos)
-                        (throw 'no-remaining-overlay t)))))))
-             (message "Removed %d imports" count))))))))
+                        (forward-char 1)
+                        (throw 'no-remaining-overlay t))))))))
+           (message "Removed %d imports" count)))))))
 
 (provide 'akirak-import)
 ;;; akirak-import.el ends here

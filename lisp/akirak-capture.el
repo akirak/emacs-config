@@ -560,9 +560,6 @@
 
   ["Convenience and specific projects"
    :class transient-row
-   ;; ("sc" "Command snippet" akirak-capture-command-snippet
-   ;;  :transient t)
-   ;; ("ss" "Tempo snippet" akirak-capture-simple-tempo-snippet)
    ("e" "Emacs config" akirak-emacs-config-capture)
    ("L" "Journal" akirak-capture-journal-item
     :if (lambda () (eq major-mode 'org-mode)))]
@@ -622,10 +619,6 @@
 
 ;;;###autoload (autoload 'akirak-capture-active-region "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture-active-region ()
-  ["Snippet"
-   :class transient-row
-   ("r" "Tempo snippet" akirak-capture-tempo-snippet)
-   ("p" "Plain snippet" akirak-capture-plain-snippet)]
   ["New entry with a block"
    :class
    transient-row
@@ -682,6 +675,7 @@
    ("v" "Vocabulary" akirak-capture-vocabulary)
    ("g" "Gptel" akirak-capture-gptel :transient t)]
   ["Others" :class transient-row
+   ("p" "Snippet" akirak-capture-snippet)
    ("b" "Convert to a link to a new entry" akirak-org-convert-to-entry-link)
    ("a" "Append block to clock" akirak-capture-append-block-to-clock
     :if org-clocking-p)
@@ -693,18 +687,6 @@
       (setq akirak-capture-bounds (car (region-bounds)))
     (user-error "No active region"))
   (transient-setup 'akirak-capture-active-region))
-
-(defun akirak-capture-tempo-snippet ()
-  (interactive)
-  (setq akirak-capture-snippet-format "tempo")
-  (setq akirak-capture-snippet-literal-name nil)
-  (call-interactively #'akirak-capture-snippet))
-
-(defun akirak-capture-plain-snippet ()
-  (interactive)
-  (setq akirak-capture-snippet-format "plain")
-  (setq akirak-capture-snippet-literal-name nil)
-  (call-interactively #'akirak-capture-snippet))
 
 (defun akirak-capture-language-study ()
   "Capture the region for language study."
@@ -750,10 +732,6 @@
                                (string-trim-right s (rx (+ punct))))))))
 
 (transient-define-prefix akirak-capture-snippet (begin end)
-  ["Options"
-   :class transient-row
-   ("-t" akirak-capture-snippet-format)
-   ("-l" akirak-capture-snippet-literal-name)]
   ["Context"
    :class transient-columns
    :setup-children octopus-setup-context-file-subgroups]
@@ -762,25 +740,29 @@
    ("\\" octopus-this-file-suffix)
    ("/" octopus-read-dog-file-suffix)]
   (interactive "r")
-  (when (use-region-p)
-    (setq akirak-capture-bounds (cons begin end)))
   (transient-setup 'akirak-capture-snippet))
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-snippet))
                                  target)
-  (require 'akirak-snippet)
-  (let ((bounds (if (use-region-p)
-                    (car (region-bounds))
-                  (bounds-of-thing-at-point 'defun))))
-    (funcall (if akirak-capture-snippet-literal-name
-                 #'akirak-snippet-capture-literal
-               (pcase akirak-capture-snippet-format
-                 ("tempo" #'akirak-snippet-capture-tempo)
-                 ("plain" #'akirak-snippet-capture)))
-             (car bounds) (cdr bounds)
-             (cl-etypecase target
-               (org-dog-file (oref target absolute))
-               (string target)))))
+  (require 'akirak-tempo)
+  (let ((org-capture-entry
+         (car (doct
+               `((""
+                  :keys ""
+                  :template ,(akirak-org-capture-make-entry-body
+                               (read-string "Heading for the snippet entry: ")
+                               :body
+                               (concat "#+begin_src tempo\n%?"
+                                       (thread-last
+                                         (buffer-substring-no-properties
+                                          (region-beginning) (region-end))
+                                         (replace-regexp-in-string "%" "%%")
+                                         (akirak-tempo-from-string))
+                                       "\n#+end_src"))
+                  :function akirak-capture--goto-snippets
+                  :after-finalize akirak-org-tempo-add-entry
+                  ,@(akirak-capture--target-plist target)))))))
+    (org-capture)))
 
 (defun akirak-capture-hotfix ()
   "Start clocking a hotfix activity on the current line."
@@ -804,32 +786,6 @@
          (org-capture))))
     (_
      (user-error "Cannot find an Org entry"))))
-
-(defun akirak-capture-simple-tempo-snippet ()
-  (interactive)
-  (require 'akirak-snippet)
-  (let* ((src (minibuffer-with-setup-hook
-                  (lambda ()
-                    (lisp-data-mode))
-                (read-from-minibuffer "Tempo snippet: ")))
-         (org-capture-initial (read-from-minibuffer "Name: "))
-         (org-capture-entry
-          (car (doct `((""
-                        :keys ""
-                        :file ,(buffer-file-name)
-                        :function ,akirak-snippet-capture-target
-                        :template
-                        ("* %i :@snippet:"
-                         ,akirak-org-capture-default-drawer
-                         "%?"
-                         ,(thread-last
-                            (org-ml-build-src-block
-                             :language "lisp-data"
-                             :parameters '(:snippet tempo)
-                             :value src)
-                            (org-ml-to-trimmed-string)))
-                        :after-finalize akirak-snippet--after-capture-finalize))))))
-    (org-capture)))
 
 (defun akirak-capture-append-block-to-clock ()
   (interactive)
@@ -1596,19 +1552,6 @@ provided as a separate command for integration, e.g. with embark."
               modes)))
     modes))
 
-(defun akirak-capture-command-snippet ()
-  (interactive)
-  (setq akirak-capture-headline "%^{Title}"
-        akirak-capture-template-options
-        `(:tags "@snippet"
-                :body ("%?"
-                       "#+begin_src emacs-lisp :snippet command :no-save-mark t"
-                       "#+end_src"))
-        akirak-capture-doct-options
-        (list :function #'akirak-snippet-select-location
-              :after-finalize #'akirak-snippet--after-capture-finalize))
-  (akirak-capture-doct))
-
 (defun akirak-capture-region-to-clock ()
   (interactive)
   (akirak-capture--to-clock
@@ -1721,10 +1664,15 @@ interpreter who are good at %s. Please respond concisely." dest-language))
   (goto-char (point-min))
   (akirak-org-goto-or-create-olp '("Backlog")))
 
-(defun akirak-capture--goto-rules ()
+(defun akirak-capture--goto-backlog ()
   (widen)
   (goto-char (point-min))
-  (akirak-org-goto-or-create-olp '("Thumb rules")))
+  (akirak-org-goto-or-create-olp '("Backlog")))
+
+(defun akirak-capture--goto-snippets ()
+  (widen)
+  (goto-char (point-min))
+  (akirak-org-goto-or-create-olp '("Snippets")))
 
 (defun akirak-capture--datetree-marker (file)
   "Return a marker to the current date in FILE."

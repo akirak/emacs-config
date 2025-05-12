@@ -1296,6 +1296,12 @@ The built-in =electric= package provides the following modes:
           large-file-warning-threshold (* 1024 1024 2))
 
     (:when-loaded
+      (:set locate-dominating-stop-dir-regexp
+            (rx-to-string `(or (regexp ,locate-dominating-stop-dir-regexp)
+                               ;; Prevent scanning of directories with extensive
+                               ;; entries.
+                               (and bol "/nix/store/" (+ (any "-._" alnum)) "/" eol))))
+
       ;; Based on https://lonely.town/@jvillasante@hachyderm.io/110232974766557148
       (add-to-list 'backup-directory-alist
                    (cons (rx bos (or "/tmp/"
@@ -2930,7 +2936,7 @@ Org-Memento integration for oahu
         (:with-map org-memento-zone-mode-map
           (:keymap "v" #'oahu-memento-group-view)))))
 #+end_src
-*** ob-aider                                                                :AI:
+*** COMMENT ob-aider                                                        :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-04-04 Fri 23:59]
 :END:
@@ -4819,6 +4825,13 @@ Major mode for editing typescript
                           '(?< . ?>))))
 
     (:with-mode typescript-ts-base-mode
+      (:huan
+        ("import" "export")
+        ("enable" "disable")
+        ("const" "let")
+        ("true" "false")
+        ;; For eslint rules
+        ("off" "warn" "error"))
       (:mode-project-roots "package.json")
       (:local-set block-comment-start "/*"
                   block-comment-end "*/"))
@@ -5347,16 +5360,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-quick-thing
     (:global-keymap "M-SPC" #'akirak-quick-thing))
 #+end_src
-*** akirak-rename
-#+begin_src elisp
-  (setup akirak-rename
-    (:global-keymap "C-c r" #'akirak/rename-dwim)
-    (defun akirak/rename-dwim (&optional arg)
-      (interactive "P")
-      (if (and arg (listp arg))
-          (akirak-rename-dwim)
-        (akirak/anzu-query-replace-on-line arg))))
-#+end_src
 *** akirak-repl
 :PROPERTIES:
 :CREATED_TIME: [2024-06-08 Sat 12:05]
@@ -5378,11 +5381,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src elisp
   (setup akirak-shr
     (:hook-into nov-mode-hook))
-#+end_src
-*** COMMENT akirak-snippet                                                     :ARCHIVE:
-#+begin_src emacs-lisp
-  (setup akirak-snippet
-    (keymap-set ctl-x-r-map "/" #'akirak-snippet-search))
 #+end_src
 *** akirak-systemctl
 #+begin_src elisp
@@ -6903,7 +6901,10 @@ Client for Language Server Protocol (LSP) servers
 #+begin_src emacs-lisp
   (setup eglot
 
-    (:set eglot-confirm-server-initiated-edits nil)
+    (:set eglot-confirm-server-initiated-edits nil
+          eglot-autoshutdown t
+          eglot-code-action-indications nil
+          eglot-extend-to-xref t)
 
     (:keymap akirak/mode-prefix-key #'akirak/eglot-prefix-map)
 
@@ -6919,6 +6920,15 @@ Client for Language Server Protocol (LSP) servers
       (if (eglot-managed-p)
           (add-hook 'before-save-hook #'eglot-format-buffer nil t)
         (remove-hook 'before-save-hook #'eglot-format-buffer t)))
+
+    (defun akirak/eglot-rename-dwim ()
+      (interactive)
+      (or (akirak-treesit-maybe-rename-tag)
+          (call-interactively #'eglot-rename)))
+
+    (:with-feature typescript-ts-mode
+      (:with-map tsx-ts-mode-map
+        (:keymap "<remap> <eglot-rename>" #'akirak/eglot-rename-dwim)))
 
     (:when-loaded
       (define-prefix-command 'akirak/eglot-prefix-map)
@@ -7633,8 +7643,7 @@ Interact with ChatGPT or other LLMs
     (:set gptel-crowdsourced-prompts-file
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
-    (:global-keymap "C-c p" #'gptel-menu
-                    "C-c P" #'gptel-rewrite)
+    (:global-keymap "C-c p" #'gptel-menu)
     (autoload #'gptel-org-set-topic "gptel-org" nil '(org-mode))
     (:with-feature org
       (:keymap "C-c C-x =" #'gptel-org-set-topic))
@@ -7644,6 +7653,7 @@ Interact with ChatGPT or other LLMs
 
     (defun akirak/gptel-insert-model-id (&optional arg)
       (interactive "P")
+      (require 'gptel)
       (let* ((provider (if arg
                            (completing-read "Provider: " gptel--known-backends
                                             nil t)
@@ -7676,7 +7686,7 @@ Interact with ChatGPT or other LLMs
                                       anthropic/claude-3.5-sonnet
                                       anthropic/claude-3.7-sonnet:thinking
                                       google/gemini-2.5-flash-preview
-                                      google/gemini-2.5-pro-preview-03-25))
+                                      google/gemini-2.5-pro-preview))
             gptel-model 'google/gemini-2.5-flash-preview)
 
       (gptel-make-gh-copilot "Copilot")
@@ -7893,8 +7903,7 @@ Replace things with predefined alternatives
 
 #+begin_src emacs-lisp
   (setup (:package huan)
-    ;; (:global-keymap "C-=" #'huan-symbol
-    ;;                 "C-+" #'huan-defun)
+    (:global-keymap "C-=" #'huan-symbol)
     (with-eval-after-load 'embark
       (keymap-set embark-defun-map "`" #'huan-defun)
       (keymap-set embark-identifier-map "`" #'huan-symbol)))
@@ -10099,6 +10108,8 @@ Operate on current line if region undefined
                                                    1)
                                                  arg))
 
+    (:global-keymap "C-c r" #'akirak/anzu-query-replace-on-line)
+
     ;; whole-line-or-region version of indent-rigidly. Useful for editing YAML.
     (defun akirak/indent-rigidly-line-or-region (&optional arg)
       (interactive "P")
@@ -10790,7 +10801,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 222 |
+| [[org-ql-search:tags:packages][packages]]            | 221 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
@@ -10808,12 +10819,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:history][history]]             |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
-| [[org-ql-search:tags:AI][AI]]                  |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
+| [[org-ql-search:tags:AI][AI]]                  |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -10910,12 +10921,11 @@ I want to care about readability in the following modes:
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Artificial intelligence / LLM
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
-| Heading  | Todo |
-|----------+------|
-| [[ob-aider][ob-aider]] |      |
-| [[copilot][copilot]]  |      |
-| [[elysium][elysium]]  |      |
-| [[gptel][gptel]]    |      |
+| Heading | Todo |
+|---------+------|
+| [[copilot][copilot]] |      |
+| [[elysium][elysium]] |      |
+| [[gptel][gptel]]   |      |
 #+END:
 
 For LLM integration, gptel is the generic frontend and backend.

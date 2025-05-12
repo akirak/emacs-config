@@ -398,7 +398,10 @@
                 (push-mark)
                 (goto-char end)
                 (when (and whole-lines
-                           (looking-at (rx (* blank) eol)))
+                           (looking-at (rx-to-string
+                                        `(and (? (or ,@akirak-treesit-sexp-end-delimiters))
+                                              (* blank)
+                                              eol))))
                   (beginning-of-line 2))
                 (activate-mark))
             (kill-region start end))))))
@@ -624,6 +627,17 @@ This is primarily intended for editing JSX/TSX."
                     (setq fresh-start (treesit-node-parent fresh-start)))
                   (rename-tag fresh-start))
                 (message "Renamed the tag to '%s'" new-name))))))))))
+
+;;;###autoload
+(defun akirak-treesit-maybe-rename-tag ()
+  "Return non-nil if the symbol at point can be renamed as a tag."
+  (when (ignore-errors
+          (cl-case (treesit-language-at (point))
+            (tsx
+             (member (treesit-node-type (treesit-node-parent (treesit-node-at (point))))
+                     '("jsx_opening_element" "jsx_closing_element")))))
+    (call-interactively #'akirak-treesit-rename-tag)
+    t))
 
 ;;;; Extras for treesit-fold
 
