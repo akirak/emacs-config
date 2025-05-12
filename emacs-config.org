@@ -7646,6 +7646,7 @@ Interact with ChatGPT or other LLMs
 
     (defun akirak/gptel-insert-model-id (&optional arg)
       (interactive "P")
+      (require 'gptel)
       (let* ((provider (if arg
                            (completing-read "Provider: " gptel--known-backends
                                             nil t)
