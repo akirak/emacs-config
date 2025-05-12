@@ -398,7 +398,10 @@
                 (push-mark)
                 (goto-char end)
                 (when (and whole-lines
-                           (looking-at (rx (* blank) eol)))
+                           (looking-at (rx-to-string
+                                        `(and (? (or ,@akirak-treesit-sexp-end-delimiters))
+                                              (* blank)
+                                              eol))))
                   (beginning-of-line 2))
                 (activate-mark))
             (kill-region start end))))))
