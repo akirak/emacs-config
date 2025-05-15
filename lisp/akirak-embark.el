@@ -157,6 +157,12 @@
   (when-let* ((url (consult-recoll--candidate-url candidate)))
     (cons 'file (abbreviate-file-name (string-remove-prefix "file://" url)))))
 
+(defun akirak-embark-url-result (_type candidate)
+  (let ((url (purecopy candidate)))
+    ;; Remove invisible property
+    (set-text-properties 0 (length url) nil url)
+    (cons 'url url)))
+
 (defun akirak-embark-transform-mountpoint (_type path)
   (cons 'directory path))
 
@@ -393,6 +399,8 @@
                '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
   (add-to-list 'embark-transformer-alist
                '(mountpoint . akirak-embark-transform-mountpoint))
+  (add-to-list 'embark-transformer-alist
+               '(github-workflow-run-url . akirak-embark-url-result))
   (add-to-list 'embark-transformer-alist
                '(recoll-result . akirak-embark-transform-recoll-result))
   (add-to-list 'embark-keymap-alist
