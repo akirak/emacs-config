@@ -6947,11 +6947,6 @@ Client for Language Server Protocol (LSP) servers
         (:keymap "<remap> <eglot-rename>" #'akirak/eglot-rename-dwim)))
 
     (:when-loaded
-      ;; This hook has become built into eglot, but it slows down loading of
-      ;; buffers where I don't need LSP integration especially due to calling
-      ;; `project-current'. Will opt out.
-      (remove-hook 'after-change-major-mode-hook #'eglot--maybe-activate-editing-mode)
-
       (define-prefix-command 'akirak/eglot-prefix-map)
       (:with-map akirak/eglot-prefix-map
         (:keymap "a" #'eglot-code-actions
