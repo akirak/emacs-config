@@ -69,9 +69,15 @@
     (org-property-values "header-args")
     (seq-uniq)
     ;; (mapcar #'org-babel-parse-header-arguments)
-    (mapcar (lambda (value)
-              (alist-get :dir (org-babel-parse-header-arguments value))))
+    (mapcar #'akirak-org-gh--dir-argument)
     (seq-uniq)))
+
+(defun akirak-org-gh--entry-dir ()
+  (when-let* ((args (org-entry-get nil "header-args" 'inherit)))
+    (akirak-org-gh--dir-argument args)))
+
+(defun akirak-org-gh--dir-argument (value)
+  (alist-get :dir (org-babel-parse-header-arguments value)))
 
 ;;;###autoload
 (defun akirak-org-gh-update-issue-subtree ()
@@ -184,6 +190,48 @@
                    ("pull"
                     'pr))
            :number (string-to-number (match-string 3 url))))))
+
+;;;###autoload
+(defun akirak-org-gh-submit-issue ()
+  "Submit a GitHub issue from the current Org entry."
+  (interactive nil org-mode)
+  (when (member "@ticket" (org-get-tags))
+    (user-error "Found @ticket tag. Maybe already inside a ticket subtree?"))
+  (when (string-match-p org-link-bracket-re (org-entry-get nil "ITEM"))
+    (user-error "On a bracket link. Maybe already submitted"))
+  (let* (data
+         (base-level (org-outline-level))
+         (dir-or-repo (or (akirak-org-gh--entry-dir)
+                          (akirak-org-git-worktree nil)
+                          (completing-read "Directory or remote repo: "
+                                           (akirak-org-gh--buffer-directories))))
+         (default-directory (if (file-name-absolute-p dir-or-repo)
+                                dir-or-repo
+                              default-directory))
+         (repo (unless (file-name-absolute-p dir-or-repo)
+                 dir-or-repo)))
+    (plist-put data :title (org-entry-get nil "ITEM"))
+    (plist-put data :body (save-excursion
+                            (org-back-to-heading)
+                            (org-end-of-meta-data t)
+                            (unless (looking-at org-heading-regexp)
+                              (thread-first
+                                (buffer-substring-no-properties
+                                 (point)
+                                 (save-excursion
+                                   (org-end-of-subtree)))
+                                (akirak-pandoc-convert-string
+                                    :from "org" :to "gfm")))))
+    (with-temp-buffer
+      (insert (plist-get data :body))
+      (with-editor
+        (apply #'call-process
+               akirak-org-gh-gh-program nil (list t nil) nil
+               "issue" "create"
+               "--title" (plist-get data :title)
+               "--body-file" "-"
+               (when repo
+                 (list "--repo" repo)))))))
 
 (provide 'akirak-org-gh)
 ;;; akirak-org-gh.el ends here
