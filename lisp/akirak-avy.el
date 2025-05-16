@@ -110,11 +110,12 @@ If CALLBACK is a function, it is called with the selected url."
     (org-super-links-insert-link)))
 
 (defconst akirak-avy-ffap-regexp
+  ;; Support TypeScript path aliases.
   (rx (or (and (syntax string-quote)
-               (any alnum ".~/")
+               (any alnum ".~@#/")
                (+? nonl)
                (syntax string-quote))
-          (and (or "~" (+ ".") symbol-start) "/"))))
+          (and (or (any "~@#") (+ ".") symbol-start) "/"))))
 
 ;;;###autoload
 (defun akirak-avy-ffap ()
