@@ -34,7 +34,17 @@
 
 (defun akirak-consult-generate-suggestions ()
   (let ((suggestions
-         (append (when-let* ((filename (if (minibufferp)
+         (append (when (and (bound-and-true-p git-commit-mode)
+                            (org-clocking-p))
+                   (list (cons (replace-regexp-in-string
+                                (rx bol (+ (any "-/." alnum)) ":" (+ blank))
+                                ""
+                                (org-link-display-format
+                                 (org-entry-get (or org-clock-hd-marker
+                                                    org-clock-marker)
+                                                "ITEM")))
+                               "Headline of the currently clocked Org entry.")))
+                 (when-let* ((filename (if (minibufferp)
                                            (with-minibuffer-selected-window
                                              (akirak-consult-edit--filename))
                                          (akirak-consult-edit--filename))))
