@@ -265,6 +265,12 @@
 (defun akirak-import--typescript-fixup (&optional _content)
   (akirak-import--typescript-merge-statement))
 
+(defun akirak-import-statement-p ()
+  "Return non-nil if the point is on an import statement."
+  (pcase (akirak-import--get-settings)
+    (`(,_ . ,(map :regexp))
+     (thing-at-point-looking-at regexp))))
+
 (defun akirak-import--typescript-merge-statement ()
   "Merge the import statements of named imports from the same module."
   (cl-flet*
