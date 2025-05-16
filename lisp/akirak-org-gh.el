@@ -1,23 +1,23 @@
-;;; akirak-org-hub.el --- GitHub client (hub) integration -*- lexical-binding: t -*-
+;;; akirak-org-gh.el --- GitHub client (gh) integration -*- lexical-binding: t -*-
 
 ;; I'll assume the gh CLI is installed, so don't interact with the GitHub API
 ;; directly.
 
-(defcustom akirak-org-hub-gh-program "gh"
+(defcustom akirak-org-gh-gh-program "gh"
   "Path to gh command."
   :type 'file)
 
 ;;;###autoload
-(defun akirak-org-hub-import-issues ()
+(defun akirak-org-gh-import-issues ()
   "Import issues of a GitHub repository into the current Org file."
   (interactive nil org-mode)
-  (let ((pom (or (akirak-org-hub--parent)
+  (let ((pom (or (akirak-org-gh--parent)
                  (user-error "Missing parent heading")))
         (default-directory (completing-read "Project: "
-                                            (akirak-org-hub--buffer-directories)))
-        (existing-urls (akirak-org-hub--collect-heading-urls))
+                                            (akirak-org-gh--buffer-directories)))
+        (existing-urls (akirak-org-gh--collect-heading-urls))
         new-entries)
-    (dolist (issue (akirak-org-hub--get-issues))
+    (dolist (issue (akirak-org-gh--get-issues))
       (unless (member (alist-get 'url issue) existing-urls)
         (push issue new-entries)))
     (when new-entries
@@ -39,7 +39,7 @@
                     ))))
       (message "Imported %d new issues" (length new-entries)))))
 
-(defun akirak-org-hub--collect-heading-urls ()
+(defun akirak-org-gh--collect-heading-urls ()
   (org-with-wide-buffer
    (goto-char (point-min))
    (let ((case-fold-search nil)
@@ -50,21 +50,21 @@
            (push (match-string 1 h) result))))
      (seq-uniq result))))
 
-(cl-defun akirak-org-hub--get-issues ()
+(cl-defun akirak-org-gh--get-issues ()
   (with-temp-buffer
-    (unless (zerop (call-process akirak-org-hub-gh-program nil (list t nil) nil
+    (unless (zerop (call-process akirak-org-gh-gh-program nil (list t nil) nil
                                  "issue" "list"
                                  "--json" "author,title,url"))
       (error "gh command failed"))
     (goto-char (point-min))
     (json-parse-buffer :array-type 'list :object-type 'alist)))
 
-(defun akirak-org-hub--parent ()
+(defun akirak-org-gh--parent ()
   "Return the marker to the heading under which new entries should be created."
   (org-with-wide-buffer
    (org-find-olp '("Backlog") 'this-buffer)))
 
-(defun akirak-org-hub--buffer-directories ()
+(defun akirak-org-gh--buffer-directories ()
   (thread-last
     (org-property-values "header-args")
     (seq-uniq)
@@ -74,16 +74,16 @@
     (seq-uniq)))
 
 ;;;###autoload
-(defun akirak-org-hub-update-issue-subtree ()
+(defun akirak-org-gh-update-issue-subtree ()
   "Update the content of the issue/PR subtree for with latest information."
   (interactive nil org-mode)
-  (let ((url (or (akirak-org-hub--get-url)
+  (let ((url (or (akirak-org-gh--get-url)
                  (user-error "Not on a url heading"))))
-    (pcase-exhaustive (or (akirak-org-hub--issue-or-pr-of-url url)
+    (pcase-exhaustive (or (akirak-org-gh--issue-or-pr-of-url url)
                           (user-error "Not on an issue/PR url"))
       ((map :repo :type :number)
        (let ((data (with-temp-buffer
-                     (unless (call-process akirak-org-hub-gh-program nil (list t nil) nil
+                     (unless (call-process akirak-org-gh-gh-program nil (list t nil) nil
                                            (format "%s" type)
                                            "view" "--repo" repo
                                            "--json"
@@ -131,7 +131,7 @@
                               (org-end-of-subtree))))
                  (unless (catch 'found-comment
                            (while (re-search-forward org-heading-regexp bound t)
-                             (when (string= (akirak-org-hub--get-url)
+                             (when (string= (akirak-org-gh--get-url)
                                             (alist-get 'url comment))
                                (throw 'found-comment t)))
                            nil)
@@ -159,7 +159,7 @@
                          (insert .body "\n")
                          (akirak-pandoc-replace-with-org start (point)))))))))))))))
 
-(defun akirak-org-hub--get-url ()
+(defun akirak-org-gh--get-url ()
   (let ((heading (org-entry-get nil "ITEM")))
     (cond
      ((string-match org-link-bracket-re heading)
@@ -169,7 +169,7 @@
      (t
       (user-error "No matching link")))))
 
-(defun akirak-org-hub--issue-or-pr-of-url (url)
+(defun akirak-org-gh--issue-or-pr-of-url (url)
   (pcase url
     ((rx bol "https://github.com/" (group (+ (any "-" alnum))
                                           "/"
@@ -185,5 +185,5 @@
                     'pr))
            :number (string-to-number (match-string 3 url))))))
 
-(provide 'akirak-org-hub)
-;;; akirak-org-hub.el ends here
+(provide 'akirak-org-gh)
+;;; akirak-org-gh.el ends here
