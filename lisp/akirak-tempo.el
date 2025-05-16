@@ -9,6 +9,7 @@
     (insert (akirak-tempo-from-string source))))
 
 (defun akirak-tempo-from-string (string)
+  (require 'string-inflection)
   (with-temp-buffer
     (insert string)
     (goto-char (point-min))
@@ -21,7 +22,8 @@
       (goto-char (point-min))
       (let* ((words (completing-read-multiple "Parameterised words: "
                                               all-symbols))
-             (regexp (regexp-opt-group words))
+             (regexp (when words
+                       (regexp-opt-group words)))
              (indent-unit (akirak-tempo--guess-indent-unit))
              base-indent
              defined-words)
@@ -50,12 +52,13 @@
                     (setq base-indent (- (match-end 0) (match-beginning 0)))
                   (setq base-indent nil)))
               (unless (eolp)
-                (if (looking-at regexp)
+                (if (and regexp (looking-at regexp))
                     (replace-the-match nil)
                   (unless (eolp)
                     (insert-char ?\")))
-                (while (re-search-forward regexp (line-end-position) t)
-                  (replace-the-match t))
+                (when regexp
+                  (while (re-search-forward regexp (line-end-position) t)
+                    (replace-the-match t)))
                 (end-of-line)
                 (insert-char ?\"))
               (when (> (forward-line) 0)

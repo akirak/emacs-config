@@ -257,8 +257,11 @@ are displayed in the frame."
                  (require 'eat)
                  (with-current-buffer (generate-new-buffer buffer-name)
                    (eat-mode)
+                   ;; Better not have this one?
+                   (local-set-key "q" #'quit-window)
                    ;; This must be set after eat-mode
                    (setq-local eat-kill-buffer-on-exit nil)
+                   (compilation-shell-minor-mode t)
                    (eat-exec (current-buffer) name "sh" nil (list "-c" command))
                    (pop-to-buffer (current-buffer)))))
               ((equal arg '(4))

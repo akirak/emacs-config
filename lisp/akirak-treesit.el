@@ -246,10 +246,10 @@
     (if (looking-back (rx bol (+ blank)) (line-beginning-position))
         (let ((indentation (current-indentation)))
           (beginning-of-line 1)
-          (kill-line arg)
-          (when (looking-at (rx-to-string `(** 0 ,indentation blank)))
-            (goto-char (match-end 0))))
-      (kill-line arg)))
+          (kill-region (point) (pos-eol arg))
+          ;; Restore the previous indentation.
+          (indent-to indentation))
+      (kill-region (point) (pos-eol arg))))
    (t
     (or (akirak-treesit--maybe-kill-inside-string (line-end-position))
         (let* ((start (point))
