@@ -307,11 +307,11 @@ display alternative actions."
                           (format "*:%s")))
     (magit-status)))
 
-(defun akirak-project-mode-root-directory (file)
+(defun akirak-project-mode-root-directory (file &optional mode)
   ;; Faster than `project-try-vc--search' with non-nil
   ;; project-vc-backend-markers-alist which is not specific to the mode.
   (when-let* ((key (provided-mode-derived-p
-                    major-mode
+                    (or mode major-mode)
                     (mapcar #'car akirak-project-per-mode-root-files)))
               (files (cdr (assq key akirak-project-per-mode-root-files))))
     (locate-dominating-file file
