@@ -588,12 +588,6 @@
       repo = "kind-icon";
       type = "github";
     };
-    kv = {
-      flake = false;
-      owner = "nicferrier";
-      repo = "emacs-kv";
-      type = "github";
-    };
     language-detection = {
       flake = false;
       owner = "andreasjansson";
