@@ -10,19 +10,8 @@
                                                    org-entry-property-inherited-from
                                                  (user-error "No worktree property"))
                                              pom)))
-         (worktree-link (cdr (assoc "GIT_WORKTREE" properties)))
-         (worktree-url (cond
-                        ((not worktree-link)
-                         (user-error "No worktree property"))
-                        ((string-match org-link-bracket-re worktree-link)
-                         (match-string 1 worktree-link))
-                        (t
-                         (error "%s isn't a bracket link" worktree-link))))
-         (worktree (pcase worktree-url
-                     ((rx bol "file:" (group (+ anything)))
-                      (match-string 1 worktree-url))
-                     (_
-                      (error "Unsupported worktree URL: %s" worktree-url))))
+         (worktree (akirak-org-git--worktree-location
+                    (cdr (assoc "GIT_WORKTREE" properties))))
          (origin (cdr (assoc "GIT_ORIGIN" properties)))
          (file (cdr (assoc "FILE_PATH_FROM_GIT_ROOT" properties))))
     (if (file-directory-p worktree)
@@ -32,6 +21,25 @@
       (when (yes-or-no-p (format-message "Clone a repository from %s? into %s"
                                          origin worktree))
         (akirak-git-clone origin worktree)))))
+
+(defun akirak-org-git-worktree (&optional pom)
+  (let ((value (org-entry-get pom "GIT_WORKTREE")))
+    (when value
+      (akirak-org-git--worktree-location value))))
+
+(defun akirak-org-git--worktree-location (worktree-link)
+  (let ((worktree-url (cond
+                       ((not worktree-link)
+                        (user-error "No worktree property"))
+                       ((string-match org-link-bracket-re worktree-link)
+                        (match-string 1 worktree-link))
+                       (t
+                        (error "%s isn't a bracket link" worktree-link)))))
+    (pcase worktree-url
+      ((rx bol "file:" (group (+ anything)))
+       (match-string 1 worktree-url))
+      (_
+       (error "Unsupported worktree URL: %s" worktree-url)))))
 
 ;;;###autoload
 (defun akirak-org-git-add-properties-if-none (pom &optional force)

@@ -69,9 +69,15 @@
     (org-property-values "header-args")
     (seq-uniq)
     ;; (mapcar #'org-babel-parse-header-arguments)
-    (mapcar (lambda (value)
-              (alist-get :dir (org-babel-parse-header-arguments value))))
+    (mapcar #'akirak-org-gh--dir-argument)
     (seq-uniq)))
+
+(defun akirak-org-gh--entry-dir ()
+  (when-let* ((args (org-entry-get nil "header-args" 'inherit)))
+    (akirak-org-gh--dir-argument args)))
+
+(defun akirak-org-gh--dir-argument (value)
+  (alist-get :dir (org-babel-parse-header-arguments value)))
 
 ;;;###autoload
 (defun akirak-org-gh-update-issue-subtree ()
@@ -184,6 +190,60 @@
                    ("pull"
                     'pr))
            :number (string-to-number (match-string 3 url))))))
+
+;;;###autoload
+(defun akirak-org-gh-submit-issue ()
+  "Submit a GitHub issue from the current Org entry."
+  (interactive nil org-mode)
+  (when (member "@ticket" (org-get-tags))
+    (user-error "Found @ticket tag. Maybe already inside a ticket subtree?"))
+  (when (string-match-p org-link-bracket-re (org-entry-get nil "ITEM"))
+    (user-error "On a bracket link. Maybe already submitted"))
+  (let* ((dir-or-repo (or (akirak-org-gh--entry-dir)
+                          (akirak-org-git-worktree nil)
+                          (completing-read "Directory or remote repo: "
+                                           (akirak-org-gh--buffer-directories))))
+         (default-directory (if (file-name-absolute-p dir-or-repo)
+                                dir-or-repo
+                              default-directory))
+         ;; TODO: Handle heading levels
+         (base-level (org-outline-level))
+         (repo (unless (file-name-absolute-p dir-or-repo)
+                 dir-or-repo))
+         (data (list :title (org-entry-get nil "ITEM")
+                     :body (save-excursion
+                             (org-back-to-heading)
+                             (org-end-of-meta-data t)
+                             (unless (looking-at org-heading-regexp)
+                               (thread-first
+                                 (buffer-substring-no-properties
+                                  (point)
+                                  (save-excursion
+                                    (org-end-of-subtree)))
+                                 (akirak-pandoc-convert-string
+                                     :from "org" :to "gfm"))))))
+         (url (with-current-buffer (get-buffer-create "*org-gh errors*")
+                (let ((inhibit-read-only t))
+                  (erase-buffer)
+                  (insert (plist-get data :body))
+                  (unless (zerop (apply #'call-process-region
+                                        (point-min) (point-max)
+                                        akirak-org-gh-gh-program 'delete t nil
+                                        "issue" "create"
+                                        "--title" (plist-get data :title)
+                                        "--body-file" "-"
+                                        (when repo
+                                          (list "--repo" repo))))
+                    (error "gh command returned non-zero. See %s"
+                           (buffer-name)))
+                  ;; Return the URL
+                  (or (thing-at-point 'url t)
+                      (error "Not matching a URL"))))))
+    (org-back-to-heading)
+    (let ((new-heading-with-link (org-link-make-string url (plist-get data :title))))
+      (if (looking-at org-complex-heading-regexp)
+          (replace-match new-heading-with-link nil nil nil 4)
+        (error "Unexpected")))))
 
 (provide 'akirak-org-gh)
 ;;; akirak-org-gh.el ends here
