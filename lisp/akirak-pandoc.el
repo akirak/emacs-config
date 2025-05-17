@@ -33,6 +33,11 @@
   ""
   :type 'file)
 
+(defcustom akirak-pandoc-options
+  '("--wrap=none")
+  "Command line options passed to pandoc command."
+  :type '(repeat string))
+
 (defvar akirak-pandoc-input-formats nil)
 
 ;;;###autoload
@@ -47,11 +52,14 @@
         (errfile (make-temp-file "pandoc-errors-")))
     (unwind-protect
         (progn
-          (unless (zerop (call-process-region begin end akirak-pandoc-executable
-                                              nil (list outbuf errfile)
-                                              (concat "--from=" format)
-                                              "--to=org"
-                                              "-"))
+          (unless (zerop (apply #'call-process-region
+                                begin end
+                                akirak-pandoc-executable
+                                nil (list outbuf errfile)
+                                (concat "--from=" format)
+                                "--to=org"
+                                (append akirak-pandoc-options
+                                        (list "-"))))
             (error "pandoc failed: %s"
                    (with-temp-buffer
                      (insert-file-contents errfile)
@@ -72,10 +80,14 @@
         (errfile (make-temp-file "pandoc-errors-")))
     (unwind-protect
         (atomic-change-group
-          (unless (zerop (call-process-region begin end akirak-pandoc-executable
-                                              'delete (list t errfile) nil
-                                              (concat "--from=" format)
-                                              "--to=org" "-"))
+          (unless (zerop (apply #'call-process-region
+                                begin end
+                                akirak-pandoc-executable
+                                'delete (list t errfile) nil
+                                (concat "--from=" format)
+                                "--to=org"
+                                (append akirak-pandoc-options
+                                        (list "-"))))
             (error "pandoc failed: %s"
                    (with-temp-buffer
                      (insert-file-contents errfile)
@@ -92,13 +104,14 @@
     (unwind-protect
         (with-temp-buffer
           (insert string)
-          (unless (zerop (call-process-region
-                          (point-min) (point-max)
-                          akirak-pandoc-executable
-                          'delete (list t errfile) nil
-                          (concat "--from=" from)
-                          (concat "--to=" to)
-                          "-"))
+          (unless (zerop (apply #'call-process-region
+                                (point-min) (point-max)
+                                akirak-pandoc-executable
+                                'delete (list t errfile) nil
+                                (concat "--from=" from)
+                                (concat "--to=" to)
+                                (append akirak-pandoc-options
+                                        (list "-"))))
             (error "pandoc failed: %s"
                    (with-temp-buffer
                      (insert-file-contents errfile)
