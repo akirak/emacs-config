@@ -68,6 +68,7 @@
   :parent embark-general-map
   "d" #'dired
   "b" #'akirak-embark-browse-remote
+  "W" #'akirak-embark-browse-remote-kill
   "K" #'akirak-embark-kill-directory-buffers
   "f" #'akirak-find-file-in-directory
   "o" #'find-file-other-window
@@ -156,6 +157,12 @@
 (defun akirak-embark-transform-recoll-result (_type candidate)
   (when-let* ((url (consult-recoll--candidate-url candidate)))
     (cons 'file (abbreviate-file-name (string-remove-prefix "file://" url)))))
+
+(defun akirak-embark-url-result (_type candidate)
+  (let ((url (purecopy candidate)))
+    ;; Remove invisible property
+    (set-text-properties 0 (length url) nil url)
+    (cons 'url url)))
 
 (defun akirak-embark-transform-mountpoint (_type path)
   (cons 'directory path))
@@ -393,6 +400,8 @@
                '(nixpkgs-package . akirak-embark-prefix-nixpkgs-installable))
   (add-to-list 'embark-transformer-alist
                '(mountpoint . akirak-embark-transform-mountpoint))
+  (add-to-list 'embark-transformer-alist
+               '(github-workflow-run-url . akirak-embark-url-result))
   (add-to-list 'embark-transformer-alist
                '(recoll-result . akirak-embark-transform-recoll-result))
   (add-to-list 'embark-keymap-alist
@@ -854,6 +863,15 @@
   (require 'browse-at-remote)
   (browse-url (let ((default-directory dir))
                 (browse-at-remote--file-url "."))))
+
+(defun akirak-embark-browse-remote-kill (dir)
+  "Copy the remote browse URL of DIR into the kill ring."
+  (interactive "DDirectory: ")
+  (require 'browse-at-remote)
+  (let* ((default-directory dir)
+         (url (browse-at-remote--file-url ".")))
+    (kill-new url)
+    (message "Copied %s" url)))
 
 (defun akirak-embark-comint-interrupt (buffer)
   "Run `comint-interrupt-subjob' on BUFFER."

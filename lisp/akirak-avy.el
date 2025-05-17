@@ -110,11 +110,12 @@ If CALLBACK is a function, it is called with the selected url."
     (org-super-links-insert-link)))
 
 (defconst akirak-avy-ffap-regexp
+  ;; Support TypeScript path aliases.
   (rx (or (and (syntax string-quote)
-               (any alnum ".~/")
+               (any alnum ".~@#/")
                (+? nonl)
                (syntax string-quote))
-          (and (or "~" (+ ".") symbol-start) "/"))))
+          (and (or (any "~@#") (+ ".") symbol-start) "/"))))
 
 ;;;###autoload
 (defun akirak-avy-ffap ()
@@ -124,7 +125,11 @@ If CALLBACK is a function, it is called with the selected url."
       (when (avy-jump akirak-avy-ffap-regexp)
         (when (looking-at (rx (syntax string-quote)))
           (goto-char (match-end 0)))
-        (ffap)))))
+        (require 'akirak-import)
+        (if (and (bound-and-true-p eglot--managed-mode)
+                 (akirak-import-statement-p))
+            (xref-find-definitions "LSP identifier at point")
+          (ffap))))))
 
 ;;;###autoload
 (defun akirak-avy-org-block ()

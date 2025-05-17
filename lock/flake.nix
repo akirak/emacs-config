@@ -588,12 +588,6 @@
       repo = "kind-icon";
       type = "github";
     };
-    kv = {
-      flake = false;
-      owner = "nicferrier";
-      repo = "emacs-kv";
-      type = "github";
-    };
     language-detection = {
       flake = false;
       owner = "andreasjansson";
@@ -835,12 +829,6 @@
       owner = "akirak";
       ref = "patch-org-element";
       repo = "org-autolist";
-      type = "github";
-    };
-    org-bb = {
-      flake = false;
-      owner = "akirak";
-      repo = "org-blockers-block";
       type = "github";
     };
     org-bookmark-heading = {
@@ -1285,6 +1273,12 @@
       flake = false;
       owner = "emacs-twist";
       repo = "twist.el";
+      type = "github";
+    };
+    unfill = {
+      flake = false;
+      owner = "purcell";
+      repo = "unfill";
       type = "github";
     };
     valign = {
