@@ -1569,22 +1569,6 @@
         "type": "github"
       }
     },
-    "kv": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1389195260,
-        "narHash": "sha256-tcg7hgXz8tJ1NO2bSaAhhTgtkTFROWW5I8DvZ7T4FGQ=",
-        "owner": "nicferrier",
-        "repo": "emacs-kv",
-        "rev": "721148475bce38a70e0b678ba8aa923652e8900e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nicferrier",
-        "repo": "emacs-kv",
-        "type": "github"
-      }
-    },
     "language-detection": {
       "flake": false,
       "locked": {
@@ -3072,7 +3056,6 @@
         "jinx": "jinx",
         "just-mode": "just-mode",
         "kind-icon": "kind-icon",
-        "kv": "kv",
         "language-detection": "language-detection",
         "license-templates": "license-templates",
         "link-hint": "link-hint",
@@ -3187,6 +3170,7 @@
         "ts": "ts",
         "twind": "twind",
         "twist": "twist",
+        "unfill": "unfill",
         "valign": "valign",
         "vertico": "vertico",
         "visual-fill-column": "visual-fill-column",
@@ -3650,6 +3634,22 @@
       "original": {
         "owner": "emacs-twist",
         "repo": "twist.el",
+        "type": "github"
+      }
+    },
+    "unfill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1739141814,
+        "narHash": "sha256-j5ZSsjF77A5kxaxGX8j8T3i5M17HaJ6EM0qm8WbrSLI=",
+        "owner": "purcell",
+        "repo": "unfill",
+        "rev": "4a15511876983eeaa75e57fcab8d4d51fe9b3840",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purcell",
+        "repo": "unfill",
         "type": "github"
       }
     },

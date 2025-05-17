@@ -9952,6 +9952,14 @@ Hot-reload packages with twist
       (add-hook 'emacs-startup-hook #'twist-watch-mode)
       (:global-keymap "<f12> e R" #'twist-update)))
 #+end_src
+*** unfill
+:PROPERTIES:
+:CREATED_TIME: [2025-05-17 Sat 12:40]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package unfill))
+#+end_src
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]

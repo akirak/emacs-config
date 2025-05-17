@@ -588,12 +588,6 @@
       repo = "kind-icon";
       type = "github";
     };
-    kv = {
-      flake = false;
-      owner = "nicferrier";
-      repo = "emacs-kv";
-      type = "github";
-    };
     language-detection = {
       flake = false;
       owner = "andreasjansson";
@@ -1285,6 +1279,12 @@
       flake = false;
       owner = "emacs-twist";
       repo = "twist.el";
+      type = "github";
+    };
+    unfill = {
+      flake = false;
+      owner = "purcell";
+      repo = "unfill";
       type = "github";
     };
     valign = {
