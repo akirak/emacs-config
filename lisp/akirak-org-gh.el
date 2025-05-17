@@ -5,6 +5,7 @@
 
 (require 'akirak-org-git)
 (require 'akirak-pandoc)
+(require 'akirak-org-shell)
 (require 'magit)
 
 (defcustom akirak-org-gh-gh-program "gh"
@@ -365,6 +366,94 @@
            (org-end-of-subtree)))
         (akirak-pandoc-convert-string
             :from "org" :to "gfm")))))
+
+(defvar akirak-org-gh-transient-target nil)
+(defvar akirak-org-gh-transient-target-url nil)
+(defvar akirak-org-gh-transient-worktree nil)
+
+;;;###autoload (autoload 'akirak-org-gh-transient "akirak-org-gh" nil 'interactive)
+(transient-define-prefix akirak-org-gh-transient ()
+  "Transient for the issue/PR tracked in the current Org entry."
+  ;; Let the user navigate the source.
+  [:description
+   (lambda () (format "Work tree: %s" akirak-org-gh-transient-worktree))
+   :if-non-nil akirak-org-gh-transient-worktree
+   ("g" "Go to source" akirak-org-git-locate-source)]
+  ;; Work with the issue or PR.
+  [:description
+   (lambda () (format "URL: %s" akirak-org-gh-transient-target-url))
+   :if-non-nil akirak-org-gh-transient-target
+   ("b" "Browse"
+    (lambda ()
+      (interactive)
+      (browse-url akirak-org-gh-transient-target-url)))
+   ("u" "Update the Org entry" akirak-org-gh-update-issue-subtree)
+   ("!" "Any command" (lambda ()
+                        (interactive)
+                        (let ((command (read-string "Subcommand:")))
+                          (akirak-org-gh--shell-with-target command))))]
+  ;; ["Issue"
+  ;;  :if (lambda () (eq 'issue (plist-get akirak-org-gh-transient-target :type)))
+  ;;  ]
+  ["PR"
+   :if (lambda ()
+         (eq 'pr (plist-get akirak-org-gh-transient-target :type)))
+   ("m" "Merge" (lambda ()
+                  (interactive)
+                  (akirak-org-gh--shell-with-target "merge")))]
+  ;; Quickly view the statuses of the checks for the PR.
+  ["Checks"
+   :if (lambda ()
+         (eq 'pr (plist-get akirak-org-gh-transient-target :type)))
+   :setup-children akirak-org-gh--checks]
+  (interactive nil org-mode)
+  (setq akirak-org-gh-transient-worktree (akirak-org-git-worktree))
+  (setq akirak-org-gh-transient-target-url (akirak-org-gh--get-url))
+  (setq akirak-org-gh-transient-target (when akirak-org-gh-transient-target-url
+                                         (akirak-org-gh--issue-or-pr-of-url
+                                          akirak-org-gh-transient-target-url)))
+  (transient-setup 'akirak-org-gh-transient))
+
+(defun akirak-org-gh--shell-with-target (command &rest options)
+  "Run a command with the issue/PR in a shell and return the buffer."
+  (pcase-exhaustive akirak-org-gh-transient-target
+    ((map :type)
+     (akirak-shell-exec-in-project
+         (append (list akirak-org-gh-gh-program
+                       (format "%s" type) command
+                       akirak-org-gh-transient-target-url)
+                 options)
+       :name "gh"
+       :root (or (akirak-org-gh--entry-dir)
+                 (akirak-org-git-worktree nil))))))
+
+(defun akirak-org-gh--checks (_children)
+  (with-temp-buffer
+    (unless (zerop (call-process akirak-org-gh-gh-program
+                                 nil (list t nil) nil
+                                 "pr" "checks" akirak-org-gh-transient-target-url
+                                 "--json" "state,link,workflow,name"))
+      (error "gh pr checks failed"))
+    (goto-char (point-min))
+    (thread-last
+      (json-parse-buffer :array-type 'list :object-type 'alist)
+      (seq-map-indexed (lambda (entry i)
+                         (list (number-to-string (1+ i))
+                               (format-spec "%s %w / %n"
+                                            `((?s . ,(pcase (alist-get 'state entry)
+                                                       ("SUCCESS" "✅")
+                                                       ("FAILURE" "❌")
+                                                       ("CANCELLED" "🚫")
+                                                       ("SKIPPED" "⏭️")
+                                                       ("WAITING" "⏳")
+                                                       (other other)))
+                                              (?n . ,(alist-get 'name entry))
+                                              (?w . ,(alist-get 'workflow entry))))
+                               `(lambda ()
+                                  (interactive)
+                                  (browse-url ,(alist-get 'link entry)))
+                               :transient t)))
+      (transient-parse-suffixes 'akirak-org-gh-transient))))
 
 (provide 'akirak-org-gh)
 ;;; akirak-org-gh.el ends here
