@@ -3034,6 +3034,7 @@ Outline-based notes management and organizer
             ;; Prevent an annoying behaviour probably due to org's bug.
             org-link-search-must-match-exact-headline t
             org-catch-invisible-edits 'show-and-error
+            org-enforce-todo-dependencies nil
             ;; Prevent from saving org-refile and org-capture locations to bookmarks
             org-bookmark-names-plist nil)
 
@@ -5212,6 +5213,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (:with-feature org
       (:with-map org-mode-map
         (:keymap "<remap> <point-to-register>" #'akirak-org-point-to-register)))
+
+    (:when-loaded
+      ;; Alternative to the default implementation provided as
+      ;; `org-enforce-todo-dependencies' option.
+      (add-hook 'org-blocker-hook #'akirak-org-block-done-by-descendants))
 
     (advice-add #'org-insert-heading-respect-content
                 :around #'akirak-org-ad-around-insert-heading)

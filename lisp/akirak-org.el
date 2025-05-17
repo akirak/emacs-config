@@ -648,6 +648,59 @@ The point should be at the heading."
          (go face))))
     props))
 
+;;;; Custom handling of todo dependencies
+
+;;;###autoload
+(defun akirak-org-block-done-by-descendants (change-plist)
+  "A simplified blocker function."
+  (cl-flet
+      ((done-keyword-p (kwd)
+         (or (eq kwd 'done)
+             (member kwd org-done-keywords)))
+       (child-heading-regexp (node)
+         (concat "^"
+                 (regexp-quote (make-string (org-get-valid-level
+                                             (1+ (org-element-property :level node)))
+                                            ?\*))
+                 " ")))
+    (pcase change-plist
+      ((and (map :type :position :from :to)
+            (guard (eq type 'todo-state-change)))
+       (cond
+        ((and (not (done-keyword-p from))
+              (done-keyword-p to))
+         (catch 'deps-ok
+           (cl-labels
+               ((check-child (node)
+                  ;; If the entry is archived, the entire subtree considered done
+                  (unless (org-element-property :archivedp node)
+                    (pcase-exhaustive (org-element-property :todo-type node)
+                      (`done)
+                      (`todo
+                       ;; If the entry is undone todo, it is a blocker
+                       (setq org-block-entry-blocking (org-element-property :title node))
+                       (throw 'deps-ok nil))
+                      (`nil
+                       ;; Check the children
+                       (check-children node)
+                       ;; TODO: Also check the checkboxes, if any
+                       ))))
+                (check-children (node)
+                  (catch 'org-child-blocked
+                    (let ((regexp (child-heading-regexp node))
+                          (bound (org-element-end node)))
+                      (while (re-search-forward regexp bound t)
+                        (save-excursion
+                          (check-child (org-element-at-point-no-context (match-beginning 0)))))))))
+             (save-excursion
+               (check-children (org-element-at-point-no-context position))
+               t))))
+        ;; ((and (not (done-keyword-p from))
+        ;;       (equal to "REVIEW"))
+        ;;  nil)
+        ;; Otherwise it is never blocked
+        (t))))))
+
 ;;;; Matching location
 
 ;;;###autoload
