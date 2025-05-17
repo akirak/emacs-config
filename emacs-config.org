@@ -3665,7 +3665,7 @@ A programmable workflow layer for Org mode
     (add-hook 'org-dog-find-file-hook #'akirak/org-dog-turn-on-transclusion)
     (add-hook 'org-dog-before-search-hook #'akirak/org-dog-turn-on-transclusion)
 
-    (add-hook 'org-dog-file-mode-hook #'org-dog-header-line-enable)
+    ;; (add-hook 'org-dog-file-mode-hook #'org-dog-header-line-enable)
 
     (add-hook 'org-dog-file-registration-hook
               (defun akirak/org-dog-add-agenda-file (file-obj)
