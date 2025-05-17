@@ -23,7 +23,7 @@
         (akirak-git-clone origin worktree)))))
 
 (defun akirak-org-git-worktree (&optional pom)
-  (let ((value (org-entry-get pom "GIT_WORKTREE")))
+  (let ((value (org-entry-get pom "GIT_WORKTREE" 'inherit)))
     (when value
       (akirak-org-git--worktree-location value))))
 

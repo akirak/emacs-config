@@ -3,6 +3,10 @@
 ;; I'll assume the gh CLI is installed, so don't interact with the GitHub API
 ;; directly.
 
+(require 'akirak-org-git)
+(require 'akirak-pandoc)
+(require 'magit)
+
 (defcustom akirak-org-gh-gh-program "gh"
   "Path to gh command."
   :type 'file)
@@ -247,6 +251,7 @@
                   (or (thing-at-point 'url t)
                       (error "Not matching a URL"))))))
     (org-back-to-heading)
+    (org-set-tags (seq-uniq (cons "@ticket" (org-get-local-tags))))
     (let ((new-heading-with-link (org-link-make-string url (plist-get data :title))))
       (if (looking-at org-complex-heading-regexp)
           (replace-match new-heading-with-link nil nil nil 4)
@@ -282,7 +287,8 @@
                                                      "--repo" repo
                                                      "--body-file" "-"))
                    (error "gh command returned non-zero. See %s"
-                          (buffer-name))))))
+                          (buffer-name)))))
+             (org-set-tags (seq-uniq (cons "@ticket" (org-get-local-tags)))))
          (user-error "Aborted"))))))
 
 (provide 'akirak-org-gh)
