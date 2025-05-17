@@ -165,17 +165,20 @@
                          (insert .body "\n")
                          (akirak-pandoc-replace-with-org start (point)))))))))))))))
 
-(defun akirak-org-gh--get-url ()
+(defun akirak-org-gh--get-url (&optional fail-if-not-link)
   (let ((heading (org-entry-get nil "ITEM")))
-    (cond
-     ((string-match org-link-bracket-re heading)
-      (match-string-no-properties 1 heading))
-     ((string-match org-link-plain-re heading)
-      (match-string-no-properties 0 heading))
-     (t
-      (user-error "No matching link")))))
+    (or (cond
+         ((string-match org-link-bracket-re heading)
+          (match-string-no-properties 1 heading))
+         ((string-match org-link-plain-re heading)
+          (match-string-no-properties 0 heading))
+         (t
+          (user-error "No matching link")))
+        (when fail-if-not-link
+          (user-error "Not on a URL entry: \"%s\"" heading)))))
 
-(defun akirak-org-gh--issue-or-pr-of-url (url)
+(defun akirak-org-gh--issue-or-pr-of-url (url &optional fail-if-mismatch)
+  (cl-check-type url string)
   (pcase url
     ((rx bol "https://github.com/" (group (+ (any "-" alnum))
                                           "/"
@@ -189,7 +192,11 @@
                     'issue)
                    ("pull"
                     'pr))
-           :number (string-to-number (match-string 3 url))))))
+           :number (string-to-number (match-string 3 url))))
+    (_
+     (when fail-if-mismatch
+       (user-error "The URL doesn't match a GitHub issue/PR: \"%s\""
+                   url)))))
 
 ;;;###autoload
 (defun akirak-org-gh-submit-issue ()
