@@ -683,8 +683,22 @@ The point should be at the heading."
                       (`nil
                        ;; Check the children
                        (check-children node)
-                       ;; TODO: Also check the checkboxes, if any
-                       ))))
+                       ;; Also check the checkbox dependencies if the option is
+                       ;; enabled. Note that this is skipped for the root node,
+                       ;; as `org-enforce-todo-checkbox-dependencies' adds its
+                       ;; own hook to `org-blocker-hook'.
+                       (when org-enforce-todo-checkbox-dependencies
+                         (unless (org-block-todo-from-checkboxes
+                                  (list :type 'todo-state-change
+                                        :from (org-element-property :todo-type node)
+                                        :to to
+                                        ;; Not necessary with the current implementation
+                                        :position (org-element-begin node)))
+                           (setq org-blocked-by-checkboxes nil
+                                 org-block-entry-blocking
+                                 (concat (org-element-property :title node)
+                                         " (checkbox)"))
+                           (throw 'deps-ok nil)))))))
                 (check-children (node)
                   (catch 'org-child-blocked
                     (let ((regexp (child-heading-regexp node))
