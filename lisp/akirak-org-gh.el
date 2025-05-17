@@ -252,5 +252,38 @@
           (replace-match new-heading-with-link nil nil nil 4)
         (error "Unexpected")))))
 
+;;;###autoload
+(defun akirak-org-gh-update-issue-body ()
+  "Update the body of the issue with the content of the Org entry."
+  (interactive nil org-mode)
+  (let ((url (akirak-org-gh--get-url t)))
+    (pcase (akirak-org-gh--issue-or-pr-of-url url t)
+      ((map :repo :number)
+       (if (yes-or-no-p (format "Update the following issue with the content of \"%s\"?\n%s"
+                                (org-entry-get nil "ITEM")
+                                url))
+           (let ((new-body (save-excursion
+                             (org-back-to-heading)
+                             (org-end-of-meta-data t)
+                             (unless (looking-at org-heading-regexp)
+                               (thread-first
+                                 (buffer-substring-no-properties
+                                  (point)
+                                  (org-entry-end-position))
+                                 (akirak-pandoc-convert-string
+                                     :from "org" :to "gfm"))))))
+             (with-current-buffer (get-buffer-create "*org-gh errors*")
+               (let ((inhibit-read-only t))
+                 (erase-buffer)
+                 (insert new-body)
+                 (unless (zerop (call-process-region (point-min) (point-max)
+                                                     akirak-org-gh-gh-program 'delete t nil
+                                                     "issue" "edit" (int-to-string number)
+                                                     "--repo" repo
+                                                     "--body-file" "-"))
+                   (error "gh command returned non-zero. See %s"
+                          (buffer-name))))))
+         (user-error "Aborted"))))))
+
 (provide 'akirak-org-gh)
 ;;; akirak-org-gh.el ends here
