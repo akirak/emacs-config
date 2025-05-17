@@ -831,12 +831,6 @@
       repo = "org-autolist";
       type = "github";
     };
-    org-bb = {
-      flake = false;
-      owner = "akirak";
-      repo = "org-blockers-block";
-      type = "github";
-    };
     org-bookmark-heading = {
       flake = false;
       owner = "akirak";

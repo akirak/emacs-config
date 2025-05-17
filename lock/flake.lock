@@ -2214,22 +2214,6 @@
         "type": "github"
       }
     },
-    "org-bb": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1664738461,
-        "narHash": "sha256-uJZ8jL1sFtPmxfQxo0gTNP/ch96sIy5w5ZvYwONrXp4=",
-        "owner": "akirak",
-        "repo": "org-blockers-block",
-        "rev": "d7cb333297f1967d2dcb9452e2e9633c83f3c41a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "repo": "org-blockers-block",
-        "type": "github"
-      }
-    },
     "org-bookmark-heading": {
       "flake": false,
       "locked": {
@@ -3096,7 +3080,6 @@
         "orderless": "orderless",
         "org": "org",
         "org-autolist": "org-autolist",
-        "org-bb": "org-bb",
         "org-bookmark-heading": "org-bookmark-heading",
         "org-dog": "org-dog",
         "org-dog-embark": "org-dog-embark",
