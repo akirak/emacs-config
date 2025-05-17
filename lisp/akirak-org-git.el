@@ -27,6 +27,9 @@
     (when value
       (akirak-org-git--worktree-location value))))
 
+(defun akirak-org-git-branch (&optional pom)
+  (org-entry-get pom "GIT_BRANCH" 'inherit))
+
 (defun akirak-org-git--worktree-location (worktree-link)
   (let ((worktree-url (cond
                        ((not worktree-link)

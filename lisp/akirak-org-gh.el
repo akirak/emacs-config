@@ -11,6 +11,8 @@
   "Path to gh command."
   :type 'file)
 
+(defvar-local akirak-org-gh-source-entry-marker nil)
+
 ;;;###autoload
 (defun akirak-org-gh-import-issues ()
   "Import issues of a GitHub repository into the current Org file."
@@ -276,7 +278,7 @@
                                   (point)
                                   (org-entry-end-position))
                                  (akirak-pandoc-convert-string
-                                     :from "org" :to "gfm"))))))
+                                  :from "org" :to "gfm"))))))
              (with-current-buffer (get-buffer-create "*org-gh errors*")
                (let ((inhibit-read-only t))
                  (erase-buffer)
@@ -290,6 +292,79 @@
                           (buffer-name)))))
              (org-set-tags (seq-uniq (cons "@ticket" (org-get-local-tags)))))
          (user-error "Aborted"))))))
+
+;;;###autoload
+(defun akirak-org-gh-submit-pr ()
+  "Submit a GitHub pull request from the current Org entry."
+  (interactive nil org-mode)
+  (when (or (member "@ticket" (org-get-tags))
+            (member "@PR" (org-get-tags)))
+    (user-error "Found @ticket or @PR tag. Maybe already inside a ticket subtree?"))
+  (when (string-match-p org-link-bracket-re (org-entry-get nil "ITEM"))
+    (user-error "On a bracket link. Maybe already submitted"))
+  (let* ((default-directory (or (akirak-org-gh--entry-dir)
+                                (akirak-org-git-worktree nil)
+                                (user-error "Cannot locate the repository")))
+         (branch (akirak-org-git-branch))
+         (title (org-entry-get nil "ITEM"))
+         (body (string-trim (akirak-org-gh--subtree-content-as-gfm)))
+         ;; (url )
+         (temp-file (make-temp-file "gh-pr-body"))
+         eat-kill-buffer-on-exit)
+    (unless (string= branch (ignore-errors (magit-get-current-branch)))
+      (user-error "The branch when the entry was created was %s, which is different\
+ from the current HEAD"
+                  branch))
+    (setq akirak-org-gh-source-entry-marker (save-excursion
+                                              (org-back-to-heading)
+                                              (point-marker)))
+    (unwind-protect
+        (progn
+          (with-temp-file temp-file
+            (insert body))
+          (with-editor
+            (with-current-buffer (get-buffer-create "*org-gh shell*")
+              (let ((inhibit-read-only t))
+                (erase-buffer)
+                (eat-mode)
+                (add-hook 'eat-exit-hook #'akirak-org-gh--update-entry-on-exit
+                          nil 'local)
+                (eat-exec (current-buffer)
+                          "gh pr" akirak-org-gh-gh-program
+                          temp-file
+                          (append (list "pr" "create"
+                                        "--editor"
+                                        "--title" title)
+                                  (if (string-empty-p body)
+                                      (list "--body" "")
+                                    (list "--body-file" "-"))))))))
+      (delete-file temp-file))))
+
+(defun akirak-org-gh--update-entry-on-exit (process)
+  (with-current-buffer (process-buffer process)
+    (let ((url (save-excursion
+                 (goto-char (point-max))
+                 (re-search-backward "https://")
+                 (thing-at-point 'url))))
+      (org-with-point-at akirak-org-gh-source-entry-marker
+        (if (looking-at org-complex-heading-regexp)
+            (replace-match (org-link-make-string url (match-string 4))
+                           nil nil nil 4)
+          (error "Unexpected"))
+        (org-set-tags (seq-uniq (cons "@PR" (org-get-local-tags))))))))
+
+(defun akirak-org-gh--subtree-content-as-gfm ()
+  (save-excursion
+    (org-back-to-heading)
+    (org-end-of-meta-data t)
+    (unless (looking-at org-heading-regexp)
+      (thread-first
+        (buffer-substring-no-properties
+         (point)
+         (save-excursion
+           (org-end-of-subtree)))
+        (akirak-pandoc-convert-string
+            :from "org" :to "gfm")))))
 
 (provide 'akirak-org-gh)
 ;;; akirak-org-gh.el ends here
