@@ -178,9 +178,7 @@
          ((string-match org-link-bracket-re heading)
           (match-string-no-properties 1 heading))
          ((string-match org-link-plain-re heading)
-          (match-string-no-properties 0 heading))
-         (t
-          (user-error "No matching link")))
+          (match-string-no-properties 0 heading)))
         (when fail-if-not-link
           (user-error "Not on a URL entry: \"%s\"" heading)))))
 
