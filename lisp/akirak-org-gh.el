@@ -204,7 +204,7 @@
                    url)))))
 
 ;;;###autoload
-(defun akirak-org-gh-submit-issue ()
+(defun akirak-org-gh-create-issue-from-entry ()
   "Submit a GitHub issue from the current Org entry."
   (interactive nil org-mode)
   (when (member "@ticket" (org-get-tags))
@@ -292,8 +292,12 @@
              (org-set-tags (seq-uniq (cons "@ticket" (org-get-local-tags)))))
          (user-error "Aborted"))))))
 
+;; "popup-" prefix ensures that the buffer will be displayed in a split window.
+;; See the current value of `display-buffer-alist'.
+(defconst akirak-org-gh-shell-buffer-name "*popup-org-gh-shell*")
+
 ;;;###autoload
-(defun akirak-org-gh-submit-pr ()
+(defun akirak-org-gh-create-pr-from-entry ()
   "Submit a GitHub pull request from the current Org entry."
   (interactive nil org-mode)
   (when (or (member "@ticket" (org-get-tags))
@@ -306,38 +310,46 @@
                                 (user-error "Cannot locate the repository")))
          (branch (akirak-org-git-branch))
          (title (org-entry-get nil "ITEM"))
-         (body (string-trim (akirak-org-gh--subtree-content-as-gfm)))
+         (body (akirak-org-gh--subtree-content-as-gfm))
          ;; (url )
-         (temp-file (make-temp-file "gh-pr-body"))
+         (temp-file (when body (make-temp-file "gh-pr-body")))
+         (marker (save-excursion
+                   (org-back-to-heading)
+                   (point-marker)))
+         ;; Kill the buffer conditionally from inside
+         ;; `akirak-org-gh--update-entry-on-exit'.
          eat-kill-buffer-on-exit)
     (unless (string= branch (ignore-errors (magit-get-current-branch)))
       (user-error "The branch when the entry was created was %s, which is different\
  from the current HEAD"
                   branch))
-    (setq akirak-org-gh-source-entry-marker (save-excursion
-                                              (org-back-to-heading)
-                                              (point-marker)))
     (unwind-protect
         (progn
-          (with-temp-file temp-file
-            (insert body))
+          (when-let* ((buffer (get-buffer akirak-org-gh-shell-buffer-name)))
+            (kill-buffer buffer))
+          (when temp-file
+            (with-temp-file temp-file
+              ;; It seems that the input needs to end with a newline to ensure
+              ;; it is sent to the program without human interaction.
+              (insert body "\n")))
           (with-editor
-            (with-current-buffer (get-buffer-create "*org-gh shell*")
-              (let ((inhibit-read-only t))
-                (erase-buffer)
-                (eat-mode)
-                (add-hook 'eat-exit-hook #'akirak-org-gh--update-entry-on-exit
-                          nil 'local)
-                (eat-exec (current-buffer)
-                          "gh pr" akirak-org-gh-gh-program
-                          temp-file
-                          (append (list "pr" "create"
-                                        "--editor"
-                                        "--title" title)
-                                  (if (string-empty-p body)
-                                      (list "--body" "")
-                                    (list "--body-file" "-"))))))))
-      (delete-file temp-file))))
+            (with-current-buffer (generate-new-buffer akirak-org-gh-shell-buffer-name)
+              (eat-mode)
+              (setq akirak-org-gh-source-entry-marker marker)
+              (add-hook 'eat-exit-hook #'akirak-org-gh--update-entry-on-exit
+                        nil 'local)
+              (eat-exec (current-buffer)
+                        "gh pr" akirak-org-gh-gh-program
+                        temp-file
+                        (append (list "pr" "create"
+                                      "--editor"
+                                      "--title" title)
+                                (if temp-file
+                                    (list "--body-file" "-")
+                                  (list "--body" ""))))
+              (pop-to-buffer (current-buffer)))))
+      (when temp-file
+        (delete-file temp-file)))))
 
 (defun akirak-org-gh--update-entry-on-exit (process)
   (with-current-buffer (process-buffer process)
@@ -350,20 +362,25 @@
             (replace-match (org-link-make-string url (match-string 4))
                            nil nil nil 4)
           (error "Unexpected"))
-        (org-set-tags (seq-uniq (cons "@PR" (org-get-local-tags))))))))
+        (org-set-tags (seq-uniq (cons "@PR" (org-get-local-tags)))))))
+  ;; Kill the buffer if and only if the process has exited with zero.
+  (when (and (eq (process-status process) 'exit)
+             (zerop (process-exit-status process)))
+    (kill-buffer (process-buffer process))))
 
 (defun akirak-org-gh--subtree-content-as-gfm ()
   (save-excursion
     (org-back-to-heading)
     (org-end-of-meta-data t)
     (unless (looking-at org-heading-regexp)
-      (thread-first
-        (buffer-substring-no-properties
-         (point)
-         (save-excursion
-           (org-end-of-subtree)))
-        (akirak-pandoc-convert-string
-            :from "org" :to "gfm")))))
+      (when-let* ((body (thread-first
+                          (buffer-substring-no-properties
+                           (point)
+                           (save-excursion
+                             (org-end-of-subtree)))
+                          (string-trim))))
+        (unless (string-empty-p body)
+          (akirak-pandoc-convert-string body :from "org" :to "gfm"))))))
 
 (defvar akirak-org-gh-transient-target nil)
 (defvar akirak-org-gh-transient-target-url nil)
@@ -438,12 +455,14 @@
       (seq-map-indexed (lambda (entry i)
                          (list (number-to-string (1+ i))
                                (format-spec "%s %w / %n"
+                                            ;; These state values are not
+                                            ;; completely the same as the
+                                            ;; statuses of workflow runs.
                                             `((?s . ,(pcase (alist-get 'state entry)
                                                        ("SUCCESS" "✅")
                                                        ("FAILURE" "❌")
-                                                       ("CANCELLED" "🚫")
-                                                       ("SKIPPED" "⏭️")
-                                                       ("WAITING" "⏳")
+                                                       ("SKIPPED" "🚫")
+                                                       ("IN_PROGRESS" "⏳")
                                                        (other other)))
                                               (?n . ,(alist-get 'name entry))
                                               (?w . ,(alist-get 'workflow entry))))
