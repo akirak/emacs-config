@@ -11,10 +11,7 @@
     nix-filter.url = "github:numtide/nix-filter";
 
     # Use a pinned version of Emacs executable
-    flake-pins = {
-      url = "github:akirak/flake-pins";
-      flake = false;
-    };
+    flake-pins.url = "github:akirak/flake-pins";
 
     # Emacs Twist
     org-babel.url = "github:emacs-twist/org-babel";
@@ -48,13 +45,6 @@
       inputs.twist.follows = "twist";
     };
     archiver.url = "github:emacs-twist/twist-archiver";
-
-    # Extra dependencies of this particular config which are not generally
-    # needed for twist itself.
-    flake-pins-pkgs = {
-      url = "github:akirak/flake-pins?dir=pkgs/cli-tools";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     tree-sitter-astro = {
       url = "github:virchau13/tree-sitter-astro";

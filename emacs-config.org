@@ -3912,7 +3912,7 @@ Integrate Org with epubinfo program
 
 #+begin_src emacs-lisp
   (setup (:package org-epubinfo)
-    (:nixpkgs epubinfo))
+    (:nixpkgs customPackages.epubinfo))
 #+end_src
 *** org-hyprctl
 :PROPERTIES:
@@ -6394,7 +6394,7 @@ Major mode for working with d2 graphs
   (setup (:package d2-mode)
     ;; d2-format is a custom wrapper for `d2 fmt` available from
     ;; https://github.com/akirak/flake-pins
-    (:nixpkgs d2 d2-format)
+    (:nixpkgs d2 customPackages.d2-format)
     (:file-match "\\.d2\\'")
     (:hook d2-format-on-save-mode)
     (:reformatters
@@ -7591,7 +7591,7 @@ Run GitHub Linguist on projects to collect information
 
 #+begin_src emacs-lisp
   (setup (:package github-linguist)
-    (:nixpkgs "github-linguist")
+    (:nixpkgs "customPackages.github-linguist")
     (:set github-linguist-executable "github-linguist"))
 #+end_src
 *** git-identity                                                    :VC:
@@ -8396,7 +8396,7 @@ A Git porcelain inside Emacs
 #+begin_src emacs-lisp
   (setup squasher
     ;; https://github.com/akirak/squasher
-    (:nixpkgs "squasher")
+    (:nixpkgs "customPackages.squasher")
 
     (defun akirak/squasher-from-revision-at-point ()
       (interactive)
