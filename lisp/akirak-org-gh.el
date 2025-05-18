@@ -453,12 +453,14 @@
       (seq-map-indexed (lambda (entry i)
                          (list (number-to-string (1+ i))
                                (format-spec "%s %w / %n"
+                                            ;; These state values are not
+                                            ;; completely the same as the
+                                            ;; statuses of workflow runs.
                                             `((?s . ,(pcase (alist-get 'state entry)
                                                        ("SUCCESS" "✅")
                                                        ("FAILURE" "❌")
-                                                       ("CANCELLED" "🚫")
-                                                       ("SKIPPED" "⏭️")
-                                                       ("WAITING" "⏳")
+                                                       ("SKIPPED" "🚫")
+                                                       ("IN_PROGRESS" "⏳")
                                                        (other other)))
                                               (?n . ,(alist-get 'name entry))
                                               (?w . ,(alist-get 'workflow entry))))
