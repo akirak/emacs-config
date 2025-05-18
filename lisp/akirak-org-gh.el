@@ -292,7 +292,9 @@
              (org-set-tags (seq-uniq (cons "@ticket" (org-get-local-tags)))))
          (user-error "Aborted"))))))
 
-(defconst akirak-org-gh-shell-buffer-name "*org-gh shell*")
+;; "popup-" prefix ensures that the buffer will be displayed in a split window.
+;; See the current value of `display-buffer-alist'.
+(defconst akirak-org-gh-shell-buffer-name "*popup-org-gh-shell*")
 
 ;;;###autoload
 (defun akirak-org-gh-create-pr-from-entry ()
