@@ -204,7 +204,7 @@
                    url)))))
 
 ;;;###autoload
-(defun akirak-org-gh-submit-issue ()
+(defun akirak-org-gh-create-issue-from-entry ()
   "Submit a GitHub issue from the current Org entry."
   (interactive nil org-mode)
   (when (member "@ticket" (org-get-tags))
@@ -295,7 +295,7 @@
 (defconst akirak-org-gh-shell-buffer-name "*org-gh shell*")
 
 ;;;###autoload
-(defun akirak-org-gh-submit-pr ()
+(defun akirak-org-gh-create-pr-from-entry ()
   "Submit a GitHub pull request from the current Org entry."
   (interactive nil org-mode)
   (when (or (member "@ticket" (org-get-tags))
