@@ -7706,6 +7706,9 @@ Interact with ChatGPT or other LLMs
                             :models '(openai/gpt-4.1
                                       openai/gpt-4.1-mini
                                       openai/o4-mini
+                                      openai/codex-mini
+                                      openai/gpt-4o-mini-search-preview
+                                      microsoft/phi-4-reasoning-plus:free
                                       anthropic/claude-3.5-sonnet
                                       anthropic/claude-3.7-sonnet:thinking
                                       google/gemini-2.5-flash-preview
