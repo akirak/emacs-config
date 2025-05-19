@@ -170,6 +170,23 @@ I am interested to see if it can reduce the amount of configuration code.
                                                 (,cmd arg))
                                            `(quote ,cmd)))))))
 #+end_src
+*** :ffap
+:PROPERTIES:
+:CREATED_TIME: [2025-05-19 Mon 21:47]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :ffap (func)
+     "Add a mode-specific entry to ffap-alist."
+     (let ((symbol (if (symbolp func)
+                       func
+                     (eval func)))
+           (mode (setup-get 'mode)))
+       `(with-eval-after-load 'ffap
+          (add-to-list 'ffap-alist '(,mode . ,symbol))))))
+#+end_src
 *** :global-keymap
 :PROPERTIES:
 :CREATED_TIME: [2025-02-15 Sat 14:44]
@@ -4875,6 +4892,14 @@ Major mode for editing YAML files
 #+begin_src emacs-lisp
   (setup yaml-ts-mode
     (:file-match "\\.ya?ml\\'")
+    (:ffap
+     (defun akirak/github-actions-ffap-handler (string)
+       (when (string-match (rx (group (+ nonl) "/" (+ nonl))
+                               "@" (group (+ (any "-" alnum))))
+                           string)
+         (format "https://github.com/%s/tree/%s"
+                 (match-string 1 string)
+                 (match-string 2 string)))))
     (:hook (defun akirak/yaml-setup ()
              "Enable extra settings for YAML."
              (interactive nil (yaml-mode yaml-ts-mode))
