@@ -243,12 +243,12 @@
     (kill-line))
    ((or (numberp arg)
         (looking-at (rx (* blank) eol)))
-    (if (looking-back (rx bol (+ blank)) (line-beginning-position))
+    (if (looking-back (rx bol (* blank)) (line-beginning-position))
         (let ((indentation (current-indentation)))
           (beginning-of-line 1)
-          (kill-region (point) (pos-eol arg))
+          (delete-region (point) (line-beginning-position 2))
           ;; Restore the previous indentation.
-          (indent-to indentation))
+          (forward-char (min indentation (current-indentation))))
       (kill-region (point) (pos-eol arg))))
    (t
     (or (akirak-treesit--maybe-kill-inside-string (line-end-position))
