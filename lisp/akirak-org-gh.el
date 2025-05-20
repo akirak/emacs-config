@@ -403,10 +403,11 @@
       (interactive)
       (browse-url akirak-org-gh-transient-target-url)))
    ("u" "Update the Org entry" akirak-org-gh-update-issue-subtree)
-   ("!" "Any command" (lambda ()
-                        (interactive)
-                        (let ((command (read-string "Subcommand:")))
-                          (akirak-org-gh--shell-with-target command))))]
+   ("!" "Any gh subcommand on the issue/PR"
+    (lambda ()
+      (interactive)
+      (let ((command (read-string "Subcommand:")))
+        (akirak-org-gh--shell-with-target command))))]
   ;; ["Issue"
   ;;  :if (lambda () (eq 'issue (plist-get akirak-org-gh-transient-target :type)))
   ;;  ]
