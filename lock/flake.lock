@@ -2411,22 +2411,6 @@
         "type": "github"
       }
     },
-    "org-placeholder": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1738377982,
-        "narHash": "sha256-Li6PeP70k4mG/Hobb8c+RoyOHYgiWx1xX7fIcmdYNxI=",
-        "owner": "akirak",
-        "repo": "org-placeholder",
-        "rev": "f46343471a32527a6ff47ac5d46ad20b02a564ca",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "repo": "org-placeholder",
-        "type": "github"
-      }
-    },
     "org-ql": {
       "flake": false,
       "locked": {
@@ -2472,6 +2456,22 @@
       "original": {
         "owner": "akirak",
         "repo": "org-reverse-datetree",
+        "type": "github"
+      }
+    },
+    "org-rooted": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1747742602,
+        "narHash": "sha256-kS309dSA4q/hcQP/DUL3ZCXmgbSzr+ahgL2mNkEpF0Q=",
+        "owner": "akirak",
+        "repo": "org-rooted",
+        "rev": "13f25903adbea3241507dc638c33693a3cc5d55b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "org-rooted",
         "type": "github"
       }
     },
@@ -3092,10 +3092,10 @@
         "org-ml": "org-ml",
         "org-nlink": "org-nlink",
         "org-pivot-search": "org-pivot-search",
-        "org-placeholder": "org-placeholder",
         "org-ql": "org-ql",
         "org-recur": "org-recur",
         "org-reverse-datetree": "org-reverse-datetree",
+        "org-rooted": "org-rooted",
         "org-super-agenda": "org-super-agenda",
         "org-super-links": "org-super-links",
         "org-volume": "org-volume",

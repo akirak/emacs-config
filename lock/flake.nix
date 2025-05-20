@@ -908,12 +908,6 @@
       repo = "org-pivot-search";
       type = "github";
     };
-    org-placeholder = {
-      flake = false;
-      owner = "akirak";
-      repo = "org-placeholder";
-      type = "github";
-    };
     org-ql = {
       flake = false;
       owner = "alphapapa";
@@ -930,6 +924,12 @@
       flake = false;
       owner = "akirak";
       repo = "org-reverse-datetree";
+      type = "github";
+    };
+    org-rooted = {
+      flake = false;
+      owner = "akirak";
+      repo = "org-rooted";
       type = "github";
     };
     org-super-agenda = {
