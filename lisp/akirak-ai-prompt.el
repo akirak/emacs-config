@@ -37,6 +37,7 @@
   ["Send a prompt to the buffer"
    :class transient-row
    :if akirak-ai-prompt-supported-p
+   ("l" "Send with the line number" akirak-ai-prompt-send-with-line-number)
    ("f" "Flymake error" akirak-ai-prompt-fix-flymake-error
     :if akirak-ai-prompt-at-error-p)
    ("F" "Flymake error (with custom prompt)"
@@ -82,6 +83,22 @@
   (transient-setup 'akirak-ai-prompt-transient))
 
 ;;;;; Suffixes
+
+(defun akirak-ai-prompt-send-with-line-number ()
+  "Within an AI shell, send a prompt with the line number at point."
+  (interactive)
+  (cl-assert (akirak-org-shell--buffer-live-p))
+  (let* ((line (cdr (posn-col-row (posn-at-point (point)))))
+         (file (buffer-file-name (or (buffer-base-buffer)
+                                     (current-buffer))))
+         (buffer akirak-ai-prompt-shell-buffer))
+    (akirak-shell-send-string-to-buffer buffer
+      (with-current-buffer buffer
+        (concat (format-spec "At line %l in %f, make the following changes:\n\n"
+                             `((?l . ,line)
+                               (?f . ,(file-relative-name file default-directory))))
+                (read-string "Prompt: ")))
+      :confirm t)))
 
 (defun akirak-ai-prompt-fix-flymake-error (&optional arg)
   "Within an AI shell, fix the error at the current point."
