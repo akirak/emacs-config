@@ -38,6 +38,7 @@
    :class transient-row
    :if akirak-ai-prompt-supported-p
    ("l" "Send with the line number" akirak-ai-prompt-send-with-line-number)
+   ("n" "Send with the function name" akirak-ai-prompt-send-with-function-name)
    ("f" "Flymake error" akirak-ai-prompt-fix-flymake-error
     :if akirak-ai-prompt-at-error-p)
    ("F" "Flymake error (with custom prompt)"
@@ -98,6 +99,23 @@
                              `((?l . ,line)
                                (?f . ,(file-relative-name file default-directory))))
                 (read-string "Prompt: ")))
+      :confirm t)))
+
+(defun akirak-ai-prompt-send-with-function-name ()
+  "Within an AI shell, send a prompt with the function name at point."
+  (interactive)
+  (cl-assert (akirak-org-shell--buffer-live-p))
+  (let* ((name (or (which-function)
+                   (user-error "No function")))
+         (file (buffer-file-name (or (buffer-base-buffer)
+                                     (current-buffer))))
+         (buffer akirak-ai-prompt-shell-buffer))
+    (akirak-shell-send-string-to-buffer buffer
+      (with-current-buffer buffer
+        (read-string "Prompt: "
+                     (format-spec "Modify %n in %f to "
+                                  `((?n . ,name)
+                                    (?f . ,(file-relative-name file default-directory))))))
       :confirm t)))
 
 (defun akirak-ai-prompt-fix-flymake-error (&optional arg)
