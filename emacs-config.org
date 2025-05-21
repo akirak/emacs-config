@@ -4835,7 +4835,7 @@ Major mode for editing typescript
 
 #+begin_src emacs-lisp
   (setup typescript-ts-mode
-    (:file-match "\\.ts\\'")
+    (:file-match "\\.ts\\'" "\\.mts\\'")
     (:mode-repl akirak/node-or-bun-repl)
 
     ;; (:also-load akirak-typescript)
