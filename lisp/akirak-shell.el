@@ -124,7 +124,8 @@ the original minor mode."
    ("RET" "Current directory" akirak-shell--terminal-cwd)
    ("p" "Project root" akirak-shell--terminal-project-root)
    ("d" "Select directory" akirak-shell-at-directory)
-   ("a" "Aider" akirak-shell-for-aider)]
+   ("a" "Aider" akirak-shell-for-aider)
+   ("c" "Codex" akirak-shell-for-codex)]
   (interactive)
   (setq akirak-shell-split-window t)
   (setq akirak-shell--buffers (seq-sort-by (lambda (buffer)
@@ -239,6 +240,16 @@ the original minor mode."
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
 
+;;;###autoload
+(defun akirak-shell-for-codex ()
+  (interactive)
+  (let ((root (abbreviate-file-name (project-root (project-current)))))
+    (akirak-shell-eat-new :dir root
+                          :command (akirak-codex-command)
+                          :name (concat "codex-"
+                                        (file-name-nondirectory
+                                         (directory-file-name root))))))
+
 ;;;; Commands that I plan on deprecating
 
 ;;;###autoload
@@ -305,6 +316,7 @@ the original minor mode."
   (let ((input (pcase (akirak-shell-detect-buffer-program buffer)
                  (`aider
                   (akirak-shell--preprocess-aider-input input))
+                 ;; Currently no codex support
                  (_
                   input))))
     (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
@@ -330,7 +342,9 @@ the original minor mode."
     (`eat-mode
      (pcase (akirak-shell--get-command buffer)
        (`("aider" . ,_)
-        'aider)))))
+        'aider)
+       (`("codex" . ,_)
+        'codex)))))
 
 (cl-defun akirak-shell--get-command (buffer)
   (declare (indent 1))
