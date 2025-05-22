@@ -652,6 +652,13 @@
                               :annotation t
                               :type "quote"))
     :transient t)
+   ("e" "Example"
+    (lambda ()
+      (interactive)
+      (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
+                              :annotation t
+                              :type "example"))
+    :transient t)
    ("n" "Other"
     (lambda ()
       (interactive)
