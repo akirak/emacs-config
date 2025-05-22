@@ -7603,7 +7603,28 @@ Edit Git commit messages
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup git-commit)
+  (setup git-commit
+    ;; Use `add-hook' to control the depth.
+    (add-hook 'git-commit-mode-hook
+              (defun akirak/git-commit-auto-insert ()
+                (when (and (bolp) (eolp))
+                  (let ((this-command 'auto-insert))
+                    (auto-insert))))
+              80)
+
+    (:auto-insert
+     ("\\.git/COMMIT_EDITMSG\\'"
+      . (> _ (when-let* ((marker (and (featurep 'org-clock)
+                                      (org-clocking-p)
+                                      (or org-clock-hd-marker
+                                          org-clock-marker)))
+                         (heading (org-entry-get marker "ITEM")))
+               (with-temp-buffer
+                 (insert heading)
+                 (goto-char (point-min))
+                 (when (looking-at (rx (+ (any word punct)) ": "))
+                   (delete-region (point) (match-end 0)))
+                 (buffer-string)))))))
 #+end_src
 *** github-linguist
 :PROPERTIES:
