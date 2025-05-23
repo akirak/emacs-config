@@ -6471,11 +6471,11 @@ A startup screen extracted from Spacemacs
                                      ;; Unused
                                      (agenda . "a")
                                      (registers . "e"))
-          dashboard-items '((recents . 15)
-                            (projects . 8)
-                            (custom-agenda . 10)
+          dashboard-items '((custom-agenda . 10)
                             (org-clock . 7)
-                            (bookmarks . 10)))
+                            (projects . 8)
+                            (bookmarks . 10)
+                            (recents . 15)))
     (:when-loaded
       (require 'akirak-dashboard)
       (add-to-list 'dashboard-item-generators
