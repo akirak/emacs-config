@@ -403,10 +403,11 @@
       (interactive)
       (browse-url akirak-org-gh-transient-target-url)))
    ("u" "Update the Org entry" akirak-org-gh-update-issue-subtree)
-   ("!" "Any command" (lambda ()
-                        (interactive)
-                        (let ((command (read-string "Subcommand:")))
-                          (akirak-org-gh--shell-with-target command))))]
+   ("!" "Any gh subcommand on the issue/PR"
+    (lambda ()
+      (interactive)
+      (let ((command (read-string "Subcommand:")))
+        (akirak-org-gh--shell-with-target command))))]
   ;; ["Issue"
   ;;  :if (lambda () (eq 'issue (plist-get akirak-org-gh-transient-target :type)))
   ;;  ]
@@ -420,7 +421,9 @@
   ["Checks"
    :if (lambda ()
          (eq 'pr (plist-get akirak-org-gh-transient-target :type)))
-   :setup-children akirak-org-gh--checks]
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-org-gh-transient (akirak-org-gh--checks)))]
   (interactive nil org-mode)
   (setq akirak-org-gh-transient-worktree (akirak-org-git-worktree))
   (setq akirak-org-gh-transient-target-url (akirak-org-gh--get-url))
@@ -442,7 +445,7 @@
        :root (or (akirak-org-gh--entry-dir)
                  (akirak-org-git-worktree nil))))))
 
-(defun akirak-org-gh--checks (_children)
+(defun akirak-org-gh--checks ()
   (with-temp-buffer
     (unless (zerop (call-process akirak-org-gh-gh-program
                                  nil (list t nil) nil
@@ -469,8 +472,7 @@
                                `(lambda ()
                                   (interactive)
                                   (browse-url ,(alist-get 'link entry)))
-                               :transient t)))
-      (transient-parse-suffixes 'akirak-org-gh-transient))))
+                               :transient t))))))
 
 (provide 'akirak-org-gh)
 ;;; akirak-org-gh.el ends here

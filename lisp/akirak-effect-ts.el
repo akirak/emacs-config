@@ -14,6 +14,12 @@
   "Insert yield*." nil
   "yield* ")
 
+(advice-add 'akirak-effect-ts-insert-yield
+            :around
+            (defun akirak-effect-ts-ad-around-insert-yield (orig &rest args)
+              (let ((skeleton-end-newline nil))
+                (apply orig args))))
+
 ;;;###autoload (autoload 'akirak-effect-ts-insert-gen "akirak-effect-ts" nil 'interactive)
 (define-skeleton akirak-effect-ts-insert-gen
   "Insert Effect.gen." nil

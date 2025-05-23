@@ -338,10 +338,14 @@
    (gptel--infix-provider)]
   ["Context"
    :class transient-columns
-   :setup-children octopus-setup-context-file-subgroups]
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-doct (octopus-generate-context-file-subgroups)))]
   ["Static files"
    :class transient-row
-   :setup-children octopus-setup-static-targets]
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-doct (octopus-generate-static-targets)))]
   ["Other locations"
    :class transient-row
    ("'" octopus-avy-org-heading-suffix)
@@ -648,6 +652,13 @@
                               :annotation t
                               :type "quote"))
     :transient t)
+   ("e" "Example"
+    (lambda ()
+      (interactive)
+      (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
+                              :annotation t
+                              :type "example"))
+    :transient t)
    ("n" "Other"
     (lambda ()
       (interactive)
@@ -734,7 +745,9 @@
 (transient-define-prefix akirak-capture-snippet (begin end)
   ["Context"
    :class transient-columns
-   :setup-children octopus-setup-context-file-subgroups]
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-snippet (octopus-generate-context-file-subgroups)))]
   ["Other locations"
    :class transient-row
    ("\\" octopus-this-file-suffix)
@@ -927,10 +940,14 @@
    ("=" akirak-capture-select-heading)]
   ["Context"
    :class transient-columns
-   :setup-children octopus-setup-context-file-subgroups]
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-url (octopus-generate-context-file-subgroups)))]
   ["Static files"
    :class transient-row
-   :setup-children octopus-setup-static-targets]
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-url (octopus-generate-static-targets)))]
   ["Other locations"
    :class transient-row
    ("n" "News"
@@ -1002,10 +1019,14 @@
    ("-j" akirak-capture-change-date-infix)]
   ["Context"
    :class transient-columns
-   :setup-children octopus-setup-context-file-subgroups]
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-journal (octopus-generate-context-file-subgroups)))]
   ["Static files"
    :class transient-row
-   :setup-children octopus-setup-static-targets]
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-journal (octopus-generate-static-targets)))]
   ["Other locations"
    :class transient-row
    ("\\" octopus-this-file-suffix)
@@ -1040,7 +1061,9 @@
 (transient-define-prefix akirak-capture-appointment ()
   ["Context"
    :class transient-columns
-   :setup-children octopus-setup-context-file-subgroups]
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-appointment (octopus-generate-context-file-subgroups)))]
   ["Other locations"
    :class transient-row
    ("/" octopus-read-dog-file-suffix)]

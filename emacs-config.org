@@ -170,6 +170,23 @@ I am interested to see if it can reduce the amount of configuration code.
                                                 (,cmd arg))
                                            `(quote ,cmd)))))))
 #+end_src
+*** :ffap
+:PROPERTIES:
+:CREATED_TIME: [2025-05-19 Mon 21:47]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :ffap (func)
+     "Add a mode-specific entry to ffap-alist."
+     (let ((symbol (if (symbolp func)
+                       func
+                     (eval func)))
+           (mode (setup-get 'mode)))
+       `(with-eval-after-load 'ffap
+          (add-to-list 'ffap-alist '(,mode . ,symbol))))))
+#+end_src
 *** :global-keymap
 :PROPERTIES:
 :CREATED_TIME: [2025-02-15 Sat 14:44]
@@ -2904,7 +2921,7 @@ Manage Org searches
                                         (file (org-dog-resolve-relative-file file)))
                               (find-file file)))
                            (`(OrgBookmark . ,bookmark)
-                            (org-placeholder-view bookmark)))))))
+                            (org-rooted-view bookmark)))))))
 #+end_src
 **** COMMENT oahu-memento                                                      :ARCHIVE:
 :PROPERTIES:
@@ -3820,7 +3837,7 @@ Transient commands for Org Dog
     (:when-loaded
       (transient-append-suffix #'octopus-find-node
         'octopus-clocked-file-suffix
-        '("b" "Placeholder" org-placeholder-find-or-create))
+        '("b" "Placeholder" org-rooted-find-or-create))
 
       (transient-append-suffix #'octopus-clock-in
         'octopus-read-dog-file-suffix
@@ -4253,32 +4270,6 @@ Experimental search command for Org files
     (defun akirak/org-pivot-search-from-files (files)
       (org-pivot-search-from-files files :interactive t)))
 #+end_src
-*** org-placeholder
-:PROPERTIES:
-:CREATED_TIME: [2022-11-12 Sat 18:39]
-:END:
-#+begin_quote
-Placeholders for Org
-[[https://github.com/akirak/org-placeholder]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package org-placeholder)
-    (:set org-placeholder-show-archived-entries-in-view t
-          org-placeholder-ignored-group-heading-regexp (rx bol (or "Backlog"
-                                                                   "Authors"
-                                                                   (repeat 4 digit))))
-    (:with-mode org-placeholder-view-mode
-      (:hook org-placeholder-view-fold-mode))
-
-    (:when-loaded
-      (require 'akirak-org-capture)
-      (:set org-placeholder-default-capture-template
-            (concat "* %i\n"
-                    akirak-org-capture-default-drawer
-                    "%?")))
-    (:global-keymap "M-s M-p" #'org-placeholder-find-or-create))
-#+end_src
 *** COMMENT org-pretty-table                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-23 Sat 23:59]
@@ -4363,6 +4354,32 @@ Create reverse date trees in org-mode
       (keymap-set calendar-mode-map "]" #'org-reverse-datetree-calendar-next)
       (keymap-set calendar-mode-map "[" #'org-reverse-datetree-calendar-previous)
       (keymap-set calendar-mode-map "RET" #'org-reverse-datetree-display-entry)))
+#+end_src
+*** org-rooted
+:PROPERTIES:
+:CREATED_TIME: [2022-11-12 Sat 18:39]
+:END:
+#+begin_quote
+Boards for Org
+[[https://github.com/akirak/org-rooted]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package org-rooted)
+    (:set org-rooted-show-archived-entries-in-view t
+          org-rooted-ignored-group-heading-regexp (rx bol (or "Backlog"
+                                                              "Authors"
+                                                              (repeat 4 digit))))
+    (:with-mode org-rooted-view-mode
+      (:hook org-rooted-view-fold-mode))
+
+    (:when-loaded
+      (require 'akirak-org-capture)
+      (:set org-rooted-default-capture-template
+            (concat "* %i\n"
+                    akirak-org-capture-default-drawer
+                    "%?")))
+    (:global-keymap "M-s M-p" #'org-rooted-find-or-create))
 #+end_src
 *** COMMENT org-starter                                    :ARCHIVE:
 :PROPERTIES:
@@ -4818,7 +4835,7 @@ Major mode for editing typescript
 
 #+begin_src emacs-lisp
   (setup typescript-ts-mode
-    (:file-match "\\.ts\\'")
+    (:file-match "\\.ts\\'" "\\.mts\\'")
     (:mode-repl akirak/node-or-bun-repl)
 
     ;; (:also-load akirak-typescript)
@@ -4875,6 +4892,14 @@ Major mode for editing YAML files
 #+begin_src emacs-lisp
   (setup yaml-ts-mode
     (:file-match "\\.ya?ml\\'")
+    (:ffap
+     (defun akirak/github-actions-ffap-handler (string)
+       (when (string-match (rx (group (+ nonl) "/" (+ nonl))
+                               "@" (group (+ (any "-" alnum))))
+                           string)
+         (format "https://github.com/%s/tree/%s"
+                 (match-string 1 string)
+                 (match-string 2 string)))))
     (:hook (defun akirak/yaml-setup ()
              "Enable extra settings for YAML."
              (interactive nil (yaml-mode yaml-ts-mode))
@@ -6220,7 +6245,7 @@ Consulting completing-read
 
                                       ;; Non-default
                                       (?o "Org" org-bookmark-heading-jump)
-                                      (?v "Org Placeholder" org-placeholder-view))
+                                      (?v "Org Placeholder" org-rooted-view))
             consult-ripgrep-args (concat (eval (car (get 'consult-ripgrep-args 'standard-value)) t)
                                          ;; Show files in .github directory, for example.
                                          " --hidden --ignore-file=.gitignore --iglob=!.git")))
@@ -6442,32 +6467,21 @@ A startup screen extracted from Spacemacs
                                      ;; Don't use p
                                      (projects . "j")
                                      (org-clock . "c")
+                                     (custom-agenda . "a")
                                      ;; Unused
                                      (agenda . "a")
                                      (registers . "e"))
-          dashboard-items '((recents . 15)
-                            (projects . 8)
+          dashboard-items '((custom-agenda . 10)
                             (org-clock . 7)
-                            (bookmarks . 10)))
+                            (projects . 8)
+                            (bookmarks . 10)
+                            (recents . 15)))
     (:when-loaded
       (require 'akirak-dashboard)
       (add-to-list 'dashboard-item-generators
-                   (cons 'org-clock
-                         (defun akirak/dashboard-org-clock-insert (list-size)
-                           (dashboard-insert-section
-                            "Org Clock (unfinished todo items)"
-                            (when (boundp 'org-clock-history)
-                              (akirak-dashboard-org-clock-items list-size))
-                            list-size
-                            'org-clock
-                            (dashboard-get-shortcut 'org-clock)
-                            `(lambda (&rest _)
-                               (require 'org-dog)
-                               (with-current-buffer (org-dog-indirect-buffer
-                                                     (org-element-property :hd-marker ',el))
-                                 (run-hooks 'akirak-org-clock-open-hook)
-                                 (pop-to-buffer (current-buffer))))
-                            (akirak-dashboard-org-clock-format-item el))))))
+                   (cons 'org-clock 'akirak-dashboard-org-clock-insert))
+      (add-to-list 'dashboard-item-generators
+                   (cons 'custom-agenda 'akirak-dashboard-insert-agenda)))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
     (:keymap "n" #'dashboard-next-line
@@ -7578,7 +7592,28 @@ Edit Git commit messages
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup git-commit)
+  (setup git-commit
+    ;; Use `add-hook' to control the depth.
+    (add-hook 'git-commit-mode-hook
+              (defun akirak/git-commit-auto-insert ()
+                (when (and (bolp) (eolp))
+                  (let ((this-command 'auto-insert))
+                    (auto-insert))))
+              80)
+
+    (:auto-insert
+     ("\\.git/COMMIT_EDITMSG\\'"
+      . (> _ (when-let* ((marker (and (featurep 'org-clock)
+                                      (org-clocking-p)
+                                      (or org-clock-hd-marker
+                                          org-clock-marker)))
+                         (heading (org-entry-get marker "ITEM")))
+               (with-temp-buffer
+                 (insert heading)
+                 (goto-char (point-min))
+                 (when (looking-at (rx (+ (any word punct)) ": "))
+                   (delete-region (point) (match-end 0)))
+                 (buffer-string)))))))
 #+end_src
 *** github-linguist
 :PROPERTIES:
@@ -7706,18 +7741,17 @@ Interact with ChatGPT or other LLMs
                             :models '(openai/gpt-4.1
                                       openai/gpt-4.1-mini
                                       openai/o4-mini
+                                      openai/codex-mini
+                                      openai/gpt-4o-mini-search-preview
+                                      microsoft/phi-4-reasoning-plus:free
                                       anthropic/claude-3.5-sonnet
-                                      anthropic/claude-3.7-sonnet:thinking
+                                      anthropic/claude-opus-4
+                                      anthropic/claude-sonnet-4
                                       google/gemini-2.5-flash-preview
                                       google/gemini-2.5-pro-preview))
             gptel-model 'google/gemini-2.5-flash-preview)
 
       (gptel-make-gh-copilot "Copilot")
-
-      (gptel-make-anthropic "Claude"
-        :stream t
-        :key (lambda ()
-               (gptel-api-key-from-auth-source "api.anthropic.com")))
 
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
@@ -10468,7 +10502,7 @@ Define how Org entries are displayed by certain commands.
               (if (buffer-narrowed-p)
                   (akirak/org-recenter-toplevel-at-top)
                 (recenter))))
-  (setq org-placeholder-find-hook #'akirak/org-goto-indirect-hook)
+  (setq org-rooted-find-hook #'akirak/org-goto-indirect-hook)
 
   (defun akirak/org-recenter-toplevel-at-top ()
     (unless (org-before-first-heading-p)
