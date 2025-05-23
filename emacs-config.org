@@ -6467,32 +6467,21 @@ A startup screen extracted from Spacemacs
                                      ;; Don't use p
                                      (projects . "j")
                                      (org-clock . "c")
+                                     (custom-agenda . "a")
                                      ;; Unused
                                      (agenda . "a")
                                      (registers . "e"))
           dashboard-items '((recents . 15)
                             (projects . 8)
+                            (custom-agenda . 10)
                             (org-clock . 7)
                             (bookmarks . 10)))
     (:when-loaded
       (require 'akirak-dashboard)
       (add-to-list 'dashboard-item-generators
-                   (cons 'org-clock
-                         (defun akirak/dashboard-org-clock-insert (list-size)
-                           (dashboard-insert-section
-                            "Org Clock (unfinished todo items)"
-                            (when (boundp 'org-clock-history)
-                              (akirak-dashboard-org-clock-items list-size))
-                            list-size
-                            'org-clock
-                            (dashboard-get-shortcut 'org-clock)
-                            `(lambda (&rest _)
-                               (require 'org-dog)
-                               (with-current-buffer (org-dog-indirect-buffer
-                                                     (org-element-property :hd-marker ',el))
-                                 (run-hooks 'akirak-org-clock-open-hook)
-                                 (pop-to-buffer (current-buffer))))
-                            (akirak-dashboard-org-clock-format-item el))))))
+                   (cons 'org-clock 'akirak-dashboard-org-clock-insert))
+      (add-to-list 'dashboard-item-generators
+                   (cons 'custom-agenda 'akirak-dashboard-insert-agenda)))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
     (:keymap "n" #'dashboard-next-line
