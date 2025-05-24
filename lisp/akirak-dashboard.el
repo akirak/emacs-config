@@ -156,7 +156,7 @@
 
 (defun akirak-dashboard-insert-agenda (list-size)
   (dashboard-insert-section
-   "Daily agenda"
+   "Scheduled for today"
    (akirak-dashboard--agenda-items 'day)
    list-size
    'custom-agenda
