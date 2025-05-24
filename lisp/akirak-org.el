@@ -201,6 +201,28 @@ With ARG, pick a text from the kill ring instead of the last one."
         (delete-region begin (point))))))
 
 ;;;###autoload
+(defun akirak-org-yank-markdown (&optional arg)
+  "Paste Markdown into the entry."
+  (interactive nil org-mode)
+  (let ((begin (point)))
+    (atomic-change-group
+      (if arg
+          (yank-pop)
+        (yank))
+      (akirak-pandoc-replace-with-org begin (point))
+      (push-mark)
+      (goto-char begin)
+      (activate-mark)
+      (akirak-org-demote-headings)
+      (deactivate-mark))
+    (let ((tag "@AI"))
+      (when (and (not (member tag (org-get-tags)))
+                 (yes-or-no-p (format "Add %s tag?" tag)))
+        (save-excursion
+          (org-back-to-heading)
+          (org-set-tags (cons tag (org-get-tags nil 'local))))))))
+
+;;;###autoload
 (defun akirak-org-angle-open (&optional arg)
   "Do-what-i-mean \"<\" in `org-mode'."
   (interactive "P")
