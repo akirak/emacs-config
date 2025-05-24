@@ -213,7 +213,7 @@ With ARG, pick a text from the kill ring instead of the last one."
       (push-mark)
       (goto-char begin)
       (activate-mark)
-      (akirak-org-demote-headings)
+      (akirak-org-demote-headings nil t)
       (deactivate-mark))
     (let ((tag "@AI"))
       (when (and (not (member tag (org-get-tags)))
@@ -1209,7 +1209,7 @@ At this point, the function works with the following pattern:
                                         source)))))
 
 ;;;###autoload
-(defun akirak-org-demote-headings (&optional arg)
+(defun akirak-org-demote-headings (&optional arg silent)
   "Demote the headings so their levels are higher than ARG."
   (interactive "P")
   (let* ((bounds (cond
@@ -1236,11 +1236,14 @@ At this point, the function works with the following pattern:
           (setq current-min-level (if current-min-level
                                       (min current-min-level level)
                                     level))))
-      (let ((level-inc (- (1+ base-level) current-min-level)))
-        (when (> level-inc 0)
-          (replace-regexp-in-region (rx bol "*")
-                                    (make-string (1+ level-inc) ?\*)
-                                    (car bounds) (cdr bounds)))))))
+      (if current-min-level
+          (let ((level-inc (- (1+ base-level) current-min-level)))
+            (when (> level-inc 0)
+              (replace-regexp-in-region (rx bol "*")
+                                        (make-string (1+ level-inc) ?\*)
+                                        (car bounds) (cdr bounds))))
+        (unless silent
+          (message "akirak-org-demote-headings: No heading in the selected region"))))))
 
 ;;;; Specific applications
 
