@@ -1372,7 +1372,7 @@ The built-in =electric= package provides the following modes:
                          (just-mode . (,@lsp-no-formatter))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
-                         (python-mode . (,@lsp))
+                         (python-mode . (,@lsp-no-formatter))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
                          (svelte-mode . (,@lsp ,@flymake-eslint))
