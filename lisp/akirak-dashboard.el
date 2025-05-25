@@ -197,39 +197,39 @@
                             (org-dog-select 'absolute))))
     ;; Update `org-agenda-files'.
     (when files
-      (setq org-agenda-files (seq-union files org-agenda-files)))
-    (thread-last
-      (org-ql-select files
-        `(and (regexp ,regexp)
-              (not (done)))
-        :action `(lambda ()
-                   (save-excursion
-                     (let* ((el (org-element-at-point-no-context))
-                            (bound (org-element-end el))
-                            timestamps)
-                       (when (re-search-forward ,regexp bound t)
-                         (push (org-timestamp-from-string (match-string 0))
-                               timestamps))
-                       (thread-first
-                         el
-                         (org-element-put-property :category (org-entry-get nil "CATEGORY" t))
-                         (org-element-put-property :hd-marker (point-marker))
-                         (org-element-put-property :active-timestamp
-                                                   (thread-last
-                                                     timestamps
-                                                     (seq-sort-by #'org-timestamp-to-time
-                                                                  #'time-less-p)
-                                                     (car))))))))
-      (seq-sort-by (lambda (el)
-                     (org-element-property :todo-keyword el))
-                   #'string-lessp)
-      (seq-sort-by (lambda (el)
-                     (or (org-element-property :priority el)
-                         org-default-priority))
-                   #'<)
-      (seq-sort-by (lambda (el)
-                     (org-timestamp-to-time (org-element-property :active-timestamp el)))
-                   #'time-less-p))))
+      (setq org-agenda-files (seq-union files org-agenda-files))
+      (thread-last
+        (org-ql-select files
+          `(and (regexp ,regexp)
+                (not (done)))
+          :action `(lambda ()
+                     (save-excursion
+                       (let* ((el (org-element-at-point-no-context))
+                              (bound (org-element-end el))
+                              timestamps)
+                         (when (re-search-forward ,regexp bound t)
+                           (push (org-timestamp-from-string (match-string 0))
+                                 timestamps))
+                         (thread-first
+                           el
+                           (org-element-put-property :category (org-entry-get nil "CATEGORY" t))
+                           (org-element-put-property :hd-marker (point-marker))
+                           (org-element-put-property :active-timestamp
+                                                     (thread-last
+                                                       timestamps
+                                                       (seq-sort-by #'org-timestamp-to-time
+                                                                    #'time-less-p)
+                                                       (car))))))))
+        (seq-sort-by (lambda (el)
+                       (org-element-property :todo-keyword el))
+                     #'string-lessp)
+        (seq-sort-by (lambda (el)
+                       (or (org-element-property :priority el)
+                           org-default-priority))
+                     #'<)
+        (seq-sort-by (lambda (el)
+                       (org-timestamp-to-time (org-element-property :active-timestamp el)))
+                     #'time-less-p)))))
 
 (provide 'akirak-dashboard)
 ;;; akirak-dashboard.el ends here
