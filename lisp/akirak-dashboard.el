@@ -201,7 +201,8 @@
       (thread-last
         (org-ql-select files
           `(and (regexp ,regexp)
-                (not (done)))
+                (not (done))
+                (not (tags "ARCHIVE")))
           :action `(lambda ()
                      (save-excursion
                        (let* ((el (org-element-at-point-no-context))
