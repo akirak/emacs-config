@@ -182,7 +182,7 @@
                                      (or ,@(mapcar (lambda (day)
                                                      (format-time-string "%F" (encode-time day)))
                                                    dates))
-                                     (repeat 0 16 (not (any ">\\n")))
+                                     (repeat 0 16 (not (any ">\n")))
                                      ">")))
          (files (seq-filter (lambda (file)
                               (if-let* ((buffer (org-find-base-buffer-visiting file)))
