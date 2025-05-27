@@ -1239,9 +1239,11 @@ At this point, the function works with the following pattern:
       (if current-min-level
           (let ((level-inc (- (1+ base-level) current-min-level)))
             (when (> level-inc 0)
-              (replace-regexp-in-region (rx bol "*")
-                                        (make-string (1+ level-inc) ?\*)
-                                        (car bounds) (cdr bounds))))
+              (replace-regexp-in-region (rx bol (+ "*") blank)
+                                        (concat (make-string (1+ level-inc) ?\*)
+                                                "\\&")
+                                        (car bounds)
+                                        (point))))
         (unless silent
           (message "akirak-org-demote-headings: No heading in the selected region"))))))
 
