@@ -1247,6 +1247,41 @@ At this point, the function works with the following pattern:
         (unless silent
           (message "akirak-org-demote-headings: No heading in the selected region"))))))
 
+;;;###autoload
+(defun akirak-org-ai-set-heading (&optional arg)
+  "Generate the heading using AI based on the content."
+  (interactive "P" org-mode)
+  (require 'gptel)
+  (when (org-before-first-heading-p)
+    (user-error "Must be after the first heading"))
+  (unless (or (string-empty-p (org-entry-get nil "ITEM"))
+              (yes-or-no-p "The current entry already has a non-empty heading. \
+Are you sure you want to override it?"))
+    (user-error "Aborted"))
+  (let ((marker (save-excursion
+                  (org-back-to-heading)
+                  (point-marker))))
+    (cl-flet
+        ((callback (response info)
+           (when (stringp response)
+             (org-with-point-at marker
+               (org-edit-headline response)))))
+      (akirak-org-ai-summarize-headline
+       (save-excursion
+         (org-back-to-heading)
+         (org-end-of-meta-data t)
+         (buffer-substring-no-properties (point) (org-entry-end-position)))
+       #'callback))))
+
+(defun akirak-org-ai-summarize-headline (content callback)
+  (gptel-request (concat "Generate a headline for the following content. \
+It should fit in a single line and must not contain a newline character. \
+If the first paragraph of the quoted content is a question, the headline should summarise the question rather than the answer that follows it.\n\n"
+                         (akirak-pandoc-convert-string content
+                           :from "org" :to "gfm"))
+    :system "Be concrete and specific to make it clear what you are referring to."
+    :callback callback))
+
 ;;;; Specific applications
 
 ;;;###autoload
