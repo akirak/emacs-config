@@ -33,9 +33,8 @@
     };
     astro-ts-mode = {
       flake = false;
-      owner = "Sorixelle";
-      repo = "astro-ts-mode";
-      type = "github";
+      type = "git";
+      url = "https://git.isincredibly.gay/srxl/astro-ts-mode.git";
     };
     auto-minor-mode = {
       flake = false;
