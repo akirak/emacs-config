@@ -444,33 +444,8 @@ are displayed in the frame."
               (cons '("iex -S mix" annotation "Run iex within the context of the application")
                     (nreverse result)))))
       (just (with-memoize
-             (let ((default-directory dir)
-                   (err-file (make-temp-file "emacs-compile-just-error")))
-               (unwind-protect
-                   (with-temp-buffer
-                     (unless (zerop (call-process "just" nil (list t err-file) nil
-                                                  "--dump" "--dump-format" "json"))
-                       (user-error "just failed: %s"
-                                   (with-temp-buffer
-                                     (insert-file-contents err-file)
-                                     (string-trim (buffer-string)))))
-                     (goto-char (point-min))
-                     (thread-last
-                       (json-parse-buffer :object-type 'alist :array-type 'list
-                                          :null-object nil)
-                       (alist-get 'recipes)
-                       (mapcar (pcase-lambda (`(,name . ,attrs))
-                                 `(,(format "just %s" name)
-                                   annotation
-                                   ,(string-join
-                                     (thread-last
-                                       (list (alist-get 'doc attrs)
-                                             (akirak-compile--just-format-body
-                                              (alist-get 'body attrs)))
-                                       (flatten-list)
-                                       (delq nil))
-                                     " — "))))))
-                 (delete-file err-file)))))
+             (let ((default-directory dir))
+               (akirak-compile--just-candidates))))
       (zig (with-memoize
             (with-temp-buffer
               (akirak-compile--insert-stdout "zig" "build" "--help")
@@ -524,6 +499,34 @@ are displayed in the frame."
       (otherwise
        (alist-get backend akirak-compile-backend-command-alist)))))
 
+(defun akirak-compile--just-candidates ()
+  (let ((err-file (make-temp-file "emacs-compile-just-error")))
+    (unwind-protect
+        (with-temp-buffer
+          (unless (zerop (call-process "just" nil (list t err-file) nil
+                                       "--dump" "--dump-format" "json"))
+            (user-error "just failed: %s"
+                        (with-temp-buffer
+                          (insert-file-contents err-file)
+                          (string-trim (buffer-string)))))
+          (goto-char (point-min))
+          (thread-last
+            (json-parse-buffer :object-type 'alist :array-type 'list
+                               :null-object nil)
+            (alist-get 'recipes)
+            (mapcar (pcase-lambda (`(,name . ,attrs))
+                      `(,(format "just %s" name)
+                        annotation
+                        ,(string-join
+                          (thread-last
+                            (list (alist-get 'doc attrs)
+                                  (akirak-compile--just-format-body
+                                   (alist-get 'body attrs)))
+                            (flatten-list)
+                            (delq nil))
+                          " — "))))))
+      (delete-file err-file))))
+
 (defun akirak-compile--installation-command-p (command)
   (pcase (akirak-compile--split-command command)
     (`(,_ ,(or "add" "install" "remove" "uninstall" "update") . ,_)
@@ -575,7 +578,7 @@ are displayed in the frame."
            (pcase token
              ((pred stringp)
               token)
-             (`(("variable" ,name))
+             (`("variable" ,name)
               (concat "{{" name "}}"))))
          (format-line (line-tokens)
            (mapconcat #'format-token line-tokens)))

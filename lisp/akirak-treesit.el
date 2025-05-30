@@ -244,16 +244,16 @@
    ((or (numberp arg)
         (looking-at (rx (* blank) eol)))
     (cond
-     ((looking-back (rx bol (* blank)) (line-beginning-position))
-      (let ((indentation (current-indentation)))
-        (beginning-of-line 1)
-        (delete-region (point) (line-beginning-position (or arg 2)))
-        ;; Restore the previous indentation.
-        (forward-char (min indentation (current-indentation)))))
      ((looking-at (rx (* blank) eol))
-      (delete-region (point) (pos-bol 2))
-      (when (looking-at (rx (+ blank)))
-        (delete-region (point) (match-end 0))))
+      (if (looking-back (rx bol (* blank)) (line-beginning-position))
+          (let ((indentation (current-indentation)))
+            (beginning-of-line 1)
+            (delete-region (point) (line-beginning-position (if arg (1+ arg) 2)))
+            ;; Restore the previous indentation.
+            (forward-char (min indentation (current-indentation))))
+        (delete-region (point) (pos-bol 2))
+        (when (looking-at (rx (+ blank)))
+          (delete-region (point) (match-end 0)))))
      (t
       (kill-region (point) (pos-eol arg)))))
    (t

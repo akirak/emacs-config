@@ -1372,7 +1372,7 @@ The built-in =electric= package provides the following modes:
                          (just-mode . (,@lsp-no-formatter))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
-                         (python-mode . (,@lsp))
+                         (python-mode . (,@lsp-no-formatter))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
                          (svelte-mode . (,@lsp ,@flymake-eslint))
@@ -7593,13 +7593,20 @@ Edit Git commit messages
 
 #+begin_src emacs-lisp
   (setup git-commit
-    ;; Use `add-hook' to control the depth.
-    (add-hook 'git-commit-mode-hook
-              (defun akirak/git-commit-auto-insert ()
-                (when (and (bolp) (eolp))
-                  (let ((this-command 'auto-insert))
-                    (auto-insert))))
-              80)
+    (:keymap "M-<return>" #'akirak/git-commit-auto-insert)
+
+    (defcustom akirak/git-commit-auto-insert-hook nil
+      "Hook that generates and inserts a commit message (or part of it).
+
+  Each function in this hook is called inside a buffer for editing the
+  commit message and must return non-nil for successful insertion."
+      :type 'hook)
+
+    (defun akirak/git-commit-auto-insert ()
+      (interactive)
+      (unless (run-hook-with-args-until-success 'akirak/git-commit-auto-insert-hook)
+        (let ((this-command 'auto-insert))
+          (auto-insert))))
 
     (:auto-insert
      ("\\.git/COMMIT_EDITMSG\\'"
