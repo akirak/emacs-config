@@ -389,12 +389,14 @@
                         (< (treesit-node-end parent)
                            lower-bound)))
           (setq node parent))
-        (when-let* ((end (or (thread-last
-                               (treesit-node-children parent)
-                               (mapcar #'treesit-node-end)
-                               (seq-find `(lambda (pos)
-                                            (>= pos ,lower-bound))))
-                             (treesit-node-end parent))))
+        (when-let* ((end (if parent
+                             (or (thread-last
+                                   (treesit-node-children parent)
+                                   (mapcar #'treesit-node-end)
+                                   (seq-find `(lambda (pos)
+                                                (>= pos ,lower-bound))))
+                                 (treesit-node-end parent))
+                           (treesit-node-end node))))
           (if arg
               (let (whole-lines)
                 (goto-char start)
