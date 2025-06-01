@@ -201,6 +201,28 @@ With ARG, pick a text from the kill ring instead of the last one."
         (delete-region begin (point))))))
 
 ;;;###autoload
+(defun akirak-org-yank-markdown (&optional arg)
+  "Paste Markdown into the entry."
+  (interactive nil org-mode)
+  (let ((begin (point)))
+    (atomic-change-group
+      (if arg
+          (yank-pop)
+        (yank))
+      (akirak-pandoc-replace-with-org begin (point))
+      (push-mark)
+      (goto-char begin)
+      (activate-mark)
+      (akirak-org-demote-headings nil t)
+      (deactivate-mark))
+    (let ((tag "@AI"))
+      (when (and (not (member tag (org-get-tags)))
+                 (yes-or-no-p (format "Add %s tag?" tag)))
+        (save-excursion
+          (org-back-to-heading)
+          (org-set-tags (cons tag (org-get-tags nil 'local))))))))
+
+;;;###autoload
 (defun akirak-org-angle-open (&optional arg)
   "Do-what-i-mean \"<\" in `org-mode'."
   (interactive "P")
@@ -1187,7 +1209,7 @@ At this point, the function works with the following pattern:
                                         source)))))
 
 ;;;###autoload
-(defun akirak-org-demote-headings (&optional arg)
+(defun akirak-org-demote-headings (&optional arg silent)
   "Demote the headings so their levels are higher than ARG."
   (interactive "P")
   (let* ((bounds (cond
@@ -1214,11 +1236,51 @@ At this point, the function works with the following pattern:
           (setq current-min-level (if current-min-level
                                       (min current-min-level level)
                                     level))))
-      (let ((level-inc (- (1+ base-level) current-min-level)))
-        (when (> level-inc 0)
-          (replace-regexp-in-region (rx bol "*")
-                                    (make-string (1+ level-inc) ?\*)
-                                    (car bounds) (cdr bounds)))))))
+      (if current-min-level
+          (let ((level-inc (- (1+ base-level) current-min-level)))
+            (when (> level-inc 0)
+              (replace-regexp-in-region (rx bol (+ "*") blank)
+                                        (concat (make-string (1+ level-inc) ?\*)
+                                                "\\&")
+                                        (car bounds)
+                                        (point))))
+        (unless silent
+          (message "akirak-org-demote-headings: No heading in the selected region"))))))
+
+;;;###autoload
+(defun akirak-org-ai-set-heading (&optional arg)
+  "Generate the heading using AI based on the content."
+  (interactive "P" org-mode)
+  (require 'gptel)
+  (when (org-before-first-heading-p)
+    (user-error "Must be after the first heading"))
+  (unless (or (string-empty-p (org-entry-get nil "ITEM"))
+              (yes-or-no-p "The current entry already has a non-empty heading. \
+Are you sure you want to override it?"))
+    (user-error "Aborted"))
+  (let ((marker (save-excursion
+                  (org-back-to-heading)
+                  (point-marker))))
+    (cl-flet
+        ((callback (response info)
+           (when (stringp response)
+             (org-with-point-at marker
+               (org-edit-headline response)))))
+      (akirak-org-ai-summarize-headline
+       (save-excursion
+         (org-back-to-heading)
+         (org-end-of-meta-data t)
+         (buffer-substring-no-properties (point) (org-entry-end-position)))
+       #'callback))))
+
+(defun akirak-org-ai-summarize-headline (content callback)
+  (gptel-request (concat "Generate a headline for the following content. \
+It should fit in a single line and must not contain a newline character. \
+If the first paragraph of the quoted content is a question, the headline should summarise the question rather than the answer that follows it.\n\n"
+                         (akirak-pandoc-convert-string content
+                           :from "org" :to "gfm"))
+    :system "Be concrete and specific to make it clear what you are referring to."
+    :callback callback))
 
 ;;;; Specific applications
 

@@ -73,9 +73,13 @@
     (mapcar #'car suggestions)))
 
 (defun akirak-consult-edit--filename ()
-  (if (eq major-mode 'nov-mode)
-      nov-file-name
-    (buffer-file-name (buffer-base-buffer))))
+  (cond
+   ((eq major-mode 'nov-mode)
+    nov-file-name)
+   ((derived-mode-p 'dired-mode)
+    (dired-filename-at-point))
+   (t
+    (buffer-file-name (buffer-base-buffer)))))
 
 (defvar akirak-consult-edit-sources
   '(akirak-consult-edit-org-tempo-source
