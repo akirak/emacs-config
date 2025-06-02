@@ -912,10 +912,14 @@ The point should be at the heading."
     (org-open-line 1)))
 
 ;;;###autoload
-(defun akirak-org-goto-before-next-heading ()
-  (interactive)
-  (org-next-visible-heading 1)
-  (re-search-backward (rx (+ (any "\n"))) nil t))
+(defun akirak-org-goto-before-next-heading (&optional arg)
+  (interactive "P")
+  (cond
+   (arg
+    (org-end-of-subtree))
+   (t
+    (org-next-visible-heading 1)
+    (re-search-backward (rx (+ (any "\n"))) nil t))))
 
 ;;;###autoload
 (defun akirak-org-table-create-or-edit ()
