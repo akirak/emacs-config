@@ -2330,6 +2330,11 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
     (:with-map tab-prefix-map
       (:keymap "R" #'akirak/tab-bar-set-tab-name-from-org-clock))
 
+    (:with-mode tab-bar-history-mode
+      (:hook-into after-init-hook)
+      (:keymap "<f7>" #'tab-bar-history-back
+               "S-<f7>" #'tab-bar-history-forward))
+
     (defun akirak/tab-bar-set-tab-name-from-org-clock ()
       (interactive)
       (if-let* ((heading (when (org-clocking-p)
@@ -2636,7 +2641,7 @@ Display available keybindings in popup
     (:set fast-but-imprecise-scrolling t
           scroll-preserve-screen-position t))
 #+end_src
-*** winner                                         :history:windows:
+*** COMMENT winner                                             :history:windows:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-03 Mon 23:59]
 :END:
