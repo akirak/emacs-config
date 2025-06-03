@@ -1267,6 +1267,7 @@ Are you sure you want to override it?"))
                   (point-marker))))
     (cl-flet
         ((callback (response info)
+           (require 'akirak-pandoc)
            (when (stringp response)
              (org-with-point-at marker
                (org-edit-headline response)))))
@@ -1278,6 +1279,7 @@ Are you sure you want to override it?"))
        #'callback))))
 
 (defun akirak-org-ai-summarize-headline (content callback)
+  (require 'akirak-pandoc)
   (gptel-request (concat "Generate a headline for the following content. \
 It should fit in a single line and must not contain a newline character. \
 If the first paragraph of the quoted content is a question, the headline should summarise the question rather than the answer that follows it.\n\n"
