@@ -200,6 +200,14 @@ With ARG, pick a text from the kill ring instead of the last one."
         (deactivate-mark)
         (delete-region begin (point))))))
 
+(defcustom akirak-org-yank-markdown-hook
+  '(akirak-org-maybe-add-ai-tag)
+  "Hook to run after pasting Markdown content.
+
+Each function is called with two markers as the arguments: the start and
+end of the pasted region."
+  :type 'hook)
+
 ;;;###autoload
 (defun akirak-org-yank-markdown (&optional arg)
   "Paste Markdown into the entry."
@@ -215,12 +223,20 @@ With ARG, pick a text from the kill ring instead of the last one."
       (activate-mark)
       (akirak-org-demote-headings nil t)
       (deactivate-mark))
-    (let ((tag "@AI"))
-      (when (and (not (member tag (org-get-tags)))
-                 (yes-or-no-p (format "Add %s tag?" tag)))
-        (save-excursion
-          (org-back-to-heading)
-          (org-set-tags (cons tag (org-get-tags nil 'local))))))))
+    (let (start-marker
+          (end-marker (point-marker)))
+      (set-marker start-marker begin)
+      (goto-char begin)
+      (run-hook-with-args 'akirak-org-yank-markdown-hook start-marker end-marker)
+      (goto-char end-marker))))
+
+(defun akirak-org-maybe-add-ai-tag (&rest _)
+  (let ((tag "@AI"))
+    (when (and (not (member tag (org-get-tags)))
+               (yes-or-no-p (format "Add %s tag?" tag)))
+      (save-excursion
+        (org-back-to-heading)
+        (org-set-tags (cons tag (org-get-tags nil 'local)))))))
 
 ;;;###autoload
 (defun akirak-org-angle-open (&optional arg)
