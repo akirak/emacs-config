@@ -7608,11 +7608,15 @@ Edit Git commit messages
   commit message and must return non-nil for successful insertion."
       :type 'hook)
 
-    (defun akirak/git-commit-auto-insert ()
-      (interactive)
-      (unless (run-hook-with-args-until-success 'akirak/git-commit-auto-insert-hook)
-        (let ((this-command 'auto-insert))
-          (auto-insert))))
+    (defun akirak/git-commit-auto-insert (&optional arg)
+      (interactive "P")
+      (if arg
+          (progn
+            (require 'akirak-ai-prompt)
+            (akirak-ai-prompt-generate-git-commit-message))
+        (unless (run-hook-with-args-until-success 'akirak/git-commit-auto-insert-hook)
+          (let ((this-command 'auto-insert))
+            (auto-insert)))))
 
     (:auto-insert
      ("\\.git/COMMIT_EDITMSG\\'"

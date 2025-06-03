@@ -197,6 +197,37 @@
          (text (completing-read "Select error: " alist nil t)))
     (cdr (assoc text alist))))
 
+(defun akirak-ai-prompt-git-commit-message-claude ()
+  (interactive)
+  (insert (with-temp-buffer
+            (insert "Generate a conventional commit message for the changes.")
+            (when (org-clocking-p)
+              (insert (akirak-ai-prompt--clock-context)))
+            (insert "\n\nThe diffs are given below as given by `git diff`:\n\n```\n")
+            (unless (zerop (call-process "git" nil (list t nil) nil
+                                         "diff" "--staged"))
+              (error "git diff failed"))
+            (insert "\n```")
+            (call-process-region (point-min) (point-max) "claude" 'delete)
+            (goto-char (point-min))
+            (when (looking-at (rx "```\n"
+                                  (group (+ anything))
+                                  "\n```"))
+              (save-excursion (replace-match "\\1")))
+            (save-excursion
+              (while (< (point) (point-max))
+                (markdown-fill-forward-paragraph)))
+            (buffer-string))))
+
+;;;###autoload
+(defalias 'akirak-ai-prompt-generate-git-commit-message
+  #'akirak-ai-prompt-git-commit-message-claude)
+
+(defun akirak-ai-prompt--clock-context ()
+  (org-with-point-at org-clock-marker
+    (format-spec "The task currently being worked on is \"%t\"."
+                 `((?t . ,(org-entry-get nil "ITEM"))))))
+
 ;;;; Utilities
 
 (defun akirak-ai-prompt-supported-p ()
