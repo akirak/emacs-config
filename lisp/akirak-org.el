@@ -1270,7 +1270,8 @@ Are you sure you want to override it?"))
            (require 'akirak-pandoc)
            (when (stringp response)
              (org-with-point-at marker
-               (org-edit-headline response)))))
+               (org-edit-headline (akirak-pandoc-convert-string response
+                                    :from "gfm" :to "org"))))))
       (akirak-org-ai-summarize-headline
        (save-excursion
          (org-back-to-heading)
