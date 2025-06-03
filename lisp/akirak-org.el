@@ -201,7 +201,8 @@ With ARG, pick a text from the kill ring instead of the last one."
         (delete-region begin (point))))))
 
 (defcustom akirak-org-yank-markdown-hook
-  '(akirak-org-maybe-add-ai-tag)
+  '(akirak-org-maybe-add-ai-tag
+    akirak-org-postprocess-ai-output)
   "Hook to run after pasting Markdown content.
 
 Each function is called with two markers as the arguments: the start and
@@ -223,7 +224,7 @@ end of the pasted region."
       (activate-mark)
       (akirak-org-demote-headings nil t)
       (deactivate-mark))
-    (let (start-marker
+    (let ((start-marker (make-marker))
           (end-marker (point-marker)))
       (set-marker start-marker begin)
       (goto-char begin)
@@ -237,6 +238,27 @@ end of the pasted region."
       (save-excursion
         (org-back-to-heading)
         (org-set-tags (cons tag (org-get-tags nil 'local)))))))
+
+(defun akirak-org-postprocess-ai-output (begin end)
+  (interactive "r")
+  (pcase-let* ((`(,begin . ,end) (if (use-region-p)
+                                     (progn
+                                       (deactivate-mark)
+                                       (cons begin end))
+                                   (cons begin end))))
+    (org-with-point-at begin
+      (while (re-search-forward org-emph-re end t)
+        (when (string= "*" (match-string 3))
+          (let ((ov (make-overlay (match-beginning 2) (match-end 2))))
+            (overlay-put ov 'face 'highlight)
+            (unwind-protect
+                (pcase-exhaustive (save-match-data
+                                    (read-char-choice "Convert to italic? [Yes, No] "
+                                                      (string-to-list "yn")))
+                  (?y (replace-match (concat "/" (match-string 4) "/")
+                                     t nil nil 2))
+                  (?n))
+              (delete-overlay ov))))))))
 
 ;;;###autoload
 (defun akirak-org-angle-open (&optional arg)
