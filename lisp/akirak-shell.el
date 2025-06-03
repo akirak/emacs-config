@@ -125,7 +125,8 @@ the original minor mode."
    ("p" "Project root" akirak-shell--terminal-project-root)
    ("d" "Select directory" akirak-shell-at-directory)
    ("a" "Aider" akirak-shell-for-aider)
-   ("c" "Codex" akirak-shell-for-codex)]
+   ("c" "Claude" akirak-shell-for-claude)
+   ("x" "Codex" akirak-shell-for-codex)]
   (interactive)
   (setq akirak-shell-split-window t)
   (setq akirak-shell--buffers (seq-sort-by (lambda (buffer)
@@ -250,6 +251,16 @@ the original minor mode."
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
 
+;;;###autoload
+(defun akirak-shell-for-claude ()
+  (interactive)
+  (let ((root (abbreviate-file-name (project-root (project-current)))))
+    (akirak-shell-eat-new :dir root
+                          :command '("claude")
+                          :name (concat "claude"
+                                        (file-name-nondirectory
+                                         (directory-file-name root))))))
+
 ;;;; Commands that I plan on deprecating
 
 ;;;###autoload
@@ -316,6 +327,8 @@ the original minor mode."
   (let ((input (pcase (akirak-shell-detect-buffer-program buffer)
                  (`aider
                   (akirak-shell--preprocess-aider-input input))
+                 (`claude
+                  (akirak-shell--preprocess-claude-input input))
                  ;; Currently no codex support
                  (_
                   input))))
@@ -343,6 +356,8 @@ the original minor mode."
      (pcase (akirak-shell--get-command buffer)
        (`("aider" . ,_)
         'aider)
+       (`("claude" . ,_)
+        'claude)
        (`("codex" . ,_)
         'codex)))))
 
@@ -359,6 +374,12 @@ the original minor mode."
   (let ((string (string-trim string)))
     (if (string-match-p "\n" string)
         (concat "{input\n" string "\ninput}")
+      string)))
+
+(defun akirak-shell--preprocess-claude-input (string)
+  (let ((string (string-trim string)))
+    (if (string-match-p "\n" string)
+        (concat "<<EOF\n" string "\nEOF")
       string)))
 
 (provide 'akirak-shell)
