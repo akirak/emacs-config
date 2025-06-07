@@ -247,20 +247,46 @@ end of the pasted region."
                                        (cons begin end))
                                    (cons begin end))))
     (org-with-point-at begin
-      (while (re-search-forward org-emph-re end t)
-        (when (string= "*" (match-string 3))
-          (unless (save-match-data
-                    (org-match-line org-heading-regexp))
-            (let ((ov (make-overlay (match-beginning 2) (match-end 2))))
-              (overlay-put ov 'face 'highlight)
-              (unwind-protect
-                  (pcase-exhaustive (save-match-data
-                                      (read-char-choice "Convert to italic? [Yes, No] "
-                                                        (string-to-list "yn")))
-                    (?y (replace-match (concat "/" (match-string 4) "/")
-                                       t nil nil 2))
-                    (?n))
-                (delete-overlay ov)))))))))
+      (let ((heading-prefix (concat (make-string (org-get-valid-level (1+ (org-outline-level)))
+                                                 ?\*)
+                                    " ")))
+        (while (re-search-forward org-emph-re end t)
+          (when (string= "*" (match-string 3))
+            (unless (save-match-data
+                      (org-match-line org-heading-regexp))
+              (when (save-match-data
+                      (when (looking-back (rx (group ":*") (* space)) (match-beginning 0))
+                        (replace-match "*:" nil nil nil 1)
+                        t))
+                (goto-char (match-beginning 0))
+                (looking-at org-emph-re))
+              (let ((ov (make-overlay (match-beginning 2) (match-end 2)))
+                    (whole-line (eolp)))
+                (overlay-put ov 'face 'highlight)
+                (unwind-protect
+                    (pcase-exhaustive (save-match-data
+                                        (read-char-choice
+                                         (format-spec "Convert to ([i]talic, %h[l]ink,\
+ [u]n-emphasize, [k]eep): "
+                                                      `((?h . ,(if whole-line
+                                                                   "[h]eading, "
+                                                                 ""))))
+                                         (string-to-list (concat (if whole-line
+                                                                     "h"
+                                                                   "")
+                                                                 "iluk"))))
+                      (?i (replace-match (concat "/" (match-string 4) "/")
+                                         t t nil 2))
+                      (?h (replace-match (concat heading-prefix
+                                                 (match-string 4))
+                                         nil t))
+                      (?l (consult-org-nlink-insert
+                           (match-beginning 2)
+                           (match-end 2)
+                           :text (match-string 4)))
+                      (?u (replace-match (match-string 4) t t nil 2))
+                      (?k))
+                  (delete-overlay ov))))))))))
 
 ;;;###autoload
 (defun akirak-org-angle-open (&optional arg)
