@@ -988,7 +988,13 @@ The other variables must not be saved, and they should be put in configuration:
           dired-auto-revert-buffer t
           dired-vc-rename-file t
           dired-listing-switches "-alh --time-style=long-iso")
-    (:mode-repl akirak-shell-new-other-window))
+    (:mode-repl akirak-shell-new-other-window)
+
+    (advice-add 'dired-internal-do-deletions :before #'akirak-dired-ad-before-deletions)
+
+    (:with-feature dired-aux
+      (:also-load akirak-dired)
+      (advice-add 'dired-rename-file :before #'akirak-dired-ad-before-deleting)))
 #+end_src
 *** display-fill-column-indicator
 :PROPERTIES:

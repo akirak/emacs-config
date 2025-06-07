@@ -138,5 +138,15 @@
               s))
           (akirak-mime-matching-suffixes regexp)))
 
+(defun akirak-dired-ad-before-deleting (file &rest _args)
+  (when (file-directory-p file)
+    (akirak-process-cleanup-dir file)))
+
+(defun akirak-dired-ad-before-deletions (l &rest _args)
+  "A before-advice for `dired-internal-do-deletions'."
+  (pcase-dolist (`(,file . ,_marker) l)
+    (when (file-directory-p file)
+      (akirak-process-cleanup-dir file))))
+
 (provide 'akirak-dired)
 ;;; akirak-dired.el ends here
