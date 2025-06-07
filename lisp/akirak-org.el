@@ -249,16 +249,18 @@ end of the pasted region."
     (org-with-point-at begin
       (while (re-search-forward org-emph-re end t)
         (when (string= "*" (match-string 3))
-          (let ((ov (make-overlay (match-beginning 2) (match-end 2))))
-            (overlay-put ov 'face 'highlight)
-            (unwind-protect
-                (pcase-exhaustive (save-match-data
-                                    (read-char-choice "Convert to italic? [Yes, No] "
-                                                      (string-to-list "yn")))
-                  (?y (replace-match (concat "/" (match-string 4) "/")
-                                     t nil nil 2))
-                  (?n))
-              (delete-overlay ov))))))))
+          (unless (save-match-data
+                    (org-match-line org-heading-regexp))
+            (let ((ov (make-overlay (match-beginning 2) (match-end 2))))
+              (overlay-put ov 'face 'highlight)
+              (unwind-protect
+                  (pcase-exhaustive (save-match-data
+                                      (read-char-choice "Convert to italic? [Yes, No] "
+                                                        (string-to-list "yn")))
+                    (?y (replace-match (concat "/" (match-string 4) "/")
+                                       t nil nil 2))
+                    (?n))
+                (delete-overlay ov)))))))))
 
 ;;;###autoload
 (defun akirak-org-angle-open (&optional arg)
