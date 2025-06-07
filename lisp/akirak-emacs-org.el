@@ -32,7 +32,7 @@
 (require 'akirak-org-capture)
 
 (defcustom akirak-emacs-org-config-file
-  "~/emacs-config/emacs-config.org"
+  "~/build/emacs-config/emacs-config.org"
   ""
   :type 'file)
 

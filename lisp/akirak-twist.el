@@ -32,7 +32,7 @@
 (require 'crm)
 
 (defcustom akirak-twist-root-directory
-  "~/emacs-config/"
+  "~/build/emacs-config/"
   ""
   :type 'directory)
 
