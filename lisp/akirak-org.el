@@ -236,6 +236,7 @@ end of the pasted region."
     (when (and (not (member tag (org-get-tags)))
                (yes-or-no-p (format "Add %s tag?" tag)))
       (save-excursion
+        (forward-char -1)
         (org-back-to-heading)
         (org-set-tags (cons tag (org-get-tags nil 'local)))))))
 
