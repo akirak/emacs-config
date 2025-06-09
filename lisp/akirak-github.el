@@ -180,12 +180,13 @@
 (defun akirak-github--select-workflow-run (&rest gh-args)
   (let ((candidates
          (with-temp-buffer
-           (message "Fetching workflow runs...")
-           (apply #'call-process
-                  akirak-github-gh-executable nil (list t nil) nil
-                  "run" "list" "--json"
-                  "displayTitle,status,updatedAt,workflowName,conclusion,event,headBranch,databaseId,url"
-                  gh-args)
+           (message "Fetching workflow runs (options: %s)..." gh-args)
+           (unless (zerop (apply #'call-process
+                                 akirak-github-gh-executable nil (list t nil) nil
+                                 "run" "list" "--json"
+                                 "displayTitle,status,updatedAt,workflowName,conclusion,event,headBranch,databaseId,url"
+                                 gh-args))
+             (error "gh command failed"))
            (goto-char (point-min))
            (thread-last
              (json-parse-buffer :object-type 'alist :array-type 'list)

@@ -200,6 +200,15 @@ With ARG, pick a text from the kill ring instead of the last one."
         (deactivate-mark)
         (delete-region begin (point))))))
 
+(defcustom akirak-org-yank-markdown-hook
+  '(akirak-org-maybe-add-ai-tag
+    akirak-org-postprocess-ai-output)
+  "Hook to run after pasting Markdown content.
+
+Each function is called with two markers as the arguments: the start and
+end of the pasted region."
+  :type 'hook)
+
 ;;;###autoload
 (defun akirak-org-yank-markdown (&optional arg)
   "Paste Markdown into the entry."
@@ -215,12 +224,70 @@ With ARG, pick a text from the kill ring instead of the last one."
       (activate-mark)
       (akirak-org-demote-headings nil t)
       (deactivate-mark))
-    (let ((tag "@AI"))
-      (when (and (not (member tag (org-get-tags)))
-                 (yes-or-no-p (format "Add %s tag?" tag)))
-        (save-excursion
-          (org-back-to-heading)
-          (org-set-tags (cons tag (org-get-tags nil 'local))))))))
+    (let ((start-marker (make-marker))
+          (end-marker (point-marker)))
+      (set-marker start-marker begin)
+      (goto-char begin)
+      (run-hook-with-args 'akirak-org-yank-markdown-hook start-marker end-marker)
+      (goto-char end-marker))))
+
+(defun akirak-org-maybe-add-ai-tag (&rest _)
+  (let ((tag "@AI"))
+    (when (and (not (member tag (org-get-tags)))
+               (yes-or-no-p (format "Add %s tag?" tag)))
+      (save-excursion
+        (forward-char -1)
+        (org-back-to-heading)
+        (org-set-tags (cons tag (org-get-tags nil 'local)))))))
+
+(defun akirak-org-postprocess-ai-output (begin end)
+  (interactive "r")
+  (pcase-let* ((`(,begin . ,end) (if (use-region-p)
+                                     (progn
+                                       (deactivate-mark)
+                                       (cons begin end))
+                                   (cons begin end))))
+    (org-with-point-at begin
+      (let ((heading-prefix (concat (make-string (org-get-valid-level (1+ (org-outline-level)))
+                                                 ?\*)
+                                    " ")))
+        (while (re-search-forward org-emph-re end t)
+          (when (string= "*" (match-string 3))
+            (unless (save-match-data
+                      (org-match-line org-heading-regexp))
+              (when (save-match-data
+                      (when (looking-back (rx (group ":*") (* space)) (match-beginning 0))
+                        (replace-match "*:" nil nil nil 1)
+                        t))
+                (goto-char (match-beginning 0))
+                (looking-at org-emph-re))
+              (let ((ov (make-overlay (match-beginning 2) (match-end 2)))
+                    (whole-line (eolp)))
+                (overlay-put ov 'face 'highlight)
+                (unwind-protect
+                    (pcase-exhaustive (save-match-data
+                                        (read-char-choice
+                                         (format-spec "Convert to ([i]talic, %h[l]ink,\
+ [u]n-emphasize, [k]eep): "
+                                                      `((?h . ,(if whole-line
+                                                                   "[h]eading, "
+                                                                 ""))))
+                                         (string-to-list (concat (if whole-line
+                                                                     "h"
+                                                                   "")
+                                                                 "iluk"))))
+                      (?i (replace-match (concat "/" (match-string 4) "/")
+                                         t t nil 2))
+                      (?h (replace-match (concat heading-prefix
+                                                 (match-string 4))
+                                         nil t))
+                      (?l (consult-org-nlink-insert
+                           (match-beginning 2)
+                           (match-end 2)
+                           :text (match-string 4)))
+                      (?u (replace-match (match-string 4) t t nil 2))
+                      (?k))
+                  (delete-overlay ov))))))))))
 
 ;;;###autoload
 (defun akirak-org-angle-open (&optional arg)
@@ -912,10 +979,14 @@ The point should be at the heading."
     (org-open-line 1)))
 
 ;;;###autoload
-(defun akirak-org-goto-before-next-heading ()
-  (interactive)
-  (org-next-visible-heading 1)
-  (re-search-backward (rx (+ (any "\n"))) nil t))
+(defun akirak-org-goto-before-next-heading (&optional arg)
+  (interactive "P")
+  (cond
+   (arg
+    (org-end-of-subtree))
+   (t
+    (org-next-visible-heading 1)
+    (re-search-backward (rx (+ (any "\n"))) nil t))))
 
 ;;;###autoload
 (defun akirak-org-table-create-or-edit ()
@@ -1263,9 +1334,11 @@ Are you sure you want to override it?"))
                   (point-marker))))
     (cl-flet
         ((callback (response info)
+           (require 'akirak-pandoc)
            (when (stringp response)
              (org-with-point-at marker
-               (org-edit-headline response)))))
+               (org-edit-headline (akirak-pandoc-convert-string response
+                                    :from "gfm" :to "org"))))))
       (akirak-org-ai-summarize-headline
        (save-excursion
          (org-back-to-heading)
@@ -1274,9 +1347,11 @@ Are you sure you want to override it?"))
        #'callback))))
 
 (defun akirak-org-ai-summarize-headline (content callback)
+  (require 'akirak-pandoc)
   (gptel-request (concat "Generate a headline for the following content. \
 It should fit in a single line and must not contain a newline character. \
-If the first paragraph of the quoted content is a question, the headline should summarise the question rather than the answer that follows it.\n\n"
+If the first paragraph of the quoted content is a question, the headline should summarise the question rather than the answer that follows it.
+Don't decorate any part of the text; Just wrap inline code.\n\n"
                          (akirak-pandoc-convert-string content
                            :from "org" :to "gfm"))
     :system "Be concrete and specific to make it clear what you are referring to."
