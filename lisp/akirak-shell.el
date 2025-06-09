@@ -257,7 +257,7 @@ the original minor mode."
   (let ((root (abbreviate-file-name (project-root (project-current)))))
     (akirak-shell-eat-new :dir root
                           :command '("claude")
-                          :name (concat "claude"
+                          :name (concat "claude-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
 

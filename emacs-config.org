@@ -5516,7 +5516,7 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode eldoc-mode)
                           akirak-window-display-document-buffer))
-                       ("^\\*aider-"
+                       (,(rx bol "*" (or "aider" "claude" "codex") "-")
                         akirak-window-display-as-right-sidebar
                         (window-width . 80))
                        ((or ,(major-modes vterm-mode)
