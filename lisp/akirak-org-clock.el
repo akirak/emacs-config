@@ -233,17 +233,6 @@ Example values are shown below:
                ""
                nil
                nil))
-        ((and (rx "~/build/" (group (+ (not (any "/")))))
-              (app (match-string 1) name))
-         (list (org-dog-select 'absolute
-                 `(relative :regexp ,(rx-to-string `(and "/"
-                                                         (or ,name
-                                                             "config"
-                                                             "homelab")
-                                                         ".org"))))
-               "todo: "
-               nil
-               nil))
         ("~/org/"
          (if (eq major-mode 'org-memento-policy-mode)
              (list (list "~/org/focus.org" "~/org/meta.org")

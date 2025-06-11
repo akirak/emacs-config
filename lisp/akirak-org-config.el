@@ -268,6 +268,10 @@
                                  name))
                          (list (concat group "-dev")
                                group))))
+    (`("~" "build" ,name "")
+     (make-org-dog-context-in-directory
+      :directory (list "projects/" "programming/" "skills/")
+      :filenames (list name)))
     (`("~" ,name "")
      (make-org-dog-context-in-directory
       :directory (list "projects/" "programming/" "skills/")
