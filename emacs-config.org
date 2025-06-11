@@ -7764,6 +7764,8 @@ Interact with ChatGPT or other LLMs
                             :models '(openai/gpt-4.1
                                       openai/gpt-4.1-mini
                                       openai/o4-mini
+                                      openai/o3
+                                      openai/o3-pro
                                       openai/codex-mini
                                       openai/gpt-4o-mini-search-preview
                                       microsoft/phi-4-reasoning-plus:free
