@@ -258,24 +258,31 @@
       :directory (list "projects/" "technology/" "programming/" "software/")
       :filenames (append (list group)
                          (when name
-                           (list name)))))
+                           (list (akirak-org-dog--normalize-project name))))))
     ((or `("~" "work2" ,_ ,group ,name "")
          `("~" "work2" ,_ ,group ""))
      (make-org-dog-context-in-directory
       :directory (list "projects/" "programming/")
       :filenames (append (when name
-                           (list (concat name "-dev")
+                           (list (concat (akirak-org-dog--normalize-project name)
+                                         "-dev")
                                  name))
                          (list (concat group "-dev")
                                group))))
     (`("~" "build" ,name "")
      (make-org-dog-context-in-directory
       :directory (list "projects/" "programming/" "skills/")
-      :filenames (list name)))
+      :filenames (list (akirak-org-dog--normalize-project name))))
     (`("~" ,name "")
      (make-org-dog-context-in-directory
       :directory (list "projects/" "programming/" "skills/")
       :filenames (list name)))))
+
+(defun akirak-org-dog--normalize-project (name)
+  "Remove a worktree suffix, if any, from the NAME of a project."
+  (if (string-match (rx (any "@=")  (+ anything)) name)
+      (substring name 0 (match-beginning 0))
+    name))
 
 (defun akirak-org-config-setup-oahu ()
   (let* ((query1 `(and (not (tags "ARCHIVE"))
