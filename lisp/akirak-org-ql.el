@@ -53,6 +53,14 @@
                           (property "GIT_ORIGIN" ,origin :inherit t))))))
   :body t)
 
+(org-ql-defpred (br git-branch) ()
+  "Filter entries that explicitly refer to the current branch of the project."
+  :normalizers ((`(,predicate-names)
+                 (when-let* ((branch (magit-get-current-branch)))
+                   `(and (project)
+                         (regexp ,(regexp-quote branch))))))
+  :body t)
+
 (org-ql-defpred (cl my-clocked) (&optional arg)
   "A convenient version of `clocked' predicate "
   :normalizers ((`(,predicate-names)
