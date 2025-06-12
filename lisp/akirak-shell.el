@@ -123,10 +123,12 @@ the original minor mode."
    :class transient-row
    ("RET" "Current directory" akirak-shell--terminal-cwd)
    ("p" "Project root" akirak-shell--terminal-project-root)
-   ("d" "Select directory" akirak-shell-at-directory)
-   ("a" "Aider" akirak-shell-for-aider)
-   ("c" "Claude" akirak-shell-for-claude)
-   ("x" "Codex" akirak-shell-for-codex)]
+   ("d" "Select directory" akirak-shell-at-directory)]
+  ["Start an AI session at project root"
+   :class transient-row
+   ("a" "Aider" akirak-shell-project-for-aider)
+   ("c" "Claude" akirak-shell-project-for-claude)
+   ("x" "Codex" akirak-shell-project-for-codex)]
   (interactive)
   (setq akirak-shell-split-window t)
   (setq akirak-shell--buffers (seq-sort-by (lambda (buffer)
@@ -231,7 +233,7 @@ the original minor mode."
             (process-live-p (get-buffer-process buffer)))))
 
 ;;;###autoload
-(defun akirak-shell-for-aider ()
+(defun akirak-shell-project-for-aider ()
   (interactive)
   (require 'akirak-aider)
   (let ((root (abbreviate-file-name (project-root (project-current)))))
@@ -242,7 +244,7 @@ the original minor mode."
                                          (directory-file-name root))))))
 
 ;;;###autoload
-(defun akirak-shell-for-codex ()
+(defun akirak-shell-project-for-codex ()
   (interactive)
   (let ((root (abbreviate-file-name (project-root (project-current)))))
     (akirak-shell-eat-new :dir root
@@ -252,7 +254,7 @@ the original minor mode."
                                          (directory-file-name root))))))
 
 ;;;###autoload
-(defun akirak-shell-for-claude ()
+(defun akirak-shell-project-for-claude ()
   (interactive)
   (let ((root (abbreviate-file-name (project-root (project-current)))))
     (akirak-shell-eat-new :dir root
