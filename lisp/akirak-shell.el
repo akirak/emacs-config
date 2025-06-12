@@ -375,7 +375,7 @@ the original minor mode."
 (defun akirak-shell--preprocess-claude-input (string)
   (let ((string (string-trim string)))
     (if (string-match-p "\n" string)
-        (concat "<<EOF\n" string "\nEOF")
+        (concat "<<EOF\n" string "\nEOF\n")
       string)))
 
 (provide 'akirak-shell)
