@@ -79,7 +79,12 @@ Each function is run without an argument in the new working tree."
          (name (or name
                    (akirak-magit--worktree-name remote-url branch)))
          (category (funcall akirak-magit-worktree-category-function))
-         (parent (or (when category
+         (current (vc-git-root default-directory))
+         (parent (or (when (string-match-p (rx "~/" (or "work2" "build") "/")
+                                           current)
+                       ;; Create as a sibling worktree
+                       (abbreviate-file-name (file-name-parent-directory current)))
+                     (when category
                        (akirak-git-clone-default-parent category))
                      (akirak-git-clone-read-parent (format "Select a parent directory of \"%s\": "
                                                            name)
