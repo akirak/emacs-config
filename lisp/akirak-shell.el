@@ -254,14 +254,8 @@ the original minor mode."
                                          (directory-file-name root))))))
 
 ;;;###autoload
-(defun akirak-shell-project-for-claude ()
-  (interactive)
-  (let ((root (abbreviate-file-name (project-root (project-current)))))
-    (akirak-shell-eat-new :dir root
-                          :command '("claude")
-                          :name (concat "claude-"
-                                        (file-name-nondirectory
-                                         (directory-file-name root))))))
+(defalias 'akirak-shell-project-for-claude
+  #'akirak-claude-code-shell)
 
 ;;;; Commands that I plan on deprecating
 
