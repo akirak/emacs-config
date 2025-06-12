@@ -710,7 +710,8 @@ suitable value detected according to the command line."
                 1)))))
     ((rx bol "eslint" space)
      (eval-when-compile
-       (let ((path-regexp (rx "/" (+ (any "-_./[]_" alnum)))))
+       ;; Absolute path
+       (let ((path-regexp (rx "/" (+ (any "-_./[]_=@" alnum)))))
          (list
           ;; Only the file path
           (list (rx-to-string `(and bol (group (regexp ,path-regexp))))
