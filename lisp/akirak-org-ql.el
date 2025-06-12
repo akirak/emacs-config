@@ -40,7 +40,7 @@
             (org-dog-meaningful-in-file-p obj)
           t))
 
-(org-ql-defpred (proj my-project) ()
+(org-ql-defpred (pr project) ()
   "Filter entries that are related to the current project."
   :normalizers ((`(,predicate-names)
                  (when-let* ((pr (project-current)))
