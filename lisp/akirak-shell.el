@@ -253,7 +253,7 @@ the original minor mode."
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
 
-;;;###autoload
+;;;###autoload (autoload 'akirak-shell-project-for-claude "akirak-shell" nil 'interactive)
 (defalias 'akirak-shell-project-for-claude
   #'akirak-claude-code-shell)
 
