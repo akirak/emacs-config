@@ -86,11 +86,16 @@
     akirak-consult-edit-suggestions-source))
 
 ;;;###autoload
-(defun akirak-consult-edit ()
-  (interactive)
-  (let ((ent (consult--multi akirak-consult-edit-sources
-                             :prompt "Pick a template or enter a prompt: "
-                             :sort nil)))
+(defun akirak-consult-edit (&optional arg)
+  (interactive "P")
+  (let* ((source-window (when (numberp arg)
+                          (require 'akirak-window)
+                          (akirak-window--other-window nil arg)))
+         (ent (with-selected-window (or source-window
+                                        (selected-window))
+                (consult--multi akirak-consult-edit-sources
+                                :prompt "Pick a template or enter a prompt: "
+                                :sort nil))))
     (if (plist-get (cdr ent) :match)
         (cl-ecase (plist-get (cdr ent) :category)
           (template-as-function
