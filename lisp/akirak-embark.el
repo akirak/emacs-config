@@ -363,7 +363,7 @@
   (keymap-set embark-file-map "a" #'find-alternate-file)
   (keymap-set embark-file-map "t" #'find-file-other-tab)
   (keymap-set embark-file-map "l" #'akirak-embark-load-or-import-file)
-  (keymap-set embark-file-map "+" #'gptel-add-file)
+  (keymap-set embark-file-map "+" #'akirak-embark-gptel-add-file)
   (keymap-set embark-file-map "C-c o" #'akirak-image-compress-file)
   (keymap-set embark-file-map "C-c C-T" #'akirak-tailscale-copy-file)
   (keymap-set embark-file-map "C-o" #'akirak-embark-org-open-file)
@@ -878,6 +878,10 @@
   (interactive "b")
   (with-current-buffer buffer
     (comint-interrupt-subjob)))
+
+(defun akirak-embark-gptel-add-file (file)
+  (interactive "f")
+  (gptel-context-add-file (expand-file-name file)))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
