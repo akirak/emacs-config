@@ -104,7 +104,12 @@
                  (call-interactively func)
                (funcall func))))
           (literal
-           (insert (car ent))))
+           (let ((string (car ent)))
+             (pcase (derived-mode-p 'eat-mode)
+               (`eat-mode
+                (eat-term-send-string-as-yank eat-terminal string))
+               (_
+                (insert string))))))
       (funcall akirak-consult-edit-fallback-function
                (car ent)))))
 
