@@ -5525,7 +5525,7 @@ This is an extra functions for window management.
                             ;; certain buffer naming convention.
                             "^\\*popup-")
                         ,(reuse-mode-window
-                          (vterm-mode nix-repl-mode)
+                          (vterm-mode nix-repl-mode "^\\*popup-")
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
                        (,(major-modes nov-mode pdf-view-mode Info-mode)
