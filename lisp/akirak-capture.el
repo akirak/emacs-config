@@ -479,20 +479,22 @@
                  (akirak-capture-doct))
     :transient t)]
 
-  ["Region"
+  ["Append to clock"
    :class transient-row
-   :if use-region-p
-   ("sn" "Snippet" akirak-capture-snippet)
+   :if org-clocking-p
+   ("=" "Append heading to clock" akirak-capture-append-heading-to-clock)
+   ("a" "Append block to clock" akirak-capture-append-block-to-clock
+    :if use-region-p)
    ("b" "Convert to a link to a new entry" akirak-org-convert-to-entry-link
-    :if (lambda () (derived-mode-p 'org-mode)))
-   ("aa" "Append block to clock" akirak-capture-append-block-to-clock
-    :if org-clocking-p)
-   ("ah" "Append heading to clock" akirak-capture-append-heading-to-clock
-    :if org-clocking-p)]
+    :if (lambda ()
+          (and (use-region-p)
+               (derived-mode-p 'org-mode))))]
 
   ["Convenience and specific projects"
    :class transient-row
-   ("e" "Emacs config" akirak-emacs-config-capture)]
+   ("e" "Emacs config" akirak-emacs-config-capture)
+   ("sn" "Snippet" akirak-capture-snippet
+    :if use-region-p)]
 
   (interactive)
   (if (equal current-prefix-arg '(16))
@@ -626,20 +628,16 @@
         (push (cons level symbol) result)))
     result))
 
-(defun akirak-capture--heading-capture-children (children)
+(defun akirak-capture--heading-capture-children ()
   (let (result
         (min-level (org-element-property
                     :level (org-element-at-point-no-context org-clock-hd-marker))))
     (dolist (n (number-sequence min-level 9))
-      (push (list transient--default-child-level
-                  'transient-suffix
-                  (list :key (int-to-string n)
-                        :description (format "Level %d" n)
-                        :command (cdr (assq n akirak-capture-heading-commands))
-                        :transient nil))
+      (push (list (int-to-string n)
+                  (format "Level %d" n)
+                  (cdr (assq n akirak-capture-heading-commands)))
             result))
-    (append children
-            (nreverse result))))
+    (nreverse result)))
 
 (transient-define-prefix akirak-capture-append-heading-to-clock (text)
   [:description
@@ -653,7 +651,11 @@
              (plist-get akirak-capture-clocked-buffer-info :level)
              (plist-get akirak-capture-clocked-buffer-info :title)))
    :class transient-row
-   :setup-children akirak-capture--heading-capture-children
+   :setup-children
+   (lambda (children)
+     (append children
+             (transient-parse-suffixes 'akirak-capture-append-heading-to-clock
+                                       (akirak-capture--heading-capture-children))))
    ("=" "Same level" akirak-capture--same-level-heading)
    ("+" "Subheading" akirak-capture--subheading)]
   (interactive (list (thread-last
