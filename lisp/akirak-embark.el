@@ -703,14 +703,14 @@
 (defun akirak-embark-kill-directory-buffers (directory)
   "Kill all buffers in DIRECTORY."
   (interactive "DKill buffers: ")
-  (let ((root (file-name-as-directory (expand-file-name directory)))
-        (count 0))
-    (dolist (buf (buffer-list))
-      (when (string-prefix-p root (expand-file-name (buffer-local-value 'default-directory buf)))
-        (kill-buffer buf)
-        (cl-incf count)))
-    (when (> count 0)
-      (message "Killed %d buffers in %s" count root))))
+  (cl-flet
+      ((buffer-count ()
+         (seq-length (buffer-list))))
+    (let ((initial-count (buffer-count)))
+      (akirak-process-cleanup-dir directory)
+      (let ((count (- (buffer-count) initial-count)))
+        (when (> count 0)
+          (message "Killed %d buffers in %s" count root))))))
 
 (defun akirak-embark-find-file-variable (symbol)
   (interactive "S")
