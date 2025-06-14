@@ -3,6 +3,8 @@ name: Update elisp
 on:
   workflow_dispatch:
   workflow_call:
+  schedule:
+    - cron: '35 7 10,24 * *'
 
 jobs:
   update:
