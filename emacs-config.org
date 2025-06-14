@@ -8611,7 +8611,10 @@ Model Context Protocol
              ;; Use the pre-downloaded Nix package. An alternative is
              ;; `nix run github:akirak/nix-playwright-mcp --`.
              :command "mcp-server-playwright"
-             :args ("--headless")))))
+             :args ("--headless"))
+            ("effect"
+             :command "docker"
+             :args ("run" "--rm" "-i" "timsmart/effect-mcp")))))
 #+end_src
 *** mermaid-mode                                        :@extra:mermaid:
 :PROPERTIES:
