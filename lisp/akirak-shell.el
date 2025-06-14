@@ -123,7 +123,8 @@ the original minor mode."
    :class transient-row
    ("RET" "Current directory" akirak-shell--terminal-cwd)
    ("p" "Project root" akirak-shell--terminal-project-root)
-   ("d" "Select directory" akirak-shell-at-directory)]
+   ("d" "Select directory" akirak-shell-at-directory)
+   ("o" akirak-shell-at-org-directory)]
   ["Start an AI session at project root"
    :class transient-row
    ("a" "Aider" akirak-shell-project-for-aider)
@@ -170,6 +171,28 @@ the original minor mode."
   (akirak-shell-eat-new :dir dir
                         :name akirak-shell-buffer-name
                         :window akirak-shell-split-window))
+
+(transient-define-suffix akirak-shell-at-org-directory ()
+  :class 'transient-suffix
+  :if (lambda ()
+        (and (derived-mode-p 'org-mode)
+             (akirak-shell--org-dir)))
+  :description (lambda ()
+                 (format "Org: %s" (akirak-shell--org-dir)))
+  (interactive)
+  (let ((dir (akirak-shell--org-dir)))
+    (unless (and dir
+                 (file-directory-p dir))
+      (user-error "The directory \"%s\" does not exist" dir))
+    (akirak-shell-at-directory dir)))
+
+(defun akirak-shell--org-dir ()
+  (require 'akirak-org-git)
+  (let ((header-args (thread-first
+                       (org-entry-get-with-inheritance "header-args" t)
+                       (org-babel-parse-header-arguments 'no-eval))))
+    (or (alist-get :dir header-args)
+        (akirak-org-git-worktree))))
 
 (cl-defun akirak-shell-eat-new (&key dir window name noselect command)
   (let* ((default-directory (or dir default-directory))
