@@ -8412,7 +8412,37 @@ A Git porcelain inside Emacs
                   (with-current-buffer buffer
                     (when (derived-mode-p 'magit-process-mode)
                       (goto-char (point-max))
-                      (recenter-top-bottom -1))))))))
+                      (recenter-top-bottom -1)))))))
+
+      (:el-patch
+        (el-patch-defun magit-worktree-delete (worktree)
+          (interactive
+           (list (magit-completing-read "Delete worktree"
+                                        (cdr (magit-list-worktrees))
+                                        nil t nil nil
+                                        (magit-section-value-if 'worktree))))
+          (if (file-directory-p (expand-file-name ".git" worktree))
+              (user-error "Deleting %s would delete the shared .git directory" worktree)
+            (let ((primary (file-name-as-directory (caar (magit-list-worktrees)))))
+              (magit-confirm-files (if magit-delete-by-moving-to-trash 'trash 'delete)
+                                   (list worktree))
+              (when (file-exists-p worktree)
+                (el-patch-swap
+                  (let ((delete-by-moving-to-trash magit-delete-by-moving-to-trash))
+                    (delete-directory worktree t magit-delete-by-moving-to-trash))
+                  (let ((default-directory primary))
+                    ;; Safely clean up the work tree
+                    (when (fboundp 'akirak-process-cleanup-dir)
+                      (akirak-process-cleanup-dir worktree))
+                    (magit-run-git "worktree" "remove"
+                                   (convert-standard-filename (expand-file-name worktree))))))
+              (if (file-exists-p default-directory)
+                  (magit-run-git "worktree" "prune")
+                (let ((default-directory primary))
+                  (magit-run-git "worktree" "prune"))
+                (when (derived-mode-p 'magit-status-mode)
+                  (kill-buffer)
+                  (magit-status-setup-buffer primary))))))))
 
     (:status personal
       (:when-loaded
