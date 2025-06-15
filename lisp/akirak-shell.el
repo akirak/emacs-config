@@ -363,10 +363,12 @@ the original minor mode."
                                     '(eat-mode))
       (`eat-mode
        (with-current-buffer buffer
+         (sit-for 0.2)
          (eat-term-send-string-as-yank eat-terminal input)
+         (sit-for 0.2)
          (when confirm
            (eat-term-send-string eat-terminal "\n")
-           (sit-for 0.5))
+           (sit-for 0.2))
          (when-let* ((window (get-buffer-window buffer)))
            (with-selected-window window
              (set-window-point nil (eat-term-display-cursor eat-terminal))
