@@ -479,6 +479,27 @@
                  (akirak-capture-doct))
     :transient t)]
 
+  ["Contextual"
+   :class transient-row
+   ("f" "Flymake error"
+    (lambda ()
+      (interactive)
+      (require 'akirak-flymake)
+      (pcase (flymake-diagnostics)
+        (`nil (user-error "No error at point"))
+        (`(,diag) (akirak-capture-project-task diag))
+        (diags (akirak-capture-project-task (akirak-flymake-select-diagnostic diags)))))
+    :if akirak-capture--at-error-p)
+   ("r" "Region"
+    (lambda ()
+      (interactive)
+      (akirak-capture-project-task (cons (region-beginning) (region-end))))
+    :if (lambda ()
+          (and (use-region-p)
+               (project-current))))
+   ("." "Project task" akirak-capture-project-task
+    :if project-current)]
+
   ["Append to clock"
    :class transient-row
    :if org-clocking-p
@@ -540,6 +561,144 @@
   (setq akirak-capture-headline (or headline
                                     (akirak-capture-read-string "Headline: ")))
   (akirak-capture-doct))
+
+(defun akirak-capture--at-error-p ()
+  (and (get-char-property-and-overlay (point) 'flymake-diagnostic)
+       t))
+
+(defvar akirak-capture-project-context nil)
+
+(defvar akirak-capture-project-include-function nil)
+
+(transient-define-infix akirak-capture-project-include-function ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-capture-project-include-function
+  :description "Function"
+  :if (lambda ()
+        (plist-get akirak-capture-project-context :function)))
+
+(defvar akirak-capture-project-include-line-number nil)
+
+(transient-define-infix akirak-capture-project-include-line-number ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-capture-project-include-line-number
+  :if (lambda ()
+        (plist-get akirak-capture-project-context :line))
+  :description "Line number")
+
+(transient-define-suffix akirak-capture-project-default-suffix ()
+  :if (lambda () (akirak-capture--project-default-file))
+  :description
+  (lambda ()
+    (format "Project default: %s"
+            (file-name-nondirectory (akirak-capture--project-default-file))))
+  (interactive)
+  (octopus--dispatch (octopus-current-command)
+                     (akirak-capture--project-default-file)))
+
+(defun akirak-capture--project-default-file ()
+  (car (akirak-org-dog-project-files)))
+
+(transient-define-prefix akirak-capture-project-task (&optional obj)
+  "Capture tasks related to the current project."
+  ["Options"
+   :class transient-row
+   ("-f" akirak-capture-project-include-function)
+   ("-l" akirak-capture-project-include-line-number)]
+  ["Create an entry"
+   :class transient-row
+   ("P" akirak-capture-project-default-suffix)
+   ("@" octopus-clock-marker-suffix
+    :if org-clocking-p)
+   ("/" octopus-read-dog-file-suffix)]
+  (interactive)
+  (pcase obj
+    (`nil
+     (pcase-let* ((file (buffer-file-name (or (buffer-base-buffer)
+                                              (current-buffer))))
+                  (`(,_col . ,row) (when file
+                                     (cdr (posn-col-row (posn-at-point))))))
+       (setq akirak-capture-project-context
+             (list :clock-in t
+                   :line row
+                   :function (which-function)
+                   :file file))))
+    ((pred stringp)
+     (setq akirak-capture-project-context nil))
+    ((and `(,begin . ,end)
+          (guard (numberp begin)
+                 (numberp end)))
+     (pcase-let* ((file (buffer-file-name (or (buffer-base-buffer)
+                                              (current-buffer))))
+                  (`(,col . ,row) (when file
+                                    (cdr (posn-col-row (posn-at-point begin))))))
+       (setq akirak-capture-project-context
+             (list :clock-in t
+                   :error (buffer-substring-no-properties begin end)
+                   :line row
+                   :tags '("@troubleshooting")
+                   :file file))))
+    ((pred flymake--diag-p)
+     (pcase-let* ((`(,col . ,row) (posn-col-row (posn-at-point (flymake-diagnostic-beg diag)))))
+       (setq akirak-capture-project-context
+             (list :clock-in t
+                   :error (flymake-diagnostic-text diag)
+                   :line row
+                   :column col
+                   :tags '("@troubleshooting")
+                   :file (buffer-file-name (or (buffer-base-buffer)
+                                               (current-buffer))))))))
+  (transient-setup 'akirak-capture-project-task))
+
+(cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-project-task))
+                                 target)
+  (require 'akirak-org-git)
+  (let* ((function (and akirak-capture-project-include-function
+                        (plist-get akirak-capture-project-context :function)))
+         (line (and akirak-capture-project-include-line-number
+                    (plist-get akirak-capture-project-context :line)))
+         (col (and line
+                   (plist-get akirak-capture-project-context :column)))
+         (file (plist-get akirak-capture-project-context :file))
+         (clock-in (plist-get akirak-capture-project-context :clock-in))
+         (tags (plist-get akirak-capture-project-context :tags))
+         (error-message (plist-get akirak-capture-project-context :error))
+         (root (when file
+                 (vc-git-root file)))
+         (obj (org-dog-file-object (cl-etypecase target
+                                     (string (abbreviate-file-name target)))))
+         (org-capture-entry
+          (car (doct
+                `((""
+                   :keys ""
+                   :template ,(akirak-org-capture-make-entry-body
+                                ""
+                                :todo (if clock-in
+                                          "UNDERWAY"
+                                        "TODO")
+                                :tags tags
+                                :properties
+                                (akirak-org-git-properties obj)
+                                :body
+                                (concat "%?"
+                                        (when function
+                                          (format " `%s`" function))
+                                        (when line
+                                          (format " on line %d" line))
+                                        (when col
+                                          (format ", column %d" col))
+                                        (when file
+                                          (format " in %s"
+                                                  (file-relative-name file root)))
+                                        (when error-message
+                                          (concat "\n\n#+begin_example\n"
+                                                  error-message
+                                                  "\n#+end_example"))
+                                        "\n\n# %a\n"))
+                   :clock-in clock-in
+                   :clock-resume clock-in
+                   ,@(akirak-capture--target-plist target)))))))
+    (org-capture)))
 
 (defun akirak-capture--read-summary-for-region (prompt)
   (completing-read prompt
