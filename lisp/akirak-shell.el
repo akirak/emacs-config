@@ -259,7 +259,7 @@ the original minor mode."
 (defun akirak-shell-project-for-aider ()
   (interactive)
   (require 'akirak-aider)
-  (let ((root (abbreviate-file-name (project-root (project-current)))))
+  (let ((root (akirak-shell-project-directory)))
     (akirak-shell-eat-new :dir root
                           :command (akirak-aider-command)
                           :name (concat "aider-"
@@ -269,7 +269,7 @@ the original minor mode."
 ;;;###autoload
 (defun akirak-shell-project-for-codex ()
   (interactive)
-  (let ((root (abbreviate-file-name (project-root (project-current)))))
+  (let ((root (akirak-shell-project-directory)))
     (akirak-shell-eat-new :dir root
                           :command (akirak-codex-command)
                           :name (concat "codex-"
@@ -279,6 +279,14 @@ the original minor mode."
 ;;;###autoload (autoload 'akirak-shell-project-for-claude "akirak-shell" nil 'interactive)
 (defalias 'akirak-shell-project-for-claude
   #'akirak-claude-code-shell)
+
+(defun akirak-shell-project-directory ()
+  (if (derived-mode-p 'org-mode)
+      (let ((worktree (akirak-org-git-worktree)))
+        (if (file-directory-p worktree)
+            worktree
+          (user-error "In org-mode, you need to set GIT_WORKTREE property")))
+    (abbreviate-file-name (project-root (project-current)))))
 
 ;;;; Commands that I plan on deprecating
 

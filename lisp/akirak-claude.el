@@ -19,7 +19,7 @@
    :class transient-row
    ("c" "Dispatch" akirak-claude--open-shell)]
   (interactive)
-  (setq akirak-claude-directory (abbreviate-file-name (project-root (project-current))))
+  (setq akirak-claude-directory (akirak-shell-project-directory))
   (transient-setup 'akirak-claude-code-shell))
 
 (defun akirak-claude--open-shell ()
