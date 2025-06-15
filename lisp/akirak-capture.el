@@ -696,7 +696,12 @@
                                           (concat "\n\n#+begin_example\n"
                                                   error-message
                                                   "\n#+end_example"))
-                                        "\n\n# %a\n"))
+                                        (cond
+                                         (file
+                                          "\n\n# %a")
+                                         ((bound-and-true-p compilation-shell-minor-mode)
+                                          (format "\n\n# compile: %s" compile-command)))
+                                        "\n"))
                    :clock-in clock-in
                    :clock-resume clock-in
                    ,@(akirak-capture--target-plist target)))))))
