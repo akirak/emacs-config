@@ -665,8 +665,10 @@
          (error-message (plist-get akirak-capture-project-context :error))
          (root (when file
                  (vc-git-root file)))
-         (obj (org-dog-file-object (cl-etypecase target
-                                     (string (abbreviate-file-name target)))))
+         (org-file (cl-etypecase target
+                     (string target)
+                     (marker (buffer-file-name (org-base-buffer (marker-buffer target))))))
+         (obj (org-dog-file-object (abbreviate-file-name org-file)))
          (org-capture-entry
           (car (doct
                 `((""
