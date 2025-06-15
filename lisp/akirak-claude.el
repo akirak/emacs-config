@@ -7,7 +7,7 @@
 
 (defvar akirak-claude-directory nil)
 
-;;;###autoload (autoload 'akirak-claude-shell "akirak-claude" nil 'interactive)
+;;;###autoload (autoload 'akirak-claude-code-shell "akirak-claude" nil 'interactive)
 (transient-define-prefix akirak-claude-code-shell ()
   "Start a terminal session for Claude Code."
   ["Options"
