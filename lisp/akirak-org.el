@@ -284,7 +284,8 @@ end of the pasted region."
                       (?l (consult-org-nlink-insert
                            (match-beginning 2)
                            (match-end 2)
-                           :text (match-string 4)))
+                           :link (match-string 4)
+                           :capture-options '(:immediate-finish t)))
                       (?u (replace-match (match-string 4) t t nil 2))
                       (?k))
                   (delete-overlay ov))))))))))
