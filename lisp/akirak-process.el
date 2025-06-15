@@ -7,19 +7,21 @@
     (when (seq-some `(lambda (proc)
                        (string-prefix-p ,dir (akirak-process--dir proc)))
                     (process-list))
-      ;; First kill file buffers in the DIR to shutdown associated eglot
-      ;; buffers. Note `eglot-autoshutdown' needs to be set to true for this
-      ;; feature to work.
-      (akirak-process--kill-file-buffers dir)
-      (dolist (proc (process-list))
-        (when-let* ((buffer (process-buffer proc)))
-          (when (string-prefix-p dir (akirak-process--buffer-dir buffer))
-            (if (derived-mode-p 'eat-mode)
-                (progn
-                  (pop-to-buffer buffer)
-                  (user-error "Cannot automatically kill the process of this buffer.\
+      ;; Change the default directory so direnv works.
+      (let ((default-directory dir))
+        ;; First kill file buffers in the DIR to shutdown associated eglot
+        ;; buffers. Note `eglot-autoshutdown' needs to be set to true for this
+        ;; feature to work.
+        (akirak-process--kill-file-buffers dir)
+        (dolist (proc (process-list))
+          (when-let* ((buffer (process-buffer proc)))
+            (when (string-prefix-p dir (akirak-process--buffer-dir buffer))
+              (if (derived-mode-p 'eat-mode)
+                  (progn
+                    (pop-to-buffer buffer)
+                    (user-error "Cannot automatically kill the process of this buffer.\
  Manually exit the session."))
-              (kill-buffer buffer)))))
+                (kill-buffer buffer))))))
       (let ((wait-start (float-time)))
         ;; There can be processes that don't terminate immediately, so wait for
         ;; all related processes to exit.

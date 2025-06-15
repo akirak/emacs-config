@@ -233,17 +233,6 @@ Example values are shown below:
                ""
                nil
                nil))
-        ((and (rx "~/build/" (group (+ (not (any "/")))))
-              (app (match-string 1) name))
-         (list (org-dog-select 'absolute
-                 `(relative :regexp ,(rx-to-string `(and "/"
-                                                         (or ,name
-                                                             "config"
-                                                             "homelab")
-                                                         ".org"))))
-               "todo: "
-               nil
-               nil))
         ("~/org/"
          (if (eq major-mode 'org-memento-policy-mode)
              (list (list "~/org/focus.org" "~/org/meta.org")
@@ -357,6 +346,27 @@ Example values are shown below:
     (save-current-buffer
       (org-with-point-at org-clock-marker
         (org-clock-in)))))
+
+;;;; Set the git commit title
+
+(defconst akirak-org-clock-commit-title-property "GIT_COMMIT_TITLE")
+
+;;;###autoload
+(defun akirak-org-clock-set-commit-title ()
+  (interactive)
+  (when (org-clocking-p)
+    (org-with-point-at (or org-clock-hd-marker
+                           org-clock-marker)
+      (org-set-property akirak-org-clock-commit-title-property
+                        (org-entry-get nil "ITEM")))))
+
+;;;###autoload
+(defun akirak-org-clock-commit-title ()
+  "Return the commit title set to the Org property, if any."
+  (when (org-clocking-p)
+    (org-entry-get (or org-clock-hd-marker
+                       org-clock-marker)
+                   akirak-org-clock-commit-title-property)))
 
 ;;;; Persist the context to the clocked entry
 

@@ -3338,7 +3338,9 @@ Outline-based notes management and organizer
                   (goto-char (point-min))
                   (let ((headline (org-get-heading t t t t)))
                     (when (string-empty-p headline)
-                      (org-edit-headline))))))
+                      (if (fboundp 'akirak-org-ai-set-heading)
+                          (akirak-org-ai-set-heading)
+                        (org-edit-headline)))))))
 
     (add-hook 'org-capture-prepare-finalize-hook #'akirak-org-capture-push-history))
 #+end_src
@@ -5516,7 +5518,7 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode eldoc-mode)
                           akirak-window-display-document-buffer))
-                       ("^\\*aider-"
+                       (,(rx bol "*" (or "aider" "claude" "codex") "-")
                         akirak-window-display-as-right-sidebar
                         (window-width . 80))
                        ((or ,(major-modes vterm-mode)
@@ -5525,7 +5527,7 @@ This is an extra functions for window management.
                             ;; certain buffer naming convention.
                             "^\\*popup-")
                         ,(reuse-mode-window
-                          (vterm-mode nix-repl-mode)
+                          (vterm-mode nix-repl-mode "^\\*popup-")
                           akirak-window-display-buffer-split-below
                           (dedicated . t)))
                        (,(major-modes nov-mode pdf-view-mode Info-mode)
@@ -7005,6 +7007,10 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '(lean4-mode . ("lake" "serve")))
       (add-to-list 'eglot-server-programs
+                   `(sql-mode
+                     . ,(eglot-alternatives
+                         '(("sqlmesh_lsp")))))
+      (add-to-list 'eglot-server-programs
                    '(svelte-mode . ("svelteserver" "--stdio")))
       (add-to-list 'eglot-server-programs
                    '(hcl-mode . ("terraform-lsp" "--stdio")))
@@ -7412,10 +7418,13 @@ A flymake plugin for SQL files using sqlfluff
 #+begin_src emacs-lisp
   (setup (:package flymake-sqlfluff)
     (:nixpkgs sqlfluff)
-    (add-hook 'sql-mode-hook
-              (defun akirak/flymake-sqlfluff-setup ()
-                (flymake-sqlfluff-load)
-                (flymake-mode)))
+
+    ;; Add to .dir-locals.el of individual projects instead.
+    ;;
+    ;; (add-hook 'sql-mode-hook
+    ;;           (defun akirak/flymake-sqlfluff-setup ()
+    ;;             (flymake-sqlfluff-load)
+    ;;             (flymake-mode)))
 
     ;; Also define the formatter
     (:reformatters
@@ -7607,7 +7616,8 @@ Edit Git commit messages
   (setup git-commit
     (:keymap "M-<return>" #'akirak/git-commit-auto-insert)
 
-    (defcustom akirak/git-commit-auto-insert-hook nil
+    (defcustom akirak/git-commit-auto-insert-hook
+      '(akirak-org-clock-commit-title)
       "Hook that generates and inserts a commit message (or part of it).
 
   Each function in this hook is called inside a buffer for editing the
@@ -7764,6 +7774,8 @@ Interact with ChatGPT or other LLMs
                             :models '(openai/gpt-4.1
                                       openai/gpt-4.1-mini
                                       openai/o4-mini
+                                      openai/o3
+                                      openai/o3-pro
                                       openai/codex-mini
                                       openai/gpt-4o-mini-search-preview
                                       microsoft/phi-4-reasoning-plus:free
@@ -8410,7 +8422,37 @@ A Git porcelain inside Emacs
                   (with-current-buffer buffer
                     (when (derived-mode-p 'magit-process-mode)
                       (goto-char (point-max))
-                      (recenter-top-bottom -1))))))))
+                      (recenter-top-bottom -1)))))))
+
+      (:el-patch
+        (el-patch-defun magit-worktree-delete (worktree)
+          (interactive
+           (list (magit-completing-read "Delete worktree"
+                                        (cdr (magit-list-worktrees))
+                                        nil t nil nil
+                                        (magit-section-value-if 'worktree))))
+          (if (file-directory-p (expand-file-name ".git" worktree))
+              (user-error "Deleting %s would delete the shared .git directory" worktree)
+            (let ((primary (file-name-as-directory (caar (magit-list-worktrees)))))
+              (magit-confirm-files (if magit-delete-by-moving-to-trash 'trash 'delete)
+                                   (list worktree))
+              (when (file-exists-p worktree)
+                (el-patch-swap
+                  (let ((delete-by-moving-to-trash magit-delete-by-moving-to-trash))
+                    (delete-directory worktree t magit-delete-by-moving-to-trash))
+                  (let ((default-directory primary))
+                    ;; Safely clean up the work tree
+                    (when (fboundp 'akirak-process-cleanup-dir)
+                      (akirak-process-cleanup-dir worktree))
+                    (magit-run-git "worktree" "remove"
+                                   (convert-standard-filename (expand-file-name worktree))))))
+              (if (file-exists-p default-directory)
+                  (magit-run-git "worktree" "prune")
+                (let ((default-directory primary))
+                  (magit-run-git "worktree" "prune"))
+                (when (derived-mode-p 'magit-status-mode)
+                  (kill-buffer)
+                  (magit-status-setup-buffer primary))))))))
 
     (:status personal
       (:when-loaded
@@ -8579,7 +8621,10 @@ Model Context Protocol
              ;; Use the pre-downloaded Nix package. An alternative is
              ;; `nix run github:akirak/nix-playwright-mcp --`.
              :command "mcp-server-playwright"
-             :args ("--headless")))))
+             :args ("--headless"))
+            ("effect"
+             :command "docker"
+             :args ("run" "--rm" "-i" "timsmart/effect-mcp")))))
 #+end_src
 *** mermaid-mode                                        :@extra:mermaid:
 :PROPERTIES:

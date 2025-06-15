@@ -363,7 +363,7 @@
   (keymap-set embark-file-map "a" #'find-alternate-file)
   (keymap-set embark-file-map "t" #'find-file-other-tab)
   (keymap-set embark-file-map "l" #'akirak-embark-load-or-import-file)
-  (keymap-set embark-file-map "+" #'gptel-add-file)
+  (keymap-set embark-file-map "+" #'akirak-embark-gptel-add-file)
   (keymap-set embark-file-map "C-c o" #'akirak-image-compress-file)
   (keymap-set embark-file-map "C-c C-T" #'akirak-tailscale-copy-file)
   (keymap-set embark-file-map "C-o" #'akirak-embark-org-open-file)
@@ -703,14 +703,14 @@
 (defun akirak-embark-kill-directory-buffers (directory)
   "Kill all buffers in DIRECTORY."
   (interactive "DKill buffers: ")
-  (let ((root (file-name-as-directory (expand-file-name directory)))
-        (count 0))
-    (dolist (buf (buffer-list))
-      (when (string-prefix-p root (expand-file-name (buffer-local-value 'default-directory buf)))
-        (kill-buffer buf)
-        (cl-incf count)))
-    (when (> count 0)
-      (message "Killed %d buffers in %s" count root))))
+  (cl-flet
+      ((buffer-count ()
+         (seq-length (buffer-list))))
+    (let ((initial-count (buffer-count)))
+      (akirak-process-cleanup-dir directory)
+      (let ((count (- (buffer-count) initial-count)))
+        (when (> count 0)
+          (message "Killed %d buffers in %s" count root))))))
 
 (defun akirak-embark-find-file-variable (symbol)
   (interactive "S")
@@ -878,6 +878,10 @@
   (interactive "b")
   (with-current-buffer buffer
     (comint-interrupt-subjob)))
+
+(defun akirak-embark-gptel-add-file (file)
+  (interactive "f")
+  (gptel-context-add-file (expand-file-name file)))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here

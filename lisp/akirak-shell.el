@@ -124,9 +124,12 @@ the original minor mode."
    ("RET" "Current directory" akirak-shell--terminal-cwd)
    ("p" "Project root" akirak-shell--terminal-project-root)
    ("d" "Select directory" akirak-shell-at-directory)
-   ("a" "Aider" akirak-shell-for-aider)
-   ("c" "Claude" akirak-shell-for-claude)
-   ("x" "Codex" akirak-shell-for-codex)]
+   ("o" akirak-shell-at-org-directory)]
+  ["Start an AI session at project root"
+   :class transient-row
+   ("a" "Aider" akirak-shell-project-for-aider)
+   ("c" "Claude" akirak-shell-project-for-claude)
+   ("x" "Codex" akirak-shell-project-for-codex)]
   (interactive)
   (setq akirak-shell-split-window t)
   (setq akirak-shell--buffers (seq-sort-by (lambda (buffer)
@@ -168,6 +171,28 @@ the original minor mode."
   (akirak-shell-eat-new :dir dir
                         :name akirak-shell-buffer-name
                         :window akirak-shell-split-window))
+
+(transient-define-suffix akirak-shell-at-org-directory ()
+  :class 'transient-suffix
+  :if (lambda ()
+        (and (derived-mode-p 'org-mode)
+             (akirak-shell--org-dir)))
+  :description (lambda ()
+                 (format "Org: %s" (akirak-shell--org-dir)))
+  (interactive)
+  (let ((dir (akirak-shell--org-dir)))
+    (unless (and dir
+                 (file-directory-p dir))
+      (user-error "The directory \"%s\" does not exist" dir))
+    (akirak-shell-at-directory dir)))
+
+(defun akirak-shell--org-dir ()
+  (require 'akirak-org-git)
+  (let ((header-args (thread-first
+                       (org-entry-get-with-inheritance "header-args" t)
+                       (org-babel-parse-header-arguments 'no-eval))))
+    (or (alist-get :dir header-args)
+        (akirak-org-git-worktree))))
 
 (cl-defun akirak-shell-eat-new (&key dir window name noselect command)
   (let* ((default-directory (or dir default-directory))
@@ -231,10 +256,10 @@ the original minor mode."
             (process-live-p (get-buffer-process buffer)))))
 
 ;;;###autoload
-(defun akirak-shell-for-aider ()
+(defun akirak-shell-project-for-aider ()
   (interactive)
   (require 'akirak-aider)
-  (let ((root (abbreviate-file-name (project-root (project-current)))))
+  (let ((root (akirak-shell-project-directory)))
     (akirak-shell-eat-new :dir root
                           :command (akirak-aider-command)
                           :name (concat "aider-"
@@ -242,24 +267,26 @@ the original minor mode."
                                          (directory-file-name root))))))
 
 ;;;###autoload
-(defun akirak-shell-for-codex ()
+(defun akirak-shell-project-for-codex ()
   (interactive)
-  (let ((root (abbreviate-file-name (project-root (project-current)))))
+  (let ((root (akirak-shell-project-directory)))
     (akirak-shell-eat-new :dir root
                           :command (akirak-codex-command)
                           :name (concat "codex-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
 
-;;;###autoload
-(defun akirak-shell-for-claude ()
-  (interactive)
-  (let ((root (abbreviate-file-name (project-root (project-current)))))
-    (akirak-shell-eat-new :dir root
-                          :command '("claude")
-                          :name (concat "claude"
-                                        (file-name-nondirectory
-                                         (directory-file-name root))))))
+;;;###autoload (autoload 'akirak-shell-project-for-claude "akirak-shell" nil 'interactive)
+(defalias 'akirak-shell-project-for-claude
+  #'akirak-claude-code-shell)
+
+(defun akirak-shell-project-directory ()
+  (if (derived-mode-p 'org-mode)
+      (let ((worktree (akirak-org-git-worktree)))
+        (if (file-directory-p worktree)
+            worktree
+          (user-error "In org-mode, you need to set GIT_WORKTREE property")))
+    (abbreviate-file-name (project-root (project-current)))))
 
 ;;;; Commands that I plan on deprecating
 

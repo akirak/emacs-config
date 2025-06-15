@@ -284,7 +284,8 @@ end of the pasted region."
                       (?l (consult-org-nlink-insert
                            (match-beginning 2)
                            (match-end 2)
-                           :text (match-string 4)))
+                           :link (match-string 4)
+                           :capture-options '(:immediate-finish t)))
                       (?u (replace-match (match-string 4) t t nil 2))
                       (?k))
                   (delete-overlay ov))))))))))
@@ -1329,22 +1330,37 @@ At this point, the function works with the following pattern:
               (yes-or-no-p "The current entry already has a non-empty heading. \
 Are you sure you want to override it?"))
     (user-error "Aborted"))
-  (let ((marker (save-excursion
-                  (org-back-to-heading)
-                  (point-marker))))
-    (cl-flet
-        ((callback (response info)
-           (require 'akirak-pandoc)
-           (when (stringp response)
-             (org-with-point-at marker
-               (org-edit-headline (akirak-pandoc-convert-string response
-                                    :from "gfm" :to "org"))))))
-      (akirak-org-ai-summarize-headline
-       (save-excursion
-         (org-back-to-heading)
-         (org-end-of-meta-data t)
-         (buffer-substring-no-properties (point) (org-entry-end-position)))
-       #'callback))))
+  (pcase (save-excursion
+           (org-back-to-heading)
+           (list (akirak-org--headline-link)
+                 (point-marker)))
+    (`(,link ,marker)
+     (cl-flet
+         ((callback (response info)
+            (require 'akirak-pandoc)
+            (when (stringp response)
+              (let ((headline-text (akirak-pandoc-convert-string response
+                                     :from "gfm" :to "org")))
+                (org-with-point-at marker
+                  (org-edit-headline (if link
+                                         (org-link-make-string link headline-text)
+                                       headline-text)))))))
+       (akirak-org-ai-summarize-headline
+        (save-excursion
+          (org-back-to-heading)
+          (org-end-of-meta-data t)
+          (buffer-substring-no-properties (point) (save-excursion (org-end-of-subtree))))
+        #'callback)))))
+
+(defun akirak-org--headline-link ()
+  "If the current headline is a bracket/plain link, return its target url."
+  (let ((headline (org-entry-get nil "ITEM")))
+    (save-match-data
+      (pcase headline
+        ((rx (regexp org-link-bracket-re))
+         (match-string 1 headline))
+        ((rx (regexp org-link-plain-re))
+         (match-string 0 headline))))))
 
 (defun akirak-org-ai-summarize-headline (content callback)
   (require 'akirak-pandoc)

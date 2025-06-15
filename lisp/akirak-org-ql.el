@@ -40,7 +40,7 @@
             (org-dog-meaningful-in-file-p obj)
           t))
 
-(org-ql-defpred (proj my-project) ()
+(org-ql-defpred (pr project) ()
   "Filter entries that are related to the current project."
   :normalizers ((`(,predicate-names)
                  (when-let* ((pr (project-current)))
@@ -51,6 +51,14 @@
                                          "remote.origin.url")))))
                      `(or (regexp ,(regexp-quote root))
                           (property "GIT_ORIGIN" ,origin :inherit t))))))
+  :body t)
+
+(org-ql-defpred (br git-branch) ()
+  "Filter entries that explicitly refer to the current branch of the project."
+  :normalizers ((`(,predicate-names)
+                 (when-let* ((branch (magit-get-current-branch)))
+                   `(and (project)
+                         (regexp ,(regexp-quote branch))))))
   :body t)
 
 (org-ql-defpred (cl my-clocked) (&optional arg)

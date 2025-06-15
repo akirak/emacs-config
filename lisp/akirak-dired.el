@@ -140,6 +140,16 @@
 
 (defun akirak-dired-ad-before-deleting (file &rest _args)
   (when (file-directory-p file)
+    ;; Check if the directory contains multiple git worktrees
+    (let ((default-directory file))
+      (when (magit-inside-worktree-p)
+        (let ((worktrees (magit-list-worktrees)))
+          (when (> (length worktrees) 1)
+            (user-error "Cannot delete this Git working tree (referenced from %s).\
+ Use git-worktree command"
+                        (car (cl-remove default-directory
+                                        (mapcar #'car worktrees)
+                                        :test #'file-equal-p)))))))
     (akirak-process-cleanup-dir file)))
 
 (defun akirak-dired-ad-before-deletions (l &rest _args)

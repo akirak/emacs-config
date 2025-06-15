@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -435,14 +435,15 @@
 ;;;###autoload (autoload 'akirak-capture "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture (&optional initial)
   "Main entry point to capture commands."
-  ["Actions (generic / specific type)"
+  ["Non-contextual commands"
    :class transient-row
-   ("T" "Start todo" (lambda ()
-                       (interactive)
-                       (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-                             akirak-capture-template-options '(:todo "UNDERWAY")
-                             akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                       (akirak-capture-doct))
+   ("h" "Plain heading"
+    (lambda ()
+      (interactive)
+      (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
+            akirak-capture-template-options nil
+            akirak-capture-doct-options nil)
+      (akirak-capture-doct))
     :transient t)
    ("t" "Todo" (lambda ()
                  (interactive)
@@ -451,16 +452,15 @@
                        akirak-capture-doct-options nil)
                  (akirak-capture-doct))
     :transient t)
-   ;; ("#" "Ticket" akirak-capture-ticket
-   ;;  :transient t)
-   ("q" "Question" (lambda ()
-                     (interactive)
-                     (setq akirak-capture-headline (akirak-capture--maybe-read-heading
-                                                    "Question: ")
-                           akirak-capture-template-options nil
-                           akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                     (akirak-capture-doct))
+   ("T" "Start todo" (lambda ()
+                       (interactive)
+                       (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
+                             akirak-capture-template-options '(:todo "UNDERWAY")
+                             akirak-capture-doct-options '(:clock-in t :clock-resume t))
+                       (akirak-capture-doct))
     :transient t)
+   ("u" "Url" akirak-capture-url
+    :if (lambda () (not akirak-capture-initial)))
    ("g" "Gptel" akirak-capture-gptel
     :transient t)
    ("i" "Ideate" (lambda ()
@@ -477,108 +477,55 @@
                        akirak-capture-template-options '(:todo "EPIC" :tags "@epic")
                        akirak-capture-doct-options '(:clock-in t :clock-resume t))
                  (akirak-capture-doct))
-    :transient t)
-   ;; ("L" "Start todo with link" (lambda ()
-   ;;                               (interactive)
-   ;;                               (setq akirak-capture-headline (akirak-capture--make-org-link)
-   ;;                                     akirak-capture-template-options '(:todo "UNDERWAY")
-   ;;                                     akirak-capture-doct-options '(:clock-in t :clock-resume t))
-   ;;                               (akirak-capture-doct))
-   ;;  :transient t)
-   ("l" "Bookmark as link" (lambda ()
-                             (interactive)
-                             (setq akirak-capture-headline (akirak-capture--make-org-link)
-                                   akirak-capture-template-options '(:tags "@bookmark")
-                                   akirak-capture-doct-options nil)
-                             (akirak-capture-doct))
-    :transient t)
-   ("F" "Hotfix" akirak-capture-hotfix)
-   ("/" "Tag prompt" akirak-capture-entry-with-tag
     :transient t)]
 
-  ["Information (input, events, etc.)"
-   :class transient-subgroups
-   ["Input"
-    :class transient-row
-    ("h" "Plain heading"
-     (lambda ()
-       (interactive)
-       (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-             akirak-capture-template-options nil
-             akirak-capture-doct-options nil)
-       (akirak-capture-doct))
-     :transient t)
-    ("u" "Url" akirak-capture-url
-     :if (lambda () (not akirak-capture-initial)))
-    ("r" "Read url right now"
-     (lambda ()
-       (interactive)
-       (setq akirak-capture-current-url (or (akirak-url-latest)
-                                            (akirak-url-complete "Capture URL: "))
-             akirak-capture-url-title nil
-             akirak-capture-doct-options '(:clock-in t :clock-resume t)
-             akirak-capture-template-options '(:todo "UNDERWAY" :tags "@reading"))
-       (akirak-capture-url nil 'keep-options))
-     :if (lambda () (not akirak-capture-initial)))]
+  ["Contextual"
+   :class transient-row
+   ("f" "Flymake error"
+    (lambda ()
+      (interactive)
+      (require 'akirak-flymake)
+      (pcase (flymake-diagnostics)
+        (`nil (user-error "No error at point"))
+        (`(,diag) (akirak-capture-project-task diag))
+        (diags (akirak-capture-project-task (akirak-flymake-select-diagnostic diags)))))
+    :if akirak-capture--at-error-p)
+   ("r" "Region"
+    (lambda ()
+      (interactive)
+      (akirak-capture-project-task (cons (region-beginning) (region-end))))
+    :if (lambda ()
+          (and (use-region-p)
+               (project-current))))
+   ("." "Project task" akirak-capture-project-task
+    :if project-current)]
 
-   ;; ["Schedule an event / org-memento"
-   ;;  :class transient-row
-   ;;  ("an" "Note"
-   ;;   (lambda ()
-   ;;     (interactive)
-   ;;     (akirak-capture-short-note
-   ;;      (akirak-capture--maybe-read-heading "Add an event or note: "))))
-   ;;  ("aa" "Schedule block"
-   ;;   (lambda ()
-   ;;     (interactive)
-   ;;     (org-memento-add-quick-event
-   ;;      (akirak-capture--maybe-read-heading "Describe an event: "))))
-   ;;  ("a!" "Quick start"
-   ;;   (lambda ()
-   ;;     (interactive)
-   ;;     (org-memento-start-quick-event
-   ;;      (akirak-capture--maybe-read-heading "Describe the current event: "))))
-
-   ;;  ;; ("am" "Meeting w/ someone"
-   ;;  ;;  (lambda ()
-   ;;  ;;    (interactive)
-   ;;  ;;    (setq akirak-capture-template-options
-   ;;  ;;          '(:tags "@meeting"
-   ;;  ;;                  :body ("- Participants :: %^{Participants}"
-   ;;  ;;                         ""
-   ;;  ;;                         "%?")))
-   ;;  ;;    (akirak-capture-appointment))
-   ;;  ;;  :transient t)
-   ;;  ;; ("as" "Session"
-   ;;  ;;  (lambda ()
-   ;;  ;;    (interactive)
-   ;;  ;;    (setq akirak-capture-template-options
-   ;;  ;;          '(:tags "@session"
-   ;;  ;;                  :body ("%?")))
-   ;;  ;;    (akirak-capture-appointment))
-   ;;  ;;  :transient t)
-   ;;  ;; ("ae" "Errand" akirak-capture-errand
-   ;;  ;;  :transient t)
-   ;;  ]
-   ]
+  ["Append to clock"
+   :class transient-row
+   :if org-clocking-p
+   ("=" "Append heading to clock" akirak-capture-append-heading-to-clock)
+   ("<" "Append block to clock" akirak-capture-append-block-to-clock
+    :if use-region-p)
+   (">" "Convert to a link to a new entry" akirak-org-convert-to-entry-link
+    :if (lambda ()
+          (and (use-region-p)
+               (derived-mode-p 'org-mode))))]
 
   ["Convenience and specific projects"
    :class transient-row
    ("e" "Emacs config" akirak-emacs-config-capture)
-   ("L" "Journal" akirak-capture-journal-item
-    :if (lambda () (eq major-mode 'org-mode)))]
+   ("sn" "Snippet" akirak-capture-snippet
+    :if use-region-p)]
 
   (interactive)
-  (cond
-   ((equal current-prefix-arg '(16))
-    (org-capture-goto-last-stored))
-   ((use-region-p)
-    (akirak-capture-active-region))
-   (t
+  (if (equal current-prefix-arg '(16))
+      (org-capture-goto-last-stored)
     (setq akirak-capture-initial initial)
     (when akirak-capture-initial
       (message "Heading set to \"%s\"" akirak-capture-initial))
-    (transient-setup 'akirak-capture))))
+    (setq akirak-capture-bounds (when (use-region-p)
+                                  (car (region-bounds))))
+    (transient-setup 'akirak-capture)))
 
 (defun akirak-capture--maybe-read-heading (&optional prompt)
   (or akirak-capture-initial
@@ -591,128 +538,10 @@
                           (read-from-minibuffer "Description: "
                                                 (cadr link)))))
 
-(defcustom akirak-capture-tag-alist
-  '(("@troubleshooting"
-     :template (:todo "UNDERWAY")
-     :doct (:clock-in t :clock-resume t))
-    ("@message"
-     :template (:todo "UNDERWAY")
-     :doct (:clock-in t :clock-resume t))
-    ("@note"
-     :doct (:clock-in t :clock-resume t)))
-  ""
-  :type '(alist :key-type (string :tag "Org tag")
-                :value-type plist))
-
-(defun akirak-capture-entry-with-tag (tag)
-  (interactive (list (completing-read "Org tag: "
-                                      (akirak-capture--org-global-tags)
-                                      nil nil "@")))
-  (let ((plist (cdr (assoc tag akirak-capture-tag-alist))))
-    (setq akirak-capture-doct-options (plist-get plist :doct)
-          akirak-capture-template-options (thread-first
-                                            (plist-get plist :template)
-                                            (plist-put :tags tag))
-          akirak-capture-headline (akirak-capture--maybe-read-heading))
-    (akirak-capture-doct)))
-
 (defun akirak-capture--org-global-tags ()
   (thread-last
     (mapcar #'car org-tag-persistent-alist)
     (cl-remove-if-not #'stringp)))
-
-;;;###autoload (autoload 'akirak-capture-active-region "akirak-capture" nil 'interactive)
-(transient-define-prefix akirak-capture-active-region ()
-  ["New entry with a block"
-   :class
-   transient-row
-   ("s" "Source"
-    (lambda ()
-      (interactive)
-      (akirak-capture--region :headline (ignore-errors
-                                          (save-excursion
-                                            (goto-char (region-beginning))
-                                            (which-function)))
-                              :type "src"
-                              :clock-in t :clock-resume t))
-    :transient t)
-   ("S" "Source (no clock-in)"
-    (lambda ()
-      (interactive)
-      (akirak-capture--region :headline (ignore-errors
-                                          (save-excursion
-                                            (goto-char (region-beginning))
-                                            (which-function)))
-                              :type "src"))
-    :transient t)
-   ("q" "Quote (with link)"
-    (lambda ()
-      (interactive)
-      (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
-                              :annotation t
-                              :type "quote"))
-    :transient t)
-   ("e" "Example"
-    (lambda ()
-      (interactive)
-      (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
-                              :annotation t
-                              :type "example"))
-    :transient t)
-   ("n" "Other"
-    (lambda ()
-      (interactive)
-      (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
-                              :clock-in t :clock-resume t))
-    :transient t)
-   ("N" "Other (immediate finish)"
-    (lambda ()
-      (interactive)
-      (akirak-capture--region :headline (akirak-capture-read-string "Headline: ")
-                              :immediate-finish t))
-    :transient t)
-
-   ;; ("t" "Troubleshooting"
-   ;;  (lambda ()
-   ;;    (interactive)
-   ;;    (akirak-capture--region :headline (akirak-capture--read-summary-for-region
-   ;;                                       "Headline: ")
-   ;;                            :todo "UNDERWAY"
-   ;;                            :tags '("@troubleshooting")
-   ;;                            :type "example"
-   ;;                            :clock-in t :clock-resume t))
-   ;;  :transient t)
-   ("l" "Language study (input)" akirak-capture-language-study)
-   ("v" "Vocabulary" akirak-capture-vocabulary)
-   ("g" "Gptel" akirak-capture-gptel :transient t)]
-  ["Others" :class transient-row
-   ("p" "Snippet" akirak-capture-snippet)
-   ("b" "Convert to a link to a new entry" akirak-org-convert-to-entry-link)
-   ("a" "Append block to clock" akirak-capture-append-block-to-clock
-    :if org-clocking-p)
-   ("h" "Append heading to clock" akirak-capture-append-heading-to-clock
-    :if org-clocking-p)]
-
-  (interactive)
-  (if (use-region-p)
-      (setq akirak-capture-bounds (car (region-bounds)))
-    (user-error "No active region"))
-  (transient-setup 'akirak-capture-active-region))
-
-(defun akirak-capture-language-study ()
-  "Capture the region for language study."
-  (interactive)
-  (let ((org-capture-entry
-         (car (doct
-               `((""
-                  :keys ""
-                  :file ,(akirak-capture--vocabulary-file)
-                  :function akirak-capture--goto-backlog
-                  :template ,(akirak-org-capture-make-entry-body
-                               "%A"
-                               :tags '("@input")
-                               :body (akirak-capture--org-block "example"))))))))
-    (org-capture)))
 
 (cl-defun akirak-capture--region (&rest doct-options
                                         &key type headline tags todo annotation
@@ -732,6 +561,144 @@
   (setq akirak-capture-headline (or headline
                                     (akirak-capture-read-string "Headline: ")))
   (akirak-capture-doct))
+
+(defun akirak-capture--at-error-p ()
+  (and (get-char-property-and-overlay (point) 'flymake-diagnostic)
+       t))
+
+(defvar akirak-capture-project-context nil)
+
+(defvar akirak-capture-project-include-function nil)
+
+(transient-define-infix akirak-capture-project-include-function ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-capture-project-include-function
+  :description "Function"
+  :if (lambda ()
+        (plist-get akirak-capture-project-context :function)))
+
+(defvar akirak-capture-project-include-line-number nil)
+
+(transient-define-infix akirak-capture-project-include-line-number ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-capture-project-include-line-number
+  :if (lambda ()
+        (plist-get akirak-capture-project-context :line))
+  :description "Line number")
+
+(transient-define-suffix akirak-capture-project-default-suffix ()
+  :if (lambda () (akirak-capture--project-default-file))
+  :description
+  (lambda ()
+    (format "Project default: %s"
+            (file-name-nondirectory (akirak-capture--project-default-file))))
+  (interactive)
+  (octopus--dispatch (octopus-current-command)
+                     (akirak-capture--project-default-file)))
+
+(defun akirak-capture--project-default-file ()
+  (car (akirak-org-dog-project-files)))
+
+(transient-define-prefix akirak-capture-project-task (&optional obj)
+  "Capture tasks related to the current project."
+  ["Options"
+   :class transient-row
+   ("-f" akirak-capture-project-include-function)
+   ("-l" akirak-capture-project-include-line-number)]
+  ["Create an entry"
+   :class transient-row
+   ("P" akirak-capture-project-default-suffix)
+   ("@" octopus-clock-marker-suffix
+    :if org-clocking-p)
+   ("/" octopus-read-dog-file-suffix)]
+  (interactive)
+  (pcase obj
+    (`nil
+     (pcase-let* ((file (buffer-file-name (or (buffer-base-buffer)
+                                              (current-buffer))))
+                  (`(,_col . ,row) (when file
+                                     (cdr (posn-col-row (posn-at-point))))))
+       (setq akirak-capture-project-context
+             (list :clock-in t
+                   :line row
+                   :function (which-function)
+                   :file file))))
+    ((pred stringp)
+     (setq akirak-capture-project-context nil))
+    ((and `(,begin . ,end)
+          (guard (numberp begin)
+                 (numberp end)))
+     (pcase-let* ((file (buffer-file-name (or (buffer-base-buffer)
+                                              (current-buffer))))
+                  (`(,col . ,row) (when file
+                                    (cdr (posn-col-row (posn-at-point begin))))))
+       (setq akirak-capture-project-context
+             (list :clock-in t
+                   :error (buffer-substring-no-properties begin end)
+                   :line row
+                   :tags '("@troubleshooting")
+                   :file file))))
+    ((pred flymake--diag-p)
+     (pcase-let* ((`(,col . ,row) (posn-col-row (posn-at-point (flymake-diagnostic-beg diag)))))
+       (setq akirak-capture-project-context
+             (list :clock-in t
+                   :error (flymake-diagnostic-text diag)
+                   :line row
+                   :column col
+                   :tags '("@troubleshooting")
+                   :file (buffer-file-name (or (buffer-base-buffer)
+                                               (current-buffer))))))))
+  (transient-setup 'akirak-capture-project-task))
+
+(cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-project-task))
+                                 target)
+  (require 'akirak-org-git)
+  (let* ((function (and akirak-capture-project-include-function
+                        (plist-get akirak-capture-project-context :function)))
+         (line (and akirak-capture-project-include-line-number
+                    (plist-get akirak-capture-project-context :line)))
+         (col (and line
+                   (plist-get akirak-capture-project-context :column)))
+         (file (plist-get akirak-capture-project-context :file))
+         (clock-in (plist-get akirak-capture-project-context :clock-in))
+         (tags (plist-get akirak-capture-project-context :tags))
+         (error-message (plist-get akirak-capture-project-context :error))
+         (root (when file
+                 (vc-git-root file)))
+         (obj (org-dog-file-object (cl-etypecase target
+                                     (string (abbreviate-file-name target)))))
+         (org-capture-entry
+          (car (doct
+                `((""
+                   :keys ""
+                   :template ,(akirak-org-capture-make-entry-body
+                                ""
+                                :todo (if clock-in
+                                          "UNDERWAY"
+                                        "TODO")
+                                :tags tags
+                                :properties
+                                (akirak-org-git-properties obj)
+                                :body
+                                (concat "%?"
+                                        (when function
+                                          (format " `%s`" function))
+                                        (when line
+                                          (format " on line %d" line))
+                                        (when col
+                                          (format ", column %d" col))
+                                        (when file
+                                          (format " in %s"
+                                                  (file-relative-name file root)))
+                                        (when error-message
+                                          (concat "\n\n#+begin_example\n"
+                                                  error-message
+                                                  "\n#+end_example"))
+                                        "\n\n# %a\n"))
+                   :clock-in clock-in
+                   :clock-resume clock-in
+                   ,@(akirak-capture--target-plist target)))))))
+    (org-capture)))
 
 (defun akirak-capture--read-summary-for-region (prompt)
   (completing-read prompt
@@ -777,29 +744,6 @@
                   ,@(akirak-capture--target-plist target)))))))
     (org-capture)))
 
-(defun akirak-capture-hotfix ()
-  "Start clocking a hotfix activity on the current line."
-  (interactive)
-  ;; Similar to `akirak-capture-clock-in'.
-  (pcase (akirak-org-clock-find-commit-entry)
-    ((and (map :marker :summary)
-          (guard marker))
-     (let ((org-capture-entry
-            (car (doct
-                  `((""
-                     :keys ""
-                     :template ,(akirak-org-capture-make-entry-body
-                                  (format "Hotfix of %s" summary)
-                                  :todo "TODO"
-                                  :tags "@hotfix")
-                     :function (lambda ()
-                                 (org-goto-marker-or-bmk ,marker))
-                     :clock-in t :clock-resume t))))))
-       (save-window-excursion
-         (org-capture))))
-    (_
-     (user-error "Cannot find an Org entry"))))
-
 (defun akirak-capture-append-block-to-clock ()
   (interactive)
   (require 'akirak-org-clock)
@@ -843,20 +787,16 @@
         (push (cons level symbol) result)))
     result))
 
-(defun akirak-capture--heading-capture-children (children)
+(defun akirak-capture--heading-capture-children ()
   (let (result
         (min-level (org-element-property
                     :level (org-element-at-point-no-context org-clock-hd-marker))))
     (dolist (n (number-sequence min-level 9))
-      (push (list transient--default-child-level
-                  'transient-suffix
-                  (list :key (int-to-string n)
-                        :description (format "Level %d" n)
-                        :command (cdr (assq n akirak-capture-heading-commands))
-                        :transient nil))
+      (push (list (int-to-string n)
+                  (format "Level %d" n)
+                  (cdr (assq n akirak-capture-heading-commands)))
             result))
-    (append children
-            (nreverse result))))
+    (nreverse result)))
 
 (transient-define-prefix akirak-capture-append-heading-to-clock (text)
   [:description
@@ -870,7 +810,11 @@
              (plist-get akirak-capture-clocked-buffer-info :level)
              (plist-get akirak-capture-clocked-buffer-info :title)))
    :class transient-row
-   :setup-children akirak-capture--heading-capture-children
+   :setup-children
+   (lambda (children)
+     (append children
+             (transient-parse-suffixes 'akirak-capture-append-heading-to-clock
+                                       (akirak-capture--heading-capture-children))))
    ("=" "Same level" akirak-capture--same-level-heading)
    ("+" "Subheading" akirak-capture--subheading)]
   (interactive (list (thread-last
@@ -950,29 +894,6 @@
      (transient-parse-suffixes 'akirak-capture-url (octopus-generate-static-targets)))]
   ["Other locations"
    :class transient-row
-   ("n" "News"
-    (lambda ()
-      (interactive)
-      (setq akirak-capture-doct-options '(:clock-in t :clock-resume t))
-      (octopus--dispatch (octopus-current-command)
-                         (akirak-capture--datetree-marker
-                          (org-dog-resolve-relative-file "news.org")))))
-   ("q" "News queue"
-    (lambda ()
-      (interactive)
-      (let* ((url akirak-capture-current-url)
-             (heading (org-link-make-string url (or akirak-capture-url-title
-                                                    (orgabilize-document-title url))))
-             (jump-func #'akirak-capture--goto-backlog)
-             (org-capture-entry
-              (car (doct
-                    `((""
-                       :keys ""
-                       :template ,(akirak-org-capture-make-entry-body
-                                    heading :body t)
-                       :file ,(org-dog-resolve-relative-file "news.org")
-                       :function ,jump-func))))))
-        (org-capture))))
    ("'" octopus-avy-org-heading-suffix)
    ("@" akirak-capture-url-to-clock)
    ("\\" octopus-this-file-suffix)
@@ -1056,57 +977,6 @@
                    :clock-in t :clock-resume t))))))
     (org-capture)))
 
-(defvar akirak-capture-datetime nil)
-
-(transient-define-prefix akirak-capture-appointment ()
-  ["Context"
-   :class transient-columns
-   :setup-children
-   (lambda (_)
-     (transient-parse-suffixes 'akirak-capture-appointment (octopus-generate-context-file-subgroups)))]
-  ["Other locations"
-   :class transient-row
-   ("/" octopus-read-dog-file-suffix)]
-  (interactive)
-  (let* ((title (akirak-capture-read-string "Appointment title: "))
-         (timestamp (with-temp-buffer
-                      (org-time-stamp nil)
-                      (goto-char (point-min))
-                      (org-element-timestamp-parser))))
-    ;; `akirak-capture-template-options' should be set from outside.
-    (setq akirak-capture-headline (concat (org-element-property
-                                           :raw-value timestamp)
-                                          " "
-                                          (if (string-empty-p title)
-                                              "%^{title}"
-                                            title))
-          akirak-capture-datetime (org-timestamp-to-time timestamp)))
-  (transient-setup 'akirak-capture-appointment))
-
-(cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-appointment))
-                                 target)
-  (let* ((file (cl-etypecase target
-                 (string target)
-                 (org-dog-file (oref target absolute))))
-         (datetreep (cl-typecase (org-dog-file-object file)
-                      (org-dog-datetree-file t)
-                      (otherwise nil)))
-         (plist (when datetreep
-                  (list :function
-                        `(lambda ()
-                           (org-reverse-datetree-goto-date-in-file
-                            ',akirak-capture-datetime)))))
-         (org-capture-entry
-          (car (doct
-                `((""
-                   :keys ""
-                   :template ,(apply #'akirak-org-capture-make-entry-body
-                                     akirak-capture-headline
-                                     akirak-capture-template-options)
-                   :file ,file
-                   ,@plist))))))
-    (org-capture)))
-
 ;;;; Other commands
 
 ;;;###autoload
@@ -1165,44 +1035,6 @@
                                                           (unless dispatch-later
                                                             "%?"))))
       (akirak-capture-doct))))
-
-(defun akirak-capture-short-note (string)
-  "Add a short note to the journal quickly."
-  (interactive "s")
-  (let ((org-capture-entry `("" ""
-                             entry (file+olp ,org-memento-file
-                                             ,(org-memento--today-string))
-                             ,(akirak-org-capture-make-entry-body string)
-                             :immediate-finish t)))
-    (org-capture)))
-
-;; Currently not used.
-(defun akirak-capture-check-item-to-clock ()
-  (interactive)
-  ;; Don't use %A. I want to keep the window configuration while typing the
-  ;; description.
-  (let ((org-capture-entry `("" "" checkitem (clock))))
-    (org-capture)))
-
-;; Currently not used.
-(defun akirak-capture-link-item-to-clock ()
-  (interactive)
-  ;; Don't use %A. I want to keep the window configuration while typing the
-  ;; description.
-  (let* ((inhibit-message t)
-         (link (progn
-                 (org-store-link nil t)
-                 (pop org-stored-links)))
-         (link-string (org-link-make-string
-                       (car link)
-                       (if (derived-mode-p 'org-mode)
-                           (cadr link)
-                         (read-from-minibuffer "Description: "
-                                               nil nil nil nil
-                                               (cadr link)))))
-         (org-capture-entry `("" "" item (clock)
-                              ,(concat link-string "%?"))))
-    (org-capture)))
 
 ;; Currently not used.
 (defun akirak-capture-vocabulary ()
@@ -1593,43 +1425,6 @@ provided as a separate command for integration, e.g. with embark."
             "%" "%%" (buffer-substring-no-properties (region-beginning) (region-end)))
            (concat "#+end_" (car (split-string body-type)))))
    :empty-lines-before 1))
-
-(defun akirak-capture-errand ()
-  (interactive)
-  (let* ((title (akirak-capture-read-string "Appointment title: "))
-         (timestamp (with-temp-buffer
-                      (org-time-stamp t)
-                      (buffer-string)
-                      (goto-char (point-min))
-                      (org-element-timestamp-parser)))
-         (file (or (oref (org-dog-find-file-object
-                          (org-dog-file-pred-1 '(relative "errands.org")))
-                         absolute)
-                   (error "Failed to locate errands.org")))
-         (org-capture-entry
-          (car (doct
-                `((""
-                   :keys ""
-                   :template ,(akirak-org-capture-make-entry-body
-                                (concat (org-element-property :raw-value timestamp)
-                                        " " title)
-                                :body
-                                (append (when (and (derived-mode-p 'org-mode)
-                                                   (not (org-before-first-heading-p)))
-                                          '("- %a" ""))
-                                        '("| Event | Time | Estimated cost |"
-                                          "|-------+------+----------------|"
-                                          "| %?    |      |                |"
-                                          "|-------+------+----------------|"
-                                          "|       |      |                |"
-                                          ""
-                                          "#+TBLFM: $3=vsum(@2$3..@-1$3)")))
-                   :file ,file
-                   :function
-                   (lambda ()
-                     (org-reverse-datetree-goto-date-in-file
-                      ',(org-timestamp-to-time timestamp)))))))))
-    (org-capture)))
 
 ;;;###autoload
 (cl-defun akirak-capture-quick-translation (word &key (dest-language "English"))
