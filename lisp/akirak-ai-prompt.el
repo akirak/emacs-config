@@ -122,10 +122,11 @@
   "Within an AI shell, fix the error at the current point."
   (interactive "P")
   (cl-assert (akirak-org-shell--buffer-live-p))
+  (require 'akirak-flymake)
   (let* ((diag (pcase (flymake-diagnostics)
                  (`nil (user-error "No error at point"))
                  (`(,diag) diag)
-                 (diags (akirak-ai-prompt--select-flymake-diagnostic diags))))
+                 (diags (akirak-flymake-select-diagnostic diags))))
          (diag-text (flymake-diagnostic-text diag))
          (line (cdr (posn-col-row (posn-at-point (flymake-diagnostic-beg diag)))))
          (file (buffer-file-name (or (buffer-base-buffer)
@@ -188,14 +189,6 @@
     (akirak-shell-send-string-to-buffer akirak-ai-prompt-shell-buffer
       content
       :confirm t)))
-
-(defun akirak-ai-prompt--select-flymake-diagnostic (diags)
-  (let* ((alist (mapcar (lambda (diag)
-                          (cons (flymake-diagnostic-text diag)
-                                diag))
-                        diags))
-         (text (completing-read "Select error: " alist nil t)))
-    (cdr (assoc text alist))))
 
 (defun akirak-ai-prompt-git-commit-message-claude ()
   (interactive)
