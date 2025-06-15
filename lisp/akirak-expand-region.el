@@ -41,7 +41,7 @@
            (guard (akirak-expand-region--text-like-p)))
        (akirak-expand-region-text))
       (_
-       (user-error "Not applicable")))))
+       (akirak-expand-region-sexp)))))
 
 (defun akirak-expand-region-text ()
   (if (use-region-p)
@@ -49,6 +49,18 @@
        (bounds-of-thing-at-point 'paragraph))
     (akirak-expand-region--select-bounds
      (bounds-of-thing-at-point 'sentence))))
+
+(defun akirak-expand-region-sexp ()
+  (if (use-region-p)
+      (progn
+        (goto-char (region-beginning))
+        (when (zerop (ppss-depth (syntax-ppss)))
+          (user-error "Cannot go upward any more"))
+        (backward-up-list)
+        (akirak-expand-region--select-bounds
+         (bounds-of-thing-at-point 'sexp)))
+    (akirak-expand-region--select-bounds
+     (bounds-of-thing-at-point 'sexp))))
 
 (defun akirak-expand-region--select-bounds (bounds)
   (goto-char (cdr bounds))
