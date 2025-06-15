@@ -483,9 +483,9 @@
    :class transient-row
    :if org-clocking-p
    ("=" "Append heading to clock" akirak-capture-append-heading-to-clock)
-   ("a" "Append block to clock" akirak-capture-append-block-to-clock
+   ("<" "Append block to clock" akirak-capture-append-block-to-clock
     :if use-region-p)
-   ("b" "Convert to a link to a new entry" akirak-org-convert-to-entry-link
+   (">" "Convert to a link to a new entry" akirak-org-convert-to-entry-link
     :if (lambda ()
           (and (use-region-p)
                (derived-mode-p 'org-mode))))]
