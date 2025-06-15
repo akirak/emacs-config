@@ -639,10 +639,10 @@
                    :tags '("@troubleshooting")
                    :file file))))
     ((pred flymake--diag-p)
-     (pcase-let* ((`(,col . ,row) (posn-col-row (posn-at-point (flymake-diagnostic-beg diag)))))
+     (pcase-let* ((`(,col . ,row) (posn-col-row (posn-at-point (flymake-diagnostic-beg obj)))))
        (setq akirak-capture-project-context
              (list :clock-in t
-                   :error (flymake-diagnostic-text diag)
+                   :error (flymake-diagnostic-text obj)
                    :line row
                    :column col
                    :tags '("@troubleshooting")
