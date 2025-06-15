@@ -7416,10 +7416,13 @@ A flymake plugin for SQL files using sqlfluff
 #+begin_src emacs-lisp
   (setup (:package flymake-sqlfluff)
     (:nixpkgs sqlfluff)
-    (add-hook 'sql-mode-hook
-              (defun akirak/flymake-sqlfluff-setup ()
-                (flymake-sqlfluff-load)
-                (flymake-mode)))
+
+    ;; Add to .dir-locals.el of individual projects instead.
+    ;;
+    ;; (add-hook 'sql-mode-hook
+    ;;           (defun akirak/flymake-sqlfluff-setup ()
+    ;;             (flymake-sqlfluff-load)
+    ;;             (flymake-mode)))
 
     ;; Also define the formatter
     (:reformatters
