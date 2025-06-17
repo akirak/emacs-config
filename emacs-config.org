@@ -1354,6 +1354,13 @@ The built-in =electric= package provides the following modes:
                                            eos)
                                        filename))))
 
+    (advice-add 'dir-locals-collect-variables
+                :filter-args
+                (defun akirak/ad-dir-locals-collect-variables (args)
+                  (cons (car args)
+                        (cons (abbreviate-file-name (cadr args))
+                              (cddr args)))))
+
     (:status personal
       (let* (;; (mix-format '((eval . (mix-format-on-save-mode t))))
              ;; (prettier '((eval . (prettier-on-save-mode t))))
