@@ -7642,7 +7642,8 @@ Edit Git commit messages
                                           org-clock-marker)))
                          (heading (org-entry-get marker "ITEM")))
                (with-temp-buffer
-                 (insert heading)
+                 (insert (akirak-pandoc-convert-string heading
+                           :from "org" :to "gfm"))
                  (goto-char (point-min))
                  (when (looking-at (rx (+ (any word punct)) ": "))
                    (delete-region (point) (match-end 0)))
