@@ -32,5 +32,29 @@
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
 
+;;;; Other commands
+
+(defcustom akirak-claude-code-default-options
+  ;; I don't have Claude Max at present
+  '("--model=sonnet")
+  "Default command line options for Claude Code."
+  :type '(repeat string))
+
+;;;###autoload
+(defun akirak-claude-code-default ()
+  (interactive)
+  (let* ((root (akirak-shell-project-directory))
+         (buffers (seq-filter (apply-partially #'akirak-shell-buffer-in-dir-p root)
+                              (buffer-list))))
+    (if buffers
+        (let ((buffer (completing-read "Shell: " (mapcar #'buffer-name buffers)
+                                       nil t)))
+          (pop-to-buffer buffer))
+      (akirak-shell-eat-new :dir root
+                            :command (cons "claude" akirak-claude-code-default-options)
+                            :name (concat "claude-"
+                                          (file-name-nondirectory
+                                           (directory-file-name root)))))))
+
 (provide 'akirak-claude)
 ;;; akirak-claude.el ends here

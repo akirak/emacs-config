@@ -127,8 +127,9 @@ the original minor mode."
    ("o" akirak-shell-at-org-directory)]
   ["Start an AI session at project root"
    :class transient-row
-   ("a" "Aider" akirak-shell-project-for-aider)
+   ("C" "Claude (default)" akirak-claude-code-default)
    ("c" "Claude" akirak-shell-project-for-claude)
+   ("a" "Aider" akirak-shell-project-for-aider)
    ("x" "Codex" akirak-shell-project-for-codex)]
   (interactive)
   (setq akirak-shell-split-window t)
