@@ -302,12 +302,7 @@ the original minor mode."
 (cl-defun akirak-shell-run-command-at-dir (dir command)
   (let ((buffer-name (thread-last
                        (buffer-list)
-                       (seq-filter `(lambda (buf)
-                                      (and (eq (buffer-local-value 'major-mode buf)
-                                               'eat-mode)
-                                           (or (null ,dir)
-                                               (file-equal-p (buffer-local-value 'default-directory buf)
-                                                             ,dir)))))
+                       (seq-filter (apply-partially #'akirak-shell-buffer-in-dir-p dir))
                        (mapcar #'buffer-name)
                        (completing-read "Shell: "))))
     (if (string-empty-p buffer-name)
@@ -410,6 +405,13 @@ the original minor mode."
     (if (string-match-p "\n" string)
         (concat "<<EOF\n" string "\nEOF")
       string)))
+
+(defun akirak-shell-buffer-in-dir-p (dir buf)
+  (and (eq (buffer-local-value 'major-mode buf)
+           'eat-mode)
+       (or (null dir)
+           (file-equal-p (buffer-local-value 'default-directory buf)
+                         dir))))
 
 (provide 'akirak-shell)
 ;;; akirak-shell.el ends here
