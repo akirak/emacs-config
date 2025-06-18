@@ -405,7 +405,8 @@ the original minor mode."
   (let ((string (string-trim string)))
     (if (string-match-p "\n" string)
         (concat "<<EOF\n" string "\nEOF")
-      string)))
+      ;; Two new lines are required for Claude Code
+      (concat string "\n"))))
 
 (defun akirak-shell-buffer-in-dir-p (dir buf)
   (and (eq (buffer-local-value 'major-mode buf)
