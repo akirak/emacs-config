@@ -1373,6 +1373,7 @@ The built-in =electric= package provides the following modes:
              (nixfmt '((eval . (nixfmt-on-save-mode t))))
              (zig-fmt '((eval . (zig-format-on-save-mode t))))
              (copilot '((eval . (copilot-mode t))))
+             (editorconfig '((eval . (editorconfig-mode t))))
              (default  `((astro-ts-mode . (,@lsp-no-formatter))
                          (css-mode . (,@lsp-no-formatter))
                          (elixir-ts-mode . (,@lsp))
@@ -1397,7 +1398,9 @@ The built-in =electric= package provides the following modes:
                          (web-mode . (,@lsp))
                          (zig-mode . (,@lsp-no-formatter ,@zig-fmt))
                          (zig-ts-mode . (,@lsp-no-formatter ,@zig-fmt))
-                         ("renovate.json" . (,@jq-format)))))
+                         ("renovate.json" . (,@jq-format))
+                         (prog-mode . (,@editorconfig))
+                         (text-mode . (,@editorconfig)))))
         (dir-locals-set-class-variables
          'personal
          `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
