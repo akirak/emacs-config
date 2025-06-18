@@ -216,59 +216,60 @@ are displayed in the frame."
                                                                (get-buffer name-or-cell)))))))
        (pop-to-buffer buffer)))
     (_
-     (if-let* ((workspace (akirak-compile--workspace-root)))
-         (let* ((key (file-name-nondirectory (directory-file-name workspace)))
-                (history (gethash key akirak-compile-per-workspace-history
-                                  :default))
-                (projects (akirak-compile--find-projects workspace))
-                (command (akirak-compile--complete
-                          (if arg
-                              "Compile in a per-project buffer: "
-                            "Compile: ")
-                          projects
-                          (unless (eq history :default)
-                            ;; In a mono-repo, the history can contain entries
-                            ;; for other projects under the same workspace.
-                            (thread-last
-                              (copy-sequence history)
-                              (seq-filter `(lambda (ent)
-                                             (member (get-char-property 0 'command-directory ent)
-                                                     (mapcar #'cdr ',projects))))))))
-                (prefer-terminal (get-text-property 0 'terminal command))
-                (default-directory (or (get-text-property 0 'command-directory command)
-                                       (akirak-compile--select-directory-for-command
-                                        command projects)
-                                       workspace)))
-           (if (akirak-compile--installation-command-p command)
-               ;; Install dependencies in a separate buffer without killing the
-               ;; current process.
-               (akirak-compile-install command)
-             ;; Keep the input in the history iff it's not an installation command.
-             (if (eq history :default)
-                 (puthash key (list command) akirak-compile-per-workspace-history)
-               (cl-pushnew command history)
-               (puthash key history akirak-compile-per-workspace-history))
-             (cond
-              (prefer-terminal
-               (let* ((name (format "%s<%s>" command (project-name (project-current))))
-                      (buffer-name (format "*%s*" name)))
-                 (when (get-buffer buffer-name)
-                   (kill-buffer buffer-name))
-                 (require 'eat)
-                 (with-current-buffer (generate-new-buffer buffer-name)
-                   (eat-mode)
-                   ;; Better not have this one?
-                   (local-set-key "q" #'quit-window)
-                   ;; This must be set after eat-mode
-                   (setq-local eat-kill-buffer-on-exit nil)
-                   (compilation-shell-minor-mode t)
-                   (eat-exec (current-buffer) name "sh" nil (list "-c" command))
-                   (pop-to-buffer (current-buffer)))))
-              ((equal arg '(4))
-               (compilation-start command t (cl-constantly (akirak-compile--buffer-name))))
-              (t
-               (compile command t)))))
-       (user-error "No workspace root")))))
+     (let ((default-directory (abbreviate-file-name default-directory)))
+       (if-let* ((workspace (akirak-compile--workspace-root)))
+           (let* ((key (file-name-nondirectory (directory-file-name workspace)))
+                  (history (gethash key akirak-compile-per-workspace-history
+                                    :default))
+                  (projects (akirak-compile--find-projects workspace))
+                  (command (akirak-compile--complete
+                            (if arg
+                                "Compile in a per-project buffer: "
+                              "Compile: ")
+                            projects
+                            (unless (eq history :default)
+                              ;; In a mono-repo, the history can contain entries
+                              ;; for other projects under the same workspace.
+                              (thread-last
+                                (copy-sequence history)
+                                (seq-filter `(lambda (ent)
+                                               (member (get-char-property 0 'command-directory ent)
+                                                       (mapcar #'cdr ',projects))))))))
+                  (prefer-terminal (get-text-property 0 'terminal command))
+                  (default-directory (or (get-text-property 0 'command-directory command)
+                                         (akirak-compile--select-directory-for-command
+                                          command projects)
+                                         workspace)))
+             (if (akirak-compile--installation-command-p command)
+                 ;; Install dependencies in a separate buffer without killing the
+                 ;; current process.
+                 (akirak-compile-install command)
+               ;; Keep the input in the history iff it's not an installation command.
+               (if (eq history :default)
+                   (puthash key (list command) akirak-compile-per-workspace-history)
+                 (cl-pushnew command history)
+                 (puthash key history akirak-compile-per-workspace-history))
+               (cond
+                (prefer-terminal
+                 (let* ((name (format "%s<%s>" command (project-name (project-current))))
+                        (buffer-name (format "*%s*" name)))
+                   (when (get-buffer buffer-name)
+                     (kill-buffer buffer-name))
+                   (require 'eat)
+                   (with-current-buffer (generate-new-buffer buffer-name)
+                     (eat-mode)
+                     ;; Better not have this one?
+                     (local-set-key "q" #'quit-window)
+                     ;; This must be set after eat-mode
+                     (setq-local eat-kill-buffer-on-exit nil)
+                     (compilation-shell-minor-mode t)
+                     (eat-exec (current-buffer) name "sh" nil (list "-c" command))
+                     (pop-to-buffer (current-buffer)))))
+                ((equal arg '(4))
+                 (compilation-start command t (cl-constantly (akirak-compile--buffer-name))))
+                (t
+                 (compile command t)))))
+         (user-error "No workspace root"))))))
 
 (defun akirak-compile--buffer-name ()
   (concat "*"
