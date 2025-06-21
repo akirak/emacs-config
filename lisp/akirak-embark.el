@@ -346,8 +346,8 @@
   (keymap-set embark-library-map "t"
               (akirak-embark-new-tab-action find-library
                 (lambda () (file-name-base buffer-file-name))))
-  (keymap-set embark-general-map "C-c c" #'akirak-capture-active-region)
-  (add-to-list 'embark-around-action-hooks '(akirak-capture-active-region embark--mark-target))
+  (keymap-set embark-general-map "C-c c" #'akirak-capture)
+  (add-to-list 'embark-around-action-hooks '(akirak-capture embark--mark-target))
   (keymap-set embark-identifier-map "R" #'project-query-replace-regexp)
   (keymap-set embark-identifier-map "C-c i" #'akirak-embark-install-package)
   (keymap-set embark-expression-map "R" #'project-query-replace-regexp)
