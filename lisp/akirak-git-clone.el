@@ -275,10 +275,14 @@ DIR is an optional destination directory to clone the repository into."
          (repo (if (and dir
                         (not (file-exists-p dir)))
                    dir
-                 (expand-file-name (akirak-git-clone-source-local-path obj)
-                                   (or dir
-                                       (akirak-git-clone--root-directory
-                                        (akirak-git-clone-source-host obj))))))
+                 (if dir
+                     (expand-file-name (thread-last
+                                         (akirak-git-clone-source-local-path obj)
+                                         (file-name-nondirectory))
+                                       dir)
+                   (expand-file-name (akirak-git-clone-source-local-path obj)
+                                     (akirak-git-clone--root-directory
+                                      (akirak-git-clone-source-host obj))))))
          (content-path (akirak-git-clone-source-content-path obj)))
     (when (akirak-git-clone-source-rev-or-ref obj)
       (message "Rev or ref is unsupported now"))
