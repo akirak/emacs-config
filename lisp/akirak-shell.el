@@ -378,7 +378,7 @@ the original minor mode."
          (eat-term-send-string-as-yank eat-terminal input)
          (sit-for 0.2)
          (when confirm
-           (eat-term-send-string eat-terminal "\n")
+           (eat-term-input-event eat-terminal 1 ?\C-m)
            (sit-for 0.2))
          (when-let* ((window (get-buffer-window buffer)))
            (with-selected-window window
