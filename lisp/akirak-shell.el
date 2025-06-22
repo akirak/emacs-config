@@ -247,7 +247,10 @@ the original minor mode."
   (if-let* ((tab (tab-bar-get-buffer-tab buffer-or-name 'all-frames)))
       (progn
         (tab-bar-select-tab tab)
-        (select-window (get-buffer-window buffer-or-name)))
+        (let ((window (get-buffer-window buffer-or-name)))
+          (if (window-live-p window)
+              (select-window window)
+            (pop-to-buffer buffer-or-name))))
     (pop-to-buffer buffer-or-name)))
 
 (defun akirak-shell--cleanup-buffers ()
