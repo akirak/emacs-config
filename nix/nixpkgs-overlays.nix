@@ -5,7 +5,7 @@
 [
   # Bring custom packages into the scope for native dependencies.
   (_: prev: {
-    inherit ((inputs.flake-pins-pkgs).packages.${prev.system})
+    inherit ((inputs.flake-pins).packages.${prev.system})
       github-linguist
       epubinfo
       squasher
