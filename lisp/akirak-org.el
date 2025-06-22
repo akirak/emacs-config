@@ -416,6 +416,24 @@ end of the pasted region."
                       org-src-lang-modes))
           lang))))
 
+(defun akirak-org-src-lang-at-point ()
+  (pcase (derived-mode-p '(markdown-mode org-mode))
+    ((and `markdown-mode
+          (let `(,pos . ,_) (markdown-code-block-at-pos (point))))
+     (save-excursion
+       (goto-char pos)
+       (when (looking-at markdown-regex-gfm-code-block-open)
+         (match-string 3))))
+    ((and `org-mode
+          (guard (org-in-src-block-p)))
+     (org-element-property :language (org-element-at-point-no-context)))
+    (_
+     (akirak-org--find-src-lang
+      (thread-last
+        (symbol-name major-mode)
+        (string-remove-suffix "-mode")
+        (string-remove-suffix "-ts"))))))
+
 ;;;###autoload
 (defun akirak-org-square-open (&optional n)
   "Dwim \"[\" for `org-mode'.
