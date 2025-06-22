@@ -435,6 +435,15 @@ DIR is an optional destination directory to clone the repository into."
                (point) (line-end-position)))))
       (delete-file err-file))))
 
+(defun akirak-git-clone-default-dest-dir (repo)
+  "Determine the local destination path for cloning URL."
+  (let ((obj (cl-etypecase repo
+               (string (akirak-git-clone--parse repo))
+               (akirak-git-clone-source repo))))
+    (expand-file-name (akirak-git-clone-source-local-path obj)
+                      (akirak-git-clone--root-directory
+                       (akirak-git-clone-source-host obj)))))
+
 (defun akirak-git-clone-browse (dir &optional content-path)
   "Browse DIR using `akirak-git-clone-browser-function'."
   (let ((root (file-name-as-directory dir)))
