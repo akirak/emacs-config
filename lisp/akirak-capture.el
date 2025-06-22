@@ -477,6 +477,18 @@
                        akirak-capture-template-options '(:todo "EPIC" :tags "@epic")
                        akirak-capture-doct-options '(:clock-in t :clock-resume t))
                  (akirak-capture-doct))
+    :transient t)
+   ("l" "Link" (lambda ()
+                 (interactive)
+                 (let ((inhibit-message t))
+                   (call-interactively #'org-store-link))
+                 (setq akirak-capture-headline
+                       (org-link-make-string
+                        (car (pop org-stored-links))
+                        (read-string "Description: " (which-function)))
+                       akirak-capture-template-options nil
+                       akirak-capture-doct-options nil)
+                 (akirak-capture-doct))
     :transient t)]
 
   ["Contextual"
