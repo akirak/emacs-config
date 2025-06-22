@@ -684,7 +684,7 @@
                                 :body
                                 (concat "%?"
                                         (when function
-                                          (format " `%s`" function))
+                                          (format " ~%s~" function))
                                         (when line
                                           (format " on line %d" line))
                                         (when col
