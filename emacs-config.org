@@ -8434,14 +8434,19 @@ A Git porcelain inside Emacs
             ;; Based on 'magit-display-buffer-same-window-except-diff-v1
             (defun akirak/magit-display-buffer (buffer)
               (let ((action (with-current-buffer buffer
-                              (cond
-                               ((derived-mode-p 'magit-diff-mode)
-                                '(nil (inhibit-same-window . t)))
-                               ((and (derived-mode-p 'magit-process-mode)
-                                     (fboundp 'akirak-window-display-buffer-prefer-other-pane))
-                                '(akirak-window-display-buffer-prefer-other-pane))
-                               (t
-                                '(display-buffer-same-window))))))
+                              (pcase (derived-mode-p '(magit-diff-mode
+                                                       magit-log-mode
+                                                       magit-process-mode))
+                                ((or `magit-diff-mode
+                                     (and `magit-log-mode
+                                          (let `(,(rx ".."))
+                                            magit-buffer-revisions)))
+                                 '(nil (inhibit-same-window . t)))
+                                ((and `magit-process-mode
+                                      (guard (fboundp 'akirak-window-display-buffer-prefer-other-pane)))
+                                 '(akirak-window-display-buffer-prefer-other-pane))
+                                (_
+                                 '(display-buffer-same-window))))))
                 (prog1 (display-buffer buffer action)
                   (with-current-buffer buffer
                     (when (derived-mode-p 'magit-process-mode)
