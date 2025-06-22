@@ -55,6 +55,8 @@ the original minor mode."
   (when-let* ((buffer (pcase cand
                         ((pred bufferp)
                          cand)
+                        ((pred windowp)
+                         (window-buffer cand))
                         ((pred stringp)
                          (get-buffer cand))
                         (`(,name . ,_)
@@ -71,6 +73,8 @@ the original minor mode."
   (pcase arg
     ('(16)
      (akirak-shell-select))
+    ('(4)
+     (call-interactively #'akirak-shell-send-string-to-buffer))
     (_
      (akirak-shell-transient))))
 
@@ -343,18 +347,29 @@ the original minor mode."
     (akirak-shell-send-string-to-buffer buffer command)
     (pop-to-buffer buffer)))
 
-(cl-defun akirak-shell-send-string-to-buffer (buffer input
-                                                     &key compilation-regexp
-                                                     confirm)
+;;;###autoload
+(cl-defun akirak-shell-send-string-to-buffer (window-or-buffer
+                                              input
+                                              &key compilation-regexp
+                                              confirm)
+  (interactive (list (or (thread-last
+                           (window-list)
+                           (seq-filter #'akirak-shell-buffer-p)
+                           (car)))
+                     (read-string "Input: ")
+                     :confirm t))
   (declare (indent 1))
-  (let ((input (pcase (akirak-shell-detect-buffer-program buffer)
-                 (`aider
-                  (akirak-shell--preprocess-aider-input input))
-                 (`claude
-                  (akirak-shell--preprocess-claude-input input))
-                 ;; Currently no codex support
-                 (_
-                  input))))
+  (let* ((buffer (cl-etypecase window-or-buffer
+                   (window (window-buffer window-or-buffer))
+                   (buffer window-or-buffer)))
+         (input (pcase (akirak-shell-detect-buffer-program buffer)
+                  (`aider
+                   (akirak-shell--preprocess-aider-input input))
+                  (`claude
+                   (akirak-shell--preprocess-claude-input input))
+                  ;; Currently no codex support
+                  (_
+                   input))))
     (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
                                     '(eat-mode))
       (`eat-mode
