@@ -1373,6 +1373,62 @@ Don't decorate any part of the text; Just wrap inline code.\n\n"
     :system "Be concrete and specific to make it clear what you are referring to."
     :callback callback))
 
+;;;###autoload
+(defun akirak-org-claude-explain ()
+  "Ask a question about the current repository and insert it into the entry."
+  (interactive nil org-mode)
+  (let* ((headline (string-trim (or (org-entry-get nil "ITEM")
+                                    (user-error "Not inside an Org entry"))))
+         (prompt (concat "Explain: "
+                         (if (string-empty-p headline)
+                             (user-error "The headline is empty")
+                           headline)))
+         (org-id (org-id-get-create))
+         (default-directory (akirak-shell-project-directory))
+         (buffer (generate-new-buffer "*claude-analysis*"))
+         (error-buffer (generate-new-buffer "*claude-analysis-error*")))
+    (cl-flet
+        ((sentinel (process output)
+           (when (eq (process-status process) 'exit)
+             (let ((exit-code (process-exit-status process)))
+               (if (zerop exit-code)
+                   (let ((response (with-current-buffer buffer
+                                     (require 'akirak-pandoc)
+                                     (akirak-pandoc-convert-string
+                                         (xterm-color-filter (buffer-string))
+                                       :from "gfm" :to "org"))))
+                     (org-with-point-at (org-id-find org-id)
+                       (atomic-change-group
+                         (let ((tag "@AI"))
+                           (when (not (member tag (org-get-tags)))
+                             (save-excursion
+                               (org-set-tags (cons tag (org-get-tags nil 'local))))))
+                         (goto-char (org-entry-end-position))
+                         (unless (bolp) (newline))
+                         (unless (eolp) (org-open-line 1))
+                         (delete-blank-lines)
+                         (let ((begin (point)))
+                           (insert response)
+                           (unless (bolp) (newline))
+                           (unless (eolp) (org-open-line 1))
+                           (push-mark)
+                           (goto-char begin)
+                           (activate-mark)
+                           (akirak-org-demote-headings nil t)
+                           (deactivate-mark)
+                           (goto-char (org-entry-end-position))
+                           (pulse-momentary-highlight-region begin (point))))
+                       (message "Claude analysis completed and inserted")))
+                 (message "Claude command failed with exit code %d" exit-code))
+               (kill-buffer (process-buffer process))
+               (kill-buffer error-buffer)))))
+      (make-process :name "claude-analysis"
+                    :buffer buffer
+                    :stderr error-buffer
+                    :command (list "claude" "-p" prompt)
+                    :sentinel #'sentinel))
+    (message "Running Claude analysis...")))
+
 ;;;; Specific applications
 
 ;;;###autoload
