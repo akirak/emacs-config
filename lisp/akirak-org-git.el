@@ -96,7 +96,13 @@
     (unless url
       (user-error "No URL found in the current headline"))
     (require 'akirak-git-clone)
-    (let ((dir (akirak-git-clone-default-dest-dir url)))
+    (let ((dir (akirak-git-clone-default-dest-dir
+                url
+                (thread-last
+                  (org-base-buffer (current-buffer))
+                  (buffer-file-name)
+                  (akirak-git-clone-org-file-category)
+                  (akirak-git-clone-default-parent)))))
       (org-entry-put nil "GIT_WORKTREE"
                      (org-link-make-string
                       (concat "file:" (abbreviate-file-name dir))))
