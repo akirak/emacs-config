@@ -86,5 +86,21 @@
                   `(("FILE_PATH_FROM_GIT_ROOT" . ,(file-relative-name file root)))))
         (seq-filter #'cdr)))))
 
+;;;###autoload
+(defun akirak-org-git-clone ()
+  "Clone a repository from URL in the current Org entry headline."
+  (interactive nil org-mode)
+  (let* ((headline (org-entry-get nil "ITEM"))
+         (url (when (string-match org-link-bracket-re headline)
+                (match-string 1 headline))))
+    (unless url
+      (user-error "No URL found in the current headline"))
+    (require 'akirak-git-clone)
+    (let ((dir (akirak-git-clone-default-dest-dir url)))
+      (org-entry-put nil "GIT_WORKTREE"
+                     (org-link-make-string
+                      (concat "file:" (abbreviate-file-name dir))))
+      (akirak-git-clone url dir))))
+
 (provide 'akirak-org-git)
 ;;; akirak-org-git.el ends here

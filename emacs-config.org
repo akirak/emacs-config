@@ -994,7 +994,20 @@ The other variables must not be saved, and they should be put in configuration:
 
     (:with-feature dired-aux
       (:also-load akirak-dired)
-      (advice-add 'dired-rename-file :before #'akirak-dired-ad-before-deleting)))
+      (advice-add 'dired-rename-file :before #'akirak-dired-ad-before-deleting))
+
+    (:status opinionated
+      (:keymap "R" (defun akirak/dired-do-rename (&optional arg)
+                     "Rename the file at point or move the selected files.
+
+  This is a custom wrapper around `dired-do-rename'. With a single
+  universal prefix, disable `dired-vc-rename-file' temporarily to allow
+  moving the selected file(s) to outside of the current Git repository."
+                     (interactive "P")
+                     (if (equal arg '(4))
+                         (let ((dired-vc-rename-file nil))
+                           (dired-do-rename))
+                       (dired-do-rename arg))))))
 #+end_src
 *** display-fill-column-indicator
 :PROPERTIES:
@@ -1354,6 +1367,13 @@ The built-in =electric= package provides the following modes:
                                            eos)
                                        filename))))
 
+    (advice-add 'dir-locals-collect-variables
+                :filter-args
+                (defun akirak/ad-dir-locals-collect-variables (args)
+                  (cons (car args)
+                        (cons (abbreviate-file-name (cadr args))
+                              (cddr args)))))
+
     (:status personal
       (let* (;; (mix-format '((eval . (mix-format-on-save-mode t))))
              ;; (prettier '((eval . (prettier-on-save-mode t))))
@@ -1366,6 +1386,7 @@ The built-in =electric= package provides the following modes:
              (nixfmt '((eval . (nixfmt-on-save-mode t))))
              (zig-fmt '((eval . (zig-format-on-save-mode t))))
              (copilot '((eval . (copilot-mode t))))
+             (editorconfig '((eval . (editorconfig-mode t))))
              (default  `((astro-ts-mode . (,@lsp-no-formatter))
                          (css-mode . (,@lsp-no-formatter))
                          (elixir-ts-mode . (,@lsp))
@@ -1390,7 +1411,9 @@ The built-in =electric= package provides the following modes:
                          (web-mode . (,@lsp))
                          (zig-mode . (,@lsp-no-formatter ,@zig-fmt))
                          (zig-ts-mode . (,@lsp-no-formatter ,@zig-fmt))
-                         ("renovate.json" . (,@jq-format)))))
+                         ("renovate.json" . (,@jq-format))
+                         (prog-mode . (,@editorconfig))
+                         (text-mode . (,@editorconfig)))))
         (dir-locals-set-class-variables
          'personal
          `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
@@ -7642,7 +7665,8 @@ Edit Git commit messages
                                           org-clock-marker)))
                          (heading (org-entry-get marker "ITEM")))
                (with-temp-buffer
-                 (insert heading)
+                 (insert (akirak-pandoc-convert-string heading
+                           :from "org" :to "gfm"))
                  (goto-char (point-min))
                  (when (looking-at (rx (+ (any word punct)) ": "))
                    (delete-region (point) (match-end 0)))

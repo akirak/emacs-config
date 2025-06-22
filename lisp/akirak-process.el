@@ -32,7 +32,7 @@
                    3)
             (user-error "Process %s didn't exit within 3 seconds"
                         (process-name proc)))
-          (sleep 0.25))))))
+          (sleep-for 0.25))))))
 
 (defun akirak-process--kill-file-buffers (dir)
   (dolist (buffer (buffer-list))

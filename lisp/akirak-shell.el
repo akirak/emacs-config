@@ -55,6 +55,8 @@ the original minor mode."
   (when-let* ((buffer (pcase cand
                         ((pred bufferp)
                          cand)
+                        ((pred windowp)
+                         (window-buffer cand))
                         ((pred stringp)
                          (get-buffer cand))
                         (`(,name . ,_)
@@ -71,6 +73,8 @@ the original minor mode."
   (pcase arg
     ('(16)
      (akirak-shell-select))
+    ('(4)
+     (call-interactively #'akirak-shell-send-string-to-buffer))
     (_
      (akirak-shell-transient))))
 
@@ -127,8 +131,9 @@ the original minor mode."
    ("o" akirak-shell-at-org-directory)]
   ["Start an AI session at project root"
    :class transient-row
-   ("a" "Aider" akirak-shell-project-for-aider)
+   ("C" "Claude (default)" akirak-claude-code-default)
    ("c" "Claude" akirak-shell-project-for-claude)
+   ("a" "Aider" akirak-shell-project-for-aider)
    ("x" "Codex" akirak-shell-project-for-codex)]
   (interactive)
   (setq akirak-shell-split-window t)
@@ -242,7 +247,10 @@ the original minor mode."
   (if-let* ((tab (tab-bar-get-buffer-tab buffer-or-name 'all-frames)))
       (progn
         (tab-bar-select-tab tab)
-        (select-window (get-buffer-window buffer-or-name)))
+        (let ((window (get-buffer-window buffer-or-name)))
+          (if (window-live-p window)
+              (select-window window)
+            (pop-to-buffer buffer-or-name))))
     (pop-to-buffer buffer-or-name)))
 
 (defun akirak-shell--cleanup-buffers ()
@@ -302,12 +310,7 @@ the original minor mode."
 (cl-defun akirak-shell-run-command-at-dir (dir command)
   (let ((buffer-name (thread-last
                        (buffer-list)
-                       (seq-filter `(lambda (buf)
-                                      (and (eq (buffer-local-value 'major-mode buf)
-                                               'eat-mode)
-                                           (or (null ,dir)
-                                               (file-equal-p (buffer-local-value 'default-directory buf)
-                                                             ,dir)))))
+                       (seq-filter (apply-partially #'akirak-shell-buffer-in-dir-p dir))
                        (mapcar #'buffer-name)
                        (completing-read "Shell: "))))
     (if (string-empty-p buffer-name)
@@ -347,26 +350,39 @@ the original minor mode."
     (akirak-shell-send-string-to-buffer buffer command)
     (pop-to-buffer buffer)))
 
-(cl-defun akirak-shell-send-string-to-buffer (buffer input
-                                                     &key compilation-regexp
-                                                     confirm)
+;;;###autoload
+(cl-defun akirak-shell-send-string-to-buffer (window-or-buffer
+                                              input
+                                              &key compilation-regexp
+                                              confirm)
+  (interactive (list (or (thread-last
+                           (window-list)
+                           (seq-filter #'akirak-shell-buffer-p)
+                           (car)))
+                     (read-string "Input: ")
+                     :confirm t))
   (declare (indent 1))
-  (let ((input (pcase (akirak-shell-detect-buffer-program buffer)
-                 (`aider
-                  (akirak-shell--preprocess-aider-input input))
-                 (`claude
-                  (akirak-shell--preprocess-claude-input input))
-                 ;; Currently no codex support
-                 (_
-                  input))))
+  (let* ((buffer (cl-etypecase window-or-buffer
+                   (window (window-buffer window-or-buffer))
+                   (buffer window-or-buffer)))
+         (input (pcase (akirak-shell-detect-buffer-program buffer)
+                  (`aider
+                   (akirak-shell--preprocess-aider-input input))
+                  (`claude
+                   (akirak-shell--preprocess-claude-input input))
+                  ;; Currently no codex support
+                  (_
+                   input))))
     (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
                                     '(eat-mode))
       (`eat-mode
        (with-current-buffer buffer
+         (sit-for 0.2)
          (eat-term-send-string-as-yank eat-terminal input)
+         (sit-for 0.2)
          (when confirm
-           (eat-term-send-string eat-terminal "\n")
-           (sit-for 0.5))
+           (eat-term-input-event eat-terminal 1 ?\C-m)
+           (sit-for 0.2))
          (when-let* ((window (get-buffer-window buffer)))
            (with-selected-window window
              (set-window-point nil (eat-term-display-cursor eat-terminal))
@@ -406,8 +422,16 @@ the original minor mode."
 (defun akirak-shell--preprocess-claude-input (string)
   (let ((string (string-trim string)))
     (if (string-match-p "\n" string)
-        (concat "<<EOF\n" string "\nEOF")
-      string)))
+        (concat "<<EOF\n" string "\nEOF\n")
+      ;; Two new lines are required for Claude Code
+      (concat string "\n"))))
+
+(defun akirak-shell-buffer-in-dir-p (dir buf)
+  (and (eq (buffer-local-value 'major-mode buf)
+           'eat-mode)
+       (or (null dir)
+           (file-equal-p (buffer-local-value 'default-directory buf)
+                         dir))))
 
 (provide 'akirak-shell)
 ;;; akirak-shell.el ends here

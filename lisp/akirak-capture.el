@@ -639,10 +639,10 @@
                    :tags '("@troubleshooting")
                    :file file))))
     ((pred flymake--diag-p)
-     (pcase-let* ((`(,col . ,row) (posn-col-row (posn-at-point (flymake-diagnostic-beg diag)))))
+     (pcase-let* ((`(,col . ,row) (posn-col-row (posn-at-point (flymake-diagnostic-beg obj)))))
        (setq akirak-capture-project-context
              (list :clock-in t
-                   :error (flymake-diagnostic-text diag)
+                   :error (flymake-diagnostic-text obj)
                    :line row
                    :column col
                    :tags '("@troubleshooting")
@@ -665,8 +665,10 @@
          (error-message (plist-get akirak-capture-project-context :error))
          (root (when file
                  (vc-git-root file)))
-         (obj (org-dog-file-object (cl-etypecase target
-                                     (string (abbreviate-file-name target)))))
+         (org-file (cl-etypecase target
+                     (string target)
+                     (marker (buffer-file-name (org-base-buffer (marker-buffer target))))))
+         (obj (org-dog-file-object (abbreviate-file-name org-file)))
          (org-capture-entry
           (car (doct
                 `((""
@@ -682,7 +684,7 @@
                                 :body
                                 (concat "%?"
                                         (when function
-                                          (format " `%s`" function))
+                                          (format " ~%s~" function))
                                         (when line
                                           (format " on line %d" line))
                                         (when col
@@ -694,7 +696,12 @@
                                           (concat "\n\n#+begin_example\n"
                                                   error-message
                                                   "\n#+end_example"))
-                                        "\n\n# %a\n"))
+                                        (cond
+                                         (file
+                                          "\n\n# %a")
+                                         ((bound-and-true-p compilation-shell-minor-mode)
+                                          (format "\n\n# compile: %s" compile-command)))
+                                        "\n"))
                    :clock-in clock-in
                    :clock-resume clock-in
                    ,@(akirak-capture--target-plist target)))))))
