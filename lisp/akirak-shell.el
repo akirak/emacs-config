@@ -355,13 +355,13 @@ the original minor mode."
                                               input
                                               &key compilation-regexp
                                               confirm)
+  (declare (indent 1))
   (interactive (list (or (thread-last
                            (window-list)
                            (seq-filter #'akirak-shell-buffer-p)
                            (car)))
                      (read-string "Input: ")
                      :confirm t))
-  (declare (indent 1))
   (let* ((buffer (cl-etypecase window-or-buffer
                    (window (window-buffer window-or-buffer))
                    (buffer window-or-buffer)))
