@@ -1357,8 +1357,12 @@ Are you sure you want to override it?"))
          ((callback (response info)
             (require 'akirak-pandoc)
             (when (stringp response)
-              (let ((headline-text (akirak-pandoc-convert-string response
-                                     :from "gfm" :to "org")))
+              (let ((headline-text (thread-first
+                                     (akirak-pandoc-convert-string response
+                                       :from "gfm" :to "org")
+                                     (string-trim)
+                                     (split-string "\n")
+                                     (car))))
                 (org-with-point-at marker
                   (org-edit-headline (if link
                                          (org-link-make-string link headline-text)
