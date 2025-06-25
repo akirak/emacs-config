@@ -291,7 +291,8 @@ the original minor mode."
 (defun akirak-shell-project-directory ()
   (if (derived-mode-p 'org-mode)
       (let ((worktree (akirak-org-git-worktree)))
-        (if (file-directory-p worktree)
+        (if (and worktree
+                 (file-directory-p worktree))
             worktree
           (user-error "In org-mode, you need to set GIT_WORKTREE property")))
     (abbreviate-file-name (project-root (project-current)))))
