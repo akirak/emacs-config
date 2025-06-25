@@ -503,6 +503,10 @@
           (and (use-region-p)
                (project-current))))
    ("." "Project task" akirak-capture-project-task
+    :if project-current)
+
+   ("?" "Project inquiry" akirak-capture-project-inquiry
+    :transient t
     :if project-current)]
 
   ["Append to clock"
@@ -714,6 +718,18 @@
                    :clock-resume clock-in
                    ,@(akirak-capture--target-plist target)))))))
     (org-capture)))
+
+(defun akirak-capture-project-inquiry ()
+  (interactive)
+  (require 'akirak-org-git)
+  (setq akirak-capture-gptel-topic nil
+        akirak-capture-dispatch-later nil
+        akirak-capture-headline (akirak-capture--maybe-read-heading)
+        akirak-capture-doct-options nil
+        akirak-capture-template-options (list :properties (akirak-org-git-properties t))
+        akirak-capture-new-tab t
+        akirak-capture-hook #'akirak-org-claude-explain)
+  (akirak-capture-doct))
 
 (defun akirak-capture--read-summary-for-region (prompt)
   (completing-read prompt
