@@ -1399,6 +1399,7 @@ Don't decorate any part of the text; Just wrap inline code.\n\n"
 (defun akirak-org-claude-explain ()
   "Ask a question about the current repository and insert it into the entry."
   (interactive nil org-mode)
+  (require 'akirak-shell)
   (let* ((headline (string-trim (or (org-entry-get nil "ITEM")
                                     (user-error "Not inside an Org entry"))))
          (prompt (read-string "Claude prompt: "
