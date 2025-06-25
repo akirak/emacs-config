@@ -217,10 +217,9 @@
 
 (defvar akirak-capture-gptel-topic nil)
 
-(transient-define-infix akirak-capture-gptel-infix ()
-  :class 'akirak-transient-flag-variable
-  :variable 'akirak-capture-gptel-topic
-  :description "Gptel topic")
+(defvar akirak-capture-hook nil)
+
+(defvar akirak-capture-new-tab nil)
 
 (transient-define-infix akirak-capture-dispatch-later ()
   :class 'akirak-transient-flag-variable
@@ -322,7 +321,6 @@
    ("=" akirak-capture-select-heading)]
   ["Entry options"
    :class transient-row
-   ("-e" akirak-capture-gptel-infix)
    ("-t" akirak-capture-todo-infix)
    ("-g" akirak-capture-tags-infix)
    ("-s" akirak-capture-scheduled-infix)
@@ -361,35 +359,30 @@
 
 (cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-doct))
                                  target)
-  (let* ((template-options (if akirak-capture-gptel-topic
-                               (thread-last
-                                 (plist-get akirak-capture-template-options :properties)
-                                 (cons `("GPTEL_TOPIC" . ,(akirak-capture--escape-gptel-topic
-                                                           akirak-capture-headline)))
-                                 (plist-put akirak-capture-template-options :properties))
-                             akirak-capture-template-options))
+  (let* ((template-options akirak-capture-template-options)
          ;; When this variable is non-nil, start the capture session in a new
          ;; tab.
-         (new-tab-name (when akirak-capture-gptel-topic
+         (new-tab-name (when akirak-capture-new-tab
                          akirak-capture-headline))
-         (doct-options (if akirak-capture-gptel-topic
+         (doct-options (if (or new-tab-name
+                               akirak-capture-hook)
                            (thread-first
                              akirak-capture-doct-options
                              (plist-put :hook
-                                        `(lambda ()
-                                           ;; Set some delay for Emacs to initialize the buffer.
-                                           (run-with-timer
-                                            0.1
-                                            nil
-                                            (lambda ()
-                                              ,@(when new-tab-name
-                                                  `((tab-bar-rename-tab ,new-tab-name)
-                                                    (when (fboundp 'fwb-toggle-window-split)
-                                                      (fwb-toggle-window-split))))
-                                              ,@(when (and akirak-capture-gptel-topic
-                                                           (not akirak-capture-dispatch-later))
-                                                  '((require 'gptel-org)
-                                                    (gptel-send)))))))
+                                        (when akirak-capture-hook
+                                          `(lambda ()
+                                             ;; Set some delay for Emacs to initialize the buffer.
+                                             (run-with-timer
+                                              0.1
+                                              nil
+                                              (lambda ()
+                                                ,@(when new-tab-name
+                                                    `((tab-bar-rename-tab ,new-tab-name)
+                                                      (when (fboundp 'fwb-toggle-window-split)
+                                                        (fwb-toggle-window-split))))
+                                                ,(when (and akirak-capture-hook
+                                                            (not akirak-capture-dispatch-later))
+                                                   `(funcall ',akirak-capture-hook)))))))
                              (plist-put :after-finalize
                                         (when new-tab-name
                                           `(lambda ()
@@ -532,7 +525,9 @@
   (interactive)
   (if (equal current-prefix-arg '(16))
       (org-capture-goto-last-stored)
-    (setq akirak-capture-initial initial)
+    (setq akirak-capture-initial initial
+          akirak-capture-new-tab nil
+          akirak-capture-hook nil)
     (when akirak-capture-initial
       (message "Heading set to \"%s\"" akirak-capture-initial))
     (setq akirak-capture-bounds (when (use-region-p)
@@ -572,6 +567,7 @@
               :tags tags))
   (setq akirak-capture-headline (or headline
                                     (akirak-capture-read-string "Headline: ")))
+  (setq akirak-capture-new-tab nil)
   (akirak-capture-doct))
 
 (defun akirak-capture--at-error-p ()
@@ -1013,6 +1009,7 @@
                                  nil nil 'inherit)))
      (list headline llm-prompt)))
   (require 'gptel)
+  (require 'gptel-org)
   (cl-flet
       ((file-link (filename)
          (thread-last
@@ -1045,10 +1042,16 @@
                                           "\n")
                                "\n\n")))))
       (setq akirak-capture-gptel-topic t
+            akirak-capture-new-tab t
             akirak-capture-dispatch-later dispatch-later
             akirak-capture-headline headline
+            akirak-capture-hook #'gptel-send
             akirak-capture-doct-options nil
             akirak-capture-template-options (list :tags "@AI"
+                                                  :properties
+                                                  `(("GPTEL_TOPIC"
+                                                     . ,(akirak-capture--escape-gptel-topic
+                                                         headline)))
                                                   :body
                                                   (concat preamble llm-prompt
                                                           (unless dispatch-later
