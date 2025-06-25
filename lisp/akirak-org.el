@@ -1397,10 +1397,10 @@ Don't decorate any part of the text; Just wrap inline code.\n\n"
   (interactive nil org-mode)
   (let* ((headline (string-trim (or (org-entry-get nil "ITEM")
                                     (user-error "Not inside an Org entry"))))
-         (prompt (concat "Explain: "
-                         (if (string-empty-p headline)
-                             (user-error "The headline is empty")
-                           headline)))
+         (prompt (read-string "Claude prompt: "
+                              (if (string-empty-p headline)
+                                  (user-error "The headline is empty")
+                                headline)))
          (org-id (org-id-get-create))
          (default-directory (akirak-shell-project-directory))
          (buffer (generate-new-buffer "*claude-analysis*"))
