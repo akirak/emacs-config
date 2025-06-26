@@ -881,6 +881,7 @@
 
 (defun akirak-embark-gptel-add-file (file)
   (interactive "f")
+  (require 'gptel-context)
   (gptel-context-add-file (expand-file-name file)))
 
 (provide 'akirak-embark)
