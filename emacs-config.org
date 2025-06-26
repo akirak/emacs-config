@@ -2161,8 +2161,41 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                     "<remap> <delete-horizontal-space>" #'cycle-spacing
                     "<remap> <upcase-word>" #'upcase-dwim
                     "<remap> <downcase-word>" #'downcase-dwim
-                    "<remap> <capitalize-word>" #'capitalize-dwim
+                    "<remap> <capitalize-word>" #'akirak/capitalize-dwim
                     "<f12> x l" #'list-processes)
+
+    (defun akirak/capitalize-dwim (&optional arg)
+      (interactive "P")
+      (if (use-region-p)
+          (titlecase-region (region-beginning) (region-end))
+        (cl-flet
+            ((swap-at-point ()
+               (let ((c (char-after (point))))
+                 (delete-char 1)
+                 (insert-char (upcase c)))))
+          (pcase arg
+            ((and '(4)
+                  (guard (require 'string-inflection nil t)))
+             (let ((execute-extended-command--last-typed nil))
+               (funcall-interactively
+                (intern (read-extended-command-1 "Case conversion: "
+                                                 "string-inflection-")))))
+            ((or '-
+                 (and (pred numberp)
+                      (guard (< arg 0))))
+             (save-excursion
+               (forward-word arg)
+               (swap-at-point)))
+            ((or (pred numberp)
+                 `nil)
+             (unless arg
+               (setq arg 1))
+             (while (> arg 0)
+               (when (looking-at (rx (+ space)))
+                 (goto-char (match-end 0)))
+               (swap-at-point)
+               (forward-word)
+               (cl-decf arg)))))))
 
     ;; I often type this sequence unintensionally. I never use this command, so
     ;; just disable the keybinding.
