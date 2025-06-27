@@ -2161,7 +2161,40 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                     "<remap> <delete-horizontal-space>" #'cycle-spacing
                     "<remap> <upcase-word>" #'upcase-dwim
                     "<remap> <downcase-word>" #'downcase-dwim
-                    "<remap> <capitalize-word>" #'capitalize-dwim)
+                    "<remap> <capitalize-word>" #'akirak/capitalize-dwim
+                    "<f12> x l" #'list-processes)
+
+    (defun akirak/capitalize-dwim (&optional arg)
+      (interactive "P")
+      (if (use-region-p)
+          (titlecase-region (region-beginning) (region-end))
+        (cl-flet
+            ((swap-at-point ()
+               (let ((c (char-after (point))))
+                 (delete-char 1)
+                 (insert-char (upcase c)))))
+          (pcase arg
+            ((and '(4)
+                  (guard (fboundp 'akirak/string-inflection))
+                  (let `(,begin . ,end)
+                    (bounds-of-thing-at-point 'symbol)))
+             (akirak/string-inflection begin end))
+            ((or '-
+                 (and (pred numberp)
+                      (guard (< arg 0))))
+             (save-excursion
+               (forward-word arg)
+               (swap-at-point)))
+            ((or (pred numberp)
+                 `nil)
+             (unless arg
+               (setq arg 1))
+             (while (> arg 0)
+               (when (looking-at (rx (+ space)))
+                 (goto-char (match-end 0)))
+               (swap-at-point)
+               (forward-word)
+               (cl-decf arg)))))))
 
     ;; I often type this sequence unintensionally. I never use this command, so
     ;; just disable the keybinding.
@@ -5541,7 +5574,11 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode eldoc-mode)
                           akirak-window-display-document-buffer))
-                       (,(rx bol "*" (or "aider" "claude" "codex") "-")
+                       (,(rx bol "*" (or "aider"
+                                         "claude"
+                                         "codex"
+                                         "gemini")
+                             "-")
                         akirak-window-display-as-right-sidebar
                         (window-width . 80))
                        ((or ,(major-modes vterm-mode)
@@ -8434,14 +8471,19 @@ A Git porcelain inside Emacs
             ;; Based on 'magit-display-buffer-same-window-except-diff-v1
             (defun akirak/magit-display-buffer (buffer)
               (let ((action (with-current-buffer buffer
-                              (cond
-                               ((derived-mode-p 'magit-diff-mode)
-                                '(nil (inhibit-same-window . t)))
-                               ((and (derived-mode-p 'magit-process-mode)
-                                     (fboundp 'akirak-window-display-buffer-prefer-other-pane))
-                                '(akirak-window-display-buffer-prefer-other-pane))
-                               (t
-                                '(display-buffer-same-window))))))
+                              (pcase (derived-mode-p '(magit-diff-mode
+                                                       magit-log-mode
+                                                       magit-process-mode))
+                                ((or `magit-diff-mode
+                                     (and `magit-log-mode
+                                          (let `(,(rx ".."))
+                                            magit-buffer-revisions)))
+                                 '(nil (inhibit-same-window . t)))
+                                ((and `magit-process-mode
+                                      (guard (fboundp 'akirak-window-display-buffer-prefer-other-pane)))
+                                 '(akirak-window-display-buffer-prefer-other-pane))
+                                (_
+                                 '(display-buffer-same-window))))))
                 (prog1 (display-buffer buffer action)
                   (with-current-buffer buffer
                     (when (derived-mode-p 'magit-process-mode)
@@ -9658,7 +9700,32 @@ underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package string-inflection))
+  (setup (:package string-inflection)
+    (defconst akirak/string-inflection-functions
+      '(string-inflection-pascal-case-function
+        string-inflection-camelcase-function
+        string-inflection-upcase-function
+        string-inflection-underscore-function
+        string-inflection-capital-underscore-function
+        string-inflection-kebab-case-function))
+
+    (defun akirak/string-inflection (begin end)
+      (let* ((orig (buffer-substring begin end))
+             (alist (thread-last
+                      akirak/string-inflection-functions
+                      (mapcar `(lambda (func)
+                                 (cons (symbol-name func)
+                                       (funcall func ',orig))))))
+             (annotation-function (lambda (cand)
+                                    (concat " " (cdr (assoc cand alist)))))
+             (name (completing-read (format "Convert \"%s\": " orig)
+                                    (completion-table-with-metadata
+                                     alist
+                                     `((annotation-function . ,annotation-function)))
+                                    nil t)))
+        (atomic-change-group
+          (delete-region begin end)
+          (insert (cdr (assoc name alist)))))))
 #+end_src
 *** COMMENT suggest           :Emacs__Lisp:development:help:ARCHIVE:
 :PROPERTIES:

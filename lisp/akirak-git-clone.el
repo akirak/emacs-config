@@ -93,11 +93,37 @@ matches the host of the repository,
 
 (cl-defstruct akirak-git-clone-source
   "Type for representing a repository."
-  type origin host local-path rev-or-ref params content-path)
+  type origin host local-path rev-or-ref params content-path pr)
 
 (defun akirak-git-clone--parse (flake-ref-or-url)
   "Parse FLAKE-REF."
   (pcase (akirak-git-clone--sanitize-url flake-ref-or-url)
+    ((rx bol "https://"
+         (group (or "github.com"
+                    "gitlab.com"
+                    "codeberg.org"))
+         "/"
+         (group (+ (not (any "/")))
+                "/"
+                (+ (not (any "/"))))
+         "/pull/"
+         (group (+ digit)))
+     (let* ((host (match-string 1 flake-ref-or-url))
+            (match (match-string 2 flake-ref-or-url))
+            (path (if (string-match-p (rx ".git" eol) match)
+                      (substring match 0 -4)
+                    match))
+            (pr-number (string-to-number (match-string 3 flake-ref-or-url)))
+            (local-path (f-join host (concat (downcase path)
+                                             (if pr-number
+                                                 (format "@pr%d" pr-number)
+                                               ""))))
+            (origin (format "https://%s/%s.git" host path)))
+       (make-akirak-git-clone-source :type 'github
+                                     :origin origin
+                                     :host host
+                                     :pr pr-number
+                                     :local-path local-path)))
     ((rx bol (group (or "github:"
                         "sourcehut:"))
          (group (+ (not (any "/")))
@@ -249,16 +275,32 @@ DIR is an optional destination directory to clone the repository into."
          (repo (if (and dir
                         (not (file-exists-p dir)))
                    dir
-                 (expand-file-name (akirak-git-clone-source-local-path obj)
-                                   (or dir
-                                       (akirak-git-clone--root-directory
-                                        (akirak-git-clone-source-host obj))))))
+                 (akirak-git-clone-default-dest-dir obj dir)))
          (content-path (akirak-git-clone-source-content-path obj)))
     (when (akirak-git-clone-source-rev-or-ref obj)
       (message "Rev or ref is unsupported now"))
     (if (file-directory-p repo)
-        (akirak-git-clone-browse repo content-path)
-      (akirak-git-clone--clone origin repo :content-path content-path))))
+        (if (akirak-git-clone-source-pr obj)
+            (let ((default-directory repo))
+              (message "Updating the branch...")
+              (call-process "git" nil nil nil "pull" "origin" "HEAD")
+              (akirak-git-clone--browse-diff))
+          (akirak-git-clone-browse repo content-path))
+      (akirak-git-clone--clone origin repo :content-path content-path
+                               :callback
+                               (when (and (akirak-git-clone-source-pr obj)
+                                          (executable-find "gh"))
+                                 `(lambda (dest)
+                                    (let ((default-directory dest))
+                                      (message "Checking out the PR...")
+                                      (call-process "gh" nil nil nil
+                                                    "pr" "checkout"
+                                                    ,(number-to-string
+                                                      (akirak-git-clone-source-pr obj)))
+                                      (akirak-git-clone--browse-diff))))))))
+
+(defun akirak-git-clone--browse-diff ()
+  (magit-log-setup-buffer (list "HEAD^...HEAD") nil nil))
 
 (defun akirak-git-clone--root-directory (host)
   "Determine the parent directory of the host directory."
@@ -368,8 +410,13 @@ DIR is an optional destination directory to clone the repository into."
     (thread-last
       (marker-buffer org-clock-marker)
       (buffer-file-name)
-      (file-name-base)
-      (string-remove-suffix "-dev"))))
+      (akirak-git-clone-org-file-category))))
+
+(defun akirak-git-clone-org-file-category (filename)
+  (thread-last
+    filename
+    (file-name-base)
+    (string-remove-suffix "-dev")))
 
 ;;;###autoload
 (cl-defun akirak-git-clone-elisp-package (node &key filename char)
@@ -435,14 +482,19 @@ DIR is an optional destination directory to clone the repository into."
                (point) (line-end-position)))))
       (delete-file err-file))))
 
-(defun akirak-git-clone-default-dest-dir (repo)
+(defun akirak-git-clone-default-dest-dir (repo &optional dir)
   "Determine the local destination path for cloning URL."
   (let ((obj (cl-etypecase repo
                (string (akirak-git-clone--parse repo))
                (akirak-git-clone-source repo))))
-    (expand-file-name (akirak-git-clone-source-local-path obj)
-                      (akirak-git-clone--root-directory
-                       (akirak-git-clone-source-host obj)))))
+    (if dir
+        (expand-file-name (thread-last
+                            (akirak-git-clone-source-local-path obj)
+                            (file-name-nondirectory))
+                          dir)
+      (expand-file-name (akirak-git-clone-source-local-path obj)
+                        (akirak-git-clone--root-directory
+                         (akirak-git-clone-source-host obj))))))
 
 (defun akirak-git-clone-browse (dir &optional content-path)
   "Browse DIR using `akirak-git-clone-browser-function'."

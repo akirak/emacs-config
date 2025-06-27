@@ -416,6 +416,24 @@ end of the pasted region."
                       org-src-lang-modes))
           lang))))
 
+(defun akirak-org-src-lang-at-point ()
+  (pcase (derived-mode-p '(markdown-mode org-mode))
+    ((and `markdown-mode
+          (let `(,pos . ,_) (markdown-code-block-at-pos (point))))
+     (save-excursion
+       (goto-char pos)
+       (when (looking-at markdown-regex-gfm-code-block-open)
+         (match-string 3))))
+    ((and `org-mode
+          (guard (org-in-src-block-p)))
+     (org-element-property :language (org-element-at-point-no-context)))
+    (_
+     (akirak-org--find-src-lang
+      (thread-last
+        (symbol-name major-mode)
+        (string-remove-suffix "-mode")
+        (string-remove-suffix "-ts"))))))
+
 ;;;###autoload
 (defun akirak-org-square-open (&optional n)
   "Dwim \"[\" for `org-mode'.
@@ -914,27 +932,27 @@ The point should be at the heading."
                      (error "Require at least one of link-text or heading"))))
     (delete-region beg end)
     (goto-char beg)
-    (save-excursion
-      (pcase-exhaustive (org-dog-buffer-object)
-        ;; TODO: Add support for other classes
-        ((and (cl-type org-dog-facade-datetree-file)
-              (guard (member "Backlog" (org-get-outline-path nil 'use-cache))))
-         (save-restriction
-           (widen)
-           (goto-char (point-min))
-           (re-search-forward (format org-complex-heading-regexp-format "Backlog"))
-           (org-end-of-subtree)
-           (insert "\n** "
-                   (when todo
-                     "TODO ")
-                   heading)))
-        (`nil
-         (let ((level (org-outline-level)))
-           (org-end-of-subtree)
-           (insert "\n" (make-string level ?\*) " " heading))))
-      (unless (looking-at (rx eol))
-        (newline))
-      (setq parent-id (org-id-get-create)))
+    (org-with-wide-buffer
+     (pcase-exhaustive (org-dog-buffer-object)
+       ;; TODO: Add support for other classes
+       ((and (cl-type org-dog-facade-datetree-file)
+             (guard (member "Backlog" (org-get-outline-path nil 'use-cache))))
+        (save-restriction
+          (widen)
+          (goto-char (point-min))
+          (re-search-forward (format org-complex-heading-regexp-format "Backlog"))
+          (org-end-of-subtree)
+          (insert "\n** "
+                  (when todo
+                    "TODO ")
+                  heading)))
+       (`nil
+        (let ((level (org-outline-level)))
+          (org-end-of-subtree)
+          (insert "\n" (make-string level ?\*) " " heading))))
+     (unless (looking-at (rx eol))
+       (newline))
+     (setq parent-id (org-id-get-create)))
     (insert (org-link-make-string (concat "id:" parent-id) link-text))))
 
 ;;;###autoload
@@ -1339,8 +1357,12 @@ Are you sure you want to override it?"))
          ((callback (response info)
             (require 'akirak-pandoc)
             (when (stringp response)
-              (let ((headline-text (akirak-pandoc-convert-string response
-                                     :from "gfm" :to "org")))
+              (let ((headline-text (thread-first
+                                     (akirak-pandoc-convert-string response
+                                       :from "gfm" :to "org")
+                                     (string-trim)
+                                     (split-string "\n")
+                                     (car))))
                 (org-with-point-at marker
                   (org-edit-headline (if link
                                          (org-link-make-string link headline-text)
@@ -1377,12 +1399,13 @@ Don't decorate any part of the text; Just wrap inline code.\n\n"
 (defun akirak-org-claude-explain ()
   "Ask a question about the current repository and insert it into the entry."
   (interactive nil org-mode)
+  (require 'akirak-shell)
   (let* ((headline (string-trim (or (org-entry-get nil "ITEM")
                                     (user-error "Not inside an Org entry"))))
-         (prompt (concat "Explain: "
-                         (if (string-empty-p headline)
-                             (user-error "The headline is empty")
-                           headline)))
+         (prompt (read-string "Claude prompt: "
+                              (if (string-empty-p headline)
+                                  (user-error "The headline is empty")
+                                headline)))
          (org-id (org-id-get-create))
          (default-directory (akirak-shell-project-directory))
          (buffer (generate-new-buffer "*claude-analysis*"))

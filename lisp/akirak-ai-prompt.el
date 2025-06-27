@@ -72,13 +72,15 @@
   ;; For safety of not sending prompts to a wrong buffer, ensure the shell
   ;; buffer is opened in an ancestor directory of the current working directory.
   (when (and akirak-ai-prompt-shell-buffer
+             (buffer-live-p akirak-ai-prompt-shell-buffer)
              (not (string-prefix-p (abbreviate-file-name
                                     (buffer-local-value 'default-directory
                                                         akirak-ai-prompt-shell-buffer))
                                    (abbreviate-file-name default-directory))))
     (setq akirak-ai-prompt-shell-buffer nil)
     (message "Unset the shell buffer for a different project"))
-  (unless akirak-ai-prompt-shell-buffer
+  (unless (and akirak-ai-prompt-shell-buffer
+               (buffer-live-p akirak-ai-prompt-shell-buffer))
     (setq akirak-ai-prompt-shell-buffer
           (akirak-org-shell--read-buffer "Terminal buffer: " akirak-ai-prompt-shell-buffer)))
   (transient-setup 'akirak-ai-prompt-transient))
