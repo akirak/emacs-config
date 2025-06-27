@@ -133,6 +133,7 @@ the original minor mode."
    :class transient-row
    ("C" "Claude (default)" akirak-claude-code-default)
    ("c" "Claude" akirak-shell-project-for-claude)
+   ("g" "Gemini" akirak-gemini-cli-shell)
    ("a" "Aider" akirak-shell-project-for-aider)
    ("x" "Codex" akirak-shell-project-for-codex)]
   (interactive)
@@ -199,7 +200,8 @@ the original minor mode."
     (or (alist-get :dir header-args)
         (akirak-org-git-worktree))))
 
-(cl-defun akirak-shell-eat-new (&key dir window name noselect command)
+(cl-defun akirak-shell-eat-new (&key dir window name noselect command
+                                     environment)
   (let* ((default-directory (or dir default-directory))
          (command (ensure-list (or command
                                    (funcall eat-default-shell-function))))
@@ -212,10 +214,11 @@ the original minor mode."
                                                       name)))))
     (with-current-buffer buffer
       (eat-mode)
-      (apply #'eat-exec buffer name
-             (pcase command
-               (`(,cmd . ,args)
-                (list cmd nil args))))
+      (let ((process-environment (or environment process-environment)))
+        (apply #'eat-exec buffer name
+               (pcase command
+                 (`(,cmd . ,args)
+                  (list cmd nil args)))))
       (unless noselect
         (pop-to-buffer-same-window buffer)))
     ;; Explicitly return the buffer
@@ -403,7 +406,9 @@ the original minor mode."
        (`("claude" . ,_)
         'claude)
        (`("codex" . ,_)
-        'codex)))))
+        'codex)
+       (`((rx bol "gemini") . ,_)
+        'gemini)))))
 
 (cl-defun akirak-shell--get-command (buffer)
   (declare (indent 1))
