@@ -2175,11 +2175,10 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                  (insert-char (upcase c)))))
           (pcase arg
             ((and '(4)
-                  (guard (require 'string-inflection nil t)))
-             (let ((execute-extended-command--last-typed nil))
-               (funcall-interactively
-                (intern (read-extended-command-1 "Case conversion: "
-                                                 "string-inflection-")))))
+                  (guard (fboundp 'akirak/string-inflection))
+                  (let `(,begin . ,end)
+                    (bounds-of-thing-at-point 'symbol)))
+             (akirak/string-inflection begin end))
             ((or '-
                  (and (pred numberp)
                       (guard (< arg 0))))
@@ -9697,7 +9696,32 @@ underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package string-inflection))
+  (setup (:package string-inflection)
+    (defconst akirak/string-inflection-functions
+      '(string-inflection-pascal-case-function
+        string-inflection-camelcase-function
+        string-inflection-upcase-function
+        string-inflection-underscore-function
+        string-inflection-capital-underscore-function
+        string-inflection-kebab-case-function))
+
+    (defun akirak/string-inflection (begin end)
+      (let* ((orig (buffer-substring begin end))
+             (alist (thread-last
+                      akirak/string-inflection-functions
+                      (mapcar `(lambda (func)
+                                 (cons (symbol-name func)
+                                       (funcall func ',orig))))))
+             (annotation-function (lambda (cand)
+                                    (concat " " (cdr (assoc cand alist)))))
+             (name (completing-read (format "Convert \"%s\": " orig)
+                                    (completion-table-with-metadata
+                                     alist
+                                     `((annotation-function . ,annotation-function)))
+                                    nil t)))
+        (atomic-change-group
+          (delete-region begin end)
+          (insert (cdr (assoc name alist)))))))
 #+end_src
 *** COMMENT suggest           :Emacs__Lisp:development:help:ARCHIVE:
 :PROPERTIES:
