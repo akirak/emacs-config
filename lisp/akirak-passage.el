@@ -282,6 +282,10 @@
     (message "Deleted the password entry")
     (setq akirak-passage-current-account nil)))
 
+(defun akirak-passage-add-process-environment (env account)
+  (cons (concat env "=" (akirak-passage--get-password account))
+        process-environment))
+
 ;;;; Auth-source support
 
 ;; Based on the implementation of auth-source-pass.el by Damien Cassou et al.
