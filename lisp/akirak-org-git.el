@@ -66,8 +66,9 @@
               (org-entry-put nil prop value)))
           (message "Added Git properties to the clocked org-mode entry"))))))
 
-(cl-defun akirak-org-git-properties (obj &key tags)
+(cl-defun akirak-org-git-properties (obj &key tags (include-file t))
   "Generate an alist of Org properties to refer to the "
+  (declare (indent 1))
   (when-let* ((root (vc-git-root default-directory)))
     (when (or (eq obj t)
               (member "@contribution" tags)
@@ -83,7 +84,8 @@
                                            "remote.origin.url"))))
                   ("GIT_BRANCH" . ,(ignore-errors
                                      (magit-get-current-branch))))
-                (when-let* ((file (buffer-file-name (buffer-base-buffer))))
+                (when-let* ((file (and include-file
+                                       (buffer-file-name (buffer-base-buffer)))))
                   `(("FILE_PATH_FROM_GIT_ROOT" . ,(file-relative-name file root)))))
         (seq-filter #'cdr)))))
 
