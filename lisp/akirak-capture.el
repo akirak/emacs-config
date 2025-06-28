@@ -486,7 +486,7 @@
 
   ["Contextual"
    :class transient-row
-   ("f" "Flymake error"
+   ("e" "Flymake error"
     (lambda ()
       (interactive)
       (require 'akirak-flymake)
