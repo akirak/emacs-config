@@ -67,8 +67,17 @@ Each function is run without an argument in the new working tree."
 (defun akirak-magit-worktree-checkout ()
   "Check out an existing branch in a worktree."
   (interactive)
-  (let ((branch (magit-read-branch-or-commit
-                 "Branch or commit to check out in a new worktree: ")))
+  (let* ((branch (magit-read-branch-or-commit
+                  "Branch or commit to check out in a new worktree: "))
+         (local-branch (magit-local-branch-p branch)))
+    (unless local-branch
+      (if (string-match (concat "^" (regexp-opt (magit-list-remotes))
+                                "/")
+                        branch)
+          (setq local-branch (substring branch (match-end 0)))
+        (error "Cannot determine the local branch for %s" branch))
+      (magit-branch-create local-branch branch)
+      (setq branch local-branch))
     (akirak-magit-worktree branch)))
 
 (cl-defun akirak-magit-worktree (branch &optional start-point &key name)
