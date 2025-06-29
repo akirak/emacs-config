@@ -161,5 +161,45 @@ Each function is run without an argument in the new working tree."
                 (match-string-no-properties 0))))
     (magit-show-commit rev)))
 
+;;;; Transient for GitHub PRs
+
+(defvar akirak-magit-pr-target nil)
+
+;;;###autoload (autoload 'akirak-magit-pr "akirak-magit" nil 'interactive)
+(transient-define-prefix akirak-magit-pr ()
+  [:description
+   (lambda ()
+     (format "PR: %s" akirak-magit-pr-target))
+   ("v" "View on web"
+    (lambda ()
+      (interactive)
+      (start-process "gh" nil akirak-github-gh-executable
+                     "pr" "view" "--web" akirak-magit-pr-target)))]
+  ["Operations"
+   ("m" "Merge"
+    (lambda ()
+      (interactive)
+      (akirak-github-pr-merge akirak-magit-pr-target)))]
+  ["Checks"
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-magit-pr
+                               (akirak-github-pr-checks akirak-magit-pr-target)))]
+  (interactive)
+  (require 'akirak-github)
+  (setq akirak-magit-pr-target (akirak-magit--remote-branch))
+  (transient-setup 'akirak-magit-pr))
+
+(defun akirak-magit--remote-branch ()
+  "Guess the remote branch of the branch at point."
+  (let ((branch (magit-branch-at-point)))
+    (if (magit-local-branch-p branch)
+        branch
+      (if (string-match (concat "^" (regexp-opt (magit-list-remotes))
+                                "/")
+                        branch)
+          (substring branch (match-end 0))
+        (error "Cannot determine the local branch for %s" branch)))))
+
 (provide 'akirak-magit)
 ;;; akirak-magit.el ends here
