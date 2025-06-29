@@ -425,32 +425,44 @@
 
 ;;;; Transient prefixes
 
+(defvar akirak-capture-start-now nil)
+
+(transient-define-infix akirak-capture-toggle-start-now ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-capture-start-now
+  :description "Start now")
+
+(defun akirak-capture--template-options ()
+  (list :todo (if akirak-capture-start-now
+                  "UNDERWAY"
+                "TODO")))
+
+(defun akirak-capture--doct-options ()
+  (if akirak-capture-start-now
+      '(:clock-in t :clock-resume t)
+    nil))
+
 ;;;###autoload (autoload 'akirak-capture "akirak-capture" nil 'interactive)
 (transient-define-prefix akirak-capture (&optional initial)
   "Main entry point to capture commands."
+  ["Options"
+   ("-n" akirak-capture-toggle-start-now)]
   ["Non-contextual commands"
    :class transient-row
    ("h" "Plain heading"
     (lambda ()
       (interactive)
       (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-            akirak-capture-template-options nil
-            akirak-capture-doct-options nil)
+            akirak-capture-template-options (akirak-capture--template-options)
+            akirak-capture-doct-options (akirak-capture--doct-options))
       (akirak-capture-doct))
     :transient t)
    ("t" "Todo" (lambda ()
                  (interactive)
                  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-                       akirak-capture-template-options '(:todo "TODO")
-                       akirak-capture-doct-options nil)
+                       akirak-capture-template-options (akirak-capture--template-options)
+                       akirak-capture-doct-options (akirak-capture--doct-options))
                  (akirak-capture-doct))
-    :transient t)
-   ("T" "Start todo" (lambda ()
-                       (interactive)
-                       (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-                             akirak-capture-template-options '(:todo "UNDERWAY")
-                             akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                       (akirak-capture-doct))
     :transient t)
    ("u" "Url" akirak-capture-url
     :if (lambda () (not akirak-capture-initial)))
@@ -526,6 +538,7 @@
       (message "Heading set to \"%s\"" akirak-capture-initial))
     (setq akirak-capture-bounds (when (use-region-p)
                                   (car (region-bounds))))
+    (setq akirak-capture-start-now nil)
     (transient-setup 'akirak-capture)))
 
 (defun akirak-capture--maybe-read-heading (&optional prompt)
@@ -634,44 +647,43 @@
                                         (car))
                                     "")
           akirak-capture-template-options
-          (list :todo (if clock-in
-                          "UNDERWAY"
-                        "TODO")
-                :tags (when troubleshooting
-                        '("@troubleshooting"))
-                :properties
-                (akirak-org-git-properties t
-                  :include-file include-file)
-                :body
-                (concat prompt
-                        (when bounds
-                          (if file
-                              (concat "\n\n#+begin_src\n"
-                                      text
-                                      "\n#+end_src")
-                            (concat "\n\n#+begin_example\n"
-                                    text
-                                    "\n#+end_example")))
-                        (cond
-                         (include-func
-                          "\n\n# %a")
-                         ((bound-and-true-p compilation-shell-minor-mode)
-                          (format "\n\n# compile: %s" compile-command)))
-                        "\n\n%?"))
-          akirak-capture-doct-options (when clock-in
-                                        '(:clock-in t :clock-resume t)))
+          (append (list :tags (when troubleshooting
+                                '("@troubleshooting"))
+                        :properties
+                        (akirak-org-git-properties t
+                          :include-file include-file)
+                        :body
+                        (concat prompt
+                                (when bounds
+                                  (if file
+                                      (concat "\n\n#+begin_src\n"
+                                              text
+                                              "\n#+end_src")
+                                    (concat "\n\n#+begin_example\n"
+                                            text
+                                            "\n#+end_example")))
+                                "\n\n%?"
+                                (cond
+                                 (include-func
+                                  "\n\n# %a")
+                                 ((bound-and-true-p compilation-shell-minor-mode)
+                                  (format "\n\n# compile: %s" compile-command)))))
+                  (akirak-capture--template-options))
+          akirak-capture-doct-options (if clock-in
+                                          '(:clock-in t :clock-resume t)
+                                        (akirak-capture--doct-options)))
     (akirak-capture-doct)))
 
 (defun akirak-capture-project-task ()
   (interactive)
   (require 'akirak-org-git)
   (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-        akirak-capture-template-options (list :todo "TODO"
-                                              :properties
-                                              (akirak-org-git-properties t
-                                                :include-file nil)
-                                              :body "%?")
-        akirak-capture-doct-options nil)
+        akirak-capture-template-options (append (list :properties
+                                                      (akirak-org-git-properties t
+                                                        :include-file nil)
+                                                      :body "%?")
+                                                (akirak-capture--template-options))
+        akirak-capture-doct-options (akirak-capture--doct-options))
   (akirak-capture-doct))
 
 (defun akirak-capture-project-inquiry ()
