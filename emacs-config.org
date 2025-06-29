@@ -8527,6 +8527,9 @@ A Git porcelain inside Emacs
         (transient-replace-suffix 'magit-branch
           'magit-worktree-branch
           '("w" "new worktree" akirak-magit-worktree-new-branch))
+        (transient-replace-suffix 'magit-merge
+          'magit-merge-dissolve
+          '("v" "view PR" akirak-magit-pr))
         (transient-append-suffix 'magit-worktree
           'magit-worktree-branch
           '("d" "worktree in default location" akirak-magit-worktree-checkout)))
