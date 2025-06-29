@@ -628,7 +628,13 @@
          (func (when file
                  (which-function)))
          (prompts (when func
-                    (list (format-spec " ~%n~ in %f"
+                    (list (format-spec "Tweak ~%n~ in %f to "
+                                       `((?n . ,func)
+                                         (?f . ,file)))
+                          (format-spec "Fix ~%n~ in %f to "
+                                       `((?n . ,func)
+                                         (?f . ,file)))
+                          (format-spec "Refactor ~%n~ in %f to "
                                        `((?n . ,func)
                                          (?f . ,file))))))
          (prompt (completing-read "Prompt: " prompts))
