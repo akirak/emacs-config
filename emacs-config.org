@@ -8474,12 +8474,11 @@ A Git porcelain inside Emacs
                               (pcase (derived-mode-p '(magit-diff-mode
                                                        magit-log-mode
                                                        magit-process-mode))
-                                ((or `magit-diff-mode
-                                     (and `magit-log-mode
-                                          (let `(,(rx ".."))
-                                            magit-buffer-revisions)))
-                                 '(nil (inhibit-same-window . t)))
-                                ((and `magit-process-mode
+                                ((and (or `magit-diff-mode
+                                          `magit-process-mode
+                                          (and `magit-log-mode
+                                               (let `(,(rx ".."))
+                                                 magit-buffer-revisions)))
                                       (guard (fboundp 'akirak-window-display-buffer-prefer-other-pane)))
                                  '(akirak-window-display-buffer-prefer-other-pane))
                                 (_
