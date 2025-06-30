@@ -1390,6 +1390,7 @@ Are you sure you want to override it?"))
 Be concise. Try to focus on the intent rather than the implementation or \
 technical details. It should fit in a single line (within 80 letters if \
 possible) and must not \ contain a newline character. \
+Use a sentence case, not a title case. \
 If the first paragraph of the quoted content is a question, the headline \
 should summarise the question rather than the answer that follows it. \
 Don't emphasize any part of the text but inline code.\n\n"
