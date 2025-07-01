@@ -8660,7 +8660,40 @@ Major mode for Markdown-formatted text
     (:with-mode gfm-mode
       (:file-match "README.md\\'"))
 
-    (:keymap "C-c '" #'markdown-edit-code-block))
+    (:keymap "C-c '" #'markdown-edit-code-block)
+
+    (defun akirak/markdown-add-heading-ids ()
+      "Add a unique ID to each heading in the buffer."
+      (interactive)
+      (save-excursion
+        (goto-char (point-min))
+        (let ((count 0))
+          (while (< (point) (progn
+                              (outline-next-heading)
+                              (point)))
+            (when (looking-at (rx (+ (any "#")) (+ blank)
+                                  (group (+ nonl))
+                                  eol))
+              (let ((content (match-string 1)))
+                (unless (string-match-p (rx blank "{#" (+ nonl) "}" (* blank) eol)
+                                        content)
+                  (goto-char (match-end 0))
+                  (let ((id (akirak/markdown-encode-id content)))
+                    (when id
+                      (insert (format " {#%s}" id))
+                      (cl-incf count)))))))
+          (when (> count 0)
+            (message "Generated %d IDs" count)))))
+
+    (defun akirak/markdown-encode-id (text)
+      (with-temp-buffer
+        (let (segments)
+          (insert text)
+          (goto-char (point-min))
+          (while (re-search-forward (rx (+ alnum)) nil t)
+            (push (downcase (match-string 0)) segments))
+          (when segments
+            (string-join (nreverse segments) "-"))))))
 #+end_src
 *** mastodon                                                            :social:
 :PROPERTIES:
