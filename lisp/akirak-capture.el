@@ -1592,21 +1592,25 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
 If `org-insert-heading' should behave as expected, it should
 return nil. This is expected in the advice for
 `org-insert-heading' defined in akirak-org-clock.el."
+  (pcase-exhaustive this-command
+    ;; C-RET
+    (`org-insert-heading-respect-content
+     (akirak-capture--org-heading 'below nil arg))
+    ;; C-S-RET
+    (`org-insert-todo-heading-respect-content
+     (akirak-capture--org-heading 'below t arg))
+    ;; M-RET
+    (`org-meta-return
+     (when (org-match-line org-heading-regexp)
+       (akirak-capture--org-heading 'above nil arg)))
+    ;; M-S-RET
+    (`org-insert-todo-heading
+     (when (org-match-line org-heading-regexp)
+       (akirak-capture--org-heading 'above t arg)))))
+
+(defun akirak-capture--org-heading (direction todo &optional arg)
   (pcase-let*
-      ((`(,direction ,todo) (pcase-exhaustive this-command
-                              ;; C-RET
-                              (`org-insert-heading-respect-content
-                               '(below nil))
-                              ;; C-S-RET
-                              (`org-insert-todo-heading-respect-content
-                               '(below t))
-                              ;; M-RET
-                              (`org-meta-return
-                               '(above nil))
-                              ;; M-S-RET
-                              (`org-insert-todo-heading
-                               '(above t))))
-       (pos (point))
+      ((pos (point))
        (subheadingp (equal arg '(4)))
        (level (org-outline-level))
        (expected-level (if subheadingp
