@@ -657,6 +657,7 @@
                                 '("@troubleshooting"))
                         :properties
                         (akirak-org-git-properties t
+                          :no-branch (not akirak-capture-start-now)
                           :include-file include-file)
                         :body
                         (concat prompt
@@ -686,6 +687,7 @@
   (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
         akirak-capture-template-options (append (list :properties
                                                       (akirak-org-git-properties t
+                                                        :no-branch (not akirak-capture-start-now)
                                                         :include-file nil)
                                                       :body "%?")
                                                 (akirak-capture--template-options))
