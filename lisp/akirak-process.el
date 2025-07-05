@@ -13,6 +13,7 @@
         ;; buffers. Note `eglot-autoshutdown' needs to be set to true for this
         ;; feature to work.
         (akirak-process--kill-file-buffers dir)
+        (sleep-for 0.3)
         (dolist (proc (process-list))
           (when-let* ((buffer (process-buffer proc)))
             (when (string-prefix-p dir (akirak-process--buffer-dir buffer))

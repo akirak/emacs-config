@@ -41,6 +41,11 @@
   ""
   :type '(repeat string))
 
+(defcustom akirak-aider-openrouter-password-account
+  "openrouter.ai/apikey"
+  "Account in the password store which stores an API key for OpenRouter."
+  :type 'string)
+
 (defconst akirak-aider-slash-commands
   '("/reset"
     "/clear"))
@@ -51,6 +56,11 @@
 
 (defun akirak-aider-complete-slash-command ()
   (completing-read "Aider command: " akirak-aider-slash-commands))
+
+(defun akirak-aider-environment ()
+  (require 'akirak-passage)
+  (akirak-passage-add-process-environment
+   "OPENROUTER_API_KEY" akirak-aider-openrouter-password-account))
 
 (provide 'akirak-aider)
 ;;; akirak-aider.el ends here

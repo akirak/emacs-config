@@ -7843,8 +7843,9 @@ Interact with ChatGPT or other LLMs
                                       anthropic/claude-3.5-sonnet
                                       anthropic/claude-opus-4
                                       anthropic/claude-sonnet-4
-                                      google/gemini-2.5-flash-preview
-                                      google/gemini-2.5-pro-preview))
+                                      google/gemini-2.5-flash-lite-preview-06-17
+                                      google/gemini-2.5-flash
+                                      google/gemini-2.5-pro))
             gptel-model 'google/gemini-2.5-flash-preview)
 
       (gptel-make-gh-copilot "Copilot")
@@ -8474,12 +8475,11 @@ A Git porcelain inside Emacs
                               (pcase (derived-mode-p '(magit-diff-mode
                                                        magit-log-mode
                                                        magit-process-mode))
-                                ((or `magit-diff-mode
-                                     (and `magit-log-mode
-                                          (let `(,(rx ".."))
-                                            magit-buffer-revisions)))
-                                 '(nil (inhibit-same-window . t)))
-                                ((and `magit-process-mode
+                                ((and (or `magit-diff-mode
+                                          `magit-process-mode
+                                          (and `magit-log-mode
+                                               (let `(,(rx ".."))
+                                                 magit-buffer-revisions)))
                                       (guard (fboundp 'akirak-window-display-buffer-prefer-other-pane)))
                                  '(akirak-window-display-buffer-prefer-other-pane))
                                 (_
@@ -8527,6 +8527,9 @@ A Git porcelain inside Emacs
         (transient-replace-suffix 'magit-branch
           'magit-worktree-branch
           '("w" "new worktree" akirak-magit-worktree-new-branch))
+        (transient-replace-suffix 'magit-merge
+          'magit-merge-dissolve
+          '("v" "view PR" akirak-magit-pr))
         (transient-append-suffix 'magit-worktree
           'magit-worktree-branch
           '("d" "worktree in default location" akirak-magit-worktree-checkout)))
@@ -8657,7 +8660,40 @@ Major mode for Markdown-formatted text
     (:with-mode gfm-mode
       (:file-match "README.md\\'"))
 
-    (:keymap "C-c '" #'markdown-edit-code-block))
+    (:keymap "C-c '" #'markdown-edit-code-block)
+
+    (defun akirak/markdown-add-heading-ids ()
+      "Add a unique ID to each heading in the buffer."
+      (interactive)
+      (save-excursion
+        (goto-char (point-min))
+        (let ((count 0))
+          (while (< (point) (progn
+                              (outline-next-heading)
+                              (point)))
+            (when (looking-at (rx (+ (any "#")) (+ blank)
+                                  (group (+ nonl))
+                                  eol))
+              (let ((content (match-string 1)))
+                (unless (string-match-p (rx blank "{#" (+ nonl) "}" (* blank) eol)
+                                        content)
+                  (goto-char (match-end 0))
+                  (let ((id (akirak/markdown-encode-id content)))
+                    (when id
+                      (insert (format " {#%s}" id))
+                      (cl-incf count)))))))
+          (when (> count 0)
+            (message "Generated %d IDs" count)))))
+
+    (defun akirak/markdown-encode-id (text)
+      (with-temp-buffer
+        (let (segments)
+          (insert text)
+          (goto-char (point-min))
+          (while (re-search-forward (rx (+ alnum)) nil t)
+            (push (downcase (match-string 0)) segments))
+          (when segments
+            (string-join (nreverse segments) "-"))))))
 #+end_src
 *** mastodon                                                            :social:
 :PROPERTIES:

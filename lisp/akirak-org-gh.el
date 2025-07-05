@@ -423,7 +423,8 @@
          (eq 'pr (plist-get akirak-org-gh-transient-target :type)))
    :setup-children
    (lambda (_)
-     (transient-parse-suffixes 'akirak-org-gh-transient (akirak-org-gh--checks)))]
+     (transient-parse-suffixes 'akirak-org-gh-transient
+                               (akirak-github-pr-checks akirak-org-gh-transient-target-url)))]
   (interactive nil org-mode)
   (setq akirak-org-gh-transient-worktree (akirak-org-git-worktree))
   (setq akirak-org-gh-transient-target-url (akirak-org-gh--get-url))
@@ -444,35 +445,6 @@
        :name "gh"
        :root (or (akirak-org-gh--entry-dir)
                  (akirak-org-git-worktree nil))))))
-
-(defun akirak-org-gh--checks ()
-  (with-temp-buffer
-    (unless (zerop (call-process akirak-org-gh-gh-program
-                                 nil (list t nil) nil
-                                 "pr" "checks" akirak-org-gh-transient-target-url
-                                 "--json" "state,link,workflow,name"))
-      (error "gh pr checks failed"))
-    (goto-char (point-min))
-    (thread-last
-      (json-parse-buffer :array-type 'list :object-type 'alist)
-      (seq-map-indexed (lambda (entry i)
-                         (list (number-to-string (1+ i))
-                               (format-spec "%s %w / %n"
-                                            ;; These state values are not
-                                            ;; completely the same as the
-                                            ;; statuses of workflow runs.
-                                            `((?s . ,(pcase (alist-get 'state entry)
-                                                       ("SUCCESS" "✅")
-                                                       ("FAILURE" "❌")
-                                                       ("SKIPPED" "🚫")
-                                                       ("IN_PROGRESS" "⏳")
-                                                       (other other)))
-                                              (?n . ,(alist-get 'name entry))
-                                              (?w . ,(alist-get 'workflow entry))))
-                               `(lambda ()
-                                  (interactive)
-                                  (browse-url ,(alist-get 'link entry)))
-                               :transient t))))))
 
 (provide 'akirak-org-gh)
 ;;; akirak-org-gh.el ends here

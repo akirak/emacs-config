@@ -273,6 +273,7 @@ the original minor mode."
   (let ((root (akirak-shell-project-directory)))
     (akirak-shell-eat-new :dir root
                           :command (akirak-aider-command)
+                          :environment (akirak-aider-environment)
                           :name (concat "aider-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))

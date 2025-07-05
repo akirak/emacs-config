@@ -1090,8 +1090,8 @@
     };
     restclient = {
       flake = false;
-      owner = "pashky";
-      repo = "restclient.el";
+      owner = "emacsorphanage";
+      repo = "restclient";
       type = "github";
     };
     rfc-mode = {

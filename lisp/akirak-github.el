@@ -244,5 +244,44 @@
                :display-sort-function #'identity)))
     (completing-read "Select a workflow run: " candidates nil t)))
 
+(defun akirak-github-pr-checks (target)
+  (with-temp-buffer
+    (unless (zerop (call-process akirak-github-gh-executable
+                                 nil (list t nil) nil
+                                 "pr" "checks" target
+                                 "--json" "state,link,workflow,name"))
+      (error "gh pr checks failed"))
+    (goto-char (point-min))
+    (thread-last
+      (json-parse-buffer :array-type 'list :object-type 'alist)
+      (seq-map-indexed (lambda (entry i)
+                         (list (number-to-string (1+ i))
+                               (format-spec "%s %w / %n"
+                                            ;; These state values are not
+                                            ;; completely the same as the
+                                            ;; statuses of workflow runs.
+                                            `((?s . ,(pcase (alist-get 'state entry)
+                                                       ("SUCCESS" "✅")
+                                                       ("FAILURE" "❌")
+                                                       ("SKIPPED" "🚫")
+                                                       ("IN_PROGRESS" "⏳")
+                                                       (other other)))
+                                              (?n . ,(alist-get 'name entry))
+                                              (?w . ,(alist-get 'workflow entry))))
+                               `(lambda ()
+                                  (interactive)
+                                  (browse-url ,(alist-get 'link entry)))
+                               :transient t))))))
+
+(defun akirak-github-pr-merge (target)
+  (pcase-exhaustive akirak-org-gh-transient-target
+    ((map :type)
+     (akirak-shell-exec-in-project
+         (append (list akirak-github-gh-executable
+                       "pr" "merge"
+                       target)
+                 options)
+       :name "gh"))))
+
 (provide 'akirak-github)
 ;;; akirak-github.el ends here

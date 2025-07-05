@@ -7,6 +7,11 @@
   ""
   :type 'file)
 
+(defcustom akirak-gemini-password-account
+  "generativelanguage.googleapis.com/apikey"
+  "Account in the password store which stores an API key for Gemini."
+  :type 'string)
+
 ;;;; Transient
 
 (defvar akirak-gemini-directory nil)
@@ -68,7 +73,7 @@
 (defun akirak-gemini-cli-environment ()
   (require 'akirak-passage)
   (akirak-passage-add-process-environment
-   "GEMINI_API_KEY" "generativelanguage.googleapis.com/apikey"))
+   "GEMINI_API_KEY" akirak-gemini-password-account))
 
 (provide 'akirak-gemini)
 ;;; akirak-gemini.el ends here

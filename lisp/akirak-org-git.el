@@ -66,8 +66,9 @@
               (org-entry-put nil prop value)))
           (message "Added Git properties to the clocked org-mode entry"))))))
 
-(cl-defun akirak-org-git-properties (obj &key tags)
+(cl-defun akirak-org-git-properties (obj &key tags (include-file t) no-branch)
   "Generate an alist of Org properties to refer to the "
+  (declare (indent 1))
   (when-let* ((root (vc-git-root default-directory)))
     (when (or (eq obj t)
               (member "@contribution" tags)
@@ -76,14 +77,17 @@
               (string-prefix-p "~/work2/learning/" root))
       (require 'magit-git)
       (thread-last
-        (append `(("GIT_WORKTREE" . ,(org-link-make-string
-                                      (concat "file:" (abbreviate-file-name root))))
+        (append `(("GIT_WORKTREE" . ,(unless no-branch
+                                       (org-link-make-string
+                                        (concat "file:" (abbreviate-file-name root)))))
                   ("GIT_ORIGIN" . ,(ignore-errors
                                      (car (magit-config-get-from-cached-list
                                            "remote.origin.url"))))
-                  ("GIT_BRANCH" . ,(ignore-errors
-                                     (magit-get-current-branch))))
-                (when-let* ((file (buffer-file-name (buffer-base-buffer))))
+                  ("GIT_BRANCH" . ,(unless no-branch
+                                     (ignore-errors
+                                       (magit-get-current-branch)))))
+                (when-let* ((file (and include-file
+                                       (buffer-file-name (buffer-base-buffer)))))
                   `(("FILE_PATH_FROM_GIT_ROOT" . ,(file-relative-name file root)))))
         (seq-filter #'cdr)))))
 

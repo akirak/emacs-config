@@ -14,7 +14,8 @@
    ("-d" "Skip permissions" "--dangerously-skip-permissions")
    ("-c" "Continue" "--continue")
    ("-r" "Resume" "--resume")
-   ("-m" "Model" "--model=" :choices ("sonnet" "opus"))]
+   ("-m" "Model" "--model=" :choices ("claude-sonnet-4-20250514"
+                                      "claude-opus-4-20250514"))]
   ["Actions"
    :class transient-row
    ("c" "Dispatch" akirak-claude--open-shell)]
