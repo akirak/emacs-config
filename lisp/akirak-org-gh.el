@@ -259,7 +259,7 @@
         (error "Unexpected")))))
 
 ;;;###autoload
-(defun akirak-org-gh-update-issue-body ()
+(defun akirak-org-gh-update-issue-with-entry ()
   "Update the body of the issue with the content of the Org entry."
   (interactive nil org-mode)
   (let ((url (akirak-org-gh--get-url t)))
