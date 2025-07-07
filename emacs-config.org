@@ -6329,7 +6329,6 @@ Consulting completing-read
                     "<remap> <yank-pop>" #'consult-yank-pop
                     "M-s o" #'consult-outline
                     "C-S-s" #'consult-line
-                    "M-s l" #'consult-focus-lines
                     "C-x /" #'consult-ripgrep)
 
     (:with-feature consult-imenu
