@@ -309,6 +309,25 @@
                                 (akirak-org-git-worktree nil)
                                 (user-error "Cannot locate the repository")))
          (branch (akirak-org-git-branch))
+         (default-repo (akirak-github-get-default-repo))
+         (remotes (akirak-org-gh--find-remotes-for-branch branch))
+         (remote (pcase remotes
+                   (`(,remote) remote)
+                   (`nil (user-error "No remote has the branch %s. Run git-push first" branch))
+                   (_ (completing-read "Select the source remote: "
+                                       remotes nil t))))
+         (remote-url (car (magit-config-get-from-cached-list (format "remote.%s.url" remote))))
+         (source-repo (pcase-exhaustive remote-url
+                        ((rx bol (or "https://github.com/"
+                                     "git@github.com:")
+                             (group (+ anything) "/" (+? anything))
+                             (?  ".git") eol)
+                         (match-string 1 remote-url))))
+         (head-args (when (and default-repo
+                               (not (equal default-repo source-repo)))
+                      (list "--head" (format "%s:%s"
+                                             (car (split-string source-repo "/"))
+                                             branch))))
          (title (org-entry-get nil "ITEM"))
          (body (akirak-org-gh--subtree-content-as-gfm))
          ;; (url )
@@ -344,12 +363,21 @@
                         (append (list "pr" "create"
                                       "--editor"
                                       "--title" title)
+                                head-args
                                 (if temp-file
                                     (list "--body-file" "-")
                                   (list "--body" ""))))
               (pop-to-buffer (current-buffer)))))
       (when temp-file
         (delete-file temp-file)))))
+
+(defun akirak-org-gh--find-remotes-for-branch (branch)
+  (let ((all-remotes (magit-list-remotes))
+        (remote-branches (magit-list-remote-branches)))
+    (cl-flet
+        ((pred (remote)
+           (member (concat remote "/" branch) remote-branches)))
+      (seq-filter #'pred all-remotes))))
 
 (defun akirak-org-gh--update-entry-on-exit (process)
   (with-current-buffer (process-buffer process)
