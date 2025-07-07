@@ -5580,7 +5580,7 @@ This is an extra functions for window management.
                                          "gemini")
                              "-")
                         akirak-window-display-as-right-sidebar
-                        (window-width . 80))
+                        (window-width . 84))
                        ((or ,(major-modes vterm-mode)
                             "^\\*Nix-REPL\\*"
                             ;; Pop up eat windows if and only if it follows a
