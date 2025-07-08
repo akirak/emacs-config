@@ -38,13 +38,13 @@ in
 
   emacs-config = make-emacs-hook {
     name = "Sort entries in the Emacs configuration";
-    stages = [ "commit" ];
+    stages = [ "pre-commit" ];
     funcName = "akirak/batch-update-emacs-config";
   };
 
   emacs-config-contents = make-emacs-hook {
     name = "Update blocks in the Emacs configuration";
-    stages = [ "push" ];
+    stages = [ "pre-push" ];
     funcName = "akirak/batch-update-emacs-config-contents";
   };
 }
