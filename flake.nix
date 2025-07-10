@@ -76,6 +76,7 @@
       imports = [
         flake-parts.flakeModules.partitions
         ./flake-module.nix
+        ./modules/utils-flake-module.nix
       ];
 
       systems = import inputs.systems;
