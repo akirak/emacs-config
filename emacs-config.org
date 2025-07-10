@@ -7803,6 +7803,23 @@ Interact with ChatGPT or other LLMs
 
 #+begin_src emacs-lisp
   (setup (:package gptel)
+    (defconst akirak/ai-model-list-file
+      (locate-user-emacs-file "ai-model-list.txt"))
+
+    (defun akirak/gptel-openrouter-models ()
+      (with-temp-buffer
+        (insert-file-contents akirak/ai-model-list-file)
+        (delete-non-matching-lines (rx bol "openrouter/"))
+        (thread-last
+          (string-split (buffer-string) "\n")
+          (mapcar (apply-partially #'string-remove-prefix "openrouter/"))
+          (seq-filter (apply-partially #'string-match-p
+                                       (rx bol (or "openai"
+                                                   "anthropic"
+                                                   "google")
+                                           "/")))
+          (mapcar #'intern))))
+
     (:set gptel-crowdsourced-prompts-file
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
@@ -7843,20 +7860,7 @@ Interact with ChatGPT or other LLMs
                             :endpoint "/api/v1/chat/completions"
                             :stream t
                             ;; For perplexity, use the native provider.
-                            :models '(openai/gpt-4.1
-                                      openai/gpt-4.1-mini
-                                      openai/o4-mini
-                                      openai/o3
-                                      openai/o3-pro
-                                      openai/codex-mini
-                                      openai/gpt-4o-mini-search-preview
-                                      microsoft/phi-4-reasoning-plus:free
-                                      anthropic/claude-3.5-sonnet
-                                      anthropic/claude-opus-4
-                                      anthropic/claude-sonnet-4
-                                      google/gemini-2.5-flash-lite-preview-06-17
-                                      google/gemini-2.5-flash
-                                      google/gemini-2.5-pro))
+                            :models (akirak/gptel-openrouter-models))
             gptel-model 'google/gemini-2.5-flash-preview)
 
       (gptel-make-gh-copilot "Copilot")
