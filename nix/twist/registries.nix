@@ -22,8 +22,9 @@
   }
 
   {
-    type = "archive";
-    url = "https://elpa.gnu.org/packages/";
+    type = "archive-contents";
+    path = inputs.gnu-elpa-archive;
+    base-url = "https://elpa.gnu.org/packages/";
   }
 
   {
@@ -32,7 +33,8 @@
   }
 
   {
-    type = "archive";
-    url = "https://elpa.nongnu.org/nongnu/";
+    type = "archive-contents";
+    path = inputs.nongnu-elpa-archive;
+    base-url = "https://elpa.nongnu.org/nongnu/";
   }
 ]

@@ -47,7 +47,8 @@ in
       createManifestFile = true;
     };
 
-    home.file.".local/share/emacs/ai-model-list.txt".source = ../ai-model-list.txt;
+    home.file.${config.programs.emacs-twist.directory + "/ai-model-list.txt"}.source =
+      ../ai-model-list.txt;
 
     home.packages = with pkgs'; [
       # Font families used in my Emacs config

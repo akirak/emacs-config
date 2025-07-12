@@ -222,6 +222,18 @@
         "type": "github"
       }
     },
+    "gnu-elpa-archive": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-7ru6w3ZS/JGKr1TdtLsuNyBukZs+UYHuFrdUrDdoEFI=",
+        "type": "file",
+        "url": "https://elpa.gnu.org/packages/archive-contents"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://elpa.gnu.org/packages/archive-contents"
+      }
+    },
     "home-manager-stable": {
       "inputs": {
         "nixpkgs": "nixpkgs_3"
@@ -500,6 +512,18 @@
         "type": "github"
       }
     },
+    "nongnu-elpa-archive": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-cSD72bbTY3IqsB4h1J7HyT9ttYAbwyE0ARK+kAFZrHI=",
+        "type": "file",
+        "url": "https://elpa.nongnu.org/nongnu/archive-contents"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://elpa.nongnu.org/nongnu/archive-contents"
+      }
+    },
     "ocaml-overlays": {
       "inputs": {
         "nixpkgs": [
@@ -560,10 +584,12 @@
         "flake-parts": "flake-parts",
         "flake-pins": "flake-pins",
         "gnu-elpa": "gnu-elpa",
+        "gnu-elpa-archive": "gnu-elpa-archive",
         "melpa": "melpa",
         "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs_6",
         "nongnu-elpa": "nongnu-elpa",
+        "nongnu-elpa-archive": "nongnu-elpa-archive",
         "org-babel": "org-babel",
         "playwright-mcp": "playwright-mcp",
         "systems": "systems_3",
@@ -676,11 +702,11 @@
         "elisp-helpers": "elisp-helpers"
       },
       "locked": {
-        "lastModified": 1741687500,
-        "narHash": "sha256-3XFSz42KAz53k9dzY5C2QbL5R4uiPwwqZ86RPiOYcNg=",
+        "lastModified": 1752050490,
+        "narHash": "sha256-iqA/Na2g4wC/DY9mzP/o6x4Kp9Kqrbov4ULanWhVOBA=",
         "owner": "emacs-twist",
         "repo": "twist.nix",
-        "rev": "cb0299ed2d7936357288b77d1f22ddbd9e35808d",
+        "rev": "26252eed229041e693310895d4a1a3b543a1b118",
         "type": "github"
       },
       "original": {
