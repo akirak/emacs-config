@@ -7861,6 +7861,15 @@ Interact with ChatGPT or other LLMs
 
       (gptel-make-gh-copilot "Copilot")
 
+      (gptel-make-openai "xAI"
+        :host "api.x.ai"
+        :key (lambda ()
+               (gptel-api-key-from-auth-source
+                "api.x.ai"))
+        :endpoint "/v1/chat/completions"
+        :stream t
+        :models '(xai/grok-4))
+
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
                (gptel-api-key-from-auth-source "api.perplexity.ai"))
