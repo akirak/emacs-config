@@ -1153,6 +1153,22 @@
         "type": "github"
       }
     },
+    "flymake-vale": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1718481405,
+        "narHash": "sha256-s+FI4rznhtyRg3swdxS/ZZXWdkAToNIG3p6xIfW2yCw=",
+        "owner": "tpeacock19",
+        "repo": "flymake-vale",
+        "rev": "28d4a675ed8a186b4f3d2c3613e2eeb0d97f090c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tpeacock19",
+        "repo": "flymake-vale",
+        "type": "github"
+      }
+    },
     "fsharp-mode": {
       "flake": false,
       "locked": {
@@ -3014,6 +3030,7 @@
         "flymake-eslint": "flymake-eslint",
         "flymake-shellcheck": "flymake-shellcheck",
         "flymake-sqlfluff": "flymake-sqlfluff",
+        "flymake-vale": "flymake-vale",
         "fsharp-mode": "fsharp-mode",
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",
