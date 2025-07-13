@@ -7492,6 +7492,18 @@ A flymake plugin for SQL files using sqlfluff
       ;; Use the same dialect as flymake-sqlfluff
       :args (list "format" "--dialect" flymake-sqlfluff-dialect "-"))))
 #+end_src
+*** flymake-vale                                                :writing:@extra:
+:PROPERTIES:
+:CREATED_TIME: [2025-07-13 Sun 13:55]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-vale)
+    (:nixpkgs vale)
+
+    (:with-hook (org-mode-hook markdown-mode-hook)
+      (:hook flymake-vale-load)))
+#+end_src
 *** COMMENT forge                                                   :VC:project:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]

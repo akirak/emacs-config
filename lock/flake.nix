@@ -431,6 +431,12 @@
       repo = "flymake-sqlfluff";
       type = "github";
     };
+    flymake-vale = {
+      flake = false;
+      owner = "tpeacock19";
+      repo = "flymake-vale";
+      type = "github";
+    };
     fsharp-mode = {
       flake = false;
       owner = "fsharp";
