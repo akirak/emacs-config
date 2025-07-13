@@ -8748,6 +8748,8 @@ Model Context Protocol
              ;; `nix run github:akirak/nix-playwright-mcp --`.
              :command "mcp-server-playwright"
              :args ("--headless"))
+            ("context7"
+             :url "http://localhost:11007/mcp")
             ("effect"
              :command "docker"
              :args ("run" "--rm" "-i" "timsmart/effect-mcp")))))
