@@ -74,7 +74,7 @@ the original minor mode."
     ('(16)
      (akirak-shell-select))
     ('(4)
-     (call-interactively #'akirak-shell-send-string-to-buffer))
+     (call-interactively #'akirak-shell-send-event-to-buffer))
     (_
      (akirak-shell-transient))))
 
@@ -354,6 +354,36 @@ the original minor mode."
          (buffer (get-buffer name)))
     (akirak-shell-send-string-to-buffer buffer command)
     (pop-to-buffer buffer)))
+
+;;;###autoload
+(cl-defun akirak-shell-send-event-to-buffer (window-or-buffer
+                                             event
+                                             &key compilation-regexp
+                                             confirm)
+  (declare (indent 1))
+  (interactive (list (or (thread-last
+                           (window-list)
+                           (seq-filter #'akirak-shell-buffer-p)
+                           (car)))
+                     (read-event "Event: ")
+                     :confirm t))
+  (let ((buffer (cl-etypecase window-or-buffer
+                  (window (window-buffer window-or-buffer))
+                  (buffer window-or-buffer))))
+    (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
+                                    '(eat-mode))
+      (`eat-mode
+       (with-current-buffer buffer
+         (when confirm
+           (eat-term-input-event eat-terminal 1 event)
+           (sit-for 0.2))
+         (when-let* ((window (get-buffer-window buffer)))
+           (with-selected-window window
+             (set-window-point nil (eat-term-display-cursor eat-terminal))
+             (recenter (- (1+ (how-many "\n" (eat-term-display-cursor eat-terminal)
+                                        (eat-term-end eat-terminal)))))))))
+      (_
+       (user-error "Not in any of the terminal modes")))))
 
 ;;;###autoload
 (cl-defun akirak-shell-send-string-to-buffer (window-or-buffer
