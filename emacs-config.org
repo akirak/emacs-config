@@ -7496,6 +7496,9 @@ A flymake plugin for SQL files using sqlfluff
 :PROPERTIES:
 :CREATED_TIME: [2025-07-13 Sun 13:55]
 :END:
+#+begin_quote
+flymake integration for vale
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package flymake-vale)
@@ -11092,23 +11095,23 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 221 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
-| [[org-ql-search:tags:@extra][@extra]]              |   9 |
+| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
+| [[org-ql-search:tags:writing][writing]]             |   5 |
 | [[org-ql-search:tags:windows][windows]]             |   5 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
-| [[org-ql-search:tags:writing][writing]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
@@ -11241,6 +11244,7 @@ To use these features, they need to be turned on at build time.
 | [[epkg][epkg]]                  |      |
 | [[epkg-marginalia][epkg-marginalia]]       |      |
 | [[flycheck][flycheck]]              |      |
+| [[flymake-vale][flymake-vale]]          |      |
 | [[fstar-mode][fstar-mode]]            |      |
 | [[lean4-mode][lean4-mode]]            |      |
 | [[lsp-mode][lsp-mode]]              |      |
