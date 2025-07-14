@@ -200,7 +200,8 @@
                (eq (treesit-node-end akirak-treesit-expand-region-node)
                    (region-end)))
     (setq akirak-treesit-expand-region-node nil))
-  (let* ((current-bounds (region-bounds))
+  (let* ((current-bounds (ignore-errors
+                           (region-bounds)))
          (node (if akirak-treesit-expand-region-node
                    (or (treesit-node-parent akirak-treesit-expand-region-node)
                        (user-error "Root node of the document"))
