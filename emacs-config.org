@@ -5660,7 +5660,7 @@ This is an extra functions for window management.
 :SORTING_TYPE: a
 :END:
 A bunch of useful packages are configured here.
-*** academic-phrases                                       :writing:
+*** COMMENT academic-phrases                                           :writing:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-07 Fri 11:28]
 :END:
@@ -6466,7 +6466,7 @@ Major mode for editing comma/char separated values
   (setup (:package csv-mode)
     (:file-match "\\.csv\\'"))
 #+end_src
-*** cue-mode
+*** COMMENT cue-mode                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-01-01 Mon 15:17]
 :END:
@@ -6981,7 +6981,7 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
         (kill-ring-save
          (akirak/eat-restore-mode)))))
 #+end_src
-*** ediprolog                                                           :Prolog:
+*** COMMENT ediprolog                                                   :Prolog:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-19 Sat 19:24]
 :END:
@@ -9042,7 +9042,7 @@ Major mode for editing .nix files
   ;;   (:reformatters
   ;;    (alejandra :program "alejandra")))
 #+end_src
-*** nix-update
+*** COMMENT nix-update                                                         :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-08 Mon 15:44]
 :END:
@@ -9054,7 +9054,7 @@ Update "fetch" blocks in .nix expressions
 #+begin_src emacs-lisp
 (setup (:package nix-update))
 #+end_src
-*** noman
+*** COMMENT noman                                                              :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-06-06 Thu 09:36]
 :END:
@@ -9834,7 +9834,7 @@ Auto-save buffers, based on your activity.
 
 =super-save-mode= can be annoying when you use org-crypt.
 Follow an instruction at [[https://github.com/bbatsov/super-save/issues/10][super-save disable when file header is present. · Issue #10 · bbatsov/super-save · GitHub]]
-*** svelte-mode
+*** COMMENT svelte-mode                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-08 Fri 20:31]
 :END:
@@ -9955,7 +9955,7 @@ Some paredit-like features for html-mode
     ;; The upstream lacks this autoload
     (autoload 'tagedit-mode "tagedit"))
 #+end_src
-*** taxy                                                   :library:
+*** COMMENT taxy                                                       :library:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
@@ -9967,7 +9967,7 @@ Programmable taxonomical grouping for arbitrary objects
 #+begin_src emacs-lisp
 (setup (:package taxy))
 #+end_src
-*** taxy-magit-section                                  :UI:library:
+*** COMMENT taxy-magit-section                                      :UI:library:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-02 Wed 23:18]
 :END:
@@ -10337,7 +10337,7 @@ Fully-featured terminal emulator
              "<f7>" "<f8>" "<f9>" "<f10>" "<f11>" "<f12>")
     (:keymap "<f8>" #'vterm-send-next-key))
 #+end_src
-*** vue-mode
+*** COMMENT vue-mode                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-11 Thu 12:11]
 :END:

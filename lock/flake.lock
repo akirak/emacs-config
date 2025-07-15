@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "academic-phrases": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1532341300,
-        "narHash": "sha256-3KEgwhb8i0ifAZWVPq0ipf7tvkj+FE+c+F8Ba96VYlQ=",
-        "owner": "nashamri",
-        "repo": "academic-phrases",
-        "rev": "25d9cf67feac6359cb213f061735e2679c84187f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nashamri",
-        "repo": "academic-phrases",
-        "type": "github"
-      }
-    },
     "aggressive-indent": {
       "flake": false,
       "locked": {
@@ -105,6 +89,7 @@
         "url": "https://elpa.gnu.org/packages/async-1.9.9.tar"
       },
       "original": {
+        "lastModified": 1724230971,
         "type": "tarball",
         "url": "https://elpa.gnu.org/packages/async-1.9.9.tar"
       }
@@ -503,24 +488,9 @@
         "url": "https://elpa.gnu.org/packages/csv-mode-1.27.tar"
       },
       "original": {
+        "lastModified": 1723194179,
         "type": "tarball",
         "url": "https://elpa.gnu.org/packages/csv-mode-1.27.tar"
-      }
-    },
-    "cue-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1663354080,
-        "narHash": "sha256-FXIZAnp1LQF0ZHK0XJ41Z/UI2vk3Z/f+StfBmF/7eeM=",
-        "owner": "russell",
-        "repo": "cue-mode",
-        "rev": "a87ba6748a7a1bebe4431ee8e54e414f0c905141",
-        "type": "github"
-      },
-      "original": {
-        "owner": "russell",
-        "repo": "cue-mode",
-        "type": "github"
       }
     },
     "d2-mode": {
@@ -841,22 +811,6 @@
       "original": {
         "type": "git",
         "url": "https://codeberg.org/akib/emacs-eat"
-      }
-    },
-    "ediprolog": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1728151816,
-        "narHash": "sha256-BuZq3mi8St6EFRY0jB/BYVfvp1Z48jfK7wxNr4A2mbQ=",
-        "owner": "triska",
-        "repo": "ediprolog",
-        "rev": "bc108f832253c2bad220b1a9936546963d743386",
-        "type": "github"
-      },
-      "original": {
-        "owner": "triska",
-        "repo": "ediprolog",
-        "type": "github"
       }
     },
     "edit-indirect": {
@@ -1868,22 +1822,6 @@
         "type": "github"
       }
     },
-    "mmm-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1708576105,
-        "narHash": "sha256-eopDqdJ6tCFScPCFiUXlX7sGAcQYxlQWn9vHq/Wri0c=",
-        "owner": "dgutov",
-        "repo": "mmm-mode",
-        "rev": "b1f5c7dbdc405e6e10d9ddd99a43a6b2ad61b176",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dgutov",
-        "repo": "mmm-mode",
-        "type": "github"
-      }
-    },
     "modus-themes": {
       "flake": false,
       "locked": {
@@ -1980,22 +1918,6 @@
         "type": "github"
       }
     },
-    "nix-update": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1732399156,
-        "narHash": "sha256-QznRQkfUgOY+dQYl8WI5PgafRvtzxxbaETaR4Ibj5KI=",
-        "owner": "jwiegley",
-        "repo": "nix-update-el",
-        "rev": "77022ccd918d665acbb519b243e7e3dc5eae1c47",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jwiegley",
-        "repo": "nix-update-el",
-        "type": "github"
-      }
-    },
     "nix3": {
       "flake": false,
       "locked": {
@@ -2025,22 +1947,6 @@
       "original": {
         "owner": "purcell",
         "repo": "emacs-nixfmt",
-        "type": "github"
-      }
-    },
-    "noman": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1734075043,
-        "narHash": "sha256-3y/mopVHA7MSX1uYgIqxGxtQDKXQ80SH+/C0WUcBTlU=",
-        "owner": "andykuszyk",
-        "repo": "noman.el",
-        "rev": "78bde84020a90f7524182fbb794d6134d7258eeb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "andykuszyk",
-        "repo": "noman.el",
         "type": "github"
       }
     },
@@ -2558,6 +2464,7 @@
         "url": "https://elpa.gnu.org/packages/org-transclusion-1.4.0.tar"
       },
       "original": {
+        "lastModified": 1716239161,
         "type": "tarball",
         "url": "https://elpa.gnu.org/packages/org-transclusion-1.4.0.tar"
       }
@@ -2731,6 +2638,7 @@
         "url": "https://elpa.gnu.org/packages/peg-1.0.1.tar"
       },
       "original": {
+        "lastModified": 1711878471,
         "type": "tarball",
         "url": "https://elpa.gnu.org/packages/peg-1.0.1.tar"
       }
@@ -2744,6 +2652,7 @@
         "url": "https://elpa.gnu.org/packages/persist-0.6.1.tar"
       },
       "original": {
+        "lastModified": 1718485631,
         "type": "tarball",
         "url": "https://elpa.gnu.org/packages/persist-0.6.1.tar"
       }
@@ -2918,6 +2827,7 @@
         "url": "https://elpa.gnu.org/packages/rainbow-mode-1.0.6.tar"
       },
       "original": {
+        "lastModified": 1711878714,
         "type": "tarball",
         "url": "https://elpa.gnu.org/packages/rainbow-mode-1.0.6.tar"
       }
@@ -3036,7 +2946,6 @@
     },
     "root": {
       "inputs": {
-        "academic-phrases": "academic-phrases",
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
         "anzu": "anzu",
@@ -3068,7 +2977,6 @@
         "corfu": "corfu",
         "cosmetic-transient": "cosmetic-transient",
         "csv-mode": "csv-mode",
-        "cue-mode": "cue-mode",
         "d2-mode": "d2-mode",
         "daemons": "daemons",
         "dash": "dash",
@@ -3089,7 +2997,6 @@
         "dumb-jump": "dumb-jump",
         "dune": "dune",
         "eat": "eat",
-        "ediprolog": "ediprolog",
         "edit-indirect": "edit-indirect",
         "eglot-booster": "eglot-booster",
         "el-patch": "el-patch",
@@ -3153,17 +3060,14 @@
         "mcp": "mcp",
         "mermaid-mode": "mermaid-mode",
         "mini-modeline": "mini-modeline",
-        "mmm-mode": "mmm-mode",
         "modus-themes": "modus-themes",
         "move-dup": "move-dup",
         "mpv": "mpv",
         "neocaml": "neocaml",
         "nix-mode": "nix-mode",
         "nix-ts-mode": "nix-ts-mode",
-        "nix-update": "nix-update",
         "nix3": "nix3",
         "nixfmt": "nixfmt",
-        "noman": "noman",
         "nov": "nov",
         "oahu": "oahu",
         "ob-duckdb": "ob-duckdb",
@@ -3234,19 +3138,15 @@
         "shr-tag-pre-highlight": "shr-tag-pre-highlight",
         "spinner": "spinner",
         "sqlformat": "sqlformat",
-        "ssass-mode": "ssass-mode",
         "ssh-config-mode": "ssh-config-mode",
         "string-inflection": "string-inflection",
         "super-save": "super-save",
-        "svelte-mode": "svelte-mode",
         "svg-lib": "svg-lib",
         "symbol-overlay": "symbol-overlay",
         "systemd": "systemd",
         "tab-bookmark": "tab-bookmark",
         "tablist": "tablist",
         "tagedit": "tagedit",
-        "taxy": "taxy",
-        "taxy-magit-section": "taxy-magit-section",
         "titlecase": "titlecase",
         "tomelr": "tomelr",
         "transient": "transient",
@@ -3258,8 +3158,6 @@
         "valign": "valign",
         "vertico": "vertico",
         "visual-fill-column": "visual-fill-column",
-        "vue-html-mode": "vue-html-mode",
-        "vue-mode": "vue-mode",
         "web-mode": "web-mode",
         "whole-line-or-region": "whole-line-or-region",
         "windswap": "windswap",
@@ -3399,22 +3297,6 @@
         "type": "github"
       }
     },
-    "ssass-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1581384754,
-        "narHash": "sha256-a+tknmy0621q0lpYOXLGPr8CQOx0jseyXjm+im4L000=",
-        "owner": "AdamNiederer",
-        "repo": "ssass-mode",
-        "rev": "96f557887ad97a0066a60c54f92b7234b8407016",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AdamNiederer",
-        "repo": "ssass-mode",
-        "type": "github"
-      }
-    },
     "ssh-config-mode": {
       "flake": false,
       "locked": {
@@ -3460,22 +3342,6 @@
       "original": {
         "owner": "bbatsov",
         "repo": "super-save",
-        "type": "github"
-      }
-    },
-    "svelte-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1634367172,
-        "narHash": "sha256-gXoghLw4friBtqsP9CKTQ0WStd+g6BVEV/rjntnvFRU=",
-        "owner": "leafOfTree",
-        "repo": "svelte-mode",
-        "rev": "6a1d4274af7f4c0f271f77bd96678c3dd1fa68e1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "leafOfTree",
-        "repo": "svelte-mode",
         "type": "github"
       }
     },
@@ -3572,40 +3438,6 @@
       "original": {
         "owner": "magnars",
         "repo": "tagedit",
-        "type": "github"
-      }
-    },
-    "taxy": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1723851644,
-        "narHash": "sha256-f8oaBgiXEDyHb3uC5fBIYbKVpdATGRvLXLwv8v1uPGw=",
-        "owner": "alphapapa",
-        "repo": "taxy.el",
-        "rev": "3099ae5cb27a34961e06a3af67555919c62c12d7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "alphapapa",
-        "ref": "stable",
-        "repo": "taxy.el",
-        "type": "github"
-      }
-    },
-    "taxy-magit-section": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1727131228,
-        "narHash": "sha256-j78mHTFNTKgWZJyWczIIWeb+3UtgMW/lrfZZbgTImXc=",
-        "owner": "alphapapa",
-        "repo": "taxy.el",
-        "rev": "19c67f4d2e7a87cb9aed8e17058c4cf4dfd75406",
-        "type": "github"
-      },
-      "original": {
-        "owner": "alphapapa",
-        "ref": "package/taxy-magit-section",
-        "repo": "taxy.el",
         "type": "github"
       }
     },
@@ -3783,38 +3615,6 @@
       "original": {
         "type": "git",
         "url": "https://codeberg.org/joostkremers/visual-fill-column.git"
-      }
-    },
-    "vue-html-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1524947905,
-        "narHash": "sha256-5xj9praYKIUW1F9wFQrGOFbIYFwDVTiGgOdys4ypzXU=",
-        "owner": "AdamNiederer",
-        "repo": "vue-html-mode",
-        "rev": "1514939804bad558584feeb6298b38d22eadf64e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AdamNiederer",
-        "repo": "vue-html-mode",
-        "type": "github"
-      }
-    },
-    "vue-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1704118670,
-        "narHash": "sha256-cTjAeK3edNdL8TbjSGoU8E7Sbch5pmB3z9YeBz3jdq8=",
-        "owner": "AdamNiederer",
-        "repo": "vue-mode",
-        "rev": "4853d97ea8d7b2fab7d331d3a8aad18d02b792ad",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AdamNiederer",
-        "repo": "vue-mode",
-        "type": "github"
       }
     },
     "web-mode": {
