@@ -377,7 +377,7 @@ the original minor mode."
                            (window-list)
                            (seq-filter #'akirak-shell-buffer-p)
                            (car)))
-                     (read-event "Event: ")
+                     (read-key "Event: ")
                      :confirm t))
   (let ((buffer (cl-etypecase window-or-buffer
                   (window (window-buffer window-or-buffer))
