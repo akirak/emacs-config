@@ -242,6 +242,18 @@ the original minor mode."
                   (interactive)
                   (akirak-shell-select-buffer-window ,name))
                :transient transient--exit))))
+    (append (when-let* ((root (project-root (project-current)))
+                        (default-buffer (seq-find (lambda (buffer)
+                                                    (file-equal-p
+                                                     root
+                                                     (buffer-local-value 'default-directory buffer)))
+                                                  akirak-shell--buffers)))
+              (list (list "'"
+                          (format "Default: %s" (buffer-name default-buffer))
+                          `(lambda ()
+                             (interactive)
+                             (akirak-shell-select-buffer-window ,(buffer-name default-buffer)))
+                          :transient transient--exit))))
     (transient-parse-suffixes 'akirak-shell-transient)
     (append children)))
 
