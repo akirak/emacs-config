@@ -36,6 +36,11 @@
       type = "git";
       url = "https://git.isincredibly.gay/srxl/astro-ts-mode.git";
     };
+    async = {
+      flake = false;
+      type = "tarball";
+      url = "https://elpa.gnu.org/packages/async-1.9.9.tar";
+    };
     auto-minor-mode = {
       flake = false;
       owner = "joewreschnig";
@@ -179,6 +184,11 @@
       owner = "akirak";
       repo = "cosmetic-transient.el";
       type = "github";
+    };
+    csv-mode = {
+      flake = false;
+      type = "tarball";
+      url = "https://elpa.gnu.org/packages/csv-mode-1.27.tar";
     };
     cue-mode = {
       flake = false;
@@ -429,6 +439,12 @@
       flake = false;
       owner = "erickgnavar";
       repo = "flymake-sqlfluff";
+      type = "github";
+    };
+    flymake-vale = {
+      flake = false;
+      owner = "tpeacock19";
+      repo = "flymake-vale";
       type = "github";
     };
     fsharp-mode = {
@@ -943,6 +959,11 @@
       repo = "org-super-links";
       type = "github";
     };
+    org-transclusion = {
+      flake = false;
+      type = "tarball";
+      url = "https://elpa.gnu.org/packages/org-transclusion-1.4.0.tar";
+    };
     org-volume = {
       flake = false;
       owner = "akirak";
@@ -1002,6 +1023,16 @@
       owner = "cute-jumper";
       repo = "parsec.el";
       type = "github";
+    };
+    peg = {
+      flake = false;
+      type = "tarball";
+      url = "https://elpa.gnu.org/packages/peg-1.0.1.tar";
+    };
+    persist = {
+      flake = false;
+      type = "tarball";
+      url = "https://elpa.gnu.org/packages/persist-0.6.1.tar";
     };
     pinyin = {
       flake = false;
@@ -1063,6 +1094,11 @@
       owner = "Fanael";
       repo = "rainbow-delimiters";
       type = "github";
+    };
+    rainbow-mode = {
+      flake = false;
+      type = "tarball";
+      url = "https://elpa.gnu.org/packages/rainbow-mode-1.0.6.tar";
     };
     reason-mode = {
       flake = false;

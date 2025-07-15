@@ -159,11 +159,11 @@
         "unstable": "unstable"
       },
       "locked": {
-        "lastModified": 1751537501,
-        "narHash": "sha256-PKSHXTyr8gGme5XlCGgJw3c4xrav25X6LWRYQkM699s=",
+        "lastModified": 1752342599,
+        "narHash": "sha256-HNBi91mQkcYq1JYresxRV2GSXn5JS8Jwfy8v+KV1Too=",
         "owner": "akirak",
         "repo": "flake-pins",
-        "rev": "b6a841e7d6a8c2f143b0d416a4bc72f562201798",
+        "rev": "b32e7951d3f064961ce647fc5115b1c35173c873",
         "type": "github"
       },
       "original": {
@@ -209,17 +209,29 @@
     "gnu-elpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1747715431,
-        "narHash": "sha256-YsxbF+RPXonQ0k375nwzt+s8F7VUuoImdmr96zPC7yo=",
+        "lastModified": 1752508514,
+        "narHash": "sha256-4IS2Wu0dY54EVZSCFOXLxprDNNi/NvvPjeawnduF1s4=",
         "owner": "elpa-mirrors",
         "repo": "elpa",
-        "rev": "597f4ef0dbc19767140ae7bb2847b1b66eebfcff",
+        "rev": "5c804473bddcf590f443862dff3f80ab1a75e473",
         "type": "github"
       },
       "original": {
         "owner": "elpa-mirrors",
         "repo": "elpa",
         "type": "github"
+      }
+    },
+    "gnu-elpa-archive": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-GuFdAWFJ/zU47n7nUznvxn9lHk2rhBBx4NJ3pbzWKUA=",
+        "type": "file",
+        "url": "https://elpa.gnu.org/packages/archive-contents"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://elpa.gnu.org/packages/archive-contents"
       }
     },
     "home-manager-stable": {
@@ -262,11 +274,11 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1751230037,
-        "narHash": "sha256-eL0ynl06PbPP8tugT3x5Bk802m/czB/jRwgtg0sLVCQ=",
+        "lastModified": 1752447269,
+        "narHash": "sha256-uzd//vcyRTxT/Su6Z0/xC7ds1AFhR2QCzTkQxtRJtAo=",
         "owner": "melpa",
         "repo": "melpa",
-        "rev": "356863235f863365b3ab1c1ede6acb318b8d654b",
+        "rev": "21b5917792cf971a29e5902bd57e22590c62f9d8",
         "type": "github"
       },
       "original": {
@@ -487,17 +499,29 @@
     "nongnu-elpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1748556196,
-        "narHash": "sha256-ehzMkz3d+6KYnSYTjJJw/tWMxoy/k3TrUCovKF9doVk=",
+        "lastModified": 1752506861,
+        "narHash": "sha256-ZGYzuR8AUutInEXg0mWI2HcArH/A6UpQg5QgAzkBMFA=",
         "owner": "elpa-mirrors",
         "repo": "nongnu",
-        "rev": "56748b48bec8af70101edaa57e35b0ac4c5b0151",
+        "rev": "ff2a2f7e04468e70545f5de5abe54f7a6e30dbf4",
         "type": "github"
       },
       "original": {
         "owner": "elpa-mirrors",
         "repo": "nongnu",
         "type": "github"
+      }
+    },
+    "nongnu-elpa-archive": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-zsd1R8cUb2tuHxbE9S+cn1I0efN3ZAfYCvTPGCPF4iE=",
+        "type": "file",
+        "url": "https://elpa.nongnu.org/nongnu/archive-contents"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://elpa.nongnu.org/nongnu/archive-contents"
       }
     },
     "ocaml-overlays": {
@@ -541,11 +565,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1751320043,
-        "narHash": "sha256-4mXLMtjdpmz/QOE/jGn/DYDCdA0eR3og+28Q9tSsFdY=",
+        "lastModified": 1752529467,
+        "narHash": "sha256-SyeEG3tGuFxSGYMOyvQ0hsalReegnVLrOvxyYUPQqg0=",
         "owner": "akirak",
         "repo": "nix-playwright-mcp",
-        "rev": "f95c3b232c250064b87ae4162faa8353f44ee4f4",
+        "rev": "36b22da33d4e1ab3b33f570fdd663f91b1b1ce33",
         "type": "github"
       },
       "original": {
@@ -560,10 +584,12 @@
         "flake-parts": "flake-parts",
         "flake-pins": "flake-pins",
         "gnu-elpa": "gnu-elpa",
+        "gnu-elpa-archive": "gnu-elpa-archive",
         "melpa": "melpa",
         "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs_6",
         "nongnu-elpa": "nongnu-elpa",
+        "nongnu-elpa-archive": "nongnu-elpa-archive",
         "org-babel": "org-babel",
         "playwright-mcp": "playwright-mcp",
         "systems": "systems_3",
@@ -676,11 +702,11 @@
         "elisp-helpers": "elisp-helpers"
       },
       "locked": {
-        "lastModified": 1741687500,
-        "narHash": "sha256-3XFSz42KAz53k9dzY5C2QbL5R4uiPwwqZ86RPiOYcNg=",
+        "lastModified": 1752050490,
+        "narHash": "sha256-iqA/Na2g4wC/DY9mzP/o6x4Kp9Kqrbov4ULanWhVOBA=",
         "owner": "emacs-twist",
         "repo": "twist.nix",
-        "rev": "cb0299ed2d7936357288b77d1f22ddbd9e35808d",
+        "rev": "26252eed229041e693310895d4a1a3b543a1b118",
         "type": "github"
       },
       "original": {

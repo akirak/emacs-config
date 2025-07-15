@@ -1,0 +1,27 @@
+name: Update the AI model list
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  schedule:
+    - cron: '5 0 * * 5'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: develop
+    - name: Set up Nix
+      uses: ./.github/actions/setup
+      with:
+        cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    - run: nix run .#update-ai-models
+    - uses: peter-evans/create-pull-request@v7
+      with:
+        base: develop
+        token: ${{ secrets.PAT_FOR_PR }}
+        title: 'chore: Update the model list'
+        branch: bot/update/ai-models
+        labels: automation,update,emacs

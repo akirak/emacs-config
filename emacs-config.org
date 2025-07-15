@@ -5580,7 +5580,7 @@ This is an extra functions for window management.
                                          "gemini")
                              "-")
                         akirak-window-display-as-right-sidebar
-                        (window-width . 80))
+                        (window-width . 84))
                        ((or ,(major-modes vterm-mode)
                             "^\\*Nix-REPL\\*"
                             ;; Pop up eat windows if and only if it follows a
@@ -6329,7 +6329,6 @@ Consulting completing-read
                     "<remap> <yank-pop>" #'consult-yank-pop
                     "M-s o" #'consult-outline
                     "C-S-s" #'consult-line
-                    "M-s l" #'consult-focus-lines
                     "C-x /" #'consult-ripgrep)
 
     (:with-feature consult-imenu
@@ -7051,15 +7050,15 @@ Client for Language Server Protocol (LSP) servers
                  "R" #'eglot-reconnect
                  "r" #'eglot-rename))
 
-      ;; (add-to-list 'eglot-server-programs
-      ;;              `(((js-mode :language-id "javascript")
-      ;;                 (js-ts-mode :language-id "javascript")
-      ;;                 (tsx-ts-mode :language-id "typescriptreact")
-      ;;                 (typescript-ts-mode :language-id "typescript")
-      ;;                 (typescript-mode :language-id "typescript"))
-      ;;                . ,(eglot-alternatives
-      ;;                    '(("typescript-language-server" "--stdio")
-      ;;                      ("deno" "lsp")))))
+      (add-to-list 'eglot-server-programs
+                   `(((js-mode :language-id "javascript")
+                      (js-ts-mode :language-id "javascript")
+                      (tsx-ts-mode :language-id "typescriptreact")
+                      (typescript-ts-mode :language-id "typescript")
+                      (typescript-mode :language-id "typescript"))
+                     . ,(eglot-alternatives
+                         '(("typescript-language-server" "--stdio")
+                           ("deno" "lsp")))))
       (add-to-list 'eglot-server-programs
                    `((nix-ts-mode nix-mode) . ("nil")))
       (add-to-list 'eglot-server-programs
@@ -7493,6 +7492,21 @@ A flymake plugin for SQL files using sqlfluff
       ;; Use the same dialect as flymake-sqlfluff
       :args (list "format" "--dialect" flymake-sqlfluff-dialect "-"))))
 #+end_src
+*** flymake-vale                                                :writing:@extra:
+:PROPERTIES:
+:CREATED_TIME: [2025-07-13 Sun 13:55]
+:END:
+#+begin_quote
+flymake integration for vale
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package flymake-vale)
+    (:nixpkgs vale)
+
+    (:with-hook (org-mode-hook markdown-mode-hook)
+      (:hook flymake-vale-load)))
+#+end_src
 *** COMMENT forge                                                   :VC:project:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
@@ -7792,6 +7806,23 @@ Interact with ChatGPT or other LLMs
 
 #+begin_src emacs-lisp
   (setup (:package gptel)
+    (defconst akirak/ai-model-list-file
+      (locate-user-emacs-file "ai-model-list.txt"))
+
+    (defun akirak/gptel-openrouter-models ()
+      (with-temp-buffer
+        (insert-file-contents akirak/ai-model-list-file)
+        (delete-non-matching-lines (rx bol "openrouter/"))
+        (thread-last
+          (string-split (buffer-string) "\n")
+          (mapcar (apply-partially #'string-remove-prefix "openrouter/"))
+          (seq-filter (apply-partially #'string-match-p
+                                       (rx bol (or "openai"
+                                                   "anthropic"
+                                                   "google")
+                                           "/")))
+          (mapcar #'intern))))
+
     (:set gptel-crowdsourced-prompts-file
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
@@ -7832,23 +7863,19 @@ Interact with ChatGPT or other LLMs
                             :endpoint "/api/v1/chat/completions"
                             :stream t
                             ;; For perplexity, use the native provider.
-                            :models '(openai/gpt-4.1
-                                      openai/gpt-4.1-mini
-                                      openai/o4-mini
-                                      openai/o3
-                                      openai/o3-pro
-                                      openai/codex-mini
-                                      openai/gpt-4o-mini-search-preview
-                                      microsoft/phi-4-reasoning-plus:free
-                                      anthropic/claude-3.5-sonnet
-                                      anthropic/claude-opus-4
-                                      anthropic/claude-sonnet-4
-                                      google/gemini-2.5-flash-lite-preview-06-17
-                                      google/gemini-2.5-flash
-                                      google/gemini-2.5-pro))
+                            :models (akirak/gptel-openrouter-models))
             gptel-model 'google/gemini-2.5-flash-preview)
 
       (gptel-make-gh-copilot "Copilot")
+
+      (gptel-make-openai "xAI"
+        :host "api.x.ai"
+        :key (lambda ()
+               (gptel-api-key-from-auth-source
+                "api.x.ai"))
+        :endpoint "/v1/chat/completions"
+        :stream t
+        :models '(xai/grok-4))
 
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
@@ -8724,6 +8751,8 @@ Model Context Protocol
              ;; `nix run github:akirak/nix-playwright-mcp --`.
              :command "mcp-server-playwright"
              :args ("--headless"))
+            ("context7"
+             :url "http://localhost:11007/mcp")
             ("effect"
              :command "docker"
              :args ("run" "--rm" "-i" "timsmart/effect-mcp")))))
@@ -9518,6 +9547,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/repl-toggle][~tomterl/repl-t
 :END:
 #+begin_quote
 An interactive HTTP client for Emacs
+[[https://github.com/emacsorphanage/restclient]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -11065,23 +11095,23 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 221 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:UI][UI]]                  |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
-| [[org-ql-search:tags:@extra][@extra]]              |   9 |
+| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:library][library]]             |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:completion][completion]]          |   6 |
+| [[org-ql-search:tags:writing][writing]]             |   5 |
 | [[org-ql-search:tags:windows][windows]]             |   5 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
 | [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
-| [[org-ql-search:tags:writing][writing]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
@@ -11214,6 +11244,7 @@ To use these features, they need to be turned on at build time.
 | [[epkg][epkg]]                  |      |
 | [[epkg-marginalia][epkg-marginalia]]       |      |
 | [[flycheck][flycheck]]              |      |
+| [[flymake-vale][flymake-vale]]          |      |
 | [[fstar-mode][fstar-mode]]            |      |
 | [[lean4-mode][lean4-mode]]            |      |
 | [[lsp-mode][lsp-mode]]              |      |

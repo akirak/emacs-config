@@ -283,5 +283,13 @@
                  options)
        :name "gh"))))
 
+(defun akirak-github-get-default-repo ()
+  "Return the default repository for the directory."
+  (with-temp-buffer
+    (when (and (zerop (call-process akirak-github-gh-executable nil (list t nil) nil
+                                    "repo" "set-default" "--view"))
+               (> (point) (point-min)))
+      (string-trim (buffer-string)))))
+
 (provide 'akirak-github)
 ;;; akirak-github.el ends here

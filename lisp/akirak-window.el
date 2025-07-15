@@ -505,7 +505,7 @@ focus on the same buffer."
 (defun akirak-window-kill-this-buffer (&optional n)
   (interactive "P")
   (require 'menu-bar)
-  (kill-this-buffer)
+  (kill-buffer (current-buffer))
   (let* ((above-window (and (not (window-minibuffer-p))
                             (window-in-direction 'above)))
          (deleted-window (when above-window

@@ -355,7 +355,6 @@
   (keymap-set embark-variable-map "k" #'akirak-embark-describe-key-briefly-in-map)
   (keymap-set embark-buffer-map "l" #'akirak-embark-org-store-link-to-buffer)
   (keymap-set embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
-  (keymap-set embark-identifier-map "M-p" #'akirak-llm-browse-package-info)
   (keymap-set embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
   ;; d is bound to `delete-file' by default, which is dangerous.
   (keymap-unset embark-file-map "d")
