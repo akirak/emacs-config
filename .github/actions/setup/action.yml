@@ -31,3 +31,4 @@ runs:
       with:
         name: ${{ inputs.cachix-name }}
         authToken: '${{ inputs.cachix-token }}'
+        useDaemon: false
