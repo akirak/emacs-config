@@ -91,7 +91,7 @@
   "Within an AI shell, send a prompt with the line number at point."
   (interactive)
   (cl-assert (akirak-org-shell--buffer-live-p))
-  (let* ((line (cdr (posn-col-row (posn-at-point (point)))))
+  (let* ((line (line-number-at-pos))
          (file (buffer-file-name (or (buffer-base-buffer)
                                      (current-buffer))))
          (buffer akirak-ai-prompt-shell-buffer))
@@ -130,7 +130,7 @@
                  (`(,diag) diag)
                  (diags (akirak-flymake-select-diagnostic diags))))
          (diag-text (flymake-diagnostic-text diag))
-         (line (cdr (posn-col-row (posn-at-point (flymake-diagnostic-beg diag)))))
+         (line (line-number-at-pos (flymake-diagnostic-beg diag)))
          (file (buffer-file-name (or (buffer-base-buffer)
                                      (current-buffer))))
          (buffer akirak-ai-prompt-shell-buffer))
@@ -160,7 +160,7 @@
   (let* ((content (buffer-substring-no-properties begin end))
          (file (buffer-file-name (or (buffer-base-buffer)
                                      (current-buffer))))
-         (line (when file (cdr (posn-col-row (posn-at-point begin)))))
+         (line (when file (line-number-at-pos begin)))
          (language (when file
                      (akirak-org--find-src-lang
                       (thread-last
