@@ -119,6 +119,11 @@
   "Insert date in the ISO-8601 format." nil
   (org-read-date))
 
+;;;###autoload (autoload 'akirak-insert-iso8601-datetime-with-zone "akirak-insert" nil 'interactive)
+(define-skeleton akirak-insert-iso8601-datetime-with-zone
+  "Insert date in the ISO-8601 format." nil
+  (format-time-string "%Y-%m-%dT%H:%M:%S%:z"))
+
 ;;;###autoload (autoload 'akirak-insert-user-full-name "akirak-insert")
 (define-skeleton akirak-insert-user-full-name
   "Insert the full name of the user." nil
