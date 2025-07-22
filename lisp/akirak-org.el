@@ -222,7 +222,12 @@ end of the pasted region."
       (push-mark)
       (goto-char begin)
       (activate-mark)
-      (akirak-org-demote-headings nil t)
+      (akirak-org-demote-headings (if (buffer-base-buffer)
+                                      (save-excursion
+                                        (goto-char (point-min))
+                                        (org-outline-level))
+                                    (org-outline-level))
+                                  t)
       (deactivate-mark))
     (let ((start-marker (make-marker))
           (end-marker (point-marker)))
