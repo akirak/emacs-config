@@ -368,8 +368,10 @@ the original minor mode."
 (defun akirak-shell-run-command-in-some-buffer (command)
   (let* ((name (read-buffer "Shell: " nil t #'akirak-shell-buffer-p))
          (buffer (get-buffer name)))
-    (akirak-shell-send-string-to-buffer buffer command)
-    (pop-to-buffer buffer)))
+    (if-let* ((window (get-buffer-window buffer)))
+        (select-window window)
+      (pop-to-buffer buffer))
+    (akirak-shell-send-string-to-buffer buffer command)))
 
 ;;;###autoload
 (cl-defun akirak-shell-send-event-to-buffer (window-or-buffer
