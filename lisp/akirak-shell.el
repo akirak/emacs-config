@@ -126,11 +126,13 @@ the original minor mode."
   ["Start terminal in a directory"
    :class transient-row
    ("RET" "Current directory" akirak-shell--terminal-cwd)
-   ("p" "Project root" akirak-shell--terminal-project-root)
+   ("p" "Project root" akirak-shell--terminal-project-root
+    :if akirak-shell-project-directory)
    ("d" "Select directory" akirak-shell-at-directory)
    ("o" akirak-shell-at-org-directory)]
   ["Start an AI session at project root"
    :class transient-row
+   :if akirak-shell-project-directory
    ("C" "Claude (default)" akirak-claude-code-default)
    ("c" "Claude" akirak-shell-project-for-claude)
    ("g" "Gemini" akirak-gemini-cli-shell)
@@ -242,7 +244,8 @@ the original minor mode."
                   (interactive)
                   (akirak-shell-select-buffer-window ,name))
                :transient transient--exit))))
-    (append (when-let* ((root (project-root (project-current)))
+    (append (when-let* ((pr (project-current))
+                        (root (project-root pr))
                         (default-buffer (seq-find (lambda (buffer)
                                                     (file-equal-p
                                                      root
@@ -311,7 +314,8 @@ the original minor mode."
                  (file-directory-p worktree))
             worktree
           (user-error "In org-mode, you need to set GIT_WORKTREE property")))
-    (abbreviate-file-name (project-root (project-current)))))
+    (when-let* ((pr (project-current)))
+      (abbreviate-file-name (project-root pr)))))
 
 ;;;; Commands that I plan on deprecating
 
