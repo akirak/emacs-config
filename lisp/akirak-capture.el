@@ -584,7 +584,8 @@
                        (`nil (user-error "No error at point"))
                        (`(,diag) diag)
                        (diags (akirak-flymake-select-diagnostic diags))))
-               (`(,col . ,line) (posn-col-row (posn-at-point (flymake-diagnostic-beg obj))))
+               (line (line-number-at-pos (flymake-diagnostic-beg obj)))
+               (col (car (posn-col-row (posn-at-point (flymake-diagnostic-beg obj)))))
                (file (buffer-file-name (or (buffer-base-buffer)
                                            (current-buffer))))
                (prompt (read-string
@@ -621,8 +622,6 @@
                                          (current-buffer))))
          (file (when filename
                  (file-relative-name filename (vc-git-root filename))))
-         (posn (when file
-                 (posn-col-row (posn-at-point))))
          (bounds (when (use-region-p)
                    (cons (region-beginning) (region-end))))
          (func (when file

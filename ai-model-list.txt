@@ -130,8 +130,6 @@ command-r7b-12-2024
 command-light
 command-r-plus
 command-r-plus-08-2024
-claude-instant-1
-claude-instant-1.2
 claude-2
 claude-2.1
 claude-3-haiku-20240307
@@ -252,7 +250,9 @@ jamba-1.5
 jamba-1.5-mini
 jamba-1.5-large
 jamba-large-1.6
+jamba-large-1.7
 jamba-mini-1.6
+jamba-mini-1.7
 togethercomputer/llama-2-70b-chat
 togethercomputer/llama-2-70b
 togethercomputer/LLaMA-2-7B-32K
@@ -635,6 +635,7 @@ groq/gemma2-9b-it
 groq/llama3-groq-70b-8192-tool-use-preview
 groq/llama3-groq-8b-8192-tool-use-preview
 groq/qwen-qwq-32b
+groq/moonshotai-kimi-k2-instruct
 groq/playai-tts
 groq/whisper-large-v3
 groq/whisper-large-v3-turbo
@@ -866,3 +867,5 @@ deepgram/whisper-base
 deepgram/whisper-small
 deepgram/whisper-medium
 deepgram/whisper-large
+elevenlabs/scribe_v1
+elevenlabs/scribe_v1_experimental

@@ -1,12 +1,6 @@
 {
   description = "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
-    academic-phrases = {
-      flake = false;
-      owner = "nashamri";
-      repo = "academic-phrases";
-      type = "github";
-    };
     aggressive-indent = {
       flake = false;
       owner = "Malabarba";
@@ -38,6 +32,7 @@
     };
     async = {
       flake = false;
+      lastModified = 1724230971;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/async-1.9.9.tar";
     };
@@ -187,14 +182,9 @@
     };
     csv-mode = {
       flake = false;
+      lastModified = 1723194179;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/csv-mode-1.27.tar";
-    };
-    cue-mode = {
-      flake = false;
-      owner = "russell";
-      repo = "cue-mode";
-      type = "github";
     };
     d2-mode = {
       flake = false;
@@ -314,12 +304,6 @@
       flake = false;
       type = "git";
       url = "https://codeberg.org/akib/emacs-eat";
-    };
-    ediprolog = {
-      flake = false;
-      owner = "triska";
-      repo = "ediprolog";
-      type = "github";
     };
     edit-indirect = {
       flake = false;
@@ -699,12 +683,6 @@
       repo = "emacs-mini-modeline";
       type = "github";
     };
-    mmm-mode = {
-      flake = false;
-      owner = "dgutov";
-      repo = "mmm-mode";
-      type = "github";
-    };
     modus-themes = {
       flake = false;
       owner = "protesilaos";
@@ -741,12 +719,6 @@
       repo = "nix-ts-mode";
       type = "github";
     };
-    nix-update = {
-      flake = false;
-      owner = "jwiegley";
-      repo = "nix-update-el";
-      type = "github";
-    };
     nix3 = {
       flake = false;
       owner = "emacs-twist";
@@ -757,12 +729,6 @@
       flake = false;
       owner = "purcell";
       repo = "emacs-nixfmt";
-      type = "github";
-    };
-    noman = {
-      flake = false;
-      owner = "andykuszyk";
-      repo = "noman.el";
       type = "github";
     };
     nov = {
@@ -961,6 +927,7 @@
     };
     org-transclusion = {
       flake = false;
+      lastModified = 1716239161;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/org-transclusion-1.4.0.tar";
     };
@@ -1026,11 +993,13 @@
     };
     peg = {
       flake = false;
+      lastModified = 1711878471;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/peg-1.0.1.tar";
     };
     persist = {
       flake = false;
+      lastModified = 1718485631;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/persist-0.6.1.tar";
     };
@@ -1097,6 +1066,7 @@
     };
     rainbow-mode = {
       flake = false;
+      lastModified = 1711878714;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/rainbow-mode-1.0.6.tar";
     };
@@ -1189,12 +1159,6 @@
       repo = "sqlformat";
       type = "github";
     };
-    ssass-mode = {
-      flake = false;
-      owner = "AdamNiederer";
-      repo = "ssass-mode";
-      type = "github";
-    };
     ssh-config-mode = {
       flake = false;
       owner = "peterhoeg";
@@ -1211,12 +1175,6 @@
       flake = false;
       owner = "bbatsov";
       repo = "super-save";
-      type = "github";
-    };
-    svelte-mode = {
-      flake = false;
-      owner = "leafOfTree";
-      repo = "svelte-mode";
       type = "github";
     };
     svg-lib = {
@@ -1253,20 +1211,6 @@
       flake = false;
       owner = "magnars";
       repo = "tagedit";
-      type = "github";
-    };
-    taxy = {
-      flake = false;
-      owner = "alphapapa";
-      ref = "stable";
-      repo = "taxy.el";
-      type = "github";
-    };
-    taxy-magit-section = {
-      flake = false;
-      owner = "alphapapa";
-      ref = "package/taxy-magit-section";
-      repo = "taxy.el";
       type = "github";
     };
     titlecase = {
@@ -1332,18 +1276,6 @@
       flake = false;
       type = "git";
       url = "https://codeberg.org/joostkremers/visual-fill-column.git";
-    };
-    vue-html-mode = {
-      flake = false;
-      owner = "AdamNiederer";
-      repo = "vue-html-mode";
-      type = "github";
-    };
-    vue-mode = {
-      flake = false;
-      owner = "AdamNiederer";
-      repo = "vue-mode";
-      type = "github";
     };
     web-mode = {
       flake = false;

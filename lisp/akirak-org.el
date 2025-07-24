@@ -219,10 +219,17 @@ end of the pasted region."
           (yank-pop)
         (yank))
       (akirak-pandoc-replace-with-org begin (point))
+      ;; Remove horizontal lines which are common in AI output
+      (replace-regexp-in-region (rx bol (+ "-") eol) "" begin (point))
       (push-mark)
       (goto-char begin)
       (activate-mark)
-      (akirak-org-demote-headings nil t)
+      (akirak-org-demote-headings (if (buffer-base-buffer)
+                                      (save-excursion
+                                        (goto-char (point-min))
+                                        (org-outline-level))
+                                    (org-outline-level))
+                                  t)
       (deactivate-mark))
     (let ((start-marker (make-marker))
           (end-marker (point-marker)))
