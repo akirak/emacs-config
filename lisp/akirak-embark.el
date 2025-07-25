@@ -366,6 +366,7 @@
   (keymap-set embark-file-map "C-c o" #'akirak-image-compress-file)
   (keymap-set embark-file-map "C-c C-T" #'akirak-tailscale-copy-file)
   (keymap-set embark-file-map "C-o" #'akirak-embark-org-open-file)
+  (keymap-set embark-url-map "C-x C-w" #'akirak-embark-download-url)
   (keymap-set embark-region-map "C-e" #'akirak-embark-goto-region-end)
   (keymap-set embark-bookmark-map "t" #'akirak-embark-bookmark-jump-other-tab)
   (keymap-set embark-buffer-map "C-c C-c" #'akirak-embark-comint-interrupt)
@@ -882,6 +883,37 @@
   (interactive "f")
   (require 'gptel-context)
   (gptel-context-add-file (expand-file-name file)))
+
+(defun akirak-embark-download-url (url)
+  "Download a url to a file."
+  (interactive "sUrl: ")
+  (let* ((out (read-file-name "Directory or file name: "))
+         (default-directory (if (file-directory-p out)
+                                out
+                              (directory-file-name out)))
+         (filename (file-name-nondirectory
+                    (if (file-directory-p out)
+                        (thread-last
+                          (url-generic-parse-url url)
+                          (url-path-and-query)
+                          (car))
+                      out)))
+         ;; Run curl in the background instead of calling `url-copy-file' for
+         ;; non-blocking fetch operation.
+         (process (start-process "curl-download"
+                                 (format "*curl %s*" url)
+                                 "curl" "-L" "-o" filename url)))
+    (set-process-sentinel process
+                          `(lambda (proc event)
+                             (when (string-match "finished" event)
+                               (if (zerop (process-exit-status proc))
+                                   (progn
+                                     (message "Download completed")
+                                     (dired-jump
+                                      t
+                                      ,(file-name-concat default-directory filename)))
+                                 (message "Download failed: %s" event)))))
+    (message "Downloading %s..." url)))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
