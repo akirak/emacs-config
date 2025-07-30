@@ -72,7 +72,11 @@ If CALLBACK is a function, it is called with the selected url."
                       (lambda ()
                         (message "Saved the text to kill ring")))
                      (_
-                      #'yank))))
+                      (pcase (derived-mode-p 'eat-mode)
+                        (`eat-mode
+                         #'eat-yank)
+                        (_
+                         #'yank))))))
 
 (defun akirak-avy--symbol-pre-action (beg end)
   (let ((string (buffer-substring-no-properties beg end)))
