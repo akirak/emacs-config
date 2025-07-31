@@ -9765,7 +9765,7 @@ Mode for fontification of ~/.ssh/config
 :CREATED_TIME: [2022-02-27 Sun 14:07]
 :END:
 #+begin_quote
-underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
+foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar conversion of names
 #+end_quote
 
 #+begin_src emacs-lisp
