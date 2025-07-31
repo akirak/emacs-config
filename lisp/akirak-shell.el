@@ -308,6 +308,7 @@ the original minor mode."
   #'akirak-claude-code-shell)
 
 (defun akirak-shell-project-directory ()
+  (require 'akirak-org-git)
   (if (derived-mode-p 'org-mode)
       (let ((worktree (akirak-org-git-worktree)))
         (if (and worktree
