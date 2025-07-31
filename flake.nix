@@ -60,6 +60,11 @@
     };
 
     playwright-mcp.url = "github:akirak/nix-playwright-mcp";
+
+    mcp-nixos = {
+      url = "github:utensils/mcp-nixos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {

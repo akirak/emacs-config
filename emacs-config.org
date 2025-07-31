@@ -8745,12 +8745,15 @@ Model Context Protocol
 #+begin_src emacs-lisp
   (setup (:package mcp)
     (:global "<f12> a m" #'mcp-hub)
+    (:nixpkgs mcp-nixos)
     (:set mcp-hub-servers
           `(("playwright-headless"
              ;; Use the pre-downloaded Nix package. An alternative is
              ;; `nix run github:akirak/nix-playwright-mcp --`.
              :command "mcp-server-playwright"
              :args ("--headless"))
+            ("nixos"
+             :command "mcp-nixos")
             ("context7"
              :url "http://localhost:11007/mcp")
             ("effect"
