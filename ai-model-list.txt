@@ -51,6 +51,7 @@ gpt-4o-2024-11-20
 gpt-4o-realtime-preview-2024-10-01
 gpt-4o-realtime-preview
 gpt-4o-realtime-preview-2024-12-17
+gpt-4o-realtime-preview-2025-06-03
 gpt-4o-mini-realtime-preview
 gpt-4o-mini-realtime-preview-2024-12-17
 gpt-4-turbo-preview
@@ -153,6 +154,8 @@ daanelson/flan-t5-large:ce962b3f6792a57074a601d3979db5839697add2e4e02696b3ced4c0
 replicate/dolly-v2-12b:ef0e1aefc61f8e096ebe4db6b2bacc297daf2ef6899f0f7e001ec445893500e5
 replit/replit-code-v1-3b:b84f4c074b807211cd75e3e8b1589b6399052125b4c27106e43d47189e8415ad
 openrouter/deepseek/deepseek-r1-0528
+openrouter/x-ai/grok-4
+openrouter/bytedance/ui-tars-1.5-7b
 openrouter/deepseek/deepseek-r1
 openrouter/deepseek/deepseek-chat
 openrouter/deepseek/deepseek-coder
@@ -215,6 +218,7 @@ openrouter/mistralai/mistral-7b-instruct
 openrouter/mistralai/mistral-7b-instruct:free
 openrouter/qwen/qwen-2.5-coder-32b-instruct
 openrouter/qwen/qwen-vl-plus
+openrouter/qwen/qwen3-coder
 openrouter/switchpoint/router
 meta-llama/Llama-2-7b-hf
 meta-llama/Llama-2-7b-chat-hf
@@ -503,6 +507,12 @@ gemini/gemini-1.5-pro-latest
 gemini/gemini-pro-vision
 gemini/gemini-gemma-2-27b-it
 gemini/gemini-gemma-2-9b-it
+gemini/imagen-4.0-generate-preview-06-06
+gemini/imagen-4.0-ultra-generate-preview-06-06
+gemini/imagen-4.0-fast-generate-preview-06-06
+gemini/imagen-3.0-generate-002
+gemini/imagen-3.0-generate-001
+gemini/imagen-3.0-fast-generate-001
 text-completion-codestral/codestral-latest
 text-completion-codestral/codestral-2405
 xai/grok-beta
