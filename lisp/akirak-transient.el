@@ -92,11 +92,12 @@
     (concat
      (propertize "[" 'face 'transient-inactive-value)
      (mapconcat (lambda (choice)
-                  (propertize choice 'face (if (equal choice value)
-                                               (if (member choice choices)
-                                                   'transient-value
-                                                 'font-lock-warning-face)
-                                             'transient-inactive-value)))
+                  (propertize (format "%s" choice)
+                              'face (if (equal choice value)
+                                        (if (member choice choices)
+                                            'transient-value
+                                          'font-lock-warning-face)
+                                      'transient-inactive-value)))
                 (if (and value (not (member value choices)))
                     (cons value choices)
                   choices)
