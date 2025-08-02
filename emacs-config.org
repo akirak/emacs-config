@@ -4656,7 +4656,8 @@ Major mode for editing Astro templates
 
 #+begin_src emacs-lisp
   (setup dockerfile-ts-mode
-    (:file-match "Dockerfile\\'" "\\.dockerfile\\'"))
+    (:file-match "Dockerfile\\'" "\\.dockerfile\\'"
+                 "Containerfile\\'"))
 #+end_src
 *** elixir-ts-mode
 :PROPERTIES:
