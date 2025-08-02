@@ -455,7 +455,7 @@
     (lambda ()
       (interactive)
       (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-            akirak-capture-template-options (akirak-capture--template-options)
+            akirak-capture-template-options nil
             akirak-capture-doct-options (akirak-capture--doct-options))
       (akirak-capture-doct))
     :transient t)
