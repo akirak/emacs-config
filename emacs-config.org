@@ -7832,6 +7832,9 @@ Interact with ChatGPT or other LLMs
     (:with-feature org
       (:keymap "C-c C-x =" #'gptel-org-set-topic))
 
+    (:with-feature gptel-transient
+      (:also-load gptel-integrations))
+
     (with-eval-after-load 'embark
       (keymap-set embark-region-map "!" #'gptel-rewrite-menu))
 
