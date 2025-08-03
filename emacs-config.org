@@ -7791,7 +7791,7 @@ Translation framework, configurable and scalable
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package go-translate)
+  (setup (:package gt)
     (:set gt-langs '(en ja))
     (:when-loaded
       gt-default-translator (gt-translator :engines (gt-google-engine))))
