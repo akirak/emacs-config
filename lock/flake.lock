@@ -1309,22 +1309,6 @@
         "type": "github"
       }
     },
-    "go-translate": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1722562268,
-        "narHash": "sha256-pThpo887JCpR27aSYI4KLzYJYlstasKREdfD3hcfzzM=",
-        "owner": "lorniu",
-        "repo": "go-translate",
-        "rev": "424682b94df9efb3dd59e396677b45e4a67b7723",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lorniu",
-        "repo": "go-translate",
-        "type": "github"
-      }
-    },
     "gptel": {
       "flake": false,
       "locked": {
@@ -1371,6 +1355,22 @@
         "owner": "~joram",
         "repo": "graphql-ts-mode",
         "type": "sourcehut"
+      }
+    },
+    "gt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1753583428,
+        "narHash": "sha256-saIh7+dtulRvM+4crE/WaVPgf+JvnfX47UJtPdPcOf0=",
+        "owner": "lorniu",
+        "repo": "gt.el",
+        "rev": "f9febd8583ea482f72139e02f440f3972502f5a2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lorniu",
+        "repo": "gt.el",
+        "type": "github"
       }
     },
     "hcl-mode": {
@@ -2629,6 +2629,22 @@
         "type": "github"
       }
     },
+    "pdd": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1753577152,
+        "narHash": "sha256-hVNinZgke+vHKCIrZlqovUpIDUMLty5K5hdX1EU8V3U=",
+        "owner": "lorniu",
+        "repo": "pdd.el",
+        "rev": "15594c3348ed7febef31f99d709b128f267035eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lorniu",
+        "repo": "pdd.el",
+        "type": "github"
+      }
+    },
     "peg": {
       "flake": false,
       "locked": {
@@ -3028,10 +3044,10 @@
         "git-modes": "git-modes",
         "github-linguist": "github-linguist",
         "gleam-ts-mode": "gleam-ts-mode",
-        "go-translate": "go-translate",
         "gptel": "gptel",
         "graphql-mode": "graphql-mode",
         "graphql-ts-mode": "graphql-ts-mode",
+        "gt": "gt",
         "hcl-mode": "hcl-mode",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
@@ -3110,6 +3126,7 @@
         "package-lint": "package-lint",
         "page-break-lines": "page-break-lines",
         "parsec": "parsec",
+        "pdd": "pdd",
         "peg": "peg",
         "persist": "persist",
         "pinyin": "pinyin",

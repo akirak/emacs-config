@@ -491,12 +491,6 @@
       repo = "gleam-mode";
       type = "github";
     };
-    go-translate = {
-      flake = false;
-      owner = "lorniu";
-      repo = "go-translate";
-      type = "github";
-    };
     gptel = {
       flake = false;
       owner = "karthink";
@@ -514,6 +508,12 @@
       owner = "~joram";
       repo = "graphql-ts-mode";
       type = "sourcehut";
+    };
+    gt = {
+      flake = false;
+      owner = "lorniu";
+      repo = "gt.el";
+      type = "github";
     };
     hcl-mode = {
       flake = false;
@@ -989,6 +989,12 @@
       flake = false;
       owner = "cute-jumper";
       repo = "parsec.el";
+      type = "github";
+    };
+    pdd = {
+      flake = false;
+      owner = "lorniu";
+      repo = "pdd.el";
       type = "github";
     };
     peg = {
