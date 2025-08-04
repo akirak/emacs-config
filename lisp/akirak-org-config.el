@@ -272,7 +272,9 @@
     (`("~" "build" ,name "")
      (make-org-dog-context-in-directory
       :directory (list "projects/" "programming/" "skills/")
-      :filenames (list (akirak-org-dog--normalize-project name))))
+      :filenames (list (concat (akirak-org-dog--normalize-project name)
+                               "-dev")
+                       (akirak-org-dog--normalize-project name))))
     (`("~" ,name "")
      (make-org-dog-context-in-directory
       :directory (list "projects/" "programming/" "skills/")
