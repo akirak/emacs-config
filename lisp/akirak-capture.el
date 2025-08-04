@@ -416,8 +416,10 @@
                      #'akirak-capture--goto-backlog)))
     (cl-etypecase target
       (marker (list :file (buffer-file-name (org-base-buffer (marker-buffer target)))
-                    :olp (org-with-point-at target
-                           (org-get-outline-path t))))
+                    ;; olp target doesn't work if one of the headlines is a
+                    ;; link, so use `org-goto-marker-or-bmk' instead.
+                    :function `(lambda ()
+                                 (org-goto-marker-or-bmk ',target))))
       (string (list :file target
                     :function jump-func))
       (org-dog-file (list :file (oref target absolute)
@@ -453,7 +455,7 @@
     (lambda ()
       (interactive)
       (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-            akirak-capture-template-options (akirak-capture--template-options)
+            akirak-capture-template-options nil
             akirak-capture-doct-options (akirak-capture--doct-options))
       (akirak-capture-doct))
     :transient t)

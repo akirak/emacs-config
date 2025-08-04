@@ -60,7 +60,8 @@ Each function is run without an argument in the new working tree."
                                                         (format "%s/%s"
                                                                 remote
                                                                 (or default "master"))))
-       (name (akirak-magit--worktree-name remote branch)))
+       (current (vc-git-root default-directory))
+       (name (akirak-magit--worktree-name remote branch current)))
     (akirak-magit-worktree branch start-point :name name)))
 
 ;;;###autoload
@@ -85,10 +86,10 @@ Each function is run without an argument in the new working tree."
   (interactive)
   (let* ((direnv-allowed (akirak-magit--direnv-allowed-p))
          (remote-url (akirak-magit--remote-url (car (magit--get-default-branch))))
-         (name (or name
-                   (akirak-magit--worktree-name remote-url branch)))
-         (category (funcall akirak-magit-worktree-category-function))
          (current (vc-git-root default-directory))
+         (name (or name
+                   (akirak-magit--worktree-name remote-url branch current)))
+         (category (funcall akirak-magit-worktree-category-function))
          (parent (or (when (string-match-p (rx "~/" (or "work2" "build") "/")
                                            current)
                        ;; Create as a sibling worktree
@@ -108,8 +109,12 @@ Each function is run without an argument in the new working tree."
       (envrc-allow))
     (run-hooks 'akirak-magit-worktree-hook)))
 
-(defun akirak-magit--worktree-name (remote-url branch)
-  (concat (akirak-magit--repo-name remote-url)
+(defun akirak-magit--worktree-name (remote-url branch dir)
+  (concat (if remote-url
+              (akirak-magit--repo-name-from-url remote-url)
+            (car (string-split (directory-file-name
+                                (file-name-nondirectory dir))
+                               akirak-magit-branch-delim)))
           akirak-magit-branch-delim
           ;; Don't include slash as it is a path delimiter
           (string-replace "/" "_" branch)))
@@ -117,7 +122,7 @@ Each function is run without an argument in the new working tree."
 (defun akirak-magit--remote-url (remote)
   (car (magit-config-get-from-cached-list (format "remote.%s.url" remote))))
 
-(defun akirak-magit--repo-name (git-url)
+(defun akirak-magit--repo-name-from-url (git-url)
   (if (string-match (rx (any ":/") (group (+? (not (any "/")))) (?  ".git") eol)
                     git-url)
       (match-string 1 git-url)

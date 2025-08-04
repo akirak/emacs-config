@@ -36,11 +36,16 @@
   "Update the value of `directory-abbrev-alist'."
   (interactive)
   (require 'project)
-  (let (result)
+  (let (result
+        (skipped-directories (mapcar #'expand-file-name
+                                     '("~/go"
+                                       "~/Downloads"
+                                       "~/fleeting"))))
     (cl-labels
         ((go (parent)
            (when (and (file-directory-p parent)
-                      (not (project-try-vc parent)))
+                      (not (or (project-try-vc parent)
+                               (member parent skipped-directories))))
              (pcase-dolist (`(,path ,init . ,_)
                             (directory-files-and-attributes
                              parent

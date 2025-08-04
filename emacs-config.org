@@ -4656,7 +4656,8 @@ Major mode for editing Astro templates
 
 #+begin_src emacs-lisp
   (setup dockerfile-ts-mode
-    (:file-match "Dockerfile\\'" "\\.dockerfile\\'"))
+    (:file-match "Dockerfile\\'" "\\.dockerfile\\'"
+                 "Containerfile\\'"))
 #+end_src
 *** elixir-ts-mode
 :PROPERTIES:
@@ -7790,7 +7791,7 @@ Translation framework, configurable and scalable
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setup (:package go-translate)
+  (setup (:package gt)
     (:set gt-langs '(en ja))
     (:when-loaded
       gt-default-translator (gt-translator :engines (gt-google-engine))))
@@ -7830,6 +7831,9 @@ Interact with ChatGPT or other LLMs
     (autoload #'gptel-org-set-topic "gptel-org" nil '(org-mode))
     (:with-feature org
       (:keymap "C-c C-x =" #'gptel-org-set-topic))
+
+    (:with-feature gptel-transient
+      (:also-load gptel-integrations))
 
     (with-eval-after-load 'embark
       (keymap-set embark-region-map "!" #'gptel-rewrite-menu))
@@ -8745,12 +8749,15 @@ Model Context Protocol
 #+begin_src emacs-lisp
   (setup (:package mcp)
     (:global "<f12> a m" #'mcp-hub)
+    (:nixpkgs mcp-nixos)
     (:set mcp-hub-servers
           `(("playwright-headless"
              ;; Use the pre-downloaded Nix package. An alternative is
              ;; `nix run github:akirak/nix-playwright-mcp --`.
              :command "mcp-server-playwright"
              :args ("--headless"))
+            ("nixos"
+             :command "mcp-nixos")
             ("context7"
              :url "http://localhost:11007/mcp")
             ("effect"
@@ -9762,7 +9769,7 @@ Mode for fontification of ~/.ssh/config
 :CREATED_TIME: [2022-02-27 Sun 14:07]
 :END:
 #+begin_quote
-underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
+foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar conversion of names
 #+end_quote
 
 #+begin_src emacs-lisp

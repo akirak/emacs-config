@@ -50,14 +50,16 @@
                                          (akirak-consult-edit--filename))))
                    `((,filename
                       . "File name of the buffer.")
-                     (,(file-name-base filename)
-                      . "Base name of the buffer.")
-                     (,(progn
-                         (require 'string-inflection)
-                         (thread-last
-                           (file-name-base filename)
-                           (string-inflection-upper-camelcase-function)))
-                      . "Base name of the buffer, pascal-cased.")
+                     ,@(let ((basename (file-name-base filename)))
+                         (unless (string-empty-p basename)
+                           (require 'string-inflection)
+                           (list (cons basename
+                                       "Base name of the buffer.")
+                                 (cons (progn
+                                         (thread-last
+                                           (file-name-base filename)
+                                           (string-inflection-upper-camelcase-function)))
+                                       "Base name of the buffer, pascal-cased."))))
                      (,(file-relative-name filename (vc-git-root default-directory))
                       . "Relative path of the file from the root.")))
                  (remq nil
@@ -77,7 +79,7 @@
    ((eq major-mode 'nov-mode)
     nov-file-name)
    ((derived-mode-p 'dired-mode)
-    (dired-filename-at-point))
+    default-directory)
    (t
     (buffer-file-name (buffer-base-buffer)))))
 

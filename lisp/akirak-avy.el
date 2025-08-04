@@ -65,32 +65,39 @@ If CALLBACK is a function, it is called with the selected url."
 ;;;###autoload
 (defun akirak-avy-insert-symbol (&optional arg)
   (interactive "P")
-  (akirak-avy--run #'akirak-avy--symbol-pre-action
+  (akirak-avy--run #'kill-new
                    #'akirak-avy--symbol-make-args
                    (pcase arg
                      ('-
                       (lambda ()
                         (message "Saved the text to kill ring")))
                      (_
-                      #'yank))))
-
-(defun akirak-avy--symbol-pre-action (beg end)
-  (let ((string (buffer-substring-no-properties beg end)))
-    (kill-new (if (string-match (rx bol (* punct)
-                                    (group (+? anything))
-                                    (* punct) eol)
-                                string)
-                  (match-string 1 string)
-                string))))
+                      (pcase (derived-mode-p 'eat-mode)
+                        (`eat-mode
+                         #'eat-yank)
+                        (_
+                         #'yank))))))
 
 (defun akirak-avy--symbol-make-args ()
-  (list (if (looking-at (rx symbol-start))
-            (point)
-          (re-search-backward (rx symbol-start) nil t))
-        (save-excursion
-          (re-search-forward
-           (rx (group (+? anything)) symbol-end)
-           nil t))))
+  (list (cl-case (derived-mode-p 'org-mode)
+          (org-mode
+           (akirak-avy--org-symbol-at-point))
+          (otherwise
+           (thing-at-point 'symbol t)))))
+
+(defun akirak-avy--org-symbol-at-point ()
+  (cond
+   ((and (get-char-property (point) 'org-emphasis)
+         (thing-at-point-looking-at org-emph-re))
+    (match-string-no-properties 4))
+   ((and (get-char-property (point) 'org-emphasis)
+         (thing-at-point-looking-at org-verbatim-re))
+    (match-string-no-properties 4))
+   ((thing-at-point-looking-at org-link-bracket-re)
+    (or (match-string-no-properties 2)
+        (match-string-no-properties 1)))
+   (t
+    (thing-at-point 'symbol t))))
 
 ;;;###autoload
 (defun akirak-avy-symbol-overlay-put ()

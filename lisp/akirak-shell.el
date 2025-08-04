@@ -90,12 +90,13 @@ the original minor mode."
 
 ;;;;; Transient infixes
 
-(defvar akirak-shell-split-window t)
+(defvar akirak-shell-new-window 'split)
 
-(transient-define-infix akirak-shell-split-window-infix ()
-  :class 'akirak-transient-flag-variable
-  :variable 'akirak-shell-split-window
-  :description "Split window")
+(transient-define-infix akirak-shell-window-infix ()
+  :class 'akirak-transient-choice-variable
+  :variable 'akirak-shell-new-window
+  :choices '(split nil new-tab)
+  :description "Window")
 
 (defvar akirak-shell-buffer-name nil)
 
@@ -121,7 +122,7 @@ the original minor mode."
           (seq-some #'akirak-shell--buffer-exited-p (akirak-shell-buffer-list))))]
   ["Options"
    :class transient-row
-   ("-s" akirak-shell-split-window-infix)
+   ("-w" akirak-shell-window-infix)
    ("-r" akirak-shell-buffer-name-infix)]
   ["Start terminal in a directory"
    :class transient-row
@@ -139,7 +140,7 @@ the original minor mode."
    ("a" "Aider" akirak-shell-project-for-aider)
    ("x" "Codex" akirak-shell-project-for-codex)]
   (interactive)
-  (setq akirak-shell-split-window t)
+  (setq akirak-shell-new-window 'split)
   (setq akirak-shell--buffers (seq-sort-by (lambda (buffer)
                                              (buffer-local-value 'buffer-display-time
                                                                  buffer))
@@ -154,13 +155,13 @@ the original minor mode."
   (interactive)
   (akirak-shell-eat-new :dir default-directory
                          :name akirak-shell-buffer-name
-                         :window akirak-shell-split-window))
+                         :window akirak-shell-new-window))
 
 (defun akirak-shell--terminal-project-root ()
   (interactive)
   (akirak-shell-eat-new :dir (project-root (project-current))
                         :name akirak-shell-buffer-name
-                        :window akirak-shell-split-window))
+                        :window akirak-shell-new-window))
 
 (defvar akirak-shell-directory nil)
 
@@ -178,7 +179,7 @@ the original minor mode."
   (setq akirak-shell-directory dir)
   (akirak-shell-eat-new :dir dir
                         :name akirak-shell-buffer-name
-                        :window akirak-shell-split-window))
+                        :window akirak-shell-new-window))
 
 (transient-define-suffix akirak-shell-at-org-directory ()
   :class 'transient-suffix
@@ -211,7 +212,7 @@ the original minor mode."
                                 (file-name-nondirectory
                                  (directory-file-name default-directory)))))
          (buffer (generate-new-buffer (format "*%s*"
-                                              (concat (when window
+                                              (concat (when (eq window 'split)
                                                         "popup-")
                                                       name)))))
     (with-current-buffer buffer
@@ -222,7 +223,13 @@ the original minor mode."
                  (`(,cmd . ,args)
                   (list cmd nil args)))))
       (unless noselect
-        (pop-to-buffer-same-window buffer)))
+        (pcase window
+          (`nil)
+          (`new-tab
+           (tab-bar-new-tab)
+           (switch-to-buffer buffer)
+           (toggle-window-dedicated nil t))
+          (_ (pop-to-buffer-same-window buffer)))))
     ;; Explicitly return the buffer
     buffer))
 
@@ -308,12 +315,12 @@ the original minor mode."
   #'akirak-claude-code-shell)
 
 (defun akirak-shell-project-directory ()
+  (require 'akirak-org-git)
   (if (derived-mode-p 'org-mode)
       (let ((worktree (akirak-org-git-worktree)))
-        (if (and worktree
-                 (file-directory-p worktree))
-            worktree
-          (user-error "In org-mode, you need to set GIT_WORKTREE property")))
+        (when (and worktree
+                   (file-directory-p worktree))
+          worktree))
     (when-let* ((pr (project-current)))
       (abbreviate-file-name (project-root pr)))))
 
