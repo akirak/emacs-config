@@ -377,7 +377,7 @@
         (remote-branches (magit-list-remote-branches)))
     (cl-flet
         ((pred (remote)
-           (member (concat remote "/" branch) remote-branches)))
+           (member (concat "refs/remotes/" remote "/" branch) remote-branches)))
       (seq-filter #'pred all-remotes))))
 
 (defun akirak-org-gh--update-entry-on-exit (process)
