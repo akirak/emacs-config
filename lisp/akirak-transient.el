@@ -81,9 +81,7 @@
 (cl-defmethod transient-infix-read ((obj akirak-transient-choice-variable))
   (let* ((choices (oref obj choices))
          (value (oref obj value)))
-    (or (cadr (member value (append choices (list (car choices)))))
-        ;; Fallback for invalid current value
-        (car choices))))
+    (cadr (member value (append choices (list (car choices)))))))
 
 (cl-defmethod transient-format-value ((obj akirak-transient-choice-variable))
   (let* ((variable (oref obj variable))
