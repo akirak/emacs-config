@@ -239,7 +239,15 @@ are displayed in the frame."
                   (default-directory (or (get-text-property 0 'command-directory command)
                                          (akirak-compile--select-directory-for-command
                                           command projects)
-                                         workspace)))
+                                         (pcase (or (mapcar #'cdr projects)
+                                                    (list workspace))
+                                           (`(,dir)
+                                            dir)
+                                           (`nil
+                                            workspace)
+                                           (dirs
+                                            (completing-read "Directory: "
+                                                             dirs nil t))))))
              (if (akirak-compile--installation-command-p command)
                  ;; Install dependencies in a separate buffer without killing the
                  ;; current process.
