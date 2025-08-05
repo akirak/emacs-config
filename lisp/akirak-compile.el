@@ -58,7 +58,7 @@
               ("opam " . dune))
             (mapcar (lambda (symbol)
                       (cons (format "%s[[:space:]]" symbol) symbol))
-                    '(cargo just mix pnpm yarn npm bun deno dune)))
+                    '(cargo just mix pnpm yarn npm bun deno dune uv)))
     (mapcar (lambda (cell)
               (cons (concat "^[[:space:]]*" (car cell))
                     (cdr cell)))))
