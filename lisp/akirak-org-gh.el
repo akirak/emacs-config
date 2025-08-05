@@ -305,6 +305,7 @@
     (user-error "Found @ticket or @PR tag. Maybe already inside a ticket subtree?"))
   (when (string-match-p org-link-bracket-re (org-entry-get nil "ITEM"))
     (user-error "On a bracket link. Maybe already submitted"))
+  (require 'akirak-github)
   (let* ((default-directory (or (akirak-org-gh--entry-dir)
                                 (akirak-org-git-worktree nil)
                                 (user-error "Cannot locate the repository")))
