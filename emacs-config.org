@@ -1999,6 +1999,7 @@ Operations on the current project
 *** python
 #+begin_src emacs-lisp
   (setup python
+    (:org-babel-language t)
     (:with-mode python-ts-mode
       (:mode-repl akirak/euporie-project)))
 #+end_src
