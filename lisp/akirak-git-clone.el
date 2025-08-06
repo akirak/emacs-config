@@ -91,6 +91,11 @@ matches the host of the repository,
   "Function used to open a directory."
   :type 'function)
 
+(defcustom akirak-git-clone-other-window-browser-function
+  #'dired-other-window
+  "Function used to open a directory."
+  :type 'function)
+
 (cl-defstruct akirak-git-clone-source
   "Type for representing a repository."
   type origin host local-path rev-or-ref params content-path pr)
@@ -232,7 +237,8 @@ matches the host of the repository,
         (string-remove-suffix ".git" (match-string 1 git-url))
       (error "Failed to match on %s" git-url))))
 
-(cl-defun akirak-git-clone--clone (origin dest &key callback ref content-path)
+(cl-defun akirak-git-clone--clone (origin dest &key callback ref content-path
+                                          other-window)
   "Clone a Git repository from ORIGIN to DEST."
   (let ((parent (f-parent dest)))
     (unless (file-directory-p parent)
@@ -255,7 +261,8 @@ matches the host of the repository,
                                (if (= 0 (process-exit-status process))
                                    ,(if callback
                                         `(funcall #',callback ,visited-path)
-                                      `(akirak-git-clone-browse ,visited-path))
+                                      `(akirak-git-clone-browse ,visited-path
+                                                                ,other-window))
                                  (message "Returned non-zero from git-clone")))))))
 
 ;;;###autoload
@@ -268,7 +275,8 @@ DIR is an optional destination directory to clone the repository into."
   (interactive (list (read-string "Flake ref: ")
                      (when current-prefix-arg
                        (read-directory-name "Destination directory: "))))
-  (when (org-clocking-p)
+  (when (and (not (eq this-command 'akirak/embark-git-clone-from-url))
+             (org-clocking-p))
     (akirak-org-clock-log-reference-url url))
   (let* ((obj (akirak-git-clone--parse url))
          (origin (akirak-git-clone-source-origin obj))
@@ -276,7 +284,8 @@ DIR is an optional destination directory to clone the repository into."
                         (not (file-exists-p dir)))
                    dir
                  (akirak-git-clone-default-dest-dir obj dir)))
-         (content-path (akirak-git-clone-source-content-path obj)))
+         (content-path (akirak-git-clone-source-content-path obj))
+         (other-window (eq this-command 'akirak/embark-git-clone-from-url)))
     (when (akirak-git-clone-source-rev-or-ref obj)
       (message "Rev or ref is unsupported now"))
     (if (file-directory-p repo)
@@ -285,8 +294,10 @@ DIR is an optional destination directory to clone the repository into."
               (message "Updating the branch...")
               (call-process "git" nil nil nil "pull" "origin" "HEAD")
               (akirak-git-clone--browse-diff))
-          (akirak-git-clone-browse repo content-path))
+          (akirak-git-clone-browse repo content-path
+                                   :other-window other-window))
       (akirak-git-clone--clone origin repo :content-path content-path
+                               :other-window other-window
                                :callback
                                (when (and (akirak-git-clone-source-pr obj)
                                           (executable-find "gh"))
@@ -496,13 +507,20 @@ DIR is an optional destination directory to clone the repository into."
                         (akirak-git-clone--root-directory
                          (akirak-git-clone-source-host obj))))))
 
-(defun akirak-git-clone-browse (dir &optional content-path)
+(cl-defun akirak-git-clone-browse (dir &optional content-path
+                                       &key other-window)
   "Browse DIR using `akirak-git-clone-browser-function'."
   (let ((root (file-name-as-directory dir)))
     (project-remember-project (project-current nil root))
     (if content-path
-        (find-file (concat root content-path))
-      (funcall akirak-git-clone-browser-function root))))
+        (funcall (if other-window
+                     #'find-file-other-window
+                   #'find-file)
+                 (concat root content-path))
+      (funcall (if other-window
+                   akirak-git-clone-other-window-browser-function
+                 akirak-git-clone-browser-function)
+               root))))
 
 (defcustom akirak-git-clone-wait 120
   ""
