@@ -3566,7 +3566,8 @@ Outline-based notes management and organizer
                                                        split-window-right))
                     (message "This function should be used only when \
   `org-src-window-setup' has a certain value"))
-                  (when (alist-get :file (caddr (org-babel-get-src-block-info)))
+                  (when (and (not (eq context 'exit))
+                             (alist-get :file (caddr (org-babel-get-src-block-info))))
                     (if-let* ((pos (org-babel-where-is-src-block-result)))
                         (goto-char pos)
                       (goto-char (org-element-end (org-element-at-point-no-context))))
