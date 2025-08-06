@@ -8248,7 +8248,9 @@ Use avy to open, copy, etc. visible links
 
 #+begin_src emacs-lisp
   (setup (:package link-hint)
-    (:global-keymap "M-g f" #'link-hint-open-link)
+    (:global-keymap "M-g f" #'link-hint-open-link
+                    ;; Override `xref-find-apropos'.
+                    "C-M-." #'akirak/link-hint-embark-act)
 
     (defvar akirak/link-hint-current-window nil
       "Window selected just before `link-hint-open-link' is run.")
@@ -8258,7 +8260,23 @@ Use avy to open, copy, etc. visible links
                 (defun akirak/link-hint-save-window (&rest _)
                   (setq akirak/link-hint-current-window (selected-window))))
 
+    (defun akirak/link-hint-embark-act ()
+      "Use avy to call 'embark-act' on a link.
+
+  This is originally implemented by oldjawbone and posted at
+  <https://www.reddit.com/r/emacs/comments/uek8mt/comment/i6pfz8y/>.
+
+  To enable this action, you alslo have to define :embark-act action on
+  each link-hint type."
+      (interactive)
+      (avy-with link-hint-embark
+        (link-hint--one :embark-act)))
+
     (:when-loaded
+      ;; Based on https://www.reddit.com/r/emacs/comments/uek8mt/comment/i6pfz8y/
+      (mapc (lambda (symbol)
+              (put symbol :embark-act #'(lambda () (call-interactively #'embark-act))))
+            link-hint-types)
       (put 'link-hint-deadgrep :open
            (defun akirak/link-hint-deadgrep-open ()
              (interactive)
