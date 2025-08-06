@@ -156,6 +156,7 @@
                    (consult--buffer-query :sort 'visibility
                                           :directory root
                                           :as #'buffer-file-name)
+                   (seq-filter #'identity)
                    (mapcar `(lambda (filename)
                               (put-text-property 0 ,len 'invisible t filename)
                               filename)))))))
