@@ -1982,6 +1982,22 @@
         "type": "github"
       }
     },
+    "ob-async": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1619643157,
+        "narHash": "sha256-cIwyuwoyojc6uiNbWleh+inoRTUqMCZYQ3IydhRkEkw=",
+        "owner": "astahlman",
+        "repo": "ob-async",
+        "rev": "9aac486073f5c356ada20e716571be33a350a982",
+        "type": "github"
+      },
+      "original": {
+        "owner": "astahlman",
+        "repo": "ob-async",
+        "type": "github"
+      }
+    },
     "ob-duckdb": {
       "flake": false,
       "locked": {
@@ -3086,6 +3102,7 @@
         "nixfmt": "nixfmt",
         "nov": "nov",
         "oahu": "oahu",
+        "ob-async": "ob-async",
         "ob-duckdb": "ob-duckdb",
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
