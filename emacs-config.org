@@ -9130,7 +9130,7 @@ Major mode for Nushell scripts
   (setup (:package nushell-mode)
     (:file-match "\\.nu\\'"))
 #+end_src
-*** COMMENT ob-async                                                           :ARCHIVE:
+*** ob-async
 :PROPERTIES:
 :CREATED_TIME: [2023-05-20 Sat 18:46]
 :END:
