@@ -5600,9 +5600,6 @@ This is an extra functions for window management.
                         (mode org-agenda-mode))
                        ("^\\*Embark Export"
                         akirak-window-display-as-left-sidebar)
-                       ("^\\*Org-Babel Error Output*"
-                        display-buffer-no-window
-                        (allow-no-window . t))
                        ("^\\*envrc"
                         display-buffer-no-window
                         (allow-no-window . t))
@@ -9317,6 +9314,7 @@ Summon and dismiss buffers as popups
                                      "\\*Backtrace\\*"
                                      "^\\*Warnings\\*"
                                      "^\\*envrc-debug\\*"
+                                     "^\\*Org-Babel Error Output*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
                                      "^\\*Compile-Log\\*"
