@@ -224,7 +224,6 @@ the original minor mode."
                   (list cmd nil args)))))
       (unless noselect
         (pcase window
-          (`nil)
           (`new-tab
            (tab-bar-new-tab)
            (switch-to-buffer buffer)
