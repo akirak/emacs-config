@@ -78,28 +78,39 @@
 (defclass akirak-transient-choice-variable (akirak-transient-variable)
   ((choices :initarg :choices)))
 
+(defun akirak-transient--choices (choices)
+  (if (functionp choices)
+      (funcall choices)
+    choices))
+
 (cl-defmethod transient-infix-read ((obj akirak-transient-choice-variable))
-  (let* ((choices (oref obj choices))
+  (let* ((choices (akirak-transient--choices (oref obj choices)))
          (value (oref obj value)))
     (cadr (member value (append choices (list (car choices)))))))
 
 (cl-defmethod transient-format-value ((obj akirak-transient-choice-variable))
   (let* ((variable (oref obj variable))
-         (choices  (oref obj choices))
+         (choices  (akirak-transient--choices (oref obj choices)))
          (value    (oref obj value)))
     (concat
      (propertize "[" 'face 'transient-inactive-value)
-     (mapconcat (lambda (choice)
-                  (propertize (format "%s" choice)
-                              'face (if (equal choice value)
-                                        (if (member choice choices)
-                                            'transient-value
-                                          'font-lock-warning-face)
-                                      'transient-inactive-value)))
-                (if (and value (not (member value choices)))
-                    (cons value choices)
-                  choices)
-                (propertize "|" 'face 'transient-inactive-value))
+     (if (< (length choices)
+            5)
+         (mapconcat (lambda (choice)
+                      (propertize (format "%s" choice)
+                                  'face (if (equal choice value)
+                                            (if (member choice choices)
+                                                'transient-value
+                                              'font-lock-warning-face)
+                                          'transient-inactive-value)))
+                    (if (and value (not (member value choices)))
+                        (cons value choices)
+                      choices)
+                    (propertize "|" 'face 'transient-inactive-value))
+       (propertize (format "%s" value)
+                   'face (if (member value choices)
+                             'transient-value
+                           'font-lock-warning-face)))
      (propertize "]" 'face 'transient-inactive-value))))
 
 ;;;; akirak-transient-flag-variable
