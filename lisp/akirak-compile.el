@@ -41,6 +41,7 @@
     ("pnpm-workspace.yaml" . pnpm-workspace)
     ("yarn.lock" . yarn)
     ("package-lock.json" . npm)
+    ("bun.lock" . bun)
     ("bun.lockb" . bun)
     ("deno.lock" . deno)
     ("package.json" . package-json)
