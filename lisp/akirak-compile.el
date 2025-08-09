@@ -239,8 +239,13 @@ are displayed in the frame."
                                                        (mapcar #'cdr ',projects))))))))
                   (prefer-terminal (get-text-property 0 'terminal command))
                   (default-directory (or (get-text-property 0 'command-directory command)
-                                         (akirak-compile--select-directory-for-command
-                                          command projects)
+                                         (pcase projects
+                                           (`nil)
+                                           (`(,project)
+                                            (cdr project))
+                                           (_
+                                            (akirak-compile--select-directory-for-command
+                                             command projects)))
                                          (pcase (or (mapcar #'cdr projects)
                                                     (list workspace))
                                            (`(,dir)
