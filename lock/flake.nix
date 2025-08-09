@@ -587,6 +587,12 @@
       repo = "kind-icon";
       type = "github";
     };
+    kotlin-ts-mode = {
+      flake = false;
+      owner = "bricka";
+      repo = "emacs-kotlin-ts-mode";
+      type = "gitlab";
+    };
     language-detection = {
       flake = false;
       owner = "andreasjansson";
@@ -740,6 +746,12 @@
       flake = false;
       owner = "akirak";
       repo = "oahu.el";
+      type = "github";
+    };
+    ob-async = {
+      flake = false;
+      owner = "astahlman";
+      repo = "ob-async";
       type = "github";
     };
     ob-duckdb = {

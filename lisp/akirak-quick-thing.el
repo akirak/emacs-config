@@ -36,11 +36,15 @@
 (transient-define-prefix akirak-quick-thing ()
   ["Embark on a target"
    :class transient-row
-   :setup-children akirak-quick-thing-bindings-1]
+   :setup-children
+   (lambda (children)
+     (transient-parse-suffixes
+      'akirak-quick-thing
+      (append children (akirak-quick-thing-bindings-1))))]
   (interactive)
   (transient-setup 'akirak-quick-thing))
 
-(defun akirak-quick-thing-bindings-1 (_children)
+(defun akirak-quick-thing-bindings-1 ()
   (thread-last
     (embark--targets)
     (akirak-quick-thing--zip-index)
@@ -51,11 +55,9 @@
                    (unless (fboundp symbol)
                      (fset symbol `(lambda () (interactive) (embark-act ,i)))
                      (put symbol 'interactive-only t))
-                   `(,transient--default-child-level
-                     transient-suffix
-                     ,(list :key (akirak-quick-thing--key (symbol-name type))
-                            :description (symbol-name type)
-                            :command symbol)))))))
+                   (list (akirak-quick-thing--key (symbol-name type))
+                         (symbol-name type)
+                         symbol))))))
     (cl-remove-if #'null)))
 
 (defun akirak-quick-thing--key (name)

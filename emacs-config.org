@@ -787,7 +787,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
       (:local-set tab-width 8))
     (:with-mode (emacs-lisp-mode)
       (:local-set tab-width 8))
-    (:with-mode (makefile-mode zig-mode zig-ts-mode)
+    (:with-mode (makefile-mode zig-mode zig-ts-mode java-ts-mode kotlin-ts-mode)
       (:local-set tab-width 4))
     (:with-mode (js-mode typescript-mode sh-mode python-mode)
       (:local-set tab-width 2)))
@@ -1395,9 +1395,11 @@ The built-in =electric= package provides the following modes:
                          (go-ts-mode . (,@lsp))
                          (haskell-mode . (,@lsp))
                          (heex-ts-mode . (,@lsp))
+                         (java-ts-mode . (,@lsp))
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
                          (just-mode . (,@lsp-no-formatter))
+                         (kotlin-ts-mode . (,@lsp))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp-no-formatter))
@@ -1999,6 +2001,7 @@ Operations on the current project
 *** python
 #+begin_src emacs-lisp
   (setup python
+    (:org-babel-language t)
     (:with-mode python-ts-mode
       (:mode-repl akirak/euporie-project)))
 #+end_src
@@ -3566,7 +3569,8 @@ Outline-based notes management and organizer
                                                        split-window-right))
                     (message "This function should be used only when \
   `org-src-window-setup' has a certain value"))
-                  (when (alist-get :file (caddr (org-babel-get-src-block-info)))
+                  (when (and (not (eq context 'exit))
+                             (alist-get :file (caddr (org-babel-get-src-block-info))))
                     (if-let* ((pos (org-babel-where-is-src-block-result)))
                         (goto-char pos)
                       (goto-char (org-element-end (org-element-at-point-no-context))))
@@ -4845,6 +4849,19 @@ Major mode for the Go programming language
     (:mode-repl akirak/node-or-bun-repl)
     (:mode-project-roots "package.json"))
 #+end_src
+*** kotlin-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2025-08-09 Sat 23:59]
+:END:
+#+begin_quote
+A mode for editing Kotlin files based on tree-sitter
+[[https://gitlab.com/bricka/emacs-kotlin-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package kotlin-ts-mode)
+    (:file-match "\\.kts?\\'"))
+#+end_src
 *** lua-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2025-03-02 Sun 12:52]
@@ -5598,9 +5615,6 @@ This is an extra functions for window management.
                         (mode org-agenda-mode))
                        ("^\\*Embark Export"
                         akirak-window-display-as-left-sidebar)
-                       ("^\\*Org-Babel Error Output*"
-                        display-buffer-no-window
-                        (allow-no-window . t))
                        ("^\\*envrc"
                         display-buffer-no-window
                         (allow-no-window . t))
@@ -8247,7 +8261,9 @@ Use avy to open, copy, etc. visible links
 
 #+begin_src emacs-lisp
   (setup (:package link-hint)
-    (:global-keymap "M-g f" #'link-hint-open-link)
+    (:global-keymap "M-g f" #'link-hint-open-link
+                    ;; Override `xref-find-apropos'.
+                    "C-M-." #'akirak/link-hint-embark-act)
 
     (defvar akirak/link-hint-current-window nil
       "Window selected just before `link-hint-open-link' is run.")
@@ -8257,7 +8273,23 @@ Use avy to open, copy, etc. visible links
                 (defun akirak/link-hint-save-window (&rest _)
                   (setq akirak/link-hint-current-window (selected-window))))
 
+    (defun akirak/link-hint-embark-act ()
+      "Use avy to call 'embark-act' on a link.
+
+  This is originally implemented by oldjawbone and posted at
+  <https://www.reddit.com/r/emacs/comments/uek8mt/comment/i6pfz8y/>.
+
+  To enable this action, you alslo have to define :embark-act action on
+  each link-hint type."
+      (interactive)
+      (avy-with link-hint-embark
+        (link-hint--one :embark-act)))
+
     (:when-loaded
+      ;; Based on https://www.reddit.com/r/emacs/comments/uek8mt/comment/i6pfz8y/
+      (mapc (lambda (symbol)
+              (put symbol :embark-act #'(lambda () (call-interactively #'embark-act))))
+            link-hint-types)
       (put 'link-hint-deadgrep :open
            (defun akirak/link-hint-deadgrep-open ()
              (interactive)
@@ -9113,7 +9145,7 @@ Major mode for Nushell scripts
   (setup (:package nushell-mode)
     (:file-match "\\.nu\\'"))
 #+end_src
-*** COMMENT ob-async                                                           :ARCHIVE:
+*** ob-async
 :PROPERTIES:
 :CREATED_TIME: [2023-05-20 Sat 18:46]
 :END:
@@ -9297,6 +9329,7 @@ Summon and dismiss buffers as popups
                                      "\\*Backtrace\\*"
                                      "^\\*Warnings\\*"
                                      "^\\*envrc-debug\\*"
+                                     "^\\*Org-Babel Error Output*"
                                      "\\*Org-Dog-Context\\*"
                                      "^\\*Org Note\\*"
                                      "^\\*Compile-Log\\*"
@@ -10575,6 +10608,11 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
             :root root :name "gleam-shell")
         (user-error "Not in a Gleam project"))))
 #+end_src
+*** Gradle
+#+begin_src elisp
+  (setup gradle
+    (:package-files "build.gradle.kts"))
+#+end_src
 *** Haskell
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 13:00]
@@ -11102,7 +11140,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 213 |
+| [[org-ql-search:tags:packages][packages]]            | 214 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |

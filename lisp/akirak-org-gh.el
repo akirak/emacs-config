@@ -305,6 +305,7 @@
     (user-error "Found @ticket or @PR tag. Maybe already inside a ticket subtree?"))
   (when (string-match-p org-link-bracket-re (org-entry-get nil "ITEM"))
     (user-error "On a bracket link. Maybe already submitted"))
+  (require 'akirak-github)
   (let* ((default-directory (or (akirak-org-gh--entry-dir)
                                 (akirak-org-git-worktree nil)
                                 (user-error "Cannot locate the repository")))
@@ -376,7 +377,7 @@
         (remote-branches (magit-list-remote-branches)))
     (cl-flet
         ((pred (remote)
-           (member (concat remote "/" branch) remote-branches)))
+           (member (concat "refs/remotes/" remote "/" branch) remote-branches)))
       (seq-filter #'pred all-remotes))))
 
 (defun akirak-org-gh--update-entry-on-exit (process)

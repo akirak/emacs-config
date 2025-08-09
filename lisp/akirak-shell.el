@@ -136,6 +136,7 @@ the original minor mode."
    :if akirak-shell-project-directory
    ("C" "Claude (default)" akirak-claude-code-default)
    ("c" "Claude" akirak-shell-project-for-claude)
+   ("s" "opencode" akirak-opencode-shell)
    ("g" "Gemini" akirak-gemini-cli-shell)
    ("a" "Aider" akirak-shell-project-for-aider)
    ("x" "Codex" akirak-shell-project-for-codex)]
@@ -224,7 +225,6 @@ the original minor mode."
                   (list cmd nil args)))))
       (unless noselect
         (pcase window
-          (`nil)
           (`new-tab
            (tab-bar-new-tab)
            (switch-to-buffer buffer)

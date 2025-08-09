@@ -36,11 +36,13 @@
     ("justfile" . just)
     ("Justfile" . just)
     ("go.mod" . go-module)
+    ("gradlew" . gradlew)
     ("mix.exs" . mix)
     ("pnpm-lock.yaml" . pnpm)
     ("pnpm-workspace.yaml" . pnpm-workspace)
     ("yarn.lock" . yarn)
     ("package-lock.json" . npm)
+    ("bun.lock" . bun)
     ("bun.lockb" . bun)
     ("deno.lock" . deno)
     ("package.json" . package-json)
@@ -58,7 +60,7 @@
               ("opam " . dune))
             (mapcar (lambda (symbol)
                       (cons (format "%s[[:space:]]" symbol) symbol))
-                    '(cargo just mix pnpm yarn npm bun deno dune)))
+                    '(cargo just mix pnpm yarn npm bun deno dune uv gradlew)))
     (mapcar (lambda (cell)
               (cons (concat "^[[:space:]]*" (car cell))
                     (cdr cell)))))
@@ -90,6 +92,10 @@
      ("dune runtest --watch")
      ("opam exec -- odig odoc")
      ("opam install ocaml-lsp-server ocamlformat-rpc odig dream sherlodoc"))
+    (gradlew
+     ("./gradlew build")
+     ("./gradlew test")
+     ("./gradlew clean"))
     (gleam
      ("gleam run")
      ("gleam test")
@@ -138,7 +144,8 @@
      ("pnpm outdated" annotation "Check for outdated packages")
      ("pnpm exec" annotation "Executes a shell command in scope of a project"))
     (uv
-     ("uv add"))
+     ("uv add")
+     ("uv remove"))
     (yarn)
     (npm
      ("npm ci")
@@ -237,9 +244,22 @@ are displayed in the frame."
                                                        (mapcar #'cdr ',projects))))))))
                   (prefer-terminal (get-text-property 0 'terminal command))
                   (default-directory (or (get-text-property 0 'command-directory command)
-                                         (akirak-compile--select-directory-for-command
-                                          command projects)
-                                         workspace)))
+                                         (pcase projects
+                                           (`nil)
+                                           (`(,project)
+                                            (cdr project))
+                                           (_
+                                            (akirak-compile--select-directory-for-command
+                                             command projects)))
+                                         (pcase (or (mapcar #'cdr projects)
+                                                    (list workspace))
+                                           (`(,dir)
+                                            dir)
+                                           (`nil
+                                            workspace)
+                                           (dirs
+                                            (completing-read "Directory: "
+                                                             dirs nil t))))))
              (if (akirak-compile--installation-command-p command)
                  ;; Install dependencies in a separate buffer without killing the
                  ;; current process.

@@ -503,7 +503,7 @@
    ("e" "Flymake error" akirak-capture-flymake-error-at-point
     :if akirak-capture--at-error-p)
 
-   ("." "Project task" akirak-capture-project-context
+   (">" "Project task" akirak-capture-project-context
     :if project-current)
 
    ("!" "Project task (no context)" akirak-capture-project-task
