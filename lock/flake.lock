@@ -1565,6 +1565,22 @@
         "type": "github"
       }
     },
+    "kotlin-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1750149805,
+        "narHash": "sha256-NRCCLtNfmLB38MBTTiSxzCAX1pHtaTsj0U256oQoqQ8=",
+        "owner": "bricka",
+        "repo": "emacs-kotlin-ts-mode",
+        "rev": "051c9ef534956c235343fb41546623ff87a1695b",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "bricka",
+        "repo": "emacs-kotlin-ts-mode",
+        "type": "gitlab"
+      }
+    },
     "language-detection": {
       "flake": false,
       "locked": {
@@ -3076,6 +3092,7 @@
         "jinx": "jinx",
         "just-mode": "just-mode",
         "kind-icon": "kind-icon",
+        "kotlin-ts-mode": "kotlin-ts-mode",
         "language-detection": "language-detection",
         "license-templates": "license-templates",
         "link-hint": "link-hint",
