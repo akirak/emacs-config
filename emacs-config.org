@@ -10608,6 +10608,11 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
             :root root :name "gleam-shell")
         (user-error "Not in a Gleam project"))))
 #+end_src
+*** Gradle
+#+begin_src elisp
+  (setup gradle
+    (:package-files "build.gradle.kts"))
+#+end_src
 *** Haskell
 :PROPERTIES:
 :CREATED_TIME: [2023-12-16 Sat 13:00]

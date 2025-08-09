@@ -36,6 +36,7 @@
     ("justfile" . just)
     ("Justfile" . just)
     ("go.mod" . go-module)
+    ("gradlew" . gradlew)
     ("mix.exs" . mix)
     ("pnpm-lock.yaml" . pnpm)
     ("pnpm-workspace.yaml" . pnpm-workspace)
@@ -59,7 +60,7 @@
               ("opam " . dune))
             (mapcar (lambda (symbol)
                       (cons (format "%s[[:space:]]" symbol) symbol))
-                    '(cargo just mix pnpm yarn npm bun deno dune uv)))
+                    '(cargo just mix pnpm yarn npm bun deno dune uv gradlew)))
     (mapcar (lambda (cell)
               (cons (concat "^[[:space:]]*" (car cell))
                     (cdr cell)))))
@@ -91,6 +92,10 @@
      ("dune runtest --watch")
      ("opam exec -- odig odoc")
      ("opam install ocaml-lsp-server ocamlformat-rpc odig dream sherlodoc"))
+    (gradlew
+     ("./gradlew build")
+     ("./gradlew test")
+     ("./gradlew clean"))
     (gleam
      ("gleam run")
      ("gleam test")
