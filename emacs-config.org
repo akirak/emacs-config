@@ -787,7 +787,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
       (:local-set tab-width 8))
     (:with-mode (emacs-lisp-mode)
       (:local-set tab-width 8))
-    (:with-mode (makefile-mode zig-mode zig-ts-mode)
+    (:with-mode (makefile-mode zig-mode zig-ts-mode java-ts-mode kotlin-ts-mode)
       (:local-set tab-width 4))
     (:with-mode (js-mode typescript-mode sh-mode python-mode)
       (:local-set tab-width 2)))
@@ -1398,6 +1398,7 @@ The built-in =electric= package provides the following modes:
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
                          (just-mode . (,@lsp-no-formatter))
+                         (kotlin-ts-mode . (,@lsp))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp-no-formatter))
@@ -4846,6 +4847,19 @@ Major mode for the Go programming language
     (:file-match "\\.[cm]?js$" "\\.json5\\'")
     (:mode-repl akirak/node-or-bun-repl)
     (:mode-project-roots "package.json"))
+#+end_src
+*** kotlin-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2025-08-09 Sat 23:59]
+:END:
+#+begin_quote
+A mode for editing Kotlin files based on tree-sitter
+[[https://gitlab.com/bricka/emacs-kotlin-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package kotlin-ts-mode)
+    (:file-match "\\.kts?\\'"))
 #+end_src
 *** lua-ts-mode
 :PROPERTIES:
