@@ -1395,6 +1395,7 @@ The built-in =electric= package provides the following modes:
                          (go-ts-mode . (,@lsp))
                          (haskell-mode . (,@lsp))
                          (heex-ts-mode . (,@lsp))
+                         (java-ts-mode . (,@lsp))
                          (js-ts-mode . (,@lsp-no-formatter))
                          (json-ts-mode . (,@lsp-no-formatter))
                          (just-mode . (,@lsp-no-formatter))
