@@ -242,7 +242,8 @@ are displayed in the frame."
                                 (seq-filter `(lambda (ent)
                                                (member (get-char-property 0 'command-directory ent)
                                                        (mapcar #'cdr ',projects))))))))
-                  (prefer-terminal (get-text-property 0 'terminal command))
+                  (prefer-terminal (or (get-text-property 0 'terminal command)
+                                       (akirak-compile--terminal-command-p command)))
                   (default-directory (or (get-text-property 0 'command-directory command)
                                          (pcase projects
                                            (`nil)
@@ -290,6 +291,10 @@ are displayed in the frame."
                 (t
                  (compile command t)))))
          (user-error "No workspace root"))))))
+
+(defun akirak-compile--terminal-command-p (command)
+  "Return non-nil if COMMAND should be run in terminal."
+  (string-match-p (rx bol (* blank) "nix run" symbol-end) command))
 
 (defun akirak-compile--buffer-name ()
   (concat "*"
