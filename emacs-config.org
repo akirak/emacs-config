@@ -6533,6 +6533,23 @@ UI for managing init system daemons (services)
   (setup (:package daemons)
     (:global-keymap "<f12> x d" #'daemons))
 #+end_src
+*** dape
+#+begin_quote
+Debug Adapter Protocol for Emacs
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package dape)
+    (:set dape-key-prefix (kbd "C-c b")
+          dape-buffer-window-arrangement 'right
+          dape-info-hide-mode-line nil
+          dape-inlay-hints t)
+
+    (:when-loaded
+      (dape-breakpoint-load)
+      (add-hook 'kill-emacs-hook #'dape-breakpoint-save))
+    (add-hook 'dape-display-source-hook 'pulse-momentary-highlight-one-line))
+#+end_src
 *** dashboard
 :PROPERTIES:
 :CREATED_TIME: [2023-11-18 Sat 23:10]
@@ -11141,7 +11158,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 214 |
+| [[org-ql-search:tags:packages][packages]]            | 215 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
