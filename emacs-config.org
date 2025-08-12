@@ -2402,6 +2402,17 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
       (:keymap "<f7>" #'tab-bar-history-back
                "S-<f7>" #'tab-bar-history-forward))
 
+    (:when-loaded
+      (dolist (i (number-sequence 1 8))
+        (global-set-key (kbd (format "C-M-%s" i))
+                        `(lambda ()
+                           (interactive)
+                           (tab-bar-select-tab ,i))))
+      (global-set-key (kbd "C-M-9")
+                      (lambda ()
+                        (interactive)
+                        (tab-bar-select-tab -1))))
+
     (defun akirak/tab-bar-set-tab-name-from-org-clock ()
       (interactive)
       (if-let* ((heading (when (org-clocking-p)
