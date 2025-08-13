@@ -7365,7 +7365,9 @@ Support for `direnv' that operates buffer-locally
 #+begin_src emacs-lisp
   (setup (:package envrc)
     (defun akirak/turn-on-envrc-mode ()
-      (unless (minibufferp)
+      ;; Disable envrc for performance.
+      (unless (or (minibufferp)
+                  (string-match-p "\*consult-" (buffer-name)))
         (envrc-mode 1)))
     (add-hook 'akirak-worktree-mode-hook #'akirak/turn-on-envrc-mode))
 #+end_src
