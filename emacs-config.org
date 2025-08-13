@@ -7145,6 +7145,17 @@ Client for Language Server Protocol (LSP) servers
                      . ("astro-ls" "--stdio"
                         :initializationOptions
                         (:typescript (:tsdk "./node_modules/typescript/lib")))))
+      (let ((java-debug-plugin (locate-user-emacs-file "java-debug-plugin.jar")))
+        (when (file-exists-p java-debug-plugin)
+          ;; Alternatively, set the variable eglot-workspace-configuration in the
+          ;; file .dir-locals.el in a project’s root directory, to have JDTLS load
+          ;; the plugin for that project.
+          ;; https://github.com/svaante/dape?tab=readme-ov-file#java---jdtls-with-java-debug-server-plugin
+          (add-to-list 'eglot-server-programs
+                       `(java-ts-mode
+                         . ("jdtls"
+                            :initializationOptions
+                            (:bundles [,java-debug-plugin]))))))
 
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")))
