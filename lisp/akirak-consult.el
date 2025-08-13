@@ -314,7 +314,11 @@
 (defvar akirak-consult-source-git-status
   (when (require 'consult-ls-git nil t)
     (append consult-ls-git--source-status-files
-            (list :enabled (lambda () (vc-git-root default-directory))))))
+            (list :enabled (lambda ()
+                             ;; For performance, prevent scanning repositories
+                             ;; that are not being edited by the user.
+                             (and (bound-and-true-p akirak-worktree-mode)
+                                  (vc-git-root default-directory)))))))
 
 (defvar akirak-consult-project-sources
   `(akirak-consult-source-project-file-buffer ;; Require consult-ls-git
