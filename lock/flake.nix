@@ -719,6 +719,13 @@
       repo = "neocaml";
       type = "github";
     };
+    neotree = {
+      flake = false;
+      owner = "akirak";
+      ref = "multi";
+      repo = "emacs-neotree";
+      type = "github";
+    };
     nix-mode = {
       flake = false;
       owner = "NixOS";

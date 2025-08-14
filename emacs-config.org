@@ -9029,6 +9029,43 @@ Major mode for OCaml code
      (ocamlformat :program "ocamlformat"
                   :args (list "--name" (buffer-file-name) "-"))))
 #+end_src
+*** neotree
+:PROPERTIES:
+:CREATED_TIME: [2025-08-14 Thu 16:18]
+:END:
+#+begin_quote
+A tree plugin like NerdTree for Vim
+[[https://github.com/jaypei/emacs-neotree]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package neotree)
+    (:set neo-window-width 40
+          neo-show-updir-line nil
+          neo-vc-integration nil)
+    (:local-set line-spacing 0.2)
+    (:global "C-z f" #'neotree-find)
+
+    ;; Use a smaller font size for tree entries
+    (:when-loaded
+      (set-face-attribute 'neo-root-dir-face nil
+                          :foreground nil
+                          :slant 'italic
+                          :underline t
+                          :weight 'normal)
+      (set-face-attribute 'neo-vc-ignored-face nil
+                          :foreground "#8888aa"
+                          :strike-through nil)
+      (cl-do-all-symbols (sym)
+        (when (and (string-match-p (rx bol "neo-"
+                                       (or (and "vc-" (+ anything))
+                                           (and (+ anything)
+                                                "-link-face"))
+                                       eol)
+                                   (symbol-name sym))
+                   (facep sym))
+          (set-face-attribute sym nil :height 0.92)))))
+#+end_src
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
@@ -11182,7 +11219,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 215 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
