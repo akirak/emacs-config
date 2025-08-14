@@ -1918,6 +1918,39 @@
         "type": "github"
       }
     },
+    "neotree": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1755188579,
+        "narHash": "sha256-DujcPOvv4rS2Gz52YMov/eP6+Y1LhE2EL2Lsglaq+Qo=",
+        "owner": "akirak",
+        "repo": "emacs-neotree",
+        "rev": "75406da27d5199b816f1cdb3807744a9fc8cbdaf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "ref": "multi",
+        "repo": "emacs-neotree",
+        "type": "github"
+      }
+    },
+    "nerd-icons": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1752810917,
+        "narHash": "sha256-JuV4z0/9FuCBJk9AU+JfTjIBfyEPFB8D2hrGSo0RJKs=",
+        "owner": "rainstormstudio",
+        "repo": "nerd-icons.el",
+        "rev": "f3e7ba37642455e5627968b1031faeefbcac1245",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rainstormstudio",
+        "repo": "nerd-icons.el",
+        "type": "github"
+      }
+    },
     "nix-mode": {
       "flake": false,
       "locked": {
@@ -3130,6 +3163,8 @@
         "move-dup": "move-dup",
         "mpv": "mpv",
         "neocaml": "neocaml",
+        "neotree": "neotree",
+        "nerd-icons": "nerd-icons",
         "nix-mode": "nix-mode",
         "nix-ts-mode": "nix-ts-mode",
         "nix3": "nix3",
