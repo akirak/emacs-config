@@ -726,6 +726,12 @@
       repo = "emacs-neotree";
       type = "github";
     };
+    nerd-icons = {
+      flake = false;
+      owner = "rainstormstudio";
+      repo = "nerd-icons.el";
+      type = "github";
+    };
     nix-mode = {
       flake = false;
       owner = "NixOS";

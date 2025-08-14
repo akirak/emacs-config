@@ -9041,6 +9041,7 @@ A tree plugin like NerdTree for Vim
 #+begin_src emacs-lisp
   (setup (:package neotree)
     (:set neo-window-width 40
+          neo-theme 'nerd-icons
           neo-show-updir-line nil
           neo-vc-integration nil)
     (:local-set line-spacing 0.2)
@@ -9066,6 +9067,21 @@ A tree plugin like NerdTree for Vim
                    (facep sym))
           (set-face-attribute sym nil :height 0.92)))))
 #+end_src
+*** nerd-icons
+:PROPERTIES:
+:CREATED_TIME: [2025-08-14 Thu 22:41]
+:END:
+#+begin_quote
+Emacs Nerd Font Icons Library
+[[https://github.com/rainstormstudio/nerd-icons.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package nerd-icons))
+#+end_src
+
+Used by neotree.
+
 *** nix3                                                           :Nix:project:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-26 Sat 17:12]
