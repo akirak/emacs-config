@@ -287,7 +287,7 @@ are displayed in the frame."
                      (setq-local eat-kill-buffer-on-exit nil)
                      (compilation-shell-minor-mode t)
                      (eat-exec (current-buffer) name "sh" nil (list "-c" command))
-                     (pop-to-buffer (current-buffer)))))
+                     (pop-to-buffer (current-buffer) '(nil (dedicated . t))))))
                 ((equal arg '(4))
                  (compilation-start command t (cl-constantly (akirak-compile--buffer-name))))
                 (t
