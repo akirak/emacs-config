@@ -1347,11 +1347,16 @@ The built-in =electric= package provides the following modes:
                          nil)))
 
     (:set find-sibling-rules
-          (let ((basename (rx (group (+ (not (any "/")))))))
+          (let ((basename (rx (group (+ (not (any "/"))))))
+                (path (rx (group (+ (any "/" alnum))))))
             `((,(concat basename "\\.ml\\'") "\\1.mli")
               (,(concat basename "\\.mli\\'") "\\1.ml")
               (,(concat basename "\\.ex\\'") "\\1.html.heex")
               (,(concat basename "\\.html\\.heex\\'") "\\1.ex")
+              (,(concat "src/main/java/" path "\\.java\\'")
+               "src/test/java/\\1Test.java")
+              (,(concat "src/test/java/" path "Test\\.java\\'")
+               "src/main/java/\\1.java")
               (,(concat basename "_test\\.go\\'") "\\1.go")
               (,(concat basename "\\.go\\'") "\\1_test.go"))))
     (keymap-set ctl-x-map "," #'find-sibling-file)
