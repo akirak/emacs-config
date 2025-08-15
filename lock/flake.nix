@@ -563,6 +563,12 @@
       repo = "iedit";
       type = "github";
     };
+    imenu-list = {
+      flake = false;
+      owner = "bmag";
+      repo = "imenu-list";
+      type = "github";
+    };
     indent-bars = {
       flake = false;
       owner = "jdtsmith";

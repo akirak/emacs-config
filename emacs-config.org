@@ -8181,6 +8181,17 @@ Edit multiple regions in the same way simultaneously.
 #+begin_src emacs-lisp
 (setup (:package iedit))
 #+end_src
+*** imenu-list
+:PROPERTIES:
+:CREATED_TIME: [2025-08-15 Fri 23:59]
+:END:
+#+begin_quote
+Show imenu entries in a separate buffer
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package imenu-list))
+#+end_src
 *** indent-bars
 :PROPERTIES:
 :CREATED_TIME: [2023-07-30 Sun 09:16]
