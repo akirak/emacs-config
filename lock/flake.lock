@@ -1501,6 +1501,22 @@
         "type": "github"
       }
     },
+    "imenu-list": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1618920003,
+        "narHash": "sha256-ihcxfozMthCqONQ+GBNLhVXnua0uHHIDB8IePw80+Cw=",
+        "owner": "bmag",
+        "repo": "imenu-list",
+        "rev": "76f2335ee6f2f066d87fe4e4729219d70c9bc70d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bmag",
+        "repo": "imenu-list",
+        "type": "github"
+      }
+    },
     "indent-bars": {
       "flake": false,
       "locked": {
@@ -3137,6 +3153,7 @@
         "huan": "huan",
         "hydra": "hydra",
         "iedit": "iedit",
+        "imenu-list": "imenu-list",
         "indent-bars": "indent-bars",
         "inheritenv": "inheritenv",
         "jinx": "jinx",
