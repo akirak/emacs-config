@@ -146,6 +146,7 @@
      ("pnpm outdated" annotation "Check for outdated packages")
      ("pnpm exec" annotation "Executes a shell command in scope of a project"))
     (uv
+     ("uv sync")
      ("uv add")
      ("uv remove"))
     (yarn)
