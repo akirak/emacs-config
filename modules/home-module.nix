@@ -65,8 +65,9 @@ in
     home.file.${config.programs.emacs-twist.directory + "/ai-model-list.txt"}.source =
       ../ai-model-list.txt;
 
-    home.file.${cfg.directory + "/java-debug-plugin.jar"}.source =
-      lib.mkIf cfg.settings.enableJava java-debug-plugin;
+    home.file.${cfg.directory + "/java-debug-plugin.jar"} = lib.mkIf cfg.settings.enableJava {
+      source = java-debug-plugin;
+    };
 
     home.packages = with pkgs'; [
       # Font families used in my Emacs config
