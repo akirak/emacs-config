@@ -254,8 +254,8 @@ are displayed in the frame."
                                            (_
                                             (akirak-compile--select-directory-for-command
                                              command projects)))
-                                         (pcase (or (mapcar #'cdr projects)
-                                                    (list workspace))
+                                         (pcase (seq-uniq (or (mapcar #'cdr projects)
+                                                              (list workspace)))
                                            (`(,dir)
                                             dir)
                                            (`nil
