@@ -16,6 +16,19 @@ let
   cfg = config.programs.emacs-twist;
 
   pkgs' = pkgs.extend (lib.composeManyExtensions overlays);
+
+  java-debug-plugin =
+    pkgs.runCommand "java-debug-plugin.jar"
+      {
+        propagatedBuildInputs = [
+          pkgs.vscode-extensions.vscjava.vscode-java-debug
+        ];
+      }
+      ''
+        jar=$(find ${pkgs.vscode-extensions.vscjava.vscode-java-debug}/share/vscode/extensions/vscjava.vscode-java-debug/server -name "*.jar")
+
+        ln -s "$jar" $out
+      '';
 in
 {
   options = {
@@ -25,6 +38,8 @@ in
         description = "List of options";
         default = [ ];
       };
+
+      enableJava = lib.mkEnableOption "Enable enhanced Java support";
     };
   };
 
@@ -49,6 +64,10 @@ in
 
     home.file.${config.programs.emacs-twist.directory + "/ai-model-list.txt"}.source =
       ../ai-model-list.txt;
+
+    home.file.${cfg.directory + "/java-debug-plugin.jar"} = lib.mkIf cfg.settings.enableJava {
+      source = java-debug-plugin;
+    };
 
     home.packages = with pkgs'; [
       # Font families used in my Emacs config

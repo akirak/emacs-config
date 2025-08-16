@@ -161,6 +161,15 @@
     };
   };
 
+  neotree = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "emacs-neotree";
+      ref = "multi";
+    };
+  };
+
   taxy = _: super: {
     files = builtins.removeAttrs super.files [ "NOTES.org" ];
   };

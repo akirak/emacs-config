@@ -198,6 +198,12 @@
       repo = "daemons.el";
       type = "github";
     };
+    dape = {
+      flake = false;
+      owner = "svaante";
+      repo = "dape";
+      type = "github";
+    };
     dash = {
       flake = false;
       owner = "magnars";
@@ -557,6 +563,12 @@
       repo = "iedit";
       type = "github";
     };
+    imenu-list = {
+      flake = false;
+      owner = "bmag";
+      repo = "imenu-list";
+      type = "github";
+    };
     indent-bars = {
       flake = false;
       owner = "jdtsmith";
@@ -711,6 +723,19 @@
       flake = false;
       owner = "bbatsov";
       repo = "neocaml";
+      type = "github";
+    };
+    neotree = {
+      flake = false;
+      owner = "akirak";
+      ref = "multi";
+      repo = "emacs-neotree";
+      type = "github";
+    };
+    nerd-icons = {
+      flake = false;
+      owner = "rainstormstudio";
+      repo = "nerd-icons.el";
       type = "github";
     };
     nix-mode = {

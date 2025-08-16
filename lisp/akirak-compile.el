@@ -94,7 +94,9 @@
      ("opam install ocaml-lsp-server ocamlformat-rpc odig dream sherlodoc"))
     (gradlew
      ("./gradlew build")
+     ("./gradlew build --scan")
      ("./gradlew test")
+     ("./gradlew test --debug --stacktrace")
      ("./gradlew clean"))
     (gleam
      ("gleam run")
@@ -144,6 +146,7 @@
      ("pnpm outdated" annotation "Check for outdated packages")
      ("pnpm exec" annotation "Executes a shell command in scope of a project"))
     (uv
+     ("uv sync")
      ("uv add")
      ("uv remove"))
     (yarn)
@@ -242,7 +245,8 @@ are displayed in the frame."
                                 (seq-filter `(lambda (ent)
                                                (member (get-char-property 0 'command-directory ent)
                                                        (mapcar #'cdr ',projects))))))))
-                  (prefer-terminal (get-text-property 0 'terminal command))
+                  (prefer-terminal (or (get-text-property 0 'terminal command)
+                                       (akirak-compile--terminal-command-p command)))
                   (default-directory (or (get-text-property 0 'command-directory command)
                                          (pcase projects
                                            (`nil)
@@ -251,8 +255,8 @@ are displayed in the frame."
                                            (_
                                             (akirak-compile--select-directory-for-command
                                              command projects)))
-                                         (pcase (or (mapcar #'cdr projects)
-                                                    (list workspace))
+                                         (pcase (seq-uniq (or (mapcar #'cdr projects)
+                                                              (list workspace)))
                                            (`(,dir)
                                             dir)
                                            (`nil
@@ -281,15 +285,19 @@ are displayed in the frame."
                      ;; Better not have this one?
                      (local-set-key "q" #'quit-window)
                      ;; This must be set after eat-mode
-                     (setq-local eat-kill-buffer-on-exit nil)
+                     (setq-local eat-kill-buffer-on-exit t)
                      (compilation-shell-minor-mode t)
                      (eat-exec (current-buffer) name "sh" nil (list "-c" command))
-                     (pop-to-buffer (current-buffer)))))
+                     (pop-to-buffer (current-buffer) '(nil (dedicated . t))))))
                 ((equal arg '(4))
                  (compilation-start command t (cl-constantly (akirak-compile--buffer-name))))
                 (t
                  (compile command t)))))
          (user-error "No workspace root"))))))
+
+(defun akirak-compile--terminal-command-p (command)
+  "Return non-nil if COMMAND should be run in terminal."
+  (string-match-p (rx bol (* blank) "nix run" symbol-end) command))
 
 (defun akirak-compile--buffer-name ()
   (concat "*"

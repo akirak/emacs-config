@@ -18,7 +18,8 @@
                                       "opus"))]
   ["Actions"
    :class transient-row
-   ("c" "Dispatch" akirak-claude--open-shell)]
+   ("c" "Start a new session" akirak-claude--open-shell)
+   ("m" "Manage MCP" akirak-claude-mcp-transient)]
   (interactive)
   (setq akirak-claude-directory (akirak-shell-project-directory))
   (transient-setup 'akirak-claude-code-shell))
@@ -56,6 +57,76 @@
                             :name (concat "claude-"
                                           (file-name-nondirectory
                                            (directory-file-name root)))))))
+
+(transient-define-prefix akirak-claude-mcp-transient ()
+  ["Info"
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes
+      'akirak-claude-mcp-transient
+      (seq-map-indexed
+       (pcase-lambda (`(,name . ,description) index)
+         (list (number-to-string index)
+               (concat (propertize name 'face 'transient-value)
+                       " "
+                       (propertize description 'face 'transient-inactive-value))
+               `(lambda ()
+                  (interactive)
+                  (akirak-claude-mcp-info ,name))))
+       (akirak-claude--mcp-list))))]
+  ["Action"
+   ("a" "Add" akirak-claude-mcp-add)]
+  (interactive)
+  (transient-setup 'akirak-claude-mcp-transient))
+
+(defun akirak-claude--mcp-list ()
+  (with-temp-buffer
+    (let ((default-directory akirak-claude-directory)
+          result)
+      (call-process "claude" nil (list t nil) nil
+                    "mcp" "list")
+      (goto-char (point-min))
+      (while (re-search-forward (rx bol (group (+ (any word)))
+                                    ":"
+                                    (group (+ anything)))
+                                nil t)
+        (push (cons (match-string 1)
+                    (match-string 2))
+              result))
+      (nreverse result))))
+
+(defun akirak-claude-mcp-info (name)
+  (let* ((default-directory akirak-claude-directory)
+         (info (with-temp-buffer
+                 (call-process "claude" nil (list t nil) nil
+                               "mcp" "get" name)
+                 (buffer-string))))
+    (when (yes-or-no-p (concat "Remove this server? \n"
+                               info))
+      (call-process "claude" nil nil nil
+                    "mcp" "remove" name "-s" "local"))))
+
+(defun akirak-claude-mcp-add ()
+  (interactive)
+  (let* ((name (completing-read "Add MCP: " mcp-hub-servers))
+         (plist (cdr (assoc name mcp-hub-servers))))
+    (if plist
+        (pcase-exhaustive plist
+          ((and (map :url)
+                (guard url))
+           (let ((transport (completing-read "Transport: " '("sse" "http")
+                                             nil t)))
+             (akirak-claude--mcp-add "--transport" transport
+                                     url)))
+          ((and (map :command :args)
+                (guard command))
+           (funcal #'akirak-claude--mcp-add command args)))
+      (user-error "Not implemented"))))
+
+(defun akirak-claude--mcp-add (args)
+  (let ((default-directory akirak-claude-directory))
+    (funcall #'call-process "claude" nil nil nil
+             "mcp" "add" args)))
 
 (provide 'akirak-claude)
 ;;; akirak-claude.el ends here
