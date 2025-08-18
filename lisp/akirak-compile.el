@@ -635,6 +635,24 @@ are displayed in the frame."
                      (buffer-string)))))
       (delete-file err-file))))
 
+(defun akirak-compile-run-test (name language)
+  "Run a test case NAME in the LANGUAGE."
+  (let ((default-directory (abbreviate-file-name default-directory)))
+    (if-let* ((workspace (akirak-compile--workspace-root))
+              (projects (akirak-compile--find-projects workspace)))
+        (pcase (seq-find (apply-partially (pcase-lambda (language `(,backend . ,root))
+                                            (and (eq language 'java)
+                                                 (memq backend '(gradlew))))
+                                          language)
+                         projects)
+          (`(,type . ,root)
+           (let ((default-directory root)
+                 (command (pcase type
+                            (`gradlew
+                             (format "./gradlew test --tests %s" (shell-quote-argument name))))))
+             (compile command))))
+      (user-error "No project"))))
+
 ;;;; Extra support for `compilation-minor-mode'
 
 (defvar akirak-compile-default-error-regexp-alist nil)
