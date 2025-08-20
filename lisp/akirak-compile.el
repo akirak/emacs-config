@@ -94,6 +94,7 @@
      ("opam install ocaml-lsp-server ocamlformat-rpc odig dream sherlodoc"))
     (gradlew
      ("./gradlew build")
+     ("./gradlew build -x test" annotation "Build the project without running tests")
      ("./gradlew build --scan")
      ("./gradlew test")
      ("./gradlew test --debug --stacktrace")
