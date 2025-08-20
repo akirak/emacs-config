@@ -422,7 +422,7 @@ are displayed in the frame."
                                  (akirak-compile--gen-commands backend dir)))
                              (akirak-compile--gen-commands backend dir)))
             (group (format "%s (%s)" backend (abbreviate-file-name dir))))
-        (setq candidates (append candidates (mapcar #'car command-alist)))
+        ;; (setq candidates (append candidates (mapcar #'car command-alist)))
         (pcase-dolist (`(,command . ,properties) command-alist)
           (add-text-properties 0 1
                                (append (list 'command-directory dir
