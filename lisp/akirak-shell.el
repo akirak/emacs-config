@@ -460,6 +460,11 @@ the original minor mode."
       (_
        (user-error "Not in any of the terminal modes")))))
 
+(defun akirak-shell-insert-response-to-org (buffer n)
+  (insert (pcase-exhaustive (akirak-shell-detect-buffer-program buffer)
+            (`claude
+             (akirak-claude-recent-output-to-org buffer n)))))
+
 (cl-defun akirak-shell-detect-buffer-program (buffer)
   (declare (indent 1))
   (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
