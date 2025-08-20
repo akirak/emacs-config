@@ -272,7 +272,7 @@ are displayed in the frame."
                ;; Keep the input in the history iff it's not an installation command.
                (if (eq history :default)
                    (puthash key (list command) akirak-compile-per-workspace-history)
-                 (cl-pushnew command history)
+                 (cl-pushnew command history :test #'string=)
                  (puthash key history akirak-compile-per-workspace-history))
                (cond
                 (prefer-terminal
