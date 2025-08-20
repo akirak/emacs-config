@@ -296,6 +296,17 @@ are displayed in the frame."
                  (compile command t)))))
          (user-error "No workspace root"))))))
 
+(defun akirak-compile-find-closest-root ()
+  "Find the closest compilation root to the current directory."
+  (let* ((workspace (akirak-compile--workspace-root))
+         (projects (when workspace (akirak-compile--find-projects workspace))))
+    (if projects
+        (thread-last
+          (mapcar #'cdr projects)
+          (seq-sort-by #'length #'>)
+          (car))
+      workspace)))
+
 (defun akirak-compile--terminal-command-p (command)
   "Return non-nil if COMMAND should be run in terminal."
   (string-match-p (rx bol (* blank) "nix run" symbol-end) command))
