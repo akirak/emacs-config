@@ -33,6 +33,11 @@
 (require 'map)
 
 (defcustom akirak-import-settings-alist
+  ;; Some language servers (such as below) have decent supports for import
+  ;; organization and cleanup. Not all languages don't need to be supported by
+  ;; this library.
+  ;;
+  ;;  * jdt-ls (Java)
   `((gleam-ts-mode
      :regexp ,(rx bol "import " (+ nonl))
      :extensions (".gleam")

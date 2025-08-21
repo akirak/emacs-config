@@ -94,6 +94,7 @@
      ("opam install ocaml-lsp-server ocamlformat-rpc odig dream sherlodoc"))
     (gradlew
      ("./gradlew build")
+     ("./gradlew build -x test" annotation "Build the project without running tests")
      ("./gradlew build --scan")
      ("./gradlew test")
      ("./gradlew test --debug --stacktrace")
@@ -271,7 +272,7 @@ are displayed in the frame."
                ;; Keep the input in the history iff it's not an installation command.
                (if (eq history :default)
                    (puthash key (list command) akirak-compile-per-workspace-history)
-                 (cl-pushnew command history)
+                 (cl-pushnew command history :test #'string=)
                  (puthash key history akirak-compile-per-workspace-history))
                (cond
                 (prefer-terminal
@@ -294,6 +295,17 @@ are displayed in the frame."
                 (t
                  (compile command t)))))
          (user-error "No workspace root"))))))
+
+(defun akirak-compile-find-closest-root ()
+  "Find the closest compilation root to the current directory."
+  (let* ((workspace (akirak-compile--workspace-root))
+         (projects (when workspace (akirak-compile--find-projects workspace))))
+    (if projects
+        (thread-last
+          (mapcar #'cdr projects)
+          (seq-sort-by #'length #'>)
+          (car))
+      workspace)))
 
 (defun akirak-compile--terminal-command-p (command)
   "Return non-nil if COMMAND should be run in terminal."
@@ -421,7 +433,7 @@ are displayed in the frame."
                                  (akirak-compile--gen-commands backend dir)))
                              (akirak-compile--gen-commands backend dir)))
             (group (format "%s (%s)" backend (abbreviate-file-name dir))))
-        (setq candidates (append candidates (mapcar #'car command-alist)))
+        ;; (setq candidates (append candidates (mapcar #'car command-alist)))
         (pcase-dolist (`(,command . ,properties) command-alist)
           (add-text-properties 0 1
                                (append (list 'command-directory dir
@@ -634,6 +646,24 @@ are displayed in the frame."
                      (insert-file-contents err-file)
                      (buffer-string)))))
       (delete-file err-file))))
+
+(defun akirak-compile-run-test (name language)
+  "Run a test case NAME in the LANGUAGE."
+  (let ((default-directory (abbreviate-file-name default-directory)))
+    (if-let* ((workspace (akirak-compile--workspace-root))
+              (projects (akirak-compile--find-projects workspace)))
+        (pcase (seq-find (apply-partially (pcase-lambda (language `(,backend . ,root))
+                                            (and (eq language 'java)
+                                                 (memq backend '(gradlew))))
+                                          language)
+                         projects)
+          (`(,type . ,root)
+           (let ((default-directory root)
+                 (command (pcase type
+                            (`gradlew
+                             (format "./gradlew test --tests %s" (shell-quote-argument name))))))
+             (compile command))))
+      (user-error "No project"))))
 
 ;;;; Extra support for `compilation-minor-mode'
 

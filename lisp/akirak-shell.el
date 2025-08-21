@@ -129,6 +129,8 @@ the original minor mode."
    ("RET" "Current directory" akirak-shell--terminal-cwd)
    ("p" "Project root" akirak-shell--terminal-project-root
     :if akirak-shell-project-directory)
+   ("b" "Closest build root" akirak-shell--terminal-closest-build-root
+    :if akirak-shell-project-directory)
    ("d" "Select directory" akirak-shell-at-directory)
    ("o" akirak-shell-at-org-directory)]
   ["Start an AI session at project root"
@@ -161,6 +163,13 @@ the original minor mode."
 (defun akirak-shell--terminal-project-root ()
   (interactive)
   (akirak-shell-eat-new :dir (project-root (project-current))
+                        :name akirak-shell-buffer-name
+                        :window akirak-shell-new-window))
+
+(defun akirak-shell--terminal-closest-build-root ()
+  (interactive)
+  (require 'akirak-compile)
+  (akirak-shell-eat-new :dir (akirak-compile-find-closest-root)
                         :name akirak-shell-buffer-name
                         :window akirak-shell-new-window))
 
@@ -450,6 +459,11 @@ the original minor mode."
                                         (eat-term-end eat-terminal)))))))))
       (_
        (user-error "Not in any of the terminal modes")))))
+
+(defun akirak-shell-insert-response-to-org (buffer n)
+  (insert (pcase-exhaustive (akirak-shell-detect-buffer-program buffer)
+            (`claude
+             (akirak-claude-recent-output-to-org buffer n)))))
 
 (cl-defun akirak-shell-detect-buffer-program (buffer)
   (declare (indent 1))

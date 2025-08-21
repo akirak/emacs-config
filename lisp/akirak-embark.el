@@ -356,6 +356,7 @@
   (keymap-set embark-buffer-map "l" #'akirak-embark-org-store-link-to-buffer)
   (keymap-set embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
   (keymap-set embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
+  (keymap-set embark-identifier-map "t" #'akirak-embark-run-test)
   ;; d is bound to `delete-file' by default, which is dangerous.
   (keymap-unset embark-file-map "d")
   (keymap-set embark-file-map "<remap> <embark-open-externally>" #'akirak-open-file-externally)
@@ -914,6 +915,10 @@
                                       ,(file-name-concat default-directory filename)))
                                  (message "Download failed: %s" event)))))
     (message "Downloading %s..." url)))
+
+(defun akirak-embark-run-test (identifier)
+  (interactive "sTest: ")
+  (akirak-imenu-run-test identifier))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here

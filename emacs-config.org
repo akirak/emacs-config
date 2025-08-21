@@ -8190,7 +8190,12 @@ Show imenu entries in a separate buffer
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package imenu-list))
+  (setup (:package imenu-list)
+    (:set imenu-list-auto-resize nil
+          ;; Just manually update the list
+          imenu-list-auto-update nil
+          imenu-list-position 'left
+          imenu-list-size 60))
 #+end_src
 *** indent-bars
 :PROPERTIES:
@@ -10516,8 +10521,7 @@ major mode for editing web templates
   (setup (:package web-mode)
     (:set web-mode-enable-front-matter-block t)
     (:org-src-lang "html")
-    (:file-match "\\.mdx\\'"
-                 "\\.html?\\'"
+    (:file-match "\\.html?\\'"
                  "\\.sface\\'")
 
     (:keymap "C-c /" #'akirak-web-mode-surround

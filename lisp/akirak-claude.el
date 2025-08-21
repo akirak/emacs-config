@@ -58,6 +58,40 @@
                                           (file-name-nondirectory
                                            (directory-file-name root)))))))
 
+(defun akirak-claude-recent-output-to-org (buffer n)
+  (with-temp-buffer
+    (insert (with-current-buffer buffer
+              (akirak-claude--recent-output n)))
+    (let ((inhibit-read-only t))
+      (remove-text-properties (point-min) (point) '(read-only t)))
+    (goto-char (point-min))
+    (while (re-search-forward (rx bol "● ") nil t)
+      (replace-match "  "))
+    (replace-regexp-in-region (rx bol "  ") "" (point-min) (point-max))
+    (concat "#+begin_example\n"
+            (string-trim (buffer-string))
+            "\n#+end_example\n")))
+
+(defun akirak-claude--recent-output (n)
+  "Return the recent N-th response from the current buffer."
+  (cl-assert (and (numberp n) (> n 0)))
+  (save-excursion
+    (goto-char (point-max))
+    (beginning-of-line -3)
+    (if (looking-at (regexp-quote "╭────"))
+        (let ((end (point)))
+          (re-search-backward (rx bol "> ") nil nil n)
+          (re-search-forward (rx bol "● "))
+          (let ((start (match-beginning 0)))
+            (buffer-substring start (if (> n 1)
+                                        (progn
+                                          (re-search-forward (rx bol "> "))
+                                          (match-beginning 0))
+                                      end))))
+      (error "The claude buffer isn't in an expected state"))))
+
+;;;; MCP
+
 (transient-define-prefix akirak-claude-mcp-transient ()
   ["Info"
    :setup-children

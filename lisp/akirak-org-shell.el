@@ -40,6 +40,9 @@
   :refresh-suffixes t
   ["Options"
    ("-b" akirak-org-shell-buffer-infix)]
+  ["Insert"
+   :if akirak-org-shell--buffer-live-p
+   ("y" "Insert response" akirak-org-shell-insert-response)]
   ["Send"
    :if akirak-org-shell--buffer-live-p
    ("r" "Send region as Markdown" akirak-org-shell-send-region-as-markdown
@@ -90,6 +93,10 @@
                        (org-entry-get nil "header-args" t)
                        (org-babel-parse-header-arguments 'no-eval))))
     (alist-get :dir header-args)))
+
+(defun akirak-org-shell-insert-response (n)
+  (interactive "P" org-mode)
+  (akirak-shell-insert-response-to-org akirak-org-shell-buffer (or n 1)))
 
 (defun akirak-org-shell--send-string (string)
   (akirak-shell-send-string-to-buffer (or akirak-org-shell-buffer
