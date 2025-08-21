@@ -10521,8 +10521,7 @@ major mode for editing web templates
   (setup (:package web-mode)
     (:set web-mode-enable-front-matter-block t)
     (:org-src-lang "html")
-    (:file-match "\\.mdx\\'"
-                 "\\.html?\\'"
+    (:file-match "\\.html?\\'"
                  "\\.sface\\'")
 
     (:keymap "C-c /" #'akirak-web-mode-surround
