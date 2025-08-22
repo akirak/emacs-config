@@ -8857,6 +8857,7 @@ Model Context Protocol
             ("nixos"
              :command "mcp-nixos")
             ("context7"
+             ;; Streamable HTTP
              :url "http://localhost:11007/mcp")
             ("effect"
              :command "docker"
