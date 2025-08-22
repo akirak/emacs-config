@@ -140,27 +140,24 @@
       (call-process "claude" nil nil nil
                     "mcp" "remove" name "-s" "local"))))
 
-(defun akirak-claude-mcp-add ()
-  (interactive)
-  (let* ((name (completing-read "Add MCP: " mcp-hub-servers))
-         (plist (cdr (assoc name mcp-hub-servers))))
-    (if plist
-        (pcase-exhaustive plist
-          ((and (map :url)
-                (guard url))
-           (let ((transport (completing-read "Transport: " '("sse" "http")
-                                             nil t)))
-             (akirak-claude--mcp-add "--transport" transport
-                                     url)))
-          ((and (map :command :args)
-                (guard command))
-           (funcal #'akirak-claude--mcp-add command args)))
-      (user-error "Not implemented"))))
+(defun akirak-claude-mcp-add (name)
+  (interactive (list (completing-read "Add MCP: " mcp-hub-servers)))
+  (pcase-exhaustive (cdr (assoc name mcp-hub-servers))
+    (`nil
+     (user-error "Not implemented"))
+    ((and (map :url)
+          (guard url))
+     (let ((transport (completing-read "Transport: " '("sse" "http")
+                                       nil t)))
+       (akirak-claude--mcp-add name "--transport" transport url)))
+    ((and (map :command :args)
+          (guard command))
+     (apply #'akirak-claude--mcp-add name command args))))
 
-(defun akirak-claude--mcp-add (args)
+(defun akirak-claude--mcp-add (name &rest args)
   (let ((default-directory akirak-claude-directory))
-    (funcall #'call-process "claude" nil nil nil
-             "mcp" "add" args)))
+    (apply #'call-process "claude" nil nil nil
+           "mcp" "add" name args)))
 
 (provide 'akirak-claude)
 ;;; akirak-claude.el ends here
