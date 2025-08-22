@@ -3277,6 +3277,7 @@
         "unfill": "unfill",
         "valign": "valign",
         "vertico": "vertico",
+        "video-trimmer": "video-trimmer",
         "visual-fill-column": "visual-fill-column",
         "web-mode": "web-mode",
         "whole-line-or-region": "whole-line-or-region",
@@ -3718,6 +3719,22 @@
       "original": {
         "owner": "minad",
         "repo": "vertico",
+        "type": "github"
+      }
+    },
+    "video-trimmer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1755803811,
+        "narHash": "sha256-zUfxwSzy18NCHUINYcD5FyTwPS7iP0qy5QILvEwpxGc=",
+        "owner": "xenodium",
+        "repo": "video-trimmer",
+        "rev": "c7f9af657d92e83ee8e8803228dfdba2e42bfdfa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "xenodium",
+        "repo": "video-trimmer",
         "type": "github"
       }
     },
