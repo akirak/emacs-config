@@ -1315,6 +1315,12 @@
       repo = "vertico";
       type = "github";
     };
+    video-trimmer = {
+      flake = false;
+      owner = "xenodium";
+      repo = "video-trimmer";
+      type = "github";
+    };
     visual-fill-column = {
       flake = false;
       type = "git";

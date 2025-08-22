@@ -10464,6 +10464,14 @@ See the following [[https://github.com/minad/vertico][comment]] for differences:
 #+begin_quote
 In contrast to Vertico, Icomplete rotates the candidates such that the current candidate always appears at the top. From my perspective, candidate rotation feels a bit less intuitive than the UI of Vertico or Selectrum.
 #+end_quote
+*** video-trimmer                                                        :media:
+:PROPERTIES:
+:CREATED_TIME: [2025-08-22 Fri 12:09]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package video-trimmer))
+#+end_src
 *** visual-fill-column
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
