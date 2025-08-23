@@ -57,6 +57,7 @@
 
 (transient-define-infix akirak-react-transient-syntax ()
   :class 'akirak-transient-choice-variable
+  :cycle t
   :variable 'akirak-react-transient-syntax
   :choices '("function" "const")
   :description "Syntax")

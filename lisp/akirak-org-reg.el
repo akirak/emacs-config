@@ -50,6 +50,7 @@
 (transient-define-infix akirak-org-reg-switch-target ()
   :description "Change target type"
   :class 'akirak-transient-choice-variable
+  :cycle t
   :choices '("item"
              "heading")
   :variable 'akirak-org-reg-target-type)

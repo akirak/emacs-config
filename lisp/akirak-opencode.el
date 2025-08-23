@@ -15,6 +15,7 @@
   :class 'akirak-transient-choice-variable
   :variable 'akirak-opencode-model
   :choices 'akirak-opencode--models
+  :cycle nil
   :prompt "Model: "
   :description "Model")
 

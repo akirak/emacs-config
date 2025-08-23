@@ -94,6 +94,7 @@ the original minor mode."
 
 (transient-define-infix akirak-shell-window-infix ()
   :class 'akirak-transient-choice-variable
+  :cycle t
   :variable 'akirak-shell-new-window
   :choices '(split nil new-tab)
   :description "Window")
