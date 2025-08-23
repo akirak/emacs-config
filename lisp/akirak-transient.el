@@ -76,7 +76,8 @@
 ;;;; akirak-transient-choice-variable
 
 (defclass akirak-transient-choice-variable (akirak-transient-variable)
-  ((choices :initarg :choices)))
+  ((choices :initarg :choices)
+   (prompt :initarg :prompt :initform nil)))
 
 (defun akirak-transient--choices (choices)
   (if (functionp choices)
@@ -86,7 +87,11 @@
 (cl-defmethod transient-infix-read ((obj akirak-transient-choice-variable))
   (let* ((choices (akirak-transient--choices (oref obj choices)))
          (value (oref obj value)))
-    (cadr (member value (append choices (list (car choices)))))))
+    (if (< (length choices) 5)
+        (cadr (member value (append choices (list (car choices)))))
+      (completing-read (or (oref obj prompt)
+                           "Value: ")
+                       choices))))
 
 (cl-defmethod transient-format-value ((obj akirak-transient-choice-variable))
   (let* ((variable (oref obj variable))
