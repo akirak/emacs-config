@@ -14,8 +14,12 @@
 (transient-define-infix akirak-opencode-set-model ()
   :class 'akirak-transient-choice-variable
   :variable 'akirak-opencode-model
-  :choices 'akirak-ai-model-list
+  :choices 'akirak-opencode--models
+  :prompt "Model: "
   :description "Model")
+
+(defun akirak-opencode--models ()
+  (process-lines "opencode" "models"))
 
 ;;;###autoload (autoload 'akirak-opencode-shell "akirak-opencode" nil 'interactive)
 (transient-define-prefix akirak-opencode-shell ()
