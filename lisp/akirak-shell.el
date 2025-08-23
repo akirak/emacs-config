@@ -431,23 +431,28 @@ the original minor mode."
                            (car)))
                      (read-string "Input: ")
                      :confirm t))
-  (let* ((buffer (cl-etypecase window-or-buffer
-                   (window (window-buffer window-or-buffer))
-                   (buffer window-or-buffer)))
-         (input (pcase (akirak-shell-detect-buffer-program buffer)
-                  (`aider
-                   (akirak-shell--preprocess-aider-input input))
-                  (`claude
-                   (akirak-shell--preprocess-claude-input input))
-                  ;; Currently no codex support
-                  (_
-                   input))))
+  (let ((buffer (cl-etypecase window-or-buffer
+                  (window (window-buffer window-or-buffer))
+                  (buffer window-or-buffer))))
     (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
                                     '(eat-mode))
       (`eat-mode
        (with-current-buffer buffer
          (sit-for 0.2)
-         (eat-term-send-string-as-yank eat-terminal input)
+         (pcase (akirak-shell-detect-buffer-program buffer)
+           (`aider
+            (eat-term-send-string-as-yank
+             eat-terminal
+             (akirak-shell--preprocess-aider-input input)))
+           (`claude
+            (eat-term-send-string-as-yank
+             eat-terminal
+             (akirak-shell--preprocess-claude-input input)))
+           (`opencode
+            (akirak-shell--eat-send-opencode-input eat-terminal input))
+           ;; Currently no codex support
+           (_
+            (eat-term-send-string-as-yank eat-terminal input)))
          (sit-for 0.2)
          (when confirm
            (eat-term-input-event eat-terminal 1 ?\C-m)
@@ -477,6 +482,8 @@ the original minor mode."
         'claude)
        (`("codex" . ,_)
         'codex)
+       (`("opencode" . ,_)
+        'opencode)
        (`((rx bol "gemini") . ,_)
         'gemini)))))
 
@@ -501,6 +508,14 @@ the original minor mode."
         (concat "<<EOF\n" string "\nEOF\n")
       ;; Two new lines are required for Claude Code
       (concat string "\n"))))
+
+(defun akirak-shell--eat-send-opencode-input (eat-terminal string)
+  (let ((n 0))
+    (dolist (line (string-split (string-trim string) "\n"))
+      (when (> n 0)
+        (eat-term-input-event eat-terminal 1 ?\C-j))
+      (eat-term-send-string-as-yank eat-terminal line)
+      (cl-incf n))))
 
 (defun akirak-shell-buffer-in-dir-p (dir buf)
   (and (eq (buffer-local-value 'major-mode buf)
