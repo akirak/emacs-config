@@ -8,7 +8,10 @@
 ;;;###autoload
 (defun akirak-ai-model-list ()
   (with-temp-buffer
-    (insert-file-contents akirak-ai-model-list-file)
+    (insert-file-contents (if (file-readable-p akirak-ai-model-list-file)
+                              akirak-ai-model-list-file
+                            (error "File set as `akirak-ai-model-list-file' is not readable: %s"
+                                   akirak-ai-model-list-file)))
     (thread-last
       (string-split (buffer-string) "\n")
       (cl-remove-if #'string-empty-p)
