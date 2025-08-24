@@ -23,7 +23,7 @@
        (propertize "not set" 'face 'transient-inactive-value))
      (propertize ")" 'face 'transient-inactive-value))))
 
-(defvar akirak-org-shell-buffer nil)
+(defvar-local akirak-org-shell-buffer nil)
 
 (transient-define-infix akirak-org-shell-buffer-infix ()
   :class 'akirak-org-shell-buffer-variable

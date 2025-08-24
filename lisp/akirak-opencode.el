@@ -14,8 +14,13 @@
 (transient-define-infix akirak-opencode-set-model ()
   :class 'akirak-transient-choice-variable
   :variable 'akirak-opencode-model
-  :choices 'akirak-ai-model-list
+  :choices 'akirak-opencode--models
+  :cycle nil
+  :prompt "Model: "
   :description "Model")
+
+(defun akirak-opencode--models ()
+  (process-lines "opencode" "models"))
 
 ;;;###autoload (autoload 'akirak-opencode-shell "akirak-opencode" nil 'interactive)
 (transient-define-prefix akirak-opencode-shell ()
@@ -24,7 +29,8 @@
    ("-m" akirak-opencode-set-model)]
   ["Actions"
    :class transient-row
-   ("s" "Dispatch" akirak-opencode--open-shell)]
+   ("s" "Dispatch" akirak-opencode--open-shell)
+   ("l" "Login" akirak-opencode-login)]
   (interactive)
   (setq akirak-opencode-directory (akirak-shell-project-directory))
   (transient-setup 'akirak-opencode-shell))
@@ -39,6 +45,11 @@
                           :name (concat "opencode-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
+
+(defun akirak-opencode-login ()
+  (interactive)
+  (akirak-shell-eat-new :command '("opencode" "auth" "login")
+                        :name "popup-opencode-auth"))
 
 (provide 'akirak-opencode)
 ;;; akirak-opencode.el ends here

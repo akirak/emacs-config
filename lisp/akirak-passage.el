@@ -113,6 +113,9 @@
     (split-string "\n")
     (car)))
 
+;;;###autoload
+(defalias 'akirak-passage-get-password #'akirak-passage--get-password)
+
 (defun akirak-passage--run-process (edit-hook &rest args)
   (declare (indent 1))
   (when (and (get-buffer-process akirak-passage-buffer)

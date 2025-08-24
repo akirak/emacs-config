@@ -572,6 +572,8 @@ are displayed in the frame."
   (pcase (akirak-compile--split-command command)
     (`(,_ ,(or "add" "install" "remove" "uninstall" "update") . ,_)
      t)
+    (`("uv" "sync" . ,_)
+     t)
     (`("npm" "ci")
      t)
     ((or `("zig" "fetch" . ,_)
