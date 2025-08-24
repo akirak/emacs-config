@@ -1590,7 +1590,11 @@ This is intended as the value of `org-dog-clock-in-fallback-fn'."
 (defun akirak-capture--escape-gptel-topic (headline)
   "Just convert a HEADLINE to an Org-property-safe string."
   (thread-last
-    (truncate-string-to-width headline 50)
+    (truncate-string-to-width (if (string-match org-link-bracket-re headline)
+                                  (or (match-string 2 headline)
+                                      (match-string 1 headline))
+                                headline)
+                              50)
     (replace-regexp-in-string (rx (+ space)) "-")
     (downcase)))
 
