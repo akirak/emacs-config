@@ -8549,6 +8549,11 @@ A Git porcelain inside Emacs
     (:nixpkgs git)
 
     (:set magit-save-repository-buffers 'dontask)
+    (when (eq system-type 'gnu/linux)
+      ;; On Linux, I mostly use ZFS, so I will disable trash operations. Metadata
+      ;; operations are slow on ZFS, and because ZFS supports automatic snapshots,
+      ;; I can rollback the filesystem if the removed file is crucial.
+      (:set magit-delete-by-moving-to-trash nil))
 
     ;; Twist allows me to get the git version of any package if necessary, so
     ;; there is no point in making this IO-intensive function run.
