@@ -8300,7 +8300,7 @@ Automatic language detection from code snippets
 #+begin_src emacs-lisp
 (setup (:package language-detection))
 #+end_src
-*** COMMENT lean4-mode                                            :Lean4:@extra:ARCHIVE:
+*** lean4-mode                                            :Lean4:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-09 Fri 19:50]
 :END:

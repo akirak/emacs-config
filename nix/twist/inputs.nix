@@ -185,4 +185,16 @@
       s = "0";
     } // super.packageRequires;
   };
+
+  lean4-mode = _: super: {
+    packageRequires = builtins.removeAttrs super.packageRequires [
+      "lsp-mode"
+    ];
+    origin = {
+      type = "github";
+      owner = "leanprover-community";
+      repo = "lean4-mode";
+      ref = "milestone-03-breaking-refactor";
+    };
+  };
 }
