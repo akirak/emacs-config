@@ -5228,6 +5228,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-expand-region
     (:global-keymap "C-M-SPC" #'akirak-expand-region-default))
 #+end_src
+*** akirak-files
+#+begin_src elisp
+  (setup akirak-files
+    (:global-keymap "C-c [" #'akirak-files-previous-file
+                    "C-c ]" #'akirak-files-next-file))
+#+end_src
 *** akirak-git
 :PROPERTIES:
 :CREATED_TIME: [2025-03-06 Thu 22:10]
