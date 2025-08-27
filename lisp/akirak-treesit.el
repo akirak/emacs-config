@@ -535,10 +535,13 @@
          ;; To handle string interpolation, don't exceed the close bound of the
          ;; current tree-sitter node.
          (unless (< (treesit-node-end (treesit-node-at pos)) bound)
-           (kill-region pos (if (and limit bound)
-                                (min limit bound)
-                              (or limit
-                                  bound)))
+           (let ((end (if (and limit bound)
+                          (min limit bound)
+                        (or limit
+                            bound))))
+             (kill-region pos (if (< pos end)
+                                  end
+                                (line-end-position))))
            t))))))
 
 (defun akirak-treesit--at-bol-or-indent ()
