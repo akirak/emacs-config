@@ -36,7 +36,7 @@
                                    (equal (get-text-property 0 'breadcrumb-kind name)
                                           "Method")))
                      (mapcar `(lambda (name)
-                                (format "%s.%s" class-qname
+                                (format "%s.%s" ,class-qname
                                         (string-remove-suffix "()" name)))))))))))
 
 (provide 'akirak-imenu)
