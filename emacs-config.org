@@ -2191,7 +2191,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                  (and (pred numberp)
                       (guard (< arg 0))))
              (save-excursion
-               (forward-word arg)
+               (forward-word (prefix-numeric-value arg))
                (swap-at-point)))
             ((or (pred numberp)
                  `nil)
