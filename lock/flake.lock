@@ -1629,6 +1629,23 @@
         "type": "github"
       }
     },
+    "lean4-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1752531458,
+        "narHash": "sha256-o9LfF0p5sYH1G7G/K0md+USGVwh6QTumTj+or6eohug=",
+        "owner": "leanprover-community",
+        "repo": "lean4-mode",
+        "rev": "cca95cb5ab39a059c9ffc0e52f8b3655722d3265",
+        "type": "github"
+      },
+      "original": {
+        "owner": "leanprover-community",
+        "ref": "milestone-03-breaking-refactor",
+        "repo": "lean4-mode",
+        "type": "github"
+      }
+    },
     "license-templates": {
       "flake": false,
       "locked": {
@@ -3161,6 +3178,7 @@
         "kind-icon": "kind-icon",
         "kotlin-ts-mode": "kotlin-ts-mode",
         "language-detection": "language-detection",
+        "lean4-mode": "lean4-mode",
         "license-templates": "license-templates",
         "link-hint": "link-hint",
         "lispy": "lispy",
