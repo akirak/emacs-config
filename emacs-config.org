@@ -8311,7 +8311,8 @@ A major mode for the Lean language
 
 #+begin_src emacs-lisp
   (setup (:package lean4-mode)
-    (:file-match "\\.lean\\'"))
+    (:file-match "\\.lean\\'")
+    (:set lean4-mode-hook '(lean4-input-set flymake-mode)))
 #+end_src
 *** license-templates                              :development:OSS:
 :PROPERTIES:

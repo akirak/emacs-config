@@ -613,8 +613,8 @@
     };
     lean4-mode = {
       flake = false;
-      owner = "leanprover-community";
-      ref = "milestone-03-breaking-refactor";
+      owner = "akirak";
+      ref = "eglot";
       repo = "lean4-mode";
       type = "github";
     };
