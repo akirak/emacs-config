@@ -5244,7 +5244,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 
 #+begin_src emacs-lisp
   (setup akirak-git
-    (:global "<f12> g r" #'akirak-git-list-remote-pages))
+    (:global-keymap "<f12> g r" #'akirak-git-list-remote-pages))
 #+end_src
 *** akirak-git-commit
 #+begin_src emacs-lisp
