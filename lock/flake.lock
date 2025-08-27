@@ -1632,16 +1632,16 @@
     "lean4-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1752531458,
-        "narHash": "sha256-o9LfF0p5sYH1G7G/K0md+USGVwh6QTumTj+or6eohug=",
-        "owner": "leanprover-community",
+        "lastModified": 1756321731,
+        "narHash": "sha256-9WizG5WlBw+jRO5A4MqqN4oEBTGVmpvjCTZkeHilrGo=",
+        "owner": "akirak",
         "repo": "lean4-mode",
-        "rev": "cca95cb5ab39a059c9ffc0e52f8b3655722d3265",
+        "rev": "3cbf94255053e8e2fbd05c593d6ba4e0ca5d3849",
         "type": "github"
       },
       "original": {
-        "owner": "leanprover-community",
-        "ref": "milestone-03-breaking-refactor",
+        "owner": "akirak",
+        "ref": "eglot",
         "repo": "lean4-mode",
         "type": "github"
       }
