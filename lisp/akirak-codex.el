@@ -30,6 +30,14 @@
   :choices '("medium" "high")
   :description "Reasoning effort")
 
+(defvar akirak-codex-codex-home nil)
+
+(transient-define-infix akirak-codex-set-codex-home ()
+  :class 'akirak-transient-directory-variable
+  :variable 'akirak-codex-codex-home
+  :description "CODEX_HOME"
+  :prompt "Set CODEX_HOME: ")
+
 ;;;###autoload (autoload 'akirak-codex-transient "akirak-codex" nil 'interactive)
 (transient-define-prefix akirak-codex-transient ()
   ["Options"
@@ -40,6 +48,7 @@
               "gpt-5-nano"
               "gpt-5-mini"))
    ("-r" akirak-codex-set-reasoning-effort)
+   ("-h" akirak-codex-set-codex-home)
    ("-s" "Sandbox" "--sandbox="
     :choices ("read-only"
               "workspace-write"
@@ -68,8 +77,7 @@
                                                          (concat "model_reasoning_effort="
                                                                  akirak-codex-reasoning-effort)))
                                                  args))
-                          ;; Use the ChatGPT authentication.
-                          ;; :environment (akirak-codex-environment)
+                          :environment (akirak-codex-environment)
                           :name (concat "codex-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
@@ -79,8 +87,11 @@
 
 (defun akirak-codex-environment ()
   (require 'akirak-passage)
-  (akirak-passage-add-process-environment
-   "OPENAI_API_KEY" akirak-codex-password-account))
+  ;; Use the ChatGPT authentication.
+  ;; (akirak-passage-add-process-environment
+  ;;  "OPENAI_API_KEY" akirak-codex-password-account)
+  (when akirak-codex-codex-home
+    (cons "CODEX_HOME" (convert-standard-filename (expand-file-name akirak-codex-codex-home)))))
 
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here
