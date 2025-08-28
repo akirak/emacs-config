@@ -124,6 +124,10 @@
             (uncomment-region start (point)))
         (error "Non-ppss is currently unsupported")))))
 
+(defcustom akirak-comment-end-delimiter-regexp (rx (or "," (and ";" (?  "/"))))
+  "Regular expression for matching statement/expression ends."
+  :type 'regexp)
+
 ;;;###autoload
 (defun akirak-comment-region-1 (begin end &optional arg)
   "Comment a region."
@@ -131,6 +135,8 @@
     (`(,block-comment-start ,block-comment-end ,indentation)
      (let ((end-marker (progn
                          (goto-char end)
+                         (when (looking-at akirak-comment-end-delimiter-regexp)
+                           (goto-char (match-end 0)))
                          (point-marker))))
        (goto-char begin)
        (unless (looking-at (rx (* blank) eol))
