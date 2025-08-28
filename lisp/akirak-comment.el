@@ -152,6 +152,15 @@
                                        (regexp-quote block-comment-start))
                                    "\\\\\\&"
                                    content-start (point))
+         ;; Indent the wrapped content. This may not be desirable in all
+         ;; situations, so it may be necessary to support opt-out.
+         (replace-regexp-in-region "^"
+                                   (if indent-tabs-mode
+                                       "\t"
+                                     (make-string tab-width ?\s))
+                                   content-start (point))
+         ;; If there is no meaningful character on the line after the region,
+         ;; insert an empty line
          (if (looking-back (rx bol (* blank)) (line-beginning-position))
              (delete-region (match-beginning 0) (point))
            (newline))
