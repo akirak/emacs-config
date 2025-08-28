@@ -146,6 +146,12 @@
        (forward-line)
        (let ((content-start (point)))
          (goto-char end-marker)
+         ;; Escape the contents of block comments. An example case of this
+         ;; situation is glob expressions in JavaScript, e.g. "**/*.ts" .
+         (replace-regexp-in-region (or (akirak-comment--block-start-regexp)
+                                       (regexp-quote block-comment-start))
+                                   "\\\\\\&"
+                                   content-start (point))
          (if (looking-back (rx bol (* blank)) (line-beginning-position))
              (delete-region (match-beginning 0) (point))
            (newline))
@@ -175,6 +181,9 @@
   (or (bound-and-true-p block-comment-start)
       (bound-and-true-p c-block-comment-starter)
       comment-start))
+
+(defun akirak-comment--block-start-regexp ()
+  (bound-and-true-p c-block-comment-start-regexp))
 
 (defun akirak-comment--block-end-syntax ()
   (or (bound-and-true-p block-comment-end)
