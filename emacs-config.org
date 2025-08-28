@@ -5550,6 +5550,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-shell
     (:global-keymap "C-c t" #'akirak-shell))
 #+end_src
+**** akirak-codex
+#+begin_src elisp
+  (setup akirak-codex
+    ;; mcp-proxy is used to communicate with non-stdio MCP servers
+    (:nixpkgs "mcp-proxy"))
+#+end_src
 *** akirak-shr
 #+begin_src elisp
   (setup akirak-shr
