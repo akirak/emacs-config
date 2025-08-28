@@ -93,5 +93,31 @@
   (when akirak-codex-codex-home
     (cons "CODEX_HOME" (convert-standard-filename (expand-file-name akirak-codex-codex-home)))))
 
+;;;###autoload
+(defun akirak-codex-insert-mcp-toml (name)
+  "Insert a TOML section for a MCP server entry."
+  (interactive (list (completing-read "Add MCP: " mcp-hub-servers))
+               toml-mode)
+  (pcase-exhaustive (cdr (assoc name mcp-hub-servers))
+    (`nil
+     (user-error "Not implemented"))
+    ((and (map :url)
+          (guard url))
+     (let ((transport (completing-read (format "Transport for %s: " url)
+                                       '("sse" "streamablehttp")
+                                       nil t)))
+       (insert (akirak-codex--mcp-toml name
+                                       "mcp-proxy"
+                                       (list url "--transport" transport)))))
+    ((and (map :command :args)
+          (guard command))
+     (insert (akirak-codex--mcp-toml name command args)))))
+
+(defun akirak-codex--mcp-toml (name command args)
+  ;; TODO: Add env support
+  (concat (format "[mcp_servers.%s]\n" name)
+          "command = " (json-encode command) "\n"
+          "args = " (json-encode args) "\n"))
+
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here
