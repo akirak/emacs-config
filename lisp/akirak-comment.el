@@ -142,7 +142,7 @@
        (unless (looking-at (rx (* blank) eol))
          (open-line 1))
        (delete-region (line-beginning-position) (point))
-       (insert (make-string indentation ?\s) block-comment-start)
+       (insert (make-string indentation ?\s) (string-trim-right block-comment-start))
        (forward-line)
        (let ((content-start (point)))
          (goto-char end-marker)
@@ -158,7 +158,7 @@
          ;; (replace-regexp-in-region (rx bol)
          ;;                           (make-string (1+ (length block-comment-start)) ?\s)
          ;;                           content-start (line-end-position 0))
-         (insert (make-string indentation ?\s) block-comment-end)
+         (insert (make-string indentation ?\s) (string-trim-left block-comment-end))
          (unless (looking-at (rx (* blank) eol))
            (newline-and-indent)))))
     (_
