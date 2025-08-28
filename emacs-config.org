@@ -1405,6 +1405,7 @@ The built-in =electric= package provides the following modes:
                          (json-ts-mode . (,@lsp-no-formatter))
                          (just-mode . (,@lsp-no-formatter))
                          (kotlin-ts-mode . (,@lsp))
+                         (lean4-mode . (,@lsp))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp-no-formatter))
@@ -7139,6 +7140,8 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '((neocamli-mode :language-id "ocamli") . ("ocamllsp")))
       (add-to-list 'eglot-server-programs
+                   '(lean4-mode . ("lake" "serve")))
+      (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
                    '(gleam-ts-mode . ("gleam" "lsp")))
@@ -8311,6 +8314,7 @@ A major mode for the Lean language
 
 #+begin_src emacs-lisp
   (setup (:package lean4-mode)
+    (:nixpkgs lean4)
     (:file-match "\\.lean\\'")
     (:set lean4-mode-hook '(lean4-input-set flymake-mode)))
 #+end_src
