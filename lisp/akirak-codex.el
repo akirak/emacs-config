@@ -7,7 +7,7 @@
   :type 'file)
 
 (defcustom akirak-codex-default-args
-  '("--config" "preferred_auth_method=apikey")
+  '("--config" "preferred_auth_method=chatgpt")
   ""
   :type '(repeat string))
 
@@ -34,8 +34,8 @@
 (transient-define-prefix akirak-codex-transient ()
   ["Options"
    ("-m" "Model" "--model="
-    :always-read t
-    :init-value (lambda (obj) (oset obj value "gpt-5"))
+    ;; :always-read t
+    ;; :init-value (lambda (obj) (oset obj value "gpt-5"))
     :choices ("gpt-5"
               "gpt-5-nano"
               "gpt-5-mini"))
@@ -68,7 +68,8 @@
                                                          (concat "model_reasoning_effort="
                                                                  akirak-codex-reasoning-effort)))
                                                  args))
-                          :environment (akirak-codex-environment)
+                          ;; Use the ChatGPT authentication.
+                          ;; :environment (akirak-codex-environment)
                           :name (concat "codex-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
