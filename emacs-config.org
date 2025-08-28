@@ -4868,7 +4868,15 @@ Major mode for the Go programming language
     (:org-src-lang "javascript")
     (:file-match "\\.[cm]?js$" "\\.json5\\'")
     (:mode-repl akirak/node-or-bun-repl)
-    (:mode-project-roots "package.json"))
+    (:mode-project-roots "package.json")
+
+    (defun akirak/javascript-syntax-setup ()
+      (setq-local c-block-comment-starter "/* "
+                  c-block-comment-ender " */"
+                  c-block-comment-start-regexp "/\\*[[:blank:]]*"
+                  c-block-comment-end-regexp "[[:blank:]]*\\*/"))
+
+    (:hook akirak/javascript-syntax-setup))
 #+end_src
 *** kotlin-ts-mode
 :PROPERTIES:
@@ -4960,9 +4968,10 @@ Major mode for editing typescript
         ("true" "false")
         ;; For eslint rules
         ("off" "warn" "error"))
-      (:mode-project-roots "package.json")
-      (:local-set block-comment-start "/*"
-                  block-comment-end "*/"))
+      (:mode-project-roots "package.json"))
+
+    ;; See js-ts-mode
+    (:hook akirak/javascript-syntax-setup)
 
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
