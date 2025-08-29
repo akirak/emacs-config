@@ -11313,7 +11313,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+RESULTS: tag-statistics
 | [[org-ql-search:tags:packages][packages]]            | 220 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
-| [[org-ql-search:tags:@extra][@extra]]              |  11 |
+| [[org-ql-search:tags:@extra][@extra]]              |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
@@ -11471,6 +11471,7 @@ To use these features, they need to be turned on at build time.
 | [[Coq][Coq]]                   |      |
 | [[tuareg][tuareg]]                |      |
 | [[utop][utop]]                  |      |
+| [[video-trimmer][video-trimmer]]         |      |
 #+END:
 *** Links
 :PROPERTIES:
