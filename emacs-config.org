@@ -5246,7 +5246,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src elisp
   (setup akirak-files
     (:global-keymap "C-c [" #'akirak-files-previous-file
-                    "C-c ]" #'akirak-files-next-file))
+                    "C-c ]" #'akirak-files-next-file)
+    (keymap-set help-map "!" #'akirak-executable-find))
 #+end_src
 *** akirak-git
 :PROPERTIES:

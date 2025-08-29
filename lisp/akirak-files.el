@@ -124,5 +124,26 @@
   (interactive "p")
   (akirak-files-next-file (- n)))
 
+;;;###autoload
+(defun akirak-executable-find (command)
+  (interactive
+   (list (let ((completions-sort nil))
+           (completing-read "Command: " (akirak--collect-commands)))))
+  (if-let* ((file (executable-find command)))
+      (message file)
+    (user-error "Not found")))
+
+(defun akirak--collect-commands ()
+  (let (result)
+    (dolist (dir exec-path)
+      (when (file-directory-p dir)
+        (pcase-dolist (`(,name ,_is-dir ,_links ,_uid ,_gid
+                               ,_atime ,_mtime ,_time ,_size
+                               ,mod . ,_rest)
+                       (directory-files-and-attributes dir nil (rx bol alnum) 'nosort))
+          (when (string-match-p "^...x" mod)
+            (cl-pushnew name result :test #'string=)))))
+    (sort result)))
+
 (provide 'akirak-files)
 ;;; akirak-files.el ends here
