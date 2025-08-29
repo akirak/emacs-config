@@ -5304,6 +5304,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     ;; Local search
     (:global-keymap "M-s M-l" #'akirak-japanese-search))
 #+end_src
+*** akirak-lmstudio
+#+begin_src elisp
+  (setup akirak-lmstudio
+    (:global-keymap "<f12> a l" #'akirak-lmstudio-model-transient))
+#+end_src
 *** akirak-log
 #+begin_src elisp
   (setup akirak-log
