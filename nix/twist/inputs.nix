@@ -185,4 +185,27 @@
       s = "0";
     } // super.packageRequires;
   };
+
+  lean4-mode = _: super: {
+    packageRequires = builtins.removeAttrs super.packageRequires [
+      "lsp-mode"
+    ];
+    files = builtins.removeAttrs super.files [
+      "lean4-info.el"
+      "lean4-fringe.el"
+      "lean4-lsp.el"
+    ];
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "lean4-mode";
+      ref = "eglot";
+    };
+    # origin = {
+    #   type = "github";
+    #   owner = "leanprover-community";
+    #   repo = "lean4-mode";
+    #   ref = "milestone-03-breaking-refactor";
+    # };
+  };
 }

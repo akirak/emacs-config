@@ -96,5 +96,54 @@
                                         nil t))))
     (dir-locals-set-directory-class dir class)))
 
+;;;###autoload
+(defun akirak-files-next-file (n)
+  (interactive "p")
+  (when (= n 0)
+    (user-error "The argument cannot be zero"))
+  (if (or (buffer-base-buffer)
+          (not (buffer-file-name)))
+      (user-error "Not directly visiting a file")
+    (let* ((files (thread-last
+                    (directory-files "." t)
+                    (seq-filter #'file-regular-p)))
+           (files (if (< n 0)
+                      (nreverse files)
+                    files))
+           (n (abs n))
+           (rest (member (expand-file-name (buffer-file-name))
+                         files)))
+      (find-file (if (< n (length rest))
+                     (nth n rest)
+                   (message "No longer remaining. Cycling")
+                   (nth (- (length rest) n 1)
+                        files))))))
+
+;;;###autoload
+(defun akirak-files-previous-file (n)
+  (interactive "p")
+  (akirak-files-next-file (- n)))
+
+;;;###autoload
+(defun akirak-executable-find (command)
+  (interactive
+   (list (let ((completions-sort nil))
+           (completing-read "Command: " (akirak--collect-commands)))))
+  (if-let* ((file (executable-find command)))
+      (message file)
+    (user-error "Not found")))
+
+(defun akirak--collect-commands ()
+  (let (result)
+    (dolist (dir exec-path)
+      (when (file-directory-p dir)
+        (pcase-dolist (`(,name ,_is-dir ,_links ,_uid ,_gid
+                               ,_atime ,_mtime ,_time ,_size
+                               ,mod . ,_rest)
+                       (directory-files-and-attributes dir nil (rx bol alnum) 'nosort))
+          (when (string-match-p "^...x" mod)
+            (cl-pushnew name result :test #'string=)))))
+    (sort result)))
+
 (provide 'akirak-files)
 ;;; akirak-files.el ends here

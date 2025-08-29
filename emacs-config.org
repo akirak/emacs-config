@@ -1405,6 +1405,7 @@ The built-in =electric= package provides the following modes:
                          (json-ts-mode . (,@lsp-no-formatter))
                          (just-mode . (,@lsp-no-formatter))
                          (kotlin-ts-mode . (,@lsp))
+                         (lean4-mode . (,@lsp))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp-no-formatter))
@@ -2191,7 +2192,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                  (and (pred numberp)
                       (guard (< arg 0))))
              (save-excursion
-               (forward-word arg)
+               (forward-word (prefix-numeric-value arg))
                (swap-at-point)))
             ((or (pred numberp)
                  `nil)
@@ -2400,7 +2401,8 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
     (:with-map tab-prefix-map
       (:keymap "=" #'tab-bar-move-window-to-tab)
-      (:keymap "R" #'akirak/tab-bar-set-tab-name-from-org-clock))
+      (:keymap "R" #'akirak/tab-bar-set-tab-name-from-org-clock)
+      (:keymap-unset "1"))
 
     (:with-mode tab-bar-history-mode
       (:hook-into after-init-hook)
@@ -3740,6 +3742,9 @@ A programmable workflow layer for Org mode
     (with-eval-after-load 'org-id
       (org-dog-id-mode t))
     (add-hook 'org-mode-hook #'org-dog-file-mode-maybe)
+    (:with-map org-dog-file-mode-map
+      (:keymap "<remap> <akirak-files-previous-file>" #'org-dog-previous-sibling-buffer
+               "<remap> <akirak-files-next-file>" #'org-dog-next-sibling-buffer))
 
     (:set org-dog-context-path-patterns
           `(("^\\.github/" . "services/github.com")
@@ -4864,7 +4869,15 @@ Major mode for the Go programming language
     (:org-src-lang "javascript")
     (:file-match "\\.[cm]?js$" "\\.json5\\'")
     (:mode-repl akirak/node-or-bun-repl)
-    (:mode-project-roots "package.json"))
+    (:mode-project-roots "package.json")
+
+    (defun akirak/javascript-syntax-setup ()
+      (setq-local c-block-comment-starter "/* "
+                  c-block-comment-ender " */"
+                  c-block-comment-start-regexp "/\\*[[:blank:]]*"
+                  c-block-comment-end-regexp "[[:blank:]]*\\*/"))
+
+    (:hook akirak/javascript-syntax-setup))
 #+end_src
 *** kotlin-ts-mode
 :PROPERTIES:
@@ -4956,9 +4969,10 @@ Major mode for editing typescript
         ("true" "false")
         ;; For eslint rules
         ("off" "warn" "error"))
-      (:mode-project-roots "package.json")
-      (:local-set block-comment-start "/*"
-                  block-comment-end "*/"))
+      (:mode-project-roots "package.json"))
+
+    ;; See js-ts-mode
+    (:hook akirak/javascript-syntax-setup)
 
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
@@ -5228,6 +5242,13 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
   (setup akirak-expand-region
     (:global-keymap "C-M-SPC" #'akirak-expand-region-default))
 #+end_src
+*** akirak-files
+#+begin_src elisp
+  (setup akirak-files
+    (:global-keymap "C-c [" #'akirak-files-previous-file
+                    "C-c ]" #'akirak-files-next-file)
+    (keymap-set help-map "!" #'akirak-executable-find))
+#+end_src
 *** akirak-git
 :PROPERTIES:
 :CREATED_TIME: [2025-03-06 Thu 22:10]
@@ -5235,7 +5256,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 
 #+begin_src emacs-lisp
   (setup akirak-git
-    (:global "<f12> g r" #'akirak-git-list-remote-pages))
+    (:global-keymap "<f12> g r" #'akirak-git-list-remote-pages))
 #+end_src
 *** akirak-git-commit
 #+begin_src emacs-lisp
@@ -5529,6 +5550,12 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src elisp
   (setup akirak-shell
     (:global-keymap "C-c t" #'akirak-shell))
+#+end_src
+**** akirak-codex
+#+begin_src elisp
+  (setup akirak-codex
+    ;; mcp-proxy is used to communicate with non-stdio MCP servers
+    (:nixpkgs "mcp-proxy"))
 #+end_src
 *** akirak-shr
 #+begin_src elisp
@@ -7130,6 +7157,8 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    '((neocamli-mode :language-id "ocamli") . ("ocamllsp")))
       (add-to-list 'eglot-server-programs
+                   '(lean4-mode . ("lake" "serve")))
+      (add-to-list 'eglot-server-programs
                    '(coq-mode . ("coq-lsp")))
       (add-to-list 'eglot-server-programs
                    '(gleam-ts-mode . ("gleam" "lsp")))
@@ -8291,18 +8320,20 @@ Automatic language detection from code snippets
 #+begin_src emacs-lisp
 (setup (:package language-detection))
 #+end_src
-*** COMMENT lean4-mode                                            :Lean4:@extra:ARCHIVE:
+*** lean4-mode                                            :Lean4:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-09 Fri 19:50]
 :END:
 #+begin_quote
-A major mode for the Lean language
-[[https://github.com/leanprover/lean4]]
+Lean4 major mode
+[[https://github.com/leanprover-community/lean4-mode]]
 #+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package lean4-mode)
-    (:file-match "\\.lean\\'"))
+    (:nixpkgs lean4)
+    (:file-match "\\.lean\\'")
+    (:set lean4-mode-hook '(lean4-input-set flymake-mode)))
 #+end_src
 *** license-templates                              :development:OSS:
 :PROPERTIES:
@@ -8549,6 +8580,11 @@ A Git porcelain inside Emacs
     (:nixpkgs git)
 
     (:set magit-save-repository-buffers 'dontask)
+    (when (eq system-type 'gnu/linux)
+      ;; On Linux, I mostly use ZFS, so I will disable trash operations. Metadata
+      ;; operations are slow on ZFS, and because ZFS supports automatic snapshots,
+      ;; I can rollback the filesystem if the removed file is crucial.
+      (:set magit-delete-by-moving-to-trash nil))
 
     ;; Twist allows me to get the git version of any package if necessary, so
     ;; there is no point in making this IO-intensive function run.
@@ -8595,6 +8631,11 @@ A Git porcelain inside Emacs
                           (yes-or-no-p "Stage all changes in this file?"))
                     (magit-stage-file (buffer-file-name))
                     (magit-commit))))
+
+    (with-eval-after-load 'magit-status
+      ;; Remove some sections for faster magit-status runs.
+      (delq 'magit-insert-am-sequence magit-status-sections-hook)
+      (delq 'magit-insert-stashes magit-status-sections-hook))
 
     (:status opinionated
       (:set magit-display-buffer-function
@@ -10465,7 +10506,7 @@ See the following [[https://github.com/minad/vertico][comment]] for differences:
 #+begin_quote
 In contrast to Vertico, Icomplete rotates the candidates such that the current candidate always appears at the top. From my perspective, candidate rotation feels a bit less intuitive than the UI of Vertico or Selectrum.
 #+end_quote
-*** video-trimmer                                                        :media:
+*** video-trimmer                                                 :media:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2025-08-22 Fri 12:09]
 :END:
@@ -10474,7 +10515,8 @@ In contrast to Vertico, Icomplete rotates the candidates such that the current c
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package video-trimmer))
+  (setup (:package video-trimmer)
+    (:nixpkgs "ffmpeg"))
 #+end_src
 *** visual-fill-column
 :PROPERTIES:
@@ -11269,11 +11311,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 219 |
+| [[org-ql-search:tags:packages][packages]]            | 220 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
+| [[org-ql-search:tags:@extra][@extra]]              |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
-| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
@@ -11333,6 +11375,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
+| [[org-ql-search:tags:Lean4][Lean4]]               |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:social][social]]              |   1 |
 | [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
@@ -11428,6 +11471,7 @@ To use these features, they need to be turned on at build time.
 | [[Coq][Coq]]                   |      |
 | [[tuareg][tuareg]]                |      |
 | [[utop][utop]]                  |      |
+| [[video-trimmer][video-trimmer]]         |      |
 #+END:
 *** Links
 :PROPERTIES:

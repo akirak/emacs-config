@@ -1,0 +1,3 @@
+(lean4-mode
+ :fetcher github :repo "leanprover-community/lean4-mode"
+ :files (:defaults ("data" "data/*.json")))

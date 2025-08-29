@@ -124,6 +124,10 @@
             (uncomment-region start (point)))
         (error "Non-ppss is currently unsupported")))))
 
+(defcustom akirak-comment-end-delimiter-regexp (rx (or "," (and ";" (?  "/"))))
+  "Regular expression for matching statement/expression ends."
+  :type 'regexp)
+
 ;;;###autoload
 (defun akirak-comment-region-1 (begin end &optional arg)
   "Comment a region."
@@ -131,22 +135,39 @@
     (`(,block-comment-start ,block-comment-end ,indentation)
      (let ((end-marker (progn
                          (goto-char end)
+                         (when (looking-at akirak-comment-end-delimiter-regexp)
+                           (goto-char (match-end 0)))
                          (point-marker))))
        (goto-char begin)
        (unless (looking-at (rx (* blank) eol))
          (open-line 1))
        (delete-region (line-beginning-position) (point))
-       (insert (make-string indentation ?\s) block-comment-start)
+       (insert (make-string indentation ?\s) (string-trim-right block-comment-start))
        (forward-line)
        (let ((content-start (point)))
          (goto-char end-marker)
+         ;; Escape the contents of block comments. An example case of this
+         ;; situation is glob expressions in JavaScript, e.g. "**/*.ts" .
+         (replace-regexp-in-region (or (akirak-comment--block-start-regexp)
+                                       (regexp-quote block-comment-start))
+                                   "\\\\\\&"
+                                   content-start (point))
+         ;; Indent the wrapped content. This may not be desirable in all
+         ;; situations, so it may be necessary to support opt-out.
+         (replace-regexp-in-region "^"
+                                   (if indent-tabs-mode
+                                       "\t"
+                                     (make-string tab-width ?\s))
+                                   content-start (point))
+         ;; If there is no meaningful character on the line after the region,
+         ;; insert an empty line
          (if (looking-back (rx bol (* blank)) (line-beginning-position))
              (delete-region (match-beginning 0) (point))
            (newline))
          ;; (replace-regexp-in-region (rx bol)
          ;;                           (make-string (1+ (length block-comment-start)) ?\s)
          ;;                           content-start (line-end-position 0))
-         (insert (make-string indentation ?\s) block-comment-end)
+         (insert (make-string indentation ?\s) (string-trim-left block-comment-end))
          (unless (looking-at (rx (* blank) eol))
            (newline-and-indent)))))
     (_
@@ -169,6 +190,9 @@
   (or (bound-and-true-p block-comment-start)
       (bound-and-true-p c-block-comment-starter)
       comment-start))
+
+(defun akirak-comment--block-start-regexp ()
+  (bound-and-true-p c-block-comment-start-regexp))
 
 (defun akirak-comment--block-end-syntax ()
   (or (bound-and-true-p block-comment-end)

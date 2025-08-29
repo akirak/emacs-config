@@ -162,6 +162,27 @@
                               filename)))))))
   "Project buffer candidate source for `consult-buffer'.")
 
+(defvar akirak-consult-source-ignored-project-file
+  `(:name "Ignored Files"
+          ;; :narrow (?i . "Ignored Files")
+          ;; :hidden t
+          :category file
+          :state ,#'consult--file-state
+          :face consult-file
+          :enabled ,(lambda () consult-project-function)
+          :items
+          ,(lambda ()
+             (when-let* ((root (akirak-consult--project-root)))
+               (let ((len (length root))
+                     (default-directory root))
+                 (thread-last
+                   (process-lines "git" "clean" "-ndx")
+                   (mapcar `(lambda (message)
+                              (let* ((relative (string-remove-prefix "Would remove " message))
+                                     (path (expand-file-name relative ,root)))
+                                (put-text-property 0 ,len 'invisible t path)
+                                path)))))))))
+
 (defvar akirak-consult--project-files-cache nil)
 
 (defun akirak-consult--project-files (&optional prepend-root root)
@@ -618,7 +639,9 @@
   ;; to apply `expand-file-name'.
   (let* ((akirak-consult-initial-directory (expand-file-name default-directory))
          (default-directory (expand-file-name dir))
-         (selected (consult--multi akirak-consult-project-sources
+         (selected (consult--multi (if current-prefix-arg
+                                       '(akirak-consult-source-ignored-project-file)
+                                     akirak-consult-project-sources)
                                    :require-match (confirm-nonexistent-file-or-buffer)
                                    :prompt (format "Switch in project from \"%s\": "
                                                    (buffer-name))

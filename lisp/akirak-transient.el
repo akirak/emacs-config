@@ -157,5 +157,40 @@ the initial value in minibuffer input."
        (propertize ")" 'face 'transient-inactive-value))
     ""))
 
+;;;; akirak-transient-file-variable
+
+(defclass akirak-transient-file-variable (akirak-transient-variable)
+  ((prompt :initarg :prompt)
+   (predicate :initarg :predicate :initform nil)))
+
+(cl-defmethod transient-infix-read ((obj akirak-transient-file-variable))
+  (read-file-name (oref obj prompt)
+                  nil
+                  (oref obj value)
+                  t
+                  nil
+                  (oref obj predicate)))
+
+(cl-defmethod transient-format-value ((obj akirak-transient-file-variable))
+  (concat
+   (propertize "(" 'face 'transient-inactive-value)
+   (if-let* ((value (oref obj value)))
+       (propertize value 'face 'transient-value)
+     "")
+   (propertize ")" 'face 'transient-inactive-value)))
+
+;;;; akirak-transient-directory-variable
+
+(defclass akirak-transient-directory-variable (akirak-transient-file-variable)
+  ())
+
+(cl-defmethod transient-infix-read ((obj akirak-transient-file-variable))
+  (read-directory-name (oref obj prompt)
+                       (oref obj value)
+                       nil
+                       t
+                       nil
+                       (oref obj predicate)))
+
 (provide 'akirak-transient)
 ;;; akirak-transient.el ends here

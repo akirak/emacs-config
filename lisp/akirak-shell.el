@@ -310,19 +310,13 @@ the original minor mode."
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
 
-;;;###autoload
-(defun akirak-shell-project-for-codex ()
-  (interactive)
-  (let ((root (akirak-shell-project-directory)))
-    (akirak-shell-eat-new :dir root
-                          :command (akirak-codex-command)
-                          :name (concat "codex-"
-                                        (file-name-nondirectory
-                                         (directory-file-name root))))))
-
 ;;;###autoload (autoload 'akirak-shell-project-for-claude "akirak-shell" nil 'interactive)
 (defalias 'akirak-shell-project-for-claude
   #'akirak-claude-code-shell)
+
+;;;###autoload (autoload 'akirak-shell-project-for-codex "akirak-shell" nil 'interactive)
+(defalias 'akirak-shell-project-for-codex
+  #'akirak-codex-transient)
 
 (defun akirak-shell-project-directory ()
   (require 'akirak-org-git)

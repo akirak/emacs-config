@@ -611,6 +611,13 @@
       repo = "language-detection.el";
       type = "github";
     };
+    lean4-mode = {
+      flake = false;
+      owner = "akirak";
+      ref = "eglot";
+      repo = "lean4-mode";
+      type = "github";
+    };
     license-templates = {
       flake = false;
       owner = "jcs-elpa";

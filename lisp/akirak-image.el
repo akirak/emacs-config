@@ -213,6 +213,12 @@ This function returns a created file, if it creates a new file.
                                (format "%dx%d"
                                        akirak-image-max-width
                                        akirak-image-max-width))))
+         (src-extension (file-name-extension src-file))
+         (out-extension (pcase src-extension
+                          ;; Currently GraphicsMagick doesn't support writing to
+                          ;; avif. It is read-only, so convert AVIF to PNG.
+                          ("avif" "png")
+                          (_ src-extension)))
          (out-file (concat (file-name-sans-extension src-file)
                            (if scale-option
                                (concat "-w" (number-to-string akirak-image-max-width))
@@ -220,7 +226,7 @@ This function returns a created file, if it creates a new file.
                            (if opacity-option
                                "-noopacity"
                              "")
-                           "." (file-name-extension src-file))))
+                           "." out-extension)))
     (when (or opacity-option scale-option)
       (unless (file-exists-p out-file)
         (apply #'call-process
