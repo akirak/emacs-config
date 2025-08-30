@@ -350,6 +350,22 @@
         "type": "github"
       }
     },
+    "cond-let": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1756481388,
+        "narHash": "sha256-xiannhRE+4XEkSqCsG4b7jDJY0HaQAc18uyNDel8/zA=",
+        "owner": "tarsius",
+        "repo": "cond-let",
+        "rev": "06e31b2124b46fb0a6ae86d40c9397a558523ef2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tarsius",
+        "repo": "cond-let",
+        "type": "github"
+      }
+    },
     "consult": {
       "flake": false,
       "locked": {
@@ -3098,6 +3114,7 @@
         "casual-symbol-overlay": "casual-symbol-overlay",
         "closql": "closql",
         "compat": "compat",
+        "cond-let": "cond-let",
         "consult": "consult",
         "consult-ls-git": "consult-ls-git",
         "consult-org-dog": "consult-org-dog",
