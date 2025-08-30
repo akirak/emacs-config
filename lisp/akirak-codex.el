@@ -58,7 +58,8 @@
               "on-failure"
               "on-request"
               "never"))
-   ("-f" "Full auto" "--full-auto")]
+   ("-f" "Full auto" "--full-auto")
+   ("-c" "Search" "--search")]
   ["Actions"
    ("x" "Open interactive shell" akirak-codex--open-shell)]
   (interactive)
