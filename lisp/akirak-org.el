@@ -1324,10 +1324,12 @@ At this point, the function works with the following pattern:
                          arg
                        (org-with-point-at (1- (car bounds))
                          (org-outline-level))))
+         (end-marker (make-marker))
          current-min-level)
     (save-excursion
-      (goto-char (car bounds))
-      (while (re-search-forward org-heading-regexp (cdr bounds) t)
+      (goto-char (cdr bounds))
+      (set-marker end-marker (point))
+      (while (re-search-backward org-heading-regexp (car bounds) t)
         (let ((level (- (match-end 1)
                         (match-beginning 1))))
           (setq current-min-level (if current-min-level
@@ -1337,10 +1339,10 @@ At this point, the function works with the following pattern:
           (let ((level-inc (- (1+ base-level) current-min-level)))
             (when (> level-inc 0)
               (replace-regexp-in-region (rx bol (+ "*") blank)
-                                        (concat (make-string (1+ level-inc) ?\*)
+                                        (concat (make-string level-inc ?\*)
                                                 "\\&")
                                         (car bounds)
-                                        (point))))
+                                        (marker-position end-marker))))
         (unless silent
           (message "akirak-org-demote-headings: No heading in the selected region"))))))
 
