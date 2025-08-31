@@ -166,13 +166,14 @@ Example values are shown below:
                       (clock-tags (save-current-buffer
                                     (org-with-point-at org-clock-marker
                                       (org-get-tags)))))
-           (and (or (not (string-prefix-p "~/" filename))
-                    (member filename files)
-                    (when further
-                      (member filename deep-files))
-                    (member filename mode-or-path-files))
-                (or (not tag)
-                    (member tag clock-tags))))
+           (or (not (string-prefix-p "~/" filename))
+               (and (or (member filename files)
+                        (when further
+                          (member filename deep-files))
+                        (member filename mode-or-path-files))
+                    (or (not tag)
+                        (member tag clock-tags)))
+               (member "@troubleshooting" clock-tags)))
        (require 'org-dog-clock)
        (message "You must clock in")
        (let ((files (if further
