@@ -3531,7 +3531,12 @@ Outline-based notes management and organizer
     (autoload 'org-bibtex-store-link "ol-bibtex")
 
     (:status opinionated
-      (:global-keymap "C-c l" #'org-store-link)
+      (:global-keymap "C-c l"
+                      (defun akirak-org-store-link (&optional arg)
+                        (interactive "P")
+                        (if arg
+                            (akirak-org-copy-remote-link)
+                          (call-interactively #'org-store-link))))
       (with-eval-after-load 'org-agenda
         (keymap-set org-agenda-mode-map
                     "C-c l"

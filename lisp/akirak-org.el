@@ -1285,6 +1285,25 @@ At this point, the function works with the following pattern:
          (akirak-shell-run-command-in-some-buffer command))))))
 
 ;;;###autoload
+(defun akirak-org-copy-remote-link ()
+  "Store an Org link to the remote URL."
+  (interactive "P")
+  (require 'akirak-git)
+  (let* ((filename (buffer-file-name (buffer-base-buffer)))
+         (url (if (use-region-p)
+                  (akirak-git-remote-permalink
+                   filename
+                   (line-number-at-pos (region-beginning) 'absolute)
+                   (line-number-at-pos (region-end) 'absolute))
+                (akirak-git-remote-permalink
+                 filename
+                 (line-number-at-pos nil 'absolute))))
+         (text (which-function)))
+    (push (list url text)
+          org-stored-links)
+    (message "Stored a link to the function in the remote repository")))
+
+;;;###autoload
 (defun akirak-org-expand-template ()
   "Insert a template according to the entry property."
   (interactive nil org-mode)
