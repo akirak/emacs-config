@@ -154,44 +154,44 @@ Example values are shown below:
   (require 'org-dog-overview)
   (pcase-exhaustive (akirak-org-clock--target)
     (`(,files ,query-prefix ,tag ,further)
-     (or (and (org-clocking-p)
-              (let ((filename (thread-last
-                                (marker-buffer org-clock-marker)
-                                (buffer-file-name)
-                                (abbreviate-file-name))))
-                (or (not (string-prefix-p "~/" filename))
+     (if (org-clocking-p)
+         (thunk-let* ((filename (thread-last
+                                  (marker-buffer org-clock-marker)
+                                  (buffer-file-name)
+                                  (abbreviate-file-name)))
+                      (deep-files (thread-last
+                                    (org-dog-overview-scan files :fast t)
+                                    (mapcar #'car)))
+                      (mode-or-path-files (akirak-org-clock--mode-or-path-files))
+                      (clock-tags (save-current-buffer
+                                    (org-with-point-at org-clock-marker
+                                      (org-get-tags)))))
+           (and (or (not (string-prefix-p "~/" filename))
                     (member filename files)
                     (when further
-                      (member filename
-                              (thread-last
-                                (org-dog-overview-scan files :fast t)
-                                (mapcar #'car))))
-                    (member filename (akirak-org-clock--mode-or-path-files))))
-              (or (not tag)
-                  (member tag
-                          (save-current-buffer
-                            (org-with-point-at org-clock-marker
-                              (org-get-tags))))))
-         (progn
-           (require 'org-dog-clock)
-           (message "You must clock in")
-           (let ((files (if further
-                            (thread-last
-                              (org-dog-overview-scan files :fast t)
-                              (mapcar #'car))
-                          files)))
-             (if files
-                 (progn
-                   (org-dog-clock-in files
-                                     :query-prefix query-prefix
-                                     :tags tag
-                                     :prompt
-                                     (format "Clock in (%s): "
-                                             (mapconcat #'file-name-nondirectory
-                                                        files ", ")))
-                   t)
-               (message "No Org file to clock in to")))
-           t)))
+                      (member filename deep-files))
+                    (member filename mode-or-path-files))
+                (or (not tag)
+                    (member tag clock-tags))))
+       (require 'org-dog-clock)
+       (message "You must clock in")
+       (let ((files (if further
+                        (thread-last
+                          (org-dog-overview-scan files :fast t)
+                          (mapcar #'car))
+                      files)))
+         (if files
+             (progn
+               (org-dog-clock-in files
+                                 :query-prefix query-prefix
+                                 :tags tag
+                                 :prompt
+                                 (format "Clock in (%s): "
+                                         (mapconcat #'file-name-nondirectory
+                                                    files ", ")))
+               t)
+           (message "No Org file to clock in to")))
+       t))
     (`nil
      t)))
 
