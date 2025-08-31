@@ -639,6 +639,8 @@
   (require 'akirak-org-git)
   (let* ((filename (buffer-file-name (or (buffer-base-buffer)
                                          (current-buffer))))
+         (contribution (string-match-p (regexp-quote "/contributions/")
+                                       filename))
          (file (when filename
                  (file-relative-name filename (vc-git-root filename))))
          (bounds (when (use-region-p)
@@ -671,8 +673,11 @@
                                         (car))
                                     "")
           akirak-capture-template-options
-          (append (list :tags (when troubleshooting
-                                '("@troubleshooting"))
+          (append (list :tags (cond
+                               (contribution
+                                '("@contribution"))
+                               (troubleshooting
+                                '("@troubleshooting")))
                         :properties
                         (akirak-org-git-properties t
                           :no-branch (not akirak-capture-start-now)
@@ -702,15 +707,21 @@
 (defun akirak-capture-project-task ()
   (interactive)
   (require 'akirak-org-git)
-  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-        akirak-capture-template-options (append (list :properties
-                                                      (akirak-org-git-properties t
-                                                        :no-branch (not akirak-capture-start-now)
-                                                        :include-file nil)
-                                                      :body "%?")
-                                                (akirak-capture--template-options))
-        akirak-capture-doct-options (akirak-capture--doct-options))
-  (akirak-capture-doct))
+  (let* ((filename (buffer-file-name (buffer-base-buffer)))
+         (contribution (string-match-p (regexp-quote "/contributions/")
+                                       filename)))
+    (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
+          akirak-capture-template-options (append (list :properties
+                                                        (akirak-org-git-properties t
+                                                          :no-branch (not akirak-capture-start-now)
+                                                          :include-file nil)
+                                                        :tags
+                                                        (when contribution
+                                                          '("@contribution"))
+                                                        :body "%?")
+                                                  (akirak-capture--template-options))
+          akirak-capture-doct-options (akirak-capture--doct-options))
+    (akirak-capture-doct)))
 
 (defun akirak-capture-project-inquiry ()
   (interactive)
