@@ -118,7 +118,39 @@
   ;; TODO: Add env support
   (concat (format "[mcp_servers.%s]\n" name)
           "command = " (json-encode command) "\n"
-          "args = " (json-encode args) "\n"))
+          "args = " (json-encode (or args (vector))) "\n"))
+
+;;;; Inserting the response
+
+(defun akirak-codex-recent-output-to-org (buffer n)
+  (with-temp-buffer
+    (insert (with-current-buffer buffer
+              (akirak-codex--recent-output n)))
+    (let ((inhibit-read-only t))
+      (remove-text-properties (point-min) (point) '(read-only t)))
+    (akirak-pandoc-replace-with-org (point) (point-max))
+    (concat "#+begin_example\n"
+            (org-no-properties (string-trim-right (buffer-string)))
+            "\n#+end_example\n")))
+
+(defun akirak-codex--recent-output (n)
+  "Return the recent N-th response from the current buffer."
+  (cl-assert (and (numberp n) (> n 0)))
+  (save-excursion
+    (goto-char (point-max))
+    (beginning-of-line 0)
+    (buffer-substring-no-properties (point) (line-end-position))
+    (if (looking-at (regexp-quote "▌"))
+        (let ((end (point)))
+          (re-search-backward (rx bol "codex") nil nil n)
+          (string-trim-right
+           (buffer-substring (line-beginning-position 2)
+                             (if (> n 1)
+                                 (progn
+                                   (re-search-forward (rx bol "user"))
+                                   (match-beginning 0))
+                               end))))
+      (error "The codex buffer isn't in an expected state"))))
 
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here
