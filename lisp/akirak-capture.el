@@ -314,6 +314,15 @@
   (goto-char (org-ql-completing-read (org-base-buffer (current-buffer))
                :prompt "Select a heading: ")))
 
+(defvar akirak-capture-example-type nil)
+
+(transient-define-infix akirak-capture-example-source-infix ()
+  :class 'akirak-transient-choice-variable
+  :cycle t
+  :description "Source"
+  :choices '(kill-ring minibuffer)
+  :variable 'akirak-capture-example-type)
+
 (transient-define-prefix akirak-capture-doct ()
   ["Headline and target parent"
    :class transient-row
@@ -517,7 +526,9 @@
 
    ("?" "Project inquiry" akirak-capture-project-inquiry
     :transient t
-    :if project-current)]
+    :if project-current)
+
+   ("%" "Troubleshooting" akirak-capture-issue)]
 
   ["Append to clock"
    :class transient-row
@@ -628,6 +639,8 @@
   (require 'akirak-org-git)
   (let* ((filename (buffer-file-name (or (buffer-base-buffer)
                                          (current-buffer))))
+         (contribution (string-match-p (regexp-quote "/contributions/")
+                                       filename))
          (file (when filename
                  (file-relative-name filename (vc-git-root filename))))
          (bounds (when (use-region-p)
@@ -660,8 +673,11 @@
                                         (car))
                                     "")
           akirak-capture-template-options
-          (append (list :tags (when troubleshooting
-                                '("@troubleshooting"))
+          (append (list :tags (cond
+                               (contribution
+                                '("@contribution"))
+                               (troubleshooting
+                                '("@troubleshooting")))
                         :properties
                         (akirak-org-git-properties t
                           :no-branch (not akirak-capture-start-now)
@@ -691,15 +707,21 @@
 (defun akirak-capture-project-task ()
   (interactive)
   (require 'akirak-org-git)
-  (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-        akirak-capture-template-options (append (list :properties
-                                                      (akirak-org-git-properties t
-                                                        :no-branch (not akirak-capture-start-now)
-                                                        :include-file nil)
-                                                      :body "%?")
-                                                (akirak-capture--template-options))
-        akirak-capture-doct-options (akirak-capture--doct-options))
-  (akirak-capture-doct))
+  (let* ((filename (buffer-file-name (buffer-base-buffer)))
+         (contribution (string-match-p (regexp-quote "/contributions/")
+                                       filename)))
+    (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
+          akirak-capture-template-options (append (list :properties
+                                                        (akirak-org-git-properties t
+                                                          :no-branch (not akirak-capture-start-now)
+                                                          :include-file nil)
+                                                        :tags
+                                                        (when contribution
+                                                          '("@contribution"))
+                                                        :body "%?")
+                                                  (akirak-capture--template-options))
+          akirak-capture-doct-options (akirak-capture--doct-options))
+    (akirak-capture-doct)))
 
 (defun akirak-capture-project-inquiry ()
   (interactive)
@@ -810,6 +832,71 @@
                   (cdr (assq n akirak-capture-heading-commands)))
             result))
     (nreverse result)))
+
+(transient-define-prefix akirak-capture-issue ()
+  :refresh-suffixes t
+  ["Options"
+   :class transient-row
+   ("s" akirak-capture-example-source-infix)]
+  ["Context"
+   :class transient-columns
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-issue (octopus-generate-context-file-subgroups)))   ]
+  ["Static files"
+   :class transient-row
+   :setup-children
+   (lambda (_)
+     (transient-parse-suffixes 'akirak-capture-issue (octopus-generate-static-targets)))]
+  ["Other locations"
+   :class transient-row
+   ("@" octopus-clock-marker-suffix)
+   ("/" octopus-read-dog-file-suffix)]
+  (interactive)
+  (setq akirak-capture-example-type 'kill-ring)
+  (transient-setup 'akirak-capture-issue))
+
+(cl-defmethod octopus--dispatch ((_cmd (eql 'akirak-capture-issue))
+                                 target)
+  (let* ((text (pcase-exhaustive akirak-capture-example-type
+                 (`kill-ring
+                  (read-from-kill-ring "Quoted text (from kill ring): "))
+                 (`minibuffer
+                  (read-string "Quoted text: "))))
+         (headline (thread-last
+                     (string-split text "\n")
+                     (cl-remove-if #'string-empty-p)
+                     (akirak-completing-read-no-sorted "Headline: ")))
+         (org-capture-entry
+          (car (doct
+                `((""
+                   :keys ""
+                   :template ,(akirak-org-capture-make-entry-body
+                                headline
+                                :todo "UNDERWAY"
+                                :tags '("@troubleshooting")
+                                :properties nil
+                                :body
+                                (concat (if (org-clocking-p)
+                                            (org-with-point-at org-clock-marker
+                                              (concat ":METADATA:\n"
+                                                      "Source: "
+                                                      (akirak-capture--clocked-entry-link)
+                                                      "\n:END:\n"))
+                                          "")
+                                        "%?\n\n"
+                                        "#+begin_example\n"
+                                        (string-trim-right text)
+                                        "\n#+end_example\n"))
+                   :clock-in t :clock-resume t
+                   ,@(akirak-capture--target-plist target)))))))
+    (org-capture)))
+
+(defun akirak-capture--clocked-entry-link ()
+  "Return an Org link to the clocked entry."
+  (org-with-point-at org-clock-marker
+    (org-link-make-string (concat "id:" (org-id-get-create))
+                          (org-entry-get nil "ITEM"))))
 
 (transient-define-prefix akirak-capture-append-heading-to-clock (text)
   [:description

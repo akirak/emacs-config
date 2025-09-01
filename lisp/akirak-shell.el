@@ -463,7 +463,9 @@ the original minor mode."
 (defun akirak-shell-insert-response-to-org (buffer n)
   (insert (pcase-exhaustive (akirak-shell-detect-buffer-program buffer)
             (`claude
-             (akirak-claude-recent-output-to-org buffer n)))))
+             (akirak-claude-recent-output-to-org buffer n))
+            (`codex
+             (akirak-codex-recent-output-to-org buffer n)))))
 
 (cl-defun akirak-shell-detect-buffer-program (buffer)
   (declare (indent 1))

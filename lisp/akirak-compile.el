@@ -265,6 +265,8 @@ are displayed in the frame."
                                            (dirs
                                             (completing-read "Directory: "
                                                              dirs nil t))))))
+             (put-text-property 0 1 'command-directory default-directory
+                                command)
              (if (akirak-compile--installation-command-p command)
                  ;; Install dependencies in a separate buffer without killing the
                  ;; current process.
@@ -272,7 +274,9 @@ are displayed in the frame."
                ;; Keep the input in the history iff it's not an installation command.
                (if (eq history :default)
                    (puthash key (list command) akirak-compile-per-workspace-history)
-                 (cl-pushnew command history :test #'string=)
+                 (if-let* ((cell (cl-member command history :test #'string=)))
+                     (setcar cell command)
+                   (push command history))
                  (puthash key history akirak-compile-per-workspace-history))
                (cond
                 (prefer-terminal
