@@ -937,30 +937,32 @@ The point should be at the heading."
                        (error "Require at least one of link-text or heading")))
         (heading (or heading link-text
                      (error "Require at least one of link-text or heading"))))
-    (delete-region beg end)
-    (goto-char beg)
-    (org-with-wide-buffer
-     (pcase-exhaustive (org-dog-buffer-object)
-       ;; TODO: Add support for other classes
-       ((and (cl-type org-dog-facade-datetree-file)
-             (guard (member "Backlog" (org-get-outline-path nil 'use-cache))))
-        (save-restriction
-          (widen)
-          (goto-char (point-min))
-          (re-search-forward (format org-complex-heading-regexp-format "Backlog"))
-          (org-end-of-subtree)
-          (insert "\n** "
-                  (when todo
-                    "TODO ")
-                  heading)))
-       (`nil
-        (let ((level (org-outline-level)))
-          (org-end-of-subtree)
-          (insert "\n" (make-string level ?\*) " " heading))))
-     (unless (looking-at (rx eol))
-       (newline))
-     (setq parent-id (org-id-get-create)))
-    (insert (org-link-make-string (concat "id:" parent-id) link-text))))
+    (atomic-change-group
+      (delete-region beg end)
+      (goto-char beg)
+      (org-with-wide-buffer
+       (pcase-exhaustive (org-dog-buffer-object)
+         ;; TODO: Add support for other classes
+         ((and (cl-type org-dog-facade-datetree-file)
+               (guard (member "Backlog" (org-get-outline-path nil 'use-cache))))
+          (save-restriction
+            (widen)
+            (goto-char (point-min))
+            (re-search-forward (format org-complex-heading-regexp-format "Backlog"))
+            (org-end-of-subtree)
+            (insert "\n** "
+                    (if todo
+                        "TODO "
+                      "")
+                    heading)))
+         (`nil
+          (let ((level (org-outline-level)))
+            (org-end-of-subtree)
+            (insert "\n" (make-string level ?\*) " " heading))))
+       (unless (looking-at (rx eol))
+         (newline))
+       (setq parent-id (org-id-get-create)))
+      (insert (org-link-make-string (concat "id:" parent-id) link-text)))))
 
 ;;;###autoload
 (defun akirak-org-select-body ()
