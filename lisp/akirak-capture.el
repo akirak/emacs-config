@@ -709,7 +709,8 @@
   (require 'akirak-org-git)
   (let* ((filename (buffer-file-name (buffer-base-buffer)))
          (contribution (string-match-p (regexp-quote "/contributions/")
-                                       filename)))
+                                       (or filename
+                                           default-directory))))
     (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
           akirak-capture-template-options (append (list :properties
                                                         (akirak-org-git-properties t
