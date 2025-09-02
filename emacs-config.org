@@ -5713,11 +5713,6 @@ This is an extra functions for window management.
                       "<remap> <delete-window>" #'akirak-window-delete-window
                       "<remap> <abort-recursive-edit>" #'akirak-window-cleanup)))
 #+end_src
-*** akirak-wordnet
-#+begin_src elisp
-  (setup akirak-wordnet
-    (:nixpkgs "sqlite"))
-#+end_src
 *** akirak-worktree
 :PROPERTIES:
 :CREATED_TIME: [2025-01-03 Fri 20:00]
