@@ -964,6 +964,39 @@ The point should be at the heading."
        (setq parent-id (org-id-get-create)))
       (insert (org-link-make-string (concat "id:" parent-id) link-text)))))
 
+(defun akirak-org-add-ai-content-as-child (body)
+  (when (org-before-first-heading-p)
+    (user-error "Before the first Org heading"))
+  (let ((origin-marker (point-marker))
+        (level (org-outline-level)))
+    (cl-flet ((callback (response info)
+                (when (stringp response)
+                  (atomic-change-group
+                    (let* ((headline-text (thread-first
+                                            (akirak-pandoc-convert-string response
+                                              :from "gfm" :to "org")
+                                            (string-trim)
+                                            (split-string "\n")
+                                            (car)))
+                           (id (org-with-point-at origin-marker
+                                 (org-end-of-subtree)
+                                 (unless (bolp)
+                                   (newline))
+                                 (insert (make-string (org-get-valid-level (1+ level)) ?\*)
+                                         " " headline-text " :@AI:\n"
+                                         body)
+                                 (org-open-line 1)
+                                 (org-id-get-create))))
+                      (org-back-to-heading)
+                      (if (> (marker-position origin-marker) (point))
+                          (org-open-line 1)
+                        (goto-char origin-marker))
+                      (insert (org-link-make-string
+                               (concat "id:" id)
+                               headline-text)))))))
+      (akirak-org-ai-summarize-headline body #'callback)
+      (message "Generating a headline..."))))
+
 ;;;###autoload
 (defun akirak-org-select-body ()
   (interactive)
