@@ -33,5 +33,18 @@
        ;; Fallback
        name))))
 
+;;;###autoload
+(defun akirak-ai-model-prefixed-list (prefix &optional predicate)
+  (declare (indent 1))
+  (with-temp-buffer
+    (insert-file-contents akirak-ai-model-list-file)
+    (thread-last
+      (string-split (buffer-string) "\n")
+      (mapcar #'akirak-ai-model--normalize-name)
+      (seq-filter (apply-partially #'string-prefix-p prefix))
+      (mapcar (apply-partially #'string-remove-prefix prefix))
+      (seq-filter (or predicate #'identity))
+      (mapcar #'intern))))
+
 (provide 'akirak-ai-model)
 ;;; akirak-ai-model.el ends here

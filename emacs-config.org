@@ -7905,23 +7905,6 @@ Interact with ChatGPT or other LLMs
 
 #+begin_src emacs-lisp
   (setup (:package gptel)
-    (defconst akirak/ai-model-list-file
-      (locate-user-emacs-file "ai-model-list.txt"))
-
-    (defun akirak/gptel-openrouter-models ()
-      (with-temp-buffer
-        (insert-file-contents akirak/ai-model-list-file)
-        (delete-non-matching-lines (rx bol "openrouter/"))
-        (thread-last
-          (string-split (buffer-string) "\n")
-          (mapcar (apply-partially #'string-remove-prefix "openrouter/"))
-          (seq-filter (apply-partially #'string-match-p
-                                       (rx bol (or "openai"
-                                                   "anthropic"
-                                                   "google")
-                                           "/")))
-          (mapcar #'intern))))
-
     (:set gptel-crowdsourced-prompts-file
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
@@ -7959,14 +7942,24 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (:set gptel-backend (gptel-make-openai "OpenRouter"
-                            :host "openrouter.ai"
-                            :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
-                            :endpoint "/api/v1/chat/completions"
+      (:set gptel-backend (gptel-make-openai "OpenAI"
+                            :key (lambda () (gptel-api-key-from-auth-source "api.openai.com"))
                             :stream t
-                            ;; For perplexity, use the native provider.
-                            :models (akirak/gptel-openrouter-models))
-            gptel-model 'google/gemini-2.5-flash-preview)
+                            :models (akirak-ai-model-prefixed-list "openai/"))
+            gptel-model 'gpt-5)
+
+      (gptel-make-openai "OpenRouter"
+        :host "openrouter.ai"
+        :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
+        :endpoint "/api/v1/chat/completions"
+        :stream t
+        ;; For perplexity, use the native provider.
+        :models (akirak-ai-model-prefixed-list "openrouter/"
+                  (apply-partially #'string-match-p
+                                   (rx bol (or "openai"
+                                               "anthropic"
+                                               "google")
+                                       "/"))))
 
       (gptel-make-gh-copilot "Copilot")
 
@@ -10476,7 +10469,7 @@ Visually align tables
 #+end_quote
 
 #+begin_quote
-This package provides visual alignment for Org Mode, Markdown and table.el tables on GUI Emacs. It can properly align tables containing variable-pitch font, CJK characters and images. 
+This package provides visual alignment for Org Mode, Markdown and table.el tables on GUI Emacs. It can properly align tables containing variable-pitch font, CJK characters and images.
 #+end_quote
 
 #+begin_src emacs-lisp
