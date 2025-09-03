@@ -12,6 +12,15 @@
     };
   };
 
+  video-trimmer = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "video-trimmer";
+      ref = "develop";
+    };
+  };
+
   bufler = _: _: {
     origin = {
       type = "github";
