@@ -56,6 +56,8 @@ chatgpt-4o-latest
 gpt-4o-2024-05-13
 gpt-4o-2024-08-06
 gpt-4o-2024-11-20
+gpt-realtime
+gpt-realtime-2025-08-28
 gpt-4o-realtime-preview-2024-10-01
 gpt-4o-realtime-preview
 gpt-4o-realtime-preview-2024-12-17
@@ -214,6 +216,12 @@ openrouter/openai/gpt-4-vision-preview
 openrouter/openai/gpt-3.5-turbo
 openrouter/openai/gpt-3.5-turbo-16k
 openrouter/openai/gpt-4
+openrouter/openai/gpt-4.1
+openrouter/openai/gpt-4.1-2025-04-14
+openrouter/openai/gpt-4.1-mini
+openrouter/openai/gpt-4.1-mini-2025-04-14
+openrouter/openai/gpt-4.1-nano
+openrouter/openai/gpt-4.1-nano-2025-04-14
 openrouter/openai/gpt-5-mini
 openrouter/openai/gpt-5-nano
 openrouter/openai/gpt-5-chat
@@ -598,6 +606,9 @@ gemini/gemini-2.0-flash-thinking-exp
 gemini/gemini-2.0-flash-thinking-exp-01-21
 gemini/gemma-3-27b-it
 gemini/learnlm-1.5-pro-experimental
+gemini/veo-3.0-generate-preview
+gemini/veo-3.0-fast-generate-preview
+gemini/veo-2.0-generate-001
 gemini/gemini-1.5-flash-002
 gemini/gemini-1.5-flash-001
 gemini/gemini-1.5-flash
@@ -645,6 +656,9 @@ xai/grok-vision-beta
 xai/grok-2-1212
 xai/grok-2
 xai/grok-2-latest
+xai/grok-code-fast-1
+xai/grok-code-fast
+xai/grok-code-fast-1-0825
 xai/grok-4
 xai/grok-4-0709
 xai/grok-4-latest
@@ -744,14 +758,12 @@ groq/llama-3.3-70b-versatile
 groq/llama-3.3-70b-specdec
 groq/llama-guard-3-8b
 groq/llama2-70b-4096
-groq/llama3-8b-8192
 groq/llama-3.2-1b-preview
 groq/llama-3.2-3b-preview
 groq/llama-3.2-11b-text-preview
 groq/llama-3.2-11b-vision-preview
 groq/llama-3.2-90b-text-preview
 groq/llama-3.2-90b-vision-preview
-groq/llama3-70b-8192
 groq/llama-3.1-8b-instant
 groq/llama-3.1-70b-versatile
 groq/llama-3.1-405b-reasoning
@@ -904,7 +916,6 @@ cerebras/llama3.1-8b
 cerebras/llama3.1-70b
 cerebras/llama-3.3-70b
 cerebras/qwen-3-32b
-cerebras/openai/gpt-oss-20b
 cerebras/openai/gpt-oss-120b
 sambanova/Meta-Llama-3.1-8B-Instruct
 sambanova/Meta-Llama-3.1-405B-Instruct
