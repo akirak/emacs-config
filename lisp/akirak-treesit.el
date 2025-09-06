@@ -630,8 +630,8 @@ This is primarily intended for editing JSX/TSX."
                                   (throw 'jsx-open-tag node)))))))))
       (pcase-exhaustive (treesit-node-children open-tag)
         ((and `(,_ ,identifier ,_ . ,_)
-              (guard (equal (treesit-node-type identifier)
-                            "identifier")))
+              (guard (member (treesit-node-type identifier)
+                             '("identifier" "member_expression"))))
          (insert (format "</%s>" (treesit-node-text identifier)))))
     (error "Cannot find")))
 
