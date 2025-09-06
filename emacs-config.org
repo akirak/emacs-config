@@ -991,6 +991,7 @@ The other variables must not be saved, and they should be put in configuration:
     (:mode-repl akirak-shell-new-other-window)
 
     (advice-add 'dired-internal-do-deletions :before #'akirak-dired-ad-before-deletions)
+    (advice-add 'dired-show-file-type :override #'ignore)
 
     (:with-feature dired-aux
       (:also-load akirak-dired)
