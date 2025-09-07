@@ -128,6 +128,8 @@
               (akirak-codex--recent-output n)))
     (let ((inhibit-read-only t))
       (remove-text-properties (point-min) (point) '(read-only t)))
+    (replace-regexp-in-region (rx bol (any "> ") " ") ""
+                              (point-min) (point-max))
     (akirak-pandoc-replace-with-org (point) (point-max))
     (concat "#+begin_example\n"
             (org-no-properties (string-trim-right (buffer-string)))
@@ -140,16 +142,22 @@
     (goto-char (point-max))
     (beginning-of-line 0)
     (buffer-substring-no-properties (point) (line-end-position))
-    (if (looking-at (regexp-quote "▌"))
-        (let ((end (point)))
-          (re-search-backward (rx bol "codex") nil nil n)
-          (string-trim-right
-           (buffer-substring (line-beginning-position 2)
-                             (if (> n 1)
-                                 (progn
-                                   (re-search-forward (rx bol "user"))
-                                   (match-beginning 0))
-                               end))))
+    (if (looking-at (rx "▌"))
+        (let ((limit (point))
+              responses)
+          (re-search-backward (rx bol "▌") nil nil n)
+          (catch 'codex-response
+            (while (and (< (point) limit)
+                        (re-search-forward (rx bol (any ">▌") " ") nil t))
+              (if (looking-at (rx "▌"))
+                  (throw 'codex-response t)
+                (let ((begin (point)))
+                  (unless (re-search-forward (rx bol "• ") nil t)
+                    (throw 'codex-response t))
+                  (push (string-trim-right
+                         (buffer-substring begin (match-beginning 0)))
+                        responses)))))
+          (string-join (nreverse responses) "\n\n"))
       (error "The codex buffer isn't in an expected state"))))
 
 (provide 'akirak-codex)
