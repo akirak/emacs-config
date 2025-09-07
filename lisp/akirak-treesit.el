@@ -667,7 +667,8 @@ This is primarily intended for editing JSX/TSX."
                   ((rename-tag (node)
                      (catch 'renamed
                        (dolist (child (treesit-node-children node))
-                         (when (equal (treesit-node-type child) "identifier")
+                         (when (member (treesit-node-type child)
+                                       '("identifier" "member_expression"))
                            (goto-char (treesit-node-start child))
                            (delete-region (treesit-node-start child)
                                           (treesit-node-end child))
@@ -688,8 +689,13 @@ This is primarily intended for editing JSX/TSX."
   (when (ignore-errors
           (cl-case (treesit-language-at (point))
             (tsx
-             (member (treesit-node-type (treesit-node-parent (treesit-node-at (point))))
-                     '("jsx_opening_element" "jsx_closing_element")))))
+             (let ((parent (treesit-node-parent (treesit-node-at (point))))
+                   (types '("jsx_opening_element" "jsx_closing_element")))
+               (or (member (treesit-node-type parent) types)
+                   (and (equal (treesit-node-type parent)
+                               "member_expression")
+                        (member (treesit-node-type (treesit-node-parent parent))
+                                types)))))))
     (call-interactively #'akirak-treesit-rename-tag)
     t))
 
