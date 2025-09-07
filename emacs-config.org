@@ -4968,6 +4968,9 @@ Major mode for editing typescript
                           '(?< . ?>))))
 
     (:with-mode typescript-ts-base-mode
+      ;; See js-ts-mode
+      (:hook akirak/javascript-syntax-setup)
+
       (:huan
         ("import" "export")
         ("enable" "disable")
@@ -4976,9 +4979,6 @@ Major mode for editing typescript
         ;; For eslint rules
         ("off" "warn" "error"))
       (:mode-project-roots "package.json"))
-
-    ;; See js-ts-mode
-    (:hook akirak/javascript-syntax-setup)
 
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
