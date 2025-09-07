@@ -4984,7 +4984,22 @@ Major mode for editing typescript
       (:file-match "\\.tsx\\'")
       (:mode-repl akirak/node-or-bun-repl)
       (:org-src-lang "react")
-      (:keymap "C-c C-e" #'akirak-treesit-jsx-close-tag)))
+      (:keymap "C-c C-e" #'akirak-treesit-jsx-close-tag)
+      (with-eval-after-load 'akirak-paren
+        (:hook (defun akirak/tsx-setup-paren-match ()
+                 (add-hook 'akirak-paren-match-hook
+                           (defun akirak/tsx-match-empty-tag ()
+                             (when-let* ((node (treesit-node-at (point)))
+                                         (type (treesit-node-type node))
+                                         (parent (when (member type '("<" "/>"))
+                                                   (treesit-node-parent node))))
+                               (when (equal (treesit-node-type parent)
+                                            "jsx_self_closing_element")
+                                 (pcase type
+                                   ("<" (treesit-node-end parent))
+                                   ("/>" (treesit-node-start parent))))))
+                           nil
+                           t))))))
 #+end_src
 **** COMMENT akirak-typescript                                  :ARCHIVE:akirak:
 #+begin_src emacs-lisp
