@@ -1404,7 +1404,6 @@ At this point, the function works with the following pattern:
 (defun akirak-org-ai-set-heading (&optional arg)
   "Generate the heading using AI based on the content."
   (interactive "P" org-mode)
-  (require 'gptel)
   (when (org-before-first-heading-p)
     (user-error "Must be after the first heading"))
   (unless (or (string-empty-p (org-entry-get nil "ITEM"))
@@ -1449,6 +1448,7 @@ Are you sure you want to override it?"))
 
 (defun akirak-org-ai-summarize-headline (content callback)
   (require 'akirak-pandoc)
+  (require 'gptel)
   (gptel-request (concat "Generate a headline for the following content. \
 Be concise. Try to focus on the intent rather than the implementation or \
 technical details. It should fit in a single line (within 80 letters if \
