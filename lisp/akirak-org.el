@@ -1428,7 +1428,8 @@ Are you sure you want to override it?"))
                 (org-with-point-at marker
                   (org-edit-headline (if link
                                          (org-link-make-string link headline-text)
-                                       headline-text)))))))
+                                       headline-text)))
+                (message "Finished updating the headline")))))
        (akirak-org-ai-summarize-headline
         (save-excursion
           (org-back-to-heading)
