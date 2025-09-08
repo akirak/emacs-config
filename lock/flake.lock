@@ -544,11 +544,11 @@
     "dape": {
       "flake": false,
       "locked": {
-        "lastModified": 1755621472,
-        "narHash": "sha256-55GOySsPsUGuBp4DlGbNFgbwdkusavgZ6J5kjp/fbNI=",
+        "lastModified": 1756239864,
+        "narHash": "sha256-bG1ZL93YQxBo+9NiYDtONj++RTVsuqdb+x6pXyL0ERQ=",
         "owner": "svaante",
         "repo": "dape",
-        "rev": "2b0beaf3493b2b18ee2c5ac85915d6b897356dcf",
+        "rev": "c8f6f248494f22226381cec1d5b644b05494bb9c",
         "type": "github"
       },
       "original": {
@@ -800,11 +800,11 @@
     "dumb-jump": {
       "flake": false,
       "locked": {
-        "lastModified": 1747391543,
-        "narHash": "sha256-KWXboFhYQfDK+6Xuq53yL+DI+pfQ600LlapVHDAZVL4=",
+        "lastModified": 1755919438,
+        "narHash": "sha256-MGTujlAQV8n+boaUBPw+u1Ff5vX2xDQR2ar0brxcyzs=",
         "owner": "jacktasia",
         "repo": "dumb-jump",
-        "rev": "42f97dea503367bf45c53a69de959177b06b0f59",
+        "rev": "21545d3b8637b38f1930176f1c4782943ce3c0bd",
         "type": "github"
       },
       "original": {
@@ -992,11 +992,11 @@
     "envrc": {
       "flake": false,
       "locked": {
-        "lastModified": 1756386431,
-        "narHash": "sha256-0IiecKfyXarg/tDOAoJFv1Yub1XGDTp33j8BggShkho=",
-        "owner": "purcell",
+        "lastModified": 1756856513,
+        "narHash": "sha256-z9g1LoEuJa/LwkKEpJ2pN0Ectib2MaYnnaLBnhmcZ4U=",
+        "owner": "akirak",
         "repo": "envrc",
-        "rev": "48a2ee6a4d6a36b1dc76efa321b9b9c8bc11d73b",
+        "rev": "53deea61f3e628cab1e5ce7edb2fe0443f4e08f0",
         "type": "github"
       },
       "original": {
@@ -1344,11 +1344,11 @@
     "gptel": {
       "flake": false,
       "locked": {
-        "lastModified": 1756015825,
-        "narHash": "sha256-5Zn+hFuEWi/lJA9/lvIyBrJsXm7pDjbGZjnb21TLC38=",
+        "lastModified": 1756694713,
+        "narHash": "sha256-nZNyr1j9VDeQALz7rvO6KFy+H/1vP4Cb2Vs7miHBsV0=",
         "owner": "karthink",
         "repo": "gptel",
-        "rev": "7bb353a582d11ce210bb0a5b77c53de564c28e67",
+        "rev": "7619333988aeb207846512ba9ba8c8f4f82bf7ff",
         "type": "github"
       },
       "original": {
@@ -1987,11 +1987,11 @@
     "nerd-icons": {
       "flake": false,
       "locked": {
-        "lastModified": 1755245685,
-        "narHash": "sha256-VjIilj5PP7XbZDB4H8X8cLFpwEUhvSFV7wyzVDeEwgQ=",
+        "lastModified": 1756476710,
+        "narHash": "sha256-wtpw3ywKOK+6iHX5KDDTYZKJUuRgW+JvYQwNk3Np6y4=",
         "owner": "rainstormstudio",
         "repo": "nerd-icons.el",
-        "rev": "e98b14248fec120cc23c5f3a5aa1128d98156c2c",
+        "rev": "6868c05c6eb56c6625ee7fa38450b514542ab636",
         "type": "github"
       },
       "original": {
@@ -3768,7 +3768,8 @@
         "type": "github"
       },
       "original": {
-        "owner": "xenodium",
+        "owner": "akirak",
+        "ref": "develop",
         "repo": "video-trimmer",
         "type": "github"
       }

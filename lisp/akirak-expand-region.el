@@ -59,8 +59,11 @@
         (backward-up-list)
         (akirak-expand-region--select-bounds
          (bounds-of-thing-at-point 'sexp)))
-    (akirak-expand-region--select-bounds
-     (bounds-of-thing-at-point 'sexp))))
+    (if-let* ((sexp (or (bounds-of-thing-at-point 'sexp)
+                        (when (looking-at (rx (* blank) (group anything)))
+                          (goto-char (match-beginning 1))
+                          (bounds-of-thing-at-point 'sexp)))))
+        (akirak-expand-region--select-bounds sexp))))
 
 (defun akirak-expand-region--select-bounds (bounds)
   (goto-char (cdr bounds))

@@ -991,6 +991,7 @@ The other variables must not be saved, and they should be put in configuration:
     (:mode-repl akirak-shell-new-other-window)
 
     (advice-add 'dired-internal-do-deletions :before #'akirak-dired-ad-before-deletions)
+    (advice-add 'dired-show-file-type :override #'ignore)
 
     (:with-feature dired-aux
       (:also-load akirak-dired)
@@ -4967,6 +4968,9 @@ Major mode for editing typescript
                           '(?< . ?>))))
 
     (:with-mode typescript-ts-base-mode
+      ;; See js-ts-mode
+      (:hook akirak/javascript-syntax-setup)
+
       (:huan
         ("import" "export")
         ("enable" "disable")
@@ -4976,14 +4980,26 @@ Major mode for editing typescript
         ("off" "warn" "error"))
       (:mode-project-roots "package.json"))
 
-    ;; See js-ts-mode
-    (:hook akirak/javascript-syntax-setup)
-
     (:with-mode tsx-ts-mode
       (:file-match "\\.tsx\\'")
       (:mode-repl akirak/node-or-bun-repl)
       (:org-src-lang "react")
-      (:keymap "C-c C-e" #'akirak-treesit-jsx-close-tag)))
+      (:keymap "C-c C-e" #'akirak-treesit-jsx-close-tag)
+      (with-eval-after-load 'akirak-paren
+        (:hook (defun akirak/tsx-setup-paren-match ()
+                 (add-hook 'akirak-paren-match-hook
+                           (defun akirak/tsx-match-empty-tag ()
+                             (when-let* ((node (treesit-node-at (point)))
+                                         (type (treesit-node-type node))
+                                         (parent (when (member type '("<" "/>"))
+                                                   (treesit-node-parent node))))
+                               (when (equal (treesit-node-type parent)
+                                            "jsx_self_closing_element")
+                                 (pcase type
+                                   ("<" (treesit-node-end parent))
+                                   ("/>" (treesit-node-start parent))))))
+                           nil
+                           t))))))
 #+end_src
 **** COMMENT akirak-typescript                                  :ARCHIVE:akirak:
 #+begin_src emacs-lisp
@@ -5712,11 +5728,6 @@ This is an extra functions for window management.
                       "S-<home>" #'akirak-window-display-buffer-starts
                       "<remap> <delete-window>" #'akirak-window-delete-window
                       "<remap> <abort-recursive-edit>" #'akirak-window-cleanup)))
-#+end_src
-*** akirak-wordnet
-#+begin_src elisp
-  (setup akirak-wordnet
-    (:nixpkgs "sqlite"))
 #+end_src
 *** akirak-worktree
 :PROPERTIES:
@@ -7910,23 +7921,6 @@ Interact with ChatGPT or other LLMs
 
 #+begin_src emacs-lisp
   (setup (:package gptel)
-    (defconst akirak/ai-model-list-file
-      (locate-user-emacs-file "ai-model-list.txt"))
-
-    (defun akirak/gptel-openrouter-models ()
-      (with-temp-buffer
-        (insert-file-contents akirak/ai-model-list-file)
-        (delete-non-matching-lines (rx bol "openrouter/"))
-        (thread-last
-          (string-split (buffer-string) "\n")
-          (mapcar (apply-partially #'string-remove-prefix "openrouter/"))
-          (seq-filter (apply-partially #'string-match-p
-                                       (rx bol (or "openai"
-                                                   "anthropic"
-                                                   "google")
-                                           "/")))
-          (mapcar #'intern))))
-
     (:set gptel-crowdsourced-prompts-file
           (locate-user-emacs-file "gptel-crowdsourced-prompts.csv"))
 
@@ -7964,14 +7958,24 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (:set gptel-backend (gptel-make-openai "OpenRouter"
-                            :host "openrouter.ai"
-                            :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
-                            :endpoint "/api/v1/chat/completions"
+      (:set gptel-backend (gptel-make-openai "OpenAI"
+                            :key (lambda () (gptel-api-key-from-auth-source "api.openai.com"))
                             :stream t
-                            ;; For perplexity, use the native provider.
-                            :models (akirak/gptel-openrouter-models))
-            gptel-model 'google/gemini-2.5-flash-preview)
+                            :models (akirak-ai-model-prefixed-list "openai/"))
+            gptel-model 'gpt-5)
+
+      (gptel-make-openai "OpenRouter"
+        :host "openrouter.ai"
+        :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
+        :endpoint "/api/v1/chat/completions"
+        :stream t
+        ;; For perplexity, use the native provider.
+        :models (akirak-ai-model-prefixed-list "openrouter/"
+                  (apply-partially #'string-match-p
+                                   (rx bol (or "openai"
+                                               "anthropic"
+                                               "google")
+                                       "/"))))
 
       (gptel-make-gh-copilot "Copilot")
 
@@ -10481,7 +10485,7 @@ Visually align tables
 #+end_quote
 
 #+begin_quote
-This package provides visual alignment for Org Mode, Markdown and table.el tables on GUI Emacs. It can properly align tables containing variable-pitch font, CJK characters and images. 
+This package provides visual alignment for Org Mode, Markdown and table.el tables on GUI Emacs. It can properly align tables containing variable-pitch font, CJK characters and images.
 #+end_quote
 
 #+begin_src emacs-lisp

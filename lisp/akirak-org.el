@@ -964,6 +964,42 @@ The point should be at the heading."
        (setq parent-id (org-id-get-create)))
       (insert (org-link-make-string (concat "id:" parent-id) link-text)))))
 
+(defun akirak-org-add-ai-content-as-child (body)
+  (when (org-before-first-heading-p)
+    (user-error "Before the first Org heading"))
+  (let ((origin-marker (point-marker))
+        (level (org-outline-level)))
+    (cl-flet ((callback (response info)
+                (atomic-change-group
+                  (let* ((headline-text (when response
+                                          (thread-first
+                                            (akirak-pandoc-convert-string response
+                                              :from "gfm" :to "org")
+                                            (string-trim)
+                                            (split-string "\n")
+                                            (car))))
+                         (id (org-with-point-at origin-marker
+                               (org-end-of-subtree)
+                               (unless (bolp)
+                                 (newline))
+                               (insert (make-string (org-get-valid-level (1+ level)) ?\*)
+                                       " "
+                                       (or headline-text " ")
+                                       " :@AI:\n"
+                                       body)
+                               (org-open-line 1)
+                               (org-id-get-create))))
+                    (org-back-to-heading)
+                    (if (> (marker-position origin-marker) (point))
+                        (org-open-line 1)
+                      (goto-char origin-marker))
+                    (insert (org-link-make-string
+                             (concat "id:" id)
+                             headline-text))
+                    (message "Inserted a link")))))
+      (akirak-org-ai-summarize-headline body #'callback)
+      (message "Generating a headline..."))))
+
 ;;;###autoload
 (defun akirak-org-select-body ()
   (interactive)
@@ -1371,7 +1407,6 @@ At this point, the function works with the following pattern:
 (defun akirak-org-ai-set-heading (&optional arg)
   "Generate the heading using AI based on the content."
   (interactive "P" org-mode)
-  (require 'gptel)
   (when (org-before-first-heading-p)
     (user-error "Must be after the first heading"))
   (unless (or (string-empty-p (org-entry-get nil "ITEM"))
@@ -1396,7 +1431,8 @@ Are you sure you want to override it?"))
                 (org-with-point-at marker
                   (org-edit-headline (if link
                                          (org-link-make-string link headline-text)
-                                       headline-text)))))))
+                                       headline-text)))
+                (message "Finished updating the headline")))))
        (akirak-org-ai-summarize-headline
         (save-excursion
           (org-back-to-heading)
@@ -1416,6 +1452,7 @@ Are you sure you want to override it?"))
 
 (defun akirak-org-ai-summarize-headline (content callback)
   (require 'akirak-pandoc)
+  (require 'gptel)
   (gptel-request (concat "Generate a headline for the following content. \
 Be concise. Try to focus on the intent rather than the implementation or \
 technical details. It should fit in a single line (within 80 letters if \

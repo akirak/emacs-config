@@ -42,7 +42,11 @@
    ("-b" akirak-org-shell-buffer-infix)]
   ["Insert"
    :if akirak-org-shell--buffer-live-p
-   ("y" "Insert response" akirak-org-shell-insert-response)]
+   ("y" "Insert response"
+    (lambda ()
+      (interactive)
+      (require 'akirak-shell)
+      (akirak-shell-paste-response-to-org akirak-org-shell-buffer 1)))]
   ["Send"
    :if akirak-org-shell--buffer-live-p
    ("r" "Send region as Markdown" akirak-org-shell-send-region-as-markdown

@@ -1330,7 +1330,8 @@
     };
     video-trimmer = {
       flake = false;
-      owner = "xenodium";
+      owner = "akirak";
+      ref = "develop";
       repo = "video-trimmer";
       type = "github";
     };

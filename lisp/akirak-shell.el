@@ -460,12 +460,14 @@ the original minor mode."
       (_
        (user-error "Not in any of the terminal modes")))))
 
-(defun akirak-shell-insert-response-to-org (buffer n)
-  (insert (pcase-exhaustive (akirak-shell-detect-buffer-program buffer)
-            (`claude
-             (akirak-claude-recent-output-to-org buffer n))
-            (`codex
-             (akirak-codex-recent-output-to-org buffer n)))))
+(defun akirak-shell-paste-response-to-org (buffer n)
+  (require 'akirak-org)
+  (akirak-org-add-ai-content-as-child
+   (pcase-exhaustive (akirak-shell-detect-buffer-program buffer)
+     (`claude
+      (akirak-claude-recent-output-to-org buffer n))
+     (`codex
+      (akirak-codex-recent-output-to-org buffer n)))))
 
 (cl-defun akirak-shell-detect-buffer-program (buffer)
   (declare (indent 1))
