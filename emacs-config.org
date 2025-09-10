@@ -8929,6 +8929,7 @@ major mode for working with mermaid graphs
 
 #+begin_src emacs-lisp
   (setup (:package mermaid-mode)
+    (:org-babel-language t)
     (:nixpkgs "mermaid-cli")
 
     (:file-match "\\.mmd\\'"))
