@@ -365,7 +365,8 @@ end of the pasted region."
           (backward-char count)))))))
 
 (defun akirak-org--generate-babel-output-filename (suffix)
-  (let* ((dir (or (akirak-org--find-babel-output-directory)
+  (let* ((dir (or (org-entry-get-with-inheritance "babel_output_directory")
+                  (akirak-org--find-babel-output-directory)
                   (read-directory-name "Enter the output directory: ")))
          (basename (concat (akirak-org--escape-filename
                             (org-link-display-format (org-entry-get nil "ITEM")))
