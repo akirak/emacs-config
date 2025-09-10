@@ -8918,7 +8918,7 @@ Model Context Protocol
              :command "docker"
              :args ("run" "--rm" "-i" "timsmart/effect-mcp")))))
 #+end_src
-*** mermaid-mode                                        :@extra:mermaid:
+*** mermaid-mode :mermaid:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
 :END:
@@ -8929,8 +8929,11 @@ major mode for working with mermaid graphs
 
 #+begin_src emacs-lisp
   (setup (:package mermaid-mode)
-    (:org-babel-language t)
-    (:nixpkgs "mermaid-cli")
+    ;; mermaid is a huge dependency (with chromium) and slow. I won't use it in
+    ;; org-babel.
+    ;;
+    ;; (:org-babel-language t)
+    ;; (:nixpkgs "mermaid-cli")
 
     (:file-match "\\.mmd\\'"))
 #+end_src
