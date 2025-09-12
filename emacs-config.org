@@ -7291,7 +7291,7 @@ Extract information from Emacs Lisp libraries
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
-*** elysium                                                                 :AI:
+*** COMMENT elysium                                                         :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-10-23 Wed 23:54]
 :END:
