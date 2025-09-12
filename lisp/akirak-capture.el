@@ -767,6 +767,8 @@
                   :keys ""
                   :template ,(akirak-org-capture-make-entry-body
                                (read-string "Heading for the snippet entry: ")
+                               :properties
+                               `(("tempo_tags" . ,(read-string "tempo tag: ")))
                                :body
                                (concat "#+begin_src tempo\n%?"
                                        (thread-last
