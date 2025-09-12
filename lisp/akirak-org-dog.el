@@ -280,9 +280,10 @@ ARG, the target file can be changed only for that item."
 ;;;###autoload
 (defun akirak-org-dog-use-templates (path)
   (interactive)
-  (pcase (org-dog-select 'absolute `(relative ,path))
-    (`(,file)
-     (akirak-org-tempo-use-file file))))
+  (dolist (file (mapcar #'car (thread-first
+                                (org-dog-select 'absolute `(relative ,path))
+                                (org-dog-overview-scan :fast t))))
+    (akirak-org-tempo-use-file file)))
 
 ;;;###autoload
 (defun akirak-org-dog-use-major-mode-templates ()
