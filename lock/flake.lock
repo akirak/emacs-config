@@ -925,22 +925,6 @@
         "type": "github"
       }
     },
-    "elysium": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1743957529,
-        "narHash": "sha256-Xux9yhLuxiI5+C/2VnOJLi/Ri7iVLQJJwBK03ImYNHQ=",
-        "owner": "lanceberge",
-        "repo": "elysium",
-        "rev": "049ad3091baf3ce578791187c5e5e4f932c26044",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lanceberge",
-        "repo": "elysium",
-        "type": "github"
-      }
-    },
     "emacsql": {
       "flake": false,
       "locked": {
@@ -3150,7 +3134,6 @@
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
         "elx": "elx",
-        "elysium": "elysium",
         "emacsql": "emacsql",
         "embark": "embark",
         "embark-consult": "embark-consult",
