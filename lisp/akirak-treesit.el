@@ -633,7 +633,7 @@ This is primarily intended for editing JSX/TSX."
               (guard (member (treesit-node-type identifier)
                              '("identifier" "member_expression"))))
          (insert (format "</%s>" (treesit-node-text identifier)))))
-    (error "Cannot find")))
+    (error "Cannot find the open tag")))
 
 ;;;###autoload
 (defun akirak-treesit-rename-tag (new-name)
