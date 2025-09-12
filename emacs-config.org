@@ -7807,7 +7807,8 @@ Edit Git commit messages
     (:keymap "M-<return>" #'akirak/git-commit-auto-insert)
 
     (defcustom akirak/git-commit-auto-insert-hook
-      '(akirak-org-clock-commit-title)
+      '(akirak-git-commit-static-message
+        akirak-org-clock-commit-title)
       "Hook that generates and inserts a commit message (or part of it).
 
   Each function in this hook is called inside a buffer for editing the
