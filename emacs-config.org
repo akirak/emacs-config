@@ -6647,7 +6647,7 @@ A startup screen extracted from Spacemacs
                                      (registers . "e"))
           dashboard-items '((custom-agenda . 10)
                             (org-clock . 7)
-                            (projects . 8)
+                            (projects . 15)
                             (bookmarks . 10)
                             (recents . 15)))
     (:when-loaded
