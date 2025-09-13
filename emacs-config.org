@@ -8917,8 +8917,8 @@ Model Context Protocol
              ;; Streamable HTTP
              :url "http://localhost:11007/mcp")
             ("effect"
-             :command "docker"
-             :args ("run" "--rm" "-i" "timsmart/effect-mcp")))))
+             :command "npx"
+             :args ("-y" "effect-mcp@latest")))))
 #+end_src
 *** mermaid-mode :mermaid:
 :PROPERTIES:
