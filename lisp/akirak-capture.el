@@ -424,11 +424,10 @@
                        #'akirak-capture--goto-some-heading
                      #'akirak-capture--goto-backlog)))
     (cl-etypecase target
-      (marker (list :file (buffer-file-name (org-base-buffer (marker-buffer target)))
-                    ;; olp target doesn't work if one of the headlines is a
-                    ;; link, so use `org-goto-marker-or-bmk' instead.
-                    :function `(lambda ()
-                                 (org-goto-marker-or-bmk ',target))))
+      ;; olp target doesn't work if one of the headlines is a
+      ;; link, so use `org-goto-marker-or-bmk' instead.
+      (marker (list :id (org-with-point-at target
+                          (org-id-get-create))))
       (string (list :file target
                     :function jump-func))
       (org-dog-file (list :file (oref target absolute)
