@@ -186,12 +186,9 @@ the initial value in minibuffer input."
   ())
 
 (cl-defmethod transient-infix-read ((obj akirak-transient-file-variable))
-  (read-directory-name (oref obj prompt)
-                       (oref obj value)
-                       nil
-                       t
-                       nil
-                       (oref obj predicate)))
+  ;; Set to nil if there is an existing value
+  (unless (oref obj value)
+    (read-directory-name (oref obj prompt) nil nil t nil (oref obj predicate))))
 
 (provide 'akirak-transient)
 ;;; akirak-transient.el ends here
