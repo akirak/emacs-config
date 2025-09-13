@@ -70,6 +70,9 @@
   "Generate an alist of Org properties to refer to the "
   (declare (indent 1))
   (when-let* ((root (vc-git-root default-directory)))
+    (when (and (member root (mapcar #'car org-dog-repository-alist))
+               (derived-mode-p 'org-mode))
+      (user-error "Please run this repository from inside a working tree (not Org mode)"))
     (when (or (eq obj t)
               (member "@contribution" tags)
               (string-prefix-p "projects/" (oref obj relative))
