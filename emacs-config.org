@@ -44,6 +44,7 @@ For technical details, check out [[https://deepwiki.com/akirak/emacs-config][Dee
   - [[#natural-languages][Natural languages]]
   - [[#grep][Grep]]
   - [[#sh-emulation-keybindings][Sh-emulation keybindings]]
+- [[#also-see][Also see]]
 - [[#license][License]]
 :END:
 ** Trying out
@@ -6646,7 +6647,7 @@ A startup screen extracted from Spacemacs
                                      (registers . "e"))
           dashboard-items '((custom-agenda . 10)
                             (org-clock . 7)
-                            (projects . 8)
+                            (projects . 15)
                             (bookmarks . 10)
                             (recents . 15)))
     (:when-loaded
@@ -7290,7 +7291,7 @@ Extract information from Emacs Lisp libraries
 #+begin_src emacs-lisp
 (setup (:package elx))
 #+end_src
-*** elysium                                                                 :AI:
+*** COMMENT elysium                                                         :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-10-23 Wed 23:54]
 :END:
@@ -7806,7 +7807,8 @@ Edit Git commit messages
     (:keymap "M-<return>" #'akirak/git-commit-auto-insert)
 
     (defcustom akirak/git-commit-auto-insert-hook
-      '(akirak-org-clock-commit-title)
+      '(akirak-git-commit-static-message
+        akirak-org-clock-commit-title)
       "Hook that generates and inserts a commit message (or part of it).
 
   Each function in this hook is called inside a buffer for editing the
@@ -8915,10 +8917,10 @@ Model Context Protocol
              ;; Streamable HTTP
              :url "http://localhost:11007/mcp")
             ("effect"
-             :command "docker"
-             :args ("run" "--rm" "-i" "timsmart/effect-mcp")))))
+             :command "npx"
+             :args ("-y" "effect-mcp@latest")))))
 #+end_src
-*** mermaid-mode                                        :@extra:mermaid:
+*** mermaid-mode :mermaid:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-17 Wed 13:52]
 :END:
@@ -8929,7 +8931,11 @@ major mode for working with mermaid graphs
 
 #+begin_src emacs-lisp
   (setup (:package mermaid-mode)
-    (:nixpkgs "mermaid-cli")
+    ;; mermaid is a huge dependency (with chromium) and slow. I won't use it in
+    ;; org-babel.
+    ;;
+    ;; (:org-babel-language t)
+    ;; (:nixpkgs "mermaid-cli")
 
     (:file-match "\\.mmd\\'"))
 #+end_src
@@ -11325,9 +11331,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 220 |
+| [[org-ql-search:tags:packages][packages]]            | 219 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
-| [[org-ql-search:tags:@extra][@extra]]              |  12 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
@@ -11348,7 +11354,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:history][history]]             |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
-| [[org-ql-search:tags:AI][AI]]                  |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -11360,6 +11365,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:MCP][MCP]]                 |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:AI][AI]]                  |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
@@ -11450,7 +11456,6 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 | Heading | Todo |
 |---------+------|
 | [[copilot][copilot]] |      |
-| [[elysium][elysium]] |      |
 | [[gptel][gptel]]   |      |
 #+END:
 
@@ -11481,7 +11486,6 @@ To use these features, they need to be turned on at build time.
 | [[lean4-mode][lean4-mode]]            |      |
 | [[lsp-mode][lsp-mode]]              |      |
 | [[mcp][mcp]]                   |      |
-| [[mermaid-mode][mermaid-mode]]          |      |
 | [[Coq][Coq]]                   |      |
 | [[tuareg][tuareg]]                |      |
 | [[utop][utop]]                  |      |
@@ -11531,6 +11535,8 @@ To annotate EPUB files in nov.el, you can use org-noter. It also supports PDF fi
 *** Sh-emulation keybindings
 I rebind the following keys in some keymaps to emulate a typical UNIX shell:
 C-a, C-e, C-u, C-w, C-h.
+** Also see
+- [[https://github.com/terlar/emacs-config][Tarje Larsen's emacs-config]] is a configuration from which this configuration takes a constant inspiration.
 ** License
 This repository is licensed under multiple licenses.
 It follows the conventions of [[https://reuse.software/][REUSE]], and the license files are stored under [[file:LICENSES/][LICENSES]] directory.

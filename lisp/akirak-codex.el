@@ -87,12 +87,13 @@
   (completing-read "Codex command: " akirak-codex-slash-commands))
 
 (defun akirak-codex-environment ()
-  (require 'akirak-passage)
   ;; Use the ChatGPT authentication.
   ;; (akirak-passage-add-process-environment
   ;;  "OPENAI_API_KEY" akirak-codex-password-account)
   (when akirak-codex-codex-home
-    (cons "CODEX_HOME" (convert-standard-filename (expand-file-name akirak-codex-codex-home)))))
+    (cons (concat "CODEX_HOME=" (convert-standard-filename
+                                 (expand-file-name akirak-codex-codex-home)))
+          process-environment)))
 
 ;;;###autoload
 (defun akirak-codex-insert-mcp-toml (name)

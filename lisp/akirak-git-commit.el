@@ -32,6 +32,74 @@
 (defconst akirak-git-commit-log-drawer-start-re
   (rx bol (* blank) ":GITCOMMITS:" (or blank eol)))
 
+(defcustom akirak-git-commit-static-message-alist nil
+  "Alist of static commit messages for file patterns."
+  :type '(alist :key-type (repeat (cons (choice (const "modified")
+                                                (const "added")
+                                                (const "deleted"))
+                                        (string :tag "File pattern")))
+                :value-type (string :tag "Commit message"))
+  :local t)
+
+;;;###autoload
+(defun akirak-git-commit-static-message ()
+  (let ((changes (akirak-git-commit--committed-changes)))
+    (catch 'commit-message
+      (pcase-dolist (`(,patterns . ,message) akirak-git-commit-static-message-alist)
+        (catch 'commit-message-pattern
+          (cl-flet*
+              ((match-pattern (entry pattern)
+                 (when (and (equal (car pattern)
+                                   (car entry))
+                            (string-match (replace-regexp-in-string
+                                           (concat "\\[\\^" (string 0) "]\\*")
+                                           "\\\\(\\&\\\\)"
+                                           (wildcard-to-regexp (cdr pattern)))
+                                          (cdr entry)))
+                   (if-let* ((matches (seq-drop (match-data) 2)))
+                       ;; If the file pattern contains a wildcard, capture the
+                       ;; string.
+                       (mapcar (pcase-lambda (`(,begin ,end))
+                                 (substring (cdr entry) begin end))
+                               (seq-partition matches 2))
+                     t)))
+               (matchp (entry)
+                 (seq-some (apply-partially #'match-pattern entry) patterns)))
+            (let (args)
+              (dolist (change changes)
+                (unless (setq args (matchp change))
+                  (throw 'commit-message-pattern nil)))
+              (insert (if (listp args)
+                          ;; Expand the wildcard matches.
+                          (with-temp-buffer
+                            (insert message)
+                            (goto-char (point-min))
+                            (while (re-search-forward (rx "\\" (group (any digit)))
+                                                      nil t)
+                              (replace-match (nth (1- (string-to-number (match-string 1)))
+                                                  args))
+                              (goto-char (point-min)))
+                            (buffer-string))
+                        message))
+              (throw 'commit-message t))))))))
+
+(defun akirak-git-commit--committed-changes ()
+  (save-excursion
+    (search-forward "# Changes to be committed:")
+    (let ((bound (save-excursion (re-search-forward "^#$" nil t)))
+          result)
+      (while (re-search-forward (rx bol "#" (+ blank)
+                                    (group (or "modified"
+                                               "added"
+                                               "deleted"))
+                                    ":" (+ blank)
+                                    (group (+ nonl)))
+                                bound t)
+        (push (cons (match-string-no-properties 1)
+                    (match-string-no-properties 2))
+              result))
+      result)))
+
 ;;;###autoload
 (define-minor-mode akirak-git-commit-log-to-org-clock-mode
   "Log commit messages to the clocked Org entry."

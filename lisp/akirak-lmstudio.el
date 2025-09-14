@@ -78,7 +78,14 @@
            (lambda (candidate)
              (akirak-lmstudio--annotation
               (alist-get candidate minibuffer-completion-table
-                         nil nil #'string=))))))
+                         nil nil #'string=)))
+           :group-function
+           (lambda (candidate transform)
+             (if transform
+                 candidate
+               (akirak-lmstudio--group
+                (alist-get candidate minibuffer-completion-table
+                           nil nil #'string=)))))))
     (completing-read prompt
                      (mapcar (lambda (entry)
                                (cons (alist-get 'modelKey entry)
@@ -88,9 +95,23 @@
 
 (defun akirak-lmstudio--annotation (entry)
   (when entry
-    (concat " "
-            ;; TODO: Add other fields (visition, trainedForToolUse, etc.)
-            (alist-get 'displayName entry))))
+    (format-spec " %p %q %f"
+                 `((?q . ,(thread-last
+                            (alist-get 'quantization entry)
+                            (alist-get 'name)))
+                   (?p . ,(or (alist-get 'paramsString entry)
+                              ""))
+                   (?f . ,(alist-get 'format entry))))))
+
+(defun akirak-lmstudio--group (entry)
+  (when entry
+    (concat (alist-get 'type entry)
+            (if (alist-get 'vision entry)
+                ", vision"
+              "")
+            (if (alist-get 'trainedForToolUse entry)
+                ", tool use"
+              ""))))
 
 (provide 'akirak-lmstudio)
 ;;; akirak-lmstudio.el ends here
