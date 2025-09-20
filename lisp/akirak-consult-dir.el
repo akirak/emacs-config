@@ -129,9 +129,9 @@
     ;; I use tab-bar.el for working with multiple projects simultaneously, so
     ;; switching to a tab visiting a directory is often a more natural way to
     ;; switch to the directory. See akirak-consult.el.
-    akirak-consult-source-tab-bar-tab
     akirak-consult-dir-open-vc-git-source
     akirak-consult-dir-dired-source
+    akirak-consult-source-tab-bar-tab
     akirak-consult-dir-or-magit-bookmark-source
     akirak-consult-dir-project-source
     akirak-consult-dir-project-parent-source))
