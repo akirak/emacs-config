@@ -112,8 +112,8 @@ Each function is run without an argument in the new working tree."
 (defun akirak-magit--worktree-name (remote-url branch dir)
   (concat (if remote-url
               (akirak-magit--repo-name-from-url remote-url)
-            (car (string-split (directory-file-name
-                                (file-name-nondirectory dir))
+            (car (string-split (file-name-nondirectory
+                                (directory-file-name dir))
                                akirak-magit-branch-delim)))
           akirak-magit-branch-delim
           ;; Don't include slash as it is a path delimiter
