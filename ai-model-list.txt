@@ -60,6 +60,7 @@ gpt-5
 gpt-5-2025-08-07
 gpt-5-chat
 gpt-5-chat-latest
+gpt-5-codex
 gpt-5-mini
 gpt-5-mini-2025-08-07
 gpt-5-nano
@@ -247,6 +248,7 @@ openrouter/qwen/qwen3-coder
 openrouter/switchpoint/router
 openrouter/undi95/remm-slerp-l2-13b
 openrouter/x-ai/grok-4
+openrouter/x-ai/grok-4-fast:free
 meta-llama/Llama-2-7b-hf
 meta-llama/Llama-2-7b-chat-hf
 meta-llama/Llama-2-13b-hf
@@ -329,6 +331,12 @@ amazon.rerank-v1:0
 amazon.titan-embed-image-v1
 amazon.titan-embed-text-v1
 amazon.titan-embed-text-v2:0
+twelvelabs.marengo-embed-2-7-v1:0
+us.twelvelabs.marengo-embed-2-7-v1:0
+eu.twelvelabs.marengo-embed-2-7-v1:0
+twelvelabs.pegasus-1-2-v1:0
+us.twelvelabs.pegasus-1-2-v1:0
+eu.twelvelabs.pegasus-1-2-v1:0
 amazon.titan-text-express-v1
 amazon.titan-text-lite-v1
 amazon.titan-text-premier-v1:0
@@ -606,6 +614,8 @@ xai/grok-3-mini-fast-beta
 xai/grok-3-mini-fast-latest
 xai/grok-3-mini-latest
 xai/grok-4
+xai/grok-4-fast-reasoning
+xai/grok-4-fast-non-reasoning
 xai/grok-4-0709
 xai/grok-4-latest
 xai/grok-beta
@@ -613,6 +623,8 @@ xai/grok-code-fast
 xai/grok-code-fast-1
 xai/grok-code-fast-1-0825
 xai/grok-vision-beta
+deepseek-chat
+deepseek-reasoner
 deepseek/deepseek-chat
 deepseek/deepseek-coder
 deepseek/deepseek-r1
@@ -796,6 +808,7 @@ azure/gpt-5
 azure/gpt-5-2025-08-07
 azure/gpt-5-chat
 azure/gpt-5-chat-latest
+azure/gpt-5-codex
 azure/gpt-5-mini
 azure/gpt-5-mini-2025-08-07
 azure/gpt-5-nano
@@ -882,6 +895,8 @@ sambanova/Meta-Llama-Guard-3-8B
 sambanova/QwQ-32B
 sambanova/Qwen2-Audio-7B-Instruct
 sambanova/Qwen3-32B
+sambanova/DeepSeek-V3.1
+sambanova/gpt-oss-120b
 azure/gpt-3.5-turbo-instruct-0914
 azure/gpt-35-turbo-instruct
 azure/gpt-35-turbo-instruct-0914
