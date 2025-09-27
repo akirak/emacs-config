@@ -125,24 +125,15 @@
 ;;;; Inserting the response
 
 (defun akirak-codex-recent-output-to-org (buffer n)
-  (with-temp-buffer
-    (insert (with-current-buffer buffer
-              (akirak-codex--recent-output n)))
-    (let ((inhibit-read-only t))
-      (remove-text-properties (point-min) (point) '(read-only t)))
-    (replace-regexp-in-region (rx bol (any "> ") " ") ""
-                              (point-min) (point-max))
-    (akirak-pandoc-replace-with-org (point) (point-max))
-    (concat "#+begin_example\n"
-            (org-no-properties (string-trim-right (buffer-string)))
-            "\n#+end_example\n")))
+  (with-current-buffer buffer
+    (akirak-codex--recent-output n)))
 
 (defun akirak-codex--recent-output (n)
   "Return the recent N-th response from the current buffer."
   (cl-assert (and (numberp n) (> n 0)))
   (save-excursion
     (goto-char (point-max))
-    (beginning-of-line 0)
+    (beginning-of-line -1)
     (buffer-substring-no-properties (point) (line-end-position))
     (if (looking-at (rx "▌"))
         (let ((limit (point))
@@ -150,17 +141,33 @@
           (re-search-backward (rx bol "▌") nil nil n)
           (catch 'codex-response
             (while (and (< (point) limit)
-                        (re-search-forward (rx bol (any ">▌") " ") nil t))
-              (if (looking-at (rx "▌"))
-                  (throw 'codex-response t)
-                (let ((begin (point)))
-                  (unless (re-search-forward (rx bol "• ") nil t)
-                    (throw 'codex-response t))
-                  (push (string-trim-right
-                         (buffer-substring begin (match-beginning 0)))
-                        responses)))))
+                        (re-search-forward (rx bol "> ") limit t))
+              (let ((begin (match-beginning 0)))
+                (unless (re-search-forward (rx bol (any "•✔>▌")) nil t)
+                  (throw 'codex-response t))
+                (let ((end (match-beginning 0)))
+                  (push (thread-last
+                          (buffer-substring begin end)
+                          (akirak-codex--remove-readonly)
+                          (string-trim)
+                          (akirak-codex--convert-to-org))
+                        responses)
+                  (goto-char end)))))
           (string-join (nreverse responses) "\n\n"))
       (error "The codex buffer isn't in an expected state"))))
+
+(defun akirak-codex--remove-readonly (string)
+  (remove-text-properties 0 (length string) '(read-only t) string)
+  string)
+
+(defun akirak-codex--convert-to-org (string)
+  "Convert output string to Org."
+  (if (string-match-p (rx bol "> ") string)
+      (concat "#+begin_quote\n"
+              (replace-regexp-in-string (rx bol (any "> ") " ") ""
+                                        string)
+              "\n#+end_quote")
+    string))
 
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here
