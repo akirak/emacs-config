@@ -43,8 +43,9 @@
   ["Options"
    ("-m" "Model" "--model="
     ;; :always-read t
-    ;; :init-value (lambda (obj) (oset obj value "gpt-5"))
-    :choices ("gpt-5"
+    :init-value (lambda (obj) (oset obj value "gpt-5-codex"))
+    :choices ("gpt-5-codex"
+              "gpt-5"
               "gpt-5-nano"
               "gpt-5-mini"))
    ("-r" akirak-codex-set-reasoning-effort)

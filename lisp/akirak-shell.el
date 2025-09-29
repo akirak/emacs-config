@@ -325,8 +325,9 @@ the original minor mode."
         (when (and worktree
                    (file-directory-p worktree))
           worktree))
-    (when-let* ((pr (project-current)))
-      (abbreviate-file-name (project-root pr)))))
+    (or (vc-git-root default-directory)
+        (when-let* ((pr (project-current)))
+          (abbreviate-file-name (project-root pr))))))
 
 ;;;; Commands that I plan on deprecating
 
