@@ -5666,6 +5666,7 @@ This is an extra functions for window management.
                        (,(rx bol "*" (or "aider"
                                          "claude"
                                          "codex"
+                                         "copilot"
                                          "gemini")
                              "-")
                         akirak-window-display-as-right-sidebar
