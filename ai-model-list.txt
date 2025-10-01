@@ -57,10 +57,10 @@ gpt-4o-search-preview
 gpt-4o-search-preview-2025-03-11
 gpt-4o-transcribe
 gpt-5
+gpt-5-codex
 gpt-5-2025-08-07
 gpt-5-chat
 gpt-5-chat-latest
-gpt-5-codex
 gpt-5-mini
 gpt-5-mini-2025-08-07
 gpt-5-nano
@@ -154,6 +154,8 @@ claude-3-opus-20240229
 claude-3-opus-latest
 claude-4-opus-20250514
 claude-4-sonnet-20250514
+claude-sonnet-4-5
+claude-sonnet-4-5-20250929
 claude-opus-4-1
 claude-opus-4-1-20250805
 claude-opus-4-20250514
@@ -230,6 +232,8 @@ openrouter/openai/gpt-4.1-nano-2025-04-14
 openrouter/openai/gpt-4o
 openrouter/openai/gpt-4o-2024-05-13
 openrouter/openai/gpt-5-chat
+openrouter/openai/gpt-5-codex
+openrouter/openai/gpt-5
 openrouter/openai/gpt-5-mini
 openrouter/openai/gpt-5-nano
 openrouter/openai/gpt-oss-120b
@@ -524,6 +528,8 @@ gemini-2.0-pro-exp-02-05
 gemini-2.5-flash
 gemini-2.5-flash-image-preview
 gemini-2.5-flash-lite
+gemini-2.5-flash-lite-preview-09-2025
+gemini-2.5-flash-preview-09-2025
 gemini-2.5-flash-lite-preview-06-17
 gemini-2.5-flash-preview-04-17
 gemini-2.5-flash-preview-05-20
@@ -567,6 +573,10 @@ gemini/gemini-2.0-pro-exp-02-05
 gemini/gemini-2.5-flash
 gemini/gemini-2.5-flash-image-preview
 gemini/gemini-2.5-flash-lite
+gemini/gemini-2.5-flash-lite-preview-09-2025
+gemini/gemini-2.5-flash-preview-09-2025
+gemini/gemini-flash-latest
+gemini/gemini-flash-lite-latest
 gemini/gemini-2.5-flash-lite-preview-06-17
 gemini/gemini-2.5-flash-preview-04-17
 gemini/gemini-2.5-flash-preview-05-20
@@ -740,6 +750,7 @@ groq/meta-llama/llama-4-scout-17b-16e-instruct
 groq/mistral-saba-24b
 groq/mixtral-8x7b-32768
 groq/moonshotai/kimi-k2-instruct
+groq/moonshotai/kimi-k2-instruct-0905
 groq/openai/gpt-oss-120b
 groq/openai/gpt-oss-20b
 groq/playai-tts
