@@ -142,7 +142,7 @@
   (when (file-directory-p file)
     ;; Check if the directory contains multiple git worktrees
     (let ((default-directory (file-name-as-directory file)))
-      (when (and (vc-git-root default-directory)
+      (when (and (file-directory-p ".git")
                  (magit-inside-worktree-p))
         (let ((worktrees (magit-list-worktrees)))
           (when (> (length worktrees) 1)
