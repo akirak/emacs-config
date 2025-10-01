@@ -1051,7 +1051,7 @@
       flake = false;
       lastModified = 1718485631;
       type = "tarball";
-      url = "https://elpa.gnu.org/packages/persist-0.6.1.tar";
+      url = "https://elpa.gnu.org/packages/persist-0.6.1.tar.lz";
     };
     pinyin = {
       flake = false;
