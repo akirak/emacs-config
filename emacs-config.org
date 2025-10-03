@@ -8672,7 +8672,7 @@ A Git porcelain inside Emacs
                                 (_
                                  '(display-buffer-same-window))))))
                 (prog1 (display-buffer buffer action)
-                  (with-current-buffer buffer
+                  (with-selected-window (get-buffer-window buffer)
                     (when (derived-mode-p 'magit-process-mode)
                       (goto-char (point-max))
                       (recenter-top-bottom -1)))))))
