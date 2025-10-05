@@ -291,7 +291,7 @@ are displayed in the frame."
                      (local-set-key "q" #'quit-window)
                      ;; This must be set after eat-mode
                      (setq-local eat-kill-buffer-on-exit t)
-                     (compilation-shell-minor-mode t)
+                     ;; (compilation-shell-minor-mode t)
                      (eat-exec (current-buffer) name "sh" nil (list "-c" command))
                      (pop-to-buffer (current-buffer) '(nil (dedicated . t))))))
                 ((equal arg '(4))
