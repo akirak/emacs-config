@@ -831,7 +831,8 @@ This function returns the current buffer."
     (save-excursion
       (org-back-to-heading)
       (while (re-search-forward org-clock-line-re bound t)
-        (push (org-element-clock-parser (pos-eol)) clocks)))
+        (push (org-element-at-point-no-context (match-beginning 0))
+              clocks)))
     (nreverse clocks)))
 
 ;;;; Log references
