@@ -210,7 +210,10 @@ are displayed in the frame."
   (interactive "P")
   (pcase arg
     ('(64)
-     (if-let* ((buffers (seq-filter #'akirak-compile-buffer-p (buffer-list))))
+     (if-let* ((buffers (thread-last
+                          (buffer-list)
+                          (seq-filter #'akirak-compile-buffer-p)
+                          (seq-filter #'akirak-compile--has-live-process-p))))
          (progn
            (switch-to-buffer (pop buffers))
            (delete-other-windows)
@@ -218,7 +221,7 @@ are displayed in the frame."
              (split-window-right)
              (switch-to-buffer buffer))
            (balance-windows))
-       (user-error "No matching buffer")))
+       (user-error "No compilation buffer with live process")))
     ('(16)
      (let ((buffer (read-buffer "Visit a compilation buffer: "
                                 nil t
@@ -342,6 +345,11 @@ are displayed in the frame."
           'compilation-mode)
       (buffer-local-value 'compilation-shell-minor-mode
                           buffer)))
+
+(defun akirak-compile--has-live-process-p (buffer)
+  (and (buffer-live-p buffer)
+       (when-let* ((proc (get-buffer-process buffer)))
+         (process-live-p proc))))
 
 (defun akirak-compile--select-directory-for-command (command projects)
   (let* ((matching-backends (thread-last
