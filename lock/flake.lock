@@ -1627,23 +1627,6 @@
         "type": "github"
       }
     },
-    "lean4-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1756321731,
-        "narHash": "sha256-9WizG5WlBw+jRO5A4MqqN4oEBTGVmpvjCTZkeHilrGo=",
-        "owner": "akirak",
-        "repo": "lean4-mode",
-        "rev": "3cbf94255053e8e2fbd05c593d6ba4e0ca5d3849",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "ref": "eglot",
-        "repo": "lean4-mode",
-        "type": "github"
-      }
-    },
     "license-templates": {
       "flake": false,
       "locked": {
@@ -1931,6 +1914,22 @@
         "owner": "kljohann",
         "repo": "mpv.el",
         "type": "github"
+      }
+    },
+    "nael": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1760369863,
+        "narHash": "sha256-uK0wU0glRd7szjGR9M19DQvvnhbtI3fEWJYQpamIwlo=",
+        "ref": "refs/heads/release",
+        "rev": "e57f7b69746db8c7cbebca1724f63d8449dc2671",
+        "revCount": 383,
+        "type": "git",
+        "url": "https://codeberg.org/mekeor/nael.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/mekeor/nael.git"
       }
     },
     "neocaml": {
@@ -3172,7 +3171,6 @@
         "kind-icon": "kind-icon",
         "kotlin-ts-mode": "kotlin-ts-mode",
         "language-detection": "language-detection",
-        "lean4-mode": "lean4-mode",
         "license-templates": "license-templates",
         "link-hint": "link-hint",
         "lispy": "lispy",
@@ -3191,6 +3189,7 @@
         "modus-themes": "modus-themes",
         "move-dup": "move-dup",
         "mpv": "mpv",
+        "nael": "nael",
         "neocaml": "neocaml",
         "neotree": "neotree",
         "nerd-icons": "nerd-icons",
