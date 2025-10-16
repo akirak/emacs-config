@@ -9096,6 +9096,15 @@ control mpv for easy note-taking
                      (type . ,(rx (or "audio" "video")
                                   "/" (+ anything)))))))
 #+end_src
+*** nael
+:PROPERTIES:
+:CREATED_TIME: [2025-10-16 Thu 20:12]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package nael)
+    (:file-match "\\.lean\\'"))
+#+end_src
 *** neocaml
 #+begin_quote
 Major mode for OCaml code

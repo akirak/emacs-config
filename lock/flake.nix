@@ -724,6 +724,11 @@
       repo = "mpv.el";
       type = "github";
     };
+    nael = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/mekeor/nael.git";
+    };
     neocaml = {
       flake = false;
       owner = "bbatsov";
