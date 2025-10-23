@@ -128,5 +128,19 @@
     (beginning-of-line 3)
     alist))
 
+(defun akirak-git-file-ignored-p (files)
+  "Return a subset of FILES that are ignored by Git."
+  (let ((ignored-files (thread-last
+                         (process-lines "git" "clean" "-ndx")
+                         (mapcar (lambda (message)
+                                   (thread-last
+                                     (string-remove-prefix "Would remove " message)
+                                     (string-remove-suffix "/")
+                                     (expand-file-name)))))))
+    (seq-filter `(lambda (file)
+                   (member (string-remove-suffix "/" (expand-file-name file))
+                           ',ignored-files))
+                files)))
+
 (provide 'akirak-git)
 ;;; akirak-git.el ends here
