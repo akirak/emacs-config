@@ -140,7 +140,7 @@
     (seq-filter `(lambda (file)
                    (member (string-remove-suffix "/" (expand-file-name file))
                            ',ignored-files))
-                files)))
+                (ensure-list files))))
 
 (provide 'akirak-git)
 ;;; akirak-git.el ends here
