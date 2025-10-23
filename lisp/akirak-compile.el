@@ -139,6 +139,7 @@
      ("deno test"))
     (pnpm
      ("pnpm install" annotation "Install all dependencies for a project")
+     ("pnpm store prune")
      ("pnpm add" annotation "Installs a package and any packages that it depends on")
      ("pnpm import" annotation "Generates a pnpm-lock.yaml from an npm package-lock.json")
      ("pnpm remove" annotation "Removes packages from node_modules and from the project's package.json")
@@ -210,7 +211,10 @@ are displayed in the frame."
   (interactive "P")
   (pcase arg
     ('(64)
-     (if-let* ((buffers (seq-filter #'akirak-compile-buffer-p (buffer-list))))
+     (if-let* ((buffers (thread-last
+                          (buffer-list)
+                          (seq-filter #'akirak-compile-buffer-p)
+                          (seq-filter #'akirak-compile--has-live-process-p))))
          (progn
            (switch-to-buffer (pop buffers))
            (delete-other-windows)
@@ -218,7 +222,7 @@ are displayed in the frame."
              (split-window-right)
              (switch-to-buffer buffer))
            (balance-windows))
-       (user-error "No matching buffer")))
+       (user-error "No compilation buffer with live process")))
     ('(16)
      (let ((buffer (read-buffer "Visit a compilation buffer: "
                                 nil t
@@ -291,7 +295,7 @@ are displayed in the frame."
                      (local-set-key "q" #'quit-window)
                      ;; This must be set after eat-mode
                      (setq-local eat-kill-buffer-on-exit t)
-                     (compilation-shell-minor-mode t)
+                     ;; (compilation-shell-minor-mode t)
                      (eat-exec (current-buffer) name "sh" nil (list "-c" command))
                      (pop-to-buffer (current-buffer) '(nil (dedicated . t))))))
                 ((equal arg '(4))
@@ -342,6 +346,11 @@ are displayed in the frame."
           'compilation-mode)
       (buffer-local-value 'compilation-shell-minor-mode
                           buffer)))
+
+(defun akirak-compile--has-live-process-p (buffer)
+  (and (buffer-live-p buffer)
+       (when-let* ((proc (get-buffer-process buffer)))
+         (process-live-p proc))))
 
 (defun akirak-compile--select-directory-for-command (command projects)
   (let* ((matching-backends (thread-last

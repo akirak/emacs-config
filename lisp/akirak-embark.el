@@ -357,8 +357,6 @@
   (keymap-set embark-identifier-map "l" #'akirak-embark-org-store-link-with-desc)
   (keymap-set embark-identifier-map "H" #'akirak-embark-devdocs-lookup)
   (keymap-set embark-identifier-map "t" #'akirak-embark-run-test)
-  ;; d is bound to `delete-file' by default, which is dangerous.
-  (keymap-unset embark-file-map "d")
   (keymap-set embark-file-map "<remap> <embark-open-externally>" #'akirak-open-file-externally)
   (keymap-set embark-file-map "a" #'find-alternate-file)
   (keymap-set embark-file-map "t" #'find-file-other-tab)

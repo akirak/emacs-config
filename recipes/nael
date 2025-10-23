@@ -1,1 +1,2 @@
-(nael :fetcher codeberg :repo "mekeor/nael")
+(nael :fetcher codeberg :repo "mekeor/nael"
+      :files ("nael/*.el"))

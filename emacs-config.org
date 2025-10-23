@@ -5222,6 +5222,8 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src elisp
   (setup akirak-effect-ts
     (:keymap "C-, y" #'akirak-effect-ts-insert-yield
+             "C-, e" #'akirak-effect-ts-insert-effect
+             "C-, f" #'akirak-effect-ts-insert-function
              "C-, g" #'akirak-effect-ts-insert-gen)
     (:org-template "software/npm/effect.org"))
 #+end_src
@@ -5666,6 +5668,7 @@ This is an extra functions for window management.
                        (,(rx bol "*" (or "aider"
                                          "claude"
                                          "codex"
+                                         "copilot"
                                          "gemini")
                              "-")
                         akirak-window-display-as-right-sidebar
@@ -7120,12 +7123,14 @@ Client for Language Server Protocol (LSP) servers
     (:keymap akirak/mode-prefix-key #'akirak/eglot-prefix-map)
 
     (defun akirak/eglot-ensure ()
-      (when (buffer-file-name)
-        (eglot-ensure)))
+      (when (and (buffer-file-name)
+                 (not (bound-and-true-p magit-buffer-revision)))
+        (eglot-ensure)
+        t))
 
     (defun akirak/eglot-ensure-with-formatter ()
-      (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer nil t)
-      (akirak/eglot-ensure))
+      (when (akirak/eglot-ensure)
+        (add-hook 'eglot-managed-mode-hook #'akirak/eglot-setup-buffer nil t)))
 
     (defun akirak/eglot-setup-buffer ()
       (if (eglot-managed-p)
@@ -8336,7 +8341,7 @@ Automatic language detection from code snippets
 #+begin_src emacs-lisp
 (setup (:package language-detection))
 #+end_src
-*** lean4-mode                                            :Lean4:@extra:
+*** COMMENT lean4-mode                                            :Lean4:@extra:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-12-09 Fri 19:50]
 :END:
@@ -8671,7 +8676,7 @@ A Git porcelain inside Emacs
                                 (_
                                  '(display-buffer-same-window))))))
                 (prog1 (display-buffer buffer action)
-                  (with-current-buffer buffer
+                  (with-selected-window (get-buffer-window buffer)
                     (when (derived-mode-p 'magit-process-mode)
                       (goto-char (point-max))
                       (recenter-top-bottom -1)))))))
@@ -9090,6 +9095,19 @@ control mpv for easy note-taking
                                  (getenv "WAYLAND_DISPLAY")))
                      (type . ,(rx (or "audio" "video")
                                   "/" (+ anything)))))))
+#+end_src
+*** nael
+:PROPERTIES:
+:CREATED_TIME: [2025-10-16 Thu 20:12]
+:END:
+#+begin_quote
+Major mode for Lean
+[[https://codeberg.org/mekeor/nael]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package nael)
+    (:file-match "\\.lean\\'"))
 #+end_src
 *** neocaml
 #+begin_quote
@@ -11333,9 +11351,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+RESULTS: tag-statistics
 | [[org-ql-search:tags:packages][packages]]            | 219 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
-| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
+| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
@@ -11395,7 +11413,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
-| [[org-ql-search:tags:Lean4][Lean4]]               |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:social][social]]              |   1 |
 | [[org-ql-search:tags:mermaid][mermaid]]             |   1 |

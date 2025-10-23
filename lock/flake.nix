@@ -32,7 +32,6 @@
     };
     async = {
       flake = false;
-      lastModified = 1724230971;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/async-1.9.9.tar";
     };
@@ -188,7 +187,6 @@
     };
     csv-mode = {
       flake = false;
-      lastModified = 1723194179;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/csv-mode-1.27.tar";
     };
@@ -611,13 +609,6 @@
       repo = "language-detection.el";
       type = "github";
     };
-    lean4-mode = {
-      flake = false;
-      owner = "akirak";
-      ref = "eglot";
-      repo = "lean4-mode";
-      type = "github";
-    };
     license-templates = {
       flake = false;
       owner = "jcs-elpa";
@@ -725,6 +716,11 @@
       owner = "kljohann";
       repo = "mpv.el";
       type = "github";
+    };
+    nael = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/mekeor/nael.git";
     };
     neocaml = {
       flake = false;
@@ -971,7 +967,6 @@
     };
     org-transclusion = {
       flake = false;
-      lastModified = 1716239161;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/org-transclusion-1.4.0.tar";
     };
@@ -1043,15 +1038,13 @@
     };
     peg = {
       flake = false;
-      lastModified = 1711878471;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/peg-1.0.1.tar";
     };
     persist = {
       flake = false;
-      lastModified = 1718485631;
       type = "tarball";
-      url = "https://elpa.gnu.org/packages/persist-0.6.1.tar";
+      url = "https://elpa.gnu.org/packages/persist-0.6.1.tar.lz";
     };
     pinyin = {
       flake = false;
@@ -1116,7 +1109,6 @@
     };
     rainbow-mode = {
       flake = false;
-      lastModified = 1711878714;
       type = "tarball";
       url = "https://elpa.gnu.org/packages/rainbow-mode-1.0.6.tar";
     };

@@ -139,8 +139,9 @@ the original minor mode."
    :if akirak-shell-project-directory
    ("C" "Claude (default)" akirak-claude-code-default)
    ("c" "Claude" akirak-shell-project-for-claude)
-   ("s" "opencode" akirak-opencode-shell)
-   ("g" "Gemini" akirak-gemini-cli-shell)
+   ("k" "Copilot" akirak-copilot-cli-transient)
+   ;; ("s" "opencode" akirak-opencode-shell)
+   ;; ("g" "Gemini" akirak-gemini-cli-shell)
    ("a" "Aider" akirak-shell-project-for-aider)
    ("x" "Codex" akirak-shell-project-for-codex)]
   (interactive)
@@ -444,6 +445,11 @@ the original minor mode."
             (eat-term-send-string-as-yank
              eat-terminal
              (akirak-shell--preprocess-claude-input input)))
+           (`copilot
+            (require 'akirak-claude)
+            (eat-term-send-string-as-yank
+             eat-terminal
+             (akirak-shell--preprocess-claude-input input)))
            (`opencode
             (akirak-shell--eat-send-opencode-input eat-terminal input))
            ;; Currently no codex support
@@ -480,6 +486,8 @@ the original minor mode."
         'aider)
        (`("claude" . ,_)
         'claude)
+       (`("copilot" . ,_)
+        'copilot)
        (`("codex" . ,_)
         'codex)
        (`("opencode" . ,_)
