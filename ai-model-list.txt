@@ -362,6 +362,7 @@ anthropic.claude-haiku-4-5-20251001-v1:0
 anthropic.claude-haiku-4-5@20251001
 anthropic.claude-3-5-sonnet-20240620-v1:0
 anthropic.claude-3-5-sonnet-20241022-v2:0
+anthropic.claude-3-7-sonnet-20240620-v1:0
 anthropic.claude-3-haiku-20240307-v1:0
 anthropic.claude-3-opus-20240229-v1:0
 anthropic.claude-3-sonnet-20240229-v1:0
@@ -498,6 +499,7 @@ deepinfra/nvidia/NVIDIA-Nemotron-Nano-9B-v2
 deepinfra/openai/gpt-oss-120b
 deepinfra/openai/gpt-oss-20b
 deepinfra/zai-org/GLM-4.5
+perplexity/search
 perplexity/codellama-34b-instruct
 perplexity/codellama-70b-instruct
 perplexity/llama-2-70b-chat
@@ -595,6 +597,7 @@ watsonx/meta-llama/llama-4-maverick-17b
 watsonx/meta-llama/llama-guard-3-11b-vision
 watsonx/mistralai/mistral-medium-2505
 watsonx/mistralai/mistral-small-2503
+watsonx/mistralai/mistral-small-3-1-24b-instruct-2503
 watsonx/mistralai/pixtral-12b-2409
 watsonx/openai/gpt-oss-120b
 watsonx/sdaia/allam-1-13b-instruct
@@ -719,6 +722,7 @@ azure_ai/Phi-4-mini-instruct
 azure_ai/Phi-4-multimodal-instruct
 azure_ai/Phi-4-mini-reasoning
 azure_ai/Phi-4-reasoning
+azure_ai/mistral-document-ai-2505
 azure_ai/MAI-DS-R1
 azure_ai/cohere-rerank-v3-english
 azure_ai/cohere-rerank-v3-multilingual
@@ -920,6 +924,8 @@ azure/standard/1792-x-1024/dall-e-3
 azure/text-embedding-3-large
 azure/text-embedding-3-small
 azure/text-embedding-ada-002
+azure/speech/azure-tts
+azure/speech/azure-tts-hd
 azure/tts-1
 azure/tts-1-hd
 azure/us/gpt-4o-2024-08-06
