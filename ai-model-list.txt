@@ -126,6 +126,8 @@ text-moderation-stable
 tts-1
 tts-1-hd
 whisper-1
+openai/sora-2
+openai/sora-2-pro
 babbage-002
 davinci-002
 ft:babbage-002
@@ -196,6 +198,7 @@ openrouter/anthropic/claude-opus-4
 openrouter/anthropic/claude-opus-4.1
 openrouter/anthropic/claude-sonnet-4
 openrouter/anthropic/claude-sonnet-4.5
+openrouter/anthropic/claude-haiku-4.5
 openrouter/bytedance/ui-tars-1.5-7b
 openrouter/cognitivecomputations/dolphin-mixtral-8x7b
 openrouter/cohere/command-r-plus
@@ -348,6 +351,8 @@ amazon.rerank-v1:0
 amazon.titan-embed-image-v1
 amazon.titan-embed-text-v1
 amazon.titan-embed-text-v2:0
+amazon.titan-image-generator-v1
+amazon.titan-image-generator-v2
 twelvelabs.marengo-embed-2-7-v1:0
 us.twelvelabs.marengo-embed-2-7-v1:0
 eu.twelvelabs.marengo-embed-2-7-v1:0
@@ -940,6 +945,9 @@ azure/us/o1-preview-2024-09-12
 azure/us/o3-mini-2025-01-31
 azure/whisper-1
 computer-use-preview
+azure/sora-2
+azure/sora-2-pro
+azure/sora-2-pro-high-res
 anyscale/HuggingFaceH4/zephyr-7b-beta
 anyscale/codellama/CodeLlama-34b-Instruct-hf
 anyscale/codellama/CodeLlama-70b-Instruct-hf
