@@ -74,7 +74,7 @@ in
       cascadia-code
       inter
       source-han-sans
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       symbola
     ];
 
