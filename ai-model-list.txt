@@ -126,6 +126,7 @@ text-moderation-stable
 tts-1
 tts-1-hd
 whisper-1
+openai/container
 openai/sora-2
 openai/sora-2-pro
 babbage-002
@@ -563,6 +564,7 @@ gemini-2.5-flash-image-preview
 gemini-2.5-flash-lite
 gemini-2.5-flash-lite-preview-09-2025
 gemini-2.5-flash-preview-09-2025
+gemini-live-2.5-flash-preview-native-audio-09-2025
 gemini-2.5-flash-lite-preview-06-17
 gemini-2.5-flash-preview-04-17
 gemini-2.5-flash-preview-05-20
@@ -606,6 +608,8 @@ watsonx/mistralai/mistral-small-3-1-24b-instruct-2503
 watsonx/mistralai/pixtral-12b-2409
 watsonx/openai/gpt-oss-120b
 watsonx/sdaia/allam-1-13b-instruct
+gemini/gemini-live-2.5-flash-preview-native-audio-09-2025
+gemini/gemini-embedding-001
 gemini/gemini-1.5-flash
 gemini/gemini-1.5-flash-001
 gemini/gemini-1.5-flash-002
@@ -728,6 +732,9 @@ azure_ai/Phi-4-multimodal-instruct
 azure_ai/Phi-4-mini-reasoning
 azure_ai/Phi-4-reasoning
 azure_ai/mistral-document-ai-2505
+azure_ai/doc-intelligence/prebuilt-read
+azure_ai/doc-intelligence/prebuilt-layout
+azure_ai/doc-intelligence/prebuilt-document
 azure_ai/MAI-DS-R1
 azure_ai/cohere-rerank-v3-english
 azure_ai/cohere-rerank-v3-multilingual
@@ -829,6 +836,7 @@ azure/ada
 azure/codex-mini
 azure/command-r-plus
 azure/computer-use-preview
+azure/container
 azure/eu/gpt-4o-2024-08-06
 azure/eu/gpt-4o-2024-11-20
 azure/eu/gpt-4o-mini-2024-07-18
@@ -892,6 +900,7 @@ azure/gpt-5-mini
 azure/gpt-5-mini-2025-08-07
 azure/gpt-5-nano
 azure/gpt-5-nano-2025-08-07
+azure/gpt-5-pro
 azure/gpt-image-1
 azure/hd/1024-x-1024/dall-e-3
 azure/hd/1024-x-1792/dall-e-3
@@ -905,6 +914,16 @@ azure/low/1536-x-1024/gpt-image-1
 azure/medium/1024-x-1024/gpt-image-1
 azure/medium/1024-x-1536/gpt-image-1
 azure/medium/1536-x-1024/gpt-image-1
+azure/gpt-image-1-mini
+azure/low/1024-x-1024/gpt-image-1-mini
+azure/low/1024-x-1536/gpt-image-1-mini
+azure/low/1536-x-1024/gpt-image-1-mini
+azure/medium/1024-x-1024/gpt-image-1-mini
+azure/medium/1024-x-1536/gpt-image-1-mini
+azure/medium/1536-x-1024/gpt-image-1-mini
+azure/high/1024-x-1024/gpt-image-1-mini
+azure/high/1024-x-1536/gpt-image-1-mini
+azure/high/1536-x-1024/gpt-image-1-mini
 azure/mistral-large-2402
 azure/mistral-large-latest
 azure/o1
