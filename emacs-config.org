@@ -10467,6 +10467,15 @@ Do the opposite of fill-paragraph or fill-region
 #+begin_src emacs-lisp
 (setup (:package unfill))
 #+end_src
+*** uniline                                                            :drawing:
+:PROPERTIES:
+:CREATED_TIME: [2025-11-10 Mon 23:15]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package uniline))
+#+end_src
+
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]
