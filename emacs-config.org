@@ -6604,6 +6604,14 @@ UI for managing init system daemons (services)
   (setup (:package daemons)
     (:global-keymap "<f12> x d" #'daemons))
 #+end_src
+*** dag-draw                                                           :drawing:
+:PROPERTIES:
+:CREATED_TIME: [2025-11-12 Wed 20:49]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package dag-draw))
+#+end_src
 *** dape
 #+begin_quote
 Debug Adapter Protocol for Emacs
