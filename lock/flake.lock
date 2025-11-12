@@ -539,6 +539,22 @@
         "type": "github"
       }
     },
+    "dag-draw": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1762899258,
+        "narHash": "sha256-ida8JlUBUa49aXER5yeT+yOrTtP/H8xvOkJvRW7qmz4=",
+        "ref": "refs/heads/congruence",
+        "rev": "e450fdc54b41cbd39baf138c47f943e2ccb3ffc4",
+        "revCount": 185,
+        "type": "git",
+        "url": "https://codeberg.org/trevoke/dag-draw.el.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/trevoke/dag-draw.el.git"
+      }
+    },
     "dape": {
       "flake": false,
       "locked": {
@@ -3103,6 +3119,7 @@
         "csv-mode": "csv-mode",
         "d2-mode": "d2-mode",
         "daemons": "daemons",
+        "dag-draw": "dag-draw",
         "dape": "dape",
         "dash": "dash",
         "dashboard": "dashboard",
