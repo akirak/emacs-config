@@ -6608,6 +6608,10 @@ UI for managing init system daemons (services)
 :PROPERTIES:
 :CREATED_TIME: [2025-11-12 Wed 20:49]
 :END:
+#+begin_quote
+Draw directed graphs using the GKNV algorithm
+[[https://codeberg.org/trevoke/dag-draw.el]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package dag-draw))
@@ -11370,7 +11374,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 220 |
+| [[org-ql-search:tags:packages][packages]]            | 221 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
@@ -11406,6 +11410,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:AI][AI]]                  |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
+| [[org-ql-search:tags:drawing][drawing]]             |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
@@ -11443,7 +11448,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
 | [[org-ql-search:tags:transit][transit]]             |   1 |
-| [[org-ql-search:tags:drawing][drawing]]             |   1 |
 | [[org-ql-search:tags:media][media]]               |   1 |
 
 Note that the table above is invisible on GitHub.
