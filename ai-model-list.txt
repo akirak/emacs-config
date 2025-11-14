@@ -57,12 +57,17 @@ gpt-4o-search-preview
 gpt-4o-search-preview-2025-03-11
 gpt-4o-transcribe
 gpt-5
+gpt-5.1
+gpt-5.1-2025-11-13
+gpt-5.1-chat-latest
 gpt-5-pro
 gpt-5-pro-2025-10-06
 gpt-5-2025-08-07
 gpt-5-chat
 gpt-5-chat-latest
 gpt-5-codex
+gpt-5.1-codex
+gpt-5.1-codex-mini
 gpt-5-mini
 gpt-5-mini-2025-08-07
 gpt-5-nano
@@ -135,6 +140,7 @@ ft:babbage-002
 ft:davinci-002
 gpt-3.5-turbo-instruct
 gpt-3.5-turbo-instruct-0914
+cohere/embed-v4.0
 command
 command-nightly
 embed-english-light-v2.0
@@ -207,6 +213,7 @@ openrouter/databricks/dbrx-instruct
 openrouter/deepseek/deepseek-chat
 openrouter/deepseek/deepseek-chat-v3-0324
 openrouter/deepseek/deepseek-chat-v3.1
+openrouter/deepseek/deepseek-v3.2-exp
 openrouter/deepseek/deepseek-coder
 openrouter/deepseek/deepseek-r1
 openrouter/deepseek/deepseek-r1-0528
@@ -229,6 +236,7 @@ openrouter/meta-llama/llama-3-70b-instruct:nitro
 openrouter/meta-llama/llama-3-8b-instruct:extended
 openrouter/meta-llama/llama-3-8b-instruct:free
 openrouter/microsoft/wizardlm-2-8x22b:nitro
+openrouter/minimax/minimax-m2
 openrouter/mistralai/mistral-7b-instruct
 openrouter/mistralai/mistral-7b-instruct:free
 openrouter/mistralai/mistral-large
@@ -270,6 +278,8 @@ openrouter/switchpoint/router
 openrouter/undi95/remm-slerp-l2-13b
 openrouter/x-ai/grok-4
 openrouter/x-ai/grok-4-fast:free
+openrouter/z-ai/glm-4.6
+openrouter/z-ai/glm-4.6:exacto
 meta-llama/Llama-2-7b-hf
 meta-llama/Llama-2-7b-chat-hf
 meta-llama/Llama-2-13b-hf
@@ -668,6 +678,8 @@ gemini/learnlm-1.5-pro-experimental
 gemini/veo-2.0-generate-001
 gemini/veo-3.0-fast-generate-preview
 gemini/veo-3.0-generate-preview
+gemini/veo-3.1-fast-generate-preview
+gemini/veo-3.1-generate-preview
 text-completion-codestral/codestral-2405
 text-completion-codestral/codestral-latest
 xai/grok-2
@@ -1131,6 +1143,7 @@ moonshot/kimi-latest-128k
 moonshot/kimi-latest-32k
 moonshot/kimi-latest-8k
 moonshot/kimi-thinking-preview
+moonshot/kimi-k2-thinking
 moonshot/moonshot-v1-128k
 moonshot/moonshot-v1-128k-0430
 moonshot/moonshot-v1-128k-vision-preview
