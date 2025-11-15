@@ -7473,7 +7473,7 @@ Show Epkg information in completion annotations
   (setup (:package epkg-marginalia)
     (with-eval-after-load 'marginalia
       (cl-pushnew 'epkg-marginalia-annotate-package
-                  (alist-get 'package marginalia-annotator-registry))))
+                  (alist-get 'package marginalia-annotators))))
 #+end_src
 *** erlang                                                         :major__mode:
 :PROPERTIES:
@@ -8843,9 +8843,9 @@ Enrich existing commands with completion annotations
       (:keymap "M-a" #'marginalia-cycle))
 
     (:when-loaded
-      (add-to-list 'marginalia-annotator-registry
+      (add-to-list 'marginalia-annotators
                    '(project-root akirak-project-root-annotator builtin none))
-      (add-to-list 'marginalia-annotator-registry
+      (add-to-list 'marginalia-annotators
                    '(directory marginalia-annotate-file builtin none))))
 #+end_src
 *** markdown-mode                                      :major__mode:
