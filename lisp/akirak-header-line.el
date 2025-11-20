@@ -178,7 +178,13 @@
                         "")))
                     ((derived-mode-p 'magit-mode)
                      (format "%%b (%s)"
-                             (abbreviate-file-name default-directory)))
+                             ;; `abbreviate-file-name' is often slow for simple
+                             ;; conversion, so use an own implementation.
+                             (file-name-as-directory
+                              (if (string-match abbreviated-home-dir default-directory)
+                                  (concat "~/" (substring default-directory
+                                                          (match-end 0)))
+                                default-directory))))
                     (t
                      "%b"))))
       (setq akirak-header-line--file (cons (float-time) format))

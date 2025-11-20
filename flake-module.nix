@@ -63,7 +63,7 @@ let
   makeConfig =
     {
       pkgs,
-      emacsPackage ? (import inputs.flake-pins).packages.${pkgs.system}.emacs-pgtk,
+      emacsPackage ? (import inputs.flake-pins).packages.${pkgs.stdenv.hostPlatform.system}.emacs-pgtk,
       nativeCompileAheadDefault ? true,
       features ? [ ],
       initFile ? (pkgs.writeText "init.el" (makeInitFileWithFilter (withExtraTags features))),
@@ -86,8 +86,8 @@ let
         pkgs = pkgs.extend (
           lib.composeExtensions inputs.flake-pins.overlays.default (
             _: _: {
-              playwright-mcp = inputs.playwright-mcp.packages.${pkgs.system}.default;
-              mcp-nixos = inputs.mcp-nixos.packages.${pkgs.system}.default;
+              playwright-mcp = inputs.playwright-mcp.packages.${pkgs.stdenv.hostPlatform.system}.default;
+              mcp-nixos = inputs.mcp-nixos.packages.${pkgs.stdenv.hostPlatform.system}.default;
             }
           )
         );
@@ -186,12 +186,12 @@ in
           pkgs.callPackage ./nix/lib/tmpInitDirWrapper.nix { } "emacs-tmpdir"
             (makeConfig {
               inherit pkgs;
-              emacsPackage = (import inputs.flake-pins).packages.${pkgs.system}.emacs-pgtk;
+              emacsPackage = (import inputs.flake-pins).packages.${pkgs.stdenv.hostPlatform.system}.emacs-pgtk;
             });
 
         emacs-on-tmpdir = pkgs.callPackage ./nix/lib/tmpInitDirWrapper.nix { } "emacs-tmpdir" (makeConfig {
           inherit pkgs;
-          emacsPackage = (import inputs.flake-pins).packages.${pkgs.system}.emacs;
+          emacsPackage = (import inputs.flake-pins).packages.${pkgs.stdenv.hostPlatform.system}.emacs;
         });
 
         # Using Emacs stable for reproducing configuration issues.

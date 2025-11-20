@@ -202,6 +202,11 @@
       repo = "daemons.el";
       type = "github";
     };
+    dag-draw = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/trevoke/dag-draw.el.git";
+    };
     dape = {
       flake = false;
       owner = "svaante";
@@ -1300,6 +1305,12 @@
       flake = false;
       owner = "purcell";
       repo = "unfill";
+      type = "github";
+    };
+    uniline = {
+      flake = false;
+      owner = "tbanel";
+      repo = "uniline";
       type = "github";
     };
     valign = {

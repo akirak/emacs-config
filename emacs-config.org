@@ -6604,6 +6604,18 @@ UI for managing init system daemons (services)
   (setup (:package daemons)
     (:global-keymap "<f12> x d" #'daemons))
 #+end_src
+*** dag-draw                                                           :drawing:
+:PROPERTIES:
+:CREATED_TIME: [2025-11-12 Wed 20:49]
+:END:
+#+begin_quote
+Draw directed graphs using the GKNV algorithm
+[[https://codeberg.org/trevoke/dag-draw.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package dag-draw))
+#+end_src
 *** dape
 #+begin_quote
 Debug Adapter Protocol for Emacs
@@ -6751,7 +6763,9 @@ Highlight uncommitted changes using VC
 
     (add-hook 'akirak-worktree-file-mode-hook #'diff-hl-mode)
 
-    (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
+    ;; Disable the dired integration as managing the background process is annoying.
+    ;; (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
+
     (:set diff-hl-command-prefix (kbd "C-c g")
           diff-hl-show-staged-changes t
           ;; https://github.com/magit/magit/discussions/5167
@@ -7459,7 +7473,7 @@ Show Epkg information in completion annotations
   (setup (:package epkg-marginalia)
     (with-eval-after-load 'marginalia
       (cl-pushnew 'epkg-marginalia-annotate-package
-                  (alist-get 'package marginalia-annotator-registry))))
+                  (alist-get 'package marginalia-annotators))))
 #+end_src
 *** erlang                                                         :major__mode:
 :PROPERTIES:
@@ -8829,9 +8843,9 @@ Enrich existing commands with completion annotations
       (:keymap "M-a" #'marginalia-cycle))
 
     (:when-loaded
-      (add-to-list 'marginalia-annotator-registry
+      (add-to-list 'marginalia-annotators
                    '(project-root akirak-project-root-annotator builtin none))
-      (add-to-list 'marginalia-annotator-registry
+      (add-to-list 'marginalia-annotators
                    '(directory marginalia-annotate-file builtin none))))
 #+end_src
 *** markdown-mode                                      :major__mode:
@@ -10467,6 +10481,19 @@ Do the opposite of fill-paragraph or fill-region
 #+begin_src emacs-lisp
 (setup (:package unfill))
 #+end_src
+*** uniline                                                            :drawing:
+:PROPERTIES:
+:CREATED_TIME: [2025-11-10 Mon 23:15]
+:END:
+#+begin_quote
+Add▶ ■─UNICODE based diagrams─■ to▶ ■─text files─■
+[[https://github.com/tbanel/uniline]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package uniline))
+#+end_src
+
 *** COMMENT unmodified-buffer                              :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:58]
@@ -11349,7 +11376,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 219 |
+| [[org-ql-search:tags:packages][packages]]            | 221 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
@@ -11385,6 +11412,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:AI][AI]]                  |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
+| [[org-ql-search:tags:drawing][drawing]]             |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
