@@ -36,7 +36,7 @@ jobs:
             result-tar: false
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: ${{ inputs.release-tag }}
 
