@@ -8621,6 +8621,10 @@ A Git porcelain inside Emacs
       ;; I can rollback the filesystem if the removed file is crucial.
       (:set magit-delete-by-moving-to-trash nil))
 
+    ;; Improve the performance of visual line movement with `line-move-visual'.
+    (:set magit-section-visibility-indicator nil
+          magit-diff-highlight-hunk-body nil)
+
     ;; Twist allows me to get the git version of any package if necessary, so
     ;; there is no point in making this IO-intensive function run.
     (advice-add 'magit-version :override #'ignore)
