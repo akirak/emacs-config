@@ -143,7 +143,7 @@
 (defun akirak-header-line--project-and-buffer ()
   (if (and akirak-header-line--file
            (< (- (float-time) (car akirak-header-line--file))
-              1))
+              10))
       (cdr akirak-header-line--file)
     (let* ((base (buffer-base-buffer))
            (filename (buffer-file-name base))
