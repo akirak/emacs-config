@@ -1375,9 +1375,8 @@
     };
     zig-mode = {
       flake = false;
-      owner = "ziglang";
-      repo = "zig-mode";
-      type = "github";
+      type = "git";
+      url = "https://codeberg.org/ziglang/zig-mode.git";
     };
     zig-ts-mode = {
       flake = false;
