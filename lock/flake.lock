@@ -3899,17 +3899,17 @@
     "zig-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1730737474,
-        "narHash": "sha256-O2iTns9b8IHj8yE+TIINOOqraND0WX4uhdLj3drmpLI=",
-        "owner": "ziglang",
-        "repo": "zig-mode",
-        "rev": "f0b4a487530146f99230f4a5ff67e8d56c8f3f80",
-        "type": "github"
+        "lastModified": 1764298606,
+        "narHash": "sha256-B0c4sIBicNLfvqwOe6Y9SEOtb/ogdPN3Q6RpQ8Q/Vds=",
+        "ref": "refs/heads/master",
+        "rev": "20e395f940afe1e19e965050b0284ec418d6a9d5",
+        "revCount": 190,
+        "type": "git",
+        "url": "https://codeberg.org/ziglang/zig-mode.git"
       },
       "original": {
-        "owner": "ziglang",
-        "repo": "zig-mode",
-        "type": "github"
+        "type": "git",
+        "url": "https://codeberg.org/ziglang/zig-mode.git"
       }
     },
     "zig-ts-mode": {
