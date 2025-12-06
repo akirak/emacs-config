@@ -440,6 +440,12 @@
       repo = "flymake-vale";
       type = "github";
     };
+    flyover = {
+      flake = false;
+      owner = "konrad1977";
+      repo = "flyover";
+      type = "github";
+    };
     fsharp-mode = {
       flake = false;
       owner = "fsharp";

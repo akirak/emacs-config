@@ -1179,6 +1179,22 @@
         "type": "github"
       }
     },
+    "flyover": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1765014258,
+        "narHash": "sha256-MZ44wgua3Wp6uFuMW5oLK/+aezG3nipbPfy43LhAjFo=",
+        "owner": "konrad1977",
+        "repo": "flyover",
+        "rev": "ddb40d548a4518e80a36d6b2e80fc6b675502019",
+        "type": "github"
+      },
+      "original": {
+        "owner": "konrad1977",
+        "repo": "flyover",
+        "type": "github"
+      }
+    },
     "fsharp-mode": {
       "flake": false,
       "locked": {
