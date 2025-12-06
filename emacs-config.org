@@ -7642,6 +7642,41 @@ flymake integration for vale
     (:with-hook (org-mode-hook markdown-mode-hook)
       (:hook flymake-vale-load)))
 #+end_src
+*** flyover
+:PROPERTIES:
+:CREATED_TIME: [2025-12-06 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package flyover)
+    (:set flyover-checkers '(flymake)
+          flyover-levels '(error warning info)
+
+          flyover-show-at-eol nil
+          flyover-show-error-id t)
+
+    ;; TODO: Customize the colors
+
+    ;; (custom-set-faces
+    ;;  '(flyover-error
+    ;;    ((t :background "#453246"
+    ;;        :foreground "#ea8faa"
+    ;;        :height 0.9
+    ;;        :weight normal)))
+
+    ;;  '(flyover-warning
+    ;;    ((t :background "#331100"
+    ;;        :foreground "#DCA561"
+    ;;        :height 0.9
+    ;;        :weight normal)))
+
+    ;;  '(flyover-info
+    ;;    ((t :background "#374243"
+    ;;        :foreground "#a8e3a9"
+    ;;        :height 0.9
+    ;;        :weight normal))))
+    )
+#+end_src
 *** COMMENT forge                                                   :VC:project:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-14 Mon 13:22]
