@@ -14,7 +14,7 @@
               FileName = "ai-model-list.txt"
 
               with open(FileName, "w") as f:
-                  for model in litellm.model_list:
+                  for model in sorted(litellm.model_list, key=str.lower):
                       f.write(model + "\n")
 
               print("Updated " + FileName)

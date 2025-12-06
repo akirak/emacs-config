@@ -6471,7 +6471,7 @@ Recoll queries using consult
                                           (abbreviate-file-name)))
                                 'face 'font-lock-doc-face)))))
 #+end_src
-*** copilot                                                 :copilot:AI:
+*** copilot                                                  :copilot:AI:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
@@ -8620,6 +8620,10 @@ A Git porcelain inside Emacs
       ;; operations are slow on ZFS, and because ZFS supports automatic snapshots,
       ;; I can rollback the filesystem if the removed file is crucial.
       (:set magit-delete-by-moving-to-trash nil))
+
+    ;; Improve the performance of visual line movement with `line-move-visual'.
+    (:set magit-section-visibility-indicator nil
+          magit-diff-highlight-hunk-body nil)
 
     ;; Twist allows me to get the git version of any package if necessary, so
     ;; there is no point in making this IO-intensive function run.
@@ -11378,9 +11382,9 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+RESULTS: tag-statistics
 | [[org-ql-search:tags:packages][packages]]            | 221 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
-| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
@@ -11521,6 +11525,7 @@ To use these features, they need to be turned on at build time.
 | [[org-memento][org-memento]]           |      |
 | [[org-recur][org-recur]]             |      |
 | [[beancount][beancount]]             |      |
+| [[copilot][copilot]]               |      |
 | [[dune][dune]]                  |      |
 | [[elx][elx]]                   |      |
 | [[epkg][epkg]]                  |      |
