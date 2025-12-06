@@ -990,11 +990,11 @@
     "envrc": {
       "flake": false,
       "locked": {
-        "lastModified": 1757736505,
-        "narHash": "sha256-9mk/eGUK/2/fy8+dImtfTdSstRSjpiYKuprnDKbre6k=",
-        "owner": "akirak",
+        "lastModified": 1763717700,
+        "narHash": "sha256-039Vrw8VuMQI1sTDZSXZrMCmcpLjVyDZBEXYIA2R/gM=",
+        "owner": "purcell",
         "repo": "envrc",
-        "rev": "a16dedd238e34fe13b0b578d54fd083ca524594c",
+        "rev": "06d72d141ac2e2990d80cdb8bb84f6cb54c628a5",
         "type": "github"
       },
       "original": {
@@ -1070,11 +1070,11 @@
     "exec-path-from-shell": {
       "flake": false,
       "locked": {
-        "lastModified": 1758550382,
-        "narHash": "sha256-gUkFIDdibG4OCKBGcJp09rmuXOtj2YlwbWa6QGv7TcY=",
+        "lastModified": 1763040242,
+        "narHash": "sha256-5rkOERgQLObhkG/NFNtL+twhqvnCeTG0W6FeovawD/o=",
         "owner": "purcell",
         "repo": "exec-path-from-shell",
-        "rev": "59631fc475678ca299cc9503c1e48e87404b0b80",
+        "rev": "7552abf032a383ff761e7d90e6b5cbb4658a728a",
         "type": "github"
       },
       "original": {
@@ -2064,11 +2064,11 @@
     "nixfmt": {
       "flake": false,
       "locked": {
-        "lastModified": 1754998305,
-        "narHash": "sha256-zw81dTRLZmJexh8IK3tbv/g9c18FPI2D7gv7wDjtH70=",
+        "lastModified": 1763717692,
+        "narHash": "sha256-B9Pxf4nQ/0FmHFsfmD+d0zh7nKvxFt+WZE7QGy1+jLs=",
         "owner": "purcell",
         "repo": "emacs-nixfmt",
-        "rev": "52bf01baa85fdaf3241e9173f54627d1f3a3e929",
+        "rev": "2de423d1c1446054e5ebb241789f696d4eaf2f6a",
         "type": "github"
       },
       "original": {
@@ -2726,11 +2726,11 @@
     "package-lint": {
       "flake": false,
       "locked": {
-        "lastModified": 1756393619,
-        "narHash": "sha256-mWHXZmqIjROZWz7NNNmXb3Q2iOPREnJRGi9W/ix1az4=",
+        "lastModified": 1764955219,
+        "narHash": "sha256-fzYkghKOR06GEDUtgvtYtF1SSe3L3a3RaIVJJM9isbA=",
         "owner": "purcell",
         "repo": "package-lint",
-        "rev": "f990665a1b4ca9eadbfcdb0b2a22fbb819e78ef4",
+        "rev": "1c37329703a507fa357302cf6fc29d4f2fe631a8",
         "type": "github"
       },
       "original": {
@@ -2742,11 +2742,11 @@
     "page-break-lines": {
       "flake": false,
       "locked": {
-        "lastModified": 1754998216,
-        "narHash": "sha256-W0Uxux6x28tJLwLOADeTWp8rr1o8h2DFOoMa1a3MxQg=",
+        "lastModified": 1763760472,
+        "narHash": "sha256-UxnY5J26/O4uBYqm1hklTa1Cp5alAd0DLW6DkEppLus=",
         "owner": "purcell",
         "repo": "page-break-lines",
-        "rev": "84b872a056404f11cacbf3fc2b0788aa7feac635",
+        "rev": "f54aa2b96f6ed249e103346cdb872c97c3c98054",
         "type": "github"
       },
       "original": {
@@ -3006,11 +3006,11 @@
     "reformatter": {
       "flake": false,
       "locked": {
-        "lastModified": 1754998240,
-        "narHash": "sha256-Ks2GpV6xOvD4gqXZjd+TR5nri8Z5MG3XUaFg01+wyKo=",
+        "lastModified": 1763717726,
+        "narHash": "sha256-cOGmVT9bPNXsMFug1yqSbFNfWK40ITjwqWhyJKgMt/c=",
         "owner": "purcell",
         "repo": "emacs-reformatter",
-        "rev": "c52e91d5438b9bf16b77b4384822e254f10a6b0a",
+        "rev": "c0ddac04b7b937ed56d6bf97e4bfcc4eccfa501a",
         "type": "github"
       },
       "original": {
@@ -3387,11 +3387,11 @@
     "shfmt": {
       "flake": false,
       "locked": {
-        "lastModified": 1755083497,
-        "narHash": "sha256-OAI4BscUO2M1x44Z9j0kjoLSccJ4NA1KNmOUFexMfeg=",
+        "lastModified": 1763735880,
+        "narHash": "sha256-UrCUTb1fwM51KoKxQjM6fNIgCclY0GovlTAIzQCuxOU=",
         "owner": "purcell",
         "repo": "emacs-shfmt",
-        "rev": "1f838a07b88380b654ef4ae759e73a720db6a166",
+        "rev": "2a222c53cea5bbecf85332077521e6de8185f101",
         "type": "github"
       },
       "original": {
