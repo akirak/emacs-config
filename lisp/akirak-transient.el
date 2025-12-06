@@ -140,15 +140,26 @@
   ((initial-contents-fn :initarg :initial-contents-fn
                         :description "Function without an argument to generate \
 the initial value in minibuffer input."
-                        :initform nil)))
+                        :initform nil)
+   (default :initarg :default
+            :initform nil
+            :description "Default value in the minibuffer")
+   (nullify :initarg :nullify
+            :initform nil
+            :description "Toggle nil")))
 
 (cl-defmethod transient-infix-read ((obj akirak-transient-string-variable))
-  (let ((value (read-from-minibuffer (oref obj prompt)
-                                     (or (oref obj value)
-                                         (when (oref obj initial-contents-fn)
-                                           (funcall (oref obj initial-contents-fn)))))))
-    (unless (string-empty-p value)
-      value)))
+  (when (or (null (oref obj value))
+            (string-empty-p (oref obj value))
+            (not (oref obj nullify)))
+    (let ((value (read-string (oref obj prompt)
+                              (or (oref obj value)
+                                  (when (oref obj initial-contents-fn)
+                                    (funcall (oref obj initial-contents-fn))))
+                              nil
+                              (oref obj default))))
+      (unless (string-empty-p value)
+        value))))
 
 (cl-defmethod transient-format-value ((obj akirak-transient-string-variable))
   (if-let* ((value (oref obj value)))
