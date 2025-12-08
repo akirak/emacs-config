@@ -3064,8 +3064,8 @@ Org Babel functions for Aider.el & Aidermacs integration
 :CREATED_TIME: [2025-05-05 Mon 11:48]
 :END:
 #+begin_quote
-Org Babel functions for DuckDB SQL
-[[https://github.com/gggion/ob-duckdb.el]]
+Org Babel integration for DuckDB CLI
+[[https://github.com/gggion/ob-duckdb]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -7646,6 +7646,10 @@ flymake integration for vale
 :PROPERTIES:
 :CREATED_TIME: [2025-12-06 Sat 23:59]
 :END:
+#+begin_quote
+Display Flycheck and Flymake errors with overlays
+[[https://github.com/konrad1977/flyover]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package flyover)
@@ -10812,7 +10816,7 @@ A z3/SMTLIBv2 interactive development environment
 :END:
 #+begin_quote
 A major mode for the Zig programming language
-[[https://github.com/zig-lang/zig-mode]]
+[[https://codeberg.org/ziglang/zig-mode]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -11401,7 +11405,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 221 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
