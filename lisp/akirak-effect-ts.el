@@ -7,7 +7,7 @@
 ;;;###autoload (autoload 'akirak-effect-ts-mode "akirak-effect-ts" nil 'interactive)
 (define-minor-mode akirak-effect-ts-mode
   "A minor mode for editing Effect-TS code efficiently."
-  :lighter "EffTS")
+  :lighter " EffTS")
 
 ;;;###autoload (autoload 'akirak-effect-ts-insert-yield "akirak-effect-ts" nil 'interactive)
 (define-skeleton akirak-effect-ts-insert-yield
