@@ -54,9 +54,6 @@ assemblyai/best
 assemblyai/nano
 Austism/chronos-hermes-13b
 azure/ada
-azure/claude-haiku-4-5
-azure/claude-opus-4-1
-azure/claude-sonnet-4-5
 azure/codex-mini
 azure/command-r-plus
 azure/computer-use-preview
@@ -230,6 +227,9 @@ azure/us/o3-2025-04-16
 azure/us/o3-mini-2025-01-31
 azure/us/o4-mini-2025-04-16
 azure/whisper-1
+azure_ai/claude-haiku-4-5
+azure_ai/claude-opus-4-1
+azure_ai/claude-sonnet-4-5
 azure_ai/Cohere-embed-v3-english
 azure_ai/Cohere-embed-v3-multilingual
 azure_ai/cohere-rerank-v3-english
@@ -295,6 +295,7 @@ cerebras/llama-3.3-70b
 cerebras/llama3.1-70b
 cerebras/llama3.1-8b
 cerebras/qwen-3-32b
+cerebras/zai-glm-4.6
 chat-bison
 chat-bison-32k
 chat-bison-32k@002
@@ -663,6 +664,7 @@ gemini/gemini-2.0-flash-preview-image-generation
 gemini/gemini-2.0-flash-thinking-exp
 gemini/gemini-2.0-flash-thinking-exp-01-21
 gemini/gemini-2.0-pro-exp-02-05
+gemini/gemini-2.5-computer-use-preview-10-2025
 gemini/gemini-2.5-flash
 gemini/gemini-2.5-flash-image
 gemini/gemini-2.5-flash-image-preview
@@ -776,6 +778,11 @@ gpt-5.1-chat-latest
 gpt-5.1-codex
 gpt-5.1-codex-max
 gpt-5.1-codex-mini
+gpt-5.2
+gpt-5.2-2025-12-11
+gpt-5.2-chat-latest
+gpt-5.2-pro
+gpt-5.2-pro-2025-12-11
 gpt-image-1
 gpt-image-1-mini
 gpt-realtime
@@ -979,6 +986,7 @@ nscale/stabilityai/stable-diffusion-xl-base-1.0
 NumbersStation/nsql-llama-2-7B
 nvidia_nim/nvidia/llama-3_2-nv-rerankqa-1b-v2
 nvidia_nim/nvidia/nv-rerankqa-mistral-4b-v3
+nvidia_nim/ranking/nvidia/llama-3.2-nv-rerankqa-1b-v2
 o1
 o1-2024-12-17
 o1-mini
@@ -1377,6 +1385,8 @@ vertex_ai/gemini-2.5-flash-image
 vertex_ai/gemini-3-pro-image-preview
 voyage/rerank-2
 voyage/rerank-2-lite
+voyage/rerank-2.5
+voyage/rerank-2.5-lite
 voyage/voyage-2
 voyage/voyage-3
 voyage/voyage-3-large
