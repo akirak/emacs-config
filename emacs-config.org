@@ -4842,7 +4842,7 @@ Major mode for the Go programming language
 
 #+begin_src emacs-lisp
   (setup json-ts-mode
-    (:file-match "\\.json\\'" "\\.lock\\'")
+    (:file-match "\\.json\\'" "\\.lock\\'" "*.webmanifest")
     (:mode-project-roots "package.json")
     (:hook (defun akirak/json-ts-setup ()
              (add-hook 'eldoc-documentation-functions
