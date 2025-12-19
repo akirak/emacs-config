@@ -142,7 +142,6 @@ the original minor mode."
    ("k" "Copilot" akirak-copilot-cli-transient)
    ;; ("s" "opencode" akirak-opencode-shell)
    ;; ("g" "Gemini" akirak-gemini-cli-shell)
-   ("a" "Aider" akirak-shell-project-for-aider)
    ("x" "Codex" akirak-shell-project-for-codex)]
   (interactive)
   (setq akirak-shell-new-window 'split)
