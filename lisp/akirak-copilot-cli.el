@@ -11,12 +11,19 @@
 (transient-define-prefix akirak-copilot-cli-transient ()
   "Start a terminal session for Copilot CLI"
   ["Options"
-   ;; TODO: --allow-tool
+   ;; TODO: --allow-tool and --deny-tool
    ;; TODO: --add-dir
+   ;; TODO: --disable-mcp-server
+   ;; TODO: --continue
    ("-r" "Resume" "--resume")
-   ("-m" "Model" "--model=" :choices ("gpt-5"
+   ("-m" "Model" "--model=" :choices ("gpt-5.1-codex"
+                                      "gpt-5.1-codex-mini"
+                                      "gpt-5.1-codex-max"
+                                      "gpt-5.2"
                                       "claude-sonnet-4"
-                                      "claude-sonnet-4.5"))]
+                                      "claude-sonnet-4.5"
+                                      "claude-opus-4.5"
+                                      "gemini-3-pro-preview"))]
   ["Actions"
    :class transient-row
    ("k" "Start a new session" akirak-copilot-cli--open-shell)]
