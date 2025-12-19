@@ -27,7 +27,7 @@
   :class 'akirak-transient-choice-variable
   :cycle t
   :variable 'akirak-codex-reasoning-effort
-  :choices '("medium" "high")
+  :choices '("medium" "high" "extra-high" "low")
   :description "Reasoning effort")
 
 (defvar akirak-codex-codex-home nil)
@@ -47,6 +47,7 @@
     :choices ("gpt-5.1-codex-max"
               "gpt-5.1-codex"
               "gpt-5.1-codex-mini"
+              "gpt-5.2"
               "gpt-5.1"))
    ("-r" akirak-codex-set-reasoning-effort)
    ("-h" akirak-codex-set-codex-home)
