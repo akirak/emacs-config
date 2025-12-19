@@ -1050,7 +1050,7 @@
     peg = {
       flake = false;
       type = "tarball";
-      url = "https://elpa.gnu.org/packages/peg-1.0.1.tar";
+      url = "https://elpa.gnu.org/packages/peg-1.0.2.tar";
     };
     persist = {
       flake = false;
