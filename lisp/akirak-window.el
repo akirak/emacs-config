@@ -112,8 +112,9 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
   ;; For most major modes, the first line of a buffer is likely to be a
   ;; header.
   (let* ((width (akirak-window--left-sidebar-width buffer))
-         (window (display-buffer-in-side-window buffer `((side . left)
-                                                         (window-width . ,width)))))
+         (window (akirak-window--display-in-sidebar buffer
+                                                    `((side . left)
+                                                      (window-width . ,width)))))
     (when window
       (with-current-buffer buffer
         (setq-local window-size-fixed 'width))
@@ -142,14 +143,26 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 
 ;;;###autoload
 (defun akirak-window-display-as-right-sidebar (buffer &optional alist)
-  (let* ((window (display-buffer-in-side-window buffer
-                                                (append '((side . right))
-                                                        alist))))
+  (let* ((window (akirak-window--display-in-sidebar buffer
+                                                    (append '((side . right))
+                                                            alist))))
     (when window
       (with-current-buffer buffer
         (setq-local window-size-fixed 'width))
       ;; (balance-windows)
       window)))
+
+(defun akirak-window--display-in-sidebar (buffer &optional alist)
+  "Display BUFFER in a side window of the current tab.
+
+This is an alternative to `display-buffer-in-side-window', which seem to
+create a buffer in the current tab."
+  (let* ((side (alist-get 'side alist))
+         (direction (pcase side
+                      (`left 'leftmost)
+                      (`right 'rightmost))))
+    (display-buffer-in-direction buffer (cons (cons 'direction direction)
+                                              alist))))
 
 (cl-defun akirak-window--max-column (buffer &key skip-first-line)
   (with-current-buffer buffer
