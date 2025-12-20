@@ -8,5 +8,12 @@
          (text (completing-read "Select error: " alist nil t)))
     (cdr (assoc text alist))))
 
+(defun akirak-flymake-filter-diags-by-pos (pos diags)
+  (or (seq-filter (apply-partially (lambda (pos diag)
+                                     (= pos (flymake--diag-beg diag)))
+                                   pos)
+                  diags)
+      diags))
+
 (provide 'akirak-flymake)
 ;;; akirak-flymake.el ends here
