@@ -125,7 +125,7 @@
   (interactive "P")
   (cl-assert (akirak-org-shell--buffer-live-p))
   (require 'akirak-flymake)
-  (let* ((diag (pcase (flymake-diagnostics)
+  (let* ((diag (pcase (akirak-flymake-filter-diags-by-pos (point) (flymake-diagnostics))
                  (`nil (user-error "No error at point"))
                  (`(,diag) diag)
                  (diags (akirak-flymake-select-diagnostic diags))))

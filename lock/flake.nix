@@ -440,6 +440,12 @@
       repo = "flymake-vale";
       type = "github";
     };
+    flyover = {
+      flake = false;
+      owner = "konrad1977";
+      repo = "flyover";
+      type = "github";
+    };
     fsharp-mode = {
       flake = false;
       owner = "fsharp";
@@ -1044,7 +1050,7 @@
     peg = {
       flake = false;
       type = "tarball";
-      url = "https://elpa.gnu.org/packages/peg-1.0.1.tar";
+      url = "https://elpa.gnu.org/packages/peg-1.0.2.tar";
     };
     persist = {
       flake = false;
