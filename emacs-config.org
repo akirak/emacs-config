@@ -8700,6 +8700,7 @@ A Git porcelain inside Emacs
                       (magit-commit)))))
 
     (with-eval-after-load 'magit-status
+      (add-hook 'magit-status-sections-hook #'magit-insert-worktrees t)
       ;; Remove some sections for faster magit-status runs.
       (delq 'magit-insert-am-sequence magit-status-sections-hook)
       (delq 'magit-insert-stashes magit-status-sections-hook))
