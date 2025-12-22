@@ -43,7 +43,7 @@
   ["Options"
    ("-m" "Model" "--model="
     ;; :always-read t
-    :init-value (lambda (obj) (oset obj value "gpt-5.1-codex"))
+    :init-value (lambda (obj) (oset obj value "gpt-5.2-codex"))
     :choices ("gpt-5.2-codex"
               "gpt-5.1-codex-max"
               "gpt-5.1-codex-mini"
