@@ -96,7 +96,13 @@ let
         extraSiteStartElisp = ''
           (add-to-list 'treesit-extra-load-path "${
             pkgs.emacs.pkgs.treesit-grammars.with-grammars (
-              _: pkgs.tree-sitter.allGrammars ++ [
+              _:
+              # tree-sitter-razor is marked as broken, so it needs to be
+              # excluded from the config.
+              (builtins.filter (
+                grammar: ((grammar.meta or { }).broken or null) != true
+              ) pkgs.tree-sitter.allGrammars)
+              ++ [
                 (pkgs.tree-sitter.buildGrammar {
                   language = "astro";
                   version = "0";
