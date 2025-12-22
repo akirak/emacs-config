@@ -96,16 +96,13 @@ let
         extraSiteStartElisp = ''
           (add-to-list 'treesit-extra-load-path "${
             pkgs.emacs.pkgs.treesit-grammars.with-grammars (
-              _:
-              (pkgs.tree-sitter.override {
-                # Add extra tree-sitter grammars that are not included in
-                # nixpkgs.
-                extraGrammars = {
-                  tree-sitter-astro = {
-                    src = inputs.tree-sitter-astro.outPath;
-                  };
-                };
-              }).allGrammars
+              _: pkgs.tree-sitter.allGrammars ++ [
+                (pkgs.tree-sitter.buildGrammar {
+                  language = "astro";
+                  version = "0";
+                  src = inputs.tree-sitter-astro.outPath;
+                })
+              ]
             )
           }/lib/")
 
