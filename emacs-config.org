@@ -1637,7 +1637,27 @@ Notes:
     (:set tab-always-indent 'complete)
 
     ;; Unbind `tab-to-tab-stop'
-    (keymap-global-unset "M-i"))
+    (keymap-global-unset "M-i")
+
+    (defun akirak/one-space-in-region (start end)
+      (interactive "r")
+      (let ((initial-end end))
+        (save-excursion
+          (goto-char end)
+          (setq end (point-marker))
+          (goto-char start)
+          (while (re-search-forward (rx (+ blank)) end t)
+            (unless (save-match-data
+                      (looking-back (rx bol (+ blank)) (line-beginning-position)))
+              (replace-match " ")))
+          (- initial-end (marker-position end)))))
+
+    (defun akirak/indent-region (start end &optional column)
+      (interactive "r\nP")
+      (let ((deleted (akirak/one-space-in-region start end)))
+        (indent-region start (- end deleted) column)))
+
+    (:global-keymap "<remap> <indent-region>" #'akirak/indent-region))
 #+end_src
 *** indent.c                                            :formatting:
 :PROPERTIES:
@@ -8700,6 +8720,7 @@ A Git porcelain inside Emacs
                       (magit-commit)))))
 
     (with-eval-after-load 'magit-status
+      (add-hook 'magit-status-sections-hook #'magit-insert-worktrees t)
       ;; Remove some sections for faster magit-status runs.
       (delq 'magit-insert-am-sequence magit-status-sections-hook)
       (delq 'magit-insert-stashes magit-status-sections-hook))

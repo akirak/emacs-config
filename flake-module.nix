@@ -97,15 +97,18 @@ let
           (add-to-list 'treesit-extra-load-path "${
             pkgs.emacs.pkgs.treesit-grammars.with-grammars (
               _:
-              (pkgs.tree-sitter.override {
-                # Add extra tree-sitter grammars that are not included in
-                # nixpkgs.
-                extraGrammars = {
-                  tree-sitter-astro = {
-                    src = inputs.tree-sitter-astro.outPath;
-                  };
-                };
-              }).allGrammars
+              # tree-sitter-razor is marked as broken, so it needs to be
+              # excluded from the config.
+              (builtins.filter (
+                grammar: ((grammar.meta or { }).broken or null) != true
+              ) pkgs.tree-sitter.allGrammars)
+              ++ [
+                (pkgs.tree-sitter.buildGrammar {
+                  language = "astro";
+                  version = "0";
+                  src = inputs.tree-sitter-astro.outPath;
+                })
+              ]
             )
           }/lib/")
 
