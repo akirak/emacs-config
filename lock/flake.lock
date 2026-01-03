@@ -80,19 +80,6 @@
         "url": "https://git.isincredibly.gay/srxl/astro-ts-mode.git"
       }
     },
-    "async": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1724230971,
-        "narHash": "sha256-v3gHlynfGj+/ss7FRvCpH+D7ekmtOBt+I59cdzpIl8o=",
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/async-1.9.9.tar"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/async-1.9.9.tar"
-      }
-    },
     "auto-minor-mode": {
       "flake": false,
       "locked": {
@@ -492,19 +479,6 @@
         "owner": "akirak",
         "repo": "cosmetic-transient.el",
         "type": "github"
-      }
-    },
-    "csv-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1723194179,
-        "narHash": "sha256-ErzKM6usjp2FrrbYwadJCfiivenMCDD9uojwJbzV3co=",
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/csv-mode-1.27.tar"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/csv-mode-1.27.tar"
       }
     },
     "d2-mode": {
@@ -2598,19 +2572,6 @@
         "type": "github"
       }
     },
-    "org-transclusion": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1716239161,
-        "narHash": "sha256-B8f0Mj9jdOXW8GxKvAAn+qyVSWojJywiXoO047l5624=",
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/org-transclusion-1.4.0.tar"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/org-transclusion-1.4.0.tar"
-      }
-    },
     "org-volume": {
       "flake": false,
       "locked": {
@@ -2787,32 +2748,6 @@
         "type": "github"
       }
     },
-    "peg": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1766009253,
-        "narHash": "sha256-y4fPWWdeH5cnVr5+5+my8vEgt6E+xjgIsbWQGodz9yU=",
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/peg-1.0.2.tar"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/peg-1.0.2.tar"
-      }
-    },
-    "persist": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1718485631,
-        "narHash": "sha256-mvxBYr8j8z7+sBmfxaZXaIWL/vZCyAN3DoWGHoF8b7o=",
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/persist-0.6.1.tar.lz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/persist-0.6.1.tar.lz"
-      }
-    },
     "pinyin": {
       "flake": false,
       "locked": {
@@ -2974,19 +2909,6 @@
         "type": "github"
       }
     },
-    "rainbow-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1711878714,
-        "narHash": "sha256-Qd5M2ellyZW+UPAxUarkS6s5dv4k3xyTpJtMmKTH9Ug=",
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/rainbow-mode-1.0.6.tar"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://elpa.gnu.org/packages/rainbow-mode-1.0.6.tar"
-      }
-    },
     "reason-mode": {
       "flake": false,
       "locked": {
@@ -3106,7 +3028,6 @@
         "anzu": "anzu",
         "apheleia": "apheleia",
         "astro-ts-mode": "astro-ts-mode",
-        "async": "async",
         "auto-minor-mode": "auto-minor-mode",
         "auto-yasnippet": "auto-yasnippet",
         "avy": "avy",
@@ -3132,7 +3053,6 @@
         "copilot": "copilot",
         "corfu": "corfu",
         "cosmetic-transient": "cosmetic-transient",
-        "csv-mode": "csv-mode",
         "d2-mode": "d2-mode",
         "daemons": "daemons",
         "dag-draw": "dag-draw",
@@ -3263,7 +3183,6 @@
         "org-rooted": "org-rooted",
         "org-super-agenda": "org-super-agenda",
         "org-super-links": "org-super-links",
-        "org-transclusion": "org-transclusion",
         "org-volume": "org-volume",
         "orgabilize": "orgabilize",
         "orgabilize-playwright": "orgabilize-playwright",
@@ -3275,8 +3194,6 @@
         "page-break-lines": "page-break-lines",
         "parsec": "parsec",
         "pdd": "pdd",
-        "peg": "peg",
-        "persist": "persist",
         "pinyin": "pinyin",
         "plz": "plz",
         "popper": "popper",
@@ -3287,7 +3204,6 @@
         "puni": "puni",
         "rainbow-csv": "rainbow-csv",
         "rainbow-delimiters": "rainbow-delimiters",
-        "rainbow-mode": "rainbow-mode",
         "reason-mode": "reason-mode",
         "reformatter": "reformatter",
         "repl-toggle": "repl-toggle",
