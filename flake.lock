@@ -258,18 +258,6 @@
         "type": "github"
       }
     },
-    "gnu-elpa-archive": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-gRsVxCOYvMoT60+Y7JYvUeci0EkfQGa8yZ7LUWtD8qo=",
-        "type": "file",
-        "url": "https://elpa.gnu.org/devel/archive-contents"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://elpa.gnu.org/devel/archive-contents"
-      }
-    },
     "home-manager-stable": {
       "inputs": {
         "nixpkgs": "nixpkgs_3"
@@ -586,18 +574,6 @@
         "type": "github"
       }
     },
-    "nongnu-elpa-archive": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-wsyhD9P/EsxLMjC5iFJRzoK6Q9CDsUOUD902NQd0t8E=",
-        "type": "file",
-        "url": "https://elpa.nongnu.org/nongnu-devel/archive-contents"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://elpa.nongnu.org/nongnu-devel/archive-contents"
-      }
-    },
     "ocaml-overlays": {
       "inputs": {
         "nixpkgs": [
@@ -658,13 +634,11 @@
         "flake-parts": "flake-parts",
         "flake-pins": "flake-pins",
         "gnu-elpa": "gnu-elpa",
-        "gnu-elpa-archive": "gnu-elpa-archive",
         "mcp-nixos": "mcp-nixos",
         "melpa": "melpa",
         "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs_7",
         "nongnu-elpa": "nongnu-elpa",
-        "nongnu-elpa-archive": "nongnu-elpa-archive",
         "org-babel": "org-babel",
         "playwright-mcp": "playwright-mcp",
         "systems": "systems_4",
