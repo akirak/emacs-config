@@ -36,11 +36,11 @@
       flake = false;
     };
     gnu-elpa-archive = {
-      url = "file+https://elpa.gnu.org/packages/archive-contents";
+      url = "file+https://elpa.gnu.org/devel/archive-contents";
       flake = false;
     };
     nongnu-elpa-archive = {
-      url = "file+https://elpa.nongnu.org/nongnu/archive-contents";
+      url = "file+https://elpa.nongnu.org/nongnu-devel/archive-contents";
       flake = false;
     };
 
