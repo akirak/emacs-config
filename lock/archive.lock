@@ -30,22 +30,6 @@
     },
     "version": "1.27.0.20250307.75451"
   },
-  "org-transclusion": {
-    "archive": {
-      "narHash": "sha256-cIhL69wMeIZGn7KIsrz9cIyGNTdJQzuMShM2qL/3wfk=",
-      "type": "tarball",
-      "url": "https://elpa.gnu.org/devel/org-transclusion-1.4.0.0.20251218.161651.tar"
-    },
-    "inventory": {
-      "type": "archive",
-      "url": "https://elpa.gnu.org/devel/"
-    },
-    "packageRequires": {
-      "emacs": "27.1",
-      "org": "9.4"
-    },
-    "version": "1.4.0.0.20251218.161651"
-  },
   "peg": {
     "archive": {
       "narHash": "sha256-uJdjkC2vtqc/VhIgKFebGNVpcLDr9eCc87lBIQj0L28=",
