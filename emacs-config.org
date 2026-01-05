@@ -3802,7 +3802,8 @@ A programmable workflow layer for Org mode
                                      file))))
 
     (defun akirak/org-dog-turn-on-transclusion ()
-      (org-transclusion-mode t))
+      (when (require 'org-transclusion nil t)
+        (org-transclusion-mode t)))
     (add-hook 'org-dog-find-file-hook #'akirak/org-dog-turn-on-transclusion)
     (add-hook 'org-dog-before-search-hook #'akirak/org-dog-turn-on-transclusion)
 
