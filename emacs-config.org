@@ -5888,6 +5888,16 @@ Quickly switch windows.
           acm-enable-copilot nil
           acm-enable-codeium nil))
 #+end_src
+*** acp                                                                     :AI:
+:PROPERTIES:
+:CREATED_TIME: [2026-01-05 Mon 09:39]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package acp))
+#+end_src
+
+This is a dependency for agent-shell, but it can also be used as an independent library for custom ACP integrations, so it's configured separately here.
 *** COMMENT adaptive-wrap                                               :visual:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 17:56]
@@ -5923,6 +5933,14 @@ Asynchronous Fuzzy Finder for Emacs
 
 #+begin_src emacs-lisp
 (setup (:package affe))
+#+end_src
+*** agent-shell                                                             :AI:
+:PROPERTIES:
+:CREATED_TIME: [2026-01-05 Mon 09:40]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package agent-shell))
 #+end_src
 *** aggressive-indent                                   :formatting:
 :PROPERTIES:

@@ -1,5 +1,37 @@
 {
   "nodes": {
+    "acp": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1766180110,
+        "narHash": "sha256-2VIMYJsMm2SMH841pfyY6EO7jkSvRcAfHB6LDiMu1X4=",
+        "owner": "xenodium",
+        "repo": "acp.el",
+        "rev": "7b67facc657a7388a53ea8bba5d6e7eba20fa3e0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "xenodium",
+        "repo": "acp.el",
+        "type": "github"
+      }
+    },
+    "agent-shell": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767546014,
+        "narHash": "sha256-vjCfG2UiL+6qBhwe26RODirbUagyRlI0Lc59L5Hlna8=",
+        "owner": "xenodium",
+        "repo": "agent-shell",
+        "rev": "9a7913a7c7b9b8e076b38e7133122dc608e7667e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "xenodium",
+        "repo": "agent-shell",
+        "type": "github"
+      }
+    },
     "aggressive-indent": {
       "flake": false,
       "locked": {
@@ -3023,6 +3055,8 @@
     },
     "root": {
       "inputs": {
+        "acp": "acp",
+        "agent-shell": "agent-shell",
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
         "anzu": "anzu",
@@ -3214,6 +3248,7 @@
         "s": "s",
         "separedit": "separedit",
         "setup": "setup",
+        "shell-maker": "shell-maker",
         "shfmt": "shfmt",
         "show-font": "show-font",
         "shr-tag-pre-highlight": "shr-tag-pre-highlight",
@@ -3298,6 +3333,22 @@
       "original": {
         "type": "git",
         "url": "https://codeberg.org/pkal/setup.el"
+      }
+    },
+    "shell-maker": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767547114,
+        "narHash": "sha256-ddEDSRpmhaTY7DpuUSqcXAa93TtOhfEIlx7J9nisVJI=",
+        "owner": "xenodium",
+        "repo": "shell-maker",
+        "rev": "53742d44b48a13e7550ecf4de824e15963bfa365",
+        "type": "github"
+      },
+      "original": {
+        "owner": "xenodium",
+        "repo": "shell-maker",
+        "type": "github"
       }
     },
     "shfmt": {
