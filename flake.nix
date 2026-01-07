@@ -35,14 +35,6 @@
       # url = "git+https://git.savannah.gnu.org/git/emacs/nongnu.git?ref=main";
       flake = false;
     };
-    gnu-elpa-archive = {
-      url = "file+https://elpa.gnu.org/packages/archive-contents";
-      flake = false;
-    };
-    nongnu-elpa-archive = {
-      url = "file+https://elpa.nongnu.org/nongnu/archive-contents";
-      flake = false;
-    };
 
     # I do want to move the below inputs into a flake partition, but it looks
     # impossible to handle the follows dependencies.

@@ -1,1 +1,77 @@
-{}
+{
+  "async": {
+    "archive": {
+      "narHash": "sha256-iOokP6ndY/dGAnU7BwyZHppcvkPrthjEYaMkEcNLfI0=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/devel/async-1.9.9.0.20251005.63407.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/devel/"
+    },
+    "packageRequires": {
+      "emacs": "24.4"
+    },
+    "version": "1.9.9.0.20251005.63407"
+  },
+  "csv-mode": {
+    "archive": {
+      "narHash": "sha256-PtjgfRM88oS0RLE9MMSXdu1LzecMgXbiftH86Qs6R2k=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/devel/csv-mode-1.27.0.20250307.75451.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/devel/"
+    },
+    "packageRequires": {
+      "cl-lib": "0.5",
+      "emacs": "27.1"
+    },
+    "version": "1.27.0.20250307.75451"
+  },
+  "peg": {
+    "archive": {
+      "narHash": "sha256-uJdjkC2vtqc/VhIgKFebGNVpcLDr9eCc87lBIQj0L28=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/devel/peg-1.0.2.0.20251217.104723.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/devel/"
+    },
+    "packageRequires": {
+      "emacs": "25"
+    },
+    "version": "1.0.2.0.20251217.104723"
+  },
+  "persist": {
+    "archive": {
+      "narHash": "sha256-M5AspNGV46PGvIv0ROx3gilqbYeS4OeY7mQUYlA3fFA=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/devel/persist-0.8.0.20251011.193839.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/devel/"
+    },
+    "packageRequires": {
+      "compat": "30.0.2.0",
+      "emacs": "26.1"
+    },
+    "version": "0.8.0.20251011.193839"
+  },
+  "rainbow-mode": {
+    "archive": {
+      "narHash": "sha256-XMJ1pjGBISLllFwOcH9nA8xu9qYo1xsiqQ5XH/4XHCU=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/devel/rainbow-mode-1.0.6.0.20231215.171141.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/devel/"
+    },
+    "packageRequires": {},
+    "version": "1.0.6.0.20231215.171141"
+  }
+}

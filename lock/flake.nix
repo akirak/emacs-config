@@ -1,6 +1,18 @@
 {
   description = "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
+    acp = {
+      flake = false;
+      owner = "xenodium";
+      repo = "acp.el";
+      type = "github";
+    };
+    agent-shell = {
+      flake = false;
+      owner = "xenodium";
+      repo = "agent-shell";
+      type = "github";
+    };
     aggressive-indent = {
       flake = false;
       owner = "Malabarba";
@@ -29,11 +41,6 @@
       flake = false;
       type = "git";
       url = "https://git.isincredibly.gay/srxl/astro-ts-mode.git";
-    };
-    async = {
-      flake = false;
-      type = "tarball";
-      url = "https://elpa.gnu.org/packages/async-1.9.9.tar";
     };
     auto-minor-mode = {
       flake = false;
@@ -184,11 +191,6 @@
       owner = "akirak";
       repo = "cosmetic-transient.el";
       type = "github";
-    };
-    csv-mode = {
-      flake = false;
-      type = "tarball";
-      url = "https://elpa.gnu.org/packages/csv-mode-1.27.tar";
     };
     d2-mode = {
       flake = false;
@@ -976,11 +978,6 @@
       repo = "org-super-links";
       type = "github";
     };
-    org-transclusion = {
-      flake = false;
-      type = "tarball";
-      url = "https://elpa.gnu.org/packages/org-transclusion-1.4.0.tar";
-    };
     org-volume = {
       flake = false;
       owner = "akirak";
@@ -1047,16 +1044,6 @@
       repo = "pdd.el";
       type = "github";
     };
-    peg = {
-      flake = false;
-      type = "tarball";
-      url = "https://elpa.gnu.org/packages/peg-1.0.2.tar";
-    };
-    persist = {
-      flake = false;
-      type = "tarball";
-      url = "https://elpa.gnu.org/packages/persist-0.6.1.tar.lz";
-    };
     pinyin = {
       flake = false;
       owner = "xuchunyang";
@@ -1118,11 +1105,6 @@
       repo = "rainbow-delimiters";
       type = "github";
     };
-    rainbow-mode = {
-      flake = false;
-      type = "tarball";
-      url = "https://elpa.gnu.org/packages/rainbow-mode-1.0.6.tar";
-    };
     reason-mode = {
       flake = false;
       owner = "reasonml-editor";
@@ -1181,6 +1163,12 @@
       flake = false;
       type = "git";
       url = "https://codeberg.org/pkal/setup.el";
+    };
+    shell-maker = {
+      flake = false;
+      owner = "xenodium";
+      repo = "shell-maker";
+      type = "github";
     };
     shfmt = {
       flake = false;

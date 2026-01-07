@@ -3802,7 +3802,8 @@ A programmable workflow layer for Org mode
                                      file))))
 
     (defun akirak/org-dog-turn-on-transclusion ()
-      (org-transclusion-mode t))
+      (when (require 'org-transclusion nil t)
+        (org-transclusion-mode t)))
     (add-hook 'org-dog-find-file-hook #'akirak/org-dog-turn-on-transclusion)
     (add-hook 'org-dog-before-search-hook #'akirak/org-dog-turn-on-transclusion)
 
@@ -4557,7 +4558,7 @@ Make super links
         (:keymap "C-c C-x L" #'org-super-links-insert-link
                "C-c C-x S" #'org-super-links-store-link))))
 #+end_src
-*** org-transclusion
+*** COMMENT org-transclusion                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-17 Thu 23:09]
 :END:
@@ -5888,6 +5889,20 @@ Quickly switch windows.
           acm-enable-copilot nil
           acm-enable-codeium nil))
 #+end_src
+*** acp                                                                     :AI:
+:PROPERTIES:
+:CREATED_TIME: [2026-01-05 Mon 09:39]
+:END:
+#+begin_quote
+An ACP (Agent Client Protocol) implementation
+[[https://github.com/xenodium/acp.el]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package acp))
+#+end_src
+
+This is a dependency for agent-shell, but it can also be used as an independent library for custom ACP integrations, so it's configured separately here.
 *** COMMENT adaptive-wrap                                               :visual:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-25 Fri 17:56]
@@ -5923,6 +5938,18 @@ Asynchronous Fuzzy Finder for Emacs
 
 #+begin_src emacs-lisp
 (setup (:package affe))
+#+end_src
+*** agent-shell                                                             :AI:
+:PROPERTIES:
+:CREATED_TIME: [2026-01-05 Mon 09:40]
+:END:
+#+begin_quote
+Native agentic integrations for Claude Code, Gemini CLI, etc.
+[[https://github.com/xenodium/agent-shell]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package agent-shell))
 #+end_src
 *** aggressive-indent                                   :formatting:
 :PROPERTIES:
@@ -11429,7 +11456,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 222 |
+| [[org-ql-search:tags:packages][packages]]            | 223 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
@@ -11446,6 +11473,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
+| [[org-ql-search:tags:AI][AI]]                  |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
@@ -11463,7 +11491,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:MCP][MCP]]                 |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
-| [[org-ql-search:tags:AI][AI]]                  |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:drawing][drawing]]             |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
@@ -11551,10 +11578,12 @@ I want to care about readability in the following modes:
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Artificial intelligence / LLM
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
-| Heading | Todo |
-|---------+------|
-| [[copilot][copilot]] |      |
-| [[gptel][gptel]]   |      |
+| Heading     | Todo |
+|-------------+------|
+| [[acp][acp]]         |      |
+| [[agent-shell][agent-shell]] |      |
+| [[copilot][copilot]]     |      |
+| [[gptel][gptel]]       |      |
 #+END:
 
 For LLM integration, gptel is the generic frontend and backend.

@@ -258,18 +258,6 @@
         "type": "github"
       }
     },
-    "gnu-elpa-archive": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-tme5gsMpHRbymOAW6dyCUruajo/A6YmgcIW12bOMMEI=",
-        "type": "file",
-        "url": "https://elpa.gnu.org/packages/archive-contents"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://elpa.gnu.org/packages/archive-contents"
-      }
-    },
     "home-manager-stable": {
       "inputs": {
         "nixpkgs": "nixpkgs_3"
@@ -332,11 +320,11 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1766363281,
-        "narHash": "sha256-kZYr8o3J0MSKN2Va/EU3eqj760qniabh8dKD5w8C/Zs=",
+        "lastModified": 1767305753,
+        "narHash": "sha256-RBVQGNHFX8aC5KPRExgEyqZUqhbGqtJmbacKquM2s/E=",
         "owner": "melpa",
         "repo": "melpa",
-        "rev": "3cc342c2e3d35e6ea625f6fd857fc7e013b1f7fe",
+        "rev": "472158b05c10903cf99e62bc4bb64589361dde60",
         "type": "github"
       },
       "original": {
@@ -573,29 +561,17 @@
     "nongnu-elpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1766330836,
-        "narHash": "sha256-5xEE7ETb+bkgz2oYVfRctbux3BJ0atgHa06wfy3GKAc=",
+        "lastModified": 1767038365,
+        "narHash": "sha256-ZqFpFDkC5zEzoJxk4LOVigW4alABCqZ4XsBFOq6MQUY=",
         "owner": "elpa-mirrors",
         "repo": "nongnu",
-        "rev": "20e4c584065bbf872471fc2c5859f49f125aae64",
+        "rev": "e34e708c5adbd71f9d7abe138a62947ccae23eb2",
         "type": "github"
       },
       "original": {
         "owner": "elpa-mirrors",
         "repo": "nongnu",
         "type": "github"
-      }
-    },
-    "nongnu-elpa-archive": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-6+iSProZvHOoA+i2gLqUZdAHK4ZvIli2F3I8ekAm7OU=",
-        "type": "file",
-        "url": "https://elpa.nongnu.org/nongnu/archive-contents"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://elpa.nongnu.org/nongnu/archive-contents"
       }
     },
     "ocaml-overlays": {
@@ -658,13 +634,11 @@
         "flake-parts": "flake-parts",
         "flake-pins": "flake-pins",
         "gnu-elpa": "gnu-elpa",
-        "gnu-elpa-archive": "gnu-elpa-archive",
         "mcp-nixos": "mcp-nixos",
         "melpa": "melpa",
         "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs_7",
         "nongnu-elpa": "nongnu-elpa",
-        "nongnu-elpa-archive": "nongnu-elpa-archive",
         "org-babel": "org-babel",
         "playwright-mcp": "playwright-mcp",
         "systems": "systems_4",
