@@ -5686,12 +5686,13 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode eldoc-mode)
                           akirak-window-display-document-buffer))
-                       (,(rx bol "*" (or "aider"
-                                         "claude"
-                                         "codex"
-                                         "copilot"
-                                         "gemini")
-                             "-")
+                       ((,(rx bol "*" (or "aider"
+                                          "claude"
+                                          "codex"
+                                          "copilot"
+                                          "gemini")
+                              "-")
+                         ,(major-modes agent-shell-mode))
                         akirak-window-display-as-right-sidebar
                         (window-width . 84))
                        ((or ,(major-modes vterm-mode)
@@ -5949,7 +5950,8 @@ Native agentic integrations for Claude Code, Gemini CLI, etc.
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package agent-shell))
+  (setup (:package agent-shell)
+    (advice-add 'agent-shell--display-buffer :override #'pop-to-buffer))
 #+end_src
 *** aggressive-indent                                   :formatting:
 :PROPERTIES:
