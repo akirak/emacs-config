@@ -1,6 +1,6 @@
 ;;; akirak-shell.el --- Generic shell wrapper -*- lexical-binding: t -*-
 
-;; Copyright (C) 2023-2024 Akira Komamura
+;; Copyright (C) 2023-2026 Akira Komamura
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
