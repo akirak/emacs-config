@@ -4828,6 +4828,19 @@ Major mode for the Go programming language
            "\n\nimport (\n"
            ")\n\n"))))
 #+end_src
+*** haskell-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-01-12 Mon 18:27]
+:END:
+#+begin_quote
+A treesit based major mode for haskell
+[[https://codeberg.org/pranshu/haskell-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package haskell-ts-mode)
+    (:file-match "\\.hs\\'"))
+#+end_src
 *** heex-ts-mode
 #+begin_src elisp
   (setup heex-ts-mode
