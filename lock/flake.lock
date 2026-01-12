@@ -1425,6 +1425,22 @@
         "type": "github"
       }
     },
+    "haskell-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1764872542,
+        "narHash": "sha256-n+0R41nx3dvTJeMKXSM0oIiYoPnRa+ObWSJS7Akhykg=",
+        "ref": "refs/heads/main",
+        "rev": "bf143ee8382f09e0a68d775d80445065f32929c3",
+        "revCount": 192,
+        "type": "git",
+        "url": "https://codeberg.org/pranshu/haskell-ts-mode"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/pranshu/haskell-ts-mode"
+      }
+    },
     "hcl-mode": {
       "flake": false,
       "locked": {
@@ -3144,6 +3160,7 @@
         "graphql-mode": "graphql-mode",
         "graphql-ts-mode": "graphql-ts-mode",
         "gt": "gt",
+        "haskell-ts-mode": "haskell-ts-mode",
         "hcl-mode": "hcl-mode",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
