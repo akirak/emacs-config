@@ -11,6 +11,12 @@ builtins.intersectAttrs esuper {
     dontByteCompile = true;
   });
 
+  envrc = esuper.envrc.overrideAttrs (_: {
+    patches = [
+      ../patches/require-info.patch
+    ];
+  });
+
   emacsql-sqlite = esuper.emacsql-sqlite.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
