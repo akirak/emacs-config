@@ -3658,7 +3658,11 @@ Converts web pages into Org
 
 #+begin_src emacs-lisp
   (setup (:package orgabilize)
-    (:nixpkgs "readability-cli")
+    ;; currently fails to build, and actually I seldom use the functionality that
+    ;; depends on this program.
+
+    ;; (:nixpkgs "readability-cli")
+
     (add-hook 'org-ctrl-c-ctrl-c-hook #'orgabilize-update-link-title)
     ;; (with-eval-after-load 'embark
     ;;   (keymap-set embark-url-map "r"
