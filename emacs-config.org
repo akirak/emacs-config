@@ -8762,7 +8762,13 @@ A Git porcelain inside Emacs
                           (magit-diff-buffer-file)
                           (yes-or-no-p "Stage all changes in this file?"))
                     (magit-stage-files (list (buffer-file-name)))
-                    (when (yes-or-no-p "Commit the current index?")
+                    (pcase (save-window-excursion
+                             (magit-diff-staged)
+                             (alist-get (read-char-choice "Commit the current index?")
+                                        '((?f . magit-commit-fixup)
+                                          (?F . magit-commit-instant-fixup)
+                                          (?n . ignore))
+                                        choices))
                       (magit-commit)))))
 
     (with-eval-after-load 'magit-status
