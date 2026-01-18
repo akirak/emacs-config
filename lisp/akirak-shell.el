@@ -33,6 +33,9 @@
 
 (declare-function eat "ext:eat")
 
+(defconst akirak-shell-mode-list
+  '(eat-mode agent-shell-mode))
+
 (define-minor-mode akirak-shell-compilation-minor-mode
   "Toggle Compilation minor mode for the shell buffer."
   :lighter " Eat-Compilation"
@@ -61,8 +64,8 @@ the original minor mode."
                          (get-buffer cand))
                         (`(,name . ,_)
                          (get-buffer name)))))
-    (eq (buffer-local-value 'major-mode buffer)
-        'eat-mode)))
+    (memq (buffer-local-value 'major-mode buffer)
+          akirak-shell-mode-list)))
 
 (defun akirak-shell-buffer-list ()
   (seq-filter #'akirak-shell-buffer-p (buffer-list)))
