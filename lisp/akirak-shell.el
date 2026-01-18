@@ -121,7 +121,7 @@ the original minor mode."
    :if-non-nil akirak-shell--buffers
    :class transient-column
    :setup-children akirak-shell--setup-reopen
-   ("k" "Kill finished buffers" akirak-shell--cleanup-buffers
+   ("K" "Kill finished buffers" akirak-shell--cleanup-buffers
     :if (lambda ()
           (seq-some #'akirak-shell--buffer-exited-p (akirak-shell-buffer-list))))]
   ["Options"
