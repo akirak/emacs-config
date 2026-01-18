@@ -355,6 +355,7 @@
      (transient-parse-suffixes 'akirak-capture-doct (octopus-generate-static-targets)))]
   ["Other locations"
    :class transient-row
+   ("." octopus-this-org-heading-suffix)
    ("'" octopus-avy-org-heading-suffix)
    ("@" octopus-clock-marker-suffix)
    ("\\" octopus-this-file-suffix)
