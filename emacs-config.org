@@ -6837,6 +6837,10 @@ Highlight uncommitted changes using VC
           ;; https://github.com/magit/magit/discussions/5167
           diff-hl-update-async nil)
 
+    ;; Missing autoload cookies
+    (autoload 'diff-hl-next-hunk "diff-hl" nil 'interactive)
+    (autoload 'diff-hl-previous-hunk "diff-hl" nil 'interactive)
+
     ;; Prevent dispatch of repeat-mode.
     (defalias 'akirak/diff-hl-next-hunk #'diff-hl-next-hunk)
     (defalias 'akirak/diff-hl-previous-hunk #'diff-hl-previous-hunk)
