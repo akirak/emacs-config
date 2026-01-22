@@ -60,28 +60,34 @@
               "never"))
    ("-f" "Full auto" "--full-auto")
    ("-c" "Search" "--search")]
-  ["Actions"
-   ("x" "Open interactive shell" akirak-codex--open-shell)]
+  ["Interactive sessions"
+   ("x" "Open interactive shell" akirak-codex--open-shell)
+   ("r" "Resume (interactive)" akirak-codex--resume-in-shell)]
   (interactive)
   (setq akirak-codex-directory (akirak-shell-project-directory))
   (transient-setup 'akirak-codex-transient))
 
-(defun akirak-codex--open-shell ()
+(cl-defun akirak-codex--open-shell (&key subcommand args)
   (interactive)
-  (let ((root akirak-codex-directory)
-        (args (transient-args 'akirak-codex-transient)))
+  (let ((root akirak-codex-directory))
     (akirak-shell-eat-new :dir root
                           :command (cons akirak-codex-executable
-                                         (append akirak-codex-default-args
+                                         (append (ensure-list subcommand)
+                                                 akirak-codex-default-args
                                                  (when akirak-codex-reasoning-effort
                                                    (list "--config"
                                                          (concat "model_reasoning_effort="
                                                                  akirak-codex-reasoning-effort)))
+                                                 (transient-args 'akirak-codex-transient)
                                                  args))
                           :environment (akirak-codex-environment)
                           :name (concat "codex-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
+
+(defun akirak-codex--resume-in-shell ()
+  (interactive)
+  (akirak-codex--open-shell :subcommand "resume"))
 
 (defun akirak-codex-complete-slash-command ()
   (completing-read "Codex command: " akirak-codex-slash-commands))
