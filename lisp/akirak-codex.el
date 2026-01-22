@@ -30,14 +30,6 @@
   :choices '("medium" "high" "extra-high" "low")
   :description "Reasoning effort")
 
-(defvar akirak-codex-codex-home nil)
-
-(transient-define-infix akirak-codex-set-codex-home ()
-  :class 'akirak-transient-directory-variable
-  :variable 'akirak-codex-codex-home
-  :description "CODEX_HOME"
-  :prompt "Set CODEX_HOME: ")
-
 ;;;###autoload (autoload 'akirak-codex-transient "akirak-codex" nil 'interactive)
 (transient-define-prefix akirak-codex-transient ()
   ["Options"
@@ -48,7 +40,6 @@
               "gpt-5.1-codex-mini"
               "gpt-5.2"))
    ("-r" akirak-codex-set-reasoning-effort)
-   ("-h" akirak-codex-set-codex-home)
    ("-s" "Sandbox" "--sandbox="
     :choices ("read-only"
               "workspace-write"
