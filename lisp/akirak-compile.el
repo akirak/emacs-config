@@ -49,6 +49,7 @@
     ("build.zig" . zig)
     ("rebar.config" . rebar3)
     ("gleam.toml" . gleam)
+    (".codex" . codex)
     ("uv.lock" . uv))
   ""
   :type '(alist :key-type (string :tag "File name")
@@ -550,8 +551,29 @@ are displayed in the frame."
                          (executable-find (car cell))))
            (mapcar (lambda (cell)
                      (list (cdr cell)))))))
+      (codex
+       (with-memoize
+        (akirak-compile--codex-candidates dir)))
       (otherwise
        (alist-get backend akirak-compile-backend-command-alist)))))
+
+(defun akirak-compile--codex-candidates (dir)
+  (mapcar (lambda (skill-name)
+            (cons (format "codex exec %s" (shell-quote-argument (concat "$" skill-name)))
+                  nil))
+          (akirak-compile--codex-skills dir)))
+
+(defun akirak-compile--codex-skills (dir)
+  (let ((skills-dir (file-name-concat dir ".codex" "skills")))
+    (when (file-directory-p skills-dir)
+      (akirak-compile--list-skills skills-dir))))
+
+(defun akirak-compile--list-skills (root)
+  (thread-last
+    (directory-files root 'full (rx bol alnum))
+    (seq-filter (lambda (dir)
+                  (file-exists-p (file-name-concat dir "SKILL.md"))))
+    (mapcar #'file-name-base)))
 
 (defun akirak-compile--just-candidates ()
   (let ((err-file (make-temp-file "emacs-compile-just-error")))
