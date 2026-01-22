@@ -2,6 +2,17 @@
 
 (require 'akirak-transient)
 
+(defconst akirak-codex-slash-commands
+  '("/diff"
+    "/feedback"
+    "/init"
+    "/mention"
+    "/model"
+    "/fork"
+    "/new"
+    "/review"
+    "/status"))
+
 (defcustom akirak-codex-executable "codex"
   ""
   :type 'file)
@@ -15,9 +26,6 @@
   "api.openai.com/apikey"
   ""
   :type 'string)
-
-(defconst akirak-codex-slash-commands
-  '())
 
 (defvar akirak-codex-directory nil)
 
