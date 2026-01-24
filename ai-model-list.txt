@@ -157,6 +157,7 @@ azure/gpt-5.2
 azure/gpt-5.2-2025-12-11
 azure/gpt-5.2-chat
 azure/gpt-5.2-chat-2025-12-11
+azure/gpt-5.2-codex
 azure/gpt-5.2-pro
 azure/gpt-5.2-pro-2025-12-11
 azure/gpt-audio-2025-08-28
@@ -406,6 +407,8 @@ command-r-plus-08-2024
 command-r7b-12-2024
 computer-use-preview
 daanelson/flan-t5-large:ce962b3f6792a57074a601d3979db5839697add2e4e02696b3ced4c022d4767f
+dall-e-2
+dall-e-3
 dashscope/qwen-coder
 dashscope/qwen-flash
 dashscope/qwen-flash-2025-07-28
@@ -642,6 +645,7 @@ gemini-2.0-flash-preview-image-generation
 gemini-2.0-flash-thinking-exp
 gemini-2.0-flash-thinking-exp-01-21
 gemini-2.0-pro-exp-02-05
+gemini-2.5-computer-use-preview-10-2025
 gemini-2.5-flash
 gemini-2.5-flash-image
 gemini-2.5-flash-image-preview
@@ -812,6 +816,11 @@ gpt-5.2-chat-latest
 gpt-5.2-codex
 gpt-5.2-pro
 gpt-5.2-pro-2025-12-11
+gpt-audio
+gpt-audio-2025-08-28
+gpt-audio-mini
+gpt-audio-mini-2025-10-06
+gpt-audio-mini-2025-12-15
 gpt-image-1
 gpt-image-1-mini
 gpt-image-1.5
