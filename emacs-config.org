@@ -2847,28 +2847,27 @@ You need to install the fonts separately.
   (defun akirak/enable-fonts (&optional value skip-check)
     (let ((families (font-family-list))
           (value (or value akirak/font-family-alist)))
-      (pcase-dolist (`(,face ,family . ,plist) value)
-        (if (or (member family families)
-                skip-check)
-            (if-let* ((fontset (plist-get plist :fontset)))
-                (set-fontset-font fontset face family nil
-                                  (plist-get plist :add))
-              (set-face-attribute face nil :family family))
-          (message "Font family %s is not installed" family)
-          ;; (delq (assq face value) value)
-          ;; (set symbol value)
-          ))))
+      (pcase-dolist (`(,faces ,family . ,plist) value)
+        (dolist (face (ensure-list faces))
+          (if (or (member family families)
+                  skip-check)
+              (if-let* ((fontset (plist-get plist :fontset)))
+                  (set-fontset-font fontset face family nil
+                                    (plist-get plist :add))
+                (set-face-attribute face nil :family family))
+            (message "Font family %s is not installed" family)
+            ;; (delq (assq face value) value)
+            ;; (set symbol value)
+            )))))
 
   (defcustom akirak/font-family-alist
-    '((default "Cascadia Code")
-      (fixed-pitch "Cascadia Code")
+    '(((default fixed-pitch) "Cascadia Code")
       (variable-pitch "Inter")
-      (kana "Source Han Sans HC" :fontset t)
-      (han "Source Han Sans HC" :fontset t)
+      ((kana han) "Source Han Sans HC" :fontset t)
       (emoji "Noto Color Emoji" :fontset t :add prepend)
       (symbol "Symbola" :fontset t :add append))
     "Alist of font families for faces."
-    :type '(repeat (list symbol
+    :type '(repeat (list (choice symbol (repeat symbol))
                          string
                          (plist :inline t
                                 :options
