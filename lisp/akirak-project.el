@@ -319,7 +319,7 @@ display alternative actions."
                                 (car files)
                               `(lambda (dir)
                                  (directory-files dir nil
-                                                  (concat "^" (regexp-opt ,files) "\\'")))))))
+                                                  (concat "^" (regexp-opt ',files) "\\'")))))))
 
 ;;;; Project root types
 

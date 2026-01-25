@@ -532,6 +532,11 @@
       repo = "gt.el";
       type = "github";
     };
+    haskell-ts-mode = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/pranshu/haskell-ts-mode";
+    };
     hcl-mode = {
       flake = false;
       owner = "hcl-emacs";

@@ -2,6 +2,17 @@
 
 (require 'akirak-transient)
 
+(defconst akirak-codex-slash-commands
+  '("/diff"
+    "/feedback"
+    "/init"
+    "/mention"
+    "/model"
+    "/fork"
+    "/new"
+    "/review"
+    "/status"))
+
 (defcustom akirak-codex-executable "codex"
   ""
   :type 'file)
@@ -16,9 +27,6 @@
   ""
   :type 'string)
 
-(defconst akirak-codex-slash-commands
-  '())
-
 (defvar akirak-codex-directory nil)
 
 (defvar akirak-codex-reasoning-effort nil)
@@ -30,14 +38,6 @@
   :choices '("medium" "high" "extra-high" "low")
   :description "Reasoning effort")
 
-(defvar akirak-codex-codex-home nil)
-
-(transient-define-infix akirak-codex-set-codex-home ()
-  :class 'akirak-transient-directory-variable
-  :variable 'akirak-codex-codex-home
-  :description "CODEX_HOME"
-  :prompt "Set CODEX_HOME: ")
-
 ;;;###autoload (autoload 'akirak-codex-transient "akirak-codex" nil 'interactive)
 (transient-define-prefix akirak-codex-transient ()
   ["Options"
@@ -45,11 +45,9 @@
     ;; :always-read t
     :init-value (lambda (obj) (oset obj value "gpt-5.2-codex"))
     :choices ("gpt-5.2-codex"
-              "gpt-5.1-codex-max"
               "gpt-5.1-codex-mini"
               "gpt-5.2"))
    ("-r" akirak-codex-set-reasoning-effort)
-   ("-h" akirak-codex-set-codex-home)
    ("-s" "Sandbox" "--sandbox="
     :choices ("read-only"
               "workspace-write"
@@ -61,28 +59,34 @@
               "never"))
    ("-f" "Full auto" "--full-auto")
    ("-c" "Search" "--search")]
-  ["Actions"
-   ("x" "Open interactive shell" akirak-codex--open-shell)]
+  ["Interactive sessions"
+   ("x" "Open interactive shell" akirak-codex--open-shell)
+   ("r" "Resume (interactive)" akirak-codex--resume-in-shell)]
   (interactive)
   (setq akirak-codex-directory (akirak-shell-project-directory))
   (transient-setup 'akirak-codex-transient))
 
-(defun akirak-codex--open-shell ()
+(cl-defun akirak-codex--open-shell (&key subcommand args)
   (interactive)
-  (let ((root akirak-codex-directory)
-        (args (transient-args 'akirak-codex-transient)))
+  (let ((root akirak-codex-directory))
     (akirak-shell-eat-new :dir root
                           :command (cons akirak-codex-executable
-                                         (append akirak-codex-default-args
+                                         (append (ensure-list subcommand)
+                                                 akirak-codex-default-args
                                                  (when akirak-codex-reasoning-effort
                                                    (list "--config"
                                                          (concat "model_reasoning_effort="
                                                                  akirak-codex-reasoning-effort)))
+                                                 (transient-args 'akirak-codex-transient)
                                                  args))
                           :environment (akirak-codex-environment)
                           :name (concat "codex-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
+
+(defun akirak-codex--resume-in-shell ()
+  (interactive)
+  (akirak-codex--open-shell :subcommand "resume"))
 
 (defun akirak-codex-complete-slash-command ()
   (completing-read "Codex command: " akirak-codex-slash-commands))
@@ -91,10 +95,7 @@
   ;; Use the ChatGPT authentication.
   ;; (akirak-passage-add-process-environment
   ;;  "OPENAI_API_KEY" akirak-codex-password-account)
-  (when akirak-codex-codex-home
-    (cons (concat "CODEX_HOME=" (convert-standard-filename
-                                 (expand-file-name akirak-codex-codex-home)))
-          process-environment)))
+  )
 
 ;;;###autoload
 (defun akirak-codex-insert-mcp-toml (name)

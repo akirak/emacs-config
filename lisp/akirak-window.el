@@ -143,12 +143,18 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 
 ;;;###autoload
 (defun akirak-window-display-as-right-sidebar (buffer &optional alist)
-  (let* ((window (akirak-window--display-in-sidebar buffer
-                                                    (append '((side . right))
-                                                            alist))))
+  "Display the buffer in the rightmost window or in the bottom window (fallback)."
+  (let* ((side (if (>= (frame-width) 160)
+                   'right
+                 'bottom))
+         (axis (pcase side
+                 (`right 'width)
+                 (`bottom 'height)))
+         (window (akirak-window--display-in-sidebar buffer (append `((side . ,side))
+                                                                   alist))))
     (when window
       (with-current-buffer buffer
-        (setq-local window-size-fixed 'width))
+        (setq-local window-size-fixed axis))
       ;; (balance-windows)
       window)))
 
@@ -160,7 +166,8 @@ create a buffer in the current tab."
   (let* ((side (alist-get 'side alist))
          (direction (pcase side
                       (`left 'leftmost)
-                      (`right 'rightmost))))
+                      (`right 'rightmost)
+                      (`bottom 'bottom))))
     (display-buffer-in-direction buffer (cons (cons 'direction direction)
                                               alist))))
 

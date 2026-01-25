@@ -1,6 +1,6 @@
 ;;; akirak-shell.el --- Generic shell wrapper -*- lexical-binding: t -*-
 
-;; Copyright (C) 2023-2024 Akira Komamura
+;; Copyright (C) 2023-2026 Akira Komamura
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
@@ -33,6 +33,9 @@
 
 (declare-function eat "ext:eat")
 
+(defconst akirak-shell-mode-list
+  '(eat-mode agent-shell-mode))
+
 (define-minor-mode akirak-shell-compilation-minor-mode
   "Toggle Compilation minor mode for the shell buffer."
   :lighter " Eat-Compilation"
@@ -61,8 +64,8 @@ the original minor mode."
                          (get-buffer cand))
                         (`(,name . ,_)
                          (get-buffer name)))))
-    (eq (buffer-local-value 'major-mode buffer)
-        'eat-mode)))
+    (memq (buffer-local-value 'major-mode buffer)
+          akirak-shell-mode-list)))
 
 (defun akirak-shell-buffer-list ()
   (seq-filter #'akirak-shell-buffer-p (buffer-list)))
@@ -118,7 +121,7 @@ the original minor mode."
    :if-non-nil akirak-shell--buffers
    :class transient-column
    :setup-children akirak-shell--setup-reopen
-   ("k" "Kill finished buffers" akirak-shell--cleanup-buffers
+   ("K" "Kill finished buffers" akirak-shell--cleanup-buffers
     :if (lambda ()
           (seq-some #'akirak-shell--buffer-exited-p (akirak-shell-buffer-list))))]
   ["Options"
@@ -137,6 +140,8 @@ the original minor mode."
   ["Start an AI session at project root"
    :class transient-row
    :if akirak-shell-project-directory
+   ("a" "Agent Shell" agent-shell)
+   ("A" "Agent Shell (new)" agent-shell-new-shell)
    ("C" "Claude (default)" akirak-claude-code-default)
    ("c" "Claude" akirak-shell-project-for-claude)
    ("k" "Copilot" akirak-copilot-cli-transient)

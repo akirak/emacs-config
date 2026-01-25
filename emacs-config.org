@@ -266,7 +266,7 @@ Specify extra root files to help eglot correctly identify project roots.
      :mode-project-roots (&rest filenames)
      "Define file names indicating the project root."
      `(add-to-list 'akirak-project-per-mode-root-files
-                   (cons ',(setup-get 'mode) ',filenames)
+                   '(,(setup-get 'mode) ,@filenames)
                    nil
                    (lambda (x y) (eq (car x) (car y))))))
 #+end_src
@@ -621,6 +621,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
         (:hook-into git-commit-mode
                     vc-git-log-edit-mode
                     markdown-mode
+                    nael-mode
                     org-mode)
         (define-abbrev-table 'global-abbrev-table
           '(("wip" "WIP")
@@ -1407,7 +1408,7 @@ The built-in =electric= package provides the following modes:
                          (json-ts-mode . (,@lsp-no-formatter))
                          (just-mode . (,@lsp-no-formatter))
                          (kotlin-ts-mode . (,@lsp))
-                         (lean4-mode . (,@lsp))
+                         (nael-mode . (,@lsp))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp-no-formatter))
@@ -2846,28 +2847,27 @@ You need to install the fonts separately.
   (defun akirak/enable-fonts (&optional value skip-check)
     (let ((families (font-family-list))
           (value (or value akirak/font-family-alist)))
-      (pcase-dolist (`(,face ,family . ,plist) value)
-        (if (or (member family families)
-                skip-check)
-            (if-let* ((fontset (plist-get plist :fontset)))
-                (set-fontset-font fontset face family nil
-                                  (plist-get plist :add))
-              (set-face-attribute face nil :family family))
-          (message "Font family %s is not installed" family)
-          ;; (delq (assq face value) value)
-          ;; (set symbol value)
-          ))))
+      (pcase-dolist (`(,faces ,family . ,plist) value)
+        (dolist (face (ensure-list faces))
+          (if (or (member family families)
+                  skip-check)
+              (if-let* ((fontset (plist-get plist :fontset)))
+                  (set-fontset-font fontset face family nil
+                                    (plist-get plist :add))
+                (set-face-attribute face nil :family family))
+            (message "Font family %s is not installed" family)
+            ;; (delq (assq face value) value)
+            ;; (set symbol value)
+            )))))
 
   (defcustom akirak/font-family-alist
-    '((default "Cascadia Code")
-      (fixed-pitch "Cascadia Code")
+    '(((default fixed-pitch) "Cascadia Code")
       (variable-pitch "Inter")
-      (kana "Source Han Sans HC" :fontset t)
-      (han "Source Han Sans HC" :fontset t)
+      ((kana han) "Source Han Sans HC" :fontset t)
       (emoji "Noto Color Emoji" :fontset t :add prepend)
       (symbol "Symbola" :fontset t :add append))
     "Alist of font families for faces."
-    :type '(repeat (list symbol
+    :type '(repeat (list (choice symbol (repeat symbol))
                          string
                          (plist :inline t
                                 :options
@@ -3658,7 +3658,11 @@ Converts web pages into Org
 
 #+begin_src emacs-lisp
   (setup (:package orgabilize)
-    (:nixpkgs "readability-cli")
+    ;; currently fails to build, and actually I seldom use the functionality that
+    ;; depends on this program.
+
+    ;; (:nixpkgs "readability-cli")
+
     (add-hook 'org-ctrl-c-ctrl-c-hook #'orgabilize-update-link-title)
     ;; (with-eval-after-load 'embark
     ;;   (keymap-set embark-url-map "r"
@@ -3784,6 +3788,7 @@ A programmable workflow layer for Org mode
             ("hie\\.yaml\\'" . "programming/haskell")
             ("/graphql/" . "programming/graphql")
             ("Cargo\\.toml\\'" . "programming/rust")
+            ("lakefile\\.toml\\'" . "programming/lean4")
             ("\\.editorconfig\\'" . "programming/editorconfig")
             ("astro\.config\.[cm]?js\\'" . "software/astro.build")
             ("machines/\\([-a-z0-9]+\\)/" . "hosts/\\1")
@@ -3792,6 +3797,11 @@ A programmable workflow layer for Org mode
           org-dog-clock-default-query-filter
           (lambda (query)
             (concat "!tags:ARCHIVE " query)))
+
+    (:with-feature org-dog-context
+      (:when-loaded
+        (add-to-list 'org-dog-context-major-mode-aliases '(nael-mode . "lean4"))))
+
 
     (add-to-list 'recentf-exclude
                  (defun akirak/org-dog-recentf-p (file)
@@ -4828,6 +4838,19 @@ Major mode for the Go programming language
            "\n\nimport (\n"
            ")\n\n"))))
 #+end_src
+*** haskell-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-01-12 Mon 18:27]
+:END:
+#+begin_quote
+A treesit based major mode for haskell
+[[https://codeberg.org/pranshu/haskell-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package haskell-ts-mode)
+    (:file-match "\\.hs\\'"))
+#+end_src
 *** heex-ts-mode
 #+begin_src elisp
   (setup heex-ts-mode
@@ -5686,12 +5709,13 @@ This is an extra functions for window management.
                         ,(reuse-mode-window
                           (help-mode devdocs-mode eldoc-mode)
                           akirak-window-display-document-buffer))
-                       (,(rx bol "*" (or "aider"
-                                         "claude"
-                                         "codex"
-                                         "copilot"
-                                         "gemini")
-                             "-")
+                       ((,(rx bol "*" (or "aider"
+                                          "claude"
+                                          "codex"
+                                          "copilot"
+                                          "gemini")
+                              "-")
+                         ,(major-modes agent-shell-mode))
                         akirak-window-display-as-right-sidebar
                         (window-width . 84))
                        ((or ,(major-modes vterm-mode)
@@ -5944,12 +5968,13 @@ Asynchronous Fuzzy Finder for Emacs
 :CREATED_TIME: [2026-01-05 Mon 09:40]
 :END:
 #+begin_quote
-Native agentic integrations for Claude Code, Gemini CLI, etc.
+Native agentic integrations for Claude Code, Gemini CLI, etc
 [[https://github.com/xenodium/agent-shell]]
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package agent-shell))
+  (setup (:package agent-shell)
+    (advice-add 'agent-shell--display-buffer :override #'pop-to-buffer))
 #+end_src
 *** aggressive-indent                                   :formatting:
 :PROPERTIES:
@@ -6391,7 +6416,7 @@ Perform code review from Github, Gitlab, and Bitbucket Cloud
 :CREATED_TIME: [2022-01-05 Wed 17:33]
 :END:
 #+begin_quote
-Consulting completing-read
+Search and navigate via completing-read
 [[https://github.com/minad/consult]]
 #+end_quote
 
@@ -6427,8 +6452,8 @@ Consulting completing-read
                           (cdr args)))))
 
     (:when-loaded
-      (:set consult-buffer-sources `(consult--source-project-buffer
-                                     consult--source-project-recent-file
+      (:set consult-buffer-sources `(consult-source-project-buffer
+                                     consult-source-project-recent-file
                                      ,@(when (require 'akirak-consult nil t)
                                          '(akirak-consult-source-help-buffer
                                            akirak-consult-source-indirect-or-org-src-buffer
@@ -6436,8 +6461,8 @@ Consulting completing-read
                                            akirak-consult-source-org-agenda-buffer
                                            akirak-consult-source-modified-buffer))
                                      akirak-consult-source-tab-bar-tab
-                                     consult--source-buffer
-                                     consult--source-recent-file)
+                                     consult-source-buffer
+                                     consult-source-recent-file)
             ;; Use only relevant bookmark groups.
             consult-bookmark-narrow '((?f "File or directory" bookmark-default-handler)
                                       (?h "Help" help-bookmark-jump)
@@ -6817,6 +6842,10 @@ Highlight uncommitted changes using VC
           diff-hl-show-staged-changes t
           ;; https://github.com/magit/magit/discussions/5167
           diff-hl-update-async nil)
+
+    ;; Missing autoload cookies
+    (autoload 'diff-hl-next-hunk "diff-hl" nil 'interactive)
+    (autoload 'diff-hl-previous-hunk "diff-hl" nil 'interactive)
 
     ;; Prevent dispatch of repeat-mode.
     (defalias 'akirak/diff-hl-next-hunk #'diff-hl-next-hunk)
@@ -7309,7 +7338,9 @@ Boost eglot using lsp-booster
 #+begin_src emacs-lisp
   (setup (:package eglot-booster)
     (:nixpkgs emacs-lsp-booster)
-    (:set eglot-booster-no-remote-boost t)
+    (:set eglot-booster-no-remote-boost t
+          ;; Needed to prevent conversion of mathematical symbols in Lean 4
+          eglot-booster-io-only t)
     (with-eval-after-load 'eglot
       (eglot-booster-mode)))
 #+end_src
@@ -8743,7 +8774,13 @@ A Git porcelain inside Emacs
                           (magit-diff-buffer-file)
                           (yes-or-no-p "Stage all changes in this file?"))
                     (magit-stage-files (list (buffer-file-name)))
-                    (when (yes-or-no-p "Commit the current index?")
+                    (pcase (save-window-excursion
+                             (magit-diff-staged)
+                             (alist-get (read-char-choice "Commit the current index?")
+                                        '((?f . magit-commit-fixup)
+                                          (?F . magit-commit-instant-fixup)
+                                          (?n . ignore))
+                                        choices))
                       (magit-commit)))))
 
     (with-eval-after-load 'magit-status
@@ -9201,7 +9238,11 @@ Major mode for Lean
 
 #+begin_src emacs-lisp
   (setup (:package nael)
-    (:file-match "\\.lean\\'"))
+    (:file-match "\\.lean\\'")
+    (:mode-project-roots "lakefile.toml" "lakefile.lean")
+    (:set nael-prepare-eglot t
+          nael-prepare-lsp nil)
+    (:keymap "C-c C-r" #'akirak/lake-lean-run))
 #+end_src
 *** neocaml
 #+begin_quote
@@ -10936,6 +10977,24 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
 #+begin_src elisp
   (setup hpack
     (:package-files "package.yaml"))
+#+end_src
+*** Lake (Lean)
+#+begin_src elisp
+  (setup lake
+    (:package-files "lakefile.toml"
+                    "lakefile.lean")
+
+    (defun akirak/lake-lean-run (file)
+      (interactive (list (buffer-file-name)))
+      (let ((default-directory (or (locate-dominating-file
+                                    file (lambda (dir)
+                                           (when (file-directory-p dir)
+                                             (seq-intersection (directory-files dir)
+                                                               '("lakefile.lean"
+                                                                 "lakefile.toml")))))
+                                   (user-error "Found neither lakefile.lean nor leanfile.toml"))))
+        (compile (format "lake env lean --run %s"
+                         (shell-quote-argument (file-relative-name file)))))))
 #+end_src
 *** Mix (Elixir)
 #+begin_src elisp
