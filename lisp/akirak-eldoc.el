@@ -47,7 +47,7 @@
     (_
      (eldoc-doc-buffer t))))
 
-(defun akirak-eldoc--to-help-buffer ()
+(defun akirak-eldoc--to-help-buffer (&rest _)
   (let* ((thing (thing-at-point 'symbol 'no-properties))
          (bookmark (cons thing (funcall bookmark-make-record-function))))
     (help-setup-xref (list 'akirak-eldoc--help-redo-helper (point) (current-buffer))
