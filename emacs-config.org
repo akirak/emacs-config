@@ -266,7 +266,7 @@ Specify extra root files to help eglot correctly identify project roots.
      :mode-project-roots (&rest filenames)
      "Define file names indicating the project root."
      `(add-to-list 'akirak-project-per-mode-root-files
-                   (cons ',(setup-get 'mode) ',filenames)
+                   '(,(setup-get 'mode) ,@filenames)
                    nil
                    (lambda (x y) (eq (car x) (car y))))))
 #+end_src
