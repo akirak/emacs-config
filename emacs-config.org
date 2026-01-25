@@ -6453,8 +6453,8 @@ Search and navigate via completing-read
                           (cdr args)))))
 
     (:when-loaded
-      (:set consult-buffer-sources `(consult--source-project-buffer
-                                     consult--source-project-recent-file
+      (:set consult-buffer-sources `(consult-source-project-buffer
+                                     consult-source-project-recent-file
                                      ,@(when (require 'akirak-consult nil t)
                                          '(akirak-consult-source-help-buffer
                                            akirak-consult-source-indirect-or-org-src-buffer
@@ -6462,8 +6462,8 @@ Search and navigate via completing-read
                                            akirak-consult-source-org-agenda-buffer
                                            akirak-consult-source-modified-buffer))
                                      akirak-consult-source-tab-bar-tab
-                                     consult--source-buffer
-                                     consult--source-recent-file)
+                                     consult-source-buffer
+                                     consult-source-recent-file)
             ;; Use only relevant bookmark groups.
             consult-bookmark-narrow '((?f "File or directory" bookmark-default-handler)
                                       (?h "Help" help-bookmark-jump)
