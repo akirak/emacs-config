@@ -130,6 +130,7 @@ matches the host of the repository,
                                      :pr pr-number
                                      :local-path local-path)))
     ((rx bol (group (or "github:"
+                        "codeberg:"
                         "sourcehut:"))
          (group (+ (not (any "/")))
                 "/"
@@ -139,6 +140,7 @@ matches the host of the repository,
          (?  "?" (group (+ anything))))
      (let* ((host (pcase (match-string 1 flake-ref-or-url)
                     ("github:" "github.com")
+                    ("codeberg:" "codeberg.org")
                     ("sourcehut:" "git.sr.ht")))
             (local-path (f-join host
                                 (match-string 2 flake-ref-or-url)))
@@ -149,6 +151,7 @@ matches the host of the repository,
                             (match-string 2 flake-ref-or-url)
                             (pcase (match-string 1 flake-ref-or-url)
                               ("github:" ".git")
+                              ("codeberg:" ".git")
                               ("sourcehut:" "")))))
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
