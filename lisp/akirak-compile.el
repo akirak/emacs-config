@@ -1,6 +1,6 @@
 ;;; akirak-compile.el ---  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2024-2025 Akira Komamura
+;; Copyright (C) 2024-2026 Akira Komamura
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
@@ -45,6 +45,8 @@
     ("bun.lock" . bun)
     ("bun.lockb" . bun)
     ("deno.lock" . deno)
+    ("lakefile.toml" . lake)
+    ("lakefile.lean" . lake)
     ("package.json" . package-json)
     ("build.zig" . zig)
     ("rebar.config" . rebar3)
@@ -100,6 +102,11 @@
      ("./gradlew test")
      ("./gradlew test --debug --stacktrace")
      ("./gradlew clean"))
+    (lake
+     ("lake build")
+     ("lake test")
+     ("lake lint")
+     ("lake clean"))
     (gleam
      ("gleam run")
      ("gleam test")
@@ -501,6 +508,37 @@ are displayed in the frame."
       (just (with-memoize
              (let ((default-directory dir))
                (akirak-compile--just-candidates))))
+      (lake (with-memoize
+             ;; TODO: Add support for lake scripts
+             (append (when (file-exists-p "lakefile.toml")
+                       (with-temp-buffer
+                         (akirak-compile--insert-stdout "dasel" "-r" "toml" "-w" "json" "-f" "lakefile.toml")
+                         (goto-char (point-min))
+                         (thread-last
+                           (json-parse-buffer :array-type 'list :object-type 'alist)
+                           (alist-get 'lean_exe)
+                           (mapcar (lambda (alist)
+                                     (list (format "lake exe %s"
+                                                   (shell-quote-argument (alist-get 'name alist)))
+                                           'annotation
+                                           (alist-get 'root alist)))))))
+                     (when (file-exists-p "lakefile.lean")
+                       (let (results)
+                         ;; lakefile.lean is parsed using naive regexp matching.
+                         ;; For an accurate implementation, perhaps tomograph
+                         ;; <https://github.com/leanprover/Pantograph> can be
+                         ;; used.
+                         (with-temp-buffer
+                           (insert-file-contents "lakefile.lean")
+                           (goto-char (point-min))
+                           (while (re-search-forward (rx bol (* blank) "lean_exe"
+                                                         (+ blank)
+                                                         (group (+ (any "_" alnum))))
+                                                     nil t)
+                             (push (list (format "lake exe %s"
+                                                 (shell-quote-argument (match-string 1))))
+                                   results)))
+                         results)))))
       (zig (with-memoize
             (with-temp-buffer
               (akirak-compile--insert-stdout "zig" "build" "--help")
@@ -613,6 +651,8 @@ are displayed in the frame."
      t)
     ((or `("zig" "fetch" . ,_)
          `("zig" "build" (or "install" "uninstall") . ,_))
+     t)
+    (`("lake" "update" . ,_)
      t)
     (`("go" "get" . ,_)
      t)
