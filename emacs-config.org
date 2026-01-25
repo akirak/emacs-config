@@ -621,6 +621,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
         (:hook-into git-commit-mode
                     vc-git-log-edit-mode
                     markdown-mode
+                    nael-mode
                     org-mode)
         (define-abbrev-table 'global-abbrev-table
           '(("wip" "WIP")
@@ -1407,7 +1408,7 @@ The built-in =electric= package provides the following modes:
                          (json-ts-mode . (,@lsp-no-formatter))
                          (just-mode . (,@lsp-no-formatter))
                          (kotlin-ts-mode . (,@lsp))
-                         (lean4-mode . (,@lsp))
+                         (nael-mode . (,@lsp))
                          (neocaml-mode . ((eval . (ocaml-eglot))))
                          (neocamli-mode . ((eval . (ocaml-eglot))))
                          (python-mode . (,@lsp-no-formatter))
@@ -3788,6 +3789,7 @@ A programmable workflow layer for Org mode
             ("hie\\.yaml\\'" . "programming/haskell")
             ("/graphql/" . "programming/graphql")
             ("Cargo\\.toml\\'" . "programming/rust")
+            ("lakefile\\.toml\\'" . "programming/lean4")
             ("\\.editorconfig\\'" . "programming/editorconfig")
             ("astro\.config\.[cm]?js\\'" . "software/astro.build")
             ("machines/\\([-a-z0-9]+\\)/" . "hosts/\\1")
@@ -3796,6 +3798,11 @@ A programmable workflow layer for Org mode
           org-dog-clock-default-query-filter
           (lambda (query)
             (concat "!tags:ARCHIVE " query)))
+
+    (:with-feature org-dog-context
+      (:when-loaded
+        (add-to-list 'org-dog-context-major-mode-aliases '(nael-mode . "lean4"))))
+
 
     (add-to-list 'recentf-exclude
                  (defun akirak/org-dog-recentf-p (file)
@@ -7332,7 +7339,9 @@ Boost eglot using lsp-booster
 #+begin_src emacs-lisp
   (setup (:package eglot-booster)
     (:nixpkgs emacs-lsp-booster)
-    (:set eglot-booster-no-remote-boost t)
+    (:set eglot-booster-no-remote-boost t
+          ;; Needed to prevent conversion of mathematical symbols in Lean 4
+          eglot-booster-io-only t)
     (with-eval-after-load 'eglot
       (eglot-booster-mode)))
 #+end_src
@@ -9230,7 +9239,11 @@ Major mode for Lean
 
 #+begin_src emacs-lisp
   (setup (:package nael)
-    (:file-match "\\.lean\\'"))
+    (:file-match "\\.lean\\'")
+    (:mode-project-roots "lakefile.toml" "lakefile.lean")
+    (:set nael-prepare-eglot t
+          nael-prepare-lsp nil)
+    (:keymap "C-c C-r" #'akirak/lake-lean-run))
 #+end_src
 *** neocaml
 #+begin_quote
@@ -10965,6 +10978,24 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
 #+begin_src elisp
   (setup hpack
     (:package-files "package.yaml"))
+#+end_src
+*** Lake (Lean)
+#+begin_src elisp
+  (setup lake
+    (:package-files "lakefile.toml"
+                    "lakefile.lean")
+
+    (defun akirak/lake-lean-run (file)
+      (interactive (list (buffer-file-name)))
+      (let ((default-directory (or (locate-dominating-file
+                                    file (lambda (dir)
+                                           (when (file-directory-p dir)
+                                             (seq-intersection (directory-files dir)
+                                                               '("lakefile.lean"
+                                                                 "lakefile.toml")))))
+                                   (user-error "Found neither lakefile.lean nor leanfile.toml"))))
+        (compile (format "lake env lean --run %s"
+                         (shell-quote-argument (file-relative-name file)))))))
 #+end_src
 *** Mix (Elixir)
 #+begin_src elisp
