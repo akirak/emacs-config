@@ -38,6 +38,13 @@
   :choices '("medium" "high" "extra-high" "low")
   :description "Reasoning effort")
 
+(defvar akirak-codex-enable-collaboration-modes nil)
+
+(transient-define-infix akirak-codex-toggle-collaboration-modes ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-codex-enable-collaboration-modes
+  :description "Collaboration modes")
+
 ;;;###autoload (autoload 'akirak-codex-transient "akirak-codex" nil 'interactive)
 (transient-define-prefix akirak-codex-transient ()
   ["Options"
@@ -57,8 +64,9 @@
               "on-failure"
               "on-request"
               "never"))
+   ("-c" akirak-codex-toggle-collaboration-modes)
    ("-f" "Full auto" "--full-auto")
-   ("-c" "Search" "--search")]
+   ("-w" "Search" "--search")]
   ["Interactive sessions"
    ("x" "Open interactive shell" akirak-codex--open-shell)
    ("r" "Resume (interactive)" akirak-codex--resume-in-shell)]
@@ -73,6 +81,8 @@
                           :command (cons akirak-codex-executable
                                          (append (ensure-list subcommand)
                                                  akirak-codex-default-args
+                                                 (when akirak-codex-enable-collaboration-modes
+                                                   (list "--enable" "collaboration_modes"))
                                                  (when akirak-codex-reasoning-effort
                                                    (list "--config"
                                                          (concat "model_reasoning_effort="
