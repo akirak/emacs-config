@@ -568,6 +568,7 @@ deepseek-ai/DeepSeek-V3-0324
 deepseek-ai/DeepSeek-V3.1
 deepseek-chat
 deepseek-reasoner
+deepseek-v3-2-251201
 deepseek/deepseek-chat
 deepseek/deepseek-coder
 deepseek/deepseek-r1
@@ -668,6 +669,7 @@ gemini-flash-experimental
 gemini-live-2.5-flash-preview-native-audio-09-2025
 gemini-pro
 gemini-pro-experimental
+gemini-robotics-er-1.5-preview
 gemini/gemini-1.5-flash
 gemini/gemini-1.5-flash-001
 gemini/gemini-1.5-flash-002
@@ -722,6 +724,7 @@ gemini/gemini-gemma-2-9b-it
 gemini/gemini-live-2.5-flash-preview-native-audio-09-2025
 gemini/gemini-pro
 gemini/gemini-pro-vision
+gemini/gemini-robotics-er-1.5-preview
 gemini/gemma-3-27b-it
 gemini/imagen-3.0-fast-generate-001
 gemini/imagen-3.0-generate-001
@@ -737,6 +740,7 @@ gemini/veo-3.1-fast-generate-001
 gemini/veo-3.1-fast-generate-preview
 gemini/veo-3.1-generate-001
 gemini/veo-3.1-generate-preview
+glm-4-7-251222
 gpt-3.5-turbo
 gpt-3.5-turbo-0125
 gpt-3.5-turbo-0301
@@ -885,6 +889,7 @@ jamba-mini-1.6
 jamba-mini-1.7
 jina-reranker-v2-base-multilingual
 joehoover/instructblip-vicuna13b:c4c54e3c8c97cd50c2d2fec9be3b6065563ccf7d43787fb99f84151b867178fe
+kimi-k2-thinking-251104
 lambda_ai/deepseek-llama3.3-70b
 lambda_ai/deepseek-r1-0528
 lambda_ai/deepseek-r1-671b
@@ -1205,6 +1210,7 @@ openrouter/meta-llama/llama-3-8b-instruct:extended
 openrouter/meta-llama/llama-3-8b-instruct:free
 openrouter/microsoft/wizardlm-2-8x22b:nitro
 openrouter/minimax/minimax-m2
+openrouter/minimax/minimax-m2.1
 openrouter/mistralai/devstral-2512
 openrouter/mistralai/devstral-2512:free
 openrouter/mistralai/ministral-14b-2512
@@ -1256,8 +1262,11 @@ openrouter/switchpoint/router
 openrouter/undi95/remm-slerp-l2-13b
 openrouter/x-ai/grok-4
 openrouter/x-ai/grok-4-fast:free
+openrouter/xiaomi/mimo-v2-flash
 openrouter/z-ai/glm-4.6
 openrouter/z-ai/glm-4.6:exacto
+openrouter/z-ai/glm-4.7
+openrouter/z-ai/glm-4.7-flash
 ovhcloud/DeepSeek-R1-Distill-Llama-70B
 ovhcloud/gpt-oss-120b
 ovhcloud/gpt-oss-20b
