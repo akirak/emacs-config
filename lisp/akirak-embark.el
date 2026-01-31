@@ -99,6 +99,7 @@
 
 (defvar-keymap akirak-embark-org-babel-block-map
   :parent akirak-embark-org-block-map
+  "RET" #'akirak-org-src-transient
   "v" #'akirak-org-babel-send-block-to-shell
   "w" #'embark-copy-as-kill)
 
