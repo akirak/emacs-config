@@ -16,22 +16,6 @@
         "type": "github"
       }
     },
-    "agent-shell": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1769200989,
-        "narHash": "sha256-fyuWbJevrqxva1j5HWE0v8vwazjLbkwanRPmGxpdr8M=",
-        "owner": "xenodium",
-        "repo": "agent-shell",
-        "rev": "6e04a69aae1b78fc2f4c901d0538249b1820aa7a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "xenodium",
-        "repo": "agent-shell",
-        "type": "github"
-      }
-    },
     "aggressive-indent": {
       "flake": false,
       "locked": {
@@ -3072,7 +3056,6 @@
     "root": {
       "inputs": {
         "acp": "acp",
-        "agent-shell": "agent-shell",
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
         "anzu": "anzu",
@@ -3265,7 +3248,6 @@
         "s": "s",
         "separedit": "separedit",
         "setup": "setup",
-        "shell-maker": "shell-maker",
         "shfmt": "shfmt",
         "show-font": "show-font",
         "shr-tag-pre-highlight": "shr-tag-pre-highlight",
@@ -3350,22 +3332,6 @@
       "original": {
         "type": "git",
         "url": "https://codeberg.org/pkal/setup.el"
-      }
-    },
-    "shell-maker": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1768558798,
-        "narHash": "sha256-eq4Eudki2RvDcApgJLseGNFQpbixnYUVejfyGann2s4=",
-        "owner": "xenodium",
-        "repo": "shell-maker",
-        "rev": "6eafe72de916cb3e75deb4f7220085ac3e775a11",
-        "type": "github"
-      },
-      "original": {
-        "owner": "xenodium",
-        "repo": "shell-maker",
-        "type": "github"
       }
     },
     "shfmt": {
