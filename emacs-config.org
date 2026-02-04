@@ -5963,7 +5963,7 @@ Asynchronous Fuzzy Finder for Emacs
 #+begin_src emacs-lisp
 (setup (:package affe))
 #+end_src
-*** agent-shell                                                     :AI:ARCHIVE:
+*** COMMENT agent-shell                                                     :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2026-01-05 Mon 09:40]
 :END:
@@ -11518,7 +11518,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 223 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
@@ -11535,13 +11535,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
-| [[org-ql-search:tags:AI][AI]]                  |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:history][history]]             |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
+| [[org-ql-search:tags:AI][AI]]                  |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -11640,12 +11640,11 @@ I want to care about readability in the following modes:
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Artificial intelligence / LLM
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
-| Heading     | Todo |
-|-------------+------|
-| [[acp][acp]]         |      |
-| [[agent-shell][agent-shell]] |      |
-| [[copilot][copilot]]     |      |
-| [[gptel][gptel]]       |      |
+| Heading | Todo |
+|---------+------|
+| [[acp][acp]]     |      |
+| [[copilot][copilot]] |      |
+| [[gptel][gptel]]   |      |
 #+END:
 
 For LLM integration, gptel is the generic frontend and backend.
