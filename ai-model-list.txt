@@ -246,6 +246,7 @@ azure/whisper-1
 azure_ai/claude-haiku-4-5
 azure_ai/claude-opus-4-1
 azure_ai/claude-opus-4-5
+azure_ai/claude-opus-4-6
 azure_ai/claude-sonnet-4-5
 azure_ai/Cohere-embed-v3-english
 azure_ai/Cohere-embed-v3-multilingual
@@ -297,6 +298,7 @@ azure_ai/mistral-medium-2505
 azure_ai/mistral-nemo
 azure_ai/mistral-small
 azure_ai/mistral-small-2503
+azure_ai/model_router
 azure_ai/Phi-3-medium-128k-instruct
 azure_ai/Phi-3-medium-4k-instruct
 azure_ai/Phi-3-mini-128k-instruct
@@ -376,6 +378,8 @@ claude-opus-4-1-20250805
 claude-opus-4-20250514
 claude-opus-4-5
 claude-opus-4-5-20251101
+claude-opus-4-6
+claude-opus-4-6-20260205
 claude-sonnet-4-20250514
 claude-sonnet-4-5
 claude-sonnet-4-5-20250929
@@ -460,6 +464,7 @@ databricks/databricks-mixtral-8x7b-instruct
 databricks/databricks-mpt-30b-instruct
 databricks/databricks-mpt-7b-instruct
 davinci-002
+deep-research-pro-preview-12-2025
 deepgram/base
 deepgram/base-conversationalai
 deepgram/base-finance
@@ -670,6 +675,7 @@ gemini-live-2.5-flash-preview-native-audio-09-2025
 gemini-pro
 gemini-pro-experimental
 gemini-robotics-er-1.5-preview
+gemini/deep-research-pro-preview-12-2025
 gemini/gemini-1.5-flash
 gemini/gemini-1.5-flash-001
 gemini/gemini-1.5-flash-002
@@ -993,6 +999,7 @@ moonshot/kimi-k2-0905-preview
 moonshot/kimi-k2-thinking
 moonshot/kimi-k2-thinking-turbo
 moonshot/kimi-k2-turbo-preview
+moonshot/kimi-k2.5
 moonshot/kimi-latest
 moonshot/kimi-latest-128k
 moonshot/kimi-latest-32k
@@ -1223,6 +1230,7 @@ openrouter/mistralai/mistral-large-2512
 openrouter/mistralai/mistral-small-3.1-24b-instruct
 openrouter/mistralai/mistral-small-3.2-24b-instruct
 openrouter/mistralai/mixtral-8x22b-instruct
+openrouter/moonshotai/kimi-k2.5
 openrouter/nousresearch/nous-hermes-llama2-13b
 openrouter/openai/gpt-3.5-turbo
 openrouter/openai/gpt-3.5-turbo-16k
@@ -1257,6 +1265,8 @@ openrouter/openai/o3-mini-high
 openrouter/pygmalionai/mythalion-13b
 openrouter/qwen/qwen-2.5-coder-32b-instruct
 openrouter/qwen/qwen-vl-plus
+openrouter/qwen/qwen3-235b-a22b-2507
+openrouter/qwen/qwen3-235b-a22b-thinking-2507
 openrouter/qwen/qwen3-coder
 openrouter/switchpoint/router
 openrouter/undi95/remm-slerp-l2-13b
@@ -1545,6 +1555,7 @@ vercel_ai_gateway/xai/grok-4
 vercel_ai_gateway/zai/glm-4.5
 vercel_ai_gateway/zai/glm-4.5-air
 vercel_ai_gateway/zai/glm-4.6
+vertex_ai/deep-research-pro-preview-12-2025
 vertex_ai/gemini-2.5-flash-image
 vertex_ai/gemini-3-pro-image-preview
 voyage/rerank-2
