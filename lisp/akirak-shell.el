@@ -131,7 +131,7 @@ the original minor mode."
   ["Start terminal in a directory"
    :class transient-row
    ("RET" "Current directory" akirak-shell--terminal-cwd)
-   ("p" "Project root" akirak-shell--terminal-project-root
+   ("r" "Project root" akirak-shell--terminal-project-root
     :if akirak-shell-project-directory)
    ("b" "Closest build root" akirak-shell--terminal-closest-build-root
     :if akirak-shell-project-directory)
