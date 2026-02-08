@@ -5713,7 +5713,8 @@ This is an extra functions for window management.
                                           "claude"
                                           "codex"
                                           "copilot"
-                                          "gemini")
+                                          "gemini"
+                                          "pi")
                               "-")
                          ,(major-modes agent-shell-mode))
                         akirak-window-display-as-right-sidebar
