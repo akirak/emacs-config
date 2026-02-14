@@ -51,7 +51,7 @@
     ("build.zig" . zig)
     ("rebar.config" . rebar3)
     ("gleam.toml" . gleam)
-    (".codex" . codex)
+    (".agents" . agents)
     ("uv.lock" . uv))
   ""
   :type '(alist :key-type (string :tag "File name")
@@ -589,20 +589,20 @@ are displayed in the frame."
                          (executable-find (car cell))))
            (mapcar (lambda (cell)
                      (list (cdr cell)))))))
-      (codex
+      (agents
        (with-memoize
-        (akirak-compile--codex-candidates dir)))
+        (akirak-compile--agents-candidates dir)))
       (otherwise
        (alist-get backend akirak-compile-backend-command-alist)))))
 
-(defun akirak-compile--codex-candidates (dir)
+(defun akirak-compile--agents-candidates (dir)
   (mapcar (lambda (skill-name)
             (cons (format "codex exec %s" (shell-quote-argument (concat "$" skill-name)))
                   nil))
-          (akirak-compile--codex-skills dir)))
+          (akirak-compile--agents-skills dir)))
 
-(defun akirak-compile--codex-skills (dir)
-  (let ((skills-dir (file-name-concat dir ".codex" "skills")))
+(defun akirak-compile--agents-skills (dir)
+  (let ((skills-dir (file-name-concat dir ".agents" "skills")))
     (when (file-directory-p skills-dir)
       (akirak-compile--list-skills skills-dir))))
 
