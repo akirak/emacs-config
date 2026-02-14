@@ -30,6 +30,19 @@
     },
     "version": "1.27.0.20250307.75451"
   },
+  "futur": {
+    "archive": {
+      "narHash": "sha256-CbH71h6i8JiC4WItg5irpWhyzq5zkqweoVsB3+Xz6XQ=",
+      "type": "tarball",
+      "url": "https://elpa.gnu.org/devel/futur-1.0.0.20260213.175101.tar"
+    },
+    "inventory": {
+      "type": "archive",
+      "url": "https://elpa.gnu.org/devel/"
+    },
+    "packageRequires": {},
+    "version": "1.0.0.20260213.175101"
+  },
   "peg": {
     "archive": {
       "narHash": "sha256-uJdjkC2vtqc/VhIgKFebGNVpcLDr9eCc87lBIQj0L28=",

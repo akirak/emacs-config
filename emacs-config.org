@@ -7785,6 +7785,14 @@ Support for F* programming
     (:file-match "\\.fst\\'")
     (:nixpkgs "fstar" "z3" "gnumake"))
 #+end_src
+*** futur
+:PROPERTIES:
+:CREATED_TIME: [2026-02-14 Sat 20:34]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package futur))
+#+end_src
 *** fwb-cmds                                                :window:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-08 Tue 16:02]
