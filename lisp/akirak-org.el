@@ -221,6 +221,7 @@ end of the pasted region."
       (akirak-pandoc-replace-with-org begin (point))
       ;; Remove horizontal lines which are common in AI output
       (replace-regexp-in-region (rx bol (+ (any "-")) eol) "" begin (point))
+      (replace-regexp-in-region (rx (>= 3 "\n")) "\n\n" begin (point))
       (push-mark)
       (goto-char begin)
       (activate-mark)
