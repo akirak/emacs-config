@@ -131,7 +131,7 @@ the original minor mode."
   ["Start terminal in a directory"
    :class transient-row
    ("RET" "Current directory" akirak-shell--terminal-cwd)
-   ("p" "Project root" akirak-shell--terminal-project-root
+   ("r" "Project root" akirak-shell--terminal-project-root
     :if akirak-shell-project-directory)
    ("b" "Closest build root" akirak-shell--terminal-closest-build-root
     :if akirak-shell-project-directory)
@@ -140,10 +140,9 @@ the original minor mode."
   ["Start an AI session at project root"
    :class transient-row
    :if akirak-shell-project-directory
-   ("a" "Agent Shell" agent-shell)
-   ("A" "Agent Shell (new)" agent-shell-new-shell)
    ("C" "Claude (default)" akirak-claude-code-default)
    ("c" "Claude" akirak-shell-project-for-claude)
+   ("p" "Pi" akirak-shell-project-for-pi)
    ("k" "Copilot" akirak-copilot-cli-transient)
    ;; ("s" "opencode" akirak-opencode-shell)
    ;; ("g" "Gemini" akirak-gemini-cli-shell)
@@ -323,6 +322,10 @@ the original minor mode."
 (defalias 'akirak-shell-project-for-codex
   #'akirak-codex-transient)
 
+;;;###autoload (autoload 'akirak-shell-project-for-pi "akirak-shell" nil 'interactive)
+(defalias 'akirak-shell-project-for-pi
+  #'akirak-pi-transient)
+
 (defun akirak-shell-project-directory ()
   (require 'akirak-org-git)
   (if (derived-mode-p 'org-mode)
@@ -449,6 +452,10 @@ the original minor mode."
             (eat-term-send-string-as-yank
              eat-terminal
              (akirak-shell--preprocess-claude-input input)))
+           (`pi
+            (eat-term-send-string-as-yank
+             eat-terminal
+             (akirak-shell--preprocess-pi-input input)))
            (`copilot
             (require 'akirak-claude)
             (eat-term-send-string-as-yank
@@ -490,6 +497,8 @@ the original minor mode."
         'aider)
        (`("claude" . ,_)
         'claude)
+       (`("pi" . ,_)
+        'pi)
        (`("copilot" . ,_)
         'copilot)
        (`("codex" . ,_)
@@ -520,6 +529,9 @@ the original minor mode."
         (concat "<<EOF\n" string "\nEOF\n")
       ;; Two new lines are required for Claude Code
       (concat string "\n"))))
+
+(defun akirak-shell--preprocess-pi-input (string)
+  (eat-term-send-string-as-yank eat-terminal string))
 
 (defun akirak-shell--eat-send-opencode-input (eat-terminal string)
   (let ((n 0))

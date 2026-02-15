@@ -5713,7 +5713,8 @@ This is an extra functions for window management.
                                           "claude"
                                           "codex"
                                           "copilot"
-                                          "gemini")
+                                          "gemini"
+                                          "pi")
                               "-")
                          ,(major-modes agent-shell-mode))
                         akirak-window-display-as-right-sidebar
@@ -5963,7 +5964,7 @@ Asynchronous Fuzzy Finder for Emacs
 #+begin_src emacs-lisp
 (setup (:package affe))
 #+end_src
-*** agent-shell                                                             :AI:
+*** COMMENT agent-shell                                                     :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2026-01-05 Mon 09:40]
 :END:
@@ -7783,6 +7784,17 @@ Support for F* programming
   (setup (:package fstar-mode)
     (:file-match "\\.fst\\'")
     (:nixpkgs "fstar" "z3" "gnumake"))
+#+end_src
+*** futur
+:PROPERTIES:
+:CREATED_TIME: [2026-02-14 Sat 20:34]
+:END:
+#+begin_quote
+Future/promise-based async library
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package futur))
 #+end_src
 *** fwb-cmds                                                :window:
 :PROPERTIES:
@@ -10984,8 +10996,9 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
     (:package-files "lakefile.toml"
                     "lakefile.lean")
 
-    (defun akirak/lake-lean-run (file)
-      (interactive (list (buffer-file-name)))
+    (defun akirak/lake-lean-run (file &optional arg)
+      (interactive (list (buffer-file-name)
+                         arg))
       (let ((default-directory (or (locate-dominating-file
                                     file (lambda (dir)
                                            (when (file-directory-p dir)
@@ -10993,8 +11006,10 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
                                                                '("lakefile.lean"
                                                                  "lakefile.toml")))))
                                    (user-error "Found neither lakefile.lean nor leanfile.toml"))))
-        (compile (format "lake env lean --run %s"
-                         (shell-quote-argument (file-relative-name file)))))))
+        (compile (read-string "Run: "
+                              (format "lake env lean --run %s"
+                                      (shell-quote-argument (file-relative-name file))))
+                 comint))))
 #+end_src
 *** Mix (Elixir)
 #+begin_src elisp
@@ -11532,13 +11547,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
-| [[org-ql-search:tags:AI][AI]]                  |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:history][history]]             |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
+| [[org-ql-search:tags:AI][AI]]                  |   3 |
 | [[org-ql-search:tags:web][web]]                 |   3 |
 | [[org-ql-search:tags:structured__editing][structured__editing]] |   3 |
 | [[org-ql-search:tags:Nix][Nix]]                 |   3 |
@@ -11637,12 +11652,11 @@ I want to care about readability in the following modes:
 See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading EPUBs in Emacs]].
 *** Artificial intelligence / LLM
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
-| Heading     | Todo |
-|-------------+------|
-| [[acp][acp]]         |      |
-| [[agent-shell][agent-shell]] |      |
-| [[copilot][copilot]]     |      |
-| [[gptel][gptel]]       |      |
+| Heading | Todo |
+|---------+------|
+| [[acp][acp]]     |      |
+| [[copilot][copilot]] |      |
+| [[gptel][gptel]]   |      |
 #+END:
 
 For LLM integration, gptel is the generic frontend and backend.

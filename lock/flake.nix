@@ -7,12 +7,6 @@
       repo = "acp.el";
       type = "github";
     };
-    agent-shell = {
-      flake = false;
-      owner = "xenodium";
-      repo = "agent-shell";
-      type = "github";
-    };
     aggressive-indent = {
       flake = false;
       owner = "Malabarba";
@@ -1168,12 +1162,6 @@
       flake = false;
       type = "git";
       url = "https://codeberg.org/pkal/setup.el";
-    };
-    shell-maker = {
-      flake = false;
-      owner = "xenodium";
-      repo = "shell-maker";
-      type = "github";
     };
     shfmt = {
       flake = false;
