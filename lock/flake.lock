@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "acp": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1768760130,
-        "narHash": "sha256-MX7fVVldR/du7nT+YOdSCKKKdqsr/LsfuG7uPiLN5VE=",
-        "owner": "xenodium",
-        "repo": "acp.el",
-        "rev": "9ab9b8f25cd7f42955171d471da5c3d016d1ef5a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "xenodium",
-        "repo": "acp.el",
-        "type": "github"
-      }
-    },
     "aggressive-indent": {
       "flake": false,
       "locked": {
@@ -3055,7 +3039,6 @@
     },
     "root": {
       "inputs": {
-        "acp": "acp",
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
         "anzu": "anzu",
