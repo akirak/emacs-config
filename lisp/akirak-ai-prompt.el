@@ -51,23 +51,6 @@
    :if-not akirak-ai-prompt-supported-p
    ("R" "Region" akirak-ai-prompt-send-region
     :if use-region-p)]
-  ["Aider"
-   :if akirak-ai-prompt-shell-aider-p
-   :class transient-row
-   ("/A" "Add this file"
-    (lambda ()
-      (interactive)
-      (let ((dir (buffer-local-value 'default-directory akirak-ai-prompt-shell-buffer)))
-        (akirak-shell-send-string-to-buffer akirak-ai-prompt-shell-buffer
-          (concat "/add " (file-relative-name (akirak-ai-prompt--buffer-file) dir))
-          :confirm t)))
-    :if akirak-ai-prompt--buffer-file)
-   ("//" "Send a command"
-    (lambda ()
-      (interactive)
-      (akirak-shell-send-string-to-buffer akirak-ai-prompt-shell-buffer
-        (akirak-aider-complete-slash-command)
-        :confirm t)))]
   (interactive nil)
   ;; For safety of not sending prompts to a wrong buffer, ensure the shell
   ;; buffer is opened in an ancestor directory of the current working directory.
