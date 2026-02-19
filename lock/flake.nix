@@ -1080,6 +1080,12 @@
       repo = "emacs-promise";
       type = "github";
     };
+    protobuf-mode = {
+      flake = false;
+      owner = "protocolbuffers";
+      repo = "protobuf";
+      type = "github";
+    };
     puni = {
       flake = false;
       owner = "AmaiKinono";
