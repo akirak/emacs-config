@@ -2877,6 +2877,22 @@
         "type": "github"
       }
     },
+    "protobuf-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1771507557,
+        "narHash": "sha256-/p2O4w+X7iOrLi5SfpDVVn8muM3Bda2R9nY8r6E5hv4=",
+        "owner": "protocolbuffers",
+        "repo": "protobuf",
+        "rev": "2744af0358e3aa6fd148994a8771bedb10017893",
+        "type": "github"
+      },
+      "original": {
+        "owner": "protocolbuffers",
+        "repo": "protobuf",
+        "type": "github"
+      }
+    },
     "puni": {
       "flake": false,
       "locked": {
@@ -3218,6 +3234,7 @@
         "posframe": "posframe",
         "prodigy": "prodigy",
         "promise": "promise",
+        "protobuf-mode": "protobuf-mode",
         "puni": "puni",
         "rainbow-csv": "rainbow-csv",
         "rainbow-delimiters": "rainbow-delimiters",
