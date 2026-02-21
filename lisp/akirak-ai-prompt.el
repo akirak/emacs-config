@@ -107,32 +107,39 @@
                                     (?f . ,(file-relative-name file default-directory))))))
       :confirm t)))
 
-(defun akirak-ai-prompt-fix-flymake-error (&optional arg)
-  "Within an AI shell, fix the error at the current point."
-  (interactive "P")
-  (cl-assert (akirak-org-shell--buffer-live-p))
+(defun akirak-ai-prompt-build-flymake-prompt (base-dir &optional custom-instruction)
   (require 'akirak-flymake)
-  (let* ((diag (pcase (akirak-flymake-filter-diags-by-pos (point) (flymake-diagnostics))
+  (let* ((diag (pcase (akirak-flymake-filter-diags-by-pos (point)
+                                                          (flymake-diagnostics))
                  (`nil (user-error "No error at point"))
                  (`(,diag) diag)
                  (diags (akirak-flymake-select-diagnostic diags))))
          (diag-text (flymake-diagnostic-text diag))
          (line (line-number-at-pos (flymake-diagnostic-beg diag)))
          (file (buffer-file-name (or (buffer-base-buffer)
-                                     (current-buffer))))
-         (buffer akirak-ai-prompt-shell-buffer))
+                                     (current-buffer)))))
+    (if custom-instruction
+        (concat custom-instruction
+                (format-spec "\n\nAt line %l in %f:\n\n%e"
+                             `((?l . ,line)
+                               (?f . ,(file-relative-name file base-dir))
+                               (?e . ,diag-text))))
+      (format-spec "Investigate the following error at line %l in %f:\n\n%e"
+                   `((?l . ,line)
+                     (?f . ,(file-relative-name file base-dir))
+                     (?e . ,diag-text))))))
+
+(defun akirak-ai-prompt-fix-flymake-error (&optional arg)
+  "Within an AI shell, fix the error at the current point."
+  (interactive "P")
+  (cl-assert (akirak-org-shell--buffer-live-p))
+  (require 'akirak-flymake)
+  (let ((buffer akirak-ai-prompt-shell-buffer))
     (akirak-shell-send-string-to-buffer buffer
-      (with-current-buffer buffer
-        (if arg
-            (concat (read-string "Prompt: ")
-                    (format-spec "\n\nAt line %l in %f:\n\n%e"
-                                 `((?l . ,line)
-                                   (?f . ,(file-relative-name file default-directory))
-                                   (?e . ,diag-text))))
-          (format-spec "Investigate the following error at line %l in %f:\n\n%e"
-                       `((?l . ,line)
-                         (?f . ,(file-relative-name file default-directory))
-                         (?e . ,diag-text)))))
+      (akirak-ai-prompt-build-flymake-prompt
+       (buffer-local-value 'default-directory buffer)
+       (when arg
+         (read-string "Prompt: ")))
       :confirm t)))
 
 (defun akirak-ai-prompt-fix-flymake-error-with-prompt ()
