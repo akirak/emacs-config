@@ -56,6 +56,8 @@
   ;; buffer is opened in an ancestor directory of the current working directory.
   (when (and akirak-ai-prompt-shell-buffer
              (buffer-live-p akirak-ai-prompt-shell-buffer)
+             (get-buffer-process akirak-ai-prompt-shell-buffer)
+             (process-live-p (get-buffer-process akirak-ai-prompt-shell-buffer))
              (not (string-prefix-p (abbreviate-file-name
                                     (buffer-local-value 'default-directory
                                                         akirak-ai-prompt-shell-buffer))
@@ -63,7 +65,9 @@
     (setq akirak-ai-prompt-shell-buffer nil)
     (message "Unset the shell buffer for a different project"))
   (unless (and akirak-ai-prompt-shell-buffer
-               (buffer-live-p akirak-ai-prompt-shell-buffer))
+               (buffer-live-p akirak-ai-prompt-shell-buffer)
+               (get-buffer-process akirak-ai-prompt-shell-buffer)
+               (process-live-p (get-buffer-process akirak-ai-prompt-shell-buffer)))
     (setq akirak-ai-prompt-shell-buffer
           (akirak-org-shell--read-buffer "Terminal buffer: " akirak-ai-prompt-shell-buffer)))
   (transient-setup 'akirak-ai-prompt-transient))
