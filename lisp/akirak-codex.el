@@ -133,6 +133,25 @@
           "command = " (json-encode command) "\n"
           "args = " (json-encode (or args (vector))) "\n"))
 
+;;;###autoload
+(defun akirak-codex-quickfix ()
+  "Fix the error at point using Codex CLI."
+  (interactive)
+  (let* ((name (format "codex-%s-quickfix" (project-name)))
+         (default-directory (vc-git-root default-directory))
+         (prompt (akirak-ai-prompt-build-flymake-prompt default-directory))
+         (buffer (generate-new-buffer name))
+         (process (make-process
+                   :name name
+                   :buffer buffer
+                   :command (list akirak-codex-executable
+                                  "exec"
+                                  "--sandbox" "workspace-write"
+                                  "-"))))
+    (process-send-string process prompt)
+    (process-send-eof proc)
+    (display-buffer buffer)))
+
 ;;;; Inserting the response
 
 (defun akirak-codex-recent-output-to-org (buffer n)
