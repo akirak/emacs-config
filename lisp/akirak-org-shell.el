@@ -103,8 +103,9 @@
   (akirak-shell-insert-response-to-org akirak-org-shell-buffer (or n 1)))
 
 (defun akirak-org-shell--send-string (string)
-  (akirak-shell-send-string-to-buffer (or akirak-org-shell-buffer
-                                          (error "Not set the buffer akirak-org-shell-buffer"))
+  (akirak-shell-send-string-to-buffer
+      (or akirak-org-shell-buffer
+          (error "Not set the buffer akirak-org-shell-buffer"))
     string
     :confirm t))
 
