@@ -5638,8 +5638,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-systemctl
 #+begin_src elisp
   (setup akirak-systemctl
-    (:global-keymap "<f12> s s" #'akirak-systemctl-toggle-unit
-             "<f12> s d" #'akirak-systemctl-daemon-reload))
+    (:global-keymap "<f12> s s" #'akirak-systemctl
+                    "<f12> s d" #'akirak-systemctl-daemon-reload))
 #+end_src
 *** akirak-treesit
 #+begin_src elisp
