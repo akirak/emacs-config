@@ -25,11 +25,6 @@
       repo = "apheleia";
       type = "github";
     };
-    astro-ts-mode = {
-      flake = false;
-      type = "git";
-      url = "https://git.isincredibly.gay/srxl/astro-ts-mode.git";
-    };
     auto-minor-mode = {
       flake = false;
       owner = "joewreschnig";
