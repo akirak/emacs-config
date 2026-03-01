@@ -349,6 +349,47 @@ are displayed in the frame."
         (message "Killed %d buffers: %s" (length killed-buffers) killed-buffers)
       (message "No buffer has been killed"))))
 
+;;;###autoload
+(defun akirak-compile-define-command ()
+  "Copy the currently running compilation commands to the kill ring."
+  (interactive)
+  (let ((root (file-name-as-directory (file-truename (vc-git-root default-directory)))))
+    (cl-flet*
+        ((buffer-directory (buffer)
+           (file-truename (buffer-local-value 'default-directory buffer)))
+         (buffer-inside-worktree-p (buffer)
+           (string-prefix-p root (buffer-directory buffer))))
+      (pcase (thread-last
+               (buffer-list)
+               (seq-filter #'akirak-compile-buffer-p)
+               (seq-filter #'akirak-compile--has-live-process-p)
+               (seq-filter #'buffer-inside-worktree-p))
+        (`nil
+         (user-error "No compilation buffer is live"))
+        (buffers
+         (let* ((entries (mapcar `(lambda (buffer)
+                                    (list (file-relative-name
+                                           (file-truename
+                                            (buffer-local-value 'default-directory buffer))
+                                           ,root)
+                                          (buffer-name buffer)
+                                          (substring-no-properties
+                                           (buffer-local-value 'compile-command buffer))))
+                                 buffers))
+                (worktree-name (file-name-nondirectory
+                                (directory-file-name (vc-git-root default-directory))))
+                (function-name (intern (format "my/%s-compile-commands" worktree-name))))
+           (pp-display-expression
+            `(defun ,function-name ()
+               (interactive)
+               (let ((root (vc-git-root default-directory)))
+                 (pcase-dolist
+                     (`(,dir ,buffer-name ,command)
+                      ,entries)
+                   (let ((default-directory (expand-file-name dir root)))
+                     (compilation-start command t (cl-constantly buffer-name))))))
+            (format "*compile command for %s*" worktree-name))))))))
+
 (defun akirak-compile-buffer-p (buffer)
   (or (eq (buffer-local-value 'major-mode buffer)
           'compilation-mode)
