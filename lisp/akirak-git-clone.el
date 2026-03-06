@@ -185,6 +185,20 @@ matches the host of the repository,
                                      :local-path local-path
                                      :rev-or-ref rev-or-ref
                                      :content-path content-path)))
+    ((rx bol "https://"
+         (group "git.sr.ht")
+         "/"
+         (group (+ (not (any "/")))
+                "/"
+                (+ (not (any "/")))))
+     (let* ((host (match-string 1 flake-ref-or-url))
+            (path (match-string 2 flake-ref-or-url))
+            (local-path (f-join host (downcase path)))
+            (origin (format "https://%s/%s" host path)))
+       (make-akirak-git-clone-source :type 'type
+                                     :origin origin
+                                     :host host
+                                     :local-path local-path)))
     ((rx bol "https://gist.github.com/")
      (let* ((host "gist.github.com")
             (path (substring flake-ref-or-url (match-end 0)))
