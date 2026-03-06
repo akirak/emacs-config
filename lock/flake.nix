@@ -439,9 +439,9 @@
     };
     fullframe = {
       flake = false;
-      owner = "~tomterl";
+      owner = "emacsmirror";
       repo = "fullframe";
-      type = "sourcehut";
+      type = "github";
     };
     fwb-cmds = {
       flake = false;
@@ -505,9 +505,9 @@
     };
     graphql-ts-mode = {
       flake = false;
-      owner = "~joram";
+      owner = "emacsmirror";
       repo = "graphql-ts-mode";
-      type = "sourcehut";
+      type = "github";
     };
     gt = {
       flake = false;
