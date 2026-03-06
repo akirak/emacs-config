@@ -505,9 +505,9 @@
     };
     graphql-ts-mode = {
       flake = false;
-      owner = "~joram";
+      owner = "emacsmirror";
       repo = "graphql-ts-mode";
-      type = "sourcehut";
+      type = "github";
     };
     gt = {
       flake = false;
