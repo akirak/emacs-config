@@ -30,6 +30,14 @@
     };
   };
 
+  repl-toggle = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "repl-toggle";
+    };
+  };
+
   magit-delta = _: super: {
     packageRequires = super.packageRequires // {
       dash = "0";

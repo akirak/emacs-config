@@ -1113,9 +1113,9 @@
     };
     repl-toggle = {
       flake = false;
-      owner = "~tomterl";
+      owner = "akirak";
       repo = "repl-toggle";
-      type = "sourcehut";
+      type = "github";
     };
     request = {
       flake = false;
