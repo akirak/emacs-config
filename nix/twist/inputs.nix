@@ -44,18 +44,21 @@
       dash = "0";
       f = "0";
       dired-hacks-utils = "0";
-    } // super.packageRequires;
+    }
+    // super.packageRequires;
   };
   dired-filter = _: super: {
     packageRequires = {
       dired-hacks-utils = "0";
       f = "0";
-    } // super.packageRequires;
+    }
+    // super.packageRequires;
   };
   dired-open = _: super: {
     packageRequires = {
       dired-hacks-utils = "0";
-    } // super.packageRequires;
+    }
+    // super.packageRequires;
   };
 
   ob-graphql = _: _: {
@@ -199,7 +202,8 @@
   daemons = _: super: {
     packageRequires = {
       s = "0";
-    } // super.packageRequires;
+    }
+    // super.packageRequires;
   };
 
   lean4-mode = _: super: {
