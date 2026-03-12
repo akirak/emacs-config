@@ -1,12 +1,6 @@
 {
   description = "THIS IS AN AUTO-GENERATED FILE. PLEASE DON'T EDIT IT MANUALLY.";
   inputs = {
-    acp = {
-      flake = false;
-      owner = "xenodium";
-      repo = "acp.el";
-      type = "github";
-    };
     aggressive-indent = {
       flake = false;
       owner = "Malabarba";
@@ -30,11 +24,6 @@
       owner = "radian-software";
       repo = "apheleia";
       type = "github";
-    };
-    astro-ts-mode = {
-      flake = false;
-      type = "git";
-      url = "https://git.isincredibly.gay/srxl/astro-ts-mode.git";
     };
     auto-minor-mode = {
       flake = false;
@@ -218,7 +207,7 @@
     dashboard = {
       flake = false;
       owner = "emacs-dashboard";
-      repo = "emacs-dashboard";
+      repo = "dashboard";
       type = "github";
     };
     deadgrep = {
@@ -450,9 +439,9 @@
     };
     fullframe = {
       flake = false;
-      owner = "~tomterl";
+      owner = "emacsmirror";
       repo = "fullframe";
-      type = "sourcehut";
+      type = "github";
     };
     fwb-cmds = {
       flake = false;
@@ -516,9 +505,9 @@
     };
     graphql-ts-mode = {
       flake = false;
-      owner = "~joram";
+      owner = "emacsmirror";
       repo = "graphql-ts-mode";
-      type = "sourcehut";
+      type = "github";
     };
     gt = {
       flake = false;
@@ -1086,6 +1075,12 @@
       repo = "emacs-promise";
       type = "github";
     };
+    protobuf-mode = {
+      flake = false;
+      owner = "protocolbuffers";
+      repo = "protobuf";
+      type = "github";
+    };
     puni = {
       flake = false;
       owner = "AmaiKinono";
@@ -1118,9 +1113,9 @@
     };
     repl-toggle = {
       flake = false;
-      owner = "~tomterl";
+      owner = "akirak";
       repo = "repl-toggle";
-      type = "sourcehut";
+      type = "github";
     };
     request = {
       flake = false;

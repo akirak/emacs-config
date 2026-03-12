@@ -30,6 +30,14 @@
     };
   };
 
+  repl-toggle = _: _: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "repl-toggle";
+    };
+  };
+
   magit-delta = _: super: {
     packageRequires = super.packageRequires // {
       dash = "0";
@@ -44,18 +52,21 @@
       dash = "0";
       f = "0";
       dired-hacks-utils = "0";
-    } // super.packageRequires;
+    }
+    // super.packageRequires;
   };
   dired-filter = _: super: {
     packageRequires = {
       dired-hacks-utils = "0";
       f = "0";
-    } // super.packageRequires;
+    }
+    // super.packageRequires;
   };
   dired-open = _: super: {
     packageRequires = {
       dired-hacks-utils = "0";
-    } // super.packageRequires;
+    }
+    // super.packageRequires;
   };
 
   ob-graphql = _: _: {
@@ -186,6 +197,23 @@
     };
   };
 
+  # Cloning from the original git.sr.ht repository fails on CI, so use a mirror.
+  graphql-ts-mode = _: _: {
+    origin = {
+      type = "github";
+      owner = "emacsmirror";
+      repo = "graphql-ts-mode";
+    };
+  };
+
+  fullframe = _: _: {
+    origin = {
+      type = "github";
+      owner = "emacsmirror";
+      repo = "fullframe";
+    };
+  };
+
   taxy = _: super: {
     files = builtins.removeAttrs super.files [ "NOTES.org" ];
   };
@@ -199,7 +227,8 @@
   daemons = _: super: {
     packageRequires = {
       s = "0";
-    } // super.packageRequires;
+    }
+    // super.packageRequires;
   };
 
   lean4-mode = _: super: {

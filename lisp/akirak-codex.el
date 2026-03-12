@@ -50,8 +50,10 @@
   ["Options"
    ("-m" "Model" "--model="
     ;; :always-read t
-    :init-value (lambda (obj) (oset obj value "gpt-5.3-codex"))
-    :choices ("gpt-5.3-codex"
+    :init-value (lambda (obj) (oset obj value "gpt-5.4"))
+    :choices ("gpt-5.4"
+              "gpt-5.3-codex"
+              "gpt-5.3-codex-spark"
               "gpt-5.2-codex"
               "gpt-5.2"))
    ("-r" akirak-codex-set-reasoning-effort)
@@ -132,6 +134,27 @@
   (concat (format "[mcp_servers.%s]\n" name)
           "command = " (json-encode command) "\n"
           "args = " (json-encode (or args (vector))) "\n"))
+
+;;;###autoload
+(defun akirak-codex-quickfix ()
+  "Fix the error at point using Codex CLI."
+  (interactive)
+  (let* ((name (format "codex-%s-quickfix" (project-name (or (project-current)
+                                                             (user-error
+                                                              "Not inside a project")))))
+         (default-directory (vc-git-root default-directory))
+         (prompt (akirak-ai-prompt-build-flymake-prompt default-directory))
+         (buffer (generate-new-buffer (format "*%s*" name)))
+         (process (make-process
+                   :name name
+                   :buffer buffer
+                   :command (list akirak-codex-executable
+                                  "exec"
+                                  "--sandbox" "workspace-write"
+                                  "-"))))
+    (process-send-string process prompt)
+    (process-send-eof process)
+    (display-buffer buffer)))
 
 ;;;; Inserting the response
 

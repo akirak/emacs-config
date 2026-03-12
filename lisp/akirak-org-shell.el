@@ -103,29 +103,34 @@
   (akirak-shell-insert-response-to-org akirak-org-shell-buffer (or n 1)))
 
 (defun akirak-org-shell--send-string (string)
-  (akirak-shell-send-string-to-buffer (or akirak-org-shell-buffer
-                                          (error "Not set the buffer akirak-org-shell-buffer"))
+  (akirak-shell-send-string-to-buffer
+      (or akirak-org-shell-buffer
+          (error "Not set the buffer akirak-org-shell-buffer"))
     string
     :confirm t))
 
 (defun akirak-org-shell-send-region-as-markdown ()
   (interactive nil org-mode)
   (if (use-region-p)
-      (thread-first
-        (buffer-substring (region-beginning) (region-end))
-        (akirak-org-shell--convert-to-gfm)
-        (akirak-org-shell--send-string))
+      (progn
+        (thread-first
+          (buffer-substring (region-beginning) (region-end))
+          (akirak-org-shell--convert-to-gfm)
+          (akirak-org-shell--send-string))
+        (akirak-org-shell--persist-agent-type))
     (user-error "Not selecting a region")))
 
 (defun akirak-org-shell-send-org-entry-as-markdown ()
   (interactive nil org-mode)
-  (thread-first
-    (save-excursion
-      (goto-char (org-entry-beginning-position))
-      (org-end-of-meta-data t)
-      (buffer-substring (point) (org-entry-end-position)))
-    (akirak-org-shell--convert-to-gfm)
-    (akirak-org-shell--send-string)))
+  (progn
+    (thread-first
+      (save-excursion
+        (goto-char (org-entry-beginning-position))
+        (org-end-of-meta-data t)
+        (buffer-substring (point) (org-entry-end-position)))
+      (akirak-org-shell--convert-to-gfm)
+      (akirak-org-shell--send-string))
+    (akirak-org-shell--persist-agent-type)))
 
 (defun akirak-org-shell-send-block ()
   (interactive nil org-mode)
@@ -134,6 +139,13 @@
      (thread-first
        (string-chop-newline body)
        (akirak-org-shell--send-string)))))
+
+(defun akirak-org-shell--set-agent-type (name)
+  (org-entry-put nil "coding_agent" name))
+
+(defun akirak-org-shell--persist-agent-type ()
+  (akirak-org-shell--set-agent-type
+   (symbol-name (akirak-shell-detect-buffer-program akirak-org-shell-buffer))))
 
 (defun akirak-org-shell-send-command (input)
   (interactive "sInput: " org-mode)

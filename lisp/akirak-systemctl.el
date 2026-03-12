@@ -28,49 +28,111 @@
 
 ;;; Code:
 
+;;;; Transient
 
-(defun akirak-systemctl--list-unit-files (&optional root)
-  (with-temp-buffer
-    (let ((process-environment (cons "SYSTEMD_COLORS=false"
-                                     process-environment))
-          result)
-      (call-process "systemctl" nil (list t nil) nil
-                    "--user" "list-unit-files" "--no-pager")
-      (goto-char (point-min))
-      ;; Ensure the output follows an expected format.
-      (unless (looking-at (rx "UNIT FILE" (+ blank)
-                              "STATE" (+ blank)
-                              "PRESET" eol))
-        (error "The output format of systemctl seems to have changed"))
-      (forward-line)
-      (while (and (not (eolp))
-                  (looking-at (rx (group (+? anything))
-                                  (+ blank) (group (+? anything))
-                                  (+ blank) (group (+? anything))
-                                  eol)))
-        (push (mapcar #'match-string
-                      (number-sequence 1 (1- (/ (length (match-data)) 2))))
-              result)
-        (forward-line))
-      (mapcar (pcase-lambda (`(,name ,state ,preset))
-                (list name :state state :preset preset))
-              result))))
+(defvar akirak-systemctl-unit-name nil)
 
-(defun akirak-systemctl--select-unit (prompt &optional root)
-  (let ((alist (akirak-systemctl--list-unit-files root)))
+(defvar akirak-systemctl-unit-active nil)
+
+(defvar akirak-systemctl-root nil)
+
+;;;###autoload (autoload 'akirak-systemctl "akirak-systemctl" nil 'interactive)
+(transient-define-prefix akirak-systemctl (&optional root)
+  [:description
+   (lambda ()
+     (format "Unit: %s (%s)" akirak-systemctl-unit-name akirak-systemctl-unit-active))
+   :class transient-row
+   ("s" "Start"
+    (lambda ()
+      (interactive)
+      (akirak-systemctl--unit-sync "start"))
+    :if-non-nil akirak-systemctl-unit-active)
+   ("r" "Restart"
+    (lambda ()
+      (interactive)
+      (akirak-systemctl--unit-sync "restart"))
+    :if-non-nil akirak-systemctl-unit-active)
+   ("s" "Stop"
+    (lambda ()
+      (interactive)
+      (akirak-systemctl--unit-sync "stop"))
+    :if-nil akirak-systemctl-unit-active)]
+  (interactive "P")
+  (setq akirak-systemctl-root root)
+  (unless akirak-systemctl-unit-name
+    (setq akirak-systemctl-unit-name
+          (akirak-systemctl--complete-unit "Select a unit: " root)))
+  (setq akirak-systemctl-unit-active
+        (akirak-systemctl--active akirak-systemctl-unit-name root))
+  (transient-setup 'akirak-systemctl))
+
+;;;; Completion
+
+(defun akirak-systemctl--complete-unit (prompt &optional root)
+  (let ((alist (akirak-systemctl--list-units root)))
     (cl-labels
         ((annotator (candidate)
            (pcase (cdr (assoc candidate alist))
-             ((map :state)
-              (format " %s" state))))
+             ((map description)
+              (concat " " (propertize description 'face 'font-lock-comment-face)))))
+         (group (unit transform)
+           (if transform
+               unit
+             (let ((props (cdr (assoc unit alist))))
+               (concat (alist-get 'active props)
+                       "/"
+                       (alist-get 'sub props)))))
          (completions (string pred action)
            (if (eq action 'metadata)
                (cons 'metadata
                      (list (cons 'category 'systemd-unit)
+                           (cons 'group-function #'group)
                            (cons 'annotation-function #'annotator)))
              (complete-with-action action alist string pred))))
-      (assoc (completing-read prompt #'completions nil t)
-             alist))))
+      (completing-read prompt #'completions nil t))))
+
+(defun akirak-systemctl--list-units (&optional root)
+  (with-temp-buffer
+    (let ((process-environment (cons "SYSTEMD_COLORS=false"
+                                     process-environment))
+          result)
+      (unless (zerop (apply #'call-process "systemctl" nil (list t nil) nil
+                            (append (list "-o" "json" "--no-pager" "--all")
+                                    (unless root
+                                      '("--user"))
+                                    (list "list-units"))))
+        (error "systemctl failed"))
+      (goto-char (point-min))
+      (mapcar (lambda (props)
+                (cons (alist-get 'unit props)
+                      props))
+              (json-parse-buffer :object-type 'alist :array-type 'list)))))
+
+;;;; Utilities
+
+(defun akirak-systemctl--active (unit &optional root)
+  (with-temp-buffer
+    (let ((process-environment (cons "SYSTEMD_COLORS=false"
+                                     process-environment)))
+      (apply #'call-process "systemctl" nil (list t nil) nil
+             (append (list "--no-pager")
+                     (unless root
+                       '("--user"))
+                     (list "is-active" unit)))
+      (string-trim (buffer-string)))))
+
+(defun akirak-systemctl--unit-sync (subcommand)
+  (with-temp-buffer
+    (let ((process-environment (cons "SYSTEMD_COLORS=false"
+                                     process-environment)))
+      (if (zerop (apply #'call-process "systemctl" nil (list t nil) nil
+                        (append (unless akirak-systemctl-root
+                                  '("--user"))
+                                (list subcommand akirak-systemctl-unit-name))))
+          (message "systemctl succeeded")
+        (message "systemctl failed")))))
+
+;;;; Deprecated
 
 ;;;###autoload
 (defun akirak-systemctl-toggle-unit (unit operation &optional root)

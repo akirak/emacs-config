@@ -34,7 +34,8 @@ let
         type = "melpa";
         path = ./recipes;
       }
-    ] ++ (import ./nix/twist/registries.nix { inherit inputs; });
+    ]
+    ++ (import ./nix/twist/registries.nix { inherit inputs; });
 
     lockDir = ./lock;
 
@@ -111,8 +112,6 @@ let
               ]
             )
           }/lib/")
-
-          (setq aidermacs--cached-version "${pkgs.aider-chat.version}")
         '';
       }
     )).overrideScope
