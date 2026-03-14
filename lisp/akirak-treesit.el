@@ -42,6 +42,8 @@
   "<remap> <kill-line>" #'akirak-treesit-smart-kill-line
   "<remap> <kill-sentence>" #'akirak-treesit-smart-kill-nodes
   "<remap> <open-line>" #'akirak-treesit-open-line
+  "<remap> <beginning-of-defun>" #'akirak-treesit-beginning-of-defun
+  "<remap> <end-of-defun>" #'akirak-treesit-end-of-defun
   "C-M-n" #'akirak-treesit-forward-up-list
   "M-n" #'akirak-treesit-next-same-type-sibling
   "M-p" #'akirak-treesit-previous-same-type-sibling)
@@ -580,6 +582,31 @@
                                  (goto-char (treesit-node-end parent))
                                  (funcall show-paren-data-function)))
                        2)))))
+
+;;;###autoload
+(defun akirak-treesit-beginning-of-defun (&optional n)
+  (interactive "P")
+  (let ((indent (if (numberp n)
+                    (* n tab-width)
+                  0))
+        (node (treesit-node-at (point))))
+    (while (> (car (posn-col-row (posn-at-point (treesit-node-start node))))
+              indent)
+      (setq node (treesit-node-parent node))
+      (goto-char (treesit-node-start node)))))
+
+;;;###autoload
+(defun akirak-treesit-end-of-defun ()
+  (interactive)
+  (akirak-treesit-beginning-of-defun)
+  (let* ((start (point))
+         (node (treesit-node-at start))
+         (parent node))
+    (while (and (setq parent (treesit-node-parent node))
+                (= (treesit-node-start parent) start))
+      (setq node parent))
+    (when node
+      (goto-char (treesit-node-end node)))))
 
 ;;;###autoload
 (defun akirak-treesit-open-line (&optional n)
