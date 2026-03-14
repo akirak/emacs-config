@@ -225,8 +225,18 @@
   (unless (use-region-p)
     (user-error "Requires setting a region"))
 
-  (let* ((begin (region-beginning))
-         (end (region-end))
+  (let* ((begin (save-excursion
+                  (goto-char (region-beginning))
+                  (save-match-data
+                    (if (looking-at (rx (+ space)))
+                        (match-end 0)
+                      (point)))))
+         (end (save-excursion
+                (goto-char (region-end))
+                (save-match-data
+                  (if (looking-back (rx (+ space)) begin)
+                      (match-beginning 0)
+                    (point)))))
          (node (treesit-node-at begin))
          (parent (treesit-node-parent node)))
     (while (and (= (treesit-node-start parent)
