@@ -6209,8 +6209,7 @@ Jump to arbitrary positions in visible text and select text quickly.
           avy-styles-alist '((avy-goto-char . at)
                              (avy-goto-char-timer . at-full))
           avy-all-windows t)
-    (:global-keymap "C-\"" #'avy-goto-char-timer
-                    "C-'" #'avy-goto-char-in-line))
+    (:global-keymap "C-'" #'avy-goto-char-timer))
 #+end_src
 
 I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
