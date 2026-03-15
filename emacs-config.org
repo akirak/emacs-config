@@ -9158,27 +9158,6 @@ Display modeline in minibuffer
                 value))
           ""))))
 #+end_src
-*** COMMENT minuet                                                          :AI:ARCHIVE:
-:PROPERTIES:
-:CREATED_TIME: [2025-01-23 Thu 22:26]
-:END:
-#+begin_quote
-Code completion using LLM
-[[https://github.com/milanglacier/minuet-ai.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package minuet)
-    ;; Run `akirak-minuet-switch-backend' to set the provider.
-    (:set minuet-provider nil)
-    (:when-loaded
-      ;; Set the default backend.
-      (require 'akirak-minuet)
-      (akirak-minuet-switch-backend (caar akirak-minuet-backend-alist)))
-    (:global-keymap "C-c y" #'minuet-complete-with-minibuffer)
-    (:with-map minuet-active-mode-map
-      (:keymap "M-<return>" #'minuet-accept-suggestion)))
-#+end_src
 *** COMMENT mlscroll                                             :aesthetics:UI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-21 Fri 23:59]
