@@ -2797,22 +2797,6 @@
         "type": "github"
       }
     },
-    "popup": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1763702377,
-        "narHash": "sha256-ZFkv9uAtAV/kZlUgQDe9Xvohm2WtzGng1w0RSAsVEQc=",
-        "owner": "auto-complete",
-        "repo": "popup-el",
-        "rev": "161cac18945f9b91df26e52c57d68ae27d38d3fb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "auto-complete",
-        "repo": "popup-el",
-        "type": "github"
-      }
-    },
     "posframe": {
       "flake": false,
       "locked": {
@@ -3213,7 +3197,6 @@
         "pinyin": "pinyin",
         "plz": "plz",
         "popper": "popper",
-        "popup": "popup",
         "posframe": "posframe",
         "prodigy": "prodigy",
         "promise": "promise",
@@ -3248,7 +3231,6 @@
         "titlecase": "titlecase",
         "tomelr": "tomelr",
         "transient": "transient",
-        "treesit-fold": "treesit-fold",
         "ts": "ts",
         "twind": "twind",
         "twist": "twist",
@@ -3586,22 +3568,6 @@
       "original": {
         "owner": "magit",
         "repo": "transient",
-        "type": "github"
-      }
-    },
-    "treesit-fold": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1772118468,
-        "narHash": "sha256-c5SNan5fMAtlfKmQ38kkXqtoOoWb3Ax8qVMflDJbyso=",
-        "owner": "emacs-tree-sitter",
-        "repo": "treesit-fold",
-        "rev": "d70c5f7240a8a48819421260c9a018c884a41111",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacs-tree-sitter",
-        "repo": "treesit-fold",
         "type": "github"
       }
     },

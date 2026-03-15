@@ -1051,12 +1051,6 @@
       repo = "popper";
       type = "github";
     };
-    popup = {
-      flake = false;
-      owner = "auto-complete";
-      repo = "popup-el";
-      type = "github";
-    };
     posframe = {
       flake = false;
       owner = "tumashu";
@@ -1257,12 +1251,6 @@
       flake = false;
       owner = "magit";
       repo = "transient";
-      type = "github";
-    };
-    treesit-fold = {
-      flake = false;
-      owner = "emacs-tree-sitter";
-      repo = "treesit-fold";
       type = "github";
     };
     ts = {

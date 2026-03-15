@@ -10381,7 +10381,7 @@ Viewing/editing system trash can
 #+begin_src emacs-lisp
 (setup (:package trashed))
 #+end_src
-*** treesit-fold
+*** COMMENT treesit-fold                                                       :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-06-22 Sat 23:59]
 :END:
@@ -11521,7 +11521,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 223 |
+| [[org-ql-search:tags:packages][packages]]            | 221 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
