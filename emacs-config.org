@@ -1021,6 +1021,11 @@ The other variables must not be saved, and they should be put in configuration:
   (setup display-fill-column-indicator
     (add-hook 'after-init-hook #'global-display-fill-column-indicator-mode))
 #+end_src
+*** display-line-numbers-mode
+#+begin_src elisp
+  (setup display-line-numbers
+    (:hook-into prog-mode-hook markdown-mode-hook))
+#+end_src
 *** edebug
 :PROPERTIES:
 :CREATED_TIME: [2022-11-09 Wed 23:59]
