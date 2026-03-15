@@ -117,7 +117,7 @@
           (buffer-substring (region-beginning) (region-end))
           (akirak-org-shell--convert-to-gfm)
           (akirak-org-shell--send-string))
-        (akirak-org-shell--persist-agent-type))
+        (akirak-org-shell--persist-agent-info))
     (user-error "Not selecting a region")))
 
 (defun akirak-org-shell-send-org-entry-as-markdown ()
@@ -130,7 +130,7 @@
         (buffer-substring (point) (org-entry-end-position)))
       (akirak-org-shell--convert-to-gfm)
       (akirak-org-shell--send-string))
-    (akirak-org-shell--persist-agent-type)))
+    (akirak-org-shell--persist-agent-info)))
 
 (defun akirak-org-shell-send-block ()
   (interactive nil org-mode)
@@ -143,9 +143,16 @@
 (defun akirak-org-shell--set-agent-type (name)
   (org-entry-put nil "coding_agent" name))
 
-(defun akirak-org-shell--persist-agent-type ()
+(defun akirak-org-shell--persist-agent-info ()
   (akirak-org-shell--set-agent-type
-   (symbol-name (akirak-shell-detect-buffer-program akirak-org-shell-buffer))))
+   (symbol-name (akirak-shell-detect-buffer-program akirak-org-shell-buffer)))
+  (let* ((actual-dir (akirak-shell-directory akirak-org-shell-buffer))
+         (pom (point-marker))
+         (logged-dir (akirak-org-git-worktree pom)))
+    (unless (and logged-dir
+                 (file-equal-p logged-dir actual-dir))
+      (with-current-buffer akirak-org-shell-buffer
+        (akirak-org-git-add-properties-if-none pom 'force)))))
 
 (defun akirak-org-shell-send-command (input)
   (interactive "sInput: " org-mode)

@@ -508,6 +508,9 @@ the original minor mode."
        (`((rx bol "gemini") . ,_)
         'gemini)))))
 
+(cl-defun akirak-shell-directory (buffer)
+  (buffer-local-value 'default-directory buffer))
+
 (cl-defun akirak-shell--get-command (buffer)
   (declare (indent 1))
   (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
