@@ -30,6 +30,7 @@
 
 (require 'akirak-transient)
 (require 'eat)
+(require 'with-editor)
 
 (declare-function eat "ext:eat")
 
@@ -220,32 +221,33 @@ the original minor mode."
 
 (cl-defun akirak-shell-eat-new (&key dir window name noselect command
                                      environment)
-  (let* ((default-directory (or dir default-directory))
-         (command (ensure-list (or command
-                                   (funcall eat-default-shell-function))))
-         (name (or name (concat "eat-"
-                                (file-name-nondirectory
-                                 (directory-file-name default-directory)))))
-         (buffer (generate-new-buffer (format "*%s*"
-                                              (concat (when (eq window 'split)
-                                                        "popup-")
-                                                      name)))))
-    (with-current-buffer buffer
-      (eat-mode)
-      (let ((process-environment (or environment process-environment)))
-        (apply #'eat-exec buffer name
-               (pcase command
-                 (`(,cmd . ,args)
-                  (list cmd nil args)))))
-      (unless noselect
-        (pcase window
-          (`new-tab
-           (tab-bar-new-tab)
-           (switch-to-buffer buffer)
-           (toggle-window-dedicated nil t))
-          (_ (pop-to-buffer-same-window buffer)))))
-    ;; Explicitly return the buffer
-    buffer))
+  (with-editor
+    (let* ((default-directory (or dir default-directory))
+           (command (ensure-list (or command
+                                     (funcall eat-default-shell-function))))
+           (name (or name (concat "eat-"
+                                  (file-name-nondirectory
+                                   (directory-file-name default-directory)))))
+           (buffer (generate-new-buffer (format "*%s*"
+                                                (concat (when (eq window 'split)
+                                                          "popup-")
+                                                        name)))))
+      (with-current-buffer buffer
+        (eat-mode)
+        (let ((process-environment (or environment process-environment)))
+          (apply #'eat-exec buffer name
+                 (pcase command
+                   (`(,cmd . ,args)
+                    (list cmd nil args)))))
+        (unless noselect
+          (pcase window
+            (`new-tab
+             (tab-bar-new-tab)
+             (switch-to-buffer buffer)
+             (toggle-window-dedicated nil t))
+            (_ (pop-to-buffer-same-window buffer)))))
+      ;; Explicitly return the buffer
+      buffer)))
 
 (defun akirak-shell--setup-reopen (children)
   (thread-last
