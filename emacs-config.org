@@ -5793,6 +5793,11 @@ This is an extra functions for window management.
   (setup akirak-worktree
     (add-hook 'after-init-hook #'akirak-worktree-global-mode))
 #+end_src
+*** akirak-xdg
+#+begin_src elisp
+  (setup akirak-xdg
+    (:global-keymap "<f12> x x" #'akirak-xdg-run-desktop-app))
+#+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
