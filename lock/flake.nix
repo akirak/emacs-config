@@ -789,6 +789,12 @@
       repo = "ob-duckdb";
       type = "github";
     };
+    ob-gptel = {
+      flake = false;
+      owner = "jwiegley";
+      repo = "ob-gptel";
+      type = "github";
+    };
     ob-graphql = {
       flake = false;
       owner = "akirak";

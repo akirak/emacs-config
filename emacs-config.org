@@ -3098,6 +3098,15 @@ Org Babel integration for DuckDB CLI
     (:org-babel-language t))
 #+end_src
 
+*** ob-gptel
+:PROPERTIES:
+:CREATED_TIME: [2026-03-20 Fri 12:35]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package ob-gptel)
+    (:org-babel-language t))
+#+end_src
 *** ob-graphql
 :PROPERTIES:
 :CREATED_TIME: [2023-05-06 Sat 13:57]
