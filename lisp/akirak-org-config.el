@@ -282,9 +282,13 @@
 
 (defun akirak-org-dog--normalize-project (name)
   "Remove a worktree suffix, if any, from the NAME of a project."
-  (if (string-match (rx (any "@=")  (+ anything)) name)
-      (substring name 0 (match-beginning 0))
-    name))
+  (pcase name
+    ((rx bol (or "nixos" "nix-config") (any "@=-"))
+     "nix-config")
+    ((rx (any "@=") (+ anything))
+     (substring name 0 (match-beginning 0)))
+    (_
+     name)))
 
 (defun akirak-org-config-setup-oahu ()
   (let* ((query1 `(and (not (tags "ARCHIVE"))
