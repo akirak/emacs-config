@@ -2115,6 +2115,22 @@
         "type": "github"
       }
     },
+    "ob-gptel": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773692299,
+        "narHash": "sha256-mXGzu6W21dVZ/utwyUEZxSn5PbnsKtTkBGTVi//cyyM=",
+        "owner": "jwiegley",
+        "repo": "ob-gptel",
+        "rev": "cbed018a7d81de9ba8dc3220e1c4d10b7bb29b11",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jwiegley",
+        "repo": "ob-gptel",
+        "type": "github"
+      }
+    },
     "ob-graphql": {
       "flake": false,
       "locked": {
@@ -3155,6 +3171,7 @@
         "oahu": "oahu",
         "ob-async": "ob-async",
         "ob-duckdb": "ob-duckdb",
+        "ob-gptel": "ob-gptel",
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
