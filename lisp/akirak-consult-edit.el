@@ -119,15 +119,10 @@
 
 (transient-define-prefix akirak-consult-edit-prompt-prefix (prompt)
   ["Gptel/elysium"
-   (gptel--infix-provider)
-   ("q" "Elysium" akirak-consult-edit--elysium)]
+   (gptel--infix-provider)]
   (interactive "sPrompt: ")
   (setq akirak-consult-edit-prompt prompt)
   (transient-setup 'akirak-consult-edit-prompt-prefix))
-
-(defun akirak-consult-edit--elysium ()
-  (interactive)
-  (elysium-query akirak-consult-edit-prompt))
 
 (provide 'akirak-consult-edit)
 ;;; akirak-consult-edit.el ends here
