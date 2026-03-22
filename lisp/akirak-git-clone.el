@@ -119,10 +119,7 @@ matches the host of the repository,
                       (substring match 0 -4)
                     match))
             (pr-number (string-to-number (match-string 3 flake-ref-or-url)))
-            (local-path (f-join host (concat (downcase path)
-                                             (if pr-number
-                                                 (format "@pr%d" pr-number)
-                                               ""))))
+            (local-path (f-join host (downcase path)))
             (origin (format "https://%s/%s.git" host path)))
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
@@ -307,9 +304,16 @@ DIR is an optional destination directory to clone the repository into."
       (message "Rev or ref is unsupported now"))
     (if (file-directory-p repo)
         (if (akirak-git-clone-source-pr obj)
-            (let ((default-directory repo))
+            (let* ((default-directory repo)
+                   (branch (akirak-git-clone--pr-branch (akirak-git-clone-source-pr obj)))
+                   (default-directory
+                    (or (akirak-git-clone--branch-worktree branch)
+                        (progn
+                          (require 'akirak-magit)
+                          (akirak-magit-worktree branch)))))
               (message "Updating the branch...")
-              (call-process "git" nil nil nil "pull" "origin" "HEAD")
+              (call-process "git" nil nil nil
+                            "pull" "origin" "HEAD")
               (akirak-git-clone--browse-diff))
           (akirak-git-clone-browse repo content-path
                                    :other-window other-window))
@@ -319,13 +323,27 @@ DIR is an optional destination directory to clone the repository into."
                                (when (and (akirak-git-clone-source-pr obj)
                                           (executable-find "gh"))
                                  `(lambda (dest)
-                                    (let ((default-directory dest))
-                                      (message "Checking out the PR...")
-                                      (call-process "gh" nil nil nil
-                                                    "pr" "checkout"
-                                                    ,(number-to-string
-                                                      (akirak-git-clone-source-pr obj)))
+                                    (let* ((default-directory dest)
+                                           (branch (akirak-git-clone--pr-branch
+                                                    ,(akirak-git-clone-source-pr obj)))
+                                           (default-directory
+                                            (or (akirak-git-clone--branch-worktree branch)
+                                                (progn
+                                                  (require 'akirak-magit)
+                                                  (akirak-magit-worktree branch)))))
+                                      (message "Updating the branch...")
+                                      (call-process "git" nil nil nil
+                                                    "pull" "origin" "HEAD")
                                       (akirak-git-clone--browse-diff))))))))
+
+(defun akirak-git-clone--branch-worktree (branch)
+  (require 'magit)
+  (seq-some (apply-partially (pcase-lambda (target-branch
+                                            `(,dir ,_hash ,branch . ,_))
+                               (when (equal target-branch branch)
+                                 dir))
+                             branch)
+            (magit-list-worktrees)))
 
 (defun akirak-git-clone--browse-diff ()
   (magit-log-setup-buffer (list "HEAD^...HEAD") nil nil))
@@ -525,7 +543,7 @@ DIR is an optional destination directory to clone the repository into."
                          (akirak-git-clone-source-host obj))))))
 
 (cl-defun akirak-git-clone-browse (dir &optional content-path
-                                       &key other-window)
+                                       &key other-window pr)
   "Browse DIR using `akirak-git-clone-browser-function'."
   (let ((root (file-name-as-directory dir)))
     (project-remember-project (project-current nil root))
@@ -538,6 +556,15 @@ DIR is an optional destination directory to clone the repository into."
                    akirak-git-clone-other-window-browser-function
                  akirak-git-clone-browser-function)
                root))))
+
+(defun akirak-git-clone--pr-branch (pr-number)
+  (with-temp-buffer
+    (unless (zerop (call-process "gh" nil (list t nil) nil
+                                 "pr" "view" (number-to-string pr-number)
+                                 "--json" "headRefName"))
+      (error "gh returned non-zero"))
+    (goto-char (point-min))
+    (alist-get 'headRefName (json-parse-buffer :object-type 'alist))))
 
 (defcustom akirak-git-clone-wait 120
   ""

@@ -54,6 +54,9 @@
    ("<C-return>" "Send the current Org entry"
     akirak-org-shell-send-org-entry-as-markdown)
    ("RET" "Send any command" akirak-org-shell-send-command)]
+  ["Agent skill"
+   ("$ <C-return>" "Run with the entry body"
+    akirak-org-shell-use-skill-with-entry-body)]
   (interactive nil org-mode)
   (unless akirak-org-shell-buffer
     (setq akirak-org-shell-buffer
@@ -117,20 +120,37 @@
           (buffer-substring (region-beginning) (region-end))
           (akirak-org-shell--convert-to-gfm)
           (akirak-org-shell--send-string))
-        (akirak-org-shell--persist-agent-type))
+        (akirak-org-shell--persist-agent-info))
     (user-error "Not selecting a region")))
 
-(defun akirak-org-shell-send-org-entry-as-markdown ()
+(defun akirak-org-shell-send-org-entry-as-markdown (&optional preamble)
   (interactive nil org-mode)
   (progn
     (thread-first
       (save-excursion
         (goto-char (org-entry-beginning-position))
         (org-end-of-meta-data t)
-        (buffer-substring (point) (org-entry-end-position)))
+        (concat preamble (buffer-substring (point) (org-entry-end-position))))
       (akirak-org-shell--convert-to-gfm)
       (akirak-org-shell--send-string))
-    (akirak-org-shell--persist-agent-type)))
+    (akirak-org-shell--persist-agent-info)))
+
+(defun akirak-org-shell-use-skill-with-entry-body ()
+  (interactive)
+  (require 'akirak-agent)
+  (let* ((dir (akirak-shell-directory akirak-org-shell-buffer))
+         (agent-type (akirak-shell-detect-buffer-program akirak-org-shell-buffer))
+         (skill (akirak-agent-complete-skill "Select a skill: "
+                                             dir
+                                             :skills-dir
+                                             (pcase agent-type
+                                               (`codex ".agents/skills")
+                                               (_ (user-error "Unsupported agent: %s"
+                                                              agent-type)))))
+         (preamble (read-string "Prompt (preamble): "
+                                (pcase-exhaustive agent-type
+                                  (`codex (format "$%s " skill))))))
+    (akirak-org-shell-send-org-entry-as-markdown (concat preamble "\n\n"))))
 
 (defun akirak-org-shell-send-block ()
   (interactive nil org-mode)
@@ -143,9 +163,16 @@
 (defun akirak-org-shell--set-agent-type (name)
   (org-entry-put nil "coding_agent" name))
 
-(defun akirak-org-shell--persist-agent-type ()
+(defun akirak-org-shell--persist-agent-info ()
   (akirak-org-shell--set-agent-type
-   (symbol-name (akirak-shell-detect-buffer-program akirak-org-shell-buffer))))
+   (symbol-name (akirak-shell-detect-buffer-program akirak-org-shell-buffer)))
+  (let* ((actual-dir (akirak-shell-directory akirak-org-shell-buffer))
+         (pom (point-marker))
+         (logged-dir (akirak-org-git-worktree pom)))
+    (unless (and logged-dir
+                 (file-equal-p logged-dir actual-dir))
+      (with-current-buffer akirak-org-shell-buffer
+        (akirak-org-git-add-properties-if-none pom 'force)))))
 
 (defun akirak-org-shell-send-command (input)
   (interactive "sInput: " org-mode)

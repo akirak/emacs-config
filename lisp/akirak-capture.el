@@ -515,7 +515,7 @@
 
   ["Contextual"
    :class transient-row
-   ("e" "Flymake error" akirak-capture-flymake-error-at-point
+   ("f" "Flymake error" akirak-capture-flymake-error-at-point
     :if akirak-capture--at-error-p)
 
    (">" "Project task" akirak-capture-project-context

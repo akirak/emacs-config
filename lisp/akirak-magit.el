@@ -107,7 +107,9 @@ Each function is run without an argument in the new working tree."
     (when (and direnv-allowed
                (fboundp 'envrc-allow))
       (envrc-allow))
-    (run-hooks 'akirak-magit-worktree-hook)))
+    (run-hooks 'akirak-magit-worktree-hook)
+    ;; Return the path for non-interactive use
+    path))
 
 (defun akirak-magit--worktree-name (remote-url branch dir)
   (concat (if remote-url

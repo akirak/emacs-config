@@ -186,7 +186,7 @@
       content
       :confirm t)))
 
-(defun akirak-ai-prompt-git-commit-message-claude ()
+(defun akirak-ai-prompt-git-commit-message-codex ()
   (interactive)
   (insert (with-temp-buffer
             (insert "Generate a conventional commit message for the changes.")
@@ -197,7 +197,11 @@
                                          "diff" "--staged"))
               (error "git diff failed"))
             (insert "\n```")
-            (call-process-region (point-min) (point-max) "claude" 'delete)
+            (call-process-region (point-min) (point-max)
+                                 "codex" 'delete nil
+                                 "exec"
+                                 "--sandbox" "read-only"
+                                 "-")
             (goto-char (point-min))
             (when (looking-at (rx "```\n"
                                   (group (+ anything))
@@ -210,7 +214,7 @@
 
 ;;;###autoload
 (defalias 'akirak-ai-prompt-generate-git-commit-message
-  #'akirak-ai-prompt-git-commit-message-claude)
+  #'akirak-ai-prompt-git-commit-message-codex)
 
 (defun akirak-ai-prompt--clock-context ()
   (org-with-point-at org-clock-marker

@@ -1021,6 +1021,11 @@ The other variables must not be saved, and they should be put in configuration:
   (setup display-fill-column-indicator
     (add-hook 'after-init-hook #'global-display-fill-column-indicator-mode))
 #+end_src
+*** display-line-numbers-mode
+#+begin_src elisp
+  (setup display-line-numbers
+    (:hook-into prog-mode-hook markdown-mode-hook))
+#+end_src
 *** edebug
 :PROPERTIES:
 :CREATED_TIME: [2022-11-09 Wed 23:59]
@@ -3093,6 +3098,19 @@ Org Babel integration for DuckDB CLI
     (:org-babel-language t))
 #+end_src
 
+*** ob-gptel
+:PROPERTIES:
+:CREATED_TIME: [2026-03-20 Fri 12:35]
+:END:
+#+begin_quote
+Org-babel backend for GPTel AI interactions
+[[https://github.com/jwiegley/ob-gptel]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package ob-gptel)
+    (:org-babel-language t))
+#+end_src
 *** ob-graphql
 :PROPERTIES:
 :CREATED_TIME: [2023-05-06 Sat 13:57]
@@ -5788,6 +5806,11 @@ This is an extra functions for window management.
   (setup akirak-worktree
     (add-hook 'after-init-hook #'akirak-worktree-global-mode))
 #+end_src
+*** akirak-xdg
+#+begin_src elisp
+  (setup akirak-xdg
+    (:global-keymap "<f12> x x" #'akirak-xdg-run-desktop-app))
+#+end_src
 ** Packages                                                :packages:
 :PROPERTIES:
 :SORTING_TYPE: a
@@ -6204,8 +6227,7 @@ Jump to arbitrary positions in visible text and select text quickly.
           avy-styles-alist '((avy-goto-char . at)
                              (avy-goto-char-timer . at-full))
           avy-all-windows t)
-    (:global-keymap "C-\"" #'avy-goto-char-timer
-                    "C-'" #'avy-goto-char-in-line))
+    (:global-keymap "C-'" #'avy-goto-char-timer))
 #+end_src
 
 I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
@@ -6549,7 +6571,7 @@ Recoll queries using consult
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
 #+begin_quote
-An unofficial Copilot plugin
+An Emacs plugin for GitHub Copilot
 [[https://github.com/copilot-emacs/copilot.el]]
 #+end_quote
 
@@ -6712,7 +6734,7 @@ Debug Adapter Protocol for Emacs
 :END:
 #+begin_quote
 A startup screen extracted from Spacemacs
-[[https://github.com/emacs-dashboard/emacs-dashboard]]
+[[https://github.com/emacs-dashboard/dashboard]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -7102,7 +7124,7 @@ Run DuckDuckGo search
 :CREATED_TIME: [2022-02-28 Mon 23:59]
 :END:
 #+begin_quote
-Jump to definition for 50+ languages without configuration
+Jump to definition for 60+ languages without configuration
 [[https://github.com/jacktasia/dumb-jump]]
 #+end_quote
 
@@ -8100,37 +8122,11 @@ Interact with ChatGPT or other LLMs
                             :models (akirak-ai-model-prefixed-list "openai/"))
             gptel-model 'gpt-5)
 
-      (gptel-make-openai "OpenRouter"
-        :host "openrouter.ai"
-        :key (lambda () (gptel-api-key-from-auth-source "openrouter.ai"))
-        :endpoint "/api/v1/chat/completions"
-        :stream t
-        ;; For perplexity, use the native provider.
-        :models (akirak-ai-model-prefixed-list "openrouter/"
-                  (apply-partially #'string-match-p
-                                   (rx bol (or "openai"
-                                               "anthropic"
-                                               "google")
-                                       "/"))))
-
       (gptel-make-gh-copilot "Copilot")
-
-      (gptel-make-openai "xAI"
-        :host "api.x.ai"
-        :key (lambda ()
-               (gptel-api-key-from-auth-source
-                "api.x.ai"))
-        :endpoint "/v1/chat/completions"
-        :stream t
-        :models '(xai/grok-4))
 
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
                (gptel-api-key-from-auth-source "api.perplexity.ai"))
-        :stream t)
-
-      (gptel-make-ollama "Ollama"
-        :host "localhost:11434"
         :stream t)))
 #+end_src
 *** COMMENT gptel-aibo                                                      :AI:ARCHIVE:
@@ -9157,27 +9153,6 @@ Display modeline in minibuffer
                 (setq akirak/mode-line-directory-memo (cons (float-time) value))
                 value))
           ""))))
-#+end_src
-*** COMMENT minuet                                                          :AI:ARCHIVE:
-:PROPERTIES:
-:CREATED_TIME: [2025-01-23 Thu 22:26]
-:END:
-#+begin_quote
-Code completion using LLM
-[[https://github.com/milanglacier/minuet-ai.el]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package minuet)
-    ;; Run `akirak-minuet-switch-backend' to set the provider.
-    (:set minuet-provider nil)
-    (:when-loaded
-      ;; Set the default backend.
-      (require 'akirak-minuet)
-      (akirak-minuet-switch-backend (caar akirak-minuet-backend-alist)))
-    (:global-keymap "C-c y" #'minuet-complete-with-minibuffer)
-    (:with-map minuet-active-mode-map
-      (:keymap "M-<return>" #'minuet-accept-suggestion)))
 #+end_src
 *** COMMENT mlscroll                                             :aesthetics:UI:ARCHIVE:
 :PROPERTIES:
@@ -10402,7 +10377,7 @@ Viewing/editing system trash can
 #+begin_src emacs-lisp
 (setup (:package trashed))
 #+end_src
-*** treesit-fold
+*** COMMENT treesit-fold                                                       :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-06-22 Sat 23:59]
 :END:
@@ -11542,7 +11517,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 223 |
+| [[org-ql-search:tags:packages][packages]]            | 222 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |

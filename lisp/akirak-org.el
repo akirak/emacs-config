@@ -1365,6 +1365,26 @@ At this point, the function works with the following pattern:
                                         source)))))
 
 ;;;###autoload
+(defun akirak-org-change-block-type (new-type)
+  "Change the type of the block at point."
+  (interactive
+   (list (pcase (org--insert-structure-template-mks)
+           (`(,_ ,type ,_)
+            type))))
+  (save-excursion
+    (save-match-data
+      (if (org-match-line org-block-regexp)
+          (let ((keyword (match-string-no-properties 1)))
+            (save-excursion
+              (goto-char (match-end 0))
+              (save-match-data
+                (if (org-match-line (rx-to-string `(and "#+end_" (group ,keyword))))
+                    (replace-match new-type nil nil nil 1)
+                  (error "Not on the block end"))))
+            (replace-match new-type nil nil nil 1))
+        (user-error "Not on a block")))))
+
+;;;###autoload
 (defun akirak-org-demote-headings (&optional arg silent)
   "Demote the headings so their levels are higher than ARG."
   (interactive "P")
