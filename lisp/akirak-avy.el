@@ -85,7 +85,7 @@ If CALLBACK is a function, it is called with the selected url."
           (otherwise
            (save-match-data
              (when (thing-at-point-looking-at
-                    (rx (+ (not (any "\"'`:;,/\\()[]{}" blank "\n")))))
+                    (rx (+ (not (any "\"'`.:;,/\\()[]{}" blank "\n")))))
                (match-string-no-properties 0)))))))
 
 (defun akirak-avy--org-symbol-at-point ()
