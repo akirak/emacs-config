@@ -479,12 +479,6 @@
     :if (lambda () (not akirak-capture-initial)))
    ("g" "Gptel" akirak-capture-gptel
     :transient t)
-   ("r" "Research" (lambda ()
-                     (interactive)
-                     (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
-                           akirak-capture-template-options '(:tags "@question")
-                           akirak-capture-doct-options '(:clock-in t :clock-resume t))
-                     (akirak-capture-doct)))
    ("i" "Ideate" (lambda ()
                    (interactive)
                    (setq akirak-capture-headline (akirak-capture--maybe-read-heading)
@@ -515,7 +509,7 @@
 
   ["Contextual"
    :class transient-row
-   ("f" "Flymake error" akirak-capture-flymake-error-at-point
+   (".e" "Flymake error" akirak-capture-flymake-error-at-point
     :if akirak-capture--at-error-p)
 
    (">" "Project task" akirak-capture-project-context
