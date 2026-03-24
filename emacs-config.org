@@ -6301,8 +6301,27 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut/gitea page from Emacs
 
 #+begin_src emacs-lisp
   (setup (:package browse-at-remote)
-    (:global-keymap "<f12> g g" #'browse-at-remote
-             "<f12> g w" #'browse-at-remote-kill))
+    (:global-keymap "<f12> g g"
+                    (defun akirak/browse-at-remote ()
+                      (interactive)
+                      (unless (vc-git-root default-directory)
+                        (user-error "Not in a Git repository"))
+                      (let ((browse-at-remote-add-line-number-if-no-region-selected t)
+                            (browse-at-remote-prefer-symbolic t))
+                        (browse-url (browse-at-remote-get-url))))
+                    "<f12> g w"
+                    (defun akirak/browse-at-remote-kill (&optional arg)
+                      (interactive "P")
+                      (unless (vc-git-root default-directory)
+                        (user-error "Not in a Git repository"))
+                      (let ((browse-at-remote-add-line-number-if-no-region-selected
+                             (not (null arg)))
+                            (browse-at-remote-prefer-symbolic nil))
+                        (kill-new (browse-at-remote-get-url))
+                        (message "Copied the permalink %s the line number"
+                                 (if arg
+                                     "with"
+                                   "without"))))))
 #+end_src
 *** COMMENT bufler                                         :ARCHIVE:
 :PROPERTIES:
