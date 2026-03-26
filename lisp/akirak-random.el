@@ -1,72 +1,60 @@
-;;; akirak-random.el --- Password generator through oepnssl -*- lexical-binding: t -*-
+;;; akirak-random.el --- -*- lexical-binding: t -*-
 
-(defconst akirak-random-default-symbol-characters
-  "!@#$%^&*")
+(defvar akirak-random-bytes-length 14)
 
-(defvar akirak-random-password-length 25)
-
-(transient-define-infix akirak-random-set-password-length ()
+(transient-define-infix akirak-random-set-bytes-length ()
   :class 'akirak-transient-number-variable
-  :variable 'akirak-random-password-length
-  :description "Length")
+  :variable 'akirak-random-bytes-length
+  :description "Length in bytes")
 
-(defvar akirak-random-avoid-big-i-and-o t)
+(defvar akirak-random-bytes-encoding nil)
 
-(transient-define-infix akirak-random-avoid-big-i-and-o ()
-  :class 'akirak-transient-flag-variable
-  :variable 'akirak-random-avoid-big-i-and-o
-  :description "Exclude I and O")
+(transient-define-infix akirak-random-set-bytes-encoding ()
+  :class 'akirak-transient-choice-variable
+  :variable 'akirak-random-bytes-encoding
+  :cycle t
+  :choices '(nil
+             base64
+             hex)
+  :prompt "Select encoding: "
+  :description "Encoding (openssl)")
 
-(defvar akirak-random-symbol-characters akirak-random-default-symbol-characters)
-
-(transient-define-infix akirak-transient-set-symbols ()
-  :class 'akirak-transient-string-variable
-  :variable 'akirak-random-symbol-characters
-  :default akirak-random-default-symbol-characters
-  :nullify t
-  :prompt "Set symbol characters: "
-  :description "Symbols")
-
-;;;###autoload (autoload 'akirak-random-password "akirak-random" nil 'interactive)
-(transient-define-prefix akirak-random-password ()
-  "Generate a random password."
+;;;###autoload (autoload 'akirak-random-bytes "akirak-random" nil 'interactive)
+(transient-define-prefix akirak-random-bytes ()
+  "Generate an encoded sequence of bytes."
   ["Options"
-   ("-l" akirak-random-set-password-length)]
-  ["Password characters"
-   :class transient-row
-   ("-s" akirak-transient-set-symbols)
-   ("-O" akirak-random-avoid-big-i-and-o)]
+   ("-l" akirak-random-set-bytes-length)
+   ("-e" akirak-random-set-bytes-encoding)]
   ["Generate"
    :class transient-row
-   ("w" "Copy a password" akirak-random--copy-password)
-   ("i" "Insert a password" akirak-random--insert-password)]
+   ("w" "Copy a password" akirak-random--copy-bytes)
+   ("i" "Insert a password" akirak-random--insert-bytes)]
   (interactive)
-  (transient-setup 'akirak-random-password))
+  (transient-setup 'akirak-random-bytes))
 
-(defun akirak-random--insert-password ()
+(defun akirak-random--insert-bytes ()
   (interactive)
-  (let ((string (akirak-random--generate-password)))
+  (let ((string (akirak-random--generate-bytes)))
     (pcase (derived-mode-p 'eat-mode)
       (`eat-mode
        (eat-term-send-string-as-yank eat-terminal string))
       (_
        (insert string)))))
 
-(defun akirak-random--copy-password ()
+(defun akirak-random--copy-bytes ()
   (interactive)
   (require 'akirak-passage)
-  (akirak-passage--copy-string (akirak-random--generate-password)))
+  (akirak-passage--copy-string (akirak-random--generate-bytes)))
 
-(defun akirak-random--generate-password ()
-  (shell-command-to-string
-   (format-spec "tr -dc %c < /dev/urandom | head -c %l"
-                `((?c . ,(shell-quote-argument
-                          (concat (if akirak-random-avoid-big-i-and-o
-                                      "a-zA-HJ-NP-Z"
-                                    "a-zA-Z")
-                                  "0-9"
-                                  (or akirak-random-symbol-characters ""))))
-                  (?l . ,akirak-random-password-length)))))
+(defun akirak-random--generate-bytes ()
+  (with-temp-buffer
+    (call-process "openssl" nil (list t nil) nil
+                  "rand"
+                  (pcase-exhaustive akirak-random-bytes-encoding
+                    (`base64 "-base64")
+                    (`hex "-hex"))
+                  (number-to-string akirak-random-bytes-length))
+    (string-trim (buffer-string))))
 
 (provide 'akirak-random)
 ;;; akirak-random.el ends here
