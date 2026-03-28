@@ -225,11 +225,25 @@
 (cl-defmethod transient-infix-read ((obj akirak-passage-account-variable))
   (akirak-passage--read-account (oref obj value)))
 
-(defun akirak-passage--read-account (default)
-  (completing-read (format-prompt "Account" default)
+(defvar akirak-passage-account-history nil)
+
+(defun akirak-passage--default-account ()
+  (when (derived-mode-p 'dired-mode)
+    (let* ((root (expand-file-name (file-name-as-directory akirak-passage-dir)))
+           (filename (dired-file-name-at-point))
+           (file-or-dir (expand-file-name (if filename
+                                              (file-name-sans-extension filename)
+                                            (file-name-as-directory default-directory)))))
+      (when (string-prefix-p root file-or-dir)
+        (string-remove-prefix root file-or-dir)))))
+
+(defun akirak-passage--read-account (initial)
+  (completing-read "Account:"
                    (akirak-passage--account-list)
-                   nil nil nil nil
-                   default))
+                   nil nil
+                   (or (akirak-passage--default-account)
+                       initial)
+                   akirak-passage-account-history))
 
 (cl-defmethod transient-infix-set ((obj akirak-passage-account-variable) value)
   (oset obj value value)
