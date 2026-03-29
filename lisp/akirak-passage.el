@@ -360,7 +360,7 @@
    ((null host)
     nil)
    (t
-    (let ((account (format "%s/%s"
+    (let ((account (format "emacs/%s/%s"
                            (if port
                                (format "%d:%d" host port)
                              host)
