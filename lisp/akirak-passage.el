@@ -56,6 +56,23 @@
                            (gui-set-selection akirak-passage-selection "")
                            (message "Cleared the clipboard"))))
 
+(defun akirak-passage--show-string (string &optional account)
+  (let ((buffer (get-buffer-create "*password*"))
+        (timeout 60))
+    (with-current-buffer buffer
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (insert (format "# The content of %s is shown below.\n" account))
+        (insert (format "# This buffer will be killed in %d seconds.\n\n" timeout))
+        (insert string))
+      (read-only-mode t))
+    (display-buffer buffer)
+    (run-with-timer timeout nil
+                    `(lambda ()
+                       (when-let* ((buffer (get-buffer ,(buffer-name buffer))))
+                         (when (buffer-live-p buffer)
+                           (kill-buffer buffer)))))))
+
 (defun akirak-passage-configure-from-shell ()
   (require 'exec-path-from-shell)
   (let* ((default-directory "~/")
@@ -112,6 +129,10 @@
     (akirak-passage--run-process nil "show" account)
     (split-string "\n")
     (car)))
+
+(defun akirak-passage--get-content (account)
+  "Return the first line of the password entry of ACCOUNT."
+  (akirak-passage--run-process nil "show" account))
 
 ;;;###autoload
 (defalias 'akirak-passage-get-password #'akirak-passage--get-password)
@@ -204,11 +225,25 @@
 (cl-defmethod transient-infix-read ((obj akirak-passage-account-variable))
   (akirak-passage--read-account (oref obj value)))
 
-(defun akirak-passage--read-account (default)
-  (completing-read (format-prompt "Account" default)
+(defvar akirak-passage-account-history nil)
+
+(defun akirak-passage--default-account ()
+  (when (derived-mode-p 'dired-mode)
+    (let* ((root (expand-file-name (file-name-as-directory akirak-passage-dir)))
+           (filename (dired-file-name-at-point))
+           (file-or-dir (expand-file-name (if filename
+                                              (file-name-sans-extension filename)
+                                            (file-name-as-directory default-directory)))))
+      (when (string-prefix-p root file-or-dir)
+        (string-remove-prefix root file-or-dir)))))
+
+(defun akirak-passage--read-account (initial)
+  (completing-read "Account:"
                    (akirak-passage--account-list)
-                   nil nil nil nil
-                   default))
+                   nil nil
+                   (or (akirak-passage--default-account)
+                       initial)
+                   akirak-passage-account-history))
 
 (cl-defmethod transient-infix-set ((obj akirak-passage-account-variable) value)
   (oset obj value value)
@@ -235,7 +270,9 @@
   "Work with the age-based password store interactively."
   [("=" akirak-passage-set-account)]
   ["Read the entry"
-   ("w" "Copy password" akirak-passage-copy-password)]
+   :class transient-row
+   ("w" "Copy password" akirak-passage-copy-password)
+   ("s" "Show password" akirak-passage-show-password)]
   ["Update the entry"
    :class transient-row
    ("e" "Edit" akirak-passage-edit-entry)
@@ -253,14 +290,21 @@
   (interactive)
   (akirak-passage--copy-string (akirak-passage--get-password akirak-passage-current-account)))
 
+(defun akirak-passage-show-password ()
+  "Copy the first line of the current password entry."
+  (interactive)
+  (akirak-passage--show-string
+   (akirak-passage--get-content akirak-passage-current-account)
+   akirak-passage-current-account))
+
 (defun akirak-passage-edit-entry ()
   "Edit the current password entry."
   (interactive)
   (with-editor
     (akirak-passage--run-process
-     (lambda ()
-       (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
-     "edit" akirak-passage-current-account)))
+        (lambda ()
+          (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
+      "edit" akirak-passage-current-account)))
 
 (defun akirak-passage-rename-entry ()
   "Rename or move the current entry."
@@ -316,7 +360,7 @@
    ((null host)
     nil)
    (t
-    (let ((account (format "%s/%s"
+    (let ((account (format "emacs/%s/%s"
                            (if port
                                (format "%d:%d" host port)
                              host)
