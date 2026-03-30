@@ -35,6 +35,10 @@
 
 (defconst akirak-passage-buffer "*Passage*")
 
+;; Use a separate buffer for "passage show" operations, so secrets can be read
+;; while editing a secret.
+(defconst akirak-passage-show-buffer "*Passage Show*")
+
 (defconst akirak-passage-git-buffer "*Git for Passage*")
 
 (defcustom akirak-passage-executable "passage"
@@ -141,78 +145,81 @@
 
 (defun akirak-passage--run-process (edit-hook &rest args)
   (declare (indent 1))
-  (when (and (get-buffer-process akirak-passage-buffer)
-             (process-live-p (get-buffer-process akirak-passage-buffer)))
-    (user-error "Another passage process is running"))
-  (when (get-buffer akirak-passage-buffer)
-    (with-current-buffer akirak-passage-buffer
-      (erase-buffer)))
-  (cl-flet
-      ((sentinel (process event)
-         (cond
-          ((string= event "finished\n")
-           (when (functionp edit-hook)
-             (funcall edit-hook)))
-          ((string= event "open\n"))
-          ((and (string= event "exited abnormally with code 1\n")
-                edit-hook))
-          (t
-           (user-error "passage %s aborted: %s" args event))))
-       ;; Touch is not supported at present. If you are using
-       ;; age-plugin-yubikey, you must set the touch policy to never.
-       (filter-fn (process string)
-         (pcase string
-           ((rx (and bol "Please insert "))
-            (let ((inp (condition-case nil
-                           (read-string string)
-                         (quit
-                          (interrupt-process process)
-                          (user-error "Aborted by the user")))))
-              (process-send-string process (concat inp "\n"))))
-           ((rx "Enter PIN for ")
-            (let ((inp (condition-case nil
-                           (password-read string string)
-                         (quit
-                          (interrupt-process process)
-                          (user-error "Aborted by the user")))))
-              (process-send-string process (concat inp "\n"))))
-           ("Waiting for age-plugin-yubikey...\n")
-           ("Password unchanged.\n"
-            (message (string-trim-right string "\n")))
-           (_
-            (with-current-buffer (process-buffer process)
-              (unless (string-empty-p (string-trim-right string))
-                ;; Clear the previous responses as it can contain "y".
-                (replace-region-contents (point-min)
-                                         (point)
-                                         string)))))))
-    (let* ((process-environment (append akirak-passage-process-environment
-                                        process-environment))
-           (process (make-process :name "passage"
-                                  :buffer (get-buffer-create akirak-passage-buffer)
-                                  :command (cons akirak-passage-executable args)
-                                  :connection-type 'pty
-                                  :noquery t
-                                  :sentinel #'sentinel
-                                  :filter #'filter-fn)))
-      (condition-case nil
-          (unless edit-hook
-            (while (process-live-p process)
-              (accept-process-output process)
-              (sit-for 0.2))
-            (if (zerop (process-exit-status process))
-                (prog1 (with-current-buffer akirak-passage-buffer
-                         (goto-char (point-min))
-                         (while (and (looking-at (rx eol))
-                                     (< (point) (point-max)))
-                           (forward-line))
-                         (buffer-substring (point) (point-max)))
-                  (kill-buffer akirak-passage-buffer))
-              (user-error "Non-zero exit code from passage. See %s" akirak-passage-buffer)))
-        (quit
-         ;; Clean up
-         (kill-process process)
-         (user-error "Abnormally exited"))))))
+  (let ((buffer-name (if (string= (car args) "show")
+                         akirak-passage-show-buffer
+                       akirak-passage-buffer)))
+    (when (and (get-buffer-process buffer-name)
+               (process-live-p (get-buffer-process buffer-name)))
+      (user-error "Another passage process is running"))
+    (when (get-buffer buffer-name)
+      (with-current-buffer buffer-name
+        (erase-buffer)))
+    (cl-flet
+        ((sentinel (process event)
+           (cond
+            ((string= event "finished\n")
+             (when (functionp edit-hook)
+               (funcall edit-hook)))
+            ((string= event "open\n"))
+            ((and (string= event "exited abnormally with code 1\n")
+                  edit-hook))
+            (t
+             (user-error "passage %s aborted: %s" args event))))
+         ;; Touch is not supported at present. If you are using
+         ;; age-plugin-yubikey, you must set the touch policy to never.
+         (filter-fn (process string)
+           (pcase string
+             ((rx (and bol "Please insert "))
+              (let ((inp (condition-case nil
+                             (read-string string)
+                           (quit
+                            (interrupt-process process)
+                            (user-error "Aborted by the user")))))
+                (process-send-string process (concat inp "\n"))))
+             ((rx "Enter PIN for ")
+              (let ((inp (condition-case nil
+                             (password-read string string)
+                           (quit
+                            (interrupt-process process)
+                            (user-error "Aborted by the user")))))
+                (process-send-string process (concat inp "\n"))))
+             ("Waiting for age-plugin-yubikey...\n")
+             ("Password unchanged.\n"
+              (message (string-trim-right string "\n")))
+             (_
+              (with-current-buffer (process-buffer process)
+                (unless (string-empty-p (string-trim-right string))
+                  ;; Clear the previous responses as it can contain "y".
+                  (replace-region-contents (point-min)
+                                           (point)
+                                           string)))))))
+      (let* ((process-environment (append akirak-passage-process-environment
+                                          process-environment))
+             (process (make-process :name "passage"
+                                    :buffer (get-buffer-create buffer-name)
+                                    :command (cons akirak-passage-executable args)
+                                    :connection-type 'pty
+                                    :noquery t
+                                    :sentinel #'sentinel
+                                    :filter #'filter-fn)))
+        (condition-case nil
+            (unless edit-hook
+              (while (process-live-p process)
+                (accept-process-output process)
+                (sit-for 0.2))
+              (if (zerop (process-exit-status process))
+                  (prog1 (with-current-buffer buffer-name
+                           (goto-char (point-min))
+                           (while (and (looking-at (rx eol))
+                                       (< (point) (point-max)))
+                             (forward-line))
+                           (buffer-substring (point) (point-max)))
+                    (kill-buffer buffer-name))
+                (user-error "Non-zero exit code from passage. See %s" buffer-name)))
+          (quit
+           ;; Clean up
+           (kill-process process)
+           (user-error "Abnormally exited")))))))
 
 ;;;; Infixes
 
