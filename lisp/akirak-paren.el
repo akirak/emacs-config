@@ -199,6 +199,13 @@ Also see `akirak-elec-pair--close-char'."
 (defun akirak-paren-select-inner (c)
   "Select the inner text inside a pair of parentheses/brackets."
   (interactive "cSelect text inside a bracket pair opening with: ")
+  (when (use-region-p)
+    (goto-char (region-beginning))
+    (when (= c (char-before (point)))
+      (backward-char)
+      (backward-up-list)
+      (while (/= c (char-after (point)))
+        (backward-up-list))))
   (deactivate-mark)
   (let* ((regexp (regexp-quote (char-to-string c)))
          (start (if (looking-at regexp)
