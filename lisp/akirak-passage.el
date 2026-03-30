@@ -35,6 +35,8 @@
 
 (defconst akirak-passage-buffer "*Passage*")
 
+(defconst akirak-passage-git-buffer "*Git for Passage*")
+
 (defcustom akirak-passage-executable "passage"
   "Executable name of passage."
   :type 'file)
@@ -89,7 +91,7 @@
     (setq akirak-passage-dir (cdr (assoc "PASSAGE_DIR" alist)))))
 
 (defun akirak-passage--git-commit (message)
-  (with-current-buffer (get-buffer-create akirak-passage-buffer)
+  (with-current-buffer (get-buffer-create akirak-passage-git-buffer)
     (let ((default-directory akirak-passage-dir)
           (process-environment (append akirak-passage-process-environment
                                        process-environment)))
