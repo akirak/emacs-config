@@ -73,6 +73,11 @@ Inside a string or comment, this command always inserts the character."
        (save-excursion
          (forward-sexp)
          (point)))
+      ;; double quote
+      (7
+       (save-excursion
+         (forward-sexp)
+         (point)))
       ;; close parenthesis
       (5
        ;; TODO: Support delimiters that consists of more than one characters
@@ -215,7 +220,7 @@ Also see `akirak-elec-pair--close-char'."
             (push-mark)
             (goto-char close-start)
             (activate-mark))
-        (user-error "No matching paren")))))
+        (re-search-forward regexp)))))
 
 ;;;###autoload
 (defun akirak-paren-select-outer (c)
