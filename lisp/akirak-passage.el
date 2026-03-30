@@ -137,7 +137,7 @@
     (car)))
 
 (defun akirak-passage--get-content (account)
-  "Return the first line of the password entry of ACCOUNT."
+  "Return the entire of the password entry of ACCOUNT."
   (akirak-passage--run-process nil "show" account))
 
 ;;;###autoload
