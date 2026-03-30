@@ -281,7 +281,8 @@
   ["Read the entry"
    :class transient-row
    ("w" "Copy password" akirak-passage-copy-password)
-   ("s" "Show password" akirak-passage-show-password)]
+   ("s" "Show password" akirak-passage-show-password)
+   ("i" "Insert password" akirak-passage-insert-password)]
   ["Update the entry"
    :class transient-row
    ("e" "Edit" akirak-passage-edit-entry)
@@ -305,6 +306,20 @@
   (akirak-passage--show-string
    (akirak-passage--get-content akirak-passage-current-account)
    akirak-passage-current-account))
+
+;;;###autoload
+(defun akirak-passage-insert-password (&optional account)
+  "Insert the first line of the current password entry into the buffer."
+  (interactive
+   (list (if current-prefix-arg
+             (akirak-passage--read-account nil)
+           akirak-passage-current-account)))
+  (let ((string (akirak-passage--get-password account)))
+    (pcase (derived-mode-p 'eat-mode)
+      (`eat-mode
+       (eat-term-send-string-as-yank eat-terminal string))
+      (_
+       (insert string)))))
 
 (defun akirak-passage-edit-entry ()
   "Edit the current password entry."
