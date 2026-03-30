@@ -99,12 +99,15 @@
     (let ((default-directory akirak-passage-dir)
           (process-environment (append akirak-passage-process-environment
                                        process-environment)))
+      (erase-buffer)
       (unless (zerop (call-process "git" nil t nil
                                    "add" "."))
         (user-error "git-add failed"))
       (unless (zerop (call-process "git" nil t nil
                                    "commit" "-a" "-m" message))
-        (user-error "git-commit failed")))))
+        (if (search-backward "nothing to commit, working tree clean" nil t)
+            (signal 'git-commit-empty nil)
+          (user-error "git-commit failed"))))))
 
 ;;;; Internal API
 
@@ -327,7 +330,12 @@
   (with-editor
     (akirak-passage--run-process
         (lambda ()
-          (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
+          (condition-case nil
+              (progn
+                (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account))
+                (message "Saved the password entry"))
+            (git-commit-empty
+             "Unchanged password entry")))
       "edit" akirak-passage-current-account)))
 
 (defun akirak-passage-rename-entry ()
