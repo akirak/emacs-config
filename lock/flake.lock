@@ -352,6 +352,22 @@
         "type": "github"
       }
     },
+    "consult-eglot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1756632318,
+        "narHash": "sha256-T6ZYTnc9tqwU+UE7f7Yk74mgPg8O5S9rnNZOQs5seBA=",
+        "owner": "mohkale",
+        "repo": "consult-eglot",
+        "rev": "d8b444aac39edfc6473ffbd228df3e9119451b51",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mohkale",
+        "repo": "consult-eglot",
+        "type": "github"
+      }
+    },
     "consult-ls-git": {
       "flake": false,
       "locked": {
@@ -3061,6 +3077,7 @@
         "compat": "compat",
         "cond-let": "cond-let",
         "consult": "consult",
+        "consult-eglot": "consult-eglot",
         "consult-ls-git": "consult-ls-git",
         "consult-org-dog": "consult-org-dog",
         "consult-org-nlink": "consult-org-nlink",
