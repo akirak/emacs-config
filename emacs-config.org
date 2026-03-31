@@ -1442,8 +1442,7 @@ The built-in =electric= package provides the following modes:
          'foss
          (cons `(prog-mode . (,@copilot))
                default)))
-      (dir-locals-set-directory-class "~/config/" 'personal)
-      (dir-locals-set-directory-class "~/emacs-config/" 'personal)
+      (dir-locals-set-directory-class "~/build/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'foss)
 
