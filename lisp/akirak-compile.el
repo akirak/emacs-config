@@ -693,8 +693,6 @@ are displayed in the frame."
     ((or `("zig" "fetch" . ,_)
          `("zig" "build" (or "install" "uninstall") . ,_))
      t)
-    (`("lake" "update" . ,_)
-     t)
     (`("go" "get" . ,_)
      t)
     (`("mix" "deps.get")
