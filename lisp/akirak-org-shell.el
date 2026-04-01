@@ -147,9 +147,11 @@
                                                (`codex ".agents/skills")
                                                (_ (user-error "Unsupported agent: %s"
                                                               agent-type)))))
+         (heading (org-entry-get nil "ITEM"))
          (preamble (read-string "Prompt (preamble): "
                                 (pcase-exhaustive agent-type
-                                  (`codex (format "$%s " skill))))))
+                                  (`codex (format "$%s %s" skill
+                                                  (akirak-org--escape-filename heading)))))))
     (akirak-org-shell-send-org-entry-as-markdown (concat preamble "\n\n"))))
 
 (defun akirak-org-shell-send-block ()
