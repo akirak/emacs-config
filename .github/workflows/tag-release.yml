@@ -9,9 +9,15 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   tag:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
 
     outputs:
       release-tag: ${{ steps.tag.outputs.release_tag }}
