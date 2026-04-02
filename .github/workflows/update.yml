@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   repository_dispatch:
     types:
-    - flake-update
+      - flake-update
   workflow_call:
 
 jobs:
@@ -13,22 +13,22 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-      with:
-        ref: develop
-    - name: Set up Nix
-      uses: ./.github/actions/setup
-      with:
-        cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
-    - run: nix flake update --inputs-from github:akirak/flake-pins
-    - name: Update the lock entries
-      run: |
-        nix run .#lock --impure
-        nix run .#update --impure
-    - uses: peter-evans/create-pull-request@v8
-      with:
-        base: develop
-        token: ${{ secrets.PAT_FOR_PR }}
-        title: 'deps: Update the root flake.lock'
-        branch: bot/update/flake-lock
-        labels: automation,update,emacs
+      - uses: actions/checkout@v6
+        with:
+          ref: develop
+      - name: Set up Nix
+        uses: ./.github/actions/setup
+        with:
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - run: nix flake update --inputs-from github:akirak/flake-pins
+      - name: Update the lock entries
+        run: |
+          nix run .#lock --impure
+          nix run .#update --impure
+      - uses: peter-evans/create-pull-request@v8
+        with:
+          base: develop
+          token: ${{ secrets.PAT_FOR_PR }}
+          title: 'deps: Update the root flake.lock'
+          branch: bot/update/flake-lock
+          labels: automation,update,emacs
