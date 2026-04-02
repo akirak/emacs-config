@@ -6,10 +6,7 @@ permissions:
 on:
   pull_request:
     types:
-    - closed
-
-permissions:
-  contents: read
+      - closed
 
 jobs:
   tag-release:
@@ -33,17 +30,15 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-    - uses: actions/checkout@v6
-      with:
-        ref: master
-    - run: git switch -c develop HEAD
-    # The develop branch should be deleted already. You can turn on
-    # "Automatically delete head branches" in the general per-repository
-    # settings to ensure this.
-    - run: git push origin HEAD
+      - uses: actions/checkout@v6
+        with:
+          ref: master
+      - run: git switch -c develop HEAD
+      # The develop branch should be deleted already. You can turn on
+      # "Automatically delete head branches" in the general per-repository
+      # settings to ensure this.
+      - run: git push origin HEAD
 
   update_packages:
     needs: recreate_develop
