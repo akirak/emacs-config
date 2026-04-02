@@ -1,4 +1,6 @@
 name: "Update other repositories"
+permissions:
+  contents: read
 
 on:
   pull_request:
