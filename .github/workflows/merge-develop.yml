@@ -1,8 +1,5 @@
 name: Post-merge tasks
 
-permissions:
-  contents: read
-
 on:
   pull_request:
     types:
@@ -27,9 +24,9 @@ jobs:
       github.base_ref == 'master' &&
       github.head_ref == 'develop' &&
       github.event.pull_request.head.repo.id == github.event.pull_request.base.repo.id
+    runs-on: ubuntu-latest
     permissions:
       contents: write
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:

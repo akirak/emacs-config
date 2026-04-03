@@ -1,6 +1,4 @@
 name: Update elisp
-permissions:
-  contents: write
 
 on:
   workflow_dispatch:
@@ -11,6 +9,10 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
     - uses: actions/checkout@v6
