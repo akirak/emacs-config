@@ -21,10 +21,10 @@ jobs:
       with:
         cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
     - run: nix run .#update-ai-models
-    - uses: peter-evans/create-pull-request@v8
+    - uses: peter-evans/create-pull-request@b993918c8536b6d44706130734d5456879762b27
       with:
         base: develop
-        token: ${{ secrets.PAT_FOR_PR }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         title: 'chore: Update the model list'
         branch: bot/update/ai-models
         labels: automation,update,emacs
