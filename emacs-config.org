@@ -1442,8 +1442,7 @@ The built-in =electric= package provides the following modes:
          'foss
          (cons `(prog-mode . (,@copilot))
                default)))
-      (dir-locals-set-directory-class "~/config/" 'personal)
-      (dir-locals-set-directory-class "~/emacs-config/" 'personal)
+      (dir-locals-set-directory-class "~/build/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'foss)
 
@@ -5569,9 +5568,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 
     (:status opinionated
       (:global-keymap "M-i c" #'akirak-paren-replace
-               "M-i d" #'akirak-paren-delete
-               "M-i SPC" #'akirak-paren-select-inner
-               "M-i M-SPC" #'akirak-paren-select-outer)))
+                      "M-i d" #'akirak-paren-delete)))
 #+end_src
 *** akirak-passage
 :PROPERTIES:
@@ -6545,6 +6542,22 @@ Search and navigate via completing-read
       (:set xref-show-xrefs-function #'consult-xref
             xref-show-definitions-function #'consult-xref)))
 #+end_src
+*** consult-eglot
+:PROPERTIES:
+:CREATED_TIME: [2026-03-31 Tue 23:59]
+:END:
+#+begin_quote
+A consulting-read interface for eglot
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package consult-eglot)
+    (add-hook 'eglot-managed-mode-hook
+              (defun akirak/setup-consult-eglot ()
+                (when (eglot-server-capable :workspaceSymbolProvider)
+                  (keymap-local-set "<remap> <consult-imenu-multi>"
+                                    #'consult-eglot-symbols)))))
+#+end_src
 *** consult-ls-git
 :PROPERTIES:
 :CREATED_TIME: [2022-05-03 Tue 21:31]
@@ -7296,7 +7309,8 @@ Client for Language Server Protocol (LSP) servers
                       (typescript-ts-mode :language-id "typescript")
                       (typescript-mode :language-id "typescript"))
                      . ,(eglot-alternatives
-                         '(("typescript-language-server" "--stdio")
+                         '(("tsgo" "--lsp" "--stdio")
+                           ("typescript-language-server" "--stdio")
                            ("deno" "lsp")))))
       (add-to-list 'eglot-server-programs
                    `((nix-ts-mode nix-mode) . ("nil")))
@@ -11537,7 +11551,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 222 |
+| [[org-ql-search:tags:packages][packages]]            | 223 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |

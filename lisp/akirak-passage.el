@@ -35,6 +35,12 @@
 
 (defconst akirak-passage-buffer "*Passage*")
 
+;; Use a separate buffer for "passage show" operations, so secrets can be read
+;; while editing a secret.
+(defconst akirak-passage-show-buffer "*Passage Show*")
+
+(defconst akirak-passage-git-buffer "*Git for Passage*")
+
 (defcustom akirak-passage-executable "passage"
   "Executable name of passage."
   :type 'file)
@@ -89,16 +95,19 @@
     (setq akirak-passage-dir (cdr (assoc "PASSAGE_DIR" alist)))))
 
 (defun akirak-passage--git-commit (message)
-  (with-current-buffer (get-buffer-create akirak-passage-buffer)
+  (with-current-buffer (get-buffer-create akirak-passage-git-buffer)
     (let ((default-directory akirak-passage-dir)
           (process-environment (append akirak-passage-process-environment
                                        process-environment)))
+      (erase-buffer)
       (unless (zerop (call-process "git" nil t nil
                                    "add" "."))
         (user-error "git-add failed"))
       (unless (zerop (call-process "git" nil t nil
                                    "commit" "-a" "-m" message))
-        (user-error "git-commit failed")))))
+        (if (search-backward "nothing to commit, working tree clean" nil t)
+            (signal 'git-commit-empty nil)
+          (user-error "git-commit failed"))))))
 
 ;;;; Internal API
 
@@ -131,7 +140,7 @@
     (car)))
 
 (defun akirak-passage--get-content (account)
-  "Return the first line of the password entry of ACCOUNT."
+  "Return the entire of the password entry of ACCOUNT."
   (akirak-passage--run-process nil "show" account))
 
 ;;;###autoload
@@ -139,78 +148,81 @@
 
 (defun akirak-passage--run-process (edit-hook &rest args)
   (declare (indent 1))
-  (when (and (get-buffer-process akirak-passage-buffer)
-             (process-live-p (get-buffer-process akirak-passage-buffer)))
-    (user-error "Another passage process is running"))
-  (when (get-buffer akirak-passage-buffer)
-    (with-current-buffer akirak-passage-buffer
-      (erase-buffer)))
-  (cl-flet
-      ((sentinel (process event)
-         (cond
-          ((string= event "finished\n")
-           (when (functionp edit-hook)
-             (funcall edit-hook)))
-          ((string= event "open\n"))
-          ((and (string= event "exited abnormally with code 1\n")
-                edit-hook))
-          (t
-           (user-error "passage %s aborted: %s" args event))))
-       ;; Touch is not supported at present. If you are using
-       ;; age-plugin-yubikey, you must set the touch policy to never.
-       (filter-fn (process string)
-         (pcase string
-           ((rx (and bol "Please insert "))
-            (let ((inp (condition-case nil
-                           (read-string string)
-                         (quit
-                          (interrupt-process process)
-                          (user-error "Aborted by the user")))))
-              (process-send-string process (concat inp "\n"))))
-           ((rx "Enter PIN for ")
-            (let ((inp (condition-case nil
-                           (password-read string string)
-                         (quit
-                          (interrupt-process process)
-                          (user-error "Aborted by the user")))))
-              (process-send-string process (concat inp "\n"))))
-           ("Waiting for age-plugin-yubikey...\n")
-           ("Password unchanged.\n"
-            (message (string-trim-right string "\n")))
-           (_
-            (with-current-buffer (process-buffer process)
-              (unless (string-empty-p (string-trim-right string))
-                ;; Clear the previous responses as it can contain "y".
-                (replace-region-contents (point-min)
-                                         (point)
-                                         string)))))))
-    (let* ((process-environment (append akirak-passage-process-environment
-                                        process-environment))
-           (process (make-process :name "passage"
-                                  :buffer (get-buffer-create akirak-passage-buffer)
-                                  :command (cons akirak-passage-executable args)
-                                  :connection-type 'pty
-                                  :noquery t
-                                  :sentinel #'sentinel
-                                  :filter #'filter-fn)))
-      (condition-case nil
-          (unless edit-hook
-            (while (process-live-p process)
-              (accept-process-output process)
-              (sit-for 0.2))
-            (if (zerop (process-exit-status process))
-                (prog1 (with-current-buffer akirak-passage-buffer
-                         (goto-char (point-min))
-                         (while (and (looking-at (rx eol))
-                                     (< (point) (point-max)))
-                           (forward-line))
-                         (buffer-substring (point) (point-max)))
-                  (kill-buffer akirak-passage-buffer))
-              (user-error "Non-zero exit code from passage. See %s" akirak-passage-buffer)))
-        (quit
-         ;; Clean up
-         (kill-process process)
-         (user-error "Abnormally exited"))))))
+  (let ((buffer-name (if (string= (car args) "show")
+                         akirak-passage-show-buffer
+                       akirak-passage-buffer)))
+    (when (and (get-buffer-process buffer-name)
+               (process-live-p (get-buffer-process buffer-name)))
+      (user-error "Another passage process is running"))
+    (when (get-buffer buffer-name)
+      (with-current-buffer buffer-name
+        (erase-buffer)))
+    (cl-flet
+        ((sentinel (process event)
+           (cond
+            ((string= event "finished\n")
+             (when (functionp edit-hook)
+               (funcall edit-hook)))
+            ((string= event "open\n"))
+            ((and (string= event "exited abnormally with code 1\n")
+                  edit-hook))
+            (t
+             (user-error "passage %s aborted: %s" args event))))
+         ;; Touch is not supported at present. If you are using
+         ;; age-plugin-yubikey, you must set the touch policy to never.
+         (filter-fn (process string)
+           (pcase string
+             ((rx (and bol "Please insert "))
+              (let ((inp (condition-case nil
+                             (read-string string)
+                           (quit
+                            (interrupt-process process)
+                            (user-error "Aborted by the user")))))
+                (process-send-string process (concat inp "\n"))))
+             ((rx "Enter PIN for ")
+              (let ((inp (condition-case nil
+                             (password-read string string)
+                           (quit
+                            (interrupt-process process)
+                            (user-error "Aborted by the user")))))
+                (process-send-string process (concat inp "\n"))))
+             ("Waiting for age-plugin-yubikey...\n")
+             ("Password unchanged.\n"
+              (message (string-trim-right string "\n")))
+             (_
+              (with-current-buffer (process-buffer process)
+                (unless (string-empty-p (string-trim-right string))
+                  ;; Clear the previous responses as it can contain "y".
+                  (replace-region-contents (point-min)
+                                           (point)
+                                           string)))))))
+      (let* ((process-environment (append akirak-passage-process-environment
+                                          process-environment))
+             (process (make-process :name "passage"
+                                    :buffer (get-buffer-create buffer-name)
+                                    :command (cons akirak-passage-executable args)
+                                    :connection-type 'pty
+                                    :noquery t
+                                    :sentinel #'sentinel
+                                    :filter #'filter-fn)))
+        (condition-case nil
+            (unless edit-hook
+              (while (process-live-p process)
+                (accept-process-output process)
+                (sit-for 0.2))
+              (if (zerop (process-exit-status process))
+                  (prog1 (with-current-buffer buffer-name
+                           (goto-char (point-min))
+                           (while (and (looking-at (rx eol))
+                                       (< (point) (point-max)))
+                             (forward-line))
+                           (buffer-substring (point) (point-max)))
+                    (kill-buffer buffer-name))
+                (user-error "Non-zero exit code from passage. See %s" buffer-name)))
+          (quit
+           ;; Clean up
+           (kill-process process)
+           (user-error "Abnormally exited")))))))
 
 ;;;; Infixes
 
@@ -272,7 +284,8 @@
   ["Read the entry"
    :class transient-row
    ("w" "Copy password" akirak-passage-copy-password)
-   ("s" "Show password" akirak-passage-show-password)]
+   ("s" "Show password" akirak-passage-show-password)
+   ("i" "Insert password" akirak-passage-insert-password)]
   ["Update the entry"
    :class transient-row
    ("e" "Edit" akirak-passage-edit-entry)
@@ -297,13 +310,32 @@
    (akirak-passage--get-content akirak-passage-current-account)
    akirak-passage-current-account))
 
+;;;###autoload
+(defun akirak-passage-insert-password (&optional account)
+  "Insert the first line of the current password entry into the buffer."
+  (interactive
+   (list (if current-prefix-arg
+             (akirak-passage--read-account nil)
+           akirak-passage-current-account)))
+  (let ((string (akirak-passage--get-password account)))
+    (pcase (derived-mode-p 'eat-mode)
+      (`eat-mode
+       (eat-term-send-string-as-yank eat-terminal string))
+      (_
+       (insert string)))))
+
 (defun akirak-passage-edit-entry ()
   "Edit the current password entry."
   (interactive)
   (with-editor
     (akirak-passage--run-process
         (lambda ()
-          (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account)))
+          (condition-case nil
+              (progn
+                (akirak-passage--git-commit (format "Edited %s" akirak-passage-current-account))
+                (message "Saved the password entry"))
+            (git-commit-empty
+             "Unchanged password entry")))
       "edit" akirak-passage-current-account)))
 
 (defun akirak-passage-rename-entry ()

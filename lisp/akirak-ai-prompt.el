@@ -124,7 +124,7 @@
                              `((?l . ,line)
                                (?f . ,(file-relative-name file base-dir))
                                (?e . ,diag-text))))
-      (format-spec "Investigate the following error at line %l in %f:\n\n%e"
+      (format-spec "Investigate and fix the following error at line %l in %f:\n\n%e"
                    `((?l . ,line)
                      (?f . ,(file-relative-name file base-dir))
                      (?e . ,diag-text))))))

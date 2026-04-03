@@ -41,6 +41,22 @@
      (transient-parse-suffixes
       'akirak-quick-thing
       (append children (akirak-quick-thing-bindings-1))))]
+  ["Select inside quotes"
+   ("\"" "double quote pair" (lambda ()
+                               (interactive)
+                               (akirak-paren-select-inner ?\")))
+   ("'" "single quote pair" (lambda ()
+                              (interactive)
+                              (akirak-paren-select-inner ?\')))
+   ("(" "parentheses" (lambda ()
+                        (interactive)
+                        (akirak-paren-select-inner ?\()))
+   ("[" "brackets" (lambda ()
+                     (interactive)
+                     (akirak-paren-select-inner ?\[)))
+   ("{" "braces" (lambda ()
+                   (interactive)
+                   (akirak-paren-select-inner ?\{)))]
   (interactive)
   (transient-setup 'akirak-quick-thing))
 

@@ -51,11 +51,11 @@
     "apheleia": {
       "flake": false,
       "locked": {
-        "lastModified": 1772839062,
-        "narHash": "sha256-wO8GelXeC+RDLqTLsrEbQlDD/WmoC0QJEQOHr08IGBw=",
+        "lastModified": 1773362106,
+        "narHash": "sha256-79g/ym1kj+BvFRkzWLX51ZtF9Xxaw3XM5JrMFhVjyPk=",
         "owner": "radian-software",
         "repo": "apheleia",
-        "rev": "011e7b999552f3c0730035183a4a6dfb60c10182",
+        "rev": "e6e5d5523d229735ab5f8ec83e10beefcfd00d76",
         "type": "github"
       },
       "original": {
@@ -307,11 +307,11 @@
     "compat": {
       "flake": false,
       "locked": {
-        "lastModified": 1769892968,
-        "narHash": "sha256-oGzSwww6IjqZtuKZAK7HTqrlvCCVk/QniQNGi70F3kU=",
+        "lastModified": 1774715040,
+        "narHash": "sha256-Fnk/fGPJ98Mci+BK1UKpQIiWDnqpa46TFDl5RQn4xZw=",
         "owner": "emacs-compat",
         "repo": "compat",
-        "rev": "38df650dce9f862c6b523de5b683573df590ab85",
+        "rev": "3b603f0f4cd0a696a17a10486bcc65d6b9446b36",
         "type": "github"
       },
       "original": {
@@ -349,6 +349,22 @@
       "original": {
         "owner": "minad",
         "repo": "consult",
+        "type": "github"
+      }
+    },
+    "consult-eglot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1756632318,
+        "narHash": "sha256-T6ZYTnc9tqwU+UE7f7Yk74mgPg8O5S9rnNZOQs5seBA=",
+        "owner": "mohkale",
+        "repo": "consult-eglot",
+        "rev": "d8b444aac39edfc6473ffbd228df3e9119451b51",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mohkale",
+        "repo": "consult-eglot",
         "type": "github"
       }
     },
@@ -596,11 +612,11 @@
     "diff-hl": {
       "flake": false,
       "locked": {
-        "lastModified": 1772059657,
-        "narHash": "sha256-m6Z5aDHfrHJdGdkhQ+vCRhaVKbJOEnHhfA5JEGx4RaI=",
+        "lastModified": 1774725944,
+        "narHash": "sha256-OAtiqcsjXyDsWnJ2OwCR+kvEwbeOMALJ0w9YTghztR4=",
         "owner": "dgutov",
         "repo": "diff-hl",
-        "rev": "bb9af85441b0cbb3281268d30256d50f0595ebfe",
+        "rev": "b965e19e6e7f9933199e421849a49229207c1c9f",
         "type": "github"
       },
       "original": {
@@ -948,11 +964,11 @@
     "envrc": {
       "flake": false,
       "locked": {
-        "lastModified": 1771404140,
-        "narHash": "sha256-tIa5eEwMSq5r3FCG2US7Y3gcaDjRFn6oKxra9qblekY=",
+        "lastModified": 1774454973,
+        "narHash": "sha256-H1GBCwb4P44551yZLuPaHt+AV9U+VNPslXL6Lf+sHik=",
         "owner": "purcell",
         "repo": "envrc",
-        "rev": "f44353c42c0794cdc6629c83a923d1689f33469f",
+        "rev": "60820285aeed4f87969d663a1c14a905c7bb763a",
         "type": "github"
       },
       "original": {
@@ -1941,11 +1957,11 @@
     "neocaml": {
       "flake": false,
       "locked": {
-        "lastModified": 1773297042,
-        "narHash": "sha256-xglc6wSGvf1+3s9cF61mCvw08U8328nI8bFsdZ1gYCs=",
+        "lastModified": 1774970173,
+        "narHash": "sha256-O2ieOrxx2uUrOWT8XrK1F2NBXoU/qWwb4KvuH8fBKJU=",
         "owner": "bbatsov",
         "repo": "neocaml",
-        "rev": "ba016ad8197869f473e67a62ca4812909d723a9b",
+        "rev": "1dfd9ddb212ea867fccef33cbd141431036e49e6",
         "type": "github"
       },
       "original": {
@@ -2264,11 +2280,11 @@
     "org": {
       "flake": false,
       "locked": {
-        "lastModified": 1772377558,
-        "narHash": "sha256-LdkCNfe0r0cOhy0JSqaXequn4K+0qwoxlNJipIwvAjs=",
+        "lastModified": 1774686254,
+        "narHash": "sha256-DZSi9S33kraU73cbUD8qYK8p/+hTE89DVagHo7v2dY0=",
         "owner": "elpa-mirrors",
         "repo": "org-mode",
-        "rev": "cf141e8a0977787a34456a2567b6644e9d943426",
+        "rev": "1cbeb7f85da020e9511e7287bc960d5f1913b937",
         "type": "github"
       },
       "original": {
@@ -3061,6 +3077,7 @@
         "compat": "compat",
         "cond-let": "cond-let",
         "consult": "consult",
+        "consult-eglot": "consult-eglot",
         "consult-ls-git": "consult-ls-git",
         "consult-org-dog": "consult-org-dog",
         "consult-org-nlink": "consult-org-nlink",

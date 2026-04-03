@@ -10,27 +10,30 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   tag:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     outputs:
       release-tag: ${{ steps.tag.outputs.release_tag }}
 
     steps:
-    - uses: actions/checkout@v6
-      with:
-        ref: ${{ inputs.ref }}
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
 
-    - name: Tag the current head
-      id: tag
-      run: |
-        tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
-        echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
-        git tag -f "$tag"
-        git push --force origin "tags/$tag"
+      - name: Tag the current head
+        id: tag
+        run: |
+          tag="r$(date -d "$(git log -1 --format=%ci)" +%Y%m%d)"
+          echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
+          git tag -f "$tag"
+          git push --force origin "tags/$tag"
 
   release:
     needs: tag
