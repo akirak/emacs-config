@@ -45,7 +45,9 @@
        (eldoc))
      (akirak-eldoc--to-help-buffer))
     (_
-     (eldoc-doc-buffer t))))
+     (with-current-buffer (eldoc-doc-buffer)
+       (setq-local eldoc-documentation-functions nil)
+       (display-buffer (current-buffer))))))
 
 (defun akirak-eldoc--to-help-buffer (&rest _)
   (let* ((thing (thing-at-point 'symbol 'no-properties))
