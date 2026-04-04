@@ -2298,6 +2298,19 @@ This is a recommended setting for use with vertico. See https://github.com/minad
        (t
         (kill-word arg))))
 
+    (defun akirak/zap-backward-char (char &optional interactive)
+      (interactive
+       (list (read-char-from-minibuffer "Zap backward char: "
+                                        nil 'read-char-history)
+             t))
+      (let ((limit (line-beginning-position))
+            (case-fold-search (if (and interactive (char-uppercase-p char))
+                                  nil
+                                case-fold-search))
+            (end (point)))
+        (kill-region (search-backward (char-to-string char))
+                     end)))
+
     (:with-map prog-mode-map
       (:keymap "<remap> <kill-word>" #'akirak/kill-word-dwim))
 
@@ -2314,7 +2327,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                           (beginning-of-line)))
 
                       "M-z" #'zap-up-to-char
-                      "M-Z" #'zap-to-char)))
+                      "M-Z" #'akirak/zap-backward-char)))
 #+end_src
 *** skeleton
 :PROPERTIES:
