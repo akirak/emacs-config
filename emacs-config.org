@@ -2298,18 +2298,26 @@ This is a recommended setting for use with vertico. See https://github.com/minad
        (t
         (kill-word arg))))
 
-    (defun akirak/zap-backward-char (char &optional interactive)
+    (defun akirak/zap-char (arg char &optional interactive)
       (interactive
-       (list (read-char-from-minibuffer "Zap backward char: "
-                                        nil 'read-char-history)
-             t))
-      (let ((limit (line-beginning-position))
-            (case-fold-search (if (and interactive (char-uppercase-p char))
-                                  nil
-                                case-fold-search))
-            (end (point)))
-        (kill-region (search-backward (char-to-string char))
-                     end)))
+       (let ((arg (prefix-numeric-value current-prefix-arg)))
+         (list arg
+               (read-char-from-minibuffer (if (and (numberp arg)
+                                                   (< arg 0))
+                                              "Zap backward char: "
+                                            "Zap up to char: ")
+                                          nil 'read-char-history)
+               t)))
+      (if (and (numberp arg)
+               (< arg 0))
+          (let ((limit (line-beginning-position))
+                (case-fold-search (if (and interactive (char-uppercase-p char))
+                                      nil
+                                    case-fold-search))
+                (end (point)))
+            (kill-region (search-backward (char-to-string char))
+                         end))
+        (zap-up-to-char arg char interactive)))
 
     (:with-map prog-mode-map
       (:keymap "<remap> <kill-word>" #'akirak/kill-word-dwim))
@@ -2326,8 +2334,8 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                             (back-to-indentation)
                           (beginning-of-line)))
 
-                      "M-z" #'zap-up-to-char
-                      "M-Z" #'akirak/zap-backward-char)))
+                      "M-z" #'akirak/zap-char
+                      "M-Z" #'zap-char)))
 #+end_src
 *** skeleton
 :PROPERTIES:
