@@ -7334,7 +7334,11 @@ Client for Language Server Protocol (LSP) servers
                            ("typescript-language-server" "--stdio")
                            ("deno" "lsp")))))
       (add-to-list 'eglot-server-programs
-                   `((nix-ts-mode nix-mode) . ("nil")))
+                   `((nix-ts-mode nix-mode)
+                     . ,(eglot-alternatives
+                         '(("tix" "lsp")
+                           ("typenix" "--lsp" "--stdio")
+                           ("nil")))))
       (add-to-list 'eglot-server-programs
                    '(just-mode . ("just-lsp")))
       (add-to-list 'eglot-server-programs
