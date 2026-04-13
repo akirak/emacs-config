@@ -21,7 +21,7 @@ jobs:
       with:
         cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
     - run: nix run .#update-ai-models
-    - uses: peter-evans/create-pull-request@d32e88dac789dcc7906e7d26f69f24116fa9c97d
+    - uses: peter-evans/create-pull-request@eec7ab75b2f71ddc8a223341c83a67f6f774c39f
       with:
         base: develop
         token: ${{ secrets.GITHUB_TOKEN }}
