@@ -134,10 +134,15 @@
 
 (defun akirak-passage--get-password (account)
   "Return the first line of the password entry of ACCOUNT."
-  (thread-first
-    (akirak-passage--run-process nil "show" account)
-    (split-string "\n")
-    (car)))
+  (with-temp-buffer
+    (insert (akirak-passage--run-process nil "show" account))
+    (goto-char (point-min))
+    (if (akirak-passage--whole-secret-p)
+        (buffer-string)
+      (buffer-substring-no-properties (point-min) (line-end-position)))))
+
+(defun akirak-passage--whole-secret-p ()
+  (looking-at (rx "-----BEGIN " (+ upper) " PRIVATE KEY-----")))
 
 (defun akirak-passage--get-content (account)
   "Return the entire of the password entry of ACCOUNT."
