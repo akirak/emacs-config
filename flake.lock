@@ -207,6 +207,24 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_4"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "fromElisp": {
       "flake": false,
       "locked": {
@@ -502,6 +520,21 @@
         "type": "github"
       }
     },
+    "nixpkgs_7": {
+      "locked": {
+        "lastModified": 1776232706,
+        "narHash": "sha256-FTMrXZ07V6MzXx0YdnTUNqnJMww2QYqjrMYr99/HhPc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "587464cfd4f7e3616c1cc5cd19a9f36b84af9ade",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nongnu-elpa": {
       "flake": false,
       "locked": {
@@ -587,6 +620,7 @@
         "playwright-mcp": "playwright-mcp",
         "systems": "systems_3",
         "tree-sitter-astro": "tree-sitter-astro",
+        "tree-sitter-dune": "tree-sitter-dune",
         "twist": "twist",
         "twist-overrides": "twist-overrides",
         "twist2elpa": "twist2elpa"
@@ -658,6 +692,21 @@
         "type": "github"
       }
     },
+    "systems_4": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "tree-sitter-astro": {
       "flake": false,
       "locked": {
@@ -671,6 +720,26 @@
       "original": {
         "owner": "virchau13",
         "repo": "tree-sitter-astro",
+        "type": "github"
+      }
+    },
+    "tree-sitter-dune": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_7"
+      },
+      "locked": {
+        "lastModified": 1776252759,
+        "narHash": "sha256-1gry8bL+/WKc5MKGrWVUTGcCbZpz8Z2gALpVJdZk8+c=",
+        "owner": "akirak",
+        "repo": "tree-sitter-dune",
+        "rev": "b88185277f032222639bf37a6bed96e22f1f0eb3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "ref": "update-flake",
+        "repo": "tree-sitter-dune",
         "type": "github"
       }
     },

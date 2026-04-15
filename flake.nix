@@ -50,6 +50,7 @@
       url = "github:virchau13/tree-sitter-astro";
       flake = false;
     };
+    tree-sitter-dune.url = "github:akirak/tree-sitter-dune/update-flake";
 
     playwright-mcp.url = "github:akirak/nix-playwright-mcp";
 
