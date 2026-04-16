@@ -141,7 +141,6 @@ the original minor mode."
   ["Start an AI session at project root"
    :class transient-row
    :if akirak-shell-project-directory
-   ("C" "Claude (default)" akirak-claude-code-default)
    ("c" "Claude" akirak-shell-project-for-claude)
    ("p" "Pi" akirak-shell-project-for-pi)
    ("k" "Copilot" akirak-copilot-cli-transient)
