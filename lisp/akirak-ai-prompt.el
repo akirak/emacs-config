@@ -161,22 +161,26 @@
                         (symbol-name major-mode)
                         (string-remove-suffix "-mode")
                         (string-remove-suffix "-ts")))))
-         (buffer akirak-ai-prompt-shell-buffer))
+         (buffer akirak-ai-prompt-shell-buffer)
+         (location (when (and line file)
+                     (with-current-buffer buffer
+                       (format-spec " (at line %l in %f):"
+                                    `((?l . ,line)
+                                      (?f . ,(file-relative-name file default-directory)))))))
+         (preamble (if prompt
+                       (concat prompt location)
+                     (concat (read-string "Prompt: " location)
+                             "\n\n"))))
     (akirak-shell-send-string-to-buffer buffer
-      (with-current-buffer buffer
-        (let ((location (when (and line file)
-                          (format-spec " (at line %l in %f):"
-                                       `((?l . ,line)
-                                         (?f . ,(file-relative-name file default-directory)))))))
-          (concat (if prompt
-                      (concat prompt location)
-                    (concat (read-string "Prompt: " location)
-                            "\n\n"))
-                  (if language
-                      (format-spec "\n\n```%m\n%b\n```"
-                                   `((?m . ,language)
-                                     (?b . ,content)))
-                    (replace-regexp-in-string (rx bol) "> " content)))))
+      (concat preamble
+              (if language
+                  (format-spec "\n\n```%m\n%b\n```"
+                               `((?m . ,language)
+                                 (?b . ,content)))
+                (if (and preamble
+                         (not (string-empty-p (string-trim preamble))))
+                    (replace-regexp-in-string (rx bol) "> " content)
+                  content)))
       :confirm t)))
 
 (defun akirak-ai-prompt-send-region (begin end)
