@@ -255,6 +255,7 @@ azure_ai/claude-haiku-4-5
 azure_ai/claude-opus-4-1
 azure_ai/claude-opus-4-5
 azure_ai/claude-opus-4-6
+azure_ai/claude-opus-4-7
 azure_ai/claude-sonnet-4-5
 azure_ai/claude-sonnet-4-6
 azure_ai/Cohere-embed-v3-english
@@ -396,6 +397,8 @@ claude-opus-4-5
 claude-opus-4-5-20251101
 claude-opus-4-6
 claude-opus-4-6-20260205
+claude-opus-4-7
+claude-opus-4-7-20260416
 claude-sonnet-4-20250514
 claude-sonnet-4-5
 claude-sonnet-4-5-20250929
@@ -741,6 +744,7 @@ gemini/veo-3.1-fast-generate-001
 gemini/veo-3.1-fast-generate-preview
 gemini/veo-3.1-generate-001
 gemini/veo-3.1-generate-preview
+gemini/veo-3.1-lite-generate-preview
 glm-4-7-251222
 gpt-3.5-turbo
 gpt-3.5-turbo-0125
@@ -1300,6 +1304,7 @@ palm/text-bison-safety-recitation-off
 perplexity/anthropic/claude-haiku-4-5
 perplexity/anthropic/claude-opus-4-5
 perplexity/anthropic/claude-opus-4-6
+perplexity/anthropic/claude-opus-4-7
 perplexity/anthropic/claude-sonnet-4-5
 perplexity/codellama-34b-instruct
 perplexity/codellama-70b-instruct
@@ -1623,7 +1628,9 @@ wandb/meta-llama/Llama-3.1-8B-Instruct
 wandb/meta-llama/Llama-3.3-70B-Instruct
 wandb/meta-llama/Llama-4-Scout-17B-16E-Instruct
 wandb/microsoft/Phi-4-mini-instruct
+wandb/MiniMaxAI/MiniMax-M2.5
 wandb/moonshotai/Kimi-K2-Instruct
+wandb/moonshotai/Kimi-K2.5
 wandb/openai/gpt-oss-120b
 wandb/openai/gpt-oss-20b
 wandb/Qwen/Qwen3-235B-A22B-Instruct-2507
