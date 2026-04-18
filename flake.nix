@@ -52,6 +52,8 @@
     };
     tree-sitter-dune.url = "github:akirak/tree-sitter-dune/update-flake";
 
+    lsp-proxy.url = "github:jadestrong/lsp-proxy";
+
     playwright-mcp.url = "github:akirak/nix-playwright-mcp";
 
     mcp-nixos = {
