@@ -133,12 +133,6 @@
       repo = "consult";
       type = "github";
     };
-    consult-eglot = {
-      flake = false;
-      owner = "mohkale";
-      repo = "consult-eglot";
-      type = "github";
-    };
     consult-ls-git = {
       flake = false;
       owner = "rcj";
@@ -315,12 +309,6 @@
       flake = false;
       owner = "Fanael";
       repo = "edit-indirect";
-      type = "github";
-    };
-    eglot-booster = {
-      flake = false;
-      owner = "jdtsmith";
-      repo = "eglot-booster";
       type = "github";
     };
     el-patch = {
@@ -818,12 +806,6 @@
       flake = false;
       owner = "alf";
       repo = "ob-restclient.el";
-      type = "github";
-    };
-    ocaml-eglot = {
-      flake = false;
-      owner = "tarides";
-      repo = "ocaml-eglot";
       type = "github";
     };
     ocp-indent = {

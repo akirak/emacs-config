@@ -6563,7 +6563,7 @@ Search and navigate via completing-read
       (:set xref-show-xrefs-function #'consult-xref
             xref-show-definitions-function #'consult-xref)))
 #+end_src
-*** consult-eglot
+*** COMMENT consult-eglot                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2026-03-31 Tue 23:59]
 :END:
@@ -7270,7 +7270,7 @@ Emacs Does Interactive Prolog
 #+end_src
 
 [[https://lib.rs/crates/scryer-prolog][scryer-prolog]] is the bleeding-edge implementation of Prolog (like GHC to Haskell), and it is installed with this package.
-*** eglot                                                      :LSP:
+*** COMMENT eglot                                                          :LSP:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
@@ -7409,7 +7409,7 @@ An OCaml companion for Eglot
   (setup (:package ocaml-eglot)
     (add-hook 'ocaml-eglot-hook #'eglot-ensure))
 #+end_src
-*** eglot-booster
+*** COMMENT eglot-booster                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-10-29 Tue 21:45]
 :END:

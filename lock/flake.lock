@@ -352,22 +352,6 @@
         "type": "github"
       }
     },
-    "consult-eglot": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1756632318,
-        "narHash": "sha256-T6ZYTnc9tqwU+UE7f7Yk74mgPg8O5S9rnNZOQs5seBA=",
-        "owner": "mohkale",
-        "repo": "consult-eglot",
-        "rev": "d8b444aac39edfc6473ffbd228df3e9119451b51",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mohkale",
-        "repo": "consult-eglot",
-        "type": "github"
-      }
-    },
     "consult-ls-git": {
       "flake": false,
       "locked": {
@@ -846,22 +830,6 @@
       "original": {
         "owner": "Fanael",
         "repo": "edit-indirect",
-        "type": "github"
-      }
-    },
-    "eglot-booster": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1752690112,
-        "narHash": "sha256-xUBQrQpw+JZxcqT1fy/8C2tjKwa7sLFHXamBm45Fa4Y=",
-        "owner": "jdtsmith",
-        "repo": "eglot-booster",
-        "rev": "cab7803c4f0adc7fff9da6680f90110674bb7a22",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jdtsmith",
-        "repo": "eglot-booster",
         "type": "github"
       }
     },
@@ -2196,22 +2164,6 @@
         "type": "github"
       }
     },
-    "ocaml-eglot": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1775044070,
-        "narHash": "sha256-uNNuqMT5ujcjwRDTHTGoeq4SOZ8sbzZMD8PMZeysboE=",
-        "owner": "tarides",
-        "repo": "ocaml-eglot",
-        "rev": "54c168216ebbd4fb086904c099cf8a831681d311",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tarides",
-        "repo": "ocaml-eglot",
-        "type": "github"
-      }
-    },
     "ocp-indent": {
       "flake": false,
       "locked": {
@@ -3077,7 +3029,6 @@
         "compat": "compat",
         "cond-let": "cond-let",
         "consult": "consult",
-        "consult-eglot": "consult-eglot",
         "consult-ls-git": "consult-ls-git",
         "consult-org-dog": "consult-org-dog",
         "consult-org-nlink": "consult-org-nlink",
@@ -3108,7 +3059,6 @@
         "dune": "dune",
         "eat": "eat",
         "edit-indirect": "edit-indirect",
-        "eglot-booster": "eglot-booster",
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
         "elx": "elx",
@@ -3192,7 +3142,6 @@
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
-        "ocaml-eglot": "ocaml-eglot",
         "ocp-indent": "ocp-indent",
         "octopus": "octopus",
         "olivetti": "olivetti",
