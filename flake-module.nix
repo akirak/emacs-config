@@ -48,6 +48,10 @@ let
           include = [ "lisp" ];
         };
       };
+
+      lsp-proxy = _: super: {
+        src = inputs.lsp-proxy.outPath;
+      };
     };
 
     # Packages that are not defined in init.el (setup cannot depend on itself)
@@ -56,6 +60,7 @@ let
     localPackages = [
       # Don't add this package to the lock file
       "akirak"
+      "lsp-proxy"
     ];
 
     exportManifest = true;

@@ -4,13 +4,19 @@
 { inputs }:
 [
   # Bring custom packages into the scope for native dependencies.
-  (_: prev: {
-    inherit ((inputs.flake-pins).packages.${prev.system})
+  (_: prev:
+  let
+    inherit (prev.stdenv.hostPlatform) system;
+    in
+  {
+    inherit ((inputs.flake-pins).packages.${system})
       github-linguist
       epubinfo
       squasher
       d2-format
-      ;
+    ;
+
+    lsp-proxy = inputs.lsp-proxy.packages.${system}.default;
   })
 
   #   # makeEmacsTwistArchive

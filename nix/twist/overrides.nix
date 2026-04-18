@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 {
-  pkgs,
+  pkgs
 }:
 _eself: esuper:
 builtins.intersectAttrs esuper {

@@ -8760,6 +8760,22 @@ LSP mode
   (put 'lsp-define-conditional-key 'lisp-indent-function 'defun)
   (put 'lsp-with-filename 'lisp-indent-function 1)
 #+end_src
+*** lsp-proxy
+:PROPERTIES:
+:CREATED_TIME: [2026-04-18 Sat 09:41]
+:END:
+#+begin_quote
+LSP Proxy client for Emacs
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package lsp-proxy)
+    (:nixpkgs "lsp-proxy")
+
+    (defun akirak/lsp-proxy-enable ()
+      (lsp-proxy-mode 1)))
+#+end_src
+
 *** COMMENT macrostep                                   :emacs_lisp:development:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:52]
