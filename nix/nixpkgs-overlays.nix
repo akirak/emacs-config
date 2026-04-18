@@ -1,4 +1,4 @@
-# Copyright (C) 2024 Akira Komamura
+# Copyright (C) 2024-2026 Akira Komamura
 # SPDX-License-Identifier: MIT
 
 { inputs }:
