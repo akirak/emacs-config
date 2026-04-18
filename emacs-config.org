@@ -1393,8 +1393,16 @@ The built-in =electric= package provides the following modes:
              ;; (prettier '((eval . (prettier-on-save-mode t))))
              (jq-format '((eval . (jq-format-on-save-mode t))))
              ;; (sqlformat '((eval . (sqlformat-on-save-mode t))))
-             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
-             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
+
+             ;; settings for lsp-proxy.
+             (lsp '((eval . (akirak/lsp-proxy-enable))))
+             ;; Use the same configuration for now.
+             (lsp-no-formatter lsp)
+
+             ;; settings for eglot.
+             ;; (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
+             ;; (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
+
              (flymake-eslint '((eval . (flymake-eslint-enable))))
              (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
              (nixfmt '((eval . (nixfmt-on-save-mode t))))
