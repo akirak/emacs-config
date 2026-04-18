@@ -65,6 +65,8 @@ in
     home.file.${config.programs.emacs-twist.directory + "/ai-model-list.txt"}.source =
       ../ai-model-list.txt;
 
+    home.file.${config.programs.emacs-twist.directory + "/lsp-proxy/languages.toml"}.source = pkgs'.callPackage ../nix/lsp-proxy-config.nix {};
+
     home.file.${cfg.directory + "/java-debug-plugin.jar"} = lib.mkIf cfg.settings.enableJava {
       source = java-debug-plugin;
     };
