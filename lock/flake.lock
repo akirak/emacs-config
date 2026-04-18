@@ -417,22 +417,6 @@
         "url": "https://codeberg.org/jao/consult-recoll.git"
       }
     },
-    "copilot": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1774941222,
-        "narHash": "sha256-hXZsu/pDE0/Li+GcFbC9ObbY4N1sVWDZ48CJfDrJmL4=",
-        "owner": "copilot-emacs",
-        "repo": "copilot.el",
-        "rev": "ab5c58bc969f52f6d75e972658f2c3381c70b4fa",
-        "type": "github"
-      },
-      "original": {
-        "owner": "copilot-emacs",
-        "repo": "copilot.el",
-        "type": "github"
-      }
-    },
     "corfu": {
       "flake": false,
       "locked": {
@@ -3033,7 +3017,6 @@
         "consult-org-dog": "consult-org-dog",
         "consult-org-nlink": "consult-org-nlink",
         "consult-recoll": "consult-recoll",
-        "copilot": "copilot",
         "corfu": "corfu",
         "cosmetic-transient": "cosmetic-transient",
         "d2-mode": "d2-mode",
