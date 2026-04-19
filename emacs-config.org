@@ -8805,8 +8805,28 @@ LSP Proxy client for Emacs
   (setup (:package lsp-proxy)
     (:nixpkgs "lsp-proxy")
 
+    (:keymap akirak/mode-prefix-key #'akirak/lsp-proxy-prefix-map)
+
     (defun akirak/lsp-proxy-enable ()
-      (lsp-proxy-mode 1)))
+      (lsp-proxy-mode 1))
+
+    (defun akirak/lsp-proxy-rename-dwim ()
+      (interactive)
+      (or (akirak-treesit-maybe-rename-tag)
+          (call-interactively #'lsp-proxy-rename)))
+
+    (:with-feature typescript-ts-mode
+      (:with-map tsx-ts-mode-map
+        (:keymap "<remap> <lsp-proxy-rename>" #'akirak/lsp-proxy-rename-dwim)))
+
+    (:when-loaded
+      (define-prefix-command 'akirak/lsp-proxy-prefix-map)
+      (:with-map akirak/lsp-proxy-prefix-map
+        (:keymap "a" #'lsp-proxy-execute-code-action
+                 "d" #'lsp-proxy-describe-thing-at-point
+                 "f" #'lsp-proxy-format-buffer
+                 "R" #'lsp-proxy-restart
+                 "r" #'lsp-proxy-rename))))
 #+end_src
 
 *** COMMENT macrostep                                   :emacs_lisp:development:ARCHIVE:
