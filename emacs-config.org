@@ -1407,7 +1407,7 @@ The built-in =electric= package provides the following modes:
              (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
              (nixfmt '((eval . (nixfmt-on-save-mode t))))
              (zig-fmt '((eval . (zig-format-on-save-mode t))))
-             (copilot '((eval . (copilot-mode t))))
+             ;; (copilot '((eval . (copilot-mode t))))
              (editorconfig '((eval . (editorconfig-mode t))))
              (default  `((astro-ts-mode . (,@lsp-no-formatter))
                          (css-mode . (,@lsp-no-formatter))
@@ -1447,10 +1447,11 @@ The built-in =electric= package provides the following modes:
         (dir-locals-set-class-variables
          'default
          default)
-        (dir-locals-set-class-variables
-         'foss
-         (cons `(prog-mode . (,@copilot))
-               default)))
+        ;; (dir-locals-set-class-variables
+        ;;  'foss
+        ;;  (cons `(prog-mode . (,@copilot))
+        ;;        default))
+        )
       (dir-locals-set-directory-class "~/build/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/foss/" 'foss)
