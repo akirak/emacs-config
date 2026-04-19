@@ -253,4 +253,13 @@
     #   ref = "milestone-03-breaking-refactor";
     # };
   };
+
+  neocaml = _: super: {
+    files = builtins.removeAttrs super.files [
+      # I prefer dune.el over neocaml-dune.el for now because of the better
+      # editing experience.
+      "neocaml-dune.el"
+      "neocaml-dune-interaction.el"
+    ];
+  };
 }
