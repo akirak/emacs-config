@@ -4999,6 +4999,30 @@ A mode for editing Kotlin files based on tree-sitter
   (setup lua-ts-mode
     (:file-match "\\.lua\\'"))
 #+end_src
+*** neocaml
+#+begin_quote
+Major mode for OCaml code
+[[http://github.com/bbatsov/neocaml]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package neocaml)
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:with-mode (neocaml-mode neocamli-mode)
+      (:mode-repl akirak/utop-project)
+      (:org-src-lang "ocaml")
+      (:mode-project-roots "dune-project")
+      (:local-set treesit-font-lock-level 4)
+      (:set neocaml-use-prettify-symbols nil)
+
+      ;; Load abbreviations
+      (:also-load akirak-ocaml)
+      (:local-set local-abbrev-table akirak-ocaml-abbrev-table))
+
+    (:reformatters
+     (ocamlformat :program "ocamlformat"
+                  :args (list "--name" (buffer-file-name) "-"))))
+#+end_src
 *** nix-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-08-26 Sat 11:56]
@@ -9313,30 +9337,6 @@ Major mode for Lean
     (:set nael-prepare-eglot t
           nael-prepare-lsp nil)
     (:keymap "C-c C-r" #'akirak/lake-lean-run))
-#+end_src
-*** neocaml
-#+begin_quote
-Major mode for OCaml code
-[[http://github.com/bbatsov/neocaml]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package neocaml)
-    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
-    (:with-mode (neocaml-mode neocamli-mode)
-      (:mode-repl akirak/utop-project)
-      (:org-src-lang "ocaml")
-      (:mode-project-roots "dune-project")
-      (:local-set treesit-font-lock-level 4)
-      (:set neocaml-use-prettify-symbols nil)
-
-      ;; Load abbreviations
-      (:also-load akirak-ocaml)
-      (:local-set local-abbrev-table akirak-ocaml-abbrev-table))
-
-    (:reformatters
-     (ocamlformat :program "ocamlformat"
-                  :args (list "--name" (buffer-file-name) "-"))))
 #+end_src
 *** neotree
 :PROPERTIES:
