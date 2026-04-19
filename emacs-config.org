@@ -1423,8 +1423,9 @@ The built-in =electric= package provides the following modes:
                          (just-mode . (,@lsp-no-formatter))
                          (kotlin-ts-mode . (,@lsp))
                          (nael-mode . (,@lsp))
-                         (neocaml-mode . ((eval . (ocaml-eglot))))
-                         (neocamli-mode . ((eval . (ocaml-eglot))))
+                         (dune-mode . (,@lsp-no-formatter))
+                         (neocaml-mode . (,@lsp-no-formatter))
+                         (neocamli-mode . (,@lsp-no-formatter))
                          (python-mode . (,@lsp-no-formatter))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
@@ -7428,7 +7429,7 @@ Client for Language Server Protocol (LSP) servers
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")))
 #+end_src
-**** ocaml-eglot
+**** COMMENT ocaml-eglot                                                       :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:04]
 :END:
