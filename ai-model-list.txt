@@ -39,6 +39,7 @@ anthropic.claude-3-haiku-20240307-v1:0
 anthropic.claude-3-opus-20240229-v1:0
 anthropic.claude-3-sonnet-20240229-v1:0
 anthropic.claude-instant-v1
+anthropic.claude-mythos-preview
 anthropic.claude-v1
 anthropic.claude-v2:1
 anyscale/codellama/CodeLlama-34b-Instruct-hf
@@ -436,6 +437,8 @@ dall-e-3
 dashscope/qwen-coder
 dashscope/qwen-flash
 dashscope/qwen-flash-2025-07-28
+dashscope/qwen-image-2.0
+dashscope/qwen-image-2.0-pro
 dashscope/qwen-max
 dashscope/qwen-plus
 dashscope/qwen-plus-2025-01-25
@@ -827,6 +830,7 @@ gpt-5.4-mini
 gpt-5.4-nano
 gpt-5.4-pro
 gpt-5.4-pro-2026-03-05
+gpt-5.5
 gpt-audio
 gpt-audio-1.5
 gpt-audio-2025-08-28
@@ -1006,6 +1010,7 @@ moonshot/kimi-k2-thinking
 moonshot/kimi-k2-thinking-turbo
 moonshot/kimi-k2-turbo-preview
 moonshot/kimi-k2.5
+moonshot/kimi-k2.6
 moonshot/kimi-latest
 moonshot/kimi-latest-128k
 moonshot/kimi-latest-32k
@@ -1199,6 +1204,7 @@ openrouter/anthropic/claude-opus-4
 openrouter/anthropic/claude-opus-4.1
 openrouter/anthropic/claude-opus-4.5
 openrouter/anthropic/claude-opus-4.6
+openrouter/anthropic/claude-opus-4.7
 openrouter/anthropic/claude-sonnet-4
 openrouter/anthropic/claude-sonnet-4.5
 openrouter/anthropic/claude-sonnet-4.6
@@ -1215,6 +1221,7 @@ openrouter/google/gemini-2.5-flash
 openrouter/google/gemini-2.5-pro
 openrouter/google/gemini-3-flash-preview
 openrouter/google/gemini-3-pro-preview
+openrouter/google/gemini-3.1-flash-lite-preview
 openrouter/google/gemini-3.1-pro-preview
 openrouter/gryphe/mythomax-l2-13b
 openrouter/mancer/weaver
@@ -1697,6 +1704,7 @@ xai/grok-4-1-fast-reasoning-latest
 xai/grok-4-fast-non-reasoning
 xai/grok-4-fast-reasoning
 xai/grok-4-latest
+xai/grok-4.20-0309-reasoning
 xai/grok-4.20-beta-0309-non-reasoning
 xai/grok-4.20-beta-0309-reasoning
 xai/grok-4.20-multi-agent-beta-0309
