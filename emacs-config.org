@@ -6354,7 +6354,8 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut/gitea page from Emacs
 
 #+begin_src emacs-lisp
   (setup (:package browse-at-remote)
-    (:global-keymap "<f12> g g"
+    (:global-keymap "<f12> g t" #'akirak-browse-at-remote
+                    "<f12> g g"
                     (defun akirak/browse-at-remote ()
                       (interactive)
                       (unless (vc-git-root default-directory)
