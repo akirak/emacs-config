@@ -133,7 +133,10 @@
     (user-error "akirak-passage-dir is not set")))
 
 (defun akirak-passage--get-password (account)
-  "Return the first line of the password entry of ACCOUNT."
+  "Return the password component of ACCOUNT.
+
+In normal cases, it returns the first line of the content. In some
+specific cases, it returns the whole content."
   (with-temp-buffer
     (insert (akirak-passage--run-process nil "show" account))
     (goto-char (point-min))
