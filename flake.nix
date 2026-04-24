@@ -50,7 +50,6 @@
       url = "github:virchau13/tree-sitter-astro";
       flake = false;
     };
-    tree-sitter-dune.url = "github:akirak/tree-sitter-dune/update-flake";
 
     lsp-proxy.url = "github:jadestrong/lsp-proxy";
 

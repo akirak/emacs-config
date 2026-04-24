@@ -80,9 +80,6 @@ let
           initFile
         ],
     }:
-    let
-      inherit (pkgs.stdenv.hostPlatform) system;
-    in
     (inputs.twist.lib.makeEnv (
       twist-args
       // {
@@ -117,7 +114,6 @@ let
                   version = "0";
                   src = inputs.tree-sitter-astro.outPath;
                 })
-                inputs.tree-sitter-dune.packages.${system}.default
               ]
             )
           }/lib/")
