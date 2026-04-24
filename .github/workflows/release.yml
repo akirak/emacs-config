@@ -39,28 +39,29 @@ jobs:
             result-tar: false
 
     steps:
-    - uses: actions/checkout@v6
-      with:
-        ref: ${{ inputs.release-tag }}
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.release-tag }}
 
-    - name: Set up Nix
-      uses: ./.github/actions/setup
-      with:
-        cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Set up Nix
+        uses: ./.github/actions/setup
+        with:
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-    - name: Build the artifact
-      run: nix ${{ matrix.command }} .#${{ matrix.package }}
+      - name: Build the artifact
+        run: nix ${{ matrix.command }} .#${{ matrix.package }}
 
-    - name: Compress the archive if any
-      run: |
-        cp -v --no-preserve=mode result/*.tar .
-        gzip ./*.tar
-      if: ${{ matrix.result-tar }}
+      - name: Compress the archive if any
+        run: |
+          cp -v --no-preserve=mode result/*.tar .
+          gzip ./*.tar
+        if: ${{ matrix.result-tar }}
 
-    - uses: akirak/action-gh-release@master
-      with:
-        tag_name: ${{ inputs.release-tag || github.ref_name }}
-        files: |
-          *.zstd
-          *.tar.gz
-          *.el
+      - uses: akirak/action-gh-release@master
+        with:
+          tag_name: ${{ inputs.release-tag || github.ref_name }}
+          files: |
+            *.zstd
+            *.tar.gz
+            *.el
+

@@ -1393,13 +1393,21 @@ The built-in =electric= package provides the following modes:
              ;; (prettier '((eval . (prettier-on-save-mode t))))
              (jq-format '((eval . (jq-format-on-save-mode t))))
              ;; (sqlformat '((eval . (sqlformat-on-save-mode t))))
-             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
-             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
+
+             ;; settings for lsp-proxy.
+             (lsp '((eval . (akirak/lsp-proxy-enable))))
+             ;; Use the same configuration for now.
+             (lsp-no-formatter lsp)
+
+             ;; settings for eglot.
+             ;; (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
+             ;; (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
+
              (flymake-eslint '((eval . (flymake-eslint-enable))))
              (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
              (nixfmt '((eval . (nixfmt-on-save-mode t))))
              (zig-fmt '((eval . (zig-format-on-save-mode t))))
-             (copilot '((eval . (copilot-mode t))))
+             ;; (copilot '((eval . (copilot-mode t))))
              (editorconfig '((eval . (editorconfig-mode t))))
              (default  `((astro-ts-mode . (,@lsp-no-formatter))
                          (css-mode . (,@lsp-no-formatter))
@@ -1415,8 +1423,9 @@ The built-in =electric= package provides the following modes:
                          (just-mode . (,@lsp-no-formatter))
                          (kotlin-ts-mode . (,@lsp))
                          (nael-mode . (,@lsp))
-                         (neocaml-mode . ((eval . (ocaml-eglot))))
-                         (neocamli-mode . ((eval . (ocaml-eglot))))
+                         (dune-mode . (,@lsp-no-formatter))
+                         (neocaml-mode . (,@lsp-no-formatter))
+                         (neocamli-mode . (,@lsp-no-formatter))
                          (python-mode . (,@lsp-no-formatter))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
                          (rust-ts-mode . (,@lsp))
@@ -1438,13 +1447,14 @@ The built-in =electric= package provides the following modes:
         (dir-locals-set-class-variables
          'default
          default)
-        (dir-locals-set-class-variables
-         'foss
-         (cons `(prog-mode . (,@copilot))
-               default)))
+        ;; (dir-locals-set-class-variables
+        ;;  'foss
+        ;;  (cons `(prog-mode . (,@copilot))
+        ;;        default))
+        )
       (dir-locals-set-directory-class "~/build/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
-      (dir-locals-set-directory-class "~/work2/foss/" 'foss)
+      (dir-locals-set-directory-class "~/work2/foss/" 'default)
 
       (:set ignored-local-variable-values
             ;; github:melpa/melpa
@@ -4991,6 +5001,30 @@ A mode for editing Kotlin files based on tree-sitter
   (setup lua-ts-mode
     (:file-match "\\.lua\\'"))
 #+end_src
+*** neocaml
+#+begin_quote
+Major mode for OCaml code
+[[http://github.com/bbatsov/neocaml]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package neocaml)
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:with-mode (neocaml-mode neocamli-mode)
+      (:mode-repl akirak/utop-project)
+      (:org-src-lang "ocaml")
+      (:mode-project-roots "dune-project")
+      (:local-set treesit-font-lock-level 4)
+      (:set neocaml-use-prettify-symbols nil)
+
+      ;; Load abbreviations
+      (:also-load akirak-ocaml)
+      (:local-set local-abbrev-table akirak-ocaml-abbrev-table))
+
+    (:reformatters
+     (ocamlformat :program "ocamlformat"
+                  :args (list "--name" (buffer-file-name) "-"))))
+#+end_src
 *** nix-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-08-26 Sat 11:56]
@@ -6563,7 +6597,7 @@ Search and navigate via completing-read
       (:set xref-show-xrefs-function #'consult-xref
             xref-show-definitions-function #'consult-xref)))
 #+end_src
-*** consult-eglot
+*** COMMENT consult-eglot                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2026-03-31 Tue 23:59]
 :END:
@@ -6620,7 +6654,7 @@ Recoll queries using consult
                                           (abbreviate-file-name)))
                                 'face 'font-lock-doc-face)))))
 #+end_src
-*** copilot                                                  :copilot:AI:@extra:
+*** COMMENT copilot                                          :copilot:AI:@extra:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
@@ -7270,7 +7304,7 @@ Emacs Does Interactive Prolog
 #+end_src
 
 [[https://lib.rs/crates/scryer-prolog][scryer-prolog]] is the bleeding-edge implementation of Prolog (like GHC to Haskell), and it is installed with this package.
-*** eglot                                                      :LSP:
+*** COMMENT eglot                                                          :LSP:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
@@ -7396,7 +7430,7 @@ Client for Language Server Protocol (LSP) servers
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")))
 #+end_src
-**** ocaml-eglot
+**** COMMENT ocaml-eglot                                                       :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:04]
 :END:
@@ -7409,7 +7443,7 @@ An OCaml companion for Eglot
   (setup (:package ocaml-eglot)
     (add-hook 'ocaml-eglot-hook #'eglot-ensure))
 #+end_src
-*** eglot-booster
+*** COMMENT eglot-booster                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-10-29 Tue 21:45]
 :END:
@@ -8760,6 +8794,42 @@ LSP mode
   (put 'lsp-define-conditional-key 'lisp-indent-function 'defun)
   (put 'lsp-with-filename 'lisp-indent-function 1)
 #+end_src
+*** lsp-proxy
+:PROPERTIES:
+:CREATED_TIME: [2026-04-18 Sat 09:41]
+:END:
+#+begin_quote
+LSP Proxy client for Emacs
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package lsp-proxy)
+    (:nixpkgs "lsp-proxy")
+
+    (:keymap akirak/mode-prefix-key #'akirak/lsp-proxy-prefix-map)
+
+    (defun akirak/lsp-proxy-enable ()
+      (lsp-proxy-mode 1))
+
+    (defun akirak/lsp-proxy-rename-dwim ()
+      (interactive)
+      (or (akirak-treesit-maybe-rename-tag)
+          (call-interactively #'lsp-proxy-rename)))
+
+    (:with-feature typescript-ts-mode
+      (:with-map tsx-ts-mode-map
+        (:keymap "<remap> <lsp-proxy-rename>" #'akirak/lsp-proxy-rename-dwim)))
+
+    (:when-loaded
+      (define-prefix-command 'akirak/lsp-proxy-prefix-map)
+      (:with-map akirak/lsp-proxy-prefix-map
+        (:keymap "a" #'lsp-proxy-execute-code-action
+                 "d" #'lsp-proxy-describe-thing-at-point
+                 "f" #'lsp-proxy-format-buffer
+                 "R" #'lsp-proxy-restart
+                 "r" #'lsp-proxy-rename))))
+#+end_src
+
 *** COMMENT macrostep                                   :emacs_lisp:development:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-17 Mon 15:52]
@@ -9289,30 +9359,6 @@ Major mode for Lean
     (:set nael-prepare-eglot t
           nael-prepare-lsp nil)
     (:keymap "C-c C-r" #'akirak/lake-lean-run))
-#+end_src
-*** neocaml
-#+begin_quote
-Major mode for OCaml code
-[[http://github.com/bbatsov/neocaml]]
-#+end_quote
-
-#+begin_src emacs-lisp
-  (setup (:package neocaml)
-    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
-    (:with-mode (neocaml-mode neocamli-mode)
-      (:mode-repl akirak/utop-project)
-      (:org-src-lang "ocaml")
-      (:mode-project-roots "dune-project")
-      (:local-set treesit-font-lock-level 4)
-      (:set neocaml-use-prettify-symbols nil)
-
-      ;; Load abbreviations
-      (:also-load akirak-ocaml)
-      (:local-set local-abbrev-table akirak-ocaml-abbrev-table))
-
-    (:reformatters
-     (ocamlformat :program "ocamlformat"
-                  :args (list "--name" (buffer-file-name) "-"))))
 #+end_src
 *** neotree
 :PROPERTIES:
@@ -11576,11 +11622,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 223 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
-| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
+| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
@@ -11610,10 +11656,8 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:MCP][MCP]]                 |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
-| [[org-ql-search:tags:AI][AI]]                  |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:drawing][drawing]]             |   2 |
-| [[org-ql-search:tags:LSP][LSP]]                 |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |
@@ -11631,7 +11675,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
-| [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
@@ -11640,6 +11683,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
+| [[org-ql-search:tags:AI][AI]]                  |   1 |
 | [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:social][social]]              |   1 |
@@ -11700,7 +11744,6 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
 | Heading | Todo |
 |---------+------|
-| [[copilot][copilot]] |      |
 | [[gptel][gptel]]   |      |
 #+END:
 

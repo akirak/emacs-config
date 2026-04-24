@@ -51,6 +51,8 @@
       flake = false;
     };
 
+    lsp-proxy.url = "github:jadestrong/lsp-proxy";
+
     playwright-mcp.url = "github:akirak/nix-playwright-mcp";
 
     mcp-nixos = {

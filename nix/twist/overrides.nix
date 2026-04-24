@@ -1,8 +1,8 @@
-# Copyright (C) 2022-2024 Akira Komamura
+# Copyright (C) 2022-2026 Akira Komamura
 # SPDX-License-Identifier: MIT
 
 {
-  pkgs,
+  pkgs
 }:
 _eself: esuper:
 builtins.intersectAttrs esuper {

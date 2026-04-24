@@ -13,18 +13,19 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-      with:
-        ref: develop
-    - name: Set up Nix
-      uses: ./.github/actions/setup
-      with:
-        cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
-    - run: nix run .#update-ai-models
-    - uses: peter-evans/create-pull-request@eec7ab75b2f71ddc8a223341c83a67f6f774c39f
-      with:
-        base: develop
-        token: ${{ secrets.GITHUB_TOKEN }}
-        title: 'chore: Update the model list'
-        branch: bot/update/ai-models
-        labels: automation,update,emacs
+      - uses: actions/checkout@v6
+        with:
+          ref: develop
+      - name: Set up Nix
+        uses: ./.github/actions/setup
+        with:
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - run: nix run .#update-ai-models
+      - uses: peter-evans/create-pull-request@eec7ab75b2f71ddc8a223341c83a67f6f774c39f
+        with:
+          base: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'chore: Update the model list'
+          branch: bot/update/ai-models
+          labels: automation,update,emacs
+

@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2025 Akira Komamura
+# Copyright (C) 2022-2026 Akira Komamura
 # SPDX-License-Identifier: MIT
 
 {
@@ -252,5 +252,14 @@
     #   repo = "lean4-mode";
     #   ref = "milestone-03-breaking-refactor";
     # };
+  };
+
+  neocaml = _: super: {
+    files = builtins.removeAttrs super.files [
+      # I prefer dune.el over neocaml-dune.el for now because of the better
+      # editing experience.
+      "neocaml-dune.el"
+      "neocaml-dune-interaction.el"
+    ];
   };
 }

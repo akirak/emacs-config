@@ -3,8 +3,10 @@ name: Build Emacs packages
 on:
   push:
     branches-ignore:
-    - master
+      - master
   pull_request:
+    paths-ignore:
+      - ai-model-list.txt
   workflow_dispatch:
 
 permissions:
@@ -18,39 +20,39 @@ jobs:
   deps-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-    - name: Set up Nix
-      uses: ./.github/actions/setup
-      with:
-        cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Set up Nix
+        uses: ./.github/actions/setup
+        with:
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-    - run: nix build .#emacs-config.depsCheck --print-build-logs
+      - run: nix build .#emacs-config.depsCheck --print-build-logs
 
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-    - name: Set up Nix
-      uses: ./.github/actions/setup
-      with:
-        cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Set up Nix
+        uses: ./.github/actions/setup
+        with:
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-    # nix-fast-build may not utilize substituters configured in the flake,
-    # so run `nix build` to prefetch dependencies beforehand.
-    - name: Prefetch dependencies
-      run: nix build .#emacs-config.emacs --accept-flake-config --no-link
+      # nix-fast-build may not utilize substituters configured in the flake,
+      # so run `nix build` to prefetch dependencies beforehand.
+      - name: Prefetch dependencies
+        run: nix build .#emacs-config.emacs --accept-flake-config --no-link
 
-    - name: Build packages
-      run: nix build .#emacs-config -L
-    #   run: |
-    #     nix run .#nix-fast-build -- \
-    #       --flake "#packages.x86_64-linux.emacs-config.elispPackages" \
-    #       --no-nom \
-    #       --skip-cached \
-    #       --no-link \
-    #       --option accept-flake-config true \
-    #       --cachix-cache akirak
-    #   env:
-    #     CACHIX_AUTH_TOKEN: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - name: Build packages
+        run: nix build .#emacs-config -L
+      #   run: |
+      #     nix run .#nix-fast-build -- \
+      #       --flake "#packages.x86_64-linux.emacs-config.elispPackages" \
+      #       --no-nom \
+      #       --skip-cached \
+      #       --no-link \
+      #       --option accept-flake-config true \
+      #       --cachix-cache akirak
+      #   env:
+      #     CACHIX_AUTH_TOKEN: '${{ secrets.CACHIX_AUTH_TOKEN }}'
