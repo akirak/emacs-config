@@ -1041,22 +1041,6 @@
         "type": "github"
       }
     },
-    "flymake-eslint": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1750444870,
-        "narHash": "sha256-DobDy+gom9OuBAGOHSDWYgGiKdSZTtTq3cDPWqAqUFc=",
-        "owner": "orzechowskid",
-        "repo": "flymake-eslint",
-        "rev": "5b72d22a9352ed06518c3e1d1231a31b8413464f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "orzechowskid",
-        "repo": "flymake-eslint",
-        "type": "github"
-      }
-    },
     "flymake-shellcheck": {
       "flake": false,
       "locked": {
@@ -3056,7 +3040,6 @@
         "exec-path-from-shell": "exec-path-from-shell",
         "f": "f",
         "flymake-actionlint1": "flymake-actionlint1",
-        "flymake-eslint": "flymake-eslint",
         "flymake-shellcheck": "flymake-shellcheck",
         "flymake-sqlfluff": "flymake-sqlfluff",
         "flymake-vale": "flymake-vale",
