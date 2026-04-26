@@ -1454,6 +1454,7 @@ The built-in =electric= package provides the following modes:
         )
       (dir-locals-set-directory-class "~/build/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
+      (dir-locals-set-directory-class "~/work2/personal/" 'personal)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)
 
       (:set ignored-local-variable-values
