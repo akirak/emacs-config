@@ -93,7 +93,6 @@ let
           lib.composeExtensions inputs.flake-pins.overlays.default (
             _: _: {
               playwright-mcp = inputs.playwright-mcp.packages.${pkgs.stdenv.hostPlatform.system}.default;
-              mcp-nixos = inputs.mcp-nixos.packages.${pkgs.stdenv.hostPlatform.system}.default;
             }
           )
         );
