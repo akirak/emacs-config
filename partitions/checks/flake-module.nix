@@ -3,7 +3,10 @@
 
 { inputs, ... }:
 {
-  imports = [ inputs.git-hooks-nix.flakeModule ];
+  imports = [
+    inputs.git-hooks-nix.flakeModule
+    inputs.treefmt-nix.flakeModule
+  ];
 
   perSystem =
     {
@@ -31,6 +34,11 @@
             ];
           };
         };
+      };
+
+      treefmt = {
+        programs.nixfmt.enable = true;
+        programs.deadnix.enable = true;
       };
 
       devShells = {

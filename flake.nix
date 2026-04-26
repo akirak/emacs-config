@@ -99,6 +99,7 @@
 
       partitionedAttrs = {
         devShells = "checks";
+        formatter = "checks";
       };
     };
 }
