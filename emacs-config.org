@@ -2345,7 +2345,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                           (beginning-of-line)))
 
                       "M-z" #'akirak/zap-char
-                      "M-Z" #'zap-char)))
+                      "M-Z" #'zap-to-char)))
 #+end_src
 *** skeleton
 :PROPERTIES:
