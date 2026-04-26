@@ -10,7 +10,6 @@
 
   perSystem =
     {
-      pkgs,
       system,
       config,
       emacs-config,
@@ -23,7 +22,7 @@
           pkgs = import inputs.nixpkgs {
             inherit system;
             overlays = [
-              (_: prev: {
+              (_: _prev: {
                 # Add packages for use in the hooks.
                 emacs-with-pkgs = emacs-config.emacs.pkgs.withPackages (epkgs: [
                   epkgs.org-ql

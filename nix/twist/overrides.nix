@@ -2,11 +2,11 @@
 # SPDX-License-Identifier: MIT
 
 {
-  pkgs
+  pkgs,
 }:
 _eself: esuper:
 builtins.intersectAttrs esuper {
-  akirak = esuper.akirak.overrideAttrs (old: {
+  akirak = esuper.akirak.overrideAttrs (_old: {
     # The libraries are improperly packaged, so disable byte-compilation for now.
     dontByteCompile = true;
   });

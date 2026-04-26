@@ -74,8 +74,6 @@
 
   outputs =
     {
-      self,
-      nixpkgs,
       flake-parts,
       ...
     }@inputs:

@@ -49,7 +49,7 @@ let
         };
       };
 
-      lsp-proxy = _: super: {
+      lsp-proxy = _: _super: {
         src = inputs.lsp-proxy.outPath;
       };
     };
