@@ -23,6 +23,8 @@ jobs:
         with:
           cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - run: nix flake update --inputs-from github:akirak/flake-pins
+      - run: nix flake update --inputs-from github:akirak/flake-pins
+        working-directory: partitions/checks
       - name: Update the lock entries
         run: |
           nix run .#lock --impure

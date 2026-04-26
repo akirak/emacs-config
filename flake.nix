@@ -54,11 +54,6 @@
     lsp-proxy.url = "github:jadestrong/lsp-proxy";
 
     playwright-mcp.url = "github:akirak/nix-playwright-mcp";
-
-    mcp-nixos = {
-      url = "github:utensils/mcp-nixos";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   nixConfig = {
@@ -74,8 +69,6 @@
 
   outputs =
     {
-      self,
-      nixpkgs,
       flake-parts,
       ...
     }@inputs:
@@ -99,6 +92,7 @@
 
       partitionedAttrs = {
         devShells = "checks";
+        formatter = "checks";
       };
     };
 }

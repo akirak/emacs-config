@@ -389,12 +389,6 @@
       repo = "flymake-actionlint1";
       type = "github";
     };
-    flymake-eslint = {
-      flake = false;
-      owner = "orzechowskid";
-      repo = "flymake-eslint";
-      type = "github";
-    };
     flymake-shellcheck = {
       flake = false;
       owner = "federicotdn";
@@ -508,10 +502,10 @@
       type = "git";
       url = "https://codeberg.org/pranshu/haskell-ts-mode";
     };
-    hcl-mode = {
+    hcl-ts-mode = {
       flake = false;
-      owner = "hcl-emacs";
-      repo = "hcl-mode";
+      owner = "arkbriar";
+      repo = "hcl-ts-mode";
       type = "github";
     };
     highlight-indent-guides = {

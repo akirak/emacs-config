@@ -1454,6 +1454,7 @@ The built-in =electric= package provides the following modes:
         )
       (dir-locals-set-directory-class "~/build/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
+      (dir-locals-set-directory-class "~/work2/personal/" 'personal)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)
 
       (:set ignored-local-variable-values
@@ -2345,7 +2346,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                           (beginning-of-line)))
 
                       "M-z" #'akirak/zap-char
-                      "M-Z" #'zap-char)))
+                      "M-Z" #'zap-to-char)))
 #+end_src
 *** skeleton
 :PROPERTIES:
@@ -4900,6 +4901,23 @@ A treesit based major mode for haskell
   (setup (:package haskell-ts-mode)
     (:file-match "\\.hs\\'"))
 #+end_src
+*** hcl-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-04-26 Sun 23:03]
+:END:
+#+begin_quote
+tree-sitter support for HCL
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package hcl-ts-mode)
+    (:file-match "\\.tf\\'"
+                 "\\.prisma\\'"
+                 "\\.hcl\\'")
+    (:reformatters
+     (terraform-fmt :program "terraform"
+                    :args (list "fmt" "--write=false" "-"))))
+#+end_src
 *** heex-ts-mode
 #+begin_src elisp
   (setup heex-ts-mode
@@ -6354,7 +6372,8 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut/gitea page from Emacs
 
 #+begin_src emacs-lisp
   (setup (:package browse-at-remote)
-    (:global-keymap "<f12> g g"
+    (:global-keymap "<f12> g t" #'akirak-browse-at-remote
+                    "<f12> g g"
                     (defun akirak/browse-at-remote ()
                       (interactive)
                       (unless (vc-git-root default-directory)
@@ -7769,7 +7788,7 @@ On-the-fly syntax checking
 #+begin_src emacs-lisp
 (setup (:package flycheck))
 #+end_src
-*** flymake-eslint
+*** COMMENT flymake-eslint                                                     :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-01 Fri 23:59]
 :END:
@@ -8344,7 +8363,7 @@ A Haskell editing mode
            "Main")
           (module-segments (string-join module-segments "."))))))
 #+end_src
-*** hcl-mode                                             :Terraform:
+*** COMMENT hcl-mode                                                 :Terraform:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
 :END:
@@ -9177,21 +9196,12 @@ Model Context Protocol
 #+begin_src emacs-lisp
   (setup (:package mcp)
     (:global "<f12> a m" #'mcp-hub)
-    (:nixpkgs mcp-nixos)
     (:set mcp-hub-servers
           `(("playwright-headless"
              ;; Use the pre-downloaded Nix package. An alternative is
              ;; `nix run github:akirak/nix-playwright-mcp --`.
              :command "mcp-server-playwright"
-             :args ("--headless"))
-            ("nixos"
-             :command "mcp-nixos")
-            ("context7"
-             ;; Streamable HTTP
-             :url "http://localhost:11007/mcp")
-            ("effect"
-             :command "npx"
-             :args ("-y" "effect-mcp@latest")))))
+             :args ("--headless")))))
 #+end_src
 *** mermaid-mode :mermaid:
 :PROPERTIES:
@@ -11622,7 +11632,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 216 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
@@ -11684,7 +11694,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
 | [[org-ql-search:tags:AI][AI]]                  |   1 |
-| [[org-ql-search:tags:Terraform][Terraform]]           |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:social][social]]              |   1 |
 | [[org-ql-search:tags:mermaid][mermaid]]             |   1 |

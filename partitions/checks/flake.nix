@@ -7,6 +7,8 @@
       # inputs.nixpkgs.follows = "nixpkgs";
       inputs.pre-commit-hooks.follows = "git-hooks-nix";
     };
+
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs = { ... }: { };

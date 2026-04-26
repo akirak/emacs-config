@@ -65,6 +65,12 @@ in
       }
     ];
     servers = {
+      oxlint = {
+        command = "oxlint";
+        args = [
+          "--lsp"
+        ];
+      };
       tsgo = {
         command = "tsgo";
         args = [
