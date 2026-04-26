@@ -8360,7 +8360,7 @@ A Haskell editing mode
            "Main")
           (module-segments (string-join module-segments "."))))))
 #+end_src
-*** hcl-mode                                             :Terraform:
+*** COMMENT hcl-mode                                                 :Terraform:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-20 Sun 23:59]
 :END:

@@ -502,12 +502,6 @@
       type = "git";
       url = "https://codeberg.org/pranshu/haskell-ts-mode";
     };
-    hcl-mode = {
-      flake = false;
-      owner = "hcl-emacs";
-      repo = "hcl-mode";
-      type = "github";
-    };
     hcl-ts-mode = {
       flake = false;
       owner = "arkbriar";

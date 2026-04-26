@@ -1345,22 +1345,6 @@
         "url": "https://codeberg.org/pranshu/haskell-ts-mode"
       }
     },
-    "hcl-mode": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1728982426,
-        "narHash": "sha256-1j23lOoGM7pML2M0LXGKIVKjCmAtf4/J43l8JpPEfXI=",
-        "owner": "hcl-emacs",
-        "repo": "hcl-mode",
-        "rev": "1da895ed75d28d9f87cbf9b74f075d90ba31c0ed",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hcl-emacs",
-        "repo": "hcl-mode",
-        "type": "github"
-      }
-    },
     "hcl-ts-mode": {
       "flake": false,
       "locked": {
@@ -3075,7 +3059,6 @@
         "graphql-ts-mode": "graphql-ts-mode",
         "gt": "gt",
         "haskell-ts-mode": "haskell-ts-mode",
-        "hcl-mode": "hcl-mode",
         "hcl-ts-mode": "hcl-ts-mode",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
