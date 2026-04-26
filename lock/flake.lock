@@ -1361,6 +1361,22 @@
         "type": "github"
       }
     },
+    "hcl-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1701160346,
+        "narHash": "sha256-OGLMwe0qTkt/xU4BmTCZt7wn6MC66RMPJS78NcfbNI8=",
+        "owner": "arkbriar",
+        "repo": "hcl-ts-mode",
+        "rev": "a524b8b630d394e2ed46eea371870030297d1d4e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arkbriar",
+        "repo": "hcl-ts-mode",
+        "type": "github"
+      }
+    },
     "highlight-indent-guides": {
       "flake": false,
       "locked": {
@@ -3060,6 +3076,7 @@
         "gt": "gt",
         "haskell-ts-mode": "haskell-ts-mode",
         "hcl-mode": "hcl-mode",
+        "hcl-ts-mode": "hcl-ts-mode",
         "highlight-indent-guides": "highlight-indent-guides",
         "hl-todo": "hl-todo",
         "ht": "ht",

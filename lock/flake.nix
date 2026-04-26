@@ -508,6 +508,12 @@
       repo = "hcl-mode";
       type = "github";
     };
+    hcl-ts-mode = {
+      flake = false;
+      owner = "arkbriar";
+      repo = "hcl-ts-mode";
+      type = "github";
+    };
     highlight-indent-guides = {
       flake = false;
       owner = "bumblepup";

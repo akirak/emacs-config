@@ -4901,6 +4901,20 @@ A treesit based major mode for haskell
   (setup (:package haskell-ts-mode)
     (:file-match "\\.hs\\'"))
 #+end_src
+*** hcl-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-04-26 Sun 23:03]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package hcl-ts-mode)
+    (:file-match "\\.tf\\'"
+                 "\\.prisma\\'"
+                 "\\.hcl\\'")
+    (:reformatters
+     (terraform-fmt :program "terraform"
+                    :args (list "fmt" "--write=false" "-"))))
+#+end_src
 *** heex-ts-mode
 #+begin_src elisp
   (setup heex-ts-mode
