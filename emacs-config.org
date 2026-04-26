@@ -7770,7 +7770,7 @@ On-the-fly syntax checking
 #+begin_src emacs-lisp
 (setup (:package flycheck))
 #+end_src
-*** flymake-eslint                                                     :ARCHIVE:
+*** COMMENT flymake-eslint                                                     :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-07-01 Fri 23:59]
 :END:
@@ -11623,7 +11623,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
