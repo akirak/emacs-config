@@ -17,6 +17,14 @@ let
 
   pkgs' = pkgs.extend (lib.composeManyExtensions overlays);
 
+  # withExtraTags =
+  #   features:
+  #   org-babel.excludeHeadlines (
+  #     s:
+  #     org-babel.tag "ARCHIVE" s
+  #     || (org-babel.tag "@extra" s && !lib.any (tag: org-babel.tag tag s) features)
+  #   );
+
   java-debug-plugin =
     pkgs.runCommand "java-debug-plugin.jar"
       {

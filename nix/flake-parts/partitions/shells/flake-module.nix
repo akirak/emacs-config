@@ -12,7 +12,6 @@
     {
       system,
       config,
-      emacs-config,
       ...
     }:
     {
@@ -24,7 +23,7 @@
             overlays = [
               (_: _prev: {
                 # Add packages for use in the hooks.
-                emacs-with-pkgs = emacs-config.emacs.pkgs.withPackages (epkgs: [
+                emacs-with-pkgs = inputs.flake-pins.packages.${system}.emacs-pgtk.pkgs.withPackages (epkgs: [
                   epkgs.org-ql
                   epkgs.org-make-toc
                 ]);
@@ -43,9 +42,5 @@
       devShells = {
         default = config.pre-commit.devShell;
       };
-
-      # checks =
-      #   {
-      #   };
     };
 }

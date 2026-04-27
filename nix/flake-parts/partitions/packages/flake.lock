@@ -1,0 +1,93 @@
+{
+  "nodes": {
+    "gnu-elpa": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777203551,
+        "narHash": "sha256-NQvKApUjlJjlD6RAFrdtb9oa8GISVKp3E4PnoGdLRvY=",
+        "owner": "elpa-mirrors",
+        "repo": "elpa",
+        "rev": "677c0ba227ad9d5486f49cf1a9f7026cdc6f5d16",
+        "type": "github"
+      },
+      "original": {
+        "owner": "elpa-mirrors",
+        "repo": "elpa",
+        "type": "github"
+      }
+    },
+    "melpa": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776807483,
+        "narHash": "sha256-0LUhYq5N6TjF6uJB3Iq3Rx+KCpcoon9NSbTKqI0TMlI=",
+        "owner": "melpa",
+        "repo": "melpa",
+        "rev": "ded37adf942ceac2bc6e234646b1b178d48ba87b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "melpa",
+        "repo": "melpa",
+        "type": "github"
+      }
+    },
+    "nix-filter": {
+      "locked": {
+        "lastModified": 1757882181,
+        "narHash": "sha256-+cCxYIh2UNalTz364p+QYmWHs0P+6wDhiWR4jDIKQIU=",
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "rev": "59c44d1909c72441144b93cf0f054be7fe764de5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "type": "github"
+      }
+    },
+    "nongnu-elpa": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1775140556,
+        "narHash": "sha256-z6dxooNYIieHdDUVlepmjQWbxt2PzZMGRloh6hB9NNo=",
+        "owner": "elpa-mirrors",
+        "repo": "nongnu",
+        "rev": "9589680ec7cf0ac153aa0a0c7f9feae602826ad6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "elpa-mirrors",
+        "repo": "nongnu",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "gnu-elpa": "gnu-elpa",
+        "melpa": "melpa",
+        "nix-filter": "nix-filter",
+        "nongnu-elpa": "nongnu-elpa",
+        "twist-overrides": "twist-overrides"
+      }
+    },
+    "twist-overrides": {
+      "locked": {
+        "lastModified": 1722071850,
+        "narHash": "sha256-lyVZGFJo9mgKUGWtMGqGq6T3wQnzQwemNryM2USEKMc=",
+        "owner": "emacs-twist",
+        "repo": "overrides",
+        "rev": "9dcd55a44ed7bf2324a1d2dc4579d5389ecac6b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-twist",
+        "repo": "overrides",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
