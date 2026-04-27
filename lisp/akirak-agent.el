@@ -76,22 +76,24 @@ alist uses interned symbols as keys."
   "Return skills in PROJECT-ROOT using CONVENTIONS.
 
 Each element is of the form (NAME . METADATA)."
-  (cl-assert (string-prefix-p (expand-file-name (file-name-as-directory root-dir))
-                              (expand-file-name default-directory))
-             nil
-             "ROOT-DIR must be an ancestor of default-directory or self")
   (let ((skills-dirs (ensure-list (or skills-dir akirak-agent-skills-dir)))
-        (cwd default-directory)
+        (cwd (if (string-prefix-p (expand-file-name (file-name-as-directory root-dir))
+                                  (expand-file-name default-directory))
+                 default-directory
+               root-dir))
         (extra-skills-dir (or extra-skills-dir
                               akirak-agent-global-skills-dir))
         result)
-    (while (not (file-equal-p cwd root-dir))
-      (dolist (absdir (mapcar `(lambda (relative)
-                                 (file-name-concat ,cwd relative))
-                              skills-dirs))
-        (when (file-directory-p absdir)
-          (setq result (append result (akirak-agent--skills-in-dir absdir)))))
-      (setq cwd (file-name-parent-directory cwd)))
+    (catch 'find-dir
+      (while t
+        (dolist (absdir (mapcar `(lambda (relative)
+                                   (file-name-concat ,cwd relative))
+                                skills-dirs))
+          (when (file-directory-p absdir)
+            (setq result (append result (akirak-agent--skills-in-dir absdir)))))
+        (when (file-equal-p cwd root-dir)
+          (throw 'find-dir t))
+        (setq cwd (file-name-parent-directory cwd))))
     (when (and extra-skills-dir
                (file-directory-p extra-skills-dir))
       (setq result (append result (akirak-agent--skills-in-dir extra-skills-dir))))
