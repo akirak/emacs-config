@@ -40,7 +40,12 @@
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } (
-      top@{ self, inputs, ... }:
+      top@{
+        flake-parts-lib,
+        self,
+        inputs,
+        ...
+      }:
       let
         inherit (nixpkgs) lib;
 
@@ -116,29 +121,25 @@
 
         flake = {
           overlays.default = overlay;
+
+          checks.x86_64-linux.homeConfiguration =
+            self.homeConfigurations."akirakomamura@default-x86_64-linux".activationPackage;
         };
 
-        perSystem = { system, ... }: {
-          checks = {
-            # Check if the elisp packages are successfully built.
-            elisp-packages = self.packages.${system}.emacs-config.overrideScope (
-              _tself: _tsuper: {
-                executablePackages = [ ];
-              }
-            );
+        perSystem =
+          { system, ... }:
+          {
+            checks = {
+              # Check if the elisp packages are successfully built.
+              elisp-packages = self.packages.${system}.emacs-config.overrideScope (
+                _tself: _tsuper: {
+                  executablePackages = [ ];
+                }
+              );
 
-          # homeModules = {
-          # twist = {
-          # imports = [
-          # inputs.twist.homeModules.emacs-twist
-          # (import (rootPath + "/nix/home-module.nix") makeEnv
-          # { inherit overlays; })
-          # ];
-          # };
-          # };
-            # depsCheck = fullEmacsEnv.depsCheck;
+              # depsCheck = fullEmacsEnv.depsCheck;
+            };
           };
-        };
 
         partitionedAttrs = {
           devShells = "shells";
@@ -146,6 +147,7 @@
           packages = "packages";
           apps = "packages";
           checks = "packages";
+          homeConfigurations = "configs";
         };
 
         partitions = {
@@ -156,6 +158,18 @@
                 ./nix/flake-parts/partitions/shells/flake-module.nix
               ];
             };
+          };
+          configs = {
+            extraInputsFlake = ./nix/flake-parts/partitions/configs;
+            module = (
+              flake-parts-lib.importApply ./nix/flake-parts/partitions/configs/flake-module.nix {
+                inherit makeEmacsEnvWithPkgs;
+                emacsConfigOrg = ./emacs-config.org;
+                paths = [
+                  ./nix/denix
+                ];
+              }
+            );
           };
           packages = {
             extraInputsFlake = ./nix/flake-parts/partitions/packages;
@@ -168,13 +182,6 @@
                   ...
                 }:
                 let
-                  twistInputs =
-                    inputs
-                    // top.config.partitions.packages.extraInputs
-                    // {
-                      inherit self;
-                    };
-
                   emacs-pgtk = inputs.flake-pins.packages.${system}.emacs-pgtk;
 
                   emacs-nonpgtk = inputs.flake-pins.packages.${system}.emacs;
