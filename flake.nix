@@ -122,6 +122,11 @@
         flake = {
           overlays.default = overlay;
 
+          lib = {
+            denixModules = ./nix/denix/modules;
+            denixInputs = top.config.partitions.configs.extraInputs // inputs;
+          };
+
           checks.x86_64-linux.homeConfiguration =
             self.homeConfigurations."akirakomamura@default-x86_64-linux".activationPackage;
         };
@@ -147,6 +152,7 @@
           packages = "packages";
           apps = "packages";
           checks = "packages";
+          overlays = "configs";
           homeConfigurations = "configs";
         };
 
@@ -163,8 +169,7 @@
             extraInputsFlake = ./nix/flake-parts/partitions/configs;
             module = (
               flake-parts-lib.importApply ./nix/flake-parts/partitions/configs/flake-module.nix {
-                inherit makeEmacsEnvWithPkgs;
-                emacsConfigOrg = ./emacs-config.org;
+                inherit overlay;
                 paths = [
                   ./nix/denix
                 ];

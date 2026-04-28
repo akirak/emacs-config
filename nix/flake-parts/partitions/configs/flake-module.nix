@@ -1,11 +1,27 @@
 {
   paths,
-  makeEmacsEnvWithPkgs,
-  emacsConfigOrg,
+  overlay,
 }:
 { inputs, ... }:
 let
   inherit (inputs) denix;
+
+  extraOverlay =
+    _final: prev:
+    let
+      inherit (prev.stdenv.hostPlatform) system;
+    in
+    {
+      ai-tools = inputs.llm-agents.packages.${system};
+      # nix-index = inputs.nix-index-database.packages.${system}.nix-index-with-db;
+      zen-browser = inputs.zen-browser.packages.${system}.default;
+      tix = inputs.tix.packages.${system}.default;
+    };
+
+  overlays = [
+    overlay
+    extraOverlay
+  ];
 
   mkConfigurations =
     moduleSystem:
@@ -31,6 +47,7 @@ let
               ];
               defaultByHostType = {
                 desktop = [
+                  "cli"
                   "gui"
                   "coding"
                 ];
@@ -41,12 +58,18 @@ let
         ))
       ];
       specialArgs = {
-        inherit moduleSystem inputs makeEmacsEnvWithPkgs emacsConfigOrg;
+        inherit
+          moduleSystem
+          inputs
+          overlays
+          ;
       };
     };
 in
 {
   flake = {
     homeConfigurations = mkConfigurations "home";
+
+    overlays.extras = extraOverlay;
   };
 }

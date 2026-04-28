@@ -28,7 +28,7 @@ delib.module {
   ];
 
   home.ifEnabled =
-    { cfg, ... }:
+    { cfg, myconfig, ... }:
     {
       programs.emacs-twist = {
         enable = true;
@@ -51,5 +51,14 @@ delib.module {
 
       # Generate a desktop file for emacsclient
       services.emacs.client.enable = cfg.enableDaemon;
+
+      systemd.user.services.emacs = lib.mkIf myconfig.wayland.enable {
+        Service = {
+          Environment = [
+            "MOZ_ENABLE_WAYLAND=1"
+            "WAYLAND_DISPLAY=wayland-1"
+          ];
+        };
+      };
     };
 }
