@@ -83,6 +83,9 @@
               lsp-proxy = inputs.lsp-proxy.packages.${system}.default;
               playwright-mcp = inputs.playwright-mcp.packages.${system}.default;
 
+              emacs-git-pgtk = inputs.flake-pins.packages.${system}.emacs-pgtk;
+              emacs-git = inputs.flake-pins.packages.${system}.emacs;
+
               emacs-env = makeEmacsEnvWithPkgs final {
                 emacsPackage = inputs.flake-pins.packages.${system}.emacs-pgtk;
               };
