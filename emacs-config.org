@@ -8846,7 +8846,8 @@ LSP Proxy client for Emacs
                  "d" #'lsp-proxy-describe-thing-at-point
                  "f" #'lsp-proxy-format-buffer
                  "R" #'lsp-proxy-restart
-                 "r" #'lsp-proxy-rename))))
+                 "r" #'lsp-proxy-rename
+                 "c" #'lsp-proxy-inline-completion-mode))))
 #+end_src
 
 *** COMMENT macrostep                                   :emacs_lisp:development:ARCHIVE:
