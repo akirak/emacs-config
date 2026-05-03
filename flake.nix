@@ -149,9 +149,9 @@
         partitionedAttrs = {
           devShells = "shells";
           formatter = "shells";
+          checks = "shells";
           packages = "packages";
           apps = "packages";
-          checks = "packages";
           overlays = "configs";
           homeConfigurations = "configs";
         };

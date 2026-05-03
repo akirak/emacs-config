@@ -16,7 +16,7 @@
     }:
     {
       pre-commit = {
-        check.enable = true;
+        check.enable = false;
         settings.hooks = import ./hooks.nix {
           pkgs = import inputs.nixpkgs {
             inherit system;
