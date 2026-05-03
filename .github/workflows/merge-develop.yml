@@ -5,6 +5,8 @@ on:
     types:
       - closed
 
+permissions: {}
+
 jobs:
   tag-release:
     if: |
@@ -13,6 +15,8 @@ jobs:
       github.head_ref == 'develop' &&
       github.event.pull_request.head.repo.id == github.event.pull_request.base.repo.id
     uses: ./.github/workflows/tag-release.yml
+    permissions:
+      contents: write
     with:
       ref: 'master'
     secrets: inherit
@@ -41,3 +45,6 @@ jobs:
     needs: recreate_develop
     uses: ./.github/workflows/update-elisp.yml
     secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
