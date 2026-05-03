@@ -1636,6 +1636,13 @@ Notes:
 
 #+begin_src emacs-lisp
   (setup imenu
+    (add-hook 'imenu-after-jump-hook
+              (defun akirak/imenu-jump-hook ()
+                (recenter)
+                (when (and (require 'pulse nil t)
+                           (fboundp 'pulse-momentary-highlight-one-line))
+                  (pulse-momentary-highlight-one-line))))
+
     (defun akirak/set-imenu-max-item-width ()
       (setq imenu-max-item-length (min (or (frame-text-width) 80)
                                        120)))
@@ -8846,7 +8853,8 @@ LSP Proxy client for Emacs
                  "d" #'lsp-proxy-describe-thing-at-point
                  "f" #'lsp-proxy-format-buffer
                  "R" #'lsp-proxy-restart
-                 "r" #'lsp-proxy-rename))))
+                 "r" #'lsp-proxy-rename
+                 "c" #'lsp-proxy-inline-completion-mode))))
 #+end_src
 
 *** COMMENT macrostep                                   :emacs_lisp:development:ARCHIVE:
