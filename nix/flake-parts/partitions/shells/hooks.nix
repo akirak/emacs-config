@@ -23,7 +23,7 @@ let
     };
 in
 {
-  nixfmt-rfc-style = {
+  nixfmt = {
     enable = true;
     excludes = [ "lock/flake\\.nix" ];
   };
