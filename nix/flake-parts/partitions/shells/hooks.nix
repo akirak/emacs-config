@@ -28,6 +28,9 @@ in
     excludes = [ "lock/flake\\.nix" ];
   };
 
+  actionlint.enable = true;
+  trufflehog.enable = true;
+
   flake-no-path = {
     enable = true;
     name = "Ensure that flake.lock does not contain a local path";
