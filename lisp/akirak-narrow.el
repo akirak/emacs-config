@@ -58,7 +58,12 @@ is an indirect buffer, this command doesn't do anything."
    (arg
     (akirak-narrow--indirect))
    ((buffer-narrowed-p)
-    (widen))
+    (let ((start (point-min))
+          (end (point-max)))
+      (widen)
+      (when (and (require 'pulse nil t)
+                 (fboundp 'pulse-momentary-highlight-region))
+        (pulse-momentary-highlight-region start end))))
    ((region-active-p)
     (let ((begin (region-beginning))
           (end (region-end)))
