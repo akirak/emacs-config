@@ -46,7 +46,11 @@ jobs:
       - name: Auto-merge
         if: steps.cpr.outputs.pull-request-operation == 'created'
         run: |
-          gh pr merge ${{ steps.cpr.outputs.pull-request-number }} \
-            --delete-branch --squash --auto
+          if gh pr merge ${{ steps.cpr.outputs.pull-request-number }} \
+            --delete-branch --squash --auto; then
+            echo "Auto-merge enabled for PR #${{ steps.cpr.outputs.pull-request-number }}."
+          else
+            echo "Skipping auto-merge: it could not be enabled for PR #${{ steps.cpr.outputs.pull-request-number }}."
+          fi
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
