@@ -100,6 +100,7 @@ delib.module {
           ".git-bak*"
           "*.local"
           "*.local.*"
+          ".codex"
         ];
 
         includes = lib.pipe cfg.identities [
