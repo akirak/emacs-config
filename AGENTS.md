@@ -1,7 +1,5 @@
 # Repository Guidelines
-
 ## Project Structure & Module Organization
-
 - `emacs-config.org`: main literate Emacs configuration; `README.org` links to it.
 - `early-init.el`: early Emacs startup settings.
 - `lisp/`: custom Emacs Lisp modules using the `akirak-*.el` naming pattern.
@@ -22,7 +20,7 @@
 - `nix build .#checks.x86_64-linux.treefmt -L`: Check the format.
 - `nix build .#emacs-config.depsCheck --print-build-logs`: verify Emacs package dependency resolution, matching CI.
 - `nix build .#emacs-config.depsCheck -L`: verify Emacs package dependency resolution, matching CI.
->>>>>>> b621b2be (squash! agents: Init)
+- `nix build .#checks.x86_64-linux.lsp-proxy -L`: Build the server configuration for lsp-proxy.
 - `nix build .#checks.x86_64-linux.elisp-packages -L`: Build the Emacs Lisp packages.
 - `nix build .#checks.x86_64-linux.homeConfiguration -L`: Build the sample home-manager configuration.
 ### Updating
@@ -31,16 +29,23 @@
 - `nix run .#update --impure -L`: update ELPA inputs, then run the repository update app.
 - `nix run .#update-ai-models`: Update `ai-model-list.txt`.
 - `nix run .#update-elisp-lock`: Commit package updates by author.
+### Others
+- `nix run .#emacs-config.emacs -- -Q -nw`: Run Emacs without any extra package or init file.
 ## Coding Style & Naming Conventions
 Use two-space indentation for Nix files and keep module files focused by domain. Format Nix with `nixfmt`; unused Nix expressions are checked by `deadnix`. These are enforced by running `nix fmt`.
 
 Emacs Lisp files should use the `akirak-<feature>.el` pattern and provide matching feature names.
 
+In `nix/lsp-proxy-config.nix`, the server name defaults to `command`, but server
+names should not conflict with each other if they take different arguments, even
+for different language groups. If two server settings take different arguments,
+they should be explicitly given different `name` attributes.
+
 Keep generated lock files and recipe updates separate from hand-written configuration changes when possible.
 
 All files should have a `SPDX-License-Identifier` header. Emacs Lisp files in `lisp/` directory must have `GPL-3.0-or-later`. Most other files in the repository should be `MIT`, but there can be few exceptions. Keep updating the copyright year in LICENSES/MIT.txt.
-## Testing Guidelines
-There is no standalone test directory. Treat Nix builds and flake checks as the test suite.
+## Development and Testing Workflows
+Depending on which file has been edited, run a command suitable for checking.
 ## Commit & Pull Request Guidelines
 The commit message should be prefixed with the following keywords:
 

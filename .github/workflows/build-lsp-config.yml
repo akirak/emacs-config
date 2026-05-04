@@ -1,11 +1,10 @@
-name: Build the sample home-manager configuration
+name: Build the LSP server config
 
 on:
   push:
     paths:
-      - flake.nix
-      - '**/flake.lock'
-      - nix/denix/**
+      - flake.lock
+      - nix/lsp-proxy-config.nix
   workflow_dispatch:
 
 permissions:
@@ -26,7 +25,7 @@ jobs:
         with:
           cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - name: Build the configuration
+      - name: Build the config
         run: |
           system="$(nix eval --impure --raw --expr builtins.currentSystem)"
-          nix build ".#checks.$system.homeConfiguration" -L
+          nix build ".#checks.$system.lsp-proxy" -L

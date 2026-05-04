@@ -1,0 +1,4 @@
+interface:
+  display_name: "Add default LSP Servers"
+  short_description: "Add Eglot-backed LSP proxy entries"
+  default_prompt: "Use $add-lsp-servers to add missing lsp-proxy entries from Eglot defaults."

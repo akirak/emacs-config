@@ -32,6 +32,11 @@
 
 (require 'org)
 
+(defconst akirak-org-trivial-word-list
+  '("a"
+    "an"
+    "the"))
+
 (defcustom akirak-org-babel-output-directories
   '(("~/org/" . "~/resources/diagrams/"))
   "Directory mappings for auto-generated file names."
@@ -388,7 +393,15 @@ end of the pasted region."
     (let (result)
       (while (re-search-forward (rx (+ (any alnum))) nil t)
         (push (match-string 0) result))
-      (mapconcat #'downcase (seq-take (nreverse result) 4) "-"))))
+      (thread-first
+        (thread-last
+          result
+          (mapcar #'downcase)
+          (cl-remove-if (lambda (word)
+                          (member word akirak-org-trivial-word-list)))
+          (nreverse))
+        (seq-take 4)
+        (string-join "-")))))
 
 (defun akirak-org--find-babel-output-directory ()
   (let ((file (thread-last
