@@ -20,6 +20,7 @@
 - `nix build .#checks.x86_64-linux.treefmt -L`: Check the format.
 - `nix build .#emacs-config.depsCheck --print-build-logs`: verify Emacs package dependency resolution, matching CI.
 - `nix build .#emacs-config.depsCheck -L`: verify Emacs package dependency resolution, matching CI.
+- `nix build .#checks.x86_64-linux.lsp-proxy -L`: Build the server configuration for lsp-proxy.
 - `nix build .#checks.x86_64-linux.elisp-packages -L`: Build the Emacs Lisp packages.
 - `nix build .#checks.x86_64-linux.homeConfiguration -L`: Build the sample home-manager configuration.
 ### Updating
