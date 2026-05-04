@@ -142,7 +142,7 @@
                 }
               );
 
-              # depsCheck = fullEmacsEnv.depsCheck;
+              deps-check = self.packages.${system}.emacs-config.depsCheck;
             };
           };
 
