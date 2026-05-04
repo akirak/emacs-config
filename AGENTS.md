@@ -36,11 +36,16 @@ Use two-space indentation for Nix files and keep module files focused by domain.
 
 Emacs Lisp files should use the `akirak-<feature>.el` pattern and provide matching feature names.
 
+In `nix/lsp-proxy-config.nix`, the server name defaults to `command`, but server
+names should not conflict with each other if they take different arguments, even
+for different language groups. If two server settings take different arguments,
+they should be explicitly given different `name` attributes.
+
 Keep generated lock files and recipe updates separate from hand-written configuration changes when possible.
 
 All files should have a `SPDX-License-Identifier` header. Emacs Lisp files in `lisp/` directory must have `GPL-3.0-or-later`. Most other files in the repository should be `MIT`, but there can be few exceptions. Keep updating the copyright year in LICENSES/MIT.txt.
-## Testing Guidelines
-There is no standalone test directory. Treat Nix builds and flake checks as the test suite.
+## Development and Testing Workflows
+Depending on which file has been edited, run a command suitable for checking.
 ## Commit & Pull Request Guidelines
 The commit message should be prefixed with the following keywords:
 
