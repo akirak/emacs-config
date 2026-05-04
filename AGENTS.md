@@ -1,7 +1,5 @@
 # Repository Guidelines
-
 ## Project Structure & Module Organization
-
 - `emacs-config.org`: main literate Emacs configuration; `README.org` links to it.
 - `early-init.el`: early Emacs startup settings.
 - `lisp/`: custom Emacs Lisp modules using the `akirak-*.el` naming pattern.
