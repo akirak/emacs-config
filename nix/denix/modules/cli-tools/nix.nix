@@ -1,3 +1,4 @@
+# Also see nh.nix
 {
   delib,
   pkgs,
@@ -16,11 +17,6 @@ delib.module {
       programs.nix-index = {
         enable = true;
         enableZshIntegration = myconfig.zsh.enable;
-      };
-
-      programs.nh = {
-        enable = true;
-        flake = "${homeconfig.home.homeDirectory}/build/nix-config";
       };
 
       programs.nix-your-shell = {
