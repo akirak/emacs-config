@@ -30,6 +30,8 @@
 - `nix run .#update --impure -L`: update ELPA inputs, then run the repository update app.
 - `nix run .#update-ai-models`: Update `ai-model-list.txt`.
 - `nix run .#update-elisp-lock`: Commit package updates by author.
+### Others
+- `nix run .#emacs-config.emacs -- -Q -nw`: Run Emacs without any extra package or init file.
 ## Coding Style & Naming Conventions
 Use two-space indentation for Nix files and keep module files focused by domain. Format Nix with `nixfmt`; unused Nix expressions are checked by `deadnix`. These are enforced by running `nix fmt`.
 
