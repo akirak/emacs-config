@@ -16,9 +16,17 @@ let
     };
   };
 
+  serverName = server: server.name or server.command;
+
+  serverDefinition =
+    server: lib.nameValuePair (serverName server) (builtins.removeAttrs server [ "name" ]);
+
   fromEglotStyleSettings = eglotStyleSettings: {
     language-server =
-      defaultLanguageServers // (lib.foldl' (acc: a: acc // a.servers) { } eglotStyleSettings);
+      defaultLanguageServers
+      // (lib.foldl' (
+        acc: a: acc // (builtins.listToAttrs (builtins.map serverDefinition a.servers))
+      ) { } eglotStyleSettings);
 
     language = lib.flatten (
       builtins.map (
@@ -27,7 +35,7 @@ let
           language:
           language
           // {
-            language-servers = (a.serverNames or (builtins.attrNames a.servers)) ++ [ "copilot" ];
+            language-servers = (builtins.map serverName a.servers) ++ [ "copilot" ];
           }
         ) a.languages)
       ) eglotStyleSettings
@@ -63,44 +71,38 @@ in
         file-types = [ "jsx" ];
       }
     ];
-    serverNames = [
-      "rass-ts"
-      "oxlint"
-      "tsgo"
-      "typescript-language-server"
-      "deno"
-    ];
-    servers = {
-      rass-ts = {
-        command = "rass";
-        args = [ "ts" ];
-      };
-      oxlint = {
+    servers = [
+      {
         command = "oxlint";
         args = [
           "--lsp"
         ];
-      };
-      tsgo = {
+      }
+      {
         command = "tsgo";
         args = [
           "--lsp"
           "--stdio"
         ];
-      };
-      typescript-language-server = {
+      }
+      {
         command = "typescript-language-server";
         args = [
           "--stdio"
         ];
-      };
-      deno = {
+      }
+      {
         command = "deno";
         args = [
           "lsp"
         ];
-      };
-    };
+      }
+      {
+        name = "rass-ts";
+        command = "rass";
+        args = [ "ts" ];
+      }
+    ];
   }
 
   # Nix
@@ -111,35 +113,28 @@ in
         file-types = [ "nix" ];
       }
     ];
-    serverNames = [
-      "tix"
-      "typenix"
-      "nil"
-      "rnix-lsp"
-      "nixd"
-    ];
-    servers = {
-      tix = {
+    servers = [
+      {
         command = "tix";
         args = [ "lsp" ];
-      };
-      typenix = {
+      }
+      {
         command = "typenix";
         args = [
           "--lsp"
           "--stdio"
         ];
-      };
-      nil = {
+      }
+      {
         command = "nil";
-      };
-      rnix-lsp = {
+      }
+      {
         command = "rnix-lsp";
-      };
-      nixd = {
+      }
+      {
         command = "nixd";
-      };
-    };
+      }
+    ];
   }
 
   # Justfile
@@ -154,11 +149,11 @@ in
         ];
       }
     ];
-    servers = {
-      just-lsp = {
+    servers = [
+      {
         command = "just-lsp";
-      };
-    };
+      }
+    ];
   }
 
   # Lean 4
@@ -170,12 +165,12 @@ in
         file-types = [ "lean" ];
       }
     ];
-    servers = {
-      lake = {
+    servers = [
+      {
         command = "lake";
         args = [ "serve" ];
-      };
-    };
+      }
+    ];
   }
 
   # SQL
@@ -186,11 +181,11 @@ in
         file-types = [ "sql" ];
       }
     ];
-    servers = {
-      sqlmesh_lsp = {
+    servers = [
+      {
         command = "sqlmesh_lsp";
-      };
-    };
+      }
+    ];
   }
 
   # Svelte
@@ -201,12 +196,12 @@ in
         file-types = [ "svelte" ];
       }
     ];
-    servers = {
-      svelteserver = {
+    servers = [
+      {
         command = "svelteserver";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # HCL
@@ -221,20 +216,16 @@ in
         ];
       }
     ];
-    serverNames = [
-      "terraform-ls"
-      "terraform-lsp"
-    ];
-    servers = {
-      terraform-ls = {
+    servers = [
+      {
         command = "terraform-ls";
         args = [ "serve" ];
-      };
-      terraform-lsp = {
+      }
+      {
         command = "terraform-lsp";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # OCaml
@@ -259,11 +250,11 @@ in
         ];
       }
     ];
-    servers = {
-      ocamllsp = {
+    servers = [
+      {
         command = "ocamllsp";
-      };
-    };
+      }
+    ];
   }
 
   # Coq (Rocq)
@@ -274,11 +265,11 @@ in
         file-types = [ "v" ];
       }
     ];
-    servers = {
-      coq-lsp = {
+    servers = [
+      {
         command = "coq-lsp";
-      };
-    };
+      }
+    ];
   }
 
   # Gleam
@@ -289,12 +280,12 @@ in
         file-types = [ "gleam" ];
       }
     ];
-    servers = {
-      gleam = {
+    servers = [
+      {
         command = "gleam";
         args = [ "lsp" ];
-      };
-    };
+      }
+    ];
   }
 
   # Zig
@@ -305,11 +296,11 @@ in
         file-types = [ "zig" ];
       }
     ];
-    servers = {
-      zls = {
+    servers = [
+      {
         command = "zls";
-      };
-    };
+      }
+    ];
   }
 
   # F#
@@ -325,12 +316,12 @@ in
         ];
       }
     ];
-    servers = {
-      fsautocomplete = {
+    servers = [
+      {
         command = "fsautocomplete";
         args = [ "--adaptive-lsp-server-enabled" ];
-      };
-    };
+      }
+    ];
   }
 
   # Elixir
@@ -351,18 +342,18 @@ in
     # The Emacs config also passes server-specific initialization options for
     # nextls. Keep the server entry here conservative until those options are
     # expressed explicitly in lsp-proxy's schema.
-    servers = {
-      lexical = {
+    servers = [
+      {
         command = "lexical";
-      };
-      nextls = {
+      }
+      {
         command = "nextls";
         args = [ "--stdio=true" ];
-      };
-      elixir-ls = {
+      }
+      {
         command = "elixir-ls";
-      };
-    };
+      }
+    ];
   }
 
   # Astro
@@ -376,12 +367,12 @@ in
     # The Emacs config includes initialization options for the TypeScript SDK.
     # This file keeps the command mapping aligned without assuming the exact
     # lsp-proxy encoding for those options.
-    servers = {
-      astro-ls = {
+    servers = [
+      {
         command = "astro-ls";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # Java
@@ -392,21 +383,17 @@ in
         file-types = [ "java" ];
       }
     ];
-    serverNames = [
-      "jdtls"
-      "java-language-server"
-    ];
     # The Emacs config conditionally adds a debug bundle to jdtls when the jar
     # exists in the user's Emacs directory. That dynamic path is intentionally
     # left out here.
-    servers = {
-      jdtls = {
+    servers = [
+      {
         command = "jdtls";
-      };
-      java-language-server = {
+      }
+      {
         command = "java-language-server";
-      };
-    };
+      }
+    ];
   }
 
   # Rust
@@ -417,11 +404,11 @@ in
         file-types = [ "rs" ];
       }
     ];
-    servers = {
-      rust-analyzer = {
+    servers = [
+      {
         command = "rust-analyzer";
-      };
-    };
+      }
+    ];
   }
 
   # CMake
@@ -435,19 +422,15 @@ in
         ];
       }
     ];
-    serverNames = [
-      "neocmakelsp"
-      "cmake-language-server"
-    ];
-    servers = {
-      neocmakelsp = {
+    servers = [
+      {
         command = "neocmakelsp";
         args = [ "stdio" ];
-      };
-      cmake-language-server = {
+      }
+      {
         command = "cmake-language-server";
-      };
-    };
+      }
+    ];
   }
 
   # Vim
@@ -461,12 +444,12 @@ in
         ];
       }
     ];
-    servers = {
-      vim-language-server = {
+    servers = [
+      {
         command = "vim-language-server";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # Python
@@ -477,56 +460,45 @@ in
         file-types = [ "py" ];
       }
     ];
-    serverNames = [
-      "rass-python"
-      "pylsp"
-      "pyls"
-      "basedpyright-langserver"
-      "pyright-langserver"
-      "pyrefly"
-      "ty"
-      "jedi-language-server"
-      "ruff"
-      "ruff-lsp"
-    ];
-    servers = {
-      rass-python = {
+    servers = [
+      {
+        name = "rass-python";
         command = "rass";
         args = [ "python" ];
-      };
-      pylsp = {
+      }
+      {
         command = "pylsp";
-      };
-      pyls = {
+      }
+      {
         command = "pyls";
-      };
-      basedpyright-langserver = {
+      }
+      {
         command = "basedpyright-langserver";
         args = [ "--stdio" ];
-      };
-      pyright-langserver = {
+      }
+      {
         command = "pyright-langserver";
         args = [ "--stdio" ];
-      };
-      pyrefly = {
+      }
+      {
         command = "pyrefly";
         args = [ "lsp" ];
-      };
-      ty = {
+      }
+      {
         command = "ty";
         args = [ "server" ];
-      };
-      jedi-language-server = {
+      }
+      {
         command = "jedi-language-server";
-      };
-      ruff = {
+      }
+      {
         command = "ruff";
         args = [ "server" ];
-      };
-      ruff-lsp = {
+      }
+      {
         command = "ruff-lsp";
-      };
-    };
+      }
+    ];
   }
 
   # JSON
@@ -540,25 +512,20 @@ in
         ];
       }
     ];
-    serverNames = [
-      "vscode-json-language-server"
-      "vscode-json-languageserver"
-      "json-languageserver"
-    ];
-    servers = {
-      vscode-json-language-server = {
+    servers = [
+      {
         command = "vscode-json-language-server";
         args = [ "--stdio" ];
-      };
-      vscode-json-languageserver = {
+      }
+      {
         command = "vscode-json-languageserver";
         args = [ "--stdio" ];
-      };
-      json-languageserver = {
+      }
+      {
         command = "json-languageserver";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # Shell
@@ -572,12 +539,12 @@ in
         ];
       }
     ];
-    servers = {
-      bash-language-server = {
+    servers = [
+      {
         command = "bash-language-server";
         args = [ "start" ];
-      };
-    };
+      }
+    ];
   }
 
   # PHP
@@ -588,20 +555,17 @@ in
         file-types = [ "php" ];
       }
     ];
-    serverNames = [
-      "phpactor"
-      "php-language-server"
-    ];
-    servers = {
-      phpactor = {
+    servers = [
+      {
         command = "phpactor";
         args = [ "language-server" ];
-      };
-      php-language-server = {
+      }
+      {
+        name = "php-language-server";
         command = "php";
         args = [ "vendor/felixfbecker/language-server/bin/php-language-server.php" ];
-      };
-    };
+      }
+    ];
   }
 
   # C, C++, and Objective-C
@@ -633,18 +597,14 @@ in
         ];
       }
     ];
-    serverNames = [
-      "clangd"
-      "ccls"
-    ];
-    servers = {
-      clangd = {
+    servers = [
+      {
         command = "clangd";
-      };
-      ccls = {
+      }
+      {
         command = "ccls";
-      };
-    };
+      }
+    ];
   }
 
   # Ruby
@@ -655,11 +615,11 @@ in
         file-types = [ "rb" ];
       }
     ];
-    servers = {
-      ruby-lsp = {
+    servers = [
+      {
         command = "ruby-lsp";
-      };
-    };
+      }
+    ];
   }
 
   # Haskell
@@ -673,19 +633,15 @@ in
         ];
       }
     ];
-    serverNames = [
-      "haskell-language-server-wrapper"
-      "static-ls"
-    ];
-    servers = {
-      haskell-language-server-wrapper = {
+    servers = [
+      {
         command = "haskell-language-server-wrapper";
         args = [ "--lsp" ];
-      };
-      static-ls = {
+      }
+      {
         command = "static-ls";
-      };
-    };
+      }
+    ];
   }
 
   # Elm
@@ -696,11 +652,11 @@ in
         file-types = [ "elm" ];
       }
     ];
-    servers = {
-      elm-language-server = {
+    servers = [
+      {
         command = "elm-language-server";
-      };
-    };
+      }
+    ];
   }
 
   # Mint
@@ -711,12 +667,12 @@ in
         file-types = [ "mint" ];
       }
     ];
-    servers = {
-      mint = {
+    servers = [
+      {
         command = "mint";
         args = [ "ls" ];
-      };
-    };
+      }
+    ];
   }
 
   # Kotlin
@@ -730,11 +686,11 @@ in
         ];
       }
     ];
-    servers = {
-      kotlin-language-server = {
+    servers = [
+      {
         command = "kotlin-language-server";
-      };
-    };
+      }
+    ];
   }
 
   # Go
@@ -753,11 +709,11 @@ in
         file-types = [ { glob = "go.work"; } ];
       }
     ];
-    servers = {
-      gopls = {
+    servers = [
+      {
         command = "gopls";
-      };
-    };
+      }
+    ];
   }
 
   # R
@@ -771,16 +727,17 @@ in
         ];
       }
     ];
-    servers = {
-      r-languageserver = {
+    servers = [
+      {
+        name = "r-languageserver";
         command = "R";
         args = [
           "--slave"
           "-e"
           "languageserver::run()"
         ];
-      };
-    };
+      }
+    ];
   }
 
   # Dart
@@ -791,16 +748,16 @@ in
         file-types = [ "dart" ];
       }
     ];
-    servers = {
-      dart = {
+    servers = [
+      {
         command = "dart";
         args = [
           "language-server"
           "--client-id"
           "emacs.eglot-dart"
         ];
-      };
-    };
+      }
+    ];
   }
 
   # Ada
@@ -815,11 +772,12 @@ in
         ];
       }
     ];
-    servers = {
-      ada-language-server = {
+    servers = [
+      {
+        name = "ada-language-server";
         command = "ada_language_server";
-      };
-    };
+      }
+    ];
   }
 
   # GPR
@@ -830,12 +788,13 @@ in
         file-types = [ "gpr" ];
       }
     ];
-    servers = {
-      ada-language-server-gpr = {
+    servers = [
+      {
+        name = "ada-language-server-gpr";
         command = "ada_language_server";
         args = [ "--language-gpr" ];
-      };
-    };
+      }
+    ];
   }
 
   # Scala
@@ -846,18 +805,14 @@ in
         file-types = [ "scala" ];
       }
     ];
-    serverNames = [
-      "metals"
-      "metals-emacs"
-    ];
-    servers = {
-      metals = {
+    servers = [
+      {
         command = "metals";
-      };
-      metals-emacs = {
+      }
+      {
         command = "metals-emacs";
-      };
-    };
+      }
+    ];
   }
 
   # Racket
@@ -868,15 +823,15 @@ in
         file-types = [ "rkt" ];
       }
     ];
-    servers = {
-      racket = {
+    servers = [
+      {
         command = "racket";
         args = [
           "-l"
           "racket-langserver"
         ];
-      };
-    };
+      }
+    ];
   }
 
   # TeX and BibTeX
@@ -897,18 +852,14 @@ in
         file-types = [ "bib" ];
       }
     ];
-    serverNames = [
-      "digestif"
-      "texlab"
-    ];
-    servers = {
-      digestif = {
+    servers = [
+      {
         command = "digestif";
-      };
-      texlab = {
+      }
+      {
         command = "texlab";
-      };
-    };
+      }
+    ];
   }
 
   # Erlang
@@ -922,12 +873,12 @@ in
         ];
       }
     ];
-    servers = {
-      elp = {
+    servers = [
+      {
         command = "elp";
         args = [ "server" ];
-      };
-    };
+      }
+    ];
   }
 
   # WebAssembly Text
@@ -938,11 +889,11 @@ in
         file-types = [ "wat" ];
       }
     ];
-    servers = {
-      wat_server = {
+    servers = [
+      {
         command = "wat_server";
-      };
-    };
+      }
+    ];
   }
 
   # YAML
@@ -956,12 +907,12 @@ in
         ];
       }
     ];
-    servers = {
-      yaml-language-server = {
+    servers = [
+      {
         command = "yaml-language-server";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # TOML
@@ -972,12 +923,12 @@ in
         file-types = [ "toml" ];
       }
     ];
-    servers = {
-      tombi = {
+    servers = [
+      {
         command = "tombi";
         args = [ "lsp" ];
-      };
-    };
+      }
+    ];
   }
 
   # Nickel
@@ -988,11 +939,11 @@ in
         file-types = [ "ncl" ];
       }
     ];
-    servers = {
-      nls = {
+    servers = [
+      {
         command = "nls";
-      };
-    };
+      }
+    ];
   }
 
   # Nushell
@@ -1003,12 +954,12 @@ in
         file-types = [ "nu" ];
       }
     ];
-    servers = {
-      nu = {
+    servers = [
+      {
         command = "nu";
         args = [ "--lsp" ];
-      };
-    };
+      }
+    ];
   }
 
   # Fennel
@@ -1019,11 +970,11 @@ in
         file-types = [ "fnl" ];
       }
     ];
-    servers = {
-      fennel-ls = {
+    servers = [
+      {
         command = "fennel-ls";
-      };
-    };
+      }
+    ];
   }
 
   # Move
@@ -1034,11 +985,11 @@ in
         file-types = [ "move" ];
       }
     ];
-    servers = {
-      move-analyzer = {
+    servers = [
+      {
         command = "move-analyzer";
-      };
-    };
+      }
+    ];
   }
 
   # Fortran
@@ -1057,11 +1008,11 @@ in
         ];
       }
     ];
-    servers = {
-      fortls = {
+    servers = [
+      {
         command = "fortls";
-      };
-    };
+      }
+    ];
   }
 
   # Futhark
@@ -1072,12 +1023,12 @@ in
         file-types = [ "fut" ];
       }
     ];
-    servers = {
-      futhark = {
+    servers = [
+      {
         command = "futhark";
         args = [ "lsp" ];
-      };
-    };
+      }
+    ];
   }
 
   # Lua
@@ -1088,18 +1039,14 @@ in
         file-types = [ "lua" ];
       }
     ];
-    serverNames = [
-      "lua-language-server"
-      "lua-lsp"
-    ];
-    servers = {
-      lua-language-server = {
+    servers = [
+      {
         command = "lua-language-server";
-      };
-      lua-lsp = {
+      }
+      {
         command = "lua-lsp";
-      };
-    };
+      }
+    ];
   }
 
   # Yang
@@ -1110,11 +1057,11 @@ in
         file-types = [ "yang" ];
       }
     ];
-    servers = {
-      yang-language-server = {
+    servers = [
+      {
         command = "yang-language-server";
-      };
-    };
+      }
+    ];
   }
 
   # CSS
@@ -1125,20 +1072,16 @@ in
         file-types = [ "css" ];
       }
     ];
-    serverNames = [
-      "vscode-css-language-server"
-      "css-languageserver"
-    ];
-    servers = {
-      vscode-css-language-server = {
+    servers = [
+      {
         command = "vscode-css-language-server";
         args = [ "--stdio" ];
-      };
-      css-languageserver = {
+      }
+      {
         command = "css-languageserver";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # HTML
@@ -1152,20 +1095,16 @@ in
         ];
       }
     ];
-    serverNames = [
-      "vscode-html-language-server"
-      "html-languageserver"
-    ];
-    servers = {
-      vscode-html-language-server = {
+    servers = [
+      {
         command = "vscode-html-language-server";
         args = [ "--stdio" ];
-      };
-      html-languageserver = {
+      }
+      {
         command = "html-languageserver";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # Dockerfile
@@ -1179,12 +1118,12 @@ in
         ];
       }
     ];
-    servers = {
-      docker-langserver = {
+    servers = [
+      {
         command = "docker-langserver";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # Clojure
@@ -1199,11 +1138,11 @@ in
         ];
       }
     ];
-    servers = {
-      clojure-lsp = {
+    servers = [
+      {
         command = "clojure-lsp";
-      };
-    };
+      }
+    ];
   }
 
   # C#
@@ -1214,24 +1153,19 @@ in
         file-types = [ "cs" ];
       }
     ];
-    serverNames = [
-      "omnisharp"
-      "OmniSharp"
-      "csharp-ls"
-    ];
-    servers = {
-      omnisharp = {
+    servers = [
+      {
         command = "omnisharp";
         args = [ "-lsp" ];
-      };
-      OmniSharp = {
+      }
+      {
         command = "OmniSharp";
         args = [ "-lsp" ];
-      };
-      csharp-ls = {
+      }
+      {
         command = "csharp-ls";
-      };
-    };
+      }
+    ];
   }
 
   # Purescript
@@ -1242,12 +1176,12 @@ in
         file-types = [ "purs" ];
       }
     ];
-    servers = {
-      purescript-language-server = {
+    servers = [
+      {
         command = "purescript-language-server";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # Perl
@@ -1262,16 +1196,17 @@ in
         ];
       }
     ];
-    servers = {
-      perl-language-server = {
+    servers = [
+      {
+        name = "perl-language-server";
         command = "perl";
         args = [
           "-MPerl::LanguageServer"
           "-e"
           "Perl::LanguageServer::run"
         ];
-      };
-    };
+      }
+    ];
   }
 
   # Markdown
@@ -1285,20 +1220,16 @@ in
         ];
       }
     ];
-    serverNames = [
-      "marksman"
-      "vscode-markdown-language-server"
-    ];
-    servers = {
-      marksman = {
+    servers = [
+      {
         command = "marksman";
         args = [ "server" ];
-      };
-      vscode-markdown-language-server = {
+      }
+      {
         command = "vscode-markdown-language-server";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # Graphviz
@@ -1312,12 +1243,12 @@ in
         ];
       }
     ];
-    servers = {
-      dot-language-server = {
+    servers = [
+      {
         command = "dot-language-server";
         args = [ "--stdio" ];
-      };
-    };
+      }
+    ];
   }
 
   # Uiua
@@ -1328,12 +1259,12 @@ in
         file-types = [ "ua" ];
       }
     ];
-    servers = {
-      uiua = {
+    servers = [
+      {
         command = "uiua";
         args = [ "lsp" ];
-      };
-    };
+      }
+    ];
   }
 
   # Blueprint
@@ -1344,12 +1275,12 @@ in
         file-types = [ "blp" ];
       }
     ];
-    servers = {
-      blueprint-compiler = {
+    servers = [
+      {
         command = "blueprint-compiler";
         args = [ "lsp" ];
-      };
-    };
+      }
+    ];
   }
 
   # Odin
@@ -1360,10 +1291,10 @@ in
         file-types = [ "odin" ];
       }
     ];
-    servers = {
-      ols = {
+    servers = [
+      {
         command = "ols";
-      };
-    };
+      }
+    ];
   }
 ])
