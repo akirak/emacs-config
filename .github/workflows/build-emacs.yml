@@ -4,8 +4,14 @@ on:
   push:
     branches-ignore:
       - master
-    paths-ignore:
-      - ai-model-list.txt
+    paths:
+      - emacs-config.org
+      - lisp/**
+      - lock/**
+      - recipes/**
+      - nix/lib/**
+      - nix/lsp-proxy-config.nix
+      - nix/twist/**
   workflow_dispatch:
 
 permissions:
