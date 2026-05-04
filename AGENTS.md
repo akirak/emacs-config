@@ -44,6 +44,8 @@ they should be explicitly given different `name` attributes.
 Keep generated lock files and recipe updates separate from hand-written configuration changes when possible.
 
 All files should have a `SPDX-License-Identifier` header. Emacs Lisp files in `lisp/` directory must have `GPL-3.0-or-later`. Most other files in the repository should be `MIT`, but there can be few exceptions. Keep updating the copyright year in LICENSES/MIT.txt.
+
+Add `Assisted-by: AGENT_NAME:MODEL_VERSION` to the file header when a file is modified by AI, where `AGENT_NAME` is the name of the AI tool or framework and `MODEL_VERSION` is the specific model version used.
 ## Development and Testing Workflows
 Depending on which file has been edited, run a command suitable for checking.
 ## Commit & Pull Request Guidelines
