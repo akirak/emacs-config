@@ -2,7 +2,6 @@
 {
   delib,
   pkgs,
-  homeconfig,
   host,
   ...
 }:
