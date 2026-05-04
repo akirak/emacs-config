@@ -4,9 +4,14 @@ on:
   push:
     branches-ignore:
       - master
-  pull_request:
-    paths-ignore:
-      - ai-model-list.txt
+    paths:
+      - emacs-config.org
+      - lisp/**
+      - lock/**
+      - recipes/**
+      - nix/lib/**
+      - nix/lsp-proxy-config.nix
+      - nix/twist/**
   workflow_dispatch:
 
 permissions:
@@ -44,8 +49,11 @@ jobs:
       - name: Prefetch dependencies
         run: nix build .#emacs-config.emacs --accept-flake-config --no-link
 
-      - name: Build packages
-        run: nix build .#emacs-config -L
+      - name: Build Emacs Lisp packages
+        run: |
+          system="$(nix eval --impure --raw --expr builtins.currentSystem)"
+          nix build ".#checks.$system.elisp-packages" -L
+
       #   run: |
       #     nix run .#nix-fast-build -- \
       #       --flake "#packages.x86_64-linux.emacs-config.elispPackages" \

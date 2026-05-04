@@ -42,4 +42,3 @@ jobs:
           fi
       - run: nix run .#update-elisp-lock
       - run: git push origin HEAD --force
-

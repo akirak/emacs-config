@@ -1,0 +1,46 @@
+# Copyright (C) 2024-2026 Akira Komamura
+# SPDX-License-Identifier: MIT
+
+{ inputs, ... }:
+{
+  imports = [
+    inputs.git-hooks-nix.flakeModule
+    inputs.treefmt-nix.flakeModule
+  ];
+
+  perSystem =
+    {
+      system,
+      config,
+      ...
+    }:
+    {
+      pre-commit = {
+        check.enable = false;
+        settings.hooks = import ./hooks.nix {
+          pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              (_: _prev: {
+                # Add packages for use in the hooks.
+                emacs-with-pkgs = inputs.flake-pins.packages.${system}.emacs-pgtk.pkgs.withPackages (epkgs: [
+                  epkgs.org-ql
+                  epkgs.org-make-toc
+                ]);
+                flake-no-path = inputs.flake-no-path.defaultPackage.${system};
+              })
+            ];
+          };
+        };
+      };
+
+      treefmt = {
+        programs.nixfmt.enable = true;
+        programs.deadnix.enable = true;
+      };
+
+      devShells = {
+        default = config.pre-commit.devShell;
+      };
+    };
+}

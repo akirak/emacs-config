@@ -1,0 +1,32 @@
+name: Build a sample home-manager configuration
+
+on:
+  push:
+    paths:
+      - flake.nix
+      - '**/flake.lock'
+      - nix/denix/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Nix
+        uses: ./.github/actions/setup
+        with:
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build Emacs Lisp packages
+        run: |
+          system="$(nix eval --impure --raw --expr builtins.currentSystem)"
+          nix build ".#checks.$system.homeConfiguration" -L
