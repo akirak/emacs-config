@@ -30,6 +30,7 @@ For technical details, check out [[https://deepwiki.com/akirak/emacs-config][Dee
 - [[#software-package-management][Software package management]]
 - [[#workarounds][Workarounds]]
 - [[#post-init][Post init]]
+- [[#integrating-into-nixoshome-manager][Integrating into NixOS/Home-Manager]]
 - [[#notes][Notes]]
   - [[#how-to-develop-this-configuration][How to develop this configuration]]
   - [[#tag-statistics][Tag statistics]]
@@ -11601,6 +11602,77 @@ Load my personal settings after all the things.
 
       (when (and custom-file (file-readable-p custom-file))
         (load custom-file))))
+#+end_src
+** Integrating into NixOS/Home-Manager
+This configuration is built with Nix (via [[https://github.com/emacs-twist/twist.nix][twist.nix]]) and integrated into
+home-manager.
+
+I am currently trying to adopt [[https://github.com/yunfachi/denix][denix]] for NixOS configurations, and [[file:nix/denix/modules/emacs/default.nix]] contains a denix module for integration.
+It depends on the home-manager module provided from twist.nix.
+
+[[file:nix/denix/modules]] contains other denix modules mostly for home-manager.
+Not all of my denix modules are defined there; There are other things that are kept private. The modules make some assumptions on the denix configuration. Refer to the entire denix configurations in [[file:nix/denix]] and [[file:flake.nix]] for home-manager integration.
+
+To use the modules from another repository, this flake exposes some outputs.
+The following is an example configuration with the ~emacs-config~ input from this repository:
+
+#+begin_src nix
+  let
+    mkConfigurations = moduleSystem: denix.lib.configurations {
+      inherit
+        moduleSystem
+        ;
+      paths = [
+        ./hosts
+        ./modules
+        # Import the modules from https://github.com/akirak/emacs-config/
+        inputs.emacs-config.lib.denixModules
+      ];
+      homeManagerUser = "akirakomamura";
+      extensions = with denix.lib.extensions; [
+        args
+        (base.withConfig (
+          final: prev: {
+            args.enable = true;
+            # Based on https://github.com/yunfachi/nix-config/blob/9ba35d6fc96a4eb86db72c91a0fc74e636c71f82/flake.nix#L25
+            hosts.features = {
+              enable = true;
+              generateIsFeatured = true;
+              features = [
+                "cli"
+                "gui"
+                "coding"
+                "powersave"
+                "wireless"
+              ];
+              defaultByHostType = {
+                desktop = [
+                  "cli"
+                  "gui"
+                  "coding"
+                ];
+                server = [ ];
+              };
+            };
+          }
+        ))
+      ];
+      specialArgs = {
+        inherit
+          moduleSystem
+          ;
+        # Merge the inputs from https://github.com/akirak/emacs-config/
+        inputs = inputs.emacs-config.lib.denixInputs // inputs;
+        # Use the overlays from https://github.com/akirak/emacs-config/
+        overlays = [
+          inputs.emacs-config.overlays.default
+          inputs.emacs-config.overlays.extras
+        ];
+      };
+    };
+  in {
+    nixosConfigurations = mkConfigurations "nixos";
+  }
 #+end_src
 ** Notes                                                      :@note:
 :PROPERTIES:
