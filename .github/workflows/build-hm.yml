@@ -1,4 +1,4 @@
-name: Build a sample home-manager configuration
+name: Build the sample home-manager configuration
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
         with:
           cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - name: Build Emacs Lisp packages
+      - name: Build the configuration
         run: |
           system="$(nix eval --impure --raw --expr builtins.currentSystem)"
           nix build ".#checks.$system.homeConfiguration" -L
