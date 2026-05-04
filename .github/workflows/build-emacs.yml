@@ -4,7 +4,6 @@ on:
   push:
     branches-ignore:
       - master
-  pull_request:
     paths-ignore:
       - ai-model-list.txt
   workflow_dispatch:
