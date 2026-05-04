@@ -56,7 +56,7 @@ delib.module {
         Service = {
           Environment = [
             "MOZ_ENABLE_WAYLAND=1"
-            "WAYLAND_DISPLAY=wayland-1"
+            "WAYLAND_DISPLAY=${myconfig.wayland.display}"
           ];
         };
       };
