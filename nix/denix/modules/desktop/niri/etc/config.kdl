@@ -415,7 +415,7 @@ binds {
     }
 
     Mod+F9 hotkey-overlay-title="Rebuild NixOS" {
-        spawn "foot" "--title" "Rebuilding NixOS..." "nixos-rebuild-and-notify";
+        spawn "foot" "--title" "Rebuilding NixOS..." "nixos-rebuild-and-notify" "os";
     }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
