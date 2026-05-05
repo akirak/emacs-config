@@ -45,7 +45,7 @@ delib.module {
 
       rebuildScript = pkgs.writeShellScriptBin "nixos-rebuild-and-notify" ''
         flake="${cfg.mainConfigDirectory}"
-        notify="${notify}"
+        notify="${lib.getExe notify}"
         cachix="${cfg.cachixName}"
         if [[ -z "$cachix" ]]; then
           unset cachix
