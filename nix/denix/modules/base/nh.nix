@@ -64,7 +64,9 @@ delib.module {
         target="$1"
         shift
         operation="''${1:-switch}"
-        shift
+        if [[ $# -gt 0 ]]; then
+          shift
+        fi
 
         case "$target" in
           os)
