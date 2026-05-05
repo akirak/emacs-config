@@ -10128,6 +10128,28 @@ Clean-up and Beautify the list of minor-modes.
                            symbol-end))
     (:hook-into after-init-hook))
 #+end_src
+*** rime                                                        :Chinese:@extra:
+:PROPERTIES:
+:CREATED_TIME: [2026-05-05 Tue 15:01]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package rime)
+    (:when-loaded
+      ;; You have to set `rime-share-data-dir' to a directory that contains rime
+      ;; dictionaries.
+      (:set rime-share-data-dir (file-name-concat (xdg-data-home) "rime-data"))
+
+      (if (and (window-system)
+               (require 'posframe nil t)
+               (posframe-workable-p))
+          (setq rime-show-candidate 'posframe
+                rime-posframe-style 'horizontal
+                rime-posframe-properties (list :internal-border-width 3))
+        (setq rime-show-candidate 'popup
+              rime-popup-style 'horizontal))))
+#+end_src
+
 *** COMMENT ruby-end                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 23:59]
