@@ -1378,24 +1378,38 @@ At this point, the function works with the following pattern:
                                         source)))))
 
 ;;;###autoload
-(defun akirak-org-change-block-type (new-type)
+(defun akirak-org-change-block-type (new-type &optional language)
   "Change the type of the block at point."
   (interactive
-   (list (pcase (org--insert-structure-template-mks)
-           (`(,_ ,type ,_)
-            type))))
-  (save-excursion
-    (save-match-data
-      (if (org-match-line org-block-regexp)
-          (let ((keyword (match-string-no-properties 1)))
-            (save-excursion
-              (goto-char (match-end 0))
-              (save-match-data
-                (if (org-match-line (rx-to-string `(and "#+end_" (group ,keyword))))
-                    (replace-match new-type nil nil nil 1)
-                  (error "Not on the block end"))))
-            (replace-match new-type nil nil nil 1))
-        (user-error "Not on a block")))))
+   (let ((type (pcase (org--insert-structure-template-mks)
+                 (`(,_ ,type ,_)
+                  type))))
+     (list type
+           (when (string= type "src")
+             (string-remove-suffix
+              "-mode"
+              (akirak-complete-major-mode "Language: " nil nil
+                                          :org-src-langs t))))))
+  (atomic-change-group
+    (save-excursion
+      (save-match-data
+        (if (org-match-line org-block-regexp)
+            (let ((keyword (match-string-no-properties 1)))
+              (cl-assert (not (string-equal-ignore-case keyword new-type))
+                         nil
+                         "Blocked from changing to the same block type")
+              (save-excursion
+                (goto-char (match-end 0))
+                (save-match-data
+                  (if (org-match-line (rx-to-string `(and "#+end_" (group ,keyword))))
+                      (replace-match new-type nil nil nil 1)
+                    (error "Not on the block end"))))
+              (goto-char (match-beginning 1))
+              (delete-region (point) (line-end-position))
+              (insert new-type
+                      (when language
+                        (concat " " language))))
+          (user-error "Not on a block"))))))
 
 ;;;###autoload
 (defun akirak-org-demote-headings (&optional arg silent)

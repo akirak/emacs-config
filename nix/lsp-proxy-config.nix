@@ -1,8 +1,14 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Assisted-by: codex:gpt-5.4
+#
 # A configuration for lsp-proxy in Nix.
 #
 # This configuration takes an inspiration from https://apribase.net/2026/03/09/lsp-proxy/.
 # See https://github.com/jadestrong/lsp-proxy#language-configuration for the
 # configuration schema.
+#
+# The server configurations are imported from eglot.el, so this file is licensed
+# under GPL.
 {
   lib,
   formats,

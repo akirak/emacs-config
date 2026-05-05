@@ -47,10 +47,26 @@ delib.module {
         flake="${cfg.mainConfigDirectory}"
         notify="${notify}"
 
+        usage() {
+          cat >&2 <<HELP
+          Usage: nixos-rebuild-and-notify TARGET [OPERATION]
+
+          TARGET: "os" or "home"
+          OPERATION: One of the subcommands of `nh os|home`
+        HELP
+        }
+
+        if [[ $# -eq 0 ]]; then
+          usage
+          exit 1
+        fi
+
         target="$1"
         shift
         operation="''${1:-switch}"
-        shift
+        if [[ $# -gt 0 ]]; then
+          shift
+        fi
 
         case "$target" in
           os)
@@ -59,6 +75,7 @@ delib.module {
             ;;
           *)
             echo >&2 "Invalid target: $target"
+            usage
             exit 1
         esac
 

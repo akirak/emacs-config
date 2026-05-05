@@ -79,7 +79,7 @@
                     (not (string-empty-p query)))
            (list "--search" query))))
 
-;;;###autoload
+;;;###autoload (autoload 'akirak-github-workflow-run-transient "akirak-github" nil 'interactive)
 (transient-define-prefix akirak-github-workflow-run-transient ()
   ["View workflow"
    :class transient-row
