@@ -10132,6 +10132,10 @@ Clean-up and Beautify the list of minor-modes.
 :PROPERTIES:
 :CREATED_TIME: [2026-05-05 Tue 15:01]
 :END:
+#+begin_quote
+Rime input method
+[[https://www.github.com/DogLooksGood/emacs-rime]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package rime)
@@ -11734,11 +11738,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 216 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
-| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
@@ -11773,6 +11777,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |
+| [[org-ql-search:tags:Chinese][Chinese]]             |   2 |
 | [[org-ql-search:tags:initialization][initialization]]      |   1 |
 | [[org-ql-search:tags:performance][performance]]         |   1 |
 | [[org-ql-search:tags:help][help]]                |   1 |
@@ -11801,7 +11806,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
-| [[org-ql-search:tags:Chinese][Chinese]]             |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
 | [[org-ql-search:tags:transit][transit]]             |   1 |
@@ -11887,6 +11891,7 @@ To use these features, they need to be turned on at build time.
 | [[lsp-mode][lsp-mode]]              |      |
 | [[mcp][mcp]]                   |      |
 | [[Coq][Coq]]                   |      |
+| [[rime][rime]]                  |      |
 | [[tuareg][tuareg]]                |      |
 | [[utop][utop]]                  |      |
 | [[video-trimmer][video-trimmer]]         |      |
