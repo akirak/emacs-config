@@ -8854,6 +8854,9 @@ LSP Proxy client for Emacs
 
     (:when-loaded
       (define-prefix-command 'akirak/lsp-proxy-prefix-map)
+      ;; Avoid the global /tmp directory
+      (:set lsp-proxy-log-file-directory
+            (file-name-concat (xdg-runtime-dir) "emacs-lsp-proxy"))
       (:with-map akirak/lsp-proxy-prefix-map
         (:keymap "a" #'lsp-proxy-execute-code-action
                  "d" #'lsp-proxy-describe-thing-at-point
