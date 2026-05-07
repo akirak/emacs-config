@@ -10,11 +10,26 @@
 # The server configurations are imported from eglot.el, so this file is licensed
 # under GPL.
 {
-  lib,
-  formats,
-  copilot-language-server,
+  pkgs,
+  elispPackages,
 }:
 let
+  inherit (pkgs)
+    lib
+    formats
+    copilot-language-server
+    ;
+
+  prevConfig = lib.importTOML (
+    elispPackages.lsp-proxy.outPath + "/share/emacs/site-lisp/languages.toml"
+  );
+
+  mergeConfig = old: new: {
+    language-server = old.language-server // new.language-server;
+    # Allow duplicates
+    language = new.language ++ old.language;
+  };
+
   defaultLanguageServers = {
     copilot = {
       command = lib.getExe copilot-language-server;
@@ -48,1259 +63,989 @@ let
     );
   };
 in
-(formats.toml { }).generate "languages.toml" (fromEglotStyleSettings [
-  # TypeScript, JavaScript, and React
-  {
-    languages = [
-      {
-        name = "typescript";
-        language-id = "typescript";
-        file-types = [ "ts" ];
-      }
-      {
-        name = "typescript-react";
-        language-id = "typescriptreact";
-        file-types = [ "tsx" ];
-      }
-      {
-        name = "javascript";
-        language-id = "javascript";
-        file-types = [
-          "js"
-          "mjs"
-          "cjs"
-        ];
-      }
-      {
-        name = "javascript-react";
-        language-id = "javascriptreact";
-        file-types = [ "jsx" ];
-      }
-    ];
-    servers = [
-      {
-        command = "oxlint";
-        args = [
-          "--lsp"
-        ];
-      }
-      {
-        command = "tsgo";
-        args = [
-          "--lsp"
-          "--stdio"
-        ];
-      }
-      {
-        command = "typescript-language-server";
-        args = [
-          "--stdio"
-        ];
-      }
-      {
-        command = "deno";
-        args = [
-          "lsp"
-        ];
-      }
-      {
-        name = "rass-ts";
-        command = "rass";
-        args = [ "ts" ];
-      }
-    ];
-  }
+lib.pipe
+  [
+    # Nix
+    {
+      languages = [
+        {
+          name = "nix";
+          file-types = [ "nix" ];
+        }
+      ];
+      servers = [
+        {
+          command = "tix";
+          args = [ "lsp" ];
+        }
+        {
+          command = "typenix";
+          args = [
+            "--lsp"
+            "--stdio"
+          ];
+        }
+        {
+          command = "nil";
+        }
+        {
+          command = "rnix-lsp";
+        }
+        {
+          command = "nixd";
+        }
+      ];
+    }
 
-  # Nix
-  {
-    languages = [
-      {
-        name = "nix";
-        file-types = [ "nix" ];
-      }
-    ];
-    servers = [
-      {
-        command = "tix";
-        args = [ "lsp" ];
-      }
-      {
-        command = "typenix";
-        args = [
-          "--lsp"
-          "--stdio"
-        ];
-      }
-      {
-        command = "nil";
-      }
-      {
-        command = "rnix-lsp";
-      }
-      {
-        command = "nixd";
-      }
-    ];
-  }
+    # Justfile
+    {
+      languages = [
+        {
+          name = "just";
+          file-types = [
+            { glob = "justfile"; }
+            { glob = "Justfile"; }
+            { glob = ".justfile"; }
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "just-lsp";
+        }
+      ];
+    }
 
-  # Justfile
-  {
-    languages = [
-      {
-        name = "just";
-        file-types = [
-          { glob = "justfile"; }
-          { glob = "Justfile"; }
-          { glob = ".justfile"; }
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "just-lsp";
-      }
-    ];
-  }
+    # Lean 4
+    {
+      languages = [
+        {
+          name = "lean";
+          language-id = "lean";
+          file-types = [ "lean" ];
+        }
+      ];
+      servers = [
+        {
+          command = "lake";
+          args = [ "serve" ];
+        }
+      ];
+    }
 
-  # Lean 4
-  {
-    languages = [
-      {
-        name = "lean";
-        language-id = "lean";
-        file-types = [ "lean" ];
-      }
-    ];
-    servers = [
-      {
-        command = "lake";
-        args = [ "serve" ];
-      }
-    ];
-  }
+    # SQL
+    {
+      languages = [
+        {
+          name = "sql";
+          file-types = [ "sql" ];
+        }
+      ];
+      servers = [
+        {
+          command = "sqlmesh_lsp";
+        }
+      ];
+    }
 
-  # SQL
-  {
-    languages = [
-      {
-        name = "sql";
-        file-types = [ "sql" ];
-      }
-    ];
-    servers = [
-      {
-        command = "sqlmesh_lsp";
-      }
-    ];
-  }
+    # Svelte
+    {
+      languages = [
+        {
+          name = "svelte";
+          file-types = [ "svelte" ];
+        }
+      ];
+      servers = [
+        {
+          command = "svelteserver";
+          args = [ "--stdio" ];
+        }
+      ];
+    }
 
-  # Svelte
-  {
-    languages = [
-      {
-        name = "svelte";
-        file-types = [ "svelte" ];
-      }
-    ];
-    servers = [
-      {
-        command = "svelteserver";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
+    # HCL
+    {
+      languages = [
+        {
+          name = "hcl";
+          file-types = [
+            "hcl"
+            "tf"
+            "tfvars"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "terraform-ls";
+          args = [ "serve" ];
+        }
+        {
+          command = "terraform-lsp";
+          args = [ "--stdio" ];
+        }
+      ];
+    }
 
-  # HCL
-  {
-    languages = [
-      {
-        name = "hcl";
-        file-types = [
-          "hcl"
-          "tf"
-          "tfvars"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "terraform-ls";
-        args = [ "serve" ];
-      }
-      {
-        command = "terraform-lsp";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
+    # OCaml
+    {
+      languages = [
+        {
+          name = "ocaml";
+          language-id = "ocaml";
+          file-types = [ "ml" ];
+        }
+        {
+          name = "ocaml-interface";
+          language-id = "ocamli";
+          file-types = [ "mli" ];
+        }
+        {
+          name = "dune";
+          language-id = "dune";
+          file-types = [
+            { glob = "dune"; }
+            { glob = "dune-project"; }
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "ocamllsp";
+        }
+      ];
+    }
 
-  # OCaml
-  {
-    languages = [
-      {
-        name = "ocaml";
-        language-id = "ocaml";
-        file-types = [ "ml" ];
-      }
-      {
-        name = "ocaml-interface";
-        language-id = "ocamli";
-        file-types = [ "mli" ];
-      }
-      {
-        name = "dune";
-        language-id = "dune";
-        file-types = [
-          { glob = "dune"; }
-          { glob = "dune-project"; }
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "ocamllsp";
-      }
-    ];
-  }
+    # Coq (Rocq)
+    {
+      languages = [
+        {
+          name = "coq";
+          file-types = [ "v" ];
+        }
+      ];
+      servers = [
+        {
+          command = "coq-lsp";
+        }
+      ];
+    }
 
-  # Coq (Rocq)
-  {
-    languages = [
-      {
-        name = "coq";
-        file-types = [ "v" ];
-      }
-    ];
-    servers = [
-      {
-        command = "coq-lsp";
-      }
-    ];
-  }
+    # Gleam
+    {
+      languages = [
+        {
+          name = "gleam";
+          file-types = [ "gleam" ];
+        }
+      ];
+      servers = [
+        {
+          command = "gleam";
+          args = [ "lsp" ];
+        }
+      ];
+    }
 
-  # Gleam
-  {
-    languages = [
-      {
-        name = "gleam";
-        file-types = [ "gleam" ];
-      }
-    ];
-    servers = [
-      {
-        command = "gleam";
-        args = [ "lsp" ];
-      }
-    ];
-  }
+    # Zig
+    {
+      languages = [
+        {
+          name = "zig";
+          file-types = [ "zig" ];
+        }
+      ];
+      servers = [
+        {
+          command = "zls";
+        }
+      ];
+    }
 
-  # Zig
-  {
-    languages = [
-      {
-        name = "zig";
-        file-types = [ "zig" ];
-      }
-    ];
-    servers = [
-      {
-        command = "zls";
-      }
-    ];
-  }
+    # F#
+    {
+      languages = [
+        {
+          name = "fsharp";
+          file-types = [
+            "fs"
+            "fsi"
+            "fsx"
+            "fsscript"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "fsautocomplete";
+          args = [ "--adaptive-lsp-server-enabled" ];
+        }
+      ];
+    }
 
-  # F#
-  {
-    languages = [
-      {
-        name = "fsharp";
-        file-types = [
-          "fs"
-          "fsi"
-          "fsx"
-          "fsscript"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "fsautocomplete";
-        args = [ "--adaptive-lsp-server-enabled" ];
-      }
-    ];
-  }
+    # Elixir
+    {
+      languages = [
+        {
+          name = "elixir";
+          file-types = [
+            "ex"
+            "exs"
+          ];
+        }
+        {
+          name = "heex";
+          file-types = [ "heex" ];
+        }
+      ];
+      # The Emacs config also passes server-specific initialization options for
+      # nextls. Keep the server entry here conservative until those options are
+      # expressed explicitly in lsp-proxy's schema.
+      servers = [
+        {
+          command = "lexical";
+        }
+        {
+          command = "nextls";
+          args = [ "--stdio=true" ];
+        }
+        {
+          command = "elixir-ls";
+        }
+      ];
+    }
 
-  # Elixir
-  {
-    languages = [
-      {
-        name = "elixir";
-        file-types = [
-          "ex"
-          "exs"
-        ];
-      }
-      {
-        name = "heex";
-        file-types = [ "heex" ];
-      }
-    ];
-    # The Emacs config also passes server-specific initialization options for
-    # nextls. Keep the server entry here conservative until those options are
-    # expressed explicitly in lsp-proxy's schema.
-    servers = [
-      {
-        command = "lexical";
-      }
-      {
-        command = "nextls";
-        args = [ "--stdio=true" ];
-      }
-      {
-        command = "elixir-ls";
-      }
-    ];
-  }
+    # Astro
+    {
+      languages = [
+        {
+          name = "astro";
+          file-types = [ "astro" ];
+        }
+      ];
+      # The Emacs config includes initialization options for the TypeScript SDK.
+      # This file keeps the command mapping aligned without assuming the exact
+      # lsp-proxy encoding for those options.
+      servers = [
+        {
+          command = "astro-ls";
+          args = [ "--stdio" ];
+        }
+      ];
+    }
 
-  # Astro
-  {
-    languages = [
-      {
-        name = "astro";
-        file-types = [ "astro" ];
-      }
-    ];
-    # The Emacs config includes initialization options for the TypeScript SDK.
-    # This file keeps the command mapping aligned without assuming the exact
-    # lsp-proxy encoding for those options.
-    servers = [
-      {
-        command = "astro-ls";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
+    # CMake
+    {
+      languages = [
+        {
+          name = "cmake";
+          file-types = [
+            "cmake"
+            { glob = "CMakeLists.txt"; }
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "neocmakelsp";
+          args = [ "stdio" ];
+        }
+        {
+          command = "cmake-language-server";
+        }
+      ];
+    }
 
-  # Java
-  {
-    languages = [
-      {
-        name = "java";
-        file-types = [ "java" ];
-      }
-    ];
-    # The Emacs config conditionally adds a debug bundle to jdtls when the jar
-    # exists in the user's Emacs directory. That dynamic path is intentionally
-    # left out here.
-    servers = [
-      {
-        command = "jdtls";
-      }
-      {
-        command = "java-language-server";
-      }
-    ];
-  }
+    # Vim
+    {
+      languages = [
+        {
+          name = "vim";
+          file-types = [
+            "vim"
+            { glob = ".vimrc"; }
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "vim-language-server";
+          args = [ "--stdio" ];
+        }
+      ];
+    }
 
-  # Rust
-  {
-    languages = [
-      {
-        name = "rust";
-        file-types = [ "rs" ];
-      }
-    ];
-    servers = [
-      {
-        command = "rust-analyzer";
-      }
-    ];
-  }
+    # Python
+    {
+      languages = [
+        {
+          name = "python";
+          file-types = [
+            "py"
+          ];
+        }
+      ];
+      servers = [
+        {
+          name = "rass-python";
+          command = "rass";
+          args = [ "python" ];
+        }
+        {
+          command = "pylsp";
+        }
+        {
+          command = "pyls";
+        }
+        {
+          command = "basedpyright-langserver";
+          args = [ "--stdio" ];
+        }
+        {
+          command = "pyright-langserver";
+          args = [ "--stdio" ];
+        }
+        {
+          command = "pyrefly";
+          args = [ "lsp" ];
+        }
+        {
+          command = "ty";
+          args = [ "server" ];
+        }
+        {
+          command = "jedi-language-server";
+        }
+        {
+          command = "ruff";
+          args = [ "server" ];
+        }
+        {
+          command = "ruff-lsp";
+        }
+      ];
+    }
 
-  # CMake
-  {
-    languages = [
-      {
-        name = "cmake";
-        file-types = [
-          "cmake"
-          { glob = "CMakeLists.txt"; }
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "neocmakelsp";
-        args = [ "stdio" ];
-      }
-      {
-        command = "cmake-language-server";
-      }
-    ];
-  }
+    # Haskell
+    {
+      languages = [
+        {
+          name = "haskell";
+          file-types = [
+            "hs"
+            "lhs"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "haskell-language-server-wrapper";
+          args = [ "--lsp" ];
+        }
+        {
+          command = "static-ls";
+        }
+      ];
+    }
 
-  # Vim
-  {
-    languages = [
-      {
-        name = "vim";
-        file-types = [
-          "vim"
-          { glob = ".vimrc"; }
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "vim-language-server";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
+    # Elm
+    {
+      languages = [
+        {
+          name = "elm";
+          file-types = [ "elm" ];
+        }
+      ];
+      servers = [
+        {
+          command = "elm-language-server";
+        }
+      ];
+    }
 
-  # Python
-  {
-    languages = [
-      {
-        name = "python";
-        file-types = [ "py" ];
-      }
-    ];
-    servers = [
-      {
-        name = "rass-python";
-        command = "rass";
-        args = [ "python" ];
-      }
-      {
-        command = "pylsp";
-      }
-      {
-        command = "pyls";
-      }
-      {
-        command = "basedpyright-langserver";
-        args = [ "--stdio" ];
-      }
-      {
-        command = "pyright-langserver";
-        args = [ "--stdio" ];
-      }
-      {
-        command = "pyrefly";
-        args = [ "lsp" ];
-      }
-      {
-        command = "ty";
-        args = [ "server" ];
-      }
-      {
-        command = "jedi-language-server";
-      }
-      {
-        command = "ruff";
-        args = [ "server" ];
-      }
-      {
-        command = "ruff-lsp";
-      }
-    ];
-  }
+    # Mint
+    {
+      languages = [
+        {
+          name = "mint";
+          file-types = [ "mint" ];
+        }
+      ];
+      servers = [
+        {
+          command = "mint";
+          args = [ "ls" ];
+        }
+      ];
+    }
 
-  # JSON
-  {
-    languages = [
-      {
-        name = "json";
-        file-types = [
-          "json"
-          "jsonc"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "vscode-json-language-server";
-        args = [ "--stdio" ];
-      }
-      {
-        command = "vscode-json-languageserver";
-        args = [ "--stdio" ];
-      }
-      {
-        command = "json-languageserver";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
+    # Kotlin
+    {
+      languages = [
+        {
+          name = "kotlin";
+          file-types = [
+            "kt"
+            "kts"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "kotlin-language-server";
+        }
+      ];
+    }
 
-  # Shell
-  {
-    languages = [
-      {
-        name = "bash";
-        file-types = [
-          "sh"
-          "bash"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "bash-language-server";
-        args = [ "start" ];
-      }
-    ];
-  }
+    # Go
+    {
+      languages = [
+        {
+          name = "go";
+          file-types = [ "go" ];
+        }
+        {
+          name = "go-mod";
+          file-types = [ { glob = "go.mod"; } ];
+        }
+        {
+          name = "go-work";
+          file-types = [ { glob = "go.work"; } ];
+        }
+      ];
+      servers = [
+        {
+          command = "gopls";
+        }
+      ];
+    }
 
-  # PHP
-  {
-    languages = [
-      {
-        name = "php";
-        file-types = [ "php" ];
-      }
-    ];
-    servers = [
-      {
-        command = "phpactor";
-        args = [ "language-server" ];
-      }
-      {
-        name = "php-language-server";
-        command = "php";
-        args = [ "vendor/felixfbecker/language-server/bin/php-language-server.php" ];
-      }
-    ];
-  }
+    # R
+    {
+      languages = [
+        {
+          name = "r";
+          file-types = [
+            "r"
+            "R"
+          ];
+        }
+      ];
+      servers = [
+        {
+          name = "r-languageserver";
+          command = "R";
+          args = [
+            "--slave"
+            "-e"
+            "languageserver::run()"
+          ];
+        }
+      ];
+    }
 
-  # C, C++, and Objective-C
-  {
-    languages = [
-      {
-        name = "c";
-        file-types = [
-          "c"
-          "h"
-        ];
-      }
-      {
-        name = "cpp";
-        file-types = [
-          "cc"
-          "cpp"
-          "cxx"
-          "hh"
-          "hpp"
-          "hxx"
-        ];
-      }
-      {
-        name = "objective-c";
-        file-types = [
-          "m"
-          "mm"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "clangd";
-      }
-      {
-        command = "ccls";
-      }
-    ];
-  }
+    # Dart
+    {
+      languages = [
+        {
+          name = "dart";
+          file-types = [ "dart" ];
+        }
+      ];
+      servers = [
+        {
+          command = "dart";
+          args = [
+            "language-server"
+            "--client-id"
+            "emacs.eglot-dart"
+          ];
+        }
+      ];
+    }
 
-  # Ruby
-  {
-    languages = [
-      {
-        name = "ruby";
-        file-types = [ "rb" ];
-      }
-    ];
-    servers = [
-      {
-        command = "ruby-lsp";
-      }
-    ];
-  }
+    # Ada
+    {
+      languages = [
+        {
+          name = "ada";
+          file-types = [
+            "adb"
+            "ads"
+            "ada"
+          ];
+        }
+      ];
+      servers = [
+        {
+          name = "ada-language-server";
+          command = "ada_language_server";
+        }
+      ];
+    }
 
-  # Haskell
-  {
-    languages = [
-      {
-        name = "haskell";
-        file-types = [
-          "hs"
-          "lhs"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "haskell-language-server-wrapper";
-        args = [ "--lsp" ];
-      }
-      {
-        command = "static-ls";
-      }
-    ];
-  }
+    # GPR
+    {
+      languages = [
+        {
+          name = "gpr";
+          file-types = [ "gpr" ];
+        }
+      ];
+      servers = [
+        {
+          name = "ada-language-server-gpr";
+          command = "ada_language_server";
+          args = [ "--language-gpr" ];
+        }
+      ];
+    }
 
-  # Elm
-  {
-    languages = [
-      {
-        name = "elm";
-        file-types = [ "elm" ];
-      }
-    ];
-    servers = [
-      {
-        command = "elm-language-server";
-      }
-    ];
-  }
+    # Scala
+    {
+      languages = [
+        {
+          name = "scala";
+          file-types = [ "scala" ];
+        }
+      ];
+      servers = [
+        {
+          command = "metals";
+        }
+        {
+          command = "metals-emacs";
+        }
+      ];
+    }
 
-  # Mint
-  {
-    languages = [
-      {
-        name = "mint";
-        file-types = [ "mint" ];
-      }
-    ];
-    servers = [
-      {
-        command = "mint";
-        args = [ "ls" ];
-      }
-    ];
-  }
+    # Racket
+    {
+      languages = [
+        {
+          name = "racket";
+          file-types = [ "rkt" ];
+        }
+      ];
+      servers = [
+        {
+          command = "racket";
+          args = [
+            "-l"
+            "racket-langserver"
+          ];
+        }
+      ];
+    }
 
-  # Kotlin
-  {
-    languages = [
-      {
-        name = "kotlin";
-        file-types = [
-          "kt"
-          "kts"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "kotlin-language-server";
-      }
-    ];
-  }
+    # TeX and BibTeX
+    {
+      languages = [
+        {
+          name = "tex";
+          file-types = [
+            "tex"
+            "ltx"
+            "ctx"
+            "texi"
+            "texinfo"
+          ];
+        }
+        {
+          name = "bibtex";
+          file-types = [ "bib" ];
+        }
+      ];
+      servers = [
+        {
+          command = "digestif";
+        }
+        {
+          command = "texlab";
+        }
+      ];
+    }
 
-  # Go
-  {
-    languages = [
-      {
-        name = "go";
-        file-types = [ "go" ];
-      }
-      {
-        name = "go-mod";
-        file-types = [ { glob = "go.mod"; } ];
-      }
-      {
-        name = "go-work";
-        file-types = [ { glob = "go.work"; } ];
-      }
-    ];
-    servers = [
-      {
-        command = "gopls";
-      }
-    ];
-  }
+    # Erlang
+    {
+      languages = [
+        {
+          name = "erlang";
+          file-types = [
+            "erl"
+            "hrl"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "elp";
+          args = [ "server" ];
+        }
+      ];
+    }
 
-  # R
-  {
-    languages = [
-      {
-        name = "r";
-        file-types = [
-          "r"
-          "R"
-        ];
-      }
-    ];
-    servers = [
-      {
-        name = "r-languageserver";
-        command = "R";
-        args = [
-          "--slave"
-          "-e"
-          "languageserver::run()"
-        ];
-      }
-    ];
-  }
+    # WebAssembly Text
+    {
+      languages = [
+        {
+          name = "wat";
+          file-types = [ "wat" ];
+        }
+      ];
+      servers = [
+        {
+          command = "wat_server";
+        }
+      ];
+    }
 
-  # Dart
-  {
-    languages = [
-      {
-        name = "dart";
-        file-types = [ "dart" ];
-      }
-    ];
-    servers = [
-      {
-        command = "dart";
-        args = [
-          "language-server"
-          "--client-id"
-          "emacs.eglot-dart"
-        ];
-      }
-    ];
-  }
+    # YAML
+    {
+      languages = [
+        {
+          name = "yaml";
+          file-types = [
+            "yaml"
+            "yml"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "yaml-language-server";
+          args = [ "--stdio" ];
+        }
+      ];
+    }
 
-  # Ada
-  {
-    languages = [
-      {
-        name = "ada";
-        file-types = [
-          "adb"
-          "ads"
-          "ada"
-        ];
-      }
-    ];
-    servers = [
-      {
-        name = "ada-language-server";
-        command = "ada_language_server";
-      }
-    ];
-  }
+    # Nickel
+    {
+      languages = [
+        {
+          name = "nickel";
+          file-types = [ "ncl" ];
+        }
+      ];
+      servers = [
+        {
+          command = "nls";
+        }
+      ];
+    }
 
-  # GPR
-  {
-    languages = [
-      {
-        name = "gpr";
-        file-types = [ "gpr" ];
-      }
-    ];
-    servers = [
-      {
-        name = "ada-language-server-gpr";
-        command = "ada_language_server";
-        args = [ "--language-gpr" ];
-      }
-    ];
-  }
+    # Nushell
+    {
+      languages = [
+        {
+          name = "nushell";
+          file-types = [ "nu" ];
+        }
+      ];
+      servers = [
+        {
+          command = "nu";
+          args = [ "--lsp" ];
+        }
+      ];
+    }
 
-  # Scala
-  {
-    languages = [
-      {
-        name = "scala";
-        file-types = [ "scala" ];
-      }
-    ];
-    servers = [
-      {
-        command = "metals";
-      }
-      {
-        command = "metals-emacs";
-      }
-    ];
-  }
+    # Fennel
+    {
+      languages = [
+        {
+          name = "fennel";
+          file-types = [ "fnl" ];
+        }
+      ];
+      servers = [
+        {
+          command = "fennel-ls";
+        }
+      ];
+    }
 
-  # Racket
-  {
-    languages = [
-      {
-        name = "racket";
-        file-types = [ "rkt" ];
-      }
-    ];
-    servers = [
-      {
-        command = "racket";
-        args = [
-          "-l"
-          "racket-langserver"
-        ];
-      }
-    ];
-  }
+    # Move
+    {
+      languages = [
+        {
+          name = "move";
+          file-types = [ "move" ];
+        }
+      ];
+      servers = [
+        {
+          command = "move-analyzer";
+        }
+      ];
+    }
 
-  # TeX and BibTeX
-  {
-    languages = [
-      {
-        name = "tex";
-        file-types = [
-          "tex"
-          "ltx"
-          "ctx"
-          "texi"
-          "texinfo"
-        ];
-      }
-      {
-        name = "bibtex";
-        file-types = [ "bib" ];
-      }
-    ];
-    servers = [
-      {
-        command = "digestif";
-      }
-      {
-        command = "texlab";
-      }
-    ];
-  }
+    # Fortran
+    {
+      languages = [
+        {
+          name = "fortran";
+          file-types = [
+            "f"
+            "f90"
+            "f95"
+            "f03"
+            "f08"
+            "for"
+            "fpp"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "fortls";
+        }
+      ];
+    }
 
-  # Erlang
-  {
-    languages = [
-      {
-        name = "erlang";
-        file-types = [
-          "erl"
-          "hrl"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "elp";
-        args = [ "server" ];
-      }
-    ];
-  }
+    # Futhark
+    {
+      languages = [
+        {
+          name = "futhark";
+          file-types = [ "fut" ];
+        }
+      ];
+      servers = [
+        {
+          command = "futhark";
+          args = [ "lsp" ];
+        }
+      ];
+    }
 
-  # WebAssembly Text
-  {
-    languages = [
-      {
-        name = "wat";
-        file-types = [ "wat" ];
-      }
-    ];
-    servers = [
-      {
-        command = "wat_server";
-      }
-    ];
-  }
+    # Lua
+    {
+      languages = [
+        {
+          name = "lua";
+          file-types = [ "lua" ];
+        }
+      ];
+      servers = [
+        {
+          command = "lua-language-server";
+        }
+        {
+          command = "lua-lsp";
+        }
+      ];
+    }
 
-  # YAML
-  {
-    languages = [
-      {
-        name = "yaml";
-        file-types = [
-          "yaml"
-          "yml"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "yaml-language-server";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
+    # Yang
+    {
+      languages = [
+        {
+          name = "yang";
+          file-types = [ "yang" ];
+        }
+      ];
+      servers = [
+        {
+          command = "yang-language-server";
+        }
+      ];
+    }
 
-  # TOML
-  {
-    languages = [
-      {
-        name = "toml";
-        file-types = [ "toml" ];
-      }
-    ];
-    servers = [
-      {
-        command = "tombi";
-        args = [ "lsp" ];
-      }
-    ];
-  }
+    # Dockerfile
+    {
+      languages = [
+        {
+          name = "dockerfile";
+          file-types = [
+            { glob = "Dockerfile"; }
+            { glob = "Dockerfile.*"; }
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "docker-langserver";
+          args = [ "--stdio" ];
+        }
+      ];
+    }
 
-  # Nickel
-  {
-    languages = [
-      {
-        name = "nickel";
-        file-types = [ "ncl" ];
-      }
-    ];
-    servers = [
-      {
-        command = "nls";
-      }
-    ];
-  }
+    # Clojure
+    {
+      languages = [
+        {
+          name = "clojure";
+          file-types = [
+            "clj"
+            "cljs"
+            "cljc"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "clojure-lsp";
+        }
+      ];
+    }
 
-  # Nushell
-  {
-    languages = [
-      {
-        name = "nushell";
-        file-types = [ "nu" ];
-      }
-    ];
-    servers = [
-      {
-        command = "nu";
-        args = [ "--lsp" ];
-      }
-    ];
-  }
+    # C#
+    {
+      languages = [
+        {
+          name = "csharp";
+          file-types = [ "cs" ];
+        }
+      ];
+      servers = [
+        {
+          command = "omnisharp";
+          args = [ "-lsp" ];
+        }
+        {
+          command = "OmniSharp";
+          args = [ "-lsp" ];
+        }
+        {
+          command = "csharp-ls";
+        }
+      ];
+    }
 
-  # Fennel
-  {
-    languages = [
-      {
-        name = "fennel";
-        file-types = [ "fnl" ];
-      }
-    ];
-    servers = [
-      {
-        command = "fennel-ls";
-      }
-    ];
-  }
+    # Purescript
+    {
+      languages = [
+        {
+          name = "purescript";
+          file-types = [ "purs" ];
+        }
+      ];
+      servers = [
+        {
+          command = "purescript-language-server";
+          args = [ "--stdio" ];
+        }
+      ];
+    }
 
-  # Move
-  {
-    languages = [
-      {
-        name = "move";
-        file-types = [ "move" ];
-      }
-    ];
-    servers = [
-      {
-        command = "move-analyzer";
-      }
-    ];
-  }
+    # Perl
+    {
+      languages = [
+        {
+          name = "perl";
+          file-types = [
+            "pl"
+            "pm"
+            "t"
+          ];
+        }
+      ];
+      servers = [
+        {
+          name = "perl-language-server";
+          command = "perl";
+          args = [
+            "-MPerl::LanguageServer"
+            "-e"
+            "Perl::LanguageServer::run"
+          ];
+        }
+      ];
+    }
 
-  # Fortran
-  {
-    languages = [
-      {
-        name = "fortran";
-        file-types = [
-          "f"
-          "f90"
-          "f95"
-          "f03"
-          "f08"
-          "for"
-          "fpp"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "fortls";
-      }
-    ];
-  }
+    # Markdown
+    {
+      languages = [
+        {
+          name = "markdown";
+          file-types = [
+            "md"
+            "markdown"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "marksman";
+          args = [ "server" ];
+        }
+        {
+          command = "vscode-markdown-language-server";
+          args = [ "--stdio" ];
+        }
+      ];
+    }
 
-  # Futhark
-  {
-    languages = [
-      {
-        name = "futhark";
-        file-types = [ "fut" ];
-      }
-    ];
-    servers = [
-      {
-        command = "futhark";
-        args = [ "lsp" ];
-      }
-    ];
-  }
+    # Graphviz
+    {
+      languages = [
+        {
+          name = "dot";
+          file-types = [
+            "dot"
+            "gv"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "dot-language-server";
+          args = [ "--stdio" ];
+        }
+      ];
+    }
 
-  # Lua
-  {
-    languages = [
-      {
-        name = "lua";
-        file-types = [ "lua" ];
-      }
-    ];
-    servers = [
-      {
-        command = "lua-language-server";
-      }
-      {
-        command = "lua-lsp";
-      }
-    ];
-  }
+    # Uiua
+    {
+      languages = [
+        {
+          name = "uiua";
+          file-types = [ "ua" ];
+        }
+      ];
+      servers = [
+        {
+          command = "uiua";
+          args = [ "lsp" ];
+        }
+      ];
+    }
 
-  # Yang
-  {
-    languages = [
-      {
-        name = "yang";
-        file-types = [ "yang" ];
-      }
-    ];
-    servers = [
-      {
-        command = "yang-language-server";
-      }
-    ];
-  }
+    # Blueprint
+    {
+      languages = [
+        {
+          name = "blueprint";
+          file-types = [ "blp" ];
+        }
+      ];
+      servers = [
+        {
+          command = "blueprint-compiler";
+          args = [ "lsp" ];
+        }
+      ];
+    }
 
-  # CSS
-  {
-    languages = [
-      {
-        name = "css";
-        file-types = [ "css" ];
-      }
-    ];
-    servers = [
-      {
-        command = "vscode-css-language-server";
-        args = [ "--stdio" ];
-      }
-      {
-        command = "css-languageserver";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
-
-  # HTML
-  {
-    languages = [
-      {
-        name = "html";
-        file-types = [
-          "html"
-          "htm"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "vscode-html-language-server";
-        args = [ "--stdio" ];
-      }
-      {
-        command = "html-languageserver";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
-
-  # Dockerfile
-  {
-    languages = [
-      {
-        name = "dockerfile";
-        file-types = [
-          { glob = "Dockerfile"; }
-          { glob = "Dockerfile.*"; }
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "docker-langserver";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
-
-  # Clojure
-  {
-    languages = [
-      {
-        name = "clojure";
-        file-types = [
-          "clj"
-          "cljs"
-          "cljc"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "clojure-lsp";
-      }
-    ];
-  }
-
-  # C#
-  {
-    languages = [
-      {
-        name = "csharp";
-        file-types = [ "cs" ];
-      }
-    ];
-    servers = [
-      {
-        command = "omnisharp";
-        args = [ "-lsp" ];
-      }
-      {
-        command = "OmniSharp";
-        args = [ "-lsp" ];
-      }
-      {
-        command = "csharp-ls";
-      }
-    ];
-  }
-
-  # Purescript
-  {
-    languages = [
-      {
-        name = "purescript";
-        file-types = [ "purs" ];
-      }
-    ];
-    servers = [
-      {
-        command = "purescript-language-server";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
-
-  # Perl
-  {
-    languages = [
-      {
-        name = "perl";
-        file-types = [
-          "pl"
-          "pm"
-          "t"
-        ];
-      }
-    ];
-    servers = [
-      {
-        name = "perl-language-server";
-        command = "perl";
-        args = [
-          "-MPerl::LanguageServer"
-          "-e"
-          "Perl::LanguageServer::run"
-        ];
-      }
-    ];
-  }
-
-  # Markdown
-  {
-    languages = [
-      {
-        name = "markdown";
-        file-types = [
-          "md"
-          "markdown"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "marksman";
-        args = [ "server" ];
-      }
-      {
-        command = "vscode-markdown-language-server";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
-
-  # Graphviz
-  {
-    languages = [
-      {
-        name = "dot";
-        file-types = [
-          "dot"
-          "gv"
-        ];
-      }
-    ];
-    servers = [
-      {
-        command = "dot-language-server";
-        args = [ "--stdio" ];
-      }
-    ];
-  }
-
-  # Uiua
-  {
-    languages = [
-      {
-        name = "uiua";
-        file-types = [ "ua" ];
-      }
-    ];
-    servers = [
-      {
-        command = "uiua";
-        args = [ "lsp" ];
-      }
-    ];
-  }
-
-  # Blueprint
-  {
-    languages = [
-      {
-        name = "blueprint";
-        file-types = [ "blp" ];
-      }
-    ];
-    servers = [
-      {
-        command = "blueprint-compiler";
-        args = [ "lsp" ];
-      }
-    ];
-  }
-
-  # Odin
-  {
-    languages = [
-      {
-        name = "odin";
-        file-types = [ "odin" ];
-      }
-    ];
-    servers = [
-      {
-        command = "ols";
-      }
-    ];
-  }
-])
+    # Odin
+    {
+      languages = [
+        {
+          name = "odin";
+          file-types = [ "odin" ];
+        }
+      ];
+      servers = [
+        {
+          command = "ols";
+        }
+      ];
+    }
+  ]
+  [
+    fromEglotStyleSettings
+    (mergeConfig prevConfig)
+    ((formats.toml { }).generate "languages.toml")
+  ]

@@ -23,6 +23,8 @@ delib.module {
   home.ifEnabled =
     { cfg, ... }:
     {
-      home.file.${cfg.configPath}.source = pkgs.callPackage ../../../lsp-proxy-config.nix { };
+      home.file.${cfg.configPath}.source =
+        homeconfig.programs.emacs-twist.config.callPackage ../../../lsp-proxy-config.nix
+          { };
     };
 }

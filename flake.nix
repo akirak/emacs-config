@@ -144,7 +144,7 @@
 
               deps-check = self.packages.${system}.emacs-config.depsCheck;
 
-              lsp-proxy = self.packages.${system}.emacs-config.pkgs.callPackage ./nix/lsp-proxy-config.nix { };
+              lsp-proxy = self.packages.${system}.emacs-config.callPackage ./nix/lsp-proxy-config.nix { };
             };
           };
 
