@@ -1,6 +1,5 @@
 {
   delib,
-  pkgs,
   homeconfig,
   ...
 }:
