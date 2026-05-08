@@ -40,7 +40,13 @@ let
   serverName = server: server.name or server.command;
 
   serverDefinition =
-    server: lib.nameValuePair (serverName server) (builtins.removeAttrs server [ "name" ]);
+    server:
+    lib.nameValuePair (serverName server) (
+      builtins.removeAttrs server [
+        "name"
+        "languageOptions"
+      ]
+    );
 
   fromEglotStyleSettings = eglotStyleSettings: {
     language-server =
@@ -56,7 +62,15 @@ let
           language:
           language
           // {
-            language-servers = (builtins.map serverName a.servers) ++ [ "copilot" ];
+            language-servers =
+              (builtins.map (
+                server:
+                (server.languageOptions or { })
+                // {
+                  name = serverName server;
+                }
+              ) a.servers)
+              ++ [ "copilot" ];
           }
         ) a.languages)
       ) eglotStyleSettings
@@ -65,6 +79,42 @@ let
 in
 lib.pipe
   [
+    # Rust (overriding)
+    {
+      languages = [
+        {
+          name = "rust";
+          roots = [
+            "Cargo.toml"
+            "Cargo.lock"
+          ];
+          file-types = [ "rs" ];
+        }
+      ];
+      servers = [
+        {
+          command = "rust-analyzer";
+          languageOptions = {
+            library-directories = [
+              "~/.cargo/registry/src"
+              # Never used on my NixOS machines, but can be relevant elsewhere.
+              "~/.rustup/toolchains"
+            ];
+          };
+          config = {
+            inlayHints = {
+              bindingModeHints.enable = false;
+              closingBraceHints.minLines = 10;
+              closureReturnTypeHints.enable = "with_block";
+              discriminantHints.enable = "fieldless";
+              lifetimeElisionHints.enable = "skip_trivial";
+              typeHints.hideClosureInitialization = false;
+            };
+          };
+        }
+      ];
+    }
+
     # Nix
     {
       languages = [
