@@ -17,7 +17,10 @@ delib.module {
     moduleOptions {
       enable = boolOption host.isDesktop;
 
-      enableRebuildScript = boolOption true;
+      rebuildScript = {
+        enable = boolOption true;
+        withSubmodule = boolOption true;
+      };
 
       mainConfigDirectory = strOption "${homeDirectory}/build/nix-config";
 
@@ -91,14 +94,20 @@ delib.module {
           build_flags=()
         fi
 
+        ${lib.optionalString cfg.rebuildScript.withSubmodule ''
+          build_flags+=(--override-input denix-modules "$(readlink -f ${lib.escapeShellArg cfg.mainConfigDirectory}/denix)")
+        ''}
+
         if [[ -v cachix ]]; then
           command=(cachix watch-exec "$cachix" "$nh" --)
         else
           command=("$nh")
         fi
 
-        if "''${command[@]}" "$target" "$operation" "$flake" -- ''${build_flags[@]} "''${@}"; then
-          "$notify" rebuildScript "Rebuilding the configuration (nh $target $operation) has finished successfully"
+        if "''${command[@]}" "$target" "$operation" "$flake" \
+          -- --option accept-flake-config true \
+          ''${build_flags[@]} "''${@}"; then
+            "$notify" rebuildScript "Rebuilding the configuration (nh $target $operation) has finished successfully"
         else
           "$notify" rebuildScript "Rebuilding the configuration (nh $target $operation) has failed"
           if [[ -v DISPLAY ]] || [[ -v WAYLAND_DISPLAY ]]
@@ -119,6 +128,6 @@ delib.module {
         flake = cfg.mainConfigDirectory;
       };
 
-      home.packages = lib.optional cfg.enableRebuildScript rebuildScript;
+      home.packages = lib.optional cfg.rebuildScript.enable rebuildScript;
     };
 }
