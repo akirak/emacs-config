@@ -288,6 +288,9 @@ lib.pipe
         {
           name = "gleam";
           file-types = [ "gleam" ];
+          roots = [
+            "gleam.toml"
+          ];
         }
       ];
       servers = [
