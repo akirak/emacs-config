@@ -11,7 +11,7 @@
 # under GPL.
 {
   pkgs,
-  elispPackages,
+  packageInputs,
 }:
 let
   inherit (pkgs)
@@ -20,9 +20,7 @@ let
     copilot-language-server
     ;
 
-  prevConfig = lib.importTOML (
-    elispPackages.lsp-proxy.outPath + "/share/emacs/site-lisp/languages.toml"
-  );
+  prevConfig = lib.importTOML (packageInputs.lsp-proxy.src + "/languages.toml");
 
   mergeConfig = old: new: {
     language-server = old.language-server // new.language-server;
