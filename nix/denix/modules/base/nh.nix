@@ -55,6 +55,10 @@ delib.module {
         fi
         nh="${lib.getExe pkgs.nh}"
 
+        command_exists() {
+          command -v "$1" >/dev/null 2>/dev/null
+        }
+
         usage() {
           cat >&2 <<HELP
           Usage: nixos-rebuild-and-notify TARGET [OPERATION]
@@ -98,7 +102,7 @@ delib.module {
           build_flags+=(--override-input denix-modules "$(readlink -f ${lib.escapeShellArg cfg.mainConfigDirectory}/denix)")
         ''}
 
-        if [[ -v cachix ]]; then
+        if [[ -v cachix ]] && [[ -n "$cachix" ]] && command_exists cachix; then
           command=(cachix watch-exec "$cachix" "$nh" --)
         else
           command=("$nh")
