@@ -68,7 +68,7 @@ let
                   name = serverName server;
                 }
               ) a.servers)
-              ++ [ "copilot" ];
+              ++ [ { name = "copilot"; } ];
           }
         ) a.languages)
       ) eglotStyleSettings
