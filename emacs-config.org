@@ -11950,6 +11950,7 @@ I rebind the following keys in some keymaps to emulate a typical UNIX shell:
 C-a, C-e, C-u, C-w, C-h.
 ** Also see
 - [[https://github.com/terlar/emacs-config][Tarje Larsen's emacs-config]] is a configuration from which this configuration takes a constant inspiration.
+- The denix modules are partly based on [[https://github.com/yunfachi/nix-config][yunfachi's nix-config]].
 ** License
 This repository is licensed under multiple licenses.
 It follows the conventions of [[https://reuse.software/][REUSE]], and the license files are stored under [[file:LICENSES/][LICENSES]] directory.
