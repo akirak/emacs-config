@@ -22,6 +22,12 @@ delib.module {
       enableDaemon = boolOption true;
     };
 
+  myconfig.ifEnabled =
+    { cfg, ... }:
+    {
+      rime.enable = lib.mkIf (builtins.elem "Chinese" cfg.extraFeatures) true;
+    };
+
   home.always.imports = [
     # Provides programs.emacs-twist
     inputs.twist.homeModules.emacs-twist

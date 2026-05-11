@@ -51,6 +51,7 @@
     ("build.zig" . zig)
     ("rebar.config" . rebar3)
     ("gleam.toml" . gleam)
+    ("Makefile" . make)
     (".agents" . agents)
     ("uv.lock" . uv))
   ""
@@ -107,18 +108,25 @@
      ("lake test")
      ("lake lint")
      ("lake clean"))
+    (make
+     ("make"))
     (gleam
      ("gleam run")
      ("gleam test")
      ("gleam add")
      ("gleam add --dev")
+     ("gleam remove")
      ("gleam deps download")
      ("gleam deps update")
+     ("gleam format src test")
      ("gleam format --check src test")
      ("gleam build")
+     ("gleam docs")
+     ("gleam shell")
      ("gleam docs build")
      ("gleam check")
      ("gleam fix")
+     ("gleam clean")
      ("gleam build"))
     (go-module
      ("go build")
@@ -528,7 +536,8 @@ are displayed in the frame."
          `(let ((key (list backend dir)))
             (or (gethash key akirak-compile-command-cache)
                 (let ((value ,body))
-                  (puthash key value akirak-compile-command-cache)
+                  (when value
+                    (puthash key value akirak-compile-command-cache))
                   value)))))
     (cl-case backend
       (mix (with-memoize
@@ -580,6 +589,18 @@ are displayed in the frame."
                                                  (shell-quote-argument (match-string 1))))
                                    results)))
                          results)))))
+      (make (with-memoize
+             (let (results)
+               (dolist (file (seq-filter #'file-exists-p (list "Makefile")))
+                 (with-temp-buffer
+                   (insert-file-contents file)
+                   (makefile-pickup-targets)
+                   (dolist (ent makefile-target-table)
+                     (let ((target (car ent)))
+                       (unless (string= target ".PHONY")
+                         (push (list (format "make %s" (shell-quote-argument target)))
+                               results))))))
+               results)))
       (zig (with-memoize
             (with-temp-buffer
               (akirak-compile--insert-stdout "zig" "build" "--help")
@@ -743,25 +764,26 @@ are displayed in the frame."
 
 (defun akirak-compile--insert-stdout (command &rest args)
   "Insert the standard output from a command into the buffer."
-  (let ((err-file (make-temp-file command)))
-    (unwind-protect
-        (let ((envrc-dir (locate-dominating-file default-directory ".envrc")))
-          (unless (zerop (if (and envrc-dir (executable-find "direnv"))
-                             (apply #'call-process "direnv"
+  (when (executable-find command)
+    (let ((err-file (make-temp-file command)))
+      (unwind-protect
+          (let ((envrc-dir (locate-dominating-file default-directory ".envrc")))
+            (unless (zerop (if (and envrc-dir (executable-find "direnv"))
+                               (apply #'call-process "direnv"
+                                      nil (list t err-file) nil
+                                      "exec"
+                                      (file-relative-name (expand-file-name envrc-dir))
+                                      command args)
+                             (apply #'call-process command
                                     nil (list t err-file) nil
-                                    "exec"
-                                    (file-relative-name (expand-file-name envrc-dir))
-                                    command args)
-                           (apply #'call-process command
-                                  nil (list t err-file) nil
-                                  args)))
-            (error "Error from command %s: %s"
-                   (mapconcat #'shell-quote-argument (cons command args)
-                              " ")
-                   (with-temp-buffer
-                     (insert-file-contents err-file)
-                     (buffer-string)))))
-      (delete-file err-file))))
+                                    args)))
+              (error "Error from command %s: %s"
+                     (mapconcat #'shell-quote-argument (cons command args)
+                                " ")
+                     (with-temp-buffer
+                       (insert-file-contents err-file)
+                       (buffer-string)))))
+        (delete-file err-file)))))
 
 (defun akirak-compile-run-test (name language)
   "Run a test case NAME in the LANGUAGE."

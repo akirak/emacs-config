@@ -1033,6 +1033,12 @@
       repo = "popper";
       type = "github";
     };
+    popup = {
+      flake = false;
+      owner = "auto-complete";
+      repo = "popup-el";
+      type = "github";
+    };
     posframe = {
       flake = false;
       owner = "tumashu";
@@ -1115,6 +1121,12 @@
       flake = false;
       owner = "akirak";
       repo = "emacs-dumb-japanese";
+      type = "github";
+    };
+    rime = {
+      flake = false;
+      owner = "DogLooksGood";
+      repo = "emacs-rime";
       type = "github";
     };
     "s" = {

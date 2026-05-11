@@ -2749,6 +2749,22 @@
         "type": "github"
       }
     },
+    "popup": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767198153,
+        "narHash": "sha256-dx0XD12aRxB9ipzjiwF9SpcXpo/3TF77DQNZkJwo80U=",
+        "owner": "auto-complete",
+        "repo": "popup-el",
+        "rev": "45a0b759076ce4139aba36dde0a2904136282e73",
+        "type": "github"
+      },
+      "original": {
+        "owner": "auto-complete",
+        "repo": "popup-el",
+        "type": "github"
+      }
+    },
     "posframe": {
       "flake": false,
       "locked": {
@@ -2973,6 +2989,22 @@
         "type": "github"
       }
     },
+    "rime": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1762355102,
+        "narHash": "sha256-/gLue5lCjpC6h3cbYHY92aKE6hdqB2yuSAXnR2VDwLs=",
+        "owner": "DogLooksGood",
+        "repo": "emacs-rime",
+        "rev": "f927d26e471e7d63de65ffa92897944242f2fd92",
+        "type": "github"
+      },
+      "original": {
+        "owner": "DogLooksGood",
+        "repo": "emacs-rime",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "aggressive-indent": "aggressive-indent",
@@ -3146,6 +3178,7 @@
         "pinyin": "pinyin",
         "plz": "plz",
         "popper": "popper",
+        "popup": "popup",
         "posframe": "posframe",
         "prodigy": "prodigy",
         "promise": "promise",
@@ -3160,6 +3193,7 @@
         "restclient": "restclient",
         "rfc-mode": "rfc-mode",
         "riben": "riben",
+        "rime": "rime",
         "s": "s",
         "separedit": "separedit",
         "setup": "setup",

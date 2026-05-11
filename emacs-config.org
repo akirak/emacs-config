@@ -5471,6 +5471,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     ;; Local search
     (:global-keymap "M-s M-l" #'akirak-japanese-search))
 #+end_src
+*** akirak-language
+#+begin_src elisp
+  (setup akirak-language
+    (:global-keymap "<f12> l" #'akirak-language-transient))
+#+end_src
 *** akirak-lmstudio
 #+begin_src elisp
   (setup akirak-lmstudio
@@ -8849,6 +8854,9 @@ LSP Proxy client for Emacs
 
     (:when-loaded
       (define-prefix-command 'akirak/lsp-proxy-prefix-map)
+      ;; Avoid the global /tmp directory
+      (:set lsp-proxy-log-file-directory
+            (file-name-concat (xdg-runtime-dir) "emacs-lsp-proxy"))
       (:with-map akirak/lsp-proxy-prefix-map
         (:keymap "a" #'lsp-proxy-execute-code-action
                  "d" #'lsp-proxy-describe-thing-at-point
@@ -10128,6 +10136,32 @@ Clean-up and Beautify the list of minor-modes.
                            symbol-end))
     (:hook-into after-init-hook))
 #+end_src
+*** rime                                                        :Chinese:@extra:
+:PROPERTIES:
+:CREATED_TIME: [2026-05-05 Tue 15:01]
+:END:
+#+begin_quote
+Rime input method
+[[https://www.github.com/DogLooksGood/emacs-rime]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package rime)
+    (:when-loaded
+      ;; You have to set `rime-share-data-dir' to a directory that contains rime
+      ;; dictionaries.
+      (:set rime-share-data-dir (file-name-concat (xdg-data-home) "rime-data"))
+
+      (if (and (window-system)
+               (require 'posframe nil t)
+               (posframe-workable-p))
+          (setq rime-show-candidate 'posframe
+                rime-posframe-style 'horizontal
+                rime-posframe-properties (list :internal-border-width 3))
+        (setq rime-show-candidate 'popup
+              rime-popup-style 'horizontal))))
+#+end_src
+
 *** COMMENT ruby-end                                                           :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-04-29 Fri 23:59]
@@ -11712,11 +11746,11 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 216 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
-| [[org-ql-search:tags:@extra][@extra]]              |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
 | [[org-ql-search:tags:editing][editing]]             |   8 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
@@ -11751,6 +11785,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |
+| [[org-ql-search:tags:Chinese][Chinese]]             |   2 |
 | [[org-ql-search:tags:initialization][initialization]]      |   1 |
 | [[org-ql-search:tags:performance][performance]]         |   1 |
 | [[org-ql-search:tags:help][help]]                |   1 |
@@ -11779,7 +11814,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
 | [[org-ql-search:tags:reading][reading]]             |   1 |
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
-| [[org-ql-search:tags:Chinese][Chinese]]             |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
 | [[org-ql-search:tags:transit][transit]]             |   1 |
@@ -11865,6 +11899,7 @@ To use these features, they need to be turned on at build time.
 | [[lsp-mode][lsp-mode]]              |      |
 | [[mcp][mcp]]                   |      |
 | [[Coq][Coq]]                   |      |
+| [[rime][rime]]                  |      |
 | [[tuareg][tuareg]]                |      |
 | [[utop][utop]]                  |      |
 | [[video-trimmer][video-trimmer]]         |      |

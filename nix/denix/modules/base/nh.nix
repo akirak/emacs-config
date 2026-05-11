@@ -17,7 +17,10 @@ delib.module {
     moduleOptions {
       enable = boolOption host.isDesktop;
 
-      enableRebuildScript = boolOption true;
+      rebuildScript = {
+        enable = boolOption true;
+        withSubmodule = boolOption true;
+      };
 
       mainConfigDirectory = strOption "${homeDirectory}/build/nix-config";
 
@@ -45,7 +48,16 @@ delib.module {
 
       rebuildScript = pkgs.writeShellScriptBin "nixos-rebuild-and-notify" ''
         flake="${cfg.mainConfigDirectory}"
-        notify="${notify}"
+        notify="${lib.getExe notify}"
+        cachix="${cfg.cachixName}"
+        if [[ -z "$cachix" ]]; then
+          unset cachix
+        fi
+        nh="${lib.getExe pkgs.nh}"
+
+        command_exists() {
+          command -v "$1" >/dev/null 2>/dev/null
+        }
 
         usage() {
           cat >&2 <<HELP
@@ -86,17 +98,20 @@ delib.module {
           build_flags=()
         fi
 
-        if json=$(${lib.getExe pkgs.nh} "$target" "$operation" --json "$flake" -- ''${build_flags[@]} "''${@}"); then
-          "$notify" rebuildScript "Rebuilding the configuration (nh $target $operation) has finished successfully"
+        ${lib.optionalString cfg.rebuildScript.withSubmodule ''
+          build_flags+=(--override-input denix-modules "$(readlink -f ${lib.escapeShellArg cfg.mainConfigDirectory}/denix)")
+        ''}
 
-          out=$(echo "$json" | jq .outputs.out -)
-          if command -v cachix >& /dev/null; then
-            if cachix push akirak "$out"; then
-              "$notify" rebuildScript "Successfully pushed the result to cachix."
-            else
-              "$notify" rebuildScript "Failed to push the result to cachix."
-            fi
-          fi
+        if [[ -v cachix ]] && [[ -n "$cachix" ]] && command_exists cachix; then
+          command=(cachix watch-exec "$cachix" "$nh" --)
+        else
+          command=("$nh")
+        fi
+
+        if "''${command[@]}" "$target" "$operation" "$flake" \
+          -- --option accept-flake-config true \
+          ''${build_flags[@]} "''${@}"; then
+            "$notify" rebuildScript "Rebuilding the configuration (nh $target $operation) has finished successfully"
         else
           "$notify" rebuildScript "Rebuilding the configuration (nh $target $operation) has failed"
           if [[ -v DISPLAY ]] || [[ -v WAYLAND_DISPLAY ]]
@@ -117,6 +132,6 @@ delib.module {
         flake = cfg.mainConfigDirectory;
       };
 
-      home.packages = lib.optional cfg.enableRebuildScript rebuildScript;
+      home.packages = lib.optional cfg.rebuildScript.enable rebuildScript;
     };
 }
