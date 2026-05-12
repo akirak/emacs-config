@@ -26,7 +26,7 @@ delib.module {
 
       emacsConfigDirectory = strOption "${homeDirectory}/build/emacs-config";
 
-      cachixName = strOption null;
+      cachixName = allowNull (strOption null);
     };
 
   home.ifEnabled =
@@ -49,7 +49,7 @@ delib.module {
       rebuildScript = pkgs.writeShellScriptBin "nixos-rebuild-and-notify" ''
         flake="${cfg.mainConfigDirectory}"
         notify="${lib.getExe notify}"
-        cachix="${cfg.cachixName}"
+        cachix="${if cfg.cachixName != null then cfg.cachixName else ""}"
         if [[ -z "$cachix" ]]; then
           unset cachix
         fi
