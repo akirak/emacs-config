@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 delib.module {
   name = "git";
 
@@ -13,37 +12,37 @@ delib.module {
     moduleOptions {
       enable = boolOption true;
 
-      identities =
-        attrsOfOption
-          (submodule {
-            options = {
-              userName = noDefault (strOption null);
-              userEmail = noDefault (strOption null);
-              githubUser = strOption null;
-              signingKey = strOption null;
-              githubOrganizations = listOfOption str [ ];
-              remoteUrls = listOfOption str [ ];
-              gitdirs = listOfOption str [ ];
-            };
-          })
-          {
-            "akira.komamura@gmail.com" = {
-              userName = "Akira Komamura";
-              userEmail = "akira.komamura@gmail.com";
-              githubUser = "akirak";
-              signingKey = "5B3390B01C01D3E";
-              githubOrganizations = [
-                "emacs-twist"
-                "elpa-mirrors"
-              ];
-              gitdirs = [
-                "~/work2/foss/"
-                "~/work2/learning/"
-                "~/work2/personal/"
-                "/git-annex/"
-              ];
-            };
-          };
+      identities = {
+        "akira.komamura@gmail.com" = {
+          userName = readOnly (strOption "Akira Komamura");
+          userEmail = readOnly (strOption "akira.komamura@gmail.com");
+          githubUser = readOnly (strOption "akirak");
+          signingKey = allowNull (strOption "5B3390B01C01D3E");
+          githubOrganizations = listOfOption str [
+            "emacs-twist"
+            "elpa-mirrors"
+          ];
+          remoteUrls = listOfOption str [ ];
+          gitdirs = listOfOption str [
+            "~/work2/foss/"
+            "~/work2/learning/"
+            "~/work2/personal/"
+            "/git-annex/"
+          ];
+        };
+      };
+
+      otherIdentities = attrsOfOption (submodule {
+        options = {
+          userName = noDefault (strOption null);
+          userEmail = noDefault (strOption null);
+          githubUser = allowNull (strOption null);
+          signingKey = allowNull (strOption null);
+          githubOrganizations = listOfOption str [ ];
+          remoteUrls = listOfOption str [ ];
+          gitdirs = listOfOption str [ ];
+        };
+      }) { };
     };
 
   home.ifEnabled =
@@ -103,7 +102,7 @@ delib.module {
           ".codex"
         ];
 
-        includes = lib.pipe cfg.identities [
+        includes = lib.pipe (cfg.identities // cfg.otherIdentities) [
           (lib.mapAttrsToList (
             _:
             {
