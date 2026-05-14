@@ -31,6 +31,13 @@
 
 (require 'subr-x)
 
+(defcustom akirak-nix-language-syntaxes
+  '(("toml" . "lib.importTOML")
+    ("json" . "lib.importJSON"))
+  ""
+  :type '(alist :key-type (string :tag "Language name")
+                :value-type (string :tag "Nix function")))
+
 ;;;###autoload
 (defun akirak-nix-prefetch-url (url &rest args)
   (interactive (cons (string-trim (read-string "Url: "))
@@ -295,6 +302,55 @@ This is a hack, so it may not work in the future."
       (with-help-window (help-buffer)
         (with-current-buffer (help-buffer)
           (insert help))))))
+
+;;;###autoload
+(defun akirak-nix-copy-and-convert-dwim (&optional arg)
+  "Convert the selected region to Nix and save the result to kill ring.
+
+The current implementation saves the source content to the Nix store.
+Use it with caution."
+  (interactive "P")
+  (let ((syntax (if arg
+                    (completing-read "Syntax: "
+                                     (mapcar #'car akirak-nix-language-syntaxes)
+                                     nil t)
+                  (or (and (featurep 'treesit)
+                           (treesit-available-p)
+                           (symbol-name (treesit-language-at (point))))
+                      (string-remove-suffix "-mode" (symbol-name major-mode)))))
+        (text (if (use-region-p)
+                  (buffer-substring-no-properties (region-beginning)
+                                                  (region-end))
+                (user-error "No region is selected")))
+        (tmp-file (make-temp-file "emacs-nix-data"))
+        (error-file (make-temp-file "emacs-nix-error")))
+    (unwind-protect
+        (progn
+          (with-temp-file tmp-file
+            (insert text))
+          (kill-new
+           (with-temp-buffer
+             (insert "let\n"
+                     "  inherit (builtins.getFlake \"nixpkgs\") lib;\n"
+                     "in\n"
+                     (format "  lib.generators.toPretty {} (%s %s)"
+                             (or (cdr (assoc syntax akirak-nix-language-syntaxes))
+                                 (error "Unsupported syntax: %s" syntax))
+                             tmp-file))
+             (message "source: %s" (buffer-string))
+             (unless (zerop (call-process-region (point-min) (point-max)
+                                                 "nix"
+                                                 'delete
+                                                 (list t error-file)
+                                                 nil
+                                                 "eval" "--raw" "-f" "-"))
+               (error "Nix returned non-zero: %s"
+                      (with-temp-buffer
+                        (insert-file-contents error-file))))
+             (buffer-string)))
+          (message "Copied a Nix expression to the kill ring"))
+      (delete-file tmp-file)
+      (delete-file error-file))))
 
 (provide 'akirak-nix)
 ;;; akirak-nix.el ends here
