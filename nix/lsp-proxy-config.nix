@@ -24,8 +24,11 @@ let
 
   mergeConfig = old: new: {
     language-server = old.language-server // new.language-server;
-    # Allow duplicates
-    language = new.language ++ old.language;
+    language = lib.pipe (new.language ++ old.language) [
+      (builtins.map ({ name, ... } @ value: { inherit name value; }))
+      builtins.listToAttrs
+      builtins.attrValues
+    ];
   };
 
   defaultLanguageServers = {
