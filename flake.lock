@@ -233,15 +233,16 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1773532811,
-        "narHash": "sha256-AntAhcrpSlO6qHuNnpTRRaD/w32i6IZEJXFM2glfnB4=",
-        "owner": "jadestrong",
+        "lastModified": 1778853863,
+        "narHash": "sha256-4vZD6rEwzoz5cTznAhw5SIQs/+9Kvq787SManApFnco=",
+        "owner": "akirak",
         "repo": "lsp-proxy",
-        "rev": "85706b52ec7599ea282b7a0b821c145a9e2cbec7",
+        "rev": "0b255d40ea0c22b0426e8e44acd0d0bd2abbefe2",
         "type": "github"
       },
       "original": {
-        "owner": "jadestrong",
+        "owner": "akirak",
+        "ref": "develop",
         "repo": "lsp-proxy",
         "type": "github"
       }

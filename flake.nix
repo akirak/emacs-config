@@ -18,7 +18,7 @@
       flake = false;
     };
 
-    lsp-proxy.url = "github:jadestrong/lsp-proxy";
+    lsp-proxy.url = "github:akirak/lsp-proxy/develop";
     playwright-mcp.url = "github:akirak/nix-playwright-mcp";
   };
 
