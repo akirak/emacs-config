@@ -11,7 +11,9 @@ delib.module {
     with delib;
     {
       emacs.lsp-proxy = {
-        enable = boolOption myconfig.emacs.enable;
+        # Currently not using lsp-proxy, so disable this unconditionally.
+        enable = boolOption false;
+        # enable = boolOption myconfig.emacs.enable;
 
         configPath = readOnly (
           strOption (homeconfig.programs.emacs-twist.directory + "/lsp-proxy/languages.json")
