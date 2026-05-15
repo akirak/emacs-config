@@ -1110,7 +1110,8 @@ It is required only in specific projects, so I won't turn on the mode by default
     ;; Bind akirak-eldoc-show-buffer instead
     ;; (:global-keymap "C-c e" #'eldoc-doc-buffer)
 
-    (:set eldoc-documentation-strategy 'eldoc-documentation-compose))
+    (:set eldoc-documentation-strategy 'eldoc-documentation-compose
+          eldoc-documentation-functions nil))
 #+end_src
 *** elec-pair                      :prog_mode:text_mode:parentheses:
 :PROPERTIES:
