@@ -12,6 +12,7 @@
     {
       system,
       config,
+      pkgs,
       ...
     }:
     {
@@ -40,7 +41,11 @@
       };
 
       devShells = {
-        default = config.pre-commit.devShell;
+        default = config.pre-commit.devShell.overrideAttrs (old: {
+          packages = (old.packages or [ ]) ++ [
+            pkgs.just
+          ];
+        });
       };
     };
 }
