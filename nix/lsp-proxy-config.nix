@@ -24,8 +24,11 @@ let
 
   mergeConfig = old: new: {
     language-server = old.language-server // new.language-server;
-    # Allow duplicates
-    language = new.language ++ old.language;
+    language = lib.pipe (new.language ++ old.language) [
+      (builtins.map ({ name, ... } @ value: { inherit name value; }))
+      builtins.listToAttrs
+      builtins.attrValues
+    ];
   };
 
   defaultLanguageServers = {
@@ -77,6 +80,118 @@ let
 in
 lib.pipe
   [
+    # TypeScript, JavaScript, and React
+    {
+      languages = [
+        {
+          name = "typescript";
+          language-id = "typescript";
+          file-types = [ "ts" ];
+          roots = [
+            "tsconfig.json"
+            "package.json"
+          ];
+        }
+        {
+          name = "typescript-react";
+          language-id = "typescriptreact";
+          file-types = [ "tsx" ];
+          roots = [
+            "tsconfig.json"
+            "package.json"
+          ];
+        }
+        {
+          name = "javascript";
+          language-id = "javascript";
+          file-types = [
+            "js"
+            "mjs"
+            "cjs"
+          ];
+          roots = [
+            "package.json"
+          ];
+        }
+        {
+          name = "javascript-react";
+          language-id = "javascriptreact";
+          file-types = [ "jsx" ];
+          roots = [
+            "package.json"
+          ];
+        }
+      ];
+      servers = [
+        {
+          command = "tsgo";
+          args = [
+            "--lsp"
+            "--stdio"
+          ];
+          languageOptions = {
+            support-workspace = true;
+            config-files = [
+              "tsconfig.json"
+              "package.json"
+            ];
+          };
+        }
+        {
+          command = "typescript-language-server";
+          args = [
+            "--stdio"
+          ];
+        }
+        {
+          command = "deno";
+          args = [
+            "lsp"
+          ];
+        }
+        {
+          command = "oxlint";
+          args = [
+            "--lsp"
+          ];
+          languageOptions = {
+            support-workspace = true;
+            config-files = [
+              ".oxlintrc.json"
+            ];
+          };
+        }
+        {
+          name = "eslint";
+          command = "vscode-eslint-language-server";
+          args = ["--stdio"];
+          # Based on the built-in config of lsp-proxy
+          languageOptions = {
+            support-workspace = true;
+            config-files = [
+              ".eslintrc.js"
+              ".eslintrc.cjs"
+              ".eslintrc.yaml"
+              ".eslintrc.yml"
+              ".eslintrc"
+              ".eslintrc.json"
+              "eslint.config.js"
+              "eslint.config.mjs"
+              "eslint.config.cjs"
+              "eslint.config.ts"
+              "eslint.config.mts"
+              "eslint.config.cts"
+            ];
+          };
+        }
+        {
+          name = "rass-ts";
+          command = "rass";
+          args = [ "ts" ];
+        }
+      ];
+    }
+
     # Rust (overriding)
     {
       languages = [
@@ -1098,5 +1213,5 @@ lib.pipe
   [
     fromEglotStyleSettings
     (mergeConfig prevConfig)
-    ((formats.toml { }).generate "languages.toml")
+    ((formats.json { }).generate "languages.json")
   ]

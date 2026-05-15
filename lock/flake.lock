@@ -307,11 +307,11 @@
     "compat": {
       "flake": false,
       "locked": {
-        "lastModified": 1777758310,
-        "narHash": "sha256-Joi7BDvo/9+wn7YiQMAbmx+SQDeUYzb02zkbEcyJdvs=",
+        "lastModified": 1777842992,
+        "narHash": "sha256-gLfQ48nMw5ZCZ6tUT95iszqMIjcUimpkjCVJ4ptVx9s=",
         "owner": "emacs-compat",
         "repo": "compat",
-        "rev": "526043760c64f53d2f863690859bc8d2d3077952",
+        "rev": "b5b48183689b536f72b1214106afeabc465da9d4",
         "type": "github"
       },
       "original": {
@@ -349,6 +349,22 @@
       "original": {
         "owner": "minad",
         "repo": "consult",
+        "type": "github"
+      }
+    },
+    "consult-eglot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1756632318,
+        "narHash": "sha256-T6ZYTnc9tqwU+UE7f7Yk74mgPg8O5S9rnNZOQs5seBA=",
+        "owner": "mohkale",
+        "repo": "consult-eglot",
+        "rev": "d8b444aac39edfc6473ffbd228df3e9119451b51",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mohkale",
+        "repo": "consult-eglot",
         "type": "github"
       }
     },
@@ -814,6 +830,22 @@
       "original": {
         "owner": "Fanael",
         "repo": "edit-indirect",
+        "type": "github"
+      }
+    },
+    "eglot-booster": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1752690112,
+        "narHash": "sha256-xUBQrQpw+JZxcqT1fy/8C2tjKwa7sLFHXamBm45Fa4Y=",
+        "owner": "jdtsmith",
+        "repo": "eglot-booster",
+        "rev": "cab7803c4f0adc7fff9da6680f90110674bb7a22",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jdtsmith",
+        "repo": "eglot-booster",
         "type": "github"
       }
     },
@@ -1829,11 +1861,11 @@
     "modus-themes": {
       "flake": false,
       "locked": {
-        "lastModified": 1775853856,
-        "narHash": "sha256-QUgfHN5yyQkEALfUQX1NcwjvromNHRL5bwXIozBIRy4=",
+        "lastModified": 1778175584,
+        "narHash": "sha256-/q6ftowqYx7Gbm/BO9twaP2nicA2gk5uGmpdF00iO5Q=",
         "owner": "protesilaos",
         "repo": "modus-themes",
-        "rev": "8635304365b6f9b2099ca28036798ac510225d36",
+        "rev": "c8925cd23b8af5d84975fa33431f58a59c630bfc",
         "type": "github"
       },
       "original": {
@@ -2129,6 +2161,22 @@
       "original": {
         "owner": "alf",
         "repo": "ob-restclient.el",
+        "type": "github"
+      }
+    },
+    "ocaml-eglot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777943519,
+        "narHash": "sha256-qBOSCNfcZUfrV1RJf0h9XMaz3jG4+HxsmY1XEGZHpVY=",
+        "owner": "tarides",
+        "repo": "ocaml-eglot",
+        "rev": "f3a9107827ee3b3875192c9cd27de5bfd4caec0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tarides",
+        "repo": "ocaml-eglot",
         "type": "github"
       }
     },
@@ -3029,6 +3077,7 @@
         "compat": "compat",
         "cond-let": "cond-let",
         "consult": "consult",
+        "consult-eglot": "consult-eglot",
         "consult-ls-git": "consult-ls-git",
         "consult-org-dog": "consult-org-dog",
         "consult-org-nlink": "consult-org-nlink",
@@ -3058,6 +3107,7 @@
         "dune": "dune",
         "eat": "eat",
         "edit-indirect": "edit-indirect",
+        "eglot-booster": "eglot-booster",
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
         "elx": "elx",
@@ -3140,6 +3190,7 @@
         "ob-graphql": "ob-graphql",
         "ob-mermaid": "ob-mermaid",
         "ob-restclient": "ob-restclient",
+        "ocaml-eglot": "ocaml-eglot",
         "ocp-indent": "ocp-indent",
         "octopus": "octopus",
         "olivetti": "olivetti",
@@ -3301,11 +3352,11 @@
     "show-font": {
       "flake": false,
       "locked": {
-        "lastModified": 1768128841,
-        "narHash": "sha256-Ww42m/wYCfFBGfRFgLimYfBvsNHsURZ14btOdenZK90=",
+        "lastModified": 1777026456,
+        "narHash": "sha256-vo67eHUmw8u7xDtZrAgONfb3o7+L4SFrLjpeUmpFzaE=",
         "owner": "protesilaos",
         "repo": "show-font",
-        "rev": "0fb3b3a7dbec93345c7135847b467c32cc45cbfa",
+        "rev": "e3941cc657272f2d2450dbdfad42f355d37611af",
         "type": "github"
       },
       "original": {

@@ -18,7 +18,7 @@
       flake = false;
     };
 
-    lsp-proxy.url = "github:jadestrong/lsp-proxy";
+    # lsp-proxy.url = "github:akirak/lsp-proxy/develop";
     playwright-mcp.url = "github:akirak/nix-playwright-mcp";
   };
 
@@ -144,7 +144,7 @@
 
               deps-check = self.packages.${system}.emacs-config.depsCheck;
 
-              lsp-proxy = self.packages.${system}.emacs-config.callPackage ./nix/lsp-proxy-config.nix { };
+              # lsp-proxy = self.packages.${system}.emacs-config.callPackage ./nix/lsp-proxy-config.nix { };
             };
           };
 

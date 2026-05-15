@@ -1110,7 +1110,8 @@ It is required only in specific projects, so I won't turn on the mode by default
     ;; Bind akirak-eldoc-show-buffer instead
     ;; (:global-keymap "C-c e" #'eldoc-doc-buffer)
 
-    (:set eldoc-documentation-strategy 'eldoc-documentation-compose))
+    (:set eldoc-documentation-strategy 'eldoc-documentation-compose
+          eldoc-documentation-functions nil))
 #+end_src
 *** elec-pair                      :prog_mode:text_mode:parentheses:
 :PROPERTIES:
@@ -1396,13 +1397,13 @@ The built-in =electric= package provides the following modes:
              ;; (sqlformat '((eval . (sqlformat-on-save-mode t))))
 
              ;; settings for lsp-proxy.
-             (lsp '((eval . (akirak/lsp-proxy-enable))))
+             ;; (lsp '((eval . (akirak/lsp-proxy-enable))))
              ;; Use the same configuration for now.
-             (lsp-no-formatter lsp)
+             ;; (lsp-no-formatter lsp)
 
              ;; settings for eglot.
-             ;; (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
-             ;; (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
+             (lsp '((eval . (akirak/eglot-ensure-with-formatter))))
+             (lsp-no-formatter '((eval . (akirak/eglot-ensure))))
 
              (flymake-eslint '((eval . (flymake-eslint-enable))))
              (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
@@ -1448,11 +1449,10 @@ The built-in =electric= package provides the following modes:
         (dir-locals-set-class-variables
          'default
          default)
-        ;; (dir-locals-set-class-variables
-        ;;  'foss
-        ;;  (cons `(prog-mode . (,@copilot))
-        ;;        default))
-        )
+        (dir-locals-set-class-variables
+         'foss
+         (cons `(prog-mode . (,@copilot))
+               default)))
       (dir-locals-set-directory-class "~/build/" 'personal)
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/personal/" 'personal)
@@ -6629,7 +6629,7 @@ Search and navigate via completing-read
       (:set xref-show-xrefs-function #'consult-xref
             xref-show-definitions-function #'consult-xref)))
 #+end_src
-*** COMMENT consult-eglot                                                      :ARCHIVE:
+*** consult-eglot
 :PROPERTIES:
 :CREATED_TIME: [2026-03-31 Tue 23:59]
 :END:
@@ -7336,7 +7336,7 @@ Emacs Does Interactive Prolog
 #+end_src
 
 [[https://lib.rs/crates/scryer-prolog][scryer-prolog]] is the bleeding-edge implementation of Prolog (like GHC to Haskell), and it is installed with this package.
-*** COMMENT eglot                                                          :LSP:ARCHIVE:
+*** eglot                                                          :LSP:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
@@ -7462,7 +7462,7 @@ Client for Language Server Protocol (LSP) servers
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")))
 #+end_src
-**** COMMENT ocaml-eglot                                                       :ARCHIVE:
+**** ocaml-eglot
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:04]
 :END:
@@ -7475,7 +7475,7 @@ An OCaml companion for Eglot
   (setup (:package ocaml-eglot)
     (add-hook 'ocaml-eglot-hook #'eglot-ensure))
 #+end_src
-*** COMMENT eglot-booster                                                      :ARCHIVE:
+*** eglot-booster
 :PROPERTIES:
 :CREATED_TIME: [2024-10-29 Tue 21:45]
 :END:
@@ -8826,7 +8826,7 @@ LSP mode
   (put 'lsp-define-conditional-key 'lisp-indent-function 'defun)
   (put 'lsp-with-filename 'lisp-indent-function 1)
 #+end_src
-*** lsp-proxy
+*** COMMENT lsp-proxy                                                          :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2026-04-18 Sat 09:41]
 :END:
@@ -11746,7 +11746,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 220 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
@@ -11782,6 +11782,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:drawing][drawing]]             |   2 |
+| [[org-ql-search:tags:LSP][LSP]]                 |   2 |
 | [[org-ql-search:tags:links][links]]               |   2 |
 | [[org-ql-search:tags:git][git]]                 |   2 |
 | [[org-ql-search:tags:project][project]]             |   2 |
@@ -11950,6 +11951,7 @@ I rebind the following keys in some keymaps to emulate a typical UNIX shell:
 C-a, C-e, C-u, C-w, C-h.
 ** Also see
 - [[https://github.com/terlar/emacs-config][Tarje Larsen's emacs-config]] is a configuration from which this configuration takes a constant inspiration.
+- The denix modules are partly based on [[https://github.com/yunfachi/nix-config][yunfachi's nix-config]].
 ** License
 This repository is licensed under multiple licenses.
 It follows the conventions of [[https://reuse.software/][REUSE]], and the license files are stored under [[file:LICENSES/][LICENSES]] directory.
