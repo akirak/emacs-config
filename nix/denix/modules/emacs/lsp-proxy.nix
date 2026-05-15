@@ -14,7 +14,7 @@ delib.module {
         enable = boolOption myconfig.emacs.enable;
 
         configPath = readOnly (
-          strOption (homeconfig.programs.emacs-twist.directory + "/lsp-proxy/languages.toml")
+          strOption (homeconfig.programs.emacs-twist.directory + "/lsp-proxy/languages.json")
         );
       };
     };

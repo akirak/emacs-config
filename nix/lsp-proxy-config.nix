@@ -1098,5 +1098,5 @@ lib.pipe
   [
     fromEglotStyleSettings
     (mergeConfig prevConfig)
-    ((formats.toml { }).generate "languages.toml")
+    ((formats.json { }).generate "languages.json")
   ]
