@@ -42,6 +42,7 @@
       'akirak-quick-thing
       (append children (akirak-quick-thing-bindings-1))))]
   ["Select inside quotes"
+   :class transient-row
    ("\"" "double quote pair" (lambda ()
                                (interactive)
                                (akirak-paren-select-inner ?\")))
