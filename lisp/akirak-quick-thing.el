@@ -32,6 +32,8 @@
 (require 'akirak-transient)
 (require 'embark)
 
+(defvar akirak-quick-thing-marker nil)
+
 ;;;###autoload (autoload 'akirak-quick-thing "akirak-quick-thing" nil 'interactive)
 (transient-define-prefix akirak-quick-thing ()
   ["Embark on a target"
@@ -40,7 +42,8 @@
    (lambda (children)
      (transient-parse-suffixes
       'akirak-quick-thing
-      (append children (akirak-quick-thing-bindings-1))))]
+      (append children (akirak-quick-thing-bindings-1))))
+   ("w" "word" akirak-quick-thing-word)]
   ["Select inside quotes"
    :class transient-row
    ("\"" "double quote pair" (lambda ()
@@ -115,6 +118,26 @@
       (push (cons i x) result)
       (cl-incf i))
     (nreverse result)))
+
+(defun akirak-quick-thing-word ()
+  (interactive)
+  (setq akirak-quick-thing-marker (point-marker))
+  (skip-syntax-backward "W_.")
+  (push-mark)
+  (skip-syntax-forward "W_.")
+  (activate-mark)
+  (let ((embark-target-finders '(embark-target-active-region)))
+    (add-hook 'post-command-hook #'akirak-quick-thing--restore)
+    (embark-act 'region)))
+
+(defun akirak-quick-thing--restore ()
+  (deactivate-mark)
+  (when (and akirak-quick-thing-marker
+             (markerp akirak-quick-thing-marker)
+             (equal (marker-buffer akirak-quick-thing-marker)
+                    (current-buffer)))
+    (goto-char akirak-quick-thing-marker))
+  (remove-hook 'post-command-hook #'akirak-quick-thing--restore))
 
 (provide 'akirak-quick-thing)
 ;;; akirak-quick-thing.el ends here
