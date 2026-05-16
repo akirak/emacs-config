@@ -25,7 +25,12 @@ let
   mergeConfig = old: new: {
     language-server = old.language-server // new.language-server;
     language = lib.pipe (new.language ++ old.language) [
-      (builtins.map ({ name, ... } @ value: { inherit name value; }))
+      (builtins.map (
+        { name, ... }@value:
+        {
+          inherit name value;
+        }
+      ))
       builtins.listToAttrs
       builtins.attrValues
     ];
@@ -164,7 +169,7 @@ lib.pipe
         {
           name = "eslint";
           command = "vscode-eslint-language-server";
-          args = ["--stdio"];
+          args = [ "--stdio" ];
           # Based on the built-in config of lsp-proxy
           languageOptions = {
             support-workspace = true;
