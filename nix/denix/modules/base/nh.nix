@@ -19,7 +19,6 @@ delib.module {
 
       rebuildScript = {
         enable = boolOption true;
-        withSubmodule = boolOption true;
       };
 
       mainConfigDirectory = strOption "${homeDirectory}/build/nix-config";
@@ -53,10 +52,6 @@ delib.module {
         else
           build_flags=()
         fi
-
-        ${lib.optionalString cfg.rebuildScript.withSubmodule ''
-          build_flags+=(--override-input denix-modules "$(readlink -f ${lib.escapeShellArg cfg.mainConfigDirectory}/denix)")
-        ''}
       '';
 
       rebuildScript = pkgs.writeShellScriptBin "nixos-rebuild-and-notify" ''
