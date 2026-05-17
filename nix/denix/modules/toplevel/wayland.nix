@@ -1,4 +1,9 @@
-{ delib, host, ... }:
+{
+  delib,
+  pkgs,
+  host,
+  ...
+}:
 delib.module {
   name = "wayland";
 
@@ -15,4 +20,8 @@ delib.module {
     {
       args.shared.enableWayland = cfg.enable;
     };
+
+  home.ifEnabled = {
+    home.packages = [ pkgs.wl-clipboard ];
+  };
 }
