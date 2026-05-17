@@ -154,6 +154,38 @@ You need curl or one of its supported alternatives"))
             "[[file:" (abbreviate-file-name outfile) "]]\n")))
 
 ;;;###autoload
+(defun akirak-image-insert-from-clipboard ()
+  "Save the clipboard image to a file and insert a link into the file."
+  (interactive nil org-mode)
+  (cl-assert (derived-mode-p 'org-mode))
+  (let ((filename (expand-file-name (concat (format-time-string "%Y%m%d-%H%M%S")
+                                            "_wayland_"
+                                            (format "%03d" (random 1000))
+                                            ".png")
+                                    akirak-image-dir)))
+    (akirak-image--paste-to-file "image/png" filename)
+    (unless (looking-at (rx bol))
+      (insert "\n"))
+    (insert (format "[[file:%s]]\n" (abbreviate-file-name filename)))))
+
+(defun akirak-image--paste-to-file (mime-type filename)
+  (cond
+   ((getenv "WAYLAND_DISPLAY")
+    (unless (executable-find "wl-paste")
+      (user-error "To read the system clipboard, wl-paste is required on Wayland"))
+    (let ((mime "image/png"))
+      (unless (member mime (process-lines "wl-paste" "--list-types"))
+        (user-error "The mime type %s is not supported for the current clipboard content"
+                    mime))
+      (with-temp-buffer
+        (call-process "wl-paste" nil (list t nil) nil
+                      "--type" mime)
+        (write-region (point-min) (point-max) filename))
+      (message "Saved the clipboard image to %s" filename)))
+   (t
+    (user-error "No known clipboard capability"))))
+
+;;;###autoload
 (defun akirak-image-import-file (file)
   "Import FILE into the library and store an Org link to its scaled
 version."
