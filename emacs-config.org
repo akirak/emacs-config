@@ -1026,7 +1026,8 @@ The other variables must not be saved, and they should be put in configuration:
 *** display-line-numbers-mode
 #+begin_src elisp
   (setup display-line-numbers
-    (:hook-into prog-mode-hook markdown-mode-hook))
+    (:hook-into prog-mode-hook markdown-mode-hook
+                yaml-ts-mode-hook))
 #+end_src
 *** edebug
 :PROPERTIES:
