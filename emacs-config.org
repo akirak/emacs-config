@@ -6391,6 +6391,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut/gitea page from Emacs
                     "<f12> g g"
                     (defun akirak/browse-at-remote ()
                       (interactive)
+                      (require 'browse-at-remote)
                       (unless (vc-git-root default-directory)
                         (user-error "Not in a Git repository"))
                       (let ((browse-at-remote-add-line-number-if-no-region-selected t)
@@ -6399,6 +6400,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut/gitea page from Emacs
                     "<f12> g w"
                     (defun akirak/browse-at-remote-kill (&optional arg)
                       (interactive "P")
+                      (require 'browse-at-remote)
                       (unless (vc-git-root default-directory)
                         (user-error "Not in a Git repository"))
                       (let ((browse-at-remote-add-line-number-if-no-region-selected
