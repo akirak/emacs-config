@@ -47,6 +47,15 @@ Inside a string or comment, this command always inserts the character."
       (goto-char loc)
     (self-insert-command n c)))
 
+;;;###autoload
+(defun akirak-paren-goto-match ()
+  "Jump to a matching paren."
+  (interactive)
+  (if-let* ((loc (and (not (ppss-comment-or-string-start (syntax-ppss)))
+                      (akirak-paren-matching-location))))
+      (goto-char loc)
+    (user-error "Not found match")))
+
 (defun akirak-paren-matching-location ()
   (pcase (funcall show-paren-data-function)
     (`(,hb ,he ,tb ,te nil)
