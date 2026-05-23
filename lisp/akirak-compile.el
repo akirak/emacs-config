@@ -155,7 +155,9 @@
      ("deno test"))
     (pnpm
      ("pnpm install" annotation "Install all dependencies for a project")
+     ("pnpm install --lockfile-only")
      ("pnpm store prune")
+     ("pnpm clean --lockfile")
      ("pnpm add" annotation "Installs a package and any packages that it depends on")
      ("pnpm import" annotation "Generates a pnpm-lock.yaml from an npm package-lock.json")
      ("pnpm remove" annotation "Removes packages from node_modules and from the project's package.json")
