@@ -42,8 +42,9 @@
 
       devShells = {
         default = config.pre-commit.devShell.overrideAttrs (old: {
-          packages = (old.packages or [ ]) ++ [
+          buildInputs = (old.buildInputs or [ ]) ++ [
             pkgs.just
+            pkgs.hello
           ];
         });
       };

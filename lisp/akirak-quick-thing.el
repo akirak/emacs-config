@@ -32,6 +32,8 @@
 (require 'akirak-transient)
 (require 'embark)
 
+(defvar akirak-quick-thing-marker nil)
+
 ;;;###autoload (autoload 'akirak-quick-thing "akirak-quick-thing" nil 'interactive)
 (transient-define-prefix akirak-quick-thing ()
   ["Embark on a target"
@@ -40,8 +42,10 @@
    (lambda (children)
      (transient-parse-suffixes
       'akirak-quick-thing
-      (append children (akirak-quick-thing-bindings-1))))]
+      (append children (akirak-quick-thing-bindings-1))))
+   ("w" "word" akirak-quick-thing-word)]
   ["Select inside quotes"
+   :class transient-row
    ("\"" "double quote pair" (lambda ()
                                (interactive)
                                (akirak-paren-select-inner ?\")))
@@ -71,17 +75,40 @@
                    (unless (fboundp symbol)
                      (fset symbol `(lambda () (interactive) (embark-act ,i)))
                      (put symbol 'interactive-only t))
-                   (list (akirak-quick-thing--key (symbol-name type))
+                   (list (symbol-name type)
                          (symbol-name type)
                          symbol))))))
+    (akirak-quick-thing--abbreviate-keys)
     (cl-remove-if #'null)))
 
-(defun akirak-quick-thing--key (name)
+(defun akirak-quick-thing--abbreviate-keys (entries)
+  (let (conflicting-keys
+        keys)
+    (pcase-dolist (`(,name . ,_) entries)
+      (let ((key (akirak-quick-thing--key name))
+            (n 1))
+        (while (member key keys)
+          (cl-pushnew key conflicting-keys)
+          (cl-incf n)
+          (setq key (akirak-quick-thing--key name n)))
+        (push key keys)))
+    (mapcar `(lambda (entry)
+               (let ((name (car entry))
+                     (n 1)
+                     key)
+                 (while (member (setq key (akirak-quick-thing--key name n))
+                                ',conflicting-keys)
+                   (cl-incf n))
+                 (cons key
+                       (cdr entry))))
+            entries)))
+
+(defun akirak-quick-thing--key (name &optional n)
   (thread-first
     (split-string name "-")
     (last)
     (car)
-    (substring 0 1)))
+    (substring 0 (or n 1))))
 
 (defun akirak-quick-thing--zip-index (list)
   (let ((i 0)
@@ -91,6 +118,26 @@
       (push (cons i x) result)
       (cl-incf i))
     (nreverse result)))
+
+(defun akirak-quick-thing-word ()
+  (interactive)
+  (setq akirak-quick-thing-marker (point-marker))
+  (skip-syntax-backward "W_.")
+  (push-mark)
+  (skip-syntax-forward "W_.")
+  (activate-mark)
+  (let ((embark-target-finders '(embark-target-active-region)))
+    (add-hook 'post-command-hook #'akirak-quick-thing--restore)
+    (embark-act 'region)))
+
+(defun akirak-quick-thing--restore ()
+  (deactivate-mark)
+  (when (and akirak-quick-thing-marker
+             (markerp akirak-quick-thing-marker)
+             (equal (marker-buffer akirak-quick-thing-marker)
+                    (current-buffer)))
+    (goto-char akirak-quick-thing-marker))
+  (remove-hook 'post-command-hook #'akirak-quick-thing--restore))
 
 (provide 'akirak-quick-thing)
 ;;; akirak-quick-thing.el ends here

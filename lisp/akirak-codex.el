@@ -50,7 +50,7 @@
   ["Options"
    ("-m" "Model" "--model="
     ;; :always-read t
-    :init-value (lambda (obj) (oset obj value "gpt-5.5"))
+    :init-value (lambda (obj) (oset obj value "gpt-5.4"))
     :choices ("gpt-5.5"
               "gpt-5.4"
               "gpt-5.4-mini"

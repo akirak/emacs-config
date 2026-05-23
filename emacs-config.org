@@ -1026,7 +1026,8 @@ The other variables must not be saved, and they should be put in configuration:
 *** display-line-numbers-mode
 #+begin_src elisp
   (setup display-line-numbers
-    (:hook-into prog-mode-hook markdown-mode-hook))
+    (:hook-into prog-mode-hook markdown-mode-hook
+                yaml-ts-mode-hook))
 #+end_src
 *** edebug
 :PROPERTIES:
@@ -1409,7 +1410,8 @@ The built-in =electric= package provides the following modes:
              (ocamlformat '((eval . (ocamlformat-on-save-mode t))))
              (nixfmt '((eval . (nixfmt-on-save-mode t))))
              (zig-fmt '((eval . (zig-format-on-save-mode t))))
-             ;; (copilot '((eval . (copilot-mode t))))
+             (copilot '((eval . (when (require 'copilot nil t)
+                                  (copilot-mode t)))))
              (editorconfig '((eval . (editorconfig-mode t))))
              (default  `((astro-ts-mode . (,@lsp-no-formatter))
                          (css-mode . (,@lsp-no-formatter))
@@ -5652,6 +5654,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                 (add-hook 'akirak-paren-match-hook 'akirak-org-matching-pair-location
                           nil t)))
 
+    (:global-keymap "C-c %" #'akirak-paren-goto-match)
+
     (:status opinionated
       (:global-keymap "M-i c" #'akirak-paren-replace
                       "M-i d" #'akirak-paren-delete)))
@@ -6389,6 +6393,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut/gitea page from Emacs
                     "<f12> g g"
                     (defun akirak/browse-at-remote ()
                       (interactive)
+                      (require 'browse-at-remote)
                       (unless (vc-git-root default-directory)
                         (user-error "Not in a Git repository"))
                       (let ((browse-at-remote-add-line-number-if-no-region-selected t)
@@ -6397,6 +6402,7 @@ Open github/gitlab/bitbucket/stash/gist/phab/sourcehut/gitea page from Emacs
                     "<f12> g w"
                     (defun akirak/browse-at-remote-kill (&optional arg)
                       (interactive "P")
+                      (require 'browse-at-remote)
                       (unless (vc-git-root default-directory)
                         (user-error "Not in a Git repository"))
                       (let ((browse-at-remote-add-line-number-if-no-region-selected
@@ -6686,7 +6692,7 @@ Recoll queries using consult
                                           (abbreviate-file-name)))
                                 'face 'font-lock-doc-face)))))
 #+end_src
-*** COMMENT copilot                                          :copilot:AI:@extra:ARCHIVE:
+*** copilot                                          :copilot:AI:@extra:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-11 Wed 05:46]
 :END:
@@ -7437,7 +7443,8 @@ Client for Language Server Protocol (LSP) servers
       (add-to-list 'eglot-server-programs
                    `((elixir-ts-mode heex-ts-mode elixir-mode) .
                      ,(eglot-alternatives
-                       '(("lexical")
+                       '(("expert" "--stdio")
+                         ("lexical")
                          ("nextls" "--stdio=true"
                           :initializationOptions
                           (:experimental (:completions (:enable t))))

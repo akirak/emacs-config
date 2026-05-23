@@ -19,7 +19,6 @@ delib.module {
 
       rebuildScript = {
         enable = boolOption true;
-        withSubmodule = boolOption true;
       };
 
       mainConfigDirectory = strOption "${homeDirectory}/build/nix-config";
@@ -45,6 +44,15 @@ delib.module {
           fi
         '';
       };
+
+      setBuildFlags = ''
+        if emacs_config="$(readlink -e "${cfg.emacsConfigDirectory}")"
+        then
+          build_flags=(--override-input emacs-config "''${emacs_config}")
+        else
+          build_flags=()
+        fi
+      '';
 
       rebuildScript = pkgs.writeShellScriptBin "nixos-rebuild-and-notify" ''
         flake="${cfg.mainConfigDirectory}"
@@ -91,16 +99,7 @@ delib.module {
             exit 1
         esac
 
-        if emacs_config="$(readlink -e "${cfg.emacsConfigDirectory}")"
-        then
-          build_flags=(--override-input emacs-config "''${emacs_config}")
-        else
-          build_flags=()
-        fi
-
-        ${lib.optionalString cfg.rebuildScript.withSubmodule ''
-          build_flags+=(--override-input denix-modules "$(readlink -f ${lib.escapeShellArg cfg.mainConfigDirectory}/denix)")
-        ''}
+        ${setBuildFlags}
 
         if [[ -v cachix ]] && [[ -n "$cachix" ]] && command_exists cachix; then
           command=(cachix watch-exec "$cachix" "$nh" --)
@@ -120,6 +119,22 @@ delib.module {
           fi
         fi
       '';
+
+      updateScript = pkgs.writeShellApplication {
+        name = "nh-update";
+        runtimeInputs = [
+          pkgs.nh
+        ];
+        text = ''
+          cd "${cfg.mainConfigDirectory}"
+          ${setBuildFlags}
+
+          echo >&2 "Running nix flake update..."
+          echo >&2 "  Directory: $PWD"
+          echo >&2 "  Flags: ''${build_flags[*]}"
+          nix flake update "''${build_flags[@]}"
+        '';
+      };
     in
     {
       programs.nh = {
@@ -132,6 +147,9 @@ delib.module {
         flake = cfg.mainConfigDirectory;
       };
 
-      home.packages = lib.optional cfg.rebuildScript.enable rebuildScript;
+      home.packages = lib.optionals cfg.rebuildScript.enable [
+        rebuildScript
+        updateScript
+      ];
     };
 }

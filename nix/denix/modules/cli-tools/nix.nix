@@ -8,14 +8,20 @@
 delib.module {
   name = "cli-tools.nix";
 
-  options = delib.singleEnableOption host.cliFeatured;
+  options = with delib; {
+    enable = boolOption host.cliFeatured;
+    enableDatabase = boolOption true;
+  };
 
   home.ifEnabled =
-    { myconfig, ... }:
+    { cfg, myconfig, ... }:
     {
       programs.nix-index = {
         enable = true;
         enableZshIntegration = myconfig.zsh.enable;
+        # Assumes the overlay from github:nix-community/nix-index-database is
+        # used
+        package = if cfg.enableDatabase then pkgs.nix-index-with-db or pkgs.nix-index else pkgs.nix-index;
       };
 
       programs.nix-your-shell = {
