@@ -1,2 +1,0 @@
-(lsp-proxy :fetcher github :repo "jadestrong/lsp-proxy"
-           :files (:defaults "languages.toml"))

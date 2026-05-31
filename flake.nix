@@ -18,7 +18,6 @@
       flake = false;
     };
 
-    # lsp-proxy.url = "github:akirak/lsp-proxy/develop";
     playwright-mcp.url = "github:akirak/nix-playwright-mcp";
   };
 
@@ -85,7 +84,6 @@
               inherit (prev.stdenv.hostPlatform) system;
             in
             {
-              lsp-proxy = inputs.lsp-proxy.packages.${system}.default;
               playwright-mcp = inputs.playwright-mcp.packages.${system}.default;
 
               emacs-git-pgtk = inputs.flake-pins.packages.${system}.emacs-pgtk;

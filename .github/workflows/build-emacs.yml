@@ -10,7 +10,6 @@ on:
       - lock/**
       - recipes/**
       - nix/lib/**
-      - nix/lsp-proxy-config.nix
       - nix/twist/**
   workflow_dispatch:
 

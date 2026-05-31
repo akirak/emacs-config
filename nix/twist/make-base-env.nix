@@ -31,7 +31,6 @@ inputs.twist.lib.makeEnv {
   localPackages = [
     # Don't add this package to the lock file
     "akirak"
-    "lsp-proxy"
   ];
 
   registries = [
@@ -75,10 +74,6 @@ inputs.twist.lib.makeEnv {
         root = inputs.self;
         include = [ "lisp" ];
       };
-    };
-
-    lsp-proxy = _: _super: {
-      src = inputs.lsp-proxy.outPath;
     };
   };
 
