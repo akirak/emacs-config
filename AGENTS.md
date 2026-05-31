@@ -9,7 +9,6 @@
 - `nix/lib/`: reusable Nix and helper utilities.
 - `nix/flake-parts/`: flake partition definitions for shells, packages, and configs.
 - `nix/denix/`: Denix/Home Manager modules.
-- `nix/lsp-proxy-config.nix`: configuration for language servers.
 - `.github/workflows/`: CI and update automation.
 - `justfile`: Shorthands for human operations.
 ## Build, Test, and Development Commands
@@ -20,7 +19,6 @@
 - `nix build .#checks.x86_64-linux.treefmt -L`: Check the format.
 - `nix build .#emacs-config.depsCheck --print-build-logs`: verify Emacs package dependency resolution, matching CI.
 - `nix build .#emacs-config.depsCheck -L`: verify Emacs package dependency resolution, matching CI.
-- `nix build .#checks.x86_64-linux.lsp-proxy -L`: Build the server configuration for lsp-proxy.
 - `nix build .#checks.x86_64-linux.elisp-packages -L`: Build the Emacs Lisp packages.
 - `nix build .#checks.x86_64-linux.homeConfiguration -L`: Build the sample home-manager configuration.
 ### Updating
@@ -35,11 +33,6 @@
 Use two-space indentation for Nix files and keep module files focused by domain. Format Nix with `nixfmt`; unused Nix expressions are checked by `deadnix`. These are enforced by running `nix fmt`.
 
 Emacs Lisp files should use the `akirak-<feature>.el` pattern and provide matching feature names.
-
-In `nix/lsp-proxy-config.nix`, the server name defaults to `command`, but server
-names should not conflict with each other if they take different arguments, even
-for different language groups. If two server settings take different arguments,
-they should be explicitly given different `name` attributes.
 
 Keep generated lock files and recipe updates separate from hand-written configuration changes when possible.
 

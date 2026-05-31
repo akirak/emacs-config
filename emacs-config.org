@@ -994,6 +994,8 @@ The other variables must not be saved, and they should be put in configuration:
           dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-shell-new-other-window)
 
+    (:keymap "C-c C-w" #'wdired-change-to-wdired-mode)
+
     (advice-add 'dired-internal-do-deletions :before #'akirak-dired-ad-before-deletions)
     (advice-add 'dired-show-file-type :override #'ignore)
 
