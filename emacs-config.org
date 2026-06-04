@@ -5094,7 +5094,8 @@ Major mode for Nix expressions, powered by tree-sitter
 #+begin_src emacs-lisp
   (setup toml-ts-mode
     (:org-src-lang "toml")
-    (:file-match "\\.toml\\'"))
+    (:file-match "\\.toml\\'"
+                 "Cargo.lock\\'"))
 #+end_src
 *** typescript-ts-mode                                              :major_mode:
 :PROPERTIES:
