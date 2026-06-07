@@ -155,7 +155,7 @@ This is only supported in `org-mode' at present."
   (cond
    ((derived-mode-p 'org-mode)
     (orgabilize-insert-org-link url arg))
-   ((derived-mode-p 'markdown-mode)
+   ((derived-mode-p 'markdown-mode 'markdown-ts-mode)
     (akirak-url-insert-as-markdown url))
    (t (insert url))))
 

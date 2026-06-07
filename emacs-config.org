@@ -5031,6 +5031,17 @@ A mode for editing Kotlin files based on tree-sitter
   (setup lua-ts-mode
     (:file-match "\\.lua\\'"))
 #+end_src
+*** markdown-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-06-07 Sun 22:29]
+:END:
+
+#+begin_src emacs-lisp
+  (setup markdown-ts-mode
+    (:file-match "\\.md\\'" "\\.markdown\\'"
+                 "\\.mdoc\\'" "\\.mdx\\'"
+                 "\\.livemd\\'"))
+#+end_src
 *** neocaml
 #+begin_quote
 Major mode for OCaml code
@@ -5094,7 +5105,8 @@ Major mode for Nix expressions, powered by tree-sitter
 #+begin_src emacs-lisp
   (setup toml-ts-mode
     (:org-src-lang "toml")
-    (:file-match "\\.toml\\'"))
+    (:file-match "\\.toml\\'"
+                 "Cargo.lock\\'"))
 #+end_src
 *** typescript-ts-mode                                              :major_mode:
 :PROPERTIES:
@@ -9147,7 +9159,7 @@ Enrich existing commands with completion annotations
       (add-to-list 'marginalia-annotators
                    '(directory marginalia-annotate-file builtin none))))
 #+end_src
-*** markdown-mode                                      :major__mode:
+*** COMMENT markdown-mode                                          :major__mode:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 14:12]
 :END:
@@ -11757,7 +11769,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+RESULTS: tag-statistics
 | [[org-ql-search:tags:packages][packages]]            | 220 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
-| [[org-ql-search:tags:@extra][@extra]]              |  11 |
+| [[org-ql-search:tags:@extra][@extra]]              |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
@@ -11769,12 +11781,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:windows][windows]]             |   5 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:history][history]]             |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |
@@ -11789,6 +11801,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:regexp][regexp]]              |   2 |
 | [[org-ql-search:tags:MCP][MCP]]                 |   2 |
 | [[org-ql-search:tags:major_mode][major_mode]]          |   2 |
+| [[org-ql-search:tags:AI][AI]]                  |   2 |
 | [[org-ql-search:tags:processes][processes]]           |   2 |
 | [[org-ql-search:tags:drawing][drawing]]             |   2 |
 | [[org-ql-search:tags:LSP][LSP]]                 |   2 |
@@ -11810,6 +11823,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:screenshot][screenshot]]          |   1 |
 | [[org-ql-search:tags:beancount][beancount]]           |   1 |
 | [[org-ql-search:tags:testing][testing]]             |   1 |
+| [[org-ql-search:tags:copilot][copilot]]             |   1 |
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
@@ -11818,7 +11832,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
-| [[org-ql-search:tags:AI][AI]]                  |   1 |
 | [[org-ql-search:tags:OSS][OSS]]                 |   1 |
 | [[org-ql-search:tags:social][social]]              |   1 |
 | [[org-ql-search:tags:mermaid][mermaid]]             |   1 |
@@ -11877,6 +11890,7 @@ See examples in [[https://depp.brause.cc/nov.el/][nov.el: Major mode for reading
 #+BEGIN: org-ql :query "tags:AI !tags:ARCHIVE !tags:akirak" :columns (heading todo)
 | Heading | Todo |
 |---------+------|
+| [[copilot][copilot]] |      |
 | [[gptel][gptel]]   |      |
 #+END:
 

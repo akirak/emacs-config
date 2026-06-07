@@ -75,8 +75,17 @@ the original minor mode."
 (cl-defun akirak-shell (&optional arg)
   (interactive "P")
   (pcase arg
-    ('(16)
+    ('(64)
      (akirak-shell-select))
+    ('(16)
+     (pcase (akirak-shell--buffers-for-project)
+       (`nil (akirak-shell-select))
+       (`(,buffer) (pop-to-buffer buffer))
+       (buffers (read-buffer "Switch to a shell buffer: "
+                             nil nil
+                             (apply-partially #'string-match
+                                              (regexp-opt
+                                               (mapcar #'buffer-name buffers)))))))
     ('(4)
      (call-interactively #'akirak-shell-send-event-to-buffer))
     (_
@@ -508,6 +517,15 @@ the original minor mode."
         'opencode)
        (`((rx bol "gemini") . ,_)
         'gemini)))))
+
+(defun akirak-shell--buffers-for-project ()
+  "Return a list of shell buffers for the current project."
+  (let ((root (project-root (or (project-current)
+                                (user-error "Not in project")))))
+    (thread-last
+      (buffer-list)
+      (seq-filter #'akirak-shell-buffer-p)
+      (seq-filter (apply-partially #'akirak-shell-buffer-in-dir-p root)))))
 
 (cl-defun akirak-shell-directory (buffer)
   (buffer-local-value 'default-directory buffer))

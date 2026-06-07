@@ -439,8 +439,11 @@ end of the pasted region."
           lang))))
 
 (defun akirak-org-src-lang-at-point ()
-  (pcase (derived-mode-p '(markdown-mode org-mode))
-    ((and `markdown-mode
+  (pcase (derived-mode-p '(markdown-mode markdown-ts-mode org-mode))
+    ((and markdown-ts-mode
+          (let language (markdown-ts-code-block-language-at)))
+     language)
+    ((and markdown-mode
           (let `(,pos . ,_) (markdown-code-block-at-pos (point))))
      (save-excursion
        (goto-char pos)
