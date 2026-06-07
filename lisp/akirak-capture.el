@@ -1405,7 +1405,8 @@ provided as a separate command for integration, e.g. with embark."
   ;; shr-based modes.
   (let* ((mode (derived-mode-p '(nov-mode
                                  eww-mode
-                                 markdown-mode)))
+                                 markdown-mode
+                                 markdown-ts-mode)))
          (bullet-regexp (when (memq mode '(nov-mode eww-mode))
                           (rx-to-string `(and bol (group (*? blank)) ,shr-bullet))))
          (remove-zws (rx-to-string `(and (group (* space))
@@ -1413,7 +1414,8 @@ provided as a separate command for integration, e.g. with embark."
                                          (group (* space))))))
     (with-temp-buffer
       (insert string)
-      (when (and (eq mode 'markdown-mode)
+      (when (and (memq mode '(markdown-mode
+                              markdown-ts-mode))
                  (executable-find "pandoc"))
         (call-process-region (point-min) (point-max)
                              "pandoc" t t t

@@ -130,7 +130,8 @@ Also returns the point."
   "Return a pandoc input format for the buffer, if any."
   (let* ((mode (or mode major-mode))
          (filename (or filename (buffer-file-name (buffer-base-buffer)))))
-    (if (and (eq mode 'markdown-mode)
+    (if (and (or (eq mode 'markdown-mode)
+                 (eq mode 'markdown-ts-mode))
              (and filename
                   (string-match-p "/README\\." filename)))
         "gfm"
