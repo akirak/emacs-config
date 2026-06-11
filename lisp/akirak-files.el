@@ -145,5 +145,27 @@
             (cl-pushnew name result :test #'string=)))))
     (sort result)))
 
+;;;###autoload
+(defun akirak-files-clear-unused-buffers (dir)
+  "Clear unused buffers in DIR."
+  (interactive)
+  (message "Clearing buffers in %s" dir)
+  (let ((count 0))
+    (dolist (buffer (buffer-list))
+      (when (and (string-prefix-p (expand-file-name dir)
+                                  (expand-file-name (buffer-local-value 'default-directory
+                                                                        buffer)))
+                 (not (if-let* ((file (buffer-file-name buffer)))
+                          (or (file-exists-p file)
+                              (buffer-modified-p buffer))
+                        (if-let* ((process (get-buffer-process buffer)))
+                            (process-live-p process)
+                          (get-buffer-window buffer 'all-frames)))))
+        (kill-buffer buffer)
+        (cl-incf count)))
+    (if (> count 0)
+        (message "No buffer has been killed.")
+      (message "Killed %d buffers in %s" count dir))))
+
 (provide 'akirak-files)
 ;;; akirak-files.el ends here
