@@ -202,5 +202,10 @@
               "\n#+end_quote")
     string))
 
+(defun akirak-codex-waiting-p (buffer)
+  "Return non-nil if the codex is currently waiting for the user input."
+  (with-current-buffer buffer
+    (string-prefix-p "> " (buffer-substring (line-beginning-position) (point)))))
+
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here
