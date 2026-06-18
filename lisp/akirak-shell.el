@@ -81,11 +81,18 @@ the original minor mode."
      (pcase (akirak-shell--buffers-for-project)
        (`nil (akirak-shell-select))
        (`(,buffer) (pop-to-buffer buffer))
-       (buffers (read-buffer "Switch to a shell buffer: "
-                             nil nil
-                             (apply-partially #'string-match
-                                              (regexp-opt
-                                               (mapcar #'buffer-name buffers)))))))
+       (buffers (pop-to-buffer
+                 (read-buffer "Switch to a shell buffer: "
+                              nil t
+                              `(lambda (arg)
+                                 (let ((regexp ,(regexp-opt
+                                                 (mapcar #'buffer-name buffers))))
+                                   (pcase-exhaustive arg
+                                     ((and `(,name . ,_)
+                                           (guard (stringp name)))
+                                      (string-match-p regexp name))
+                                     ((pred stringp)
+                                      (string-match-p regexp arg))))))))))
     ('(4)
      (call-interactively #'akirak-shell-send-event-to-buffer))
     (_
