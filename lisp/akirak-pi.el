@@ -130,5 +130,19 @@
 (defun akirak-pi-complete-slash-command ()
   (completing-read "Pi command: " akirak-pi-slash-commands))
 
+(defun akirak-pi-waiting-p (buffer)
+  "Return non-nil if pi is waiting for the user input."
+  (not (akirak-pi--working-p buffer)))
+
+(defun akirak-pi--working-p (buffer)
+  "Return non-nil if pi is working on the task."
+  (with-current-buffer buffer
+    (save-excursion
+      (goto-char (point-max))
+      (string-match-p (rx "Working..." (* blank) eol)
+                      (buffer-substring-no-properties
+                       (line-beginning-position -5)
+                       (line-end-position -5))))))
+
 (provide 'akirak-pi)
 ;;; akirak-pi.el ends here
