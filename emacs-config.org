@@ -2222,6 +2222,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                     "<remap> <upcase-word>" #'upcase-dwim
                     "<remap> <downcase-word>" #'downcase-dwim
                     "<remap> <capitalize-word>" #'akirak/capitalize-dwim
+                    "C-c v" #'visible-mode
                     "<f12> x l" #'list-processes)
 
     (defun akirak/capitalize-dwim (&optional arg)
@@ -5892,7 +5893,6 @@ This is an extra functions for window management.
                       "C-x o" #'akirak-window-cycle-two-windows
                       "C-x M-o" #'akirak-window-swap-two-windows
                       "C-x `" #'akirak-window-column-prefix
-                      "C-c v" #'akirak-window-open-in-new-tab
                       "M-o" #'akirak-window-moderate-1
                       "S-<end>" #'akirak-window-display-buffer-ends
                       "S-<home>" #'akirak-window-display-buffer-starts
