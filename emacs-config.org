@@ -1303,9 +1303,9 @@ The built-in =electric= package provides the following modes:
                                         (window--display-buffer buffer ,(selected-window)
                                                                 'reuse)))
                                     (with-selected-window window
-                                      (akirak-avy-ffap)))
+                                      (ffap-menu)))
                                 (if arg
-                                    (akirak-avy-ffap)
+                                    (ffap-menu)
                                   (ffap))))))
 #+end_src
 *** fileio.c                                                 :files:

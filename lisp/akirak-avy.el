@@ -127,6 +127,7 @@ If CALLBACK is a function, it is called with the selected url."
                (syntax string-quote))
           (and (or (any "~@#") (+ ".") symbol-start) "/"))))
 
+;; Deprecated. Use `ffap-menu` instead.
 ;;;###autoload
 (defun akirak-avy-ffap ()
   (interactive)
