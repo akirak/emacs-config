@@ -317,7 +317,7 @@ are displayed in the frame."
                      (eat-exec (current-buffer) name "sh" nil (list "-c" command))
                      (pop-to-buffer (current-buffer) '(nil (dedicated . t))))))
                 ((equal arg '(4))
-                 (compilation-start command t (cl-constantly (akirak-compile--buffer-name))))
+                 (akirak-compile--start command t (akirak-compile--buffer-name)))
                 (t
                  (compile command t)))))
          (user-error "No workspace root"))))))
@@ -397,8 +397,15 @@ are displayed in the frame."
                      (`(,dir ,buffer-name ,command)
                       ',entries)
                    (let ((default-directory (expand-file-name dir root)))
-                     (compilation-start command t (cl-constantly buffer-name))))))
+                     (akirak-compile--start command t buffer-name)))))
             (format "*compile command for %s*" worktree-name))))))))
+
+(defun akirak-compile--start (command comint buffer-name
+                                      &optional highlight-regexp continue)
+  (compilation-start command comint (cl-constantly buffer-name)
+                     highlight-regexp continue)
+  (with-current-buffer buffer-name
+    (setq-local compile-command command)))
 
 (defun akirak-compile-buffer-p (buffer)
   (or (eq (buffer-local-value 'major-mode buffer)
@@ -741,15 +748,14 @@ are displayed in the frame."
       (nreverse args))))
 
 (defun akirak-compile-install (command)
-  (compilation-start command t
-                     (cl-constantly
-                      (format "*%s-install*" (thread-last
-                                               default-directory
-                                               (directory-file-name)
-                                               (file-name-nondirectory ))))
-                     nil
-                     ;; Keep what the user has installed for the project
-                     'continue))
+  (akirak-compile--start command t
+                         (format "*%s-install*" (thread-last
+                                                  default-directory
+                                                  (directory-file-name)
+                                                  (file-name-nondirectory )))
+                         nil
+                         ;; Keep what the user has installed for the project
+                         'continue))
 
 (defun akirak-compile--just-format-body (body)
   (when body
