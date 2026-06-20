@@ -4,30 +4,14 @@ delib.module {
 
   options.niri = with delib; {
     enable = boolOption false;
-    enableDmsShell = boolOption true;
   };
 
   nixos.ifEnabled =
-    { cfg, ... }:
     {
       environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
       programs.niri = {
         enable = true;
-      };
-
-      # Based on https://danklinux.com/docs/dankmaterialshell/nixos
-      programs.dms-shell = {
-        enable = cfg.enableDmsShell;
-
-        systemd = {
-          enable = true;
-          restartIfChanged = true;
-        };
-
-        enableSystemMonitoring = true;
-        enableAudioWavelength = true;
-        enableCalendarEvents = true;
       };
 
       environment.systemPackages = [
