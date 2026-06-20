@@ -527,6 +527,21 @@ the original minor mode."
        (`((rx bol "gemini") . ,_)
         'gemini)))))
 
+(defun akirak-shell-buffer-status (program buffer)
+  (pcase program
+    (`codex
+     (require 'akirak-codex)
+     (if (akirak-codex-waiting-p buffer)
+         'done
+       'running))
+    (`pi
+     (require 'akirak-pi)
+     (if (akirak-pi-waiting-p buffer)
+         'done
+       'running))
+    (_
+     nil)))
+
 (defun akirak-shell--buffers-for-project (&optional pr)
   "Return a list of shell buffers for the current project."
   (let ((root (project-root (or pr
