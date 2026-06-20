@@ -205,7 +205,12 @@
 (defun akirak-codex-waiting-p (buffer)
   "Return non-nil if the codex is currently waiting for the user input."
   (with-current-buffer buffer
-    (string-prefix-p "> " (buffer-substring (line-beginning-position) (point)))))
+    (save-excursion
+      (goto-char (point-max))
+      (string-prefix-p "─ Worked for"
+                       (buffer-substring-no-properties
+                        (line-beginning-position -4)
+                        (line-end-position -4))))))
 
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here
