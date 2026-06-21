@@ -5620,12 +5620,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (keymap-set akirak/c-z-map "d" #'akirak-org-clock-done)
     (keymap-set akirak/c-z-map "r" #'akirak-org-clock-set-review))
 #+end_src
-*** akirak-org-log
-#+begin_src emacs-lisp
-  (setup akirak-org-log
-    (:status personal
-      (keymap-set help-map "w" #'akirak-org-log-goto-week-entry)))
-#+end_src
 *** akirak-org-reg
 #+begin_src emacs-lisp
   (setup akirak-org-reg
