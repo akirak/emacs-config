@@ -78,14 +78,23 @@ the original minor mode."
     ('(64)
      (akirak-shell-select))
     ('(16)
-     (pcase (akirak-shell--buffers-for-project)
-       (`nil (akirak-shell-select))
-       (`(,buffer) (pop-to-buffer buffer))
-       (buffers (read-buffer "Switch to a shell buffer: "
-                             nil nil
-                             (apply-partially #'string-match
-                                              (regexp-opt
-                                               (mapcar #'buffer-name buffers)))))))
+     (if-let* ((pr (project-current)))
+         (pcase (akirak-shell--buffers-for-project pr)
+           (`nil (akirak-shell-select))
+           (`(,buffer) (pop-to-buffer buffer))
+           (buffers (pop-to-buffer
+                     (read-buffer "Switch to a shell buffer: "
+                                  nil t
+                                  `(lambda (arg)
+                                     (let ((regexp ,(regexp-opt
+                                                     (mapcar #'buffer-name buffers))))
+                                       (pcase-exhaustive arg
+                                         ((and `(,name . ,_)
+                                               (guard (stringp name)))
+                                          (string-match-p regexp name))
+                                         ((pred stringp)
+                                          (string-match-p regexp arg)))))))))
+       (akirak-shell-select)))
     ('(4)
      (call-interactively #'akirak-shell-send-event-to-buffer))
     (_
@@ -518,9 +527,25 @@ the original minor mode."
        (`((rx bol "gemini") . ,_)
         'gemini)))))
 
-(defun akirak-shell--buffers-for-project ()
+(defun akirak-shell-buffer-status (program buffer)
+  (pcase program
+    (`codex
+     (require 'akirak-codex)
+     (if (akirak-codex-waiting-p buffer)
+         'done
+       'running))
+    (`pi
+     (require 'akirak-pi)
+     (if (akirak-pi-waiting-p buffer)
+         'done
+       'running))
+    (_
+     nil)))
+
+(defun akirak-shell--buffers-for-project (&optional pr)
   "Return a list of shell buffers for the current project."
-  (let ((root (project-root (or (project-current)
+  (let ((root (project-root (or pr
+                                (project-current)
                                 (user-error "Not in project")))))
     (thread-last
       (buffer-list)

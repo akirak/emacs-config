@@ -104,28 +104,45 @@
   (interactive)
   (let ((root akirak-pi-directory))
     (akirak-shell-eat-new :dir root
-                          :command (cons akirak-pi-executable
-                                         (append akirak-pi-default-args
-                                                 (when akirak-pi-provider
-                                                   (list "--provider" akirak-pi-provider))
-                                                 (when akirak-pi-model
-                                                   (list "--model" akirak-pi-model))
-                                                 (when akirak-pi-thinking-level
-                                                   (list "--thinking" akirak-pi-thinking-level))
-                                                 (when akirak-pi-models-scope
-                                                   (list "--models" akirak-pi-models-scope))
-                                                 (when akirak-pi-tools
-                                                   (list "--tools" akirak-pi-tools))
-                                                 (when akirak-pi-no-tools
-                                                   (list "--no-tools"))
-                                                 (transient-args 'akirak-pi-transient)
-                                                 args))
+                          :command (akirak-pi--command args)
                           :name (concat "pi-"
                                         (file-name-nondirectory
                                          (directory-file-name root))))))
 
+(defun akirak-pi--command (args)
+  (cons akirak-pi-executable
+        (append akirak-pi-default-args
+                (when akirak-pi-provider
+                  (list "--provider" akirak-pi-provider))
+                (when akirak-pi-model
+                  (list "--model" akirak-pi-model))
+                (when akirak-pi-thinking-level
+                  (list "--thinking" akirak-pi-thinking-level))
+                (when akirak-pi-models-scope
+                  (list "--models" akirak-pi-models-scope))
+                (when akirak-pi-tools
+                  (list "--tools" akirak-pi-tools))
+                (when akirak-pi-no-tools
+                  (list "--no-tools"))
+                (transient-args 'akirak-pi-transient)
+                args)))
+
 (defun akirak-pi-complete-slash-command ()
   (completing-read "Pi command: " akirak-pi-slash-commands))
+
+(defun akirak-pi-waiting-p (buffer)
+  "Return non-nil if pi is waiting for the user input."
+  (not (akirak-pi--working-p buffer)))
+
+(defun akirak-pi--working-p (buffer)
+  "Return non-nil if pi is working on the task."
+  (with-current-buffer buffer
+    (save-excursion
+      (goto-char (point-max))
+      (string-match-p (rx "Working..." (* blank) eol)
+                      (buffer-substring-no-properties
+                       (line-beginning-position -5)
+                       (line-end-position -5))))))
 
 (provide 'akirak-pi)
 ;;; akirak-pi.el ends here

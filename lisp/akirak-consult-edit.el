@@ -80,8 +80,8 @@
     nov-file-name)
    ((derived-mode-p 'dired-mode)
     default-directory)
-   (t
-    (buffer-file-name (buffer-base-buffer)))))
+   ((buffer-file-name (buffer-base-buffer)))
+   ((bound-and-true-p magit-buffer-file-name))))
 
 (defvar akirak-consult-edit-sources
   '(akirak-consult-edit-org-tempo-source

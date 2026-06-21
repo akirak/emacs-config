@@ -1303,9 +1303,9 @@ The built-in =electric= package provides the following modes:
                                         (window--display-buffer buffer ,(selected-window)
                                                                 'reuse)))
                                     (with-selected-window window
-                                      (akirak-avy-ffap)))
+                                      (ffap-menu)))
                                 (if arg
-                                    (akirak-avy-ffap)
+                                    (ffap-menu)
                                   (ffap))))))
 #+end_src
 *** fileio.c                                                 :files:
@@ -2222,6 +2222,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                     "<remap> <upcase-word>" #'upcase-dwim
                     "<remap> <downcase-word>" #'downcase-dwim
                     "<remap> <capitalize-word>" #'akirak/capitalize-dwim
+                    "C-c v" #'visible-mode
                     "<f12> x l" #'list-processes)
 
     (defun akirak/capitalize-dwim (&optional arg)
@@ -5892,7 +5893,6 @@ This is an extra functions for window management.
                       "C-x o" #'akirak-window-cycle-two-windows
                       "C-x M-o" #'akirak-window-swap-two-windows
                       "C-x `" #'akirak-window-column-prefix
-                      "C-c v" #'akirak-window-open-in-new-tab
                       "M-o" #'akirak-window-moderate-1
                       "S-<end>" #'akirak-window-display-buffer-ends
                       "S-<home>" #'akirak-window-display-buffer-starts
@@ -6886,7 +6886,8 @@ A startup screen extracted from Spacemacs
           dashboard-banner-logo-title nil
           dashboard-display-icons-p #'ignore
           dashboard-projects-backend 'project-el
-          dashboard-item-shortcuts '((recents . "r")
+          dashboard-item-shortcuts '((process-buffers . "b")
+                                     (recents . "r")
                                      (bookmarks . "m")
                                      ;; Don't use p
                                      (projects . "j")
@@ -6895,7 +6896,8 @@ A startup screen extracted from Spacemacs
                                      ;; Unused
                                      (agenda . "a")
                                      (registers . "e"))
-          dashboard-items '((custom-agenda . 10)
+          dashboard-items '((process-buffers . 10)
+                            (custom-agenda . 10)
                             (org-clock . 7)
                             (projects . 15)
                             (bookmarks . 10)
@@ -6905,7 +6907,9 @@ A startup screen extracted from Spacemacs
       (add-to-list 'dashboard-item-generators
                    (cons 'org-clock 'akirak-dashboard-org-clock-insert))
       (add-to-list 'dashboard-item-generators
-                   (cons 'custom-agenda 'akirak-dashboard-insert-agenda)))
+                   (cons 'custom-agenda 'akirak-dashboard-insert-agenda))
+      (add-to-list 'dashboard-item-generators
+                   (cons 'process-buffers 'akirak-dashboard-insert-process-buffers)))
 
     ;; I'm no longer an evil user. Prefer n/p over j/k.
     (:keymap "n" #'dashboard-next-line

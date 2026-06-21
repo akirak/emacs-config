@@ -232,5 +232,66 @@
                        (org-timestamp-to-time (org-element-property :active-timestamp el)))
                      #'time-less-p)))))
 
+;;;; Process buffers
+
+(defun akirak-dashboard-insert-process-buffers (list-size)
+  (require 'akirak-shell)
+  (dashboard-insert-section
+   "Process buffers"
+   (seq-take (akirak-dashboard--process-buffers) list-size)
+   list-size
+   'process-buffers
+   (dashboard-get-shortcut 'process-buffers)
+   `(lambda (&rest _)
+      (akirak-dashboard--process-buffer-open ',el))
+   (akirak-dashboard--process-buffer-format-item el)))
+
+(defun akirak-dashboard--process-buffers ()
+  (seq-sort-by
+   (apply-partially #'buffer-local-value 'buffer-display-time)
+   (lambda (a b)
+     (not (time-less-p a b)))
+   (seq-filter (lambda (buffer)
+                 (when-let* ((process (get-buffer-process buffer)))
+                   (and (process-live-p process)
+                        (not (string-match-p (rx bol " *EGLOT")
+                                             (buffer-name buffer))))))
+               (buffer-list))))
+
+(defun akirak-dashboard--process-buffer-open (buffer)
+  (pop-to-buffer buffer))
+
+(defun akirak-dashboard--process-buffer-format-item (buffer)
+  (let* ((mode (buffer-local-value 'major-mode buffer))
+         (dir (buffer-local-value 'default-directory buffer))
+         (git-root (vc-git-root dir)))
+    (format-spec "%m %g%p %c"
+                 `((?g . ,(if git-root
+                              (file-name-nondirectory
+                               (directory-file-name git-root))
+                            "not in git root"))
+                   (?p . ,(if (equal dir git-root)
+                              ""
+                            (format " (%s)"
+                                    (file-name-nondirectory
+                                     (directory-file-name dir)))))
+                   (?c . ,(if-let* ((prog (akirak-shell-detect-buffer-program buffer)))
+                              (format "%s [coding:%s]"
+                                      prog
+                                      (pcase-exhaustive
+                                          (akirak-shell-buffer-status prog buffer)
+                                        (`done "✅")
+                                        (`running "⌛")
+                                        (`nil "unknown")))
+                            (if (buffer-local-value 'compilation-directory buffer)
+                                (format "%s [compile:⌛]"
+                                        (buffer-local-value 'compile-command buffer))
+                              (process-command (get-buffer-process buffer)))))
+                   (?m . ,(or (nerd-icons-icon-for-mode mode)
+                              (format "[%s]"
+                                      (string-remove-suffix "-mode"
+                                                            (symbol-name mode)))))
+                   ))))
+
 (provide 'akirak-dashboard)
 ;;; akirak-dashboard.el ends here

@@ -98,7 +98,7 @@
   (interactive)
   (akirak-import-thing (thing-at-point 'symbol)))
 
-(defun akirak-import-thing (&optional pattern)
+(defun akirak-import-thing (&optional pattern filename)
   (if-let* ((entry (akirak-import--get-settings)))
       (pcase-exhaustive entry
         (`(,mode . ,(map :regexp :treesit-node-types :extra-modes
@@ -110,6 +110,7 @@
                                                                         :treesit-node-types
                                                                         treesit-node-types))
                 (generated-statements (akirak-import--generate-statements
+                                       :filename filename
                                        :identifier pattern
                                        :extensions extensions
                                        :package-file package-file
@@ -183,12 +184,15 @@
                                                    extensions
                                                    source-directories
                                                    package-file
-                                                   transform-filename)
+                                                   transform-filename
+                                                   filename)
   (let ((regexp (concat "/" (regexp-opt source-directories) "/")))
     (thread-last
-      (akirak-consult--project-files 'absolute
-                                     (when package-file
-                                       (locate-dominating-file default-directory package-file)))
+      (if filename
+          (expand-file-name filename)
+        (akirak-consult--project-files 'absolute
+                                       (when package-file
+                                         (locate-dominating-file default-directory package-file))))
       (delete (buffer-file-name (buffer-base-buffer)))
       (mapcar `(lambda (filename)
                  (when (string-match ,regexp filename)
@@ -349,7 +353,8 @@
 
 (defcustom akirak-import-typescript-alias-config
   '("package.json"
-    ("#*.js" . "./src/*.[tj]s"))
+    ;; ("#*.js" . "./src/*.[tj]s")
+    ("@/*" . "./src/*.[tj]sx"))
   ""
   :type '(cons (string :tag "Marker file name")
                (alist :key-type (string :tag "alias")
@@ -379,6 +384,58 @@
     (when (re-search-forward (rx "*") nil t)
       (replace-match "\\\\([^z-a]+\\\\)"))
     (buffer-string)))
+
+;;;###autoload
+(defun akirak-import-add-many ()
+  "Add missing imports."
+  (interactive)
+  (let* ((pr (or (project-current)
+                 (user-error "You must run this command inside a project")))
+         (symbols (completing-read-multiple "Select symbols to import: "
+                                            (akirak-import--collect-symbols)))
+         (found (akirak-import--find-imenu major-mode symbols (project-root pr))))
+    (dolist (symbol symbols)
+      (akirak-import--generate-statements symbol (assoc symbol found)))))
+
+(defun akirak-import--find-imenu (mode symbols root)
+  (let (result)
+    (dolist (buffer (buffer-list))
+      (let* ((filename (buffer-file-name (or (buffer-base-buffer buffer)
+                                             buffer))))
+        (when (and filename
+                   (string-equal (project-root (project-current
+                                                nil
+                                                (file-name-directory filename)))
+                                 root)
+                   (eq (buffer-local-value 'major-mode buffer)
+                       mode))
+          (with-current-buffer buffer
+            (let ((index (imenu--make-index-alist)))
+              (dolist (symbol symbols)
+                (when (assoc symbol index)
+                  (push symbol filename))))))))
+    result))
+
+(defun akirak-import--collect-symbols ()
+  (let (result)
+    (save-excursion
+      (save-restriction
+        (widen)
+        (goto-char (point-min))
+        (while-let ((pos (and (< (point) (point-max))
+                              (next-overlay-change (point)))))
+          (goto-char pos)
+          (dolist (ov (overlays-at pos))
+            (let ((plist (overlay-properties ov)))
+              (when (eq (plist-get plist 'category) 'flymake-error)
+                (let ((text (buffer-substring-no-properties (overlay-start ov)
+                                                            (overlay-end ov))))
+                  (when (string-match-p (rx symbol-start
+                                            (+ (not (any blank)))
+                                            symbol-end)
+                                        text)
+                    (cl-pushnew text result)))))))))
+    result))
 
 ;;;###autoload
 (defun akirak-import-cleanup ()

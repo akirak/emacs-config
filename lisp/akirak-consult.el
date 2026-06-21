@@ -632,14 +632,17 @@
 
 ;; Based on `consult-buffer'.
 ;;;###autoload
-(defun akirak-consult-project-file (dir)
+(defun akirak-consult-project-file (dir &optional arg)
   (interactive (list (or (akirak-consult--project-root)
-                         default-directory)))
+                         default-directory)
+                     current-prefix-arg))
   ;; `default-directory' can be abbreviated (e.g. in dired-mode), so it is safer
   ;; to apply `expand-file-name'.
+  (when (equal arg 0)
+    (akirak-files-clear-unused-buffers dir))
   (let* ((akirak-consult-initial-directory (expand-file-name default-directory))
          (default-directory (expand-file-name dir))
-         (selected (consult--multi (if current-prefix-arg
+         (selected (consult--multi (if (equal arg '(4))
                                        '(akirak-consult-source-ignored-project-file)
                                      akirak-consult-project-sources)
                                    :require-match (confirm-nonexistent-file-or-buffer)
