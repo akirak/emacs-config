@@ -284,7 +284,7 @@
                                         (`done "✅")
                                         (`running "⌛")
                                         (`nil "unknown")))
-                            (if (buffer-local-value 'compilation-directory buffer)
+                            (if (buffer-local-value 'compilation-arguments buffer)
                                 (format "%s [compile:⌛]"
                                         (buffer-local-value 'compile-command buffer))
                               (process-command (get-buffer-process buffer)))))
