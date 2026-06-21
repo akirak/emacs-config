@@ -68,7 +68,8 @@
                                     "STOPPED"))
                           (org-element-property :archivedp el)
                           (when-let* ((ts (org-element-property :scheduled el)))
-                            (time-less-p (current-time) (org-timestamp-to-time ts))))
+                            (time-less-p (current-time) (org-timestamp-to-time ts)))
+                          (org-entry-blocked-p))
                   (throw 'dashboard-org-clock-skip t))
                 (push (thread-first
                         el
