@@ -511,7 +511,7 @@ the original minor mode."
   (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
                                   '(eat-mode))
     (`eat-mode
-     (pcase (akirak-shell--get-command buffer)
+     (pcase (akirak-shell-get-command buffer)
        (`("aider" . ,_)
         'aider)
        (`("claude" . ,_)
@@ -555,7 +555,7 @@ the original minor mode."
 (cl-defun akirak-shell-directory (buffer)
   (buffer-local-value 'default-directory buffer))
 
-(cl-defun akirak-shell--get-command (buffer)
+(cl-defun akirak-shell-get-command (buffer)
   (declare (indent 1))
   (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
                                   '(eat-mode))
