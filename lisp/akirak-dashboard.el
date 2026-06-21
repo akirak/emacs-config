@@ -290,8 +290,7 @@
                    (?m . ,(or (nerd-icons-icon-for-mode mode)
                               (format "[%s]"
                                       (string-remove-suffix "-mode"
-                                                            (symbol-name mode)))))
-                   ))))
+                                                            (symbol-name mode)))))))))
 
 (provide 'akirak-dashboard)
 ;;; akirak-dashboard.el ends here
