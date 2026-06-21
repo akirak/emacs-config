@@ -287,7 +287,16 @@
                             (if (buffer-local-value 'compilation-arguments buffer)
                                 (format "%s [compile:⌛]"
                                         (buffer-local-value 'compile-command buffer))
-                              (process-command (get-buffer-process buffer)))))
+                              (propertize
+                               (pcase (akirak-shell-get-command buffer)
+                                 (`null
+                                  (process-command (get-buffer-process buffer)))
+                                 (`(,command . ,args)
+                                  (mapconcat #'shell-quote-argument
+                                             (cons (file-name-nondirectory command)
+                                                   args)
+                                             " ")))
+                               'face 'font-lock-comment-face))))
                    (?m . ,(or (nerd-icons-icon-for-mode mode)
                               (format "[%s]"
                                       (string-remove-suffix "-mode"
