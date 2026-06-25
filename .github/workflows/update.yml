@@ -41,7 +41,7 @@ jobs:
           nix run .#lock --impure
           nix run .#update --impure
 
-      - uses: peter-evans/create-pull-request@aa523f9db61947bd5e06efd77870ef065eae32cc
+      - uses: peter-evans/create-pull-request@6fff569d741c6b8131d2a49663b16573ef90be31
         with:
           base: develop
           token: ${{ steps.generate-token.outputs.token }}
