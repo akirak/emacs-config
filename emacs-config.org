@@ -7009,7 +7009,7 @@ Highlight uncommitted changes using VC
     ;; Disable the dired integration as managing the background process is annoying.
     ;; (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
 
-    (:set diff-hl-command-prefix (kbd "C-c g")
+    (:set diff-hl-command-prefix nil
           diff-hl-show-staged-changes t
           ;; https://github.com/magit/magit/discussions/5167
           diff-hl-update-async nil)
