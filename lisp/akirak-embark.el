@@ -368,6 +368,7 @@
   (keymap-set embark-file-map "C-o" #'akirak-embark-org-open-file)
   (keymap-set embark-url-map "C-x C-w" #'akirak-embark-download-url)
   (keymap-set embark-region-map "C-e" #'akirak-embark-goto-region-end)
+  (keymap-set embark-region-map "/" #'akirak-embark-ripgrep)
   (keymap-set embark-bookmark-map "t" #'akirak-embark-bookmark-jump-other-tab)
   (keymap-set embark-buffer-map "C-c C-c" #'akirak-embark-comint-interrupt)
 
@@ -918,6 +919,10 @@
 (defun akirak-embark-run-test (identifier)
   (interactive "sTest: ")
   (akirak-imenu-run-test identifier))
+
+(defun akirak-embark-ripgrep (text)
+  (interactive "sText:")
+  (consult-ripgrep nil text))
 
 (provide 'akirak-embark)
 ;;; akirak-embark.el ends here
