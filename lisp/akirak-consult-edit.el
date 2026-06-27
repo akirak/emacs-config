@@ -62,17 +62,22 @@
                                                     org-clock-marker)
                                                 "ITEM")))
                                "Headline of the currently clocked Org entry.")))
-                 (remq nil
-                       (list (when-let* ((func (which-function)))
-                               (cons func "Name of the function."))
-                             (cons (format-time-string "%F")
-                                   "Current date.")
-                             (cons user-full-name "Name of the user.")
-                             (when-let* ((pr (project-current)))
-                               (cons (project-name pr)
-                                     "Name of the project.")))))))
+                 (cl-remove-if #'akirak-consult--string-empty-or-nil-p
+                               (list (when-let* ((func (which-function)))
+                                       (cons func "Name of the function."))
+                                     (cons (format-time-string "%F")
+                                           "Current date.")
+                                     (cons user-full-name "Name of the user.")
+                                     (when-let* ((pr (project-current)))
+                                       (cons (project-name pr)
+                                             "Name of the project.")))
+                               :key #'car))))
     (setq akirak-consult-edit-suggestions suggestions)
     (mapcar #'car suggestions)))
+
+(defun akirak-consult--string-empty-or-nil-p (string)
+  (or (null string)
+      (string-empty-p string)))
 
 (defun akirak-consult-edit--filename ()
   (cond
