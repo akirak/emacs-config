@@ -5501,7 +5501,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-language
 #+begin_src elisp
   (setup akirak-language
-    (:global-keymap "<f12> l" #'akirak-language-transient))
+    (:global-keymap "<f12> l" #'akirak-language-set-input-method))
 #+end_src
 *** akirak-lmstudio
 #+begin_src elisp
