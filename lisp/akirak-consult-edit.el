@@ -34,21 +34,13 @@
 
 (defun akirak-consult-generate-suggestions ()
   (let ((suggestions
-         (append (when (and (bound-and-true-p git-commit-mode)
-                            (org-clocking-p))
-                   (list (cons (replace-regexp-in-string
-                                (rx bol (+ (any "-/." alnum)) ":" (+ blank))
-                                ""
-                                (org-link-display-format
-                                 (org-entry-get (or org-clock-hd-marker
-                                                    org-clock-marker)
-                                                "ITEM")))
-                               "Headline of the currently clocked Org entry.")))
-                 (when-let* ((filename (if (minibufferp)
+         (append (when-let* ((filename (if (minibufferp)
                                            (with-minibuffer-selected-window
                                              (akirak-consult-edit--filename))
                                          (akirak-consult-edit--filename))))
-                   `((,filename
+                   `((,(file-relative-name filename (vc-git-root default-directory))
+                      . "Relative path of the file from the root.")
+                     (,filename
                       . "File name of the buffer.")
                      ,@(let ((basename (file-name-base filename)))
                          (unless (string-empty-p basename)
@@ -59,9 +51,17 @@
                                          (thread-last
                                            (file-name-base filename)
                                            (string-inflection-upper-camelcase-function)))
-                                       "Base name of the buffer, pascal-cased."))))
-                     (,(file-relative-name filename (vc-git-root default-directory))
-                      . "Relative path of the file from the root.")))
+                                       "Base name of the buffer, pascal-cased."))))))
+                 (when (and (bound-and-true-p git-commit-mode)
+                            (org-clocking-p))
+                   (list (cons (replace-regexp-in-string
+                                (rx bol (+ (any "-/." alnum)) ":" (+ blank))
+                                ""
+                                (org-link-display-format
+                                 (org-entry-get (or org-clock-hd-marker
+                                                    org-clock-marker)
+                                                "ITEM")))
+                               "Headline of the currently clocked Org entry.")))
                  (remq nil
                        (list (when-let* ((func (which-function)))
                                (cons func "Name of the function."))
