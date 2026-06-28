@@ -68,7 +68,8 @@
                                     "STOPPED"))
                           (org-element-property :archivedp el)
                           (when-let* ((ts (org-element-property :scheduled el)))
-                            (time-less-p (current-time) (org-timestamp-to-time ts))))
+                            (time-less-p (current-time) (org-timestamp-to-time ts)))
+                          (org-entry-blocked-p))
                   (throw 'dashboard-org-clock-skip t))
                 (push (thread-first
                         el
@@ -283,15 +284,23 @@
                                         (`done "✅")
                                         (`running "⌛")
                                         (`nil "unknown")))
-                            (if (buffer-local-value 'compilation-directory buffer)
+                            (if (buffer-local-value 'compilation-arguments buffer)
                                 (format "%s [compile:⌛]"
                                         (buffer-local-value 'compile-command buffer))
-                              (process-command (get-buffer-process buffer)))))
+                              (propertize
+                               (pcase (akirak-shell-get-command buffer)
+                                 (`null
+                                  (process-command (get-buffer-process buffer)))
+                                 (`(,command . ,args)
+                                  (mapconcat #'shell-quote-argument
+                                             (cons (file-name-nondirectory command)
+                                                   args)
+                                             " ")))
+                               'face 'font-lock-comment-face))))
                    (?m . ,(or (nerd-icons-icon-for-mode mode)
                               (format "[%s]"
                                       (string-remove-suffix "-mode"
-                                                            (symbol-name mode)))))
-                   ))))
+                                                            (symbol-name mode)))))))))
 
 (provide 'akirak-dashboard)
 ;;; akirak-dashboard.el ends here

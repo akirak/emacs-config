@@ -32,22 +32,35 @@
 
 (require 'akirak-transient)
 
-;;;###autoload (autoload 'akirak-language-transient "akirak-language" nil 'interactive)
-(transient-define-prefix akirak-language-transient ()
-  [:description
-   (lambda ()
-     (format "Switch the input method (current: %s)" current-input-method))
-   :class transient-row
-   ("j" "Japanese (custom)"
-    (lambda ()
-      (interactive)
-      (set-input-method "japanese-riben")))
-   ("c" "Chinese (rime)"
-    (lambda ()
-      (interactive)
-      (set-input-method "rime")))]
+(defcustom akirak-language-input-methods
+  '((?j "Japanese" japanese-riben)
+    (?c "Chinese" rime))
+  ""
+  :type '(repeat (list char
+                       string
+                       string)))
+
+;;;###autoload
+(defun akirak-language-set-input-method ()
   (interactive)
-  (transient-setup 'akirak-language-transient))
+  (pcase-exhaustive
+      (thread-first
+        (read-char-choice
+         (format "Switch input method (%s): "
+                 (mapconcat (pcase-lambda (`(,key ,language . ,_))
+                              (format "%s: %s" (char-to-string key) language))
+                            akirak-language-input-methods
+                            ", "))
+         (mapcar (pcase-lambda (`(,key . ,_))
+                   key)
+                 akirak-language-input-methods))
+        (assq akirak-language-input-methods))
+    (`(,_ ,language ,input-method)
+     (let ((toggle-input-method-active t))
+       (when current-input-method
+         (deactivate-input-method))
+       (activate-input-method input-method)
+       (setq default-input-method input-method)))))
 
 (provide 'akirak-language)
 ;;; akirak-language.el ends here

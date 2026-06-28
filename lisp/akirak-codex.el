@@ -207,10 +207,10 @@
   (with-current-buffer buffer
     (save-excursion
       (goto-char (point-max))
-      (string-prefix-p "─ Worked for"
-                       (buffer-substring-no-properties
-                        (line-beginning-position -4)
-                        (line-end-position -4))))))
+      (not (string-prefix-p "Working "
+                            (buffer-substring-no-properties
+                             (line-beginning-position -4)
+                             (line-end-position -4)))))))
 
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here

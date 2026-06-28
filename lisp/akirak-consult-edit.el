@@ -34,21 +34,13 @@
 
 (defun akirak-consult-generate-suggestions ()
   (let ((suggestions
-         (append (when (and (bound-and-true-p git-commit-mode)
-                            (org-clocking-p))
-                   (list (cons (replace-regexp-in-string
-                                (rx bol (+ (any "-/." alnum)) ":" (+ blank))
-                                ""
-                                (org-link-display-format
-                                 (org-entry-get (or org-clock-hd-marker
-                                                    org-clock-marker)
-                                                "ITEM")))
-                               "Headline of the currently clocked Org entry.")))
-                 (when-let* ((filename (if (minibufferp)
+         (append (when-let* ((filename (if (minibufferp)
                                            (with-minibuffer-selected-window
                                              (akirak-consult-edit--filename))
                                          (akirak-consult-edit--filename))))
-                   `((,filename
+                   `((,(file-relative-name filename (vc-git-root default-directory))
+                      . "Relative path of the file from the root.")
+                     (,filename
                       . "File name of the buffer.")
                      ,@(let ((basename (file-name-base filename)))
                          (unless (string-empty-p basename)
@@ -59,20 +51,33 @@
                                          (thread-last
                                            (file-name-base filename)
                                            (string-inflection-upper-camelcase-function)))
-                                       "Base name of the buffer, pascal-cased."))))
-                     (,(file-relative-name filename (vc-git-root default-directory))
-                      . "Relative path of the file from the root.")))
-                 (remq nil
-                       (list (when-let* ((func (which-function)))
-                               (cons func "Name of the function."))
-                             (cons (format-time-string "%F")
-                                   "Current date.")
-                             (cons user-full-name "Name of the user.")
-                             (when-let* ((pr (project-current)))
-                               (cons (project-name pr)
-                                     "Name of the project.")))))))
+                                       "Base name of the buffer, pascal-cased."))))))
+                 (when (and (bound-and-true-p git-commit-mode)
+                            (org-clocking-p))
+                   (list (cons (replace-regexp-in-string
+                                (rx bol (+ (any "-/." alnum)) ":" (+ blank))
+                                ""
+                                (org-link-display-format
+                                 (org-entry-get (or org-clock-hd-marker
+                                                    org-clock-marker)
+                                                "ITEM")))
+                               "Headline of the currently clocked Org entry.")))
+                 (cl-remove-if #'akirak-consult--string-empty-or-nil-p
+                               (list (when-let* ((func (which-function)))
+                                       (cons func "Name of the function."))
+                                     (cons (format-time-string "%F")
+                                           "Current date.")
+                                     (cons user-full-name "Name of the user.")
+                                     (when-let* ((pr (project-current)))
+                                       (cons (project-name pr)
+                                             "Name of the project.")))
+                               :key #'car))))
     (setq akirak-consult-edit-suggestions suggestions)
     (mapcar #'car suggestions)))
+
+(defun akirak-consult--string-empty-or-nil-p (string)
+  (or (null string)
+      (string-empty-p string)))
 
 (defun akirak-consult-edit--filename ()
   (cond

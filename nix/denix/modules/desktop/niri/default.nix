@@ -1,11 +1,16 @@
-{ delib, lib, pkgs, ... }:
+{
+  delib,
+  lib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "niri";
 
   options.niri = with delib; {
     enable = boolOption false;
 
-    include = listOfOption str [];
+    include = listOfOption str [ ];
 
     inputConfig = pathOption ./etc/input.kdl;
 
@@ -54,73 +59,74 @@ delib.module {
     bindsConfig = pathOption ./etc/binds.kdl;
   };
 
-  nixos.ifEnabled =
-    {
-      environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  nixos.ifEnabled = {
+    environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-      programs.niri = {
-        enable = true;
-      };
-
-      environment.systemPackages = [
-        # Enables XWayland. See https://niri-wm.github.io/niri/Xwayland.html
-        pkgs.xwayland-satellite
-      ];
-
-      environment.etc."wayland-sessions/Niri.desktop".text = ''
-        [Desktop Entry]
-        Name=Niri
-        Exec=niri-session
-        Type=Application
-      '';
+    programs.niri = {
+      enable = true;
     };
 
-  home.ifEnabled = { cfg, ... }:
-    {
-      xdg.configFile."niri/config.kdl".source = pkgs.runCommand "config.kdl" {
-        includeKdl = lib.concatStringsSep "\n" cfg.include;
+    environment.systemPackages = [
+      # Enables XWayland. See https://niri-wm.github.io/niri/Xwayland.html
+      pkgs.xwayland-satellite
+    ];
 
-        windowRules = lib.concatStringsSep "\n" cfg.windowRules;
-
-        hotkeyOverlay = ''
-          hotkey-overlay {
-            ${if cfg.skipHotkeyOverlayAtStartup
-              then "skip-at-startup"
-              else ""}
-          }
-        '';
-
-        screenshotPath = lib.optionalString (cfg.screenshotPath != null) ''
-          screenshot-path "${cfg.screenshotPath}"
-        '';
-
-        passAsFile = [
-          "includeKdl"
-          "hotkeyOverlay"
-          "windowRules"
-          "screenshotPath"
-        ];
-      } ''
-        tmp=$(mktemp)
-
-        # include can cause a validation error if validation is performed
-        # in a temporary environment, so exclude it from validation.
-        cat > $tmp \
-          ${cfg.inputConfig} \
-          ${cfg.outputConfig} \
-          ${cfg.layoutConfig} \
-          $hotkeyOverlayPath \
-          $screenshotPathPath \
-          ${cfg.animationsConfig} \
-          $windowRulesPath \
-          ${cfg.bindsConfig}
-
-        ${lib.getExe pkgs.niri} validate -c "$tmp"
-
-        cat "$includeKdlPath" "$tmp" > $out
-      '';
-
-    # Requires the home module from the xremap flake
-    services.xremap.withNiri = true;
+    environment.etc."wayland-sessions/Niri.desktop".text = ''
+      [Desktop Entry]
+      Name=Niri
+      Exec=niri-session
+      Type=Application
+    '';
   };
+
+  home.ifEnabled =
+    { cfg, ... }:
+    {
+      xdg.configFile."niri/config.kdl".source =
+        pkgs.runCommand "config.kdl"
+          {
+            includeKdl = lib.concatStringsSep "\n" cfg.include;
+
+            windowRules = lib.concatStringsSep "\n" cfg.windowRules;
+
+            hotkeyOverlay = ''
+              hotkey-overlay {
+                ${if cfg.skipHotkeyOverlayAtStartup then "skip-at-startup" else ""}
+              }
+            '';
+
+            screenshotPath = lib.optionalString (cfg.screenshotPath != null) ''
+              screenshot-path "${cfg.screenshotPath}"
+            '';
+
+            passAsFile = [
+              "includeKdl"
+              "hotkeyOverlay"
+              "windowRules"
+              "screenshotPath"
+            ];
+          }
+          ''
+            tmp=$(mktemp)
+
+            # include can cause a validation error if validation is performed
+            # in a temporary environment, so exclude it from validation.
+            cat > $tmp \
+              ${cfg.inputConfig} \
+              ${cfg.outputConfig} \
+              ${cfg.layoutConfig} \
+              $hotkeyOverlayPath \
+              $screenshotPathPath \
+              ${cfg.animationsConfig} \
+              $windowRulesPath \
+              ${cfg.bindsConfig}
+
+            ${lib.getExe pkgs.niri} validate -c "$tmp"
+
+            cat "$includeKdlPath" "$tmp" > $out
+          '';
+
+      # Requires the home module from the xremap flake
+      services.xremap.withNiri = true;
+    };
 }

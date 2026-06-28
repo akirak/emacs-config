@@ -980,6 +980,16 @@ The other variables must not be saved, and they should be put in configuration:
       ;; Use `desktop-after-read-hook' to display a dashboard.
       (add-hook 'desktop-globals-to-save 'desktop-after-read-hook)))
 #+end_src
+*** dictionary
+:PROPERTIES:
+:CREATED_TIME: [2026-06-21 Sun 10:33]
+:END:
+
+#+begin_src emacs-lisp
+  (setup dictionary
+    (:with-map help-map
+      (:keymap "w" #'dictionary-search)))
+#+end_src
 *** dired                                                    :dired:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-24 Thu 18:47]
@@ -5491,7 +5501,7 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-language
 #+begin_src elisp
   (setup akirak-language
-    (:global-keymap "<f12> l" #'akirak-language-transient))
+    (:global-keymap "<f12> l" #'akirak-language-set-input-method))
 #+end_src
 *** akirak-lmstudio
 #+begin_src elisp
@@ -5619,12 +5629,6 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
     (keymap-set akirak/c-z-map "C-o" #'akirak-org-clock-out)
     (keymap-set akirak/c-z-map "d" #'akirak-org-clock-done)
     (keymap-set akirak/c-z-map "r" #'akirak-org-clock-set-review))
-#+end_src
-*** akirak-org-log
-#+begin_src emacs-lisp
-  (setup akirak-org-log
-    (:status personal
-      (keymap-set help-map "w" #'akirak-org-log-goto-week-entry)))
 #+end_src
 *** akirak-org-reg
 #+begin_src emacs-lisp
@@ -7005,7 +7009,7 @@ Highlight uncommitted changes using VC
     ;; Disable the dired integration as managing the background process is annoying.
     ;; (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
 
-    (:set diff-hl-command-prefix (kbd "C-c g")
+    (:set diff-hl-command-prefix nil
           diff-hl-show-staged-changes t
           ;; https://github.com/magit/magit/discussions/5167
           diff-hl-update-async nil)
