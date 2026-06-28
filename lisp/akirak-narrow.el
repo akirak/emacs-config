@@ -58,6 +58,9 @@ is an indirect buffer, this command doesn't do anything."
    (arg
     (akirak-narrow--indirect))
    ((buffer-narrowed-p)
+    (when (and (derived-mode-p 'org-mode)
+               (bound-and-true-p org-capture-mode))
+      (user-error "Prohibited org capture buffers"))
     (let ((start (point-min))
           (end (point-max)))
       (widen)
