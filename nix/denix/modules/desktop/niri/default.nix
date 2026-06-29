@@ -31,7 +31,7 @@ delib.module {
 
     # https://yalter.github.io/niri/Configuration:-Window-Rules
     # Allow adding host-specific window rules by appending them to this list.
-    windowRules = listOfOption str [
+    defaultWindowRules = listOfOption str [
       ''
         window-rule {
           match app-id=r#"^foot$"#
@@ -55,6 +55,8 @@ delib.module {
         }
       ''
     ];
+
+    extraWindowRules = listOfOption str [ ];
 
     bindsConfig = pathOption ./etc/binds.kdl;
   };
@@ -87,7 +89,7 @@ delib.module {
           {
             includeKdl = lib.concatStringsSep "\n" cfg.include;
 
-            windowRules = lib.concatStringsSep "\n" cfg.windowRules;
+            windowRules = lib.concatStringsSep "\n" (cfg.defaultWindowRules ++ cfg.extraWindowRules);
 
             hotkeyOverlay = ''
               hotkey-overlay {
