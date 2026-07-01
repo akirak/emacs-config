@@ -644,11 +644,24 @@ This is primarily intended for editing JSX/TSX."
       (setq node parent)
       (setq parent (treesit-node-parent node)))
     (let ((string (buffer-substring (treesit-node-start node)
-                                    (treesit-node-end node)))
-          (pos (treesit-node-start parent)))
-      (delete-region pos (treesit-node-end parent))
-      (goto-char pos)
-      (save-excursion (insert string)))))
+                                    (treesit-node-end node))))
+      (goto-char (treesit-node-end parent))
+      (push-mark)
+      (goto-char (treesit-node-start parent))
+      (activate-mark)
+      (while (/= (read-char-choice "Press 'r' or SPC to expand the region to\
+ replace, then press RET: "
+                                   '(?r ?\s ?\r))
+                 ?\r)
+        (deactivate-mark)
+        (setq parent (treesit-node-parent parent))
+        (goto-char (treesit-node-end parent))
+        (push-mark)
+        (goto-char (treesit-node-start parent))
+        (activate-mark))
+      (atomic-change-group
+        (delete-region (region-beginning) (region-end))
+        (save-excursion (insert string))))))
 
 ;;;###autoload
 (defun akirak-treesit-jsx-close-tag ()
