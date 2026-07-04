@@ -608,36 +608,38 @@ are displayed in the frame."
                (akirak-compile--just-candidates))))
       (lake (with-memoize
              ;; TODO: Add support for lake scripts
-             (append (when (file-exists-p "lakefile.toml")
-                       (akirak-compile--with-command-buffer
-                           '("dasel" "-r" "toml" "-w" "json" "-f" "lakefile.toml")
-                         (thread-last
-                           (json-parse-buffer :array-type 'list :object-type 'alist)
-                           (alist-get 'lean_exe)
-                           (mapcar (lambda (alist)
-                                     (list (format "lake exe %s"
-                                                   (shell-quote-argument (alist-get 'name alist)))
-                                           'annotation
-                                           (alist-get 'root alist)))))))
-                     (when (file-exists-p "lakefile.lean")
-                       (let (results)
-                         ;; lakefile.lean is parsed using naive regexp matching.
-                         ;; For an accurate implementation, perhaps tomograph
-                         ;; <https://github.com/leanprover/Pantograph> can be
-                         ;; used.
-                         (with-temp-buffer
-                           (insert-file-contents "lakefile.lean")
-                           (goto-char (point-min))
-                           (while (re-search-forward (rx bol (* blank) "lean_exe"
-                                                         (+ blank)
-                                                         (group (+ (any "_" alnum))))
-                                                     nil t)
-                             (push (list (format "lake exe %s"
-                                                 (shell-quote-argument (match-string 1))))
-                                   results)))
-                         results)))))
+             (let ((default-directory dir))
+               (append (when (file-exists-p "lakefile.toml")
+                         (akirak-compile--with-command-buffer
+                             '("dasel" "-r" "toml" "-w" "json" "-f" "lakefile.toml")
+                           (thread-last
+                             (json-parse-buffer :array-type 'list :object-type 'alist)
+                             (alist-get 'lean_exe)
+                             (mapcar (lambda (alist)
+                                       (list (format "lake exe %s"
+                                                     (shell-quote-argument (alist-get 'name alist)))
+                                             'annotation
+                                             (alist-get 'root alist)))))))
+                       (when (file-exists-p "lakefile.lean")
+                         (let (results)
+                           ;; lakefile.lean is parsed using naive regexp matching.
+                           ;; For an accurate implementation, perhaps tomograph
+                           ;; <https://github.com/leanprover/Pantograph> can be
+                           ;; used.
+                           (with-temp-buffer
+                             (insert-file-contents "lakefile.lean")
+                             (goto-char (point-min))
+                             (while (re-search-forward (rx bol (* blank) "lean_exe"
+                                                           (+ blank)
+                                                           (group (+ (any "_" alnum))))
+                                                       nil t)
+                               (push (list (format "lake exe %s"
+                                                   (shell-quote-argument (match-string 1))))
+                                     results)))
+                           results))))))
       (make (with-memoize
-             (let (results)
+             (let (results
+                   (default-directory dir))
                (dolist (file (seq-filter #'file-exists-p (list "Makefile")))
                  (with-temp-buffer
                    (insert-file-contents file)
@@ -649,22 +651,23 @@ are displayed in the frame."
                                results))))))
                results)))
       (zig (with-memoize
-            (akirak-compile--with-command-buffer '("zig" "build" "--help")
-              (re-search-forward (rx bol "Steps:"))
-              (delete-region (point-min) (point))
-              (re-search-forward (rx bol "General Options:"))
-              (delete-region (match-beginning 0) (point-max))
-              (let (result)
-                (goto-char (point-min))
-                (while (re-search-forward (rx bol (* blank)
-                                              (group (+ (any "-_" alnum)))
-                                              (?  " (default)")
-                                              (optional (+ blank) (group (+ nonl))))
-                                          nil t)
-                  (push (list (format "zig build %s" (shell-quote-argument (match-string 1)))
-                              'annotation (match-string 2))
-                        result))
-                result))))
+            (let ((default-directory dir))
+              (akirak-compile--with-command-buffer '("zig" "build" "--help")
+                (re-search-forward (rx bol "Steps:"))
+                (delete-region (point-min) (point))
+                (re-search-forward (rx bol "General Options:"))
+                (delete-region (match-beginning 0) (point-max))
+                (let (result)
+                  (goto-char (point-min))
+                  (while (re-search-forward (rx bol (* blank)
+                                                (group (+ (any "-_" alnum)))
+                                                (?  " (default)")
+                                                (optional (+ blank) (group (+ nonl))))
+                                            nil t)
+                    (push (list (format "zig build %s" (shell-quote-argument (match-string 1)))
+                                'annotation (match-string 2))
+                          result))
+                  result)))))
       ((bun pnpm yarn npm deno)
        ;; We only read package.json, so memoization wouldn't be necessary.
        (let* ((command (symbol-name backend))
@@ -674,7 +677,8 @@ are displayed in the frame."
                                        " run")
                                       ((eq backend 'deno)
                                        " task"))
-                                     " ")))
+                                     " "))
+              (default-directory dir))
          (append (map-apply `(lambda (subcommand body)
                                (list (concat ,script-prefix subcommand)
                                      'annotation body
