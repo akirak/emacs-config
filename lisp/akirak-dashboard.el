@@ -283,6 +283,7 @@
                                           (akirak-shell-buffer-status prog buffer)
                                         (`done "✅")
                                         (`running "⌛")
+                                        (`prompt "❓")
                                         (`nil "unknown")))
                             (if (buffer-local-value 'compilation-arguments buffer)
                                 (format "%s [compile:⌛]"

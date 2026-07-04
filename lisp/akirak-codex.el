@@ -202,15 +202,22 @@
               "\n#+end_quote")
     string))
 
-(defun akirak-codex-waiting-p (buffer)
-  "Return non-nil if the codex is currently waiting for the user input."
+(defun akirak-codex-buffer-status (buffer)
   (with-current-buffer buffer
     (save-excursion
       (goto-char (point-max))
-      (not (string-prefix-p "Working "
-                            (buffer-substring-no-properties
-                             (line-beginning-position -4)
-                             (line-end-position -4)))))))
+      (pcase (buffer-substring-no-properties
+              (line-beginning-position -4)
+              (line-end-position -4))
+        ((rx bol "Working ")
+         'waiting)
+        ((rx bol "─ Worked for ")
+         'done)
+        ((guard (string-match-p (rx (* blank) "Press enter to confirm or esc to cancel")
+                                (buffer-substring-no-properties
+                                 (line-beginning-position)
+                                 (line-end-position))))
+         'prompt)))))
 
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here
