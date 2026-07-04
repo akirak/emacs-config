@@ -245,8 +245,9 @@ are displayed in the frame."
      (let ((buffer (read-buffer "Visit a compilation buffer: "
                                 nil t
                                 (lambda (name-or-cell)
-                                  (akirak-compile-buffer-p (or (cdr-safe name-or-cell)
-                                                               (get-buffer name-or-cell)))))))
+                                  (akirak-compile-buffer-p
+                                   (or (cdr-safe name-or-cell)
+                                       (get-buffer name-or-cell)))))))
        (pop-to-buffer buffer)))
     (_
      (let ((default-directory (abbreviate-file-name default-directory)))
@@ -380,11 +381,13 @@ are displayed in the frame."
          (let* ((entries (mapcar `(lambda (buffer)
                                     (list (file-relative-name
                                            (file-truename
-                                            (buffer-local-value 'default-directory buffer))
+                                            (buffer-local-value 'default-directory
+                                                                buffer))
                                            ,root)
                                           (buffer-name buffer)
                                           (substring-no-properties
-                                           (buffer-local-value 'compile-command buffer))))
+                                           (buffer-local-value 'compile-command
+                                                               buffer))))
                                  buffers))
                 (worktree-name (file-name-nondirectory
                                 (directory-file-name (vc-git-root default-directory))))
@@ -425,7 +428,8 @@ are displayed in the frame."
                                              (string-match-p (car cell) ,command)))
                               (mapcar #'cdr)))
          (matching-projects (seq-filter (apply-partially (lambda (backends backend)
-                                                           (memq (car backend) backends))
+                                                           (memq (car backend)
+                                                                 backends))
                                                          matching-backends)
                                         projects))
          (directories (thread-last
@@ -482,8 +486,10 @@ are displayed in the frame."
                               (member "pnpm-workspace.yaml" files))
                    ;; Detect pnpm projects inside pnpm workspaces.
                    (push (cons (if (and (equal (car cell) "package.json")
-                                        (locate-dominating-file dir "pnpm-workspace.yaml"))
-                                   (cdr (assoc "pnpm-lock.yaml" akirak-compile-package-file-alist))
+                                        (locate-dominating-file dir
+                                                                "pnpm-workspace.yaml"))
+                                   (cdr (assoc "pnpm-lock.yaml"
+                                               akirak-compile-package-file-alist))
                                  (cdr cell))
                                dir)
                          result)))))
@@ -500,8 +506,10 @@ are displayed in the frame."
       (let ((command-alist (if (eq backend 'package-json)
                                (cond
                                 ((seq-find `(lambda (cell)
-                                              (and (memq (car cell) '(pnpm bun deno yarn npm))
-                                                   (equal (cdr cell) ,dir)))
+                                              (and (memq (car cell)
+                                                         '(pnpm bun deno yarn npm))
+                                                   (equal (cdr cell)
+                                                          ,dir)))
                                            projects)
                                  nil)
                                 ;; Inside a pnpm workspace, treat package.json
@@ -553,7 +561,8 @@ are displayed in the frame."
                                     (apply #'call-process "direnv"
                                            nil (list t err-file) nil
                                            "exec"
-                                           (file-relative-name (expand-file-name envrc-dir))
+                                           (file-relative-name
+                                            (expand-file-name envrc-dir))
                                            executable args)
                                   (apply #'call-process executable
                                          nil (list t err-file) nil
@@ -811,7 +820,8 @@ are displayed in the frame."
            (let ((default-directory root)
                  (command (pcase type
                             (`gradlew
-                             (format "./gradlew test --tests %s" (shell-quote-argument name))))))
+                             (format "./gradlew test --tests %s"
+                                     (shell-quote-argument name))))))
              (compile command))))
       (user-error "No project"))))
 
