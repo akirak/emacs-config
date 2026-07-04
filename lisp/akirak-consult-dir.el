@@ -188,7 +188,10 @@
                  (akirak-consult-dir--default-root)))
          (default-directory root)
          (selected (consult--read (akirak-consult--sort-entries-1
-                                   (process-lines "fd" "-t" "d")
+                                   (process-lines "fd"
+                                                  "-H"
+                                                  "-E" ".git"
+                                                  "-t" "d")
                                    (file-relative-name current root))
                                   :category 'directory
                                   :state (consult--file-state)
