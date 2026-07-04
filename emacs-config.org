@@ -1547,6 +1547,7 @@ Notes:
   (setup frame
     (blink-cursor-mode -1)
     (set-frame-parameter nil 'alpha '(98 . 96))
+    (keymap-global-unset "<f11>")
 
     (:set window-divider-default-places 'bottom-only
           window-divider-default-bottom-width 1)
