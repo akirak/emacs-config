@@ -1794,6 +1794,22 @@
         "type": "github"
       }
     },
+    "markdown-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777110899,
+        "narHash": "sha256-2L59pUw/bdARmhZnTFNpYSfBkk7wpUxAPMCWHUznDYA=",
+        "owner": "jrblevin",
+        "repo": "markdown-mode",
+        "rev": "1f72cefa6a4b759f90e335e4908725a721b17ad9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jrblevin",
+        "repo": "markdown-mode",
+        "type": "github"
+      }
+    },
     "mastodon": {
       "flake": false,
       "locked": {
@@ -3167,6 +3183,7 @@
         "magit-nix3": "magit-nix3",
         "magit-section": "magit-section",
         "marginalia": "marginalia",
+        "markdown-mode": "markdown-mode",
         "mastodon": "mastodon",
         "mcp": "mcp",
         "mermaid-mode": "mermaid-mode",

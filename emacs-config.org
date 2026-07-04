@@ -5042,7 +5042,7 @@ A mode for editing Kotlin files based on tree-sitter
   (setup lua-ts-mode
     (:file-match "\\.lua\\'"))
 #+end_src
-*** markdown-ts-mode
+*** COMMENT markdown-ts-mode                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2026-06-07 Sun 22:29]
 :END:
@@ -9168,7 +9168,7 @@ Enrich existing commands with completion annotations
       (add-to-list 'marginalia-annotators
                    '(directory marginalia-annotate-file builtin none))))
 #+end_src
-*** COMMENT markdown-mode                                          :major__mode:ARCHIVE:
+*** markdown-mode                                          :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 14:12]
 :END:
