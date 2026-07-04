@@ -2898,6 +2898,8 @@ Elegant, highly legible and customizable themes
     (when (or window-system
               (daemonp))
       (require 'modus-themes)
+      (custom-set-faces
+       '(margin ((t (:background "#c9c0a3")))))
       (load-theme 'modus-operandi :no-confirm)))
 #+end_src
 *** Font families
