@@ -9671,6 +9671,7 @@ Minor mode to automatically balance window margins
 #+begin_src emacs-lisp
   (setup (:package olivetti)
     (:set olivetti-body-width akirak/default-body-width)
+    (:global-keymap "S-<f11>" #'olivetti-mode)
 
     ;; Also hooked into nov-mode. See the package setting
     (:hook-into org-mode-hook
