@@ -538,6 +538,36 @@ are displayed in the frame."
         (or (car (member result candidates))
             result)))))
 
+(defmacro akirak-compile--with-command-buffer (command-and-args &rest body)
+  "Insert the standard output from a command into the buffer."
+  (declare (indent 1))
+  `(let* ((command (car ,command-and-args))
+          (executable (executable-find command))
+          (args (cdr ,command-and-args)))
+     (when command
+       (let ((err-file (make-temp-file command)))
+         (unwind-protect
+             (let ((envrc-dir (locate-dominating-file default-directory ".envrc")))
+               (with-temp-buffer
+                 (unless (zerop (if (and envrc-dir (executable-find "direnv"))
+                                    (apply #'call-process "direnv"
+                                           nil (list t err-file) nil
+                                           "exec"
+                                           (file-relative-name (expand-file-name envrc-dir))
+                                           executable args)
+                                  (apply #'call-process executable
+                                         nil (list t err-file) nil
+                                         args)))
+                   (error "Error from command %s: %s"
+                          (mapconcat #'shell-quote-argument (cons command args)
+                                     " ")
+                          (with-temp-buffer
+                            (insert-file-contents err-file)
+                            (buffer-string))))
+                 (goto-char (point-min))
+                 ,@body))
+           (delete-file err-file))))))
+
 (defun akirak-compile--gen-commands (backend dir)
   "Generate an alist of commands for BACKEND at DIR."
   (cl-macrolet
@@ -550,13 +580,13 @@ are displayed in the frame."
                   value)))))
     (cl-case backend
       (mix (with-memoize
-            (let (result)
-              (with-temp-buffer
-                (akirak-compile--insert-stdout "mix" "help")
-                (goto-char (point-min))
+            (let (result
+                  (default-directory dir))
+              (akirak-compile--with-command-buffer '("mix" "help")
                 (save-match-data
-                  (while (re-search-forward (rx bol (* space) (group "mix" (* (not (any "#"))))
-                                                " # " (group (+ nonl)) eol)
+                  (while (re-search-forward (rx bol (group "mix" (* (not (any "#"))))
+                                                (+ blank)
+                                                "# " (group (+ nonl)) eol)
                                             nil t)
                     (push (list (string-trim-right (match-string 1))
                                 'annotation
@@ -570,9 +600,8 @@ are displayed in the frame."
       (lake (with-memoize
              ;; TODO: Add support for lake scripts
              (append (when (file-exists-p "lakefile.toml")
-                       (with-temp-buffer
-                         (akirak-compile--insert-stdout "dasel" "-r" "toml" "-w" "json" "-f" "lakefile.toml")
-                         (goto-char (point-min))
+                       (akirak-compile--with-command-buffer
+                           '("dasel" "-r" "toml" "-w" "json" "-f" "lakefile.toml")
                          (thread-last
                            (json-parse-buffer :array-type 'list :object-type 'alist)
                            (alist-get 'lean_exe)
@@ -611,9 +640,7 @@ are displayed in the frame."
                                results))))))
                results)))
       (zig (with-memoize
-            (with-temp-buffer
-              (akirak-compile--insert-stdout "zig" "build" "--help")
-              (goto-char (point-min))
+            (akirak-compile--with-command-buffer '("zig" "build" "--help")
               (re-search-forward (rx bol "Steps:"))
               (delete-region (point-min) (point))
               (re-search-forward (rx bol "General Options:"))
@@ -769,29 +796,6 @@ are displayed in the frame."
          (format-line (line-tokens)
            (mapconcat #'format-token line-tokens)))
       (string-join (mapcar #'format-line body) "; "))))
-
-(defun akirak-compile--insert-stdout (command &rest args)
-  "Insert the standard output from a command into the buffer."
-  (when (executable-find command)
-    (let ((err-file (make-temp-file command)))
-      (unwind-protect
-          (let ((envrc-dir (locate-dominating-file default-directory ".envrc")))
-            (unless (zerop (if (and envrc-dir (executable-find "direnv"))
-                               (apply #'call-process "direnv"
-                                      nil (list t err-file) nil
-                                      "exec"
-                                      (file-relative-name (expand-file-name envrc-dir))
-                                      command args)
-                             (apply #'call-process command
-                                    nil (list t err-file) nil
-                                    args)))
-              (error "Error from command %s: %s"
-                     (mapconcat #'shell-quote-argument (cons command args)
-                                " ")
-                     (with-temp-buffer
-                       (insert-file-contents err-file)
-                       (buffer-string)))))
-        (delete-file err-file)))))
 
 (defun akirak-compile-run-test (name language)
   "Run a test case NAME in the LANGUAGE."
