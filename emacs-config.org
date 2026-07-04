@@ -5318,6 +5318,7 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup akirak-avy
     (:global-keymap "C-;" #'akirak-avy-insert-symbol
+                    "C-:" #'akirak-avy-insert-word
                     "M-g `" #'akirak-avy-org-block))
 #+end_src
 *** COMMENT akirak-bitwarden                                                   :ARCHIVE:

@@ -81,14 +81,43 @@ If CALLBACK is a function, it is called with the selected url."
 (defun akirak-avy--symbol-make-args ()
   (list (cl-case (derived-mode-p 'org-mode)
           (org-mode
-           (akirak-avy--org-symbol-at-point))
+           (akirak-avy--org-thing-at-point 'symbol))
           (otherwise
            (save-match-data
              (when (thing-at-point-looking-at
                     (rx (+ (not (any "\"'`.:;,/\\()[]{}" blank "\n")))))
                (match-string-no-properties 0)))))))
 
-(defun akirak-avy--org-symbol-at-point ()
+;;;###autoload
+(defun akirak-avy-insert-word (&optional arg)
+  "Like `akirak-avy-insert-symbol', but for a word boundary."
+  (interactive "P")
+  (akirak-avy--run #'kill-new
+                   #'akirak-avy--word-make-args
+                   (pcase arg
+                     ('-
+                      (lambda ()
+                        (message "Saved the text to kill ring")))
+                     (_
+                      (pcase (derived-mode-p 'eat-mode)
+                        (`eat-mode
+                         #'eat-yank)
+                        (_
+                         #'yank))))))
+
+(defun akirak-avy--word-make-args ()
+  (list (cl-case (derived-mode-p 'org-mode)
+          (org-mode
+           (akirak-avy--org-thing-at-point 'word))
+          (otherwise
+           (save-match-data
+             (when (thing-at-point-looking-at
+                    (rx word-start
+                        (+ (not (any space)))
+                        word-end))
+               (match-string-no-properties 0)))))))
+
+(defun akirak-avy--org-thing-at-point (thing)
   (cond
    ((and (get-char-property (point) 'org-emphasis)
          (thing-at-point-looking-at org-emph-re))
@@ -100,7 +129,7 @@ If CALLBACK is a function, it is called with the selected url."
     (or (match-string-no-properties 2)
         (match-string-no-properties 1)))
    (t
-    (thing-at-point 'symbol t))))
+    (thing-at-point thing t))))
 
 ;;;###autoload
 (defun akirak-avy-symbol-overlay-put ()
