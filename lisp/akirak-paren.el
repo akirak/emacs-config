@@ -290,5 +290,30 @@ Also see `akirak-elec-pair--close-char'."
                 t))
             (user-error "No matching paren"))))))
 
+;;;###autoload
+(defun akirak-paren-kill-word (arg)
+  "An enhanced version of `kill-word', suitable for `text-mode'."
+  (interactive "p")
+  (if (looking-at (rx (syntax punctuation)))
+      (if-let* ((end (akirak-paren-matching-location)))
+          (kill-region (point) end)
+        (if (bound-and-true-p treesit-primary-parser)
+            (pcase (akirak-paren--ts-matching-nodes)
+              (`(,start-node . ,end-node)
+               (kill-region (treesit-node-start start-node)
+                            (treesit-node-end end-node))))
+          (let ((start (point)))
+            (or (let ((end (next-single-property-change start 'face)))
+                  (when (and (< (1+ start) end)
+                             (eq (char-after start) (char-before end)))
+                    (kill-region start end)
+                    t))
+                (let ((end (next-single-property-change (1+ start) 'face)))
+                  (when (eq (char-after start) (char-after end))
+                    (kill-region start (1+ end))
+                    t))
+                (user-error "No matching paren")))))
+    (kill-word arg)))
+
 (provide 'akirak-paren)
 ;;; akirak-paren.el ends here
