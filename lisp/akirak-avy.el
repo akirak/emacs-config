@@ -177,5 +177,32 @@ If CALLBACK is a function, it is called with the selected url."
   (avy-with akirak-avy-org-block
     (avy-jump org-block-regexp)))
 
+;;;###autoload
+(defun akirak-avy-paragraph-char-2 (char1 char2)
+  ;; Based on `avy-goto-char-2' by the original author, Oleh Krehel.
+  (interactive (list (let ((c1 (read-char "char 1: " t)))
+                       (if (memq c1 '(? ?\b))
+                           (keyboard-quit)
+                         c1))
+                     (let ((c2 (read-char "char 2: " t)))
+                       (cond ((eq c2 ?)
+                              (keyboard-quit))
+                             ((memq c2 avy-del-last-char-by)
+                              (keyboard-escape-quit)
+                              (call-interactively 'avy-goto-char-2))
+                             (t
+                              c2)))))
+  (pcase (bounds-of-thing-at-point 'paragraph)
+    (`(,beg . ,end)
+     (let ((case-fold-search nil))
+       (avy-with akirak-avy-paragraph-char
+         (avy-jump
+          (rx-to-string `(and (or bol word-start (* (syntax punctuation)))
+                              ,(string char1 char2)))
+          :beg beg
+          :end end))))
+    (_
+     (user-error "No paragraph detected at point"))))
+
 (provide 'akirak-avy)
 ;;; akirak-avy.el ends here
