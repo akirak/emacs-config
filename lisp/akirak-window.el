@@ -744,5 +744,37 @@ Otherwise, it calls `akirak-window-duplicate-state'."
    (goto-char (point-min))
    (recenter-top-bottom 1)))
 
+;;;###autoload
+(defun akirak-window-set-centered-margins (window)
+  "Set the margins for a centered WINDOW."
+  (let* ((body-width (window-body-width window))
+         (margins (window-margins window))
+         (window-width (+ (window-width window)
+                          (car margins)
+                          (cdr margins)))
+         (frame-width (frame-width (window-frame window)))
+         (left-column (window-left-column window))
+         (right-column (- frame-width
+                          (+ left-column
+                             window-width)))
+         (leftw (window-in-direction 'left window))
+         (rightw (window-in-direction 'right window)))
+    (if (and (or (null leftw)
+                 (window-at-side-p leftw))
+             (or (null rightw)
+                 (window-at-side-p rightw)))
+        (let ((left-margin (- (/ (- frame-width body-width)
+                                 2)
+                              left-column))
+              (right-margin (- (/ (- frame-width body-width)
+                                  2)
+                               right-column)))
+          (set-window-margins window left-margin right-margin))
+      (set-window-margins window
+                          (/ (- window-width body-width)
+                             2)
+                          (/ (- window-width body-width)
+                             2)))))
+
 (provide 'akirak-window)
 ;;; akirak-window.el ends here
