@@ -8,14 +8,38 @@
 ;;;###autoload
 (defun akirak-ai-model-list ()
   (with-temp-buffer
-    (insert-file-contents (if (file-readable-p akirak-ai-model-list-file)
-                              akirak-ai-model-list-file
-                            (error "File set as `akirak-ai-model-list-file' is not readable: %s"
-                                   akirak-ai-model-list-file)))
+    (insert-file-contents
+     (if (file-readable-p akirak-ai-model-list-file)
+         akirak-ai-model-list-file
+       (error "File set as `akirak-ai-model-list-file' is not readable: %s"
+              akirak-ai-model-list-file)))
     (thread-last
       (string-split (buffer-string) "\n")
       (cl-remove-if #'string-empty-p)
       (mapcar #'akirak-ai-model--normalize-name))))
+
+;;;###autoload
+(defun akirak-ai-model-insert-names ()
+  (interactive)
+  (let ((names (completing-read-multiple "Model names: "
+                                         (akirak-ai-model-list)
+                                         nil t)))
+    (if (and (listp names)
+             (> (length names) 1))
+        (let ((quote-char (read-char "Quote (enter to none): "))
+              (separator (read-char "Separator (enter to none): ")))
+          (dolist (name names)
+            (if (= quote-char 13)
+                (insert name)
+              (insert (string quote-char)
+                      name
+                      (string quote-char)))
+            (unless (= separator 13)
+              (insert-char separator))
+            (newline-and-indent)))
+      (insert (if (listp names)
+                  (car names)
+                names)))))
 
 (defun akirak-ai-model--normalize-name (name)
   "Convert the NAME of a model to the provider/model format."
