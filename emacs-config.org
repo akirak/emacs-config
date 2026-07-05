@@ -8281,19 +8281,43 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (:set gptel-backend (gptel-make-openai "OpenAI"
-                            :key (lambda () (gptel-api-key-from-auth-source "api.openai.com"))
-                            :stream t
-                            :models (akirak-ai-model-prefixed-list "openai/"))
-            gptel-model 'gpt-5)
+      (:set gptel-backend (gptel-make-openai-oauth "OpenAI-sub")
+            gptel-model 'gpt-5.4)
 
-      (gptel-make-gh-copilot "Copilot")
+      ;; OpenAI via API.
+      ;; (:set gptel-backend
+      ;;       (gptel-make-openai "OpenAI"
+      ;;         :key (lambda ()
+      ;;                (gptel-api-key-from-auth-source "api.openai.com"))
+      ;;         :stream t
+      ;;         :models (akirak-ai-model-prefixed-list "openai/")))
+
+      ;; (gptel-make-gh-copilot "Copilot")
+
+      (gptel-make-openai "OpenCode Zen"
+        :host "opencode.ai"
+        :endpoint "/zen/v1"
+        :key (lambda ()
+               (gptel-api-key-from-auth-source "opencode.ai"))
+        :models '(glm-5.2
+                  kimi-k2.7-code
+                  deepseek-v4-pro
+                  deepseek-v4-flash
+                  openrouter/qwen/qwen3.6-plus)
+        :stream t)
 
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
                (gptel-api-key-from-auth-source "api.perplexity.ai"))
         :stream t)))
 #+end_src
+
+Supported backends:
+
+- [X] OpenAI via subscription (default, requires ChatGPT Plus or higher)
+- [X] OpenCode Go/Zen
+- [ ] Locally-hosted llama-swap: Not part of this repository
+
 *** COMMENT gptel-aibo                                                      :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-02-05 Wed 22:17]
