@@ -5322,6 +5322,7 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-avy
     (:global-keymap "C-;" #'akirak-avy-insert-symbol
                     "C-:" #'akirak-avy-insert-word
+                    "C-'" #'akirak-avy-paragraph-char-2
                     "M-g `" #'akirak-avy-org-block))
 #+end_src
 *** COMMENT akirak-bitwarden                                                   :ARCHIVE:
@@ -6337,10 +6338,10 @@ Jump to arbitrary positions in visible text and select text quickly.
           avy-styles-alist '((avy-goto-char . at)
                              (avy-goto-char-timer . at-full))
           avy-all-windows t)
-    (:global-keymap "C-'" #'avy-goto-char-timer))
+    (:global-keymap "C-\"" #'avy-goto-char-timer))
 #+end_src
 
-I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
+For keybindings, refer to the configuration for akirak-avy.
 *** beancount                                     :@extra:beancount:
 #+begin_quote
 A major mode to edit Beancount input files.
