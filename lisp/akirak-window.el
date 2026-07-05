@@ -718,6 +718,40 @@ Otherwise, it calls `akirak-window-duplicate-state'."
   (interactive)
   (set-window-dedicated-p (selected-window) (not (window-dedicated-p))))
 
+;;;###autoload
+(defun akirak-window-convert-to-side-window (&optional arg window)
+  (interactive "P")
+  (if (or (when (window-at-side-p nil 'left)
+            (set-window-parameter window 'window-side 'left)
+            t)
+          (when (window-at-side-p nil 'right)
+            (set-window-parameter window 'window-side 'right)
+            t))
+      (let ((current-width (window-width window))
+            (content-width (if (numberp arg)
+                               arg
+                             (1+ (akirak-window--content-width window)))))
+        (when (< content-width current-width)
+          (window-resize window (- content-width current-width)
+                         'horizontal))
+        (toggle-window-dedicated window t))
+    (user-error "Cannot convert to a side window")))
+
+(defun akirak-window--content-width (&optional window)
+  (with-selected-window (or window
+                            (selected-window))
+    (save-excursion
+      (goto-char (window-start window))
+      (end-of-line 1)
+      (let ((max (car (posn-col-row (posn-at-point (point)) t))))
+        (while (< (point) (point-max))
+          (end-of-line 2)
+          (let ((width (car (posn-col-row (posn-at-point (point)) t))))
+            (when (or (null max)
+                      (> width max))
+              (setq max width))))
+        max))))
+
 (defvar akirak-window-last-nonhelp-window nil)
 
 (defmacro akirak-window--with-each-non-file-buffer-window (&rest body)
