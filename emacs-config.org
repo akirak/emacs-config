@@ -9678,8 +9678,8 @@ Minor mode to automatically balance window margins
     (:global-keymap "S-<f11>" #'olivetti-mode)
 
     ;; Also hooked into nov-mode. See the package setting
-    (:hook-into org-mode-hook
-                org-memento-timeline-mode-hook)
+    ;; (:hook-into org-mode-hook
+    ;;             org-memento-timeline-mode-hook)
 
     ;; Implement `olivetti-set-width-hook' without tweaking the upstream code.
     (advice-add 'olivetti-expand
