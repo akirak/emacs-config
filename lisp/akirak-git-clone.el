@@ -333,15 +333,16 @@ DIR is an optional destination directory to clone the repository into."
                                                        (file-name-nondirectory repo)
                                                        (akirak-git-clone-source-pr obj))))))
                 (akirak-git-clone--browse-diff))
-            (akirak-git-clone--clone (akirak-git-clone-source-origin source)
-                                     (akirak-git-clone-default-dest-dir source dir)
-                                     :ref branch
-                                     :content-path content-path
-                                     :other-window other-window
-                                     :callback
-                                     (lambda (dest)
-                                       (let ((default-directory dest))
-                                         (akirak-git-clone--browse-diff))))))
+            (let ((dest (akirak-git-clone-default-dest-dir
+                         source (file-name-parent-directory repo))))
+              (if (file-directory-p dest)
+                  (let ((default-directory dest))
+                    (message "Updating the branch...")
+                    (call-process "git" nil nil nil
+                                  "pull" "origin" "HEAD")
+                    (akirak-git-clone--browse-diff))
+                (akirak-git-clone--clone origin dest :content-path content-path
+                                         :other-window other-window)))))
       (if (file-directory-p repo)
           (let ((default-directory repo))
             (message "Updating the branch...")
@@ -582,12 +583,18 @@ DIR is an optional destination directory to clone the repository into."
       (error "gh returned non-zero"))
     (goto-char (point-min))
     (let-alist (json-parse-buffer :object-type 'alist)
-      (make-akirak-git-clone-source :type 'github
-                                    :rev-or-ref .headRefName
-                                    :origin (format "https://github.com/%s.git"
-                                                    .headRepository.nameWithOwner)
-                                    :owner-and-repo .headRepository.nameWithOwner
-                                    :host "github.com"))))
+      (let ((name-with-owner .headRepository.nameWithOwner))
+        (make-akirak-git-clone-source :type 'github
+                                      :rev-or-ref .headRefName
+                                      :local-path (file-name-concat
+                                                   "github.com"
+                                                   (format "%s@pr%d"
+                                                           (downcase name-with-owner)
+                                                           pr-number))
+                                      :origin (format "https://github.com/%s.git"
+                                                      name-with-owner)
+                                      :owner-and-repo name-with-owner
+                                      :host "github.com")))))
 
 (defcustom akirak-git-clone-wait 120
   ""
