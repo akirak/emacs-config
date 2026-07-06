@@ -20,4 +20,10 @@ builtins.intersectAttrs esuper {
       cd ..
     '';
   });
+
+  diff-hl = esuper.diff-hl.overrideAttrs (old: {
+    patches = [
+      ./patches/diff-hl/remove-bindings.patch
+    ];
+  });
 }
