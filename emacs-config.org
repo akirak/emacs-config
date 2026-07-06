@@ -7020,8 +7020,8 @@ Highlight uncommitted changes using VC
     ;; Disable the dired integration as managing the background process is annoying.
     ;; (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
 
-    (:set diff-hl-command-prefix nil
-          diff-hl-show-staged-changes t
+    ;; `diff-hl-command-prefix' is ineffective since I've patched the source.
+    (:set diff-hl-show-staged-changes t
           ;; https://github.com/magit/magit/discussions/5167
           diff-hl-update-async nil)
 
@@ -7034,10 +7034,12 @@ Highlight uncommitted changes using VC
     (defalias 'akirak/diff-hl-previous-hunk #'diff-hl-previous-hunk)
 
     (:global-keymap "M-g j" #'akirak/diff-hl-next-hunk
-             "M-g k" #'akirak/diff-hl-previous-hunk)
+                    "M-g k" #'akirak/diff-hl-previous-hunk)
 
     (:when-loaded
-      (keymap-set diff-hl-command-map "c" #'magit-commit)
+      ;; `diff-hl-command-map' is no longer available since I've patched the
+      ;; source.
+      ;; (keymap-set diff-hl-command-map "c" #'magit-commit)
       (defun akirak/diff-hl-after-navigation (orig &rest args)
         ;; (when (buffer-narrowed-p)
         ;;   (widen))
