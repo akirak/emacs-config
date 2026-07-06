@@ -362,7 +362,7 @@ DIR is an optional destination directory to clone the repository into."
             (magit-list-worktrees)))
 
 (defun akirak-git-clone--browse-diff ()
-  (magit-log-setup-buffer (list "HEAD^...HEAD") nil nil))
+  (magit-diff-setup-buffer "HEAD^...HEAD" nil nil nil))
 
 (defun akirak-git-clone--root-directory (host)
   "Determine the parent directory of the host directory."
