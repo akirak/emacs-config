@@ -98,7 +98,8 @@ matches the host of the repository,
 
 (cl-defstruct akirak-git-clone-source
   "Type for representing a repository."
-  type origin host local-path rev-or-ref params content-path pr)
+  type origin host local-path rev-or-ref params content-path pr
+  owner-and-repo)
 
 (defun akirak-git-clone--parse (flake-ref-or-url)
   "Parse FLAKE-REF."
@@ -123,6 +124,7 @@ matches the host of the repository,
             (origin (format "https://%s/%s.git" host path)))
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
+                                     :owner-and-repo path
                                      :host host
                                      :pr pr-number
                                      :local-path local-path)))
@@ -153,6 +155,7 @@ matches the host of the repository,
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
                                      :host host
+                                     :owner-and-repo path
                                      :local-path local-path
                                      :rev-or-ref rev-or-ref
                                      :params params)))
@@ -179,6 +182,7 @@ matches the host of the repository,
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
                                      :host host
+                                     :owner-and-repo path
                                      :local-path local-path
                                      :rev-or-ref rev-or-ref
                                      :content-path content-path)))
@@ -194,6 +198,7 @@ matches the host of the repository,
             (origin (format "https://%s/%s" host path)))
        (make-akirak-git-clone-source :type 'type
                                      :origin origin
+                                     :owner-and-repo path
                                      :host host
                                      :local-path local-path)))
     ((rx bol "https://gist.github.com/")
@@ -302,39 +307,49 @@ DIR is an optional destination directory to clone the repository into."
          (other-window (eq this-command 'akirak/embark-git-clone-from-url)))
     (when (akirak-git-clone-source-rev-or-ref obj)
       (message "Rev or ref is unsupported now"))
-    (if (file-directory-p repo)
-        (if (akirak-git-clone-source-pr obj)
-            (let* ((default-directory repo)
-                   (branch (akirak-git-clone--pr-branch (akirak-git-clone-source-pr obj)))
-                   (default-directory
-                    (or (akirak-git-clone--branch-worktree branch)
-                        (progn
-                          (require 'akirak-magit)
-                          (akirak-magit-worktree branch)))))
-              (message "Updating the branch...")
-              (call-process "git" nil nil nil
-                            "pull" "origin" "HEAD")
-              (akirak-git-clone--browse-diff))
-          (akirak-git-clone-browse repo content-path
-                                   :other-window other-window))
-      (akirak-git-clone--clone origin repo :content-path content-path
-                               :other-window other-window
-                               :callback
-                               (when (and (akirak-git-clone-source-pr obj)
-                                          (executable-find "gh"))
-                                 `(lambda (dest)
-                                    (let* ((default-directory dest)
-                                           (branch (akirak-git-clone--pr-branch
-                                                    ,(akirak-git-clone-source-pr obj)))
-                                           (default-directory
-                                            (or (akirak-git-clone--branch-worktree branch)
-                                                (progn
-                                                  (require 'akirak-magit)
-                                                  (akirak-magit-worktree branch)))))
-                                      (message "Updating the branch...")
-                                      (call-process "git" nil nil nil
-                                                    "pull" "origin" "HEAD")
-                                      (akirak-git-clone--browse-diff))))))))
+    (if (akirak-git-clone-source-pr obj)
+        (let* ((source (akirak-git-clone--pr-source (akirak-git-clone-source-owner-and-repo obj)
+                                                    (akirak-git-clone-source-pr obj)))
+               (branch (akirak-git-clone-source-rev-or-ref source)))
+          (require 'akirak-magit)
+          ;; The working tree exists
+          (if (file-directory-p repo)
+              (let* ((default-directory repo)
+                     (remote (directory-file-name
+                              (file-name-directory
+                               (akirak-git-clone-source-owner-and-repo source))))
+                     (default-directory
+                      (progn
+                        (magit-call-git "remote" "add" "-f"
+                                        remote
+                                        (akirak-git-clone-source-origin source))
+                        (magit-call-git "fetch"
+                                        remote
+                                        branch)
+                        (akirak-magit-worktree branch
+                                               nil
+                                               :name
+                                               (format "%s@pr%d"
+                                                       (file-name-nondirectory repo)
+                                                       (akirak-git-clone-source-pr obj))))))
+                (akirak-git-clone--browse-diff))
+            (akirak-git-clone--clone (akirak-git-clone-source-origin source)
+                                     (akirak-git-clone-default-dest-dir source dir)
+                                     :ref branch
+                                     :content-path content-path
+                                     :other-window other-window
+                                     :callback
+                                     (lambda (dest)
+                                       (let ((default-directory dest))
+                                         (akirak-git-clone--browse-diff))))))
+      (if (file-directory-p repo)
+          (let ((default-directory repo))
+            (message "Updating the branch...")
+            (call-process "git" nil nil nil
+                          "pull" "origin" "HEAD")
+            (akirak-git-clone--browse-diff))
+        (akirak-git-clone--clone origin repo :content-path content-path
+                                 :other-window other-window)))))
 
 (defun akirak-git-clone--branch-worktree (branch)
   (require 'magit)
@@ -557,14 +572,22 @@ DIR is an optional destination directory to clone the repository into."
                  akirak-git-clone-browser-function)
                root))))
 
-(defun akirak-git-clone--pr-branch (pr-number)
+(defun akirak-git-clone--pr-source (owner-and-repo pr-number)
   (with-temp-buffer
     (unless (zerop (call-process "gh" nil (list t nil) nil
-                                 "pr" "view" (number-to-string pr-number)
-                                 "--json" "headRefName"))
+                                 "pr" "view"
+                                 "-R" owner-and-repo
+                                 (number-to-string pr-number)
+                                 "--json" "headRepository,headRefName"))
       (error "gh returned non-zero"))
     (goto-char (point-min))
-    (alist-get 'headRefName (json-parse-buffer :object-type 'alist))))
+    (let-alist (json-parse-buffer :object-type 'alist)
+      (make-akirak-git-clone-source :type 'github
+                                    :rev-or-ref .headRefName
+                                    :origin (format "https://github.com/%s.git"
+                                                    .headRepository.nameWithOwner)
+                                    :owner-and-repo .headRepository.nameWithOwner
+                                    :host "github.com"))))
 
 (defcustom akirak-git-clone-wait 120
   ""

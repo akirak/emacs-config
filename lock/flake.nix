@@ -671,6 +671,12 @@
       repo = "marginalia";
       type = "github";
     };
+    markdown-mode = {
+      flake = false;
+      owner = "jrblevin";
+      repo = "markdown-mode";
+      type = "github";
+    };
     mastodon = {
       flake = false;
       type = "git";

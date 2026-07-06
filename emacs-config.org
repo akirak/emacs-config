@@ -1001,6 +1001,8 @@ The other variables must not be saved, and they should be put in configuration:
           dired-recursive-deletes 'top
           dired-auto-revert-buffer t
           dired-vc-rename-file t
+          dired-hide-details-hide-absolute-location t
+          dired-filename-display-length 60
           dired-listing-switches "-alh --time-style=long-iso")
     (:mode-repl akirak-shell-new-other-window)
 
@@ -1547,6 +1549,7 @@ Notes:
   (setup frame
     (blink-cursor-mode -1)
     (set-frame-parameter nil 'alpha '(98 . 96))
+    (keymap-global-unset "<f11>")
 
     (:set window-divider-default-places 'bottom-only
           window-divider-default-bottom-width 1)
@@ -2354,6 +2357,7 @@ This is a recommended setting for use with vertico. See https://github.com/minad
         (zap-up-to-char arg char interactive)))
 
     (:with-map prog-mode-map
+      ;; For `text-mode-map', use `akirak-paren-kill-word'.
       (:keymap "<remap> <kill-word>" #'akirak/kill-word-dwim))
 
     (:status opinionated
@@ -2469,9 +2473,9 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
 
 #+begin_src emacs-lisp
   (setup subword
-    ;; (add-hook 'prog-mode-hook (defun akirak/enable-superword-mode ()
-    ;;                             (superword-mode 1)))
-    )
+    (defun akirak/enable-superword-mode ()
+      (superword-mode 1))
+    (add-hook 'text-mode-hook #'akirak/enable-superword-mode))
 #+end_src
 *** tab-bar
 :PROPERTIES:
@@ -2898,6 +2902,8 @@ Elegant, highly legible and customizable themes
     (when (or window-system
               (daemonp))
       (require 'modus-themes)
+      (custom-set-faces
+       '(margin ((t (:background "#c9c0a3")))))
       (load-theme 'modus-operandi :no-confirm)))
 #+end_src
 *** Font families
@@ -5042,7 +5048,7 @@ A mode for editing Kotlin files based on tree-sitter
   (setup lua-ts-mode
     (:file-match "\\.lua\\'"))
 #+end_src
-*** markdown-ts-mode
+*** COMMENT markdown-ts-mode                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2026-06-07 Sun 22:29]
 :END:
@@ -5318,6 +5324,8 @@ This is a collection of various utilities to enhance the experience.
 #+begin_src emacs-lisp
   (setup akirak-avy
     (:global-keymap "C-;" #'akirak-avy-insert-symbol
+                    "C-:" #'akirak-avy-insert-word
+                    "C-'" #'akirak-avy-paragraph-char-2
                     "M-g `" #'akirak-avy-org-block))
 #+end_src
 *** COMMENT akirak-bitwarden                                                   :ARCHIVE:
@@ -5674,6 +5682,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                           nil t)))
 
     (:global-keymap "C-c %" #'akirak-paren-goto-match)
+    (:with-map text-mode-map
+      (:keymap "<remap> <kill-word>" #'akirak-paren-kill-word))
 
     (:status opinionated
       (:global-keymap "M-i c" #'akirak-paren-replace
@@ -5900,6 +5910,7 @@ This is an extra functions for window management.
                       "M-o" #'akirak-window-moderate-1
                       "S-<end>" #'akirak-window-display-buffer-ends
                       "S-<home>" #'akirak-window-display-buffer-starts
+                      "S-<f8>" #'akirak-window-convert-to-side-window
                       "<remap> <delete-window>" #'akirak-window-delete-window
                       "<remap> <abort-recursive-edit>" #'akirak-window-cleanup)))
 #+end_src
@@ -6333,10 +6344,10 @@ Jump to arbitrary positions in visible text and select text quickly.
           avy-styles-alist '((avy-goto-char . at)
                              (avy-goto-char-timer . at-full))
           avy-all-windows t)
-    (:global-keymap "C-'" #'avy-goto-char-timer))
+    (:global-keymap "C-\"" #'avy-goto-char-timer))
 #+end_src
 
-I only use this package via my custom wrappers defined in [[file:lisp/akirak-avy.el]] and other files.
+For keybindings, refer to the configuration for akirak-avy.
 *** beancount                                     :@extra:beancount:
 #+begin_quote
 A major mode to edit Beancount input files.
@@ -8270,19 +8281,43 @@ Interact with ChatGPT or other LLMs
     (:when-loaded
       (fset 'gptel--update-header-line #'ignore)
 
-      (:set gptel-backend (gptel-make-openai "OpenAI"
-                            :key (lambda () (gptel-api-key-from-auth-source "api.openai.com"))
-                            :stream t
-                            :models (akirak-ai-model-prefixed-list "openai/"))
-            gptel-model 'gpt-5)
+      (:set gptel-backend (gptel-make-openai-oauth "OpenAI-sub")
+            gptel-model 'gpt-5.4)
 
-      (gptel-make-gh-copilot "Copilot")
+      ;; OpenAI via API.
+      ;; (:set gptel-backend
+      ;;       (gptel-make-openai "OpenAI"
+      ;;         :key (lambda ()
+      ;;                (gptel-api-key-from-auth-source "api.openai.com"))
+      ;;         :stream t
+      ;;         :models (akirak-ai-model-prefixed-list "openai/")))
+
+      ;; (gptel-make-gh-copilot "Copilot")
+
+      (gptel-make-openai "OpenCode Zen"
+        :host "opencode.ai"
+        :endpoint "/zen/v1"
+        :key (lambda ()
+               (gptel-api-key-from-auth-source "opencode.ai"))
+        :models '(glm-5.2
+                  kimi-k2.7-code
+                  deepseek-v4-pro
+                  deepseek-v4-flash
+                  openrouter/qwen/qwen3.6-plus)
+        :stream t)
 
       (gptel-make-perplexity "Perplexity"
         :key (lambda ()
                (gptel-api-key-from-auth-source "api.perplexity.ai"))
         :stream t)))
 #+end_src
+
+Supported backends:
+
+- [X] OpenAI via subscription (default, requires ChatGPT Plus or higher)
+- [X] OpenCode Go/Zen
+- [ ] Locally-hosted llama-swap: Not part of this repository
+
 *** COMMENT gptel-aibo                                                      :AI:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-02-05 Wed 22:17]
@@ -9167,7 +9202,7 @@ Enrich existing commands with completion annotations
       (add-to-list 'marginalia-annotators
                    '(directory marginalia-annotate-file builtin none))))
 #+end_src
-*** COMMENT markdown-mode                                          :major__mode:ARCHIVE:
+*** markdown-mode                                          :major__mode:
 :PROPERTIES:
 :CREATED_TIME: [2022-02-28 Mon 14:12]
 :END:
@@ -9667,16 +9702,24 @@ Minor mode to automatically balance window margins
 #+begin_src emacs-lisp
   (setup (:package olivetti)
     (:set olivetti-body-width akirak/default-body-width)
+    (:global-keymap "S-<f11>" #'olivetti-mode)
 
     ;; Also hooked into nov-mode. See the package setting
-    (:hook-into org-mode-hook
-                org-memento-timeline-mode-hook)
+    ;; (:hook-into org-mode-hook
+    ;;             org-memento-timeline-mode-hook)
 
     ;; Implement `olivetti-set-width-hook' without tweaking the upstream code.
     (advice-add 'olivetti-expand
                 :after
                 (lambda (&rest _args)
-                  (run-hooks 'olivetti-expand-hook))))
+                  (run-hooks 'olivetti-expand-hook)))
+
+    (advice-add 'olivetti-set-window
+                :after
+                (defun akirak/ad-after-olivetti-set-window (window-or-frame)
+                  (when (windowp window-or-frame)
+                    (require 'akirak-window)
+                    (akirak-window-set-centered-margins window-or-frame)))))
 #+end_src
 *** orderless                                           :completion:
 :PROPERTIES:
@@ -11775,7 +11818,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 220 |
+| [[org-ql-search:tags:packages][packages]]            | 221 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  12 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
@@ -11789,12 +11832,12 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:windows][windows]]             |   5 |
 | [[org-ql-search:tags:dired][dired]]               |   4 |
 | [[org-ql-search:tags:Emacs__Lisp][Emacs__Lisp]]         |   4 |
+| [[org-ql-search:tags:major__mode][major__mode]]         |   4 |
 | [[org-ql-search:tags:files][files]]               |   4 |
 | [[org-ql-search:tags:writing][writing]]             |   4 |
 | [[org-ql-search:tags:IO][IO]]                  |   3 |
 | [[org-ql-search:tags:process][process]]             |   3 |
 | [[org-ql-search:tags:parentheses][parentheses]]         |   3 |
-| [[org-ql-search:tags:major__mode][major__mode]]         |   3 |
 | [[org-ql-search:tags:minibuffer][minibuffer]]          |   3 |
 | [[org-ql-search:tags:history][history]]             |   3 |
 | [[org-ql-search:tags:navigation][navigation]]          |   3 |

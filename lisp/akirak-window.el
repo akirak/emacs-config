@@ -718,6 +718,40 @@ Otherwise, it calls `akirak-window-duplicate-state'."
   (interactive)
   (set-window-dedicated-p (selected-window) (not (window-dedicated-p))))
 
+;;;###autoload
+(defun akirak-window-convert-to-side-window (&optional arg window)
+  (interactive "P")
+  (if (or (when (window-at-side-p nil 'left)
+            (set-window-parameter window 'window-side 'left)
+            t)
+          (when (window-at-side-p nil 'right)
+            (set-window-parameter window 'window-side 'right)
+            t))
+      (let ((current-width (window-width window))
+            (content-width (if (numberp arg)
+                               arg
+                             (1+ (akirak-window--content-width window)))))
+        (when (< content-width current-width)
+          (window-resize window (- content-width current-width)
+                         'horizontal))
+        (toggle-window-dedicated window t))
+    (user-error "Cannot convert to a side window")))
+
+(defun akirak-window--content-width (&optional window)
+  (with-selected-window (or window
+                            (selected-window))
+    (save-excursion
+      (goto-char (window-start window))
+      (end-of-line 1)
+      (let ((max (car (posn-col-row (posn-at-point (point)) t))))
+        (while (< (point) (point-max))
+          (end-of-line 2)
+          (let ((width (car (posn-col-row (posn-at-point (point)) t))))
+            (when (or (null max)
+                      (> width max))
+              (setq max width))))
+        max))))
+
 (defvar akirak-window-last-nonhelp-window nil)
 
 (defmacro akirak-window--with-each-non-file-buffer-window (&rest body)
@@ -743,6 +777,38 @@ Otherwise, it calls `akirak-window-duplicate-state'."
   (akirak-window--with-each-non-file-buffer-window
    (goto-char (point-min))
    (recenter-top-bottom 1)))
+
+;;;###autoload
+(defun akirak-window-set-centered-margins (window)
+  "Set the margins for a centered WINDOW."
+  (let* ((body-width (window-body-width window))
+         (margins (window-margins window))
+         (window-width (+ (window-width window)
+                          (car margins)
+                          (cdr margins)))
+         (frame-width (frame-width (window-frame window)))
+         (left-column (window-left-column window))
+         (right-column (- frame-width
+                          (+ left-column
+                             window-width)))
+         (leftw (window-in-direction 'left window))
+         (rightw (window-in-direction 'right window)))
+    (if (and (or (null leftw)
+                 (window-at-side-p leftw))
+             (or (null rightw)
+                 (window-at-side-p rightw)))
+        (let ((left-margin (- (/ (- frame-width body-width)
+                                 2)
+                              left-column))
+              (right-margin (- (/ (- frame-width body-width)
+                                  2)
+                               right-column)))
+          (set-window-margins window left-margin right-margin))
+      (set-window-margins window
+                          (/ (- window-width body-width)
+                             2)
+                          (/ (- window-width body-width)
+                             2)))))
 
 (provide 'akirak-window)
 ;;; akirak-window.el ends here

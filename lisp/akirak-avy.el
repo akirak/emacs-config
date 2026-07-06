@@ -81,14 +81,43 @@ If CALLBACK is a function, it is called with the selected url."
 (defun akirak-avy--symbol-make-args ()
   (list (cl-case (derived-mode-p 'org-mode)
           (org-mode
-           (akirak-avy--org-symbol-at-point))
+           (akirak-avy--org-thing-at-point 'symbol))
           (otherwise
            (save-match-data
              (when (thing-at-point-looking-at
                     (rx (+ (not (any "\"'`.:;,/\\()[]{}" blank "\n")))))
                (match-string-no-properties 0)))))))
 
-(defun akirak-avy--org-symbol-at-point ()
+;;;###autoload
+(defun akirak-avy-insert-word (&optional arg)
+  "Like `akirak-avy-insert-symbol', but for a word boundary."
+  (interactive "P")
+  (akirak-avy--run #'kill-new
+                   #'akirak-avy--word-make-args
+                   (pcase arg
+                     ('-
+                      (lambda ()
+                        (message "Saved the text to kill ring")))
+                     (_
+                      (pcase (derived-mode-p 'eat-mode)
+                        (`eat-mode
+                         #'eat-yank)
+                        (_
+                         #'yank))))))
+
+(defun akirak-avy--word-make-args ()
+  (list (cl-case (derived-mode-p 'org-mode)
+          (org-mode
+           (akirak-avy--org-thing-at-point 'word))
+          (otherwise
+           (save-match-data
+             (when (thing-at-point-looking-at
+                    (rx word-start
+                        (+ (not (any space)))
+                        word-end))
+               (match-string-no-properties 0)))))))
+
+(defun akirak-avy--org-thing-at-point (thing)
   (cond
    ((and (get-char-property (point) 'org-emphasis)
          (thing-at-point-looking-at org-emph-re))
@@ -100,7 +129,7 @@ If CALLBACK is a function, it is called with the selected url."
     (or (match-string-no-properties 2)
         (match-string-no-properties 1)))
    (t
-    (thing-at-point 'symbol t))))
+    (thing-at-point thing t))))
 
 ;;;###autoload
 (defun akirak-avy-symbol-overlay-put ()
@@ -147,6 +176,33 @@ If CALLBACK is a function, it is called with the selected url."
   (interactive)
   (avy-with akirak-avy-org-block
     (avy-jump org-block-regexp)))
+
+;;;###autoload
+(defun akirak-avy-paragraph-char-2 (char1 char2)
+  ;; Based on `avy-goto-char-2' by the original author, Oleh Krehel.
+  (interactive (list (let ((c1 (read-char "char 1: " t)))
+                       (if (memq c1 '(? ?\b))
+                           (keyboard-quit)
+                         c1))
+                     (let ((c2 (read-char "char 2: " t)))
+                       (cond ((eq c2 ?)
+                              (keyboard-quit))
+                             ((memq c2 avy-del-last-char-by)
+                              (keyboard-escape-quit)
+                              (call-interactively 'avy-goto-char-2))
+                             (t
+                              c2)))))
+  (pcase (bounds-of-thing-at-point 'paragraph)
+    (`(,beg . ,end)
+     (let ((case-fold-search nil))
+       (avy-with akirak-avy-paragraph-char
+         (avy-jump
+          (rx-to-string `(and (or bol word-start (* (syntax punctuation)))
+                              ,(string char1 char2)))
+          :beg beg
+          :end end))))
+    (_
+     (user-error "No paragraph detected at point"))))
 
 (provide 'akirak-avy)
 ;;; akirak-avy.el ends here

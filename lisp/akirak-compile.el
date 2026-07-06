@@ -245,8 +245,9 @@ are displayed in the frame."
      (let ((buffer (read-buffer "Visit a compilation buffer: "
                                 nil t
                                 (lambda (name-or-cell)
-                                  (akirak-compile-buffer-p (or (cdr-safe name-or-cell)
-                                                               (get-buffer name-or-cell)))))))
+                                  (akirak-compile-buffer-p
+                                   (or (cdr-safe name-or-cell)
+                                       (get-buffer name-or-cell)))))))
        (pop-to-buffer buffer)))
     (_
      (let ((default-directory (abbreviate-file-name default-directory)))
@@ -380,11 +381,13 @@ are displayed in the frame."
          (let* ((entries (mapcar `(lambda (buffer)
                                     (list (file-relative-name
                                            (file-truename
-                                            (buffer-local-value 'default-directory buffer))
+                                            (buffer-local-value 'default-directory
+                                                                buffer))
                                            ,root)
                                           (buffer-name buffer)
                                           (substring-no-properties
-                                           (buffer-local-value 'compile-command buffer))))
+                                           (buffer-local-value 'compile-command
+                                                               buffer))))
                                  buffers))
                 (worktree-name (file-name-nondirectory
                                 (directory-file-name (vc-git-root default-directory))))
@@ -425,7 +428,8 @@ are displayed in the frame."
                                              (string-match-p (car cell) ,command)))
                               (mapcar #'cdr)))
          (matching-projects (seq-filter (apply-partially (lambda (backends backend)
-                                                           (memq (car backend) backends))
+                                                           (memq (car backend)
+                                                                 backends))
                                                          matching-backends)
                                         projects))
          (directories (thread-last
@@ -482,8 +486,10 @@ are displayed in the frame."
                               (member "pnpm-workspace.yaml" files))
                    ;; Detect pnpm projects inside pnpm workspaces.
                    (push (cons (if (and (equal (car cell) "package.json")
-                                        (locate-dominating-file dir "pnpm-workspace.yaml"))
-                                   (cdr (assoc "pnpm-lock.yaml" akirak-compile-package-file-alist))
+                                        (locate-dominating-file dir
+                                                                "pnpm-workspace.yaml"))
+                                   (cdr (assoc "pnpm-lock.yaml"
+                                               akirak-compile-package-file-alist))
                                  (cdr cell))
                                dir)
                          result)))))
@@ -500,8 +506,10 @@ are displayed in the frame."
       (let ((command-alist (if (eq backend 'package-json)
                                (cond
                                 ((seq-find `(lambda (cell)
-                                              (and (memq (car cell) '(pnpm bun deno yarn npm))
-                                                   (equal (cdr cell) ,dir)))
+                                              (and (memq (car cell)
+                                                         '(pnpm bun deno yarn npm))
+                                                   (equal (cdr cell)
+                                                          ,dir)))
                                            projects)
                                  nil)
                                 ;; Inside a pnpm workspace, treat package.json
@@ -538,6 +546,37 @@ are displayed in the frame."
         (or (car (member result candidates))
             result)))))
 
+(defmacro akirak-compile--with-command-buffer (command-and-args &rest body)
+  "Insert the standard output from a command into the buffer."
+  (declare (indent 1))
+  `(let* ((command (car ,command-and-args))
+          (executable (executable-find command))
+          (args (cdr ,command-and-args)))
+     (when command
+       (let ((err-file (make-temp-file command)))
+         (unwind-protect
+             (let ((envrc-dir (locate-dominating-file default-directory ".envrc")))
+               (with-temp-buffer
+                 (unless (zerop (if (and envrc-dir (executable-find "direnv"))
+                                    (apply #'call-process "direnv"
+                                           nil (list t err-file) nil
+                                           "exec"
+                                           (file-relative-name
+                                            (expand-file-name envrc-dir))
+                                           executable args)
+                                  (apply #'call-process executable
+                                         nil (list t err-file) nil
+                                         args)))
+                   (error "Error from command %s: %s"
+                          (mapconcat #'shell-quote-argument (cons command args)
+                                     " ")
+                          (with-temp-buffer
+                            (insert-file-contents err-file)
+                            (buffer-string))))
+                 (goto-char (point-min))
+                 ,@body))
+           (delete-file err-file))))))
+
 (defun akirak-compile--gen-commands (backend dir)
   "Generate an alist of commands for BACKEND at DIR."
   (cl-macrolet
@@ -550,13 +589,13 @@ are displayed in the frame."
                   value)))))
     (cl-case backend
       (mix (with-memoize
-            (let (result)
-              (with-temp-buffer
-                (akirak-compile--insert-stdout "mix" "help")
-                (goto-char (point-min))
+            (let (result
+                  (default-directory dir))
+              (akirak-compile--with-command-buffer '("mix" "help")
                 (save-match-data
-                  (while (re-search-forward (rx bol (* space) (group "mix" (* (not (any "#"))))
-                                                " # " (group (+ nonl)) eol)
+                  (while (re-search-forward (rx bol (group "mix" (* (not (any "#"))))
+                                                (+ blank)
+                                                "# " (group (+ nonl)) eol)
                                             nil t)
                     (push (list (string-trim-right (match-string 1))
                                 'annotation
@@ -569,37 +608,38 @@ are displayed in the frame."
                (akirak-compile--just-candidates))))
       (lake (with-memoize
              ;; TODO: Add support for lake scripts
-             (append (when (file-exists-p "lakefile.toml")
-                       (with-temp-buffer
-                         (akirak-compile--insert-stdout "dasel" "-r" "toml" "-w" "json" "-f" "lakefile.toml")
-                         (goto-char (point-min))
-                         (thread-last
-                           (json-parse-buffer :array-type 'list :object-type 'alist)
-                           (alist-get 'lean_exe)
-                           (mapcar (lambda (alist)
-                                     (list (format "lake exe %s"
-                                                   (shell-quote-argument (alist-get 'name alist)))
-                                           'annotation
-                                           (alist-get 'root alist)))))))
-                     (when (file-exists-p "lakefile.lean")
-                       (let (results)
-                         ;; lakefile.lean is parsed using naive regexp matching.
-                         ;; For an accurate implementation, perhaps tomograph
-                         ;; <https://github.com/leanprover/Pantograph> can be
-                         ;; used.
-                         (with-temp-buffer
-                           (insert-file-contents "lakefile.lean")
-                           (goto-char (point-min))
-                           (while (re-search-forward (rx bol (* blank) "lean_exe"
-                                                         (+ blank)
-                                                         (group (+ (any "_" alnum))))
-                                                     nil t)
-                             (push (list (format "lake exe %s"
-                                                 (shell-quote-argument (match-string 1))))
-                                   results)))
-                         results)))))
+             (let ((default-directory dir))
+               (append (when (file-exists-p "lakefile.toml")
+                         (akirak-compile--with-command-buffer
+                             '("dasel" "-r" "toml" "-w" "json" "-f" "lakefile.toml")
+                           (thread-last
+                             (json-parse-buffer :array-type 'list :object-type 'alist)
+                             (alist-get 'lean_exe)
+                             (mapcar (lambda (alist)
+                                       (list (format "lake exe %s"
+                                                     (shell-quote-argument (alist-get 'name alist)))
+                                             'annotation
+                                             (alist-get 'root alist)))))))
+                       (when (file-exists-p "lakefile.lean")
+                         (let (results)
+                           ;; lakefile.lean is parsed using naive regexp matching.
+                           ;; For an accurate implementation, perhaps tomograph
+                           ;; <https://github.com/leanprover/Pantograph> can be
+                           ;; used.
+                           (with-temp-buffer
+                             (insert-file-contents "lakefile.lean")
+                             (goto-char (point-min))
+                             (while (re-search-forward (rx bol (* blank) "lean_exe"
+                                                           (+ blank)
+                                                           (group (+ (any "_" alnum))))
+                                                       nil t)
+                               (push (list (format "lake exe %s"
+                                                   (shell-quote-argument (match-string 1))))
+                                     results)))
+                           results))))))
       (make (with-memoize
-             (let (results)
+             (let (results
+                   (default-directory dir))
                (dolist (file (seq-filter #'file-exists-p (list "Makefile")))
                  (with-temp-buffer
                    (insert-file-contents file)
@@ -611,24 +651,23 @@ are displayed in the frame."
                                results))))))
                results)))
       (zig (with-memoize
-            (with-temp-buffer
-              (akirak-compile--insert-stdout "zig" "build" "--help")
-              (goto-char (point-min))
-              (re-search-forward (rx bol "Steps:"))
-              (delete-region (point-min) (point))
-              (re-search-forward (rx bol "General Options:"))
-              (delete-region (match-beginning 0) (point-max))
-              (let (result)
-                (goto-char (point-min))
-                (while (re-search-forward (rx bol (* blank)
-                                              (group (+ (any "-_" alnum)))
-                                              (?  " (default)")
-                                              (optional (+ blank) (group (+ nonl))))
-                                          nil t)
-                  (push (list (format "zig build %s" (shell-quote-argument (match-string 1)))
-                              'annotation (match-string 2))
-                        result))
-                result))))
+            (let ((default-directory dir))
+              (akirak-compile--with-command-buffer '("zig" "build" "--help")
+                (re-search-forward (rx bol "Steps:"))
+                (delete-region (point-min) (point))
+                (re-search-forward (rx bol "General Options:"))
+                (delete-region (match-beginning 0) (point-max))
+                (let (result)
+                  (goto-char (point-min))
+                  (while (re-search-forward (rx bol (* blank)
+                                                (group (+ (any "-_" alnum)))
+                                                (?  " (default)")
+                                                (optional (+ blank) (group (+ nonl))))
+                                            nil t)
+                    (push (list (format "zig build %s" (shell-quote-argument (match-string 1)))
+                                'annotation (match-string 2))
+                          result))
+                  result)))))
       ((bun pnpm yarn npm deno)
        ;; We only read package.json, so memoization wouldn't be necessary.
        (let* ((command (symbol-name backend))
@@ -638,7 +677,8 @@ are displayed in the frame."
                                        " run")
                                       ((eq backend 'deno)
                                        " task"))
-                                     " ")))
+                                     " "))
+              (default-directory dir))
          (append (map-apply `(lambda (subcommand body)
                                (list (concat ,script-prefix subcommand)
                                      'annotation body
@@ -770,29 +810,6 @@ are displayed in the frame."
            (mapconcat #'format-token line-tokens)))
       (string-join (mapcar #'format-line body) "; "))))
 
-(defun akirak-compile--insert-stdout (command &rest args)
-  "Insert the standard output from a command into the buffer."
-  (when (executable-find command)
-    (let ((err-file (make-temp-file command)))
-      (unwind-protect
-          (let ((envrc-dir (locate-dominating-file default-directory ".envrc")))
-            (unless (zerop (if (and envrc-dir (executable-find "direnv"))
-                               (apply #'call-process "direnv"
-                                      nil (list t err-file) nil
-                                      "exec"
-                                      (file-relative-name (expand-file-name envrc-dir))
-                                      command args)
-                             (apply #'call-process command
-                                    nil (list t err-file) nil
-                                    args)))
-              (error "Error from command %s: %s"
-                     (mapconcat #'shell-quote-argument (cons command args)
-                                " ")
-                     (with-temp-buffer
-                       (insert-file-contents err-file)
-                       (buffer-string)))))
-        (delete-file err-file)))))
-
 (defun akirak-compile-run-test (name language)
   "Run a test case NAME in the LANGUAGE."
   (let ((default-directory (abbreviate-file-name default-directory)))
@@ -807,7 +824,8 @@ are displayed in the frame."
            (let ((default-directory root)
                  (command (pcase type
                             (`gradlew
-                             (format "./gradlew test --tests %s" (shell-quote-argument name))))))
+                             (format "./gradlew test --tests %s"
+                                     (shell-quote-argument name))))))
              (compile command))))
       (user-error "No project"))))
 

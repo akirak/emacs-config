@@ -531,9 +531,7 @@ the original minor mode."
   (pcase program
     (`codex
      (require 'akirak-codex)
-     (if (akirak-codex-waiting-p buffer)
-         'done
-       'running))
+     (akirak-codex-buffer-status buffer))
     (`pi
      (require 'akirak-pi)
      (if (akirak-pi-waiting-p buffer)
