@@ -62,7 +62,8 @@
   (make-variable-buffer-local 'akirak-org-shell-buffer)
   (unless (akirak-org-shell--buffer-live-p)
     (setq akirak-org-shell-buffer
-          (akirak-org-shell--read-buffer "Terminal buffer: " akirak-org-shell-buffer)))
+          (akirak-org-shell--read-buffer "Terminal buffer: "
+                                         akirak-org-shell-buffer)))
   (transient-setup 'akirak-org-shell-transient))
 
 (defun akirak-org-shell--read-buffer (prompt default)
