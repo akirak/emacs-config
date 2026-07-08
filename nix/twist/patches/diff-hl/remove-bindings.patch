@@ -1,0 +1,25 @@
+From 11caad30521c0f8df21d70be1d3d3e0ffa2910f5 Mon Sep 17 00:00:00 2001
+From: Akira Komamura <akira.komamura@gmail.com>
+Date: Mon, 6 Jul 2026 01:24:55 +0900
+Subject: [PATCH] Remove the built-in bindings
+
+---
+ diff-hl.el | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/diff-hl.el b/diff-hl.el
+index 7e7efdf..f2f33b8 100644
+--- a/diff-hl.el
++++ b/diff-hl.el
+@@ -1339,8 +1339,6 @@ The value of this variable is a mode line template as in
+ (define-minor-mode diff-hl-mode
+   "Toggle VC diff highlighting."
+   :lighter diff-hl-lighter
+-  :keymap `(([remap vc-diff] . diff-hl-diff-goto-hunk)
+-            (,diff-hl-command-prefix . diff-hl-command-map))
+   (if diff-hl-mode
+       (progn
+         (diff-hl-maybe-define-bitmaps)
+-- 
+2.54.0
+

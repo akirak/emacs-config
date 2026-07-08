@@ -23,7 +23,7 @@
        (propertize "not set" 'face 'transient-inactive-value))
      (propertize ")" 'face 'transient-inactive-value))))
 
-(defvar-local akirak-org-shell-buffer nil)
+(defvar akirak-org-shell-buffer nil)
 
 (transient-define-infix akirak-org-shell-buffer-infix ()
   :class 'akirak-org-shell-buffer-variable
@@ -55,12 +55,15 @@
     akirak-org-shell-send-org-entry-as-markdown)
    ("RET" "Send any command" akirak-org-shell-send-command)]
   ["Agent skill"
+   :if akirak-org-shell--buffer-live-p
    ("$ <C-return>" "Run with the entry body"
     akirak-org-shell-use-skill-with-entry-body)]
   (interactive nil org-mode)
-  (unless akirak-org-shell-buffer
+  (make-variable-buffer-local 'akirak-org-shell-buffer)
+  (unless (akirak-org-shell--buffer-live-p)
     (setq akirak-org-shell-buffer
-          (akirak-org-shell--read-buffer "Terminal buffer: " akirak-org-shell-buffer)))
+          (akirak-org-shell--read-buffer "Terminal buffer: "
+                                         akirak-org-shell-buffer)))
   (transient-setup 'akirak-org-shell-transient))
 
 (defun akirak-org-shell--read-buffer (prompt default)

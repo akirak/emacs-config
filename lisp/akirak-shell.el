@@ -80,7 +80,9 @@ the original minor mode."
     ('(16)
      (if-let* ((pr (project-current)))
          (pcase (akirak-shell--buffers-for-project pr)
-           (`nil (akirak-shell-select))
+           (`nil (if (akirak-shell-buffer-list)
+                     (akirak-shell-select)
+                   (akirak-shell-transient)))
            (`(,buffer) (pop-to-buffer buffer))
            (buffers (pop-to-buffer
                      (read-buffer "Switch to a shell buffer: "
