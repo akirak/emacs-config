@@ -36,7 +36,7 @@
        (buffer-live-p akirak-org-shell-buffer)))
 
 ;;;###autoload (autoload 'akirak-org-shell-transient "akirak-org-shell" nil 'interactive)
-(transient-define-prefix akirak-org-shell-transient ()
+(transient-define-prefix akirak-org-shell-transient (&optional arg)
   :refresh-suffixes t
   ["Options"
    ("-b" akirak-org-shell-buffer-infix)]
@@ -58,12 +58,23 @@
    :if akirak-org-shell--buffer-live-p
    ("$ <C-return>" "Run with the entry body"
     akirak-org-shell-use-skill-with-entry-body)]
-  (interactive nil org-mode)
+  (interactive "P" org-mode)
   (make-variable-buffer-local 'akirak-org-shell-buffer)
-  (unless (akirak-org-shell--buffer-live-p)
-    (setq akirak-org-shell-buffer
-          (akirak-org-shell--read-buffer "Terminal buffer: "
-                                         akirak-org-shell-buffer)))
+  (if (numberp arg)
+      (if-let* ((window (akirak-window--other-window nil arg))
+                (buffer (window-buffer window)))
+          (if (akirak-shell-buffer-p buffer)
+              (progn
+                (setq akirak-org-shell-buffer buffer)
+                (message "Set the shell buffer to %s (%s)"
+                         (buffer-name buffer)
+                         (abbreviate-file-name (buffer-local-value 'default-directory buffer))))
+            (user-error "Not a shell buffer: %s" (buffer-name buffer)))
+        (user-error "Cannot find the window for the argument %d" arg))
+    (unless (akirak-org-shell--buffer-live-p)
+      (setq akirak-org-shell-buffer
+            (akirak-org-shell--read-buffer "Terminal buffer: "
+                                           akirak-org-shell-buffer))))
   (transient-setup 'akirak-org-shell-transient))
 
 (defun akirak-org-shell--read-buffer (prompt default)
