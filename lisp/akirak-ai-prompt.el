@@ -19,7 +19,7 @@
   :prompt "Terminal buffer: "
   :description "Buffer")
 
-(defun akirak-org-shell--buffer-live-p ()
+(defun akirak-ai-prompt--buffer-live-p ()
   (and akirak-ai-prompt-shell-buffer
        (buffer-live-p akirak-ai-prompt-shell-buffer)))
 
@@ -52,6 +52,7 @@
    ("R" "Region" akirak-ai-prompt-send-region
     :if use-region-p)]
   (interactive nil)
+  (make-variable-buffer-local 'akirak-ai-prompt-shell-buffer)
   ;; For safety of not sending prompts to a wrong buffer, ensure the shell
   ;; buffer is opened in an ancestor directory of the current working directory.
   (when (and akirak-ai-prompt-shell-buffer
@@ -77,7 +78,7 @@
 (defun akirak-ai-prompt-send-with-line-number ()
   "Within an AI shell, send a prompt with the line number at point."
   (interactive)
-  (cl-assert (akirak-org-shell--buffer-live-p))
+  (cl-assert (akirak-ai-prompt--buffer-live-p))
   (let* ((line (line-number-at-pos))
          (file (buffer-file-name (or (buffer-base-buffer)
                                      (current-buffer))))
@@ -93,7 +94,7 @@
 (defun akirak-ai-prompt-send-with-function-name ()
   "Within an AI shell, send a prompt with the function name at point."
   (interactive)
-  (cl-assert (akirak-org-shell--buffer-live-p))
+  (cl-assert (akirak-ai-prompt--buffer-live-p))
   (let* ((name (or (which-function)
                    (user-error "No function")))
          (file (buffer-file-name (or (buffer-base-buffer)
@@ -132,7 +133,7 @@
 (defun akirak-ai-prompt-fix-flymake-error (&optional arg)
   "Within an AI shell, fix the error at the current point."
   (interactive "P")
-  (cl-assert (akirak-org-shell--buffer-live-p))
+  (cl-assert (akirak-ai-prompt--buffer-live-p))
   (require 'akirak-flymake)
   (let ((buffer akirak-ai-prompt-shell-buffer))
     (akirak-shell-send-string-to-buffer buffer
