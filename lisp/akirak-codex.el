@@ -50,11 +50,13 @@
   ["Options"
    ("-m" "Model" "--model="
     ;; :always-read t
-    :init-value (lambda (obj) (oset obj value "gpt-5.4"))
-    :choices ("gpt-5.5"
+    :init-value (lambda (obj) (oset obj value "gpt-5.6-luna"))
+    :choices ("gpt-5.6-sol"
+              "gpt-5.6-terra"
+              "gpt-5.6-luna"
+              "gpt-5.5"
               "gpt-5.4"
-              "gpt-5.4-mini"
-              "gpt-5.3-codex"))
+              "gpt-5.4-mini"))
    ("-r" akirak-codex-set-reasoning-effort)
    ("-s" "Sandbox" "--sandbox="
     :choices ("read-only"
