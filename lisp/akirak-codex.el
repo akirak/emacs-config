@@ -29,13 +29,13 @@
 
 (defvar akirak-codex-directory nil)
 
-(defvar akirak-codex-reasoning-effort nil)
+(defvar akirak-codex-reasoning-effort "high")
 
 (transient-define-infix akirak-codex-set-reasoning-effort ()
   :class 'akirak-transient-choice-variable
   :cycle t
   :variable 'akirak-codex-reasoning-effort
-  :choices '("medium" "high" "extra-high" "low")
+  :choices '("low" "medium" "high" "xhigh" "max")
   :description "Reasoning effort")
 
 (defvar akirak-codex-enable-collaboration-modes nil)
