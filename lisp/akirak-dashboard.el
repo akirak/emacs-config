@@ -282,7 +282,7 @@
                                       (pcase-exhaustive
                                           (akirak-shell-buffer-status prog buffer)
                                         (`done "✅")
-                                        (`running "⌛")
+                                        (`waiting "⌛")
                                         (`prompt "❓")
                                         (`nil "unknown")))
                             (if (buffer-local-value 'compilation-arguments buffer)
