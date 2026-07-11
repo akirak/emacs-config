@@ -632,19 +632,14 @@
     (open-line n)))
 
 ;;;###autoload
-(defun akirak-treesit-raise-node ()
-  "Replace the parent node with the current node.
+(defun akirak-treesit-raise-node (begin end)
+  "Replace the parent node with the nodes selected in the region.
 
 This is primarily intended for editing JSX/TSX."
-  (interactive)
-  (let* ((node (treesit-node-at (point)))
-         (start (treesit-node-start node))
-         (parent node))
-    (while (= start (treesit-node-start parent))
-      (setq node parent)
-      (setq parent (treesit-node-parent node)))
-    (let ((string (buffer-substring (treesit-node-start node)
-                                    (treesit-node-end node))))
+  (interactive "r")
+  (let* ((nodes (akirak-treesit--region-nodes begin end))
+         (parent (treesit-node-parent (car nodes))))
+    (let ((string (buffer-substring begin end)))
       (goto-char (treesit-node-end parent))
       (push-mark)
       (goto-char (treesit-node-start parent))
