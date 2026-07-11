@@ -656,7 +656,8 @@ This is primarily intended for editing JSX/TSX."
         (activate-mark))
       (atomic-change-group
         (delete-region (region-beginning) (region-end))
-        (save-excursion (insert string))))))
+        (save-excursion (insert string))
+        (indent-region (point) (+ (point) (- end begin)))))))
 
 ;;;###autoload
 (defun akirak-treesit-swap-selected-node (arg)
