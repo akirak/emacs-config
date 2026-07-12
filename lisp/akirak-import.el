@@ -50,9 +50,10 @@
                          (if (char-uppercase-p (aref identifier 0))
                              (concat "type " identifier)
                            identifier))))))
-    ((typescript-ts-mode tsx-ts-mode)
+    ((typescript-ts-mode tsx-ts-mode
+                         web-mode markdown-mode markdown-ts-mode astro-ts-mode)
      :regexp ,(rx bol "import " (+ nonl))
-     :extensions (".ts" ".tsx")
+     :extensions (".ts" ".tsx" ".mdx" ".mdoc" ".astro")
      :source-directories ("src" "app")
      :package-file "package.json"
      :fixup-function akirak-import--typescript-fixup
