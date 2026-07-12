@@ -9216,7 +9216,9 @@ Major mode for Markdown-formatted text
 #+begin_src emacs-lisp
   (setup (:package markdown-mode)
     (:file-match "\\.md\\'" "\\.markdown\\'"
-                 "\\.mdoc\\'" "\\.mdx\\'"
+                 "\\.mdoc\\'"
+                 ;; Use `web-mode' for *.mdx instead
+                 ;; "\\.mdx\\'"
                  "\\.livemd\\'")
     (:with-mode gfm-mode
       (:file-match "README.md\\'"))
@@ -11010,6 +11012,7 @@ major mode for editing web templates
     (:set web-mode-enable-front-matter-block t)
     (:org-src-lang "html")
     (:file-match "\\.html?\\'"
+                 "\\.mdx\\'"
                  "\\.sface\\'")
 
     (:keymap "C-c /" #'akirak-web-mode-surround
