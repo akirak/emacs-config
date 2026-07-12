@@ -774,7 +774,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   ;; buffer.c
   (setup line-spacing
-    (:with-mode (org-mode markdown-mode)
+    (:with-mode (org-mode markdown-mode web-mode)
       (:local-set line-spacing 0.5))
     (:with-mode (Help-mode helpful-mode Info-mode)
       (:local-set line-spacing 0.3))
