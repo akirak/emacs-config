@@ -5233,8 +5233,7 @@ Major mode for editing YAML files
 :CUSTOM_ID: zig-ts-mode
 :END:
 #+begin_quote
-Tree Sitter support for Zig
-[[https://codeberg.org/meow_king/zig-ts-mode]]
+Major mode for Zig code
 #+end_quote
 
 #+begin_src emacs-lisp
