@@ -11009,7 +11009,9 @@ major mode for editing web templates
 
 #+begin_src emacs-lisp
   (setup (:package web-mode)
-    (:set web-mode-enable-front-matter-block t)
+    (:set web-mode-enable-front-matter-block t
+          web-mode-enable-auto-closing nil
+          web-mode-enable-auto-quoting nil)
     (:org-src-lang "html")
     (:file-match "\\.html?\\'"
                  "\\.mdx\\'"
