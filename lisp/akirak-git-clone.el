@@ -339,9 +339,13 @@ DIR is an optional destination directory to clone the repository into."
                   (let ((default-directory dest))
                     (message "Updating the branch...")
                     (call-process "git" nil nil nil
+                                  "switch" branch)
+                    (call-process "git" nil nil nil
                                   "pull" "origin" "HEAD")
                     (akirak-git-clone--browse-diff))
-                (akirak-git-clone--clone origin dest :content-path content-path
+                (akirak-git-clone--clone origin dest
+                                         :ref branch
+                                         :content-path content-path
                                          :other-window other-window)))))
       (if (file-directory-p repo)
           (let ((default-directory repo))
