@@ -538,7 +538,7 @@ the original minor mode."
      (require 'akirak-pi)
      (if (akirak-pi-waiting-p buffer)
          'done
-       'running))
+       'waiting))
     (_
      nil)))
 
