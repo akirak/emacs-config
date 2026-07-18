@@ -616,6 +616,7 @@ the original minor mode."
     (`done "✅")
     (`waiting "⌛")
     (`prompt "⏸️")
+    (`fresh "🌱")
     (`nil "❓")))
 
 ;;;###autoload

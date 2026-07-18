@@ -215,7 +215,11 @@
          'waiting)
         ((rx bol "─ Worked for ")
          'done)
-        ((guard (string-match-p (rx (* blank) "Press enter to confirm or esc to cancel")
+        ((rx bol "• You have " (+ digit)
+             " usage limit resets available.")
+         'fresh)
+        ((guard (string-match-p (rx (* blank)
+                                    "Press enter to confirm or esc to cancel")
                                 (buffer-substring-no-properties
                                  (line-beginning-position)
                                  (line-end-position))))
