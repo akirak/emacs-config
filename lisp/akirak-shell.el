@@ -37,6 +37,8 @@
 (defconst akirak-shell-mode-list
   '(eat-mode agent-shell-mode))
 
+(defvar-local akirak-shell-last-input nil)
+
 (define-minor-mode akirak-shell-compilation-minor-mode
   "Toggle Compilation minor mode for the shell buffer."
   :lighter " Eat-Compilation"
@@ -448,6 +450,7 @@ the original minor mode."
 (cl-defun akirak-shell-send-string-to-buffer (window-or-buffer
                                               input
                                               &key compilation-regexp
+                                              redacted
                                               confirm)
   (declare (indent 1))
   (interactive (list (or (thread-last
@@ -487,6 +490,10 @@ the original minor mode."
            ;; Currently no codex support
            (_
             (eat-term-send-string-as-yank eat-terminal input)))
+         (setq-local akirak-shell-last-input
+                     (if redacted
+                         "***"
+                       input))
          (sit-for 0.2)
          (when confirm
            (eat-term-input-event eat-terminal 1 ?\C-m)
@@ -508,26 +515,35 @@ the original minor mode."
      (`codex
       (akirak-codex-recent-output-to-org buffer n)))))
 
-(cl-defun akirak-shell-detect-buffer-program (buffer)
+(defun akirak-shell-detect-buffer-program (buffer)
   (declare (indent 1))
   (pcase (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
                                   '(eat-mode))
     (`eat-mode
-     (pcase (akirak-shell-get-command buffer)
-       (`("aider" . ,_)
-        'aider)
-       (`("claude" . ,_)
-        'claude)
-       (`("pi" . ,_)
-        'pi)
-       (`("copilot" . ,_)
-        'copilot)
-       (`("codex" . ,_)
-        'codex)
-       (`("opencode" . ,_)
-        'opencode)
-       (`((rx bol "gemini") . ,_)
-        'gemini)))))
+     (akirak-shell-program-from-command (akirak-shell-get-command buffer)))))
+
+(defun akirak-shell-program-from-command (command &rest args)
+  (pcase (cond
+          (args
+           (car command args))
+          ((listp command)
+           command)
+          (t
+           (list command)))
+    (`("aider" . ,_)
+     'aider)
+    (`("claude" . ,_)
+     'claude)
+    (`("pi" . ,_)
+     'pi)
+    (`("copilot" . ,_)
+     'copilot)
+    (`("codex" . ,_)
+     'codex)
+    (`("opencode" . ,_)
+     'opencode)
+    (`((rx bol "gemini") . ,_)
+     'gemini)))
 
 (defun akirak-shell-buffer-status (program buffer)
   (pcase program
@@ -594,6 +610,51 @@ the original minor mode."
        (or (null dir)
            (file-equal-p (buffer-local-value 'default-directory buf)
                          dir))))
+
+(defun akirak-shell-buffer-status-icon (prog buffer)
+  (pcase-exhaustive (akirak-shell-buffer-status prog buffer)
+    (`done "✅")
+    (`waiting "⌛")
+    (`prompt "⏸️")
+    (`nil "❓")))
+
+;;;###autoload
+(defun akirak-shell-ad-around-annotate-buffer (orig cand)
+  "Annotate a buffer candidate.
+
+The ORIG is supposed to be `marginalia-annotate-buffer'."
+  (let ((buffer (or (and (stringp cand)
+                         (get-text-property 0 'uniquify-orig-buffer cand))
+                    (get-buffer cand))))
+    (if (memq (buffer-local-value 'major-mode buffer)
+              akirak-shell-mode-list)
+        (let* ((command-and-args (akirak-shell-get-command buffer))
+               (program (akirak-shell-program-from-command command-and-args))
+               (last-input (buffer-local-value 'akirak-shell-last-input buffer)))
+          (format-mode-line `(" "
+                              ,(or (and program
+                                        (concat (akirak-shell-buffer-status-icon
+                                                 program buffer)
+                                                " "))
+                                   "")
+                              ,(abbreviate-file-name
+                                (buffer-local-value 'default-directory buffer))
+                              " "
+                              ,(if last-input
+                                   (format "(%s)" (car command-and-args))
+                                 (list :propertize
+                                       (mapconcat #'shell-quote-argument
+                                                  command-and-args
+                                                  " ")
+                                       'face 'font-lock-comment-face))
+                              " "
+                              ,(if last-input
+                                   (list :propertize
+                                         (truncate-string-to-width
+                                          (car (split-string last-input "\n"))
+                                          50)
+                                         'face 'font-lock-comment-face)))))
+      (funcall orig cand))))
 
 (provide 'akirak-shell)
 ;;; akirak-shell.el ends here

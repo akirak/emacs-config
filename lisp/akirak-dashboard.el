@@ -279,12 +279,7 @@
                    (?c . ,(if-let* ((prog (akirak-shell-detect-buffer-program buffer)))
                               (format "%s [coding:%s]"
                                       prog
-                                      (pcase-exhaustive
-                                          (akirak-shell-buffer-status prog buffer)
-                                        (`done "✅")
-                                        (`waiting "⌛")
-                                        (`prompt "❓")
-                                        (`nil "unknown")))
+                                      (akirak-shell-buffer-status-icon prog buffer))
                             (if (buffer-local-value 'compilation-arguments buffer)
                                 (format "%s [compile:⌛]"
                                         (buffer-local-value 'compile-command buffer))

@@ -9198,6 +9198,10 @@ Enrich existing commands with completion annotations
       (:keymap "M-a" #'marginalia-cycle))
 
     (:when-loaded
+      (when (fboundp 'akirak-shell-ad-around-annotate-buffer)
+        (advice-add 'marginalia-annotate-buffer
+                    :around #'akirak-shell-ad-around-annotate-buffer))
+
       (add-to-list 'marginalia-annotators
                    '(project-root akirak-project-root-annotator builtin none))
       (add-to-list 'marginalia-annotators
