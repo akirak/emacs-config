@@ -45,6 +45,8 @@
   ""
   :type '(repeat string))
 
+(defvar akirak-shell-command-history nil)
+
 (defvar-local akirak-shell-last-input nil)
 
 (define-minor-mode akirak-shell-compilation-minor-mode
@@ -266,6 +268,10 @@ the original minor mode."
                                                 (concat (when (eq window 'split)
                                                           "popup-")
                                                         name)))))
+      (when (member prog akirak-shell-managed-commands)
+        (when (member command akirak-shell-command-history)
+          (delete command akirak-shell-command-history))
+        (push command akirak-shell-command-history))
       (with-current-buffer buffer
         (eat-mode)
         (let ((process-environment (or environment process-environment)))
