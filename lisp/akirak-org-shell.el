@@ -60,21 +60,34 @@
     akirak-org-shell-use-skill-with-entry-body)]
   (interactive "P" org-mode)
   (make-variable-buffer-local 'akirak-org-shell-buffer)
-  (if (numberp arg)
-      (if-let* ((window (akirak-window--other-window nil arg))
-                (buffer (window-buffer window)))
-          (if (akirak-shell-buffer-p buffer)
-              (progn
-                (setq akirak-org-shell-buffer buffer)
-                (message "Set the shell buffer to %s (%s)"
-                         (buffer-name buffer)
-                         (abbreviate-file-name (buffer-local-value 'default-directory buffer))))
-            (user-error "Not a shell buffer: %s" (buffer-name buffer)))
-        (user-error "Cannot find the window for the argument %d" arg))
-    (unless (akirak-org-shell--buffer-live-p)
-      (setq akirak-org-shell-buffer
-            (akirak-org-shell--read-buffer "Terminal buffer: "
-                                           akirak-org-shell-buffer))))
+  (cond
+   ((and (numberp arg)
+         (> arg 0))
+    (if-let* ((window (akirak-window--other-window nil arg))
+              (buffer (window-buffer window)))
+        (if (akirak-shell-buffer-p buffer)
+            (progn
+              (setq akirak-org-shell-buffer buffer)
+              (message "Set the shell buffer to %s (%s)"
+                       (buffer-name buffer)
+                       (abbreviate-file-name (buffer-local-value 'default-directory buffer))))
+          (user-error "Not a shell buffer: %s" (buffer-name buffer)))
+      (user-error "Cannot find the window for the argument %d" arg)))
+   ;; Use the current buffer
+   ((and (not (equal arg 0))
+         (akirak-org-shell--buffer-live-p)))
+   ;; Create a new buffer
+   ((or (equal arg 0)
+        (null (seq-filter #'akirak-shell-buffer-p (buffer-list))))
+    (let* ((dir (akirak-shell-project-directory))
+           (buffer (akirak-shell-prepare-session dir)))
+      (display-buffer buffer)
+      (setq akirak-org-shell-buffer buffer)))
+   ;; Fallback: Select an existing buffer
+   (t
+    (setq akirak-org-shell-buffer
+          (akirak-org-shell--read-buffer "Terminal buffer: "
+                                         akirak-org-shell-buffer))))
   (transient-setup 'akirak-org-shell-transient))
 
 (defun akirak-org-shell--read-buffer (prompt default)

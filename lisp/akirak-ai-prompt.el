@@ -65,23 +65,34 @@
                                    (abbreviate-file-name default-directory))))
     (setq akirak-ai-prompt-shell-buffer nil)
     (message "Unset the shell buffer for a different project"))
-  (if (numberp arg)
-      (if-let* ((window (akirak-window--other-window nil arg))
-                (buffer (window-buffer window)))
-          (if (akirak-shell-buffer-p buffer)
-              (progn
-                (setq akirak-ai-prompt-shell-buffer buffer)
-                (message "Set the shell buffer to %s (%s)"
-                         (buffer-name buffer)
-                         (abbreviate-file-name (buffer-local-value 'default-directory buffer))))
-            (user-error "Not a shell buffer: %s" (buffer-name buffer)))
-        (user-error "Cannot find the window for the argument %d" arg))
-    (unless (and akirak-ai-prompt-shell-buffer
-                 (buffer-live-p akirak-ai-prompt-shell-buffer)
-                 (get-buffer-process akirak-ai-prompt-shell-buffer)
-                 (process-live-p (get-buffer-process akirak-ai-prompt-shell-buffer)))
-      (setq akirak-ai-prompt-shell-buffer
-            (akirak-org-shell--read-buffer "Terminal buffer: " akirak-ai-prompt-shell-buffer))))
+  (cond
+   ((and (numberp arg)
+         (> arg 0))
+    (if-let* ((window (akirak-window--other-window nil arg))
+              (buffer (window-buffer window)))
+        (if (akirak-shell-buffer-p buffer)
+            (progn
+              (setq akirak-ai-prompt-shell-buffer buffer)
+              (message "Set the shell buffer to %s (%s)"
+                       (buffer-name buffer)
+                       (abbreviate-file-name (buffer-local-value 'default-directory buffer))))
+          (user-error "Not a shell buffer: %s" (buffer-name buffer)))
+      (user-error "Cannot find the window for the argument %d" arg)))
+   ;; Use the current buffer
+   ((and (not (equal arg 0))
+         akirak-ai-prompt-shell-buffer
+         (buffer-live-p akirak-ai-prompt-shell-buffer)
+         (get-buffer-process akirak-ai-prompt-shell-buffer)
+         (process-live-p (get-buffer-process akirak-ai-prompt-shell-buffer))))
+   ((or (equal arg 0)
+        (null (seq-filter #'akirak-shell-buffer-p (buffer-list))))
+    (let* ((dir (akirak-shell-project-directory))
+           (buffer (akirak-shell-prepare-session dir)))
+      (display-buffer buffer)
+      (setq akirak-ai-prompt-shell-buffer buffer)))
+   (t
+    (setq akirak-ai-prompt-shell-buffer
+          (akirak-org-shell--read-buffer "Terminal buffer: " akirak-ai-prompt-shell-buffer))))
   (transient-setup 'akirak-ai-prompt-transient))
 
 ;;;;; Suffixes

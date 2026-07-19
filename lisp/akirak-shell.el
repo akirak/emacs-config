@@ -122,6 +122,28 @@ the original minor mode."
         (pop-to-buffer-same-window buffer)
       (akirak-shell-transient))))
 
+;;;###autoload
+(defun akirak-shell-prepare-session (dir)
+  "Return a new buffer for interactive session."
+  (let ((command-and-args (akirak-shell-select-command "Select a command: ")))
+    (akirak-shell-eat-new :dir dir :command command-and-args :noselect t)))
+
+(defun akirak-shell-select-command (prompt)
+  (let* ((candidates (mapcar (lambda (entry)
+                               (cons (mapconcat #'shell-quote-argument entry " ")
+                                     entry))
+                             akirak-shell-command-history))
+         (completion-extra-properties
+          `(:group-function
+            (lambda (candidate transform)
+              (if transform
+                  candidate
+                (car (alist-get candidate minibuffer-completion-table
+                                nil nil #'string=))))))
+         (response (completing-read prompt candidates)))
+    (or (cdr (assoc response candidates))
+        (mapcar #'shell-unquote-argument (split-string response)))))
+
 ;;;; Transient
 
 ;;;;; Transient infixes
