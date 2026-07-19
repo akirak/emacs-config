@@ -80,19 +80,20 @@
 (cl-defun akirak-codex--open-shell (&key subcommand args)
   (interactive)
   (let ((root akirak-codex-directory))
-    (akirak-shell-eat-new :dir root
-                          :command (cons akirak-codex-executable
-                                         (append (ensure-list subcommand)
-                                                 akirak-codex-default-args
-                                                 (when akirak-codex-enable-collaboration-modes
-                                                   (list "--enable" "collaboration_modes"))
-                                                 (when akirak-codex-reasoning-effort
-                                                   (list "--config"
-                                                         (concat "model_reasoning_effort="
-                                                                 akirak-codex-reasoning-effort)))
-                                                 (transient-args 'akirak-codex-transient)
-                                                 args))
-                          :environment (akirak-codex-environment))))
+    (akirak-shell-eat-new
+     :dir root
+     :command (cons akirak-codex-executable
+                    (append (ensure-list subcommand)
+                            akirak-codex-default-args
+                            (when akirak-codex-enable-collaboration-modes
+                              (list "--enable" "collaboration_modes"))
+                            (when akirak-codex-reasoning-effort
+                              (list "--config"
+                                    (concat "model_reasoning_effort="
+                                            akirak-codex-reasoning-effort)))
+                            (transient-args 'akirak-codex-transient)
+                            args))
+     :environment (akirak-codex-environment))))
 
 (defun akirak-codex--resume-in-shell ()
   (interactive)
