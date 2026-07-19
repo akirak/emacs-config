@@ -92,10 +92,7 @@
                                                                  akirak-codex-reasoning-effort)))
                                                  (transient-args 'akirak-codex-transient)
                                                  args))
-                          :environment (akirak-codex-environment)
-                          :name (concat "codex-"
-                                        (file-name-nondirectory
-                                         (directory-file-name root))))))
+                          :environment (akirak-codex-environment))))
 
 (defun akirak-codex--resume-in-shell ()
   (interactive)

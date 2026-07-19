@@ -37,6 +37,14 @@
 (defconst akirak-shell-mode-list
   '(eat-mode agent-shell-mode))
 
+(defcustom akirak-shell-managed-commands
+  ;; See the customization of `display-buffer-alist'.
+  '("codex"
+    "claude"
+    "pi")
+  ""
+  :type '(repeat string))
+
 (defvar-local akirak-shell-last-input nil)
 
 (define-minor-mode akirak-shell-compilation-minor-mode
@@ -246,9 +254,14 @@ the original minor mode."
     (let* ((default-directory (or dir default-directory))
            (command (ensure-list (or command
                                      (funcall eat-default-shell-function))))
-           (name (or name (concat "eat-"
-                                  (file-name-nondirectory
-                                   (directory-file-name default-directory)))))
+           (prog (file-name-nondirectory (car command)))
+           (name (or name
+                     (format "%s-%s"
+                             (if (member prog akirak-shell-managed-commands)
+                                 prog
+                               "eat")
+                             (file-name-nondirectory
+                              (directory-file-name default-directory)))))
            (buffer (generate-new-buffer (format "*%s*"
                                                 (concat (when (eq window 'split)
                                                           "popup-")

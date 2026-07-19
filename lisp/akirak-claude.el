@@ -29,10 +29,7 @@
   (let ((root akirak-claude-directory)
         (args (transient-args 'akirak-claude-code-shell)))
     (akirak-shell-eat-new :dir root
-                          :command (cons "claude" args)
-                          :name (concat "claude-"
-                                        (file-name-nondirectory
-                                         (directory-file-name root))))))
+                          :command (cons "claude" args))))
 
 ;;;; Other commands
 
