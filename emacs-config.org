@@ -774,7 +774,7 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 #+begin_src emacs-lisp
   ;; buffer.c
   (setup line-spacing
-    (:with-mode (org-mode markdown-mode)
+    (:with-mode (org-mode markdown-mode web-mode)
       (:local-set line-spacing 0.5))
     (:with-mode (Help-mode helpful-mode Info-mode)
       (:local-set line-spacing 0.3))
@@ -5233,8 +5233,7 @@ Major mode for editing YAML files
 :CUSTOM_ID: zig-ts-mode
 :END:
 #+begin_quote
-Tree Sitter support for Zig
-[[https://codeberg.org/meow_king/zig-ts-mode]]
+Major mode for Zig code
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -9199,6 +9198,10 @@ Enrich existing commands with completion annotations
       (:keymap "M-a" #'marginalia-cycle))
 
     (:when-loaded
+      (when (fboundp 'akirak-shell-ad-around-annotate-buffer)
+        (advice-add 'marginalia-annotate-buffer
+                    :around #'akirak-shell-ad-around-annotate-buffer))
+
       (add-to-list 'marginalia-annotators
                    '(project-root akirak-project-root-annotator builtin none))
       (add-to-list 'marginalia-annotators
@@ -9216,7 +9219,9 @@ Major mode for Markdown-formatted text
 #+begin_src emacs-lisp
   (setup (:package markdown-mode)
     (:file-match "\\.md\\'" "\\.markdown\\'"
-                 "\\.mdoc\\'" "\\.mdx\\'"
+                 "\\.mdoc\\'"
+                 ;; Use `web-mode' for *.mdx instead
+                 ;; "\\.mdx\\'"
                  "\\.livemd\\'")
     (:with-mode gfm-mode
       (:file-match "README.md\\'"))
@@ -9403,8 +9408,25 @@ Eclipse-like moving and duplicating lines or rectangles
 
 #+begin_src emacs-lisp
   (setup (:package move-dup)
-    (:keymap "M-P" #'move-dup-move-lines-up
-           "M-N" #'move-dup-move-lines-down)
+    (:keymap "M-P"
+             (defun akirak/move-dup-move-lines-up (&optional arg)
+               (interactive "P")
+               (if (and (bound-and-true-p treesit-primary-parser)
+                        (use-region-p))
+                   (akirak-treesit-swap-selected-node (if (numberp arg)
+                                                          (* (-1) arg)
+                                                        -1))
+                 (move-dup-move-lines-up arg)))
+             "M-N"
+             (defun akirak/move-dup-move-lines-down (&optional arg)
+               (interactive "P")
+               (if (and (bound-and-true-p treesit-primary-parser)
+                        (use-region-p))
+                   (akirak-treesit-swap-selected-node (if (numberp arg)
+                                                          arg
+
+                                                        1))
+                 (move-dup-move-lines-down arg))))
 
     (defun akirak/turn-on-move-dup-mode ()
       (unless (or (minibufferp)
@@ -10990,9 +11012,12 @@ major mode for editing web templates
 
 #+begin_src emacs-lisp
   (setup (:package web-mode)
-    (:set web-mode-enable-front-matter-block t)
+    (:set web-mode-enable-front-matter-block t
+          web-mode-enable-auto-closing nil
+          web-mode-enable-auto-quoting nil)
     (:org-src-lang "html")
     (:file-match "\\.html?\\'"
+                 "\\.mdx\\'"
                  "\\.sface\\'")
 
     (:keymap "C-c /" #'akirak-web-mode-surround

@@ -632,19 +632,14 @@
     (open-line n)))
 
 ;;;###autoload
-(defun akirak-treesit-raise-node ()
-  "Replace the parent node with the current node.
+(defun akirak-treesit-raise-node (begin end)
+  "Replace the parent node with the nodes selected in the region.
 
 This is primarily intended for editing JSX/TSX."
-  (interactive)
-  (let* ((node (treesit-node-at (point)))
-         (start (treesit-node-start node))
-         (parent node))
-    (while (= start (treesit-node-start parent))
-      (setq node parent)
-      (setq parent (treesit-node-parent node)))
-    (let ((string (buffer-substring (treesit-node-start node)
-                                    (treesit-node-end node))))
+  (interactive "r")
+  (let* ((nodes (akirak-treesit--region-nodes begin end))
+         (parent (treesit-node-parent (car nodes))))
+    (let ((string (buffer-substring begin end)))
       (goto-char (treesit-node-end parent))
       (push-mark)
       (goto-char (treesit-node-start parent))
@@ -661,7 +656,84 @@ This is primarily intended for editing JSX/TSX."
         (activate-mark))
       (atomic-change-group
         (delete-region (region-beginning) (region-end))
-        (save-excursion (insert string))))))
+        (save-excursion (insert string))
+        (indent-region (point) (+ (point) (- end begin)))))))
+
+;;;###autoload
+(defun akirak-treesit-swap-selected-node (arg)
+  (interactive "P")
+  (let* ((n (if (numberp arg)
+                arg
+              1))
+         (region-start (region-beginning))
+         (region-end (region-end))
+         (nodes (akirak-treesit--region-nodes region-start region-end)))
+    (let ((len (length nodes))
+          (m (length nodes)))
+      (pcase n
+        (1
+         (let ((target (car (last nodes))))
+           (while (> m 0)
+             (setq target (treesit-node-next-sibling target))
+             (unless target
+               (user-error "No further sibling"))
+             (cl-decf m))
+           (atomic-change-group
+             (goto-char (1+ (treesit-node-end target)))
+             (when (looking-at (rx (* blank) eol))
+               (goto-char (1+ (match-end 0))))
+             (kill-region region-end (point))
+             (goto-char region-start)
+             (yank))
+           (push-mark (point) t t)
+           (setq deactivate-mark nil)
+           (forward-char (- region-end region-start))
+           (activate-mark)))
+        (-1
+         (let ((target (car nodes)))
+           (while (> m 0)
+             (setq target (treesit-node-prev-sibling target))
+             (unless target
+               (user-error "No further sibling"))
+             (cl-decf m))
+           (atomic-change-group
+             (goto-char (treesit-node-start target))
+             (when (looking-back (rx bol (* blank)) (line-beginning-position))
+               (goto-char (match-beginning 0)))
+             (kill-region region-start region-end)
+             (yank))
+           (push-mark (- (point) (- region-end region-start))
+                      t t)
+           (setq deactivate-mark nil)
+           (activate-mark)))
+        (_
+         (error "Not implemented: only 1 and -1 are supported right now"))))))
+
+(defun akirak-treesit--region-nodes (begin end)
+  "Return the treesit nodes in the region."
+  (let* ((node-start (save-excursion
+                       (goto-char begin)
+                       (if (looking-at (rx (+ space)))
+                           (match-end 0)
+                         begin)))
+         (node-end (save-excursion
+                     (goto-char end)
+                     (if (looking-back (rx (+ space)) node-start)
+                         (match-beginning 0)
+                       end)))
+         (start-node (treesit-node-at node-start))
+         (node start-node))
+    (while (and (= (treesit-node-start node)
+                   node-start)
+                (< (treesit-node-end node)
+                   node-end))
+      (setq node (treesit-node-parent node))
+      (unless node
+        (user-error "Not identifying a node list for the region")))
+    (seq-filter `(lambda (child)
+                   (and (>= (treesit-node-start child) ,node-start)
+                        (<= (treesit-node-end child) ,node-end)))
+                (treesit-node-children node))))
 
 ;;;###autoload
 (defun akirak-treesit-jsx-close-tag ()

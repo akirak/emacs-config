@@ -104,10 +104,7 @@
   (interactive)
   (let ((root akirak-pi-directory))
     (akirak-shell-eat-new :dir root
-                          :command (akirak-pi--command args)
-                          :name (concat "pi-"
-                                        (file-name-nondirectory
-                                         (directory-file-name root))))))
+                          :command (akirak-pi--command args))))
 
 (defun akirak-pi--command (args)
   (cons akirak-pi-executable

@@ -338,10 +338,18 @@ DIR is an optional destination directory to clone the repository into."
               (if (file-directory-p dest)
                   (let ((default-directory dest))
                     (message "Updating the branch...")
-                    (call-process "git" nil nil nil
-                                  "pull" "origin" "HEAD")
-                    (akirak-git-clone--browse-diff))
-                (akirak-git-clone--clone origin dest :content-path content-path
+                    (if (or (string= branch
+                                     (magit-rev-parse "--abbrev-ref" "HEAD"))
+                            (zerop (call-process "git" nil nil nil
+                                                 "switch" branch)))
+                        (progn
+                          (call-process "git" nil nil nil
+                                        "pull" "origin" "HEAD")
+                          (akirak-git-clone--browse-diff))
+                      (user-error "Git failed to switch to the branch in the working tree")))
+                (akirak-git-clone--clone origin dest
+                                         :ref branch
+                                         :content-path content-path
                                          :other-window other-window)))))
       (if (file-directory-p repo)
           (let ((default-directory repo))

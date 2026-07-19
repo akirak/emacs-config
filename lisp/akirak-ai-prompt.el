@@ -19,7 +19,7 @@
   :prompt "Terminal buffer: "
   :description "Buffer")
 
-(defun akirak-org-shell--buffer-live-p ()
+(defun akirak-ai-prompt--buffer-live-p ()
   (and akirak-ai-prompt-shell-buffer
        (buffer-live-p akirak-ai-prompt-shell-buffer)))
 
@@ -30,7 +30,7 @@
 ;;;;; Prefix
 
 ;;;###autoload (autoload 'akirak-ai-prompt-transient "akirak-ai-prompt" nil 'interactive)
-(transient-define-prefix akirak-ai-prompt-transient ()
+(transient-define-prefix akirak-ai-prompt-transient (&optional arg)
   :refresh-suffixes t
   ["Options"
    ("-b" akirak-ai-prompt-shell-buffer-infix)]
@@ -51,7 +51,8 @@
    :if-not akirak-ai-prompt-supported-p
    ("R" "Region" akirak-ai-prompt-send-region
     :if use-region-p)]
-  (interactive nil)
+  (interactive "P")
+  (make-variable-buffer-local 'akirak-ai-prompt-shell-buffer)
   ;; For safety of not sending prompts to a wrong buffer, ensure the shell
   ;; buffer is opened in an ancestor directory of the current working directory.
   (when (and akirak-ai-prompt-shell-buffer
@@ -64,12 +65,34 @@
                                    (abbreviate-file-name default-directory))))
     (setq akirak-ai-prompt-shell-buffer nil)
     (message "Unset the shell buffer for a different project"))
-  (unless (and akirak-ai-prompt-shell-buffer
-               (buffer-live-p akirak-ai-prompt-shell-buffer)
-               (get-buffer-process akirak-ai-prompt-shell-buffer)
-               (process-live-p (get-buffer-process akirak-ai-prompt-shell-buffer)))
+  (cond
+   ((and (numberp arg)
+         (> arg 0))
+    (if-let* ((window (akirak-window--other-window nil arg))
+              (buffer (window-buffer window)))
+        (if (akirak-shell-buffer-p buffer)
+            (progn
+              (setq akirak-ai-prompt-shell-buffer buffer)
+              (message "Set the shell buffer to %s (%s)"
+                       (buffer-name buffer)
+                       (abbreviate-file-name (buffer-local-value 'default-directory buffer))))
+          (user-error "Not a shell buffer: %s" (buffer-name buffer)))
+      (user-error "Cannot find the window for the argument %d" arg)))
+   ;; Use the current buffer
+   ((and (not (equal arg 0))
+         akirak-ai-prompt-shell-buffer
+         (buffer-live-p akirak-ai-prompt-shell-buffer)
+         (get-buffer-process akirak-ai-prompt-shell-buffer)
+         (process-live-p (get-buffer-process akirak-ai-prompt-shell-buffer))))
+   ((or (equal arg 0)
+        (null (seq-filter #'akirak-shell-buffer-p (buffer-list))))
+    (let* ((dir (akirak-shell-project-directory))
+           (buffer (akirak-shell-prepare-session dir)))
+      (display-buffer buffer)
+      (setq akirak-ai-prompt-shell-buffer buffer)))
+   (t
     (setq akirak-ai-prompt-shell-buffer
-          (akirak-org-shell--read-buffer "Terminal buffer: " akirak-ai-prompt-shell-buffer)))
+          (akirak-org-shell--read-buffer "Terminal buffer: " akirak-ai-prompt-shell-buffer))))
   (transient-setup 'akirak-ai-prompt-transient))
 
 ;;;;; Suffixes
@@ -77,7 +100,7 @@
 (defun akirak-ai-prompt-send-with-line-number ()
   "Within an AI shell, send a prompt with the line number at point."
   (interactive)
-  (cl-assert (akirak-org-shell--buffer-live-p))
+  (cl-assert (akirak-ai-prompt--buffer-live-p))
   (let* ((line (line-number-at-pos))
          (file (buffer-file-name (or (buffer-base-buffer)
                                      (current-buffer))))
@@ -93,7 +116,7 @@
 (defun akirak-ai-prompt-send-with-function-name ()
   "Within an AI shell, send a prompt with the function name at point."
   (interactive)
-  (cl-assert (akirak-org-shell--buffer-live-p))
+  (cl-assert (akirak-ai-prompt--buffer-live-p))
   (let* ((name (or (which-function)
                    (user-error "No function")))
          (file (buffer-file-name (or (buffer-base-buffer)
@@ -132,7 +155,7 @@
 (defun akirak-ai-prompt-fix-flymake-error (&optional arg)
   "Within an AI shell, fix the error at the current point."
   (interactive "P")
-  (cl-assert (akirak-org-shell--buffer-live-p))
+  (cl-assert (akirak-ai-prompt--buffer-live-p))
   (require 'akirak-flymake)
   (let ((buffer akirak-ai-prompt-shell-buffer))
     (akirak-shell-send-string-to-buffer buffer

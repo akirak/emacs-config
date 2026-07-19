@@ -29,13 +29,13 @@
 
 (defvar akirak-codex-directory nil)
 
-(defvar akirak-codex-reasoning-effort nil)
+(defvar akirak-codex-reasoning-effort "medium")
 
 (transient-define-infix akirak-codex-set-reasoning-effort ()
   :class 'akirak-transient-choice-variable
   :cycle t
   :variable 'akirak-codex-reasoning-effort
-  :choices '("medium" "high" "extra-high" "low")
+  :choices '("low" "medium" "high" "xhigh" "max")
   :description "Reasoning effort")
 
 (defvar akirak-codex-enable-collaboration-modes nil)
@@ -50,11 +50,13 @@
   ["Options"
    ("-m" "Model" "--model="
     ;; :always-read t
-    :init-value (lambda (obj) (oset obj value "gpt-5.4"))
-    :choices ("gpt-5.5"
+    :init-value (lambda (obj) (oset obj value "gpt-5.6-luna"))
+    :choices ("gpt-5.6-sol"
+              "gpt-5.6-terra"
+              "gpt-5.6-luna"
+              "gpt-5.5"
               "gpt-5.4"
-              "gpt-5.4-mini"
-              "gpt-5.3-codex"))
+              "gpt-5.4-mini"))
    ("-r" akirak-codex-set-reasoning-effort)
    ("-s" "Sandbox" "--sandbox="
     :choices ("read-only"
@@ -78,22 +80,20 @@
 (cl-defun akirak-codex--open-shell (&key subcommand args)
   (interactive)
   (let ((root akirak-codex-directory))
-    (akirak-shell-eat-new :dir root
-                          :command (cons akirak-codex-executable
-                                         (append (ensure-list subcommand)
-                                                 akirak-codex-default-args
-                                                 (when akirak-codex-enable-collaboration-modes
-                                                   (list "--enable" "collaboration_modes"))
-                                                 (when akirak-codex-reasoning-effort
-                                                   (list "--config"
-                                                         (concat "model_reasoning_effort="
-                                                                 akirak-codex-reasoning-effort)))
-                                                 (transient-args 'akirak-codex-transient)
-                                                 args))
-                          :environment (akirak-codex-environment)
-                          :name (concat "codex-"
-                                        (file-name-nondirectory
-                                         (directory-file-name root))))))
+    (akirak-shell-eat-new
+     :dir root
+     :command (cons akirak-codex-executable
+                    (append (ensure-list subcommand)
+                            akirak-codex-default-args
+                            (when akirak-codex-enable-collaboration-modes
+                              (list "--enable" "collaboration_modes"))
+                            (when akirak-codex-reasoning-effort
+                              (list "--config"
+                                    (concat "model_reasoning_effort="
+                                            akirak-codex-reasoning-effort)))
+                            (transient-args 'akirak-codex-transient)
+                            args))
+     :environment (akirak-codex-environment))))
 
 (defun akirak-codex--resume-in-shell ()
   (interactive)
@@ -213,7 +213,11 @@
          'waiting)
         ((rx bol "─ Worked for ")
          'done)
-        ((guard (string-match-p (rx (* blank) "Press enter to confirm or esc to cancel")
+        ((rx bol "• You have " (+ digit)
+             " usage limit resets available.")
+         'fresh)
+        ((guard (string-match-p (rx (* blank)
+                                    "Press enter to confirm or esc to cancel")
                                 (buffer-substring-no-properties
                                  (line-beginning-position)
                                  (line-end-position))))
