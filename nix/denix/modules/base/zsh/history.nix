@@ -28,6 +28,10 @@ delib.module {
         size = 5000;
       };
 
+      shellAliases = {
+        history = "fc -l -1000";
+      };
+
       initContent = ''
         # https://github.com/MichaelAquilina/zsh-history-filter
         export HISTORY_FILTER_EXCLUDE=("TOKEN")
