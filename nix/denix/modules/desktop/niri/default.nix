@@ -49,6 +49,13 @@ delib.module {
       ''
       ''
         window-rule {
+          match app-id=r#"^org.pulseaudio.pavucontrol"#
+
+          open-floating true
+        }
+      ''
+      ''
+        window-rule {
           match title=r#"^Rebuilding NixOS"#
 
           open-focused false
