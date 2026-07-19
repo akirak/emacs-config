@@ -542,17 +542,20 @@ This function returns the current buffer."
 
 (defun akirak-org-clock--capture-buffer (clock-marker)
   "Return a corresponding capture buffer for the clock marker."
-  (let ((suffix (buffer-name (marker-buffer clock-marker)))
-        (point (org-with-clock-position (list clock-marker)
-                 (org-back-to-heading)
-                 (point))))
-    (thread-last
-      (internal-complete-buffer "CAPTURE-" nil t)
-      (seq-some `(lambda (name)
-                   (when (string-suffix-p ,suffix name)
-                     (with-current-buffer (get-buffer name)
-                       (when (eq (point-min) ,point)
-                         (current-buffer)))))))))
+  (when (and clock-marker
+             (markerp clock-marker)
+             (buffer-live-p (marker-buffer clock-marker)))
+    (let* ((suffix (buffer-name (marker-buffer clock-marker)))
+           (point (org-with-clock-position (list clock-marker)
+                    (org-back-to-heading)
+                    (point))))
+      (thread-last
+        (internal-complete-buffer "CAPTURE-" nil t)
+        (seq-some `(lambda (name)
+                     (when (string-suffix-p ,suffix name)
+                       (with-current-buffer (get-buffer name)
+                         (when (eq (point-min) ,point)
+                           (current-buffer))))))))))
 
 ;;;; Other utilities
 
