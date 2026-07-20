@@ -50,4 +50,6 @@ in
     stages = [ "pre-push" ];
     funcName = "akirak/batch-update-emacs-config-contents";
   };
+
+  zizmor.enable = true;
 }
