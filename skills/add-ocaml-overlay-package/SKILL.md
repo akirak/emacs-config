@@ -3,6 +3,10 @@ name: add-ocaml-overlay-package
 description: Add or update an OCaml package in the Nix flake overlay in nix-ocaml/nix-overlay repository and verify it through Hydra job attributes. Use when Codex needs to package an upstream OCaml library, wire it into ocaml/default.nix or related overlay files, handle fetchFromGitHub/fixed-output hashes, respect OCaml version constraints, and prove targets such as hydraJobs.<system>.build_5_5.<package> build cleanly.
 ---
 
+<!-- Copyright (C) 2026 Akira Komamura
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Add OCaml Overlay Package
 
 Use this skill for [nix-ocaml/nix-overlays](https://github.com/nix-ocaml/nix-overlays)'s OCaml overlay packaging workflow.

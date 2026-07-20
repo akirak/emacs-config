@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Akira Komamura
+# SPDX-License-Identifier: GPL-3.0-or-later
 interface:
   display_name: "Add OCaml Overlay Package"
   short_description: "Add and verify OCaml packages in this flake"

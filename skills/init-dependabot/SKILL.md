@@ -5,6 +5,10 @@ metadata:
   short-description: Initialize Dependabot for a repository
 ---
 
+<!-- Copyright (C) 2026 Akira Komamura
+SPDX-License-Identifier: GPL-3.0-or-later
+ -->
+
 # Init Dependabot
 
 Set up Dependabot by copying the bundled templates from `assets/`, tailoring them to the target repository, and leaving the workflow in a state that passes `zizmor`.
