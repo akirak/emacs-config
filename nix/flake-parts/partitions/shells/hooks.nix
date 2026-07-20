@@ -52,4 +52,6 @@ in
   };
 
   zizmor.enable = true;
+
+  reuse.enable = true;
 }
