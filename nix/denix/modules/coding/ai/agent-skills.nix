@@ -44,9 +44,13 @@ delib.module {
       # Because of the presense of system skills (e.g. ~/.codex/skills/.system),
       # you can't set the roots directly.
       home.file = lib.listToAttrs (
-        lib.zipListsWith (
-          root: { name, source }: lib.nameValuePair ("${root}/${name}") { inherit source; }
-        ) cfg.roots skillDirs
+        lib.concatMap (
+          root:
+          map (
+            { name, source }:
+            lib.nameValuePair ("${root}/${name}") { inherit source; }
+          ) skillDirs
+        ) cfg.roots
       );
     };
 }
