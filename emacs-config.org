@@ -8970,6 +8970,18 @@ A Git porcelain inside Emacs
     ;; there is no point in making this IO-intensive function run.
     (advice-add 'magit-version :override #'ignore)
 
+    (add-hook 'magit-post-create-buffer-hook
+              (defun akirak/magit-status-run-faster ()
+                (when (and (eq major-mode 'magit-status-mode)
+                           (string-match-p (rx bol "nixpkgs" (syntax symbol))
+                                           (file-name-nondirectory
+                                            (directory-file-name default-directory))))
+                  (setq-local magit-status-sections-hook
+                              (list #'magit-insert-status-headers
+                                    #'magit-insert-untracked-files
+                                    #'magit-insert-unstaged-changes
+                                    #'magit-insert-staged-changes)))))
+
     (:with-map (magit-status-mode-map magit-log-mode-map)
       (:keymap "^" (defun akirak/magit-up-directory ()
                      "Visit the parent repository using magit, or visit the parent directory using dired."
