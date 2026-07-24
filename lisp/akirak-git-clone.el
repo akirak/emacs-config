@@ -167,7 +167,7 @@ matches the host of the repository,
          (group (+ (not (any "/")))
                 "/"
                 (+ (not (any "/"))))
-         (?  "/tree/"
+         (?  (or "/tree/" "/blob/")
              (group (+ (not (any "/"))))
              "/" (group (+ anything))))
      (let* ((host (match-string 1 flake-ref-or-url))
