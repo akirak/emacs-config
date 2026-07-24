@@ -5317,7 +5317,7 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-ai-prompt
 #+begin_src elisp
   (setup akirak-ai-prompt
-    (:global-keymap "C-c a" #'akirak-ai-prompt-transient))
+    (:global-keymap "C-c a" #'akirak-ai-prompt))
 #+end_src
 *** akirak-avy
 #+begin_src emacs-lisp
