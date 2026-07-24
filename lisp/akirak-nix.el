@@ -31,6 +31,9 @@
 
 (require 'subr-x)
 
+(defconst akirak-nix-fake-hash-sha256
+  "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+
 (defcustom akirak-nix-language-syntaxes
   '(("toml" . "lib.importTOML")
     ("json" . "lib.importJSON"))
@@ -351,6 +354,41 @@ Use it with caution."
           (message "Copied a Nix expression to the kill ring"))
       (delete-file tmp-file)
       (delete-file error-file))))
+
+;;;###autoload
+(defun akirak-nix-insert-fake-hash ()
+  (akirak-nix--insert-string akirak-nix-fake-hash-sha256))
+
+;;;###autoload
+(defun akirak-nix-hash-replace-region (begin end)
+  (interactive "r")
+  (replace-region-contents
+   begin end (akirak-nix-hash (buffer-substring begin end))))
+
+;;;###autoload
+(cl-defun akirak-nix-hash (orig interactive &key (to-sri t) (type "sha256"))
+  (interactive (list (read-string "Hash string: ")
+                     t
+                     :to-sri t
+                     :type "sha256"))
+  (let ((value (with-temp-buffer
+                 (unless (zerop (apply #'call-process "nix-hash" nil (list t nil) nil
+                                       "--type" type
+                                       (list (when to-sri
+                                               "--to-sri")
+                                             orig)))
+                   (error "nix-hash failed with non-zero exit code"))
+                 (string-trim-right (buffer-string)))))
+    (when interactive
+      (akirak-nix--insert-string value))
+    value))
+
+(defun akirak-nix--insert-string (string)
+  (let ((ppss (syntax-ppss)))
+    (if (and ppss (ppss-comment-or-string-start ppss))
+        (insert string)
+      ;; FIXME: Insert with quotes
+      (insert string))))
 
 (provide 'akirak-nix)
 ;;; akirak-nix.el ends here
