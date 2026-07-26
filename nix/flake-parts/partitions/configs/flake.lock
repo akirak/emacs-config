@@ -731,6 +731,27 @@
         "type": "github"
       }
     },
+    "playwright-cli": {
+      "inputs": {
+        "nixpkgs": [
+          "flake-pins",
+          "unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785039178,
+        "narHash": "sha256-Mlub3VP7KFL6zxhALkeCh0KOEzjzw5dMNy4wm4Vm8Ig=",
+        "owner": "akirak",
+        "repo": "nix-playwright-cli",
+        "rev": "cc0204c45c0eb8b747f226d2d60277d50ab45347",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "nix-playwright-cli",
+        "type": "github"
+      }
+    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -756,6 +777,7 @@
         "denix": "denix",
         "flake-pins": "flake-pins",
         "llm-agents": "llm-agents",
+        "playwright-cli": "playwright-cli",
         "tix": "tix",
         "xremap": "xremap",
         "zen-browser": "zen-browser"
