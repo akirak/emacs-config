@@ -487,8 +487,8 @@ the original minor mode."
                                     '(eat-mode))
       (`eat-mode
        (with-current-buffer buffer
+         (eat-term-input-event eat-terminal 1 event)
          (when confirm
-           (eat-term-input-event eat-terminal 1 event)
            (sit-for 0.2))
          (when-let* ((window (get-buffer-window buffer)))
            (with-selected-window window
