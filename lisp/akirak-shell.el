@@ -366,6 +366,17 @@ the original minor mode."
   (not (and (get-buffer-process buffer)
             (process-live-p (get-buffer-process buffer)))))
 
+(defun akirak-shell-exit-buffer (buffer)
+  (unless (and (get-buffer-process buffer)
+               (process-live-p (get-buffer-process buffer)))
+    (user-error "No live process"))
+  (akirak-shell-send-event-to-buffer buffer
+    (pcase (akirak-shell-detect-buffer-program buffer)
+      ((or `codex `pi)
+       (akirak-shell-send-event-to-buffer buffer ?\C-d))
+      (_
+       (user-error "Cannot exit this program")))))
+
 ;;;###autoload
 (defun akirak-shell-project-for-aider ()
   (interactive)
@@ -476,8 +487,8 @@ the original minor mode."
                                     '(eat-mode))
       (`eat-mode
        (with-current-buffer buffer
+         (eat-term-input-event eat-terminal 1 event)
          (when confirm
-           (eat-term-input-event eat-terminal 1 event)
            (sit-for 0.2))
          (when-let* ((window (get-buffer-window buffer)))
            (with-selected-window window

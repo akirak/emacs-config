@@ -370,22 +370,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_6": {
-      "locked": {
-        "lastModified": 1782636521,
-        "narHash": "sha256-OG8laCOGtkxlB1JH3XqOnXxnkGJme4mQdXo5hkhCQIY=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "e1c1b84752fb0897897380a3cae9dc7fcab91ca3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "ocaml-overlays": {
       "inputs": {
         "nixpkgs": [
@@ -422,24 +406,6 @@
         "type": "github"
       }
     },
-    "playwright-mcp": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_6"
-      },
-      "locked": {
-        "lastModified": 1782722204,
-        "narHash": "sha256-PyBUeeoxCMnDgSas/BwifbrgSVDffwaK48RrpeOa7t8=",
-        "owner": "akirak",
-        "repo": "nix-playwright-mcp",
-        "rev": "9574b39eb59ecaf5a1bdd076c7118a9c375dc5cf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "akirak",
-        "repo": "nix-playwright-mcp",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -449,7 +415,6 @@
           "nixpkgs"
         ],
         "org-babel": "org-babel",
-        "playwright-mcp": "playwright-mcp",
         "tree-sitter-astro": "tree-sitter-astro",
         "twist": "twist"
       }

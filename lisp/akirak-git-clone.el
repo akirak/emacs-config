@@ -167,7 +167,7 @@ matches the host of the repository,
          (group (+ (not (any "/")))
                 "/"
                 (+ (not (any "/"))))
-         (?  "/tree/"
+         (?  (or "/tree/" "/blob/")
              (group (+ (not (any "/"))))
              "/" (group (+ anything))))
      (let* ((host (match-string 1 flake-ref-or-url))
@@ -279,7 +279,9 @@ matches the host of the repository,
                              (when (eq 'exit (process-status process))
                                (if (= 0 (process-exit-status process))
                                    ,(if callback
-                                        `(funcall #',callback ,visited-path)
+                                        (if (file-regular-p ,visited-path)
+                                            (find-file ,visited-path)
+                                          `(funcall #',callback ,visited-path))
                                       `(akirak-git-clone-browse ,visited-path
                                                                 ,other-window))
                                  (message "Returned non-zero from git-clone")))))))

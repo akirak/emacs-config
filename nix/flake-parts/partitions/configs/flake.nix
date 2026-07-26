@@ -13,6 +13,11 @@
     xremap.url = "github:xremap/nix-flake";
     llm-agents.url = "github:numtide/llm-agents.nix";
 
+    playwright-cli = {
+      url = "github:akirak/nix-playwright-cli";
+      inputs.nixpkgs.follows = "flake-pins/unstable";
+    };
+
     tix = {
       url = "github:JRMurr/tix";
       # The upstream follows the nixos-unstable channel.

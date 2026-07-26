@@ -18,7 +18,6 @@
       flake = false;
     };
 
-    playwright-mcp.url = "github:akirak/nix-playwright-mcp";
   };
 
   nixConfig = {
@@ -84,8 +83,6 @@
               inherit (prev.stdenv.hostPlatform) system;
             in
             {
-              playwright-mcp = inputs.playwright-mcp.packages.${system}.default;
-
               emacs-git-pgtk = inputs.flake-pins.packages.${system}.emacs-pgtk;
               emacs-git = inputs.flake-pins.packages.${system}.emacs;
 

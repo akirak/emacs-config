@@ -3770,7 +3770,7 @@ Playwright backend for scraping web pages
 
 #+begin_src emacs-lisp
   (setup (:package orgabilize-playwright)
-    ;; A custom package from github:akirak/nix-playwright-mcp
+    ;; The playwright-mcp package from nixpkgs
     (:nixpkgs playwright-mcp)
     (:set orgabilize-use-playwright t
           orgabilize-playwright-mcp-name "playwright-headless"))
@@ -5317,7 +5317,7 @@ This is a collection of various utilities to enhance the experience.
 *** akirak-ai-prompt
 #+begin_src elisp
   (setup akirak-ai-prompt
-    (:global-keymap "C-c a" #'akirak-ai-prompt-transient))
+    (:global-keymap "C-c a" #'akirak-ai-prompt))
 #+end_src
 *** akirak-avy
 #+begin_src emacs-lisp
@@ -8970,6 +8970,18 @@ A Git porcelain inside Emacs
     ;; there is no point in making this IO-intensive function run.
     (advice-add 'magit-version :override #'ignore)
 
+    (add-hook 'magit-post-create-buffer-hook
+              (defun akirak/magit-status-run-faster ()
+                (when (and (eq major-mode 'magit-status-mode)
+                           (string-match-p (rx bol "nixpkgs" (syntax symbol))
+                                           (file-name-nondirectory
+                                            (directory-file-name default-directory))))
+                  (setq-local magit-status-sections-hook
+                              (list #'magit-insert-status-headers
+                                    #'magit-insert-untracked-files
+                                    #'magit-insert-unstaged-changes
+                                    #'magit-insert-staged-changes)))))
+
     (:with-map (magit-status-mode-map magit-log-mode-map)
       (:keymap "^" (defun akirak/magit-up-directory ()
                      "Visit the parent repository using magit, or visit the parent directory using dired."
@@ -9287,7 +9299,7 @@ Model Context Protocol
     (:set mcp-hub-servers
           `(("playwright-headless"
              ;; Use the pre-downloaded Nix package. An alternative is
-             ;; `nix run github:akirak/nix-playwright-mcp --`.
+             ;; The executable is provided by nixpkgs' playwright-mcp package.
              :command "mcp-server-playwright"
              :args ("--headless")))))
 #+end_src

@@ -29,7 +29,6 @@
 
 ;;;;; Prefix
 
-;;;###autoload (autoload 'akirak-ai-prompt-transient "akirak-ai-prompt" nil 'interactive)
 (transient-define-prefix akirak-ai-prompt-transient (&optional arg)
   :refresh-suffixes t
   ["Options"
@@ -66,6 +65,9 @@
     (setq akirak-ai-prompt-shell-buffer nil)
     (message "Unset the shell buffer for a different project"))
   (cond
+   ((or (equal arg '-)
+        (equal arg -1))
+    (user-error "You've entered a wrong path. Call `akirak-ai-prompt' instead"))
    ((and (numberp arg)
          (> arg 0))
     (if-let* ((window (akirak-window--other-window nil arg))
@@ -94,6 +96,17 @@
     (setq akirak-ai-prompt-shell-buffer
           (akirak-org-shell--read-buffer "Terminal buffer: " akirak-ai-prompt-shell-buffer))))
   (transient-setup 'akirak-ai-prompt-transient))
+
+;;;###autoload
+(defun akirak-ai-prompt (&optional arg)
+  (interactive "P")
+  (if (or (equal arg '-)
+          (equal arg -1))
+      (if (and akirak-ai-prompt-shell-buffer
+               (buffer-live-p akirak-ai-prompt-shell-buffer))
+          (akirak-shell-exit-buffer akirak-ai-prompt-shell-buffer)
+        (user-error "Buffer is not set"))
+    (funcall-interactively 'akirak-ai-prompt-transient arg)))
 
 ;;;;; Suffixes
 

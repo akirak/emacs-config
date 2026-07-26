@@ -1,0 +1,33 @@
+# Copyright (C) 2021-2026 Akira Komamura
+# SPDX-License-Identifier: MIT
+
+version = 1
+
+[[annotations]]
+path = [
+  "*",
+  ".github/**",
+  "lock/**",
+  "nix/**",
+  "recipes/**",
+]
+SPDX-FileCopyrightText = "2021-2026 Akira Komamura"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = [
+  "lisp/**",
+  "skills/**",
+]
+SPDX-FileCopyrightText = "2021-2026 Akira Komamura"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = "LICENSES/MIT.txt"
+SPDX-FileCopyrightText = "2021-2026 Akira Komamura"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "LICENSES/GPL-3.0-or-later.txt"
+SPDX-FileCopyrightText = "2007 Free Software Foundation, Inc."
+SPDX-License-Identifier = "GPL-3.0-or-later"
