@@ -312,7 +312,7 @@ Also see `akirak-elec-pair--close-char'."
                   (when (eq (char-after start) (char-after end))
                     (kill-region start (1+ end))
                     t))
-                (user-error "No matching paren")))))
+                (kill-word arg)))))
     (kill-word arg)))
 
 (provide 'akirak-paren)
