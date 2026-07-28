@@ -5201,6 +5201,10 @@ Major mode for editing typescript
 :PROPERTIES:
 :CREATED_TIME: [2026-07-28 Tue 23:59]
 :END:
+#+begin_quote
+Major mode for TypeSpec (using tree-sitter)
+[[https://github.com/pradyuman/typespec-ts-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package typespec-ts-mode)
