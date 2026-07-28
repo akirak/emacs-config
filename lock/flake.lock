@@ -3285,6 +3285,7 @@
         "ts": "ts",
         "twind": "twind",
         "twist": "twist",
+        "typespec-ts-mode": "typespec-ts-mode",
         "unfill": "unfill",
         "uniline": "uniline",
         "valign": "valign",
@@ -3667,6 +3668,22 @@
       "original": {
         "owner": "emacs-twist",
         "repo": "twist.el",
+        "type": "github"
+      }
+    },
+    "typespec-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1766873626,
+        "narHash": "sha256-cUy66yiwxU+X1cBK1THJS9oQsDL4IlN9MEK3TU3XGvc=",
+        "owner": "pradyuman",
+        "repo": "typespec-ts-mode",
+        "rev": "fcd43e13568c61772dbb344c6391c2933bd0a72e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pradyuman",
+        "repo": "typespec-ts-mode",
         "type": "github"
       }
     },
