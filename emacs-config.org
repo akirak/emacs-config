@@ -5197,6 +5197,19 @@ Major mode for editing typescript
     (with-eval-after-load 'typescript-mode
       (keymap-set tsx-mode-map "C-c C-e" #'akirak-jsx-close-tag)))
 #+end_src
+*** typespec-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-07-28 Tue 23:59]
+:END:
+#+begin_quote
+Major mode for TypeSpec (using tree-sitter)
+[[https://github.com/pradyuman/typespec-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package typespec-ts-mode)
+    (:file-match "\\.tsp\\'"))
+#+end_src
 *** yaml-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2022-03-07 Mon 16:07]

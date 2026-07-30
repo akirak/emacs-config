@@ -1,9 +1,9 @@
 {
   "async": {
     "archive": {
-      "narHash": "sha256-eO539hI0hLb3hDwHiowbrN1sXhLS3Iw+Adg9H6b3vbw=",
+      "narHash": "sha256-4ye4Ww34hK5w/Z5t/njDDjIfbVFOay1n9sZ3iXJKeqU=",
       "type": "tarball",
-      "url": "https://elpa.gnu.org/devel/async-1.9.9.0.20260318.110333.tar"
+      "url": "https://elpa.gnu.org/devel/async-1.9.9.0.20260729.33.tar"
     },
     "inventory": {
       "type": "archive",
@@ -12,7 +12,7 @@
     "packageRequires": {
       "emacs": "24.4"
     },
-    "version": "1.9.9.0.20260318.110333"
+    "version": "1.9.9.0.20260729.33"
   },
   "csv-mode": {
     "archive": {

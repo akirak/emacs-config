@@ -56,6 +56,13 @@ delib.module {
       ''
       ''
         window-rule {
+          match title=r#"^Select Folder$"#
+
+          open-floating true
+        }
+      ''
+      ''
+        window-rule {
           match title=r#"^Rebuilding NixOS"#
 
           open-focused false

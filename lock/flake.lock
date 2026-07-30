@@ -612,11 +612,11 @@
     "diff-hl": {
       "flake": false,
       "locked": {
-        "lastModified": 1782526136,
-        "narHash": "sha256-NI9o+FKU6RZk9eGJhXomUMRhq4V0GglO7WpljlnD2/A=",
+        "lastModified": 1784774334,
+        "narHash": "sha256-sIwCz+jyPD1pjqGRW7Dt11os5nXwoqJKj5FgI09MMCw=",
         "owner": "dgutov",
         "repo": "diff-hl",
-        "rev": "2d7d0714d9637f54af672987c65b6973b31e56a2",
+        "rev": "91fcd4fa42fef895a754e80c4435ae6314be7822",
         "type": "github"
       },
       "original": {
@@ -2199,11 +2199,11 @@
     "ocp-indent": {
       "flake": false,
       "locked": {
-        "lastModified": 1759325469,
-        "narHash": "sha256-La1V1mQDVPUhbpZ+p3YthZwbOWdTm6uuYDMbSKoFor0=",
+        "lastModified": 1784731175,
+        "narHash": "sha256-ZY5aLP/hYB1MfpYdf5wQGF4ERytXypQ4CP8NKWM/RaU=",
         "owner": "OCamlPro",
         "repo": "ocp-indent",
-        "rev": "e2ac9daae2579151ad258b40071e5074a4b1c3fa",
+        "rev": "2cfb05ccca1f76d9bfda67e80ff35709ab2697cd",
         "type": "github"
       },
       "original": {
@@ -2264,11 +2264,11 @@
     "org": {
       "flake": false,
       "locked": {
-        "lastModified": 1784364286,
-        "narHash": "sha256-uwkKLh3v6LWz/nbszec6S59/FaNkhontY9AFHN8tv44=",
+        "lastModified": 1784957470,
+        "narHash": "sha256-lFXrMEdZSYSBN5godO1Pw1jZMcdD8wqYFIxL8Fmxpqo=",
         "owner": "elpa-mirrors",
         "repo": "org-mode",
-        "rev": "80333bd6f5be87684a4e486731841e1a504b86e2",
+        "rev": "c75ffe4a43355bc76807d9aa711834b33f724fca",
         "type": "github"
       },
       "original": {
@@ -3285,6 +3285,7 @@
         "ts": "ts",
         "twind": "twind",
         "twist": "twist",
+        "typespec-ts-mode": "typespec-ts-mode",
         "unfill": "unfill",
         "uniline": "uniline",
         "valign": "valign",
@@ -3667,6 +3668,22 @@
       "original": {
         "owner": "emacs-twist",
         "repo": "twist.el",
+        "type": "github"
+      }
+    },
+    "typespec-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1766873626,
+        "narHash": "sha256-cUy66yiwxU+X1cBK1THJS9oQsDL4IlN9MEK3TU3XGvc=",
+        "owner": "pradyuman",
+        "repo": "typespec-ts-mode",
+        "rev": "fcd43e13568c61772dbb344c6391c2933bd0a72e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pradyuman",
+        "repo": "typespec-ts-mode",
         "type": "github"
       }
     },

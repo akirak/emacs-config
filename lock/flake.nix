@@ -1289,6 +1289,12 @@
       repo = "twist.el";
       type = "github";
     };
+    typespec-ts-mode = {
+      flake = false;
+      owner = "pradyuman";
+      repo = "typespec-ts-mode";
+      type = "github";
+    };
     unfill = {
       flake = false;
       owner = "purcell";

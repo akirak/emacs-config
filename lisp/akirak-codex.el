@@ -211,7 +211,8 @@
               (line-end-position -4))
         ((rx bol "Working ")
          'waiting)
-        ((rx bol "─ Worked for ")
+        ((rx bol (or "─ Worked for "
+                     "──────────────"))
          'done)
         ((rx bol "• You have " (+ digit)
              " usage limit resets available.")

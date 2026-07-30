@@ -1,5 +1,7 @@
 ;;; akirak-process.el ---  -*- lexical-binding: t -*-
 
+(require 'akirak-shell)
+
 ;;;###autoload
 (defun akirak-process-cleanup-dir (dir)
   "Gracefully shutdown processes and kill buffers under DIR."
@@ -17,12 +19,20 @@
         (dolist (proc (process-list))
           (when-let* ((buffer (process-buffer proc)))
             (when (string-prefix-p dir (akirak-process--buffer-dir buffer))
-              (if (derived-mode-p 'eat-mode)
-                  (progn
+              (if (provided-mode-derived-p (buffer-local-value 'major-mode buffer)
+                                           akirak-shell-mode-list)
+                  (if-let* ((command-and-args (akirak-shell-get-command buffer))
+                            (program (akirak-shell-program-from-command command-and-args)))
+                      (if (yes-or-no-p (format "Exit buffer %s (%s)? "
+                                               (buffer-name buffer)
+                                               (akirak-shell-buffer-status-icon
+                                                program buffer)))
+                          (akirak-shell-exit-buffer buffer)
+                        (user-error "Remaining shell buffer"))
                     (pop-to-buffer buffer)
-                    (user-error "Cannot automatically kill the process of this buffer.\
- Manually exit the session."))
-                (kill-buffer buffer))))))
+                    (user-error "Cannot kill this buffer. Try again"))
+                (unless (kill-buffer buffer)
+                  (user-error "Remaining process buffer")))))))
       (let ((wait-start (float-time)))
         ;; There can be processes that don't terminate immediately, so wait for
         ;; all related processes to exit.
