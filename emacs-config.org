@@ -10477,6 +10477,16 @@ Auto-save buffers, based on your activity.
                                 org-dog-find-file
                                 akirak-consult-project-file
                                 akirak-consult-dir))
+
+    ;; Prevent committing buffers too early, especially for edit-indirect.
+    (advice-add 'super-save-maybe-silently
+                :before-while
+                (defun akirak/ad-before-super-save-maybe-silently (&rest _args)
+                  (and buffer-display-time
+                       (> (- (float-time)
+                             (float-time buffer-display-time))
+                          0.5))))
+
     (:when-loaded
       (add-hook 'super-save-predicates
                 (defun akirak/super-save-not-org-crypt-p ()
