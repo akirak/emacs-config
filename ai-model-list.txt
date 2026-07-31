@@ -290,6 +290,7 @@ azure_ai/claude-opus-4-5
 azure_ai/claude-opus-4-6
 azure_ai/claude-opus-4-7
 azure_ai/claude-opus-4-8
+azure_ai/claude-opus-5
 azure_ai/claude-sonnet-4-5
 azure_ai/claude-sonnet-4-6
 azure_ai/claude-sonnet-5
@@ -462,6 +463,7 @@ claude-opus-4-6-20260205
 claude-opus-4-7
 claude-opus-4-7-20260416
 claude-opus-4-8
+claude-opus-5
 claude-sonnet-4-20250514
 claude-sonnet-4-5
 claude-sonnet-4-5-20250929
@@ -556,6 +558,8 @@ dashscope/qwen3-vl-32b-instruct
 dashscope/qwen3-vl-32b-thinking
 dashscope/qwen3-vl-plus
 dashscope/qwen3.5-plus
+dashscope/qwen3.7-max
+dashscope/qwen3.7-plus
 dashscope/qwq-plus
 databricks/databricks-bge-large-en
 databricks/databricks-claude-3-7-sonnet
