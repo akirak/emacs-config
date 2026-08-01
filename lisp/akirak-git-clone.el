@@ -279,9 +279,9 @@ matches the host of the repository,
                              (when (eq 'exit (process-status process))
                                (if (= 0 (process-exit-status process))
                                    ,(if callback
-                                        (if (file-regular-p ,visited-path)
-                                            (find-file ,visited-path)
-                                          `(funcall #',callback ,visited-path))
+                                        `(if (file-regular-p ,visited-path)
+                                             (find-file ,visited-path)
+                                           (funcall #',callback ,visited-path))
                                       `(akirak-git-clone-browse ,visited-path
                                                                 ,other-window))
                                  (message "Returned non-zero from git-clone")))))))
@@ -415,24 +415,26 @@ DIR is an optional destination directory to clone the repository into."
     (list
      (let* ((name (akirak-git-clone--name-from-ref ref))
             (url (akirak-git-clone--clone-url-from-ref ref))
-            (existing-repo (thread-last
-                             (project-known-project-roots)
-                             (seq-filter (lambda (dir)
-                                           (string-prefix-p "~/work2/" dir)))
-                             (seq-find `(lambda (dir)
-                                          (string-suffix-p ,(file-name-as-directory name)
-                                                           dir))))))
-       (if (and existing-repo
-                (file-directory-p existing-repo))
+            (dest (thread-last
+                    (project-known-project-roots)
+                    (seq-filter (lambda (dir)
+                                  (string-prefix-p "~/work2/" dir)))
+                    (seq-find `(lambda (dir)
+                                 (string-suffix-p ,(file-name-as-directory name)
+                                                  dir))))))
+       (unless (and dest
+                    (file-directory-p dest))
+         (setq dest (expand-file-name name
+                                      (if (akirak-git-clone--contribution-p ref)
+                                          "~/work2/foss/contributions/"
+                                        (akirak-git-clone-read-parent
+                                         (format "Parent directory for %s: " name))))))
+       (if (file-directory-p dest)
            (if callback
-               (funcall callback existing-repo)
-             (akirak-git-clone-browse existing-repo))
+               (funcall callback dest)
+             (akirak-git-clone-browse dest))
          (akirak-git-clone--clone
-          url (expand-file-name name
-                                (if (akirak-git-clone--contribution-p ref)
-                                    "~/work2/foss/contributions/"
-                                  (akirak-git-clone-read-parent
-                                   (format "Parent directory for %s: " name))))
+          url dest
           :callback callback
           :ref (alist-get 'ref ref)))))))
 

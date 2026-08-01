@@ -262,4 +262,22 @@
       "neocaml-dune-interaction.el"
     ];
   };
+
+  separedit = _: super: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "separedit.el";
+      ref = "develop";
+    };
+  };
+
+  edit-indirect = _: super: {
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "edit-indirect";
+      ref = "develop";
+    };
+  };
 }

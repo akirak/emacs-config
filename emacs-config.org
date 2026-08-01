@@ -5067,7 +5067,8 @@ Major mode for OCaml code
 
 #+begin_src emacs-lisp
   (setup (:package neocaml)
-    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"
+                 "\\.mlx")
     (:with-mode (neocaml-mode neocamli-mode)
       (:mode-repl akirak/utop-project)
       (:org-src-lang "ocaml")
@@ -7317,7 +7318,7 @@ Jump to definition for 60+ languages without configuration
                           #'dumb-jump-xref-activate
                           80 'local))))
 #+end_src
-*** dune                                                    :OCaml:@extra:fstar:
+*** dune 
 :PROPERTIES:
 :CREATED_TIME: [2023-01-10 Tue 17:26]
 :END:
@@ -10313,7 +10314,8 @@ Edit comment/string/docstring/code block in separate buffer
 
 #+begin_src emacs-lisp
   (setup (:package separedit)
-    (:set separedit-default-mode 'markdown-mode)
+    (:set separedit-default-mode 'markdown-mode
+          separedit-preserve-string-indentation t)
     (:global-keymap "C-c '" #'separedit))
 #+end_src
 *** shfmt
@@ -10476,6 +10478,16 @@ Auto-save buffers, based on your activity.
                                 org-dog-find-file
                                 akirak-consult-project-file
                                 akirak-consult-dir))
+
+    ;; Prevent committing buffers too early, especially for edit-indirect.
+    (advice-add 'super-save-maybe-silently
+                :before-while
+                (defun akirak/ad-before-super-save-maybe-silently (&rest _args)
+                  (and buffer-display-time
+                       (> (- (float-time)
+                             (float-time buffer-display-time))
+                          0.5))))
+
     (:when-loaded
       (add-hook 'super-save-predicates
                 (defun akirak/super-save-not-org-crypt-p ()
@@ -11872,7 +11884,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+RESULTS: tag-statistics
 | [[org-ql-search:tags:packages][packages]]            | 221 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
-| [[org-ql-search:tags:@extra][@extra]]              |  12 |
+| [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
@@ -11930,8 +11942,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:grep][grep]]                |   1 |
 | [[org-ql-search:tags:reference][reference]]           |   1 |
 | [[org-ql-search:tags:search][search]]              |   1 |
-| [[org-ql-search:tags:OCaml][OCaml]]               |   1 |
-| [[org-ql-search:tags:fstar][fstar]]               |   1 |
 | [[org-ql-search:tags:direnv][direnv]]              |   1 |
 | [[org-ql-search:tags:window][window]]              |   1 |
 | [[org-ql-search:tags:translation][translation]]         |   1 |
@@ -12015,7 +12025,6 @@ To use these features, they need to be turned on at build time.
 | [[org-recur][org-recur]]             |      |
 | [[beancount][beancount]]             |      |
 | [[copilot][copilot]]               |      |
-| [[dune][dune]]                  |      |
 | [[elx][elx]]                   |      |
 | [[epkg][epkg]]                  |      |
 | [[epkg-marginalia][epkg-marginalia]]       |      |

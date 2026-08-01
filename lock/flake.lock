@@ -692,11 +692,11 @@
     "docco": {
       "flake": false,
       "locked": {
-        "lastModified": 1756297479,
-        "narHash": "sha256-p4taAV7+18/MlLDrO3o+qIU6IADoDsa1sBdZvztxnf4=",
+        "lastModified": 1785497120,
+        "narHash": "sha256-qqgeG/LQhm5z8caoqt7g1nDVfr8jozKsLAL7ocaQTTM=",
         "owner": "akirak",
         "repo": "docco.el",
-        "rev": "a3fc2665692ef910b6b85b92a1205a8b981ed389",
+        "rev": "2a58c198555e4715dc008242a030d3d12109c893",
         "type": "github"
       },
       "original": {
@@ -836,15 +836,16 @@
     "edit-indirect": {
       "flake": false,
       "locked": {
-        "lastModified": 1706404789,
-        "narHash": "sha256-FC8QDeRitLstVACn7jpdQblxaDiYRbSAtRAAhhyEVuI=",
-        "owner": "Fanael",
+        "lastModified": 1785497028,
+        "narHash": "sha256-W8+HuV9gJpXy6fYPCuyprDc5Ey9GQenQmqGQvMY22g8=",
+        "owner": "akirak",
         "repo": "edit-indirect",
-        "rev": "82a28d8a85277cfe453af464603ea330eae41c05",
+        "rev": "61a401461d66bc99a4e710b9392837bae369ffe5",
         "type": "github"
       },
       "original": {
-        "owner": "Fanael",
+        "owner": "akirak",
+        "ref": "develop",
         "repo": "edit-indirect",
         "type": "github"
       }
@@ -3322,15 +3323,16 @@
     "separedit": {
       "flake": false,
       "locked": {
-        "lastModified": 1746520419,
-        "narHash": "sha256-HLmZMAGFQ6C5Gs7zxT99ytfYYz+LIUzNH9hBE2OQ+7E=",
-        "owner": "twlz0ne",
+        "lastModified": 1785500921,
+        "narHash": "sha256-QtstSm1tMB9rScM6gO87n+jnVuHo52Rl4JE0Twfvg30=",
+        "owner": "akirak",
         "repo": "separedit.el",
-        "rev": "5cb46a65fc6e12b753dce8f581fbfa144d011a80",
+        "rev": "a0afbb9e0c185ba89aa5212c8d0b3de68d9e8ed6",
         "type": "github"
       },
       "original": {
-        "owner": "twlz0ne",
+        "owner": "akirak",
+        "ref": "develop",
         "repo": "separedit.el",
         "type": "github"
       }

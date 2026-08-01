@@ -313,7 +313,8 @@
     };
     edit-indirect = {
       flake = false;
-      owner = "Fanael";
+      owner = "akirak";
+      ref = "develop";
       repo = "edit-indirect";
       type = "github";
     };
@@ -1161,7 +1162,8 @@
     };
     separedit = {
       flake = false;
-      owner = "twlz0ne";
+      owner = "akirak";
+      ref = "develop";
       repo = "separedit.el";
       type = "github";
     };
