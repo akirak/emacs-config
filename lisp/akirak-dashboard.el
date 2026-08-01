@@ -271,7 +271,11 @@
                               (file-name-nondirectory
                                (directory-file-name git-root))
                             "not in git root"))
-                   (?p . ,(if (equal dir git-root)
+                   (?p . ,(if (or (not git-root)
+                                  (string= (file-name-as-directory
+                                            (expand-file-name dir))
+                                           (file-name-as-directory
+                                            (expand-file-name git-root))))
                               ""
                             (format " (%s)"
                                     (file-name-nondirectory
