@@ -5067,9 +5067,11 @@ Major mode for OCaml code
 
 #+begin_src emacs-lisp
   (setup (:package neocaml)
-    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"
-                 "\\.mlx")
-    (:with-mode (neocaml-mode neocamli-mode)
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:with-feature neocaml-mlx
+      (:file-match "\\.mlx\\'"))
+
+    (:with-mode (neocaml-mode neocamli-mode neocaml-mlx-mode)
       (:mode-repl akirak/utop-project)
       (:org-src-lang "ocaml")
       (:mode-project-roots "dune-project")
