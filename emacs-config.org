@@ -5067,7 +5067,8 @@ Major mode for OCaml code
 
 #+begin_src emacs-lisp
   (setup (:package neocaml)
-    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"
+                 "\\.mlx")
     (:with-mode (neocaml-mode neocamli-mode)
       (:mode-repl akirak/utop-project)
       (:org-src-lang "ocaml")
