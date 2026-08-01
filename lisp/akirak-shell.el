@@ -604,9 +604,7 @@ the original minor mode."
      (akirak-codex-buffer-status buffer))
     (`pi
      (require 'akirak-pi)
-     (if (akirak-pi-waiting-p buffer)
-         'done
-       'waiting))
+     (akirak-pi-buffer-status buffer))
     (_
      nil)))
 
