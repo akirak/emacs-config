@@ -261,6 +261,13 @@
       "neocaml-dune.el"
       "neocaml-dune-interaction.el"
     ];
+
+    origin = {
+      type = "github";
+      owner = "akirak";
+      repo = "neocaml";
+      ref = "mlx";
+    };
   };
 
   separedit = _: super: {

@@ -1942,15 +1942,16 @@
     "neocaml": {
       "flake": false,
       "locked": {
-        "lastModified": 1783661567,
-        "narHash": "sha256-UGaOzOrV5dGa5GZhFL6ntiDI43wWLKe3LEaqEl4RK0o=",
-        "owner": "bbatsov",
+        "lastModified": 1785597349,
+        "narHash": "sha256-odBr8N0Glp8iL4+Z23V4GWJ3LRYpXW19BZxJa17IJoQ=",
+        "owner": "akirak",
         "repo": "neocaml",
-        "rev": "32acab3624160a7d0bb04c42babaa791729ab8b5",
+        "rev": "a0574454005948c843b532d0e54d5933946d7d66",
         "type": "github"
       },
       "original": {
-        "owner": "bbatsov",
+        "owner": "akirak",
+        "ref": "mlx",
         "repo": "neocaml",
         "type": "github"
       }
