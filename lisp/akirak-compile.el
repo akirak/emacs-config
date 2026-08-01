@@ -52,6 +52,7 @@
     ("rebar.config" . rebar3)
     ("gleam.toml" . gleam)
     ("Makefile" . make)
+    ("process-compose.yaml" . process-compose)
     (".agents" . agents)
     ("uv.lock" . uv))
   ""
@@ -180,6 +181,8 @@
      ("zig build")
      ("zig test")
      ("zig std"))
+    (process-compose
+     ("process-compose --tui=false"))
     (rebar3
      ("rebar3 compile")
      ("rebar3 release")
