@@ -726,7 +726,8 @@
     };
     neocaml = {
       flake = false;
-      owner = "bbatsov";
+      owner = "akirak";
+      ref = "mlx";
       repo = "neocaml";
       type = "github";
     };
