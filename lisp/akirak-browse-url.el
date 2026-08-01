@@ -54,24 +54,28 @@
     (xwidget-webkit-new-session url)))
 
 ;;;###autoload
-(defun akirak-browse-url-chromium-default (url &optional arg)
-  (start-process "chromium"
-                 nil
-                 browse-url-chromium-program
-                 ;; At present, only a single private profile is allowed.
-                 ;; This may be changed in the future.
-                 "--profile-directory=Default"
-                 url))
+(defun akirak-browse-url-chromium-default (url &rest _args)
+  (if-let* ((prog (executable-find browse-url-chromium-program)))
+      (start-process "chromium"
+                     nil
+                     prog
+                     ;; At present, only a single private profile is allowed.
+                     ;; This may be changed in the future.
+                     "--profile-directory=Default"
+                     url)
+    (browse-url-xdg-open url)))
 
 ;;;###autoload
-(defun akirak-browse-url-private-url (url &optional arg)
-  (start-process "chromium"
-                 nil
-                 browse-url-chromium-program
-                 ;; At present, only a single private profile is allowed.
-                 ;; This may be changed in the future.
-                 "--profile-directory=Private"
-                 url))
+(defun akirak-browse-url-private-url (url &rest _args)
+  (if-let* ((prog (executable-find browse-url-chromium-program)))
+      (start-process "chromium"
+                     nil
+                     prog
+                     ;; At present, only a single private profile is allowed.
+                     ;; This may be changed in the future.
+                     "--profile-directory=Private"
+                     url)
+    (browse-url-xdg-open url)))
 
 (defun akirak-browse-url-chromium-oneshot-advice (&rest _args)
   (advice-remove 'browse-url-chromium
