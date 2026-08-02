@@ -1448,6 +1448,8 @@ The built-in =electric= package provides the following modes:
                          (neocamli-mode . (,@lsp-no-formatter))
                          (python-mode . (,@lsp-no-formatter))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
+                         (reason-mode . (,@lsp-no-formatter))
+                         (reason-ts-mode . (,@lsp-no-formatter))
                          (rust-ts-mode . (,@lsp))
                          (svelte-mode . (,@lsp ,@flymake-eslint))
                          (tsx-ts-mode . (,@lsp-no-formatter))
@@ -5108,6 +5110,20 @@ Major mode for Nix expressions, powered by tree-sitter
      ;; nixfmt-rfc-style is now recommended, but keep alejandra until I finish
      ;; migration
      (alejandra :program "alejandra")))
+#+end_src
+*** reason-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-08-03 Mon 08:48]
+:END:
+#+begin_quote
+Tree-sitter mode for Reason ML
+[[https://github.com/akirak/reason-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package reason-ts-mode)
+    (:org-src-lang "reason")
+    (:file-match "\\.re\\'"))
 #+end_src
 *** rust-ts-mode
 :PROPERTIES:
