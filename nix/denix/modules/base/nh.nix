@@ -141,11 +141,11 @@ delib.module {
         enable = true;
         clean = {
           enable = true;
-          dates = "06,16,26-*-* 02:00:00";
+          dates = "Wed-*-* 02:00:00";
           # On desktop machines, also run this command manually:
           #
-          # nh clean all --no-gc --keep-since 15d --evaluation-strategy=run0
-          extraArgs = "--no-gc --keep-since 15d --evaluation-strategy=none";
+          # nh clean all --keep-since 15d --evaluation-strategy=run0
+          extraArgs = "--keep-since 15d --evaluation-strategy=none";
         };
         flake = cfg.mainConfigDirectory;
       };
