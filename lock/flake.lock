@@ -2959,6 +2959,22 @@
         "type": "github"
       }
     },
+    "reason-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785714374,
+        "narHash": "sha256-KQskFw7BcDb+iEsz5sskdrBKjhcFp3+4IDBYUQCuLvk=",
+        "owner": "akirak",
+        "repo": "reason-ts-mode",
+        "rev": "fb80873de8a49c3528edae0ddc0dd70ef78636e7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "reason-ts-mode",
+        "type": "github"
+      }
+    },
     "reformatter": {
       "flake": false,
       "locked": {
@@ -3257,6 +3273,7 @@
         "rainbow-csv": "rainbow-csv",
         "rainbow-delimiters": "rainbow-delimiters",
         "reason-mode": "reason-mode",
+        "reason-ts-mode": "reason-ts-mode",
         "reformatter": "reformatter",
         "repl-toggle": "repl-toggle",
         "request": "request",
