@@ -137,10 +137,10 @@
                          (line-beginning-position -5)
                          (line-end-position -5)))
         'waiting)
-       ((string-prefix-p "0.0%/"
-                         (buffer-substring-no-properties
-                          (line-beginning-position 0)
-                          (line-end-position 0)))
+       ((string-match-p (rx bol "0.0%/")
+                        (buffer-substring-no-properties
+                         (line-beginning-position 0)
+                         (line-end-position 1)))
         'fresh)
        ((string-match-p (rx bol " ↑↓ navigate  enter select  escape/ctrl+c cancel")
                         (buffer-substring-no-properties
