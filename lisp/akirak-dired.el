@@ -159,5 +159,14 @@
     (when (file-directory-p file)
       (akirak-process-cleanup-dir file))))
 
+(defun akirak-dired-ad-after-rename-subdir (from-dir to-dir)
+  "An advice for `dired-rename-file'."
+  (when (file-equal-p (project-root (project-current nil from-dir))
+                      from-dir)
+    (project-forget-project (abbreviate-file-name
+                             (expand-file-name from-dir)))
+    (project-remember-project (abbreviate-file-name
+                               (expand-file-name to-dir)))))
+
 (provide 'akirak-dired)
 ;;; akirak-dired.el ends here
