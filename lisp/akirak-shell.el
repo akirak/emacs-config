@@ -296,11 +296,14 @@ the original minor mode."
         (push command akirak-shell-command-history))
       (with-current-buffer buffer
         (eat-mode)
+        (eat-kill-buffer-on-exit nil)
         (let ((process-environment (or environment process-environment)))
           (apply #'eat-exec buffer name
                  (pcase command
                    (`(,cmd . ,args)
                     (list cmd nil args)))))
+        (add-hook 'eat-exit-hook
+                  #'akirak-shell-kill-current-buffer 90 'local)
         (unless noselect
           (pcase window
             (`new-tab
@@ -310,6 +313,24 @@ the original minor mode."
             (_ (pop-to-buffer-same-window buffer)))))
       ;; Explicitly return the buffer
       buffer)))
+
+(defun akirak-shell-kill-current-buffer (_process)
+  "A modified version of `eat--kill-buffer'."
+  (let* ((buffer (current-buffer))
+         (window (get-buffer-window buffer)))
+    (if window
+        (if (window-in-direction 'above window)
+            (quit-window 'kill window)
+          ;; TODO: Close the tab if it's the dedicated window and only window in
+          ;; the tab
+          (let* ((dir (buffer-local-value 'default-directory buffer))
+                 (root (vc-git-root dir)))
+            (if root
+                (let ((magit-display-buffer-function #'ignore))
+                  (window--display-buffer (magit-status root) window))
+              ;; TODO: Is there any better behavior?
+              (dired dir))))
+      (kill-buffer buffer))))
 
 (defun akirak-shell--setup-reopen (children)
   (thread-last
@@ -426,7 +447,8 @@ the original minor mode."
 (cl-defun akirak-shell-run-command-at-dir (dir command)
   (let ((buffer-name (thread-last
                        (buffer-list)
-                       (seq-filter (apply-partially #'akirak-shell-buffer-in-dir-p dir))
+                       (seq-filter (apply-partially #'akirak-shell-buffer-in-dir-p
+                                                    dir))
                        (mapcar #'buffer-name)
                        (completing-read "Shell: "))))
     (if (string-empty-p buffer-name)
