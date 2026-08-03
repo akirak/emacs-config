@@ -726,7 +726,8 @@
     };
     neocaml = {
       flake = false;
-      owner = "bbatsov";
+      owner = "akirak";
+      ref = "mlx";
       repo = "neocaml";
       type = "github";
     };
@@ -1112,6 +1113,12 @@
       repo = "reason-mode";
       type = "github";
     };
+    reason-ts-mode = {
+      flake = false;
+      owner = "akirak";
+      repo = "reason-ts-mode";
+      type = "github";
+    };
     reformatter = {
       flake = false;
       owner = "purcell";
@@ -1386,5 +1393,5 @@
       type = "github";
     };
   };
-  outputs = { ... }: { };
+  outputs = _: { };
 }

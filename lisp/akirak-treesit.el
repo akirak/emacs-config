@@ -207,7 +207,12 @@
                            (region-bounds)))
          (node (if akirak-treesit-expand-region-node
                    (or (treesit-node-parent akirak-treesit-expand-region-node)
-                       (user-error "Root node of the document"))
+                       (if (or (> (point) (point-min))
+                               (< (point) (point-max)))
+                           (akirak-treesit--select-region-outer
+                            (caar current-bounds)
+                            (cdar current-bounds))
+                         (user-error "Root node of the document")))
                  (treesit-node-at (point))))
          (start (treesit-node-start node)))
     (when (use-region-p)
@@ -222,6 +227,28 @@
     (if (equal (region-bounds) current-bounds)
         (akirak-treesit-expand-region-1)
       (message "%s" (treesit-node-type node)))))
+
+(defun akirak-treesit--select-region-outer (begin end)
+  "Select the region of a node containing the region between BEGIN and END."
+  (goto-char begin)
+  (let* ((pos (re-search-backward (rx (not (any space)))))
+         (node (treesit-node-at pos)))
+    (catch 'no-parent
+      (while (and node
+                  (or (> (treesit-node-start node) begin)
+                      (< (treesit-node-end node) end)))
+        (if-let* ((parent (treesit-node-parent node)))
+            (setq node parent)
+          (throw 'no-parent t))))
+    (when (use-region-p)
+      (deactivate-mark))
+    (goto-char (treesit-node-start node))
+    (let ((inhibit-message t))
+      (activate-mark))
+    (goto-char (treesit-node-end node))
+    (push-mark)
+    (goto-char (treesit-node-start node))
+    (setq akirak-treesit-expand-region-node node)))
 
 (defun akirak-treesit-expand-region-2 (arg)
   (unless (use-region-p)

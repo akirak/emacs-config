@@ -87,7 +87,8 @@
     (nix-flake
      ("nix fmt")
      ("nix flake check")
-     ("nix flake lock"))
+     ("nix flake lock")
+     ("nix build -L"))
     (dune
      ("dune build")
      ("dune build --watch")

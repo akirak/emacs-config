@@ -1010,6 +1010,8 @@ The other variables must not be saved, and they should be put in configuration:
 
     (advice-add 'dired-internal-do-deletions :before #'akirak-dired-ad-before-deletions)
     (advice-add 'dired-show-file-type :override #'ignore)
+    (advice-add 'akirak-dired-ad-after-rename-subdir
+                :after #'akirak-dired-ad-after-rename-subdir)
 
     (:with-feature dired-aux
       (:also-load akirak-dired)
@@ -1446,6 +1448,8 @@ The built-in =electric= package provides the following modes:
                          (neocamli-mode . (,@lsp-no-formatter))
                          (python-mode . (,@lsp-no-formatter))
                          (nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
+                         (reason-mode . (,@lsp-no-formatter))
+                         (reason-ts-mode . (,@lsp-no-formatter))
                          (rust-ts-mode . (,@lsp))
                          (svelte-mode . (,@lsp ,@flymake-eslint))
                          (tsx-ts-mode . (,@lsp-no-formatter))
@@ -5067,9 +5071,11 @@ Major mode for OCaml code
 
 #+begin_src emacs-lisp
   (setup (:package neocaml)
-    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'"
-                 "\\.mlx")
-    (:with-mode (neocaml-mode neocamli-mode)
+    (:file-match "\\.ml\\(?:\\.[^z-a]+\\)?\\'")
+    (:with-feature neocaml-mlx
+      (:file-match "\\.mlx\\'"))
+
+    (:with-mode (neocaml-mode neocamli-mode neocaml-mlx-mode)
       (:mode-repl akirak/utop-project)
       (:org-src-lang "ocaml")
       (:mode-project-roots "dune-project")
@@ -5104,6 +5110,20 @@ Major mode for Nix expressions, powered by tree-sitter
      ;; nixfmt-rfc-style is now recommended, but keep alejandra until I finish
      ;; migration
      (alejandra :program "alejandra")))
+#+end_src
+*** reason-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-08-03 Mon 08:48]
+:END:
+#+begin_quote
+Tree-sitter mode for Reason ML
+[[https://github.com/akirak/reason-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package reason-ts-mode)
+    (:org-src-lang "reason")
+    (:file-match "\\.re\\'"))
 #+end_src
 *** rust-ts-mode
 :PROPERTIES:
@@ -9097,7 +9117,8 @@ A Git porcelain inside Emacs
                     (when (fboundp 'akirak-process-cleanup-dir)
                       (akirak-process-cleanup-dir worktree))
                     (magit-run-git "worktree" "remove"
-                                   (convert-standard-filename (expand-file-name worktree))))))
+                                   (convert-standard-filename (expand-file-name worktree)))
+                    (project-forget-project worktree))))
               (if (file-exists-p default-directory)
                   (magit-run-git "worktree" "prune")
                 (let ((default-directory primary))

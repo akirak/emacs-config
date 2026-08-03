@@ -692,11 +692,11 @@
     "docco": {
       "flake": false,
       "locked": {
-        "lastModified": 1785497120,
-        "narHash": "sha256-qqgeG/LQhm5z8caoqt7g1nDVfr8jozKsLAL7ocaQTTM=",
+        "lastModified": 1785502215,
+        "narHash": "sha256-c8TEN/JCCspTCIKE4i/1cLTEZq7Ka4SaUiV10GrKuiQ=",
         "owner": "akirak",
         "repo": "docco.el",
-        "rev": "2a58c198555e4715dc008242a030d3d12109c893",
+        "rev": "f65161346ae6180e223aad2c670d947374cfa402",
         "type": "github"
       },
       "original": {
@@ -804,11 +804,11 @@
     "dune": {
       "flake": false,
       "locked": {
-        "lastModified": 1766525110,
-        "narHash": "sha256-x25Y+Vj3fyesTTJbM9Dbh8eUhcaLUPk1o7vGz3CWYfw=",
+        "lastModified": 1785510906,
+        "narHash": "sha256-2Hi5+Rsn0GyuZF2RGS1SR2sRv8JbDyeuo6+S9TzVQHs=",
         "owner": "ocaml",
         "repo": "dune",
-        "rev": "a58b512fd30054f9e27bf3fdfcbe5ee81d0ddbe2",
+        "rev": "156eb7a6f11cd28d42977dd8c9c7b9f04a74cef8",
         "type": "github"
       },
       "original": {
@@ -1942,15 +1942,16 @@
     "neocaml": {
       "flake": false,
       "locked": {
-        "lastModified": 1783661567,
-        "narHash": "sha256-UGaOzOrV5dGa5GZhFL6ntiDI43wWLKe3LEaqEl4RK0o=",
-        "owner": "bbatsov",
+        "lastModified": 1785597349,
+        "narHash": "sha256-odBr8N0Glp8iL4+Z23V4GWJ3LRYpXW19BZxJa17IJoQ=",
+        "owner": "akirak",
         "repo": "neocaml",
-        "rev": "32acab3624160a7d0bb04c42babaa791729ab8b5",
+        "rev": "a0574454005948c843b532d0e54d5933946d7d66",
         "type": "github"
       },
       "original": {
-        "owner": "bbatsov",
+        "owner": "akirak",
+        "ref": "mlx",
         "repo": "neocaml",
         "type": "github"
       }
@@ -2200,11 +2201,11 @@
     "ocp-indent": {
       "flake": false,
       "locked": {
-        "lastModified": 1784731175,
-        "narHash": "sha256-ZY5aLP/hYB1MfpYdf5wQGF4ERytXypQ4CP8NKWM/RaU=",
+        "lastModified": 1785141829,
+        "narHash": "sha256-3VKn5dvBCu8fBzJuavY7phCK0AqOQRDGMMx6F4D2tg0=",
         "owner": "OCamlPro",
         "repo": "ocp-indent",
-        "rev": "2cfb05ccca1f76d9bfda67e80ff35709ab2697cd",
+        "rev": "0aa58970defdce27fbdb3b44a0c071131d423d6d",
         "type": "github"
       },
       "original": {
@@ -2958,6 +2959,22 @@
         "type": "github"
       }
     },
+    "reason-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785714374,
+        "narHash": "sha256-KQskFw7BcDb+iEsz5sskdrBKjhcFp3+4IDBYUQCuLvk=",
+        "owner": "akirak",
+        "repo": "reason-ts-mode",
+        "rev": "fb80873de8a49c3528edae0ddc0dd70ef78636e7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "reason-ts-mode",
+        "type": "github"
+      }
+    },
     "reformatter": {
       "flake": false,
       "locked": {
@@ -3256,6 +3273,7 @@
         "rainbow-csv": "rainbow-csv",
         "rainbow-delimiters": "rainbow-delimiters",
         "reason-mode": "reason-mode",
+        "reason-ts-mode": "reason-ts-mode",
         "reformatter": "reformatter",
         "repl-toggle": "repl-toggle",
         "request": "request",

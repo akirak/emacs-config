@@ -28,6 +28,9 @@
 
 ;;; Code:
 
+(defcustom akirak-dashboard-command-length 25
+  ""
+  :type 'number)
 
 ;;;; org-clock-history
 
@@ -262,6 +265,10 @@
 (defun akirak-dashboard--process-buffer-open (buffer)
   (pop-to-buffer buffer))
 
+(defun akirak-dashboard--truncate-command (command)
+  (truncate-string-to-width command akirak-dashboard-command-length
+                            nil nil t))
+
 (defun akirak-dashboard--process-buffer-format-item (buffer)
   (let* ((mode (buffer-local-value 'major-mode buffer))
          (dir (buffer-local-value 'default-directory buffer))
@@ -271,7 +278,11 @@
                               (file-name-nondirectory
                                (directory-file-name git-root))
                             "not in git root"))
-                   (?p . ,(if (equal dir git-root)
+                   (?p . ,(if (or (not git-root)
+                                  (string= (file-name-as-directory
+                                            (expand-file-name dir))
+                                           (file-name-as-directory
+                                            (expand-file-name git-root))))
                               ""
                             (format " (%s)"
                                     (file-name-nondirectory
@@ -282,16 +293,18 @@
                                       (akirak-shell-buffer-status-icon prog buffer))
                             (if (buffer-local-value 'compilation-arguments buffer)
                                 (format "%s [compile:⌛]"
-                                        (buffer-local-value 'compile-command buffer))
+                                        (akirak-dashboard--truncate-command
+                                         (buffer-local-value 'compile-command buffer)))
                               (propertize
-                               (pcase (akirak-shell-get-command buffer)
-                                 (`null
-                                  (process-command (get-buffer-process buffer)))
-                                 (`(,command . ,args)
-                                  (mapconcat #'shell-quote-argument
-                                             (cons (file-name-nondirectory command)
-                                                   args)
-                                             " ")))
+                               (akirak-dashboard--truncate-command
+                                (pcase (akirak-shell-get-command buffer)
+                                  (`null
+                                   (process-command (get-buffer-process buffer)))
+                                  (`(,command . ,args)
+                                   (mapconcat #'shell-quote-argument
+                                              (cons (file-name-nondirectory command)
+                                                    args)
+                                              " "))))
                                'face 'font-lock-comment-face))))
                    (?m . ,(or (nerd-icons-icon-for-mode mode)
                               (format "[%s]"
