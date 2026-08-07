@@ -104,10 +104,14 @@ Each function is run without an argument in the new working tree."
     (if start-point
         (magit-worktree-branch path branch start-point)
       (magit-worktree-checkout path branch))
-    (when (and direnv-allowed
-               (fboundp 'envrc-allow))
-      (envrc-allow))
-    (run-hooks 'akirak-magit-worktree-hook)
+    (let ((default-directory path))
+      (when (and direnv-allowed
+                 (fboundp 'envrc-allow))
+        (unless (file-exists-p ".envrc")
+          (copy-file (file-name-concat current ".envrc")
+                     ".envrc"))
+        (envrc-allow))
+      (run-hooks 'akirak-magit-worktree-hook))
     ;; Return the path for non-interactive use
     path))
 
