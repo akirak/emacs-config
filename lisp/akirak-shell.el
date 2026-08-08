@@ -428,14 +428,14 @@ the original minor mode."
 
 (defun akirak-shell-project-directory ()
   (require 'akirak-org-git)
-  (if (derived-mode-p 'org-mode)
-      (let ((worktree (akirak-org-git-worktree)))
-        (when (and worktree
-                   (file-directory-p worktree))
-          worktree))
-    (or (vc-git-root default-directory)
-        (when-let* ((pr (project-current)))
-          (abbreviate-file-name (project-root pr))))))
+  (or (and (derived-mode-p 'org-mode)
+           (let ((worktree (akirak-org-git-worktree)))
+             (when (and worktree
+                        (file-directory-p worktree))
+               worktree)))
+      (or (vc-git-root default-directory)
+          (when-let* ((pr (project-current)))
+            (abbreviate-file-name (project-root pr))))))
 
 ;;;; Commands that I plan on deprecating
 
