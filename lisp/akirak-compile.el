@@ -183,7 +183,8 @@
      ("zig test")
      ("zig std"))
     (process-compose
-     ("process-compose --tui=false"))
+     ("process-compose --tui=false")
+     ("process-compose attach" terminal t))
     (rebar3
      ("rebar3 compile")
      ("rebar3 release")

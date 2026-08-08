@@ -5902,6 +5902,9 @@ This is an extra functions for window management.
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
+                       ("^\\*process-compose attach"
+                        display-buffer-in-new-tab
+                        (dedicated . t))
                        ("^\\*Embark Export"
                         akirak-window-display-as-left-sidebar)
                        ("^\\*Org-Babel Error Output*"
