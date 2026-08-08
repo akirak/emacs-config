@@ -226,10 +226,13 @@ matches the host of the repository,
             (path (if (string-match-p (rx ".git" eol) match)
                       (substring match 0 -4)
                     match))
-            (local-path (f-join host path))
-            (origin flake-ref-or-url))
+            (local-path (f-join host path)))
        (make-akirak-git-clone-source :type 'git
-                                     :origin origin
+                                     :origin
+                                     (replace-regexp-in-string
+                                      (rx bol "git+https:")
+                                      "https"
+                                      flake-ref-or-url)
                                      :host host
                                      :local-path local-path)))
     (_
