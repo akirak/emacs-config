@@ -19,8 +19,11 @@ delib.module {
     };
 
   myconfig.ifEnabled = {
-    # input group is needed to run xremap without sudo.
-    user.extraGroups = [ "input" ];
+    # Access to input devices and /dev/uinput is needed to run xremap without sudo.
+    user.extraGroups = [
+      "input"
+      "uinput"
+    ];
   };
 
   home.always.imports = [
