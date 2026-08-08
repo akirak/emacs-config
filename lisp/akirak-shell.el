@@ -100,8 +100,10 @@ the original minor mode."
                      (read-buffer "Switch to a shell buffer: "
                                   nil t
                                   `(lambda (arg)
-                                     (let ((regexp ,(regexp-opt
-                                                     (mapcar #'buffer-name buffers))))
+                                     (let ((regexp (concat "^"
+                                                           ,(regexp-opt
+                                                             (mapcar #'buffer-name buffers))
+                                                           "$")))
                                        (pcase-exhaustive arg
                                          ((and `(,name . ,_)
                                                (guard (stringp name)))
