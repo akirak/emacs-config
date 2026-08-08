@@ -328,8 +328,10 @@ the original minor mode."
           (let* ((dir (buffer-local-value 'default-directory buffer))
                  (root (vc-git-root dir)))
             (if root
-                (let ((magit-display-buffer-function #'ignore))
-                  (window--display-buffer (magit-status root) window 'reuse))
+                (let ((magit-display-buffer-function
+                       #'magit-display-buffer-same-window-except-diff-v1))
+                  (select-window window)
+                  (magit-status root))
               ;; TODO: Is there any better behavior?
               (dired dir))))
       (kill-buffer buffer))))
