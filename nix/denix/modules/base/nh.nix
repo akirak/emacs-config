@@ -141,7 +141,7 @@ delib.module {
         enable = true;
         clean = {
           enable = true;
-          dates = "Wed-*-* 02:00:00";
+          dates = "Wed *-*-* 02:00:00";
           # On desktop machines, also run this command manually:
           #
           # nh clean all --keep-since 15d --evaluation-strategy=run0
