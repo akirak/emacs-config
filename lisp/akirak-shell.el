@@ -296,7 +296,7 @@ the original minor mode."
         (push command akirak-shell-command-history))
       (with-current-buffer buffer
         (eat-mode)
-        (eat-kill-buffer-on-exit nil)
+        (setq-local eat-kill-buffer-on-exit nil)
         (let ((process-environment (or environment process-environment)))
           (apply #'eat-exec buffer name
                  (pcase command
