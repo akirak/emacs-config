@@ -182,8 +182,6 @@
      ("zig build")
      ("zig test")
      ("zig std"))
-    (process-compose
-     ("process-compose --tui=false"))
     (rebar3
      ("rebar3 compile")
      ("rebar3 release")
@@ -275,6 +273,7 @@ are displayed in the frame."
                                                        (mapcar #'cdr ',projects))))))))
                   (prefer-terminal (or (get-text-property 0 'terminal command)
                                        (akirak-compile--terminal-command-p command)))
+                  (buffer-name-key (get-text-property 0 'buffer-name command))
                   (default-directory (or (get-text-property 0 'command-directory command)
                                          (pcase projects
                                            (`nil)
@@ -307,7 +306,9 @@ are displayed in the frame."
                  (puthash key history akirak-compile-per-workspace-history))
                (cond
                 (prefer-terminal
-                 (let* ((name (format "%s<%s>" command (project-name (project-current))))
+                 (let* ((name (format "%s<%s>"
+                                      (or buffer-name-key command)
+                                      (project-name (project-current))))
                         (buffer-name (format "*%s*" name)))
                    (when (get-buffer buffer-name)
                      (kill-buffer buffer-name))
@@ -321,8 +322,14 @@ are displayed in the frame."
                      ;; (compilation-shell-minor-mode t)
                      (eat-exec (current-buffer) name "sh" nil (list "-c" command))
                      (pop-to-buffer (current-buffer) '(nil (dedicated . t))))))
-                ((equal arg '(4))
-                 (akirak-compile--start command t (akirak-compile--buffer-name)))
+                ((or (equal arg '(4))
+                     buffer-name-key)
+                 (akirak-compile--start command t
+                                        (if buffer-name-key
+                                            (format "*%s<%s>*"
+                                                    buffer-name-key
+                                                    (project-name (project-current)))
+                                          (akirak-compile--buffer-name))))
                 (t
                  (compile command t)))))
          (user-error "No workspace root"))))))
@@ -641,6 +648,19 @@ are displayed in the frame."
                                                    (shell-quote-argument (match-string 1))))
                                      results)))
                            results))))))
+      (process-compose
+       (progn
+         (require 'akirak-process-compose)
+         (let* ((file (akirak-process-compose-find-config dir))
+                (config (akirak-process-compose-parse file)))
+           (append '(("process-compose up --tui=false")
+                     ("process-compose attach" terminal t)
+                     ("process-compose down" buffer-name "process-compose down"))
+                   (mapcar (lambda (name)
+                             (list (format "process-compose process logs %s -n 500 -f"
+                                           (shell-quote-argument name))
+                                   'buffer-name (concat "process-compose logs " name)))
+                           (akirak-process-compose-process-names config))))))
       (make (with-memoize
              (let (results
                    (default-directory dir))

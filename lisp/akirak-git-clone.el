@@ -121,7 +121,7 @@ matches the host of the repository,
                     match))
             (pr-number (string-to-number (match-string 3 flake-ref-or-url)))
             (local-path (f-join host (downcase path)))
-            (origin (format "https://%s/%s.git" host path)))
+            (origin (akirak-git-clone--clone-url-2 host path)))
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
                                      :owner-and-repo path
@@ -145,13 +145,7 @@ matches the host of the repository,
                                 (match-string 2 flake-ref-or-url)))
             (rev-or-ref (match-string 3 flake-ref-or-url))
             (params (match-string 4 flake-ref-or-url))
-            (origin (format "https://%s/%s%s"
-                            host
-                            (match-string 2 flake-ref-or-url)
-                            (pcase (match-string 1 flake-ref-or-url)
-                              ("github:" ".git")
-                              ("codeberg:" ".git")
-                              ("sourcehut:" "")))))
+            (origin (akirak-git-clone--clone-url-2 host path)))
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
                                      :host host
@@ -178,7 +172,7 @@ matches the host of the repository,
             (rev-or-ref (match-string 3 flake-ref-or-url))
             (content-path (match-string 4 flake-ref-or-url))
             (local-path (f-join host (downcase path)))
-            (origin (format "https://%s/%s.git" host path)))
+            (origin (akirak-git-clone--clone-url-2 host path)))
        (make-akirak-git-clone-source :type 'github
                                      :origin origin
                                      :host host
@@ -195,7 +189,7 @@ matches the host of the repository,
      (let* ((host (match-string 1 flake-ref-or-url))
             (path (match-string 2 flake-ref-or-url))
             (local-path (f-join host (downcase path)))
-            (origin (format "https://%s/%s" host path)))
+            (origin (akirak-git-clone--clone-url-2 host path)))
        (make-akirak-git-clone-source :type 'type
                                      :origin origin
                                      :owner-and-repo path
@@ -226,10 +220,13 @@ matches the host of the repository,
             (path (if (string-match-p (rx ".git" eol) match)
                       (substring match 0 -4)
                     match))
-            (local-path (f-join host path))
-            (origin flake-ref-or-url))
+            (local-path (f-join host path)))
        (make-akirak-git-clone-source :type 'git
-                                     :origin origin
+                                     :origin
+                                     (replace-regexp-in-string
+                                      (rx bol "git+https:")
+                                      "https"
+                                      flake-ref-or-url)
                                      :host host
                                      :local-path local-path)))
     (_
@@ -396,17 +393,45 @@ DIR is an optional destination directory to clone the repository into."
       (akirak-git-clone--repo-name (alist-get 'url ref))))
 
 (defun akirak-git-clone--clone-url-from-ref (ref)
-  (pcase (alist-get 'type ref)
-    ("github"
-     (format "https://github.com/%s/%s.git"
-             (alist-get 'owner ref)
-             (alist-get 'repo ref)))
-    ("sourcehut"
-     (format "https://git.sr.ht/%s/%s"
-             (alist-get 'owner ref)
-             (alist-get 'repo ref)))
-    ("git"
-     (alist-get 'url ref))))
+  (or (akirak-git-clone--clone-url-3 (alist-get 'type ref)
+                                   (alist-get 'owner ref)
+                                   (alist-get 'repo ref))
+      (pcase-exhaustive (alist-get 'type ref)
+        ("git"
+         (alist-get 'url ref)))))
+
+(defun akirak-git-clone--clone-url-3 (type-string owner repo)
+  (let ((private (not (akirak-git-clone--contribution-p
+                       `((type . ,type-string)
+                         (owner . ,owner))))))
+    (pcase type-string
+      ("github"
+       (if private
+           (format "git@github.com:%s/%s.git" owner repo)
+         (format "https://github.com/%s/%s.git" owner repo)))
+      ("sourcehut"
+       (format "https://git.sr.ht/%s/%s.git" owner repo))
+      ("codeberg"
+       (format "https://codeberg.org/%s/%s.git" owner repo))
+      ("git"
+       (alist-get 'url ref)))))
+
+(defun akirak-git-clone--clone-url-2 (type-or-host path)
+  (pcase (save-match-data
+           (when (string-match (rx bol (group (+ (not (any "/"))))
+                                   "/" (group (+ (not (any "/")))))
+                               path)
+             (list (match-string 1 path)
+                   (match-string 2 path))))
+    (`(,owner ,repo)
+     (akirak-git-clone--clone-url-3 (pcase type-or-host
+                                      ((or "github" "gitlab" "sourcehut")
+                                       type-or-host)
+                                      ("github.com" "github")
+                                      ("gitlab.com" "gitlab")
+                                      ("codeberg.org" "codebert"))
+                                    owner
+                                    repo))))
 
 (cl-defun akirak-git-clone-flake-node (ref &optional directory
                                            &key callback)

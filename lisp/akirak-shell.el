@@ -91,7 +91,7 @@ the original minor mode."
      (akirak-shell-select))
     ('(16)
      (if-let* ((pr (project-current)))
-         (pcase (akirak-shell--buffers-for-project pr)
+         (pcase (seq-filter #'buffer-live-p (akirak-shell--buffers-for-project pr))
            (`nil (if (akirak-shell-buffer-list)
                      (akirak-shell-select)
                    (akirak-shell-transient)))
@@ -100,8 +100,10 @@ the original minor mode."
                      (read-buffer "Switch to a shell buffer: "
                                   nil t
                                   `(lambda (arg)
-                                     (let ((regexp ,(regexp-opt
-                                                     (mapcar #'buffer-name buffers))))
+                                     (let ((regexp (concat "^"
+                                                           ,(regexp-opt
+                                                             (mapcar #'buffer-name buffers))
+                                                           "$")))
                                        (pcase-exhaustive arg
                                          ((and `(,name . ,_)
                                                (guard (stringp name)))
@@ -296,7 +298,7 @@ the original minor mode."
         (push command akirak-shell-command-history))
       (with-current-buffer buffer
         (eat-mode)
-        (eat-kill-buffer-on-exit nil)
+        (setq-local eat-kill-buffer-on-exit nil)
         (let ((process-environment (or environment process-environment)))
           (apply #'eat-exec buffer name
                  (pcase command
@@ -326,8 +328,10 @@ the original minor mode."
           (let* ((dir (buffer-local-value 'default-directory buffer))
                  (root (vc-git-root dir)))
             (if root
-                (let ((magit-display-buffer-function #'ignore))
-                  (window--display-buffer (magit-status root) window))
+                (let ((magit-display-buffer-function
+                       #'magit-display-buffer-same-window-except-diff-v1))
+                  (select-window window)
+                  (magit-status root))
               ;; TODO: Is there any better behavior?
               (dired dir))))
       (kill-buffer buffer))))
@@ -424,14 +428,14 @@ the original minor mode."
 
 (defun akirak-shell-project-directory ()
   (require 'akirak-org-git)
-  (if (derived-mode-p 'org-mode)
-      (let ((worktree (akirak-org-git-worktree)))
-        (when (and worktree
-                   (file-directory-p worktree))
-          worktree))
-    (or (vc-git-root default-directory)
-        (when-let* ((pr (project-current)))
-          (abbreviate-file-name (project-root pr))))))
+  (or (and (derived-mode-p 'org-mode)
+           (let ((worktree (akirak-org-git-worktree)))
+             (when (and worktree
+                        (file-directory-p worktree))
+               worktree)))
+      (or (vc-git-root default-directory)
+          (when-let* ((pr (project-current)))
+            (abbreviate-file-name (project-root pr))))))
 
 ;;;; Commands that I plan on deprecating
 

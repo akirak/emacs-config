@@ -2103,7 +2103,8 @@ Operations on the current project
   (setup recentf
     (:hook-into after-init-hook)
     (:set recentf-max-saved-items 1000
-          recentf-auto-cleanup 'never
+          ;; Clean up the history on idle
+          recentf-auto-cleanup 180
           ;; Default value. Some packages add extra entries after the package is
           ;; loaded.
           recentf-exclude (list (concat "^" (regexp-opt (list "/nix/store/"
@@ -5738,6 +5739,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       (add-hook 'auth-source-backend-parser-functions #'akirak-passage-auth-source-parse)
       (add-hook 'auth-sources 'passage)))
 #+end_src
+*** akirak-process-compose
+#+begin_src elisp
+  (setup akirak-process-compose
+    (:nixpkgs yq))
+#+end_src
 *** akirak-project
 #+begin_src emacs-lisp
   (setup akirak-project
@@ -5901,6 +5907,9 @@ This is an extra functions for window management.
                        ((major-mode . org-agenda-mode)
                         akirak-window-display-org-agenda-buffer
                         (mode org-agenda-mode))
+                       ("^\\*process-compose attach"
+                        display-buffer-in-new-tab
+                        (dedicated . t))
                        ("^\\*Embark Export"
                         akirak-window-display-as-left-sidebar)
                        ("^\\*Org-Babel Error Output*"
