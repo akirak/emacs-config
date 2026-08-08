@@ -396,17 +396,26 @@ DIR is an optional destination directory to clone the repository into."
       (akirak-git-clone--repo-name (alist-get 'url ref))))
 
 (defun akirak-git-clone--clone-url-from-ref (ref)
-  (pcase (alist-get 'type ref)
-    ("github"
-     (format "https://github.com/%s/%s.git"
-             (alist-get 'owner ref)
-             (alist-get 'repo ref)))
-    ("sourcehut"
-     (format "https://git.sr.ht/%s/%s"
-             (alist-get 'owner ref)
-             (alist-get 'repo ref)))
-    ("git"
-     (alist-get 'url ref))))
+  (let ((private (not (akirak-git-clone--contribution-p ref))))
+    (pcase (alist-get 'type ref)
+      ("github"
+       (if private
+           (format "git@github.com:%s/%s.git"
+                   (alist-get 'owner ref)
+                   (alist-get 'repo ref))
+         (format "https://github.com/%s/%s.git"
+                 (alist-get 'owner ref)
+                 (alist-get 'repo ref))))
+      ("sourcehut"
+       (format "https://git.sr.ht/%s/%s.git"
+               (alist-get 'owner ref)
+               (alist-get 'repo ref)))
+      ("codeberg"
+       (format "https://codeberg.org/%s/%s.git"
+               (alist-get 'owner ref)
+               (alist-get 'repo ref)))
+      ("git"
+       (alist-get 'url ref)))))
 
 (cl-defun akirak-git-clone-flake-node (ref &optional directory
                                            &key callback)
