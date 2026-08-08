@@ -327,7 +327,7 @@ the original minor mode."
                  (root (vc-git-root dir)))
             (if root
                 (let ((magit-display-buffer-function #'ignore))
-                  (window--display-buffer (magit-status root) window))
+                  (window--display-buffer (magit-status root) window 'reuse))
               ;; TODO: Is there any better behavior?
               (dired dir))))
       (kill-buffer buffer))))
