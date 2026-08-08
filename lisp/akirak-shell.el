@@ -91,7 +91,7 @@ the original minor mode."
      (akirak-shell-select))
     ('(16)
      (if-let* ((pr (project-current)))
-         (pcase (akirak-shell--buffers-for-project pr)
+         (pcase (seq-filter #'buffer-live-p (akirak-shell--buffers-for-project pr))
            (`nil (if (akirak-shell-buffer-list)
                      (akirak-shell-select)
                    (akirak-shell-transient)))
