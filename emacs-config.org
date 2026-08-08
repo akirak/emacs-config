@@ -5739,6 +5739,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
       (add-hook 'auth-source-backend-parser-functions #'akirak-passage-auth-source-parse)
       (add-hook 'auth-sources 'passage)))
 #+end_src
+*** akirak-process-compose
+#+begin_src elisp
+  (setup akirak-process-compose
+    (:nixpkgs yq))
+#+end_src
 *** akirak-project
 #+begin_src emacs-lisp
   (setup akirak-project

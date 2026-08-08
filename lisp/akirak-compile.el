@@ -182,10 +182,6 @@
      ("zig build")
      ("zig test")
      ("zig std"))
-    (process-compose
-     ("process-compose --tui=false")
-     ("process-compose attach" terminal t)
-     ("process-compose down" buffer-name "process-compose down"))
     (rebar3
      ("rebar3 compile")
      ("rebar3 release")
@@ -652,6 +648,19 @@ are displayed in the frame."
                                                    (shell-quote-argument (match-string 1))))
                                      results)))
                            results))))))
+      (process-compose
+       (progn
+         (require 'akirak-process-compose)
+         (let* ((file (akirak-process-compose-find-config dir))
+                (config (akirak-process-compose-parse file)))
+           (append '(("process-compose up --tui=false")
+                     ("process-compose attach" terminal t)
+                     ("process-compose down" buffer-name "process-compose down"))
+                   (mapcar (lambda (name)
+                             (list (format "process-compose process logs %s -n 500 -f"
+                                           (shell-quote-argument name))
+                                   'buffer-name (concat "process-compose logs " name)))
+                           (akirak-process-compose-process-names config))))))
       (make (with-memoize
              (let (results
                    (default-directory dir))
