@@ -334,7 +334,8 @@ the original minor mode."
                   (select-window window)
                   (magit-status root))
               ;; TODO: Is there any better behavior?
-              (dired dir))))
+              (dired dir)))
+          (kill-buffer buffer))
       (kill-buffer buffer))))
 
 (defun akirak-shell--setup-reopen (children)
