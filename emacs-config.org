@@ -457,6 +457,20 @@ By default, settings inside =:status= clauses are not loaded.
                 (memq tag akirak/enabled-status-tags))
         (macroexp-progn progn))))
 #+end_src
+*** :vc-ignore
+:PROPERTIES:
+:CREATED_TIME: [2026-08-09 Sun 23:22]
+:END:
+
+#+begin_src emacs-lisp
+  (eval-when-compile
+    (define-setup-macro
+     :vc-ignore (&rest patterns)
+     (dolist (pattern patterns)
+       (cl-pushnew pattern project-vc-ignores))))
+#+end_src
+
+
 ** Performance                                             :packages:
 # Note: Some of these should be loaded as early as possible.
 *** benchmark-init                            :profiling:initialization:
@@ -2031,6 +2045,9 @@ Operations on the current project
 
 #+begin_src emacs-lisp
   (setup project
+    (:set project-vc-ignores '(".git" ".direnv" "node_modules"
+                               ".venv" "target"))
+
     (:when-loaded
       (add-hook 'project-find-functions
                 (defun akirak/project-nix-store-finder (dir)
@@ -11372,6 +11389,7 @@ I prefer [[#zig-ts-mode][zig-ts-mode]], but I still use ~zig-mode~ for its extra
 #+begin_src elisp
   (setup dune
     (:package-files "dune" "dune-project")
+    (:vc-ignore "_build*")
 
     (defun akirak/dune-browse-doc ()
       "Browse package documentation for the project."
