@@ -331,7 +331,8 @@ are displayed in the frame."
                                                     (project-name (project-current)))
                                           (akirak-compile--buffer-name))))
                 (t
-                 (compile command t)))))
+                 (with-editor
+                   (compile command t))))))
          (user-error "No workspace root"))))))
 
 (defun akirak-compile-find-closest-root ()
@@ -416,8 +417,9 @@ are displayed in the frame."
 
 (defun akirak-compile--start (command comint buffer-name
                                       &optional highlight-regexp continue)
-  (compilation-start command comint (cl-constantly buffer-name)
-                     highlight-regexp continue)
+  (with-editor
+    (compilation-start command comint (cl-constantly buffer-name)
+                       highlight-regexp continue))
   (with-current-buffer buffer-name
     (setq-local compile-command command)))
 
