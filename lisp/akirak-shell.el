@@ -77,8 +77,9 @@ the original minor mode."
                          (get-buffer cand))
                         (`(,name . ,_)
                          (get-buffer name)))))
-    (memq (buffer-local-value 'major-mode buffer)
-          akirak-shell-mode-list)))
+    (and (buffer-live-p buffer)
+         (memq (buffer-local-value 'major-mode buffer)
+               akirak-shell-mode-list))))
 
 (defun akirak-shell-buffer-list ()
   (seq-filter #'akirak-shell-buffer-p (buffer-list)))
@@ -91,7 +92,7 @@ the original minor mode."
      (akirak-shell-select))
     ('(16)
      (if-let* ((pr (project-current)))
-         (pcase (seq-filter #'buffer-live-p (akirak-shell--buffers-for-project pr))
+         (pcase (akirak-shell--buffers-for-project pr)
            (`nil (if (akirak-shell-buffer-list)
                      (akirak-shell-select)
                    (akirak-shell-transient)))
@@ -333,7 +334,8 @@ the original minor mode."
                   (select-window window)
                   (magit-status root))
               ;; TODO: Is there any better behavior?
-              (dired dir))))
+              (dired dir)))
+          (kill-buffer buffer))
       (kill-buffer buffer))))
 
 (defun akirak-shell--setup-reopen (children)

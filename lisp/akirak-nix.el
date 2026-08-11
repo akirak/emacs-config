@@ -357,6 +357,7 @@ Use it with caution."
 
 ;;;###autoload
 (defun akirak-nix-insert-fake-hash ()
+  (interactive)
   (akirak-nix--insert-string akirak-nix-fake-hash-sha256))
 
 ;;;###autoload

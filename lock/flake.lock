@@ -256,6 +256,22 @@
         "type": "github"
       }
     },
+    "capnp-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786411552,
+        "narHash": "sha256-+UqHwNkL+8rwBwBBwIN0n76oAbbkMuw6NdZr7jtcIhY=",
+        "owner": "akirak",
+        "repo": "capnp-ts-mode",
+        "rev": "fd9d26b03eb33a41a46cb296021ba5722664fd98",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "capnp-ts-mode",
+        "type": "github"
+      }
+    },
     "casual": {
       "flake": false,
       "locked": {
@@ -3105,6 +3121,7 @@
         "burly": "burly",
         "buttercup": "buttercup",
         "cape": "cape",
+        "capnp-ts-mode": "capnp-ts-mode",
         "casual": "casual",
         "casual-symbol-overlay": "casual-symbol-overlay",
         "closql": "closql",

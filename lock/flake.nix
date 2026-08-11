@@ -97,6 +97,12 @@
       repo = "cape";
       type = "github";
     };
+    capnp-ts-mode = {
+      flake = false;
+      owner = "akirak";
+      repo = "capnp-ts-mode";
+      type = "github";
+    };
     casual = {
       flake = false;
       owner = "kickingvegas";
