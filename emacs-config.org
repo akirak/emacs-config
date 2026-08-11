@@ -4814,6 +4814,19 @@ Major mode for editing Astro templates
   (setup (:package astro-ts-mode)
     (:file-match "\\.astro\\'"))
 #+end_src
+*** capnp-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-08-11 Tue 10:26]
+:END:
+#+begin_quote
+Tree-sitter mode for Cap'n Proto
+[[https://github.com/akirak/capnp-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package capnp-ts-mode)
+    (:file-match "\\.capnp\\'"))
+#+end_src
 *** dockerfile-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-09-23 Sat 11:30]
