@@ -866,22 +866,6 @@
         "type": "github"
       }
     },
-    "eglot-booster": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1782829258,
-        "narHash": "sha256-HhWR40j/WFcorp8QttXtOz5yxL1B4JUXL+9IuNpoND0=",
-        "owner": "jdtsmith",
-        "repo": "eglot-booster",
-        "rev": "510f579409627c333ef0e9157db713b1004da842",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jdtsmith",
-        "repo": "eglot-booster",
-        "type": "github"
-      }
-    },
     "el-patch": {
       "flake": false,
       "locked": {
@@ -3159,7 +3143,6 @@
         "dune": "dune",
         "eat": "eat",
         "edit-indirect": "edit-indirect",
-        "eglot-booster": "eglot-booster",
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
         "elx": "elx",

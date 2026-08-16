@@ -7589,7 +7589,7 @@ An OCaml companion for Eglot
   (setup (:package ocaml-eglot)
     (add-hook 'ocaml-eglot-hook #'eglot-ensure))
 #+end_src
-*** eglot-booster
+*** COMMENT eglot-booster                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-10-29 Tue 21:45]
 :END:
