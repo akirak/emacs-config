@@ -7488,6 +7488,15 @@ Client for Language Server Protocol (LSP) servers
       (or (akirak-treesit-maybe-rename-tag)
           (call-interactively #'eglot-rename)))
 
+    (when (executable-find "rg")
+      (cl-defmethod project-files ((project (head eglot)) &optional dirs)
+        (mapcan
+         (lambda (dir)
+           (process-lines "rg" "--files"
+                          (convert-standard-filename (expand-file-name dir))))
+         (or dirs
+             (list (project-root project))))))
+
     (:with-feature typescript-ts-mode
       (:with-map tsx-ts-mode-map
         (:keymap "<remap> <eglot-rename>" #'akirak/eglot-rename-dwim)))
