@@ -7,7 +7,7 @@
 delib.module {
   name = "xdg";
 
-  options = delib.singleEnableOption (!pkgs.stdenv.isDarwin);
+  options = delib.singleEnableOption (!pkgs.stdenv.hostPlatform.isDarwin);
 
   home.ifEnabled = {
     xdg = {
