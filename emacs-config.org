@@ -790,7 +790,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
       (:local-set tab-width 8))
     (:with-mode (emacs-lisp-mode)
       (:local-set tab-width 8))
-    (:with-mode (makefile-mode zig-mode zig-ts-mode java-ts-mode kotlin-ts-mode)
+    (:with-mode (makefile-mode zig-mode zig-ts-mode java-ts-mode kotlin-ts-mode
+                               go-mode go-ts-mode)
       (:local-set tab-width 4))
     (:with-mode (js-mode typescript-mode sh-mode python-mode)
       (:local-set tab-width 2)))
