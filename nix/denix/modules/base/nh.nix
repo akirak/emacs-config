@@ -144,8 +144,8 @@ delib.module {
           dates = "Wed *-*-* 02:00:00";
           # On desktop machines, also run this command manually:
           #
-          # nh clean all --keep-since 15d --evaluation-strategy=run0
-          extraArgs = "--keep-since 15d --evaluation-strategy=none";
+          # nh clean all --keep-since 15d --elevation-strategy run0
+          extraArgs = "--keep-since 15d --elevation-strategy none";
         };
         flake = cfg.mainConfigDirectory;
       };

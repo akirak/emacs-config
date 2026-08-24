@@ -159,10 +159,12 @@
                          (file-name-nondirectory filename))
                         (`(nix-store ,_)
                          (let* ((name (thread-last
-                                        (akirak-header-line--parse-nix-drv-name (project-name pr))
+                                        (akirak-header-line--parse-nix-drv-name
+                                         (project-name pr))
                                         (alist-get 'name)))
                                 (pos (save-match-data
-                                       (string-match (rx bol (+ (any alnum)) "-") name)
+                                       (string-match (rx bol (+ (any alnum)) "-")
+                                                     name)
                                        (nth 1 (match-data)))))
                            (format "[nix:%s] %s"
                                    (substring name pos)
@@ -171,8 +173,12 @@
                         (`(vc . ,_)
                          (let ((root (vc-git-root (project-root pr))))
                            (format "[%s] %s"
-                                   (file-name-nondirectory (string-remove-suffix "/" root))
-                                   (file-relative-name filename (expand-file-name root))))))
+                                   (file-name-nondirectory
+                                    (string-remove-suffix "/" root))
+                                   (akirak-header-line--truncate-relative-path
+                                    (file-relative-name
+                                     filename
+                                     (expand-file-name root)))))))
                       (if base
                           " -> %b"
                         "")))
@@ -189,6 +195,14 @@
                      "%b"))))
       (setq akirak-header-line--file (cons (float-time) format))
       format)))
+
+(defun akirak-header-line--truncate-relative-path (string)
+  (let ((segments (file-name-split string)))
+    (apply #'file-name-concat
+           (append (mapcar (lambda (segment)
+                             (truncate-string-to-width segment 25 nil nil "…"))
+                           (butlast segments))
+                   (last segments)))))
 
 (provide 'akirak-header-line)
 ;;; akirak-header-line.el ends here

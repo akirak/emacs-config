@@ -27,16 +27,37 @@
   ""
   :type 'string)
 
+(defcustom akirak-codex-model-reasoning-efforts
+  '("low" "medium" "high" "xhigh" "max")
+  ""
+  :type '(repeat string))
+
+(defcustom akirak-codex-supported-models
+  '("gpt-5.6-sol"
+    "gpt-5.6-terra"
+    "gpt-5.6-luna"
+    "gpt-5.5"
+    "gpt-5.4"
+    "gpt-5.4-mini")
+  ""
+  :type '(repeat string))
+
 (defvar akirak-codex-directory nil)
 
-(defvar akirak-codex-reasoning-effort "medium")
+(defvar akirak-codex-model "gpt-5.6-luna xhigh fast")
 
-(transient-define-infix akirak-codex-set-reasoning-effort ()
+(transient-define-infix akirak-codex-set-model ()
   :class 'akirak-transient-choice-variable
-  :cycle t
-  :variable 'akirak-codex-reasoning-effort
-  :choices '("low" "medium" "high" "xhigh" "max")
-  :description "Reasoning effort")
+  :variable 'akirak-codex-model
+  :choices
+  (lambda ()
+    (let (result)
+      (dolist (model akirak-codex-supported-models)
+        (dolist (effort akirak-codex-model-reasoning-efforts)
+          (push (format "%s %s" model effort)
+                result)))
+      (nreverse result)))
+  :description "Model")
 
 (defvar akirak-codex-enable-collaboration-modes nil)
 
@@ -48,16 +69,7 @@
 ;;;###autoload (autoload 'akirak-codex-transient "akirak-codex" nil 'interactive)
 (transient-define-prefix akirak-codex-transient ()
   ["Options"
-   ("-m" "Model" "--model="
-    ;; :always-read t
-    :init-value (lambda (obj) (oset obj value "gpt-5.6-luna"))
-    :choices ("gpt-5.6-sol"
-              "gpt-5.6-terra"
-              "gpt-5.6-luna"
-              "gpt-5.5"
-              "gpt-5.4"
-              "gpt-5.4-mini"))
-   ("-r" akirak-codex-set-reasoning-effort)
+   ("-m" akirak-codex-set-model)
    ("-s" "Sandbox" "--sandbox="
     :choices ("read-only"
               "workspace-write"
@@ -83,17 +95,22 @@
     (akirak-shell-eat-new
      :dir root
      :command (cons akirak-codex-executable
-                    (append (ensure-list subcommand)
+                    (append (when subcommand (ensure-list subcommand))
                             akirak-codex-default-args
+                            (akirak-codex--parse-model-arguments akirak-codex-model)
                             (when akirak-codex-enable-collaboration-modes
                               (list "--enable" "collaboration_modes"))
-                            (when akirak-codex-reasoning-effort
-                              (list "--config"
-                                    (concat "model_reasoning_effort="
-                                            akirak-codex-reasoning-effort)))
                             (transient-args 'akirak-codex-transient)
                             args))
      :environment (akirak-codex-environment))))
+
+(defun akirak-codex--parse-model-arguments (model-string)
+  (pcase (split-string model-string)
+    (`(,model ,reasoning . ,rest)
+     (append (list "-m" model
+                   "--config" (concat "model_reasoning_effort=" reasoning))
+             (when (member "fast" rest)
+               (list "--config" "features.fast_mode=true"))))))
 
 (defun akirak-codex--resume-in-shell ()
   (interactive)

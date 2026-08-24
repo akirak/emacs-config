@@ -866,22 +866,6 @@
         "type": "github"
       }
     },
-    "eglot-booster": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1782829258,
-        "narHash": "sha256-HhWR40j/WFcorp8QttXtOz5yxL1B4JUXL+9IuNpoND0=",
-        "owner": "jdtsmith",
-        "repo": "eglot-booster",
-        "rev": "510f579409627c333ef0e9157db713b1004da842",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jdtsmith",
-        "repo": "eglot-booster",
-        "type": "github"
-      }
-    },
     "el-patch": {
       "flake": false,
       "locked": {
@@ -2282,11 +2266,11 @@
     "org": {
       "flake": false,
       "locked": {
-        "lastModified": 1784957470,
-        "narHash": "sha256-lFXrMEdZSYSBN5godO1Pw1jZMcdD8wqYFIxL8Fmxpqo=",
+        "lastModified": 1786770526,
+        "narHash": "sha256-PwPNL7i1H1DTOBrvnw1NkLOgFoTCBeCIS2yjRtNCwuU=",
         "owner": "elpa-mirrors",
         "repo": "org-mode",
-        "rev": "c75ffe4a43355bc76807d9aa711834b33f724fca",
+        "rev": "7427df2d96d264734e1ba2a943545faa1c8c763f",
         "type": "github"
       },
       "original": {
@@ -3159,7 +3143,6 @@
         "dune": "dune",
         "eat": "eat",
         "edit-indirect": "edit-indirect",
-        "eglot-booster": "eglot-booster",
         "el-patch": "el-patch",
         "eldoc-eval": "eldoc-eval",
         "elx": "elx",

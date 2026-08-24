@@ -324,12 +324,6 @@
       repo = "edit-indirect";
       type = "github";
     };
-    eglot-booster = {
-      flake = false;
-      owner = "jdtsmith";
-      repo = "eglot-booster";
-      type = "github";
-    };
     el-patch = {
       flake = false;
       owner = "radian-software";
