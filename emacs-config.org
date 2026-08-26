@@ -1998,8 +1998,8 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup process
-    ;; Expand read-process-output-max for lsp-mode
-    (:set read-process-output-max (* 1024 1024)))
+    ;; Raise the limit for LSP servers
+    (:set read-process-output-max (* 4 1024 1024)))
 #+end_src
 *** profiler                                       :Emacs:profiling:
 :PROPERTIES:
