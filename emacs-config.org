@@ -7448,6 +7448,11 @@ Client for Language Server Protocol (LSP) servers
 
     (:set eglot-confirm-server-initiated-edits nil
           eglot-autoshutdown t
+          eglot-sync-connect 0
+          ;; Requires Emacs >= 30
+          eglot-events-buffer-config '(:size 0 :format short)
+          eglot-max-file-watches 3000
+          eglot-report-progress nil
           eglot-code-action-indications nil
           eglot-extend-to-xref t)
 
@@ -7495,6 +7500,15 @@ Client for Language Server Protocol (LSP) servers
                  "o" #'eglot-code-action-organize-imports
                  "R" #'eglot-reconnect
                  "r" #'eglot-rename))
+
+      ;; Disable highlighting other occurrences of the symbol at point
+      (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
+      ;; Disable deep analysis of the source code
+      (add-to-list 'eglot-ignored-server-capabilities :codeLensProvider)
+      ;; No coloring
+      (add-to-list 'eglot-ignored-server-capabilities :colorProvider)
+      ;; Never use folding provided by LSP
+      (add-to-list 'eglot-ignored-server-capabilities :foldingRangeProvider)
 
       (add-to-list 'eglot-server-programs
                    `(((js-mode :language-id "javascript")
@@ -7570,6 +7584,10 @@ Client for Language Server Protocol (LSP) servers
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")))
 #+end_src
+
+References:
+
+- [[https://www.jamescherti.com/emacs-eglot-performance/][Configuring Emacs Eglot for Optimal Performance │ James Cherti]]
 **** ocaml-eglot
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:04]
