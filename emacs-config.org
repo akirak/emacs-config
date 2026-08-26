@@ -7501,6 +7501,8 @@ Client for Language Server Protocol (LSP) servers
                  "R" #'eglot-reconnect
                  "r" #'eglot-rename))
 
+      ;; Disable inlay hints
+      (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
       ;; Disable deep analysis of the source code
       (add-to-list 'eglot-ignored-server-capabilities :codeLensProvider)
       ;; No coloring
