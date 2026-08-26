@@ -5655,12 +5655,34 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                    (getenv "DISPLAY")))
       (:hook-into emacs-startup-hook))
     (:hook akirak-log-mode)
-    ;; (add-hook 'akirak-org-clock-pre-exit-hook
-    ;;           (defun akirak/org-clock-save-wconf ()
-    ;;             (if (and (require 'burly nil t)
-    ;;                      (fboundp 'akirak-burly-clock-push))
-    ;;                 (akirak-burly-clock-push)
-    ;;               (message "Burly is not available, so the window configuration won't be saved"))))
+    (add-hook 'org-clock-in-hook
+              (defun akirak/org-clock-restore-burly ()
+                (let ((url (org-entry-get nil "burly_windows_url"))
+                      (datetime (org-entry-get nil "burly_saved_at")))
+                  (when (and url
+                             (not (string-empty-p url))
+                             (require 'burly nil t)
+                             (yes-or-no-p (format-prompt
+                                           "Restore the window configuration saved at %s? "
+                                           nil
+                                           datetime)))
+                    (tab-bar-switch-to-tab (org-entry-get org-clock-hd-marker
+                                                          "ITEM"))
+                    (tab-bar-rename-tab)
+                    (burly-open-url url)))))
+    (add-hook 'akirak-org-clock-pre-exit-hook
+              (defun akirak/org-clock-save-burly ()
+                (when (require 'burly nil t)
+                  (let ((url (burly-windows-url)))
+                    (org-with-point-at org-clock-hd-marker
+                      (unless (org-before-first-heading-p)
+                        (org-entry-put nil
+                                       "burly_windows_url"
+                                       url)
+                        (org-entry-put nil
+                                       "burly_saved_at"
+                                       (format-time-string
+                                        (org-time-stamp-format t t)))))))))
 
     (advice-add 'save-buffers-kill-terminal
                 :before
