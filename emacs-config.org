@@ -5624,8 +5624,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-org
     (:with-feature org
+      (:hook akirak-org-truncate-property-mode)
       (:with-map org-mode-map
-        (:keymap "<remap> <point-to-register>" #'akirak-org-point-to-register)))
+        (:keymap "<remap> <point-to-register>" #'akirak-org-point-to-register
+                 "<remap> <org-cycle>" #'akirak-org-cycle-dwim)))
 
     (:when-loaded
       ;; Alternative to the default implementation provided as

@@ -43,6 +43,10 @@
   :type '(alist :key-type directory
                 :value-type directory))
 
+(defcustom akirak-org-property-truncate-length 60
+  "Max visible characters for property drawer values before truncating."
+  :type 'number)
+
 ;;;###autoload
 (defun akirak-org-sort-buffer ()
   "Sort entries in the buffer according to sorting_type property values."
@@ -1502,6 +1506,64 @@ Are you sure you want to override it?"))
         ((rx (regexp org-link-plain-re))
          (match-string 0 headline))))))
 
+;;;###autoload
+(defun akirak-org-cycle-dwim (&optional arg)
+  (interactive "P")
+  (if (org-at-property-p)
+      (catch 'truncated
+        (save-excursion
+          (beginning-of-line)
+          (dolist (ov (overlays-in (point) (line-end-position)))
+            (when (overlay-get ov 'akirak-org-property-truncation)
+              (delete-overlay ov)
+              (throw 'truncated t)))
+          (when (looking-at org-property-re)
+            (let* ((value-start (match-beginning 3))
+                   (value-end (match-end 3))
+                   (limit akirak-org-property-truncate-length))
+              (when (and value-start
+                         (> (- value-end value-start) limit))
+                (let ((ov (make-overlay (+ value-start limit) value-end)))
+                  (overlay-put ov 'display "…")
+                  (overlay-put ov 'akirak-org-property-truncation t)))))))
+    (funcall-interactively 'org-cycle arg)))
+
+;;;###autoload
+(define-minor-mode akirak-org-truncate-property-mode
+  "Truncate long property values in `org-mode'."
+  :lighter " OrgTrnc"
+  (progn
+    (if (bound-and-true-p akirak-org-truncate-property-mode)
+      (progn
+        (add-hook 'org-cycle-hook #'akirak-org-cycle-property-truncation)
+        (add-to-invisibility-spec (cons 'akirak-org-property-truncation t))
+        (akirak-org-cycle-property-truncation nil))
+      (akirak-org-clear-property-truncation))
+    (force-window-update (current-buffer))))
+
+;;;###autoload
+(defun akirak-org-cycle-property-truncation (state)
+  "Add invisible overlays to truncate long property values in current buffer."
+  (interactive (list 'contents)
+               org-mode)
+  (let ((limit akirak-org-property-truncate-length))
+    (akirak-org-clear-property-truncation)
+    (unless (eq state 'all)
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward org-property-re nil t)
+          (let* ((value-start (match-beginning 3))
+                 (value-end (match-end 3)))
+            (when (and value-start
+                       (> (- value-end value-start) limit))
+              (let ((ov (make-overlay (+ value-start limit) value-end)))
+                (overlay-put ov 'display "…")
+                (overlay-put ov 'akirak-org-property-truncation t)))))))))
+
+(defun akirak-org-clear-property-truncation ()
+  "Remove all property-truncation overlays in current buffer."
+  (remove-overlays (point-min) (point-max) 'akirak-org-property-truncation t))
+
 (defun akirak-org-ai-summarize-headline (content callback)
   (require 'akirak-pandoc)
   (require 'gptel)
@@ -1514,7 +1576,7 @@ If the first paragraph of the quoted content is a question, the headline \
 should summarise the question rather than the answer that follows it. \
 Don't emphasize any part of the text but inline code.\n\n"
                          (akirak-pandoc-convert-string content
-                           :from "org" :to "gfm"))
+                                                       :from "org" :to "gfm"))
     :callback callback))
 
 ;;;###autoload
