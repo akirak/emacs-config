@@ -7551,6 +7551,9 @@ Client for Language Server Protocol (LSP) servers
                            ("typenix" "--lsp" "--stdio")
                            ("nil")))))
       (add-to-list 'eglot-server-programs
+                   `(capnp-ts-mode
+                     . ("capnp-ls" "--stdio")))
+      (add-to-list 'eglot-server-programs
                    '(just-mode . ("just-lsp")))
       (add-to-list 'eglot-server-programs
                    '(lean4-mode . ("lake" "serve")))
