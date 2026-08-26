@@ -378,25 +378,27 @@
                                akirak-capture-hook)
                            (thread-first
                              akirak-capture-doct-options
-                             (plist-put :hook
-                                        (when akirak-capture-hook
-                                          `(lambda ()
-                                             ;; Set some delay for Emacs to initialize the buffer.
-                                             (run-with-timer
-                                              0.1
-                                              nil
-                                              (lambda ()
-                                                ,@(when new-tab-name
-                                                    `((tab-bar-rename-tab ,new-tab-name)
-                                                      (when (fboundp 'fwb-toggle-window-split)
-                                                        (fwb-toggle-window-split))))
-                                                ,(when (and akirak-capture-hook
-                                                            (not akirak-capture-dispatch-later))
-                                                   `(funcall ',akirak-capture-hook)))))))
-                             (plist-put :after-finalize
-                                        (when new-tab-name
-                                          `(lambda ()
-                                             (tab-bar-close-tab-by-name ,new-tab-name)))))
+                             (plist-put
+                              :hook
+                              (when akirak-capture-hook
+                                `(lambda ()
+                                   ;; Set some delay for Emacs to initialize the buffer.
+                                   (run-with-timer
+                                    0.1
+                                    nil
+                                    (lambda ()
+                                      ,@(when new-tab-name
+                                          `((tab-bar-rename-tab ,new-tab-name)
+                                            (when (fboundp 'fwb-toggle-window-split)
+                                              (fwb-toggle-window-split))))
+                                      ,(when (and akirak-capture-hook
+                                                  (not akirak-capture-dispatch-later))
+                                         `(funcall ',akirak-capture-hook)))))))
+                             (plist-put
+                              :after-finalize
+                              (when new-tab-name
+                                `(lambda ()
+                                   (tab-bar-close-tab-by-name ,new-tab-name)))))
                          akirak-capture-doct-options))
          (org-capture-entry
           (car (doct
@@ -839,12 +841,14 @@
    :class transient-columns
    :setup-children
    (lambda (_)
-     (transient-parse-suffixes 'akirak-capture-issue (octopus-generate-context-file-subgroups)))   ]
+     (transient-parse-suffixes 'akirak-capture-issue
+                               (octopus-generate-context-file-subgroups)))]
   ["Static files"
    :class transient-row
    :setup-children
    (lambda (_)
-     (transient-parse-suffixes 'akirak-capture-issue (octopus-generate-static-targets)))]
+     (transient-parse-suffixes 'akirak-capture-issue
+                               (octopus-generate-static-targets)))]
   ["Other locations"
    :class transient-row
    ("@" octopus-clock-marker-suffix)
@@ -1039,12 +1043,14 @@
    :class transient-columns
    :setup-children
    (lambda (_)
-     (transient-parse-suffixes 'akirak-capture-journal (octopus-generate-context-file-subgroups)))]
+     (transient-parse-suffixes 'akirak-capture-journal
+                               (octopus-generate-context-file-subgroups)))]
   ["Static files"
    :class transient-row
    :setup-children
    (lambda (_)
-     (transient-parse-suffixes 'akirak-capture-journal (octopus-generate-static-targets)))]
+     (transient-parse-suffixes 'akirak-capture-journal
+                               (octopus-generate-static-targets)))]
   ["Other locations"
    :class transient-row
    ("\\" octopus-this-file-suffix)
