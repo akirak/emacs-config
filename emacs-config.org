@@ -7501,8 +7501,6 @@ Client for Language Server Protocol (LSP) servers
                  "R" #'eglot-reconnect
                  "r" #'eglot-rename))
 
-      ;; Disable highlighting other occurrences of the symbol at point
-      (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
       ;; Disable deep analysis of the source code
       (add-to-list 'eglot-ignored-server-capabilities :codeLensProvider)
       ;; No coloring
