@@ -1465,8 +1465,9 @@ The built-in =electric= package provides the following modes:
                          (text-mode . (,@editorconfig)))))
         (dir-locals-set-class-variables
          'personal
-         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
-           (org-mode . (eval . (jinx-mode 1)))))
+         (append `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
+                   (org-mode . (eval . (jinx-mode 1))))
+                 default))
         (dir-locals-set-class-variables
          'default
          default)
