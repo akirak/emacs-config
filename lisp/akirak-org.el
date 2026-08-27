@@ -1557,9 +1557,11 @@ Are you sure you want to override it?"))
             (overlay-put ov 'display "…")
             (overlay-put ov 'akirak-org-property-truncation t)))))))
 
-(defun akirak-org-clear-property-truncation ()
+(defun akirak-org-clear-property-truncation (&optional begin end)
   "Remove all property-truncation overlays in current buffer."
-  (remove-overlays (point-min) (point-max) 'akirak-org-property-truncation t))
+  (remove-overlays (or begin (point-min))
+                   (or end (point-max))
+                   'akirak-org-property-truncation t))
 
 (defun akirak-org-ai-summarize-headline (content callback)
   (require 'akirak-pandoc)
