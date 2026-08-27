@@ -248,7 +248,15 @@
                                 (buffer-substring-no-properties
                                  (line-beginning-position)
                                  (line-end-position))))
-         'prompt)))))
+         'prompt)
+        ;; With a background terminal
+        ((guard (string-match-p
+                 (rx bol (or "─ Worked for "
+                             "──────────────"))
+                 (buffer-substring-no-properties
+                  (line-beginning-position -6)
+                  (line-end-position -6))))
+         'done)))))
 
 (defun akirak-codex-watch-sessions ()
   "Start watching new codex sessions."
