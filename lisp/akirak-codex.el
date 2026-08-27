@@ -1,6 +1,7 @@
 ;;; akirak-codex.el ---  -*- lexical-binding: t -*-
 
 (require 'akirak-transient)
+(require 'xdg nil t)
 
 (defconst akirak-codex-slash-commands
   '("/diff"
@@ -16,6 +17,11 @@
 (defcustom akirak-codex-executable "codex"
   ""
   :type 'file)
+
+(defcustom akirak-codex-session-watcher-dir
+  (file-name-concat (xdg-runtime-dir) "codex" "sessions")
+  ""
+  :type 'directory)
 
 (defcustom akirak-codex-default-args
   '("--config" "preferred_auth_method=chatgpt")
@@ -41,6 +47,8 @@
     "gpt-5.4-mini")
   ""
   :type '(repeat string))
+
+(defvar akirak-codex-session-watcher nil)
 
 (defvar akirak-codex-directory nil)
 
@@ -241,6 +249,30 @@
                                  (line-beginning-position)
                                  (line-end-position))))
          'prompt)))))
+
+(defun akirak-codex-watch-sessions ()
+  "Start watching new codex sessions."
+  (when (and (not akirak-codex-session-watcher)
+             (require 'filenotify nil t))
+    (let ((dir akirak-codex-session-watcher-dir))
+      (file-notify-add-watch dir '(change) #'akirak-codex--handle-session-change))))
+
+(defun akirak-codex--handle-session-change (arg)
+  (pcase arg
+    (`(,_descriptor ,action ,file . ,_)
+     (when (eq action 'created)
+       (when-let* ((session-id (file-name-sans-extension (file-name-nondirectory file)))
+                   (pid (with-temp-buffer
+                          (insert-file-contents file)
+                          (string-to-number (string-trim (buffer-string)))))
+                   (process (seq-find `(lambda (process)
+                                         (= ,pid (process-id process)))
+                                      (process-list)))
+                   (buffer (process-buffer process)))
+         (with-current-buffer buffer
+           (setq-local akirak-codex-session-id session-id))
+         (message "New codex session started. session ID: %s, buffer: %s"
+                  session-id (buffer-name buffer)))))))
 
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here

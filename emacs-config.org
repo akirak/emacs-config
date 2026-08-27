@@ -5840,6 +5840,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 **** akirak-codex
 #+begin_src elisp
   (setup akirak-codex
+    (:when-loaded
+      (akirak-codex-watch-sessions))
     ;; mcp-proxy is used to communicate with non-stdio MCP servers
     (:nixpkgs "mcp-proxy"))
 #+end_src
