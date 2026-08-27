@@ -52,7 +52,7 @@
 
 (defvar akirak-codex-directory nil)
 
-(defvar akirak-codex-model "gpt-5.6-luna xhigh fast")
+(defvar akirak-codex-model "gpt-5.6-sol medium")
 
 (transient-define-infix akirak-codex-set-model ()
   :class 'akirak-transient-choice-variable
