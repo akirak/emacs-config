@@ -1513,19 +1513,12 @@ Are you sure you want to override it?"))
       (catch 'truncated
         (save-excursion
           (beginning-of-line)
-          (dolist (ov (overlays-in (point) (line-end-position)))
-            (when (overlay-get ov 'akirak-org-property-truncation)
-              (delete-overlay ov)
-              (throw 'truncated t)))
-          (when (looking-at org-property-re)
-            (let* ((value-start (match-beginning 3))
-                   (value-end (match-end 3))
-                   (limit akirak-org-property-truncate-length))
-              (when (and value-start
-                         (> (- value-end value-start) limit))
-                (let ((ov (make-overlay (+ value-start limit) value-end)))
-                  (overlay-put ov 'display "…")
-                  (overlay-put ov 'akirak-org-property-truncation t)))))))
+          (let ((end (line-end-position)))
+            (dolist (ov (overlays-in (point) end))
+              (when (overlay-get ov 'akirak-org-property-truncation)
+                (delete-overlay ov)
+                (throw 'truncated t)))
+            (akirak-org-truncate-properties-in-region (point) end))))
     (funcall-interactively 'org-cycle arg)))
 
 ;;;###autoload
@@ -1534,10 +1527,10 @@ Are you sure you want to override it?"))
   :lighter " OrgTrnc"
   (progn
     (if (bound-and-true-p akirak-org-truncate-property-mode)
-      (progn
-        (add-hook 'org-cycle-hook #'akirak-org-cycle-property-truncation)
-        (add-to-invisibility-spec (cons 'akirak-org-property-truncation t))
-        (akirak-org-cycle-property-truncation nil))
+        (progn
+          (add-hook 'org-cycle-hook #'akirak-org-cycle-property-truncation)
+          (add-to-invisibility-spec (cons 'akirak-org-property-truncation t))
+          (akirak-org-cycle-property-truncation nil))
       (akirak-org-clear-property-truncation))
     (force-window-update (current-buffer))))
 
@@ -1546,19 +1539,23 @@ Are you sure you want to override it?"))
   "Add invisible overlays to truncate long property values in current buffer."
   (interactive (list 'contents)
                org-mode)
-  (let ((limit akirak-org-property-truncate-length))
+  (let ((limit))
     (akirak-org-clear-property-truncation)
     (unless (eq state 'all)
-      (save-excursion
-        (goto-char (point-min))
-        (while (re-search-forward org-property-re nil t)
-          (let* ((value-start (match-beginning 3))
-                 (value-end (match-end 3)))
-            (when (and value-start
-                       (> (- value-end value-start) limit))
-              (let ((ov (make-overlay (+ value-start limit) value-end)))
-                (overlay-put ov 'display "…")
-                (overlay-put ov 'akirak-org-property-truncation t)))))))))
+      (akirak-org-truncate-properties-in-region (point-min) (point-max)))))
+
+(defun akirak-org-truncate-properties-in-region (begin end)
+  (save-excursion
+    (goto-char begin)
+    (while (re-search-forward org-property-re end t)
+      (let* ((value-start (match-beginning 3))
+             (value-end (match-end 3)))
+        (when (and value-start
+                   (> (- value-end value-start) akirak-org-property-truncate-length))
+          (let ((ov (make-overlay (+ value-start akirak-org-property-truncate-length)
+                                  value-end)))
+            (overlay-put ov 'display "…")
+            (overlay-put ov 'akirak-org-property-truncation t)))))))
 
 (defun akirak-org-clear-property-truncation ()
   "Remove all property-truncation overlays in current buffer."
