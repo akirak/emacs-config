@@ -276,7 +276,7 @@ the original minor mode."
         (akirak-org-git-worktree))))
 
 (cl-defun akirak-shell-eat-new (&key dir window name noselect command
-                                     environment)
+                                     environment bookmark-function)
   (with-editor
     (let* ((default-directory (or dir default-directory))
            (command (ensure-list (or command
@@ -307,10 +307,15 @@ the original minor mode."
                     (list cmd nil args)))))
         (add-hook 'eat-exit-hook
                   #'akirak-shell-kill-current-buffer 90 'local)
+        (when bookmark-function
+          (setq-local bookmark-make-record-function bookmark-function))
         (unless noselect
           (pcase window
             (`new-tab
              (tab-bar-new-tab)
+             (switch-to-buffer buffer)
+             (toggle-window-dedicated nil t))
+            (`same-window
              (switch-to-buffer buffer)
              (toggle-window-dedicated nil t))
             (_ (pop-to-buffer-same-window buffer)))))

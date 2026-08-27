@@ -102,6 +102,7 @@
   (let ((root akirak-codex-directory))
     (akirak-shell-eat-new
      :dir root
+     :bookmark-function #'akirak-codex-make-bookmark
      :command (cons akirak-codex-executable
                     (append (when subcommand (ensure-list subcommand))
                             akirak-codex-default-args
@@ -281,6 +282,20 @@
            (setq-local akirak-codex-session-id session-id))
          (message "New codex session started. session ID: %s, buffer: %s"
                   session-id (buffer-name buffer)))))))
+
+(defun akirak-codex-bookmark-handler (bookmark)
+  (akirak-shell-eat-new :dir (bookmark-prop-get bookmark 'filename)
+                        :window 'same-window
+                        :bookmark-function #'akirak-codex-make-bookmark
+                        :command (list akirak-codex-executable
+                                       "resume"
+                                       (bookmark-prop-get bookmark 'codex-session-id))))
+
+(defun akirak-codex-make-bookmark ()
+  (when akirak-codex-session-id
+    `((filename . ,(abbreviate-file-name default-directory))
+      (handler . akirak-codex-bookmark-handler)
+      (codex-session-id . ,akirak-codex-session-id))))
 
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here
