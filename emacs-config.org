@@ -5684,7 +5684,11 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                         (org-entry-put nil
                                        "burly_saved_at"
                                        (format-time-string
-                                        (org-time-stamp-format t t)))))))))
+                                        (org-time-stamp-format t t)))
+                        (akirak-org-truncate-properties-in-region
+                         (point)
+                         (or (re-search-forward org-property-drawer-re nil t)
+                             (org-entry-end-position)))))))))
 
     (advice-add 'save-buffers-kill-terminal
                 :before
