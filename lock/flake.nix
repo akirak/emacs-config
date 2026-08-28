@@ -1107,12 +1107,6 @@
       repo = "rainbow-delimiters";
       type = "github";
     };
-    reason-mode = {
-      flake = false;
-      owner = "reasonml-editor";
-      repo = "reason-mode";
-      type = "github";
-    };
     reason-ts-mode = {
       flake = false;
       owner = "akirak";

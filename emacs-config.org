@@ -10203,7 +10203,7 @@ Colorize color names in buffers
   (setup (:package rainbow-mode)
     (:hook-into prog-mode))
 #+end_src
-*** reason-mode
+*** COMMENT reason-mode                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-01-30 Tue 23:11]
 :END:
