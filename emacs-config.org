@@ -8766,6 +8766,14 @@ Completion kind icons
       (require 'kind-icon)
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
+*** kubernetes
+:PROPERTIES:
+:CREATED_TIME: [2026-08-28 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package kubernetes))
+#+end_src
 *** language-detection
 :PROPERTIES:
 :CREATED_TIME: [2022-09-10 Sat 20:00]

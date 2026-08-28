@@ -1618,6 +1618,22 @@
         "type": "gitlab"
       }
     },
+    "kubernetes": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785430276,
+        "narHash": "sha256-v7FP6pHy3+lIaExmKPLTIL5+jzmlrXLWnti/px6h3os=",
+        "owner": "kubernetes-el",
+        "repo": "kubernetes-el",
+        "rev": "c6a3d3ab293b2e24267ff487236ea687ed7eb951",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kubernetes-el",
+        "repo": "kubernetes-el",
+        "type": "github"
+      }
+    },
     "language-detection": {
       "flake": false,
       "locked": {
@@ -1760,6 +1776,22 @@
       "original": {
         "owner": "emacs-twist",
         "repo": "nix3.el",
+        "type": "github"
+      }
+    },
+    "magit-popup": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1595153743,
+        "narHash": "sha256-AZs4wlZWTYjF9SHON6bTZ/XXqgFLkXPe8prdbfoz134=",
+        "owner": "emacsattic",
+        "repo": "magit-popup",
+        "rev": "d8585fa39f88956963d877b921322530257ba9f5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacsattic",
+        "repo": "magit-popup",
         "type": "github"
       }
     },
@@ -3174,6 +3206,7 @@
         "just-mode": "just-mode",
         "kind-icon": "kind-icon",
         "kotlin-ts-mode": "kotlin-ts-mode",
+        "kubernetes": "kubernetes",
         "language-detection": "language-detection",
         "license-templates": "license-templates",
         "link-hint": "link-hint",
@@ -3183,6 +3216,7 @@
         "magit": "magit",
         "magit-delta": "magit-delta",
         "magit-nix3": "magit-nix3",
+        "magit-popup": "magit-popup",
         "magit-section": "magit-section",
         "marginalia": "marginalia",
         "markdown-mode": "markdown-mode",

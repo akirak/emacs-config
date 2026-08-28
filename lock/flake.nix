@@ -605,6 +605,12 @@
       repo = "emacs-kotlin-ts-mode";
       type = "gitlab";
     };
+    kubernetes = {
+      flake = false;
+      owner = "kubernetes-el";
+      repo = "kubernetes-el";
+      type = "github";
+    };
     language-detection = {
       flake = false;
       owner = "andreasjansson";
@@ -658,6 +664,12 @@
       flake = false;
       owner = "emacs-twist";
       repo = "nix3.el";
+      type = "github";
+    };
+    magit-popup = {
+      flake = false;
+      owner = "emacsattic";
+      repo = "magit-popup";
       type = "github";
     };
     magit-section = {
