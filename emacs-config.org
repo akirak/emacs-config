@@ -8410,7 +8410,7 @@ Interact with ChatGPT or other LLMs
       (fset 'gptel--update-header-line #'ignore)
 
       (:set gptel-backend (gptel-make-openai-oauth "OpenAI-sub")
-            gptel-model 'gpt-5.4)
+            gptel-model 'gpt-5.6-luna)
 
       ;; OpenAI via API.
       ;; (:set gptel-backend
@@ -8430,8 +8430,7 @@ Interact with ChatGPT or other LLMs
         :models '(glm-5.2
                   kimi-k2.7-code
                   deepseek-v4-pro
-                  deepseek-v4-flash
-                  openrouter/qwen/qwen3.6-plus)
+                  deepseek-v4-flash)
         :stream t)
 
       (gptel-make-perplexity "Perplexity"
