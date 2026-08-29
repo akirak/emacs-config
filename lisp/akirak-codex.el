@@ -1,6 +1,7 @@
 ;;; akirak-codex.el ---  -*- lexical-binding: t -*-
 
 (require 'akirak-transient)
+(require 'xdg nil t)
 
 (defconst akirak-codex-slash-commands
   '("/diff"
@@ -16,6 +17,11 @@
 (defcustom akirak-codex-executable "codex"
   ""
   :type 'file)
+
+(defcustom akirak-codex-session-watcher-dir
+  (file-name-concat (xdg-runtime-dir) "codex" "sessions")
+  ""
+  :type 'directory)
 
 (defcustom akirak-codex-default-args
   '("--config" "preferred_auth_method=chatgpt")
@@ -42,9 +48,11 @@
   ""
   :type '(repeat string))
 
+(defvar akirak-codex-session-watcher nil)
+
 (defvar akirak-codex-directory nil)
 
-(defvar akirak-codex-model "gpt-5.6-luna xhigh fast")
+(defvar akirak-codex-model "gpt-5.6-sol medium")
 
 (transient-define-infix akirak-codex-set-model ()
   :class 'akirak-transient-choice-variable
@@ -94,6 +102,7 @@
   (let ((root akirak-codex-directory))
     (akirak-shell-eat-new
      :dir root
+     :bookmark-function #'akirak-codex-make-bookmark
      :command (cons akirak-codex-executable
                     (append (when subcommand (ensure-list subcommand))
                             akirak-codex-default-args
@@ -240,7 +249,53 @@
                                 (buffer-substring-no-properties
                                  (line-beginning-position)
                                  (line-end-position))))
-         'prompt)))))
+         'prompt)
+        ;; With a background terminal
+        ((guard (string-match-p
+                 (rx bol (or "─ Worked for "
+                             "──────────────"))
+                 (buffer-substring-no-properties
+                  (line-beginning-position -6)
+                  (line-end-position -6))))
+         'done)))))
+
+(defun akirak-codex-watch-sessions ()
+  "Start watching new codex sessions."
+  (when (and (not akirak-codex-session-watcher)
+             (require 'filenotify nil t))
+    (let ((dir akirak-codex-session-watcher-dir))
+      (file-notify-add-watch dir '(change) #'akirak-codex--handle-session-change))))
+
+(defun akirak-codex--handle-session-change (arg)
+  (pcase arg
+    (`(,_descriptor ,action ,file . ,_)
+     (when (eq action 'created)
+       (when-let* ((session-id (file-name-sans-extension (file-name-nondirectory file)))
+                   (pid (with-temp-buffer
+                          (insert-file-contents file)
+                          (string-to-number (string-trim (buffer-string)))))
+                   (process (seq-find `(lambda (process)
+                                         (= ,pid (process-id process)))
+                                      (process-list)))
+                   (buffer (process-buffer process)))
+         (with-current-buffer buffer
+           (setq-local akirak-codex-session-id session-id))
+         (message "New codex session started. session ID: %s, buffer: %s"
+                  session-id (buffer-name buffer)))))))
+
+(defun akirak-codex-bookmark-handler (bookmark)
+  (akirak-shell-eat-new :dir (bookmark-prop-get bookmark 'filename)
+                        :window 'same-window
+                        :bookmark-function #'akirak-codex-make-bookmark
+                        :command (list akirak-codex-executable
+                                       "resume"
+                                       (bookmark-prop-get bookmark 'codex-session-id))))
+
+(defun akirak-codex-make-bookmark ()
+  (when akirak-codex-session-id
+    `((filename . ,(abbreviate-file-name default-directory))
+      (handler . akirak-codex-bookmark-handler)
+      (codex-session-id . ,akirak-codex-session-id))))
 
 (provide 'akirak-codex)
 ;;; akirak-codex.el ends here

@@ -275,6 +275,15 @@
       (setq node (treesit-node-parent node))
       (setq parent (treesit-node-parent node)))
     (cond
+     ((= arg 0)
+      (goto-char (treesit-node-start node))
+      (when (<= (current-column) (current-indentation))
+        (beginning-of-line))
+      (push-mark (point) t t)
+      (goto-char (treesit-node-end node))
+      (when (looking-at (rx (* blank) eol))
+        (goto-char (1+ (match-end 0))))
+      (activate-mark))
      ((< arg 0)
       (while (< arg 0)
         (setq node (or (treesit-node-prev-sibling node)
@@ -696,7 +705,10 @@ This is primarily intended for editing JSX/TSX."
               1))
          (region-start (region-beginning))
          (region-end (region-end))
-         (nodes (akirak-treesit--region-nodes region-start region-end)))
+         (nodes (akirak-treesit--region-nodes region-start region-end))
+         (end-at-eol (save-excursion
+                       (goto-char region-end)
+                       (looking-at (rx (* blank) eol)))))
     (let ((len (length nodes))
           (m (length nodes)))
       (pcase n
@@ -717,6 +729,9 @@ This is primarily intended for editing JSX/TSX."
            (push-mark (point) t t)
            (setq deactivate-mark nil)
            (forward-char (- region-end region-start))
+           (when (and end-at-eol
+                      (not (looking-at (rx (* blank) eol))))
+             (open-line 1))
            (activate-mark)))
         (-1
          (let ((target (car nodes)))
@@ -752,10 +767,10 @@ This is primarily intended for editing JSX/TSX."
                        end)))
          (start-node (treesit-node-at node-start))
          (node start-node))
-    (while (and (= (treesit-node-start node)
-                   node-start)
-                (< (treesit-node-end node)
-                   node-end))
+    (while (and (>= (treesit-node-start node)
+                    node-start)
+                (<= (treesit-node-end node)
+                    node-end))
       (setq node (treesit-node-parent node))
       (unless node
         (user-error "Not identifying a node list for the region")))

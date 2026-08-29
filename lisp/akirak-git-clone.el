@@ -232,6 +232,67 @@ matches the host of the repository,
     (_
      (error "Unsupported ref: %s" flake-ref-or-url))))
 
+(defun akirak-git-clone--parse-origin (git-url)
+  "Parse GIT-URL"
+  (pcase git-url
+    ((rx bol "https://"
+         (group (or "github.com"
+                    "gitlab.com"
+                    "codeberg.org"
+                    "git.sr.ht"))
+         "/"
+         (group (+ (not (any "/")))
+                "/"
+                (+ (not (any "/")))))
+     (let* ((host (match-string 1 git-url))
+            (match (match-string 2 git-url))
+            (path (if (string-match-p (rx ".git" eol) match)
+                      (substring match 0 -4)
+                    match))
+            (origin (akirak-git-clone--clone-url-2 host path)))
+       (make-akirak-git-clone-source :type 'github
+                                     :origin origin
+                                     :owner-and-repo path
+                                     :host host)))
+    ((rx bol "git@"
+         (group (or "github.com"
+                    "gitlab.com"
+                    "codeberg.org"
+                    "git.sr.ht"))
+         ":"
+         (group (+ (not (any "/")))
+                "/"
+                (+ (not (any "/")))))
+     (let* ((host (match-string 1 git-url))
+            (match (match-string 2 git-url))
+            (path (if (string-match-p (rx ".git" eol) match)
+                      (substring match 0 -4)
+                    match))
+            (origin (akirak-git-clone--clone-url-2 host path)))
+       (make-akirak-git-clone-source :type 'github
+                                     :origin origin
+                                     :owner-and-repo path
+                                     :host host)))
+    ((rx bol (or "https" "git") "://"
+         (?  (+ (any "-_." alnum)) "@")
+         (group (+ (any "-_" alnum)) (+ "." (+ (any "-_" alnum))))
+         (?  ":" (+ (char digit)))
+         "/")
+     (let ((host (match-string 1 git-url)))
+       (make-akirak-git-clone-source :type 'git
+                                     :host host
+                                     :origin git-url)))
+    ((rx bol "git@"
+         (group (+ (any "-_" alnum)) (+ "." (+ (any "-_" alnum))))
+         ":")
+     (let ((host (match-string 1 git-url)))
+       (make-akirak-git-clone-source :type 'git
+                                     :host host
+                                     :origin git-url)))
+    (_
+     (make-akirak-git-clone-source :type 'git
+                                   :origin git-url))))
+
 (defun akirak-git-clone--sanitize-url (url)
   ;; For now, just strip a query and a fragment reference
   (replace-regexp-in-string (rx (any "?#") (+ anything)) "" url))
@@ -298,66 +359,70 @@ DIR is an optional destination directory to clone the repository into."
     (akirak-org-clock-log-reference-url url))
   (let* ((obj (akirak-git-clone--parse url))
          (origin (akirak-git-clone-source-origin obj))
-         (repo (if (and dir
-                        (not (file-exists-p dir)))
-                   dir
-                 (akirak-git-clone-default-dest-dir obj dir)))
          (content-path (akirak-git-clone-source-content-path obj))
          (other-window (eq this-command 'akirak/embark-git-clone-from-url)))
     (when (akirak-git-clone-source-rev-or-ref obj)
       (message "Rev or ref is unsupported now"))
     (if (akirak-git-clone-source-pr obj)
-        (let* ((source (akirak-git-clone--pr-source (akirak-git-clone-source-owner-and-repo obj)
+        ;; If you are trying to review a PR, then it is likely you have a local
+        ;; copy of the repository.
+        (let* ((repo (or (akirak-git-clone--find-working-tree obj)
+                         (akirak-git-clone-default-dest-dir obj)))
+               (pr-obj (akirak-git-clone--pr-source (akirak-git-clone-source-owner-and-repo obj)
                                                     (akirak-git-clone-source-pr obj)))
-               (branch (akirak-git-clone-source-rev-or-ref source)))
+               (default-name (format "%s@pr%d"
+                                     (file-name-nondirectory repo)
+                                     (akirak-git-clone-source-pr obj)))
+               (branch (akirak-git-clone-source-rev-or-ref pr-obj)))
           (require 'akirak-magit)
-          ;; The working tree exists
+          ;; The repository exists
           (if (file-directory-p repo)
               (let* ((default-directory repo)
                      (remote (directory-file-name
                               (file-name-directory
-                               (akirak-git-clone-source-owner-and-repo source))))
+                               (akirak-git-clone-source-owner-and-repo pr-obj))))
                      (default-directory
                       (progn
+                        (akirak-project-remember-this)
                         (magit-call-git "remote" "add" "-f"
                                         remote
-                                        (akirak-git-clone-source-origin source))
-                        (magit-call-git "fetch"
-                                        remote
-                                        branch)
-                        (akirak-magit-worktree branch
-                                               nil
-                                               :name
-                                               (format "%s@pr%d"
-                                                       (file-name-nondirectory repo)
-                                                       (akirak-git-clone-source-pr obj))))))
+                                        (akirak-git-clone-source-origin pr-obj))
+                        (unless (zerop (magit-call-git "fetch"
+                                                       remote
+                                                       branch))
+                          (signal 'git-fetch-failed))
+                        (or (seq-some `(lambda (ent)
+                                         (when (string= (nth 2 ent) ,branch)
+                                           (abbreviate-file-name (car ent))))
+                                      (magit-list-worktrees))
+                            (progn
+                              (unless (zerop (magit-call-git "branch"
+                                                             branch
+                                                             (concat remote "/" branch)))
+                                (message "git-branch failed, but continuing anyway"))
+                              (akirak-magit-worktree branch nil
+                                                     :name default-name))))))
                 (akirak-git-clone--browse-diff))
-            (let ((dest (akirak-git-clone-default-dest-dir
-                         source (file-name-parent-directory repo))))
-              (if (file-directory-p dest)
-                  (let ((default-directory dest))
-                    (message "Updating the branch...")
-                    (if (or (string= branch
-                                     (magit-rev-parse "--abbrev-ref" "HEAD"))
-                            (zerop (call-process "git" nil nil nil
-                                                 "switch" branch)))
-                        (progn
-                          (call-process "git" nil nil nil
-                                        "pull" "origin" "HEAD")
-                          (akirak-git-clone--browse-diff))
-                      (user-error "Git failed to switch to the branch in the working tree")))
-                (akirak-git-clone--clone origin dest
-                                         :ref branch
-                                         :content-path content-path
-                                         :other-window other-window)))))
-      (if (file-directory-p repo)
-          (let ((default-directory repo))
-            (message "Updating the branch...")
-            (call-process "git" nil nil nil
-                          "pull" "origin" "HEAD")
-            (akirak-git-clone--browse-diff))
-        (akirak-git-clone--clone origin repo :content-path content-path
-                                 :other-window other-window)))))
+            (akirak-git-clone--clone
+             origin repo
+             :callback
+             `(lambda (repo)
+                (let* ((default-directory repo)
+                       (default-directory
+                        (akirak-magit-worktree branch ,nil :name ,default-name)))
+                  (akirak-git-clone--browse-diff))))))
+      (let ((repo (if (and dir
+                           (not (file-exists-p dir)))
+                      dir
+                    (akirak-git-clone-default-dest-dir obj dir))))
+        (if (file-directory-p repo)
+            (let ((default-directory repo))
+              (message "Updating the branch...")
+              (call-process "git" nil nil nil
+                            "pull" "origin" "HEAD")
+              (akirak-git-clone--browse-diff))
+          (akirak-git-clone--clone origin repo :content-path content-path
+                                   :other-window other-window))))))
 
 (defun akirak-git-clone--branch-worktree (branch)
   (require 'magit)
@@ -594,6 +659,51 @@ DIR is an optional destination directory to clone the repository into."
       (expand-file-name (akirak-git-clone-source-local-path obj)
                         (akirak-git-clone--root-directory
                          (akirak-git-clone-source-host obj))))))
+
+(defun akirak-git-clone--find-working-tree (obj)
+  (let* ((name (if (akirak-git-clone-source-owner-and-repo obj)
+                   (akirak-git-clone--repo-name
+                    (akirak-git-clone-source-owner-and-repo obj))
+                 (akirak-git-clone--repo-name (akirak-git-clone-source-origin obj))))
+         (path-regexp (rx-to-string `(and "/" ,name
+                                          (?  (or "=@") (+ (any "-_" alnum)))
+                                          (?  "/") eol))))
+    (cl-flet
+        ((name-match-p (path)
+           (string-match-p path-regexp path))
+         (origin-match-p (path)
+           (when-let* ((their-origin (car (magit-config-get-from-cached-list
+                                           "remote.origin.url")))
+                       (their-obj (akirak-git-clone--parse-origin their-origin)))
+             (and (equal (akirak-git-clone-source-host obj)
+                         (akirak-git-clone-source-host their-obj))
+                  (or (and (akirak-git-clone-source-owner-and-repo obj)
+                           (equal (akirak-git-clone-source-owner-and-repo obj)
+                                  (akirak-git-clone-source-owner-and-repo their-obj)))
+                      (equal (akirak-git-clone--normalize-url
+                              (akirak-git-clone-source-origin obj))
+                             (akirak-git-clone--normalize-url
+                              (akirak-git-clone-source-origin their-obj))))))))
+      (when-let* ((path (thread-last
+                          project--list
+                          (mapcar #'car)
+                          (seq-filter #'name-match-p)
+                          (seq-filter #'file-directory-p)
+                          (seq-find #'origin-match-p))))
+        (if (file-directory-p (file-name-concat path ".git"))
+            path
+          (let ((default-directory path))
+            (thread-last
+              (magit-list-worktrees)
+              (mapcar #'car)
+              (seq-find (lambda (dir)
+                          (file-directory-p (file-name-concat dir ".git")))))))))))
+
+(defun akirak-git-clone--normalize-url (git-url)
+  (thread-last
+    git-url
+    (string-remove-suffix "/")
+    (string-remove-suffix ".git")))
 
 (cl-defun akirak-git-clone-browse (dir &optional content-path
                                        &key other-window pr)

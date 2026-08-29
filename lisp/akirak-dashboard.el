@@ -258,7 +258,7 @@
    (seq-filter (lambda (buffer)
                  (when-let* ((process (get-buffer-process buffer)))
                    (and (process-live-p process)
-                        (not (string-match-p (rx bol " *EGLOT")
+                        (not (string-match-p (rx bol (? blank) "*EGLOT")
                                              (buffer-name buffer))))))
                (buffer-list))))
 

@@ -193,8 +193,14 @@
   (org-entry-put nil "coding_agent" name))
 
 (defun akirak-org-shell--persist-agent-info ()
-  (akirak-org-shell--set-agent-type
-   (symbol-name (akirak-shell-detect-buffer-program akirak-org-shell-buffer)))
+  (let ((program (akirak-shell-detect-buffer-program akirak-org-shell-buffer)))
+    (akirak-org-shell--set-agent-type (symbol-name program))
+    (pcase program
+      (`codex
+       (let ((session-id (buffer-local-value 'akirak-codex-session-id
+                                             akirak-org-shell-buffer)))
+         (when session-id
+           (org-entry-put nil "codex_session_id" session-id))))))
   (let* ((actual-dir (akirak-shell-directory akirak-org-shell-buffer))
          (pom (point-marker))
          (logged-dir (akirak-org-git-worktree pom)))

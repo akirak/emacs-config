@@ -1465,8 +1465,9 @@ The built-in =electric= package provides the following modes:
                          (text-mode . (,@editorconfig)))))
         (dir-locals-set-class-variables
          'personal
-         `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
-           (org-mode . (eval . (jinx-mode 1)))))
+         (append `((nix-ts-mode . (,@lsp-no-formatter ,@nixfmt))
+                   (org-mode . (eval . (jinx-mode 1))))
+                 default))
         (dir-locals-set-class-variables
          'default
          default)
@@ -1998,8 +1999,8 @@ Resources:
 
 #+begin_src emacs-lisp
   (setup process
-    ;; Expand read-process-output-max for lsp-mode
-    (:set read-process-output-max (* 1024 1024)))
+    ;; Raise the limit for LSP servers
+    (:set read-process-output-max (* 4 1024 1024)))
 #+end_src
 *** profiler                                       :Emacs:profiling:
 :PROPERTIES:
@@ -5624,8 +5625,10 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 #+begin_src emacs-lisp
   (setup akirak-org
     (:with-feature org
+      (:hook akirak-org-truncate-property-mode)
       (:with-map org-mode-map
-        (:keymap "<remap> <point-to-register>" #'akirak-org-point-to-register)))
+        (:keymap "<remap> <point-to-register>" #'akirak-org-point-to-register
+                 "<remap> <org-cycle>" #'akirak-org-cycle-dwim)))
 
     (:when-loaded
       ;; Alternative to the default implementation provided as
@@ -5655,12 +5658,41 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                    (getenv "DISPLAY")))
       (:hook-into emacs-startup-hook))
     (:hook akirak-log-mode)
-    ;; (add-hook 'akirak-org-clock-pre-exit-hook
-    ;;           (defun akirak/org-clock-save-wconf ()
-    ;;             (if (and (require 'burly nil t)
-    ;;                      (fboundp 'akirak-burly-clock-push))
-    ;;                 (akirak-burly-clock-push)
-    ;;               (message "Burly is not available, so the window configuration won't be saved"))))
+    (add-hook 'org-clock-in-hook
+              (defun akirak/org-clock-restore-burly ()
+                (let ((url (org-entry-get nil "burly_windows_url"))
+                      (datetime (org-entry-get nil "burly_saved_at")))
+                  (when (and url
+                             (not (string-empty-p url))
+                             (require 'burly nil t)
+                             (yes-or-no-p (format-prompt
+                                           "Restore the window configuration saved at %s? "
+                                           nil
+                                           datetime)))
+                    (tab-bar-switch-to-tab (org-entry-get org-clock-hd-marker
+                                                          "ITEM"))
+                    (tab-bar-rename-tab)
+                    (burly-open-url url)))))
+    (add-hook 'akirak-org-clock-pre-exit-hook
+              (defun akirak/org-clock-save-burly ()
+                (when (require 'burly nil t)
+                  (let ((url (burly-windows-url)))
+                    (org-with-point-at org-clock-hd-marker
+                      (unless (org-before-first-heading-p)
+                        (org-entry-put nil
+                                       "burly_windows_url"
+                                       url)
+                        (org-entry-put nil
+                                       "burly_saved_at"
+                                       (format-time-string
+                                        (org-time-stamp-format t t)))
+                        (org-back-to-heading)
+                        (let ((begin (point))
+                              (end (or (save-excursion
+                                         (re-search-forward org-property-drawer-re nil t))
+                                       (org-entry-end-position))))
+                          (akirak-org-clear-property-truncation begin end)
+                          (akirak-org-truncate-properties-in-region begin end))))))))
 
     (advice-add 'save-buffers-kill-terminal
                 :before
@@ -5816,6 +5848,8 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 **** akirak-codex
 #+begin_src elisp
   (setup akirak-codex
+    (:when-loaded
+      (akirak-codex-watch-sessions))
     ;; mcp-proxy is used to communicate with non-stdio MCP servers
     (:nixpkgs "mcp-proxy"))
 #+end_src
@@ -7448,16 +7482,26 @@ Client for Language Server Protocol (LSP) servers
 
     (:set eglot-confirm-server-initiated-edits nil
           eglot-autoshutdown t
+          eglot-sync-connect 0
+          ;; Requires Emacs >= 30
+          eglot-events-buffer-config '(:size 0 :format short)
+          eglot-max-file-watches 3000
+          eglot-report-progress nil
           eglot-code-action-indications nil
           eglot-extend-to-xref t)
 
     (:keymap akirak/mode-prefix-key #'akirak/eglot-prefix-map)
 
     (defun akirak/eglot-ensure ()
-      (when (and (buffer-file-name)
-                 (not (bound-and-true-p magit-buffer-revision)))
-        (eglot-ensure)
-        t))
+      (if (and (buffer-file-name)
+               (not (bound-and-true-p magit-buffer-revision))
+               ;; With unmerged changes, a LSP server may exit abnormally,
+               ;; so don't run the server on such files.
+               (bound-and-true-p smerge-mode))
+          (progn
+            (eglot-ensure)
+            t)
+        (eglot--managed-mode -1)))
 
     (defun akirak/eglot-ensure-with-formatter ()
       (when (akirak/eglot-ensure)
@@ -7496,6 +7540,15 @@ Client for Language Server Protocol (LSP) servers
                  "R" #'eglot-reconnect
                  "r" #'eglot-rename))
 
+      ;; Disable inlay hints
+      (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
+      ;; Disable deep analysis of the source code
+      (add-to-list 'eglot-ignored-server-capabilities :codeLensProvider)
+      ;; No coloring
+      (add-to-list 'eglot-ignored-server-capabilities :colorProvider)
+      ;; Never use folding provided by LSP
+      (add-to-list 'eglot-ignored-server-capabilities :foldingRangeProvider)
+
       (add-to-list 'eglot-server-programs
                    `(((js-mode :language-id "javascript")
                       (js-ts-mode :language-id "javascript")
@@ -7512,6 +7565,9 @@ Client for Language Server Protocol (LSP) servers
                          '(("tix" "lsp")
                            ("typenix" "--lsp" "--stdio")
                            ("nil")))))
+      (add-to-list 'eglot-server-programs
+                   `(capnp-ts-mode
+                     . ("capnp-ls" "--stdio")))
       (add-to-list 'eglot-server-programs
                    '(just-mode . ("just-lsp")))
       (add-to-list 'eglot-server-programs
@@ -7570,6 +7626,10 @@ Client for Language Server Protocol (LSP) servers
       (put 'tsx-mode 'eglot-language-id "typescriptreact")
       (put 'lean4-mode 'eglot-language-id "lean")))
 #+end_src
+
+References:
+
+- [[https://www.jamescherti.com/emacs-eglot-performance/][Configuring Emacs Eglot for Optimal Performance │ James Cherti]]
 **** ocaml-eglot
 :PROPERTIES:
 :CREATED_TIME: [2025-01-23 Thu 22:04]
@@ -8710,6 +8770,14 @@ Completion kind icons
     (with-eval-after-load 'corfu
       (require 'kind-icon)
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
+#+end_src
+*** kubernetes
+:PROPERTIES:
+:CREATED_TIME: [2026-08-28 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package kubernetes))
 #+end_src
 *** language-detection
 :PROPERTIES:
@@ -10148,7 +10216,7 @@ Colorize color names in buffers
   (setup (:package rainbow-mode)
     (:hook-into prog-mode))
 #+end_src
-*** reason-mode
+*** COMMENT reason-mode                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-01-30 Tue 23:11]
 :END:
