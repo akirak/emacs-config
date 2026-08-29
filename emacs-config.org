@@ -7493,10 +7493,15 @@ Client for Language Server Protocol (LSP) servers
     (:keymap akirak/mode-prefix-key #'akirak/eglot-prefix-map)
 
     (defun akirak/eglot-ensure ()
-      (when (and (buffer-file-name)
-                 (not (bound-and-true-p magit-buffer-revision)))
-        (eglot-ensure)
-        t))
+      (if (and (buffer-file-name)
+               (not (bound-and-true-p magit-buffer-revision))
+               ;; With unmerged changes, a LSP server may exit abnormally,
+               ;; so don't run the server on such files.
+               (bound-and-true-p smerge-mode))
+          (progn
+            (eglot-ensure)
+            t)
+        (eglot--managed-mode -1)))
 
     (defun akirak/eglot-ensure-with-formatter ()
       (when (akirak/eglot-ensure)
