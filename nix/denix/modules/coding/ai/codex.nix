@@ -100,7 +100,10 @@ delib.module {
             set -euo pipefail
 
             configFile="$HOME/.codex/config.toml"
-            content="sqlite_home = \"''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/codex\""
+            dir="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/codex"
+            content="sqlite_home = \"$dir\""
+
+            mkdir -pv "$dir"
 
             if [[ -f "$configFile" ]]; then
               if ! grep -E "^sqlite_home" "$configFile" >/dev/null; then
