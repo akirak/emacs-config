@@ -696,7 +696,10 @@ This is primarily intended for editing JSX/TSX."
               1))
          (region-start (region-beginning))
          (region-end (region-end))
-         (nodes (akirak-treesit--region-nodes region-start region-end)))
+         (nodes (akirak-treesit--region-nodes region-start region-end))
+         (end-at-eol (save-excursion
+                       (goto-char region-end)
+                       (looking-at (rx (* blank) eol)))))
     (let ((len (length nodes))
           (m (length nodes)))
       (pcase n
@@ -717,6 +720,9 @@ This is primarily intended for editing JSX/TSX."
            (push-mark (point) t t)
            (setq deactivate-mark nil)
            (forward-char (- region-end region-start))
+           (when (and end-at-eol
+                      (not (looking-at (rx (* blank) eol))))
+             (open-line 1))
            (activate-mark)))
         (-1
          (let ((target (car nodes)))
