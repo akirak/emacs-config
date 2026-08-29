@@ -8774,6 +8774,9 @@ Completion kind icons
 :PROPERTIES:
 :CREATED_TIME: [2026-08-28 Fri 23:59]
 :END:
+#+begin_quote
+Magit-like porcelain for Kubernetes
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package kubernetes))
