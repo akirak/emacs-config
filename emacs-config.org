@@ -7506,11 +7506,12 @@ Client for Language Server Protocol (LSP) servers
                (not (bound-and-true-p magit-buffer-revision))
                ;; With unmerged changes, a LSP server may exit abnormally,
                ;; so don't run the server on such files.
-               (bound-and-true-p smerge-mode))
+               (not (bound-and-true-p smerge-mode)))
           (progn
             (eglot-ensure)
             t)
-        (eglot--managed-mode -1)))
+        (when (featurep 'eglot)
+          (eglot--managed-mode -1))))
 
     (defun akirak/eglot-ensure-with-formatter ()
       (when (akirak/eglot-ensure)
