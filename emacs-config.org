@@ -5421,6 +5421,8 @@ This is a collection of various utilities to enhance the experience.
 :END:
 #+begin_src elisp
   (setup akirak-compile
+    ;; dasel is required to parse TOML
+    (:nixpkgs dasel)
     (:global-keymap "C-x c" #'akirak-compile)
 
     (with-eval-after-load 'compile
