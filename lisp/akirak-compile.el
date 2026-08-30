@@ -653,7 +653,13 @@ are displayed in the frame."
                                (push (list (format "lake exe %s"
                                                    (shell-quote-argument (match-string 1))))
                                      results)))
-                           results))))))
+                           results))
+                       '(("lake build"
+                          annotation "Build the project")
+                         ("lake clean"
+                          annotation "Clean build artifacts")
+                         ("lake update"
+                          annotation "Update dependencies"))))))
       (process-compose
        (progn
          (require 'akirak-process-compose)
