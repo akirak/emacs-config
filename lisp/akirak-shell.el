@@ -31,6 +31,7 @@
 (require 'akirak-transient)
 (require 'eat)
 (require 'with-editor)
+(require 'vc-git)
 
 (declare-function eat "ext:eat")
 
