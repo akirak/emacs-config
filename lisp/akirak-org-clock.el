@@ -557,6 +557,18 @@ This function returns the current buffer."
                          (when (eq (point-min) ,point)
                            (current-buffer))))))))))
 
+;;;###autoload
+(defun akirak-org-clock-save-wconf ()
+  "Save the window configuration to the clock."
+  (interactive)
+  (require 'akirak-org)
+  (akirak-org-save-wconf org-clock-hd-marker))
+
+;;;###autoload
+(defun akirak-org-clock-restore-wconf ()
+  "Restore the window configuration from the clock."
+  (akirak-org-restore-wconf org-clock-hd-marker))
+
 ;;;; Other utilities
 
 (defun akirak-org-clock-transfer-entries (dest)
