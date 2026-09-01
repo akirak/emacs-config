@@ -16,5 +16,10 @@ emacs.pkgs.treesit-grammars.with-grammars (
       version = "0";
       src = inputs.tree-sitter-reason.outPath;
     })
+    (tree-sitter.buildGrammar {
+      language = "cypher";
+      version = "0";
+      src = inputs.tree-sitter-cypher.outPath;
+    })
   ]
 )

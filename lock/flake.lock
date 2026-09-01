@@ -497,6 +497,22 @@
         "type": "github"
       }
     },
+    "cypher-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787565821,
+        "narHash": "sha256-HynZId/hvNZIPc2Yw8THXZ0B9tJttkoC80U4qHsWp5Y=",
+        "ref": "refs/heads/main",
+        "rev": "0bdb59b169899fece56d09680ab3ea8c7a4c85af",
+        "revCount": 15,
+        "type": "git",
+        "url": "https://codeberg.org/nutcase/cypher-ts-mode.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/nutcase/cypher-ts-mode.git"
+      }
+    },
     "d2-mode": {
       "flake": false,
       "locked": {
@@ -3136,6 +3152,7 @@
         "copilot": "copilot",
         "corfu": "corfu",
         "cosmetic-transient": "cosmetic-transient",
+        "cypher-ts-mode": "cypher-ts-mode",
         "d2-mode": "d2-mode",
         "daemons": "daemons",
         "dag-draw": "dag-draw",

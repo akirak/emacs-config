@@ -416,6 +416,7 @@
         ],
         "org-babel": "org-babel",
         "tree-sitter-astro": "tree-sitter-astro",
+        "tree-sitter-cypher": "tree-sitter-cypher",
         "tree-sitter-reason": "tree-sitter-reason",
         "twist": "twist"
       }
@@ -485,6 +486,22 @@
       "original": {
         "owner": "virchau13",
         "repo": "tree-sitter-astro",
+        "type": "github"
+      }
+    },
+    "tree-sitter-cypher": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786686506,
+        "narHash": "sha256-OH/nzPpgTNdehKoDBo7Xt7K9q1V51jPKEkmEjVs1/P8=",
+        "owner": "taekwombo",
+        "repo": "tree-sitter-cypher",
+        "rev": "8f156a9ef57843a4f37650b9237de09364e5a5ff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "taekwombo",
+        "repo": "tree-sitter-cypher",
         "type": "github"
       }
     },

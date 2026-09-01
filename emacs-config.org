@@ -4822,6 +4822,18 @@ Tree-sitter mode for Cap'n Proto
   (setup (:package capnp-ts-mode)
     (:file-match "\\.capnp\\'"))
 #+end_src
+*** cypher-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-09-01 Tue 23:59]
+:END:
+#+begin_quote
+Cypher editing mode
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package cypher-ts-mode)
+    (:file-match "\\.cypher\\'"))
+#+end_src
 *** dockerfile-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-09-23 Sat 11:30]

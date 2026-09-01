@@ -187,6 +187,11 @@
       repo = "cosmetic-transient.el";
       type = "github";
     };
+    cypher-ts-mode = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/nutcase/cypher-ts-mode.git";
+    };
     d2-mode = {
       flake = false;
       owner = "andorsk";
