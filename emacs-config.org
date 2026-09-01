@@ -7832,6 +7832,7 @@ Support for `direnv' that operates buffer-locally
 
 #+begin_src emacs-lisp
   (setup (:package envrc)
+    (:set envrc-async t)
     (add-hook 'after-init-hook #'envrc-global-mode))
 #+end_src
 *** epkg                                                          :Emacs:@extra:
