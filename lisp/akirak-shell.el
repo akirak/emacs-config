@@ -31,6 +31,7 @@
 (require 'akirak-transient)
 (require 'eat)
 (require 'with-editor)
+(require 'vc-git)
 
 (declare-function eat "ext:eat")
 
@@ -648,6 +649,7 @@ the original minor mode."
                                 (user-error "Not in project")))))
     (thread-last
       (buffer-list)
+      (seq-filter #'buffer-live-p)
       (seq-filter #'akirak-shell-buffer-p)
       (seq-filter (apply-partially #'akirak-shell-buffer-in-dir-p root)))))
 

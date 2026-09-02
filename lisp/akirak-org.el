@@ -1601,8 +1601,8 @@ Don't emphasize any part of the text but inline code.\n\n"
                    (let ((response (with-current-buffer buffer
                                      (require 'akirak-pandoc)
                                      (akirak-pandoc-convert-string
-                                         (xterm-color-filter (buffer-string))
-                                       :from "gfm" :to "org"))))
+                                      (xterm-color-filter (buffer-string))
+                                      :from "gfm" :to "org"))))
                      (org-with-point-at (org-id-find org-id)
                        (atomic-change-group
                          (let ((tag "@AI"))
@@ -1634,6 +1634,54 @@ Don't emphasize any part of the text but inline code.\n\n"
                     :command (list "claude" "-p" prompt)
                     :sentinel #'sentinel))
     (message "Running Claude analysis...")))
+
+
+;;;; Window config
+
+;;;###autoload
+(defun akirak-org-restore-wconf (&optional pom confirm)
+  "Restore the window configuration from the entryl."
+  (interactive)
+  (require 'burly nil t)
+  (let ((url (org-entry-get pom "burly_windows_url"))
+        (datetime (org-entry-pom pom "burly_saved_at")))
+    (if (and url
+             (not (string-empty-p url)))
+        (when (or (not confirm)
+                  (yes-or-no-p (if datetime
+                                   (format-prompt
+                                    "Restore the window configuration saved at %s? "
+                                    nil
+                                    datetime)
+                                 (format-prompt
+                                  "Restore the window configuration saved at %s? "
+                                  nil
+                                  datetime))))
+          (tab-bar-switch-to-tab (org-entry-get org-clock-hd-marker
+                                                "ITEM"))
+          (tab-bar-rename-tab)
+          (burly-open-url url))
+      (user-error "No window configuration is saved to burly_windows_url"))))
+
+(defun akirak-org-save-wconf (pom)
+  "Save the window configuration to the Org entry at pom."
+  (require 'burly)
+  (let ((url (burly-windows-url)))
+    (org-with-point-at pom
+      (org-entry-put nil
+                     "burly_windows_url"
+                     url)
+      (org-entry-put nil
+                     "burly_saved_at"
+                     (format-time-string
+                      (org-time-stamp-format t t)))
+      (org-back-to-heading)
+      (let ((begin (point))
+            (end (or (save-excursion
+                       (re-search-forward org-property-drawer-re nil t))
+                     (org-entry-end-position))))
+        (akirak-org-clear-property-truncation begin end)
+        (akirak-org-truncate-properties-in-region begin end)))))
 
 ;;;; Specific applications
 

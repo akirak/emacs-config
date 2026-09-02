@@ -1000,7 +1000,12 @@ The other variables must not be saved, and they should be put in configuration:
   (setup dired
     (:set dired-recursive-copies 'always
           dired-recursive-deletes 'top
-          dired-auto-revert-buffer t
+          dired-clean-confirm-killing-deleted-buffers nil
+          dired-free-space nil
+          dired-movement-style 'bounded-files
+          dired-auto-revert-buffer 'dired-directory-changed-p
+          dired-do-revert-buffer (lambda (dir)
+                                   (not (file-remote-p dir)))
           dired-vc-rename-file t
           dired-hide-details-hide-absolute-location t
           dired-filename-display-length 60
@@ -1031,6 +1036,10 @@ The other variables must not be saved, and they should be put in configuration:
                            (dired-do-rename))
                        (dired-do-rename arg))))))
 #+end_src
+
+References:
+
+- [[https://www.jamescherti.com/emacs-dired-configuration/][Fixing Emacs Dired Defaults: Settings for Better File Management │ James Cherti]]
 *** display-fill-column-indicator
 :PROPERTIES:
 :CREATED_TIME: [2022-11-13 Sun 17:44]
@@ -4813,6 +4822,18 @@ Tree-sitter mode for Cap'n Proto
   (setup (:package capnp-ts-mode)
     (:file-match "\\.capnp\\'"))
 #+end_src
+*** cypher-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-09-01 Tue 23:59]
+:END:
+#+begin_quote
+Cypher editing mode
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package cypher-ts-mode)
+    (:file-match "\\.cypher\\'"))
+#+end_src
 *** dockerfile-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-09-23 Sat 11:30]
@@ -5412,6 +5433,8 @@ This is a collection of various utilities to enhance the experience.
 :END:
 #+begin_src elisp
   (setup akirak-compile
+    ;; dasel is required to parse TOML
+    (:nixpkgs dasel)
     (:global-keymap "C-x c" #'akirak-compile)
 
     (with-eval-after-load 'compile
@@ -5658,41 +5681,13 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
                    (getenv "DISPLAY")))
       (:hook-into emacs-startup-hook))
     (:hook akirak-log-mode)
-    (add-hook 'org-clock-in-hook
-              (defun akirak/org-clock-restore-burly ()
-                (let ((url (org-entry-get nil "burly_windows_url"))
-                      (datetime (org-entry-get nil "burly_saved_at")))
-                  (when (and url
-                             (not (string-empty-p url))
-                             (require 'burly nil t)
-                             (yes-or-no-p (format-prompt
-                                           "Restore the window configuration saved at %s? "
-                                           nil
-                                           datetime)))
-                    (tab-bar-switch-to-tab (org-entry-get org-clock-hd-marker
-                                                          "ITEM"))
-                    (tab-bar-rename-tab)
-                    (burly-open-url url)))))
     (add-hook 'akirak-org-clock-pre-exit-hook
-              (defun akirak/org-clock-save-burly ()
-                (when (require 'burly nil t)
-                  (let ((url (burly-windows-url)))
-                    (org-with-point-at org-clock-hd-marker
-                      (unless (org-before-first-heading-p)
-                        (org-entry-put nil
-                                       "burly_windows_url"
-                                       url)
-                        (org-entry-put nil
-                                       "burly_saved_at"
-                                       (format-time-string
-                                        (org-time-stamp-format t t)))
-                        (org-back-to-heading)
-                        (let ((begin (point))
-                              (end (or (save-excursion
-                                         (re-search-forward org-property-drawer-re nil t))
-                                       (org-entry-end-position))))
-                          (akirak-org-clear-property-truncation begin end)
-                          (akirak-org-truncate-properties-in-region begin end))))))))
+              (defun akirak/org-capture-save-wconf ()
+                (when (equal org-clock-marker
+                             (buffer-local-value
+                              'org-capture-clock-was-started
+                              (current-buffer)))
+                  (akirak-org-clock-save-wconf))))
 
     (advice-add 'save-buffers-kill-terminal
                 :before
@@ -7497,11 +7492,12 @@ Client for Language Server Protocol (LSP) servers
                (not (bound-and-true-p magit-buffer-revision))
                ;; With unmerged changes, a LSP server may exit abnormally,
                ;; so don't run the server on such files.
-               (bound-and-true-p smerge-mode))
+               (not (bound-and-true-p smerge-mode)))
           (progn
             (eglot-ensure)
             t)
-        (eglot--managed-mode -1)))
+        (when (featurep 'eglot)
+          (eglot--managed-mode -1))))
 
     (defun akirak/eglot-ensure-with-formatter ()
       (when (akirak/eglot-ensure)
@@ -7836,12 +7832,7 @@ Support for `direnv' that operates buffer-locally
 
 #+begin_src emacs-lisp
   (setup (:package envrc)
-    (defun akirak/turn-on-envrc-mode ()
-      ;; Disable envrc for performance.
-      (unless (or (minibufferp)
-                  (string-match-p "\*consult-" (buffer-name)))
-        (envrc-mode 1)))
-    (add-hook 'akirak-worktree-mode-hook #'akirak/turn-on-envrc-mode))
+    (add-hook 'after-init-hook #'envrc-global-mode))
 #+end_src
 *** epkg                                                          :Emacs:@extra:
 :PROPERTIES:
@@ -7853,7 +7844,7 @@ Browse the Emacsmirror package database
 
 #+begin_src emacs-lisp
   (setup (:package epkg)
-    (:set epkg-database-connector 'sqlite-builtin))
+    (:nixpkgs sqlite))
 #+end_src
 **** epkg-marginalia                             :Emacs:completion:
 :PROPERTIES:
@@ -8410,7 +8401,7 @@ Interact with ChatGPT or other LLMs
       (fset 'gptel--update-header-line #'ignore)
 
       (:set gptel-backend (gptel-make-openai-oauth "OpenAI-sub")
-            gptel-model 'gpt-5.4)
+            gptel-model 'gpt-5.6-luna)
 
       ;; OpenAI via API.
       ;; (:set gptel-backend
@@ -8430,8 +8421,7 @@ Interact with ChatGPT or other LLMs
         :models '(glm-5.2
                   kimi-k2.7-code
                   deepseek-v4-pro
-                  deepseek-v4-flash
-                  openrouter/qwen/qwen3.6-plus)
+                  deepseek-v4-flash)
         :stream t)
 
       (gptel-make-perplexity "Perplexity"
@@ -8775,6 +8765,9 @@ Completion kind icons
 :PROPERTIES:
 :CREATED_TIME: [2026-08-28 Fri 23:59]
 :END:
+#+begin_quote
+Magit-like porcelain for Kubernetes
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package kubernetes))

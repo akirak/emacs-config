@@ -623,8 +623,12 @@ are displayed in the frame."
              ;; TODO: Add support for lake scripts
              (let ((default-directory dir))
                (append (when (file-exists-p "lakefile.toml")
-                         (akirak-compile--with-command-buffer
-                             '("dasel" "-r" "toml" "-w" "json" "-f" "lakefile.toml")
+                         (with-temp-buffer
+                           (unless (zerop (call-process "dasel"
+                                                        "lakefile.toml" (list t nil) nil
+                                                        "-i" "toml" "-o" "json"))
+                             (error "Failed to parse lakefile.toml"))
+                           (goto-char (point-min))
                            (thread-last
                              (json-parse-buffer :array-type 'list :object-type 'alist)
                              (alist-get 'lean_exe)
@@ -649,7 +653,13 @@ are displayed in the frame."
                                (push (list (format "lake exe %s"
                                                    (shell-quote-argument (match-string 1))))
                                      results)))
-                           results))))))
+                           results))
+                       '(("lake build"
+                          annotation "Build the project")
+                         ("lake clean"
+                          annotation "Clean build artifacts")
+                         ("lake update"
+                          annotation "Update dependencies"))))))
       (process-compose
        (progn
          (require 'akirak-process-compose)

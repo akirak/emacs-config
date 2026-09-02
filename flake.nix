@@ -21,6 +21,10 @@
       url = "github:reasonml-editor/tree-sitter-reason";
       flake = false;
     };
+    tree-sitter-cypher = {
+      url = "github:taekwombo/tree-sitter-cypher";
+      flake = false;
+    };
 
   };
 
