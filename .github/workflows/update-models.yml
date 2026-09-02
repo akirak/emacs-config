@@ -34,7 +34,7 @@ jobs:
       - name: Update the models
         run: nix run .#update-ai-models
 
-      - uses: peter-evans/create-pull-request@b99c9ae23bcf83f0f5aa571c2f0093de8aa85036
+      - uses: peter-evans/create-pull-request@762a4a5ab172615cc619580088c2a9443915facf
         id: cpr
         with:
           base: develop
