@@ -5024,7 +5024,7 @@ tree-sitter support for HCL
 
 #+begin_src emacs-lisp
   (setup json-ts-mode
-    (:file-match "\\.json\\'" "\\.lock\\'" "*.webmanifest")
+    (:file-match "\\.jsonc?\\'" "\\.lock\\'" "*.webmanifest")
     (:mode-project-roots "package.json")
     (:hook (defun akirak/json-ts-setup ()
              (add-hook 'eldoc-documentation-functions
