@@ -15,6 +15,9 @@ runs:
   using: composite
   steps:
     - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
+      with:
+        extra_nix_config: |
+          accept-flake-config = true
 
     - name: Restore the package cache
       uses: nix-community/cache-nix-action@135667ec418502fa5a3598af6fb9eb733888ce6a # v6
