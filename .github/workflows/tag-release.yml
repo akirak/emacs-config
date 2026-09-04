@@ -9,8 +9,7 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   tag:
@@ -23,9 +22,10 @@ jobs:
       release-tag: ${{ steps.tag.outputs.release_tag }}
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ inputs.ref }}
+          persist-credentials: false
 
       - name: Tag the current head
         id: tag
@@ -38,6 +38,9 @@ jobs:
   release:
     needs: tag
     uses: ./.github/workflows/release.yml
+    permissions:
+      contents: write
     with:
       release-tag: ${{ needs.tag.outputs.release-tag }}
-    secrets: inherit
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}

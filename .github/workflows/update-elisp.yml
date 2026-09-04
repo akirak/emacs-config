@@ -3,6 +3,9 @@ name: Update elisp
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
   schedule:
     - cron: '35 7 10,24 * *'
 
@@ -15,9 +18,10 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: develop
+          persist-credentials: false
       - name: Set up Nix
         uses: ./.github/actions/setup
         with:
