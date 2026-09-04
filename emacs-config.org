@@ -7077,6 +7077,10 @@ fast, friendly searching with ripgrep
 :PROPERTIES:
 :CREATED_TIME: [2026-09-04 Fri 23:59]
 :END:
+#+begin_quote
+Simple notes with an efficient file-naming scheme
+[[https://github.com/protesilaos/denote]]
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package denote))
@@ -12006,7 +12010,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 219 |
+| [[org-ql-search:tags:packages][packages]]            | 220 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
