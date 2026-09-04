@@ -26,7 +26,7 @@ runs:
         restore-prefixes-first-match: nix-${{ runner.os }}-
         gc-max-store-size-linux: 2G
 
-    - uses: cachix/cachix-action@v17
+    - uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
       with:
         name: ${{ inputs.cachix-name }}
         authToken: '${{ inputs.cachix-token }}'
