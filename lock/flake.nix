@@ -1027,12 +1027,6 @@
       repo = "ox-gfm";
       type = "github";
     };
-    ox-hugo = {
-      flake = false;
-      owner = "kaushalmodi";
-      repo = "ox-hugo";
-      type = "github";
-    };
     package-lint = {
       flake = false;
       owner = "purcell";
@@ -1278,12 +1272,6 @@
       flake = false;
       type = "git";
       url = "https://codeberg.org/acdw/titlecase.el.git";
-    };
-    tomelr = {
-      flake = false;
-      owner = "kaushalmodi";
-      repo = "tomelr";
-      type = "github";
     };
     transient = {
       flake = false;
