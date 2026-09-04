@@ -9743,7 +9743,7 @@ Reformat Nix using nixfmt
 
 #+begin_src emacs-lisp
   (setup (:package nixfmt)
-    (:nixpkgs nixfmt-rfc-style))
+    (:nixpkgs nixfmt))
 #+end_src
 *** nix-mode                                                               :Nix:
 :PROPERTIES:
