@@ -4713,7 +4713,7 @@ Github Flavored Markdown Back-End for Org Export Engine
   (setup (:package ox-gfm)
     (add-to-list 'org-modules 'ox-gfm))
 #+end_src
-*** ox-hugo
+*** COMMENT ox-hugo                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-02 Mon 23:26]
 :END:
