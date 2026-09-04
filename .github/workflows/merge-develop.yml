@@ -35,9 +35,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: master
+          persist-credentials: false
       - run: git switch -c develop HEAD
       # The develop branch should be deleted already. You can turn on
       # "Automatically delete head branches" in the general per-repository
@@ -47,7 +48,8 @@ jobs:
   update_packages:
     needs: recreate_develop
     uses: ./.github/workflows/update-elisp.yml
-    secrets: inherit
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     permissions:
       contents: write
       pull-requests: write

@@ -11,6 +11,9 @@ on:
       release-tag:
         required: true
         type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
 
 permissions:
   contents: write
@@ -40,9 +43,10 @@ jobs:
             result-tar: false
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ inputs.release-tag }}
+          persist-credentials: false
 
       - name: Set up Nix
         uses: ./.github/actions/setup
@@ -58,7 +62,7 @@ jobs:
           gzip ./*.tar
         if: ${{ matrix.result-tar }}
 
-      - uses: akirak/action-gh-release@master
+      - uses: akirak/action-gh-release@c9b46fe7aad9f02afd89b12450b780f52dacfb2d # master
         with:
           tag_name: ${{ inputs.release-tag || github.ref_name }}
           files: |

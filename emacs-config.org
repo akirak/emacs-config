@@ -4713,7 +4713,7 @@ Github Flavored Markdown Back-End for Org Export Engine
   (setup (:package ox-gfm)
     (add-to-list 'org-modules 'ox-gfm))
 #+end_src
-*** ox-hugo
+*** COMMENT ox-hugo                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-01-02 Mon 23:26]
 :END:
@@ -5024,7 +5024,7 @@ tree-sitter support for HCL
 
 #+begin_src emacs-lisp
   (setup json-ts-mode
-    (:file-match "\\.json\\'" "\\.lock\\'" "*.webmanifest")
+    (:file-match "\\.jsonc?\\'" "\\.lock\\'" "*.webmanifest")
     (:mode-project-roots "package.json")
     (:hook (defun akirak/json-ts-setup ()
              (add-hook 'eldoc-documentation-functions
@@ -7073,6 +7073,18 @@ fast, friendly searching with ripgrep
                                      "--ignore-file=.gitignore"
                                      "--iglob=!.git")))
 #+end_src
+*** denote
+:PROPERTIES:
+:CREATED_TIME: [2026-09-04 Fri 23:59]
+:END:
+#+begin_quote
+Simple notes with an efficient file-naming scheme
+[[https://github.com/protesilaos/denote]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package denote))
+#+end_src
 *** devdocs                                              :reference:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-28 Sun 13:31]
@@ -7832,6 +7844,7 @@ Support for `direnv' that operates buffer-locally
 
 #+begin_src emacs-lisp
   (setup (:package envrc)
+    (:set envrc-async t)
     (add-hook 'after-init-hook #'envrc-global-mode))
 #+end_src
 *** epkg                                                          :Emacs:@extra:
@@ -9742,7 +9755,7 @@ Reformat Nix using nixfmt
 
 #+begin_src emacs-lisp
   (setup (:package nixfmt)
-    (:nixpkgs nixfmt-rfc-style))
+    (:nixpkgs nixfmt))
 #+end_src
 *** nix-mode                                                               :Nix:
 :PROPERTIES:
