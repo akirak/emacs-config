@@ -233,6 +233,12 @@
       repo = "deadgrep";
       type = "github";
     };
+    denote = {
+      flake = false;
+      owner = "protesilaos";
+      repo = "denote";
+      type = "github";
+    };
     devdocs = {
       flake = false;
       owner = "astoff";

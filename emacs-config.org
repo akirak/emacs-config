@@ -7073,6 +7073,14 @@ fast, friendly searching with ripgrep
                                      "--ignore-file=.gitignore"
                                      "--iglob=!.git")))
 #+end_src
+*** denote
+:PROPERTIES:
+:CREATED_TIME: [2026-09-04 Fri 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package denote))
+#+end_src
 *** devdocs                                              :reference:
 :PROPERTIES:
 :CREATED_TIME: [2022-08-28 Sun 13:31]

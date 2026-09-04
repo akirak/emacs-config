@@ -625,6 +625,22 @@
         "type": "github"
       }
     },
+    "denote": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787924430,
+        "narHash": "sha256-Lk9UiMSsQTNJ+arL5NXpfDgWOdzFHdvnxtvaG1juLyc=",
+        "owner": "protesilaos",
+        "repo": "denote",
+        "rev": "0a157981e58faa8c98cfc937dfb2792533642197",
+        "type": "github"
+      },
+      "original": {
+        "owner": "protesilaos",
+        "repo": "denote",
+        "type": "github"
+      }
+    },
     "devdocs": {
       "flake": false,
       "locked": {
@@ -3144,6 +3160,7 @@
         "dash": "dash",
         "dashboard": "dashboard",
         "deadgrep": "deadgrep",
+        "denote": "denote",
         "devdocs": "devdocs",
         "diff-hl": "diff-hl",
         "dired-collapse": "dired-collapse",
