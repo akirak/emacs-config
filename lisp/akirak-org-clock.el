@@ -402,7 +402,10 @@ Example values are shown below:
   (setq org-clock-history
         (seq-take
          (thread-last
-           (org-dog-select 'absolute)
+           (append (org-dog-select 'absolute)
+                   (when (and (bound-and-true-p denote-directory)
+                              (file-directory-p denote-directory))
+                     (directory-files denote-directory t "\\.org\\'" t)))
            (seq-filter #'akirak-org-clock--recently-active-p)
            (org-map-entries (lambda ()
                               (let ((marker (point-marker))
