@@ -7088,7 +7088,27 @@ Simple notes with an efficient file-naming scheme
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package denote))
+  (setup (:package denote)
+    (:set denote-org-store-link-to-heading 'link
+          ;; Each denote entry must contain some front matter. Otherwise, denote
+          ;; writes it.
+          ;; denote-org-front-matter "#+denote_identifier: %4$s\n"
+          denote-org-front-matter "")
+    (add-hook 'denote-after-new-note-hook #'akirak-denote-visit-hook)
+
+    (:when-loaded
+      (let ((plist (cdr (assq 'org denote-file-types))))
+        ;; (plist-put plist :identifier-key-regexp "^#\\+denote_identifier\\s-*:")
+        (plist-put plist :title-key-regexp "^\\* "))
+
+      (advice-add 'denote-retrieve-front-matter-title-value
+                  :around
+                  (defun akirak/ad-around-denote-title-value (orig file type)
+                    (if (eq type 'org)
+                        (org-with-base-buffer (get-file-buffer file)
+                          (require 'akirak-denote)
+                          (akirak-denote-org-title))
+                      (apply orig file type))))))
 #+end_src
 *** devdocs                                              :reference:
 :PROPERTIES:
