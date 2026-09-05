@@ -5463,6 +5463,11 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-consult-org
     (:global-keymap "M-s M-j" #'akirak-consult-org-clock-history))
 #+end_src
+*** akirak-denote
+#+begin_src elisp
+  (setup akirak-denote
+    (:global-keymap "M-s C-M-p" #'akirak-denote-search))
+#+end_src
 *** akirak-disk
 #+begin_src elisp
   (setup akirak-disk

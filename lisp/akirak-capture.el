@@ -541,7 +541,8 @@
    :class transient-row
    ("e" "Emacs config" akirak-emacs-config-capture)
    ("sn" "Snippet" akirak-capture-snippet
-    :if use-region-p)]
+    :if use-region-p)
+   ("d" "Denote" akirak-denote-new)]
 
   (interactive)
   (if (equal current-prefix-arg '(16))
