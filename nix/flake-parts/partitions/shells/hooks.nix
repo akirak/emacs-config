@@ -28,7 +28,6 @@ in
     excludes = [ "lock/flake\\.nix" ];
   };
 
-  actionlint.enable = true;
   trufflehog.enable = true;
 
   flake-no-path = {
