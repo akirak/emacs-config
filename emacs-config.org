@@ -657,7 +657,8 @@ For configuration, see [[https://git.sr.ht/~tomterl/fullframe][~tomterl/fullfram
 
 #+begin_src emacs-lisp
   (setup autorevert
-    (:set auto-revert-avoid-polling t)
+    (:set auto-revert-avoid-polling t
+          auto-revert-check-vc-info t)
     (:with-mode global-auto-revert-mode
       (:hook-into after-init-hook)))
 #+end_src
@@ -2165,6 +2166,7 @@ Operations on the current project
 
 #+begin_src emacs-lisp
   (setup replace
+    (:set query-replace-show-preview t)
     (:global-keymap "C-c o" #'occur))
 #+end_src
 *** savehist                                               :history:
@@ -5463,6 +5465,11 @@ This is a collection of various utilities to enhance the experience.
   (setup akirak-consult-org
     (:global-keymap "M-s M-j" #'akirak-consult-org-clock-history))
 #+end_src
+*** akirak-denote
+#+begin_src elisp
+  (setup akirak-denote
+    (:global-keymap "M-s C-M-p" #'akirak-denote-search))
+#+end_src
 *** akirak-disk
 #+begin_src elisp
   (setup akirak-disk
@@ -7083,7 +7090,27 @@ Simple notes with an efficient file-naming scheme
 #+end_quote
 
 #+begin_src emacs-lisp
-(setup (:package denote))
+  (setup (:package denote)
+    (:set denote-org-store-link-to-heading 'link
+          ;; Each denote entry must contain some front matter. Otherwise, denote
+          ;; writes it.
+          ;; denote-org-front-matter "#+denote_identifier: %4$s\n"
+          denote-org-front-matter "")
+    (add-hook 'denote-after-new-note-hook #'akirak-denote-visit-hook)
+
+    (:when-loaded
+      (let ((plist (cdr (assq 'org denote-file-types))))
+        ;; (plist-put plist :identifier-key-regexp "^#\\+denote_identifier\\s-*:")
+        (plist-put plist :title-key-regexp "^\\* "))
+
+      (advice-add 'denote-retrieve-front-matter-title-value
+                  :around
+                  (defun akirak/ad-around-denote-title-value (orig file type)
+                    (if (eq type 'org)
+                        (org-with-base-buffer (get-file-buffer file)
+                          (require 'akirak-denote)
+                          (akirak-denote-org-title))
+                      (apply orig file type))))))
 #+end_src
 *** devdocs                                              :reference:
 :PROPERTIES:
