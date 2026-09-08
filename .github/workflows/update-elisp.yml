@@ -45,4 +45,8 @@ jobs:
             git commit -am 'emacs: Update ELPA packages'
           fi
       - run: nix run .#update-elisp-lock
-      - run: git push origin HEAD --force
+      - run: |
+          gh auth setup-git
+          git push origin HEAD --force
+        env:
+          GH_TOKEN: ${{ github.token }}
