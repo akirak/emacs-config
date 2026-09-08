@@ -43,11 +43,15 @@ jobs:
       # The develop branch should be deleted already. You can turn on
       # "Automatically delete head branches" in the general per-repository
       # settings to ensure this.
-      - run: git push origin HEAD
+      - run: |
+          gh auth setup-git
+          git push origin HEAD
+        env:
+          GH_TOKEN: ${{ github.token }}
 
   update_packages:
     needs: recreate_develop
-    uses: ./.github/workflows/update-elisp.yml
+    uses: $/.github/workflows/update-elisp.yml
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     permissions:
