@@ -272,38 +272,6 @@
         "type": "github"
       }
     },
-    "casual": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1787030770,
-        "narHash": "sha256-TkfoF9tAhYsC/9ywuCcKsTuTnMUPu5kjzDzYGpB1egk=",
-        "owner": "kickingvegas",
-        "repo": "casual",
-        "rev": "4360a3f8bd8dc775bd1c41a0fb26f2397785ad7f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kickingvegas",
-        "repo": "casual",
-        "type": "github"
-      }
-    },
-    "casual-symbol-overlay": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1729555091,
-        "narHash": "sha256-W29ntKpsrCj5nHhRXz2+pXJyFXhsmKN1ZbI3GUearF0=",
-        "owner": "kickingvegas",
-        "repo": "casual-symbol-overlay",
-        "rev": "1453e7486dd0921f0319f21dd8c8b603e4eb7300",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kickingvegas",
-        "repo": "casual-symbol-overlay",
-        "type": "github"
-      }
-    },
     "closql": {
       "flake": false,
       "locked": {
@@ -2959,22 +2927,6 @@
         "type": "github"
       }
     },
-    "rainbow-csv": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1767246603,
-        "narHash": "sha256-K2sSCOxqsNI0f4bPHQ9Mg3YF0GQDGoQWa9U8HKtcEJs=",
-        "owner": "emacs-vs",
-        "repo": "rainbow-csv",
-        "rev": "5b0bbaca8c6c1785b5ddd48fdf16817acc046ad2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacs-vs",
-        "repo": "rainbow-csv",
-        "type": "github"
-      }
-    },
     "rainbow-delimiters": {
       "flake": false,
       "locked": {
@@ -3138,8 +3090,6 @@
         "buttercup": "buttercup",
         "cape": "cape",
         "capnp-ts-mode": "capnp-ts-mode",
-        "casual": "casual",
-        "casual-symbol-overlay": "casual-symbol-overlay",
         "closql": "closql",
         "compat": "compat",
         "cond-let": "cond-let",
@@ -3305,7 +3255,6 @@
         "promise": "promise",
         "protobuf-mode": "protobuf-mode",
         "puni": "puni",
-        "rainbow-csv": "rainbow-csv",
         "rainbow-delimiters": "rainbow-delimiters",
         "reason-ts-mode": "reason-ts-mode",
         "reformatter": "reformatter",

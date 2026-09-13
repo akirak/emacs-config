@@ -103,18 +103,6 @@
       repo = "capnp-ts-mode";
       type = "github";
     };
-    casual = {
-      flake = false;
-      owner = "kickingvegas";
-      repo = "casual";
-      type = "github";
-    };
-    casual-symbol-overlay = {
-      flake = false;
-      owner = "kickingvegas";
-      repo = "casual-symbol-overlay";
-      type = "github";
-    };
     closql = {
       flake = false;
       owner = "magit";
@@ -1110,12 +1098,6 @@
       flake = false;
       owner = "AmaiKinono";
       repo = "puni";
-      type = "github";
-    };
-    rainbow-csv = {
-      flake = false;
-      owner = "emacs-vs";
-      repo = "rainbow-csv";
       type = "github";
     };
     rainbow-delimiters = {
