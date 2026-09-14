@@ -6611,7 +6611,7 @@ Completion At Point Extensions
              "C-x r M-l" #'cape-line
              "C-M-/" #'cape-dabbrev))
 #+end_src
-*** casual
+*** COMMENT casual                                                             :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-02-02 Sun 12:14]
 :END:
@@ -10212,7 +10212,7 @@ For auto-pairing, you can use =electric-pair-mode= along with puni.
 #+end_src
 
 This contains workarounds for puni-mode, like mode-specific soft deletion.
-*** rainbow-csv
+*** COMMENT rainbow-csv                                                        :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-01-02 Thu 23:59]
 :END:
@@ -10712,7 +10712,7 @@ Highlight symbols with keymap-enabled overlays
 #+end_src
 
 =embark= can substitute for most of the functionalities of the package, but I am used to this package.
-**** casual-symbol-overlay                                      :transit:
+**** COMMENT casual-symbol-overlay                                     :transit:ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-09-11 Wed 12:05]
 :END:
@@ -10755,6 +10755,7 @@ Major mode for editing systemd units
 :END:
 #+begin_quote
 Tab bookmarks
+[[https://github.com/minad/tab-bookmark]]
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -12037,13 +12038,13 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 220 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
 | [[org-ql-search:tags:UI][UI]]                  |  10 |
 | [[org-ql-search:tags:development][development]]         |   8 |
-| [[org-ql-search:tags:editing][editing]]             |   8 |
+| [[org-ql-search:tags:editing][editing]]             |   7 |
 | [[org-ql-search:tags:Emacs][Emacs]]               |   6 |
 | [[org-ql-search:tags:VC][VC]]                  |   6 |
 | [[org-ql-search:tags:library][library]]             |   6 |
@@ -12107,7 +12108,6 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 | [[org-ql-search:tags:EPUB][EPUB]]                |   1 |
 | [[org-ql-search:tags:colors][colors]]              |   1 |
 | [[org-ql-search:tags:graphics][graphics]]            |   1 |
-| [[org-ql-search:tags:transit][transit]]             |   1 |
 | [[org-ql-search:tags:media][media]]               |   1 |
 
 Note that the table above is invisible on GitHub.

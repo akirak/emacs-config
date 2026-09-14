@@ -80,7 +80,8 @@ the original minor mode."
                          (get-buffer name)))))
     (and (buffer-live-p buffer)
          (memq (buffer-local-value 'major-mode buffer)
-               akirak-shell-mode-list))))
+               akirak-shell-mode-list)
+         (process-live-p (get-buffer-process buffer)))))
 
 (defun akirak-shell-buffer-list ()
   (seq-filter #'akirak-shell-buffer-p (buffer-list)))
