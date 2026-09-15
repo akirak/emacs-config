@@ -1783,6 +1783,12 @@ Notes:
     (:file-match "\\.c?js\\'")
     (:set js-indent-level 2))
 #+end_src
+*** keyboard.c
+#+begin_src elisp
+  (setup keyboard
+    (:with-mode eat-mode
+      (:local-set echo-keystrokes 0)))
+#+end_src
 *** keymap.c                                           :keybindings:
 :PROPERTIES:
 :CREATED_TIME: [2022-03-19 Sat 23:59]
@@ -2248,6 +2254,9 @@ This is a recommended setting for use with vertico. See https://github.com/minad
           ;; Don't auto-save remote files.
           remote-file-name-inhibit-auto-save t
           shell-command-default-error-buffer "*shell-command stderr*")
+
+    (:with-mode (eat-mode compilation-mode)
+      (:local-set buffer-undo-list t))
 
     (:global-keymap "<remap> <count-words-region>" #'akirak/count-words-dwim
                     "<remap> <delete-horizontal-space>" #'cycle-spacing
@@ -2878,7 +2887,14 @@ Display available keybindings in popup
     (:set bidi-inhibit-bpa t
           bidi-display-reordering 'left-to-right
           bidi-paragraph-direction 'left-to-right
-          scroll-conservatively 1))
+          scroll-conservatively 1)
+
+    (:with-mode eat-mode
+      ;; https://www.jamescherti.com/emacs-terminal-performance-vterm-eat-ansi-term-ghostel/
+      (:local-set redisplay-skip-fontification-on-input t
+                  scroll-conservatively most-positive-fixnum
+                  auto-hscroll-mode nil
+                  nobreak-char-display nil)))
 #+end_src
 ** Typography settings                                       :visual:
 *** Theme packages                                        :packages:
@@ -7453,7 +7469,13 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 
 #+begin_src emacs-lisp
   (setup (:package eat)
-    (:set eat-kill-buffer-on-exit t)
+    (:set eat-kill-buffer-on-exit t
+          ;; https://www.jamescherti.com/emacs-terminal-performance-vterm-eat-ansi-term-ghostel/
+          eat-minimum-latency 0.01
+          eat-maximum-latency 0.05
+          eat-term-scrollback-size (* 64 1024)
+          eat-enable-shell-prompt-annotation nil)
+
     (:with-map eat-semi-char-mode-map
       (:keymap "S-<prior>" #'View-scroll-page-backward
                "S-<next>" #'View-scroll-page-forward)
