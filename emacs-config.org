@@ -10850,6 +10850,11 @@ Viewing/editing system trash can
 :PROPERTIES:
 :CREATED_TIME: [2024-06-22 Sat 23:59]
 :END:
+#+begin_quote
+Code folding using treesit
+[[https://github.com/emacs-tree-sitter/treesit-fold]]
+#+end_quote
+
 :LOGBOOK:
 CLOCK: [2026-09-16 Wed 10:40]--[2026-09-16 Wed 11:07] =>  0:27
 :END:
@@ -12063,7 +12068,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
