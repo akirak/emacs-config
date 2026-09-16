@@ -10846,9 +10846,12 @@ Viewing/editing system trash can
 #+begin_src emacs-lisp
 (setup (:package trashed))
 #+end_src
-*** COMMENT treesit-fold                                                       :ARCHIVE:
+*** treesit-fold
 :PROPERTIES:
 :CREATED_TIME: [2024-06-22 Sat 23:59]
+:END:
+:LOGBOOK:
+CLOCK: [2026-09-16 Wed 10:40]--[2026-09-16 Wed 11:07] =>  0:27
 :END:
 #+begin_quote
 Code folding using treesit
@@ -10867,7 +10870,7 @@ Code folding using treesit
     ;; `treesit' doesn't have a built-in keymap for its enabled modes, so I will
     ;; use `akirak-treesit-mode'. Actually, `treesit-fold' has nothing to do with
     ;; the mode.
-    (:hook-into akirak-treesit-mode-hook)
+    (:hook-into json-ts-mode-hook)
     (defvar-keymap treesit-fold-mode-map
       :doc "Keymap for `treesit-fold-mode'.")
     (:keymap "C-c TAB" #'akirak-treesit-fold-dwim))

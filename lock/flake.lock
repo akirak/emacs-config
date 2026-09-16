@@ -3283,6 +3283,7 @@
         "tagedit": "tagedit",
         "titlecase": "titlecase",
         "transient": "transient",
+        "treesit-fold": "treesit-fold",
         "ts": "ts",
         "twind": "twind",
         "twist": "twist",
@@ -3606,6 +3607,22 @@
       "original": {
         "owner": "magit",
         "repo": "transient",
+        "type": "github"
+      }
+    },
+    "treesit-fold": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781857459,
+        "narHash": "sha256-tuaYydP2MQ8RLY2o1UkF4pVVHzsLgClWb1adRchrm3U=",
+        "owner": "emacs-tree-sitter",
+        "repo": "treesit-fold",
+        "rev": "cc1003b730a3167b972cc8400dffe19be7988fc7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-tree-sitter",
+        "repo": "treesit-fold",
         "type": "github"
       }
     },
