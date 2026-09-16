@@ -25,6 +25,7 @@ delib.module {
           remoteUrls = listOfOption str [ ];
           gitdirs = listOfOption str [
             "~/work2/foss/"
+            "~/work2/projects/"
             "~/work2/learning/"
             "~/work2/personal/"
             "/git-annex/"
