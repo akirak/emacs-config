@@ -518,9 +518,11 @@ are displayed in the frame."
     (pcase-dolist (`(,backend . ,dir) projects)
       (let ((command-alist (if (eq backend 'package-json)
                                (cond
+                                ((memq 'bun (mapcar #'car projects))
+                                 (akirak-compile--gen-commands 'bun dir))
                                 ((seq-find `(lambda (cell)
                                               (and (memq (car cell)
-                                                         '(pnpm bun deno yarn npm))
+                                                         '(pnpm deno yarn npm))
                                                    (equal (cdr cell)
                                                           ,dir)))
                                            projects)
