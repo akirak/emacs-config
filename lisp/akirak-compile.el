@@ -269,12 +269,14 @@ are displayed in the frame."
                               (thread-last
                                 (copy-sequence history)
                                 (seq-filter `(lambda (ent)
-                                               (member (get-char-property 0 'command-directory ent)
+                                               (member (get-char-property
+                                                        0 'command-directory ent)
                                                        (mapcar #'cdr ',projects))))))))
                   (prefer-terminal (or (get-text-property 0 'terminal command)
                                        (akirak-compile--terminal-command-p command)))
                   (buffer-name-key (get-text-property 0 'buffer-name command))
-                  (default-directory (or (get-text-property 0 'command-directory command)
+                  (default-directory (or (get-text-property
+                                          0 'command-directory command)
                                          (pcase projects
                                            (`nil)
                                            (`(,project)
@@ -499,8 +501,8 @@ are displayed in the frame."
                               (member "pnpm-workspace.yaml" files))
                    ;; Detect pnpm projects inside pnpm workspaces.
                    (push (cons (if (and (equal (car cell) "package.json")
-                                        (locate-dominating-file dir
-                                                                "pnpm-workspace.yaml"))
+                                        (locate-dominating-file
+                                         dir "pnpm-workspace.yaml"))
                                    (cdr (assoc "pnpm-lock.yaml"
                                                akirak-compile-package-file-alist))
                                  (cdr cell))
@@ -616,7 +618,8 @@ are displayed in the frame."
                                 'annotation
                                 (string-trim (match-string 2)))
                           result))))
-              (cons '("iex -S mix" annotation "Run iex within the context of the application")
+              (cons '("iex -S mix" annotation
+                      "Run iex within the context of the application")
                     (nreverse result)))))
       (just (with-memoize
              (let ((default-directory dir))
@@ -626,17 +629,20 @@ are displayed in the frame."
              (let ((default-directory dir))
                (append (when (file-exists-p "lakefile.toml")
                          (with-temp-buffer
-                           (unless (zerop (call-process "dasel"
-                                                        "lakefile.toml" (list t nil) nil
-                                                        "-i" "toml" "-o" "json"))
+                           (unless (zerop (call-process
+                                           "dasel"
+                                           "lakefile.toml" (list t nil) nil
+                                           "-i" "toml" "-o" "json"))
                              (error "Failed to parse lakefile.toml"))
                            (goto-char (point-min))
                            (thread-last
-                             (json-parse-buffer :array-type 'list :object-type 'alist)
+                             (json-parse-buffer :array-type 'list
+                                                :object-type 'alist)
                              (alist-get 'lean_exe)
                              (mapcar (lambda (alist)
                                        (list (format "lake exe %s"
-                                                     (shell-quote-argument (alist-get 'name alist)))
+                                                     (shell-quote-argument
+                                                      (alist-get 'name alist)))
                                              'annotation
                                              (alist-get 'root alist)))))))
                        (when (file-exists-p "lakefile.lean")
@@ -653,7 +659,8 @@ are displayed in the frame."
                                                            (group (+ (any "_" alnum))))
                                                        nil t)
                                (push (list (format "lake exe %s"
-                                                   (shell-quote-argument (match-string 1))))
+                                                   (shell-quote-argument
+                                                    (match-string 1))))
                                      results)))
                            results))
                        '(("lake build"
@@ -673,7 +680,8 @@ are displayed in the frame."
                    (mapcar (lambda (name)
                              (list (format "process-compose process logs %s -n 500 -f"
                                            (shell-quote-argument name))
-                                   'buffer-name (concat "process-compose logs " name)))
+                                   'buffer-name (concat "process-compose logs "
+                                                        name)))
                            (akirak-process-compose-process-names config))))))
       (make (with-memoize
              (let (results
@@ -702,7 +710,8 @@ are displayed in the frame."
                                                 (?  " (default)")
                                                 (optional (+ blank) (group (+ nonl))))
                                             nil t)
-                    (push (list (format "zig build %s" (shell-quote-argument (match-string 1)))
+                    (push (list (format "zig build %s"
+                                        (shell-quote-argument (match-string 1)))
                                 'annotation (match-string 2))
                           result))
                   result)))))
@@ -720,11 +729,14 @@ are displayed in the frame."
          (append (map-apply `(lambda (subcommand body)
                                (list (concat ,script-prefix subcommand)
                                      'annotation body
-                                     'terminal (string-match-p (rx word-start "vitest" blank)
-                                                               body)))
+                                     'terminal (string-match-p
+                                                (rx word-start "vitest" blank)
+                                                body)))
                             (with-temp-buffer
-                              (insert-file-contents (expand-file-name "package.json" dir))
-                              (map-elt (json-parse-buffer :array-type 'list) "scripts")))
+                              (insert-file-contents
+                               (expand-file-name "package.json" dir))
+                              (map-elt (json-parse-buffer :array-type 'list)
+                                       "scripts")))
                  (alist-get backend akirak-compile-backend-command-alist))))
       (package-json
        (let ((default-directory dir))
@@ -746,7 +758,8 @@ are displayed in the frame."
 
 (defun akirak-compile--agents-candidates (dir)
   (mapcar (lambda (skill-name)
-            (cons (format "codex exec %s" (shell-quote-argument (concat "$" skill-name)))
+            (cons (format "codex exec %s"
+                          (shell-quote-argument (concat "$" skill-name)))
                   nil))
           (akirak-compile--agents-skills dir)))
 
