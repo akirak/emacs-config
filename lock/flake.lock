@@ -291,11 +291,11 @@
     "compat": {
       "flake": false,
       "locked": {
-        "lastModified": 1788946738,
-        "narHash": "sha256-pmEjlLOc/gdsip9RL4CGQKdhnOPw1r+idAEKygteJD0=",
+        "lastModified": 1789312871,
+        "narHash": "sha256-vgIrxiMH4QBSAmtZpSdCwgmjAl1FISnuawHf8NA14KQ=",
         "owner": "emacs-compat",
         "repo": "compat",
-        "rev": "f0787bca0f7eae45e51fa752b46e38f49e09137e",
+        "rev": "90880f81419577e1d3f68424d2a3adf31e6d663e",
         "type": "github"
       },
       "original": {
@@ -2298,11 +2298,11 @@
     "org": {
       "flake": false,
       "locked": {
-        "lastModified": 1787989787,
-        "narHash": "sha256-ZfJOT9pbfeDxeb7bXeM4uk0bcxnOjGTvzWwUktgjxgQ=",
+        "lastModified": 1789151664,
+        "narHash": "sha256-FZasd1AP9b+EgX/pre+CB23u58G+wXYxtVuhykAMYJo=",
         "owner": "elpa-mirrors",
         "repo": "org-mode",
-        "rev": "80c431fe0c59bb6b6c4d05ad2d4d279f34b5fcd5",
+        "rev": "9b0a23e0b0cdf4bab11e60a0c17b197cf08ef7bb",
         "type": "github"
       },
       "original": {
@@ -3283,6 +3283,7 @@
         "tagedit": "tagedit",
         "titlecase": "titlecase",
         "transient": "transient",
+        "treesit-fold": "treesit-fold",
         "ts": "ts",
         "twind": "twind",
         "twist": "twist",
@@ -3606,6 +3607,22 @@
       "original": {
         "owner": "magit",
         "repo": "transient",
+        "type": "github"
+      }
+    },
+    "treesit-fold": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781857459,
+        "narHash": "sha256-tuaYydP2MQ8RLY2o1UkF4pVVHzsLgClWb1adRchrm3U=",
+        "owner": "emacs-tree-sitter",
+        "repo": "treesit-fold",
+        "rev": "cc1003b730a3167b972cc8400dffe19be7988fc7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-tree-sitter",
+        "repo": "treesit-fold",
         "type": "github"
       }
     },

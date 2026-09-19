@@ -26,6 +26,8 @@ delib.module {
       emacsConfigDirectory = strOption "${homeDirectory}/build/emacs-config";
 
       cachixName = allowNull (strOption null);
+
+      cleanOptions = strOption "--keep-since 10d --elevation-strategy none --keep-one --cross-filesystems";
     };
 
   home.ifEnabled =
@@ -144,8 +146,8 @@ delib.module {
           dates = "*-*-* 02:00:00";
           # On desktop machines, also run this command manually:
           #
-          # nh clean all --keep-since 10d --elevation-strategy run0
-          extraArgs = "--keep-since 10d --elevation-strategy none";
+          # nh clean all <options> --elevation-strategy run0
+          extraArgs = cfg.cleanOptions;
         };
         flake = cfg.mainConfigDirectory;
       };

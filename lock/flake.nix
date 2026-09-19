@@ -1267,6 +1267,12 @@
       repo = "transient";
       type = "github";
     };
+    treesit-fold = {
+      flake = false;
+      owner = "emacs-tree-sitter";
+      repo = "treesit-fold";
+      type = "github";
+    };
     ts = {
       flake = false;
       owner = "alphapapa";

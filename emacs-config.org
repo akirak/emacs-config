@@ -1489,6 +1489,7 @@ The built-in =electric= package provides the following modes:
       (dir-locals-set-directory-class "~/work2/learning/" 'default)
       (dir-locals-set-directory-class "~/work2/personal/" 'personal)
       (dir-locals-set-directory-class "~/work2/foss/" 'default)
+      (dir-locals-set-directory-class "~/work2/projects/" 'default)
 
       (:set ignored-local-variable-values
             ;; github:melpa/melpa
@@ -1782,6 +1783,12 @@ Notes:
   (setup js-mode
     (:file-match "\\.c?js\\'")
     (:set js-indent-level 2))
+#+end_src
+*** keyboard.c
+#+begin_src elisp
+  (setup keyboard
+    (:with-mode eat-mode
+      (:local-set echo-keystrokes 0)))
 #+end_src
 *** keymap.c                                           :keybindings:
 :PROPERTIES:
@@ -2248,6 +2255,9 @@ This is a recommended setting for use with vertico. See https://github.com/minad
           ;; Don't auto-save remote files.
           remote-file-name-inhibit-auto-save t
           shell-command-default-error-buffer "*shell-command stderr*")
+
+    (:with-mode (eat-mode compilation-mode)
+      (:local-set buffer-undo-list t))
 
     (:global-keymap "<remap> <count-words-region>" #'akirak/count-words-dwim
                     "<remap> <delete-horizontal-space>" #'cycle-spacing
@@ -2878,7 +2888,14 @@ Display available keybindings in popup
     (:set bidi-inhibit-bpa t
           bidi-display-reordering 'left-to-right
           bidi-paragraph-direction 'left-to-right
-          scroll-conservatively 1))
+          scroll-conservatively 1)
+
+    (:with-mode eat-mode
+      ;; https://www.jamescherti.com/emacs-terminal-performance-vterm-eat-ansi-term-ghostel/
+      (:local-set redisplay-skip-fontification-on-input t
+                  scroll-conservatively most-positive-fixnum
+                  auto-hscroll-mode nil
+                  nobreak-char-display nil)))
 #+end_src
 ** Typography settings                                       :visual:
 *** Theme packages                                        :packages:
@@ -7453,7 +7470,13 @@ Emulate A Terminal, in a region, in a buffer and in Eshell
 
 #+begin_src emacs-lisp
   (setup (:package eat)
-    (:set eat-kill-buffer-on-exit t)
+    (:set eat-kill-buffer-on-exit t
+          ;; https://www.jamescherti.com/emacs-terminal-performance-vterm-eat-ansi-term-ghostel/
+          eat-minimum-latency 0.01
+          eat-maximum-latency 0.05
+          eat-term-scrollback-size (* 64 1024)
+          eat-enable-shell-prompt-annotation nil)
+
     (:with-map eat-semi-char-mode-map
       (:keymap "S-<prior>" #'View-scroll-page-backward
                "S-<next>" #'View-scroll-page-forward)
@@ -10824,9 +10847,17 @@ Viewing/editing system trash can
 #+begin_src emacs-lisp
 (setup (:package trashed))
 #+end_src
-*** COMMENT treesit-fold                                                       :ARCHIVE:
+*** treesit-fold
 :PROPERTIES:
 :CREATED_TIME: [2024-06-22 Sat 23:59]
+:END:
+#+begin_quote
+Code folding using treesit
+[[https://github.com/emacs-tree-sitter/treesit-fold]]
+#+end_quote
+
+:LOGBOOK:
+CLOCK: [2026-09-16 Wed 10:40]--[2026-09-16 Wed 11:07] =>  0:27
 :END:
 #+begin_quote
 Code folding using treesit
@@ -10845,7 +10876,7 @@ Code folding using treesit
     ;; `treesit' doesn't have a built-in keymap for its enabled modes, so I will
     ;; use `akirak-treesit-mode'. Actually, `treesit-fold' has nothing to do with
     ;; the mode.
-    (:hook-into akirak-treesit-mode-hook)
+    (:hook-into json-ts-mode-hook)
     (defvar-keymap treesit-fold-mode-map
       :doc "Keymap for `treesit-fold-mode'.")
     (:keymap "C-c TAB" #'akirak-treesit-fold-dwim))
@@ -12038,7 +12069,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |

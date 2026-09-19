@@ -42,7 +42,8 @@
   ;; See the customization of `display-buffer-alist'.
   '("codex"
     "claude"
-    "pi")
+    "pi"
+    "devin")
   ""
   :type '(repeat string))
 
@@ -205,7 +206,8 @@ the original minor mode."
    ("k" "Copilot" akirak-copilot-cli-transient)
    ;; ("s" "opencode" akirak-opencode-shell)
    ;; ("g" "Gemini" akirak-gemini-cli-shell)
-   ("x" "Codex" akirak-shell-project-for-codex)]
+   ("x" "Codex" akirak-shell-project-for-codex)
+   ("v" "Devin" akirak-shell-project-for-devin)]
   (interactive)
   (setq akirak-shell-new-window 'split)
   (setq akirak-shell--buffers (seq-sort-by (lambda (buffer)
@@ -435,6 +437,12 @@ the original minor mode."
 (defalias 'akirak-shell-project-for-pi
   #'akirak-pi-transient)
 
+(defun akirak-shell-project-for-devin ()
+  (interactive)
+  (let ((root (akirak-shell-project-directory)))
+    (akirak-shell-eat-new :dir root
+                          :command (list "devin"))))
+
 (defun akirak-shell-project-directory ()
   (require 'akirak-org-git)
   (or (and (derived-mode-p 'org-mode)
@@ -627,6 +635,8 @@ the original minor mode."
      'copilot)
     (`("codex" . ,_)
      'codex)
+    (`("devin" . ,_)
+     'devin)
     (`("opencode" . ,_)
      'opencode)
     (`((rx bol "gemini") . ,_)
@@ -640,6 +650,9 @@ the original minor mode."
     (`pi
      (require 'akirak-pi)
      (akirak-pi-buffer-status buffer))
+    (`devin
+     (require 'akirak-devin)
+     (akirak-devin-buffer-status buffer))
     (_
      nil)))
 

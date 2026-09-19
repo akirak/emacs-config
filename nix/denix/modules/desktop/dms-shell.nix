@@ -25,7 +25,6 @@ delib.module {
         restartIfChanged = true;
       };
 
-      enableSystemMonitoring = true;
       enableAudioWavelength = true;
       enableCalendarEvents = true;
     };
