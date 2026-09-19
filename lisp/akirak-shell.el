@@ -635,6 +635,8 @@ the original minor mode."
      'copilot)
     (`("codex" . ,_)
      'codex)
+    (`("devin" . ,_)
+     'devin)
     (`("opencode" . ,_)
      'opencode)
     (`((rx bol "gemini") . ,_)
@@ -648,6 +650,9 @@ the original minor mode."
     (`pi
      (require 'akirak-pi)
      (akirak-pi-buffer-status buffer))
+    (`devin
+     (require 'akirak-devin)
+     (akirak-devin-buffer-status buffer))
     (_
      nil)))
 
