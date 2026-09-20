@@ -36,7 +36,7 @@
       (akirak-mark-thing-at-point)
     (pcase (derived-mode-p 'org-mode 'text-mode)
       (`org-mode
-       (akirak-org-expand-region))
+       (akirak-org-expand-region arg))
       ((or `text-mode
            (guard (akirak-expand-region--text-like-p)))
        (akirak-expand-region-text))

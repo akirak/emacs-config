@@ -1082,7 +1082,7 @@ The point should be at the heading."
     (org-table-create)))
 
 ;;;###autoload
-(defun akirak-org-expand-region ()
+(defun akirak-org-expand-region (&optional arg)
   (cond
    ((use-region-p)
     (pcase-let* ((`((,region-beg . ,region-end) . ,_) (region-bounds))
@@ -1098,6 +1098,29 @@ The point should be at the heading."
              (or (< el-beg region-beg)
                  (> el-end region-end)))
         (akirak-org--select-element el))
+       ((and (org-at-item-p)
+             (or (eq arg '-)
+                 (numberp arg)))
+        (if (or (eq arg '-)
+                (< arg 0))
+            (progn
+              (goto-char region-beg)
+              (if (eq arg '-)
+                  (org-previous-item)
+                (dotimes (_ (- arg))
+                  (org-previous-item)))
+              (akirak-expand-region--select-bounds
+               (cons (point) region-end)))
+          (progn
+            (goto-char region-beg)
+            (while (< (org-element-end (org-element-at-point-no-context))
+                      region-end)
+              (org-next-item))
+            (dotimes (_ arg)
+              (org-next-item))
+            (akirak-expand-region--select-bounds
+             (cons region-beg
+                   (org-element-end (org-element-at-point-no-context)))))))
        ((and (not (org-at-item-p))
              (let ((next (save-excursion
                            (while (< (point) region-end)
