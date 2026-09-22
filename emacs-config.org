@@ -4839,7 +4839,12 @@ Tree-sitter mode for Cap'n Proto
 
 #+begin_src emacs-lisp
   (setup (:package capnp-ts-mode)
-    (:file-match "\\.capnp\\'"))
+    (:file-match "\\.capnp\\'")
+
+    (defun akirak/capnp-insert-id ()
+      "Insert a new ID into the buffer."
+      (interactive)
+      (call-process "capnp" nil (list t nil) nil "id")))
 #+end_src
 *** cypher-ts-mode
 :PROPERTIES:
