@@ -19,6 +19,7 @@ delib.module {
 
       rebuildScript = {
         enable = boolOption true;
+        elevationStrategy = enumOption [ "sudo" "run0" ] "run0";
       };
 
       mainConfigDirectory = strOption "${homeDirectory}/build/nix-config";
@@ -110,6 +111,7 @@ delib.module {
         fi
 
         if "''${command[@]}" "$target" "$operation" "$flake" \
+          --elevation-strategy "${cfg.rebuildScript.elevationStrategy}" \
           -- --option accept-flake-config true \
           ''${build_flags[@]} "''${@}"; then
             "$notify" rebuildScript "Rebuilding the configuration (nh $target $operation) has finished successfully"
