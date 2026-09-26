@@ -3289,7 +3289,6 @@
         "twist": "twist",
         "typespec-ts-mode": "typespec-ts-mode",
         "unfill": "unfill",
-        "uniline": "uniline",
         "valign": "valign",
         "vertico": "vertico",
         "video-trimmer": "video-trimmer",
@@ -3703,22 +3702,6 @@
       "original": {
         "owner": "purcell",
         "repo": "unfill",
-        "type": "github"
-      }
-    },
-    "uniline": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1773309588,
-        "narHash": "sha256-b7Hq1Rdh35YJohZH/TecKG3YkCMUB1tD10mDCjlafIM=",
-        "owner": "tbanel",
-        "repo": "uniline",
-        "rev": "419bb03931e7290ee88c26a160bd8dba6d5aca49",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tbanel",
-        "repo": "uniline",
         "type": "github"
       }
     },
