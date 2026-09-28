@@ -1303,12 +1303,6 @@
       repo = "unfill";
       type = "github";
     };
-    uniline = {
-      flake = false;
-      owner = "tbanel";
-      repo = "uniline";
-      type = "github";
-    };
     valign = {
       flake = false;
       owner = "casouri";

@@ -25,10 +25,16 @@
           'prompt
         (pcase (buffer-substring-no-properties
                 (line-beginning-position -4)
-                (line-end-position 1))
+                (line-end-position -4))
           ((rx "% remaining")
            'fresh)
           ((rx bol " Changes are unstaged and uncommitted.")
+           'done)
+          ((guard (string-match-p
+                   (rx bol "❭ Ask Devin to build features, fix bugs, or work")
+                   (buffer-substring-no-properties
+                    (line-beginning-position -1)
+                    (line-end-position -1))))
            'done))))))
 
 (provide 'akirak-devin)
