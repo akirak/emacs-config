@@ -9965,7 +9965,9 @@ Completion style for matching regexps in any order
 
 #+begin_src emacs-lisp
   (setup (:package orderless)
-    (:set completion-styles '(orderless)))
+    (:set completion-styles '(orderless basic)
+          completion-category-overrides '((file (styles partial-completion)))
+          completion-pcm-leading-wildcard t))
 #+end_src
 
 Resources:
