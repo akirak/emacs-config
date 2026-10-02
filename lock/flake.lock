@@ -243,11 +243,11 @@
     "cape": {
       "flake": false,
       "locked": {
-        "lastModified": 1788584405,
-        "narHash": "sha256-B1p9phUYk/xS9ukXsNaNmasJkVanECYJeaeNwGcFFnQ=",
+        "lastModified": 1790552853,
+        "narHash": "sha256-bzCZS+JjX2bNCl/2mLvVCLb58lSdlJo3L81oNgDfYJ8=",
         "owner": "minad",
         "repo": "cape",
-        "rev": "1c543fce9151821e8400258aefcfdee2fb24920d",
+        "rev": "50bc6187daf9af9df1a802fcbbd91fe4b952fc69",
         "type": "github"
       },
       "original": {
@@ -323,11 +323,11 @@
     "consult": {
       "flake": false,
       "locked": {
-        "lastModified": 1788802850,
-        "narHash": "sha256-XRMLinY+5QX3ea/XsiblcclX324T/1fp+13hM18DEoQ=",
+        "lastModified": 1790413830,
+        "narHash": "sha256-NZynusRDUSF3PXjYfIQKbasSSRZ3Om3kEZjcEazIFbw=",
         "owner": "minad",
         "repo": "consult",
-        "rev": "1b217ca2fb8bcfc4bb56feef829d1bb2b61c85b1",
+        "rev": "3c64214db5cd61a8f8186e4dce89c0e04be1652c",
         "type": "github"
       },
       "original": {
@@ -436,11 +436,11 @@
     "corfu": {
       "flake": false,
       "locked": {
-        "lastModified": 1788583850,
-        "narHash": "sha256-MNAtUcB/c6c0RRb1qiYWhHaDvYvvIYT4oJh/JdKig0o=",
+        "lastModified": 1789313238,
+        "narHash": "sha256-JwssB1UFF/FH0wn0GbcOWtjiWh2T4QF0GSAEyohglds=",
         "owner": "minad",
         "repo": "corfu",
-        "rev": "5869254349a035e16d656eb232a52cf0e163d531",
+        "rev": "b468efac023dda39332acc943edc9895c80b5a6f",
         "type": "github"
       },
       "original": {
@@ -596,11 +596,11 @@
     "denote": {
       "flake": false,
       "locked": {
-        "lastModified": 1788953824,
-        "narHash": "sha256-3BTm5untY6WeTp/pW45dd5hmHsLkpX0+MBqcI+C8LQ0=",
+        "lastModified": 1790328823,
+        "narHash": "sha256-SHwvFQx0HfRNeTgg01ykhf81EiGDO+K1gzY3Dlq3cVo=",
         "owner": "protesilaos",
         "repo": "denote",
-        "rev": "110ced99991125a0675a68dcefe8dfc3c50c5617",
+        "rev": "4a4eee6cbb0730dcc499235f55625d5d3d53cfae",
         "type": "github"
       },
       "original": {
@@ -708,11 +708,11 @@
     "docco": {
       "flake": false,
       "locked": {
-        "lastModified": 1785502215,
-        "narHash": "sha256-c8TEN/JCCspTCIKE4i/1cLTEZq7Ka4SaUiV10GrKuiQ=",
+        "lastModified": 1790697242,
+        "narHash": "sha256-6S5c6Mz6zaemCMERMaynJGOJzZul2u22DYPvD3g4o6A=",
         "owner": "akirak",
         "repo": "docco.el",
-        "rev": "f65161346ae6180e223aad2c670d947374cfa402",
+        "rev": "06afd216c47e222c3139ec40e647f3ebe0a7f00c",
         "type": "github"
       },
       "original": {
@@ -1557,11 +1557,11 @@
     "jinx": {
       "flake": false,
       "locked": {
-        "lastModified": 1786624112,
-        "narHash": "sha256-RHsnAt+5XHRfU2pYCuzcWRJzoa2FRFjJRPKonRNR8MU=",
+        "lastModified": 1790413921,
+        "narHash": "sha256-yBSF/yLxmiaVKqXP+xrvniJopPM4R8edbg1GD6p6B+s=",
         "owner": "minad",
         "repo": "jinx",
-        "rev": "23f6d028decb6081ee30659e7e841f6046e5f511",
+        "rev": "bccb08062a3372629015bcd2c197490b7d005f37",
         "type": "github"
       },
       "original": {
@@ -1814,11 +1814,11 @@
     "marginalia": {
       "flake": false,
       "locked": {
-        "lastModified": 1788757877,
-        "narHash": "sha256-TWjDgP8pHNqnRdMBVydvkHwqB8nDOIkCIYm7ZHeTdfA=",
+        "lastModified": 1790425681,
+        "narHash": "sha256-s+ok2/8p4YVbamZ5tz9yrqGQOiNyhaH/x5lQ2GBjsJo=",
         "owner": "minad",
         "repo": "marginalia",
-        "rev": "c5d0139012d2a84f8040219b9aee17db4e145e5c",
+        "rev": "42eafcfddbe88d92ed96521a00a5a90a49bac4dd",
         "type": "github"
       },
       "original": {
@@ -1910,11 +1910,11 @@
     "modus-themes": {
       "flake": false,
       "locked": {
-        "lastModified": 1788770365,
-        "narHash": "sha256-TpwUkCJ+0DowLsN9se6IG1uYR9SORR4H0wWaI8x/gAQ=",
+        "lastModified": 1789981950,
+        "narHash": "sha256-09zZJjrHM4Exb/UlsKghb7KifO/yX8XByFpCM+gGKh8=",
         "owner": "protesilaos",
         "repo": "modus-themes",
-        "rev": "f1ad6c9383bc0ce5a5a9df4f3c3a85d32d34a863",
+        "rev": "4fcc8d00540a81936a213d608a69c4c85df8f970",
         "type": "github"
       },
       "original": {
@@ -2282,11 +2282,11 @@
     "orderless": {
       "flake": false,
       "locked": {
-        "lastModified": 1788966398,
-        "narHash": "sha256-8OrXAIdh7WmhJQWuM+0T3qn8DSn8hN0Sj5P2Y6pT1K4=",
+        "lastModified": 1790552692,
+        "narHash": "sha256-Lufd8wmUssmc4gj+3Lp5fmhWENtt43C+7/gVF6kfWzY=",
         "owner": "oantolin",
         "repo": "orderless",
-        "rev": "5806e3f9401606d16962cffae68188c92deb1272",
+        "rev": "3d2c2e6468ddf51e69c78e8212e5fd9006d2ce8a",
         "type": "github"
       },
       "original": {
@@ -3724,11 +3724,11 @@
     "vertico": {
       "flake": false,
       "locked": {
-        "lastModified": 1788758397,
-        "narHash": "sha256-UDJh6PrM+Rb7R6g+VFMQlFRsN54f54bUmd9cM0H13NQ=",
+        "lastModified": 1789313132,
+        "narHash": "sha256-Xg0yPOYWWYI5dxdY0e+aFHUNL8R+acMc1P+JwHrijGk=",
         "owner": "minad",
         "repo": "vertico",
-        "rev": "8581ed12e9190005ea9afaef19f2a22951aa1bfb",
+        "rev": "a9998a777f1d92348f84d091bb15b87df933a7a2",
         "type": "github"
       },
       "original": {

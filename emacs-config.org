@@ -6705,6 +6705,7 @@ Search and navigate via completing-read
     ;; (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
 
     (:set consult-narrow-key "<"
+          consult-async-min-input 1
           consult-project-root-function (defun akirak/consult-project-root ()
                                           (when-let* ((project (project-current)))
                                             (project-root project))))
@@ -9965,7 +9966,9 @@ Completion style for matching regexps in any order
 
 #+begin_src emacs-lisp
   (setup (:package orderless)
-    (:set completion-styles '(orderless)))
+    (:set completion-styles '(orderless basic)
+          completion-category-overrides '((file (styles partial-completion)))
+          completion-pcm-leading-wildcard t))
 #+end_src
 
 Resources:
