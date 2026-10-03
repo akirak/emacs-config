@@ -371,7 +371,8 @@ DIR is an optional destination directory to clone the repository into."
                (pr-obj (akirak-git-clone--pr-source (akirak-git-clone-source-owner-and-repo obj)
                                                     (akirak-git-clone-source-pr obj)))
                (default-name (format "%s@pr%d"
-                                     (file-name-nondirectory repo)
+                                     (file-name-nondirectory
+                                      (directory-file-name repo))
                                      (akirak-git-clone-source-pr obj)))
                (branch (akirak-git-clone-source-rev-or-ref pr-obj)))
           (require 'akirak-magit)
