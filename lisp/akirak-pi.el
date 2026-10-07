@@ -132,10 +132,10 @@
     (save-excursion
       (goto-char (point-max))
       (cond
-       ((string-match-p (rx "Working..." (* blank) eol)
+       ((string-match-p (rx "Working ───")
                         (buffer-substring-no-properties
-                         (line-beginning-position -5)
-                         (line-end-position -5)))
+                         (line-beginning-position -3)
+                         (line-end-position -3)))
         'waiting)
        ((string-match-p (rx bol "0.0%/")
                         (buffer-substring-no-properties
