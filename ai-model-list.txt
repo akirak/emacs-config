@@ -16,6 +16,7 @@ ai21.j2-ultra-v1
 ai21.jamba-1-5-large-v1:0
 ai21.jamba-1-5-mini-v1:0
 ai21.jamba-instruct-v1:0
+amazon.nova-2-5-sonic
 amazon.nova-2-multimodal-embeddings-v1:0
 amazon.nova-2-sonic-v1:0
 amazon.nova-canvas-v1:0
@@ -55,6 +56,7 @@ assemblyai/best
 assemblyai/nano
 Austism/chronos-hermes-13b
 azure/ada
+azure/apac/gpt-6.1-sol
 azure/chat-latest
 azure/codex-mini
 azure/command-r-plus
@@ -106,6 +108,7 @@ azure/eu/gpt-5.6-terra
 azure/eu/gpt-6-astra
 azure/eu/gpt-6-luna
 azure/eu/gpt-6-sol
+azure/eu/gpt-6.1-sol
 azure/eu/o1-2024-12-17
 azure/eu/o1-mini
 azure/eu/o1-mini-2024-09-12
@@ -268,6 +271,7 @@ azure/medium/1536-x-1024/gpt-image-1
 azure/medium/1536-x-1024/gpt-image-1-mini
 azure/mistral-large-2402
 azure/mistral-large-latest
+azure/model-router
 azure/o1
 azure/o1-2024-12-17
 azure/o1-mini
@@ -349,6 +353,7 @@ azure/us/gpt-5.6-terra
 azure/us/gpt-6-astra
 azure/us/gpt-6-luna
 azure/us/gpt-6-sol
+azure/us/gpt-6.1-sol
 azure/us/gpt-chat-latest
 azure/us/o1-2024-12-17
 azure/us/o1-mini
@@ -361,10 +366,12 @@ azure/us/o4-mini-2025-04-16
 azure/us/text-embedding-3-large
 azure/us/text-embedding-3-small
 azure/us/text-embedding-ada-002
+azure/whisper
 azure/whisper-1
 azure_ai/claude-fable-5
 azure_ai/claude-fable-5-1
 azure_ai/claude-haiku-4-5
+azure_ai/claude-haiku-5-5
 azure_ai/claude-opus-4-5
 azure_ai/claude-opus-4-6
 azure_ai/claude-opus-4-7
@@ -453,9 +460,11 @@ azure_ai/grok-4-fast-non-reasoning
 azure_ai/grok-4-fast-reasoning
 azure_ai/grok-4.3
 azure_ai/grok-4.6
+azure_ai/grok-4.7
 azure_ai/grok-code-fast-1
 azure_ai/jais-30b-chat
 azure_ai/jamba-instruct
+azure_ai/kimi-k2-thinking
 azure_ai/kimi-k2.5
 azure_ai/kimi-k2.6
 azure_ai/kimi-k2.7-code
@@ -508,6 +517,7 @@ bedrock/moonshotai.kimi-k2-thinking
 bedrock/moonshotai.kimi-k2.5
 bedrock/us.anthropic.claude-3-5-haiku-20241022-v1:0
 bedrock_mantle/anthropic.claude-haiku-4-5
+bedrock_mantle/anthropic.claude-haiku-5-5
 bedrock_mantle/anthropic.claude-opus-5-5
 bedrock_mantle/anthropic.claude-sonnet-5-5
 bedrock_mantle/deepseek.v3.1
@@ -540,6 +550,7 @@ bedrock_mantle/us-gov-east-1/openai.gpt-5.4
 bedrock_mantle/us-gov-east-1/openai.gpt-oss-120b
 bedrock_mantle/us-gov-east-1/openai.gpt-oss-20b
 bedrock_mantle/us-gov-east-1/xai.grok-4.6
+bedrock_mantle/us-gov-west-1/anthropic.claude-haiku-5-5
 bedrock_mantle/us-gov-west-1/anthropic.claude-opus-5-5
 bedrock_mantle/us-gov-west-1/anthropic.claude-sonnet-5-5
 bedrock_mantle/us-gov-west-1/google.gemma-4-26b-a4b
@@ -607,6 +618,7 @@ claude-fable-5
 claude-fable-5-1
 claude-haiku-4-5
 claude-haiku-4-5-20251001
+claude-haiku-5-5
 claude-mythos-5
 claude-mythos-5-1
 claude-mythos-preview
@@ -626,6 +638,8 @@ claude-sonnet-4-6
 claude-sonnet-5
 claude-sonnet-5-5
 cloudflare/@cf/aisingapore/gemma-sea-lion-v4-27b-it
+cloudflare/@cf/cloudflare/clef
+cloudflare/@cf/cloudflare/clef-flash
 cloudflare/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b
 cloudflare/@cf/google/gemma-2b-it-lora
 cloudflare/@cf/google/gemma-4-26b-a4b-it
@@ -657,6 +671,8 @@ cloudflare/@cf/qwen/qwq-32b
 cloudflare/@cf/zai-org/glm-4.7-flash
 cloudflare/@cf/zai-org/glm-5.2
 cloudflare/@hf/thebloke/codellama-7b-instruct-awq
+cloudflare/clef
+cloudflare/clef-flash
 codestral/codestral-2405
 codestral/codestral-latest
 cohere.command-light-text-v14
@@ -666,6 +682,8 @@ cohere.embed-multilingual-v3
 cohere.embed-v4:0
 cohere.rerank-v3-5:0
 cohere/embed-v4.0
+cohere/embed-v5.0-fast
+cohere/embed-v5.0-pro
 cohere/parse-v5.0
 command-a-03-2025
 command-a-plus-05-2026
@@ -1279,6 +1297,7 @@ gemini-flash-latest
 gemini-flash-lite-latest
 gemini-live-2.5-flash-native-audio
 gemini-live-2.5-flash-preview-native-audio-09-2025
+gemini-nano-banana-2.1
 gemini-omni-flash-preview
 gemini-pro-latest
 gemini-robotics-er-1.5-preview
@@ -1330,6 +1349,7 @@ gemini/gemini-flash-lite-latest
 gemini/gemini-gemma-2-27b-it
 gemini/gemini-gemma-2-9b-it
 gemini/gemini-live-2.5-flash-preview-native-audio-09-2025
+gemini/gemini-nano-banana-2.1
 gemini/gemini-omni-1.1-flash
 gemini/gemini-omni-flash-preview
 gemini/gemini-pro-latest
@@ -1880,6 +1900,8 @@ openrouter/anthropic/claude-fable-5.1:batch
 openrouter/anthropic/claude-fable-5:batch
 openrouter/anthropic/claude-haiku-4.5
 openrouter/anthropic/claude-haiku-4.5:batch
+openrouter/anthropic/claude-haiku-5.5
+openrouter/anthropic/claude-haiku-5.5:batch
 openrouter/anthropic/claude-opus-4.1
 openrouter/anthropic/claude-opus-4.1:batch
 openrouter/anthropic/claude-opus-4.5
@@ -1971,6 +1993,7 @@ openrouter/google/gemini-3.7-flash
 openrouter/google/gemini-3.7-flash:batch
 openrouter/google/gemini-3.8-flash
 openrouter/google/gemini-3.8-flash:batch
+openrouter/google/gemini-nano-banana-2.1
 openrouter/google/gemma-2-27b-it
 openrouter/google/gemma-3-12b-it
 openrouter/google/gemma-3-27b-it
@@ -1987,9 +2010,11 @@ openrouter/inception/mercury-2.5
 openrouter/inclusionai/ling-3.0-flash
 openrouter/inclusionai/ling-3.0-flash-fin
 openrouter/inclusionai/ling-3.0-flash-fin:free
+openrouter/inclusionai/ling-3.0-flash-sante
 openrouter/inclusionai/ling-3.0-flash-sante:free
 openrouter/inclusionai/ling-3.0-flash-vl
 openrouter/inclusionai/ling-3.0-flash-vl:free
+openrouter/inclusionai/ling-3.1-flash
 openrouter/inference-net/schematron-v2-small
 openrouter/inference-net/schematron-v2-turbo
 openrouter/kwaipilot/kat-coder-pro-v2.5
@@ -2035,6 +2060,7 @@ openrouter/mistralai/mistral-large
 openrouter/mistralai/mistral-large-2407
 openrouter/mistralai/mistral-large-2512
 openrouter/mistralai/mistral-large-2512:batch
+openrouter/mistralai/mistral-large-4-0
 openrouter/mistralai/mistral-medium-3
 openrouter/mistralai/mistral-medium-3-5
 openrouter/mistralai/mistral-medium-3-5:batch
@@ -2167,6 +2193,9 @@ openrouter/openai/gpt-6.1-sol:batch
 openrouter/openai/gpt-audio
 openrouter/openai/gpt-audio-mini
 openrouter/openai/gpt-chat-latest
+openrouter/openai/gpt-image-2
+openrouter/openai/gpt-image-2.5-flare
+openrouter/openai/gpt-image-2.5-sunburst
 openrouter/openai/gpt-oss-120b
 openrouter/openai/gpt-oss-120b:batch
 openrouter/openai/gpt-oss-20b
@@ -2268,6 +2297,7 @@ openrouter/sao10k/l3.3-euryale-70b
 openrouter/stealth/space-bunny-alpha
 openrouter/stepfun/step-3.5-flash
 openrouter/stepfun/step-3.7-flash
+openrouter/stepfun/step-5-preview
 openrouter/switchpoint/router
 openrouter/tencent/hunyuan-a13b-instruct
 openrouter/tencent/hy-mt2-1.8b
@@ -2360,15 +2390,10 @@ ovhcloud/Mixtral-8x7B-Instruct-v0.1
 ovhcloud/Qwen2.5-Coder-32B-Instruct
 ovhcloud/Qwen2.5-VL-72B-Instruct
 ovhcloud/Qwen3-32B
-palm/chat-bison
-palm/chat-bison-001
-palm/text-bison
-palm/text-bison-001
-palm/text-bison-safety-off
-palm/text-bison-safety-recitation-off
 perplexity/anthropic/claude-fable-5
 perplexity/anthropic/claude-fable-5-1
 perplexity/anthropic/claude-haiku-4-5
+perplexity/anthropic/claude-haiku-5-5
 perplexity/anthropic/claude-opus-4-5
 perplexity/anthropic/claude-opus-4-6
 perplexity/anthropic/claude-opus-4-7
@@ -2424,6 +2449,7 @@ perplexity/pplx-70b-chat
 perplexity/pplx-70b-online
 perplexity/pplx-7b-chat
 perplexity/pplx-7b-online
+perplexity/pplx-decider-v1-27b
 perplexity/pplx-embed-context-v1-0.6b
 perplexity/pplx-embed-context-v1-4b
 perplexity/pplx-embed-v1-0.6b
@@ -2745,6 +2771,7 @@ vertex_ai/gemini-3.1-flash-lite
 vertex_ai/gemini-3.1-flash-lite-image
 vertex_ai/gemini-3.1-flash-lite-preview
 vertex_ai/gemini-3.5-flash-lite
+vertex_ai/gemini-nano-banana-2.1
 volcengine/doubao-seed-2-0-code-preview-260215
 volcengine/doubao-seed-2-0-lite-260215
 volcengine/doubao-seed-2-0-mini-260215
@@ -2900,6 +2927,7 @@ xai/grok-imagine-image-quality-latest
 xai/grok-imagine-video
 xai/grok-imagine-video-1.5
 xai/grok-imagine-video-1.5-2026-05-30
+xai/grok-imagine-video-1.5-lite
 xai/grok-imagine-video-1.5-preview
 xai/grok-voice-transcribe-1.0
 xai/grok-voice-transcribe-2.0
