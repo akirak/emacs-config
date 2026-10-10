@@ -592,6 +592,12 @@
       repo = "just-mode.el";
       type = "github";
     };
+    kdl-mode = {
+      flake = false;
+      owner = "taquangtrung";
+      repo = "emacs-kdl-mode";
+      type = "github";
+    };
     kind-icon = {
       flake = false;
       owner = "jdtsmith";

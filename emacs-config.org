@@ -8801,6 +8801,15 @@ Justfile editing mode
   (setup (:package just-mode)
     (:file-match "/justfile\\'"))
 #+end_src
+*** kdl-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-10-10 Sat 16:14]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package kdl-mode)
+    (:file-match "\\.kdl\\'"))
+#+end_src
 *** COMMENT keycast                                                            :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2023-03-31 Fri 23:59]

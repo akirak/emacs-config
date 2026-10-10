@@ -1586,6 +1586,22 @@
         "type": "github"
       }
     },
+    "kdl-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790923598,
+        "narHash": "sha256-gSf60F2uFhwEN+RE/S2hIc4T5iW56c1hGvWcbq16Fhw=",
+        "owner": "taquangtrung",
+        "repo": "emacs-kdl-mode",
+        "rev": "e966ed4b53f8a72b88a016e61bcadec42f317e39",
+        "type": "github"
+      },
+      "original": {
+        "owner": "taquangtrung",
+        "repo": "emacs-kdl-mode",
+        "type": "github"
+      }
+    },
     "kind-icon": {
       "flake": false,
       "locked": {
@@ -3172,6 +3188,7 @@
         "inheritenv": "inheritenv",
         "jinx": "jinx",
         "just-mode": "just-mode",
+        "kdl-mode": "kdl-mode",
         "kind-icon": "kind-icon",
         "kotlin-ts-mode": "kotlin-ts-mode",
         "kubernetes": "kubernetes",
