@@ -98,6 +98,10 @@ delib.module {
   home.ifEnabled =
     { cfg, ... }:
     {
+      home.packages = [
+        pkgs.wayland-utils
+      ];
+
       xdg.configFile."niri/config.kdl".source =
         pkgs.runCommand "config.kdl"
           {
