@@ -8805,6 +8805,9 @@ Justfile editing mode
 :PROPERTIES:
 :CREATED_TIME: [2026-10-10 Sat 16:14]
 :END:
+#+begin_quote
+Major mode for editing KDL files
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package kdl-mode)
@@ -12094,7 +12097,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
