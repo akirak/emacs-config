@@ -56,6 +56,13 @@ delib.module {
       ''
       ''
         window-rule {
+          match title=r#"^OpenSSH Authentication Passphrase request"#
+
+          open-floating true
+        }
+      ''
+      ''
+        window-rule {
           match title=r#"^Select Folder$"#
 
           open-floating true
@@ -98,6 +105,10 @@ delib.module {
   home.ifEnabled =
     { cfg, ... }:
     {
+      home.packages = [
+        pkgs.wayland-utils
+      ];
+
       xdg.configFile."niri/config.kdl".source =
         pkgs.runCommand "config.kdl"
           {

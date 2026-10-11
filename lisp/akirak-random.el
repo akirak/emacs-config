@@ -28,7 +28,8 @@
   ["Generate"
    :class transient-row
    ("w" "Copy a password" akirak-random--copy-bytes)
-   ("i" "Insert a password" akirak-random--insert-bytes)]
+   ("i" "Insert a password" akirak-random--insert-bytes)
+   ("f" "Save to file" akirak-random--write-bytes)]
   (interactive)
   (transient-setup 'akirak-random-bytes))
 
@@ -45,6 +46,23 @@
   (interactive)
   (require 'akirak-passage)
   (akirak-passage--copy-string (akirak-random--generate-bytes)))
+
+(defun akirak-random--write-bytes ()
+  (interactive)
+  (let ((file (read-file-name "Output file: ")))
+    (if (or (not (file-exists-p file))
+            (yes-or-no-p (format "Write to %s? " file)))
+        (with-temp-buffer
+          (apply #'call-process "openssl"
+                 nil nil nil
+                 "rand"
+                 (append (pcase akirak-random-bytes-encoding
+                           (`base64 '("-base64"))
+                           (`hex '("-hex")))
+                         (list "-out"
+                               (convert-standard-filename (expand-file-name file))
+                               (number-to-string akirak-random-bytes-length)))))
+      (user-error "Aborted"))))
 
 (defun akirak-random--generate-bytes ()
   (with-temp-buffer
