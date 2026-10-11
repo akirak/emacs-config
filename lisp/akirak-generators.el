@@ -6,7 +6,8 @@
 (transient-define-prefix akirak-generators ()
   [("b" "Random bytes" akirak-random-bytes)
    ("w" "Password" akirak-password-generate)
-   ("p" "Passphrase" akirak-passphrase-generate)]
+   ("p" "Passphrase" akirak-passphrase-generate)
+   ("s" "ssh" akirak-ssh-keygen)]
   (interactive)
   (transient-setup 'akirak-generators))
 
