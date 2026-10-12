@@ -33,13 +33,13 @@ delib.module {
         # };
         x86_64-linux = {
           target = "x86_64-unknown-linux";
-          hash = "sha256-fKxvVzm6Oj5VQvO3+gftkC1t+5bKIuTGOuhMA7t9tHw=";
+          hash = "sha256-g7OxE8Ab8qPp4QDbCNd+awhoBqd1TwkeIIMb3+IVFX4=";
         };
       };
 
       release = releases.${system};
 
-      version = "3000.10.21";
+      version = "3000.11.3";
 
       devin-cli = pkgs.callPackage (
         { stdenvNoCC }:
