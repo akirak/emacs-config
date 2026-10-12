@@ -11,7 +11,10 @@ delib.module {
     moduleOptions (args: {
       enable = boolOption false;
 
-      roots = listOfOption str (lib.optional args.myconfig.codex.enable ".codex/skills");
+      roots = listOfOption str (
+        lib.optional args.myconfig.codex.enable ".codex/skills"
+        ++ lib.optional args.myconfig.devin-cli.enable ".devin/skills"
+      );
 
       sources = attrsOfOption (submodule {
         options = {
