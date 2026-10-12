@@ -56,6 +56,24 @@
   :variable 'akirak-ssh-keygen-use-passphrase
   :description "Set a passphrase (-N)")
 
+;;;; FIDO options
+
+(defvar akirak-ssh-keygen-verify-required nil)
+
+(transient-define-infix akirak-ssh-keygen-toggle-verify-required ()
+  :class 'akirak-transient-flag-variable
+  :variable 'akirak-ssh-keygen-verify-required
+  :description "Require verification (-O verify-required)")
+
+(defvar akirak-ssh-keygen-application nil)
+
+(transient-define-infix akirak-ssh-keygen-set-application ()
+  :class 'akirak-transient-string-variable
+  :variable 'akirak-ssh-keygen-application
+  :nullify t
+  :prompt "Application: "
+  :description "Application (-O application=)")
+
 ;;;; Prefix
 
 ;;;###autoload (autoload 'akirak-ssh-keygen "akirak-ssh" nil 'interactive)
@@ -63,7 +81,9 @@
   "Generate an SSH key pair in a temporary directory."
   ["Options"
    ("-t" akirak-ssh-keygen-set-type)
-   ("-N" akirak-ssh-keygen-toggle-passphrase)]
+   ("-N" akirak-ssh-keygen-toggle-passphrase)
+   ("-v" akirak-ssh-keygen-toggle-verify-required)
+   ("-a" akirak-ssh-keygen-set-application)]
   ["Generate"
    ("i" "Insert the private key into the buffer and save the public key to kill ring"
     akirak-ssh-keygen--insert)]
@@ -89,11 +109,17 @@
     (unwind-protect
         (progn
           (with-temp-buffer
-            (unless (zerop (call-process akirak-ssh-keygen-executable
-                                         nil (list t t) nil
-                                         "-q" "-t" akirak-ssh-keygen-type
-                                         "-N" passphrase
-                                         "-f" base))
+            (unless (zerop (apply #'call-process akirak-ssh-keygen-executable
+                                  nil (list t t) nil
+                                  (append
+                                   (list "-q" "-t" akirak-ssh-keygen-type
+                                         "-N" passphrase)
+                                   (when akirak-ssh-keygen-verify-required
+                                     (list "-O" "verify-required"))
+                                   (when akirak-ssh-keygen-application
+                                     (list "-O" (concat "application="
+                                                        akirak-ssh-keygen-application)))
+                                   (list "-f" base))))
               (error "ssh-keygen failed: %s" (string-trim (buffer-string)))))
           (list (akirak-ssh-keygen--file-contents base)
                 (akirak-ssh-keygen--file-contents (concat base ".pub"))))
