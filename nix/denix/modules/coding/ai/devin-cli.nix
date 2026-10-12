@@ -79,5 +79,7 @@ delib.module {
       home.packages = [
         devin-cli
       ];
+
+      xdg.configFile."devin/AGENTS.md".source = ./etc/AGENTS.md;
     };
 }
