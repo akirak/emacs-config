@@ -720,7 +720,8 @@ are displayed in the frame."
                           result))
                   result)))))
       (nix-flake
-       (when (executable-find "nix-fast-build")
+       (when (and (executable-find "nix-fast-build")
+                  (require 'nix3-core nil t))
          `((,(format "nix-fast-build --flake .#packages.%s" (nix3-system))))))
       ((bun pnpm yarn npm deno)
        ;; We only read package.json, so memoization wouldn't be necessary.
