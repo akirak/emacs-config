@@ -53,10 +53,11 @@
 (cl-defun akirak-complete-major-mode (prompt &optional default history
                                              &key org-src-langs)
   (completing-read (format-prompt prompt default)
-                   (append (when org-src-langs
-                             (require 'org-src)
-                             (mapcar #'car org-src-lang-modes))
-                           (akirak-major-mode-list))
+                   (seq-uniq (append (when org-src-langs
+                                       (require 'org-src)
+                                       (cons "console"
+                                             (mapcar #'car org-src-lang-modes)))
+                                     (akirak-major-mode-list)))
                    nil nil nil history default))
 
 (provide 'akirak-subr)
