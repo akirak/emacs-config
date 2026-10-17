@@ -64,7 +64,7 @@ delib.module {
 
   home.ifEnabled = { cfg, ... }: {
     home.packages = [
-      pkgs.ai-tools.codex
+      pkgs.codex
     ];
 
     home.file = {

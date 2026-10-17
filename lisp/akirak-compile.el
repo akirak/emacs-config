@@ -350,7 +350,11 @@ are displayed in the frame."
 
 (defun akirak-compile--terminal-command-p (command)
   "Return non-nil if COMMAND should be run in terminal."
-  (string-match-p (rx bol (* blank) "nix run" symbol-end) command))
+  (string-match-p (rx bol (* blank)
+                      (or "nix run"
+                          "nix-fast-build")
+                      symbol-end)
+                  command))
 
 (defun akirak-compile--buffer-name ()
   (concat "*"
@@ -715,6 +719,12 @@ are displayed in the frame."
                                 'annotation (match-string 2))
                           result))
                   result)))))
+      (nix-flake
+       (when (and (executable-find "nix-fast-build")
+                  (require 'nix3-core nil t))
+         `((,(format "nix-fast-build --flake .#packages.%s" (nix3-system)))
+           (,(format "nix-fast-build --cachix-cache akirak --flake .#packages.%s"
+                     (nix3-system))))))
       ((bun pnpm yarn npm deno)
        ;; We only read package.json, so memoization wouldn't be necessary.
        (let* ((command (symbol-name backend))
