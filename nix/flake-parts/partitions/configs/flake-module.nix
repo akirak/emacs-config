@@ -12,7 +12,6 @@ let
       inherit (prev.stdenv.hostPlatform) system;
     in
     {
-      ai-tools = inputs.llm-agents.packages.${system};
       nix-index = inputs.nix-index-database.packages.${system}.nix-index-with-db;
       zen-browser = inputs.zen-browser.packages.${system}.default;
       tix = inputs.tix.packages.${system}.default;
