@@ -13,7 +13,7 @@ delib.module {
 
   home.ifEnabled = {
     home.packages = [
-      pkgs.ai-tools.claude-code
+      pkgs.claude-code
     ];
   };
 }

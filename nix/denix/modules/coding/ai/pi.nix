@@ -11,7 +11,7 @@ delib.module {
 
   home.ifEnabled = {
     home.packages = [
-      pkgs.ai-tools.pi
+      pkgs.pi-coding-agent
     ];
   };
 }
