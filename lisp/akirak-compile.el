@@ -722,7 +722,9 @@ are displayed in the frame."
       (nix-flake
        (when (and (executable-find "nix-fast-build")
                   (require 'nix3-core nil t))
-         `((,(format "nix-fast-build --flake .#packages.%s" (nix3-system))))))
+         `((,(format "nix-fast-build --flake .#packages.%s" (nix3-system)))
+           (,(format "nix-fast-build --cachix-cache akirak --flake .#packages.%s"
+                     (nix3-system))))))
       ((bun pnpm yarn npm deno)
        ;; We only read package.json, so memoization wouldn't be necessary.
        (let* ((command (symbol-name backend))
