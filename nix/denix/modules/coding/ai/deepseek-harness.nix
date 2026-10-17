@@ -7,7 +7,12 @@
 delib.module {
   name = "deepseek-harness";
 
-  options = delib.singleEnableOption host.codingFeatured;
+  # Not using for now.
+  options = delib.singleEnableOption false;
+
+  # currently available from llm-agents.nix
+
+  # options = delib.singleEnableOption host.codingFeatured;
 
   home.ifEnabled = {
     home.packages = [
