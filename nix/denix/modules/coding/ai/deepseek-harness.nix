@@ -16,7 +16,7 @@ delib.module {
 
   home.ifEnabled = {
     home.packages = [
-      pkgs.ai-tools.dsh
+      pkgs.llm-agents.dsh
     ];
   };
 }
