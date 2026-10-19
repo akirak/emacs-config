@@ -68,6 +68,10 @@ delib.module {
           # Use gpg-agent as ssh-agent.
           gpg-connect-agent /bye
           export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
+          if [[ $TERM != eat-truecolor ]]; then
+            alias duckdb='duckdb -dark-mode'
+          fi
         '';
       };
 

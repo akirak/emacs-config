@@ -12,7 +12,6 @@ delib.module {
   home.ifEnabled = {
     home.packages = with pkgs; [
       difftastic
-      duckdb
       hyperfine
       just
     ];
