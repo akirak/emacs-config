@@ -25,7 +25,6 @@
 - `nix run .#lock --impure -L`: Fill missing lock entries for the Emacs Lisp packages.
 - `nix flake update --flake path:./nix/flake-parts/partitions/packages`: Update the Emacs package registries.
 - `nix run .#update --impure -L`: update ELPA inputs, then run the repository update app.
-- `nix run .#update-ai-models`: Update `ai-model-list.txt`.
 - `nix run .#update-elisp-lock`: Commit package updates by author.
 ### Others
 - `nix run .#emacs-config.emacs -- -Q -nw`: Run Emacs without any extra package or init file.
