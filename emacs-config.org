@@ -7900,7 +7900,7 @@ Define and query search engines from within Emacs.
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
 #+begin_quote
-Support for `direnv' that operates buffer-locally
+Buffer-local `direnv' support with choice of sync/async
 #+end_quote
 
 #+begin_src emacs-lisp
