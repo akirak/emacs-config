@@ -8478,7 +8478,7 @@ Interact with ChatGPT or other LLMs
       ;;         :key (lambda ()
       ;;                (gptel-api-key-from-auth-source "api.openai.com"))
       ;;         :stream t
-      ;;         :models (akirak-ai-model-prefixed-list "openai/")))
+      ;;         :models (akirak-ai-model-list-from-provider "openai")))
 
       ;; (gptel-make-gh-copilot "Copilot")
 
