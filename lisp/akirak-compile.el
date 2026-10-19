@@ -86,7 +86,7 @@
      ("cargo test --test '*'" annotation "Run tests in tests directory"))
     (nix-flake
      ("nix fmt")
-     ("nix flake check")
+     ("nix flake check -L")
      ("nix flake lock")
      ("nix build -L"))
     (dune
