@@ -4844,7 +4844,8 @@ Tree-sitter mode for Cap'n Proto
     (defun akirak/capnp-insert-id ()
       "Insert a new ID into the buffer."
       (interactive)
-      (call-process "capnp" nil (list t nil) nil "id")))
+      (when (zerop (call-process "capnp" nil (list t nil) nil "id"))
+        (insert ";\n"))))
 #+end_src
 *** cypher-ts-mode
 :PROPERTIES:
