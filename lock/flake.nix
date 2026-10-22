@@ -413,12 +413,6 @@
       repo = "flymake-shellcheck";
       type = "github";
     };
-    flymake-sqlfluff = {
-      flake = false;
-      owner = "erickgnavar";
-      repo = "flymake-sqlfluff";
-      type = "github";
-    };
     flymake-vale = {
       flake = false;
       owner = "tpeacock19";

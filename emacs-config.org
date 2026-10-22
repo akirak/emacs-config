@@ -8059,7 +8059,7 @@ A bash/sh Flymake backend powered by ShellCheck
   (setup (:package flymake-shellcheck)
     (:nixpkgs "shellcheck"))
 #+end_src
-*** flymake-sqlfluff
+*** COMMENT flymake-sqlfluff                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-04-01 Tue 16:15]
 :END:

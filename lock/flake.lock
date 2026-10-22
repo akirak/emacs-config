@@ -1106,22 +1106,6 @@
         "type": "github"
       }
     },
-    "flymake-sqlfluff": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1718110665,
-        "narHash": "sha256-l7BDXyPyTy6Hnl1Iem6pEpTp+amIeKQKzk3oaaJg5cQ=",
-        "owner": "erickgnavar",
-        "repo": "flymake-sqlfluff",
-        "rev": "0a836d7a919723ae5897fce01c3c7d651a30e8c6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "erickgnavar",
-        "repo": "flymake-sqlfluff",
-        "type": "github"
-      }
-    },
     "flymake-vale": {
       "flake": false,
       "locked": {
@@ -3158,7 +3142,6 @@
         "f": "f",
         "flymake-actionlint1": "flymake-actionlint1",
         "flymake-shellcheck": "flymake-shellcheck",
-        "flymake-sqlfluff": "flymake-sqlfluff",
         "flymake-vale": "flymake-vale",
         "flyover": "flyover",
         "fsharp-mode": "fsharp-mode",
