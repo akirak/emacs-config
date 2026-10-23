@@ -43,11 +43,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1792615425,
-        "narHash": "sha256-nPkEmcy14n8yBd11MlJEFOaCGyMZZlNU+NlLMnohnmA=",
+        "lastModified": 1792701499,
+        "narHash": "sha256-OKKjtYZE7u+c36J5DqzEm/bkp7KnVR8rMYO/V0A5f4M=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "ec2655f2dc8af1dadebef40bcf9ef9d148c08206",
+        "rev": "64b6b5f255b7a34575ad8115d165416766727c29",
         "type": "github"
       },
       "original": {
@@ -153,11 +153,11 @@
         "unstable-202609": "unstable-202609"
       },
       "locked": {
-        "lastModified": 1792638324,
-        "narHash": "sha256-NuX8l+Yh8gPUT6zNsqoz+gCgjEsBLvJgYF7bDXrXJsc=",
+        "lastModified": 1792725554,
+        "narHash": "sha256-+28aLKNfNYTnvdWe7kxDRSYdzTyGLwBEO+UwNxQqHKo=",
         "owner": "akirak",
         "repo": "flake-pins",
-        "rev": "2d78159de43c177d3f473ae5fd9245afdd22a6a4",
+        "rev": "f28aa4f45ae8d027dac8bbdc44d01a718629c4c4",
         "type": "github"
       },
       "original": {
@@ -205,11 +205,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1792605213,
-        "narHash": "sha256-J73EBU30r2hXvHCcBtaigQDAIu/GGPYk1nc6P9THcmg=",
+        "lastModified": 1792703141,
+        "narHash": "sha256-3X34FaSeMJXMx8CK/BN6sZ9knwNauuiJXQhLM+bQQuI=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "ab97a5d09e0f2aa7339cfd35ec5824fd6653e27c",
+        "rev": "6750249c69969d09d952efaf3fab88a2bdac7ec6",
         "type": "github"
       },
       "original": {
@@ -226,11 +226,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792624390,
-        "narHash": "sha256-Qw1+LMJtF10B8FVqZdIlAEfNyGmhxzfgnvm1UD9+zY8=",
+        "lastModified": 1792667976,
+        "narHash": "sha256-qlW9xfM0TFDIU6wGTXfTZ2xSgvgOlV89YHdvfjQ+e0Q=",
         "owner": "LnL7",
         "repo": "nix-darwin",
-        "rev": "57abbd54db8e267474f9154d80bad195462fa081",
+        "rev": "38cf0abb072c30fff68da0e3f516fc8a7cfb8fc0",
         "type": "github"
       },
       "original": {
@@ -328,11 +328,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1792503283,
-        "narHash": "sha256-vhe2jyvRCgufWPqDuDq1S3t3ypE+ka46IFutV02xKso=",
+        "lastModified": 1792615934,
+        "narHash": "sha256-MlvRfa1O5Cqc2/a+gG+l9TSuowEoCKCmrJ1d9oAVm0I=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "cd4ea8d57de16f4810bc5f14207bac45fbf19f67",
+        "rev": "da6dc0e7b26060f2f71ce3ef7088fb56ee44fa36",
         "type": "github"
       },
       "original": {
@@ -459,11 +459,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792567368,
-        "narHash": "sha256-mrM+zFDRO1pI85t2SEq5R739BIq7Nv5XkFtVZK9nkZM=",
+        "lastModified": 1792653800,
+        "narHash": "sha256-E8zFJilWlORqzIUJizyhZ/0WKBOizuM6s1nRSgPRomo=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "83dd732f2428827f35d997deae108a2ced5125f4",
+        "rev": "5f267b7f323a4d6df0b9c0e3eaa043cbe85386f2",
         "type": "github"
       },
       "original": {
@@ -561,11 +561,11 @@
         "typescript-src": "typescript-src"
       },
       "locked": {
-        "lastModified": 1792573584,
-        "narHash": "sha256-d5VM/HnKZmTfykfSHAUROnVGtyAh71OYAA/mbvMEMes=",
+        "lastModified": 1792658433,
+        "narHash": "sha256-jGP3zuRRNwpvqUSFDk+U9xfAwsJtgEIAdzUhqbFxMaw=",
         "owner": "Effect-TS",
         "repo": "tsgo",
-        "rev": "13dc02a99f8a1ccd630ced6a82d882f5257ae042",
+        "rev": "93fc061739d80a497836ad6f55c8130d7e021f02",
         "type": "github"
       },
       "original": {
@@ -595,17 +595,17 @@
     "typescript-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1792449759,
-        "narHash": "sha256-GZRZNPuEPSqtZ8GNNactogfCzrV/a9EGUDYWXsxsJwY=",
+        "lastModified": 1792542346,
+        "narHash": "sha256-NlWNGxEpZ9Mgj4TCMjj+hk50WFOo/OvdjFdHzl07iOs=",
         "owner": "microsoft",
         "repo": "TypeScript",
-        "rev": "28534d7609062699a68b1b66e2367f8d95dbf290",
+        "rev": "538671d3cc2dc1fa292dbb00185d3cdbef9aa73b",
         "type": "github"
       },
       "original": {
         "owner": "microsoft",
         "repo": "TypeScript",
-        "rev": "28534d7609062699a68b1b66e2367f8d95dbf290",
+        "rev": "538671d3cc2dc1fa292dbb00185d3cdbef9aa73b",
         "type": "github"
       }
     },
