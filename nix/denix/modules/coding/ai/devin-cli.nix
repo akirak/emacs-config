@@ -11,7 +11,7 @@ delib.module {
   options =
     with delib;
     moduleOptions {
-      enable = boolOption host.codingFeatured;
+      enable = boolOption false;
     };
 
   home.ifEnabled =
@@ -39,7 +39,8 @@ delib.module {
 
       release = releases.${system};
 
-      version = "3000.11.3";
+      # FIXME: Update this version before using this package again.
+      version = throw "FIXME: Update the version of devin-cli";
 
       devin-cli = pkgs.callPackage (
         { stdenvNoCC }:
