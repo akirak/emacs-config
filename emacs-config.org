@@ -1366,10 +1366,17 @@ The built-in =electric= package provides the following modes:
           version-control t
           view-read-only t
           auto-mode-case-fold nil
-          require-final-newline t
           remote-file-name-inhibit-delete-by-moving-to-trash t
           ;; pkgs/top-level/all-packages.nix in nixpkgs: 1.5 MB
           large-file-warning-threshold (* 1024 1024 2))
+
+    (add-hook 'find-file-hook
+              (defun akirak/set-require-final-newline ()
+                "Set `require-final-newline' based on the file path."
+                (setq require-final-newline
+                      ;; Don't append a final newline to secrets.
+                      (not (string-match-p (rx "/passage." (+ (any alnum)) "/")
+                                           buffer-file-truename)))))
 
     (:when-loaded
       (:set locate-dominating-stop-dir-regexp
