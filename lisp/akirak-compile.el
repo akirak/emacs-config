@@ -86,7 +86,7 @@
      ("cargo test --test '*'" annotation "Run tests in tests directory"))
     (nix-flake
      ("nix fmt")
-     ("nix flake check")
+     ("nix flake check -L")
      ("nix flake lock")
      ("nix build -L"))
     (dune
@@ -720,11 +720,12 @@ are displayed in the frame."
                           result))
                   result)))))
       (nix-flake
-       (when (and (executable-find "nix-fast-build")
-                  (require 'nix3-core nil t))
-         `((,(format "nix-fast-build --flake .#packages.%s" (nix3-system)))
-           (,(format "nix-fast-build --cachix-cache akirak --flake .#packages.%s"
-                     (nix3-system))))))
+       (append (alist-get backend akirak-compile-backend-command-alist)
+               (when (and (executable-find "nix-fast-build")
+                          (require 'nix3-core nil t))
+                 `((,(format "nix-fast-build --flake .#packages.%s" (nix3-system)))
+                   (,(format "nix-fast-build --cachix-cache akirak --flake .#packages.%s"
+                             (nix3-system)))))))
       ((bun pnpm yarn npm deno)
        ;; We only read package.json, so memoization wouldn't be necessary.
        (let* ((command (symbol-name backend))

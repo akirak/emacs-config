@@ -1106,22 +1106,6 @@
         "type": "github"
       }
     },
-    "flymake-sqlfluff": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1718110665,
-        "narHash": "sha256-l7BDXyPyTy6Hnl1Iem6pEpTp+amIeKQKzk3oaaJg5cQ=",
-        "owner": "erickgnavar",
-        "repo": "flymake-sqlfluff",
-        "rev": "0a836d7a919723ae5897fce01c3c7d651a30e8c6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "erickgnavar",
-        "repo": "flymake-sqlfluff",
-        "type": "github"
-      }
-    },
     "flymake-vale": {
       "flake": false,
       "locked": {
@@ -1782,11 +1766,11 @@
     "magit-nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1791460652,
-        "narHash": "sha256-jRJ7GdVBHCehmR8LWNgZXZRuLwWRdAydEzJx948n7WA=",
+        "lastModified": 1791770488,
+        "narHash": "sha256-1/8fZFe7MMkK/oQxPytN3j68k3h/kgs7+sc3Tg1sLQ4=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "d3455ac1675885d5c174b327b7f3895b345545ee",
+        "rev": "4ed007cf0a90a75b6461f1092a898d4153db5596",
         "type": "github"
       },
       "original": {
@@ -2072,11 +2056,11 @@
     "nix3": {
       "flake": false,
       "locked": {
-        "lastModified": 1791460652,
-        "narHash": "sha256-jRJ7GdVBHCehmR8LWNgZXZRuLwWRdAydEzJx948n7WA=",
+        "lastModified": 1791770488,
+        "narHash": "sha256-1/8fZFe7MMkK/oQxPytN3j68k3h/kgs7+sc3Tg1sLQ4=",
         "owner": "emacs-twist",
         "repo": "nix3.el",
-        "rev": "d3455ac1675885d5c174b327b7f3895b345545ee",
+        "rev": "4ed007cf0a90a75b6461f1092a898d4153db5596",
         "type": "github"
       },
       "original": {
@@ -2298,11 +2282,11 @@
     "orderless": {
       "flake": false,
       "locked": {
-        "lastModified": 1790552692,
-        "narHash": "sha256-Lufd8wmUssmc4gj+3Lp5fmhWENtt43C+7/gVF6kfWzY=",
+        "lastModified": 1791919658,
+        "narHash": "sha256-sc0IH8rwLuriqkK7SKi3js+qSnrzeNNWUcoffL71ObE=",
         "owner": "oantolin",
         "repo": "orderless",
-        "rev": "3d2c2e6468ddf51e69c78e8212e5fd9006d2ce8a",
+        "rev": "e271a8ec938929b726331236cf56d1c44571122e",
         "type": "github"
       },
       "original": {
@@ -2314,11 +2298,11 @@
     "org": {
       "flake": false,
       "locked": {
-        "lastModified": 1791708104,
-        "narHash": "sha256-CnKwWVnuNAm53wl6DCSUBnWnCi+r2VVelmMTVLnZ52A=",
+        "lastModified": 1792222005,
+        "narHash": "sha256-1aghPu96zgkqDMIDieOsNGn8YscWpXsP3BbVnIrCrvs=",
         "owner": "elpa-mirrors",
         "repo": "org-mode",
-        "rev": "9bb071dec90f246faff9f08005c10e92fefc1e69",
+        "rev": "47b724f8cedb7e847f016fb66c409a401756f583",
         "type": "github"
       },
       "original": {
@@ -3158,7 +3142,6 @@
         "f": "f",
         "flymake-actionlint1": "flymake-actionlint1",
         "flymake-shellcheck": "flymake-shellcheck",
-        "flymake-sqlfluff": "flymake-sqlfluff",
         "flymake-vale": "flymake-vale",
         "flyover": "flyover",
         "fsharp-mode": "fsharp-mode",

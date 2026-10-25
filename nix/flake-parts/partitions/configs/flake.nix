@@ -11,6 +11,7 @@
 
     # Extra packages used in the home-manager configuration
     xremap.url = "github:xremap/nix-flake";
+    llm-agents.url = "github:numtide/llm-agents.nix";
 
     playwright-cli = {
       url = "github:akirak/nix-playwright-cli";

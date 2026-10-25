@@ -49,6 +49,13 @@ delib.module {
       ''
       ''
         window-rule {
+          match app-id=r#"^blueman-manager"#
+
+          open-floating true
+        }
+      ''
+      ''
+        window-rule {
           match app-id=r#"^org.pulseaudio.pavucontrol"#
 
           open-floating true

@@ -1366,10 +1366,17 @@ The built-in =electric= package provides the following modes:
           version-control t
           view-read-only t
           auto-mode-case-fold nil
-          require-final-newline t
           remote-file-name-inhibit-delete-by-moving-to-trash t
           ;; pkgs/top-level/all-packages.nix in nixpkgs: 1.5 MB
           large-file-warning-threshold (* 1024 1024 2))
+
+    (add-hook 'find-file-hook
+              (defun akirak/set-require-final-newline ()
+                "Set `require-final-newline' based on the file path."
+                (setq require-final-newline
+                      ;; Don't append a final newline to secrets.
+                      (not (string-match-p (rx "/passage." (+ (any alnum)) "/")
+                                           buffer-file-truename)))))
 
     (:when-loaded
       (:set locate-dominating-stop-dir-regexp
@@ -4839,12 +4846,17 @@ Tree-sitter mode for Cap'n Proto
 
 #+begin_src emacs-lisp
   (setup (:package capnp-ts-mode)
+    (:org-src-lang capnp)
     (:file-match "\\.capnp\\'")
 
     (defun akirak/capnp-insert-id ()
       "Insert a new ID into the buffer."
       (interactive)
-      (call-process "capnp" nil (list t nil) nil "id")))
+      (when (zerop (call-process "capnp" nil (list t nil) nil "id"))
+        (insert ";\n")))
+
+    (:auto-insert
+     ("\\.capnp\\'" . akirak/capnp-insert-id)))
 #+end_src
 *** cypher-ts-mode
 :PROPERTIES:
@@ -7895,7 +7907,7 @@ Define and query search engines from within Emacs.
 :CREATED_TIME: [2022-01-23 Sun 23:59]
 :END:
 #+begin_quote
-Support for `direnv' that operates buffer-locally
+Buffer-local `direnv' support with choice of sync/async
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -8054,7 +8066,7 @@ A bash/sh Flymake backend powered by ShellCheck
   (setup (:package flymake-shellcheck)
     (:nixpkgs "shellcheck"))
 #+end_src
-*** flymake-sqlfluff
+*** COMMENT flymake-sqlfluff                                                   :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2025-04-01 Tue 16:15]
 :END:
@@ -8478,7 +8490,7 @@ Interact with ChatGPT or other LLMs
       ;;         :key (lambda ()
       ;;                (gptel-api-key-from-auth-source "api.openai.com"))
       ;;         :stream t
-      ;;         :models (akirak-ai-model-prefixed-list "openai/")))
+      ;;         :models (akirak-ai-model-list-from-provider "openai")))
 
       ;; (gptel-make-gh-copilot "Copilot")
 
@@ -12097,7 +12109,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 218 |
+| [[org-ql-search:tags:packages][packages]]            | 217 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |

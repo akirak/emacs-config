@@ -35,19 +35,11 @@
 
 (defun akirak-major-mode-list ()
   "Return a list of major modes defined in the current Emacs instance."
-  (let (modes)
-    (cl-do-all-symbols
-        (sym)
-      (let ((name (symbol-name sym)))
-        (when (and (commandp sym)
-                   (string-suffix-p "-mode" name)
-                   (let ((case-fold-search nil))
-                     (string-match-p "^[a-z]" name))
-                   (not (string-match-p (rx "/") name))
-                   (not (string-match-p "global" name))
-                   (not (memq sym minor-mode-list)))
-          (push sym modes))))
-    modes))
+  (let ((case-fold-search nil))
+    (seq-remove (lambda (sym)
+                  (or (memq sym minor-mode-list)
+                      (string-search "global" (symbol-name sym))))
+                (apropos-internal "\\`[a-z][^/]*-mode\\'" #'commandp))))
 
 ;;;###autoload
 (cl-defun akirak-complete-major-mode (prompt &optional default history
@@ -57,7 +49,7 @@
                                        (require 'org-src)
                                        (cons "console"
                                              (mapcar #'car org-src-lang-modes)))
-                                     (akirak-major-mode-list)))
+                                     (mapcar #'symbol-name (akirak-major-mode-list))))
                    nil nil nil history default))
 
 (provide 'akirak-subr)

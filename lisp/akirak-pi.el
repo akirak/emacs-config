@@ -1,6 +1,7 @@
 ;;; akirak-pi.el --- Integration with Pi coding agent -*- lexical-binding: t -*-
 
 (require 'akirak-transient)
+(require 'akirak-ai-model)
 
 (defconst akirak-pi-slash-commands
   '("/login"
@@ -37,18 +38,21 @@
 (defvar akirak-pi-provider nil)
 
 (transient-define-infix akirak-pi-set-provider ()
-  :class 'akirak-transient-string-variable
+  :class 'akirak-transient-choice-variable
   :variable 'akirak-pi-provider
-  :prompt "Provider: "
-  :description "Provider")
+  :description "Provider"
+  :prompt "Select a provider: "
+  :choices 'akirak-ai-provider-list)
 
 (defvar akirak-pi-model nil)
 
 (transient-define-infix akirak-pi-set-model ()
-  :class 'akirak-transient-string-variable
+  :class 'akirak-transient-choice-variable
   :variable 'akirak-pi-model
-  :prompt "Model: "
-  :description "Model")
+  :description "Model"
+  :prompt "Select a model: "
+  :reader (lambda (prompt _initial _history)
+            (akirak-ai-model-complete prompt :provider akirak-pi-provider)))
 
 (defvar akirak-pi-thinking-level nil)
 
