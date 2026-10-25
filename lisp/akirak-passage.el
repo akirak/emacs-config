@@ -299,6 +299,9 @@ specific cases, it returns the whole content."
    ("e" "Edit" akirak-passage-edit-entry)
    ("m" "Rename" akirak-passage-rename-entry)
    ("D" "Delete" akirak-passage-delete-entry)]
+  ["Others"
+   :class transient-row
+   ("v" "Visit the store" akirak-passage-find-store)]
   (interactive)
   (unless akirak-passage-current-account
     (setq akirak-passage-current-account (akirak-passage--read-account nil)))
@@ -317,6 +320,12 @@ specific cases, it returns the whole content."
   (akirak-passage--show-string
    (akirak-passage--get-content akirak-passage-current-account)
    akirak-passage-current-account))
+
+;;;###autoload
+(defun akirak-passage-find-store ()
+  "Visit the store."
+  (interactive)
+  (dired akirak-passage-dir))
 
 ;;;###autoload
 (defun akirak-passage-insert-password (&optional account)
