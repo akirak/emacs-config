@@ -35,6 +35,7 @@ delib.module {
         nix-fast-build
         nix-inspect
         cachix
+        nix-locate
       ];
     };
 }
