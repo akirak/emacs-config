@@ -93,47 +93,49 @@ delib.module {
           builtin cd "$1" && pwd
         }
 
-        function cd() {
-          case "$1" in
-            -h)
-              echo <<-HELP
-                Usage: cd [-p|-m|-r|DIR]
+        if command -v emacsclient > /dev/null; then
+          function cd() {
+            case "$1" in
+              -h)
+                echo <<-HELP
+                  Usage: cd [-p|-m|-r|DIR]
 
-                Options:
-                  -p: Select an Emacs project (requires an Emacs server running)
-                  -m: Select a mount point
-                  -r: Select a remote of the current Git repository
-                  -w: Select the directory of a visible buffer
-                  -d: Select a sub-directory inside the current Git repository
-                  -g: Go to the root of the current Git working tree
+                  Options:
+                    -p: Select an Emacs project (requires an Emacs server running)
+                    -m: Select a mount point
+                    -r: Select a remote of the current Git repository
+                    -w: Select the directory of a visible buffer
+                    -d: Select a sub-directory inside the current Git repository
+                    -g: Go to the root of the current Git working tree
         HELP
-              ;;
-            -p|)
-              projects | pick cdv
-              ;;
-            -m)
-              mountpoints | pick cdv
-              ;;
-            -r)
-              remotes | pick cdv
-              ;;
-            -w)
-              emacs-visible-directories | pick cdv
-              ;;
-            -d)
-              project-subdirectories | pick cdv
-              ;;
-            -g)
-              local root="$(git rev-parse --show-toplevel)"
-              if [[ -n "$root" ]]; then
-                builtin cd "$root"
-              fi
-              ;;
-            *)
-              builtin cd "$@"
-              ;;
-          esac
-        }
+                ;;
+              -p|)
+                projects | pick cdv
+                ;;
+              -m)
+                mountpoints | pick cdv
+                ;;
+              -r)
+                remotes | pick cdv
+                ;;
+              -w)
+                emacs-visible-directories | pick cdv
+                ;;
+              -d)
+                project-subdirectories | pick cdv
+                ;;
+              -g)
+                local root="$(git rev-parse --show-toplevel)"
+                if [[ -n "$root" ]]; then
+                  builtin cd "$root"
+                fi
+                ;;
+              *)
+                builtin cd "$@"
+                ;;
+            esac
+          }
+        fi
       '';
     };
 
