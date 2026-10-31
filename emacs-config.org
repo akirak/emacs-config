@@ -1884,7 +1884,8 @@ Resources:
     (defun akirak/minibuffer-tilde ()
       "During `find-file', replace the minibuffer input with the home directory."
       (interactive)
-      (if minibuffer-completing-file-name
+      (if (and minibuffer-completing-file-name
+               (not (file-remote-p (buffer-substring (minibuffer-prompt-end) (point-max)))))
           (progn
             (delete-region (minibuffer-prompt-end) (point-max))
             (goto-char (point-max))
