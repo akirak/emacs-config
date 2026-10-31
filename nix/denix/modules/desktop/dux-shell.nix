@@ -1,6 +1,6 @@
 { delib, host, ... }:
 delib.module {
-  name = "dms-shell";
+  name = "dux-shell";
 
   options = with delib; singleEnableOption host.guiFeatured;
 
@@ -16,8 +16,8 @@ delib.module {
   };
 
   nixos.ifEnabled = {
-    # Based on https://danklinux.com/docs/dankmaterialshell/nixos
-    programs.dms-shell = {
+    # Based on https://duxlabs.dev/docs/dms/nixos
+    programs.dux-shell = {
       enable = true;
 
       systemd = {
