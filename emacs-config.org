@@ -2672,7 +2672,23 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
                    (cons tramp-file-name-regexp nil))
 
       (when (executable-find "run0")
-        (tramp-enable-run0-method))))
+        (tramp-enable-run0-method))
+
+      (add-to-list 'tramp-methods
+                   '("microvm"
+                     (tramp-login-program "run0")
+                     (tramp-login-args
+                      (("--user" "microvm")
+                       ("--background" "''")
+                       ("sh")
+                       ("-c")
+                       ("'exec ssh -e none \"$1@vsock-mux//var/lib/microvms/$0/notify.vsock\"'")
+                       ("%h")
+                       ("%u")))
+                     (tramp-remote-shell "/bin/sh")
+                     (tramp-remote-shell-login ("-l"))
+                     (tramp-remote-shell-args ("-c"))
+                     (tramp-connection-timeout 30)))))
 #+end_src
 *** transient
 :PROPERTIES:
