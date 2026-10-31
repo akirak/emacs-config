@@ -2669,7 +2669,10 @@ You can set =initial-buffer-choice= to a function or a buffer name depending on 
     (:when-loaded
       ;; Based on https://lonely.town/@jvillasante@hachyderm.io/110232974766557148
       (add-to-list 'backup-directory-alist
-                   (cons tramp-file-name-regexp nil))))
+                   (cons tramp-file-name-regexp nil))
+
+      (when (executable-find "run0")
+        (tramp-enable-run0-method))))
 #+end_src
 *** transient
 :PROPERTIES:
