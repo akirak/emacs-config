@@ -24,6 +24,12 @@ delib.module {
         enable = true;
         restartIfChanged = true;
       };
+
+      plugins = {
+        clipboardManager = {
+          enable = false;
+        };
+      };
     };
   };
 }
