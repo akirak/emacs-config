@@ -8392,7 +8392,7 @@ Run GitHub Linguist on projects to collect information
 
 #+begin_src emacs-lisp
   (setup (:package github-linguist)
-    (:nixpkgs "customPackages.github-linguist")
+    (:nixpkgs "github-linguist")
     (:set github-linguist-executable "github-linguist"))
 #+end_src
 *** git-identity                                                    :VC:
