@@ -28,7 +28,7 @@ delib.module {
 
       cachixName = allowNull (strOption null);
 
-      cleanOptions = strOption "--keep-since 10d --elevation-strategy none --keep-one --cross-filesystems";
+      cleanOptions = strOption "--keep-since 10d --elevation-strategy none --keep-one --no-direnv --cross-filesystems";
     };
 
   home.ifEnabled =
@@ -143,14 +143,6 @@ delib.module {
     {
       programs.nh = {
         enable = true;
-        clean = {
-          enable = true;
-          dates = "*-*-* 02:00:00";
-          # On desktop machines, also run this command manually:
-          #
-          # nh clean all <options> --elevation-strategy run0
-          extraArgs = cfg.cleanOptions;
-        };
         flake = cfg.mainConfigDirectory;
       };
 
@@ -159,4 +151,18 @@ delib.module {
         updateScript
       ];
     };
+
+  nixos.ifEnabled = {cfg, ...}: {
+    programs.nh = {
+      enable = true;
+      clean = {
+        enable = true;
+        dates = "*-*-* 02:00:00";
+        # On desktop machines, also run this command manually:
+        #
+        # nh clean all <options> --elevation-strategy run0
+        extraArgs = cfg.cleanOptions;
+      };
+    };
+  };
 }

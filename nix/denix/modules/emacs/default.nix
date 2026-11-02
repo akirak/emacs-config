@@ -66,5 +66,9 @@ delib.module {
           ];
         };
       };
+
+      programs.zsh.initContent = ''
+        export EDITOR=emacsclient
+      '';
     };
 }

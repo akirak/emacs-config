@@ -37,5 +37,11 @@ delib.module {
       gpg-connect-agent /bye
       export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
     '';
+
+    programs.zsh.initContent = ''
+      # Use gpg-agent as ssh-agent.
+      gpg-connect-agent /bye
+      export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    '';
   };
 }
