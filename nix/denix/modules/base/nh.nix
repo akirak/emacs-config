@@ -28,7 +28,7 @@ delib.module {
 
       cachixName = allowNull (strOption null);
 
-      cleanOptions = strOption "--keep-since 10d --elevation-strategy none --keep-one --cross-filesystems";
+      cleanOptions = strOption "--keep-since 10d --elevation-strategy none --keep-one --no-direnv --cross-filesystems";
     };
 
   home.ifEnabled =
