@@ -301,7 +301,8 @@ specific cases, it returns the whole content."
    ("D" "Delete" akirak-passage-delete-entry)]
   ["Others"
    :class transient-row
-   ("v" "Visit the store" akirak-passage-find-store)]
+   ("v" "Visit the store" akirak-passage-find-store)
+   ("j" "Jump to the secret file" akirak-passage-dired-jump)]
   (interactive)
   (unless akirak-passage-current-account
     (setq akirak-passage-current-account (akirak-passage--read-account nil)))
@@ -326,6 +327,13 @@ specific cases, it returns the whole content."
   "Visit the store."
   (interactive)
   (dired akirak-passage-dir))
+
+;;;###autoload
+(defun akirak-passage-dired-jump ()
+  "Visit the secret file using `dired-jump'."
+  (interactive)
+  (dired-jump nil (file-name-concat akirak-passage-dir
+                                    (concat akirak-passage-current-account ".age"))))
 
 ;;;###autoload
 (defun akirak-passage-insert-password (&optional account)
