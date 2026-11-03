@@ -10,13 +10,18 @@ let
     _final: prev:
     let
       inherit (prev.stdenv.hostPlatform) system;
+
+      llm-agents-packages = inputs.llm-agents.packages.${prev.stdenv.system};
     in
     {
-      llm-agents = inputs.llm-agents.packages.${system};
       nix-index = inputs.nix-index-database.packages.${system}.nix-index-with-db;
       zen-browser = inputs.zen-browser.packages.${system}.default;
       tix = inputs.tix.packages.${system}.default;
       playwright-cli = inputs.playwright-cli.packages.${system}.default;
+
+      # Don't override the packages if the packages are provided from the parent scope
+      dsh = prev.dsh or llm-agents-packages.dsh; # DeepSeek Shell
+      omp = prev.omp or llm-agents-packages.omp; # Oh My Pi
     };
 
   overlays = [
