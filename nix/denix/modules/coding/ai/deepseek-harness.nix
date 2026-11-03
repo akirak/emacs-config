@@ -14,7 +14,11 @@ delib.module {
       enable = boolOption false;
 
       # currently only available from llm-agents.nix
-      package = packageOption pkgs.llm-agents.dsh;
+      package = packageOption (
+        # In case nixpkgs adds a different package.
+        assert (pkgs.dsh.meta.homepage == "https://github.com/deepseek-ai/deepseek-harness");
+        pkgs.dsh
+      );
 
       web = {
         enable = boolOption false;
