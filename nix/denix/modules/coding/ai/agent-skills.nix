@@ -14,6 +14,7 @@ delib.module {
       roots = listOfOption str (
         lib.optional args.myconfig.codex.enable ".codex/skills"
         ++ lib.optional args.myconfig.devin-cli.enable ".devin/skills"
+        ++ lib.optional args.myconfig.oh-my-pi.enable ".omp/agent/skills"
       );
 
       sources = attrsOfOption (submodule {
