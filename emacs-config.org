@@ -2272,8 +2272,19 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                     "<remap> <upcase-word>" #'upcase-dwim
                     "<remap> <downcase-word>" #'downcase-dwim
                     "<remap> <capitalize-word>" #'akirak/capitalize-dwim
+                    "C-c ~" #'akirak/toggle-case-char
                     "C-c v" #'visible-mode
                     "<f12> x l" #'list-processes)
+
+    (defun akirak/toggle-case-char (&optional arg)
+      (interactive "P")
+      (if (or (null arg)
+              (numberp arg))
+          (let ((c (char-after (point)))
+                (end (+ (or arg 1) (point))))
+            (if (char-uppercase-p c)
+                (downcase-region (point) end)
+              (upcase-region (point) end)))))
 
     (defun akirak/capitalize-dwim (&optional arg)
       (interactive "P")
