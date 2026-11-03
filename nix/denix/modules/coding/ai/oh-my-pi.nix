@@ -15,13 +15,39 @@ delib.module {
 
       # currently only available from llm-agents.nix
       package = packageOption pkgs.llm-agents.omp;
+
+      settings = {
+        models = {
+          providers = attrsOfOption (submodule {
+            options = {
+              baseUrl = noNullDefault (strOption null);
+              authHeader = boolOption false;
+            };
+          }) {};
+        };
+
+        config = attrsOption {};
+      };
     };
 
   home.ifEnabled =
     { cfg, ... }:
+    let
+      inherit (pkgs.writers) writeYAML;
+    in
     {
       home.packages = [
         cfg.package
       ];
+
+      home.file = {
+        ".omp/agent/models.yml".source = writeYAML "models.yml" {
+          providers = cfg.settings.models.providers;
+        };
+        ".omp/agent/config.yml".source = writeYAML "config.yml" cfg.settings.config;
+
+        # Extensions
+        # ".omp/agent/extensions/my-ext.ts".source = writeYAML "extensions/my-ext.ts" { };
+      };
     };
 }
