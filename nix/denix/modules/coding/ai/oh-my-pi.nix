@@ -14,7 +14,11 @@ delib.module {
       enable = boolOption false;
 
       # currently only available from llm-agents.nix
-      package = packageOption pkgs.llm-agents.omp;
+      package = packageOption (
+        # In case nixpkgs adds a different package.
+        assert (pkgs.omp.meta.homepage == "https://omp.sh");
+        pkgs.omp
+      );
 
       settings = {
         models = {
@@ -23,10 +27,10 @@ delib.module {
               baseUrl = noNullDefault (strOption null);
               authHeader = boolOption false;
             };
-          }) {};
+          }) { };
         };
 
-        config = attrsOption {};
+        config = attrsOption { };
       };
     };
 
