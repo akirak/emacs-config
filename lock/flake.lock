@@ -3299,6 +3299,7 @@
         "tablist": "tablist",
         "tagedit": "tagedit",
         "titlecase": "titlecase",
+        "tlaplus-ts-mode": "tlaplus-ts-mode",
         "transient": "transient",
         "treesit-fold": "treesit-fold",
         "ts": "ts",
@@ -3608,6 +3609,22 @@
       "original": {
         "type": "git",
         "url": "https://codeberg.org/acdw/titlecase.el.git"
+      }
+    },
+    "tlaplus-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794069972,
+        "narHash": "sha256-cOIQrWjP1QeNPRCR9C/fS1GM++/3kAtJQ6BmPDno5Mc=",
+        "owner": "akirak",
+        "repo": "tlaplus-ts-mode",
+        "rev": "2dc1e1bc0c0035d145a0691a85d919b1dd93c00c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "tlaplus-ts-mode",
+        "type": "github"
       }
     },
     "transient": {

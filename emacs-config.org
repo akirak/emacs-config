@@ -5252,6 +5252,15 @@ Tree-sitter mode for Reason ML
     (:file-match "\\.rs\\'")
     (:mode-project-roots "Cargo.toml"))
 #+end_src
+*** tlaplus-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-11-07 Sat 23:59]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package tlaplus-ts-mode)
+    (:file-match "\\.tla\\'"))
+#+end_src
 *** toml-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2023-03-19 Sun 21:27]

@@ -1267,6 +1267,12 @@
       type = "git";
       url = "https://codeberg.org/acdw/titlecase.el.git";
     };
+    tlaplus-ts-mode = {
+      flake = false;
+      owner = "akirak";
+      repo = "tlaplus-ts-mode";
+      type = "github";
+    };
     transient = {
       flake = false;
       owner = "magit";
