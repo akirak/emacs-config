@@ -17,6 +17,10 @@
       url = "github:virchau13/tree-sitter-astro";
       flake = false;
     };
+    tree-sitter-alloy = {
+      url = "github:vincentlu/tree-sitter-alloy";
+      flake = false;
+    };
     tree-sitter-reason = {
       url = "github:reasonml-editor/tree-sitter-reason";
       flake = false;

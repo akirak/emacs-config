@@ -32,6 +32,22 @@
         "type": "github"
       }
     },
+    "alloy-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773116980,
+        "narHash": "sha256-wT1N6Xgq0LWtIoGcojVOfcYxRR+6GQULg4vs1/4XLZg=",
+        "owner": "vincentlu",
+        "repo": "alloy-ts-mode",
+        "rev": "2e8764db16ed81669f0be17bd1056d1b70acaf96",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vincentlu",
+        "repo": "alloy-ts-mode",
+        "type": "github"
+      }
+    },
     "anzu": {
       "flake": false,
       "locked": {
@@ -3075,6 +3091,7 @@
       "inputs": {
         "aggressive-indent": "aggressive-indent",
         "aio": "aio",
+        "alloy-ts-mode": "alloy-ts-mode",
         "anzu": "anzu",
         "apheleia": "apheleia",
         "auto-minor-mode": "auto-minor-mode",

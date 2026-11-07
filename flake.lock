@@ -445,6 +445,7 @@
           "nixpkgs"
         ],
         "org-babel": "org-babel",
+        "tree-sitter-alloy": "tree-sitter-alloy",
         "tree-sitter-astro": "tree-sitter-astro",
         "tree-sitter-cypher": "tree-sitter-cypher",
         "tree-sitter-reason": "tree-sitter-reason",
@@ -500,6 +501,22 @@
         "owner": "nix-systems",
         "ref": "future-26.11",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tree-sitter-alloy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773503070,
+        "narHash": "sha256-pkSsv0zrVmwtWCfE3Luji6Gt0gtv70dZy35Muga9A0A=",
+        "owner": "vincentlu",
+        "repo": "tree-sitter-alloy",
+        "rev": "7bcc865b0d12ff4f20876efd072fd1bc11faff48",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vincentlu",
+        "repo": "tree-sitter-alloy",
         "type": "github"
       }
     },

@@ -4854,6 +4854,18 @@ Emacs:
 The generated remappings do have limitations, but it is possible to work around
 manually by adding extra entries in the following subsections.
 
+*** alloy-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-11-07 Sat 22:26]
+:END:
+#+begin_quote
+Tree-sitter major mode for Alloy 6
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package alloy-ts-mode)
+    (:file-match "\\.als\\'"))
+#+end_src
 *** COMMENT astro-ts-mode                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-03-29 Fri 21:02]

@@ -13,6 +13,12 @@
       repo = "emacs-aio";
       type = "github";
     };
+    alloy-ts-mode = {
+      flake = false;
+      owner = "vincentlu";
+      repo = "alloy-ts-mode";
+      type = "github";
+    };
     anzu = {
       flake = false;
       owner = "emacsorphanage";
