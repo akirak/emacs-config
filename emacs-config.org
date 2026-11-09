@@ -5235,6 +5235,10 @@ Major mode for Nix expressions, powered by tree-sitter
 :PROPERTIES:
 :CREATED_TIME: [2026-11-09 Mon 15:42]
 :END:
+#+begin_quote
+Tree-sitter major mode for Quint
+[[https://github.com/gruhn/tree-sitter-quint]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package quint-ts-mode)
@@ -5268,6 +5272,10 @@ Tree-sitter mode for Reason ML
 :PROPERTIES:
 :CREATED_TIME: [2026-11-07 Sat 23:59]
 :END:
+#+begin_quote
+Tree-sitter major mode for TLA+
+[[https://github.com/akirak/tlaplus-ts-mode]]
+#+end_quote
 
 #+begin_src emacs-lisp
   (setup (:package tlaplus-ts-mode)
