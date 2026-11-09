@@ -12,6 +12,11 @@ emacs.pkgs.treesit-grammars.with-grammars (
       src = inputs.tree-sitter-astro.outPath;
     })
     (tree-sitter.buildGrammar {
+      language = "alloy";
+      version = "0";
+      src = inputs.tree-sitter-alloy.outPath;
+    })
+    (tree-sitter.buildGrammar {
       language = "reason";
       version = "0";
       src = inputs.tree-sitter-reason.outPath;

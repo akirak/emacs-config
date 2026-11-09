@@ -2272,8 +2272,19 @@ This is a recommended setting for use with vertico. See https://github.com/minad
                     "<remap> <upcase-word>" #'upcase-dwim
                     "<remap> <downcase-word>" #'downcase-dwim
                     "<remap> <capitalize-word>" #'akirak/capitalize-dwim
+                    "C-c ~" #'akirak/toggle-case-char
                     "C-c v" #'visible-mode
                     "<f12> x l" #'list-processes)
+
+    (defun akirak/toggle-case-char (&optional arg)
+      (interactive "P")
+      (if (or (null arg)
+              (numberp arg))
+          (let ((c (char-after (point)))
+                (end (+ (or arg 1) (point))))
+            (if (char-uppercase-p c)
+                (downcase-region (point) end)
+              (upcase-region (point) end)))))
 
     (defun akirak/capitalize-dwim (&optional arg)
       (interactive "P")
@@ -4843,6 +4854,21 @@ Emacs:
 The generated remappings do have limitations, but it is possible to work around
 manually by adding extra entries in the following subsections.
 
+*** alloy-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-11-07 Sat 22:26]
+:END:
+#+begin_quote
+Tree-sitter major mode for Alloy 6
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package alloy-ts-mode)
+    (:file-match "\\.als\\'"
+                 ;; Also use for Forge FM, which should be mostly compatible with
+                 ;; Alloy
+                 "\\.frg\\'"))
+#+end_src
 *** COMMENT astro-ts-mode                                                      :ARCHIVE:
 :PROPERTIES:
 :CREATED_TIME: [2024-03-29 Fri 21:02]
@@ -5205,6 +5231,19 @@ Major mode for Nix expressions, powered by tree-sitter
      ;; migration
      (alejandra :program "alejandra")))
 #+end_src
+*** quint-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-11-09 Mon 15:42]
+:END:
+#+begin_quote
+Tree-sitter major mode for Quint
+[[https://github.com/gruhn/tree-sitter-quint]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package quint-ts-mode)
+    (:file-match "\\.qnt\\'"))
+#+end_src
 *** reason-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2026-08-03 Mon 08:48]
@@ -5228,6 +5267,19 @@ Tree-sitter mode for Reason ML
   (setup rust-ts-mode
     (:file-match "\\.rs\\'")
     (:mode-project-roots "Cargo.toml"))
+#+end_src
+*** tlaplus-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-11-07 Sat 23:59]
+:END:
+#+begin_quote
+Tree-sitter major mode for TLA+
+[[https://github.com/akirak/tlaplus-ts-mode]]
+#+end_quote
+
+#+begin_src emacs-lisp
+  (setup (:package tlaplus-ts-mode)
+    (:file-match "\\.tla\\'"))
 #+end_src
 *** toml-ts-mode
 :PROPERTIES:

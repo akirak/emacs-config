@@ -13,6 +13,12 @@
       repo = "emacs-aio";
       type = "github";
     };
+    alloy-ts-mode = {
+      flake = false;
+      owner = "vincentlu";
+      repo = "alloy-ts-mode";
+      type = "github";
+    };
     anzu = {
       flake = false;
       owner = "emacsorphanage";
@@ -1100,6 +1106,12 @@
       repo = "puni";
       type = "github";
     };
+    quint-ts-mode = {
+      flake = false;
+      owner = "omidmnz";
+      repo = "quint-ts-mode";
+      type = "github";
+    };
     rainbow-delimiters = {
       flake = false;
       owner = "Fanael";
@@ -1260,6 +1272,12 @@
       flake = false;
       type = "git";
       url = "https://codeberg.org/acdw/titlecase.el.git";
+    };
+    tlaplus-ts-mode = {
+      flake = false;
+      owner = "akirak";
+      repo = "tlaplus-ts-mode";
+      type = "github";
     };
     transient = {
       flake = false;

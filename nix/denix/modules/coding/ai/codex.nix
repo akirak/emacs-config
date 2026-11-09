@@ -62,14 +62,21 @@ delib.module {
       };
     };
 
+  myconfig.ifEnabled = {
+    agents-md = {
+      enable = true;
+      files.codex = {
+        pathFromHome = ".codex/AGENTS.md";
+      };
+    };
+  };
+
   home.ifEnabled = { cfg, ... }: {
     home.packages = [
       pkgs.codex
     ];
 
     home.file = {
-      ".codex/AGENTS.md".source = ./etc/AGENTS.md;
-
       ".codex/hooks.json".source = pkgs.writers.writeJSON "hooks.json" {
         hooks = lib.pipe cfg.hooks [
           (lib.filterAttrs (_: entries: builtins.length entries != 0))
