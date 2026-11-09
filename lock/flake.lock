@@ -2943,6 +2943,22 @@
         "type": "github"
       }
     },
+    "quint-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786713433,
+        "narHash": "sha256-Sx2dwct6e6gSY27UNvyXe//VwMNIwm2A3KHP/8QP4BY=",
+        "owner": "omidmnz",
+        "repo": "quint-ts-mode",
+        "rev": "6143e10d39bb9143c29f031b62c298817d8f725d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "omidmnz",
+        "repo": "quint-ts-mode",
+        "type": "github"
+      }
+    },
     "rainbow-delimiters": {
       "flake": false,
       "locked": {
@@ -3272,6 +3288,7 @@
         "promise": "promise",
         "protobuf-mode": "protobuf-mode",
         "puni": "puni",
+        "quint-ts-mode": "quint-ts-mode",
         "rainbow-delimiters": "rainbow-delimiters",
         "reason-ts-mode": "reason-ts-mode",
         "reformatter": "reformatter",

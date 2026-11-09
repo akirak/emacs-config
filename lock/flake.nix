@@ -1106,6 +1106,12 @@
       repo = "puni";
       type = "github";
     };
+    quint-ts-mode = {
+      flake = false;
+      owner = "omidmnz";
+      repo = "quint-ts-mode";
+      type = "github";
+    };
     rainbow-delimiters = {
       flake = false;
       owner = "Fanael";

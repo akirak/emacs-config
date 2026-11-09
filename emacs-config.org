@@ -5231,6 +5231,15 @@ Major mode for Nix expressions, powered by tree-sitter
      ;; migration
      (alejandra :program "alejandra")))
 #+end_src
+*** quint-ts-mode
+:PROPERTIES:
+:CREATED_TIME: [2026-11-09 Mon 15:42]
+:END:
+
+#+begin_src emacs-lisp
+  (setup (:package quint-ts-mode)
+    (:file-match "\\.qnt\\'"))
+#+end_src
 *** reason-ts-mode
 :PROPERTIES:
 :CREATED_TIME: [2026-08-03 Mon 08:48]
