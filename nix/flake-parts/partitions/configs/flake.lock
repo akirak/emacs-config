@@ -34,6 +34,22 @@
         "type": "github"
       }
     },
+    "copeanddrag": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791991327,
+        "narHash": "sha256-6nyhqoZmN5U1ia+zZxvA3zshbOC1mpMjuvW3X3a8v9U=",
+        "owner": "sidprasad",
+        "repo": "copeanddrag",
+        "rev": "1158ffc7d2faa10a045a4dd4794e93c8c5b49d6c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sidprasad",
+        "repo": "copeanddrag",
+        "type": "github"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1774313767,
@@ -329,6 +345,22 @@
         "type": "github"
       }
     },
+    "forge": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794071494,
+        "narHash": "sha256-2VzKtvmiue5jNbZyyHvTKnyqmD29mI7uzW3ODxKXkAo=",
+        "owner": "tnelson",
+        "repo": "Forge",
+        "rev": "326400a735540d25f697336c7efbacd215b1800e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tnelson",
+        "repo": "Forge",
+        "type": "github"
+      }
+    },
     "gitignore": {
       "inputs": {
         "nixpkgs": [
@@ -472,6 +504,29 @@
       "original": {
         "owner": "LnL7",
         "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
+    "nix-sterling": {
+      "inputs": {
+        "copeanddrag": "copeanddrag",
+        "forge": "forge",
+        "nixpkgs": [
+          "flake-pins",
+          "unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794414634,
+        "narHash": "sha256-PMLtf8btBoXAXYxZJ7wFV7Da+JmqeOfbid/ijhs3Dzw=",
+        "owner": "akirak",
+        "repo": "nix-sterling",
+        "rev": "33391c25e13f076ef3b767ce82a1a74b455ad125",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "nix-sterling",
         "type": "github"
       }
     },
@@ -782,6 +837,7 @@
         "denix": "denix",
         "flake-pins": "flake-pins",
         "llm-agents": "llm-agents",
+        "nix-sterling": "nix-sterling",
         "playwright-cli": "playwright-cli",
         "tix": "tix",
         "xremap": "xremap",
