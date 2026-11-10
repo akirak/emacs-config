@@ -25,6 +25,11 @@
       inputs.nixpkgs.follows = "flake-pins/unstable";
     };
 
+    nix-sterling = {
+      url = "github:akirak/nix-sterling";
+      inputs.nixpkgs.follows = "flake-pins/unstable";
+    };
+
     # Don't override the nixpkgs input so I can utilize the binary cache.
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };

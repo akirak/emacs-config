@@ -4864,9 +4864,10 @@ Tree-sitter major mode for Alloy 6
 
 #+begin_src emacs-lisp
   (setup (:package alloy-ts-mode)
+    (:nixpkgs sterling-forge sterling-alloy)
     (:file-match "\\.als\\'"
                  ;; Also use for Forge FM, which should be mostly compatible with
-                 ;; Alloy
+                 ;; Forge
                  "\\.frg\\'"))
 #+end_src
 *** COMMENT astro-ts-mode                                                      :ARCHIVE:
