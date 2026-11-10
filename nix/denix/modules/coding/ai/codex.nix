@@ -43,7 +43,8 @@ delib.module {
       }) [ ];
     in
     moduleOptions {
-      enable = boolOption host.codingFeatured;
+      # enable = boolOption host.codingFeatured;
+      enable = boolOption false;
 
       sqliteOnRuntimeDir = boolOption true;
 
