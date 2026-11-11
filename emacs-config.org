@@ -4868,7 +4868,31 @@ Tree-sitter major mode for Alloy 6
     (:file-match "\\.als\\'"
                  ;; Also use for Forge FM, which should be mostly compatible with
                  ;; Forge
-                 "\\.frg\\'"))
+                 "\\.frg\\'")
+
+    (:keymap "C-c C-c"
+             (defun akirak/alloy-open-sterling ()
+               (interactive)
+               (if-let* ((filename (buffer-file-name))
+                         (program (pcase (file-name-extension filename)
+                                    ("als" "sterling-alloy")
+                                    ("frg" "sterling-forge")))
+                         (buffer-name (format "*%s<%s>*"
+                                              program
+                                              (file-name-base filename)))
+                         (command (mapconcat #'shell-quote-argument
+                                             (list program
+                                                   "--browser"
+                                                   (pcase-exhaustive system-type
+                                                     (`gnu/linux
+                                                      (executable-find "xdg-open")))
+                                                   filename)
+                                             " ")))
+                   (progn
+                     (compilation-start command t (cl-constantly buffer-name))
+                     (with-current-buffer buffer-name
+                       (setq-local compile-command command)))
+                 (user-error "Unsupported file")))))
 #+end_src
 *** COMMENT astro-ts-mode                                                      :ARCHIVE:
 :PROPERTIES:
