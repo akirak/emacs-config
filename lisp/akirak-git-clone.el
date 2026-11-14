@@ -129,7 +129,6 @@ matches the host of the repository,
                                      :pr pr-number
                                      :local-path local-path)))
     ((rx bol (group (or "github:"
-                        "codeberg:"
                         "sourcehut:"))
          (group (+ (not (any "/")))
                 "/"
@@ -139,7 +138,6 @@ matches the host of the repository,
          (?  "?" (group (+ anything))))
      (let* ((host (pcase (match-string 1 flake-ref-or-url)
                     ("github:" "github.com")
-                    ("codeberg:" "codeberg.org")
                     ("sourcehut:" "git.sr.ht")))
             (local-path (f-join host
                                 (match-string 2 flake-ref-or-url)))
@@ -477,8 +475,6 @@ DIR is an optional destination directory to clone the repository into."
          (format "https://github.com/%s/%s.git" owner repo)))
       ("sourcehut"
        (format "https://git.sr.ht/%s/%s.git" owner repo))
-      ("codeberg"
-       (format "https://codeberg.org/%s/%s.git" owner repo))
       ("git"
        (alist-get 'url ref)))))
 
@@ -494,8 +490,7 @@ DIR is an optional destination directory to clone the repository into."
                                       ((or "github" "gitlab" "sourcehut")
                                        type-or-host)
                                       ("github.com" "github")
-                                      ("gitlab.com" "gitlab")
-                                      ("codeberg.org" "codebert"))
+                                      ("gitlab.com" "gitlab"))
                                     owner
                                     repo))))
 
