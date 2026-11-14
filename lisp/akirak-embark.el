@@ -66,6 +66,7 @@
 
 (defvar-keymap akirak-embark-directory-map
   :parent embark-general-map
+  "5" #'find-file-other-frame
   "d" #'dired
   "b" #'akirak-embark-browse-remote
   "W" #'akirak-embark-browse-remote-kill
