@@ -4882,6 +4882,7 @@ Tree-sitter major mode for Alloy 6
                                               (file-name-base filename)))
                          (command (mapconcat #'shell-quote-argument
                                              (list program
+                                                   "--watch"
                                                    "--browser"
                                                    (pcase-exhaustive system-type
                                                      (`gnu/linux
