@@ -8010,7 +8010,13 @@ Buffer-local `direnv' support with choice of sync/async
 #+begin_src emacs-lisp
   (setup (:package envrc)
     (:set envrc-async nil)
-    (add-hook 'after-init-hook #'envrc-global-mode))
+    (add-hook 'after-init-hook #'envrc-global-mode)
+
+    (:auto-insert
+     ("\\.envrc\\'"
+      . (> "use flake\n"
+           ;; An option specific to https://github.com/akirak/agent-wrapper
+           "export AGENTS_ALLOW_RUN=1"))))
 #+end_src
 *** epkg                                                          :Emacs:@extra:
 :PROPERTIES:
