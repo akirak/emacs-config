@@ -6811,6 +6811,11 @@ Search and navigate via completing-read
     (:with-mode consult-preview-at-point-mode
       (:hook completion-list-mode))
 
+    (add-hook 'consult-after-jump-hook
+              (defun akirak/consult-jump-highlight ()
+                (when (fboundp 'pulse-momentary-highlight-one-line)
+                  (pulse-momentary-highlight-one-line))))
+
     ;; (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
 
     (:set consult-narrow-key "<"
