@@ -26,14 +26,46 @@ delib.module {
         listenAddress = strOption "127.0.0.1";
         extraArgs = listOfOption str [ ];
       };
+
+      defaultModel = submoduleOption {
+        options = {
+          provider = noNullDefault (strOption null);
+          model = noNullDefault (strOption null);
+        };
+      } null;
+
+      providers = attrsOfOption (submodule {
+        options = {
+          apiKeyEnv = noNullDefault (strOption null);
+          api = strOption "openai-completions";
+          baseURL = noNullDefault (strOption null);
+          models = listOfOption (submodule {
+            options = {
+              id = noNullDefault (strOption null);
+            };
+          }) [ ];
+        };
+      }) { };
     };
 
   home.ifEnabled =
     { cfg, ... }:
+    let
+      hasSettings = (cfg.providers != { }) || (cfg.defaultModel != null);
+    in
     {
       home.packages = [
         cfg.package
       ];
+
+      home.file.".dsh/settings.yaml".source = lib.mkIf hasSettings (
+        pkgs.writers.writeYAML "settings.yaml" {
+          "llm-pi-ai" = lib.mkIf (cfg.providers != { }) {
+            providers = cfg.providers;
+          };
+          "agent-default-model" = lib.mkIf (cfg.defaultModel != null) cfg.defaultModel;
+        }
+      );
 
       # FIXME: You can't get the auth token from this setup.
       systemd.user.services.dsh-web = lib.mkIf cfg.web.enable {
