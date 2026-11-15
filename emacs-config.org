@@ -5255,7 +5255,17 @@ Major mode for Nix expressions, powered by tree-sitter
     (:reformatters
      ;; nixfmt-rfc-style is now recommended, but keep alejandra until I finish
      ;; migration
-     (alejandra :program "alejandra")))
+     (alejandra :program "alejandra"))
+
+    (:auto-insert
+     ("/denix/modules/.+\\.nix\\'"
+      . (> "{ delib, pkgs, lib, ... }:\n"
+           "delib.module {\n"
+           " name = \"" _ "\";\n"
+           " options = with delib; moduleOptions {\n"
+           "    enable = boolOption false;\n"
+           " };\n"
+           "}"))))
 #+end_src
 *** quint-ts-mode
 :PROPERTIES:
