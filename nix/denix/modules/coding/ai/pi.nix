@@ -7,11 +7,15 @@
 delib.module {
   name = "pi";
 
-  options = delib.singleEnableOption host.codingFeatured;
+  options = with delib; moduleOptions {
+    enable = boolOption host.codingFeatured;
 
-  home.ifEnabled = {
+    package = packageOption pkgs.pi-coding-agent;
+  };
+
+  home.ifEnabled = {cfg,...}: {
     home.packages = [
-      pkgs.pi-coding-agent
+      cfg.package
     ];
   };
 }
