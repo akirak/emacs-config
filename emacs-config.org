@@ -10485,6 +10485,14 @@ Define commands which run reformatters on the current buffer
                     (list "@biomejs/biome" "format" (buffer-file-name)
                           (concat "--stdin-file-path=" (buffer-file-name)))))))
 #+end_src
+*** remoto
+:PROPERTIES:
+:CREATED_TIME: [2026-11-18 Wed 23:59]
+:END:
+
+#+begin_src emacs-lisp
+(setup (:package remoto))
+#+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
 :CREATED_TIME: [2022-01-31 Mon 19:05]
