@@ -10489,6 +10489,9 @@ Define commands which run reformatters on the current buffer
 :PROPERTIES:
 :CREATED_TIME: [2026-11-18 Wed 23:59]
 :END:
+#+begin_quote
+Browse GitHub and Codeberg repos without cloning
+#+end_quote
 
 #+begin_src emacs-lisp
 (setup (:package remoto))
@@ -12236,7 +12239,7 @@ If you have [[https://github.com/alphapapa/org-ql/][org-ql]] installed, you can 
 #+end_src
 
 #+RESULTS: tag-statistics
-| [[org-ql-search:tags:packages][packages]]            | 217 |
+| [[org-ql-search:tags:packages][packages]]            | 218 |
 | [[org-ql-search:tags:visual][visual]]              |  14 |
 | [[org-ql-search:tags:@extra][@extra]]              |  11 |
 | [[org-ql-search:tags:formatting][formatting]]          |  10 |
