@@ -72,6 +72,20 @@
     (akirak-xdg--run-desktop-entry filename data
                                    (akirak-xdg--maybe-file-argument arg))))
 
+;;;###autoload
+(defun akirak-xdg-find-desktop-file (filename)
+  "Find the FILENAME for a desktop app."
+  (interactive
+   (progn
+     (unless akirak-xdg-desktop-cache
+       (akirak-xdg--load-desktop-files))
+     (list (akirak-xdg-complete-desktop-file "Find desktop file: "))))
+  (find-file (or (seq-find (lambda (path)
+                             (string= (file-name-nondirectory path)
+                                      filename))
+                           (akirak-xdg--desktop-files))
+                 (user-error "Missing desktop file: %s" filename))))
+
 (defun akirak-xdg--maybe-file-argument (arg)
   (pcase arg
     (`nil)
