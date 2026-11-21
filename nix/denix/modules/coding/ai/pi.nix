@@ -2,6 +2,7 @@
   delib,
   pkgs,
   host,
+  lib,
   ...
 }:
 delib.module {
@@ -11,11 +12,15 @@ delib.module {
     enable = boolOption host.codingFeatured;
 
     package = packageOption pkgs.pi-coding-agent;
+
+    acp = {
+      enable = boolOption false;
+    };
   };
 
   home.ifEnabled = {cfg,...}: {
     home.packages = [
       cfg.package
-    ];
+    ] ++ lib.optional cfg.acp.enable pkgs.pi-acp;
   };
 }
