@@ -7,13 +7,28 @@
 delib.module {
   name = "cli-tools.system";
 
-  options = delib.singleEnableOption host.cliFeatured;
+  options =
+    with delib;
+    moduleOptions {
+      enable = boolOption host.cliFeatured;
 
-  home.ifEnabled = {
+      bottom = {
+        enable = boolOption true;
+      };
+    };
+
+  home.ifEnabled = { cfg, ... }: {
     home.packages = with pkgs; [
-      btop
       dua
       duf
     ];
+
+    programs.bottom = {
+      enable = cfg.bottom.enable;
+
+      settings = {
+        flags.process_memory_as_value = true;
+      };
+    };
   };
 }
