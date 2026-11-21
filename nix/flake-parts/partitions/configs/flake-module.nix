@@ -19,9 +19,16 @@ let
       tix = inputs.tix.packages.${system}.default;
       playwright-cli = inputs.playwright-cli.packages.${system}.default;
 
+      inherit (inputs.nix-sterling.packages.${system})
+        forge
+        sterling-alloy
+        sterling-forge
+        ;
+
       # Don't override the packages if the packages are provided from the parent scope
       dsh = prev.dsh or llm-agents-packages.dsh; # DeepSeek Shell
       omp = prev.omp or llm-agents-packages.omp; # Oh My Pi
+      claude-agent-acp = prev.claude-agent-acp or llm-agents-packages.claude-agent-acp;
     };
 
   overlays = [

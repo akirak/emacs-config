@@ -4864,10 +4864,36 @@ Tree-sitter major mode for Alloy 6
 
 #+begin_src emacs-lisp
   (setup (:package alloy-ts-mode)
+    (:nixpkgs sterling-forge sterling-alloy)
     (:file-match "\\.als\\'"
                  ;; Also use for Forge FM, which should be mostly compatible with
-                 ;; Alloy
-                 "\\.frg\\'"))
+                 ;; Forge
+                 "\\.frg\\'")
+
+    (:keymap "C-c C-c"
+             (defun akirak/alloy-open-sterling ()
+               (interactive)
+               (if-let* ((filename (buffer-file-name))
+                         (program (pcase (file-name-extension filename)
+                                    ("als" "sterling-alloy")
+                                    ("frg" "sterling-forge")))
+                         (buffer-name (format "*%s<%s>*"
+                                              program
+                                              (file-name-base filename)))
+                         (command (mapconcat #'shell-quote-argument
+                                             (list program
+                                                   "--watch"
+                                                   "--browser"
+                                                   (pcase-exhaustive system-type
+                                                     (`gnu/linux
+                                                      (executable-find "xdg-open")))
+                                                   filename)
+                                             " ")))
+                   (progn
+                     (compilation-start command t (cl-constantly buffer-name))
+                     (with-current-buffer buffer-name
+                       (setq-local compile-command command)))
+                 (user-error "Unsupported file")))))
 #+end_src
 *** COMMENT astro-ts-mode                                                      :ARCHIVE:
 :PROPERTIES:
@@ -5229,7 +5255,17 @@ Major mode for Nix expressions, powered by tree-sitter
     (:reformatters
      ;; nixfmt-rfc-style is now recommended, but keep alejandra until I finish
      ;; migration
-     (alejandra :program "alejandra")))
+     (alejandra :program "alejandra"))
+
+    (:auto-insert
+     ("/denix/modules/.+\\.nix\\'"
+      . (> "{ delib, pkgs, lib, ... }:\n"
+           "delib.module {\n"
+           " name = \"" _ "\";\n"
+           " options = with delib; moduleOptions {\n"
+           "    enable = boolOption false;\n"
+           " };\n"
+           "}"))))
 #+end_src
 *** quint-ts-mode
 :PROPERTIES:
@@ -6786,6 +6822,11 @@ Search and navigate via completing-read
     (:with-mode consult-preview-at-point-mode
       (:hook completion-list-mode))
 
+    (add-hook 'consult-after-jump-hook
+              (defun akirak/consult-jump-highlight ()
+                (when (fboundp 'pulse-momentary-highlight-one-line)
+                  (pulse-momentary-highlight-one-line))))
+
     ;; (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
 
     (:set consult-narrow-key "<"
@@ -7985,7 +8026,13 @@ Buffer-local `direnv' support with choice of sync/async
 #+begin_src emacs-lisp
   (setup (:package envrc)
     (:set envrc-async nil)
-    (add-hook 'after-init-hook #'envrc-global-mode))
+    (add-hook 'after-init-hook #'envrc-global-mode)
+
+    (:auto-insert
+     ("\\.envrc\\'"
+      . (> "use flake\n"
+           ;; An option specific to https://github.com/akirak/agent-wrapper
+           "export AGENTS_ALLOW_RUN=1"))))
 #+end_src
 *** epkg                                                          :Emacs:@extra:
 :PROPERTIES:
@@ -10437,6 +10484,17 @@ Define commands which run reformatters on the current buffer
                       nil))
                     (list "@biomejs/biome" "format" (buffer-file-name)
                           (concat "--stdin-file-path=" (buffer-file-name)))))))
+#+end_src
+*** COMMENT remoto                                                             :ARCHIVE:
+:PROPERTIES:
+:CREATED_TIME: [2026-11-18 Wed 23:59]
+:END:
+#+begin_quote
+Browse GitHub and Codeberg repos without cloning
+#+end_quote
+
+#+begin_src emacs-lisp
+(setup (:package remoto))
 #+end_src
 *** repl-toggle                                :windows:development:
 :PROPERTIES:
