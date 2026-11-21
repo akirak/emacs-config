@@ -1,15 +1,17 @@
 {
   delib,
   pkgs,
+  host,
   ...
 }:
 delib.module {
   name = "claude-code";
 
-  # I am currently not using Claude Code, so this should be disabled
-  # unconditionally. If you ever use claude, you could enable it explicitly on
-  # individual hosts.
-  options = delib.singleEnableOption false;
+  options =
+    with delib;
+    moduleOptions {
+      enable = boolOption host.codingFeatured;
+    };
 
   home.ifEnabled = {
     home.packages = [
