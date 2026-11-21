@@ -28,6 +28,7 @@ let
       # Don't override the packages if the packages are provided from the parent scope
       dsh = prev.dsh or llm-agents-packages.dsh; # DeepSeek Shell
       omp = prev.omp or llm-agents-packages.omp; # Oh My Pi
+      orca-ade = llm-agents-packages.orca; # Orca ADE (different package from orca in nixpkgs)
       claude-agent-acp = prev.claude-agent-acp or llm-agents-packages.claude-agent-acp;
     };
 
