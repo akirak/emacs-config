@@ -1218,22 +1218,6 @@
         "type": "gitlab"
       }
     },
-    "ghub": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1794327516,
-        "narHash": "sha256-zNMm6YidtwzMvRyUjYVaw1DiLJTYSXMDKaDlAWJSi9s=",
-        "owner": "magit",
-        "repo": "ghub",
-        "rev": "24f3a08022edae0132fc21f279794d7ede48b612",
-        "type": "github"
-      },
-      "original": {
-        "owner": "magit",
-        "repo": "ghub",
-        "type": "github"
-      }
-    },
     "git-attr": {
       "flake": false,
       "locked": {
@@ -3023,22 +3007,6 @@
         "type": "github"
       }
     },
-    "remoto": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1794781364,
-        "narHash": "sha256-4IN3sv03akZrnLA6QU7J4yjj2wrVskxAX6oP9u89X8o=",
-        "owner": "agzam",
-        "repo": "remoto.el",
-        "rev": "3fccf0c0384f32108758323f1691f6dda3c164c9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "agzam",
-        "repo": "remoto.el",
-        "type": "github"
-      }
-    },
     "repl-toggle": {
       "flake": false,
       "locked": {
@@ -3213,7 +3181,6 @@
         "fullframe": "fullframe",
         "fwb-cmds": "fwb-cmds",
         "gcmh": "gcmh",
-        "ghub": "ghub",
         "git-attr": "git-attr",
         "git-auto-commit-mode": "git-auto-commit-mode",
         "git-identity": "git-identity",
@@ -3325,7 +3292,6 @@
         "rainbow-delimiters": "rainbow-delimiters",
         "reason-ts-mode": "reason-ts-mode",
         "reformatter": "reformatter",
-        "remoto": "remoto",
         "repl-toggle": "repl-toggle",
         "request": "request",
         "restclient": "restclient",
@@ -3352,7 +3318,6 @@
         "titlecase": "titlecase",
         "tlaplus-ts-mode": "tlaplus-ts-mode",
         "transient": "transient",
-        "treepy": "treepy",
         "treesit-fold": "treesit-fold",
         "ts": "ts",
         "twind": "twind",
@@ -3692,22 +3657,6 @@
       "original": {
         "owner": "magit",
         "repo": "transient",
-        "type": "github"
-      }
-    },
-    "treepy": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1780227894,
-        "narHash": "sha256-rAoAGROlMSqxk9eJpATw194W5VmM3MMLLs3IITbIJxo=",
-        "owner": "volrath",
-        "repo": "treepy.el",
-        "rev": "806c000bd40153d17dfa5709c6d19546d507a416",
-        "type": "github"
-      },
-      "original": {
-        "owner": "volrath",
-        "repo": "treepy.el",
         "type": "github"
       }
     },

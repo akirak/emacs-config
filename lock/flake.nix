@@ -455,12 +455,6 @@
       repo = "gcmh";
       type = "gitlab";
     };
-    ghub = {
-      flake = false;
-      owner = "magit";
-      repo = "ghub";
-      type = "github";
-    };
     git-attr = {
       flake = false;
       owner = "arnested";
@@ -1136,12 +1130,6 @@
       repo = "emacs-reformatter";
       type = "github";
     };
-    remoto = {
-      flake = false;
-      owner = "agzam";
-      repo = "remoto.el";
-      type = "github";
-    };
     repl-toggle = {
       flake = false;
       owner = "akirak";
@@ -1295,12 +1283,6 @@
       flake = false;
       owner = "magit";
       repo = "transient";
-      type = "github";
-    };
-    treepy = {
-      flake = false;
-      owner = "volrath";
-      repo = "treepy.el";
       type = "github";
     };
     treesit-fold = {
