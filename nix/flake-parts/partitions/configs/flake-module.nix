@@ -22,7 +22,8 @@ let
       inherit (inputs.nix-sterling.packages.${system})
         forge
         sterling-alloy
-        sterling-forge;
+        sterling-forge
+        ;
 
       # Don't override the packages if the packages are provided from the parent scope
       dsh = prev.dsh or llm-agents-packages.dsh; # DeepSeek Shell
