@@ -30,6 +30,12 @@
       inputs.nixpkgs.follows = "flake-pins/unstable";
     };
 
+    # dux-shell
+    dank-niri-windows = {
+      url = "github:rochacbruno/DankNiriWindows";
+      flake = false;
+    };
+
     # Don't override the nixpkgs input so I can utilize the binary cache.
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };

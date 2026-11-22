@@ -1,4 +1,4 @@
-{ delib, host, ... }:
+{ delib, pkgs, host, ... }:
 delib.module {
   name = "dux-shell";
 
@@ -31,5 +31,13 @@ delib.module {
         };
       };
     };
+  };
+
+  home.ifEnabled = {
+    # NOTE: Plugins need to be manually enabled in the Settings of Dux.
+
+    # Non-standard in nixpkgs; Add
+    # https://github.com/rochacbruno/DankNiriWindows to pkgs
+    xdg.configFile."DankMaterialShell/plugins/NiriWindows".source = pkgs.dux-plugins.niri-windows;
   };
 }

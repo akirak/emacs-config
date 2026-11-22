@@ -80,6 +80,22 @@
         "type": "github"
       }
     },
+    "dank-niri-windows": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788950814,
+        "narHash": "sha256-+Ju8cbw1yWWW2K2Gpl7nTdkjINqXBD4ktl5g8OhuIEg=",
+        "owner": "rochacbruno",
+        "repo": "DankNiriWindows",
+        "rev": "411d5ee9f7707029f4c12c824ec3b24ca6756a0d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rochacbruno",
+        "repo": "DankNiriWindows",
+        "type": "github"
+      }
+    },
     "denix": {
       "inputs": {
         "home-manager": [
@@ -834,6 +850,7 @@
     },
     "root": {
       "inputs": {
+        "dank-niri-windows": "dank-niri-windows",
         "denix": "denix",
         "flake-pins": "flake-pins",
         "llm-agents": "llm-agents",
