@@ -5824,11 +5824,13 @@ I once used [[https://github.com/cute-jumper/embrace.el][embrace.el]], but it ha
 *** akirak-org-clock
 #+begin_src emacs-lisp
   (setup akirak-org-clock
-    (when (and (daemonp)
-               ;; Don't enable the mode when troubleshooting.
-               (or (getenv "WAYLAND_DISPLAY")
-                   (getenv "DISPLAY")))
-      (:hook-into emacs-startup-hook))
+    ;; Don't enable `akirak-org-clock-mode' automatically. It can still be
+    ;; toggled manually when needed.
+    ;; (when (and (daemonp)
+    ;;            ;; Don't enable the mode when troubleshooting.
+    ;;            (or (getenv "WAYLAND_DISPLAY")
+    ;;                (getenv "DISPLAY")))
+    ;;   (:hook-into emacs-startup-hook))
     (:hook akirak-log-mode)
     (add-hook 'akirak-org-clock-pre-exit-hook
               (defun akirak/org-capture-save-wconf ()
