@@ -35,7 +35,9 @@
 
 (defvar akirak-pi-directory nil)
 
-(defvar akirak-pi-provider nil)
+(defcustom akirak-pi-provider "opencode"
+  ""
+  :type 'string)
 
 (transient-define-infix akirak-pi-set-provider ()
   :class 'akirak-transient-choice-variable
@@ -44,7 +46,9 @@
   :prompt "Select a provider: "
   :choices 'akirak-ai-provider-list)
 
-(defvar akirak-pi-model nil)
+(defcustom akirak-pi-model "deepseek-v4.1-flash"
+  ""
+  :type 'string)
 
 (transient-define-infix akirak-pi-set-model ()
   :class 'akirak-transient-choice-variable
