@@ -848,6 +848,22 @@
         "type": "github"
       }
     },
+    "pstack-claude": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795613271,
+        "narHash": "sha256-doi5YnkPQqHhn2HQ7ybftWfcXdSrd1c+fNT5d2tek9g=",
+        "owner": "michael-denyer",
+        "repo": "pstack-claude",
+        "rev": "2f6de895e2a5a7a7a6428b105047a2b75327cd16",
+        "type": "github"
+      },
+      "original": {
+        "owner": "michael-denyer",
+        "repo": "pstack-claude",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "dank-niri-windows": "dank-niri-windows",
@@ -856,6 +872,7 @@
         "llm-agents": "llm-agents",
         "nix-sterling": "nix-sterling",
         "playwright-cli": "playwright-cli",
+        "pstack-claude": "pstack-claude",
         "tix": "tix",
         "xremap": "xremap",
         "zen-browser": "zen-browser"

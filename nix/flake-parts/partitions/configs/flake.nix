@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Assisted-by: pi:claude-opus-5-5
 {
   inputs = {
     flake-pins.url = "github:akirak/flake-pins";
@@ -33,6 +35,12 @@
     # dux-shell
     dank-niri-windows = {
       url = "github:rochacbruno/DankNiriWindows";
+      flake = false;
+    };
+
+    # Agent skills and extensions
+    pstack-claude = {
+      url = "github:michael-denyer/pstack-claude";
       flake = false;
     };
 

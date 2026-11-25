@@ -29,6 +29,10 @@ let
         niri-windows = inputs.dank-niri-windows;
       };
 
+      agent-plugins = {
+        pstack-claude = inputs.pstack-claude.outPath;
+      };
+
       # Don't override the packages if the packages are provided from the parent scope
       dsh = prev.dsh or llm-agents-packages.dsh; # DeepSeek Shell
       omp = prev.omp or llm-agents-packages.omp; # Oh My Pi
