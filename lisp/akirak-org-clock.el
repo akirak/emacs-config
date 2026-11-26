@@ -70,18 +70,22 @@ Example values are shown below:
 
 (defvar akirak-org-clock-snooze-until nil)
 
+(defconst akirak-org-clock--advice-alist
+  '((save-buffer . akirak-org-clock--advise-save-buffer)
+    (org-self-insert-command . akirak-org-clock--advise-org-self-insert-command)
+    (org-insert-heading . akirak-org-clock--advise-org-insert-heading))
+  "Advice functions installed while `akirak-org-clock-mode' is enabled.")
+
 ;;;###autoload
 (define-minor-mode akirak-org-clock-mode
   "Ensure clocking"
   :global t
   :lighter " OClk"
-  (cond
-   ((bound-and-true-p akirak-org-clock-mode)
-    (ad-activate 'save-buffer)
-    (ad-activate 'org-self-insert-command))
-   (t
-    (ad-deactivate 'save-buffer)
-    (ad-deactivate 'org-self-insert-command))))
+  (if akirak-org-clock-mode
+      (dolist (cell akirak-org-clock--advice-alist)
+        (advice-add (car cell) :around (cdr cell)))
+    (dolist (cell akirak-org-clock--advice-alist)
+      (advice-remove (car cell) (cdr cell)))))
 
 (defconst akirak-org-clock-file-name-whitelist
   (rx-to-string `(or (and bol (or ,(expand-file-name user-emacs-directory)
@@ -114,7 +118,7 @@ Example values are shown below:
   (and akirak-org-clock-snooze-until
        (< (float-time) akirak-org-clock-snooze-until)))
 
-(defadvice save-buffer (around akirak-org-clock activate)
+(defun akirak-org-clock--advise-save-buffer (orig &rest args)
   (require 'akirak-emacs-org)
   (when-let* ((filename (if-let* ((base (buffer-base-buffer)))
                             (buffer-file-name base)
@@ -146,7 +150,7 @@ Example values are shown below:
                 (akirak-org-clock--snoozed-p)
                 (file-remote-p filename)
                 (akirak-org-clock--check-before-save)))
-      ad-do-it)))
+      (apply orig args))))
 
 (defun akirak-org-clock--check-before-save ()
   (require 'org-clock)
@@ -296,20 +300,20 @@ Example values are shown below:
   "Reclocking interval."
   :type 'number)
 
-(defadvice org-self-insert-command (around akirak-org-clock activate)
+(defun akirak-org-clock--advise-org-self-insert-command (orig &rest args)
   (if (akirak-org-clock--org-allow-p)
-      ad-do-it
+      (apply orig args)
     (user-error "Please clock in first")))
 
-(defadvice org-insert-heading (around akirak-org-clock activate)
+(defun akirak-org-clock--advise-org-insert-heading (orig &rest args)
   (if (or (akirak-org-clock--org-allow-p)
           (not (called-interactively-p 'any)))
-      ad-do-it
+      (apply orig args)
     (or (unless (and (memq this-command '(org-meta-return
                                           org-insert-todo-heading))
                      (looking-at (rx nonl)))
           (akirak-capture-org-ins-heading-fallback current-prefix-arg))
-        ad-do-it)))
+        (apply orig args))))
 
 (defun akirak-org-clock--org-allow-p ()
   (or (org-clocking-p)

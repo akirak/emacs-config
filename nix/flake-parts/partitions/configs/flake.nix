@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Assisted-by: pi:claude-opus-5-5
 {
   inputs = {
     flake-pins.url = "github:akirak/flake-pins";
@@ -28,6 +30,18 @@
     nix-sterling = {
       url = "github:akirak/nix-sterling";
       inputs.nixpkgs.follows = "flake-pins/unstable";
+    };
+
+    # dux-shell
+    dank-niri-windows = {
+      url = "github:rochacbruno/DankNiriWindows";
+      flake = false;
+    };
+
+    # Agent skills and extensions
+    pstack-claude = {
+      url = "github:michael-denyer/pstack-claude";
+      flake = false;
     };
 
     # Don't override the nixpkgs input so I can utilize the binary cache.
