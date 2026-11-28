@@ -768,8 +768,14 @@ Otherwise, it calls `akirak-window-duplicate-state'."
 (defun akirak-window-display-buffer-ends ()
   (interactive)
   (akirak-window--with-each-non-file-buffer-window
-   (goto-char (point-max))
-   (recenter-top-bottom -2)))
+   (pcase (and (featurep 'akirak-shell)
+               (akirak-shell-detect-buffer-program (current-buffer)))
+     (`pi
+      ;; Send Ctrl+End
+      (eat-term-send-string eat-terminal "\e[1;5F"))
+     (_
+      (goto-char (point-max))
+      (recenter-top-bottom -2)))))
 
 ;;;###autoload
 (defun akirak-window-display-buffer-starts ()
